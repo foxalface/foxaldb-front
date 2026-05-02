@@ -37,6 +37,7 @@ export const Menu: React.FC<MenuProps> = () => {
         deleteDiagram,
         updateDiagramUpdatedAt,
         databaseType,
+        currentDiagram,
     } = useChartDB();
     const {
         openCreateDiagramDialog,
@@ -147,6 +148,25 @@ export const Menu: React.FC<MenuProps> = () => {
 
     const emojiAI = '✨';
 
+    const handleSaveDiagram = useCallback(async () => {
+        updateDiagramUpdatedAt();
+
+        const response = await fetch('http://127.0.0.1:8000/api/diagrams', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: currentDiagram?.name ?? 'Untitled diagram',
+                content: currentDiagram,
+            }),
+        });
+
+        const data = await response.json();
+
+        console.log('Diagram saved:', data);
+    }, [currentDiagram, updateDiagramUpdatedAt]);
+
     return (
         <Menubar className="h-8 border-none py-2 shadow-none md:h-10 md:py-0">
             <MenubarMenu>
@@ -165,7 +185,7 @@ export const Menu: React.FC<MenuProps> = () => {
                             }
                         </MenubarShortcut>
                     </MenubarItem>
-                    <MenubarItem onClick={updateDiagramUpdatedAt}>
+                    <MenubarItem onClick={handleSaveDiagram}>
                         {t('menu.actions.save')}
                         <MenubarShortcut>
                             {
