@@ -10,7 +10,7 @@ export const HelmetData: React.FC = () => (
         <meta property="og:type" content="website" />
         <meta
             property="og:title"
-            content="ChartDB - Database schema diagrams visualizer"
+            content="FoxalDB - Database schema diagrams visualizer"
         />
         <meta
             property="og:description"
@@ -24,7 +24,7 @@ export const HelmetData: React.FC = () => (
         <meta name="twitter:card" content="summary_large_image" />
         <meta
             name="twitter:title"
-            content="ChartDB - Database schema diagrams visualizer"
+            content="FoxalDB - Database schema diagrams visualizer"
         />
         <meta
             name="twitter:description"
@@ -34,6 +34,6 @@ export const HelmetData: React.FC = () => (
             name="twitter:image"
             content="https://github.com/chartdb/chartdb/raw/main/public/chartdb.png"
         />
-        <title>ChartDB - Database schema diagrams visualizer</title>
+        <title>FoxalDB - Database schema diagrams visualizer</title>
     </Helmet>
 );
