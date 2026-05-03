@@ -25,11 +25,24 @@ import { useHistory } from '@/hooks/use-history';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from '@/hooks/use-layout';
 import { useTheme } from '@/hooks/use-theme';
+import { updateDiagram } from '@/lib/api/diagrams';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
 
 export interface MenuProps {}
+
+const isValidBackendDiagramId = (id: unknown): id is string | number => {
+    if (typeof id === 'number') {
+        return Number.isInteger(id) && id > 0;
+    }
+
+    if (typeof id === 'string') {
+        return /^\d+$/.test(id);
+    }
+
+    return false;
+};
 
 export const Menu: React.FC<MenuProps> = () => {
     const {
@@ -151,20 +164,14 @@ export const Menu: React.FC<MenuProps> = () => {
     const handleSaveDiagram = useCallback(async () => {
         updateDiagramUpdatedAt();
 
-        const response = await fetch('http://127.0.0.1:8000/api/diagrams', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: currentDiagram?.name ?? 'Untitled diagram',
-                content: currentDiagram,
-            }),
+        if (!currentDiagram || !isValidBackendDiagramId(currentDiagram.id)) {
+            return;
+        }
+
+        await updateDiagram(String(currentDiagram.id), {
+            name: currentDiagram.name ?? 'Untitled diagram',
+            content: currentDiagram,
         });
-
-        const data = await response.json();
-
-        console.log('Diagram saved:', data);
     }, [currentDiagram, updateDiagramUpdatedAt]);
 
     return (

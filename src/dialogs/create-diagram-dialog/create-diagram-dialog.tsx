@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
+import { createDiagram } from '@/lib/api/diagrams';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
@@ -48,7 +49,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [step, setStep] = useState<CreateDiagramDialogStep>(
         CreateDiagramDialogStep.SELECT_DATABASE
     );
-    const { listDiagrams, addDiagram } = useStorage();
+    const { listDiagrams } = useStorage();
     const [diagramNumber, setDiagramNumber] = useState<number>(1);
     const navigate = useNavigate();
     const [parsedMetadata, setParsedMetadata] = useState<DatabaseMetadata>();
@@ -77,6 +78,15 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     }, [dialog.open]);
 
     const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
+
+    const persistDiagram = useCallback(async (diagram: Diagram) => {
+        const result = await createDiagram({
+            name: diagram.name,
+            content: diagram,
+        });
+
+        return String(result.diagram.id);
+    }, []);
 
     const importNewDiagram = useCallback(
         async ({
@@ -127,24 +137,25 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 });
             }
 
-            await addDiagram({ diagram });
+            const backendDiagramId = await persistDiagram(diagram);
+
             await updateConfig({
-                config: { defaultDiagramId: diagram.id },
+                config: { defaultDiagramId: backendDiagramId },
             });
 
             closeCreateDiagramDialog();
-            navigate(`/diagrams/${diagram.id}`);
+            navigate(`/diagrams/${backendDiagramId}`);
         },
         [
             importMethod,
             databaseType,
-            addDiagram,
             databaseEdition,
             closeCreateDiagramDialog,
             navigate,
             updateConfig,
             scriptResult,
             diagramNumber,
+            persistDiagram,
         ]
     );
 
@@ -161,18 +172,19 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updatedAt: new Date(),
         };
 
-        await addDiagram({ diagram });
-        await updateConfig({ config: { defaultDiagramId: diagram.id } });
+        const backendDiagramId = await persistDiagram(diagram);
+
+        await updateConfig({ config: { defaultDiagramId: backendDiagramId } });
         closeCreateDiagramDialog();
-        navigate(`/diagrams/${diagram.id}`);
+        navigate(`/diagrams/${backendDiagramId}`);
     }, [
         databaseType,
-        addDiagram,
         databaseEdition,
         closeCreateDiagramDialog,
         navigate,
         updateConfig,
         diagramNumber,
+        persistDiagram,
     ]);
 
     const importNewDiagramOrFilterTables = useCallback(async () => {
