@@ -248,6 +248,9 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                                     openDiagram(diagram.id);
                                                     closeOpenDiagramDialog();
                                                 }}
+                                                onDuplicate={() => {
+                                                    closeOpenDiagramDialog();
+                                                }}
                                                 numberOfDiagrams={
                                                     diagrams.length
                                                 }

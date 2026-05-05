@@ -25,7 +25,10 @@ import { useHistory } from '@/hooks/use-history';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from '@/hooks/use-layout';
 import { useTheme } from '@/hooks/use-theme';
-import { updateDiagram } from '@/lib/api/diagrams';
+import {
+    deleteDiagram as deleteDiagramApi,
+    updateDiagram,
+} from '@/lib/api/diagrams';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
@@ -47,7 +50,6 @@ const isValidBackendDiagramId = (id: unknown): id is string | number => {
 export const Menu: React.FC<MenuProps> = () => {
     const {
         clearDiagramData,
-        deleteDiagram,
         updateDiagramUpdatedAt,
         databaseType,
         currentDiagram,
@@ -81,10 +83,12 @@ export const Menu: React.FC<MenuProps> = () => {
     const { exportImage } = useExportImage();
     const navigate = useNavigate();
 
-    const handleDeleteDiagramAction = useCallback(() => {
-        deleteDiagram();
+    const handleDeleteDiagramAction = useCallback(async () => {
+        if (currentDiagram?.id) {
+            await deleteDiagramApi(currentDiagram.id);
+        }
         navigate('/');
-    }, [deleteDiagram, navigate]);
+    }, [currentDiagram?.id, navigate]);
 
     const createNewDiagram = () => {
         openCreateDiagramDialog();

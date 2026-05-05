@@ -10,13 +10,14 @@ import { Button } from '@/components/button/button';
 import { Ellipsis, Layers2, SquareArrowOutUpRight, Trash2 } from 'lucide-react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import type { Diagram } from '@/lib/domain';
-import { useStorage } from '@/hooks/use-storage';
-import { cloneDiagram } from '@/lib/clone';
 import { useTranslation } from 'react-i18next';
+import { deleteDiagram, duplicateDiagram } from '@/lib/api/diagrams';
+import { useNavigate } from 'react-router-dom';
 
 interface DiagramRowActionsMenuProps {
     diagram: Diagram;
     onOpen: () => void;
+    onDuplicate?: () => void;
     refetch: () => void;
     numberOfDiagrams: number;
 }
@@ -24,36 +25,31 @@ interface DiagramRowActionsMenuProps {
 export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
     diagram,
     onOpen,
+    onDuplicate,
     refetch,
     numberOfDiagrams,
 }) => {
     const { diagramId } = useChartDB();
-    const { deleteDiagram, addDiagram } = useStorage();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const onDelete = useCallback(async () => {
-        deleteDiagram(diagram.id);
-        refetch();
+        await deleteDiagram(diagram.id);
+        await refetch();
 
         if (diagram.id === diagramId || numberOfDiagrams <= 1) {
-            window.location.href = '/';
+            navigate('/');
         }
-    }, [deleteDiagram, diagram.id, diagramId, refetch, numberOfDiagrams]);
+    }, [diagram.id, diagramId, refetch, numberOfDiagrams, navigate]);
 
-    const onDuplicate = useCallback(async () => {
-        const duplicatedDiagram = cloneDiagram(diagram);
+    const handleDuplicate = useCallback(async () => {
+        const response = await duplicateDiagram(diagram.id);
+        const duplicatedDiagramId = String(response.diagram.id);
 
-        const diagramToAdd = duplicatedDiagram.diagram;
-
-        if (!diagramToAdd) {
-            return;
-        }
-
-        diagramToAdd.name = `${diagram.name} (Copy)`;
-
-        addDiagram({ diagram: diagramToAdd });
-        refetch();
-    }, [addDiagram, refetch, diagram]);
+        await refetch();
+        onDuplicate?.();
+        navigate(`/diagrams/${duplicatedDiagramId}`);
+    }, [diagram.id, refetch, onDuplicate, navigate]);
 
     return (
         <DropdownMenu>
@@ -77,7 +73,7 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                    onClick={onDuplicate}
+                    onClick={handleDuplicate}
                     className="flex justify-between gap-4"
                 >
                     {t('open_diagram_dialog.diagram_actions.duplicate')}

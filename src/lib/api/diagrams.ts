@@ -28,6 +28,18 @@ interface CreateDiagramResponse {
     };
 }
 
+interface DeleteDiagramResponse {
+    message: string;
+}
+
+interface DuplicateDiagramResponse {
+    message: string;
+    diagram: {
+        id: number | string;
+        name: string;
+    };
+}
+
 export const getDiagrams = async (): Promise<DiagramApiResource[]> => {
     const response = await apiRequest<GetDiagramsResponse>('/diagrams');
     return response.data;
@@ -55,3 +67,17 @@ export const updateDiagram = async (
         data,
     });
 };
+
+export const deleteDiagram = async (
+    id: string
+): Promise<DeleteDiagramResponse> =>
+    apiRequest<DeleteDiagramResponse>(`/diagrams/${id}`, {
+        method: 'DELETE',
+    });
+
+export const duplicateDiagram = async (
+    id: string
+): Promise<DuplicateDiagramResponse> =>
+    apiRequest<DuplicateDiagramResponse>(`/diagrams/${id}/duplicate`, {
+        method: 'POST',
+    });
