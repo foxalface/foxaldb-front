@@ -1,3 +1,4 @@
+import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { updateDiagram } from '@/lib/api/diagrams';
 import { useEffect, useRef } from 'react';
@@ -24,6 +25,7 @@ const toAutosaveSnapshot = (diagram: {
 }): string => JSON.stringify(diagram);
 
 export const useDiagramAutosave = () => {
+    const { isAuthenticated } = useAuth();
     const { currentDiagram } = useChartDB();
     const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
         null
@@ -33,7 +35,11 @@ export const useDiagramAutosave = () => {
     const isSavingRef = useRef(false);
 
     useEffect(() => {
-        if (!currentDiagram || !isValidBackendDiagramId(currentDiagram.id)) {
+        if (
+            !isAuthenticated ||
+            !currentDiagram ||
+            !isValidBackendDiagramId(currentDiagram.id)
+        ) {
             return;
         }
 
@@ -83,5 +89,5 @@ export const useDiagramAutosave = () => {
                 clearTimeout(debounceTimeoutRef.current);
             }
         };
-    }, [currentDiagram]);
+    }, [isAuthenticated, currentDiagram]);
 };

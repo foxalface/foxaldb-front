@@ -1,3 +1,4 @@
+import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
@@ -60,6 +61,7 @@ export const useDiagramLoader = () => {
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config } = useConfig();
+    const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
     const { currentDiagram, loadDiagramFromData } = useChartDB();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
@@ -72,7 +74,11 @@ export const useDiagramLoader = () => {
     const currentDiagramLoadingRef = useRef<string | undefined>(undefined);
 
     useEffect(() => {
-        if (!config) {
+        if (!config || isAuthLoading) {
+            return;
+        }
+
+        if (!isAuthenticated) {
             return;
         }
 
@@ -132,6 +138,8 @@ export const useDiagramLoader = () => {
         openOpenDiagramDialog,
         closeOpenDiagramDialog,
         config,
+        isAuthenticated,
+        isAuthLoading,
         resetRedoStack,
         resetUndoStack,
         hideLoader,

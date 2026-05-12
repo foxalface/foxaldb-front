@@ -1,14 +1,14 @@
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL: string =
+    import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api';
+
+export const BACKEND_URL: string =
+    import.meta.env.VITE_BACKEND_URL ?? 'http://localhost:8000';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-interface ApiRequestOptions extends Omit<
-    RequestInit,
-    'method' | 'body' | 'headers'
-> {
+interface ApiRequestOptions extends Omit<RequestInit, 'method' | 'body'> {
     method?: HttpMethod;
     data?: unknown;
-    token?: string;
 }
 
 export class ApiError extends Error {
@@ -23,14 +23,39 @@ export class ApiError extends Error {
     }
 }
 
-const buildHeaders = (token?: string): HeadersInit => {
+const getXsrfToken = (): string | undefined => {
+    const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : undefined;
+};
+
+const buildHeaders = (
+    hasBody: boolean,
+    caller?: HeadersInit
+): Record<string, string> => {
     const headers: Record<string, string> = {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
     };
 
-    if (token) {
-        headers.Authorization = `Bearer ${token}`;
+    if (hasBody) {
+        headers['Content-Type'] = 'application/json';
+    }
+
+    const xsrfToken = getXsrfToken();
+    if (xsrfToken) {
+        headers['X-XSRF-TOKEN'] = xsrfToken;
+    }
+
+    if (caller) {
+        const entries =
+            caller instanceof Headers
+                ? Array.from(caller.entries())
+                : Array.isArray(caller)
+                  ? caller
+                  : Object.entries(caller);
+
+        for (const [key, value] of entries) {
+            headers[key] = value;
+        }
     }
 
     return headers;
@@ -48,12 +73,14 @@ export const apiRequest = async <TResponse>(
     path: string,
     options: ApiRequestOptions = {}
 ): Promise<TResponse> => {
-    const { method = 'GET', data, token, ...restOptions } = options;
+    const { method = 'GET', data, headers, ...restOptions } = options;
+    const body = data === undefined ? undefined : JSON.stringify(data);
     const response = await fetch(toApiPath(path), {
         ...restOptions,
         method,
-        headers: buildHeaders(token),
-        body: data === undefined ? undefined : JSON.stringify(data),
+        headers: buildHeaders(body !== undefined, headers),
+        credentials: 'include',
+        body,
     });
 
     let payload: unknown = null;
