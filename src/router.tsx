@@ -28,6 +28,24 @@ const routes: RouteObject[] = [
         },
     },
     {
+        path: 'login',
+        async lazy() {
+            const { LoginPage } = await import('./pages/auth/login-page');
+            return {
+                element: <LoginPage />,
+            };
+        },
+    },
+    {
+        path: 'register',
+        async lazy() {
+            const { RegisterPage } = await import('./pages/auth/register-page');
+            return {
+                element: <RegisterPage />,
+            };
+        },
+    },
+    {
         id: 'templates',
         path: 'templates',
         async lazy() {
