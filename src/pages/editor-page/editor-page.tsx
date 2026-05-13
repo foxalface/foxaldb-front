@@ -24,6 +24,7 @@ import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 import { HIDE_CHARTDB_CLOUD } from '@/lib/env';
 import { useDiagramLoader } from './use-diagram-loader';
 import { useDiagramAutosave } from './use-diagram-autosave';
+import { useGuestDiagramMigration } from './use-guest-diagram-migration';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
@@ -47,6 +48,7 @@ const EditorPageComponent: React.FC = () => {
         useLocalConfig();
     const { initialDiagram } = useDiagramLoader();
     useDiagramAutosave();
+    useGuestDiagramMigration();
 
     useEffect(() => {
         if (HIDE_CHARTDB_CLOUD) {

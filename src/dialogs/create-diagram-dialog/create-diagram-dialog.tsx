@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { createDiagram } from '@/lib/api/diagrams';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { useAuth } from '@/hooks/use-auth';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
 import { loadFromDatabaseMetadata } from '@/lib/data/import-metadata/import';
@@ -28,14 +29,18 @@ import {
     importDBMLToDiagram,
 } from '@/lib/dbml/dbml-import/dbml-import';
 import type { ImportMethod } from '@/lib/import-method/import-method';
+import { useToast } from '@/components/toast/use-toast';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
 export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     dialog,
 }) => {
-    const { diagramId } = useChartDB();
+    const { isAuthenticated } = useAuth();
+    const { loadDiagramFromData } = useChartDB();
+    const { toast } = useToast();
     const { t } = useTranslation();
+
     const [importMethod, setImportMethod] = useState<ImportMethod>('query');
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
@@ -49,7 +54,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [step, setStep] = useState<CreateDiagramDialogStep>(
         CreateDiagramDialogStep.SELECT_DATABASE
     );
-    const { listDiagrams } = useStorage();
+    const { listDiagrams, addDiagram } = useStorage();
     const [diagramNumber, setDiagramNumber] = useState<number>(1);
     const navigate = useNavigate();
     const [parsedMetadata, setParsedMetadata] = useState<DatabaseMetadata>();
@@ -66,7 +71,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             setDiagramNumber(diagrams.length + 1);
         };
         fetchDiagrams();
-    }, [listDiagrams, setDiagramNumber, dialog.open]);
+    }, [listDiagrams, dialog.open]);
 
     useEffect(() => {
         setStep(CreateDiagramDialogStep.SELECT_DATABASE);
@@ -77,16 +82,31 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setParsedMetadata(undefined);
     }, [dialog.open]);
 
-    const hasExistingDiagram = (diagramId ?? '').trim().length !== 0;
-
-    const persistDiagram = useCallback(async (diagram: Diagram) => {
-        const result = await createDiagram({
-            name: diagram.name,
-            content: diagram,
+    const showGuestLimitToast = useCallback(() => {
+        toast({
+            title: 'Guest mode limit reached',
+            description:
+                'You can only create one diagram in guest mode. Sign in to create more.',
         });
+    }, [toast]);
 
-        return String(result.diagram.id);
-    }, []);
+    const persistDiagram = useCallback(
+        async (diagram: Diagram) => {
+            if (!isAuthenticated) {
+                await addDiagram({ diagram });
+                loadDiagramFromData(diagram);
+                return diagram.id;
+            }
+
+            const result = await createDiagram({
+                name: diagram.name,
+                content: diagram,
+            });
+
+            return String(result.diagram.id);
+        },
+        [isAuthenticated, addDiagram, loadDiagramFromData]
+    );
 
     const importNewDiagram = useCallback(
         async ({
@@ -96,6 +116,14 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             selectedTables?: SelectedTable[];
             databaseMetadata?: DatabaseMetadata;
         } = {}) => {
+            if (!isAuthenticated) {
+                const diagrams = await listDiagrams();
+                if (diagrams.length >= 1) {
+                    showGuestLimitToast();
+                    return;
+                }
+            }
+
             let diagram: Diagram | undefined;
 
             if (importMethod === 'ddl') {
@@ -108,7 +136,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 diagram = await importDBMLToDiagram(scriptResult, {
                     databaseType,
                 });
-                // Update the diagram name if it's the default
+
                 if (diagram.name === defaultDBMLDiagramName) {
                     diagram.name = `Diagram ${diagramNumber}`;
                 }
@@ -137,14 +165,16 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 });
             }
 
-            const backendDiagramId = await persistDiagram(diagram);
-
-            await updateConfig({
-                config: { defaultDiagramId: backendDiagramId },
-            });
+            const id = await persistDiagram(diagram);
 
             closeCreateDiagramDialog();
-            navigate(`/diagrams/${backendDiagramId}`);
+
+            if (isAuthenticated) {
+                await updateConfig({
+                    config: { defaultDiagramId: id },
+                });
+                navigate(`/diagrams/${id}`);
+            }
         },
         [
             importMethod,
@@ -156,10 +186,21 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             scriptResult,
             diagramNumber,
             persistDiagram,
+            isAuthenticated,
+            listDiagrams,
+            showGuestLimitToast,
         ]
     );
 
     const createEmptyDiagram = useCallback(async () => {
+        if (!isAuthenticated) {
+            const diagrams = await listDiagrams();
+            if (diagrams.length >= 1) {
+                showGuestLimitToast();
+                return;
+            }
+        }
+
         const diagram: Diagram = {
             id: generateDiagramId(),
             name: `Diagram ${diagramNumber}`,
@@ -172,11 +213,16 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updatedAt: new Date(),
         };
 
-        const backendDiagramId = await persistDiagram(diagram);
+        const id = await persistDiagram(diagram);
 
-        await updateConfig({ config: { defaultDiagramId: backendDiagramId } });
         closeCreateDiagramDialog();
-        navigate(`/diagrams/${backendDiagramId}`);
+
+        if (isAuthenticated) {
+            await updateConfig({
+                config: { defaultDiagramId: id },
+            });
+            navigate(`/diagrams/${id}`);
+        }
     }, [
         databaseType,
         databaseEdition,
@@ -185,6 +231,9 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         updateConfig,
         diagramNumber,
         persistDiagram,
+        isAuthenticated,
+        listDiagrams,
+        showGuestLimitToast,
     ]);
 
     const importNewDiagramOrFilterTables = useCallback(async () => {
@@ -194,7 +243,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             if (importMethod === 'ddl' || importMethod === 'dbml') {
                 await importNewDiagram();
             } else {
-                // Parse metadata asynchronously to avoid blocking the UI
                 const metadata = await new Promise<DatabaseMetadata>(
                     (resolve, reject) => {
                         setTimeout(() => {
@@ -214,7 +262,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
                 setParsedMetadata(metadata);
 
-                // Check if it's a large database that needs table selection
                 if (totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER) {
                     setStep(CreateDiagramDialogStep.SELECT_TABLES);
                 } else {
@@ -229,34 +276,13 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     }, [importMethod, scriptResult, importNewDiagram]);
 
     return (
-        <Dialog
-            {...dialog}
-            onOpenChange={(open) => {
-                // Don't allow closing while parsing metadata
-                if (isParsingMetadata) {
-                    return;
-                }
-
-                if (!hasExistingDiagram) {
-                    return;
-                }
-
-                if (!open) {
-                    closeCreateDiagramDialog();
-                }
-            }}
-        >
-            <DialogContent
-                className="flex max-h-dvh w-full flex-col md:max-w-[900px]"
-                showClose={hasExistingDiagram}
-                onInteractOutside={(e) => e.preventDefault()}
-                onEscapeKeyDown={(e) => e.preventDefault()}
-            >
+        <Dialog {...dialog}>
+            <DialogContent className="flex max-h-dvh w-full flex-col md:max-w-[900px]">
                 {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
                     <SelectDatabase
                         createNewDiagram={createEmptyDiagram}
                         databaseType={databaseType}
-                        hasExistingDiagram={hasExistingDiagram}
+                        hasExistingDiagram={false}
                         setDatabaseType={setDatabaseType}
                         onContinue={() =>
                             setStep(CreateDiagramDialogStep.IMPORT_DATABASE)

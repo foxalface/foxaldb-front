@@ -1,6 +1,7 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useConfig } from '@/hooks/use-config';
+import { useStorage } from '@/hooks/use-storage';
 import { useDialog } from '@/hooks/use-dialog';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
@@ -62,7 +63,8 @@ export const useDiagramLoader = () => {
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config } = useConfig();
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
-    const { currentDiagram, loadDiagramFromData } = useChartDB();
+    const { listDiagrams } = useStorage();
+    const { currentDiagram, loadDiagram, loadDiagramFromData } = useChartDB();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
     const {
@@ -79,6 +81,34 @@ export const useDiagramLoader = () => {
         }
 
         if (!isAuthenticated) {
+            if (currentDiagramLoadingRef.current === 'guest') {
+                return;
+            }
+
+            currentDiagramLoadingRef.current = 'guest';
+
+            void (async () => {
+                try {
+                    const diagrams = await listDiagrams();
+
+                    if (diagrams.length > 0) {
+                        const loaded = await loadDiagram(diagrams[0].id);
+                        if (loaded) {
+                            setInitialDiagram(loaded);
+                        } else {
+                            setInitialDiagram(undefined);
+                            openCreateDiagramDialog();
+                        }
+                    } else {
+                        setInitialDiagram(undefined);
+                        openCreateDiagramDialog();
+                    }
+                } catch {
+                    setInitialDiagram(undefined);
+                    openCreateDiagramDialog();
+                }
+            })();
+
             return;
         }
 
@@ -145,7 +175,9 @@ export const useDiagramLoader = () => {
         hideLoader,
         showLoader,
         currentDiagram?.id,
+        loadDiagram,
         loadDiagramFromData,
+        listDiagrams,
     ]);
 
     return { initialDiagram };

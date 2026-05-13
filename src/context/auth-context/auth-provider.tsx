@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { AuthContext } from './auth-context';
 import type { AuthUser } from '@/lib/api/auth';
 import {
@@ -6,6 +12,7 @@ import {
     login as apiLogin,
     register as apiRegister,
     logout as apiLogout,
+    fetchSessionUser,
     fetchCurrentUser,
 } from '@/lib/api/auth';
 
@@ -14,12 +21,19 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
 }) => {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const didCheckSessionRef = useRef(false);
 
     useEffect(() => {
+        if (didCheckSessionRef.current) {
+            return;
+        }
+
+        didCheckSessionRef.current = true;
+
         const checkSession = async () => {
             try {
                 await initCsrf();
-                const currentUser = await fetchCurrentUser();
+                const currentUser = await fetchSessionUser();
                 setUser(currentUser);
             } catch {
                 setUser(null);
@@ -28,7 +42,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
             }
         };
 
-        checkSession();
+        void checkSession();
     }, []);
 
     const login = useCallback(

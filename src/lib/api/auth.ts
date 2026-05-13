@@ -10,6 +10,10 @@ interface AuthUserResponse {
     user: AuthUser;
 }
 
+interface SessionUserResponse {
+    user: AuthUser | null;
+}
+
 interface LogoutResponse {
     message: string;
 }
@@ -57,6 +61,11 @@ export const register = async (
 
 export const logout = async (): Promise<void> => {
     await apiRequest<LogoutResponse>('/logout', { method: 'POST' });
+};
+
+export const fetchSessionUser = async (): Promise<AuthUser | null> => {
+    const response = await apiRequest<SessionUserResponse>('/session');
+    return response.user;
 };
 
 export const fetchCurrentUser = async (): Promise<AuthUser> => {
