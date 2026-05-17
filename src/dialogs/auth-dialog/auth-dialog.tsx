@@ -56,7 +56,9 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({ dialog }) => {
                     <DialogDescription>
                         {isAuthenticated
                             ? 'Manage your current session.'
-                            : 'Continue without leaving the editor.'}
+                            : mode === 'login'
+                              ? 'Sign in to save more diagrams and keep them synced.'
+                              : 'Create an account to save more diagrams.'}
                     </DialogDescription>
                 </DialogHeader>
 

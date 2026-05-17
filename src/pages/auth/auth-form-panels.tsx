@@ -46,6 +46,7 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
                     <Input
                         autoComplete="email"
                         autoFocus
+                        disabled={isSubmitting}
                         name="email"
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -57,6 +58,7 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
                     <span>Password</span>
                     <Input
                         autoComplete="current-password"
+                        disabled={isSubmitting}
                         name="password"
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -77,6 +79,7 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
                 No account?{' '}
                 <button
                     className="underline underline-offset-4"
+                    disabled={isSubmitting}
                     onClick={onSwitchToRegister}
                     type="button"
                 >
@@ -131,6 +134,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                     <Input
                         autoComplete="name"
                         autoFocus
+                        disabled={isSubmitting}
                         name="name"
                         onChange={(e) => setName(e.target.value)}
                         required
@@ -142,6 +146,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                     <span>Email</span>
                     <Input
                         autoComplete="email"
+                        disabled={isSubmitting}
                         name="email"
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -153,6 +158,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                     <span>Password</span>
                     <Input
                         autoComplete="new-password"
+                        disabled={isSubmitting}
                         name="password"
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -164,6 +170,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                     <span>Confirm password</span>
                     <Input
                         autoComplete="new-password"
+                        disabled={isSubmitting}
                         name="password_confirmation"
                         onChange={(e) =>
                             setPasswordConfirmation(e.target.value)
@@ -186,6 +193,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                 Already have an account?{' '}
                 <button
                     className="underline underline-offset-4"
+                    disabled={isSubmitting}
                     onClick={onSwitchToLogin}
                     type="button"
                 >

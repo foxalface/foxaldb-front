@@ -18,6 +18,8 @@ export const AuthNavAction: React.FC<AuthNavActionProps> = ({ compact }) => {
 
         try {
             await logout();
+        } catch {
+            // AuthProvider clears the local session even when the request fails.
         } finally {
             setIsLoggingOut(false);
         }
