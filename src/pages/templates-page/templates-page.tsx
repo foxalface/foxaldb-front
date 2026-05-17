@@ -7,10 +7,11 @@ import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { Component, Star } from 'lucide-react';
 import { ListMenu } from '@/components/list-menu/list-menu';
 import { TemplateCard } from './template-card/template-card';
-import { useLoaderData, useMatches, useParams } from 'react-router-dom';
+import { Link, useLoaderData, useMatches, useParams } from 'react-router-dom';
 import type { Template } from '@/templates-data/templates-data';
 import { Spinner } from '@/components/spinner/spinner';
 import { TemplatesPageHelmet } from './templates-page-helmet';
+import { Button } from '@/components/button/button';
 
 export interface TemplatesPageLoaderData {
     templates: Template[] | undefined;
@@ -58,7 +59,10 @@ const TemplatesPageComponent: React.FC = () => {
                             </a>
                         </div>
                     </div>
-                    <div className="flex flex-1 justify-end">
+                    <div className="flex flex-1 items-center justify-end gap-2">
+                        <Button asChild size="sm" variant="secondary">
+                            <Link to="/login">Sign in</Link>
+                        </Button>
                         <iframe
                             src={`https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&size=large&text=false`}
                             width="40"

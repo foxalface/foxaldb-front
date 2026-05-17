@@ -9,9 +9,10 @@ import { LocalConfigProvider } from '@/context/local-config-context/local-config
 import { StorageProvider } from '@/context/storage-context/storage-provider';
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
+import { Button } from '@/components/button/button';
 
 const ExamplesPageComponent: React.FC = () => {
     const { effectiveTheme } = useTheme();
@@ -75,7 +76,11 @@ const ExamplesPageComponent: React.FC = () => {
                         </div>
                     </div>
                     <div className="group flex flex-1 flex-row items-center justify-center"></div>
-                    <div className="hidden flex-1 justify-end sm:flex"></div>
+                    <div className="hidden flex-1 justify-end sm:flex">
+                        <Button asChild size="sm" variant="secondary">
+                            <Link to="/login">Sign in</Link>
+                        </Button>
+                    </div>
                 </nav>
                 <div className="flex flex-col px-3 pt-3 text-center md:px-28 md:text-left">
                     <h1 className="font-primary text-2xl font-bold">
