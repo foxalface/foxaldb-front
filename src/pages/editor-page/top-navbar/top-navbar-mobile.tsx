@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import ChartDBLogo from '@/assets/logo-2.png';
 import { DiagramName } from './diagram-name';
 import { LanguageNav } from './language-nav/language-nav';
@@ -6,21 +6,11 @@ import { Menu } from './menu/menu';
 import { Button } from '@/components/button/button';
 import { useSidebar } from '@/components/sidebar/use-sidebar';
 import { MenuIcon } from 'lucide-react';
+import { AuthNavAction } from './auth-nav-action';
 
 export interface TopNavbarMobileProps {}
 
 export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
-    const renderStars = useCallback(() => {
-        return (
-            <iframe
-                src="https://ghbtns.com/github-btn.html?user=chartdb&repo=chartdb&type=star&size=small&text=false"
-                width="25"
-                height="20"
-                title="GitHub"
-            ></iframe>
-        );
-    }, []);
-
     const { toggleSidebar } = useSidebar();
 
     return (
@@ -49,7 +39,7 @@ export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {renderStars()}
+                        <AuthNavAction compact />
                         <LanguageNav />
                     </div>
                 </div>

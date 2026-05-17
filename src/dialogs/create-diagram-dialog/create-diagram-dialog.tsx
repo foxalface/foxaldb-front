@@ -30,6 +30,7 @@ import {
 } from '@/lib/dbml/dbml-import/dbml-import';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { useToast } from '@/components/toast/use-toast';
+import { ToastAction } from '@/components/toast/toast';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {}
 
@@ -45,7 +46,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
-    const { closeCreateDiagramDialog } = useDialog();
+    const { closeCreateDiagramDialog, openAuthDialog } = useDialog();
     const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = useState('');
     const [databaseEdition, setDatabaseEdition] = useState<
@@ -82,13 +83,23 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setParsedMetadata(undefined);
     }, [dialog.open]);
 
+    const handleGuestLimitSignIn = useCallback(() => {
+        closeCreateDiagramDialog();
+        openAuthDialog();
+    }, [closeCreateDiagramDialog, openAuthDialog]);
+
     const showGuestLimitToast = useCallback(() => {
         toast({
             title: 'Guest mode limit reached',
-            description:
-                'You can only create one diagram in guest mode. Sign in to create more.',
+            description: 'Sign in to create and save more diagrams.',
+            layout: 'column',
+            action: (
+                <ToastAction altText="Sign in" onClick={handleGuestLimitSignIn}>
+                    Sign in
+                </ToastAction>
+            ),
         });
-    }, [toast]);
+    }, [handleGuestLimitSignIn, toast]);
 
     const persistDiagram = useCallback(
         async (diagram: Diagram) => {

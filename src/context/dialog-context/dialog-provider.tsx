@@ -20,6 +20,7 @@ import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/expor
 import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
+import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -63,6 +64,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         );
 
     const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
+    const [openAuthDialog, setOpenAuthDialog] = useState(false);
 
     // Export image dialog
     const [openExportImageDialog, setOpenExportImageDialog] = useState(false);
@@ -155,6 +157,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
                 openStarUsDialog: () => setOpenStarUsDialog(true),
                 closeStarUsDialog: () => setOpenStarUsDialog(false),
+                openAuthDialog: () => setOpenAuthDialog(true),
+                closeAuthDialog: () => setOpenAuthDialog(false),
                 closeExportImageDialog: () => setOpenExportImageDialog(false),
                 openExportImageDialog: openExportImageDialogHandler,
                 openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
@@ -191,6 +195,7 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 {...tableSchemaDialogParams}
             />
             <StarUsDialog dialog={{ open: openStarUsDialog }} />
+            <AuthDialog dialog={{ open: openAuthDialog }} />
             <ExportImageDialog
                 dialog={{ open: openExportImageDialog }}
                 {...exportImageDialogParams}
