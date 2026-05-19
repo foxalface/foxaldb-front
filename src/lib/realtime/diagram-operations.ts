@@ -45,6 +45,14 @@ export interface DiagramOperationMutators {
     ) => Promise<void>;
 }
 
+export interface ApplyRemoteDiagramOperationContext {
+    existingTableIds: ReadonlySet<string>;
+    getTableFromStorage: (tableId: string) => Promise<DBTable | undefined>;
+}
+
+const isDexieConstraintError = (error: unknown): boolean =>
+    error instanceof Error && error.name === 'ConstraintError';
+
 const DIAGRAM_OPERATION_ACTIONS: readonly DiagramOperationAction[] = [
     'add_tables',
     'update_table',
@@ -91,7 +99,8 @@ const validateRemoveTablesData = (
 
 export const applyRemoteDiagramOperation = async (
     payload: DiagramOperationPayload,
-    mutators: DiagramOperationMutators
+    mutators: DiagramOperationMutators,
+    context: ApplyRemoteDiagramOperationContext
 ): Promise<void> => {
     if (!isDiagramOperationAction(payload.action)) {
         console.warn(
@@ -113,7 +122,25 @@ export const applyRemoteDiagramOperation = async (
                 return;
             }
 
-            await mutators.addTables(payload.data.tables, historyOptions);
+            for (const table of payload.data.tables) {
+                if (context.existingTableIds.has(table.id)) {
+                    continue;
+                }
+
+                const storedTable = await context.getTableFromStorage(table.id);
+                const tableToApply = storedTable ?? table;
+
+                try {
+                    await mutators.addTables([tableToApply], historyOptions);
+                } catch (error) {
+                    if (isDexieConstraintError(error)) {
+                        continue;
+                    }
+
+                    throw error;
+                }
+            }
+
             return;
         }
         case 'update_table': {

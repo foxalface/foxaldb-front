@@ -1,6 +1,7 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { updateDiagram } from '@/lib/api/diagrams';
+import { remoteSyncDepthRef } from '@/lib/realtime/diagram-sync-state';
 import { useEffect, useRef } from 'react';
 
 const AUTOSAVE_DEBOUNCE_MS = 900;
@@ -40,6 +41,10 @@ export const useDiagramAutosave = () => {
             !currentDiagram ||
             !isValidBackendDiagramId(currentDiagram.id)
         ) {
+            return;
+        }
+
+        if (remoteSyncDepthRef.current > 0) {
             return;
         }
 

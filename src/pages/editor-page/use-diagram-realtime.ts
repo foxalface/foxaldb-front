@@ -1,5 +1,6 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useStorage } from '@/hooks/use-storage';
 import { getClientId } from '@/lib/realtime/client-id';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
@@ -13,7 +14,7 @@ import {
     remoteSyncDepthRef,
 } from '@/lib/realtime/diagram-sync-state';
 import { getEcho } from '@/lib/realtime/echo';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface DiagramTestPayload {
     message: string;
@@ -68,12 +69,16 @@ const parseDiagramOperationPayload = (
 
 export const useDiagramRealtime = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram, addTables, updateTable, removeTables } =
+    const { currentDiagram, tables, addTables, updateTable, removeTables } =
         useChartDB();
+    const { getTable: getTableFromStorage } = useStorage();
     const diagramId =
         currentDiagram && isValidBackendDiagramId(currentDiagram.id)
             ? String(currentDiagram.id)
             : null;
+
+    const existingTableIdsRef = useRef<ReadonlySet<string>>(new Set());
+    existingTableIdsRef.current = new Set(tables.map((table) => table.id));
 
     useEffect(() => {
         if (isLoading || !isAuthenticated || diagramId === null) {
@@ -107,11 +112,22 @@ export const useDiagramRealtime = (): void => {
                 remoteSyncDepthRef.current += 1;
 
                 try {
-                    await applyRemoteDiagramOperation(payload, {
-                        addTables,
-                        updateTable,
-                        removeTables,
-                    });
+                    await applyRemoteDiagramOperation(
+                        payload,
+                        {
+                            addTables,
+                            updateTable,
+                            removeTables,
+                        },
+                        {
+                            existingTableIds: existingTableIdsRef.current,
+                            getTableFromStorage: (tableId: string) =>
+                                getTableFromStorage({
+                                    diagramId: diagramId,
+                                    id: tableId,
+                                }),
+                        }
+                    );
                 } catch (error) {
                     console.warn(
                         '[DiagramOperation] Failed to apply operation',
@@ -162,8 +178,10 @@ export const useDiagramRealtime = (): void => {
         isLoading,
         isAuthenticated,
         diagramId,
+        tables,
         addTables,
         updateTable,
         removeTables,
+        getTableFromStorage,
     ]);
 };

@@ -24,6 +24,7 @@ import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 import { HIDE_CHARTDB_CLOUD } from '@/lib/env';
 import { useDiagramLoader } from './use-diagram-loader';
 import { useDiagramAutosave } from './use-diagram-autosave';
+import { useDiagramOperationSync } from './use-diagram-operation-sync';
 import { useDiagramRealtime } from './use-diagram-realtime';
 import { useGuestDiagramMigration } from './use-guest-diagram-migration';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
@@ -50,6 +51,7 @@ const EditorPageComponent: React.FC = () => {
     const { initialDiagram } = useDiagramLoader();
     useDiagramAutosave();
     useDiagramRealtime();
+    useDiagramOperationSync();
     useGuestDiagramMigration();
 
     useEffect(() => {
