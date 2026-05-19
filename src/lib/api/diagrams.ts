@@ -1,3 +1,4 @@
+import type { DiagramOperationRequest } from '@/lib/realtime/diagram-operations';
 import { apiRequest } from './client';
 
 export interface DiagramApiResource {
@@ -81,3 +82,19 @@ export const duplicateDiagram = async (
     apiRequest<DuplicateDiagramResponse>(`/diagrams/${id}/duplicate`, {
         method: 'POST',
     });
+
+interface PostDiagramOperationResponse {
+    message: string;
+}
+
+export const postDiagramOperation = async (
+    diagramId: string,
+    body: DiagramOperationRequest
+): Promise<PostDiagramOperationResponse> =>
+    apiRequest<PostDiagramOperationResponse>(
+        `/diagrams/${diagramId}/operations`,
+        {
+            method: 'POST',
+            data: body,
+        }
+    );
