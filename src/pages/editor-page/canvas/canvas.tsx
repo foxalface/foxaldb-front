@@ -40,6 +40,7 @@ import {
 import type { RelationshipEdgeType } from './relationship-edge/relationship-edge';
 import { RelationshipEdge } from './relationship-edge/relationship-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { emitTablePositionSync } from '@/lib/realtime/emit-table-position-sync';
 import {
     LEFT_HANDLE_ID_PREFIX,
     TARGET_ID_PREFIX,
@@ -1225,6 +1226,58 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             sizeChanges.length > 0,
                     }
                 );
+
+                if (
+                    positionChanges.length > 0 ||
+                    childTableMovements.size > 0
+                ) {
+                    const positionUpdates: {
+                        id: string;
+                        x: number;
+                        y: number;
+                    }[] = [];
+
+                    for (const change of positionChanges) {
+                        const x = change.position?.x;
+                        const y = change.position?.y;
+
+                        if (
+                            x !== undefined &&
+                            y !== undefined &&
+                            !isNaN(x) &&
+                            !isNaN(y)
+                        ) {
+                            positionUpdates.push({
+                                id: change.id,
+                                x,
+                                y,
+                            });
+                        }
+                    }
+
+                    for (const [tableId, areaMovement] of childTableMovements) {
+                        const hasDirectPositionChange = positionChanges.some(
+                            (change) => change.id === tableId
+                        );
+
+                        if (hasDirectPositionChange) {
+                            continue;
+                        }
+
+                        const table = tables.find((t) => t.id === tableId);
+                        if (!table) {
+                            continue;
+                        }
+
+                        positionUpdates.push({
+                            id: tableId,
+                            x: table.x + areaMovement.deltaX,
+                            y: table.y + areaMovement.deltaY,
+                        });
+                    }
+
+                    emitTablePositionSync(events, positionUpdates);
+                }
             }
 
             updateOverlappingGraphOnChangesDebounced({
@@ -1332,6 +1385,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             tables,
             areas,
             getNode,
+            events,
         ]
     );
 

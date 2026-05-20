@@ -22,6 +22,20 @@ const isTableSyncEvent = (
     event.action === 'update_table' ||
     event.action === 'remove_tables';
 
+const shouldPostTableSyncEvent = (event: TableSyncChartDBEvent): boolean => {
+    switch (event.action) {
+        case 'add_tables':
+            return event.data.tables.length > 0;
+        case 'update_table':
+            return (
+                event.data.id.length > 0 &&
+                Object.keys(event.data.table).length > 0
+            );
+        case 'remove_tables':
+            return event.data.tableIds.length > 0;
+    }
+};
+
 export const useDiagramOperationSync = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
     const { currentDiagram, events } = useChartDB();
@@ -49,6 +63,10 @@ export const useDiagramOperationSync = (): void => {
             }
 
             if (!isTableSyncEvent(event)) {
+                return;
+            }
+
+            if (!shouldPostTableSyncEvent(event)) {
                 return;
             }
 

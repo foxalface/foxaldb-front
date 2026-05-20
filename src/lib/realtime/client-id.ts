@@ -1,4 +1,4 @@
-const CLIENT_ID_KEY = 'foxaldb_client_id';
+let currentClientId: string | null = null;
 
 const generateClientId = (): string => {
     if (
@@ -12,12 +12,11 @@ const generateClientId = (): string => {
 };
 
 export const getClientId = (): string => {
-    const existing = sessionStorage.getItem(CLIENT_ID_KEY);
-    if (existing !== null && existing.length > 0) {
-        return existing;
+    if (currentClientId !== null) {
+        return currentClientId;
     }
 
-    const id = generateClientId();
-    sessionStorage.setItem(CLIENT_ID_KEY, id);
-    return id;
+    currentClientId = generateClientId();
+
+    return currentClientId;
 };
