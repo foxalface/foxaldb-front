@@ -2,10 +2,12 @@ import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useStorage } from '@/hooks/use-storage';
 import { getClientId } from '@/lib/realtime/client-id';
+import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { getEcho } from '@/lib/realtime/echo';
 import {
     applyRemoteDiagramOperation,
     isDiagramOperationAction,
+    type DiagramOperationData,
     type DiagramOperationPayload,
 } from '@/lib/realtime/diagram-operations';
 import {
@@ -14,50 +16,51 @@ import {
 } from '@/lib/realtime/diagram-sync-state';
 import { useEffect, useRef } from 'react';
 
-const isValidBackendDiagramId = (id: unknown): id is string | number => {
-    if (typeof id === 'number') {
-        return Number.isInteger(id) && id > 0;
-    }
-
-    if (typeof id === 'string') {
-        return /^\d+$/.test(id);
-    }
-
-    return false;
-};
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-    typeof value === 'object' && value !== null;
-
 interface DiagramTestPayload {
     message: string;
     sentAt: string;
     userId: number;
 }
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+    typeof value === 'object' && value !== null && !Array.isArray(value);
+
 const parseDiagramOperationPayload = (
-    payload: unknown
+    value: unknown
 ): DiagramOperationPayload | null => {
-    if (!isRecord(payload)) {
+    if (!isRecord(value)) {
         return null;
     }
 
-    const { action, data, userId, clientId, sentAt } = payload;
+    const action = value.action;
+    const data = value.data;
+    const userId = value.userId;
+    const clientId = value.clientId;
+    const sentAt = value.sentAt;
 
-    if (
-        typeof action !== 'string' ||
-        !isDiagramOperationAction(action) ||
-        !isRecord(data) ||
-        typeof userId !== 'number' ||
-        typeof clientId !== 'string' ||
-        typeof sentAt !== 'string'
-    ) {
+    if (typeof action !== 'string' || !isDiagramOperationAction(action)) {
+        return null;
+    }
+
+    if (!isRecord(data)) {
+        return null;
+    }
+
+    if (typeof clientId !== 'string') {
+        return null;
+    }
+
+    if (typeof userId !== 'number') {
+        return null;
+    }
+
+    if (typeof sentAt !== 'string') {
         return null;
     }
 
     return {
         action,
-        data: data as DiagramOperationPayload['data'],
+        data: data as DiagramOperationData,
         userId,
         clientId,
         sentAt,
@@ -67,8 +70,16 @@ const parseDiagramOperationPayload = (
 export const useDiagramRealtime = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
     const { getTable: getTableFromStorage } = useStorage();
-    const { currentDiagram, tables, addTables, updateTable, removeTables } =
-        useChartDB();
+    const {
+        currentDiagram,
+        tables,
+        addTables,
+        updateTable,
+        removeTables,
+        addField,
+        removeField,
+        updateField,
+    } = useChartDB();
 
     const existingTableIdsRef = useRef<ReadonlySet<string>>(new Set());
     existingTableIdsRef.current = new Set(tables.map((table) => table.id));
@@ -95,18 +106,15 @@ export const useDiagramRealtime = (): void => {
             console.log('[DiagramTest]', payload);
         };
 
-        const handleDiagramOperation = (payload: unknown): void => {
-            const parsedPayload = parseDiagramOperationPayload(payload);
+        const handleDiagramOperation = (value: unknown): void => {
+            const payload = parseDiagramOperationPayload(value);
 
-            if (parsedPayload === null) {
-                console.warn(
-                    '[DiagramOperation] Invalid operation payload',
-                    payload
-                );
+            if (payload === null) {
+                console.warn('[DiagramOperation] Invalid payload', value);
                 return;
             }
 
-            if (parsedPayload.clientId === getClientId()) {
+            if (payload.clientId === getClientId()) {
                 return;
             }
 
@@ -114,11 +122,14 @@ export const useDiagramRealtime = (): void => {
             remoteSyncDepthRef.current += 1;
 
             void applyRemoteDiagramOperation(
-                parsedPayload,
+                payload,
                 {
                     addTables,
                     updateTable,
                     removeTables,
+                    addField,
+                    removeField,
+                    updateField,
                 },
                 {
                     existingTableIds: existingTableIdsRef.current,
@@ -186,6 +197,9 @@ export const useDiagramRealtime = (): void => {
         addTables,
         updateTable,
         removeTables,
+        addField,
+        removeField,
+        updateField,
         getTableFromStorage,
     ]);
 };

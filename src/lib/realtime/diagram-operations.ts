@@ -1,19 +1,34 @@
 import type {
+    AddFieldEvent,
     CreateTableEvent,
+    RemoveFieldEvent,
     RemoveTableEvent,
     UpdateTableEvent,
 } from '@/context/chartdb-context/chartdb-context';
+import type { DBField } from '@/lib/domain/db-field';
 import type { DBTable } from '@/lib/domain/db-table';
 
 export type DiagramOperationAction =
     | 'add_tables'
     | 'update_table'
-    | 'remove_tables';
+    | 'remove_tables'
+    | 'add_field'
+    | 'remove_field'
+    | 'update_field';
+
+export type UpdateFieldOperationData = {
+    tableId: string;
+    fieldId: string;
+    attributes: Partial<DBField>;
+};
 
 export type DiagramOperationData =
     | CreateTableEvent['data']
     | UpdateTableEvent['data']
-    | RemoveTableEvent['data'];
+    | RemoveTableEvent['data']
+    | AddFieldEvent['data']
+    | RemoveFieldEvent['data']
+    | UpdateFieldOperationData;
 
 export interface DiagramOperationRequest {
     action: DiagramOperationAction;
@@ -43,6 +58,22 @@ export interface DiagramOperationMutators {
         tableIds: string[],
         options: { updateHistory: false }
     ) => Promise<void>;
+    addField: (
+        tableId: string,
+        field: DBField,
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    removeField: (
+        tableId: string,
+        fieldId: string,
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    updateField: (
+        tableId: string,
+        fieldId: string,
+        field: Partial<DBField>,
+        options: { updateHistory: false }
+    ) => Promise<void>;
 }
 
 export interface ApplyRemoteDiagramOperationContext {
@@ -57,6 +88,9 @@ const DIAGRAM_OPERATION_ACTIONS: readonly DiagramOperationAction[] = [
     'add_tables',
     'update_table',
     'remove_tables',
+    'add_field',
+    'remove_field',
+    'update_field',
 ];
 
 export const isDiagramOperationAction = (
@@ -70,46 +104,62 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const validateAddTablesData = (
     data: unknown
 ): data is CreateTableEvent['data'] => {
-    if (!isRecord(data)) {
-        return false;
-    }
-
-    return Array.isArray(data.tables);
+    return isRecord(data) && Array.isArray(data.tables);
 };
 
 const validateUpdateTableData = (
     data: unknown
 ): data is UpdateTableEvent['data'] => {
-    if (!isRecord(data)) {
-        return false;
-    }
-
-    return typeof data.id === 'string' && isRecord(data.table);
+    return (
+        isRecord(data) && typeof data.id === 'string' && isRecord(data.table)
+    );
 };
 
 const validateRemoveTablesData = (
     data: unknown
 ): data is RemoveTableEvent['data'] => {
-    if (!isRecord(data)) {
-        return false;
-    }
-
-    return Array.isArray(data.tableIds);
+    return isRecord(data) && Array.isArray(data.tableIds);
 };
+
+const validateAddFieldData = (data: unknown): data is AddFieldEvent['data'] => {
+    return (
+        isRecord(data) &&
+        typeof data.tableId === 'string' &&
+        isRecord(data.field) &&
+        typeof data.field.id === 'string'
+    );
+};
+
+const validateRemoveFieldData = (
+    data: unknown
+): data is RemoveFieldEvent['data'] => {
+    return (
+        isRecord(data) &&
+        typeof data.tableId === 'string' &&
+        typeof data.fieldId === 'string'
+    );
+};
+
+const validateUpdateFieldData = (
+    data: unknown
+): data is UpdateFieldOperationData => {
+    return (
+        isRecord(data) &&
+        typeof data.tableId === 'string' &&
+        typeof data.fieldId === 'string' &&
+        isRecord(data.attributes) &&
+        Object.keys(data.attributes).length > 0
+    );
+};
+
+const tableHasField = (table: DBTable | undefined, fieldId: string): boolean =>
+    table?.fields.some((field) => field.id === fieldId) ?? false;
 
 export const applyRemoteDiagramOperation = async (
     payload: DiagramOperationPayload,
     mutators: DiagramOperationMutators,
     context: ApplyRemoteDiagramOperationContext
 ): Promise<void> => {
-    if (!isDiagramOperationAction(payload.action)) {
-        console.warn(
-            '[DiagramOperation] Ignoring operation with invalid action',
-            payload.action
-        );
-        return;
-    }
-
     const historyOptions = { updateHistory: false as const };
 
     switch (payload.action) {
@@ -143,6 +193,7 @@ export const applyRemoteDiagramOperation = async (
 
             return;
         }
+
         case 'update_table': {
             if (!validateUpdateTableData(payload.data)) {
                 console.warn(
@@ -159,6 +210,7 @@ export const applyRemoteDiagramOperation = async (
             );
             return;
         }
+
         case 'remove_tables': {
             if (!validateRemoveTablesData(payload.data)) {
                 console.warn(
@@ -169,6 +221,77 @@ export const applyRemoteDiagramOperation = async (
             }
 
             await mutators.removeTables(payload.data.tableIds, historyOptions);
+            return;
+        }
+
+        case 'add_field': {
+            if (!validateAddFieldData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid add_field payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const storedTable = await context.getTableFromStorage(
+                payload.data.tableId
+            );
+
+            if (tableHasField(storedTable, payload.data.field.id)) {
+                return;
+            }
+
+            await mutators.addField(
+                payload.data.tableId,
+                payload.data.field,
+                historyOptions
+            );
+            return;
+        }
+
+        case 'remove_field': {
+            if (!validateRemoveFieldData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid remove_field payload',
+                    payload.data
+                );
+                return;
+            }
+
+            await mutators.removeField(
+                payload.data.tableId,
+                payload.data.fieldId,
+                historyOptions
+            );
+            return;
+        }
+
+        case 'update_field': {
+            if (!validateUpdateFieldData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid update_field payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const storedTable = await context.getTableFromStorage(
+                payload.data.tableId
+            );
+
+            if (
+                storedTable !== undefined &&
+                !tableHasField(storedTable, payload.data.fieldId)
+            ) {
+                return;
+            }
+
+            await mutators.updateField(
+                payload.data.tableId,
+                payload.data.fieldId,
+                payload.data.attributes,
+                historyOptions
+            );
             return;
         }
     }

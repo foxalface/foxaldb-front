@@ -687,6 +687,11 @@ export const ChartDBProvider: React.FC<
                 })
             );
 
+            events.emit({
+                action: 'update_field',
+                data: { tableId, fieldId, field },
+            });
+
             const table = await db.getTable({ diagramId, id: tableId });
             if (!table) {
                 return;
@@ -717,7 +722,15 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setTables, addUndoAction, resetRedoStack, getField]
+        [
+            db,
+            diagramId,
+            setTables,
+            addUndoAction,
+            resetRedoStack,
+            getField,
+            events,
+        ]
     );
 
     const removeField: ChartDBContext['removeField'] = useCallback(

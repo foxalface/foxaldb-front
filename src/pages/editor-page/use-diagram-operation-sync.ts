@@ -4,37 +4,12 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { postDiagramOperation } from '@/lib/api/diagrams';
 import { getClientId } from '@/lib/realtime/client-id';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
-import type { DiagramOperationAction } from '@/lib/realtime/diagram-operations';
+import type { DiagramOperationRequest } from '@/lib/realtime/diagram-operations';
 import { isApplyingRemoteRef } from '@/lib/realtime/diagram-sync-state';
 import { useCallback, useEffect, useRef } from 'react';
 
 const UPDATE_TABLE_DEBOUNCE_MS = 120;
-
-type TableSyncChartDBEvent = Extract<
-    ChartDBEvent,
-    { action: DiagramOperationAction }
->;
-
-const isTableSyncEvent = (
-    event: ChartDBEvent
-): event is TableSyncChartDBEvent =>
-    event.action === 'add_tables' ||
-    event.action === 'update_table' ||
-    event.action === 'remove_tables';
-
-const shouldPostTableSyncEvent = (event: TableSyncChartDBEvent): boolean => {
-    switch (event.action) {
-        case 'add_tables':
-            return event.data.tables.length > 0;
-        case 'update_table':
-            return (
-                event.data.id.length > 0 &&
-                Object.keys(event.data.table).length > 0
-            );
-        case 'remove_tables':
-            return event.data.tableIds.length > 0;
-    }
-};
+const UPDATE_FIELD_DEBOUNCE_MS = 150;
 
 export const useDiagramOperationSync = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
@@ -44,71 +19,107 @@ export const useDiagramOperationSync = (): void => {
         Map<string, ReturnType<typeof setTimeout>>
     >(new Map());
 
+    const updateFieldTimeoutsRef = useRef<
+        Map<string, ReturnType<typeof setTimeout>>
+    >(new Map());
+
     const handleChartDBEvent = useCallback(
         (event: ChartDBEvent) => {
-            if (isLoading || !isAuthenticated) {
-                return;
-            }
-
-            if (!currentDiagram) {
-                return;
-            }
-
-            if (!isValidBackendDiagramId(currentDiagram.id)) {
-                return;
-            }
-
-            if (isApplyingRemoteRef.current) {
-                return;
-            }
-
-            if (!isTableSyncEvent(event)) {
-                return;
-            }
-
-            if (!shouldPostTableSyncEvent(event)) {
-                return;
-            }
+            console.log('[DiagramOperationSync] event received', event);
+            if (isLoading || !isAuthenticated) return;
+            if (!currentDiagram) return;
+            if (!isValidBackendDiagramId(currentDiagram.id)) return;
+            if (isApplyingRemoteRef.current) return;
 
             const diagramId = String(currentDiagram.id);
 
-            const postOperation = (): void => {
-                void postDiagramOperation(diagramId, {
+            const postOperation = (body: DiagramOperationRequest): void => {
+                void postDiagramOperation(diagramId, body).catch(
+                    (error: unknown) => {
+                        console.warn(
+                            '[DiagramOperation] Failed to post operation',
+                            error
+                        );
+                    }
+                );
+            };
+
+            // ===== TABLE =====
+
+            if (
+                event.action === 'add_tables' ||
+                event.action === 'remove_tables'
+            ) {
+                postOperation({
                     action: event.action,
                     data: event.data,
                     clientId: getClientId(),
-                }).catch((error: unknown) => {
-                    console.warn(
-                        '[DiagramOperation] Failed to post operation',
-                        error
-                    );
                 });
-            };
+                return;
+            }
 
             if (event.action === 'update_table') {
                 const tableId = event.data.id;
-                const pendingTimeout =
-                    updateTableTimeoutsRef.current.get(tableId);
 
-                if (pendingTimeout !== undefined) {
-                    clearTimeout(pendingTimeout);
-                }
+                const existing = updateTableTimeoutsRef.current.get(tableId);
+                if (existing) clearTimeout(existing);
 
                 const timeout = setTimeout(() => {
                     updateTableTimeoutsRef.current.delete(tableId);
 
-                    if (isApplyingRemoteRef.current) {
-                        return;
-                    }
+                    if (isApplyingRemoteRef.current) return;
 
-                    postOperation();
+                    postOperation({
+                        action: 'update_table',
+                        data: event.data,
+                        clientId: getClientId(),
+                    });
                 }, UPDATE_TABLE_DEBOUNCE_MS);
 
                 updateTableTimeoutsRef.current.set(tableId, timeout);
                 return;
             }
 
-            postOperation();
+            // ===== FIELD =====
+
+            if (
+                event.action === 'add_field' ||
+                event.action === 'remove_field'
+            ) {
+                postOperation({
+                    action: event.action,
+                    data: event.data,
+                    clientId: getClientId(),
+                });
+                return;
+            }
+
+            if (event.action === 'update_field') {
+                const key = `${event.data.tableId}:${event.data.fieldId}`;
+
+                const existing = updateFieldTimeoutsRef.current.get(key);
+                if (existing) clearTimeout(existing);
+
+                const timeout = setTimeout(() => {
+                    updateFieldTimeoutsRef.current.delete(key);
+
+                    if (isApplyingRemoteRef.current) return;
+
+                    // ⚠️ IMPORTANT : mapping field → attributes
+                    postOperation({
+                        action: 'update_field',
+                        data: {
+                            tableId: event.data.tableId,
+                            fieldId: event.data.fieldId,
+                            attributes: event.data.field,
+                        },
+                        clientId: getClientId(),
+                    });
+                }, UPDATE_FIELD_DEBOUNCE_MS);
+
+                updateFieldTimeoutsRef.current.set(key, timeout);
+                return;
+            }
         },
         [currentDiagram, isAuthenticated, isLoading]
     );
@@ -117,12 +128,14 @@ export const useDiagramOperationSync = (): void => {
 
     useEffect(() => {
         const updateTableTimeouts = updateTableTimeoutsRef.current;
+        const updateFieldTimeouts = updateFieldTimeoutsRef.current;
 
         return () => {
-            for (const timeout of updateTableTimeouts.values()) {
-                clearTimeout(timeout);
-            }
+            updateTableTimeouts.forEach(clearTimeout);
             updateTableTimeouts.clear();
+
+            updateFieldTimeouts.forEach(clearTimeout);
+            updateFieldTimeouts.clear();
         };
     }, []);
 };
