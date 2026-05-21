@@ -11,6 +11,36 @@ import { useCallback, useEffect, useRef } from 'react';
 const UPDATE_TABLE_DEBOUNCE_MS = 120;
 const UPDATE_FIELD_DEBOUNCE_MS = 150;
 
+const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
+    switch (event.action) {
+        case 'add_tables':
+            return event.data.tables.length > 0;
+        case 'remove_tables':
+            return event.data.tableIds.length > 0;
+        case 'update_table':
+            return (
+                event.data.id.length > 0 &&
+                Object.keys(event.data.table).length > 0
+            );
+        case 'add_field':
+            return (
+                event.data.tableId.length > 0 && event.data.field.id.length > 0
+            );
+        case 'remove_field':
+            return (
+                event.data.tableId.length > 0 && event.data.fieldId.length > 0
+            );
+        case 'update_field':
+            return (
+                event.data.tableId.length > 0 &&
+                event.data.fieldId.length > 0 &&
+                Object.keys(event.data.field).length > 0
+            );
+        case 'load_diagram':
+            return false;
+    }
+};
+
 export const useDiagramOperationSync = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
     const { currentDiagram, events } = useChartDB();
@@ -25,11 +55,11 @@ export const useDiagramOperationSync = (): void => {
 
     const handleChartDBEvent = useCallback(
         (event: ChartDBEvent) => {
-            console.log('[DiagramOperationSync] event received', event);
             if (isLoading || !isAuthenticated) return;
             if (!currentDiagram) return;
             if (!isValidBackendDiagramId(currentDiagram.id)) return;
             if (isApplyingRemoteRef.current) return;
+            if (!shouldPostDiagramSyncEvent(event)) return;
 
             const diagramId = String(currentDiagram.id);
 
@@ -105,7 +135,6 @@ export const useDiagramOperationSync = (): void => {
 
                     if (isApplyingRemoteRef.current) return;
 
-                    // ⚠️ IMPORTANT : mapping field → attributes
                     postOperation({
                         action: 'update_field',
                         data: {
