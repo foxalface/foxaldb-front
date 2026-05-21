@@ -19,12 +19,18 @@ export type DiagramOperationAction =
     | 'remove_field'
     | 'update_field'
     | 'add_relationships'
-    | 'remove_relationships';
+    | 'remove_relationships'
+    | 'update_relationship';
 
 export type UpdateFieldOperationData = {
     tableId: string;
     fieldId: string;
     attributes: Partial<DBField>;
+};
+
+export type UpdateRelationshipOperationData = {
+    id: string;
+    attributes: Partial<DBRelationship>;
 };
 
 export type DiagramOperationData =
@@ -35,7 +41,8 @@ export type DiagramOperationData =
     | RemoveFieldEvent['data']
     | UpdateFieldOperationData
     | AddRelationshipsEvent['data']
-    | RemoveRelationshipsEvent['data'];
+    | RemoveRelationshipsEvent['data']
+    | UpdateRelationshipOperationData;
 
 export interface DiagramOperationRequest {
     action: DiagramOperationAction;
@@ -89,6 +96,11 @@ export interface DiagramOperationMutators {
         relationshipIds: string[],
         options: { updateHistory: false }
     ) => Promise<void>;
+    updateRelationship: (
+        id: string,
+        relationship: Partial<DBRelationship>,
+        options: { updateHistory: false }
+    ) => Promise<void>;
 }
 
 export interface ApplyRemoteDiagramOperationContext {
@@ -112,6 +124,7 @@ const DIAGRAM_OPERATION_ACTIONS: readonly DiagramOperationAction[] = [
     'update_field',
     'add_relationships',
     'remove_relationships',
+    'update_relationship',
 ];
 
 export const isDiagramOperationAction = (
@@ -190,6 +203,18 @@ const validateRemoveRelationshipsData = (
     data: unknown
 ): data is RemoveRelationshipsEvent['data'] => {
     return isRecord(data) && Array.isArray(data.relationshipIds);
+};
+
+const validateUpdateRelationshipData = (
+    data: unknown
+): data is UpdateRelationshipOperationData => {
+    return (
+        isRecord(data) &&
+        typeof data.id === 'string' &&
+        data.id.length > 0 &&
+        isRecord(data.attributes) &&
+        Object.keys(data.attributes).length > 0
+    );
 };
 
 const tableHasField = (table: DBTable | undefined, fieldId: string): boolean =>
@@ -395,6 +420,32 @@ export const applyRemoteDiagramOperation = async (
             }
 
             await mutators.removeRelationships(relationshipIds, historyOptions);
+            return;
+        }
+
+        case 'update_relationship': {
+            if (!validateUpdateRelationshipData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid update_relationship payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const relationshipId = payload.data.id;
+            const inState = context.existingRelationshipIds.has(relationshipId);
+            const storedRelationship =
+                await context.getRelationshipFromStorage(relationshipId);
+
+            if (!inState && storedRelationship === undefined) {
+                return;
+            }
+
+            await mutators.updateRelationship(
+                relationshipId,
+                payload.data.attributes,
+                historyOptions
+            );
             return;
         }
     }

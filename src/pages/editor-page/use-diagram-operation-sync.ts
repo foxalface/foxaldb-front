@@ -10,6 +10,7 @@ import { useCallback, useEffect, useRef } from 'react';
 
 const UPDATE_TABLE_DEBOUNCE_MS = 120;
 const UPDATE_FIELD_DEBOUNCE_MS = 150;
+const UPDATE_RELATIONSHIP_DEBOUNCE_MS = 150;
 
 const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
     switch (event.action) {
@@ -40,6 +41,11 @@ const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
             return event.data.relationships.length > 0;
         case 'remove_relationships':
             return event.data.relationshipIds.length > 0;
+        case 'update_relationship':
+            return (
+                event.data.id.length > 0 &&
+                Object.keys(event.data.relationship).length > 0
+            );
         case 'load_diagram':
             return false;
     }
@@ -54,6 +60,10 @@ export const useDiagramOperationSync = (): void => {
     >(new Map());
 
     const updateFieldTimeoutsRef = useRef<
+        Map<string, ReturnType<typeof setTimeout>>
+    >(new Map());
+
+    const updateRelationshipTimeoutsRef = useRef<
         Map<string, ReturnType<typeof setTimeout>>
     >(new Map());
 
@@ -167,6 +177,37 @@ export const useDiagramOperationSync = (): void => {
                 });
                 return;
             }
+
+            if (event.action === 'update_relationship') {
+                const relationshipId = event.data.id;
+
+                const existing =
+                    updateRelationshipTimeoutsRef.current.get(relationshipId);
+                if (existing) clearTimeout(existing);
+
+                const timeout = setTimeout(() => {
+                    updateRelationshipTimeoutsRef.current.delete(
+                        relationshipId
+                    );
+
+                    if (isApplyingRemoteRef.current) return;
+
+                    postOperation({
+                        action: 'update_relationship',
+                        data: {
+                            id: event.data.id,
+                            attributes: event.data.relationship,
+                        },
+                        clientId: getClientId(),
+                    });
+                }, UPDATE_RELATIONSHIP_DEBOUNCE_MS);
+
+                updateRelationshipTimeoutsRef.current.set(
+                    relationshipId,
+                    timeout
+                );
+                return;
+            }
         },
         [currentDiagram, isAuthenticated, isLoading]
     );
@@ -176,6 +217,8 @@ export const useDiagramOperationSync = (): void => {
     useEffect(() => {
         const updateTableTimeouts = updateTableTimeoutsRef.current;
         const updateFieldTimeouts = updateFieldTimeoutsRef.current;
+        const updateRelationshipTimeouts =
+            updateRelationshipTimeoutsRef.current;
 
         return () => {
             updateTableTimeouts.forEach(clearTimeout);
@@ -183,6 +226,9 @@ export const useDiagramOperationSync = (): void => {
 
             updateFieldTimeouts.forEach(clearTimeout);
             updateFieldTimeouts.clear();
+
+            updateRelationshipTimeouts.forEach(clearTimeout);
+            updateRelationshipTimeouts.clear();
         };
     }, []);
 };

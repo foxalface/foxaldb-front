@@ -1454,6 +1454,11 @@ export const ChartDBProvider: React.FC<
                     )
                 );
 
+                events.emit({
+                    action: 'update_relationship',
+                    data: { id, relationship },
+                });
+
                 const updatedAt = new Date();
                 setDiagramUpdatedAt(updatedAt);
                 await Promise.all([
@@ -1483,6 +1488,7 @@ export const ChartDBProvider: React.FC<
                 getRelationship,
                 resetRedoStack,
                 diagramId,
+                events,
             ]
         );
 

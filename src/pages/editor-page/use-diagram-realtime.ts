@@ -85,6 +85,7 @@ export const useDiagramRealtime = (): void => {
         updateField,
         addRelationships,
         removeRelationships,
+        updateRelationship,
     } = useChartDB();
 
     const existingTableIdsRef = useRef<ReadonlySet<string>>(new Set());
@@ -143,6 +144,7 @@ export const useDiagramRealtime = (): void => {
                     updateField,
                     addRelationships,
                     removeRelationships,
+                    updateRelationship,
                 },
                 {
                     existingTableIds: existingTableIdsRef.current,
@@ -221,6 +223,7 @@ export const useDiagramRealtime = (): void => {
         updateField,
         addRelationships,
         removeRelationships,
+        updateRelationship,
         getTableFromStorage,
         getRelationshipFromStorage,
     ]);
