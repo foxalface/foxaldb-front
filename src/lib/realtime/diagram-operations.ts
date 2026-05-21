@@ -1,11 +1,14 @@
 import type {
     AddFieldEvent,
+    AddRelationshipsEvent,
     CreateTableEvent,
     RemoveFieldEvent,
+    RemoveRelationshipsEvent,
     RemoveTableEvent,
     UpdateTableEvent,
 } from '@/context/chartdb-context/chartdb-context';
 import type { DBField } from '@/lib/domain/db-field';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
 
 export type DiagramOperationAction =
@@ -14,7 +17,9 @@ export type DiagramOperationAction =
     | 'remove_tables'
     | 'add_field'
     | 'remove_field'
-    | 'update_field';
+    | 'update_field'
+    | 'add_relationships'
+    | 'remove_relationships';
 
 export type UpdateFieldOperationData = {
     tableId: string;
@@ -28,7 +33,9 @@ export type DiagramOperationData =
     | RemoveTableEvent['data']
     | AddFieldEvent['data']
     | RemoveFieldEvent['data']
-    | UpdateFieldOperationData;
+    | UpdateFieldOperationData
+    | AddRelationshipsEvent['data']
+    | RemoveRelationshipsEvent['data'];
 
 export interface DiagramOperationRequest {
     action: DiagramOperationAction;
@@ -74,11 +81,23 @@ export interface DiagramOperationMutators {
         field: Partial<DBField>,
         options: { updateHistory: false }
     ) => Promise<void>;
+    addRelationships: (
+        relationships: DBRelationship[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    removeRelationships: (
+        relationshipIds: string[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
 }
 
 export interface ApplyRemoteDiagramOperationContext {
     existingTableIds: ReadonlySet<string>;
     getTableFromStorage: (tableId: string) => Promise<DBTable | undefined>;
+    existingRelationshipIds: ReadonlySet<string>;
+    getRelationshipFromStorage: (
+        relationshipId: string
+    ) => Promise<DBRelationship | undefined>;
 }
 
 const isDexieConstraintError = (error: unknown): boolean =>
@@ -91,6 +110,8 @@ const DIAGRAM_OPERATION_ACTIONS: readonly DiagramOperationAction[] = [
     'add_field',
     'remove_field',
     'update_field',
+    'add_relationships',
+    'remove_relationships',
 ];
 
 export const isDiagramOperationAction = (
@@ -150,6 +171,25 @@ const validateUpdateFieldData = (
         isRecord(data.attributes) &&
         Object.keys(data.attributes).length > 0
     );
+};
+
+const isDBRelationship = (value: unknown): value is DBRelationship =>
+    isRecord(value) && typeof value.id === 'string';
+
+const validateAddRelationshipsData = (
+    data: unknown
+): data is AddRelationshipsEvent['data'] => {
+    return (
+        isRecord(data) &&
+        Array.isArray(data.relationships) &&
+        data.relationships.every(isDBRelationship)
+    );
+};
+
+const validateRemoveRelationshipsData = (
+    data: unknown
+): data is RemoveRelationshipsEvent['data'] => {
+    return isRecord(data) && Array.isArray(data.relationshipIds);
 };
 
 const tableHasField = (table: DBTable | undefined, fieldId: string): boolean =>
@@ -292,6 +332,69 @@ export const applyRemoteDiagramOperation = async (
                 payload.data.attributes,
                 historyOptions
             );
+            return;
+        }
+
+        case 'add_relationships': {
+            if (!validateAddRelationshipsData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid add_relationships payload',
+                    payload.data
+                );
+                return;
+            }
+
+            for (const relationship of payload.data.relationships) {
+                if (context.existingRelationshipIds.has(relationship.id)) {
+                    continue;
+                }
+
+                if (
+                    !context.existingTableIds.has(relationship.sourceTableId) ||
+                    !context.existingTableIds.has(relationship.targetTableId)
+                ) {
+                    continue;
+                }
+
+                const storedRelationship =
+                    await context.getRelationshipFromStorage(relationship.id);
+                const relationshipToApply = storedRelationship ?? relationship;
+
+                try {
+                    await mutators.addRelationships(
+                        [relationshipToApply],
+                        historyOptions
+                    );
+                } catch (error) {
+                    if (isDexieConstraintError(error)) {
+                        continue;
+                    }
+
+                    throw error;
+                }
+            }
+
+            return;
+        }
+
+        case 'remove_relationships': {
+            if (!validateRemoveRelationshipsData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid remove_relationships payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const relationshipIds = payload.data.relationshipIds.filter(
+                (id): id is string => typeof id === 'string' && id.length > 0
+            );
+
+            if (relationshipIds.length === 0) {
+                return;
+            }
+
+            await mutators.removeRelationships(relationshipIds, historyOptions);
             return;
         }
     }

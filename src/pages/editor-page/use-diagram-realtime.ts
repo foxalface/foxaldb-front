@@ -69,20 +69,31 @@ const parseDiagramOperationPayload = (
 
 export const useDiagramRealtime = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
-    const { getTable: getTableFromStorage } = useStorage();
+    const {
+        getTable: getTableFromStorage,
+        getRelationship: getRelationshipFromStorage,
+    } = useStorage();
     const {
         currentDiagram,
         tables,
+        relationships,
         addTables,
         updateTable,
         removeTables,
         addField,
         removeField,
         updateField,
+        addRelationships,
+        removeRelationships,
     } = useChartDB();
 
     const existingTableIdsRef = useRef<ReadonlySet<string>>(new Set());
     existingTableIdsRef.current = new Set(tables.map((table) => table.id));
+
+    const existingRelationshipIdsRef = useRef<ReadonlySet<string>>(new Set());
+    existingRelationshipIdsRef.current = new Set(
+        relationships.map((relationship) => relationship.id)
+    );
 
     const diagramId =
         currentDiagram && isValidBackendDiagramId(currentDiagram.id)
@@ -130,6 +141,8 @@ export const useDiagramRealtime = (): void => {
                     addField,
                     removeField,
                     updateField,
+                    addRelationships,
+                    removeRelationships,
                 },
                 {
                     existingTableIds: existingTableIdsRef.current,
@@ -137,6 +150,12 @@ export const useDiagramRealtime = (): void => {
                         getTableFromStorage({
                             diagramId,
                             id: tableId,
+                        }),
+                    existingRelationshipIds: existingRelationshipIdsRef.current,
+                    getRelationshipFromStorage: (relationshipId: string) =>
+                        getRelationshipFromStorage({
+                            diagramId,
+                            id: relationshipId,
                         }),
                 }
             )
@@ -200,6 +219,9 @@ export const useDiagramRealtime = (): void => {
         addField,
         removeField,
         updateField,
+        addRelationships,
+        removeRelationships,
         getTableFromStorage,
+        getRelationshipFromStorage,
     ]);
 };

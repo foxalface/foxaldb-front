@@ -1293,6 +1293,11 @@ export const ChartDBProvider: React.FC<
                 ...relationships,
             ]);
 
+            events.emit({
+                action: 'add_relationships',
+                data: { relationships },
+            });
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
@@ -1314,7 +1319,7 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setRelationships, addUndoAction, resetRedoStack]
+        [db, diagramId, setRelationships, addUndoAction, resetRedoStack, events]
     );
 
     const addRelationship: ChartDBContext['addRelationship'] = useCallback(
@@ -1390,6 +1395,11 @@ export const ChartDBProvider: React.FC<
                     )
                 );
 
+                events.emit({
+                    action: 'remove_relationships',
+                    data: { relationshipIds: ids },
+                });
+
                 const updatedAt = new Date();
                 setDiagramUpdatedAt(updatedAt);
                 await Promise.all([
@@ -1418,6 +1428,7 @@ export const ChartDBProvider: React.FC<
                 relationships,
                 addUndoAction,
                 resetRedoStack,
+                events,
             ]
         );
 

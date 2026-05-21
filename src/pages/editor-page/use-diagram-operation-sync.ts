@@ -36,6 +36,10 @@ const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
                 event.data.fieldId.length > 0 &&
                 Object.keys(event.data.field).length > 0
             );
+        case 'add_relationships':
+            return event.data.relationships.length > 0;
+        case 'remove_relationships':
+            return event.data.relationshipIds.length > 0;
         case 'load_diagram':
             return false;
     }
@@ -147,6 +151,20 @@ export const useDiagramOperationSync = (): void => {
                 }, UPDATE_FIELD_DEBOUNCE_MS);
 
                 updateFieldTimeoutsRef.current.set(key, timeout);
+                return;
+            }
+
+            // ===== RELATIONSHIP =====
+
+            if (
+                event.action === 'add_relationships' ||
+                event.action === 'remove_relationships'
+            ) {
+                postOperation({
+                    action: event.action,
+                    data: event.data,
+                    clientId: getClientId(),
+                });
                 return;
             }
         },
