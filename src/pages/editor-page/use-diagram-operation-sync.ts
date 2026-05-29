@@ -5,7 +5,7 @@ import { postDiagramOperation } from '@/lib/api/diagrams';
 import { getClientId } from '@/lib/realtime/client-id';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { DiagramOperationRequest } from '@/lib/realtime/diagram-operations';
-import { isApplyingRemoteRef } from '@/lib/realtime/diagram-sync-state';
+import { isRemoteSyncActive } from '@/lib/realtime/diagram-sync-state';
 import { useCallback, useEffect, useRef } from 'react';
 
 const UPDATE_TABLE_DEBOUNCE_MS = 120;
@@ -72,7 +72,7 @@ export const useDiagramOperationSync = (): void => {
             if (isLoading || !isAuthenticated) return;
             if (!currentDiagram) return;
             if (!isValidBackendDiagramId(currentDiagram.id)) return;
-            if (isApplyingRemoteRef.current) return;
+            if (isRemoteSyncActive()) return;
             if (!shouldPostDiagramSyncEvent(event)) return;
 
             const diagramId = String(currentDiagram.id);
@@ -111,7 +111,7 @@ export const useDiagramOperationSync = (): void => {
                 const timeout = setTimeout(() => {
                     updateTableTimeoutsRef.current.delete(tableId);
 
-                    if (isApplyingRemoteRef.current) return;
+                    if (isRemoteSyncActive()) return;
 
                     postOperation({
                         action: 'update_table',
@@ -147,7 +147,7 @@ export const useDiagramOperationSync = (): void => {
                 const timeout = setTimeout(() => {
                     updateFieldTimeoutsRef.current.delete(key);
 
-                    if (isApplyingRemoteRef.current) return;
+                    if (isRemoteSyncActive()) return;
 
                     postOperation({
                         action: 'update_field',
@@ -190,7 +190,7 @@ export const useDiagramOperationSync = (): void => {
                         relationshipId
                     );
 
-                    if (isApplyingRemoteRef.current) return;
+                    if (isRemoteSyncActive()) return;
 
                     postOperation({
                         action: 'update_relationship',

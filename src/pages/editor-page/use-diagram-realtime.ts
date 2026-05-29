@@ -11,8 +11,8 @@ import {
     type DiagramOperationPayload,
 } from '@/lib/realtime/diagram-operations';
 import {
-    isApplyingRemoteRef,
     remoteSyncDepthRef,
+    syncRemoteApplyState,
 } from '@/lib/realtime/diagram-sync-state';
 import { useEffect, useRef } from 'react';
 
@@ -130,8 +130,8 @@ export const useDiagramRealtime = (): void => {
                 return;
             }
 
-            isApplyingRemoteRef.current = true;
             remoteSyncDepthRef.current += 1;
+            syncRemoteApplyState();
 
             void applyRemoteDiagramOperation(
                 payload,
@@ -172,7 +172,7 @@ export const useDiagramRealtime = (): void => {
                         0,
                         remoteSyncDepthRef.current - 1
                     );
-                    isApplyingRemoteRef.current = false;
+                    syncRemoteApplyState();
                 });
         };
 
