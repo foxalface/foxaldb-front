@@ -5,8 +5,14 @@ import { postDiagramOperation } from '@/lib/api/diagrams';
 import { getClientId } from '@/lib/realtime/client-id';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { DiagramOperationRequest } from '@/lib/realtime/diagram-operations';
-import { isRemoteSyncActive } from '@/lib/realtime/diagram-sync-state';
+import {
+    isOutboundReplayActive,
+    isRemoteSyncActive,
+} from '@/lib/realtime/diagram-sync-state';
 import { useCallback, useEffect, useRef } from 'react';
+
+const shouldSkipOutboundSync = (): boolean =>
+    isRemoteSyncActive() || isOutboundReplayActive();
 
 const UPDATE_TABLE_DEBOUNCE_MS = 120;
 const UPDATE_FIELD_DEBOUNCE_MS = 150;
@@ -114,7 +120,7 @@ export const useDiagramOperationSync = (): void => {
             if (isLoading || !isAuthenticated) return;
             if (!currentDiagram) return;
             if (!isValidBackendDiagramId(currentDiagram.id)) return;
-            if (isRemoteSyncActive()) return;
+            if (shouldSkipOutboundSync()) return;
             if (!shouldPostDiagramSyncEvent(event)) return;
 
             const diagramId = String(currentDiagram.id);
@@ -153,7 +159,7 @@ export const useDiagramOperationSync = (): void => {
                 const timeout = setTimeout(() => {
                     updateTableTimeoutsRef.current.delete(tableId);
 
-                    if (isRemoteSyncActive()) return;
+                    if (shouldSkipOutboundSync()) return;
 
                     postOperation({
                         action: 'update_table',
@@ -189,7 +195,7 @@ export const useDiagramOperationSync = (): void => {
                 const timeout = setTimeout(() => {
                     updateFieldTimeoutsRef.current.delete(key);
 
-                    if (isRemoteSyncActive()) return;
+                    if (shouldSkipOutboundSync()) return;
 
                     postOperation({
                         action: 'update_field',
@@ -232,7 +238,7 @@ export const useDiagramOperationSync = (): void => {
                         relationshipId
                     );
 
-                    if (isRemoteSyncActive()) return;
+                    if (shouldSkipOutboundSync()) return;
 
                     postOperation({
                         action: 'update_relationship',
@@ -274,7 +280,7 @@ export const useDiagramOperationSync = (): void => {
                 const timeout = setTimeout(() => {
                     updateNoteTimeoutsRef.current.delete(noteId);
 
-                    if (isRemoteSyncActive()) return;
+                    if (shouldSkipOutboundSync()) return;
 
                     postOperation({
                         action: 'update_note',
@@ -313,7 +319,7 @@ export const useDiagramOperationSync = (): void => {
                 const timeout = setTimeout(() => {
                     updateAreaTimeoutsRef.current.delete(areaId);
 
-                    if (isRemoteSyncActive()) return;
+                    if (shouldSkipOutboundSync()) return;
 
                     postOperation({
                         action: 'update_area',
@@ -353,7 +359,7 @@ export const useDiagramOperationSync = (): void => {
                 const timeout = setTimeout(() => {
                     updateDependencyTimeoutsRef.current.delete(dependencyId);
 
-                    if (isRemoteSyncActive()) return;
+                    if (shouldSkipOutboundSync()) return;
 
                     postOperation({
                         action: 'update_dependency',

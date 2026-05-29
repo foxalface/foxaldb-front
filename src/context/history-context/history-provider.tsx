@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { historyContext } from './history-context';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
+import { runWithoutOutboundReplay } from '@/lib/realtime/diagram-sync-state';
 import type { RedoUndoActionHandlers } from './redo-undo-action';
 
 export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
@@ -390,10 +391,12 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
         const handler = undoActionHandlers[action.action];
         addRedoAction(action);
 
-        await handler?.({
-            undoData: action.undoData,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any);
+        await runWithoutOutboundReplay(() =>
+            handler?.({
+                undoData: action.undoData,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any)
+        );
     };
 
     const redo = async () => {
@@ -405,10 +408,12 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
         const handler = redoActionHandlers[action.action];
         addUndoAction(action);
 
-        await handler?.({
-            redoData: action.redoData,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any);
+        await runWithoutOutboundReplay(() =>
+            handler?.({
+                redoData: action.redoData,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any)
+        );
     };
 
     return (
