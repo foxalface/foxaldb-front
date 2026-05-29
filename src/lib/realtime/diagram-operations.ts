@@ -1,8 +1,10 @@
 import type {
     AddFieldEvent,
+    AddNotesEvent,
     AddRelationshipsEvent,
     CreateTableEvent,
     RemoveFieldEvent,
+    RemoveNotesEvent,
     RemoveRelationshipsEvent,
     RemoveTableEvent,
     UpdateTableEvent,
@@ -10,6 +12,7 @@ import type {
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
+import type { Note } from '@/lib/domain/note';
 
 export type DiagramOperationAction =
     | 'add_tables'
@@ -20,7 +23,10 @@ export type DiagramOperationAction =
     | 'update_field'
     | 'add_relationships'
     | 'remove_relationships'
-    | 'update_relationship';
+    | 'update_relationship'
+    | 'add_notes'
+    | 'remove_notes'
+    | 'update_note';
 
 export type UpdateFieldOperationData = {
     tableId: string;
@@ -33,6 +39,11 @@ export type UpdateRelationshipOperationData = {
     attributes: Partial<DBRelationship>;
 };
 
+export type UpdateNoteOperationData = {
+    id: string;
+    attributes: Partial<Note>;
+};
+
 export type DiagramOperationData =
     | CreateTableEvent['data']
     | UpdateTableEvent['data']
@@ -42,7 +53,10 @@ export type DiagramOperationData =
     | UpdateFieldOperationData
     | AddRelationshipsEvent['data']
     | RemoveRelationshipsEvent['data']
-    | UpdateRelationshipOperationData;
+    | UpdateRelationshipOperationData
+    | AddNotesEvent['data']
+    | RemoveNotesEvent['data']
+    | UpdateNoteOperationData;
 
 export interface DiagramOperationRequest {
     action: DiagramOperationAction;
@@ -101,6 +115,19 @@ export interface DiagramOperationMutators {
         relationship: Partial<DBRelationship>,
         options: { updateHistory: false }
     ) => Promise<void>;
+    addNotes: (
+        notes: Note[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    removeNotes: (
+        noteIds: string[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    updateNote: (
+        id: string,
+        note: Partial<Note>,
+        options: { updateHistory: false }
+    ) => Promise<void>;
 }
 
 export interface ApplyRemoteDiagramOperationContext {
@@ -111,6 +138,8 @@ export interface ApplyRemoteDiagramOperationContext {
         relationshipId: string
     ) => Promise<DBRelationship | undefined>;
     existingFieldIdsByTable: ReadonlyMap<string, ReadonlySet<string>>;
+    existingNoteIds: ReadonlySet<string>;
+    getNoteFromStorage: (noteId: string) => Promise<Note | undefined>;
 }
 
 const isDexieConstraintError = (error: unknown): boolean =>
@@ -126,6 +155,9 @@ const DIAGRAM_OPERATION_ACTIONS: readonly DiagramOperationAction[] = [
     'add_relationships',
     'remove_relationships',
     'update_relationship',
+    'add_notes',
+    'remove_notes',
+    'update_note',
 ];
 
 export const isDiagramOperationAction = (
@@ -209,6 +241,33 @@ const validateRemoveRelationshipsData = (
 const validateUpdateRelationshipData = (
     data: unknown
 ): data is UpdateRelationshipOperationData => {
+    return (
+        isRecord(data) &&
+        typeof data.id === 'string' &&
+        data.id.length > 0 &&
+        isRecord(data.attributes) &&
+        Object.keys(data.attributes).length > 0
+    );
+};
+
+const isNote = (value: unknown): value is Note =>
+    isRecord(value) && typeof value.id === 'string';
+
+const validateAddNotesData = (data: unknown): data is AddNotesEvent['data'] => {
+    return (
+        isRecord(data) && Array.isArray(data.notes) && data.notes.every(isNote)
+    );
+};
+
+const validateRemoveNotesData = (
+    data: unknown
+): data is RemoveNotesEvent['data'] => {
+    return isRecord(data) && Array.isArray(data.noteIds);
+};
+
+const validateUpdateNoteData = (
+    data: unknown
+): data is UpdateNoteOperationData => {
     return (
         isRecord(data) &&
         typeof data.id === 'string' &&
@@ -454,6 +513,83 @@ export const applyRemoteDiagramOperation = async (
 
             await mutators.updateRelationship(
                 relationshipId,
+                payload.data.attributes,
+                historyOptions
+            );
+            return;
+        }
+
+        case 'add_notes': {
+            if (!validateAddNotesData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid add_notes payload',
+                    payload.data
+                );
+                return;
+            }
+
+            for (const note of payload.data.notes) {
+                if (context.existingNoteIds.has(note.id)) {
+                    continue;
+                }
+
+                const storedNote = await context.getNoteFromStorage(note.id);
+                const noteToApply = storedNote ?? note;
+
+                try {
+                    await mutators.addNotes([noteToApply], historyOptions);
+                } catch (error) {
+                    if (isDexieConstraintError(error)) {
+                        continue;
+                    }
+
+                    throw error;
+                }
+            }
+
+            return;
+        }
+
+        case 'remove_notes': {
+            if (!validateRemoveNotesData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid remove_notes payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const noteIds = payload.data.noteIds.filter(
+                (id): id is string => typeof id === 'string' && id.length > 0
+            );
+
+            if (noteIds.length === 0) {
+                return;
+            }
+
+            await mutators.removeNotes(noteIds, historyOptions);
+            return;
+        }
+
+        case 'update_note': {
+            if (!validateUpdateNoteData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid update_note payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const noteId = payload.data.id;
+            const inState = context.existingNoteIds.has(noteId);
+            const storedNote = await context.getNoteFromStorage(noteId);
+
+            if (!inState && storedNote === undefined) {
+                return;
+            }
+
+            await mutators.updateNote(
+                noteId,
                 payload.data.attributes,
                 historyOptions
             );

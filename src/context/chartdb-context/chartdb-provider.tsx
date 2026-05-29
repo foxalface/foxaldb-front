@@ -1782,6 +1782,13 @@ export const ChartDBProvider: React.FC<
         async (notes: Note[], options = { updateHistory: true }) => {
             setNotes((currentNotes) => [...currentNotes, ...notes]);
 
+            if (notes.length > 0) {
+                events.emit({
+                    action: 'add_notes',
+                    data: { notes },
+                });
+            }
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
@@ -1799,7 +1806,7 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setNotes, addUndoAction, resetRedoStack]
+        [db, diagramId, setNotes, addUndoAction, resetRedoStack, events]
     );
 
     const addNote: ChartDBContext['addNote'] = useCallback(
@@ -1842,6 +1849,13 @@ export const ChartDBProvider: React.FC<
 
             setNotes((notes) => notes.filter((note) => !ids.includes(note.id)));
 
+            if (ids.length > 0) {
+                events.emit({
+                    action: 'remove_notes',
+                    data: { noteIds: ids },
+                });
+            }
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
@@ -1859,7 +1873,7 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setNotes, notes, addUndoAction, resetRedoStack]
+        [db, diagramId, setNotes, notes, addUndoAction, resetRedoStack, events]
     );
 
     const removeNote: ChartDBContext['removeNote'] = useCallback(
@@ -1881,6 +1895,13 @@ export const ChartDBProvider: React.FC<
                 notes.map((n) => (n.id === id ? { ...n, ...note } : n))
             );
 
+            if (Object.keys(note).length > 0) {
+                events.emit({
+                    action: 'update_note',
+                    data: { id, note },
+                });
+            }
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
@@ -1898,7 +1919,15 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setNotes, getNote, addUndoAction, resetRedoStack]
+        [
+            db,
+            diagramId,
+            setNotes,
+            getNote,
+            addUndoAction,
+            resetRedoStack,
+            events,
+        ]
     );
 
     const highlightCustomTypeId = useCallback(

@@ -11,6 +11,7 @@ import { useCallback, useEffect, useRef } from 'react';
 const UPDATE_TABLE_DEBOUNCE_MS = 120;
 const UPDATE_FIELD_DEBOUNCE_MS = 150;
 const UPDATE_RELATIONSHIP_DEBOUNCE_MS = 150;
+const UPDATE_NOTE_DEBOUNCE_MS = 150;
 
 const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
     switch (event.action) {
@@ -46,6 +47,15 @@ const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
                 event.data.id.length > 0 &&
                 Object.keys(event.data.relationship).length > 0
             );
+        case 'add_notes':
+            return event.data.notes.length > 0;
+        case 'remove_notes':
+            return event.data.noteIds.length > 0;
+        case 'update_note':
+            return (
+                event.data.id.length > 0 &&
+                Object.keys(event.data.note).length > 0
+            );
         case 'load_diagram':
             return false;
     }
@@ -64,6 +74,10 @@ export const useDiagramOperationSync = (): void => {
     >(new Map());
 
     const updateRelationshipTimeoutsRef = useRef<
+        Map<string, ReturnType<typeof setTimeout>>
+    >(new Map());
+
+    const updateNoteTimeoutsRef = useRef<
         Map<string, ReturnType<typeof setTimeout>>
     >(new Map());
 
@@ -208,6 +222,45 @@ export const useDiagramOperationSync = (): void => {
                 );
                 return;
             }
+
+            // ===== NOTE =====
+
+            if (
+                event.action === 'add_notes' ||
+                event.action === 'remove_notes'
+            ) {
+                postOperation({
+                    action: event.action,
+                    data: event.data,
+                    clientId: getClientId(),
+                });
+                return;
+            }
+
+            if (event.action === 'update_note') {
+                const noteId = event.data.id;
+
+                const existing = updateNoteTimeoutsRef.current.get(noteId);
+                if (existing) clearTimeout(existing);
+
+                const timeout = setTimeout(() => {
+                    updateNoteTimeoutsRef.current.delete(noteId);
+
+                    if (isRemoteSyncActive()) return;
+
+                    postOperation({
+                        action: 'update_note',
+                        data: {
+                            id: event.data.id,
+                            attributes: event.data.note,
+                        },
+                        clientId: getClientId(),
+                    });
+                }, UPDATE_NOTE_DEBOUNCE_MS);
+
+                updateNoteTimeoutsRef.current.set(noteId, timeout);
+                return;
+            }
         },
         [currentDiagram, isAuthenticated, isLoading]
     );
@@ -219,6 +272,7 @@ export const useDiagramOperationSync = (): void => {
         const updateFieldTimeouts = updateFieldTimeoutsRef.current;
         const updateRelationshipTimeouts =
             updateRelationshipTimeoutsRef.current;
+        const updateNoteTimeouts = updateNoteTimeoutsRef.current;
 
         return () => {
             updateTableTimeouts.forEach(clearTimeout);
@@ -229,6 +283,9 @@ export const useDiagramOperationSync = (): void => {
 
             updateRelationshipTimeouts.forEach(clearTimeout);
             updateRelationshipTimeouts.clear();
+
+            updateNoteTimeouts.forEach(clearTimeout);
+            updateNoteTimeouts.clear();
         };
     }, []);
 };

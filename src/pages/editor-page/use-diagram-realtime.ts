@@ -72,11 +72,13 @@ export const useDiagramRealtime = (): void => {
     const {
         getTable: getTableFromStorage,
         getRelationship: getRelationshipFromStorage,
+        getNote: getNoteFromStorage,
     } = useStorage();
     const {
         currentDiagram,
         tables,
         relationships,
+        notes,
         addTables,
         updateTable,
         removeTables,
@@ -86,6 +88,9 @@ export const useDiagramRealtime = (): void => {
         addRelationships,
         removeRelationships,
         updateRelationship,
+        addNotes,
+        removeNotes,
+        updateNote,
     } = useChartDB();
 
     const existingTableIdsRef = useRef<ReadonlySet<string>>(new Set());
@@ -105,6 +110,9 @@ export const useDiagramRealtime = (): void => {
             new Set(table.fields.map((field) => field.id)),
         ])
     );
+
+    const existingNoteIdsRef = useRef<ReadonlySet<string>>(new Set());
+    existingNoteIdsRef.current = new Set(notes.map((note) => note.id));
 
     const diagramId =
         currentDiagram && isValidBackendDiagramId(currentDiagram.id)
@@ -155,6 +163,9 @@ export const useDiagramRealtime = (): void => {
                     addRelationships,
                     removeRelationships,
                     updateRelationship,
+                    addNotes,
+                    removeNotes,
+                    updateNote,
                 },
                 {
                     existingTableIds: existingTableIdsRef.current,
@@ -170,6 +181,12 @@ export const useDiagramRealtime = (): void => {
                             id: relationshipId,
                         }),
                     existingFieldIdsByTable: existingFieldIdsByTableRef.current,
+                    existingNoteIds: existingNoteIdsRef.current,
+                    getNoteFromStorage: (noteId: string) =>
+                        getNoteFromStorage({
+                            diagramId,
+                            id: noteId,
+                        }),
                 }
             )
                 .catch((error: unknown) => {
@@ -227,6 +244,7 @@ export const useDiagramRealtime = (): void => {
         isAuthenticated,
         diagramId,
         tables,
+        notes,
         addTables,
         updateTable,
         removeTables,
@@ -236,7 +254,11 @@ export const useDiagramRealtime = (): void => {
         addRelationships,
         removeRelationships,
         updateRelationship,
+        addNotes,
+        removeNotes,
+        updateNote,
         getTableFromStorage,
         getRelationshipFromStorage,
+        getNoteFromStorage,
     ]);
 };

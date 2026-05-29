@@ -25,6 +25,9 @@ export type ChartDBEventType =
     | 'add_relationships'
     | 'remove_relationships'
     | 'update_relationship'
+    | 'add_notes'
+    | 'remove_notes'
+    | 'update_note'
     | 'load_diagram';
 
 export type ChartDBEventBase<T extends ChartDBEventType, D> = {
@@ -77,6 +80,18 @@ export type UpdateRelationshipEvent = ChartDBEventBase<
     { id: string; relationship: Partial<DBRelationship> }
 >;
 
+export type AddNotesEvent = ChartDBEventBase<'add_notes', { notes: Note[] }>;
+
+export type RemoveNotesEvent = ChartDBEventBase<
+    'remove_notes',
+    { noteIds: string[] }
+>;
+
+export type UpdateNoteEvent = ChartDBEventBase<
+    'update_note',
+    { id: string; note: Partial<Note> }
+>;
+
 export type LoadDiagramEvent = ChartDBEventBase<
     'load_diagram',
     { diagram: Diagram }
@@ -92,6 +107,9 @@ export type ChartDBEvent =
     | AddRelationshipsEvent
     | RemoveRelationshipsEvent
     | UpdateRelationshipEvent
+    | AddNotesEvent
+    | RemoveNotesEvent
+    | UpdateNoteEvent
     | LoadDiagramEvent;
 
 export interface ChartDBContext {
