@@ -1,22 +1,12 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
+import type { Diagram } from '@/lib/domain/diagram';
 import { updateDiagram } from '@/lib/api/diagrams';
-import { remoteSyncDepthRef } from '@/lib/realtime/diagram-sync-state';
+import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
+import { isRemoteSyncActive } from '@/lib/realtime/diagram-sync-state';
 import { useEffect, useRef } from 'react';
 
 const AUTOSAVE_DEBOUNCE_MS = 900;
-
-const isValidBackendDiagramId = (id: unknown): id is string | number => {
-    if (typeof id === 'number') {
-        return Number.isInteger(id) && id > 0;
-    }
-
-    if (typeof id === 'string') {
-        return /^\d+$/.test(id);
-    }
-
-    return false;
-};
 
 const toAutosaveSnapshot = (diagram: {
     name: string;
@@ -34,6 +24,9 @@ export const useDiagramAutosave = () => {
     const activeDiagramIdRef = useRef<string | null>(null);
     const lastSavedPayloadRef = useRef<string | null>(null);
     const isSavingRef = useRef(false);
+    const latestDiagramRef = useRef<Diagram | null>(null);
+    const latestPayloadRef = useRef<string | null>(null);
+    const latestDiagramIdRef = useRef<string | null>(null);
 
     useEffect(() => {
         if (
@@ -44,10 +37,6 @@ export const useDiagramAutosave = () => {
             return;
         }
 
-        if (remoteSyncDepthRef.current > 0) {
-            return;
-        }
-
         const diagramId = String(currentDiagram.id);
         const payload = toAutosaveSnapshot({
             name: currentDiagram.name ?? 'Untitled diagram',
@@ -55,6 +44,14 @@ export const useDiagramAutosave = () => {
             relationships: currentDiagram.relationships ?? [],
             dependencies: currentDiagram.dependencies ?? [],
         });
+
+        latestDiagramRef.current = currentDiagram;
+        latestPayloadRef.current = payload;
+        latestDiagramIdRef.current = diagramId;
+
+        if (isRemoteSyncActive()) {
+            return;
+        }
 
         if (activeDiagramIdRef.current !== diagramId) {
             activeDiagramIdRef.current = diagramId;
@@ -75,13 +72,41 @@ export const useDiagramAutosave = () => {
                 return;
             }
 
+            if (isRemoteSyncActive()) {
+                return;
+            }
+
+            const diagram = latestDiagramRef.current;
+            const savePayload = latestPayloadRef.current;
+            const saveDiagramId = latestDiagramIdRef.current;
+
+            if (
+                diagram === null ||
+                savePayload === null ||
+                saveDiagramId === null
+            ) {
+                return;
+            }
+
+            if (!isValidBackendDiagramId(diagram.id)) {
+                return;
+            }
+
+            if (String(diagram.id) !== saveDiagramId) {
+                return;
+            }
+
+            if (savePayload === lastSavedPayloadRef.current) {
+                return;
+            }
+
             isSavingRef.current = true;
             try {
-                await updateDiagram(diagramId, {
-                    name: currentDiagram.name ?? 'Untitled diagram',
-                    content: currentDiagram,
+                await updateDiagram(saveDiagramId, {
+                    name: diagram.name ?? 'Untitled diagram',
+                    content: diagram,
                 });
-                lastSavedPayloadRef.current = payload;
+                lastSavedPayloadRef.current = savePayload;
             } catch (error) {
                 console.error('Failed to autosave diagram', error);
             } finally {
