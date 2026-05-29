@@ -580,10 +580,13 @@ export const ChartDBProvider: React.FC<
 
             setTables(updateTables);
 
-            events.emit({
-                action: 'remove_tables',
-                data: { tableIds: tablesToDelete.map((t) => t.id) },
-            });
+            const tableIdsToRemove = tablesToDelete.map((table) => table.id);
+            if (tableIdsToRemove.length > 0) {
+                events.emit({
+                    action: 'remove_tables',
+                    data: { tableIds: tableIdsToRemove },
+                });
+            }
 
             const promises = [];
             for (const updatedTable of updatedTables) {
