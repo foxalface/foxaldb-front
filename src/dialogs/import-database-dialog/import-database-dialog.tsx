@@ -15,6 +15,7 @@ import type { BaseDialogProps } from '../common/base-dialog-props';
 import { sqlImportToDiagram } from '@/lib/data/sql-import';
 import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 import type { ImportMethod } from '@/lib/import-method/import-method';
+import { runWithoutOutboundReplay } from '@/lib/realtime/diagram-sync-state';
 
 export interface ImportDatabaseDialogProps extends BaseDialogProps {
     databaseType: DatabaseType;
@@ -119,21 +120,21 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
 
         // Use queueMicrotask to defer work after dialog closes but before next paint
         queueMicrotask(async () => {
-            // Add tables and relationships
-            await Promise.all([
-                addTables(positionedTables, { updateHistory: false }),
-                addRelationships(diagram.relationships ?? [], {
-                    updateHistory: false,
-                }),
-            ]);
+            await runWithoutOutboundReplay(async () => {
+                await Promise.all([
+                    addTables(positionedTables, { updateHistory: false }),
+                    addRelationships(diagram.relationships ?? [], {
+                        updateHistory: false,
+                    }),
+                ]);
 
-            if (currentDatabaseType === DatabaseType.GENERIC) {
-                await updateDatabaseType(databaseType);
-            }
+                if (currentDatabaseType === DatabaseType.GENERIC) {
+                    await updateDatabaseType(databaseType);
+                }
 
-            // Reset undo/redo stacks
-            resetRedoStack();
-            resetUndoStack();
+                resetRedoStack();
+                resetUndoStack();
+            });
         });
     }, [
         importMethod,

@@ -8,8 +8,9 @@ import type { DiagramOperationRequest } from '@/lib/realtime/diagram-operations'
 import {
     isOutboundReplayActive,
     isRemoteSyncActive,
+    setClearPendingDiagramOperationSyncTimers,
 } from '@/lib/realtime/diagram-sync-state';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 
 const shouldSkipOutboundSync = (): boolean =>
     isRemoteSyncActive() || isOutboundReplayActive();
@@ -20,6 +21,35 @@ const UPDATE_RELATIONSHIP_DEBOUNCE_MS = 150;
 const UPDATE_NOTE_DEBOUNCE_MS = 150;
 const UPDATE_AREA_DEBOUNCE_MS = 150;
 const UPDATE_DEPENDENCY_DEBOUNCE_MS = 150;
+
+const updateTableTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+const updateFieldTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+const updateRelationshipTimeouts = new Map<
+    string,
+    ReturnType<typeof setTimeout>
+>();
+const updateNoteTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+const updateAreaTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+const updateDependencyTimeouts = new Map<
+    string,
+    ReturnType<typeof setTimeout>
+>();
+
+const clearTimeoutMap = (
+    timeouts: Map<string, ReturnType<typeof setTimeout>>
+): void => {
+    timeouts.forEach(clearTimeout);
+    timeouts.clear();
+};
+
+export const clearPendingDiagramOperationSyncTimers = (): void => {
+    clearTimeoutMap(updateTableTimeouts);
+    clearTimeoutMap(updateFieldTimeouts);
+    clearTimeoutMap(updateRelationshipTimeouts);
+    clearTimeoutMap(updateNoteTimeouts);
+    clearTimeoutMap(updateAreaTimeouts);
+    clearTimeoutMap(updateDependencyTimeouts);
+};
 
 const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
     switch (event.action) {
@@ -91,30 +121,6 @@ export const useDiagramOperationSync = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
     const { currentDiagram, events } = useChartDB();
 
-    const updateTableTimeoutsRef = useRef<
-        Map<string, ReturnType<typeof setTimeout>>
-    >(new Map());
-
-    const updateFieldTimeoutsRef = useRef<
-        Map<string, ReturnType<typeof setTimeout>>
-    >(new Map());
-
-    const updateRelationshipTimeoutsRef = useRef<
-        Map<string, ReturnType<typeof setTimeout>>
-    >(new Map());
-
-    const updateNoteTimeoutsRef = useRef<
-        Map<string, ReturnType<typeof setTimeout>>
-    >(new Map());
-
-    const updateAreaTimeoutsRef = useRef<
-        Map<string, ReturnType<typeof setTimeout>>
-    >(new Map());
-
-    const updateDependencyTimeoutsRef = useRef<
-        Map<string, ReturnType<typeof setTimeout>>
-    >(new Map());
-
     const handleChartDBEvent = useCallback(
         (event: ChartDBEvent) => {
             if (isLoading || !isAuthenticated) return;
@@ -153,11 +159,11 @@ export const useDiagramOperationSync = (): void => {
             if (event.action === 'update_table') {
                 const tableId = event.data.id;
 
-                const existing = updateTableTimeoutsRef.current.get(tableId);
+                const existing = updateTableTimeouts.get(tableId);
                 if (existing) clearTimeout(existing);
 
                 const timeout = setTimeout(() => {
-                    updateTableTimeoutsRef.current.delete(tableId);
+                    updateTableTimeouts.delete(tableId);
 
                     if (shouldSkipOutboundSync()) return;
 
@@ -168,7 +174,7 @@ export const useDiagramOperationSync = (): void => {
                     });
                 }, UPDATE_TABLE_DEBOUNCE_MS);
 
-                updateTableTimeoutsRef.current.set(tableId, timeout);
+                updateTableTimeouts.set(tableId, timeout);
                 return;
             }
 
@@ -189,11 +195,11 @@ export const useDiagramOperationSync = (): void => {
             if (event.action === 'update_field') {
                 const key = `${event.data.tableId}:${event.data.fieldId}`;
 
-                const existing = updateFieldTimeoutsRef.current.get(key);
+                const existing = updateFieldTimeouts.get(key);
                 if (existing) clearTimeout(existing);
 
                 const timeout = setTimeout(() => {
-                    updateFieldTimeoutsRef.current.delete(key);
+                    updateFieldTimeouts.delete(key);
 
                     if (shouldSkipOutboundSync()) return;
 
@@ -208,7 +214,7 @@ export const useDiagramOperationSync = (): void => {
                     });
                 }, UPDATE_FIELD_DEBOUNCE_MS);
 
-                updateFieldTimeoutsRef.current.set(key, timeout);
+                updateFieldTimeouts.set(key, timeout);
                 return;
             }
 
@@ -229,14 +235,11 @@ export const useDiagramOperationSync = (): void => {
             if (event.action === 'update_relationship') {
                 const relationshipId = event.data.id;
 
-                const existing =
-                    updateRelationshipTimeoutsRef.current.get(relationshipId);
+                const existing = updateRelationshipTimeouts.get(relationshipId);
                 if (existing) clearTimeout(existing);
 
                 const timeout = setTimeout(() => {
-                    updateRelationshipTimeoutsRef.current.delete(
-                        relationshipId
-                    );
+                    updateRelationshipTimeouts.delete(relationshipId);
 
                     if (shouldSkipOutboundSync()) return;
 
@@ -250,10 +253,7 @@ export const useDiagramOperationSync = (): void => {
                     });
                 }, UPDATE_RELATIONSHIP_DEBOUNCE_MS);
 
-                updateRelationshipTimeoutsRef.current.set(
-                    relationshipId,
-                    timeout
-                );
+                updateRelationshipTimeouts.set(relationshipId, timeout);
                 return;
             }
 
@@ -274,11 +274,11 @@ export const useDiagramOperationSync = (): void => {
             if (event.action === 'update_note') {
                 const noteId = event.data.id;
 
-                const existing = updateNoteTimeoutsRef.current.get(noteId);
+                const existing = updateNoteTimeouts.get(noteId);
                 if (existing) clearTimeout(existing);
 
                 const timeout = setTimeout(() => {
-                    updateNoteTimeoutsRef.current.delete(noteId);
+                    updateNoteTimeouts.delete(noteId);
 
                     if (shouldSkipOutboundSync()) return;
 
@@ -292,7 +292,7 @@ export const useDiagramOperationSync = (): void => {
                     });
                 }, UPDATE_NOTE_DEBOUNCE_MS);
 
-                updateNoteTimeoutsRef.current.set(noteId, timeout);
+                updateNoteTimeouts.set(noteId, timeout);
                 return;
             }
 
@@ -313,11 +313,11 @@ export const useDiagramOperationSync = (): void => {
             if (event.action === 'update_area') {
                 const areaId = event.data.id;
 
-                const existing = updateAreaTimeoutsRef.current.get(areaId);
+                const existing = updateAreaTimeouts.get(areaId);
                 if (existing) clearTimeout(existing);
 
                 const timeout = setTimeout(() => {
-                    updateAreaTimeoutsRef.current.delete(areaId);
+                    updateAreaTimeouts.delete(areaId);
 
                     if (shouldSkipOutboundSync()) return;
 
@@ -331,7 +331,7 @@ export const useDiagramOperationSync = (): void => {
                     });
                 }, UPDATE_AREA_DEBOUNCE_MS);
 
-                updateAreaTimeoutsRef.current.set(areaId, timeout);
+                updateAreaTimeouts.set(areaId, timeout);
                 return;
             }
 
@@ -352,12 +352,11 @@ export const useDiagramOperationSync = (): void => {
             if (event.action === 'update_dependency') {
                 const dependencyId = event.data.id;
 
-                const existing =
-                    updateDependencyTimeoutsRef.current.get(dependencyId);
+                const existing = updateDependencyTimeouts.get(dependencyId);
                 if (existing) clearTimeout(existing);
 
                 const timeout = setTimeout(() => {
-                    updateDependencyTimeoutsRef.current.delete(dependencyId);
+                    updateDependencyTimeouts.delete(dependencyId);
 
                     if (shouldSkipOutboundSync()) return;
 
@@ -371,7 +370,7 @@ export const useDiagramOperationSync = (): void => {
                     });
                 }, UPDATE_DEPENDENCY_DEBOUNCE_MS);
 
-                updateDependencyTimeoutsRef.current.set(dependencyId, timeout);
+                updateDependencyTimeouts.set(dependencyId, timeout);
                 return;
             }
         },
@@ -381,32 +380,13 @@ export const useDiagramOperationSync = (): void => {
     events.useSubscription(handleChartDBEvent);
 
     useEffect(() => {
-        const updateTableTimeouts = updateTableTimeoutsRef.current;
-        const updateFieldTimeouts = updateFieldTimeoutsRef.current;
-        const updateRelationshipTimeouts =
-            updateRelationshipTimeoutsRef.current;
-        const updateNoteTimeouts = updateNoteTimeoutsRef.current;
-        const updateAreaTimeouts = updateAreaTimeoutsRef.current;
-        const updateDependencyTimeouts = updateDependencyTimeoutsRef.current;
+        setClearPendingDiagramOperationSyncTimers(
+            clearPendingDiagramOperationSyncTimers
+        );
 
         return () => {
-            updateTableTimeouts.forEach(clearTimeout);
-            updateTableTimeouts.clear();
-
-            updateFieldTimeouts.forEach(clearTimeout);
-            updateFieldTimeouts.clear();
-
-            updateRelationshipTimeouts.forEach(clearTimeout);
-            updateRelationshipTimeouts.clear();
-
-            updateNoteTimeouts.forEach(clearTimeout);
-            updateNoteTimeouts.clear();
-
-            updateAreaTimeouts.forEach(clearTimeout);
-            updateAreaTimeouts.clear();
-
-            updateDependencyTimeouts.forEach(clearTimeout);
-            updateDependencyTimeouts.clear();
+            setClearPendingDiagramOperationSyncTimers(null);
+            clearPendingDiagramOperationSyncTimers();
         };
     }, []);
 };
