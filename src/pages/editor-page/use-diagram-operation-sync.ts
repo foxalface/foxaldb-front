@@ -13,6 +13,7 @@ const UPDATE_FIELD_DEBOUNCE_MS = 150;
 const UPDATE_RELATIONSHIP_DEBOUNCE_MS = 150;
 const UPDATE_NOTE_DEBOUNCE_MS = 150;
 const UPDATE_AREA_DEBOUNCE_MS = 150;
+const UPDATE_DEPENDENCY_DEBOUNCE_MS = 150;
 
 const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
     switch (event.action) {
@@ -66,6 +67,15 @@ const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
                 event.data.id.length > 0 &&
                 Object.keys(event.data.area).length > 0
             );
+        case 'add_dependencies':
+            return event.data.dependencies.length > 0;
+        case 'remove_dependencies':
+            return event.data.dependencyIds.length > 0;
+        case 'update_dependency':
+            return (
+                event.data.id.length > 0 &&
+                Object.keys(event.data.dependency).length > 0
+            );
         case 'load_diagram':
             return false;
     }
@@ -92,6 +102,10 @@ export const useDiagramOperationSync = (): void => {
     >(new Map());
 
     const updateAreaTimeoutsRef = useRef<
+        Map<string, ReturnType<typeof setTimeout>>
+    >(new Map());
+
+    const updateDependencyTimeoutsRef = useRef<
         Map<string, ReturnType<typeof setTimeout>>
     >(new Map());
 
@@ -314,6 +328,46 @@ export const useDiagramOperationSync = (): void => {
                 updateAreaTimeoutsRef.current.set(areaId, timeout);
                 return;
             }
+
+            // ===== DEPENDENCY =====
+
+            if (
+                event.action === 'add_dependencies' ||
+                event.action === 'remove_dependencies'
+            ) {
+                postOperation({
+                    action: event.action,
+                    data: event.data,
+                    clientId: getClientId(),
+                });
+                return;
+            }
+
+            if (event.action === 'update_dependency') {
+                const dependencyId = event.data.id;
+
+                const existing =
+                    updateDependencyTimeoutsRef.current.get(dependencyId);
+                if (existing) clearTimeout(existing);
+
+                const timeout = setTimeout(() => {
+                    updateDependencyTimeoutsRef.current.delete(dependencyId);
+
+                    if (isRemoteSyncActive()) return;
+
+                    postOperation({
+                        action: 'update_dependency',
+                        data: {
+                            id: event.data.id,
+                            attributes: event.data.dependency,
+                        },
+                        clientId: getClientId(),
+                    });
+                }, UPDATE_DEPENDENCY_DEBOUNCE_MS);
+
+                updateDependencyTimeoutsRef.current.set(dependencyId, timeout);
+                return;
+            }
         },
         [currentDiagram, isAuthenticated, isLoading]
     );
@@ -327,6 +381,7 @@ export const useDiagramOperationSync = (): void => {
             updateRelationshipTimeoutsRef.current;
         const updateNoteTimeouts = updateNoteTimeoutsRef.current;
         const updateAreaTimeouts = updateAreaTimeoutsRef.current;
+        const updateDependencyTimeouts = updateDependencyTimeoutsRef.current;
 
         return () => {
             updateTableTimeouts.forEach(clearTimeout);
@@ -343,6 +398,9 @@ export const useDiagramOperationSync = (): void => {
 
             updateAreaTimeouts.forEach(clearTimeout);
             updateAreaTimeouts.clear();
+
+            updateDependencyTimeouts.forEach(clearTimeout);
+            updateDependencyTimeouts.clear();
         };
     }, []);
 };

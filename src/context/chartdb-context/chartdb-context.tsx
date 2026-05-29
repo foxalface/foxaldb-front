@@ -31,6 +31,9 @@ export type ChartDBEventType =
     | 'add_areas'
     | 'remove_areas'
     | 'update_area'
+    | 'add_dependencies'
+    | 'remove_dependencies'
+    | 'update_dependency'
     | 'load_diagram';
 
 export type ChartDBEventBase<T extends ChartDBEventType, D> = {
@@ -107,6 +110,21 @@ export type UpdateAreaEvent = ChartDBEventBase<
     { id: string; area: Partial<Area> }
 >;
 
+export type AddDependenciesEvent = ChartDBEventBase<
+    'add_dependencies',
+    { dependencies: DBDependency[] }
+>;
+
+export type RemoveDependenciesEvent = ChartDBEventBase<
+    'remove_dependencies',
+    { dependencyIds: string[] }
+>;
+
+export type UpdateDependencyEvent = ChartDBEventBase<
+    'update_dependency',
+    { id: string; dependency: Partial<DBDependency> }
+>;
+
 export type LoadDiagramEvent = ChartDBEventBase<
     'load_diagram',
     { diagram: Diagram }
@@ -128,6 +146,9 @@ export type ChartDBEvent =
     | AddAreasEvent
     | RemoveAreasEvent
     | UpdateAreaEvent
+    | AddDependenciesEvent
+    | RemoveDependenciesEvent
+    | UpdateDependencyEvent
     | LoadDiagramEvent;
 
 export interface ChartDBContext {

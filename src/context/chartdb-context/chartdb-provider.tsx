@@ -1505,6 +1505,13 @@ export const ChartDBProvider: React.FC<
                 ...dependencies,
             ]);
 
+            if (dependencies.length > 0) {
+                events.emit({
+                    action: 'add_dependencies',
+                    data: { dependencies },
+                });
+            }
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
@@ -1526,7 +1533,7 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setDependencies, addUndoAction, resetRedoStack]
+        [db, diagramId, setDependencies, addUndoAction, resetRedoStack, events]
     );
 
     const addDependency: ChartDBContext['addDependency'] = useCallback(
@@ -1578,6 +1585,13 @@ export const ChartDBProvider: React.FC<
                     )
                 );
 
+                if (ids.length > 0) {
+                    events.emit({
+                        action: 'remove_dependencies',
+                        data: { dependencyIds: ids },
+                    });
+                }
+
                 const updatedAt = new Date();
                 setDiagramUpdatedAt(updatedAt);
                 await Promise.all([
@@ -1604,6 +1618,7 @@ export const ChartDBProvider: React.FC<
                 addUndoAction,
                 resetRedoStack,
                 dependencies,
+                events,
             ]
         );
 
@@ -1626,6 +1641,13 @@ export const ChartDBProvider: React.FC<
                     d.id === id ? { ...d, ...dependency } : d
                 )
             );
+
+            if (Object.keys(dependency).length > 0) {
+                events.emit({
+                    action: 'update_dependency',
+                    data: { id, dependency },
+                });
+            }
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
@@ -1650,6 +1672,7 @@ export const ChartDBProvider: React.FC<
             addUndoAction,
             resetRedoStack,
             getDependency,
+            events,
         ]
     );
 

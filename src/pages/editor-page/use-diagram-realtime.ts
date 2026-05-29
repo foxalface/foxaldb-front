@@ -74,11 +74,13 @@ export const useDiagramRealtime = (): void => {
         getRelationship: getRelationshipFromStorage,
         getNote: getNoteFromStorage,
         getArea: getAreaFromStorage,
+        getDependency: getDependencyFromStorage,
     } = useStorage();
     const {
         currentDiagram,
         tables,
         relationships,
+        dependencies,
         notes,
         areas,
         addTables,
@@ -90,6 +92,9 @@ export const useDiagramRealtime = (): void => {
         addRelationships,
         removeRelationships,
         updateRelationship,
+        addDependencies,
+        removeDependencies,
+        updateDependency,
         addNotes,
         removeNotes,
         updateNote,
@@ -121,6 +126,11 @@ export const useDiagramRealtime = (): void => {
 
     const existingAreaIdsRef = useRef<ReadonlySet<string>>(new Set());
     existingAreaIdsRef.current = new Set(areas.map((area) => area.id));
+
+    const existingDependencyIdsRef = useRef<ReadonlySet<string>>(new Set());
+    existingDependencyIdsRef.current = new Set(
+        dependencies.map((dependency) => dependency.id)
+    );
 
     const diagramId =
         currentDiagram && isValidBackendDiagramId(currentDiagram.id)
@@ -177,6 +187,9 @@ export const useDiagramRealtime = (): void => {
                     addAreas,
                     removeAreas,
                     updateArea,
+                    addDependencies,
+                    removeDependencies,
+                    updateDependency,
                 },
                 {
                     existingTableIds: existingTableIdsRef.current,
@@ -203,6 +216,12 @@ export const useDiagramRealtime = (): void => {
                         getAreaFromStorage({
                             diagramId,
                             id: areaId,
+                        }),
+                    existingDependencyIds: existingDependencyIdsRef.current,
+                    getDependencyFromStorage: (dependencyId: string) =>
+                        getDependencyFromStorage({
+                            diagramId,
+                            id: dependencyId,
                         }),
                 }
             )
@@ -261,6 +280,7 @@ export const useDiagramRealtime = (): void => {
         isAuthenticated,
         diagramId,
         tables,
+        dependencies,
         notes,
         areas,
         addTables,
@@ -272,6 +292,9 @@ export const useDiagramRealtime = (): void => {
         addRelationships,
         removeRelationships,
         updateRelationship,
+        addDependencies,
+        removeDependencies,
+        updateDependency,
         addNotes,
         removeNotes,
         updateNote,
@@ -282,5 +305,6 @@ export const useDiagramRealtime = (): void => {
         getRelationshipFromStorage,
         getNoteFromStorage,
         getAreaFromStorage,
+        getDependencyFromStorage,
     ]);
 };

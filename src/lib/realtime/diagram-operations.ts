@@ -1,10 +1,12 @@
 import type {
     AddAreasEvent,
+    AddDependenciesEvent,
     AddFieldEvent,
     AddNotesEvent,
     AddRelationshipsEvent,
     CreateTableEvent,
     RemoveAreasEvent,
+    RemoveDependenciesEvent,
     RemoveFieldEvent,
     RemoveNotesEvent,
     RemoveRelationshipsEvent,
@@ -12,6 +14,7 @@ import type {
     UpdateTableEvent,
 } from '@/context/chartdb-context/chartdb-context';
 import type { Area } from '@/lib/domain/area';
+import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -32,7 +35,10 @@ export type DiagramOperationAction =
     | 'update_note'
     | 'add_areas'
     | 'remove_areas'
-    | 'update_area';
+    | 'update_area'
+    | 'add_dependencies'
+    | 'remove_dependencies'
+    | 'update_dependency';
 
 export type UpdateFieldOperationData = {
     tableId: string;
@@ -55,6 +61,11 @@ export type UpdateAreaOperationData = {
     attributes: Partial<Area>;
 };
 
+export type UpdateDependencyOperationData = {
+    id: string;
+    attributes: Partial<DBDependency>;
+};
+
 export type DiagramOperationData =
     | CreateTableEvent['data']
     | UpdateTableEvent['data']
@@ -70,7 +81,10 @@ export type DiagramOperationData =
     | UpdateNoteOperationData
     | AddAreasEvent['data']
     | RemoveAreasEvent['data']
-    | UpdateAreaOperationData;
+    | UpdateAreaOperationData
+    | AddDependenciesEvent['data']
+    | RemoveDependenciesEvent['data']
+    | UpdateDependencyOperationData;
 
 export interface DiagramOperationRequest {
     action: DiagramOperationAction;
@@ -155,6 +169,19 @@ export interface DiagramOperationMutators {
         area: Partial<Area>,
         options: { updateHistory: false }
     ) => Promise<void>;
+    addDependencies: (
+        dependencies: DBDependency[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    removeDependencies: (
+        dependencyIds: string[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    updateDependency: (
+        id: string,
+        dependency: Partial<DBDependency>,
+        options: { updateHistory: false }
+    ) => Promise<void>;
 }
 
 export interface ApplyRemoteDiagramOperationContext {
@@ -169,6 +196,10 @@ export interface ApplyRemoteDiagramOperationContext {
     getNoteFromStorage: (noteId: string) => Promise<Note | undefined>;
     existingAreaIds: ReadonlySet<string>;
     getAreaFromStorage: (areaId: string) => Promise<Area | undefined>;
+    existingDependencyIds: ReadonlySet<string>;
+    getDependencyFromStorage: (
+        dependencyId: string
+    ) => Promise<DBDependency | undefined>;
 }
 
 const isDexieConstraintError = (error: unknown): boolean =>
@@ -190,6 +221,9 @@ const DIAGRAM_OPERATION_ACTIONS: readonly DiagramOperationAction[] = [
     'add_areas',
     'remove_areas',
     'update_area',
+    'add_dependencies',
+    'remove_dependencies',
+    'update_dependency',
 ];
 
 export const isDiagramOperationAction = (
@@ -327,6 +361,40 @@ const validateRemoveAreasData = (
 const validateUpdateAreaData = (
     data: unknown
 ): data is UpdateAreaOperationData => {
+    return (
+        isRecord(data) &&
+        typeof data.id === 'string' &&
+        data.id.length > 0 &&
+        isRecord(data.attributes) &&
+        Object.keys(data.attributes).length > 0
+    );
+};
+
+const isDBDependency = (value: unknown): value is DBDependency =>
+    isRecord(value) &&
+    typeof value.id === 'string' &&
+    typeof value.tableId === 'string' &&
+    typeof value.dependentTableId === 'string';
+
+const validateAddDependenciesData = (
+    data: unknown
+): data is AddDependenciesEvent['data'] => {
+    return (
+        isRecord(data) &&
+        Array.isArray(data.dependencies) &&
+        data.dependencies.every(isDBDependency)
+    );
+};
+
+const validateRemoveDependenciesData = (
+    data: unknown
+): data is RemoveDependenciesEvent['data'] => {
+    return isRecord(data) && Array.isArray(data.dependencyIds);
+};
+
+const validateUpdateDependencyData = (
+    data: unknown
+): data is UpdateDependencyOperationData => {
     return (
         isRecord(data) &&
         typeof data.id === 'string' &&
@@ -726,6 +794,96 @@ export const applyRemoteDiagramOperation = async (
 
             await mutators.updateArea(
                 areaId,
+                payload.data.attributes,
+                historyOptions
+            );
+            return;
+        }
+
+        case 'add_dependencies': {
+            if (!validateAddDependenciesData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid add_dependencies payload',
+                    payload.data
+                );
+                return;
+            }
+
+            for (const dependency of payload.data.dependencies) {
+                if (context.existingDependencyIds.has(dependency.id)) {
+                    continue;
+                }
+
+                if (
+                    !context.existingTableIds.has(dependency.tableId) ||
+                    !context.existingTableIds.has(dependency.dependentTableId)
+                ) {
+                    continue;
+                }
+
+                const storedDependency = await context.getDependencyFromStorage(
+                    dependency.id
+                );
+                const dependencyToApply = storedDependency ?? dependency;
+
+                try {
+                    await mutators.addDependencies(
+                        [dependencyToApply],
+                        historyOptions
+                    );
+                } catch (error) {
+                    if (isDexieConstraintError(error)) {
+                        continue;
+                    }
+
+                    throw error;
+                }
+            }
+
+            return;
+        }
+
+        case 'remove_dependencies': {
+            if (!validateRemoveDependenciesData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid remove_dependencies payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const dependencyIds = payload.data.dependencyIds.filter(
+                (id): id is string => typeof id === 'string' && id.length > 0
+            );
+
+            if (dependencyIds.length === 0) {
+                return;
+            }
+
+            await mutators.removeDependencies(dependencyIds, historyOptions);
+            return;
+        }
+
+        case 'update_dependency': {
+            if (!validateUpdateDependencyData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid update_dependency payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const dependencyId = payload.data.id;
+            const inState = context.existingDependencyIds.has(dependencyId);
+            const storedDependency =
+                await context.getDependencyFromStorage(dependencyId);
+
+            if (!inState && storedDependency === undefined) {
+                return;
+            }
+
+            await mutators.updateDependency(
+                dependencyId,
                 payload.data.attributes,
                 historyOptions
             );
