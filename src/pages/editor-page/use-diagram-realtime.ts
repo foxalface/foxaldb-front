@@ -96,6 +96,16 @@ export const useDiagramRealtime = (): void => {
         relationships.map((relationship) => relationship.id)
     );
 
+    const existingFieldIdsByTableRef = useRef<
+        ReadonlyMap<string, ReadonlySet<string>>
+    >(new Map());
+    existingFieldIdsByTableRef.current = new Map(
+        tables.map((table) => [
+            table.id,
+            new Set(table.fields.map((field) => field.id)),
+        ])
+    );
+
     const diagramId =
         currentDiagram && isValidBackendDiagramId(currentDiagram.id)
             ? String(currentDiagram.id)
@@ -159,6 +169,7 @@ export const useDiagramRealtime = (): void => {
                             diagramId,
                             id: relationshipId,
                         }),
+                    existingFieldIdsByTable: existingFieldIdsByTableRef.current,
                 }
             )
                 .catch((error: unknown) => {
@@ -215,6 +226,7 @@ export const useDiagramRealtime = (): void => {
         isLoading,
         isAuthenticated,
         diagramId,
+        tables,
         addTables,
         updateTable,
         removeTables,

@@ -110,6 +110,7 @@ export interface ApplyRemoteDiagramOperationContext {
     getRelationshipFromStorage: (
         relationshipId: string
     ) => Promise<DBRelationship | undefined>;
+    existingFieldIdsByTable: ReadonlyMap<string, ReadonlySet<string>>;
 }
 
 const isDexieConstraintError = (error: unknown): boolean =>
@@ -298,19 +299,29 @@ export const applyRemoteDiagramOperation = async (
                 return;
             }
 
-            const storedTable = await context.getTableFromStorage(
-                payload.data.tableId
-            );
+            const { tableId, field } = payload.data;
+            const existingFieldIds =
+                context.existingFieldIdsByTable.get(tableId);
 
-            if (tableHasField(storedTable, payload.data.field.id)) {
+            if (existingFieldIds?.has(field.id)) {
                 return;
             }
 
-            await mutators.addField(
-                payload.data.tableId,
-                payload.data.field,
-                historyOptions
+            const storedTable = await context.getTableFromStorage(tableId);
+            const storedField = storedTable?.fields.find(
+                (stored) => stored.id === field.id
             );
+            const fieldToApply = storedField ?? field;
+
+            try {
+                await mutators.addField(tableId, fieldToApply, historyOptions);
+            } catch (error) {
+                if (isDexieConstraintError(error)) {
+                    return;
+                }
+
+                throw error;
+            }
             return;
         }
 
