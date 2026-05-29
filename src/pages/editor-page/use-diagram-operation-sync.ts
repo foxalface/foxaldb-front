@@ -12,6 +12,7 @@ const UPDATE_TABLE_DEBOUNCE_MS = 120;
 const UPDATE_FIELD_DEBOUNCE_MS = 150;
 const UPDATE_RELATIONSHIP_DEBOUNCE_MS = 150;
 const UPDATE_NOTE_DEBOUNCE_MS = 150;
+const UPDATE_AREA_DEBOUNCE_MS = 150;
 
 const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
     switch (event.action) {
@@ -56,6 +57,15 @@ const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
                 event.data.id.length > 0 &&
                 Object.keys(event.data.note).length > 0
             );
+        case 'add_areas':
+            return event.data.areas.length > 0;
+        case 'remove_areas':
+            return event.data.areaIds.length > 0;
+        case 'update_area':
+            return (
+                event.data.id.length > 0 &&
+                Object.keys(event.data.area).length > 0
+            );
         case 'load_diagram':
             return false;
     }
@@ -78,6 +88,10 @@ export const useDiagramOperationSync = (): void => {
     >(new Map());
 
     const updateNoteTimeoutsRef = useRef<
+        Map<string, ReturnType<typeof setTimeout>>
+    >(new Map());
+
+    const updateAreaTimeoutsRef = useRef<
         Map<string, ReturnType<typeof setTimeout>>
     >(new Map());
 
@@ -261,6 +275,45 @@ export const useDiagramOperationSync = (): void => {
                 updateNoteTimeoutsRef.current.set(noteId, timeout);
                 return;
             }
+
+            // ===== AREA =====
+
+            if (
+                event.action === 'add_areas' ||
+                event.action === 'remove_areas'
+            ) {
+                postOperation({
+                    action: event.action,
+                    data: event.data,
+                    clientId: getClientId(),
+                });
+                return;
+            }
+
+            if (event.action === 'update_area') {
+                const areaId = event.data.id;
+
+                const existing = updateAreaTimeoutsRef.current.get(areaId);
+                if (existing) clearTimeout(existing);
+
+                const timeout = setTimeout(() => {
+                    updateAreaTimeoutsRef.current.delete(areaId);
+
+                    if (isRemoteSyncActive()) return;
+
+                    postOperation({
+                        action: 'update_area',
+                        data: {
+                            id: event.data.id,
+                            attributes: event.data.area,
+                        },
+                        clientId: getClientId(),
+                    });
+                }, UPDATE_AREA_DEBOUNCE_MS);
+
+                updateAreaTimeoutsRef.current.set(areaId, timeout);
+                return;
+            }
         },
         [currentDiagram, isAuthenticated, isLoading]
     );
@@ -273,6 +326,7 @@ export const useDiagramOperationSync = (): void => {
         const updateRelationshipTimeouts =
             updateRelationshipTimeoutsRef.current;
         const updateNoteTimeouts = updateNoteTimeoutsRef.current;
+        const updateAreaTimeouts = updateAreaTimeoutsRef.current;
 
         return () => {
             updateTableTimeouts.forEach(clearTimeout);
@@ -286,6 +340,9 @@ export const useDiagramOperationSync = (): void => {
 
             updateNoteTimeouts.forEach(clearTimeout);
             updateNoteTimeouts.clear();
+
+            updateAreaTimeouts.forEach(clearTimeout);
+            updateAreaTimeouts.clear();
         };
     }, []);
 };

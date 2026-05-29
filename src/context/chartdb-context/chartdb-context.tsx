@@ -28,6 +28,9 @@ export type ChartDBEventType =
     | 'add_notes'
     | 'remove_notes'
     | 'update_note'
+    | 'add_areas'
+    | 'remove_areas'
+    | 'update_area'
     | 'load_diagram';
 
 export type ChartDBEventBase<T extends ChartDBEventType, D> = {
@@ -92,6 +95,18 @@ export type UpdateNoteEvent = ChartDBEventBase<
     { id: string; note: Partial<Note> }
 >;
 
+export type AddAreasEvent = ChartDBEventBase<'add_areas', { areas: Area[] }>;
+
+export type RemoveAreasEvent = ChartDBEventBase<
+    'remove_areas',
+    { areaIds: string[] }
+>;
+
+export type UpdateAreaEvent = ChartDBEventBase<
+    'update_area',
+    { id: string; area: Partial<Area> }
+>;
+
 export type LoadDiagramEvent = ChartDBEventBase<
     'load_diagram',
     { diagram: Diagram }
@@ -110,6 +125,9 @@ export type ChartDBEvent =
     | AddNotesEvent
     | RemoveNotesEvent
     | UpdateNoteEvent
+    | AddAreasEvent
+    | RemoveAreasEvent
+    | UpdateAreaEvent
     | LoadDiagramEvent;
 
 export interface ChartDBContext {

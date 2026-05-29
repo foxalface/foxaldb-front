@@ -1,14 +1,17 @@
 import type {
+    AddAreasEvent,
     AddFieldEvent,
     AddNotesEvent,
     AddRelationshipsEvent,
     CreateTableEvent,
+    RemoveAreasEvent,
     RemoveFieldEvent,
     RemoveNotesEvent,
     RemoveRelationshipsEvent,
     RemoveTableEvent,
     UpdateTableEvent,
 } from '@/context/chartdb-context/chartdb-context';
+import type { Area } from '@/lib/domain/area';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -26,7 +29,10 @@ export type DiagramOperationAction =
     | 'update_relationship'
     | 'add_notes'
     | 'remove_notes'
-    | 'update_note';
+    | 'update_note'
+    | 'add_areas'
+    | 'remove_areas'
+    | 'update_area';
 
 export type UpdateFieldOperationData = {
     tableId: string;
@@ -44,6 +50,11 @@ export type UpdateNoteOperationData = {
     attributes: Partial<Note>;
 };
 
+export type UpdateAreaOperationData = {
+    id: string;
+    attributes: Partial<Area>;
+};
+
 export type DiagramOperationData =
     | CreateTableEvent['data']
     | UpdateTableEvent['data']
@@ -56,7 +67,10 @@ export type DiagramOperationData =
     | UpdateRelationshipOperationData
     | AddNotesEvent['data']
     | RemoveNotesEvent['data']
-    | UpdateNoteOperationData;
+    | UpdateNoteOperationData
+    | AddAreasEvent['data']
+    | RemoveAreasEvent['data']
+    | UpdateAreaOperationData;
 
 export interface DiagramOperationRequest {
     action: DiagramOperationAction;
@@ -128,6 +142,19 @@ export interface DiagramOperationMutators {
         note: Partial<Note>,
         options: { updateHistory: false }
     ) => Promise<void>;
+    addAreas: (
+        areas: Area[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    removeAreas: (
+        areaIds: string[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    updateArea: (
+        id: string,
+        area: Partial<Area>,
+        options: { updateHistory: false }
+    ) => Promise<void>;
 }
 
 export interface ApplyRemoteDiagramOperationContext {
@@ -140,6 +167,8 @@ export interface ApplyRemoteDiagramOperationContext {
     existingFieldIdsByTable: ReadonlyMap<string, ReadonlySet<string>>;
     existingNoteIds: ReadonlySet<string>;
     getNoteFromStorage: (noteId: string) => Promise<Note | undefined>;
+    existingAreaIds: ReadonlySet<string>;
+    getAreaFromStorage: (areaId: string) => Promise<Area | undefined>;
 }
 
 const isDexieConstraintError = (error: unknown): boolean =>
@@ -158,6 +187,9 @@ const DIAGRAM_OPERATION_ACTIONS: readonly DiagramOperationAction[] = [
     'add_notes',
     'remove_notes',
     'update_note',
+    'add_areas',
+    'remove_areas',
+    'update_area',
 ];
 
 export const isDiagramOperationAction = (
@@ -268,6 +300,33 @@ const validateRemoveNotesData = (
 const validateUpdateNoteData = (
     data: unknown
 ): data is UpdateNoteOperationData => {
+    return (
+        isRecord(data) &&
+        typeof data.id === 'string' &&
+        data.id.length > 0 &&
+        isRecord(data.attributes) &&
+        Object.keys(data.attributes).length > 0
+    );
+};
+
+const isArea = (value: unknown): value is Area =>
+    isRecord(value) && typeof value.id === 'string';
+
+const validateAddAreasData = (data: unknown): data is AddAreasEvent['data'] => {
+    return (
+        isRecord(data) && Array.isArray(data.areas) && data.areas.every(isArea)
+    );
+};
+
+const validateRemoveAreasData = (
+    data: unknown
+): data is RemoveAreasEvent['data'] => {
+    return isRecord(data) && Array.isArray(data.areaIds);
+};
+
+const validateUpdateAreaData = (
+    data: unknown
+): data is UpdateAreaOperationData => {
     return (
         isRecord(data) &&
         typeof data.id === 'string' &&
@@ -590,6 +649,83 @@ export const applyRemoteDiagramOperation = async (
 
             await mutators.updateNote(
                 noteId,
+                payload.data.attributes,
+                historyOptions
+            );
+            return;
+        }
+
+        case 'add_areas': {
+            if (!validateAddAreasData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid add_areas payload',
+                    payload.data
+                );
+                return;
+            }
+
+            for (const area of payload.data.areas) {
+                if (context.existingAreaIds.has(area.id)) {
+                    continue;
+                }
+
+                const storedArea = await context.getAreaFromStorage(area.id);
+                const areaToApply = storedArea ?? area;
+
+                try {
+                    await mutators.addAreas([areaToApply], historyOptions);
+                } catch (error) {
+                    if (isDexieConstraintError(error)) {
+                        continue;
+                    }
+
+                    throw error;
+                }
+            }
+
+            return;
+        }
+
+        case 'remove_areas': {
+            if (!validateRemoveAreasData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid remove_areas payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const areaIds = payload.data.areaIds.filter(
+                (id): id is string => typeof id === 'string' && id.length > 0
+            );
+
+            if (areaIds.length === 0) {
+                return;
+            }
+
+            await mutators.removeAreas(areaIds, historyOptions);
+            return;
+        }
+
+        case 'update_area': {
+            if (!validateUpdateAreaData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid update_area payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const areaId = payload.data.id;
+            const inState = context.existingAreaIds.has(areaId);
+            const storedArea = await context.getAreaFromStorage(areaId);
+
+            if (!inState && storedArea === undefined) {
+                return;
+            }
+
+            await mutators.updateArea(
+                areaId,
                 payload.data.attributes,
                 historyOptions
             );

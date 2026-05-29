@@ -1658,6 +1658,13 @@ export const ChartDBProvider: React.FC<
         async (areas: Area[], options = { updateHistory: true }) => {
             setAreas((currentAreas) => [...currentAreas, ...areas]);
 
+            if (areas.length > 0) {
+                events.emit({
+                    action: 'add_areas',
+                    data: { areas },
+                });
+            }
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
@@ -1675,7 +1682,7 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setAreas, addUndoAction, resetRedoStack]
+        [db, diagramId, setAreas, addUndoAction, resetRedoStack, events]
     );
 
     const addArea: ChartDBContext['addArea'] = useCallback(
@@ -1718,6 +1725,13 @@ export const ChartDBProvider: React.FC<
 
             setAreas((areas) => areas.filter((area) => !ids.includes(area.id)));
 
+            if (ids.length > 0) {
+                events.emit({
+                    action: 'remove_areas',
+                    data: { areaIds: ids },
+                });
+            }
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
@@ -1735,7 +1749,7 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setAreas, areas, addUndoAction, resetRedoStack]
+        [db, diagramId, setAreas, areas, addUndoAction, resetRedoStack, events]
     );
 
     const removeArea: ChartDBContext['removeArea'] = useCallback(
@@ -1757,6 +1771,13 @@ export const ChartDBProvider: React.FC<
                 areas.map((a) => (a.id === id ? { ...a, ...area } : a))
             );
 
+            if (Object.keys(area).length > 0) {
+                events.emit({
+                    action: 'update_area',
+                    data: { id, area },
+                });
+            }
+
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
 
@@ -1774,7 +1795,15 @@ export const ChartDBProvider: React.FC<
                 resetRedoStack();
             }
         },
-        [db, diagramId, setAreas, getArea, addUndoAction, resetRedoStack]
+        [
+            db,
+            diagramId,
+            setAreas,
+            getArea,
+            addUndoAction,
+            resetRedoStack,
+            events,
+        ]
     );
 
     // Note operations
