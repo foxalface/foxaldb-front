@@ -26,6 +26,7 @@ import { useDiagramLoader } from './use-diagram-loader';
 import { useDiagramAutosave } from './use-diagram-autosave';
 import { useDiagramOperationSync } from './use-diagram-operation-sync';
 import { useDiagramRealtime } from './use-diagram-realtime';
+import { useDiagramReconnectRefresh } from './use-diagram-reconnect-refresh';
 import { useGuestDiagramMigration } from './use-guest-diagram-migration';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
@@ -51,6 +52,7 @@ const EditorPageComponent: React.FC = () => {
     const { initialDiagram } = useDiagramLoader();
     useDiagramAutosave();
     useDiagramRealtime();
+    useDiagramReconnectRefresh();
     useDiagramOperationSync();
     useGuestDiagramMigration();
 
