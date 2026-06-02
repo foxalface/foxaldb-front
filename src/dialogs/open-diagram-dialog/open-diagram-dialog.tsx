@@ -20,7 +20,7 @@ import {
 } from '@/components/table/table';
 import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
-import { getDiagrams } from '@/lib/api/diagrams';
+import { getDiagrams, type DiagramApiResource } from '@/lib/api/diagrams';
 import type { Diagram } from '@/lib/domain/diagram';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,21 +50,15 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         const diagramsFromApi = await getDiagrams();
 
         const backendDiagrams = diagramsFromApi.map(
-            (diagram: {
-                id: number;
-                name: string;
-                tables_count: number;
-                database_type: string;
-                database_edition: string | null;
-                created_at: string;
-                updated_at: string;
-            }) =>
+            (diagram: DiagramApiResource): Diagram =>
                 ({
                     id: String(diagram.id),
                     name: diagram.name,
-                    createdAt: new Date(diagram.created_at),
-                    updatedAt: new Date(diagram.updated_at),
-                    tables: Array.from({ length: diagram.tables_count }),
+                    createdAt: new Date(diagram.created_at ?? 0),
+                    updatedAt: new Date(diagram.updated_at ?? 0),
+                    tables: Array.from({
+                        length: diagram.tables_count ?? 0,
+                    }),
                     databaseType: diagram.database_type,
                     databaseEdition: diagram.database_edition,
                 }) as Diagram

@@ -1,6 +1,14 @@
 import type { DiagramOperationRequest } from '@/lib/realtime/diagram-operations';
 import { apiRequest } from './client';
 
+export type DiagramAccessRole = 'owner' | 'editor' | 'viewer';
+
+export interface DiagramAccess {
+    role: DiagramAccessRole | null;
+    can_edit: boolean;
+    can_manage_members: boolean;
+}
+
 export interface DiagramApiResource {
     id: number | string;
     name: string;
@@ -12,6 +20,12 @@ export interface DiagramApiResource {
     updated_at?: string;
     createdAt?: string;
     updatedAt?: string;
+    access?: DiagramAccess;
+}
+
+export interface DiagramsGroupedList {
+    owned: DiagramApiResource[];
+    shared: DiagramApiResource[];
 }
 
 export interface DiagramPayload {
@@ -20,7 +34,7 @@ export interface DiagramPayload {
 }
 
 interface GetDiagramsResponse {
-    data: DiagramApiResource[];
+    data: DiagramsGroupedList;
 }
 
 interface CreateDiagramResponse {
@@ -41,10 +55,18 @@ interface DuplicateDiagramResponse {
     };
 }
 
-export const getDiagrams = async (): Promise<DiagramApiResource[]> => {
+export const flattenDiagramsList = (
+    grouped: DiagramsGroupedList
+): DiagramApiResource[] => [...grouped.owned, ...grouped.shared];
+
+export const getDiagramsGrouped = async (): Promise<DiagramsGroupedList> => {
     const response = await apiRequest<GetDiagramsResponse>('/diagrams');
     return response.data;
 };
+
+/** Owned diagrams first, then shared (for list UIs). */
+export const getDiagrams = async (): Promise<DiagramApiResource[]> =>
+    flattenDiagramsList(await getDiagramsGrouped());
 
 export const getDiagram = async (id: string): Promise<DiagramApiResource> => {
     return apiRequest<DiagramApiResource>(`/diagrams/${id}`);
