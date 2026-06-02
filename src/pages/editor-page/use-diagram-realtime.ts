@@ -8,6 +8,7 @@ import {
     applyRemoteDiagramOperation,
     isDiagramOperationAction,
     type DiagramOperationData,
+    type DiagramOperationMutators,
     type DiagramOperationPayload,
 } from '@/lib/realtime/diagram-operations';
 import {
@@ -20,6 +21,16 @@ interface DiagramTestPayload {
     message: string;
     sentAt: string;
     userId: number;
+}
+
+interface DiagramRealtimeStorage {
+    getTableFromStorage: ReturnType<typeof useStorage>['getTable'];
+    getRelationshipFromStorage: ReturnType<
+        typeof useStorage
+    >['getRelationship'];
+    getNoteFromStorage: ReturnType<typeof useStorage>['getNote'];
+    getAreaFromStorage: ReturnType<typeof useStorage>['getArea'];
+    getDependencyFromStorage: ReturnType<typeof useStorage>['getDependency'];
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -137,6 +148,65 @@ export const useDiagramRealtime = (): void => {
             ? String(currentDiagram.id)
             : null;
 
+    const diagramIdRef = useRef<string | null>(diagramId);
+    diagramIdRef.current = diagramId;
+
+    const mutatorsRef = useRef<DiagramOperationMutators>({
+        addTables,
+        updateTable,
+        removeTables,
+        addField,
+        removeField,
+        updateField,
+        addRelationships,
+        removeRelationships,
+        updateRelationship,
+        addNotes,
+        removeNotes,
+        updateNote,
+        addAreas,
+        removeAreas,
+        updateArea,
+        addDependencies,
+        removeDependencies,
+        updateDependency,
+    });
+    mutatorsRef.current = {
+        addTables,
+        updateTable,
+        removeTables,
+        addField,
+        removeField,
+        updateField,
+        addRelationships,
+        removeRelationships,
+        updateRelationship,
+        addNotes,
+        removeNotes,
+        updateNote,
+        addAreas,
+        removeAreas,
+        updateArea,
+        addDependencies,
+        removeDependencies,
+        updateDependency,
+    };
+
+    const storageRef = useRef<DiagramRealtimeStorage>({
+        getTableFromStorage,
+        getRelationshipFromStorage,
+        getNoteFromStorage,
+        getAreaFromStorage,
+        getDependencyFromStorage,
+    });
+    storageRef.current = {
+        getTableFromStorage,
+        getRelationshipFromStorage,
+        getNoteFromStorage,
+        getAreaFromStorage,
+        getDependencyFromStorage,
+    };
+
     useEffect(() => {
         if (isLoading || !isAuthenticated || diagramId === null) {
             return;
@@ -166,65 +236,49 @@ export const useDiagramRealtime = (): void => {
                 return;
             }
 
+            const activeDiagramId = diagramIdRef.current;
+            if (activeDiagramId === null) {
+                return;
+            }
+
+            const storage = storageRef.current;
+
             remoteSyncDepthRef.current += 1;
             syncRemoteApplyState();
 
-            void applyRemoteDiagramOperation(
-                payload,
-                {
-                    addTables,
-                    updateTable,
-                    removeTables,
-                    addField,
-                    removeField,
-                    updateField,
-                    addRelationships,
-                    removeRelationships,
-                    updateRelationship,
-                    addNotes,
-                    removeNotes,
-                    updateNote,
-                    addAreas,
-                    removeAreas,
-                    updateArea,
-                    addDependencies,
-                    removeDependencies,
-                    updateDependency,
-                },
-                {
-                    existingTableIds: existingTableIdsRef.current,
-                    getTableFromStorage: (tableId: string) =>
-                        getTableFromStorage({
-                            diagramId,
-                            id: tableId,
-                        }),
-                    existingRelationshipIds: existingRelationshipIdsRef.current,
-                    getRelationshipFromStorage: (relationshipId: string) =>
-                        getRelationshipFromStorage({
-                            diagramId,
-                            id: relationshipId,
-                        }),
-                    existingFieldIdsByTable: existingFieldIdsByTableRef.current,
-                    existingNoteIds: existingNoteIdsRef.current,
-                    getNoteFromStorage: (noteId: string) =>
-                        getNoteFromStorage({
-                            diagramId,
-                            id: noteId,
-                        }),
-                    existingAreaIds: existingAreaIdsRef.current,
-                    getAreaFromStorage: (areaId: string) =>
-                        getAreaFromStorage({
-                            diagramId,
-                            id: areaId,
-                        }),
-                    existingDependencyIds: existingDependencyIdsRef.current,
-                    getDependencyFromStorage: (dependencyId: string) =>
-                        getDependencyFromStorage({
-                            diagramId,
-                            id: dependencyId,
-                        }),
-                }
-            )
+            void applyRemoteDiagramOperation(payload, mutatorsRef.current, {
+                existingTableIds: existingTableIdsRef.current,
+                getTableFromStorage: (tableId: string) =>
+                    storage.getTableFromStorage({
+                        diagramId: activeDiagramId,
+                        id: tableId,
+                    }),
+                existingRelationshipIds: existingRelationshipIdsRef.current,
+                getRelationshipFromStorage: (relationshipId: string) =>
+                    storage.getRelationshipFromStorage({
+                        diagramId: activeDiagramId,
+                        id: relationshipId,
+                    }),
+                existingFieldIdsByTable: existingFieldIdsByTableRef.current,
+                existingNoteIds: existingNoteIdsRef.current,
+                getNoteFromStorage: (noteId: string) =>
+                    storage.getNoteFromStorage({
+                        diagramId: activeDiagramId,
+                        id: noteId,
+                    }),
+                existingAreaIds: existingAreaIdsRef.current,
+                getAreaFromStorage: (areaId: string) =>
+                    storage.getAreaFromStorage({
+                        diagramId: activeDiagramId,
+                        id: areaId,
+                    }),
+                existingDependencyIds: existingDependencyIdsRef.current,
+                getDependencyFromStorage: (dependencyId: string) =>
+                    storage.getDependencyFromStorage({
+                        diagramId: activeDiagramId,
+                        id: dependencyId,
+                    }),
+            })
                 .catch((error: unknown) => {
                     console.warn(
                         '[DiagramOperation] Failed to apply operation',
@@ -275,36 +329,5 @@ export const useDiagramRealtime = (): void => {
                 );
             }
         };
-    }, [
-        isLoading,
-        isAuthenticated,
-        diagramId,
-        tables,
-        dependencies,
-        notes,
-        areas,
-        addTables,
-        updateTable,
-        removeTables,
-        addField,
-        removeField,
-        updateField,
-        addRelationships,
-        removeRelationships,
-        updateRelationship,
-        addDependencies,
-        removeDependencies,
-        updateDependency,
-        addNotes,
-        removeNotes,
-        updateNote,
-        addAreas,
-        removeAreas,
-        updateArea,
-        getTableFromStorage,
-        getRelationshipFromStorage,
-        getNoteFromStorage,
-        getAreaFromStorage,
-        getDependencyFromStorage,
-    ]);
+    }, [isLoading, isAuthenticated, diagramId]);
 };
