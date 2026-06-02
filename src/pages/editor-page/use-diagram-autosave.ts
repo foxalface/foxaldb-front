@@ -1,6 +1,8 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import type { Diagram } from '@/lib/domain/diagram';
+import type { DatabaseEdition } from '@/lib/domain/database-edition';
+import type { DatabaseType } from '@/lib/domain/database-type';
 import { updateDiagram } from '@/lib/api/diagrams';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { isRemoteSyncActive } from '@/lib/realtime/diagram-sync-state';
@@ -8,12 +10,43 @@ import { useEffect, useRef } from 'react';
 
 const AUTOSAVE_DEBOUNCE_MS = 900;
 
+type AutosaveSnapshotContent = Pick<
+    Diagram,
+    | 'name'
+    | 'databaseType'
+    | 'databaseEdition'
+    | 'tables'
+    | 'relationships'
+    | 'dependencies'
+    | 'areas'
+    | 'customTypes'
+    | 'notes'
+>;
+
 const toAutosaveSnapshot = (diagram: {
     name: string;
-    tables: unknown;
-    relationships: unknown;
-    dependencies: unknown;
-}): string => JSON.stringify(diagram);
+    databaseType: DatabaseType;
+    databaseEdition?: DatabaseEdition;
+    tables: NonNullable<Diagram['tables']>;
+    relationships: NonNullable<Diagram['relationships']>;
+    dependencies: NonNullable<Diagram['dependencies']>;
+    areas: NonNullable<Diagram['areas']>;
+    customTypes: NonNullable<Diagram['customTypes']>;
+    notes: NonNullable<Diagram['notes']>;
+}): string => JSON.stringify(diagram satisfies AutosaveSnapshotContent);
+
+const buildAutosaveSnapshotFromDiagram = (diagram: Diagram): string =>
+    toAutosaveSnapshot({
+        name: diagram.name ?? 'Untitled diagram',
+        databaseType: diagram.databaseType,
+        databaseEdition: diagram.databaseEdition,
+        tables: diagram.tables ?? [],
+        relationships: diagram.relationships ?? [],
+        dependencies: diagram.dependencies ?? [],
+        areas: diagram.areas ?? [],
+        customTypes: diagram.customTypes ?? [],
+        notes: diagram.notes ?? [],
+    });
 
 export const useDiagramAutosave = () => {
     const { isAuthenticated } = useAuth();
@@ -38,12 +71,7 @@ export const useDiagramAutosave = () => {
         }
 
         const diagramId = String(currentDiagram.id);
-        const payload = toAutosaveSnapshot({
-            name: currentDiagram.name ?? 'Untitled diagram',
-            tables: currentDiagram.tables ?? [],
-            relationships: currentDiagram.relationships ?? [],
-            dependencies: currentDiagram.dependencies ?? [],
-        });
+        const payload = buildAutosaveSnapshotFromDiagram(currentDiagram);
 
         latestDiagramRef.current = currentDiagram;
         latestPayloadRef.current = payload;
