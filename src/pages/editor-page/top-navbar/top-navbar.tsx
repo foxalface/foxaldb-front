@@ -7,6 +7,7 @@ import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
 import { Menu } from './menu/menu';
 import { AuthNavAction } from './auth-nav-action';
+import { DiagramViewers } from './diagram-viewers';
 
 export interface TopNavbarProps {}
 
@@ -38,6 +39,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             <DiagramName />
             <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
                 <LastSaved />
+                <DiagramViewers />
                 <AuthNavAction />
                 <LanguageNav />
             </div>
