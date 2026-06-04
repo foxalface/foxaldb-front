@@ -7,6 +7,7 @@ import { Button } from '@/components/button/button';
 import { useSidebar } from '@/components/sidebar/use-sidebar';
 import { MenuIcon } from 'lucide-react';
 import { AuthNavAction } from './auth-nav-action';
+import { ShareDiagramAction } from './share-diagram-action';
 
 export interface TopNavbarMobileProps {}
 
@@ -39,6 +40,7 @@ export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
+                        <ShareDiagramAction />
                         <AuthNavAction compact />
                         <LanguageNav />
                     </div>

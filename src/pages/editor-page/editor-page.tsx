@@ -31,6 +31,7 @@ import { useGuestDiagramMigration } from './use-guest-diagram-migration';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
+import { DiagramAccessProvider } from '@/context/diagram-access-context/diagram-access-provider';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -138,9 +139,11 @@ export const EditorPage: React.FC = () => (
                                                         <ExportImageProvider>
                                                             <AlertProvider>
                                                                 <DialogProvider>
-                                                                    <KeyboardShortcutsProvider>
-                                                                        <EditorPageComponent />
-                                                                    </KeyboardShortcutsProvider>
+                                                                    <DiagramAccessProvider>
+                                                                        <KeyboardShortcutsProvider>
+                                                                            <EditorPageComponent />
+                                                                        </KeyboardShortcutsProvider>
+                                                                    </DiagramAccessProvider>
                                                                 </DialogProvider>
                                                             </AlertProvider>
                                                         </ExportImageProvider>

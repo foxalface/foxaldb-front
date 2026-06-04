@@ -1,4 +1,5 @@
 import { useAuth } from '@/hooks/use-auth';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useConfig } from '@/hooks/use-config';
 import { useStorage } from '@/hooks/use-storage';
@@ -16,6 +17,7 @@ export const useDiagramLoader = () => {
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config } = useConfig();
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
+    const { setDiagramAccess, clearDiagramAccess } = useDiagramAccess();
     const { listDiagrams } = useStorage();
     const { currentDiagram, loadDiagram, loadDiagramFromData } = useChartDB();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
@@ -39,6 +41,7 @@ export const useDiagramLoader = () => {
             }
 
             currentDiagramLoadingRef.current = 'guest';
+            clearDiagramAccess();
 
             void (async () => {
                 try {
@@ -86,9 +89,11 @@ export const useDiagramLoader = () => {
 
                     loadDiagramFromData(normalizedDiagram);
                     setInitialDiagram(normalizedDiagram);
+                    setDiagramAccess(diagram.access ?? null);
                     closeOpenDiagramDialog();
                     hideLoader();
                 } catch {
+                    clearDiagramAccess();
                     openOpenDiagramDialog({ canClose: false });
                     hideLoader();
                 }
@@ -96,6 +101,7 @@ export const useDiagramLoader = () => {
                 return;
             }
 
+            clearDiagramAccess();
             const diagrams = await getDiagrams();
 
             if (diagrams.length > 0) {
@@ -131,6 +137,8 @@ export const useDiagramLoader = () => {
         loadDiagram,
         loadDiagramFromData,
         listDiagrams,
+        setDiagramAccess,
+        clearDiagramAccess,
     ]);
 
     return { initialDiagram };

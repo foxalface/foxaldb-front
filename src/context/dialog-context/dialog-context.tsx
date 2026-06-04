@@ -9,6 +9,7 @@ import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/i
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
+import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -22,6 +23,12 @@ export interface DialogContext {
         params?: Omit<OpenDiagramDialogProps, 'dialog'>
     ) => void;
     closeOpenDiagramDialog: () => void;
+
+    // Share diagram dialog
+    openShareDiagramDialog: (
+        params: Omit<ShareDiagramDialogProps, 'dialog'>
+    ) => void;
+    closeShareDiagramDialog: () => void;
 
     // Export SQL dialog
     openExportSQLDialog: (params: Omit<ExportSQLDialogProps, 'dialog'>) => void;
@@ -77,6 +84,8 @@ export const dialogContext = createContext<DialogContext>({
     closeCreateDiagramDialog: emptyFn,
     openOpenDiagramDialog: emptyFn,
     closeOpenDiagramDialog: emptyFn,
+    openShareDiagramDialog: emptyFn,
+    closeShareDiagramDialog: emptyFn,
     openExportSQLDialog: emptyFn,
     closeExportSQLDialog: emptyFn,
     closeCreateRelationshipDialog: emptyFn,

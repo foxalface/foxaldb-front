@@ -1,4 +1,5 @@
 import { useAuth } from '@/hooks/use-auth';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
@@ -42,6 +43,7 @@ const getPusherConnection = (
 export const useDiagramReconnectRefresh = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
     const { currentDiagram, updateDiagramData } = useChartDB();
+    const { setDiagramAccess } = useDiagramAccess();
 
     const refreshInFlightRef = useRef(false);
     const lastRefreshAtRef = useRef(0);
@@ -81,6 +83,7 @@ export const useDiagramReconnectRefresh = (): void => {
         try {
             const raw = await getDiagram(diagramId);
             const diagram = normalizeDiagramFromApi(raw, diagramId);
+            setDiagramAccess(raw.access ?? null);
             await updateDiagramData(diagram, { forceUpdateStorage: true });
         } catch (error: unknown) {
             console.warn(
@@ -95,7 +98,7 @@ export const useDiagramReconnectRefresh = (): void => {
             syncRemoteApplyState();
             refreshInFlightRef.current = false;
         }
-    }, [diagramId, updateDiagramData]);
+    }, [diagramId, setDiagramAccess, updateDiagramData]);
 
     useEffect(() => {
         if (isLoading || !isAuthenticated || diagramId === null) {

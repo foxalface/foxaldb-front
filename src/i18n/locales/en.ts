@@ -345,6 +345,30 @@ export const en = {
             import: 'Import',
         },
 
+        share_diagram_dialog: {
+            title: 'Share diagram',
+            description:
+                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
+            share_button: 'Share',
+            empty_members: 'No collaborators yet.',
+            remove: 'Remove',
+            roles: {
+                owner: 'Owner',
+                editor: 'Editor',
+                viewer: 'Viewer',
+            },
+            add_member: {
+                title: 'Add collaborator',
+                email_placeholder: 'Email address',
+                add: 'Add',
+                adding: 'Adding...',
+            },
+            errors: {
+                load_failed: 'Could not load collaborators.',
+                add_failed: 'Could not add collaborator.',
+            },
+        },
+
         open_diagram_dialog: {
             title: 'Open Database',
             description: 'Select a diagram to open from the list below.',
