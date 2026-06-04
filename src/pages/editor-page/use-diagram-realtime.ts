@@ -321,7 +321,7 @@ export const useDiagramRealtime = (): void => {
                     '.DiagramOperation',
                     handleDiagramOperation
                 );
-                echo.leave(`diagram.${diagramId}`);
+                echo.leaveChannel(`private-diagram.${diagramId}`);
             } catch (error) {
                 console.warn(
                     `[DiagramRealtime] failed to cleanup (diagram.${diagramId})`,

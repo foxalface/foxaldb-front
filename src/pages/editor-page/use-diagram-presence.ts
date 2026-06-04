@@ -62,7 +62,7 @@ export const useDiagramPresence = (): DiagramPresenceState => {
             setIsPresenceActive(false);
 
             try {
-                echo.leave(`diagram.${diagramId}`);
+                echo.leaveChannel(`presence-diagram.${diagramId}`);
             } catch (error: unknown) {
                 console.warn(
                     `[DiagramPresence] failed to leave (diagram.${diagramId})`,

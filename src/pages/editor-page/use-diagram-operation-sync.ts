@@ -131,7 +131,9 @@ export const useDiagramOperationSync = (): void => {
             if (diagramAccess !== null && diagramAccess.can_edit === false) {
                 return;
             }
-            if (shouldSkipOutboundSync()) return;
+            if (shouldSkipOutboundSync()) {
+                return;
+            }
             if (!shouldPostDiagramSyncEvent(event)) return;
 
             const diagramId = String(currentDiagram.id);
