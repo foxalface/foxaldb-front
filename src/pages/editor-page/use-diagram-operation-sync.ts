@@ -1,5 +1,6 @@
 import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
 import { useAuth } from '@/hooks/use-auth';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { postDiagramOperation } from '@/lib/api/diagrams';
 import { getClientId } from '@/lib/realtime/client-id';
@@ -119,6 +120,7 @@ const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
 
 export const useDiagramOperationSync = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
+    const { diagramAccess } = useDiagramAccess();
     const { currentDiagram, events } = useChartDB();
 
     const handleChartDBEvent = useCallback(
@@ -126,6 +128,9 @@ export const useDiagramOperationSync = (): void => {
             if (isLoading || !isAuthenticated) return;
             if (!currentDiagram) return;
             if (!isValidBackendDiagramId(currentDiagram.id)) return;
+            if (diagramAccess !== null && diagramAccess.can_edit === false) {
+                return;
+            }
             if (shouldSkipOutboundSync()) return;
             if (!shouldPostDiagramSyncEvent(event)) return;
 
@@ -374,7 +379,7 @@ export const useDiagramOperationSync = (): void => {
                 return;
             }
         },
-        [currentDiagram, isAuthenticated, isLoading]
+        [currentDiagram, diagramAccess, isAuthenticated, isLoading]
     );
 
     events.useSubscription(handleChartDBEvent);

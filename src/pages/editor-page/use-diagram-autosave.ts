@@ -1,4 +1,5 @@
 import { useAuth } from '@/hooks/use-auth';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
@@ -50,6 +51,7 @@ const buildAutosaveSnapshotFromDiagram = (diagram: Diagram): string =>
 
 export const useDiagramAutosave = () => {
     const { isAuthenticated } = useAuth();
+    const { diagramAccess } = useDiagramAccess();
     const { currentDiagram } = useChartDB();
     const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
         null
@@ -67,6 +69,10 @@ export const useDiagramAutosave = () => {
             !currentDiagram ||
             !isValidBackendDiagramId(currentDiagram.id)
         ) {
+            return;
+        }
+
+        if (diagramAccess !== null && diagramAccess.can_edit === false) {
             return;
         }
 
@@ -147,5 +153,5 @@ export const useDiagramAutosave = () => {
                 clearTimeout(debounceTimeoutRef.current);
             }
         };
-    }, [isAuthenticated, currentDiagram]);
+    }, [isAuthenticated, currentDiagram, diagramAccess]);
 };

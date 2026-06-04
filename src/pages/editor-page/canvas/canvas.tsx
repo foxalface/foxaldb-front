@@ -801,6 +801,10 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const onConnectHandler = useCallback(
         async (params: AddEdgeParams) => {
+            if (readonly) {
+                return;
+            }
+
             if (
                 params.sourceHandle?.startsWith?.(
                     TOP_SOURCE_HANDLE_ID_PREFIX
@@ -854,7 +858,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 targetFieldId,
             });
         },
-        [createRelationship, createDependency, getField, toast, databaseType]
+        [
+            createRelationship,
+            createDependency,
+            getField,
+            toast,
+            databaseType,
+            readonly,
+        ]
     );
 
     const onEdgesChangeHandler: OnEdgesChange<EdgeType> = useCallback(
@@ -1028,13 +1039,17 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const onNodesChangeHandler: OnNodesChange<NodeType> = useCallback(
         (changes) => {
-            let changesToApply = changes;
-
             if (readonly) {
-                changesToApply = changesToApply.filter(
-                    (change) => change.type !== 'remove'
+                const selectionChanges = changes.filter(
+                    (change) => change.type === 'select'
                 );
+                if (selectionChanges.length > 0) {
+                    return onNodesChange(selectionChanges);
+                }
+                return;
             }
+
+            let changesToApply = changes;
 
             // Handle area drag changes - add child table movements for visual feedback only
             const areaDragChanges = changesToApply.filter((change) => {
@@ -1751,6 +1766,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     maxZoom={5}
                     minZoom={0.1}
                     onConnect={onConnectHandler}
+                    nodesDraggable={!readonly}
+                    nodesConnectable={!readonly}
                     proOptions={{
                         hideAttribution: true,
                     }}
@@ -1767,7 +1784,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     selectionMode={SelectionMode.Full}
                     onPaneClick={onPaneClickHandler}
                     connectionLineComponent={ConnectionLine}
-                    deleteKeyCode={['Backspace', 'Delete']}
+                    deleteKeyCode={readonly ? [] : ['Backspace', 'Delete']}
                     multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
                 >
                     <Controls
