@@ -12,6 +12,10 @@ export const setClearPendingDiagramOperationSyncTimers = (
     clearPendingDiagramOperationSyncTimersCallback = callback;
 };
 
+export const clearPendingDiagramOperationSyncTimers = (): void => {
+    clearPendingDiagramOperationSyncTimersCallback?.();
+};
+
 export const isRemoteSyncActive = (): boolean => remoteSyncDepthRef.current > 0;
 
 export const isOutboundReplayActive = (): boolean =>

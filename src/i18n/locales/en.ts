@@ -72,6 +72,23 @@ export const en = {
             clear: 'Clear',
         },
 
+        diagram_access: {
+            removed: {
+                title: 'Access removed',
+                description: 'You no longer have access to this diagram.',
+            },
+            role_changed_viewer: {
+                title: 'View-only access',
+                description:
+                    'Your role on this diagram was changed to viewer. Editing is now disabled.',
+            },
+            role_changed_editor: {
+                title: 'Edit access granted',
+                description:
+                    'Your role on this diagram was changed to editor. You can edit again.',
+            },
+        },
+
         reorder_diagram_alert: {
             title: 'Auto Arrange Diagram',
             description:

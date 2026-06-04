@@ -23,6 +23,7 @@ import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 import { HIDE_CHARTDB_CLOUD } from '@/lib/env';
 import { useDiagramLoader } from './use-diagram-loader';
+import { useDiagramAccessListener } from './use-diagram-access-listener';
 import { useDiagramAutosave } from './use-diagram-autosave';
 import { useDiagramOperationSync } from './use-diagram-operation-sync';
 import { useDiagramRealtime } from './use-diagram-realtime';
@@ -52,6 +53,7 @@ const EditorPageComponent: React.FC = () => {
         useLocalConfig();
     const { initialDiagram } = useDiagramLoader();
     useDiagramAutosave();
+    useDiagramAccessListener();
     useDiagramRealtime();
     useDiagramReconnectRefresh();
     useDiagramOperationSync();

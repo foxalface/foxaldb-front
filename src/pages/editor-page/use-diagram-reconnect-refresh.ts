@@ -1,9 +1,15 @@
 import { useAuth } from '@/hooks/use-auth';
+import { useAlert } from '@/context/alert-context/alert-context';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDialog } from '@/hooks/use-dialog';
 import { getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
+import {
+    isDiagramAccessDenied,
+    kickOutOfDiagram,
+} from '@/lib/realtime/kick-out-of-diagram';
 import { getEcho } from '@/lib/realtime/echo';
 import {
     isOutboundReplayActive,
@@ -12,6 +18,8 @@ import {
     syncRemoteApplyState,
 } from '@/lib/realtime/diagram-sync-state';
 import { useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const HIDDEN_THRESHOLD_MS = 30_000;
 const REFRESH_COOLDOWN_MS = 5_000;
@@ -42,8 +50,13 @@ const getPusherConnection = (
 
 export const useDiagramReconnectRefresh = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram, updateDiagramData } = useChartDB();
-    const { setDiagramAccess } = useDiagramAccess();
+    const { currentDiagram, updateDiagramData, loadDiagramFromData } =
+        useChartDB();
+    const { setDiagramAccess, clearDiagramAccess } = useDiagramAccess();
+    const { showAlert } = useAlert();
+    const { openOpenDiagramDialog } = useDialog();
+    const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const refreshInFlightRef = useRef(false);
     const lastRefreshAtRef = useRef(0);
@@ -86,6 +99,20 @@ export const useDiagramReconnectRefresh = (): void => {
             setDiagramAccess(raw.access ?? null);
             await updateDiagramData(diagram, { forceUpdateStorage: true });
         } catch (error: unknown) {
+            if (isDiagramAccessDenied(error)) {
+                kickOutOfDiagram({
+                    title: t('diagram_access.removed.title'),
+                    message: t('diagram_access.removed.description'),
+                    dedupeKey: `reconnect:${diagramId}`,
+                    clearDiagramAccess,
+                    loadDiagramFromData,
+                    navigate,
+                    showAlert,
+                    openOpenDiagramDialog,
+                });
+                return;
+            }
+
             console.warn(
                 '[DiagramReconnect] Failed to refresh diagram from backend',
                 error
@@ -98,7 +125,17 @@ export const useDiagramReconnectRefresh = (): void => {
             syncRemoteApplyState();
             refreshInFlightRef.current = false;
         }
-    }, [diagramId, setDiagramAccess, updateDiagramData]);
+    }, [
+        diagramId,
+        setDiagramAccess,
+        updateDiagramData,
+        clearDiagramAccess,
+        loadDiagramFromData,
+        navigate,
+        showAlert,
+        openOpenDiagramDialog,
+        t,
+    ]);
 
     useEffect(() => {
         if (isLoading || !isAuthenticated || diagramId === null) {
