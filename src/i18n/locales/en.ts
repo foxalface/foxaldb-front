@@ -386,6 +386,34 @@ export const en = {
             },
         },
 
+        activity_feed_dialog: {
+            title: 'Activity',
+            description: 'Recent changes to this diagram.',
+            activity_button: 'Activity',
+            empty: 'No activity yet.',
+            unknown_user: 'Someone',
+            errors: {
+                load_failed: 'Could not load activity.',
+            },
+            actions: {
+                add_tables: '{{user}} added table {{table}}',
+                remove_tables: '{{user}} removed a table',
+                add_field: '{{user}} added field {{field}}',
+                remove_field: '{{user}} removed a field',
+                update_field: '{{user}} updated field {{field}}',
+                add_relationships: '{{user}} added a relationship',
+                remove_relationships: '{{user}} removed a relationship',
+                update_relationship: '{{user}} updated a relationship',
+                add_notes: '{{user}} added a note',
+                remove_notes: '{{user}} removed a note',
+                add_areas: '{{user}} added an area',
+                remove_areas: '{{user}} removed an area',
+                add_dependencies: '{{user}} added a dependency',
+                remove_dependencies: '{{user}} removed a dependency',
+                fallback: '{{user}} updated the diagram',
+            },
+        },
+
         open_diagram_dialog: {
             title: 'Open Database',
             description: 'Select a diagram to open from the list below.',

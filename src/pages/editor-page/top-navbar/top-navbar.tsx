@@ -9,6 +9,7 @@ import { Menu } from './menu/menu';
 import { AuthNavAction } from './auth-nav-action';
 import { DiagramViewers } from './diagram-viewers';
 import { ShareDiagramAction } from './share-diagram-action';
+import { ActivityFeedAction } from './activity-feed-action';
 
 export interface TopNavbarProps {}
 
@@ -40,6 +41,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             <DiagramName />
             <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
                 <LastSaved />
+                <ActivityFeedAction />
                 <ShareDiagramAction />
                 <DiagramViewers />
                 <AuthNavAction />

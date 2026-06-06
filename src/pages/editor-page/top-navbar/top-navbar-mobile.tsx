@@ -8,6 +8,7 @@ import { useSidebar } from '@/components/sidebar/use-sidebar';
 import { MenuIcon } from 'lucide-react';
 import { AuthNavAction } from './auth-nav-action';
 import { ShareDiagramAction } from './share-diagram-action';
+import { ActivityFeedAction } from './activity-feed-action';
 
 export interface TopNavbarMobileProps {}
 
@@ -40,6 +41,7 @@ export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
+                        <ActivityFeedAction />
                         <ShareDiagramAction />
                         <AuthNavAction compact />
                         <LanguageNav />

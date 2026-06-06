@@ -23,6 +23,8 @@ import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diag
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
 import { ShareDiagramDialog } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
+import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
+import { ActivityFeedDialog } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -148,6 +150,16 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             setOpenShareDiagramDialog(true);
         }, []);
 
+    const [openActivityFeedDialog, setOpenActivityFeedDialog] = useState(false);
+    const [activityFeedDialogParams, setActivityFeedDialogParams] =
+        useState<Omit<ActivityFeedDialogProps, 'dialog'>>();
+
+    const openActivityFeedDialogHandler: DialogContext['openActivityFeedDialog'] =
+        useCallback((params) => {
+            setActivityFeedDialogParams(params);
+            setOpenActivityFeedDialog(true);
+        }, []);
+
     return (
         <dialogContext.Provider
             value={{
@@ -157,6 +169,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
                 openShareDiagramDialog: openShareDiagramDialogHandler,
                 closeShareDiagramDialog: () => setOpenShareDiagramDialog(false),
+                openActivityFeedDialog: openActivityFeedDialogHandler,
+                closeActivityFeedDialog: () => setOpenActivityFeedDialog(false),
                 openExportSQLDialog: openExportSQLDialogHandler,
                 closeExportSQLDialog: () => setOpenExportSQLDialog(false),
                 openCreateRelationshipDialog:
@@ -220,6 +234,12 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 <ShareDiagramDialog
                     dialog={{ open: openShareDiagramDialog }}
                     {...shareDiagramDialogParams}
+                />
+            ) : null}
+            {activityFeedDialogParams ? (
+                <ActivityFeedDialog
+                    dialog={{ open: openActivityFeedDialog }}
+                    {...activityFeedDialogParams}
                 />
             ) : null}
         </dialogContext.Provider>
