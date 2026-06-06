@@ -119,11 +119,24 @@ const resolveFieldLabel = (
     return fallbackField ?? 'field';
 };
 
+export const resolveActivityActorName = (
+    activity: DiagramActivityResource,
+    t: TFunction,
+    currentUserId?: number | null
+): string => {
+    if (currentUserId != null && activity.user?.id === currentUserId) {
+        return t('activity_feed_dialog.you');
+    }
+
+    return activity.user?.name ?? t('activity_feed_dialog.unknown_user');
+};
+
 export const formatActivityMessage = (
     activity: DiagramActivityResource,
-    t: TFunction
+    t: TFunction,
+    currentUserId?: number | null
 ): string => {
-    const user = activity.user?.name ?? t('activity_feed_dialog.unknown_user');
+    const user = resolveActivityActorName(activity, t, currentUserId);
 
     if (!isDiagramActivityAction(activity.action)) {
         return t('activity_feed_dialog.actions.fallback', { user });

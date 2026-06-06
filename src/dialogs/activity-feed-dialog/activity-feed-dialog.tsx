@@ -88,15 +88,21 @@ export const ActivityFeedDialog: React.FC<ActivityFeedDialogProps> = ({
                         <Spinner size="medium" />
                     </div>
                 ) : activities.length === 0 ? (
-                    <p className="py-4 text-sm text-muted-foreground">
-                        {t('activity_feed_dialog.empty')}
-                    </p>
+                    <div className="space-y-1 py-4">
+                        <p className="text-sm text-muted-foreground">
+                            {t('activity_feed_dialog.empty')}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                            {t('activity_feed_dialog.empty_hint')}
+                        </p>
+                    </div>
                 ) : (
                     <ul>
                         {activities.map((activity) => (
                             <ActivityListItem
                                 key={activity.id}
                                 activity={activity}
+                                currentUserId={user.id}
                             />
                         ))}
                     </ul>

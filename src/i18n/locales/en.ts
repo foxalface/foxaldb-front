@@ -395,6 +395,8 @@ export const en = {
             description: 'Recent changes to this diagram.',
             activity_button: 'Activity',
             empty: 'No activity yet.',
+            empty_hint: 'Start editing to see recent changes.',
+            you: 'You',
             unknown_user: 'Someone',
             errors: {
                 load_failed: 'Could not load activity.',
