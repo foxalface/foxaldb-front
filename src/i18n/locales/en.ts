@@ -386,6 +386,10 @@ export const en = {
             },
         },
 
+        editor_role: {
+            view_only: 'View only',
+        },
+
         activity_feed_dialog: {
             title: 'Activity',
             description: 'Recent changes to this diagram.',

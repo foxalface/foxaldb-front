@@ -1,8 +1,9 @@
 import React from 'react';
 import { Badge } from '@/components/badge/badge';
-import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils';
 import type { DiagramAccessRole } from '@/lib/api/diagrams';
 import type { DiagramMemberRole } from '@/lib/api/diagram-members';
+import { useTranslation } from 'react-i18next';
 
 type RoleBadgeValue = DiagramAccessRole | DiagramMemberRole;
 
@@ -21,5 +22,15 @@ export const DiagramRoleBadge: React.FC<DiagramRoleBadgeProps> = ({ role }) => {
               ? 'secondary'
               : 'outline';
 
-    return <Badge variant={variant}>{label}</Badge>;
+    return (
+        <Badge
+            variant={variant}
+            className={cn(
+                role === 'viewer' &&
+                    'border-muted-foreground/30 bg-muted/40 text-muted-foreground'
+            )}
+        >
+            {label}
+        </Badge>
+    );
 };

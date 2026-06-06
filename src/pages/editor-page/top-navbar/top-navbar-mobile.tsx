@@ -9,6 +9,7 @@ import { MenuIcon } from 'lucide-react';
 import { AuthNavAction } from './auth-nav-action';
 import { ShareDiagramAction } from './share-diagram-action';
 import { ActivityFeedAction } from './activity-feed-action';
+import { DiagramAccessRoleIndicator } from './diagram-access-role-indicator';
 
 export interface TopNavbarMobileProps {}
 
@@ -41,6 +42,9 @@ export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
+                        <div className="hidden min-[420px]:flex">
+                            <DiagramAccessRoleIndicator compact />
+                        </div>
                         <ActivityFeedAction />
                         <ShareDiagramAction />
                         <AuthNavAction compact />

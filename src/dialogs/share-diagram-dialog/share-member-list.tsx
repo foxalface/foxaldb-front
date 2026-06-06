@@ -17,7 +17,7 @@ import {
 } from '@/lib/api/diagram-members';
 import type { AuthUser } from '@/lib/api/auth';
 import { useTranslation } from 'react-i18next';
-import { DiagramRoleBadge } from './diagram-role-badge';
+import { DiagramRoleBadge } from '@/components/diagram-role-badge/diagram-role-badge';
 
 export interface ShareMemberListProps {
     diagramId: string;

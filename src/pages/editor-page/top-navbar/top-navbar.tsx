@@ -10,6 +10,7 @@ import { AuthNavAction } from './auth-nav-action';
 import { DiagramViewers } from './diagram-viewers';
 import { ShareDiagramAction } from './share-diagram-action';
 import { ActivityFeedAction } from './activity-feed-action';
+import { DiagramAccessRoleIndicator } from './diagram-access-role-indicator';
 
 export interface TopNavbarProps {}
 
@@ -40,6 +41,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
             </div>
             <DiagramName />
             <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
+                <DiagramAccessRoleIndicator />
                 <LastSaved />
                 <ActivityFeedAction />
                 <ShareDiagramAction />
