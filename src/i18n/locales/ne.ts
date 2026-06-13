@@ -18,6 +18,8 @@ export const ne: LanguageTranslation = {
                 browse: 'सबै डाटाबेसहरू...',
                 save: 'सुरक्षित गर्नुहोस्',
                 import: 'डाटाबेस आयात गर्नुहोस्',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'SQL निर्यात गर्नुहोस्',
                 export_as: 'निर्यात गर्नुहोस्',
                 delete_diagram: 'हटाउनुहोस्',
@@ -390,6 +392,17 @@ export const ne: LanguageTranslation = {
                     'SQL स्क्रिप्ट उत्पन्न गर्नमा त्रुटि। कृपया पछि प्रयास गर्नुहोस् वा <0>हामीलाई सम्पर्क गर्नुहोस्</0>।',
                 description:
                     'तपाईंले OPENAI_TOKEN प्रयोग गर्न सक्नुहुन्छ, यहाँ <0>यहाँ</0> म्यानुअल हेर्नुहोस्।',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

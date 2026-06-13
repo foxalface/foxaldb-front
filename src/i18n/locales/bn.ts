@@ -18,6 +18,8 @@ export const bn: LanguageTranslation = {
                 browse: 'সমস্ত ডেটাবেস...',
                 save: 'সংরক্ষণ করুন',
                 import: 'ডাটাবেস আমদানি করুন',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'SQL রপ্তানি করুন',
                 export_as: 'রূপে রপ্তানি করুন',
                 delete_diagram: 'মুছুন',
@@ -390,6 +392,17 @@ export const bn: LanguageTranslation = {
                     'SQL স্ক্রিপ্ট তৈরি করার সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন বা <0>আমাদের সাথে যোগাযোগ করুন</0>।',
                 description:
                     'আপনার OPENAI_TOKEN ব্যবহার করার জন্য বিনামূল্যে অভিজ্ঞতা নিন, ম্যানুয়াল <0>এখানে দেখুন</0>।',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

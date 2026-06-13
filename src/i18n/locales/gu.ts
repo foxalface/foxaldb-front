@@ -18,6 +18,8 @@ export const gu: LanguageTranslation = {
                 browse: 'બધા ડેટાબેસ...',
                 save: 'સાચવો',
                 import: 'ડેટાબેસ આયાત કરો',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'SQL નિકાસ કરો',
                 export_as: 'રૂપે નિકાસ કરો',
                 delete_diagram: 'કાઢી નાખો',
@@ -387,6 +389,17 @@ export const gu: LanguageTranslation = {
                     'SQL સ્ક્રિપ્ટ જનરેટ કરવા દરમિયાન ભૂલ થઈ. કૃપા કરીને પછીથી ફરી પ્રયત્ન કરો અથવા <0>અમારો સંપર્ક કરો</0>.',
                 description:
                     'તમારા OPENAI_TOKEN નો ઉપયોગ કરવા માટે મફત અનુભવો, મેન્યુઅલ <0>અહીં જુઓ</0>.',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

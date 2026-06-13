@@ -18,6 +18,8 @@ export const tr: LanguageTranslation = {
                 browse: 'Tüm veritabanları...',
                 save: 'Kaydet',
                 import: 'Veritabanı İçe Aktar',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'SQL Olarak Dışa Aktar',
                 export_as: 'Olarak Dışa Aktar',
                 delete_diagram: 'Sil',
@@ -385,6 +387,18 @@ export const tr: LanguageTranslation = {
                     "OPENAI_TOKEN'ınızı kullanabilirsiniz, kılavuzu <0>buradan</0> görebilirsiniz.",
             },
         },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
+            },
+        },
+
         create_relationship_dialog: {
             title: 'İlişki Oluştur',
             primary_table: 'Birincil Tablo',

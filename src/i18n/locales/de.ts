@@ -18,6 +18,8 @@ export const de: LanguageTranslation = {
                 browse: 'Alle Datenbanken...',
                 save: 'Speichern',
                 import: 'Datenbank importieren',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'SQL exportieren',
                 export_as: 'Exportieren als',
                 delete_diagram: 'Löschen',
@@ -391,6 +393,17 @@ export const de: LanguageTranslation = {
                     'Fehler beim Generieren des SQL-Skripts. Bitte versuchen Sie es später erneut oder <0>kontaktieren Sie uns</0>.',
                 description:
                     'Verwenden Sie Ihren OPENAI_TOKEN, siehe Anleitung <0>hier</0>.',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

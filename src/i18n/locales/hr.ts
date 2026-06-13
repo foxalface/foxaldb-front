@@ -18,6 +18,8 @@ export const hr: LanguageTranslation = {
                 browse: 'Sve baze podataka...',
                 save: 'Spremi',
                 import: 'Uvezi',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'Izvezi SQL',
                 export_as: 'Izvezi kao',
                 delete_diagram: 'Izbriši',
@@ -383,6 +385,17 @@ export const hr: LanguageTranslation = {
                     'Greška pri generiranju SQL skripte. Molimo pokušajte ponovno kasnije ili <0>kontaktirajte nas</0>.',
                 description:
                     'Slobodno koristite svoj OPENAI_TOKEN, pogledajte priručnik <0>ovdje</0>.',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

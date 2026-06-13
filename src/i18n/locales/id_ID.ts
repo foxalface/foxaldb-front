@@ -18,6 +18,8 @@ export const id_ID: LanguageTranslation = {
                 browse: 'Semua database...',
                 save: 'Simpan',
                 import: 'Impor Database',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'Ekspor SQL',
                 export_as: 'Ekspor Sebagai',
                 delete_diagram: 'Hapus',
@@ -386,6 +388,17 @@ export const id_ID: LanguageTranslation = {
                     'Kesalahan saat menghasilkan skrip SQL. Silakan coba lagi nanti atau <0>hubungi kami</0>.',
                 description:
                     'Silakan gunakan OPENAI_TOKEN Anda, lihat petunjuk <0>di sini</0>.',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

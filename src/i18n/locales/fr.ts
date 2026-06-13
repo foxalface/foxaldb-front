@@ -18,6 +18,8 @@ export const fr: LanguageTranslation = {
                 browse: 'Toutes les bases de données...',
                 save: 'Enregistrer',
                 import: 'Importer Base de Données',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'Exporter SQL',
                 export_as: 'Exporter en tant que',
                 delete_diagram: 'Supprimer',
@@ -434,6 +436,17 @@ export const fr: LanguageTranslation = {
                 "Aucun schéma n'existe encore. Créez votre premier schéma pour organiser vos tables.",
             create: 'Créer',
             cancel: 'Annuler',
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
+            },
         },
 
         create_relationship_dialog: {

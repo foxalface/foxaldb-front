@@ -18,6 +18,8 @@ export const ko_KR: LanguageTranslation = {
                 browse: '모든 데이터베이스...',
                 save: '저장',
                 import: '데이터베이스 가져오기',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'SQL로 저장',
                 export_as: '다른 형식으로 저장',
                 delete_diagram: '삭제',
@@ -386,6 +388,17 @@ export const ko_KR: LanguageTranslation = {
                     'SQL 생성에 실패하였습니다. 잠시후 다시 시도해주세요 계속해서 증상이 발생하는 경우 <0>우리에게 연락해주세요</0>.',
                 description:
                     '당신의 OPENAI_TOKEN가 있는 경우, <0>여기에서</0> 메뉴얼을 참고하여 사용하실 수 있습니다.',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

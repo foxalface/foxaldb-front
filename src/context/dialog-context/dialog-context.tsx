@@ -11,6 +11,7 @@ import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
 import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
+import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -36,6 +37,12 @@ export interface DialogContext {
         params: Omit<ActivityFeedDialogProps, 'dialog'>
     ) => void;
     closeActivityFeedDialog: () => void;
+
+    // Export Laravel migrations dialog
+    openExportLaravelMigrationsDialog: (
+        params: Omit<ExportLaravelMigrationsDialogProps, 'dialog'>
+    ) => void;
+    closeExportLaravelMigrationsDialog: () => void;
 
     // Export SQL dialog
     openExportSQLDialog: (params: Omit<ExportSQLDialogProps, 'dialog'>) => void;
@@ -95,6 +102,8 @@ export const dialogContext = createContext<DialogContext>({
     closeShareDiagramDialog: emptyFn,
     openActivityFeedDialog: emptyFn,
     closeActivityFeedDialog: emptyFn,
+    openExportLaravelMigrationsDialog: emptyFn,
+    closeExportLaravelMigrationsDialog: emptyFn,
     openExportSQLDialog: emptyFn,
     closeExportSQLDialog: emptyFn,
     closeCreateRelationshipDialog: emptyFn,

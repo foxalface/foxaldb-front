@@ -18,6 +18,8 @@ export const ru: LanguageTranslation = {
                 browse: 'Все базы данных...',
                 save: 'Сохранить',
                 import: 'Импортировать базу данных',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'Экспорт SQL',
                 export_as: 'Экспортировать как',
                 delete_diagram: 'Удалить',
@@ -387,6 +389,17 @@ export const ru: LanguageTranslation = {
                     'Ошибка создания скрипта SQL. Попробуйте еще раз позже или <0>свяжитесь с нами</0>.',
                 description:
                     'Не стесняйтесь использовать ваш OPENAI_TOKEN, см. руководство <0>здесь</0>.',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

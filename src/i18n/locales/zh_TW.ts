@@ -18,6 +18,8 @@ export const zh_TW: LanguageTranslation = {
                 browse: '所有資料庫...',
                 save: '儲存',
                 import: '匯入資料庫',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: '匯出 SQL',
                 export_as: '匯出為特定格式',
                 delete_diagram: '刪除',
@@ -379,6 +381,17 @@ export const zh_TW: LanguageTranslation = {
                     '生成 SQL 腳本時發生錯誤。稍後再試，或<0>聯繫我們</0>。',
                 description:
                     '可以自由使用 OPENAI_TOKEN，詳細說明可參考<0>此處</0>。',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

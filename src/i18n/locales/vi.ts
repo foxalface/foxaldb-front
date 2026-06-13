@@ -18,6 +18,8 @@ export const vi: LanguageTranslation = {
                 browse: 'Tất cả cơ sở dữ liệu...',
                 save: 'Lưu',
                 import: 'Nhập cơ sở dữ liệu',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'Xuất SQL',
                 export_as: 'Xuất thành',
                 delete_diagram: 'Xóa',
@@ -386,6 +388,17 @@ export const vi: LanguageTranslation = {
                     'Lỗi khi tạo SQL. Vui lòng thử lại sau hoặc <0>liên hệ với chúng tôi</0>.',
                 description:
                     'Bạn có thể sử dụng OPENAI_TOKEN, xem hướng dẫn <0>tại đây</0>.',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

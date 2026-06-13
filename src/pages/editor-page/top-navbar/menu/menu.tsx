@@ -32,6 +32,7 @@ import {
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
+import { useAuth } from '@/hooks/use-auth';
 
 export interface MenuProps {}
 
@@ -62,7 +63,9 @@ export const Menu: React.FC<MenuProps> = () => {
         openExportImageDialog,
         openExportDiagramDialog,
         openImportDiagramDialog,
+        openExportLaravelMigrationsDialog,
     } = useDialog();
+    const { isAuthenticated } = useAuth();
     const { showAlert } = useAlert();
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
@@ -178,6 +181,27 @@ export const Menu: React.FC<MenuProps> = () => {
         });
     }, [currentDiagram, updateDiagramUpdatedAt]);
 
+    const canExportLaravelMigrations =
+        isAuthenticated &&
+        currentDiagram?.id &&
+        isValidBackendDiagramId(currentDiagram.id);
+
+    const openLaravelMigrationsExport = useCallback(() => {
+        if (!canExportLaravelMigrations || !currentDiagram?.id) {
+            return;
+        }
+
+        openExportLaravelMigrationsDialog({
+            diagramId: String(currentDiagram.id),
+            diagramName: currentDiagram.name ?? 'diagram',
+        });
+    }, [
+        canExportLaravelMigrations,
+        currentDiagram?.id,
+        currentDiagram?.name,
+        openExportLaravelMigrationsDialog,
+    ]);
+
     return (
         <Menubar className="h-8 border-none py-2 shadow-none md:h-10 md:py-0">
             <MenubarMenu>
@@ -241,6 +265,25 @@ export const Menu: React.FC<MenuProps> = () => {
                         </MenubarSubContent>
                     </MenubarSub>
                     <MenubarSeparator />
+                    {canExportLaravelMigrations ? (
+                        <>
+                            <MenubarSub>
+                                <MenubarSubTrigger>
+                                    {t('menu.actions.export')}
+                                </MenubarSubTrigger>
+                                <MenubarSubContent>
+                                    <MenubarItem
+                                        onClick={openLaravelMigrationsExport}
+                                    >
+                                        {t(
+                                            'menu.actions.export_laravel_migrations'
+                                        )}
+                                    </MenubarItem>
+                                </MenubarSubContent>
+                            </MenubarSub>
+                            <MenubarSeparator />
+                        </>
+                    ) : null}
                     <MenubarSub>
                         <MenubarSubTrigger>
                             {t('menu.actions.export_sql')}

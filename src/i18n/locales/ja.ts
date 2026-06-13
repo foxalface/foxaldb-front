@@ -18,6 +18,8 @@ export const ja: LanguageTranslation = {
                 browse: 'すべてのデータベース...',
                 save: '保存',
                 import: 'データベースをインポート',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'SQLをエクスポート',
                 export_as: '形式を指定してエクスポート',
                 delete_diagram: '削除',
@@ -391,6 +393,17 @@ export const ja: LanguageTranslation = {
                     'SQLスクリプトの生成中にエラーが発生しました。後でもう一度試すか、<0>お問い合わせください</0>。',
                 description:
                     'OPENAI_TOKENを自由に使用して、マニュアルを<0>こちら</0>で確認してください。',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

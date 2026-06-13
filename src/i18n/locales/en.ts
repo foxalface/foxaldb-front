@@ -18,6 +18,8 @@ export const en = {
                 browse: 'All Databases...',
                 save: 'Save',
                 import: 'Import',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: 'Export SQL',
                 export_as: 'Export as',
                 delete_diagram: 'Delete',
@@ -454,6 +456,17 @@ export const en = {
                     'Error generating SQL script. Please try again later or <0>contact us</0>.',
                 description:
                     'Feel free to use your OPENAI_TOKEN, see the manual <0>here</0>.',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

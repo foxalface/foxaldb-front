@@ -18,6 +18,8 @@ export const zh_CN: LanguageTranslation = {
                 browse: '所有数据库...',
                 save: '保存',
                 import: '导入数据库',
+                export: 'Export',
+                export_laravel_migrations: 'Laravel migrations',
                 export_sql: '导出 SQL 语句',
                 export_as: '导出为',
                 delete_diagram: '删除',
@@ -380,6 +382,17 @@ export const zh_CN: LanguageTranslation = {
                     '生成 SQL 脚本时出错。请稍后再试，或者 <0>联系我们</0>。',
                 description:
                     '随时使用您的 OPENAI_TOKEN，在<0>这里</0>查看手册。',
+            },
+        },
+
+        export_laravel_migrations_dialog: {
+            title: 'Export Laravel migrations',
+            laravel_version: 'Laravel version',
+            export: 'Export',
+            exporting: 'Exporting...',
+            cancel: 'Cancel',
+            errors: {
+                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

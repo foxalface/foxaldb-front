@@ -25,6 +25,8 @@ import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/sha
 import { ShareDiagramDialog } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
 import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
 import { ActivityFeedDialog } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
+import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
+import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -160,6 +162,21 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             setOpenActivityFeedDialog(true);
         }, []);
 
+    const [
+        openExportLaravelMigrationsDialog,
+        setOpenExportLaravelMigrationsDialog,
+    ] = useState(false);
+    const [
+        exportLaravelMigrationsDialogParams,
+        setExportLaravelMigrationsDialogParams,
+    ] = useState<Omit<ExportLaravelMigrationsDialogProps, 'dialog'>>();
+
+    const openExportLaravelMigrationsDialogHandler: DialogContext['openExportLaravelMigrationsDialog'] =
+        useCallback((params) => {
+            setExportLaravelMigrationsDialogParams(params);
+            setOpenExportLaravelMigrationsDialog(true);
+        }, []);
+
     return (
         <dialogContext.Provider
             value={{
@@ -171,6 +188,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 closeShareDiagramDialog: () => setOpenShareDiagramDialog(false),
                 openActivityFeedDialog: openActivityFeedDialogHandler,
                 closeActivityFeedDialog: () => setOpenActivityFeedDialog(false),
+                openExportLaravelMigrationsDialog:
+                    openExportLaravelMigrationsDialogHandler,
+                closeExportLaravelMigrationsDialog: () =>
+                    setOpenExportLaravelMigrationsDialog(false),
                 openExportSQLDialog: openExportSQLDialogHandler,
                 closeExportSQLDialog: () => setOpenExportSQLDialog(false),
                 openCreateRelationshipDialog:
@@ -240,6 +261,12 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 <ActivityFeedDialog
                     dialog={{ open: openActivityFeedDialog }}
                     {...activityFeedDialogParams}
+                />
+            ) : null}
+            {exportLaravelMigrationsDialogParams ? (
+                <ExportLaravelMigrationsDialog
+                    dialog={{ open: openExportLaravelMigrationsDialog }}
+                    {...exportLaravelMigrationsDialogParams}
                 />
             ) : null}
         </dialogContext.Provider>
