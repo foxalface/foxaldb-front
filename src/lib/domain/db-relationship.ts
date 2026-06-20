@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+export type ForeignKeyOnDeleteAction = 'cascade' | 'set_null' | 'restrict';
+export type ForeignKeyOnUpdateAction = 'cascade' | 'restrict';
+
 export interface DBRelationship {
     id: string;
     name: string;
@@ -11,6 +14,8 @@ export interface DBRelationship {
     targetFieldId: string;
     sourceCardinality: Cardinality;
     targetCardinality: Cardinality;
+    onDelete?: ForeignKeyOnDeleteAction | null;
+    onUpdate?: ForeignKeyOnUpdateAction | null;
     createdAt: number;
 }
 
@@ -25,6 +30,8 @@ export const dbRelationshipSchema: z.ZodType<DBRelationship> = z.object({
     targetFieldId: z.string(),
     sourceCardinality: z.union([z.literal('one'), z.literal('many')]),
     targetCardinality: z.union([z.literal('one'), z.literal('many')]),
+    onDelete: z.enum(['cascade', 'set_null', 'restrict']).nullable().optional(),
+    onUpdate: z.enum(['cascade', 'restrict']).nullable().optional(),
     createdAt: z.number(),
 });
 

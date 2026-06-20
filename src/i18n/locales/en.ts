@@ -213,8 +213,16 @@ export const en = {
                     primary: 'Primary Table',
                     foreign: 'Related Table',
                     cardinality: 'Cardinality',
+                    on_delete: 'On delete',
+                    on_update: 'On update',
                     delete_relationship: 'Delete',
                     switch_tables: 'Switch Tables',
+                    referential_action: {
+                        none: 'No action',
+                        cascade: 'Cascade',
+                        set_null: 'Set null',
+                        restrict: 'Restrict',
+                    },
                     relationship_actions: {
                         title: 'Actions',
                         delete_relationship: 'Delete',

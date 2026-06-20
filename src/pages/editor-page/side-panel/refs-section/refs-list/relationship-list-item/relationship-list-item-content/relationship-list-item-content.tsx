@@ -18,6 +18,15 @@ import type {
     RelationshipType,
 } from '@/lib/domain/db-relationship';
 import { determineRelationshipType } from '@/lib/domain/db-relationship';
+import {
+    ON_DELETE_ACTION_OPTIONS,
+    ON_UPDATE_ACTION_OPTIONS,
+    REFERENTIAL_ACTION_NONE,
+    fromOnDeleteSelectValue,
+    fromOnUpdateSelectValue,
+    toOnDeleteSelectValue,
+    toOnUpdateSelectValue,
+} from '@/lib/domain/foreign-key-referential-action';
 import { useReactFlow } from '@xyflow/react';
 import {
     FileMinus2,
@@ -69,6 +78,24 @@ export const RelationshipListItemContent: React.FC<
                     targetCardinality: 'many',
                 });
             }
+        },
+        [relationship.id, updateRelationship]
+    );
+
+    const updateOnDelete = useCallback(
+        (value: string) => {
+            updateRelationship(relationship.id, {
+                onDelete: fromOnDeleteSelectValue(value),
+            });
+        },
+        [relationship.id, updateRelationship]
+    );
+
+    const updateOnUpdate = useCallback(
+        (value: string) => {
+            updateRelationship(relationship.id, {
+                onUpdate: fromOnUpdateSelectValue(value),
+            });
         },
         [relationship.id, updateRelationship]
     );
@@ -231,6 +258,66 @@ export const RelationshipListItemContent: React.FC<
                                 <SelectItem value="one_to_many">
                                     {t('relationship_type.one_to_many')}
                                 </SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex flex-col gap-2 text-xs">
+                    <div className="font-bold text-subtitle">
+                        {t('side_panel.refs_section.relationship.on_delete')}
+                    </div>
+                    <Select
+                        value={toOnDeleteSelectValue(relationship.onDelete)}
+                        onValueChange={updateOnDelete}
+                        disabled={readonly}
+                    >
+                        <SelectTrigger className="h-8">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value={REFERENTIAL_ACTION_NONE}>
+                                    {t(
+                                        'side_panel.refs_section.relationship.referential_action.none'
+                                    )}
+                                </SelectItem>
+                                {ON_DELETE_ACTION_OPTIONS.map((action) => (
+                                    <SelectItem key={action} value={action}>
+                                        {t(
+                                            `side_panel.refs_section.relationship.referential_action.${action}`
+                                        )}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div className="flex flex-col gap-2 text-xs">
+                    <div className="font-bold text-subtitle">
+                        {t('side_panel.refs_section.relationship.on_update')}
+                    </div>
+                    <Select
+                        value={toOnUpdateSelectValue(relationship.onUpdate)}
+                        onValueChange={updateOnUpdate}
+                        disabled={readonly}
+                    >
+                        <SelectTrigger className="h-8">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectItem value={REFERENTIAL_ACTION_NONE}>
+                                    {t(
+                                        'side_panel.refs_section.relationship.referential_action.none'
+                                    )}
+                                </SelectItem>
+                                {ON_UPDATE_ACTION_OPTIONS.map((action) => (
+                                    <SelectItem key={action} value={action}>
+                                        {t(
+                                            `side_panel.refs_section.relationship.referential_action.${action}`
+                                        )}
+                                    </SelectItem>
+                                ))}
                             </SelectGroup>
                         </SelectContent>
                     </Select>
