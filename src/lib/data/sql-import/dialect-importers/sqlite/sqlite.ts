@@ -827,6 +827,15 @@ function findForeignKeysUsingRegex(
                 getTableIdWithSchemaSupport(targetTable);
 
             // Add the relationship
+            const createTableEnd = sqlContent.indexOf(';', match.index);
+            const createTableSql =
+                createTableEnd >= 0
+                    ? sqlContent.substring(
+                          lastCreateTablePos,
+                          createTableEnd + 1
+                      )
+                    : sqlContent.substring(lastCreateTablePos);
+
             relationships.push({
                 name: `FK_${sourceTable}_${sourceColumn}_${targetTable}`,
                 sourceTable,
@@ -837,6 +846,7 @@ function findForeignKeysUsingRegex(
                 targetColumn,
                 sourceTableId,
                 targetTableId,
+                sourceSql: createTableSql,
             });
         }
     }
@@ -880,6 +890,7 @@ function findForeignKeysUsingRegex(
             targetColumn,
             sourceTableId,
             targetTableId,
+            sourceSql: match[0],
         });
     }
 

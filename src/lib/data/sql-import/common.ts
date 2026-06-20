@@ -1,3 +1,4 @@
+import { buildRelationshipReferentialActions } from '@/lib/domain/foreign-key-referential-action';
 import type { Diagram } from '@/lib/domain/diagram';
 import { generateDiagramId, generateId } from '@/lib/utils';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -71,8 +72,32 @@ export interface SQLForeignKey {
     targetTableId: string;
     updateAction?: string;
     deleteAction?: string;
+    sourceSql?: string;
     sourceCardinality?: Cardinality;
     targetCardinality?: Cardinality;
+}
+
+export function withForeignKeySourceSql(
+    fk: SQLForeignKey,
+    sourceSql?: string | null
+): SQLForeignKey {
+    if (!sourceSql?.trim()) {
+        return fk;
+    }
+
+    return {
+        ...fk,
+        sourceSql: sourceSql.trim(),
+    };
+}
+
+export function withForeignKeysSourceSql(
+    foreignKeys: SQLForeignKey[],
+    sourceSql?: string | null
+): SQLForeignKey[] {
+    return foreignKeys.map((foreignKey) =>
+        withForeignKeySourceSql(foreignKey, sourceSql)
+    );
 }
 
 export interface SQLParserResult {
@@ -1039,6 +1064,11 @@ export function convertToChartDBDiagram(
             targetFieldId: sourceField.id,
             sourceCardinality,
             targetCardinality,
+            ...buildRelationshipReferentialActions(
+                rel.deleteAction,
+                rel.updateAction,
+                rel.sourceSql
+            ),
             createdAt: Date.now(),
         });
     });

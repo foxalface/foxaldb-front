@@ -5,6 +5,7 @@ import type {
     DBTable,
 } from '@/lib/domain';
 import { schemaNameToDomainSchemaName } from '@/lib/domain';
+import { buildRelationshipReferentialActionsFromDefinition } from '@/lib/domain/foreign-key-referential-action';
 import type { ForeignKeyInfo } from '../metadata-types/foreign-key-info';
 import { generateId } from '@/lib/utils';
 
@@ -78,6 +79,9 @@ export const createRelationshipsFromMetadata = ({
                     targetFieldId: sourceField.id,
                     sourceCardinality,
                     targetCardinality,
+                    ...buildRelationshipReferentialActionsFromDefinition(
+                        fk.fk_def
+                    ),
                     createdAt: Date.now(),
                 };
             }

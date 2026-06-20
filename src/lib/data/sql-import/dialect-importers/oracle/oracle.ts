@@ -7,6 +7,7 @@ import type {
     SQLForeignKey,
     SQLASTNode,
 } from '../../common';
+import { buildSQLFromAST } from '../../common';
 import type {
     TableReference,
     ColumnReference,
@@ -215,6 +216,7 @@ function parseAlterTableAddConstraint(statements: string[]): SQLForeignKey[] {
                 targetColumn: normalizeOracleIdentifier(targetColumn),
                 sourceTableId: '', // Will be filled by linkRelationships
                 targetTableId: '', // Will be filled by linkRelationships
+                sourceSql: stmt,
             });
         }
     }
@@ -395,6 +397,7 @@ function parseCreateTableManually(
                     targetColumn: normalizeOracleIdentifier(targetCol),
                     sourceTableId: tableId,
                     targetTableId: '', // Will be filled later
+                    sourceSql: part,
                 });
             }
             continue;
@@ -500,6 +503,7 @@ function parseCreateTableManually(
                             targetColumn: normalizeOracleIdentifier(targetCol),
                             sourceTableId: tableId,
                             targetTableId: '', // Will be filled later
+                            sourceSql: part,
                         });
                     }
                 }
@@ -546,6 +550,7 @@ function parseCreateTableManually(
                         targetColumn: normalizeOracleIdentifier(targetCol),
                         sourceTableId: tableId,
                         targetTableId: '', // Will be filled later
+                        sourceSql: part,
                     });
                 }
 
@@ -964,6 +969,7 @@ function processAlterTable(
                                 targetTableId: '', // Will be filled later
                                 updateAction: reference.on_update,
                                 deleteAction: reference.on_delete,
+                                sourceSql: buildSQLFromAST(stmt),
                             });
                         }
                     }

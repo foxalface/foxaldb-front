@@ -8,6 +8,7 @@ import type {
     SQLASTNode,
     SQLCheckConstraint,
 } from '../../common';
+import { buildSQLFromAST } from '../../common';
 import type {
     TableReference,
     ColumnReference,
@@ -342,6 +343,7 @@ function parseAlterTableAddConstraint(statements: string[]): SQLForeignKey[] {
                 targetColumn: targetColumn,
                 sourceTableId: '', // Will be filled by linkRelationships
                 targetTableId: '', // Will be filled by linkRelationships
+                sourceSql: stmt,
             });
         }
     }
@@ -506,6 +508,7 @@ function parseCreateTableManually(
                     targetColumn: targetCol.trim().replace(/\[|\]/g, ''),
                     sourceTableId: tableId,
                     targetTableId: '', // Will be filled later
+                    sourceSql: part,
                 });
             }
             continue;
@@ -621,6 +624,7 @@ function parseCreateTableManually(
                                 .replace(/\[|\]/g, ''),
                             sourceTableId: tableId,
                             targetTableId: '', // Will be filled later
+                            sourceSql: part,
                         });
                     }
                 }
@@ -684,6 +688,7 @@ function parseCreateTableManually(
                                     .replace(/\[|\]/g, ''),
                                 sourceTableId: tableId,
                                 targetTableId: '', // Will be filled later
+                                sourceSql: part,
                             });
                         }
                     }
@@ -700,6 +705,7 @@ function parseCreateTableManually(
                         targetColumn: targetCol.trim().replace(/\[|\]/g, ''),
                         sourceTableId: tableId,
                         targetTableId: '', // Will be filled later
+                        sourceSql: part,
                     });
                 }
 
@@ -1176,6 +1182,7 @@ function processAlterTable(
                             targetTableId: '', // Will be filled later
                             updateAction: reference.on_update,
                             deleteAction: reference.on_delete,
+                            sourceSql: buildSQLFromAST(stmt),
                         });
                     }
                 }

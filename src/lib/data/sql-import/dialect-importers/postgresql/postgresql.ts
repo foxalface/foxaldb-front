@@ -9,6 +9,7 @@ import type {
     SQLCheckConstraint,
 } from '../../common';
 import { buildSQLFromAST } from '../../common';
+import { resolveSqlReferentialActionPhrases } from '@/lib/domain/foreign-key-referential-action';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type {
     TableReference,
@@ -796,6 +797,7 @@ function extractForeignKeysFromCreateTable(
                 targetTableId,
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
+                sourceSql: sql,
             });
         }
     }
@@ -827,6 +829,7 @@ function extractForeignKeysFromCreateTable(
                 targetTableId,
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
+                sourceSql: sql,
             });
         }
     }
@@ -1880,6 +1883,13 @@ export async function fromPostgres(
                                         );
 
                                     if (sourceTableId && targetTableId) {
+                                        const { deleteAction, updateAction } =
+                                            resolveSqlReferentialActionPhrases(
+                                                stmt.sql,
+                                                reference.on_delete,
+                                                reference.on_update
+                                            );
+
                                         relationships.push({
                                             name:
                                                 createDefs.constraint ||
@@ -1892,8 +1902,9 @@ export async function fromPostgres(
                                             targetColumn: targetColumns[i],
                                             sourceTableId,
                                             targetTableId,
-                                            updateAction: reference.on_update,
-                                            deleteAction: reference.on_delete,
+                                            updateAction,
+                                            deleteAction,
+                                            sourceSql: stmt.sql,
                                             sourceCardinality: 'many',
                                             targetCardinality: 'one',
                                         });
@@ -2101,6 +2112,9 @@ export async function fromPostgres(
                 );
 
                 if (sourceTableId && targetTableId) {
+                    const { deleteAction, updateAction } =
+                        resolveSqlReferentialActionPhrases(stmt.sql);
+
                     relationships.push({
                         name: constraintName,
                         sourceTable,
@@ -2111,6 +2125,9 @@ export async function fromPostgres(
                         targetColumn,
                         sourceTableId,
                         targetTableId,
+                        deleteAction,
+                        updateAction,
+                        sourceSql: stmt.sql,
                         sourceCardinality: 'many',
                         targetCardinality: 'one',
                     });

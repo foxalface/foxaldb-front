@@ -68,6 +68,7 @@ interface PendingForeignKey {
     targetColumns: string[];
     updateAction?: string;
     deleteAction?: string;
+    sourceSql?: string;
 }
 
 // Helper to extract statements from PostgreSQL dump
@@ -804,6 +805,8 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                                         reference.on_update,
                                                                     deleteAction:
                                                                         reference.on_delete,
+                                                                    sourceSql:
+                                                                        trimmedStmt,
                                                                 };
                                                             pendingForeignKeys.push(
                                                                 pendingFk
@@ -845,6 +848,8 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                                             reference.on_update,
                                                                         deleteAction:
                                                                             reference.on_delete,
+                                                                        sourceSql:
+                                                                            trimmedStmt,
                                                                     };
 
                                                                 relationships.push(
@@ -1095,6 +1100,7 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                             targetTableId,
                             updateAction,
                             deleteAction,
+                            sourceSql: statement,
                         };
 
                         relationships.push(fk);
@@ -1153,6 +1159,7 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         targetTableId,
                         updateAction: pendingFk.updateAction,
                         deleteAction: pendingFk.deleteAction,
+                        sourceSql: pendingFk.sourceSql,
                     };
 
                     relationships.push(fk);
@@ -1364,6 +1371,7 @@ function findForeignKeysUsingRegex(
                 targetTableId,
                 sourceCardinality,
                 targetCardinality,
+                sourceSql: stmt,
             });
 
             addedRelationships.add(relationshipKey);

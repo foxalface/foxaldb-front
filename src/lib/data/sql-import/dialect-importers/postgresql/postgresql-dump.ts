@@ -203,6 +203,7 @@ function processForeignKeyConstraint(
                 targetTableId,
                 updateAction,
                 deleteAction,
+                sourceSql: statement,
             };
 
             relationships.push(relationship);
