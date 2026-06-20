@@ -396,6 +396,12 @@ export const uk: LanguageTranslation = {
         export_laravel_migrations_dialog: {
             title: 'Export Laravel migrations',
             laravel_version: 'Laravel version',
+            include_table_indexes: 'Include table indexes',
+            include_table_indexes_description:
+                'Export explicit table index definitions. Field-level unique constraints are always included.',
+            include_foreign_keys: 'Include foreign keys',
+            include_foreign_keys_description:
+                'Export separate foreign key migration files.',
             export: 'Export',
             exporting: 'Exporting...',
             cancel: 'Cancel',

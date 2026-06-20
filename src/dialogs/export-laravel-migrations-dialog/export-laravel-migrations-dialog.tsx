@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '@/components/button/button';
+import { Checkbox } from '@/components/checkbox/checkbox';
 import {
     Dialog,
     DialogClose,
@@ -23,6 +24,7 @@ import {
     DEFAULT_LARAVEL_VERSION,
     exportLaravelMigrations,
     LARAVEL_VERSIONS,
+    type LaravelMigrationExportRequest,
     type LaravelVersion,
 } from '@/lib/api/diagram-laravel-export';
 import { downloadBlob } from '@/lib/download-blob';
@@ -36,7 +38,15 @@ export interface ExportLaravelMigrationsDialogProps extends BaseDialogProps {
 
 export interface LaravelMigrationExportOptions {
     laravelVersion: LaravelVersion;
+    includeIndexes: boolean;
+    includeForeignKeys: boolean;
 }
+
+const DEFAULT_EXPORT_OPTIONS: LaravelMigrationExportOptions = {
+    laravelVersion: DEFAULT_LARAVEL_VERSION,
+    includeIndexes: true,
+    includeForeignKeys: true,
+};
 
 const buildExportFilename = (diagramName: string): string => {
     const slug = diagramName
@@ -54,9 +64,9 @@ export const ExportLaravelMigrationsDialog: React.FC<
     const { t } = useTranslation();
     const { user } = useAuth();
     const { closeExportLaravelMigrationsDialog } = useDialog();
-    const [options, setOptions] = useState<LaravelMigrationExportOptions>({
-        laravelVersion: DEFAULT_LARAVEL_VERSION,
-    });
+    const [options, setOptions] = useState<LaravelMigrationExportOptions>(
+        DEFAULT_EXPORT_OPTIONS
+    );
     const [isExporting, setIsExporting] = useState(false);
     const [exportError, setExportError] = useState<string | null>(null);
 
@@ -65,7 +75,7 @@ export const ExportLaravelMigrationsDialog: React.FC<
             return;
         }
 
-        setOptions({ laravelVersion: DEFAULT_LARAVEL_VERSION });
+        setOptions(DEFAULT_EXPORT_OPTIONS);
         setExportError(null);
         setIsExporting(false);
     }, [dialog.open]);
@@ -74,11 +84,14 @@ export const ExportLaravelMigrationsDialog: React.FC<
         setIsExporting(true);
         setExportError(null);
 
+        const payload: LaravelMigrationExportRequest = {
+            laravelVersion: options.laravelVersion,
+            includeIndexes: options.includeIndexes,
+            includeForeignKeys: options.includeForeignKeys,
+        };
+
         try {
-            const blob = await exportLaravelMigrations(
-                diagramId,
-                options.laravelVersion
-            );
+            const blob = await exportLaravelMigrations(diagramId, payload);
 
             downloadBlob(blob, buildExportFilename(diagramName));
             closeExportLaravelMigrationsDialog();
@@ -93,7 +106,7 @@ export const ExportLaravelMigrationsDialog: React.FC<
         closeExportLaravelMigrationsDialog,
         diagramId,
         diagramName,
-        options.laravelVersion,
+        options,
         t,
     ]);
 
@@ -127,9 +140,10 @@ export const ExportLaravelMigrationsDialog: React.FC<
                         <Select
                             value={options.laravelVersion}
                             onValueChange={(value) =>
-                                setOptions({
+                                setOptions((previous) => ({
+                                    ...previous,
                                     laravelVersion: value as LaravelVersion,
-                                })
+                                }))
                             }
                             disabled={isExporting}
                         >
@@ -144,6 +158,60 @@ export const ExportLaravelMigrationsDialog: React.FC<
                                 ))}
                             </SelectContent>
                         </Select>
+                    </div>
+
+                    <div className="space-y-3">
+                        <div className="flex items-start gap-2">
+                            <Checkbox
+                                id="include-table-indexes"
+                                checked={options.includeIndexes}
+                                onCheckedChange={(checked) =>
+                                    setOptions((previous) => ({
+                                        ...previous,
+                                        includeIndexes: checked === true,
+                                    }))
+                                }
+                                disabled={isExporting}
+                            />
+                            <div className="grid gap-1 leading-none">
+                                <Label htmlFor="include-table-indexes">
+                                    {t(
+                                        'export_laravel_migrations_dialog.include_table_indexes'
+                                    )}
+                                </Label>
+                                <p className="text-sm text-muted-foreground">
+                                    {t(
+                                        'export_laravel_migrations_dialog.include_table_indexes_description'
+                                    )}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-2">
+                            <Checkbox
+                                id="include-foreign-keys"
+                                checked={options.includeForeignKeys}
+                                onCheckedChange={(checked) =>
+                                    setOptions((previous) => ({
+                                        ...previous,
+                                        includeForeignKeys: checked === true,
+                                    }))
+                                }
+                                disabled={isExporting}
+                            />
+                            <div className="grid gap-1 leading-none">
+                                <Label htmlFor="include-foreign-keys">
+                                    {t(
+                                        'export_laravel_migrations_dialog.include_foreign_keys'
+                                    )}
+                                </Label>
+                                <p className="text-sm text-muted-foreground">
+                                    {t(
+                                        'export_laravel_migrations_dialog.include_foreign_keys_description'
+                                    )}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

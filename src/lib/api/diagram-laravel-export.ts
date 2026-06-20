@@ -9,6 +9,12 @@ export const LARAVEL_VERSIONS: LaravelVersion[] = ['10', '11', '12', '13'];
 
 export const DEFAULT_LARAVEL_VERSION: LaravelVersion = '13';
 
+export interface LaravelMigrationExportRequest {
+    laravelVersion: LaravelVersion;
+    includeIndexes?: boolean;
+    includeForeignKeys?: boolean;
+}
+
 const getXsrfToken = (): string | undefined => {
     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]*)/);
     return match ? decodeURIComponent(match[1]) : undefined;
@@ -30,7 +36,7 @@ const buildHeaders = (): Record<string, string> => {
 
 export const exportLaravelMigrations = async (
     diagramId: string | number,
-    laravelVersion: LaravelVersion
+    payload: LaravelMigrationExportRequest
 ): Promise<Blob> => {
     const response = await fetch(
         `${API_BASE_URL}/diagrams/${diagramId}/export/laravel-migrations`,
@@ -38,29 +44,29 @@ export const exportLaravelMigrations = async (
             method: 'POST',
             headers: buildHeaders(),
             credentials: 'include',
-            body: JSON.stringify({ laravelVersion }),
+            body: JSON.stringify(payload),
         }
     );
 
     if (!response.ok) {
         const responseText = await response.text();
-        let payload: unknown = responseText;
+        let errorPayload: unknown = responseText;
 
         try {
-            payload = JSON.parse(responseText) as unknown;
+            errorPayload = JSON.parse(responseText) as unknown;
         } catch {
             // Keep raw response text for non-JSON error payloads.
         }
 
         const message =
-            typeof payload === 'object' &&
-            payload !== null &&
-            'message' in payload &&
-            typeof payload.message === 'string'
-                ? payload.message
+            typeof errorPayload === 'object' &&
+            errorPayload !== null &&
+            'message' in errorPayload &&
+            typeof errorPayload.message === 'string'
+                ? errorPayload.message
                 : `API request failed with status ${response.status}`;
 
-        throw new ApiError(message, response.status, payload);
+        throw new ApiError(message, response.status, errorPayload);
     }
 
     return response.blob();
