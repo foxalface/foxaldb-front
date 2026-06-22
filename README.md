@@ -96,6 +96,18 @@ npm install
 VITE_OPENAI_API_KEY=<YOUR_OPEN_AI_KEY> npm run build
 ```
 
+### Testing
+
+Vitest runs in **happy-dom**. Global setup stubs `localStorage` and `sessionStorage` because Node 22+ can expose a broken global `localStorage`; see [`src/test/memory-storage.ts`](src/test/memory-storage.ts).
+
+```bash
+npm test                              # watch mode
+npm run test:ci                       # single run (CI)
+npm run test:ci:fast                  # stop on first failure (local only)
+npm run test:coverage                 # coverage report
+npx vitest run path/to/test.ts        # single file
+```
+
 ### Run the Docker Container
 
 ```bash
