@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { convertToChartDBDiagram, type SQLParserResult } from '../common';
 import { fromPostgres } from '../dialect-importers/postgresql/postgresql';
 import { fromPostgresDump } from '../dialect-importers/postgresql/postgresql-dump';
@@ -8,14 +8,6 @@ import { fromSQLServer } from '../dialect-importers/sqlserver/sqlserver';
 import { DatabaseType } from '@/lib/domain/database-type';
 
 describe('SQL import referential actions', () => {
-    beforeEach(() => {
-        vi.stubGlobal('localStorage', {
-            getItem: vi.fn(() => 'test-workspace-id'),
-            setItem: vi.fn(),
-            removeItem: vi.fn(),
-        });
-    });
-
     it('maps SQLForeignKey deleteAction and updateAction in convertToChartDBDiagram', () => {
         const sourceTableId = 'source-table-id';
         const targetTableId = 'target-table-id';
