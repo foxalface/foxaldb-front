@@ -89,6 +89,8 @@ npm install
 npm run build
 ```
 
+Production builds run lint, TypeScript, and Vite bundling with a raised Node heap limit (`NODE_OPTIONS=--max-old-space-size=4096`) via `cross-env` — use `npm run build`; no manual env setup is required.
+
 Or like this if you want to have AI capabilities:
 
 ```bash

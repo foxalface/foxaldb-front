@@ -5,7 +5,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "npm run lint && tsc -b && vite build",
+        "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 npm run build:run",
+        "build:run": "npm run lint && tsc -b && vite build",
         "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "npm run lint -- --fix",
         "typecheck": "tsc -b",
@@ -97,6 +98,7 @@
         "@vitejs/plugin-react": "^5.1.2",
         "@vitest/ui": "^3.2.4",
         "autoprefixer": "^10.4.20",
+        "cross-env": "^7.0.3",
         "eslint": "^9.16.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-css-modules": "^2.12.0",
