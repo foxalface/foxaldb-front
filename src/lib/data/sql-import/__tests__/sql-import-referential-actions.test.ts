@@ -28,6 +28,7 @@ describe('SQL import referential actions', () => {
                         },
                     ],
                     indexes: [],
+                    order: 0,
                 },
                 {
                     id: sourceTableId,
@@ -50,6 +51,7 @@ describe('SQL import referential actions', () => {
                         },
                     ],
                     indexes: [],
+                    order: 0,
                 },
             ],
             relationships: [
@@ -155,6 +157,7 @@ describe('SQL import referential actions', () => {
                         },
                     ],
                     indexes: [],
+                    order: 0,
                 },
                 {
                     id: sourceTableId,
@@ -176,6 +179,7 @@ describe('SQL import referential actions', () => {
                         },
                     ],
                     indexes: [],
+                    order: 0,
                 },
             ],
             relationships: [
@@ -373,6 +377,7 @@ ALTER TABLE playlists ADD CONSTRAINT fk_playlists_user_id
                         },
                     ],
                     indexes: [],
+                    order: 0,
                 },
                 {
                     id: sourceTableId,
@@ -394,6 +399,7 @@ ALTER TABLE playlists ADD CONSTRAINT fk_playlists_user_id
                         },
                     ],
                     indexes: [],
+                    order: 0,
                 },
             ],
             relationships: [

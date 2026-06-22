@@ -1450,7 +1450,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         ...(hasWidthChange && {
                             measured: {
                                 ...node.measured,
-                                width: tableUpdate.width,
+                                width: tableUpdate.width ?? undefined,
                             },
                         }),
                     };

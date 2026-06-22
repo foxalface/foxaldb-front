@@ -75,6 +75,23 @@ export const ar: LanguageTranslation = {
             clear: 'مسح',
         },
 
+        diagram_access: {
+            removed: {
+                title: 'Access removed',
+                description: 'You no longer have access to this diagram.',
+            },
+            role_changed_viewer: {
+                title: 'View-only access',
+                description:
+                    'Your role on this diagram was changed to viewer. Editing is now disabled.',
+            },
+            role_changed_editor: {
+                title: 'Edit access granted',
+                description:
+                    'Your role on this diagram was changed to editor. You can edit again.',
+            },
+        },
+
         reorder_diagram_alert: {
             title: 'ترتيب تلقائي للرسم البياني',
             description:
@@ -200,8 +217,16 @@ export const ar: LanguageTranslation = {
                     primary: 'الجدول الأساسي',
                     foreign: 'الجدول المرتبط',
                     cardinality: 'الكاردينالية',
+                    on_delete: 'On delete',
+                    on_update: 'On update',
                     delete_relationship: 'حذف',
                     switch_tables: 'تبديل الجداول',
+                    referential_action: {
+                        none: 'No action',
+                        cascade: 'Cascade',
+                        set_null: 'Set null',
+                        restrict: 'Restrict',
+                    },
                     relationship_actions: {
                         title: 'إجراءات',
                         delete_relationship: 'حذف',
@@ -348,6 +373,64 @@ export const ar: LanguageTranslation = {
             empty_diagram: 'قاعدة بيانات فارغة',
             continue: 'متابعة',
             import: 'استيراد',
+        },
+
+        share_diagram_dialog: {
+            title: 'Share diagram',
+            description:
+                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
+            share_button: 'Share',
+            empty_members: 'No collaborators yet.',
+            remove: 'Remove',
+            roles: {
+                owner: 'Owner',
+                editor: 'Editor',
+                viewer: 'Viewer',
+            },
+            add_member: {
+                title: 'Add collaborator',
+                email_placeholder: 'Email address',
+                add: 'Add',
+                adding: 'Adding...',
+            },
+            errors: {
+                load_failed: 'Could not load collaborators.',
+                add_failed: 'Could not add collaborator.',
+            },
+        },
+
+        editor_role: {
+            view_only: 'View only',
+        },
+
+        activity_feed_dialog: {
+            title: 'Activity',
+            description: 'Recent changes to this diagram.',
+            activity_button: 'Activity',
+            empty: 'No activity yet.',
+            empty_hint: 'Start editing to see recent changes.',
+            you: 'You',
+            unknown_user: 'Someone',
+            errors: {
+                load_failed: 'Could not load activity.',
+            },
+            actions: {
+                add_tables: '{{user}} added table {{table}}',
+                remove_tables: '{{user}} removed a table',
+                add_field: '{{user}} added field {{field}}',
+                remove_field: '{{user}} removed a field',
+                update_field: '{{user}} updated field {{field}}',
+                add_relationships: '{{user}} added a relationship',
+                remove_relationships: '{{user}} removed a relationship',
+                update_relationship: '{{user}} updated a relationship',
+                add_notes: '{{user}} added a note',
+                remove_notes: '{{user}} removed a note',
+                add_areas: '{{user}} added an area',
+                remove_areas: '{{user}} removed an area',
+                add_dependencies: '{{user}} added a dependency',
+                remove_dependencies: '{{user}} removed a dependency',
+                fallback: '{{user}} updated the diagram',
+            },
         },
 
         open_diagram_dialog: {
