@@ -33,7 +33,7 @@ Table "finance"."general_ledger" {
             expect(relationship.sourceTableId).toBe(relationship.targetTableId);
 
             // Export back to DBML
-            const exportResult = generateDBMLFromDiagram(diagram);
+            const exportResult = await generateDBMLFromDiagram(diagram);
 
             // Check inline format
             expect(exportResult.inlineDbml).toContain('reversal_id');
@@ -71,7 +71,7 @@ Table "employees" {
         expect(rel.sourceTableId).toBe(rel.targetTableId);
 
         // Export and verify
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
 
         // Check that the self-reference is preserved
         expect(exportResult.inlineDbml).toContain('manager_id');
@@ -104,7 +104,7 @@ Table "categories" {
         });
 
         // Export and verify both relationships are preserved
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
 
         expect(exportResult.inlineDbml).toContain('parent_id');
         expect(exportResult.inlineDbml).toContain('related_id');
@@ -132,7 +132,7 @@ Table "hr"."staff" {
 
         expect(diagram.relationships?.length).toBe(1);
 
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
 
         // Should preserve the schema in the reference
         // FK fields use ref: > to indicate "I reference other"
@@ -159,7 +159,7 @@ Table "graph_nodes" {
         // Should have 2 self-referencing relationships
         expect(diagram.relationships?.length).toBe(2);
 
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
 
         // Both references should be preserved
         expect(exportResult.inlineDbml).toContain('next_node_id');

@@ -31,10 +31,7 @@ import {
     clearErrorHighlight,
     highlightErrorLine,
 } from '@/components/code-snippet/dbml/utils';
-import {
-    registerDBMLCompletionProvider,
-    type DBMLCompletionManager,
-} from '@/components/code-snippet/dbml/dbml-completion-provider';
+import type { DBMLCompletionManager } from '@/components/code-snippet/dbml/dbml-completion-provider';
 import type * as monaco from 'monaco-editor';
 import type { Monaco } from '@monaco-editor/react';
 import { useTranslation } from 'react-i18next';
@@ -65,6 +62,8 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
     const decorationsCollection =
         useRef<monaco.editor.IEditorDecorationsCollection>();
     const completionManagerRef = useRef<DBMLCompletionManager>();
+    const dbmlGenerationRequestIdRef = useRef(0);
+    const completionMountIdRef = useRef(0);
 
     const handleEditorDidMount = useCallback(
         (
@@ -98,11 +97,27 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
 
             readOnlyDisposableRef.current = readOnlyDisposable;
 
-            // Register DBML completion provider
+            const mountId = ++completionMountIdRef.current;
+
+            // Register DBML completion provider (lazy-loads @dbml/parse)
             completionManagerRef.current?.dispose();
-            completionManagerRef.current = registerDBMLCompletionProvider(
-                monacoInstance,
-                editor.getValue()
+            void import('@/components/code-snippet/dbml/dbml-completion-provider').then(
+                ({ registerDBMLCompletionProvider }) => {
+                    if (
+                        !isMountedRef.current ||
+                        mountId !== completionMountIdRef.current ||
+                        editorRef.current !== editor
+                    ) {
+                        return;
+                    }
+
+                    completionManagerRef.current?.dispose();
+                    completionManagerRef.current =
+                        registerDBMLCompletionProvider(
+                            monacoInstance,
+                            editor.getValue()
+                        );
+                }
             );
         },
         []
@@ -174,13 +189,23 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
             return;
         }
 
+        const requestId = ++dbmlGenerationRequestIdRef.current;
+
         setErrorMessage(undefined);
         clearErrorHighlight(decorationsCollection.current);
 
         const generateDBML = async () => {
             setIsLoading(true);
 
-            const result = generateDBMLFromDiagram(currentDiagram);
+            const diagram = currentDiagram;
+            const result = await generateDBMLFromDiagram(diagram);
+
+            if (
+                !isMountedRef.current ||
+                requestId !== dbmlGenerationRequestIdRef.current
+            ) {
+                return;
+            }
 
             // Handle errors
             if (result.error) {
@@ -196,7 +221,13 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
             setIsLoading(false);
         };
 
-        setTimeout(() => generateDBML(), 0);
+        const timeoutId = setTimeout(() => {
+            void generateDBML();
+        }, 0);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
     }, [currentDiagram, toast, isEditMode]);
 
     // Update editedDbml when dbmlToDisplay changes

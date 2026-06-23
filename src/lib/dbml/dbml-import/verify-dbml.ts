@@ -1,5 +1,3 @@
-import { Parser } from '@dbml/core';
-import { preprocessDBML, sanitizeDBML } from './dbml-import';
 import type { DBMLError } from './dbml-import-error';
 import {
     parseDBMLError,
@@ -7,14 +5,14 @@ import {
 } from './dbml-import-error';
 import type { DatabaseType } from '@/lib/domain/database-type';
 
-export const verifyDBML = (
+export const verifyDBML = async (
     content: string,
     {
         databaseType,
     }: {
         databaseType: DatabaseType;
     }
-):
+): Promise<
     | {
           hasError: true;
           error: unknown;
@@ -23,10 +21,13 @@ export const verifyDBML = (
       }
     | {
           hasError: false;
-      } => {
+      }
+> => {
     try {
-        // Validate array types BEFORE preprocessing (preprocessing removes [])
         validateArrayTypesForDatabase(content, databaseType);
+
+        const [{ preprocessDBML, sanitizeDBML }, { Parser }] =
+            await Promise.all([import('./dbml-import'), import('@dbml/core')]);
 
         const { content: preprocessedContent } = preprocessDBML(content);
         const sanitizedContent = sanitizeDBML(preprocessedContent);

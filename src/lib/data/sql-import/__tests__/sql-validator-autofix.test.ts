@@ -3,7 +3,7 @@ import { validateSQL } from '../sql-validator';
 import { DatabaseType } from '@/lib/domain';
 
 describe('SQL Validator Auto-fix', () => {
-    it('should provide auto-fix for cast operator errors', () => {
+    it('should provide auto-fix for cast operator errors', async () => {
         const sql = `
 CREATE TABLE dragons (
     id UUID PRIMARY KEY,
@@ -15,7 +15,7 @@ SELECT id: :text FROM dragons;
 SELECT ST_X(lair_location: :geometry) AS longitude FROM dragons;
         `;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         // Should detect errors
         expect(result.isValid).toBe(false);
@@ -33,13 +33,13 @@ SELECT ST_X(lair_location: :geometry) AS longitude FROM dragons;
         expect(result.fixedSQL).toContain('GEOGRAPHY(POINT, 4326)');
     });
 
-    it('should handle multi-line cast operator errors', () => {
+    it('should handle multi-line cast operator errors', async () => {
         const sql = `
 SELECT AVG(power_level): :DECIMAL(3,
 2) FROM enchantments;
         `;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(result.fixedSQL).toBeDefined();
@@ -47,7 +47,7 @@ SELECT AVG(power_level): :DECIMAL(3,
         expect(result.fixedSQL).not.toContain(': :');
     });
 
-    it('should auto-fix split DECIMAL declarations', () => {
+    it('should auto-fix split DECIMAL declarations', async () => {
         const sql = `
 CREATE TABLE potions (
     id INTEGER PRIMARY KEY,
@@ -57,7 +57,7 @@ CREATE TABLE potions (
     3) DEFAULT 0.000
 );`;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(result.errors.length).toBeGreaterThan(0);
@@ -80,7 +80,7 @@ CREATE TABLE potions (
         ).toBe(true);
     });
 
-    it('should handle multiple auto-fixes together', () => {
+    it('should handle multiple auto-fixes together', async () => {
         const sql = `
 CREATE TABLE enchantments (
     id INTEGER PRIMARY KEY,
@@ -93,7 +93,7 @@ SELECT AVG(power_level): :DECIMAL(3,
 2) FROM enchantments;
 `;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(result.fixedSQL).toBeDefined();
@@ -116,14 +116,14 @@ SELECT AVG(power_level): :DECIMAL(3,
         ).toBe(true);
     });
 
-    it('should preserve original SQL when no errors', () => {
+    it('should preserve original SQL when no errors', async () => {
         const sql = `
 CREATE TABLE wizards (
     id UUID PRIMARY KEY,
     name VARCHAR(100)
 );`;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);

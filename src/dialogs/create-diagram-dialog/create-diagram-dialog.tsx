@@ -20,14 +20,9 @@ import { ImportDatabase } from '../common/import-database/import-database';
 import { SelectTables } from '../common/select-tables/select-tables';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
-import { sqlImportToDiagram } from '@/lib/data/sql-import';
 import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
 import { filterMetadataByTables } from '@/lib/data/import-metadata/filter-metadata';
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
-import {
-    defaultDBMLDiagramName,
-    importDBMLToDiagram,
-} from '@/lib/dbml/dbml-import/dbml-import';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { useToast } from '@/components/toast/use-toast';
 import { ToastAction } from '@/components/toast/toast';
@@ -138,12 +133,16 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             let diagram: Diagram | undefined;
 
             if (importMethod === 'ddl') {
+                const { sqlImportToDiagram } =
+                    await import('@/lib/data/sql-import');
                 diagram = await sqlImportToDiagram({
                     sqlContent: scriptResult,
                     sourceDatabaseType: databaseType,
                     targetDatabaseType: databaseType,
                 });
             } else if (importMethod === 'dbml') {
+                const { defaultDBMLDiagramName, importDBMLToDiagram } =
+                    await import('@/lib/dbml/dbml-import/dbml-import');
                 diagram = await importDBMLToDiagram(scriptResult, {
                     databaseType,
                 });

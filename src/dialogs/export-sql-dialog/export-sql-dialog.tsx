@@ -18,7 +18,7 @@ import {
     exportBaseSQL,
     exportSQL,
 } from '@/lib/data/sql-export/export-sql-script';
-import { hasCrossDialectSupport } from '@/lib/data/sql-export/cross-dialect';
+import { hasCrossDialectSupport } from '@/lib/data/sql-export/cross-dialect/cross-dialect-support';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { Annoyed, Sparkles, Blocks, Wand2 } from 'lucide-react';
@@ -145,12 +145,10 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
 
         // Use deterministic export if available and AI export is not selected
         if (hasDeterministicPath && !useAIExport) {
-            return Promise.resolve(
-                exportBaseSQL({
-                    diagram: filteredDiagram,
-                    targetDatabaseType,
-                })
-            );
+            return exportBaseSQL({
+                diagram: filteredDiagram,
+                targetDatabaseType,
+            });
         } else {
             return exportSQL(filteredDiagram, targetDatabaseType, {
                 stream: true,

@@ -12,8 +12,6 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
-import { sqlImportToDiagram } from '@/lib/data/sql-import';
-import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { runWithoutOutboundReplay } from '@/lib/realtime/diagram-sync-state';
 
@@ -65,12 +63,16 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
         let diagram: Diagram | undefined;
 
         if (importMethod === 'ddl') {
+            const { sqlImportToDiagram } =
+                await import('@/lib/data/sql-import');
             diagram = await sqlImportToDiagram({
                 sqlContent: scriptResult,
                 sourceDatabaseType: databaseType,
                 targetDatabaseType: databaseType,
             });
         } else if (importMethod === 'dbml') {
+            const { importDBMLToDiagram } =
+                await import('@/lib/dbml/dbml-import/dbml-import');
             diagram = await importDBMLToDiagram(scriptResult, {
                 databaseType,
             });

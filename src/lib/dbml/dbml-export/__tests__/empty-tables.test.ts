@@ -5,7 +5,7 @@ import type { Diagram } from '@/lib/domain/diagram';
 import { generateId, generateDiagramId } from '@/lib/utils';
 
 describe('DBML Export - Empty Tables', () => {
-    it('should filter out tables with no fields', () => {
+    it('should filter out tables with no fields', async () => {
         const diagram: Diagram = {
             id: generateDiagramId(),
             name: 'Test Diagram',
@@ -73,7 +73,7 @@ describe('DBML Export - Empty Tables', () => {
             updatedAt: new Date(),
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Verify the DBML doesn't contain the empty table
         expect(result.inlineDbml).not.toContain('empty_table');
@@ -84,7 +84,7 @@ describe('DBML Export - Empty Tables', () => {
         expect(result.inlineDbml).toContain('another_valid_table');
     });
 
-    it('should handle diagram with only empty tables', () => {
+    it('should handle diagram with only empty tables', async () => {
         const diagram: Diagram = {
             id: generateDiagramId(),
             name: 'Test Diagram',
@@ -120,7 +120,7 @@ describe('DBML Export - Empty Tables', () => {
             updatedAt: new Date(),
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Should not error and should return empty DBML (or just enums if any)
         expect(result.inlineDbml).toBeTruthy();
@@ -128,7 +128,7 @@ describe('DBML Export - Empty Tables', () => {
         expect(result.error).toBeUndefined();
     });
 
-    it('should filter out table that becomes empty after removing invalid fields', () => {
+    it('should filter out table that becomes empty after removing invalid fields', async () => {
         const diagram: Diagram = {
             id: generateDiagramId(),
             name: 'Test Diagram',
@@ -193,7 +193,7 @@ describe('DBML Export - Empty Tables', () => {
             updatedAt: new Date(),
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Table with only empty field names should be filtered out
         expect(result.inlineDbml).not.toContain(

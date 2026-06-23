@@ -178,7 +178,7 @@ Table "adventures"."quests" {
 
             // Export back to DBML
             const { standardDbml: exportedDbml } =
-                generateDBMLFromDiagram(diagram);
+                await generateDBMLFromDiagram(diagram);
 
             // Verify the exported DBML contains array syntax
             expect(exportedDbml).toContain('text[]');
@@ -222,7 +222,7 @@ Table "guilds"."members" {
 
             // Export
             const { standardDbml: exportedDbml } =
-                generateDBMLFromDiagram(diagram);
+                await generateDBMLFromDiagram(diagram);
 
             // Verify exported DBML has correct array syntax with types
             expect(exportedDbml).toContain('varchar(50)[]');
@@ -280,7 +280,7 @@ Table "dungeons"."loot_tables" {
             });
 
             const { standardDbml: exportedDbml } =
-                generateDBMLFromDiagram(diagram);
+                await generateDBMLFromDiagram(diagram);
 
             const reimportedDiagram = await importDBMLToDiagram(exportedDbml, {
                 databaseType: DatabaseType.POSTGRESQL,

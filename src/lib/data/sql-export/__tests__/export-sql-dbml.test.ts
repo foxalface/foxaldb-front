@@ -52,7 +52,7 @@ describe('DBML Export - SQL Generation Tests', () => {
         }) as Diagram;
 
     describe('Composite Primary Keys', () => {
-        it('should handle tables with composite primary keys correctly', () => {
+        it('should handle tables with composite primary keys correctly', async () => {
             const tableId = testId();
             const field1Id = testId();
             const field2Id = testId();
@@ -99,7 +99,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -114,7 +114,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             );
         });
 
-        it('should not create duplicate index for composite primary key', () => {
+        it('should not create duplicate index for composite primary key', async () => {
             const tableId = testId();
             const field1Id = testId();
             const field2Id = testId();
@@ -184,7 +184,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -204,7 +204,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).toContain('CREATE UNIQUE INDEX index_1');
         });
 
-        it('should handle single primary keys inline', () => {
+        it('should handle single primary keys inline', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Wizard Academy',
@@ -238,7 +238,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -252,7 +252,7 @@ describe('DBML Export - SQL Generation Tests', () => {
     });
 
     describe('Default Value Handling', () => {
-        it('should skip invalid default values like "has default"', () => {
+        it('should skip invalid default values like "has default"', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Potion Shop',
@@ -296,7 +296,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -310,7 +310,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).toContain('"stock_count" integer NOT NULL'); // integer gets simplified to int
         });
 
-        it('should handle valid default values correctly', () => {
+        it('should handle valid default values correctly', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Treasure Vault',
@@ -366,7 +366,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -378,7 +378,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).toContain('DEFAULT EUR');
         });
 
-        it('should handle NOW and similar default values', () => {
+        it('should handle NOW and similar default values', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Quest Log',
@@ -422,7 +422,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -435,7 +435,7 @@ describe('DBML Export - SQL Generation Tests', () => {
     });
 
     describe('Character Type Handling', () => {
-        it('should handle char types with and without length correctly', () => {
+        it('should handle char types with and without length correctly', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Dragon Registry',
@@ -478,7 +478,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -490,7 +490,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).toContain('"status" char(1)');
         });
 
-        it('should not have spaces between char and parentheses', () => {
+        it('should not have spaces between char and parentheses', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Rune Inscriptions',
@@ -525,7 +525,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -538,7 +538,7 @@ describe('DBML Export - SQL Generation Tests', () => {
     });
 
     describe('Complex Table Structures', () => {
-        it('should handle tables with no primary key', () => {
+        it('should handle tables with no primary key', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Alchemy Log',
@@ -589,7 +589,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -600,7 +600,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).not.toContain('PRIMARY KEY');
         });
 
-        it('should handle multiple tables with relationships', () => {
+        it('should handle multiple tables with relationships', async () => {
             const guildTableId = testId();
             const memberTableId = testId();
             const guildIdFieldId = testId();
@@ -704,7 +704,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -721,7 +721,7 @@ describe('DBML Export - SQL Generation Tests', () => {
     });
 
     describe('Schema Support', () => {
-        it('should handle tables with schemas correctly', () => {
+        it('should handle tables with schemas correctly', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Multi-Realm Database',
@@ -783,7 +783,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -796,7 +796,7 @@ describe('DBML Export - SQL Generation Tests', () => {
     });
 
     describe('Edge Cases', () => {
-        it('should handle empty tables array', () => {
+        it('should handle empty tables array', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Empty Realm',
@@ -805,7 +805,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -814,7 +814,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).toBe('');
         });
 
-        it('should handle tables with empty fields', () => {
+        it('should handle tables with empty fields', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Void Space',
@@ -831,7 +831,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -842,7 +842,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).toContain('(\n\n)');
         });
 
-        it('should handle special characters in default values', () => {
+        it('should handle special characters in default values', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Mystic Scrolls',
@@ -877,7 +877,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -887,7 +887,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).toContain("DEFAULT 'Ancient\\'s Wisdom'");
         });
 
-        it('should handle numeric precision and scale', () => {
+        it('should handle numeric precision and scale', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Treasury',
@@ -932,7 +932,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -944,7 +944,7 @@ describe('DBML Export - SQL Generation Tests', () => {
             expect(sql).toContain('"interest_rate" numeric(5)');
         });
 
-        it('should normalize over-escaped default values', () => {
+        it('should normalize over-escaped default values', async () => {
             const diagram: Diagram = createDiagram({
                 id: testId(),
                 name: 'Corrupted Defaults Test',
@@ -1000,7 +1000,7 @@ describe('DBML Export - SQL Generation Tests', () => {
                 relationships: [],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,

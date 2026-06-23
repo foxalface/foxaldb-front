@@ -34,20 +34,13 @@ import { useTheme } from '@/hooks/use-theme';
 import type { OnChange, Monaco } from '@monaco-editor/react';
 import { useDebounce } from '@/hooks/use-debounce-v2';
 import { InstructionsSection } from './instructions-section/instructions-section';
-import { parseSQLError } from '@/lib/data/sql-import';
 import type { editor, IDisposable } from 'monaco-editor';
 import { waitFor } from '@/lib/utils';
-import {
-    validateSQL,
-    type ValidationResult,
-} from '@/lib/data/sql-import/sql-validator';
+import type { ValidationResult } from '@/lib/data/sql-import/sql-validator';
 import { SQLValidationStatus } from './sql-validation-status';
 import { setupDBMLLanguage } from '@/components/code-snippet/languages/dbml-language';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { detectImportMethod } from '@/lib/import-method/detect-import-method';
-import { verifyDBML } from '@/lib/dbml/dbml-import/verify-dbml';
-import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
-import { sqlImportToDiagram } from '@/lib/data/sql-import';
 import {
     clearErrorHighlight,
     highlightErrorLine,
@@ -146,18 +139,31 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
         }
 
         if (importMethod === 'dbml') {
-            // Validate DBML by parsing it
-            const validateResponse = verifyDBML(scriptResult, { databaseType });
-            if (!validateResponse.hasError) {
-                setErrorMessage('');
+            let cancelled = false;
+            (async () => {
+                const { verifyDBML } =
+                    await import('@/lib/dbml/dbml-import/verify-dbml');
+                const { importDBMLToDiagram } =
+                    await import('@/lib/dbml/dbml-import/dbml-import');
 
-                // Try to count tables/relationships for DBML
-                (async () => {
+                if (cancelled) {
+                    return;
+                }
+
+                const validateResponse = await verifyDBML(scriptResult, {
+                    databaseType,
+                });
+                if (!validateResponse.hasError) {
+                    setErrorMessage('');
+
                     try {
                         const diagram = await importDBMLToDiagram(
                             scriptResult,
                             { databaseType }
                         );
+                        if (cancelled) {
+                            return;
+                        }
                         setSqlValidation({
                             isValid: true,
                             errors: [],
@@ -167,73 +173,95 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                                 diagram.relationships?.length ?? 0,
                         });
                     } catch {
-                        // If parsing fails, just show validation without counts
-                        setSqlValidation({
-                            isValid: true,
-                            errors: [],
-                            warnings: [],
+                        if (!cancelled) {
+                            setSqlValidation({
+                                isValid: true,
+                                errors: [],
+                                warnings: [],
+                            });
+                        }
+                    }
+                } else {
+                    let errorMsg = 'Invalid DBML syntax';
+                    let line: number = 1;
+
+                    if (validateResponse.parsedError && monacoRef.current) {
+                        errorMsg = validateResponse.parsedError.message;
+                        line = validateResponse.parsedError.line;
+                        highlightErrorLine({
+                            monaco: monacoRef.current,
+                            error: validateResponse.parsedError,
+                            model: editorRef.current?.getModel(),
+                            editorDecorationsCollection:
+                                decorationsCollection.current,
                         });
                     }
-                })();
-            } else {
-                let errorMsg = 'Invalid DBML syntax';
-                let line: number = 1;
 
-                if (validateResponse.parsedError && monacoRef.current) {
-                    errorMsg = validateResponse.parsedError.message;
-                    line = validateResponse.parsedError.line;
-                    highlightErrorLine({
-                        monaco: monacoRef.current,
-                        error: validateResponse.parsedError,
-                        model: editorRef.current?.getModel(),
-                        editorDecorationsCollection:
-                            decorationsCollection.current,
+                    setSqlValidation({
+                        isValid: false,
+                        errors: [
+                            {
+                                message: errorMsg,
+                                line: line,
+                                type: 'syntax' as const,
+                            },
+                        ],
+                        warnings: [],
                     });
+                    setErrorMessage(errorMsg);
                 }
 
-                setSqlValidation({
-                    isValid: false,
-                    errors: [
-                        {
-                            message: errorMsg,
-                            line: line,
-                            type: 'syntax' as const,
-                        },
-                    ],
-                    warnings: [],
-                });
-                setErrorMessage(errorMsg);
-            }
+                setShowAutoFixButton(false);
+            })();
 
-            setShowAutoFixButton(false);
-            return;
+            return () => {
+                cancelled = true;
+            };
         }
 
         // SQL validation
-        // First run our validation based on database type
-        const validation = validateSQL(scriptResult, databaseType);
+        let cancelled = false;
+        (async () => {
+            const { validateSQL } =
+                await import('@/lib/data/sql-import/sql-validator');
+            const { parseSQLError, sqlImportToDiagram } =
+                await import('@/lib/data/sql-import');
 
-        // If we have auto-fixable errors, show the auto-fix button
-        if (validation.fixedSQL && validation.errors.length > 0) {
-            setSqlValidation(validation);
-            setShowAutoFixButton(true);
-            // Don't try to parse invalid SQL
-            setErrorMessage('SQL contains syntax errors');
-            return;
-        }
+            if (cancelled) {
+                return;
+            }
 
-        // Hide auto-fix button if no fixes available
-        setShowAutoFixButton(false);
+            const validation = await validateSQL(scriptResult, databaseType);
 
-        // Validate the SQL (either original or already fixed) and count tables/relationships
-        parseSQLError({
-            sqlContent: scriptResult,
-            sourceDatabaseType: databaseType,
-        }).then(async (result) => {
+            if (cancelled) {
+                return;
+            }
+
+            // If we have auto-fixable errors, show the auto-fix button
+            if (validation.fixedSQL && validation.errors.length > 0) {
+                setSqlValidation(validation);
+                setShowAutoFixButton(true);
+                // Don't try to parse invalid SQL
+                setErrorMessage('SQL contains syntax errors');
+                return;
+            }
+
+            // Hide auto-fix button if no fixes available
+            setShowAutoFixButton(false);
+
+            // Validate the SQL (either original or already fixed) and count tables/relationships
+            const result = await parseSQLError({
+                sqlContent: scriptResult,
+                sourceDatabaseType: databaseType,
+            });
+
+            if (cancelled) {
+                return;
+            }
+
             if (result.success) {
                 setErrorMessage('');
 
-                // Try to parse and count tables/relationships for successful validation
                 try {
                     const diagram = await sqlImportToDiagram({
                         sqlContent: scriptResult,
@@ -241,20 +269,29 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                         targetDatabaseType: databaseType,
                     });
 
+                    if (cancelled) {
+                        return;
+                    }
+
                     setSqlValidation({
                         ...validation,
                         tableCount: diagram.tables?.length ?? 0,
                         relationshipCount: diagram.relationships?.length ?? 0,
                     });
                 } catch {
-                    // If parsing fails, just show validation without counts
-                    setSqlValidation(validation);
+                    if (!cancelled) {
+                        setSqlValidation(validation);
+                    }
                 }
             } else if (!result.success && result.error) {
                 setSqlValidation(validation);
                 setErrorMessage(result.error);
             }
-        });
+        })();
+
+        return () => {
+            cancelled = true;
+        };
     }, [importMethod, scriptResult, databaseType, clearDecorations]);
 
     // Check if the script result is a valid JSON

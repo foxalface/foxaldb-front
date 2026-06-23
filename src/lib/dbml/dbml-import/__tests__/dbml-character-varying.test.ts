@@ -33,7 +33,7 @@ Table "finance"."general_ledger" {
         expect(referenceField?.characterMaximumLength).toBe('50');
 
         // Export and verify lengths are preserved
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
 
         // Should contain the character varying with lengths
         expect(exportResult.inlineDbml).toMatch(
@@ -68,7 +68,7 @@ Table "users" {
         expect(emailField?.characterMaximumLength).toBe('255');
 
         // Export and verify
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
         expect(exportResult.inlineDbml).toContain('varchar(100)');
         expect(exportResult.inlineDbml).toContain('varchar(255)');
     });
@@ -124,7 +124,7 @@ Table "finance"."general_ledger" {
         expect(exchangeRateField?.scale).toBe(6);
 
         // Export and verify all types are preserved correctly
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
 
         // Check that numeric types have their precision/scale
         expect(exportResult.inlineDbml).toMatch(/numeric\(15,\s*2\)/);

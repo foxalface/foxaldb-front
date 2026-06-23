@@ -1,5 +1,4 @@
 import { importer } from '@dbml/core';
-import { exportBaseSQL } from '@/lib/data/sql-export/export-sql-script';
 import type { Diagram } from '@/lib/domain/diagram';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
@@ -1361,7 +1360,9 @@ export interface DBMLExportResult {
     error?: string;
 }
 
-export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
+export async function generateDBMLFromDiagram(
+    diagram: Diagram
+): Promise<DBMLExportResult> {
     // Filter out fields with empty names
     const sanitizedTables =
         diagram.tables?.map((table) => {
@@ -1494,7 +1495,9 @@ export function generateDBMLFromDiagram(diagram: Diagram): DBMLExportResult {
     let errorMsg: string | undefined = undefined;
 
     try {
-        baseScript = exportBaseSQL({
+        const { exportBaseSQL } =
+            await import('@/lib/data/sql-export/export-sql-script');
+        baseScript = await exportBaseSQL({
             diagram: finalDiagramForExport, // Use final diagram
             targetDatabaseType: diagram.databaseType,
             isDBMLFlow: true,

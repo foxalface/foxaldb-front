@@ -66,7 +66,7 @@ describe('DBML Export - Timestamp with Time Zone', () => {
         };
 
         // Export to DBML
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
 
         // Verify the DBML contains quoted multi-word types
         expect(exportResult.inlineDbml).toContain('"timestamp with time zone"');
@@ -157,7 +157,7 @@ describe('DBML Export - Timestamp with Time Zone', () => {
             updatedAt: new Date(),
         };
 
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
 
         expect(exportResult.inlineDbml).toContain('"time with time zone"');
         expect(exportResult.inlineDbml).toContain('"time without time zone"');
@@ -227,7 +227,7 @@ describe('DBML Export - Timestamp with Time Zone', () => {
             updatedAt: new Date(),
         };
 
-        const exportResult = generateDBMLFromDiagram(diagram);
+        const exportResult = await generateDBMLFromDiagram(diagram);
 
         expect(exportResult.inlineDbml).toContain('"double precision"');
 

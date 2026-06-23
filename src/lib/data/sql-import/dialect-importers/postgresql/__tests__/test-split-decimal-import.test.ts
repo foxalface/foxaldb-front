@@ -25,7 +25,10 @@ CREATE TABLE market_data (
 );
 `;
 
-        const validationResult = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const validationResult = await validateSQL(
+            sql,
+            DatabaseType.POSTGRESQL
+        );
 
         // Validation should detect issues but provide auto-fix
         expect(validationResult.isValid).toBe(false);
@@ -98,7 +101,10 @@ CREATE TABLE transactions (
 );
 `;
 
-        const validationResult = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const validationResult = await validateSQL(
+            sql,
+            DatabaseType.POSTGRESQL
+        );
 
         // Validation should detect issues but provide auto-fix
         expect(validationResult.isValid).toBe(false);
@@ -143,7 +149,10 @@ CREATE TABLE complex_table (
 );
 `;
 
-        const validationResult = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const validationResult = await validateSQL(
+            sql,
+            DatabaseType.POSTGRESQL
+        );
 
         // Validation should detect issues but provide auto-fix
         expect(validationResult.isValid).toBe(false);

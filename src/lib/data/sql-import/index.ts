@@ -1,15 +1,10 @@
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
-import { fromPostgres } from './dialect-importers/postgresql/postgresql';
-import { fromPostgresDump } from './dialect-importers/postgresql/postgresql-dump';
-
-import { fromSQLServer } from './dialect-importers/sqlserver/sqlserver';
-import { fromSQLite } from './dialect-importers/sqlite/sqlite';
-import { fromOracle, isOracleFormat } from './dialect-importers/oracle/oracle';
 import type { SQLParserResult } from './common';
 import { convertToChartDBDiagram } from './common';
 import { adjustTablePositions } from '@/lib/domain/db-table';
-import { fromMySQL, isMySQLFormat } from './dialect-importers/mysql/mysql';
+import { isMySQLFormat } from './dialect-importers/mysql/mysql-format';
+import { isOracleFormat } from './dialect-importers/oracle/oracle-format';
 import { getTableIndexesWithPrimaryKey } from '@/lib/domain/db-index';
 
 /**
@@ -113,6 +108,52 @@ function isSQLiteFormat(sqlContent: string): boolean {
     return false;
 }
 
+async function parseSqlWithDialect({
+    sqlContent,
+    sourceDatabaseType,
+}: {
+    sqlContent: string;
+    sourceDatabaseType: DatabaseType;
+}): Promise<SQLParserResult> {
+    switch (sourceDatabaseType) {
+        case DatabaseType.POSTGRESQL:
+        case DatabaseType.COCKROACHDB:
+            if (isPgDumpFormat(sqlContent)) {
+                const { fromPostgresDump } =
+                    await import('./dialect-importers/postgresql/postgresql-dump');
+                return fromPostgresDump(sqlContent);
+            }
+            {
+                const { fromPostgres } =
+                    await import('./dialect-importers/postgresql/postgresql');
+                return fromPostgres(sqlContent);
+            }
+        case DatabaseType.MYSQL:
+        case DatabaseType.MARIADB: {
+            const { fromMySQL } =
+                await import('./dialect-importers/mysql/mysql');
+            return fromMySQL(sqlContent);
+        }
+        case DatabaseType.SQL_SERVER: {
+            const { fromSQLServer } =
+                await import('./dialect-importers/sqlserver/sqlserver');
+            return fromSQLServer(sqlContent);
+        }
+        case DatabaseType.SQLITE: {
+            const { fromSQLite } =
+                await import('./dialect-importers/sqlite/sqlite');
+            return fromSQLite(sqlContent);
+        }
+        case DatabaseType.ORACLE: {
+            const { fromOracle } =
+                await import('./dialect-importers/oracle/oracle');
+            return fromOracle(sqlContent);
+        }
+        default:
+            throw new Error(`Unsupported database type: ${sourceDatabaseType}`);
+    }
+}
+
 /**
  * Auto-detect database type from SQL content
  * @param sqlContent SQL content as string
@@ -192,38 +233,10 @@ export async function sqlImportToDiagram({
         }
     }
 
-    let parserResult: SQLParserResult;
-
-    // Select the appropriate parser based on database type
-    switch (sourceDatabaseType) {
-        case DatabaseType.POSTGRESQL:
-        case DatabaseType.COCKROACHDB:
-            // Check if the SQL is from pg_dump and use the appropriate parser
-            // CockroachDB uses PostgreSQL-compatible syntax
-            if (isPgDumpFormat(sqlContent)) {
-                parserResult = await fromPostgresDump(sqlContent);
-            } else {
-                parserResult = await fromPostgres(sqlContent);
-            }
-            break;
-        case DatabaseType.MYSQL:
-        case DatabaseType.MARIADB:
-            // Check if the SQL is from MySQL dump and use the appropriate parser
-            parserResult = await fromMySQL(sqlContent);
-
-            break;
-        case DatabaseType.SQL_SERVER:
-            parserResult = await fromSQLServer(sqlContent);
-            break;
-        case DatabaseType.SQLITE:
-            parserResult = await fromSQLite(sqlContent);
-            break;
-        case DatabaseType.ORACLE:
-            parserResult = await fromOracle(sqlContent);
-            break;
-        default:
-            throw new Error(`Unsupported database type: ${sourceDatabaseType}`);
-    }
+    const parserResult = await parseSqlWithDialect({
+        sqlContent,
+        sourceDatabaseType,
+    });
 
     // Convert the parsed SQL to a diagram
     const diagram = convertToChartDBDiagram(
@@ -277,39 +290,7 @@ export async function parseSQLError({
     column?: number;
 }> {
     try {
-        // Validate SQL based on the database type
-        switch (sourceDatabaseType) {
-            case DatabaseType.POSTGRESQL:
-            case DatabaseType.COCKROACHDB:
-                // PostgreSQL/CockroachDB validation - check format and use appropriate parser
-                if (isPgDumpFormat(sqlContent)) {
-                    await fromPostgresDump(sqlContent);
-                } else {
-                    await fromPostgres(sqlContent);
-                }
-                break;
-            case DatabaseType.MYSQL:
-            case DatabaseType.MARIADB:
-                await fromMySQL(sqlContent);
-
-                break;
-            case DatabaseType.SQL_SERVER:
-                // SQL Server validation
-                await fromSQLServer(sqlContent);
-                break;
-            case DatabaseType.SQLITE:
-                // SQLite validation
-                await fromSQLite(sqlContent);
-                break;
-            case DatabaseType.ORACLE:
-                // Oracle validation
-                await fromOracle(sqlContent);
-                break;
-            default:
-                throw new Error(
-                    `Unsupported database type: ${sourceDatabaseType}`
-                );
-        }
+        await parseSqlWithDialect({ sqlContent, sourceDatabaseType });
 
         return { success: true };
     } catch (error: unknown) {

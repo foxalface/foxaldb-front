@@ -5,7 +5,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
 
 describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
-    it('should export array fields for magical spell components', () => {
+    it('should export array fields for magical spell components', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Magical Spell System',
@@ -74,7 +74,7 @@ describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
             updatedAt: new Date(),
         };
 
-        const sql = exportBaseSQL({
+        const sql = await exportBaseSQL({
             diagram,
             targetDatabaseType: DatabaseType.POSTGRESQL,
             isDBMLFlow: true,
@@ -85,7 +85,7 @@ describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
         expect(sql).toContain('"elemental_types" varchar(50)[]');
     });
 
-    it('should export array fields for hero inventory system', () => {
+    it('should export array fields for hero inventory system', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'RPG Inventory System',
@@ -167,7 +167,7 @@ describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
             updatedAt: new Date(),
         };
 
-        const sql = exportBaseSQL({
+        const sql = await exportBaseSQL({
             diagram,
             targetDatabaseType: DatabaseType.POSTGRESQL,
             isDBMLFlow: true,
@@ -179,7 +179,7 @@ describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
         expect(sql).toContain('"skill_levels" numeric(5, 2)[]');
     });
 
-    it('should export non-array fields normally when isArray is false or undefined', () => {
+    it('should export non-array fields normally when isArray is false or undefined', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Quest System',
@@ -235,7 +235,7 @@ describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
             updatedAt: new Date(),
         };
 
-        const sql = exportBaseSQL({
+        const sql = await exportBaseSQL({
             diagram,
             targetDatabaseType: DatabaseType.POSTGRESQL,
             isDBMLFlow: true,
@@ -247,7 +247,7 @@ describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
         expect(sql).not.toContain('"description" text[]');
     });
 
-    it('should handle mixed array and non-array fields in magical creatures table', () => {
+    it('should handle mixed array and non-array fields in magical creatures table', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Bestiary System',
@@ -337,7 +337,7 @@ describe('SQL Export - Array Fields (Fantasy RPG Theme)', () => {
             updatedAt: new Date(),
         };
 
-        const sql = exportBaseSQL({
+        const sql = await exportBaseSQL({
             diagram,
             targetDatabaseType: DatabaseType.POSTGRESQL,
             isDBMLFlow: true,

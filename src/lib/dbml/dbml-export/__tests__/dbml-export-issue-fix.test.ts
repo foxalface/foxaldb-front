@@ -4,7 +4,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
 
 describe('DBML Export - Issue Fixes', () => {
-    it('should merge field attributes into a single bracket instead of multiple', () => {
+    it('should merge field attributes into a single bracket instead of multiple', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -76,7 +76,7 @@ describe('DBML Export - Issue Fixes', () => {
             ],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check that inline DBML has merged attributes in a single bracket
         // Relationship is many-to-one (source=many, target=one), so source field gets ref: >
@@ -88,7 +88,7 @@ describe('DBML Export - Issue Fixes', () => {
         expect(result.inlineDbml).not.toMatch(/\[pk, not null\]\s*\[ref:/);
     });
 
-    it('should handle table names with schema using proper quoted syntax', () => {
+    it('should handle table names with schema using proper quoted syntax', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -125,7 +125,7 @@ describe('DBML Export - Issue Fixes', () => {
             relationships: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Should use quoted syntax for schema.table
         expect(result.standardDbml).toContain('Table "public"."users"');
@@ -134,7 +134,7 @@ describe('DBML Export - Issue Fixes', () => {
         expect(result.standardDbml).not.toContain('[public].[users]');
     });
 
-    it('should preserve schema in table references within relationships', () => {
+    it('should preserve schema in table references within relationships', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -208,7 +208,7 @@ describe('DBML Export - Issue Fixes', () => {
             ],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check inline DBML preserves schema in references
         // Relationship is many-to-one (source=many, target=one)
@@ -216,7 +216,7 @@ describe('DBML Export - Issue Fixes', () => {
         expect(result.inlineDbml).toContain('ref: > "service"."tenant"."id"');
     });
 
-    it('should wrap table and field names with spaces in quotes instead of replacing with underscores', () => {
+    it('should wrap table and field names with spaces in quotes instead of replacing with underscores', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -320,7 +320,7 @@ describe('DBML Export - Issue Fixes', () => {
             ],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check that table names with spaces are wrapped in quotes
         expect(result.standardDbml).toContain('Table "user profile"');
@@ -352,7 +352,7 @@ describe('DBML Export - Issue Fixes', () => {
         );
     });
 
-    it('should export table and field comments to DBML for PostgreSQL', () => {
+    it('should export table and field comments to DBML for PostgreSQL', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -478,7 +478,7 @@ describe('DBML Export - Issue Fixes', () => {
             ],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check table comments in standard DBML
         expect(result.standardDbml).toContain('Table "users" {');
@@ -523,7 +523,7 @@ describe('DBML Export - Issue Fixes', () => {
         );
     });
 
-    it('should export table and field comments to DBML for MySQL', () => {
+    it('should export table and field comments to DBML for MySQL', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -587,7 +587,7 @@ describe('DBML Export - Issue Fixes', () => {
             relationships: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check table exists in DBML
         expect(result.standardDbml).toContain('Table "pl_a_cmsn" {');
@@ -620,7 +620,7 @@ describe('DBML Export - Issue Fixes', () => {
         );
     });
 
-    it('should handle multiline comments for MySQL tables and fields', () => {
+    it('should handle multiline comments for MySQL tables and fields', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -673,7 +673,7 @@ describe('DBML Export - Issue Fixes', () => {
             relationships: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check that multiline table comment is preserved as single line at the end
         expect(result.standardDbml).toContain('Table "users" {');
@@ -702,7 +702,7 @@ describe('DBML Export - Issue Fixes', () => {
         );
     });
 
-    it('should handle multiline comments for PostgreSQL tables and fields', () => {
+    it('should handle multiline comments for PostgreSQL tables and fields', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -740,7 +740,7 @@ describe('DBML Export - Issue Fixes', () => {
             relationships: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check that multiline comments are flattened for PostgreSQL too
         expect(result.standardDbml).toContain('Table "products" {');
@@ -756,7 +756,7 @@ describe('DBML Export - Issue Fixes', () => {
         );
     });
 
-    it('should preserve tables with same name but different schemas', () => {
+    it('should preserve tables with same name but different schemas', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -867,7 +867,7 @@ describe('DBML Export - Issue Fixes', () => {
             relationships: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Both public.users and auth.users should be present
         expect(result.standardDbml).toContain('Table "public"."users"');
@@ -894,7 +894,7 @@ describe('DBML Export - Issue Fixes', () => {
         expect(result.standardDbml).not.toContain('duplicate_id');
     });
 
-    it('should correctly handle categories tables with public and public_2 schemas', () => {
+    it('should correctly handle categories tables with public and public_2 schemas', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -957,7 +957,7 @@ describe('DBML Export - Issue Fixes', () => {
             customTypes: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Should have both tables with correct schemas
         expect(result.standardDbml).toContain('Table "public"."table_1"');
@@ -975,7 +975,7 @@ describe('DBML Export - Issue Fixes', () => {
         expect(public2Matches).toHaveLength(1);
     });
 
-    it('should only remove tables with both same schema AND same name', () => {
+    it('should only remove tables with both same schema AND same name', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -1062,7 +1062,7 @@ describe('DBML Export - Issue Fixes', () => {
             relationships: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Both store.products and warehouse.products should be present
         expect(result.standardDbml).toContain('Table "store"."products"');
@@ -1083,7 +1083,7 @@ describe('DBML Export - Issue Fixes', () => {
         expect(result.standardDbml).not.toContain('duplicate_field');
     });
 
-    it('should export index names correctly in DBML', () => {
+    it('should export index names correctly in DBML', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -1166,7 +1166,7 @@ describe('DBML Export - Issue Fixes', () => {
             relationships: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check that table is properly formatted with schema
         expect(result.standardDbml).toContain('Table "public"."users"');
@@ -1195,7 +1195,7 @@ describe('DBML Export - Issue Fixes', () => {
         );
     });
 
-    it('should export in the right format', () => {
+    it('should export in the right format', async () => {
         const diagram: Diagram = {
             id: 'mqqwkkodrxxd',
             name: 'Diagram 9',
@@ -1268,7 +1268,7 @@ describe('DBML Export - Issue Fixes', () => {
             customTypes: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // For 1:1 relationships, symbol is '-' (one-to-one)
         // Inline ref goes on target side (table_1) with ref: - pointing to source (table_2)
@@ -1297,7 +1297,7 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
         expect(result.standardDbml).toBe(expectedStandardDBML);
     });
 
-    it('should handle tables with multiple relationships correctly', () => {
+    it('should handle tables with multiple relationships correctly', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -1498,7 +1498,7 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
             ],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Debug output removed
         // console.log('Inline DBML:', result.inlineDbml);
@@ -1542,7 +1542,7 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
         expect(result.inlineDbml).not.toMatch(/\[.*ref:.*\]\}/);
     });
 
-    it('should properly format closing brace when table has both indexes and inline refs', () => {
+    it('should properly format closing brace when table has both indexes and inline refs', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -1622,7 +1622,7 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
             ],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check that the inline DBML has proper indentation
         // Note: indexes on primary key fields should be filtered out
@@ -1656,7 +1656,7 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
         expect(braceBalance).toBe(0);
     });
 
-    it('should export GIN index type in DBML', () => {
+    it('should export GIN index type in DBML', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -1709,14 +1709,14 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
             relationships: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // The index should include type: gin
         expect(result.standardDbml).toContain('type: gin');
         expect(result.standardDbml).toContain('test_index_2');
     });
 
-    it('should export composite GIN index type in DBML', () => {
+    it('should export composite GIN index type in DBML', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -1789,7 +1789,7 @@ Ref "fk_0_table_2_id_fk":"table_2"."id" - "table_1"."id"
             relationships: [],
         };
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // The composite index should include type: gin
         expect(result.standardDbml).toContain('type: gin');

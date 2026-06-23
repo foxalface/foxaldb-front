@@ -52,7 +52,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
         }) as Diagram;
 
     describe('DBML Generation with Special Characters', () => {
-        it('should handle table names with special characters', () => {
+        it('should handle table names with special characters', async () => {
             const diagram = createDiagram({
                 tables: [
                     createTable({
@@ -74,7 +74,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Should properly quote table names with special characters
             expect(result.standardDbml).toContain('Table "user-profiles"');
@@ -86,7 +86,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
             expect(result.error).toBeUndefined();
         });
 
-        it('should handle schema-qualified table names', () => {
+        it('should handle schema-qualified table names', async () => {
             const diagram = createDiagram({
                 tables: [
                     createTable({
@@ -104,7 +104,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Should properly quote schema and table names
             expect(result.standardDbml).toContain(
@@ -115,7 +115,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
             expect(result.error).toBeUndefined();
         });
 
-        it('should handle table names with spaces', () => {
+        it('should handle table names with spaces', async () => {
             const diagram = createDiagram({
                 tables: [
                     createTable({
@@ -132,7 +132,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Should properly quote table names with spaces
             expect(result.standardDbml).toContain('Table "user profiles"');
@@ -141,7 +141,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
             expect(result.error).toBeUndefined();
         });
 
-        it('should handle schema names with spaces', () => {
+        it('should handle schema names with spaces', async () => {
             const diagram = createDiagram({
                 tables: [
                     createTable({
@@ -159,7 +159,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Should properly quote schema with spaces
             expect(result.standardDbml).toContain(
@@ -170,7 +170,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
             expect(result.error).toBeUndefined();
         });
 
-        it('should handle table names with dots', () => {
+        it('should handle table names with dots', async () => {
             const diagram = createDiagram({
                 tables: [
                     createTable({
@@ -187,7 +187,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Should properly quote table names with dots
             expect(result.standardDbml).toContain('Table "app.config"');
@@ -196,7 +196,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
             expect(result.error).toBeUndefined();
         });
 
-        it('should not have line breaks in table declarations', () => {
+        it('should not have line breaks in table declarations', async () => {
             const diagram = createDiagram({
                 tables: [
                     createTable({
@@ -214,7 +214,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Table declaration should be on a single line
             const tableDeclarations =
@@ -232,7 +232,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
     });
 
     describe('Multiple tables and relationships', () => {
-        it('should handle multiple tables with special characters', () => {
+        it('should handle multiple tables with special characters', async () => {
             const parentTableId = testId();
             const childTableId = testId();
             const parentIdField = testId();
@@ -289,7 +289,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Should contain both tables properly quoted
             expect(result.standardDbml).toContain(
@@ -309,7 +309,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
             expect(result.error).toBeUndefined();
         });
 
-        it('should work correctly with inline DBML format', () => {
+        it('should work correctly with inline DBML format', async () => {
             const parentTableId = testId();
             const childTableId = testId();
             const parentIdField = testId();
@@ -364,7 +364,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Both standard and inline should be generated
             expect(result.standardDbml).toBeDefined();
@@ -385,7 +385,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
     });
 
     describe('Edge cases', () => {
-        it('should handle empty table names gracefully', () => {
+        it('should handle empty table names gracefully', async () => {
             const diagram = createDiagram({
                 tables: [
                     createTable({
@@ -402,13 +402,13 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Should not throw error
             expect(result.error).toBeUndefined();
         });
 
-        it('should handle Unicode characters in names', () => {
+        it('should handle Unicode characters in names', async () => {
             const diagram = createDiagram({
                 tables: [
                     createTable({
@@ -425,7 +425,7 @@ describe('DBML Export - Fix Multiline Table Names', () => {
                 ],
             });
 
-            const result = generateDBMLFromDiagram(diagram);
+            const result = await generateDBMLFromDiagram(diagram);
 
             // Should handle Unicode characters
             expect(result.standardDbml).toContain('Table "użytkownik"');

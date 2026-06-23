@@ -237,7 +237,7 @@ Table "authors" {
             });
 
             // Export
-            const exportResult = generateDBMLFromDiagram(diagram);
+            const exportResult = await generateDBMLFromDiagram(diagram);
 
             // Re-import
             const reimportedDiagram = await importDBMLToDiagram(
@@ -266,7 +266,7 @@ Table "settings" {
                 databaseType: DatabaseType.POSTGRESQL,
             });
 
-            const exportResult = generateDBMLFromDiagram(diagram);
+            const exportResult = await generateDBMLFromDiagram(diagram);
 
             const reimportedDiagram = await importDBMLToDiagram(
                 exportResult.inlineDbml,
@@ -294,7 +294,7 @@ Table "articles" {
                 databaseType: DatabaseType.POSTGRESQL,
             });
 
-            const exportResult = generateDBMLFromDiagram(diagram);
+            const exportResult = await generateDBMLFromDiagram(diagram);
 
             const reimportedDiagram = await importDBMLToDiagram(
                 exportResult.inlineDbml,

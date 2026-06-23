@@ -5,7 +5,7 @@ import type { Diagram } from '@/lib/domain/diagram';
 import { generateId } from '@/lib/utils';
 
 describe('Composite Primary Key Name Export', () => {
-    it('should export composite primary key with name in DBML', () => {
+    it('should export composite primary key with name in DBML', async () => {
         const diagram: Diagram = {
             id: generateId(),
             name: 'Test',
@@ -99,7 +99,7 @@ describe('Composite Primary Key Name Export', () => {
             createdAt: Date.now(),
         });
 
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Check that the DBML contains the composite PK with name
         expect(result.standardDbml).toContain(

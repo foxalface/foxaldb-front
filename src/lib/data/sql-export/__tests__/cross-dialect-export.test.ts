@@ -55,7 +55,7 @@ describe('Cross-Dialect Export Tests', () => {
 
     describe('PostgreSQL to MySQL Export', () => {
         describe('Type Conversions', () => {
-            it('should convert basic integer types', () => {
+            it('should convert basic integer types', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -123,7 +123,7 @@ describe('Cross-Dialect Export Tests', () => {
                 expect(result).toContain('-- Was: uuid');
             });
 
-            it('should convert JSONB to JSON with inline comment', () => {
+            it('should convert JSONB to JSON with inline comment', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -144,7 +144,7 @@ describe('Cross-Dialect Export Tests', () => {
                 expect(result).toContain('-- Was: jsonb');
             });
 
-            it('should convert array types to JSON', () => {
+            it('should convert array types to JSON', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -166,7 +166,7 @@ describe('Cross-Dialect Export Tests', () => {
                 expect(result).toContain('PostgreSQL array');
             });
 
-            it('should convert SERIAL to INT AUTO_INCREMENT', () => {
+            it('should convert SERIAL to INT AUTO_INCREMENT', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -189,7 +189,7 @@ describe('Cross-Dialect Export Tests', () => {
                 expect(result).toContain('AUTO_INCREMENT');
             });
 
-            it('should convert nextval default to AUTO_INCREMENT', () => {
+            it('should convert nextval default to AUTO_INCREMENT', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -214,7 +214,7 @@ describe('Cross-Dialect Export Tests', () => {
                 expect(result).not.toContain('nextval');
             });
 
-            it('should convert timestamptz to DATETIME with warning', () => {
+            it('should convert timestamptz to DATETIME with warning', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -260,7 +260,7 @@ describe('Cross-Dialect Export Tests', () => {
         });
 
         describe('ENUM Types', () => {
-            it('should convert ENUM to VARCHAR with values comment', () => {
+            it('should convert ENUM to VARCHAR with values comment', async () => {
                 const customTypes: DBCustomType[] = [
                     {
                         id: testId(),
@@ -296,7 +296,7 @@ describe('Cross-Dialect Export Tests', () => {
         });
 
         describe('Schema Handling', () => {
-            it('should convert PostgreSQL schema to MySQL database', () => {
+            it('should convert PostgreSQL schema to MySQL database', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -369,7 +369,7 @@ describe('Cross-Dialect Export Tests', () => {
         });
 
         describe('Warnings Header', () => {
-            it('should include conversion notes header', () => {
+            it('should include conversion notes header', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -394,7 +394,7 @@ describe('Cross-Dialect Export Tests', () => {
 
     describe('PostgreSQL to SQL Server Export', () => {
         describe('Type Conversions', () => {
-            it('should convert boolean to BIT', () => {
+            it('should convert boolean to BIT', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -414,7 +414,7 @@ describe('Cross-Dialect Export Tests', () => {
                 expect(result).toContain('BIT');
             });
 
-            it('should convert UUID to UNIQUEIDENTIFIER', () => {
+            it('should convert UUID to UNIQUEIDENTIFIER', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -454,7 +454,7 @@ describe('Cross-Dialect Export Tests', () => {
                 expect(result).toContain('NVARCHAR(MAX)');
             });
 
-            it('should convert SERIAL to INT IDENTITY', () => {
+            it('should convert SERIAL to INT IDENTITY', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -477,7 +477,7 @@ describe('Cross-Dialect Export Tests', () => {
                 expect(result).toContain('IDENTITY(1,1)');
             });
 
-            it('should convert timestamptz to DATETIMEOFFSET', () => {
+            it('should convert timestamptz to DATETIMEOFFSET', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -567,7 +567,7 @@ describe('Cross-Dialect Export Tests', () => {
                 expect(result).toContain('DEFAULT NEWID()');
             });
 
-            it('should convert true/false to 1/0', () => {
+            it('should convert true/false to 1/0', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -590,7 +590,7 @@ describe('Cross-Dialect Export Tests', () => {
         });
 
         describe('Schema Handling', () => {
-            it('should create SQL Server schema', () => {
+            it('should create SQL Server schema', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -618,7 +618,7 @@ describe('Cross-Dialect Export Tests', () => {
         });
 
         describe('Comments via Extended Properties', () => {
-            it('should add table comments as extended properties', () => {
+            it('should add table comments as extended properties', async () => {
                 const diagram = createDiagram({
                     tables: [
                         createTable({
@@ -645,7 +645,7 @@ describe('Cross-Dialect Export Tests', () => {
     });
 
     describe('Export Routing via exportBaseSQL', () => {
-        it('should route PostgreSQL to MySQL through deterministic exporter', () => {
+        it('should route PostgreSQL to MySQL through deterministic exporter', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -661,7 +661,7 @@ describe('Cross-Dialect Export Tests', () => {
                 ],
             });
 
-            const result = exportBaseSQL({
+            const result = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.MYSQL,
             });
@@ -671,7 +671,7 @@ describe('Cross-Dialect Export Tests', () => {
             expect(result).toContain('-- PostgreSQL to MySQL conversion');
         });
 
-        it('should route PostgreSQL to SQL Server through deterministic exporter', () => {
+        it('should route PostgreSQL to SQL Server through deterministic exporter', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -687,7 +687,7 @@ describe('Cross-Dialect Export Tests', () => {
                 ],
             });
 
-            const result = exportBaseSQL({
+            const result = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.SQL_SERVER,
             });
@@ -697,7 +697,7 @@ describe('Cross-Dialect Export Tests', () => {
             expect(result).toContain('-- PostgreSQL to SQL Server conversion');
         });
 
-        it('should route PostgreSQL to MariaDB through MySQL deterministic exporter', () => {
+        it('should route PostgreSQL to MariaDB through MySQL deterministic exporter', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -713,7 +713,7 @@ describe('Cross-Dialect Export Tests', () => {
                 ],
             });
 
-            const result = exportBaseSQL({
+            const result = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.MARIADB,
             });
@@ -724,7 +724,7 @@ describe('Cross-Dialect Export Tests', () => {
     });
 
     describe('Index Handling', () => {
-        it('should downgrade GIN index to BTREE for MySQL', () => {
+        it('should downgrade GIN index to BTREE for MySQL', async () => {
             const fieldId = testId();
             const diagram = createDiagram({
                 tables: [
@@ -757,7 +757,7 @@ describe('Cross-Dialect Export Tests', () => {
             expect(result).toContain('-- GIN index downgraded to BTREE');
         });
 
-        it('should add prefix length for JSON indexes in MySQL', () => {
+        it('should add prefix length for JSON indexes in MySQL', async () => {
             const fieldId = testId();
             const diagram = createDiagram({
                 tables: [
@@ -791,7 +791,7 @@ describe('Cross-Dialect Export Tests', () => {
     });
 
     describe('Foreign Key Handling', () => {
-        it('should generate foreign keys with MySQL syntax', () => {
+        it('should generate foreign keys with MySQL syntax', async () => {
             const sourceFieldId = testId();
             const targetFieldId = testId();
             const sourceTableId = testId();

@@ -4,14 +4,6 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
 import { dataTypeMap, type DataType } from '../data-types/data-types';
 import { generateCacheKey, getFromCache, setInCache } from './export-sql-cache';
-import { exportMSSQL } from './export-per-type/mssql';
-import { exportPostgreSQL } from './export-per-type/postgresql';
-import { exportSQLite } from './export-per-type/sqlite';
-import { exportMySQL } from './export-per-type/mysql';
-import {
-    exportPostgreSQLToMySQL,
-    exportPostgreSQLToMSSQL,
-} from './cross-dialect';
 import { escapeSQLComment } from './export-per-type/common';
 import {
     databaseTypesWithCommentSupport,
@@ -151,7 +143,7 @@ const getQuotedFieldName = (
     return needsQuoting ? `"${fieldName}"` : fieldName;
 };
 
-export const exportBaseSQL = ({
+export const exportBaseSQL = async ({
     diagram,
     targetDatabaseType,
     isDBMLFlow = false,
@@ -163,7 +155,7 @@ export const exportBaseSQL = ({
     isDBMLFlow?: boolean;
     onlyRelationships?: boolean;
     skipFKGeneration?: boolean;
-}): string => {
+}): Promise<string> => {
     const { tables, relationships } = diagram;
 
     if (!tables || tables.length === 0) {
@@ -172,17 +164,30 @@ export const exportBaseSQL = ({
 
     if (!isDBMLFlow && diagram.databaseType === targetDatabaseType) {
         switch (diagram.databaseType) {
-            case DatabaseType.SQL_SERVER:
+            case DatabaseType.SQL_SERVER: {
+                const { exportMSSQL } = await import('./export-per-type/mssql');
                 return exportMSSQL({ diagram, onlyRelationships });
-            case DatabaseType.POSTGRESQL:
+            }
+            case DatabaseType.POSTGRESQL: {
+                const { exportPostgreSQL } =
+                    await import('./export-per-type/postgresql');
                 return exportPostgreSQL({ diagram, onlyRelationships });
-            case DatabaseType.SQLITE:
+            }
+            case DatabaseType.SQLITE: {
+                const { exportSQLite } =
+                    await import('./export-per-type/sqlite');
                 return exportSQLite({ diagram, onlyRelationships });
+            }
             case DatabaseType.MYSQL:
-            case DatabaseType.MARIADB:
+            case DatabaseType.MARIADB: {
+                const { exportMySQL } = await import('./export-per-type/mysql');
                 return exportMySQL({ diagram, onlyRelationships });
-            default:
+            }
+            default: {
+                const { exportPostgreSQL } =
+                    await import('./export-per-type/postgresql');
                 return exportPostgreSQL({ diagram, onlyRelationships });
+            }
         }
     }
 
@@ -193,9 +198,11 @@ export const exportBaseSQL = ({
             targetDatabaseType === DatabaseType.MYSQL ||
             targetDatabaseType === DatabaseType.MARIADB
         ) {
+            const { exportPostgreSQLToMySQL } = await import('./cross-dialect');
             return exportPostgreSQLToMySQL({ diagram, onlyRelationships });
         }
         if (targetDatabaseType === DatabaseType.SQL_SERVER) {
+            const { exportPostgreSQLToMSSQL } = await import('./cross-dialect');
             return exportPostgreSQLToMSSQL({ diagram, onlyRelationships });
         }
     }
@@ -749,7 +756,7 @@ export const exportSQL = async (
         signal?: AbortSignal;
     }
 ): Promise<string> => {
-    const sqlScript = exportBaseSQL({
+    const sqlScript = await exportBaseSQL({
         diagram,
         targetDatabaseType: databaseType,
     });

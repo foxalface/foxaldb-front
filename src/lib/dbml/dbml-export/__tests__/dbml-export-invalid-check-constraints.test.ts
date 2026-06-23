@@ -4,7 +4,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
 
 describe('DBML Export - Invalid Check Constraints', () => {
-    it('should not fail when table has invalid check constraints', () => {
+    it('should not fail when table has invalid check constraints', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -55,7 +55,7 @@ describe('DBML Export - Invalid Check Constraints', () => {
         };
 
         // Should not throw
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Should not contain error message
         expect(result.error).toBeUndefined();
@@ -72,7 +72,7 @@ describe('DBML Export - Invalid Check Constraints', () => {
         expect(result.standardDbml).not.toContain('(a a)');
     });
 
-    it('should handle table with only invalid check constraints', () => {
+    it('should handle table with only invalid check constraints', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -118,7 +118,7 @@ describe('DBML Export - Invalid Check Constraints', () => {
         };
 
         // Should not throw
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Should not contain error message
         expect(result.error).toBeUndefined();
@@ -131,7 +131,7 @@ describe('DBML Export - Invalid Check Constraints', () => {
         expect(result.standardDbml).not.toContain('checks {');
     });
 
-    it('should handle empty check constraint expressions', () => {
+    it('should handle empty check constraint expressions', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -182,7 +182,7 @@ describe('DBML Export - Invalid Check Constraints', () => {
         };
 
         // Should not throw
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Should not contain error message
         expect(result.error).toBeUndefined();
@@ -191,7 +191,7 @@ describe('DBML Export - Invalid Check Constraints', () => {
         expect(result.standardDbml).toContain('age >= 0');
     });
 
-    it('should handle unbalanced parentheses in check constraints', () => {
+    it('should handle unbalanced parentheses in check constraints', async () => {
         const diagram: Diagram = {
             id: 'test-diagram',
             name: 'Test',
@@ -232,7 +232,7 @@ describe('DBML Export - Invalid Check Constraints', () => {
         };
 
         // Should not throw
-        const result = generateDBMLFromDiagram(diagram);
+        const result = await generateDBMLFromDiagram(diagram);
 
         // Should not contain error message
         expect(result.error).toBeUndefined();

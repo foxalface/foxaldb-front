@@ -4,7 +4,7 @@ import { generateDBMLFromDiagram } from '../dbml-export';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const testCase = (caseNumber: string) => {
+const testCase = async (caseNumber: string) => {
     // Read the JSON file
     const jsonPath = path.join(__dirname, 'cases', `${caseNumber}.json`);
     const jsonContent = fs.readFileSync(jsonPath, 'utf-8');
@@ -13,7 +13,7 @@ const testCase = (caseNumber: string) => {
     const diagram = diagramFromJSONInput(jsonContent);
 
     // Generate DBML from the diagram
-    const result = generateDBMLFromDiagram(diagram);
+    const result = await generateDBMLFromDiagram(diagram);
 
     // Check for both regular and inline DBML files
     const regularDbmlPath = path.join(__dirname, 'cases', `${caseNumber}.dbml`);
@@ -48,38 +48,38 @@ const testCase = (caseNumber: string) => {
 
 describe('DBML Export cases', () => {
     it('should handle case 1 diagram', { timeout: 60000 }, async () => {
-        testCase('1');
+        await testCase('1');
     });
 
     it('should handle case 2 diagram', { timeout: 30000 }, async () => {
-        testCase('2');
+        await testCase('2');
     });
 
     it('should handle case 3 diagram', { timeout: 30000 }, async () => {
-        testCase('3');
+        await testCase('3');
     });
 
     it('should handle case 4 diagram', { timeout: 30000 }, async () => {
-        testCase('4');
+        await testCase('4');
     });
 
     it('should handle case 5 diagram', { timeout: 30000 }, async () => {
-        testCase('5');
+        await testCase('5');
     });
 
     it(
         'should handle case 6 diagram - auto increment',
         { timeout: 30000 },
         async () => {
-            testCase('6');
+            await testCase('6');
         }
     );
 
     it('should handle case 7 diagram', { timeout: 30000 }, async () => {
-        testCase('7');
+        await testCase('7');
     });
 
     it('should handle case 8 diagram', { timeout: 30000 }, async () => {
-        testCase('8');
+        await testCase('8');
     });
 });

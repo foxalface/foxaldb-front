@@ -93,12 +93,12 @@ describe('SQL Export Tests', () => {
 
     describe('Primary Key Index Export', () => {
         describe('exportBaseSQL', () => {
-            it('should export PRIMARY KEY without CONSTRAINT for PostgreSQL', () => {
+            it('should export PRIMARY KEY without CONSTRAINT for PostgreSQL', async () => {
                 const { diagram } = createTestDiagramWithPKIndex(
                     DatabaseType.POSTGRESQL
                 );
 
-                const sql = exportBaseSQL({
+                const sql = await exportBaseSQL({
                     diagram,
                     targetDatabaseType: DatabaseType.POSTGRESQL,
                 });
@@ -107,12 +107,12 @@ describe('SQL Export Tests', () => {
                 expect(sql).not.toContain('CONSTRAINT');
             });
 
-            it('should export PRIMARY KEY without CONSTRAINT for MySQL', () => {
+            it('should export PRIMARY KEY without CONSTRAINT for MySQL', async () => {
                 const { diagram } = createTestDiagramWithPKIndex(
                     DatabaseType.MYSQL
                 );
 
-                const sql = exportBaseSQL({
+                const sql = await exportBaseSQL({
                     diagram,
                     targetDatabaseType: DatabaseType.MYSQL,
                 });
@@ -121,12 +121,12 @@ describe('SQL Export Tests', () => {
                 expect(sql).not.toContain('CONSTRAINT');
             });
 
-            it('should export PRIMARY KEY without CONSTRAINT for SQL Server', () => {
+            it('should export PRIMARY KEY without CONSTRAINT for SQL Server', async () => {
                 const { diagram } = createTestDiagramWithPKIndex(
                     DatabaseType.SQL_SERVER
                 );
 
-                const sql = exportBaseSQL({
+                const sql = await exportBaseSQL({
                     diagram,
                     targetDatabaseType: DatabaseType.SQL_SERVER,
                 });
@@ -135,12 +135,12 @@ describe('SQL Export Tests', () => {
                 expect(sql).not.toContain('CONSTRAINT');
             });
 
-            it('should export PRIMARY KEY without CONSTRAINT for SQLite', () => {
+            it('should export PRIMARY KEY without CONSTRAINT for SQLite', async () => {
                 const { diagram } = createTestDiagramWithPKIndex(
                     DatabaseType.SQLITE
                 );
 
-                const sql = exportBaseSQL({
+                const sql = await exportBaseSQL({
                     diagram,
                     targetDatabaseType: DatabaseType.SQLITE,
                 });
@@ -151,7 +151,7 @@ describe('SQL Export Tests', () => {
         });
 
         describe('Database-specific exporters', () => {
-            it('exportPostgreSQL: should export PRIMARY KEY without CONSTRAINT', () => {
+            it('exportPostgreSQL: should export PRIMARY KEY without CONSTRAINT', async () => {
                 const { diagram } = createTestDiagramWithPKIndex(
                     DatabaseType.POSTGRESQL
                 );
@@ -162,7 +162,7 @@ describe('SQL Export Tests', () => {
                 expect(sql).not.toContain('CONSTRAINT');
             });
 
-            it('exportMySQL: should export PRIMARY KEY without CONSTRAINT', () => {
+            it('exportMySQL: should export PRIMARY KEY without CONSTRAINT', async () => {
                 const { diagram } = createTestDiagramWithPKIndex(
                     DatabaseType.MYSQL
                 );
@@ -173,7 +173,7 @@ describe('SQL Export Tests', () => {
                 expect(sql).not.toContain('CONSTRAINT');
             });
 
-            it('exportMSSQL: should export PRIMARY KEY without CONSTRAINT', () => {
+            it('exportMSSQL: should export PRIMARY KEY without CONSTRAINT', async () => {
                 const { diagram } = createTestDiagramWithPKIndex(
                     DatabaseType.SQL_SERVER
                 );
@@ -184,7 +184,7 @@ describe('SQL Export Tests', () => {
                 expect(sql).not.toContain('CONSTRAINT');
             });
 
-            it('exportSQLite: should export PRIMARY KEY without CONSTRAINT', () => {
+            it('exportSQLite: should export PRIMARY KEY without CONSTRAINT', async () => {
                 const { diagram } = createTestDiagramWithPKIndex(
                     DatabaseType.SQLITE
                 );
@@ -199,7 +199,7 @@ describe('SQL Export Tests', () => {
     });
 
     describe('Unique Constraint Index Export', () => {
-        it('should not generate CREATE UNIQUE INDEX for single-column unique fields in PostgreSQL', () => {
+        it('should not generate CREATE UNIQUE INDEX for single-column unique fields in PostgreSQL', async () => {
             const fieldId = testId();
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
@@ -247,7 +247,7 @@ describe('SQL Export Tests', () => {
             expect(sql).not.toContain('CREATE UNIQUE INDEX');
         });
 
-        it('should still generate CREATE UNIQUE INDEX for multi-column unique indexes in PostgreSQL', () => {
+        it('should still generate CREATE UNIQUE INDEX for multi-column unique indexes in PostgreSQL', async () => {
             const fieldId1 = testId();
             const fieldId2 = testId();
             const diagram = createDiagram({
@@ -293,7 +293,7 @@ describe('SQL Export Tests', () => {
             expect(sql).toContain('"col_a", "col_b"');
         });
 
-        it('should generate CREATE UNIQUE INDEX for single-column unique index when field is not marked unique', () => {
+        it('should generate CREATE UNIQUE INDEX for single-column unique index when field is not marked unique', async () => {
             const fieldId = testId();
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
@@ -335,7 +335,7 @@ describe('SQL Export Tests', () => {
     });
 
     describe('exportBaseSQL with foreign key relationships', () => {
-        it('should export PostgreSQL diagram with two tables and a foreign key relationship', () => {
+        it('should export PostgreSQL diagram with two tables and a foreign key relationship', async () => {
             const diagram = createDiagram({
                 id: 'ee570f766a15',
                 name: 'Diagram 1',
@@ -444,7 +444,7 @@ CREATE TABLE "public"."users" (
 -- Schema: public
 ALTER TABLE "public"."user_profiles" ADD CONSTRAINT "fk_user_profiles_user_id_users_id" FOREIGN KEY("user_id") REFERENCES "public"."users"("id");`;
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
             });
@@ -452,7 +452,7 @@ ALTER TABLE "public"."user_profiles" ADD CONSTRAINT "fk_user_profiles_user_id_us
             expect(sql.trim()).toBe(expectedSql.trim());
         });
 
-        it('should place FK on target table for 1:1 relationships in DBML flow', () => {
+        it('should place FK on target table for 1:1 relationships in DBML flow', async () => {
             // This tests the generic code path used by DBML export (isDBMLFlow: true)
             const usersTableId = 'users-table-id';
             const profilesTableId = 'profiles-table-id';
@@ -507,7 +507,7 @@ ALTER TABLE "public"."user_profiles" ADD CONSTRAINT "fk_user_profiles_user_id_us
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true, // Use the generic code path
@@ -520,7 +520,7 @@ ALTER TABLE "public"."user_profiles" ADD CONSTRAINT "fk_user_profiles_user_id_us
             );
         });
 
-        it('should place FK on many side for one-to-many relationships', () => {
+        it('should place FK on many side for one-to-many relationships', async () => {
             const ordersTableId = 'orders-table-id';
             const customersTableId = 'customers-table-id';
             const ordersCustomerIdFieldId = 'orders-customer-id-field';
@@ -574,7 +574,7 @@ ALTER TABLE "public"."user_profiles" ADD CONSTRAINT "fk_user_profiles_user_id_us
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,

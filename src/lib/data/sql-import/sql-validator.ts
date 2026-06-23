@@ -4,16 +4,11 @@
  */
 
 import { DatabaseType } from '@/lib/domain/database-type';
-import {
-    validatePostgreSQLDialect,
-    type ValidationResult,
-    type ValidationError,
-    type ValidationWarning,
+import type {
+    ValidationResult,
+    ValidationError,
+    ValidationWarning,
 } from './validators/postgresql-validator';
-import { validateMySQLDialect } from './validators/mysql-validator';
-import { validateSQLServerDialect } from './validators/sqlserver-validator';
-import { validateSQLiteDialect } from './validators/sqlite-validator';
-import { validateOracleDialect } from './validators/oracle-validator';
 
 // Re-export types for backward compatibility
 export type { ValidationResult, ValidationError, ValidationWarning };
@@ -24,31 +19,42 @@ export type { ValidationResult, ValidationError, ValidationWarning };
  * @param databaseType - The target database type
  * @returns ValidationResult with errors, warnings, and optional fixed SQL
  */
-export function validateSQL(
+export async function validateSQL(
     sql: string,
     databaseType: DatabaseType
-): ValidationResult {
+): Promise<ValidationResult> {
     switch (databaseType) {
         case DatabaseType.POSTGRESQL:
-        case DatabaseType.COCKROACHDB:
-            // CockroachDB uses PostgreSQL-compatible syntax
+        case DatabaseType.COCKROACHDB: {
+            const { validatePostgreSQLDialect } =
+                await import('./validators/postgresql-validator');
             return validatePostgreSQLDialect(sql);
+        }
 
         case DatabaseType.MYSQL:
+        case DatabaseType.MARIADB: {
+            const { validateMySQLDialect } =
+                await import('./validators/mysql-validator');
             return validateMySQLDialect(sql);
+        }
 
-        case DatabaseType.SQL_SERVER:
+        case DatabaseType.SQL_SERVER: {
+            const { validateSQLServerDialect } =
+                await import('./validators/sqlserver-validator');
             return validateSQLServerDialect(sql);
+        }
 
-        case DatabaseType.SQLITE:
+        case DatabaseType.SQLITE: {
+            const { validateSQLiteDialect } =
+                await import('./validators/sqlite-validator');
             return validateSQLiteDialect(sql);
+        }
 
-        case DatabaseType.MARIADB:
-            // MariaDB uses MySQL validator
-            return validateMySQLDialect(sql);
-
-        case DatabaseType.ORACLE:
+        case DatabaseType.ORACLE: {
+            const { validateOracleDialect } =
+                await import('./validators/oracle-validator');
             return validateOracleDialect(sql);
+        }
 
         default:
             return {

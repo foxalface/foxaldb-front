@@ -3,7 +3,7 @@ import { validateSQL } from '../sql-validator';
 import { DatabaseType } from '@/lib/domain';
 
 describe('SQL Validator', () => {
-    it('should detect cast operator errors (: :)', () => {
+    it('should detect cast operator errors (: :)', async () => {
         const sql = `
 CREATE TABLE wizards (
     id UUID PRIMARY KEY,
@@ -15,7 +15,7 @@ SELECT id: :text FROM wizards;
 SELECT COUNT(*): :integer FROM wizards;
         `;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(result.errors).toHaveLength(2);
@@ -26,7 +26,7 @@ SELECT COUNT(*): :integer FROM wizards;
         expect(result.fixedSQL).toContain('::integer');
     });
 
-    it('should detect split DECIMAL declarations', () => {
+    it('should detect split DECIMAL declarations', async () => {
         const sql = `
 CREATE TABLE potions (
     id INTEGER PRIMARY KEY,
@@ -34,7 +34,7 @@ CREATE TABLE potions (
     2) NOT NULL
 );`;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         expect(
@@ -44,21 +44,21 @@ CREATE TABLE potions (
         ).toBe(true);
     });
 
-    it('should warn about extensions', () => {
+    it('should warn about extensions', async () => {
         const sql = `
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION postgis;
 CREATE TABLE dragons (id UUID PRIMARY KEY);
         `;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(
             result.warnings.some((w) => w.message.includes('CREATE EXTENSION'))
         ).toBe(true);
     });
 
-    it('should warn about functions and triggers', () => {
+    it('should warn about functions and triggers', async () => {
         const sql = `
 CREATE OR REPLACE FUNCTION update_timestamp()
 RETURNS TRIGGER AS $$
@@ -73,7 +73,7 @@ BEFORE UPDATE ON wizards
 FOR EACH ROW EXECUTE FUNCTION update_timestamp();
         `;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(
             result.warnings.some((w) =>
@@ -87,7 +87,7 @@ FOR EACH ROW EXECUTE FUNCTION update_timestamp();
         ).toBe(true);
     });
 
-    it('should validate clean SQL as valid', () => {
+    it('should validate clean SQL as valid', async () => {
         const sql = `
 CREATE TABLE wizards (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -103,14 +103,14 @@ CREATE TABLE spells (
 );
         `;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(true);
         expect(result.errors).toHaveLength(0);
         expect(result.fixedSQL).toBeUndefined();
     });
 
-    it('should handle the fifth example file issues', () => {
+    it('should handle the fifth example file issues', async () => {
         const sql = `
 -- Sample from the problematic file
 UPDATE magic_towers 
@@ -128,7 +128,7 @@ SELECT
 FROM towers t;
         `;
 
-        const result = validateSQL(sql, DatabaseType.POSTGRESQL);
+        const result = await validateSQL(sql, DatabaseType.POSTGRESQL);
 
         expect(result.isValid).toBe(false);
         // Should find multiple cast operator errors

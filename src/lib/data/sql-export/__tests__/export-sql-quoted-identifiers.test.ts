@@ -52,7 +52,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
         }) as Diagram;
 
     describe('Table Names with Special Characters', () => {
-        it('should quote table names with spaces', () => {
+        it('should quote table names with spaces', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -70,7 +70,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -79,7 +79,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "user profiles"');
         });
 
-        it('should quote table names with dashes', () => {
+        it('should quote table names with dashes', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -97,7 +97,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -106,7 +106,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "user-accounts"');
         });
 
-        it('should quote table names with dots', () => {
+        it('should quote table names with dots', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -124,7 +124,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -133,7 +133,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "app.config.settings"');
         });
 
-        it('should not double-quote already quoted table names', () => {
+        it('should not double-quote already quoted table names', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -151,7 +151,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -161,7 +161,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).not.toContain('""already-quoted""');
         });
 
-        it('should handle backtick-quoted table names', () => {
+        it('should handle backtick-quoted table names', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.MYSQL,
                 tables: [
@@ -179,7 +179,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.MYSQL,
                 isDBMLFlow: true,
@@ -189,7 +189,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).not.toContain('"`mysql-table`"');
         });
 
-        it('should handle bracket-quoted table names', () => {
+        it('should handle bracket-quoted table names', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.SQL_SERVER,
                 tables: [
@@ -207,7 +207,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.SQL_SERVER,
                 isDBMLFlow: true,
@@ -219,7 +219,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
     });
 
     describe('Schema Names with Special Characters', () => {
-        it('should quote schema names with spaces', () => {
+        it('should quote schema names with spaces', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -238,13 +238,13 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sqlDBML = exportBaseSQL({
+            const sqlDBML = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
             });
 
-            const sqlNormal = exportBaseSQL({
+            const sqlNormal = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: false,
@@ -261,7 +261,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sqlNormal).toContain('CREATE TABLE "user data"."profiles"');
         });
 
-        it('should quote both schema and table names with special characters', () => {
+        it('should quote both schema and table names with special characters', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -280,7 +280,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -289,7 +289,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "app-db"."user-settings"');
         });
 
-        it('should not double-quote already quoted schema names', () => {
+        it('should not double-quote already quoted schema names', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -308,7 +308,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -318,7 +318,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).not.toContain('""quoted-schema""');
         });
 
-        it('should handle mixed quoted and unquoted identifiers', () => {
+        it('should handle mixed quoted and unquoted identifiers', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -349,7 +349,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -361,7 +361,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
     });
 
     describe('Foreign Key References with Special Characters', () => {
-        it('should quote table names in foreign key constraints', () => {
+        it('should quote table names in foreign key constraints', async () => {
             const parentTableId = testId();
             const childTableId = testId();
             const parentIdFieldId = testId();
@@ -417,7 +417,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -428,7 +428,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             );
         });
 
-        it('should handle foreign keys between schema-qualified tables with special characters', () => {
+        it('should handle foreign keys between schema-qualified tables with special characters', async () => {
             const parentTableId = testId();
             const childTableId = testId();
             const parentIdFieldId = testId();
@@ -486,7 +486,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -499,7 +499,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
     });
 
     describe('Schema Quoting in Non-DBML Flow', () => {
-        it('should properly quote schemas with special characters in non-DBML flow', () => {
+        it('should properly quote schemas with special characters in non-DBML flow', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.GENERIC,
                 tables: [
@@ -543,7 +543,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             });
 
             // Test with Generic database type to use base exportSQL
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.GENERIC,
                 isDBMLFlow: false,
@@ -562,7 +562,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "schema.with.dots"."products"');
         });
 
-        it('should not quote simple schema names in non-DBML flow', () => {
+        it('should not quote simple schema names in non-DBML flow', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.GENERIC,
                 tables: [
@@ -593,7 +593,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.GENERIC,
                 isDBMLFlow: false,
@@ -606,7 +606,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "myschema"."orders"');
         });
 
-        it('should handle schemas in foreign key relationships', () => {
+        it('should handle schemas in foreign key relationships', async () => {
             const parentTableId = testId();
             const childTableId = testId();
             const parentIdFieldId = testId();
@@ -664,7 +664,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.GENERIC,
                 isDBMLFlow: false,
@@ -677,7 +677,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
     });
 
     describe('Edge Cases and Complex Scenarios', () => {
-        it('should handle table names that are SQL reserved words', () => {
+        it('should handle table names that are SQL reserved words', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -706,7 +706,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -717,7 +717,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "order"');
         });
 
-        it('should handle Unicode characters in table names', () => {
+        it('should handle Unicode characters in table names', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -746,7 +746,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -756,7 +756,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "用户表"');
         });
 
-        it('should handle table names with parentheses', () => {
+        it('should handle table names with parentheses', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -774,7 +774,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -783,7 +783,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "users(archived)"');
         });
 
-        it('should handle table names with forward slashes', () => {
+        it('should handle table names with forward slashes', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -801,7 +801,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -810,7 +810,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "api/v1/users"');
         });
 
-        it('should handle empty table names gracefully', () => {
+        it('should handle empty table names gracefully', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -828,7 +828,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -838,7 +838,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE ""');
         });
 
-        it('should preserve different quote styles when already quoted', () => {
+        it('should preserve different quote styles when already quoted', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -878,7 +878,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -891,7 +891,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
     });
 
     describe('DBML vs Non-DBML Flow Behavior', () => {
-        it('should quote all table names when in DBML flow, but not in normal flow for simple names', () => {
+        it('should quote all table names when in DBML flow, but not in normal flow for simple names', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -909,13 +909,13 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sqlNormal = exportBaseSQL({
+            const sqlNormal = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: false,
             });
 
-            const sqlDBML = exportBaseSQL({
+            const sqlDBML = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: true,
@@ -928,7 +928,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sqlDBML).toContain('CREATE TABLE "users"');
         });
 
-        it('should quote table names with special characters even when not in DBML flow', () => {
+        it('should quote table names with special characters even when not in DBML flow', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -946,7 +946,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: false,
@@ -955,7 +955,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
             expect(sql).toContain('CREATE TABLE "user-accounts"');
         });
 
-        it('should create schema statements when not in DBML flow', () => {
+        it('should create schema statements when not in DBML flow', async () => {
             const diagram = createDiagram({
                 databaseType: DatabaseType.POSTGRESQL,
                 tables: [
@@ -986,7 +986,7 @@ describe('Quoted Identifiers - Special Characters Handling', () => {
                 ],
             });
 
-            const sql = exportBaseSQL({
+            const sql = await exportBaseSQL({
                 diagram,
                 targetDatabaseType: DatabaseType.POSTGRESQL,
                 isDBMLFlow: false,

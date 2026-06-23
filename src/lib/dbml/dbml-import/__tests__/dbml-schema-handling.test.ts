@@ -86,7 +86,7 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
             });
 
             // Export to DBML
-            const exported = generateDBMLFromDiagram(sourceDiagram);
+            const exported = await generateDBMLFromDiagram(sourceDiagram);
 
             // Re-import the exported DBML (simulating edit mode)
             const reimportedDiagram = await importDBMLToDiagram(
@@ -190,7 +190,7 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
                 databaseType: DatabaseType.POSTGRESQL,
             });
 
-            const exported = generateDBMLFromDiagram(diagram);
+            const exported = await generateDBMLFromDiagram(diagram);
 
             expect(exported.standardDbml).toContain('Order');
             expect(exported.standardDbml).toContain('Yes');
@@ -336,7 +336,7 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
             expect(noField?.name).toBe('No');
 
             // Export and verify it doesn't cause errors
-            const exported = generateDBMLFromDiagram(diagram);
+            const exported = await generateDBMLFromDiagram(diagram);
             expect(exported.standardDbml).toContain('"Yes"');
             expect(exported.standardDbml).toContain('"No"');
 
@@ -384,7 +384,7 @@ describe('DBML Schema Handling - Fantasy Realm Database', () => {
             // Perform 3 round-trips
             for (let cycle = 1; cycle <= 3; cycle++) {
                 // Export
-                const exported = generateDBMLFromDiagram(currentDiagram);
+                const exported = await generateDBMLFromDiagram(currentDiagram);
 
                 // Re-import
                 const reimported = await importDBMLToDiagram(
