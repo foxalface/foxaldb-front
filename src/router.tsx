@@ -3,7 +3,15 @@ import type { RouteObject } from 'react-router-dom';
 import { createBrowserRouter } from 'react-router-dom';
 import type { TemplatePageLoaderData } from './pages/template-page/template-page';
 import type { TemplatesPageLoaderData } from './pages/templates-page/templates-page';
-import { getTemplatesAndAllTags } from './templates-data/template-utils';
+
+const loadTemplatesAndAllTags = async (options?: {
+    featured?: boolean;
+    tag?: string;
+}) => {
+    const { getTemplatesAndAllTags } =
+        await import('./templates-data/template-utils');
+    return getTemplatesAndAllTags(options);
+};
 
 const routes: RouteObject[] = [
     ...['', 'diagrams/:diagramId'].map((path) => ({
@@ -57,7 +65,7 @@ const routes: RouteObject[] = [
         },
 
         loader: async (): Promise<TemplatesPageLoaderData> => {
-            const { tags, templates } = await getTemplatesAndAllTags();
+            const { tags, templates } = await loadTemplatesAndAllTags();
 
             return {
                 allTags: tags,
@@ -76,7 +84,7 @@ const routes: RouteObject[] = [
             };
         },
         loader: async (): Promise<TemplatesPageLoaderData> => {
-            const { tags, templates } = await getTemplatesAndAllTags({
+            const { tags, templates } = await loadTemplatesAndAllTags({
                 featured: true,
             });
 
@@ -97,7 +105,7 @@ const routes: RouteObject[] = [
             };
         },
         loader: async ({ params }): Promise<TemplatesPageLoaderData> => {
-            const { tags, templates } = await getTemplatesAndAllTags({
+            const { tags, templates } = await loadTemplatesAndAllTags({
                 tag: params.tag?.replace(/-/g, ' '),
             });
 

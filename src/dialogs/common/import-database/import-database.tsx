@@ -31,7 +31,7 @@ import {
     ResizablePanelGroup,
 } from '@/components/resizable/resizable';
 import { useTheme } from '@/hooks/use-theme';
-import type { OnChange } from '@monaco-editor/react';
+import type { OnChange, Monaco } from '@monaco-editor/react';
 import { useDebounce } from '@/hooks/use-debounce-v2';
 import { InstructionsSection } from './instructions-section/instructions-section';
 import { parseSQLError } from '@/lib/data/sql-import';
@@ -101,6 +101,7 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     const { effectiveTheme } = useTheme();
     const [errorMessage, setErrorMessage] = useState('');
     const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+    const monacoRef = useRef<Monaco | null>(null);
     const decorationsCollection = useRef<editor.IEditorDecorationsCollection>();
     const pasteDisposableRef = useRef<IDisposable | null>(null);
 
@@ -178,10 +179,11 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
                 let errorMsg = 'Invalid DBML syntax';
                 let line: number = 1;
 
-                if (validateResponse.parsedError) {
+                if (validateResponse.parsedError && monacoRef.current) {
                     errorMsg = validateResponse.parsedError.message;
                     line = validateResponse.parsedError.line;
                     highlightErrorLine({
+                        monaco: monacoRef.current,
                         error: validateResponse.parsedError,
                         model: editorRef.current?.getModel(),
                         editorDecorationsCollection:
@@ -393,8 +395,9 @@ export const ImportDatabase: React.FC<ImportDatabaseProps> = ({
     }, [importMethod]);
 
     const handleEditorDidMount = useCallback(
-        (editor: editor.IStandaloneCodeEditor) => {
+        (editor: editor.IStandaloneCodeEditor, monacoInstance: Monaco) => {
             editorRef.current = editor;
+            monacoRef.current = monacoInstance;
             decorationsCollection.current =
                 editor.createDecorationsCollection();
 

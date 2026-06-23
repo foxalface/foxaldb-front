@@ -34,6 +34,38 @@ export default defineConfig({
         rollupOptions: {
             external: (id) => /__test__/.test(id),
             output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        if (
+                            id.includes('@xyflow/react') ||
+                            id.includes('@xyflow/system') ||
+                            id.includes('/@xyflow/')
+                        ) {
+                            return 'react-flow';
+                        }
+                        if (
+                            id.includes('monaco-editor') ||
+                            id.includes('@monaco-editor')
+                        ) {
+                            return 'monaco';
+                        }
+                        if (
+                            id.includes('/react/') ||
+                            id.includes('/react-dom/') ||
+                            id.includes('react-router') ||
+                            id.includes('/scheduler/')
+                        ) {
+                            return 'vendor';
+                        }
+                    }
+
+                    if (
+                        id.includes('/src/templates-data/templates/') ||
+                        id.includes('/src/templates-data/templates-data.ts')
+                    ) {
+                        return 'templates';
+                    }
+                },
                 assetFileNames: (assetInfo) => {
                     if (
                         assetInfo.names &&

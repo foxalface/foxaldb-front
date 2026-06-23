@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils';
-import React, { lazy, Suspense, useCallback, useEffect } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useMemo } from 'react';
 import { Spinner } from '../spinner/spinner';
 import { useTheme } from '@/hooks/use-theme';
-import { useMonaco } from '@monaco-editor/react';
+import type { Monaco } from '@monaco-editor/react';
 import { useToast } from '@/components/toast/use-toast';
 import { Button } from '../button/button';
 import type { LucideIcon } from 'lucide-react';
@@ -11,7 +11,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 import { DarkTheme } from './themes/dark';
 import { LightTheme } from './themes/light';
-import './config.ts';
+import type { editor } from 'monaco-editor';
 
 export const Editor = lazy(() =>
     import('./code-editor').then((module) => ({
@@ -63,19 +63,42 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         allowCopy = true,
     }) => {
         const { t } = useTranslation();
-        const monaco = useMonaco();
         const { effectiveTheme } = useTheme();
         const { toast } = useToast();
         const [isCopied, setIsCopied] = React.useState(false);
         const [tooltipOpen, setTooltipOpen] = React.useState(false);
 
-        useEffect(() => {
-            monaco?.editor?.defineTheme?.(
-                effectiveTheme,
-                effectiveTheme === 'dark' ? DarkTheme : LightTheme
-            );
-            monaco?.editor?.setTheme?.(effectiveTheme);
-        }, [monaco, effectiveTheme]);
+        const handleBeforeMount = useCallback(
+            (monaco: Monaco) => {
+                monaco.editor.defineTheme('dark', DarkTheme);
+                monaco.editor.defineTheme('light', LightTheme);
+                monaco.editor.setTheme(effectiveTheme);
+                editorProps?.beforeMount?.(monaco);
+            },
+            [effectiveTheme, editorProps]
+        );
+
+        const handleMount = useCallback(
+            (editorInstance: editor.IStandaloneCodeEditor, monaco: Monaco) => {
+                if (autoScroll) {
+                    const model = editorInstance.getModel();
+                    if (model) {
+                        editorInstance.revealLine(model.getLineCount());
+                    }
+                }
+                editorProps?.onMount?.(editorInstance, monaco);
+            },
+            [autoScroll, editorProps]
+        );
+
+        const mergedEditorProps = useMemo(
+            () => ({
+                ...editorProps,
+                beforeMount: handleBeforeMount,
+                onMount: handleMount,
+            }),
+            [editorProps, handleBeforeMount, handleMount]
+        );
 
         useEffect(() => {
             if (!isCopied) return;
@@ -83,16 +106,6 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                 setIsCopied(false);
             }, 1500);
         }, [isCopied]);
-
-        useEffect(() => {
-            if (monaco) {
-                const editor = monaco.editor.getModels()[0];
-                if (editor && autoScroll) {
-                    const lineCount = editor.getLineCount();
-                    monaco.editor.getEditors()[0]?.revealLine(lineCount);
-                }
-            }
-        }, [code, monaco, autoScroll]);
 
         const copyToClipboard = useCallback(async () => {
             if (!navigator?.clipboard) {
@@ -201,7 +214,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                             language={language}
                             loading={<Spinner />}
                             theme={effectiveTheme}
-                            {...editorProps}
+                            {...mergedEditorProps}
                             options={{
                                 editContext: false,
                                 readOnly: true,

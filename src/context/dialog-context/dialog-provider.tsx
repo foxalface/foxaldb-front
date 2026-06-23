@@ -1,17 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import type { DialogContext } from './dialog-context';
 import { dialogContext } from './dialog-context';
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
-import { CreateDiagramDialog } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import { OpenDiagramDialog } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sql-dialog';
-import { ExportSQLDialog } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import { CreateRelationshipDialog } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog/import-database-dialog';
-import { ImportDatabaseDialog } from '@/dialogs/import-database-dialog/import-database-dialog';
 import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { TableSchemaDialog } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { emptyFn } from '@/lib/utils';
@@ -27,6 +24,28 @@ import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/act
 import { ActivityFeedDialog } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
+
+const CreateDiagramDialogLazy = lazy(() =>
+    import('@/dialogs/create-diagram-dialog/create-diagram-dialog').then(
+        (module) => ({
+            default: module.CreateDiagramDialog,
+        })
+    )
+);
+
+const ExportSQLDialogLazy = lazy(() =>
+    import('@/dialogs/export-sql-dialog/export-sql-dialog').then((module) => ({
+        default: module.ExportSQLDialog,
+    }))
+);
+
+const ImportDatabaseDialogLazy = lazy(() =>
+    import('@/dialogs/import-database-dialog/import-database-dialog').then(
+        (module) => ({
+            default: module.ImportDatabaseDialog,
+        })
+    )
+);
 
 export const DialogProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -171,6 +190,30 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         setExportLaravelMigrationsDialogParams,
     ] = useState<Omit<ExportLaravelMigrationsDialogProps, 'dialog'>>();
 
+    const [createDiagramDialogMounted, setCreateDiagramDialogMounted] =
+        useState(false);
+    const [exportSQLDialogMounted, setExportSQLDialogMounted] = useState(false);
+    const [importDatabaseDialogMounted, setImportDatabaseDialogMounted] =
+        useState(false);
+
+    useEffect(() => {
+        if (openNewDiagramDialog) {
+            setCreateDiagramDialogMounted(true);
+        }
+    }, [openNewDiagramDialog]);
+
+    useEffect(() => {
+        if (openExportSQLDialog) {
+            setExportSQLDialogMounted(true);
+        }
+    }, [openExportSQLDialog]);
+
+    useEffect(() => {
+        if (openImportDatabaseDialog) {
+            setImportDatabaseDialogMounted(true);
+        }
+    }, [openImportDatabaseDialog]);
+
     const openExportLaravelMigrationsDialogHandler: DialogContext['openExportLaravelMigrationsDialog'] =
         useCallback((params) => {
             setExportLaravelMigrationsDialogParams(params);
@@ -219,26 +262,38 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             }}
         >
             {children}
-            <CreateDiagramDialog
-                dialog={{ open: openNewDiagramDialog }}
-                {...newDiagramDialogParams}
-            />
+            {createDiagramDialogMounted ? (
+                <Suspense fallback={null}>
+                    <CreateDiagramDialogLazy
+                        dialog={{ open: openNewDiagramDialog }}
+                        {...newDiagramDialogParams}
+                    />
+                </Suspense>
+            ) : null}
             <OpenDiagramDialog
                 dialog={{ open: openOpenDiagramDialog }}
                 {...openDiagramDialogParams}
             />
-            <ExportSQLDialog
-                dialog={{ open: openExportSQLDialog }}
-                {...exportSQLDialogParams}
-            />
+            {exportSQLDialogMounted ? (
+                <Suspense fallback={null}>
+                    <ExportSQLDialogLazy
+                        dialog={{ open: openExportSQLDialog }}
+                        {...exportSQLDialogParams}
+                    />
+                </Suspense>
+            ) : null}
             <CreateRelationshipDialog
                 dialog={{ open: openCreateRelationshipDialog }}
                 {...createRelationshipDialogParams}
             />
-            <ImportDatabaseDialog
-                dialog={{ open: openImportDatabaseDialog }}
-                {...importDatabaseDialogParams}
-            />
+            {importDatabaseDialogMounted ? (
+                <Suspense fallback={null}>
+                    <ImportDatabaseDialogLazy
+                        dialog={{ open: openImportDatabaseDialog }}
+                        {...importDatabaseDialogParams}
+                    />
+                </Suspense>
+            ) : null}
             <TableSchemaDialog
                 dialog={{ open: openTableSchemaDialog }}
                 {...tableSchemaDialogParams}
