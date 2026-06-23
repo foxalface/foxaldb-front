@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
     Select,
     SelectContent,
@@ -15,9 +15,15 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { CustomTypesSection } from './custom-types-section/custom-types-section';
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
-import { DBMLSection } from './dbml-section/dbml-section';
 import { RefsSection } from './refs-section/refs-section';
 import { VisualsSection } from './visuals-section/visuals-section';
+import { Spinner } from '@/components/spinner/spinner';
+
+const DBMLSectionLazy = React.lazy(() =>
+    import('./dbml-section/dbml-section').then((module) => ({
+        default: module.DBMLSection,
+    }))
+);
 
 export interface SidePanelProps {}
 
@@ -72,7 +78,15 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
             {selectedSidebarSection === 'tables' ? (
                 <TablesSection />
             ) : selectedSidebarSection === 'dbml' ? (
-                <DBMLSection />
+                <Suspense
+                    fallback={
+                        <div className="flex flex-1 items-center justify-center">
+                            <Spinner />
+                        </div>
+                    }
+                >
+                    <DBMLSectionLazy />
+                </Suspense>
             ) : selectedSidebarSection === 'refs' ? (
                 <RefsSection />
             ) : selectedSidebarSection === 'visuals' ? (
