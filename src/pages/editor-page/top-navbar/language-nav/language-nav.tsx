@@ -17,7 +17,7 @@ import type {
     SelectBoxProps,
 } from '@/components/select-box/select-box';
 import { SelectBox } from '@/components/select-box/select-box';
-import { languages } from '@/i18n/i18n';
+import { languages } from '@/i18n/languages';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/button/button-variants';
 
@@ -33,8 +33,8 @@ export const LanguageNav: React.FC<LanguageNavProps> = () => {
     }));
 
     const handleLanguageChange: SelectBoxProps['onChange'] = useCallback(
-        (language: string | string[]) => {
-            i18n.changeLanguage(language as string);
+        async (language: string | string[]) => {
+            await i18n.changeLanguage(language as string);
             setDropdownOpen(false);
         },
         [i18n]
