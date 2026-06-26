@@ -1,12 +1,21 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+    ForeignKeyList,
+    ImportTableSnapshotList,
+    MigrationEmptyDash,
+    MigrationSummaryGrid,
+    MigrationSummaryItem,
+    MigrationViewerLayout,
+    MigrationViewerSection,
+    MigrationScrollableList,
+    WarningList,
+} from '@/dialogs/laravel-migration-shared/viewer-primitives';
 import type { LaravelMigrationSchemaSnapshot } from '@/types/laravel-migration';
 
 export interface MigrationSnapshotViewerProps {
     snapshot: LaravelMigrationSchemaSnapshot;
 }
-
-// TODO: This viewer is intentionally reusable for future import preview, diff preview, and apply preview flows.
 
 export const MigrationSnapshotViewer: React.FC<
     MigrationSnapshotViewerProps
@@ -34,157 +43,83 @@ export const MigrationSnapshotViewer: React.FC<
     }, [snapshot]);
 
     return (
-        <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                <SummaryItem
+        <MigrationViewerLayout>
+            <MigrationSummaryGrid>
+                <MigrationSummaryItem
                     label={t('import_laravel_migrations_dialog.summary.tables')}
                     value={summary.tables}
                 />
-                <SummaryItem
+                <MigrationSummaryItem
                     label={t(
                         'import_laravel_migrations_dialog.summary.columns'
                     )}
                     value={summary.columns}
                 />
-                <SummaryItem
+                <MigrationSummaryItem
                     label={t(
                         'import_laravel_migrations_dialog.summary.indexes'
                     )}
                     value={summary.indexes}
                 />
-                <SummaryItem
+                <MigrationSummaryItem
                     label={t(
                         'import_laravel_migrations_dialog.summary.foreign_keys'
                     )}
                     value={summary.foreignKeys}
                 />
-                <SummaryItem
+                <MigrationSummaryItem
                     label={t(
                         'import_laravel_migrations_dialog.summary.warnings'
                     )}
                     value={summary.warnings}
                 />
-            </div>
+            </MigrationSummaryGrid>
 
-            <section className="space-y-2">
-                <h3 className="text-sm font-medium">
-                    {t('import_laravel_migrations_dialog.tables.title')}
-                </h3>
+            <MigrationViewerSection
+                title={t('import_laravel_migrations_dialog.tables.title')}
+            >
                 {snapshot.tables.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">—</p>
+                    <MigrationEmptyDash />
                 ) : (
-                    <ul className="max-h-48 space-y-1 overflow-y-auto rounded-md border p-2">
-                        {snapshot.tables.map((table) => (
-                            <li key={table.name}>
-                                <details>
-                                    <summary className="cursor-pointer text-sm">
-                                        <span className="font-medium">
-                                            {table.name}
-                                        </span>
-                                        <span className="ml-2 text-muted-foreground">
-                                            {t(
-                                                'import_laravel_migrations_dialog.tables.columns_count',
-                                                { count: table.columns.length }
-                                            )}
-                                            {' · '}
-                                            {t(
-                                                'import_laravel_migrations_dialog.tables.indexes_count',
-                                                { count: table.indexes.length }
-                                            )}
-                                        </span>
-                                    </summary>
-                                    {table.columns.length > 0 ? (
-                                        <ul className="mt-1 space-y-0.5 pl-4 text-xs text-muted-foreground">
-                                            {table.columns.map((column) => (
-                                                <li key={column.name}>
-                                                    {column.name}{' '}
-                                                    <span className="opacity-80">
-                                                        ({column.type})
-                                                    </span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : null}
-                                </details>
-                            </li>
-                        ))}
-                    </ul>
+                    <ImportTableSnapshotList tables={snapshot.tables} />
                 )}
-            </section>
+            </MigrationViewerSection>
 
-            <section className="space-y-2">
-                <h3 className="text-sm font-medium">
-                    {t('import_laravel_migrations_dialog.foreign_keys.title')}
-                </h3>
+            <MigrationViewerSection
+                title={t('import_laravel_migrations_dialog.foreign_keys.title')}
+            >
                 {snapshot.foreignKeys.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">—</p>
+                    <MigrationEmptyDash />
                 ) : (
-                    <ul className="max-h-36 space-y-1 overflow-y-auto rounded-md border p-2 text-sm">
-                        {snapshot.foreignKeys.map((foreignKey, index) => (
-                            <li
-                                key={`${foreignKey.localTable}.${foreignKey.localColumn}-${index}`}
-                            >
-                                {foreignKey.localTable}.{foreignKey.localColumn}
-                                {' → '}
-                                {foreignKey.referencedTable}.
-                                {foreignKey.referencedColumn}
-                            </li>
-                        ))}
-                    </ul>
+                    <ForeignKeyList foreignKeys={snapshot.foreignKeys} />
                 )}
-            </section>
+            </MigrationViewerSection>
 
-            <section className="space-y-2">
-                <h3 className="text-sm font-medium">
-                    {t('import_laravel_migrations_dialog.warnings.title')}
-                </h3>
-                {snapshot.warnings.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">
-                        {t('import_laravel_migrations_dialog.warnings.none')}
-                    </p>
-                ) : (
-                    <ul className="max-h-36 space-y-1 overflow-y-auto rounded-md border p-2 text-sm">
-                        {snapshot.warnings.map((warning, index) => (
-                            <li key={`${warning.message}-${index}`}>
-                                {warning.message}
-                                {warning.relativePath ? (
-                                    <span className="ml-1 text-muted-foreground">
-                                        ({warning.relativePath})
-                                    </span>
-                                ) : null}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </section>
+            <MigrationViewerSection
+                title={t('import_laravel_migrations_dialog.warnings.title')}
+            >
+                <WarningList
+                    warnings={snapshot.warnings}
+                    noneLabel={t(
+                        'import_laravel_migrations_dialog.warnings.none'
+                    )}
+                />
+            </MigrationViewerSection>
 
-            <section className="space-y-2">
-                <h3 className="text-sm font-medium">
-                    {t('import_laravel_migrations_dialog.source_files.title')}
-                </h3>
+            <MigrationViewerSection
+                title={t('import_laravel_migrations_dialog.source_files.title')}
+            >
                 <p className="text-sm text-muted-foreground">
                     {summary.sourceFiles}
                 </p>
                 {snapshot.sourceFiles.length > 0 ? (
-                    <ul className="max-h-24 space-y-0.5 overflow-y-auto rounded-md border p-2 text-xs text-muted-foreground">
+                    <MigrationScrollableList size="sm" textSize="xs">
                         {snapshot.sourceFiles.map((sourceFile) => (
                             <li key={sourceFile}>{sourceFile}</li>
                         ))}
-                    </ul>
+                    </MigrationScrollableList>
                 ) : null}
-            </section>
-        </div>
+            </MigrationViewerSection>
+        </MigrationViewerLayout>
     );
 };
-
-interface SummaryItemProps {
-    label: string;
-    value: number;
-}
-
-const SummaryItem: React.FC<SummaryItemProps> = ({ label, value }) => (
-    <div className="rounded-md border px-3 py-2">
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-lg font-semibold">{value}</p>
-    </div>
-);

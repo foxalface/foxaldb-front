@@ -65,6 +65,7 @@ export const Menu: React.FC<MenuProps> = () => {
         openImportDiagramDialog,
         openExportLaravelMigrationsDialog,
         openLaravelMigrationImportDialog,
+        openLaravelMigrationDiffDialog,
     } = useDialog();
     const { isAuthenticated } = useAuth();
     const { showAlert } = useAlert();
@@ -273,6 +274,13 @@ export const Menu: React.FC<MenuProps> = () => {
                                     >
                                         {t(
                                             'menu.actions.import_laravel_migrations'
+                                        )}
+                                    </MenubarItem>
+                                    <MenubarItem
+                                        onClick={openLaravelMigrationDiffDialog}
+                                    >
+                                        {t(
+                                            'menu.actions.compare_laravel_migrations'
                                         )}
                                     </MenubarItem>
                                 </>

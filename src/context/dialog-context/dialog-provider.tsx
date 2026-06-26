@@ -25,6 +25,7 @@ import { ActivityFeedDialog } from '@/dialogs/activity-feed-dialog/activity-feed
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import { LaravelMigrationImportDialog } from '@/dialogs/laravel-migration-import-dialog/laravel-migration-import-dialog';
+import { LaravelMigrationDiffDialog } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 
 const CreateDiagramDialogLazy = lazy(() =>
     import('@/dialogs/create-diagram-dialog/create-diagram-dialog').then(
@@ -226,6 +227,9 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
         setOpenLaravelMigrationImportDialog,
     ] = useState(false);
 
+    const [openLaravelMigrationDiffDialog, setOpenLaravelMigrationDiffDialog] =
+        useState(false);
+
     return (
         <dialogContext.Provider
             value={{
@@ -245,6 +249,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                     setOpenLaravelMigrationImportDialog(true),
                 closeLaravelMigrationImportDialog: () =>
                     setOpenLaravelMigrationImportDialog(false),
+                openLaravelMigrationDiffDialog: () =>
+                    setOpenLaravelMigrationDiffDialog(true),
+                closeLaravelMigrationDiffDialog: () =>
+                    setOpenLaravelMigrationDiffDialog(false),
                 openExportSQLDialog: openExportSQLDialogHandler,
                 closeExportSQLDialog: () => setOpenExportSQLDialog(false),
                 openCreateRelationshipDialog:
@@ -336,6 +344,9 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             ) : null}
             <LaravelMigrationImportDialog
                 dialog={{ open: openLaravelMigrationImportDialog }}
+            />
+            <LaravelMigrationDiffDialog
+                dialog={{ open: openLaravelMigrationDiffDialog }}
             />
         </dialogContext.Provider>
     );

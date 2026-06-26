@@ -21,6 +21,7 @@ export const ne: LanguageTranslation = {
                 export: 'Export',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
+                compare_laravel_migrations: 'Compare Laravel migrations',
                 export_sql: 'SQL निर्यात गर्नुहोस्',
                 export_as: 'निर्यात गर्नुहोस्',
                 delete_diagram: 'हटाउनुहोस्',
@@ -534,6 +535,64 @@ export const ne: LanguageTranslation = {
             },
         },
 
+        compare_laravel_migrations_dialog: {
+            title: 'Compare Laravel migrations',
+            description:
+                'Upload two ZIP archives of Laravel migration files to preview the schema diff between them.',
+            before_label: 'Before archive',
+            after_label: 'After archive',
+            compare: 'Compare',
+            comparing: 'Comparing...',
+            close: 'Close',
+            compare_another: 'Compare another',
+            no_before_file_selected: 'No before archive selected.',
+            no_after_file_selected: 'No after archive selected.',
+            errors: {
+                compare_failed: 'Could not compare Laravel migrations.',
+                before_required: 'Please select a before archive ZIP file.',
+                after_required: 'Please select an after archive ZIP file.',
+                file_too_large: 'File must be 5 MB or smaller.',
+            },
+            summary: {
+                added_tables: 'Added tables',
+                removed_tables: 'Removed tables',
+                changed_tables: 'Changed tables',
+                added_foreign_keys: 'Added foreign keys',
+                removed_foreign_keys: 'Removed foreign keys',
+                changed_foreign_keys: 'Changed foreign keys',
+                warnings: 'Warnings',
+            },
+            sections: {
+                added_tables: 'Added tables',
+                removed_tables: 'Removed tables',
+                changed_tables: 'Changed tables',
+                added_foreign_keys: 'Added foreign keys',
+                removed_foreign_keys: 'Removed foreign keys',
+                changed_foreign_keys: 'Changed foreign keys',
+                warnings: 'Warnings',
+            },
+            tables: {
+                columns_count: '{{count}} columns',
+                indexes_count: '{{count}} indexes',
+            },
+            changed_tables: {
+                added_columns: 'Added columns',
+                removed_columns: 'Removed columns',
+                changed_columns: 'Changed columns',
+                added_indexes: 'Added indexes',
+                removed_indexes: 'Removed indexes',
+                changed_indexes: 'Changed indexes',
+            },
+            changed_foreign_keys: {
+                before: 'Before',
+            },
+            attribute_change: {
+                arrow: '→',
+            },
+            warnings: {
+                none: 'No warnings.',
+            },
+        },
         create_relationship_dialog: {
             title: 'सम्बन्ध बनाउनुहोस्',
             primary_table: 'मुख्य तालिका',

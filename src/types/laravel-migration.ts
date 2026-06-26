@@ -57,3 +57,50 @@ export interface LaravelMigrationSchemaSnapshot {
     warnings: ImportWarning[];
     sourceFiles: string[];
 }
+
+export interface AttributeChange {
+    attribute: string;
+    before: unknown;
+    after: unknown;
+}
+
+export interface ColumnDiff {
+    columnName: string;
+    before: ColumnSnapshot | null;
+    after: ColumnSnapshot | null;
+    changes: AttributeChange[];
+}
+
+export interface IndexDiff {
+    key: string;
+    before: IndexSnapshot | null;
+    after: IndexSnapshot | null;
+    changes: AttributeChange[];
+}
+
+export interface ForeignKeyDiff {
+    key: string;
+    before: ForeignKeySnapshot | null;
+    after: ForeignKeySnapshot | null;
+    changes: AttributeChange[];
+}
+
+export interface TableDiff {
+    tableName: string;
+    addedColumns: ColumnSnapshot[];
+    removedColumns: ColumnSnapshot[];
+    changedColumns: ColumnDiff[];
+    addedIndexes: IndexSnapshot[];
+    removedIndexes: IndexSnapshot[];
+    changedIndexes: IndexDiff[];
+}
+
+export interface LaravelMigrationSchemaDiff {
+    addedTables: TableSnapshot[];
+    removedTables: TableSnapshot[];
+    changedTables: TableDiff[];
+    addedForeignKeys: ForeignKeySnapshot[];
+    removedForeignKeys: ForeignKeySnapshot[];
+    changedForeignKeys: ForeignKeyDiff[];
+    warnings: ImportWarning[];
+}

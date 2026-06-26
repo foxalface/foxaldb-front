@@ -48,6 +48,10 @@ export interface DialogContext {
     openLaravelMigrationImportDialog: () => void;
     closeLaravelMigrationImportDialog: () => void;
 
+    // Compare Laravel migrations dialog
+    openLaravelMigrationDiffDialog: () => void;
+    closeLaravelMigrationDiffDialog: () => void;
+
     // Export SQL dialog
     openExportSQLDialog: (params: Omit<ExportSQLDialogProps, 'dialog'>) => void;
     closeExportSQLDialog: () => void;
@@ -110,6 +114,8 @@ export const dialogContext = createContext<DialogContext>({
     closeExportLaravelMigrationsDialog: emptyFn,
     openLaravelMigrationImportDialog: emptyFn,
     closeLaravelMigrationImportDialog: emptyFn,
+    openLaravelMigrationDiffDialog: emptyFn,
+    closeLaravelMigrationDiffDialog: emptyFn,
     openExportSQLDialog: emptyFn,
     closeExportSQLDialog: emptyFn,
     closeCreateRelationshipDialog: emptyFn,
