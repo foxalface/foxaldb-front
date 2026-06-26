@@ -24,6 +24,7 @@ import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/act
 import { ActivityFeedDialog } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
+import { LaravelMigrationImportDialog } from '@/dialogs/laravel-migration-import-dialog/laravel-migration-import-dialog';
 
 const CreateDiagramDialogLazy = lazy(() =>
     import('@/dialogs/create-diagram-dialog/create-diagram-dialog').then(
@@ -220,6 +221,11 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             setOpenExportLaravelMigrationsDialog(true);
         }, []);
 
+    const [
+        openLaravelMigrationImportDialog,
+        setOpenLaravelMigrationImportDialog,
+    ] = useState(false);
+
     return (
         <dialogContext.Provider
             value={{
@@ -235,6 +241,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                     openExportLaravelMigrationsDialogHandler,
                 closeExportLaravelMigrationsDialog: () =>
                     setOpenExportLaravelMigrationsDialog(false),
+                openLaravelMigrationImportDialog: () =>
+                    setOpenLaravelMigrationImportDialog(true),
+                closeLaravelMigrationImportDialog: () =>
+                    setOpenLaravelMigrationImportDialog(false),
                 openExportSQLDialog: openExportSQLDialogHandler,
                 closeExportSQLDialog: () => setOpenExportSQLDialog(false),
                 openCreateRelationshipDialog:
@@ -324,6 +334,9 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                     {...exportLaravelMigrationsDialogParams}
                 />
             ) : null}
+            <LaravelMigrationImportDialog
+                dialog={{ open: openLaravelMigrationImportDialog }}
+            />
         </dialogContext.Provider>
     );
 };

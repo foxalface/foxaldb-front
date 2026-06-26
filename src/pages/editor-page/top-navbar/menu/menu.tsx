@@ -64,6 +64,7 @@ export const Menu: React.FC<MenuProps> = () => {
         openExportDiagramDialog,
         openImportDiagramDialog,
         openExportLaravelMigrationsDialog,
+        openLaravelMigrationImportDialog,
     } = useDialog();
     const { isAuthenticated } = useAuth();
     const { showAlert } = useAlert();
@@ -262,6 +263,20 @@ export const Menu: React.FC<MenuProps> = () => {
                             >
                                 DBML
                             </MenubarItem>
+                            {isAuthenticated ? (
+                                <>
+                                    <MenubarSeparator />
+                                    <MenubarItem
+                                        onClick={
+                                            openLaravelMigrationImportDialog
+                                        }
+                                    >
+                                        {t(
+                                            'menu.actions.import_laravel_migrations'
+                                        )}
+                                    </MenubarItem>
+                                </>
+                            ) : null}
                         </MenubarSubContent>
                     </MenubarSub>
                     <MenubarSeparator />

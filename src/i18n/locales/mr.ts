@@ -20,6 +20,7 @@ export const mr: LanguageTranslation = {
                 import: 'डेटाबेस इम्पोर्ट करा',
                 export: 'Export',
                 export_laravel_migrations: 'Laravel migrations',
+                import_laravel_migrations: 'Import Laravel migrations',
                 export_sql: 'SQL एक्स्पोर्ट करा',
                 export_as: 'म्हणून एक्स्पोर्ट करा',
                 delete_diagram: 'हटवा',
@@ -496,6 +497,44 @@ export const mr: LanguageTranslation = {
             cancel: 'Cancel',
             errors: {
                 export_failed: 'Could not export Laravel migrations.',
+            },
+        },
+
+        import_laravel_migrations_dialog: {
+            title: 'Import Laravel migrations',
+            description:
+                'Upload a ZIP archive of Laravel migration files to preview the parsed schema snapshot.',
+            upload: 'Upload',
+            uploading: 'Uploading...',
+            close: 'Close',
+            upload_another: 'Upload another',
+            no_file_selected: 'No file selected.',
+            errors: {
+                upload_failed: 'Could not import Laravel migrations.',
+                file_required: 'Please select a ZIP file to upload.',
+                file_too_large: 'File must be 5 MB or smaller.',
+            },
+            summary: {
+                tables: 'Tables',
+                columns: 'Columns',
+                indexes: 'Indexes',
+                foreign_keys: 'Foreign keys',
+                warnings: 'Warnings',
+            },
+            tables: {
+                title: 'Tables',
+                columns_count: '{{count}} columns',
+                indexes_count: '{{count}} indexes',
+            },
+            foreign_keys: {
+                title: 'Foreign keys',
+            },
+            warnings: {
+                title: 'Warnings',
+                none: 'No warnings.',
+            },
+            source_files: {
+                title: 'Source files',
             },
         },
 
