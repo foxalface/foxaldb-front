@@ -12,6 +12,7 @@ const SUPPORTED_LARAVEL_COLUMN_TYPES = new Set([
     'integer',
     'tinyinteger',
     'smallinteger',
+    'bigint',
     'biginteger',
     'unsignedinteger',
     'unsignedbiginteger',
@@ -55,6 +56,7 @@ const mapLaravelTypeToDataType = (type: string): DataType | null => {
             return findGenericType('smallint');
         case 'smallinteger':
             return findGenericType('smallint');
+        case 'bigint':
         case 'biginteger':
             return findGenericType('bigint');
         case 'unsignedinteger':

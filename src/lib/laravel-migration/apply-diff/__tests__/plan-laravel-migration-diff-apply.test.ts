@@ -441,6 +441,46 @@ describe('planLaravelMigrationDiffApply', () => {
 });
 
 describe('mapColumnSnapshotToField', () => {
+    it('maps bigint column type successfully', () => {
+        const result = mapColumnSnapshotToField(
+            baseColumn({ name: 'user_id', type: 'bigint', length: null })
+        );
+
+        expect(result.issues).toEqual([]);
+        expect(result.fieldPayload).toEqual(
+            expect.objectContaining({
+                name: 'user_id',
+                type: { id: 'bigint', name: 'bigint' },
+            })
+        );
+    });
+
+    it('maps bigint primary autoIncrement id column successfully', () => {
+        const result = mapColumnSnapshotToField(
+            baseColumn({
+                name: 'id',
+                type: 'bigint',
+                nullable: false,
+                unique: true,
+                primary: true,
+                autoIncrement: true,
+                length: null,
+            })
+        );
+
+        expect(result.issues).toEqual([]);
+        expect(result.fieldPayload).toEqual(
+            expect.objectContaining({
+                name: 'id',
+                type: { id: 'bigint', name: 'bigint' },
+                primaryKey: true,
+                increment: true,
+                unique: true,
+                nullable: false,
+            })
+        );
+    });
+
     it('creates validation issue for unknown column type', () => {
         const result = mapColumnSnapshotToField(
             baseColumn({ name: 'payload', type: 'binary' })
