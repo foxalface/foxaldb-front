@@ -28,4 +28,11 @@ describe('normalizeIdentifier', () => {
     it('falls back to column for empty column names', () => {
         expect(normalizeColumnName('___')).toBe('column');
     });
+
+    it('handles null and undefined identifiers without throwing', () => {
+        expect(normalizeTableName(null)).toBe('unnamed');
+        expect(normalizeTableName(undefined)).toBe('unnamed');
+        expect(normalizeColumnName(null)).toBe('column');
+        expect(normalizeColumnName(undefined)).toBe('column');
+    });
 });

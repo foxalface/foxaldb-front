@@ -24,6 +24,7 @@ import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/act
 import { ActivityFeedDialog } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
+import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 import { LaravelMigrationImportDialog } from '@/dialogs/laravel-migration-import-dialog/laravel-migration-import-dialog';
 import { LaravelMigrationDiffDialog } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 
@@ -229,6 +230,16 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
 
     const [openLaravelMigrationDiffDialog, setOpenLaravelMigrationDiffDialog] =
         useState(false);
+    const [
+        laravelMigrationDiffDialogParams,
+        setLaravelMigrationDiffDialogParams,
+    ] = useState<Omit<LaravelMigrationDiffDialogProps, 'dialog'>>();
+
+    const openLaravelMigrationDiffDialogHandler: DialogContext['openLaravelMigrationDiffDialog'] =
+        useCallback((params) => {
+            setLaravelMigrationDiffDialogParams(params);
+            setOpenLaravelMigrationDiffDialog(true);
+        }, []);
 
     return (
         <dialogContext.Provider
@@ -249,8 +260,8 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                     setOpenLaravelMigrationImportDialog(true),
                 closeLaravelMigrationImportDialog: () =>
                     setOpenLaravelMigrationImportDialog(false),
-                openLaravelMigrationDiffDialog: () =>
-                    setOpenLaravelMigrationDiffDialog(true),
+                openLaravelMigrationDiffDialog:
+                    openLaravelMigrationDiffDialogHandler,
                 closeLaravelMigrationDiffDialog: () =>
                     setOpenLaravelMigrationDiffDialog(false),
                 openExportSQLDialog: openExportSQLDialogHandler,
@@ -345,9 +356,12 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
             <LaravelMigrationImportDialog
                 dialog={{ open: openLaravelMigrationImportDialog }}
             />
-            <LaravelMigrationDiffDialog
-                dialog={{ open: openLaravelMigrationDiffDialog }}
-            />
+            {laravelMigrationDiffDialogParams ? (
+                <LaravelMigrationDiffDialog
+                    dialog={{ open: openLaravelMigrationDiffDialog }}
+                    {...laravelMigrationDiffDialogParams}
+                />
+            ) : null}
         </dialogContext.Provider>
     );
 };

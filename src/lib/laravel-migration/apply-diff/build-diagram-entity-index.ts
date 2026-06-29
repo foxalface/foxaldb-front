@@ -12,13 +12,25 @@ import {
 } from './snapshot-match-key';
 import type { DiagramEntityIndex } from './types';
 
+const normalizeSnapshotIndexName = (
+    name: string | null | undefined
+): string | null => {
+    if (name == null) {
+        return null;
+    }
+
+    const trimmed = name.trim();
+
+    return trimmed === '' ? null : trimmed;
+};
+
 const toIndexSnapshot = (table: DBTable, index: DBIndex): IndexSnapshot => {
     const fieldNameById = new Map(
         table.fields.map((field) => [field.id, field.name])
     );
 
     return {
-        name: index.name.trim() === '' ? null : index.name,
+        name: normalizeSnapshotIndexName(index.name),
         columns: index.fieldIds
             .map((fieldId) => fieldNameById.get(fieldId))
             .filter((name): name is string => name !== undefined),

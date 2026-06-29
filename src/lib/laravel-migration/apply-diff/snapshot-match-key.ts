@@ -30,7 +30,7 @@ export const indexMatchKey = (
 ): string => {
     const normalizedTable = tableMatchKey(tableName);
 
-    if (index.name !== null && index.name !== '') {
+    if (index.name != null && index.name !== '') {
         return `${normalizedTable}::index::${columnMatchKey(index.name)}`;
     }
 

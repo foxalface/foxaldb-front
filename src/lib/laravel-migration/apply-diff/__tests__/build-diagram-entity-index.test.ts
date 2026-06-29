@@ -1,12 +1,13 @@
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
+import type { IndexSnapshot } from '@/types/laravel-migration';
 import { describe, expect, it } from 'vitest';
 import {
     buildDiagramEntityIndex,
     resolveFieldByTableAndColumn,
     resolveTableByName,
 } from '../build-diagram-entity-index';
-import { foreignKeyMatchKey } from '../snapshot-match-key';
+import { foreignKeyMatchKey, indexMatchKey } from '../snapshot-match-key';
 
 const usersTable: DBTable = {
     id: 'users-table-id',
@@ -120,6 +121,93 @@ describe('buildDiagramEntityIndex', () => {
 
         expect(index.relationshipByFkKey.get(fkKey)?.relationship.id).toBe(
             'posts-user-relationship'
+        );
+    });
+
+    it('does not crash when an index has a null name', () => {
+        const tableWithNullNamedIndex: DBTable = {
+            ...usersTable,
+            indexes: [
+                {
+                    id: 'users-null-name-index',
+                    name: null as unknown as string,
+                    unique: false,
+                    fieldIds: ['users-email-field'],
+                    createdAt: 1,
+                },
+            ],
+        };
+
+        expect(() =>
+            buildDiagramEntityIndex({
+                tables: [tableWithNullNamedIndex],
+                relationships: [],
+            })
+        ).not.toThrow();
+    });
+
+    it('indexes a primary key index with a null name by columns and flags', () => {
+        const tableWithNullPkIndex: DBTable = {
+            ...usersTable,
+            indexes: [
+                {
+                    id: 'users-pk-index',
+                    name: null as unknown as string,
+                    unique: true,
+                    fieldIds: ['users-id-field'],
+                    isPrimaryKey: true,
+                    createdAt: 1,
+                },
+            ],
+        };
+
+        const entityIndex = buildDiagramEntityIndex({
+            tables: [tableWithNullPkIndex],
+            relationships: [],
+        });
+
+        const pkSnapshot: IndexSnapshot = {
+            name: null,
+            columns: ['ID'],
+            unique: true,
+            primary: true,
+        };
+        const indexKey = indexMatchKey('Users', pkSnapshot);
+
+        expect(entityIndex.indexByTableAndKey.get(indexKey)?.index.id).toBe(
+            'users-pk-index'
+        );
+    });
+
+    it('matches an unnamed unique index by columns, unique, and primary flags', () => {
+        const tableWithUnnamedUniqueIndex: DBTable = {
+            ...usersTable,
+            indexes: [
+                {
+                    id: 'users-email-index',
+                    name: null as unknown as string,
+                    unique: true,
+                    fieldIds: ['users-email-field'],
+                    createdAt: 1,
+                },
+            ],
+        };
+
+        const entityIndex = buildDiagramEntityIndex({
+            tables: [tableWithUnnamedUniqueIndex],
+            relationships: [],
+        });
+
+        const uniqueSnapshot: IndexSnapshot = {
+            name: null,
+            columns: ['email'],
+            unique: true,
+            primary: false,
+        };
+        const indexKey = indexMatchKey('Users', uniqueSnapshot);
+
+        expect(entityIndex.indexByTableAndKey.get(indexKey)?.index.id).toBe(
+            'users-email-index'
         );
     });
 });

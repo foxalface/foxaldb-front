@@ -204,6 +204,22 @@ export const Menu: React.FC<MenuProps> = () => {
         openExportLaravelMigrationsDialog,
     ]);
 
+    const openLaravelMigrationsDiff = useCallback(() => {
+        if (!canExportLaravelMigrations || !currentDiagram?.id) {
+            return;
+        }
+
+        openLaravelMigrationDiffDialog({
+            diagramId: String(currentDiagram.id),
+            diagramName: currentDiagram.name ?? 'diagram',
+        });
+    }, [
+        canExportLaravelMigrations,
+        currentDiagram?.id,
+        currentDiagram?.name,
+        openLaravelMigrationDiffDialog,
+    ]);
+
     return (
         <Menubar className="h-8 border-none py-2 shadow-none md:h-10 md:py-0">
             <MenubarMenu>
@@ -276,13 +292,15 @@ export const Menu: React.FC<MenuProps> = () => {
                                             'menu.actions.import_laravel_migrations'
                                         )}
                                     </MenubarItem>
-                                    <MenubarItem
-                                        onClick={openLaravelMigrationDiffDialog}
-                                    >
-                                        {t(
-                                            'menu.actions.compare_laravel_migrations'
-                                        )}
-                                    </MenubarItem>
+                                    {canExportLaravelMigrations ? (
+                                        <MenubarItem
+                                            onClick={openLaravelMigrationsDiff}
+                                        >
+                                            {t(
+                                                'menu.actions.compare_laravel_migrations'
+                                            )}
+                                        </MenubarItem>
+                                    ) : null}
                                 </>
                             ) : null}
                         </MenubarSubContent>

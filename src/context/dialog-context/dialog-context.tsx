@@ -12,6 +12,7 @@ import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/c
 import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
 import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
+import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -49,7 +50,9 @@ export interface DialogContext {
     closeLaravelMigrationImportDialog: () => void;
 
     // Compare Laravel migrations dialog
-    openLaravelMigrationDiffDialog: () => void;
+    openLaravelMigrationDiffDialog: (
+        params: Omit<LaravelMigrationDiffDialogProps, 'dialog'>
+    ) => void;
     closeLaravelMigrationDiffDialog: () => void;
 
     // Export SQL dialog

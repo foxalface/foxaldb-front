@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/button/button';
+import { Checkbox } from '@/components/checkbox/checkbox';
 import {
     Dialog,
     DialogClose,
@@ -11,44 +12,162 @@ import {
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { FileUploader } from '@/components/file-uploader/file-uploader';
+import { Label } from '@/components/label/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/select/select';
 import { Spinner } from '@/components/spinner/spinner';
 import { useAuth } from '@/hooks/use-auth';
+import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
-import { compareLaravelMigrationArchives } from '@/lib/api/laravel-migration-diff';
+import {
+    DEFAULT_LARAVEL_VERSION,
+    LARAVEL_VERSIONS,
+    type LaravelVersion,
+} from '@/lib/api/diagram-laravel-export';
+import { compareDiagramToLaravelMigrationArchive } from '@/lib/api/laravel-migration-diff';
 import { LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES } from '@/lib/api/laravel-migration-import';
 import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
+import { defaultSchemas } from '@/lib/data/default-schemas';
+import {
+    ApplyExecutionError,
+    createLaravelMigrationApplyApi,
+    executeLaravelMigrationDiffApply,
+    planLaravelMigrationDiffApply,
+    type ApplyPlan,
+} from '@/lib/laravel-migration/apply-diff';
 import { formatApiErrorMessage } from '@/pages/auth/format-api-error-message';
 import type { LaravelMigrationSchemaDiff } from '@/types/laravel-migration';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { LaravelMigrationDiffViewer } from './laravel-migration-diff-viewer';
 
-export interface LaravelMigrationDiffDialogProps extends BaseDialogProps {}
+export interface LaravelMigrationDiffDialogProps extends BaseDialogProps {
+    diagramId: string;
+    diagramName: string;
+}
+
+interface LaravelMigrationDiffOptions {
+    laravelVersion: LaravelVersion;
+    includeIndexes: boolean;
+    includeForeignKeys: boolean;
+}
+
+const DEFAULT_DIFF_OPTIONS: LaravelMigrationDiffOptions = {
+    laravelVersion: DEFAULT_LARAVEL_VERSION,
+    includeIndexes: true,
+    includeForeignKeys: true,
+};
+
+const countPlanValidationErrors = (plan: ApplyPlan): number =>
+    plan.issues.filter((issue) => issue.severity === 'error').length;
 
 export const LaravelMigrationDiffDialog: React.FC<
     LaravelMigrationDiffDialogProps
-> = ({ dialog }) => {
+> = ({ dialog, diagramId }) => {
     const { t } = useTranslation();
     const { user } = useAuth();
     const { closeLaravelMigrationDiffDialog } = useDialog();
-    const [beforeFile, setBeforeFile] = useState<File | null>(null);
-    const [afterFile, setAfterFile] = useState<File | null>(null);
-    const [beforeUploadKey, setBeforeUploadKey] = useState(0);
-    const [afterUploadKey, setAfterUploadKey] = useState(0);
+    const {
+        currentDiagram,
+        tables,
+        relationships,
+        databaseType,
+        readonly,
+        addTables,
+        removeTables,
+        addField,
+        removeField,
+        updateField,
+        addIndex,
+        removeIndex,
+        updateIndex,
+        addRelationships,
+        removeRelationships,
+        updateRelationship,
+    } = useChartDB();
+    const [archive, setArchive] = useState<File | null>(null);
+    const [archiveUploadKey, setArchiveUploadKey] = useState(0);
+    const [options, setOptions] =
+        useState<LaravelMigrationDiffOptions>(DEFAULT_DIFF_OPTIONS);
     const [isComparing, setIsComparing] = useState(false);
-    const [beforeFileError, setBeforeFileError] = useState<string | null>(null);
-    const [afterFileError, setAfterFileError] = useState<string | null>(null);
+    const [isApplying, setIsApplying] = useState(false);
+    const [applySuccess, setApplySuccess] = useState(false);
+    const [applyError, setApplyError] = useState<string | null>(null);
+    const [archiveError, setArchiveError] = useState<string | null>(null);
     const [compareError, setCompareError] = useState<string | null>(null);
     const [diff, setDiff] = useState<LaravelMigrationSchemaDiff | null>(null);
 
+    const applyApi = useMemo(
+        () =>
+            createLaravelMigrationApplyApi({
+                addTables,
+                removeTables,
+                addField,
+                removeField,
+                updateField,
+                addIndex,
+                removeIndex,
+                updateIndex,
+                addRelationships,
+                removeRelationships,
+                updateRelationship,
+            }),
+        [
+            addField,
+            addIndex,
+            addRelationships,
+            addTables,
+            removeField,
+            removeIndex,
+            removeRelationships,
+            removeTables,
+            updateField,
+            updateIndex,
+            updateRelationship,
+        ]
+    );
+
+    const applyPlan = useMemo(() => {
+        if (!diff) {
+            return null;
+        }
+
+        return planLaravelMigrationDiffApply({
+            tables,
+            relationships,
+            diff,
+        });
+    }, [diff, relationships, tables]);
+
+    const applySummary = useMemo(() => {
+        if (!diff) {
+            return null;
+        }
+
+        return {
+            addedTables: diff.addedTables.length,
+            removedTables: diff.removedTables.length,
+            changedTables: diff.changedTables.length,
+            validationIssues: applyPlan
+                ? countPlanValidationErrors(applyPlan)
+                : 0,
+        };
+    }, [applyPlan, diff]);
+
     const resetState = useCallback(() => {
-        setBeforeFile(null);
-        setAfterFile(null);
-        setBeforeUploadKey((previous) => previous + 1);
-        setAfterUploadKey((previous) => previous + 1);
+        setArchive(null);
+        setArchiveUploadKey((previous) => previous + 1);
+        setOptions(DEFAULT_DIFF_OPTIONS);
         setIsComparing(false);
-        setBeforeFileError(null);
-        setAfterFileError(null);
+        setIsApplying(false);
+        setApplySuccess(false);
+        setApplyError(null);
+        setArchiveError(null);
         setCompareError(null);
         setDiff(null);
     }, []);
@@ -61,95 +180,65 @@ export const LaravelMigrationDiffDialog: React.FC<
         resetState();
     }, [dialog.open, resetState]);
 
-    const onBeforeFileChange = useCallback((files: File[]) => {
-        setBeforeFileError(null);
+    const onArchiveChange = useCallback((files: File[]) => {
+        setArchiveError(null);
         setCompareError(null);
+        setApplyError(null);
+        setApplySuccess(false);
 
         if (files.length === 0) {
-            setBeforeFile(null);
+            setArchive(null);
             return;
         }
 
-        setBeforeFile(files[0]);
-    }, []);
-
-    const onAfterFileChange = useCallback((files: File[]) => {
-        setAfterFileError(null);
-        setCompareError(null);
-
-        if (files.length === 0) {
-            setAfterFile(null);
-            return;
-        }
-
-        setAfterFile(files[0]);
+        setArchive(files[0]);
     }, []);
 
     const handleCompare = useCallback(async () => {
-        let hasClientError = false;
-
-        if (!beforeFile) {
-            setBeforeFileError(
-                t('compare_laravel_migrations_dialog.errors.before_required')
-            );
-            hasClientError = true;
-        }
-
-        if (!afterFile) {
-            setAfterFileError(
-                t('compare_laravel_migrations_dialog.errors.after_required')
-            );
-            hasClientError = true;
-        }
-
-        if (hasClientError) {
-            return;
-        }
-
-        if (!beforeFile || !afterFile) {
-            return;
-        }
-
-        if (beforeFile.size > LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES) {
-            setBeforeFileError(
-                t('compare_laravel_migrations_dialog.errors.file_too_large')
+        if (!archive) {
+            setArchiveError(
+                t('compare_laravel_migrations_dialog.errors.archive_required')
             );
             return;
         }
 
-        if (afterFile.size > LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES) {
-            setAfterFileError(
+        if (archive.size > LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES) {
+            setArchiveError(
                 t('compare_laravel_migrations_dialog.errors.file_too_large')
             );
             return;
         }
 
         setIsComparing(true);
-        setBeforeFileError(null);
-        setAfterFileError(null);
+        setArchiveError(null);
         setCompareError(null);
+        setApplyError(null);
+        setApplySuccess(false);
 
         try {
-            const result = await compareLaravelMigrationArchives(
-                beforeFile,
-                afterFile
+            const result = await compareDiagramToLaravelMigrationArchive(
+                diagramId,
+                {
+                    archive,
+                    content: currentDiagram,
+                    laravelVersion: options.laravelVersion,
+                    includeIndexes: options.includeIndexes,
+                    includeForeignKeys: options.includeForeignKeys,
+                }
             );
             setDiff(result);
         } catch (error) {
             const validationErrors = parseLaravelValidationErrors(error);
 
-            if (validationErrors.before_archive) {
-                setBeforeFileError(validationErrors.before_archive);
+            if (validationErrors.archive) {
+                setArchiveError(validationErrors.archive);
             }
 
-            if (validationErrors.after_archive) {
-                setAfterFileError(validationErrors.after_archive);
+            if (validationErrors.content) {
+                setCompareError(validationErrors.content);
             }
 
-            if (
-                !validationErrors.before_archive &&
-                !validationErrors.after_archive
-            ) {
+            if (!validationErrors.archive && !validationErrors.content) {
                 const message = formatApiErrorMessage(error);
                 setCompareError(
                     message ||
@@ -161,11 +250,134 @@ export const LaravelMigrationDiffDialog: React.FC<
         } finally {
             setIsComparing(false);
         }
-    }, [afterFile, beforeFile, t]);
+    }, [archive, currentDiagram, diagramId, options, t]);
 
     const handleCompareAnother = useCallback(() => {
         resetState();
     }, [resetState]);
+
+    const handleApply = useCallback(async () => {
+        if (!diff) {
+            return;
+        }
+
+        setApplyError(null);
+        setApplySuccess(false);
+
+        const latestPlan = planLaravelMigrationDiffApply({
+            tables,
+            relationships,
+            diff,
+        });
+
+        if (!latestPlan.canApply) {
+            setApplyError(
+                t('compare_laravel_migrations_dialog.apply.apply_blocked')
+            );
+            return;
+        }
+
+        setIsApplying(true);
+
+        try {
+            await executeLaravelMigrationDiffApply({
+                plan: latestPlan,
+                api: applyApi,
+                existingTables: tables,
+                existingRelationships: relationships,
+                defaultSchema: defaultSchemas[databaseType] ?? null,
+            });
+            setApplySuccess(true);
+        } catch (error) {
+            const message =
+                error instanceof ApplyExecutionError
+                    ? error.message
+                    : formatApiErrorMessage(error);
+
+            setApplyError(
+                message ||
+                    t('compare_laravel_migrations_dialog.apply.apply_failed')
+            );
+        } finally {
+            setIsApplying(false);
+        }
+    }, [applyApi, databaseType, diff, relationships, tables, t]);
+
+    const canShowApply = Boolean(user && !readonly && diff);
+
+    const applyFooter = canShowApply ? (
+        <div className="space-y-3 border-t pt-3">
+            {applySummary ? (
+                <div className="space-y-2">
+                    <p className="text-sm font-medium">
+                        {applyPlan?.canApply
+                            ? t(
+                                  'compare_laravel_migrations_dialog.apply.ready_to_apply'
+                              )
+                            : t(
+                                  'compare_laravel_migrations_dialog.apply.validation_issues'
+                              )}
+                    </p>
+                    <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground md:grid-cols-4">
+                        <span>
+                            {t(
+                                'compare_laravel_migrations_dialog.apply.added_tables'
+                            )}
+                            : {applySummary.addedTables}
+                        </span>
+                        <span>
+                            {t(
+                                'compare_laravel_migrations_dialog.apply.removed_tables'
+                            )}
+                            : {applySummary.removedTables}
+                        </span>
+                        <span>
+                            {t(
+                                'compare_laravel_migrations_dialog.apply.changed_tables'
+                            )}
+                            : {applySummary.changedTables}
+                        </span>
+                        <span>
+                            {t(
+                                'compare_laravel_migrations_dialog.apply.validation_issues'
+                            )}
+                            : {applySummary.validationIssues}
+                        </span>
+                    </div>
+                </div>
+            ) : null}
+
+            {applySuccess ? (
+                <p className="text-sm text-green-600 dark:text-green-400">
+                    {t('compare_laravel_migrations_dialog.apply.apply_success')}
+                </p>
+            ) : null}
+
+            {applyError ? (
+                <p className="text-sm text-destructive">{applyError}</p>
+            ) : null}
+
+            <Button
+                type="button"
+                onClick={() => void handleApply()}
+                disabled={
+                    isApplying ||
+                    isComparing ||
+                    !applyPlan?.canApply ||
+                    applySuccess
+                }
+            >
+                {isApplying ? (
+                    <>
+                        <Spinner className="mr-1 size-5 text-primary-foreground" />
+                        {t('compare_laravel_migrations_dialog.apply.applying')}
+                    </>
+                ) : (
+                    t('compare_laravel_migrations_dialog.apply.apply')
+                )}
+            </Button>
+        </div>
+    ) : null;
 
     if (!user) {
         return null;
@@ -195,57 +407,124 @@ export const LaravelMigrationDiffDialog: React.FC<
 
                 <DialogInternalContent>
                     {diff ? (
-                        <LaravelMigrationDiffViewer diff={diff} />
+                        <LaravelMigrationDiffViewer
+                            diff={diff}
+                            footer={applyFooter}
+                        />
                     ) : (
                         <div className="flex flex-col gap-4 p-1">
                             <div className="space-y-2">
                                 <p className="text-sm font-medium">
                                     {t(
-                                        'compare_laravel_migrations_dialog.before_label'
+                                        'compare_laravel_migrations_dialog.archive_label'
                                     )}
                                 </p>
                                 <FileUploader
-                                    key={beforeUploadKey}
+                                    key={archiveUploadKey}
                                     supportedExtensions={['.zip']}
-                                    onFilesChange={onBeforeFileChange}
+                                    onFilesChange={onArchiveChange}
                                 />
-                                {!beforeFile ? (
+                                {!archive ? (
                                     <p className="text-sm text-muted-foreground">
                                         {t(
-                                            'compare_laravel_migrations_dialog.no_before_file_selected'
+                                            'compare_laravel_migrations_dialog.no_archive_selected'
                                         )}
                                     </p>
                                 ) : null}
-                                {beforeFileError ? (
+                                {archiveError ? (
                                     <p className="text-sm text-destructive">
-                                        {beforeFileError}
+                                        {archiveError}
                                     </p>
                                 ) : null}
                             </div>
 
                             <div className="space-y-2">
-                                <p className="text-sm font-medium">
+                                <Label htmlFor="diff-laravel-version">
                                     {t(
-                                        'compare_laravel_migrations_dialog.after_label'
+                                        'compare_laravel_migrations_dialog.laravel_version'
                                     )}
-                                </p>
-                                <FileUploader
-                                    key={afterUploadKey}
-                                    supportedExtensions={['.zip']}
-                                    onFilesChange={onAfterFileChange}
-                                />
-                                {!afterFile ? (
-                                    <p className="text-sm text-muted-foreground">
-                                        {t(
-                                            'compare_laravel_migrations_dialog.no_after_file_selected'
-                                        )}
-                                    </p>
-                                ) : null}
-                                {afterFileError ? (
-                                    <p className="text-sm text-destructive">
-                                        {afterFileError}
-                                    </p>
-                                ) : null}
+                                </Label>
+                                <Select
+                                    value={options.laravelVersion}
+                                    onValueChange={(value) =>
+                                        setOptions((previous) => ({
+                                            ...previous,
+                                            laravelVersion:
+                                                value as LaravelVersion,
+                                        }))
+                                    }
+                                    disabled={isComparing}
+                                >
+                                    <SelectTrigger id="diff-laravel-version">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {LARAVEL_VERSIONS.map((version) => (
+                                            <SelectItem
+                                                key={version}
+                                                value={version}
+                                            >
+                                                {version}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div className="space-y-3">
+                                <div className="flex items-start gap-2">
+                                    <Checkbox
+                                        id="diff-include-table-indexes"
+                                        checked={options.includeIndexes}
+                                        onCheckedChange={(checked) =>
+                                            setOptions((previous) => ({
+                                                ...previous,
+                                                includeIndexes:
+                                                    checked === true,
+                                            }))
+                                        }
+                                        disabled={isComparing}
+                                    />
+                                    <div className="grid gap-1 leading-none">
+                                        <Label htmlFor="diff-include-table-indexes">
+                                            {t(
+                                                'compare_laravel_migrations_dialog.include_table_indexes'
+                                            )}
+                                        </Label>
+                                        <p className="text-sm text-muted-foreground">
+                                            {t(
+                                                'compare_laravel_migrations_dialog.include_table_indexes_description'
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-2">
+                                    <Checkbox
+                                        id="diff-include-foreign-keys"
+                                        checked={options.includeForeignKeys}
+                                        onCheckedChange={(checked) =>
+                                            setOptions((previous) => ({
+                                                ...previous,
+                                                includeForeignKeys:
+                                                    checked === true,
+                                            }))
+                                        }
+                                        disabled={isComparing}
+                                    />
+                                    <div className="grid gap-1 leading-none">
+                                        <Label htmlFor="diff-include-foreign-keys">
+                                            {t(
+                                                'compare_laravel_migrations_dialog.include_foreign_keys'
+                                            )}
+                                        </Label>
+                                        <p className="text-sm text-muted-foreground">
+                                            {t(
+                                                'compare_laravel_migrations_dialog.include_foreign_keys_description'
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -262,7 +541,7 @@ export const LaravelMigrationDiffDialog: React.FC<
                         <Button
                             type="button"
                             variant="secondary"
-                            disabled={isComparing}
+                            disabled={isComparing || isApplying}
                         >
                             {t('compare_laravel_migrations_dialog.close')}
                         </Button>
@@ -273,6 +552,7 @@ export const LaravelMigrationDiffDialog: React.FC<
                             type="button"
                             variant="secondary"
                             onClick={handleCompareAnother}
+                            disabled={isApplying}
                         >
                             {t(
                                 'compare_laravel_migrations_dialog.compare_another'
@@ -282,11 +562,7 @@ export const LaravelMigrationDiffDialog: React.FC<
                         <Button
                             type="button"
                             onClick={() => void handleCompare()}
-                            disabled={
-                                isComparing ||
-                                beforeFile === null ||
-                                afterFile === null
-                            }
+                            disabled={isComparing || archive === null}
                         >
                             {isComparing ? (
                                 <>

@@ -21,7 +21,7 @@ export const uk: LanguageTranslation = {
                 export: 'Export',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
-                compare_laravel_migrations: 'Compare Laravel migrations',
+                compare_laravel_migrations: 'Sync from Laravel migrations',
                 export_sql: 'Експорт SQL',
                 export_as: 'Експортувати як',
                 delete_diagram: 'Видалити',
@@ -534,21 +534,26 @@ export const uk: LanguageTranslation = {
         },
 
         compare_laravel_migrations_dialog: {
-            title: 'Compare Laravel migrations',
+            title: 'Sync from Laravel migrations',
             description:
-                'Upload two ZIP archives of Laravel migration files to preview the schema diff between them.',
-            before_label: 'Before archive',
-            after_label: 'After archive',
+                'Compare the open diagram with a Laravel migration archive.',
+            archive_label: 'Laravel migrations archive',
             compare: 'Compare',
             comparing: 'Comparing...',
             close: 'Close',
             compare_another: 'Compare another',
-            no_before_file_selected: 'No before archive selected.',
-            no_after_file_selected: 'No after archive selected.',
+            no_archive_selected: 'No archive selected.',
+            laravel_version: 'Laravel version',
+            include_table_indexes: 'Include table indexes',
+            include_table_indexes_description:
+                'Include explicit table index definitions. Field-level unique constraints are always included.',
+            include_foreign_keys: 'Include foreign keys',
+            include_foreign_keys_description:
+                'Include separate foreign key migration definitions.',
             errors: {
                 compare_failed: 'Could not compare Laravel migrations.',
-                before_required: 'Please select a before archive ZIP file.',
-                after_required: 'Please select an after archive ZIP file.',
+                archive_required:
+                    'Please select a Laravel migrations archive ZIP file.',
                 file_too_large: 'File must be 5 MB or smaller.',
             },
             summary: {
@@ -589,6 +594,18 @@ export const uk: LanguageTranslation = {
             },
             warnings: {
                 none: 'No warnings.',
+            },
+            apply: {
+                apply: 'Apply changes',
+                applying: 'Applying...',
+                apply_success: 'Changes applied successfully.',
+                apply_failed: 'Could not apply migration changes.',
+                apply_blocked: 'Fix validation issues before applying changes.',
+                ready_to_apply: 'Ready to apply',
+                validation_issues: 'Validation issues',
+                added_tables: 'Added tables',
+                removed_tables: 'Removed tables',
+                changed_tables: 'Changed tables',
             },
         },
         create_relationship_dialog: {

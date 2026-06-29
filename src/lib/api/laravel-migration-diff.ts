@@ -1,3 +1,4 @@
+import type { LaravelVersion } from '@/lib/api/diagram-laravel-export';
 import type { LaravelMigrationSchemaDiff } from '@/types/laravel-migration';
 import { ApiError } from './client';
 
@@ -26,21 +27,9 @@ const buildHeaders = (): Record<string, string> => {
     return headers;
 };
 
-export const compareLaravelMigrationArchives = async (
-    beforeFile: File,
-    afterFile: File
+const parseDiffResponse = async (
+    response: Response
 ): Promise<LaravelMigrationSchemaDiff> => {
-    const formData = new FormData();
-    formData.append('before_archive', beforeFile);
-    formData.append('after_archive', afterFile);
-
-    const response = await fetch(`${API_BASE_URL}/laravel-migrations/diff`, {
-        method: 'POST',
-        headers: buildHeaders(),
-        credentials: 'include',
-        body: formData,
-    });
-
     const responseText = await response.text();
     let payload: unknown = null;
 
@@ -73,4 +62,61 @@ export const compareLaravelMigrationArchives = async (
     const data = payload as LaravelMigrationDiffResponse;
 
     return data.diff;
+};
+
+export const compareLaravelMigrationArchives = async (
+    beforeFile: File,
+    afterFile: File
+): Promise<LaravelMigrationSchemaDiff> => {
+    const formData = new FormData();
+    formData.append('before_archive', beforeFile);
+    formData.append('after_archive', afterFile);
+
+    const response = await fetch(`${API_BASE_URL}/laravel-migrations/diff`, {
+        method: 'POST',
+        headers: buildHeaders(),
+        credentials: 'include',
+        body: formData,
+    });
+
+    return parseDiffResponse(response);
+};
+
+export const compareDiagramToLaravelMigrationArchive = async (
+    diagramId: string | number,
+    payload: {
+        archive: File;
+        content: unknown;
+        laravelVersion: LaravelVersion;
+        includeIndexes?: boolean;
+        includeForeignKeys?: boolean;
+    }
+): Promise<LaravelMigrationSchemaDiff> => {
+    const formData = new FormData();
+    formData.append('archive', payload.archive);
+    formData.append('content', JSON.stringify(payload.content));
+    formData.append('laravelVersion', payload.laravelVersion);
+
+    if (payload.includeIndexes !== undefined) {
+        formData.append('includeIndexes', payload.includeIndexes ? '1' : '0');
+    }
+
+    if (payload.includeForeignKeys !== undefined) {
+        formData.append(
+            'includeForeignKeys',
+            payload.includeForeignKeys ? '1' : '0'
+        );
+    }
+
+    const response = await fetch(
+        `${API_BASE_URL}/diagrams/${diagramId}/laravel-migrations/diff`,
+        {
+            method: 'POST',
+            headers: buildHeaders(),
+            credentials: 'include',
+            body: formData,
+        }
+    );
+
+    return parseDiffResponse(response);
 };
