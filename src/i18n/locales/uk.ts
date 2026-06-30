@@ -543,7 +543,6 @@ export const uk: LanguageTranslation = {
             close: 'Close',
             compare_another: 'Compare another',
             no_archive_selected: 'No archive selected.',
-            laravel_version: 'Laravel version',
             include_table_indexes: 'Include table indexes',
             include_table_indexes_description:
                 'Include explicit table index definitions. Field-level unique constraints are always included.',

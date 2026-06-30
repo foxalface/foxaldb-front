@@ -87,7 +87,7 @@ export const compareDiagramToLaravelMigrationArchive = async (
     payload: {
         archive: File;
         content: unknown;
-        laravelVersion: LaravelVersion;
+        laravelVersion?: LaravelVersion;
         includeIndexes?: boolean;
         includeForeignKeys?: boolean;
     }
@@ -95,7 +95,10 @@ export const compareDiagramToLaravelMigrationArchive = async (
     const formData = new FormData();
     formData.append('archive', payload.archive);
     formData.append('content', JSON.stringify(payload.content));
-    formData.append('laravelVersion', payload.laravelVersion);
+
+    if (payload.laravelVersion !== undefined) {
+        formData.append('laravelVersion', payload.laravelVersion);
+    }
 
     if (payload.includeIndexes !== undefined) {
         formData.append('includeIndexes', payload.includeIndexes ? '1' : '0');

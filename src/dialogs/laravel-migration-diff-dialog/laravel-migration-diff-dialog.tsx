@@ -13,22 +13,10 @@ import {
 } from '@/components/dialog/dialog';
 import { FileUploader } from '@/components/file-uploader/file-uploader';
 import { Label } from '@/components/label/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/select/select';
 import { Spinner } from '@/components/spinner/spinner';
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
-import {
-    DEFAULT_LARAVEL_VERSION,
-    LARAVEL_VERSIONS,
-    type LaravelVersion,
-} from '@/lib/api/diagram-laravel-export';
 import { compareDiagramToLaravelMigrationArchive } from '@/lib/api/laravel-migration-diff';
 import { LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES } from '@/lib/api/laravel-migration-import';
 import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
@@ -52,13 +40,11 @@ export interface LaravelMigrationDiffDialogProps extends BaseDialogProps {
 }
 
 interface LaravelMigrationDiffOptions {
-    laravelVersion: LaravelVersion;
     includeIndexes: boolean;
     includeForeignKeys: boolean;
 }
 
 const DEFAULT_DIFF_OPTIONS: LaravelMigrationDiffOptions = {
-    laravelVersion: DEFAULT_LARAVEL_VERSION,
     includeIndexes: true,
     includeForeignKeys: true,
 };
@@ -221,7 +207,6 @@ export const LaravelMigrationDiffDialog: React.FC<
                 {
                     archive,
                     content: currentDiagram,
-                    laravelVersion: options.laravelVersion,
                     includeIndexes: options.includeIndexes,
                     includeForeignKeys: options.includeForeignKeys,
                 }
@@ -436,39 +421,6 @@ export const LaravelMigrationDiffDialog: React.FC<
                                         {archiveError}
                                     </p>
                                 ) : null}
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="diff-laravel-version">
-                                    {t(
-                                        'compare_laravel_migrations_dialog.laravel_version'
-                                    )}
-                                </Label>
-                                <Select
-                                    value={options.laravelVersion}
-                                    onValueChange={(value) =>
-                                        setOptions((previous) => ({
-                                            ...previous,
-                                            laravelVersion:
-                                                value as LaravelVersion,
-                                        }))
-                                    }
-                                    disabled={isComparing}
-                                >
-                                    <SelectTrigger id="diff-laravel-version">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {LARAVEL_VERSIONS.map((version) => (
-                                            <SelectItem
-                                                key={version}
-                                                value={version}
-                                            >
-                                                {version}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
                             </div>
 
                             <div className="space-y-3">
