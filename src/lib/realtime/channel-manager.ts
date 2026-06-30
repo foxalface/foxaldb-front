@@ -1,0 +1,171 @@
+import type Echo from 'laravel-echo';
+import { getEcho } from './echo';
+import {
+    diagramPresenceChannelFull,
+    diagramPrivateChannel,
+    diagramPrivateChannelFull,
+    userPrivateChannel,
+    userPrivateChannelFull,
+} from './channels';
+import type { EventDispatcher } from './event-dispatcher';
+import type { RealtimePingPayload } from './events';
+
+type PrivateChannel = ReturnType<Echo<'reverb'>['private']>;
+
+export class ChannelManager {
+    private userId: number | null = null;
+    private currentDiagramId: string | null = null;
+    private userChannel: PrivateChannel | null = null;
+    private diagramPrivateChannel: PrivateChannel | null = null;
+    private pingHandler: ((payload: RealtimePingPayload) => void) | null = null;
+
+    constructor(private readonly dispatcher: EventDispatcher) {}
+
+    getCurrentDiagramId(): string | null {
+        return this.currentDiagramId;
+    }
+
+    joinUserChannel(userId: number): void {
+        const echo = getEcho();
+        if (echo === null) {
+            return;
+        }
+
+        if (this.userId === userId && this.userChannel !== null) {
+            return;
+        }
+
+        this.leaveUserChannel();
+        this.userId = userId;
+
+        try {
+            this.userChannel = echo.private(userPrivateChannel(userId));
+        } catch (error) {
+            console.warn(
+                `[Realtime] Failed to join ${userPrivateChannelFull(userId)}`,
+                error
+            );
+            this.userId = null;
+            this.userChannel = null;
+        }
+    }
+
+    joinDiagram(diagramId: string): void {
+        const echo = getEcho();
+        if (echo === null) {
+            return;
+        }
+
+        if (this.currentDiagramId === diagramId) {
+            return;
+        }
+
+        this.leaveDiagramChannels();
+
+        this.currentDiagramId = diagramId;
+
+        try {
+            this.diagramPrivateChannel = echo.private(
+                diagramPrivateChannel(diagramId)
+            );
+
+            this.pingHandler = (payload: RealtimePingPayload) => {
+                this.dispatcher.emit('Realtime.Ping', payload);
+            };
+
+            this.diagramPrivateChannel.listen(
+                '.Realtime.Ping',
+                this.pingHandler
+            );
+
+            echo.join(diagramPrivateChannel(diagramId));
+        } catch (error) {
+            console.warn(
+                `[Realtime] Failed to join diagram channels for ${diagramId}`,
+                error
+            );
+            this.leaveDiagramChannels();
+        }
+    }
+
+    leaveDiagram(): void {
+        this.leaveDiagramChannels();
+        this.currentDiagramId = null;
+    }
+
+    rejoinAll(): void {
+        const userId = this.userId;
+        const diagramId = this.currentDiagramId;
+
+        this.leaveUserChannel();
+        this.leaveDiagramChannels();
+        this.currentDiagramId = null;
+
+        if (userId !== null) {
+            this.joinUserChannel(userId);
+        }
+
+        if (diagramId !== null) {
+            this.joinDiagram(diagramId);
+        }
+    }
+
+    clearAll(): void {
+        this.leaveUserChannel();
+        this.leaveDiagramChannels();
+        this.currentDiagramId = null;
+        this.userId = null;
+    }
+
+    private leaveUserChannel(): void {
+        if (this.userId === null) {
+            return;
+        }
+
+        const echo = getEcho();
+        if (echo !== null) {
+            try {
+                echo.leaveChannel(userPrivateChannelFull(this.userId));
+            } catch (error) {
+                console.warn(
+                    `[Realtime] Failed to leave ${userPrivateChannelFull(this.userId)}`,
+                    error
+                );
+            }
+        }
+
+        this.userChannel = null;
+        this.userId = null;
+    }
+
+    private leaveDiagramChannels(): void {
+        const diagramId = this.currentDiagramId;
+        const echo = getEcho();
+
+        if (this.diagramPrivateChannel !== null && this.pingHandler !== null) {
+            try {
+                this.diagramPrivateChannel.stopListening(
+                    '.Realtime.Ping',
+                    this.pingHandler
+                );
+            } catch (error) {
+                console.warn('[Realtime] Failed to stop ping listener', error);
+            }
+        }
+
+        if (echo !== null && diagramId !== null) {
+            try {
+                echo.leaveChannel(diagramPrivateChannelFull(diagramId));
+                echo.leaveChannel(diagramPresenceChannelFull(diagramId));
+            } catch (error) {
+                console.warn(
+                    `[Realtime] Failed to leave diagram channels for ${diagramId}`,
+                    error
+                );
+            }
+        }
+
+        this.diagramPrivateChannel = null;
+        this.pingHandler = null;
+    }
+}

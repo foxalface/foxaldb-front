@@ -17,7 +17,7 @@ import {
 } from '@/lib/realtime/diagram-sync-state';
 import { useEffect, useRef } from 'react';
 
-interface DiagramTestPayload {
+interface RealtimePingPayload {
     message: string;
     sentAt: string;
     userId: number;
@@ -220,8 +220,8 @@ export const useDiagramRealtime = (): void => {
 
         let channel: ReturnType<typeof echo.private> | null = null;
 
-        const handleDiagramTest = (payload: DiagramTestPayload): void => {
-            console.log('[DiagramTest]', payload);
+        const handleRealtimePing = (payload: RealtimePingPayload): void => {
+            console.log('[Realtime.Ping]', payload);
         };
 
         const handleDiagramOperation = (value: unknown): void => {
@@ -298,7 +298,7 @@ export const useDiagramRealtime = (): void => {
             channel = echo.private(`diagram.${diagramId}`);
 
             channel
-                .listen('.DiagramTest', handleDiagramTest)
+                .listen('.Realtime.Ping', handleRealtimePing)
                 .listen('.DiagramOperation', handleDiagramOperation)
                 .error((error: unknown) => {
                     console.warn(
@@ -316,7 +316,7 @@ export const useDiagramRealtime = (): void => {
 
         return () => {
             try {
-                channel?.stopListening('.DiagramTest', handleDiagramTest);
+                channel?.stopListening('.Realtime.Ping', handleRealtimePing);
                 channel?.stopListening(
                     '.DiagramOperation',
                     handleDiagramOperation

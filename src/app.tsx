@@ -5,15 +5,18 @@ import { TooltipProvider } from './components/tooltip/tooltip';
 import { HelmetData } from './helmet/helmet-data';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from '@/context/auth-context/auth-provider';
+import { RealtimeProvider } from '@/context/realtime-context/realtime-provider';
 
 export const App = () => {
     return (
         <HelmetProvider>
             <AuthProvider>
-                <HelmetData />
-                <TooltipProvider>
-                    <RouterProvider router={router} />
-                </TooltipProvider>
+                <RealtimeProvider>
+                    <HelmetData />
+                    <TooltipProvider>
+                        <RouterProvider router={router} />
+                    </TooltipProvider>
+                </RealtimeProvider>
             </AuthProvider>
         </HelmetProvider>
     );
