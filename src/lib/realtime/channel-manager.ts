@@ -9,8 +9,19 @@ import {
 } from './channels';
 import type { EventDispatcher } from './event-dispatcher';
 import type { RealtimePingPayload } from './events';
+import {
+    parseDiagramPresenceMemberInfo,
+    type DiagramPresenceUser,
+} from './diagram-presence';
 
 type PrivateChannel = ReturnType<Echo<'reverb'>['private']>;
+
+export interface PresenceEventHandlers {
+    onHere: (members: DiagramPresenceUser[]) => void;
+    onJoining: (member: DiagramPresenceUser) => void;
+    onLeaving: (member: DiagramPresenceUser) => void;
+    onError: (error: unknown) => void;
+}
 
 export class ChannelManager {
     private userId: number | null = null;
@@ -18,11 +29,16 @@ export class ChannelManager {
     private userChannel: PrivateChannel | null = null;
     private diagramPrivateChannel: PrivateChannel | null = null;
     private pingHandler: ((payload: RealtimePingPayload) => void) | null = null;
+    private presenceHandlers: PresenceEventHandlers | null = null;
 
     constructor(private readonly dispatcher: EventDispatcher) {}
 
     getCurrentDiagramId(): string | null {
         return this.currentDiagramId;
+    }
+
+    setPresenceHandlers(handlers: PresenceEventHandlers | null): void {
+        this.presenceHandlers = handlers;
     }
 
     joinUserChannel(userId: number): void {
@@ -78,7 +94,40 @@ export class ChannelManager {
                 this.pingHandler
             );
 
-            echo.join(diagramPrivateChannel(diagramId));
+            echo.join(diagramPrivateChannel(diagramId))
+                .here((members: unknown[]) => {
+                    const parsedMembers = Array.isArray(members)
+                        ? members
+                              .map(parseDiagramPresenceMemberInfo)
+                              .filter(
+                                  (member): member is DiagramPresenceUser =>
+                                      member !== null
+                              )
+                        : [];
+
+                    this.presenceHandlers?.onHere(parsedMembers);
+                })
+                .joining((member: unknown) => {
+                    const parsedMember = parseDiagramPresenceMemberInfo(member);
+
+                    if (parsedMember !== null) {
+                        this.presenceHandlers?.onJoining(parsedMember);
+                    }
+                })
+                .leaving((member: unknown) => {
+                    const parsedMember = parseDiagramPresenceMemberInfo(member);
+
+                    if (parsedMember !== null) {
+                        this.presenceHandlers?.onLeaving(parsedMember);
+                    }
+                })
+                .error((error: unknown) => {
+                    console.warn(
+                        `[Realtime] Presence channel error (diagram.${diagramId})`,
+                        error
+                    );
+                    this.presenceHandlers?.onError(error);
+                });
         } catch (error) {
             console.warn(
                 `[Realtime] Failed to join diagram channels for ${diagramId}`,

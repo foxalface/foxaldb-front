@@ -7,7 +7,7 @@ import { LastSaved } from './last-saved';
 import { LanguageNav } from './language-nav/language-nav';
 import { Menu } from './menu/menu';
 import { AuthNavAction } from './auth-nav-action';
-import { DiagramViewers } from './diagram-viewers';
+import { PresenceAvatarStack } from '@/components/presence/presence-avatar-stack';
 import { ShareDiagramAction } from './share-diagram-action';
 import { ActivityFeedAction } from './activity-feed-action';
 import { DiagramAccessRoleIndicator } from './diagram-access-role-indicator';
@@ -45,7 +45,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                 <LastSaved />
                 <ActivityFeedAction />
                 <ShareDiagramAction />
-                <DiagramViewers />
+                <PresenceAvatarStack />
                 <AuthNavAction />
                 <LanguageNav />
             </div>

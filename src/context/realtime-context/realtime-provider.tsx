@@ -2,6 +2,7 @@ import React, {
     useCallback,
     useEffect,
     useMemo,
+    useReducer,
     useRef,
     useState,
 } from 'react';
@@ -15,6 +16,10 @@ import {
     ConnectionManager,
     type ConnectionStatus,
 } from '@/lib/realtime/connection-manager';
+import {
+    initialPresenceState,
+    presenceReducer,
+} from '@/lib/realtime/presence-reducer';
 import { EventDispatcher } from '@/lib/realtime/event-dispatcher';
 import type {
     RealtimeEventHandler,
@@ -156,6 +161,11 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     const [currentDiagramId, setCurrentDiagramId] = useState<string | null>(
         null
     );
+    const [presence, dispatchPresence] = useReducer(
+        presenceReducer,
+        undefined,
+        initialPresenceState
+    );
 
     const connectionManagerRef = useRef(new ConnectionManager());
     const dispatcherRef = useRef(new EventDispatcher());
@@ -166,7 +176,28 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
 
         return connectionManager.onStatusChange((status) => {
             setConnectionStatus(status);
+
+            if (status === 'reconnecting' || status === 'disconnected') {
+                dispatchPresence({ type: 'SET_DISCONNECTED' });
+            }
         });
+    }, []);
+
+    useEffect(() => {
+        const channelManager = channelManagerRef.current;
+
+        channelManager.setPresenceHandlers({
+            onHere: (members) => dispatchPresence({ type: 'HERE', members }),
+            onJoining: (member) =>
+                dispatchPresence({ type: 'JOINING', member }),
+            onLeaving: (member) =>
+                dispatchPresence({ type: 'LEAVING', memberId: member.id }),
+            onError: (error) => dispatchPresence({ type: 'SET_ERROR', error }),
+        });
+
+        return () => {
+            channelManager.setPresenceHandlers(null);
+        };
     }, []);
 
     useEffect(() => {
@@ -174,6 +205,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         const channelManager = channelManagerRef.current;
 
         return connectionManager.onReconnect(() => {
+            dispatchPresence({ type: 'SET_DISCONNECTED' });
             channelManager.rejoinAll();
             setCurrentDiagramId(channelManager.getCurrentDiagramId());
         });
@@ -189,6 +221,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         const dispatcher = dispatcherRef.current;
 
         if (!isAuthenticated || user === null) {
+            dispatchPresence({ type: 'RESET' });
             channelManager.clearAll();
             dispatcher.clear();
             connectionManager.disconnect();
@@ -207,6 +240,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         channelManager.joinUserChannel(user.id);
 
         return () => {
+            dispatchPresence({ type: 'RESET' });
             channelManager.clearAll();
             dispatcher.clear();
             connectionManager.disconnect();
@@ -220,12 +254,14 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             return;
         }
 
+        dispatchPresence({ type: 'SET_JOINING' });
         channelManagerRef.current.joinDiagram(String(diagramId));
         setCurrentDiagramId(channelManagerRef.current.getCurrentDiagramId());
     }, []);
 
     const leaveDiagram = useCallback(() => {
         channelManagerRef.current.leaveDiagram();
+        dispatchPresence({ type: 'RESET' });
         setCurrentDiagramId(null);
     }, []);
 
@@ -243,11 +279,19 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         () => ({
             connectionStatus,
             currentDiagramId,
+            presence,
             joinDiagram,
             leaveDiagram,
             on,
         }),
-        [connectionStatus, currentDiagramId, joinDiagram, leaveDiagram, on]
+        [
+            connectionStatus,
+            currentDiagramId,
+            presence,
+            joinDiagram,
+            leaveDiagram,
+            on,
+        ]
     );
 
     return (

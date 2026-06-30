@@ -1,76 +1,84 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useRealtime } from '@/hooks/use-realtime';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
-import { getEcho } from '@/lib/realtime/echo';
-import { useEffect, useState } from 'react';
+import {
+    getInitialsFromName,
+    getPresenceColorClass,
+} from '@/lib/realtime/presence-utils';
+import { useMemo } from 'react';
+
+export interface PresenceMember {
+    id: number;
+    name: string;
+    initials: string;
+    colorClass: string;
+    isSelf: boolean;
+}
 
 export interface DiagramPresenceState {
-    viewerCount: number;
-    isPresenceActive: boolean;
+    members: PresenceMember[];
+    isPresenceVisible: boolean;
 }
 
 export const useDiagramPresence = (): DiagramPresenceState => {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { user, isAuthenticated, isLoading } = useAuth();
+    const { presence } = useRealtime();
     const { currentDiagram } = useChartDB();
-    const [viewerCount, setViewerCount] = useState(0);
-    const [isPresenceActive, setIsPresenceActive] = useState(false);
 
     const diagramId =
         currentDiagram && isValidBackendDiagramId(currentDiagram.id)
             ? String(currentDiagram.id)
             : null;
 
-    useEffect(() => {
-        if (isLoading || !isAuthenticated || diagramId === null) {
-            setViewerCount(0);
-            setIsPresenceActive(false);
-            return;
+    return useMemo(() => {
+        if (
+            isLoading ||
+            !isAuthenticated ||
+            diagramId === null ||
+            user === null
+        ) {
+            return {
+                members: [],
+                isPresenceVisible: false,
+            };
         }
 
-        const echo = getEcho();
+        const members: PresenceMember[] = Array.from(
+            presence.members.values()
+        ).map((member) => ({
+            id: member.id,
+            name: member.name,
+            initials: getInitialsFromName(member.name),
+            colorClass: getPresenceColorClass(member.id),
+            isSelf: member.id === user.id,
+        }));
 
-        if (echo === null) {
-            setViewerCount(0);
-            setIsPresenceActive(false);
-            return;
-        }
-
-        const channel = echo.join(`diagram.${diagramId}`);
-
-        channel
-            .here((members: unknown[]) => {
-                const count = Array.isArray(members) ? members.length : 0;
-                setViewerCount(count);
-                setIsPresenceActive(true);
-            })
-            .joining(() => {
-                setViewerCount((count) => count + 1);
-            })
-            .leaving(() => {
-                setViewerCount((count) => Math.max(0, count - 1));
-            })
-            .error((error: unknown) => {
-                console.warn(
-                    `[DiagramPresence] channel error (diagram.${diagramId})`,
-                    error
-                );
-                setIsPresenceActive(false);
+        if (!members.some((member) => member.isSelf)) {
+            members.unshift({
+                id: user.id,
+                name: user.name,
+                initials: getInitialsFromName(user.name),
+                colorClass: getPresenceColorClass(user.id),
+                isSelf: true,
             });
+        }
 
-        return () => {
-            setViewerCount(0);
-            setIsPresenceActive(false);
-
-            try {
-                echo.leaveChannel(`presence-diagram.${diagramId}`);
-            } catch (error: unknown) {
-                console.warn(
-                    `[DiagramPresence] failed to leave (diagram.${diagramId})`,
-                    error
-                );
+        members.sort((left, right) => {
+            if (left.isSelf && !right.isSelf) {
+                return -1;
             }
-        };
-    }, [isLoading, isAuthenticated, diagramId]);
 
-    return { viewerCount, isPresenceActive };
+            if (!left.isSelf && right.isSelf) {
+                return 1;
+            }
+
+            return left.name.localeCompare(right.name);
+        });
+
+        return {
+            members,
+            isPresenceVisible: true,
+        };
+    }, [diagramId, isAuthenticated, isLoading, presence.members, user]);
 };

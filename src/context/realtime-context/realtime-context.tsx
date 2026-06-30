@@ -5,10 +5,15 @@ import type {
     RealtimeEventHandler,
     RealtimeEventName,
 } from '@/lib/realtime/events';
+import {
+    initialPresenceState,
+    type PresenceState,
+} from '@/lib/realtime/presence-reducer';
 
 export interface RealtimeContextValue {
     connectionStatus: ConnectionStatus;
     currentDiagramId: string | null;
+    presence: PresenceState;
     joinDiagram: (diagramId: string) => void;
     leaveDiagram: () => void;
     on: <T extends RealtimeEventName>(
@@ -20,6 +25,7 @@ export interface RealtimeContextValue {
 export const RealtimeContext = createContext<RealtimeContextValue>({
     connectionStatus: 'idle',
     currentDiagramId: null,
+    presence: initialPresenceState(),
     joinDiagram: emptyFn,
     leaveDiagram: emptyFn,
     on: () => emptyFn,

@@ -10,6 +10,7 @@ import { AuthNavAction } from './auth-nav-action';
 import { ShareDiagramAction } from './share-diagram-action';
 import { ActivityFeedAction } from './activity-feed-action';
 import { DiagramAccessRoleIndicator } from './diagram-access-role-indicator';
+import { PresenceAvatarStack } from '@/components/presence/presence-avatar-stack';
 
 export interface TopNavbarMobileProps {}
 
@@ -42,6 +43,7 @@ export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
+                        <PresenceAvatarStack />
                         <div className="hidden min-[420px]:flex">
                             <DiagramAccessRoleIndicator compact />
                         </div>
