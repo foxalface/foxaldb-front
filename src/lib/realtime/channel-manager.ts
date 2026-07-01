@@ -1,4 +1,5 @@
 import type Echo from 'laravel-echo';
+import type { PresenceChannel } from 'laravel-echo';
 import { getEcho } from './echo';
 import {
     diagramPresenceChannelFull,
@@ -28,6 +29,7 @@ export class ChannelManager {
     private currentDiagramId: string | null = null;
     private userChannel: PrivateChannel | null = null;
     private diagramPrivateChannel: PrivateChannel | null = null;
+    private diagramPresenceChannel: PresenceChannel | null = null;
     private pingHandler: ((payload: RealtimePingPayload) => void) | null = null;
     private presenceHandlers: PresenceEventHandlers | null = null;
 
@@ -35,6 +37,10 @@ export class ChannelManager {
 
     getCurrentDiagramId(): string | null {
         return this.currentDiagramId;
+    }
+
+    getDiagramPresenceChannel(): PresenceChannel | null {
+        return this.diagramPresenceChannel;
     }
 
     setPresenceHandlers(handlers: PresenceEventHandlers | null): void {
@@ -94,7 +100,10 @@ export class ChannelManager {
                 this.pingHandler
             );
 
-            echo.join(diagramPrivateChannel(diagramId))
+            const presenceChannel = echo.join(diagramPrivateChannel(diagramId));
+            this.diagramPresenceChannel = presenceChannel;
+
+            presenceChannel
                 .here((members: unknown[]) => {
                     const parsedMembers = Array.isArray(members)
                         ? members
@@ -215,6 +224,7 @@ export class ChannelManager {
         }
 
         this.diagramPrivateChannel = null;
+        this.diagramPresenceChannel = null;
         this.pingHandler = null;
     }
 }
