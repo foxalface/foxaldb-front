@@ -124,6 +124,7 @@ import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useClickAway } from 'react-use';
 import { useDiagramCursors } from '../use-diagram-cursors';
+import { CursorOverlay } from '@/components/presence/cursor-overlay';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -1987,6 +1988,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     {showFilter ? (
                         <CanvasFilter onClose={() => setShowFilter(false)} />
                     ) : null}
+                    <CursorOverlay />
                 </ReactFlow>
                 <MarkerDefinitions />
             </div>

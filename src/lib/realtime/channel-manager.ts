@@ -264,6 +264,7 @@ export class ChannelManager {
             isKnownPresenceUser: (userId) => this.isKnownPresenceUser(userId),
             onAction: (action) => this.cursorOnAction(action),
         });
+        this.cursorTransport.start();
     }
 
     private clearCursorTransport(): void {

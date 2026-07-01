@@ -11,6 +11,8 @@ const createPresenceChannelMock = () => ({
     leaving: vi.fn().mockReturnThis(),
     error: vi.fn().mockReturnThis(),
     whisper: vi.fn(),
+    listenForWhisper: vi.fn().mockReturnThis(),
+    stopListeningForWhisper: vi.fn().mockReturnThis(),
 });
 
 const createEchoMock = (

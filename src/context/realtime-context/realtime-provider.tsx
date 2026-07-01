@@ -27,6 +27,8 @@ import type {
 } from '@/lib/realtime/events';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { CursorWhisperPayload } from '@/lib/realtime/cursor-types';
+import { CursorActionSubscriber } from '@/lib/realtime/cursor-subscriber';
+import type { CursorAction } from '@/lib/realtime/cursor-reducer';
 import { clearEchoInstance, setEchoInstance } from '@/lib/realtime/echo';
 import { RealtimeContext } from './realtime-context';
 
@@ -171,6 +173,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     const connectionManagerRef = useRef(new ConnectionManager());
     const dispatcherRef = useRef(new EventDispatcher());
     const channelManagerRef = useRef(new ChannelManager(dispatcherRef.current));
+    const cursorSubscriberRef = useRef(new CursorActionSubscriber());
     const presenceMembersRef = useRef(presence.members);
     presenceMembersRef.current = presence.members;
 
@@ -178,6 +181,9 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         channelManagerRef.current.setCursorPresenceChecker((userId) =>
             presenceMembersRef.current.has(userId)
         );
+        channelManagerRef.current.setCursorOnAction((action) => {
+            cursorSubscriberRef.current.dispatch(action);
+        });
     }, []);
 
     useEffect(() => {
@@ -288,6 +294,13 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         channelManagerRef.current.sendCursor(payload);
     }, []);
 
+    const subscribeToCursorActions = useCallback(
+        (listener: (action: CursorAction) => void) => {
+            return cursorSubscriberRef.current.subscribe(listener);
+        },
+        []
+    );
+
     const value = useMemo(
         () => ({
             connectionStatus,
@@ -296,6 +309,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             joinDiagram,
             leaveDiagram,
             sendCursor,
+            subscribeToCursorActions,
             on,
         }),
         [
@@ -305,6 +319,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             joinDiagram,
             leaveDiagram,
             sendCursor,
+            subscribeToCursorActions,
             on,
         ]
     );
