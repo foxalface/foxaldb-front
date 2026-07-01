@@ -123,6 +123,7 @@ import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useClickAway } from 'react-use';
+import { useDiagramCursors } from '../use-diagram-cursors';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -1582,6 +1583,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, []);
 
     const containerRef = useRef<HTMLDivElement>(null);
+    useDiagramCursors(containerRef);
     const exitEditTableMode = useCallback(
         () => setEditTableModeTable(null),
         [setEditTableModeTable]

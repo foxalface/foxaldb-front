@@ -5,6 +5,7 @@ import type {
     RealtimeEventHandler,
     RealtimeEventName,
 } from '@/lib/realtime/events';
+import type { CursorWhisperPayload } from '@/lib/realtime/cursor-types';
 import {
     initialPresenceState,
     type PresenceState,
@@ -16,6 +17,7 @@ export interface RealtimeContextValue {
     presence: PresenceState;
     joinDiagram: (diagramId: string) => void;
     leaveDiagram: () => void;
+    sendCursor: (payload: CursorWhisperPayload) => void;
     on: <T extends RealtimeEventName>(
         event: T,
         handler: RealtimeEventHandler<T>
@@ -28,5 +30,6 @@ export const RealtimeContext = createContext<RealtimeContextValue>({
     presence: initialPresenceState(),
     joinDiagram: emptyFn,
     leaveDiagram: emptyFn,
+    sendCursor: emptyFn,
     on: () => emptyFn,
 });

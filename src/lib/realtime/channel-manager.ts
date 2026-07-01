@@ -8,6 +8,9 @@ import {
     userPrivateChannel,
     userPrivateChannelFull,
 } from './channels';
+import type { CursorAction } from './cursor-reducer';
+import { CursorTransport } from './cursor-transport';
+import type { CursorWhisperPayload } from './cursor-types';
 import type { EventDispatcher } from './event-dispatcher';
 import type { RealtimePingPayload } from './events';
 import {
@@ -32,6 +35,9 @@ export class ChannelManager {
     private diagramPresenceChannel: PresenceChannel | null = null;
     private pingHandler: ((payload: RealtimePingPayload) => void) | null = null;
     private presenceHandlers: PresenceEventHandlers | null = null;
+    private cursorTransport: CursorTransport | null = null;
+    private isKnownPresenceUser: (userId: number) => boolean = () => false;
+    private cursorOnAction: (action: CursorAction) => void = () => undefined;
 
     constructor(private readonly dispatcher: EventDispatcher) {}
 
@@ -45,6 +51,19 @@ export class ChannelManager {
 
     setPresenceHandlers(handlers: PresenceEventHandlers | null): void {
         this.presenceHandlers = handlers;
+    }
+
+    setCursorPresenceChecker(checker: (userId: number) => boolean): void {
+        this.isKnownPresenceUser = checker;
+    }
+
+    setCursorOnAction(handler: (action: CursorAction) => void): void {
+        this.cursorOnAction = handler;
+    }
+
+    sendCursor(payload: CursorWhisperPayload): void {
+        this.ensureCursorTransport();
+        this.cursorTransport?.sendCursor(payload);
     }
 
     joinUserChannel(userId: number): void {
@@ -102,6 +121,7 @@ export class ChannelManager {
 
             const presenceChannel = echo.join(diagramPrivateChannel(diagramId));
             this.diagramPresenceChannel = presenceChannel;
+            this.ensureCursorTransport();
 
             presenceChannel
                 .here((members: unknown[]) => {
@@ -223,8 +243,31 @@ export class ChannelManager {
             }
         }
 
+        this.clearCursorTransport();
         this.diagramPrivateChannel = null;
         this.diagramPresenceChannel = null;
         this.pingHandler = null;
+    }
+
+    private ensureCursorTransport(): void {
+        if (this.userId === null || this.diagramPresenceChannel === null) {
+            return;
+        }
+
+        if (this.cursorTransport !== null) {
+            return;
+        }
+
+        this.cursorTransport = new CursorTransport({
+            getPresenceChannel: () => this.getDiagramPresenceChannel(),
+            selfUserId: this.userId,
+            isKnownPresenceUser: (userId) => this.isKnownPresenceUser(userId),
+            onAction: (action) => this.cursorOnAction(action),
+        });
+    }
+
+    private clearCursorTransport(): void {
+        this.cursorTransport?.stop();
+        this.cursorTransport = null;
     }
 }

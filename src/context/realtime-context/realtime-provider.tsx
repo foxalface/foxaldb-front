@@ -26,6 +26,7 @@ import type {
     RealtimeEventName,
 } from '@/lib/realtime/events';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
+import type { CursorWhisperPayload } from '@/lib/realtime/cursor-types';
 import { clearEchoInstance, setEchoInstance } from '@/lib/realtime/echo';
 import { RealtimeContext } from './realtime-context';
 
@@ -170,6 +171,14 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     const connectionManagerRef = useRef(new ConnectionManager());
     const dispatcherRef = useRef(new EventDispatcher());
     const channelManagerRef = useRef(new ChannelManager(dispatcherRef.current));
+    const presenceMembersRef = useRef(presence.members);
+    presenceMembersRef.current = presence.members;
+
+    useEffect(() => {
+        channelManagerRef.current.setCursorPresenceChecker((userId) =>
+            presenceMembersRef.current.has(userId)
+        );
+    }, []);
 
     useEffect(() => {
         const connectionManager = connectionManagerRef.current;
@@ -275,6 +284,10 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const sendCursor = useCallback((payload: CursorWhisperPayload): void => {
+        channelManagerRef.current.sendCursor(payload);
+    }, []);
+
     const value = useMemo(
         () => ({
             connectionStatus,
@@ -282,6 +295,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             presence,
             joinDiagram,
             leaveDiagram,
+            sendCursor,
             on,
         }),
         [
@@ -290,6 +304,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             presence,
             joinDiagram,
             leaveDiagram,
+            sendCursor,
             on,
         ]
     );
