@@ -125,6 +125,8 @@ import { useDiff } from '@/context/diff-context/use-diff';
 import { useClickAway } from 'react-use';
 import { useDiagramCursors } from '../use-diagram-cursors';
 import { CursorOverlay } from '@/components/presence/cursor-overlay';
+import { SelectionBroadcastListener } from '@/components/presence/selection-broadcast-listener';
+import { RemoteSelectionsProvider } from '@/context/remote-selections-context/remote-selections-provider';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
 const DEFAULT_EDGE_Z_INDEX = 0;
@@ -1749,183 +1751,206 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     return (
         <CanvasContextMenu>
-            <div
-                className="relative flex h-full"
-                id="canvas"
-                ref={containerRef}
-                onMouseMove={handleMouseMove}
-            >
-                <ReactFlow
-                    onlyRenderVisibleElements
-                    colorMode={effectiveTheme}
-                    className={cn('nodes-animated', {
-                        'canvas-cursor-multi-select': shiftPressed,
-                        'canvas-cursor-default': !shiftPressed,
-                    })}
-                    nodes={nodesWithCursor}
-                    edges={edgesWithFloating}
-                    onNodesChange={onNodesChangeHandler}
-                    onEdgesChange={onEdgesChangeHandler}
-                    maxZoom={5}
-                    minZoom={0.1}
-                    onConnect={onConnectHandler}
-                    nodesDraggable={!readonly}
-                    nodesConnectable={!readonly}
-                    proOptions={{
-                        hideAttribution: true,
-                    }}
-                    fitView={false}
-                    nodeTypes={nodeTypes}
-                    edgeTypes={edgeTypes}
-                    defaultEdgeOptions={{
-                        animated: false,
-                        type: 'relationship-edge',
-                    }}
-                    panOnScroll={scrollAction === 'pan'}
-                    snapToGrid={shiftPressed || snapToGridEnabled}
-                    snapGrid={[20, 20]}
-                    selectionMode={SelectionMode.Full}
-                    onPaneClick={onPaneClickHandler}
-                    connectionLineComponent={ConnectionLine}
-                    deleteKeyCode={readonly ? [] : ['Backspace', 'Delete']}
-                    multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
+            {/* Single RemoteSelectionsProvider for the whole canvas — not per node/edge */}
+            <RemoteSelectionsProvider>
+                <div
+                    className="relative flex h-full"
+                    id="canvas"
+                    ref={containerRef}
+                    onMouseMove={handleMouseMove}
                 >
-                    <Controls
-                        position="top-left"
-                        showZoom={false}
-                        showFitView={false}
-                        showInteractive={false}
-                        className="!shadow-none"
+                    <ReactFlow
+                        onlyRenderVisibleElements
+                        colorMode={effectiveTheme}
+                        className={cn('nodes-animated', {
+                            'canvas-cursor-multi-select': shiftPressed,
+                            'canvas-cursor-default': !shiftPressed,
+                        })}
+                        nodes={nodesWithCursor}
+                        edges={edgesWithFloating}
+                        onNodesChange={onNodesChangeHandler}
+                        onEdgesChange={onEdgesChangeHandler}
+                        maxZoom={5}
+                        minZoom={0.1}
+                        onConnect={onConnectHandler}
+                        nodesDraggable={!readonly}
+                        nodesConnectable={!readonly}
+                        proOptions={{
+                            hideAttribution: true,
+                        }}
+                        fitView={false}
+                        nodeTypes={nodeTypes}
+                        edgeTypes={edgeTypes}
+                        defaultEdgeOptions={{
+                            animated: false,
+                            type: 'relationship-edge',
+                        }}
+                        panOnScroll={scrollAction === 'pan'}
+                        snapToGrid={shiftPressed || snapToGridEnabled}
+                        snapGrid={[20, 20]}
+                        selectionMode={SelectionMode.Full}
+                        onPaneClick={onPaneClickHandler}
+                        connectionLineComponent={ConnectionLine}
+                        deleteKeyCode={readonly ? [] : ['Backspace', 'Delete']}
+                        multiSelectionKeyCode={['Shift', 'Meta', 'Control']}
                     >
-                        <div className="flex flex-col items-center gap-2 md:flex-row">
-                            {!readonly ? (
-                                <>
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <span>
-                                                <Button
-                                                    variant="secondary"
-                                                    className={cn(
-                                                        'size-8 p-1 shadow-none',
-                                                        snapToGridEnabled ||
-                                                            shiftPressed
-                                                            ? 'bg-pink-600 text-white hover:bg-pink-500 dark:hover:bg-pink-700 hover:text-white'
-                                                            : ''
-                                                    )}
-                                                    onClick={() =>
-                                                        setSnapToGridEnabled(
-                                                            (prev) => !prev
-                                                        )
-                                                    }
-                                                >
-                                                    <Magnet className="size-4" />
-                                                </Button>
-                                            </span>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            {t('snap_to_grid_tooltip', {
-                                                key:
-                                                    operatingSystem === 'mac'
-                                                        ? '⇧'
-                                                        : 'Shift',
-                                            })}
-                                        </TooltipContent>
-                                    </Tooltip>
-                                    {highlightedCustomType ? (
+                        <Controls
+                            position="top-left"
+                            showZoom={false}
+                            showFitView={false}
+                            showInteractive={false}
+                            className="!shadow-none"
+                        >
+                            <div className="flex flex-col items-center gap-2 md:flex-row">
+                                {!readonly ? (
+                                    <>
                                         <Tooltip>
                                             <TooltipTrigger asChild>
                                                 <span>
                                                     <Button
                                                         variant="secondary"
-                                                        className="size-8 border border-yellow-400 bg-yellow-200 p-1 shadow-none hover:bg-yellow-300 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700"
+                                                        className={cn(
+                                                            'size-8 p-1 shadow-none',
+                                                            snapToGridEnabled ||
+                                                                shiftPressed
+                                                                ? 'bg-pink-600 text-white hover:bg-pink-500 dark:hover:bg-pink-700 hover:text-white'
+                                                                : ''
+                                                        )}
                                                         onClick={() =>
-                                                            highlightCustomTypeId(
-                                                                undefined
+                                                            setSnapToGridEnabled(
+                                                                (prev) => !prev
                                                             )
                                                         }
                                                     >
-                                                        <Highlighter className="size-4" />
+                                                        <Magnet className="size-4" />
                                                     </Button>
                                                 </span>
                                             </TooltipTrigger>
                                             <TooltipContent>
-                                                {t(
-                                                    'toolbar.custom_type_highlight_tooltip',
-                                                    {
-                                                        typeName:
-                                                            highlightedCustomType.name,
-                                                    }
-                                                )}
+                                                {t('snap_to_grid_tooltip', {
+                                                    key:
+                                                        operatingSystem ===
+                                                        'mac'
+                                                            ? '⇧'
+                                                            : 'Shift',
+                                                })}
                                             </TooltipContent>
                                         </Tooltip>
-                                    ) : null}
-                                </>
-                            ) : null}
+                                        {highlightedCustomType ? (
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <span>
+                                                        <Button
+                                                            variant="secondary"
+                                                            className="size-8 border border-yellow-400 bg-yellow-200 p-1 shadow-none hover:bg-yellow-300 dark:border-yellow-700 dark:bg-yellow-800 dark:hover:bg-yellow-700"
+                                                            onClick={() =>
+                                                                highlightCustomTypeId(
+                                                                    undefined
+                                                                )
+                                                            }
+                                                        >
+                                                            <Highlighter className="size-4" />
+                                                        </Button>
+                                                    </span>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {t(
+                                                        'toolbar.custom_type_highlight_tooltip',
+                                                        {
+                                                            typeName:
+                                                                highlightedCustomType.name,
+                                                        }
+                                                    )}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        ) : null}
+                                    </>
+                                ) : null}
 
-                            <div
-                                className={`transition-opacity duration-300 ease-in-out ${
-                                    hasOverlappingTables
-                                        ? 'opacity-100'
-                                        : 'opacity-0'
-                                }`}
-                            >
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <span>
-                                            <Button
-                                                variant="default"
-                                                className="size-8 p-1 shadow-none"
-                                                onClick={pulseOverlappingTables}
-                                            >
-                                                <AlertTriangle className="size-4 text-white" />
-                                            </Button>
-                                        </span>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        {t(
-                                            'toolbar.highlight_overlapping_tables'
-                                        )}
-                                    </TooltipContent>
-                                </Tooltip>
+                                <div
+                                    className={`transition-opacity duration-300 ease-in-out ${
+                                        hasOverlappingTables
+                                            ? 'opacity-100'
+                                            : 'opacity-0'
+                                    }`}
+                                >
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <span>
+                                                <Button
+                                                    variant="default"
+                                                    className="size-8 p-1 shadow-none"
+                                                    onClick={
+                                                        pulseOverlappingTables
+                                                    }
+                                                >
+                                                    <AlertTriangle className="size-4 text-white" />
+                                                </Button>
+                                            </span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {t(
+                                                'toolbar.highlight_overlapping_tables'
+                                            )}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </div>
                             </div>
-                        </div>
-                    </Controls>
-                    {isLoadingDOM ? (
-                        <Controls
-                            position="top-center"
-                            orientation="horizontal"
-                            showZoom={false}
-                            showFitView={false}
-                            showInteractive={false}
-                            className="!shadow-none"
-                        >
-                            <Badge
-                                variant="default"
-                                className="bg-pink-600 text-white"
-                            >
-                                {t('loading_diagram')}
-                            </Badge>
                         </Controls>
-                    ) : null}
+                        {isLoadingDOM ? (
+                            <Controls
+                                position="top-center"
+                                orientation="horizontal"
+                                showZoom={false}
+                                showFitView={false}
+                                showInteractive={false}
+                                className="!shadow-none"
+                            >
+                                <Badge
+                                    variant="default"
+                                    className="bg-pink-600 text-white"
+                                >
+                                    {t('loading_diagram')}
+                                </Badge>
+                            </Controls>
+                        ) : null}
 
-                    {!isDesktop && !readonly ? (
-                        <Controls
-                            position="bottom-left"
-                            orientation="horizontal"
-                            showZoom={false}
-                            showFitView={false}
-                            showInteractive={false}
-                            className="!shadow-none"
-                        >
-                            <Button
-                                className="size-11 bg-pink-600 p-2 hover:bg-pink-500"
-                                onClick={showSidePanel}
+                        {!isDesktop && !readonly ? (
+                            <Controls
+                                position="bottom-left"
+                                orientation="horizontal"
+                                showZoom={false}
+                                showFitView={false}
+                                showInteractive={false}
+                                className="!shadow-none"
                             >
-                                <Pencil />
-                            </Button>
-                        </Controls>
-                    ) : null}
-                    {isLostInCanvas ? (
+                                <Button
+                                    className="size-11 bg-pink-600 p-2 hover:bg-pink-500"
+                                    onClick={showSidePanel}
+                                >
+                                    <Pencil />
+                                </Button>
+                            </Controls>
+                        ) : null}
+                        {isLostInCanvas ? (
+                            <Controls
+                                position={
+                                    isDesktop ? 'bottom-center' : 'top-center'
+                                }
+                                orientation="horizontal"
+                                showZoom={false}
+                                showFitView={false}
+                                showInteractive={false}
+                                className="!shadow-none"
+                                style={{
+                                    [isDesktop ? 'bottom' : 'top']: isDesktop
+                                        ? '70px'
+                                        : '70px',
+                                }}
+                            >
+                                <ShowAllButton />
+                            </Controls>
+                        ) : null}
                         <Controls
                             position={
                                 isDesktop ? 'bottom-center' : 'top-center'
@@ -1935,63 +1960,51 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             showFitView={false}
                             showInteractive={false}
                             className="!shadow-none"
-                            style={{
-                                [isDesktop ? 'bottom' : 'top']: isDesktop
-                                    ? '70px'
-                                    : '70px',
-                            }}
                         >
-                            <ShowAllButton />
+                            <Toolbar readonly={readonly} />
                         </Controls>
-                    ) : null}
-                    <Controls
-                        position={isDesktop ? 'bottom-center' : 'top-center'}
-                        orientation="horizontal"
-                        showZoom={false}
-                        showFitView={false}
-                        showInteractive={false}
-                        className="!shadow-none"
-                    >
-                        <Toolbar readonly={readonly} />
-                    </Controls>
-                    {showMiniMapOnCanvas && (
-                        <MiniMap
-                            style={{
-                                width: isDesktop ? 100 : 60,
-                                height: isDesktop ? 100 : 60,
-                            }}
+                        {showMiniMapOnCanvas && (
+                            <MiniMap
+                                style={{
+                                    width: isDesktop ? 100 : 60,
+                                    height: isDesktop ? 100 : 60,
+                                }}
+                            />
+                        )}
+                        <Background
+                            variant={BackgroundVariant.Dots}
+                            gap={16}
+                            size={1}
                         />
-                    )}
-                    <Background
-                        variant={BackgroundVariant.Dots}
-                        gap={16}
-                        size={1}
-                    />
-                    {/* Empty state when all tables are hidden by filter */}
-                    {allTablesHiddenByFilter && (
-                        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
-                            <div className="pointer-events-auto flex items-center gap-3 rounded-lg border bg-background/90 px-4 py-3 shadow-sm backdrop-blur-sm">
-                                <EyeOff className="size-5 text-muted-foreground" />
-                                <span className="text-sm text-muted-foreground">
-                                    {t('canvas.all_tables_hidden')}
-                                </span>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={() => resetFilter()}
-                                >
-                                    {t('canvas.show_all_tables')}
-                                </Button>
+                        {/* Empty state when all tables are hidden by filter */}
+                        {allTablesHiddenByFilter && (
+                            <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+                                <div className="pointer-events-auto flex items-center gap-3 rounded-lg border bg-background/90 px-4 py-3 shadow-sm backdrop-blur-sm">
+                                    <EyeOff className="size-5 text-muted-foreground" />
+                                    <span className="text-sm text-muted-foreground">
+                                        {t('canvas.all_tables_hidden')}
+                                    </span>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => resetFilter()}
+                                    >
+                                        {t('canvas.show_all_tables')}
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    {showFilter ? (
-                        <CanvasFilter onClose={() => setShowFilter(false)} />
-                    ) : null}
-                    <CursorOverlay />
-                </ReactFlow>
-                <MarkerDefinitions />
-            </div>
+                        )}
+                        {showFilter ? (
+                            <CanvasFilter
+                                onClose={() => setShowFilter(false)}
+                            />
+                        ) : null}
+                        <CursorOverlay />
+                        <SelectionBroadcastListener />
+                    </ReactFlow>
+                    <MarkerDefinitions />
+                </div>
+            </RemoteSelectionsProvider>
         </CanvasContextMenu>
     );
 };

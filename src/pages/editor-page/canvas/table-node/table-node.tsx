@@ -53,6 +53,11 @@ import { useDiff } from '@/context/diff-context/use-diff';
 import { TableNodeStatus } from './table-node-status/table-node-status';
 import { TableEditMode } from './table-edit-mode/table-edit-mode';
 import { useCanvas } from '@/hooks/use-canvas';
+import { useEntityRemoteSelections } from '@/hooks/use-remote-selections';
+import { EntityCollaboratorsBadge } from '@/components/presence/entity-collaborators-badge';
+
+// Remote table selection UI: plain div/span only via EntityCollaboratorsBadge.
+// No Popover, Tooltip, Avatar, Radix, portals, or callback refs.
 
 export const TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX = 'table_rel_source_';
 export const TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX = 'table_rel_target_';
@@ -103,6 +108,12 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             showCreateRelationshipNode,
             tempFloatingEdge,
         } = useCanvas();
+        const remoteCollaborators = useEntityRemoteSelections(
+            'table',
+            table.id
+        );
+        const hasRemoteSelection = remoteCollaborators.length > 0;
+        const primaryRemoteRingClass = remoteCollaborators[0]?.ringColorClass;
 
         // Get edit mode state directly from context
         const editTableMode = useMemo(
@@ -380,7 +391,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         ? 'outline outline-[3px] outline-red-500 dark:outline-red-900 outline-offset-[5px]'
                         : editTableMode
                           ? 'invisible'
-                          : ''
+                          : '',
+                    hasRemoteSelection
+                        ? cn(
+                              'ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900',
+                              primaryRemoteRingClass
+                          )
+                        : ''
                 ),
             [
                 selected,
@@ -396,6 +413,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 editTableMode,
                 isPartOfCreatingRelationship,
                 table.isView,
+                hasRemoteSelection,
+                primaryRemoteRingClass,
             ]
         );
 
@@ -430,7 +449,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     />
                 ) : null}
                 <div
-                    className={tableClassName}
+                    className={cn(tableClassName, 'relative')}
                     onClick={(e) => {
                         if (e.detail === 2 && !readonly) {
                             e.stopPropagation();
@@ -461,6 +480,12 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         setHoveringTableId(null);
                     }}
                 >
+                    {hasRemoteSelection ? (
+                        <EntityCollaboratorsBadge
+                            collaborators={remoteCollaborators}
+                            className="absolute -right-2 -top-2 z-20"
+                        />
+                    ) : null}
                     <NodeResizer
                         isVisible={focused}
                         lineClassName="!border-none !w-2"

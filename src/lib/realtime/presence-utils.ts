@@ -28,6 +28,51 @@ export const PRESENCE_TEXT_COLOR_CLASSES = [
     'text-rose-500',
 ] as const;
 
+export const PRESENCE_BORDER_COLOR_CLASSES = [
+    'border-red-500',
+    'border-orange-500',
+    'border-amber-500',
+    'border-green-500',
+    'border-teal-500',
+    'border-cyan-500',
+    'border-blue-500',
+    'border-indigo-500',
+    'border-violet-500',
+    'border-purple-500',
+    'border-pink-500',
+    'border-rose-500',
+] as const;
+
+export const PRESENCE_STROKE_COLOR_CLASSES = [
+    '!stroke-red-500',
+    '!stroke-orange-500',
+    '!stroke-amber-500',
+    '!stroke-green-500',
+    '!stroke-teal-500',
+    '!stroke-cyan-500',
+    '!stroke-blue-500',
+    '!stroke-indigo-500',
+    '!stroke-violet-500',
+    '!stroke-purple-500',
+    '!stroke-pink-500',
+    '!stroke-rose-500',
+] as const;
+
+export const PRESENCE_RING_COLOR_CLASSES = [
+    'ring-red-500',
+    'ring-orange-500',
+    'ring-amber-500',
+    'ring-green-500',
+    'ring-teal-500',
+    'ring-cyan-500',
+    'ring-blue-500',
+    'ring-indigo-500',
+    'ring-violet-500',
+    'ring-purple-500',
+    'ring-pink-500',
+    'ring-rose-500',
+] as const;
+
 export const hashUserId = (userId: number): number => {
     let hash = userId;
 
@@ -46,6 +91,21 @@ export const getPresenceColorClass = (userId: number): string => {
 export const getPresenceTextColorClass = (userId: number): string => {
     const index = hashUserId(userId) % PRESENCE_TEXT_COLOR_CLASSES.length;
     return PRESENCE_TEXT_COLOR_CLASSES[index];
+};
+
+export const getPresenceBorderColorClass = (userId: number): string => {
+    const index = hashUserId(userId) % PRESENCE_BORDER_COLOR_CLASSES.length;
+    return PRESENCE_BORDER_COLOR_CLASSES[index];
+};
+
+export const getPresenceStrokeColorClass = (userId: number): string => {
+    const index = hashUserId(userId) % PRESENCE_STROKE_COLOR_CLASSES.length;
+    return PRESENCE_STROKE_COLOR_CLASSES[index];
+};
+
+export const getPresenceRingColorClass = (userId: number): string => {
+    const index = hashUserId(userId) % PRESENCE_RING_COLOR_CLASSES.length;
+    return PRESENCE_RING_COLOR_CLASSES[index];
 };
 
 export const getInitialsFromName = (name: string): string => {

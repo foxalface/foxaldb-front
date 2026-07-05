@@ -47,6 +47,11 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 closeRelationshipPopover,
             } = useCanvas();
 
+            // TODO(M17.4): Remote relationship selection rendering is deferred.
+            // Edge foreignObject/ref composition caused React Flow ref churn and
+            // Maximum update depth exceeded. Transport/reducer still track
+            // relationship selections; reintroduce rendering in a dedicated pass.
+
             const relationship = data?.relationship;
 
             const isPopoverOpen = useMemo(

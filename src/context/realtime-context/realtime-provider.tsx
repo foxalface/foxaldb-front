@@ -29,6 +29,9 @@ import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { CursorWhisperPayload } from '@/lib/realtime/cursor-types';
 import { CursorActionSubscriber } from '@/lib/realtime/cursor-subscriber';
 import type { CursorAction } from '@/lib/realtime/cursor-reducer';
+import { SelectionActionSubscriber } from '@/lib/realtime/selection-subscriber';
+import type { SelectionAction } from '@/lib/realtime/selection-reducer';
+import type { SelectionWhisperPayload } from '@/lib/realtime/selection-types';
 import { clearEchoInstance, setEchoInstance } from '@/lib/realtime/echo';
 import { RealtimeContext } from './realtime-context';
 
@@ -174,6 +177,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     const dispatcherRef = useRef(new EventDispatcher());
     const channelManagerRef = useRef(new ChannelManager(dispatcherRef.current));
     const cursorSubscriberRef = useRef(new CursorActionSubscriber());
+    const selectionSubscriberRef = useRef(new SelectionActionSubscriber());
     const presenceMembersRef = useRef(presence.members);
     presenceMembersRef.current = presence.members;
 
@@ -183,6 +187,9 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         );
         channelManagerRef.current.setCursorOnAction((action) => {
             cursorSubscriberRef.current.dispatch(action);
+        });
+        channelManagerRef.current.setSelectionOnAction((action) => {
+            selectionSubscriberRef.current.dispatch(action);
         });
     }, []);
 
@@ -301,6 +308,20 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const sendSelection = useCallback(
+        (payload: SelectionWhisperPayload): void => {
+            channelManagerRef.current.sendSelection(payload);
+        },
+        []
+    );
+
+    const subscribeToSelectionActions = useCallback(
+        (listener: (action: SelectionAction) => void) => {
+            return selectionSubscriberRef.current.subscribe(listener);
+        },
+        []
+    );
+
     const value = useMemo(
         () => ({
             connectionStatus,
@@ -310,6 +331,8 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             leaveDiagram,
             sendCursor,
             subscribeToCursorActions,
+            sendSelection,
+            subscribeToSelectionActions,
             on,
         }),
         [
@@ -320,6 +343,8 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             leaveDiagram,
             sendCursor,
             subscribeToCursorActions,
+            sendSelection,
+            subscribeToSelectionActions,
             on,
         ]
     );
