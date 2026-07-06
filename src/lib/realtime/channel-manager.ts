@@ -11,6 +11,9 @@ import {
 import type { CursorAction } from './cursor-reducer';
 import { CursorTransport } from './cursor-transport';
 import type { CursorWhisperPayload } from './cursor-types';
+import type { MovementAction } from './movement-reducer';
+import { MovementTransport } from './movement-transport';
+import type { MovementWhisperPayload } from './movement-types';
 import type { SelectionAction } from './selection-reducer';
 import { SelectionTransport } from './selection-transport';
 import type { SelectionWhisperPayload } from './selection-types';
@@ -40,9 +43,12 @@ export class ChannelManager {
     private presenceHandlers: PresenceEventHandlers | null = null;
     private cursorTransport: CursorTransport | null = null;
     private selectionTransport: SelectionTransport | null = null;
+    private movementTransport: MovementTransport | null = null;
     private isKnownPresenceUser: (userId: number) => boolean = () => false;
     private cursorOnAction: (action: CursorAction) => void = () => undefined;
     private selectionOnAction: (action: SelectionAction) => void = () =>
+        undefined;
+    private movementOnAction: (action: MovementAction) => void = () =>
         undefined;
 
     constructor(private readonly dispatcher: EventDispatcher) {}
@@ -69,6 +75,15 @@ export class ChannelManager {
 
     setSelectionOnAction(handler: (action: SelectionAction) => void): void {
         this.selectionOnAction = handler;
+    }
+
+    setMovementOnAction(handler: (action: MovementAction) => void): void {
+        this.movementOnAction = handler;
+    }
+
+    sendMovement(payload: MovementWhisperPayload): void {
+        this.ensureMovementTransport();
+        this.movementTransport?.sendMovement(payload);
     }
 
     sendSelection(payload: SelectionWhisperPayload): void {
@@ -138,6 +153,7 @@ export class ChannelManager {
             this.diagramPresenceChannel = presenceChannel;
             this.ensureCursorTransport();
             this.ensureSelectionTransport();
+            this.ensureMovementTransport();
 
             presenceChannel
                 .here((members: unknown[]) => {
@@ -261,6 +277,7 @@ export class ChannelManager {
 
         this.clearCursorTransport();
         this.clearSelectionTransport();
+        this.clearMovementTransport();
         this.diagramPrivateChannel = null;
         this.diagramPresenceChannel = null;
         this.pingHandler = null;
@@ -310,5 +327,28 @@ export class ChannelManager {
     private clearSelectionTransport(): void {
         this.selectionTransport?.stop();
         this.selectionTransport = null;
+    }
+
+    private ensureMovementTransport(): void {
+        if (this.userId === null || this.diagramPresenceChannel === null) {
+            return;
+        }
+
+        if (this.movementTransport !== null) {
+            return;
+        }
+
+        this.movementTransport = new MovementTransport({
+            getPresenceChannel: () => this.getDiagramPresenceChannel(),
+            selfUserId: this.userId,
+            isKnownPresenceUser: (userId) => this.isKnownPresenceUser(userId),
+            onAction: (action) => this.movementOnAction(action),
+        });
+        this.movementTransport.start();
+    }
+
+    private clearMovementTransport(): void {
+        this.movementTransport?.stop();
+        this.movementTransport = null;
     }
 }

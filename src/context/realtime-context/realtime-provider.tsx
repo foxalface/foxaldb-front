@@ -29,6 +29,9 @@ import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { CursorWhisperPayload } from '@/lib/realtime/cursor-types';
 import { CursorActionSubscriber } from '@/lib/realtime/cursor-subscriber';
 import type { CursorAction } from '@/lib/realtime/cursor-reducer';
+import { MovementActionSubscriber } from '@/lib/realtime/movement-subscriber';
+import type { MovementAction } from '@/lib/realtime/movement-reducer';
+import type { MovementWhisperPayload } from '@/lib/realtime/movement-types';
 import { SelectionActionSubscriber } from '@/lib/realtime/selection-subscriber';
 import type { SelectionAction } from '@/lib/realtime/selection-reducer';
 import type { SelectionWhisperPayload } from '@/lib/realtime/selection-types';
@@ -178,6 +181,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     const channelManagerRef = useRef(new ChannelManager(dispatcherRef.current));
     const cursorSubscriberRef = useRef(new CursorActionSubscriber());
     const selectionSubscriberRef = useRef(new SelectionActionSubscriber());
+    const movementSubscriberRef = useRef(new MovementActionSubscriber());
     const presenceMembersRef = useRef(presence.members);
     presenceMembersRef.current = presence.members;
 
@@ -190,6 +194,9 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         });
         channelManagerRef.current.setSelectionOnAction((action) => {
             selectionSubscriberRef.current.dispatch(action);
+        });
+        channelManagerRef.current.setMovementOnAction((action) => {
+            movementSubscriberRef.current.dispatch(action);
         });
     }, []);
 
@@ -322,6 +329,20 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const sendMovement = useCallback(
+        (payload: MovementWhisperPayload): void => {
+            channelManagerRef.current.sendMovement(payload);
+        },
+        []
+    );
+
+    const subscribeToMovementActions = useCallback(
+        (listener: (action: MovementAction) => void) => {
+            return movementSubscriberRef.current.subscribe(listener);
+        },
+        []
+    );
+
     const value = useMemo(
         () => ({
             connectionStatus,
@@ -333,6 +354,8 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             subscribeToCursorActions,
             sendSelection,
             subscribeToSelectionActions,
+            sendMovement,
+            subscribeToMovementActions,
             on,
         }),
         [
@@ -345,6 +368,8 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             subscribeToCursorActions,
             sendSelection,
             subscribeToSelectionActions,
+            sendMovement,
+            subscribeToMovementActions,
             on,
         ]
     );

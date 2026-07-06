@@ -7,6 +7,8 @@ import type {
     RealtimeEventName,
 } from '@/lib/realtime/events';
 import type { CursorWhisperPayload } from '@/lib/realtime/cursor-types';
+import type { MovementAction } from '@/lib/realtime/movement-reducer';
+import type { MovementWhisperPayload } from '@/lib/realtime/movement-types';
 import type { SelectionAction } from '@/lib/realtime/selection-reducer';
 import type { SelectionWhisperPayload } from '@/lib/realtime/selection-types';
 import {
@@ -17,6 +19,8 @@ import {
 export type CursorActionListener = (action: CursorAction) => void;
 
 export type SelectionActionListener = (action: SelectionAction) => void;
+
+export type MovementActionListener = (action: MovementAction) => void;
 
 export interface RealtimeContextValue {
     connectionStatus: ConnectionStatus;
@@ -29,6 +33,10 @@ export interface RealtimeContextValue {
     sendSelection: (payload: SelectionWhisperPayload) => void;
     subscribeToSelectionActions: (
         listener: SelectionActionListener
+    ) => () => void;
+    sendMovement: (payload: MovementWhisperPayload) => void;
+    subscribeToMovementActions: (
+        listener: MovementActionListener
     ) => () => void;
     on: <T extends RealtimeEventName>(
         event: T,
@@ -46,5 +54,7 @@ export const RealtimeContext = createContext<RealtimeContextValue>({
     subscribeToCursorActions: () => emptyFn,
     sendSelection: emptyFn,
     subscribeToSelectionActions: () => emptyFn,
+    sendMovement: emptyFn,
+    subscribeToMovementActions: () => emptyFn,
     on: () => emptyFn,
 });
