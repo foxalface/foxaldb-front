@@ -2,10 +2,11 @@ import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useRealtime } from '@/hooks/use-realtime';
 import {
-    shouldSendCursorUpdate,
-    type FlowPosition,
-    isTouchPrimaryDevice,
-} from '@/lib/realtime/cursor-send-utils';
+    resetCursorSendState,
+    setLastPointerFlowPosition,
+    trySendCursorUpdate,
+} from '@/lib/realtime/cursor-send-state';
+import { isTouchPrimaryDevice } from '@/lib/realtime/cursor-send-utils';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { CursorWhisperPayload } from '@/lib/realtime/cursor-types';
 import { useReactFlow } from '@xyflow/react';
@@ -54,8 +55,6 @@ export const useDiagramCursors = (
         const selfUserId = user.id;
         let isPointerInside = false;
         let pendingClientPosition: { x: number; y: number } | null = null;
-        let lastSentPosition: FlowPosition | null = null;
-        let lastSentAt = 0;
         let animationFrameId: number | undefined;
 
         const cancelScheduledFlush = (): void => {
@@ -79,29 +78,16 @@ export const useDiagramCursors = (
             const flowPosition = screenToFlowPositionRef.current(
                 pendingClientPosition
             );
-            const now = Date.now();
+            setLastPointerFlowPosition(flowPosition);
 
-            if (
-                !shouldSendCursorUpdate(
-                    lastSentPosition,
-                    flowPosition,
-                    lastSentAt,
-                    now
-                )
-            ) {
-                return;
-            }
-
-            const payload: CursorWhisperPayload = {
-                userId: selfUserId,
-                x: flowPosition.x,
-                y: flowPosition.y,
-            };
-
-            sendCursorRef.current(payload);
-            logCursorSend(payload);
-            lastSentPosition = flowPosition;
-            lastSentAt = now;
+            trySendCursorUpdate(
+                flowPosition,
+                (payload) => {
+                    sendCursorRef.current(payload);
+                    logCursorSend(payload);
+                },
+                selfUserId
+            );
         };
 
         const scheduleFlush = (): void => {
@@ -155,6 +141,7 @@ export const useDiagramCursors = (
                 handleVisibilityChange
             );
             cancelScheduledFlush();
+            resetCursorSendState();
         };
     }, [canvasRef, isActive, user]);
 };

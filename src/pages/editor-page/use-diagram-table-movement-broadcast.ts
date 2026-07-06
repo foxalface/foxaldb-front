@@ -1,6 +1,10 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useRealtime } from '@/hooks/use-realtime';
+import {
+    publishLocalDraggingTableIds,
+    resetLocalDraggingTableIds,
+} from '@/lib/realtime/local-dragging-table-ids-registry';
 import { MovementBroadcastController } from '@/lib/realtime/movement-broadcast-controller';
 import {
     buildDraggingTableSnapshot,
@@ -52,12 +56,11 @@ export const useDiagramTableMovementBroadcast = (): void => {
     sendMovementRef.current = sendMovement;
 
     const controllerRef = useRef<MovementBroadcastController | null>(null);
-    const localDraggingTableIdsRef = useRef<Set<string>>(new Set());
 
     useEffect(() => {
         if (!isActive || user === null) {
             controllerRef.current?.reset();
-            localDraggingTableIdsRef.current = new Set();
+            resetLocalDraggingTableIds();
             controllerRef.current = null;
             return;
         }
@@ -80,7 +83,7 @@ export const useDiagramTableMovementBroadcast = (): void => {
         return () => {
             controller.dispose();
             controllerRef.current = null;
-            localDraggingTableIdsRef.current = new Set();
+            resetLocalDraggingTableIds();
         };
     }, [isActive, storeApi, user]);
 
@@ -92,8 +95,6 @@ export const useDiagramTableMovementBroadcast = (): void => {
         }
 
         controller.onDraggingSnapshotChange(draggingSnapshot);
-        localDraggingTableIdsRef.current = new Set(
-            controller.getLocalDraggingTableIds()
-        );
+        publishLocalDraggingTableIds(controller.getLocalDraggingTableIds());
     }, [draggingSnapshot, isActive]);
 };

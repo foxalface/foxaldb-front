@@ -124,6 +124,13 @@ import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useClickAway } from 'react-use';
 import { useDiagramCursors } from '../use-diagram-cursors';
+import { useLocalDraggingTableIds } from '@/hooks/use-local-dragging-table-ids';
+import { useRemoteTableMovement } from '@/hooks/use-remote-table-movement';
+import {
+    buildRenderOverridePositions,
+    findSyncedPendingTableIds,
+    mergeRemoteTablePositionsIntoNodes,
+} from '@/lib/realtime/movement-utils';
 import { CursorOverlay } from '@/components/presence/cursor-overlay';
 import { SelectionBroadcastListener } from '@/components/presence/selection-broadcast-listener';
 import { TableMovementBroadcastListener } from '@/components/presence/table-movement-broadcast-listener';
@@ -1588,6 +1595,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     const containerRef = useRef<HTMLDivElement>(null);
     useDiagramCursors(containerRef);
+    const localDraggingTableIds = useLocalDraggingTableIds();
+    const {
+        remoteTablePositions,
+        pendingSyncPositions,
+        clearPendingSyncForTables,
+    } = useRemoteTableMovement();
     const exitEditTableMode = useCallback(
         () => setEditTableModeTable(null),
         [setEditTableModeTable]
@@ -1669,10 +1682,40 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         exitEditTableMode,
     ]);
 
+    const renderOverridePositions = useMemo(
+        () =>
+            buildRenderOverridePositions(
+                remoteTablePositions,
+                pendingSyncPositions
+            ),
+        [remoteTablePositions, pendingSyncPositions]
+    );
+
+    const syncedPendingTableIds = useMemo(
+        () => findSyncedPendingTableIds(nodes, pendingSyncPositions),
+        [nodes, pendingSyncPositions]
+    );
+
+    useEffect(() => {
+        if (syncedPendingTableIds.length > 0) {
+            clearPendingSyncForTables(syncedPendingTableIds);
+        }
+    }, [clearPendingSyncForTables, syncedPendingTableIds]);
+
+    const nodesWithRemoteMovement = useMemo(
+        () =>
+            mergeRemoteTablePositionsIntoNodes(
+                nodes,
+                renderOverridePositions,
+                localDraggingTableIds
+            ),
+        [nodes, renderOverridePositions, localDraggingTableIds]
+    );
+
     // Add temporary invisible node at cursor position and edge
     const nodesWithCursor = useMemo(() => {
         if (!tempFloatingEdge || !cursorPosition) {
-            return nodes;
+            return nodesWithRemoteMovement;
         }
 
         const tempNode: TempCursorNodeType = {
@@ -1684,8 +1727,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             selectable: false,
         };
 
-        return [...nodes, tempNode];
-    }, [nodes, tempFloatingEdge, cursorPosition]);
+        return [...nodesWithRemoteMovement, tempNode];
+    }, [nodesWithRemoteMovement, tempFloatingEdge, cursorPosition]);
 
     const edgesWithFloating = useMemo(() => {
         if (!tempFloatingEdge || !cursorPosition) return edges;

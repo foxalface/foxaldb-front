@@ -1,3 +1,4 @@
+import { useDiagramCursorDragSync } from '@/pages/editor-page/use-diagram-cursor-drag-sync';
 import { useDiagramTableMovementBroadcast } from '@/pages/editor-page/use-diagram-table-movement-broadcast';
 import type React from 'react';
 
@@ -7,5 +8,6 @@ import type React from 'react';
  */
 export const TableMovementBroadcastListener: React.FC = () => {
     useDiagramTableMovementBroadcast();
+    useDiagramCursorDragSync();
     return null;
 };
