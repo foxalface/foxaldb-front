@@ -126,6 +126,7 @@ import { useClickAway } from 'react-use';
 import { useDiagramCursors } from '../use-diagram-cursors';
 import { CursorOverlay } from '@/components/presence/cursor-overlay';
 import { SelectionBroadcastListener } from '@/components/presence/selection-broadcast-listener';
+import { TableMovementBroadcastListener } from '@/components/presence/table-movement-broadcast-listener';
 import { RemoteSelectionsProvider } from '@/context/remote-selections-context/remote-selections-provider';
 
 const HIGHLIGHTED_EDGE_Z_INDEX = 1;
@@ -2001,6 +2002,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         ) : null}
                         <CursorOverlay />
                         <SelectionBroadcastListener />
+                        <TableMovementBroadcastListener />
                     </ReactFlow>
                     <MarkerDefinitions />
                 </div>
