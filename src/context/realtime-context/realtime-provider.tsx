@@ -35,6 +35,9 @@ import type { MovementWhisperPayload } from '@/lib/realtime/movement-types';
 import { SelectionActionSubscriber } from '@/lib/realtime/selection-subscriber';
 import type { SelectionAction } from '@/lib/realtime/selection-reducer';
 import type { SelectionWhisperPayload } from '@/lib/realtime/selection-types';
+import { EditingActionSubscriber } from '@/lib/realtime/editing-subscriber';
+import type { EditingAction } from '@/lib/realtime/editing-reducer';
+import type { EditingWhisperPayload } from '@/lib/realtime/editing-types';
 import { clearEchoInstance, setEchoInstance } from '@/lib/realtime/echo';
 import { RealtimeContext } from './realtime-context';
 
@@ -182,6 +185,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     const cursorSubscriberRef = useRef(new CursorActionSubscriber());
     const selectionSubscriberRef = useRef(new SelectionActionSubscriber());
     const movementSubscriberRef = useRef(new MovementActionSubscriber());
+    const editingSubscriberRef = useRef(new EditingActionSubscriber());
     const presenceMembersRef = useRef(presence.members);
     presenceMembersRef.current = presence.members;
 
@@ -197,6 +201,9 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         });
         channelManagerRef.current.setMovementOnAction((action) => {
             movementSubscriberRef.current.dispatch(action);
+        });
+        channelManagerRef.current.setEditingOnAction((action) => {
+            editingSubscriberRef.current.dispatch(action);
         });
     }, []);
 
@@ -343,6 +350,17 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const sendEditing = useCallback((payload: EditingWhisperPayload): void => {
+        channelManagerRef.current.sendEditing(payload);
+    }, []);
+
+    const subscribeToEditingActions = useCallback(
+        (listener: (action: EditingAction) => void) => {
+            return editingSubscriberRef.current.subscribe(listener);
+        },
+        []
+    );
+
     const value = useMemo(
         () => ({
             connectionStatus,
@@ -356,6 +374,8 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             subscribeToSelectionActions,
             sendMovement,
             subscribeToMovementActions,
+            sendEditing,
+            subscribeToEditingActions,
             on,
         }),
         [
@@ -370,6 +390,8 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             subscribeToSelectionActions,
             sendMovement,
             subscribeToMovementActions,
+            sendEditing,
+            subscribeToEditingActions,
             on,
         ]
     );

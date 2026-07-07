@@ -17,6 +17,9 @@ import type { MovementWhisperPayload } from './movement-types';
 import type { SelectionAction } from './selection-reducer';
 import { SelectionTransport } from './selection-transport';
 import type { SelectionWhisperPayload } from './selection-types';
+import type { EditingAction } from './editing-reducer';
+import { EditingTransport } from './editing-transport';
+import type { EditingWhisperPayload } from './editing-types';
 import type { EventDispatcher } from './event-dispatcher';
 import type { RealtimePingPayload } from './events';
 import {
@@ -44,12 +47,14 @@ export class ChannelManager {
     private cursorTransport: CursorTransport | null = null;
     private selectionTransport: SelectionTransport | null = null;
     private movementTransport: MovementTransport | null = null;
+    private editingTransport: EditingTransport | null = null;
     private isKnownPresenceUser: (userId: number) => boolean = () => false;
     private cursorOnAction: (action: CursorAction) => void = () => undefined;
     private selectionOnAction: (action: SelectionAction) => void = () =>
         undefined;
     private movementOnAction: (action: MovementAction) => void = () =>
         undefined;
+    private editingOnAction: (action: EditingAction) => void = () => undefined;
 
     constructor(private readonly dispatcher: EventDispatcher) {}
 
@@ -81,9 +86,18 @@ export class ChannelManager {
         this.movementOnAction = handler;
     }
 
+    setEditingOnAction(handler: (action: EditingAction) => void): void {
+        this.editingOnAction = handler;
+    }
+
     sendMovement(payload: MovementWhisperPayload): void {
         this.ensureMovementTransport();
         this.movementTransport?.sendMovement(payload);
+    }
+
+    sendEditing(payload: EditingWhisperPayload): void {
+        this.ensureEditingTransport();
+        this.editingTransport?.sendEditing(payload);
     }
 
     sendSelection(payload: SelectionWhisperPayload): void {
@@ -154,6 +168,7 @@ export class ChannelManager {
             this.ensureCursorTransport();
             this.ensureSelectionTransport();
             this.ensureMovementTransport();
+            this.ensureEditingTransport();
 
             presenceChannel
                 .here((members: unknown[]) => {
@@ -278,6 +293,7 @@ export class ChannelManager {
         this.clearCursorTransport();
         this.clearSelectionTransport();
         this.clearMovementTransport();
+        this.clearEditingTransport();
         this.diagramPrivateChannel = null;
         this.diagramPresenceChannel = null;
         this.pingHandler = null;
@@ -350,5 +366,28 @@ export class ChannelManager {
     private clearMovementTransport(): void {
         this.movementTransport?.stop();
         this.movementTransport = null;
+    }
+
+    private ensureEditingTransport(): void {
+        if (this.userId === null || this.diagramPresenceChannel === null) {
+            return;
+        }
+
+        if (this.editingTransport !== null) {
+            return;
+        }
+
+        this.editingTransport = new EditingTransport({
+            getPresenceChannel: () => this.getDiagramPresenceChannel(),
+            selfUserId: this.userId,
+            isKnownPresenceUser: (userId) => this.isKnownPresenceUser(userId),
+            onAction: (action) => this.editingOnAction(action),
+        });
+        this.editingTransport.start();
+    }
+
+    private clearEditingTransport(): void {
+        this.editingTransport?.stop();
+        this.editingTransport = null;
     }
 }
