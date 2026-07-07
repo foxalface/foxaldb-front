@@ -50,10 +50,10 @@ describe('editing-utils', () => {
     });
 
     describe('shouldRemoveStaleEditing', () => {
-        it('uses a 2000ms timeout by default', () => {
-            expect(REMOTE_EDITING_STALE_MS).toBe(2000);
-            expect(shouldRemoveStaleEditing(1_000, 2_999)).toBe(false);
-            expect(shouldRemoveStaleEditing(1_000, 3_000)).toBe(true);
+        it('uses a 3000ms timeout by default', () => {
+            expect(REMOTE_EDITING_STALE_MS).toBe(3000);
+            expect(shouldRemoveStaleEditing(1_000, 3_999)).toBe(false);
+            expect(shouldRemoveStaleEditing(1_000, 4_000)).toBe(true);
         });
     });
 

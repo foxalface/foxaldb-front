@@ -12,6 +12,8 @@ import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
+import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
+import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
 import { createRelationshipEditingItem } from '@/lib/realtime/editing-utils';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import {
@@ -38,6 +40,10 @@ export const RelationshipListItemHeader: React.FC<
     const { t } = useTranslation();
     const { focusOnRelationship } = useFocusOn();
     const { startEditing, stopEditing } = useEditingBroadcast();
+    const remoteEditors = useEntityRemoteEditing(
+        'relationship',
+        relationship.id
+    );
     const [editMode, setEditMode] = React.useState(false);
     const [relationshipName, setRelationshipName] = React.useState(
         relationship.name
@@ -151,6 +157,12 @@ export const RelationshipListItemHeader: React.FC<
                     <div className="truncate">{relationship.name}</div>
                 )}
             </div>
+            {remoteEditors.length > 0 ? (
+                <EntityEditingBadge
+                    editors={remoteEditors}
+                    className="mr-1 shrink-0"
+                />
+            ) : null}
             <div className="flex flex-row-reverse items-center">
                 {!editMode ? (
                     <>

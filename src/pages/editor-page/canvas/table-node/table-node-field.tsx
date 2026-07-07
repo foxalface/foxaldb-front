@@ -36,6 +36,8 @@ import {
 } from './table-node-dependency-indicator';
 import { useCanvas } from '@/hooks/use-canvas';
 import { useLayout } from '@/hooks/use-layout';
+import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
+import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -343,6 +345,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
             readonly,
         ]);
 
+        const remoteEditors = useEntityRemoteEditing('field', field.id);
+
         return (
             <div
                 className={cn(
@@ -625,6 +629,12 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         </Button>
                     </div>
                 )}
+                {remoteEditors.length > 0 ? (
+                    <EntityEditingBadge
+                        editors={remoteEditors}
+                        className="absolute right-1 top-1/2 z-10 -translate-y-1/2"
+                    />
+                ) : null}
             </div>
         );
     },

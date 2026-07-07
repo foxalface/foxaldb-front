@@ -11,7 +11,10 @@ import type {
     UserEditingState,
 } from './editing-types';
 
-export const REMOTE_EDITING_STALE_MS = 2000;
+// Local editors heartbeat their snapshot every ~1000ms
+// (DEFAULT_EDITING_HEARTBEAT_MS), so this stale window tolerates ~2 missed
+// heartbeats before a badge is treated as abandoned (tab crash / disconnect).
+export const REMOTE_EDITING_STALE_MS = 3000;
 
 export interface RemoteEditingViewModel {
     userId: number;

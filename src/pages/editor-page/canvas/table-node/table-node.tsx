@@ -54,10 +54,13 @@ import { TableNodeStatus } from './table-node-status/table-node-status';
 import { TableEditMode } from './table-edit-mode/table-edit-mode';
 import { useCanvas } from '@/hooks/use-canvas';
 import { useEntityRemoteSelections } from '@/hooks/use-remote-selections';
+import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
 import { EntityCollaboratorsBadge } from '@/components/presence/entity-collaborators-badge';
+import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
 
-// Remote table selection UI: plain div/span only via EntityCollaboratorsBadge.
-// No Popover, Tooltip, Avatar, Radix, portals, or callback refs.
+// Remote table selection/editing UI: plain div/span only via
+// EntityCollaboratorsBadge / EntityEditingBadge. No Popover, Tooltip, Avatar,
+// Radix, portals, or callback refs.
 
 export const TABLE_RELATIONSHIP_SOURCE_HANDLE_ID_PREFIX = 'table_rel_source_';
 export const TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX = 'table_rel_target_';
@@ -114,6 +117,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         );
         const hasRemoteSelection = remoteCollaborators.length > 0;
         const primaryRemoteRingClass = remoteCollaborators[0]?.ringColorClass;
+        const remoteEditors = useEntityRemoteEditing('table', table.id);
+        const hasRemoteEditing = remoteEditors.length > 0;
 
         // Get edit mode state directly from context
         const editTableMode = useMemo(
@@ -484,6 +489,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         <EntityCollaboratorsBadge
                             collaborators={remoteCollaborators}
                             className="absolute -right-2 -top-2 z-20"
+                        />
+                    ) : null}
+                    {hasRemoteEditing ? (
+                        <EntityEditingBadge
+                            editors={remoteEditors}
+                            showLabel
+                            className="absolute -left-2 -top-2 z-20"
                         />
                     ) : null}
                     <NodeResizer
