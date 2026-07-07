@@ -4,6 +4,8 @@ import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import type { DatabaseType, DBTable } from '@/lib/domain';
 import { useUpdateTableField } from '@/hooks/use-update-table-field';
+import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
+import { createFieldEditingItem } from '@/lib/realtime/editing-utils';
 import {
     Tooltip,
     TooltipContent,
@@ -25,6 +27,7 @@ export interface TableEditModeFieldProps {
 export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
     ({ table, field, focused = false, databaseType }) => {
         const { t } = useTranslation();
+        const { startEditing, stopEditing } = useEditingBroadcast();
         const [showHighlight, setShowHighlight] = React.useState(false);
 
         const {
@@ -70,6 +73,8 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                         'bg-sky-100 dark:bg-sky-950': showHighlight,
                     }
                 )}
+                onFocus={() => startEditing(createFieldEditingItem(field.id))}
+                onBlur={stopEditing}
             >
                 <div className="flex flex-1 items-center justify-start gap-1 overflow-hidden">
                     <span className="relative min-w-0 flex-1">

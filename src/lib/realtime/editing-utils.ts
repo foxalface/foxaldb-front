@@ -31,6 +31,23 @@ export const toEditingEntityKey = (
     entityId: string
 ): string => `${entityType}:${entityId}`;
 
+export const createTableEditingItem = (tableId: string): EditingItem => ({
+    entityType: 'table',
+    entityId: tableId,
+});
+
+export const createFieldEditingItem = (fieldId: string): EditingItem => ({
+    entityType: 'field',
+    entityId: fieldId,
+});
+
+export const createRelationshipEditingItem = (
+    relationshipId: string
+): EditingItem => ({
+    entityType: 'relationship',
+    entityId: relationshipId,
+});
+
 export const shouldRemoveStaleEditing = (
     receivedAt: number,
     now: number,

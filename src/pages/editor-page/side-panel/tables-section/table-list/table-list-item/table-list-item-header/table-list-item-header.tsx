@@ -15,6 +15,8 @@ import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-h
 import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
+import { createTableEditingItem } from '@/lib/realtime/editing-utils';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import { useSortable } from '@dnd-kit/sortable';
 import {
@@ -59,6 +61,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     } = useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
     const { openTableSchemaDialog } = useDialog();
+    const { startEditing, stopEditing } = useEditingBroadcast();
     const { t } = useTranslation();
     const { focusOnTable } = useFocusOn();
     const [editMode, setEditMode] = React.useState(false);
@@ -272,6 +275,10 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         value={tableName}
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => setTableName(e.target.value)}
+                        onFocus={() =>
+                            startEditing(createTableEditingItem(table.id))
+                        }
+                        onBlur={stopEditing}
                         className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : !readonly ? (

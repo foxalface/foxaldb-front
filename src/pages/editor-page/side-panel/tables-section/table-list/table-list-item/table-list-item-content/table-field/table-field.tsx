@@ -3,6 +3,8 @@ import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useUpdateTableField } from '@/hooks/use-update-table-field';
+import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
+import { createFieldEditingItem } from '@/lib/realtime/editing-utils';
 import {
     Tooltip,
     TooltipContent,
@@ -35,6 +37,7 @@ export const TableField: React.FC<TableFieldProps> = ({
     readonly = false,
 }) => {
     const { t } = useTranslation();
+    const { startEditing, stopEditing } = useEditingBroadcast();
 
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
@@ -68,6 +71,12 @@ export const TableField: React.FC<TableFieldProps> = ({
             className="flex flex-1 touch-none flex-row justify-between gap-2 p-1"
             ref={setNodeRef}
             style={style}
+            onFocus={
+                readonly
+                    ? undefined
+                    : () => startEditing(createFieldEditingItem(field.id))
+            }
+            onBlur={readonly ? undefined : stopEditing}
             {...attributes}
         >
             <div className="flex flex-1 items-center justify-start gap-1 overflow-hidden">

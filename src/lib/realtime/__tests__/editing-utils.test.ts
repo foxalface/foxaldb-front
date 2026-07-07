@@ -3,12 +3,38 @@ import { editingReducer, initialRemoteEditingState } from '../editing-reducer';
 import {
     areEditingSnapshotsEqual,
     buildEditingByEntity,
+    createFieldEditingItem,
+    createRelationshipEditingItem,
+    createTableEditingItem,
     shouldRemoveStaleEditing,
     toEditingEntityKey,
     REMOTE_EDITING_STALE_MS,
 } from '../editing-utils';
 
 describe('editing-utils', () => {
+    describe('editing item factories', () => {
+        it('builds a table editing item shape', () => {
+            expect(createTableEditingItem('table-1')).toEqual({
+                entityType: 'table',
+                entityId: 'table-1',
+            });
+        });
+
+        it('builds a field editing item shape', () => {
+            expect(createFieldEditingItem('field-1')).toEqual({
+                entityType: 'field',
+                entityId: 'field-1',
+            });
+        });
+
+        it('builds a relationship editing item shape', () => {
+            expect(createRelationshipEditingItem('rel-1')).toEqual({
+                entityType: 'relationship',
+                entityId: 'rel-1',
+            });
+        });
+    });
+
     describe('toEditingEntityKey', () => {
         it('builds keys for each entity type', () => {
             expect(toEditingEntityKey('table', 'table-1')).toBe(

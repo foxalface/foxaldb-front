@@ -11,6 +11,8 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useFocusOn } from '@/hooks/use-focus-on';
+import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
+import { createRelationshipEditingItem } from '@/lib/realtime/editing-utils';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import {
     DropdownMenu,
@@ -35,6 +37,7 @@ export const RelationshipListItemHeader: React.FC<
     const { deleteElements } = useReactFlow();
     const { t } = useTranslation();
     const { focusOnRelationship } = useFocusOn();
+    const { startEditing, stopEditing } = useEditingBroadcast();
     const [editMode, setEditMode] = React.useState(false);
     const [relationshipName, setRelationshipName] = React.useState(
         relationship.name
@@ -136,6 +139,12 @@ export const RelationshipListItemHeader: React.FC<
                         value={relationshipName}
                         onClick={(e) => e.stopPropagation()}
                         onChange={(e) => setRelationshipName(e.target.value)}
+                        onFocus={() =>
+                            startEditing(
+                                createRelationshipEditingItem(relationship.id)
+                            )
+                        }
+                        onBlur={stopEditing}
                         className="h-7 w-full focus-visible:ring-0"
                     />
                 ) : (

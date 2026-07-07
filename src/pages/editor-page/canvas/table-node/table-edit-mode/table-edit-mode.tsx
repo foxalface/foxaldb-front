@@ -16,6 +16,8 @@ import { ColorPicker } from '@/components/color-picker/color-picker';
 import { Separator } from '@/components/separator/separator';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useUpdateTable } from '@/hooks/use-update-table';
+import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
+import { createTableEditingItem } from '@/lib/realtime/editing-utils';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from '@/hooks/use-layout';
 import { SelectBox } from '@/components/select-box/select-box';
@@ -42,6 +44,7 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
         const [isVisible, setIsVisible] = useState(false);
         const { createField, updateTable, schemas, databaseType } =
             useChartDB();
+        const { startEditing, stopEditing } = useEditingBroadcast();
         const { t } = useTranslation();
         const { openTableFromSidebar, selectSidebarSection } = useLayout();
         const { tableName, handleTableNameChange } = useUpdateTable(table);
@@ -288,6 +291,10 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
                             onChange={(e) =>
                                 handleTableNameChange(e.target.value)
                             }
+                            onFocus={() =>
+                                startEditing(createTableEditingItem(table.id))
+                            }
+                            onBlur={stopEditing}
                         />
                     </div>
                     <div className="flex shrink-0 flex-row gap-1">
