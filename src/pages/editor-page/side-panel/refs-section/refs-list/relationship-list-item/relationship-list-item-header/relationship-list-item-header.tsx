@@ -12,8 +12,10 @@ import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
+import { useEditingConflictWarning } from '@/hooks/use-editing-conflict-warning';
 import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
 import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
+import { EntityConflictHint } from '@/components/presence/entity-conflict-hint';
 import { createRelationshipEditingItem } from '@/lib/realtime/editing-utils';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import {
@@ -45,6 +47,14 @@ export const RelationshipListItemHeader: React.FC<
         relationship.id
     );
     const [editMode, setEditMode] = React.useState(false);
+    const [isLocallyEditing, setIsLocallyEditing] = React.useState(false);
+    const { message, editors } = useEditingConflictWarning(
+        'relationship',
+        relationship.id,
+        {
+            isLocallyEditing,
+        }
+    );
     const [relationshipName, setRelationshipName] = React.useState(
         relationship.name
     );
@@ -58,6 +68,8 @@ export const RelationshipListItemHeader: React.FC<
             });
         }
 
+        // The input may unmount before blur fires.
+        setIsLocallyEditing(false);
         setEditMode(false);
     }, [
         relationshipName,
@@ -134,58 +146,73 @@ export const RelationshipListItemHeader: React.FC<
     );
 
     return (
-        <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-            <div className="flex min-w-0 flex-1">
-                {editMode ? (
-                    <Input
-                        ref={inputRef}
-                        autoFocus
-                        type="text"
-                        placeholder={relationship.name}
-                        value={relationshipName}
-                        onClick={(e) => e.stopPropagation()}
-                        onChange={(e) => setRelationshipName(e.target.value)}
-                        onFocus={() =>
-                            startEditing(
-                                createRelationshipEditingItem(relationship.id)
-                            )
-                        }
-                        onBlur={stopEditing}
-                        className="h-7 w-full focus-visible:ring-0"
+        <div className="flex min-w-0 flex-1 flex-col">
+            <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
+                <div className="flex min-w-0 flex-1">
+                    {editMode ? (
+                        <Input
+                            ref={inputRef}
+                            autoFocus
+                            type="text"
+                            placeholder={relationship.name}
+                            value={relationshipName}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) =>
+                                setRelationshipName(e.target.value)
+                            }
+                            onFocus={() => {
+                                setIsLocallyEditing(true);
+                                startEditing(
+                                    createRelationshipEditingItem(
+                                        relationship.id
+                                    )
+                                );
+                            }}
+                            onBlur={() => {
+                                setIsLocallyEditing(false);
+                                stopEditing();
+                            }}
+                            className="h-7 w-full focus-visible:ring-0"
+                        />
+                    ) : (
+                        <div className="truncate">{relationship.name}</div>
+                    )}
+                </div>
+                {remoteEditors.length > 0 ? (
+                    <EntityEditingBadge
+                        editors={remoteEditors}
+                        className="mr-1 shrink-0"
                     />
-                ) : (
-                    <div className="truncate">{relationship.name}</div>
-                )}
-            </div>
-            {remoteEditors.length > 0 ? (
-                <EntityEditingBadge
-                    editors={remoteEditors}
-                    className="mr-1 shrink-0"
-                />
-            ) : null}
-            <div className="flex flex-row-reverse items-center">
-                {!editMode ? (
-                    <>
-                        {!readonly ? <div>{renderDropDownMenu()}</div> : null}
-                        <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
+                ) : null}
+                <div className="flex flex-row-reverse items-center">
+                    {!editMode ? (
+                        <>
                             {!readonly ? (
-                                <ListItemHeaderButton onClick={enterEditMode}>
-                                    <Pencil />
-                                </ListItemHeaderButton>
+                                <div>{renderDropDownMenu()}</div>
                             ) : null}
-                            <ListItemHeaderButton
-                                onClick={handleFocusOnRelationship}
-                            >
-                                <CircleDotDashed />
-                            </ListItemHeaderButton>
-                        </div>
-                    </>
-                ) : (
-                    <ListItemHeaderButton onClick={editRelationshipName}>
-                        <Check />
-                    </ListItemHeaderButton>
-                )}
+                            <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
+                                {!readonly ? (
+                                    <ListItemHeaderButton
+                                        onClick={enterEditMode}
+                                    >
+                                        <Pencil />
+                                    </ListItemHeaderButton>
+                                ) : null}
+                                <ListItemHeaderButton
+                                    onClick={handleFocusOnRelationship}
+                                >
+                                    <CircleDotDashed />
+                                </ListItemHeaderButton>
+                            </div>
+                        </>
+                    ) : (
+                        <ListItemHeaderButton onClick={editRelationshipName}>
+                            <Check />
+                        </ListItemHeaderButton>
+                    )}
+                </div>
             </div>
+            <EntityConflictHint message={message} editors={editors} />
         </div>
     );
 };
