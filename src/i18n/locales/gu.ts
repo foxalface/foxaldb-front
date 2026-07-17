@@ -770,6 +770,15 @@ export const gu: LanguageTranslation = {
 
         snap_to_grid_tooltip: 'ગ્રિડ પર સ્નેપ કરો (જમાવટ {{key}})',
 
+        editing_conflict: {
+            one: '{{name}} is also editing this.',
+            two: '{{name1}} and {{name2}} are also editing this.',
+            many: '{{name}} and {{count}} others are also editing this.',
+            fallback_name: 'Collaborator',
+            last_writer_wins:
+                "Changes aren't locked. The last saved edit wins.",
+        },
+
         tool_tips: {
             double_click_to_edit: 'સંપાદિત કરવા માટે ડબલ-ક્લિક કરો',
         },

@@ -10,6 +10,7 @@ import {
 import type { EditingEntityType } from '@/lib/realtime/editing-types';
 import type { RemoteEditingViewModel } from '@/lib/realtime/editing-utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface UseEditingConflictWarningOptions {
     isLocallyEditing: boolean;
@@ -33,6 +34,7 @@ export const useEditingConflictWarning = (
     entityId: string,
     options: UseEditingConflictWarningOptions
 ): UseEditingConflictWarningResult => {
+    const { t } = useTranslation();
     const { isLocallyEditing, debounceMs = DEFAULT_DEBOUNCE_MS } = options;
     const remoteEditors = useEntityRemoteEditing(entityType, entityId);
     const hasRawConflict = isLocallyEditing && remoteEditors.length > 0;
@@ -84,8 +86,8 @@ export const useEditingConflictWarning = (
     const hasConflict = severity === 'high';
 
     const message = useMemo(
-        () => buildEditingConflictMessage(editors),
-        [editors]
+        () => buildEditingConflictMessage(editors, t),
+        [editors, t]
     );
 
     return useMemo(

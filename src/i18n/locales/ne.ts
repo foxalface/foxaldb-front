@@ -773,6 +773,15 @@ export const ne: LanguageTranslation = {
 
         snap_to_grid_tooltip: 'ग्रिडमा स्न्याप गर्नुहोस् ({{key}} थिच्नुहोस)',
 
+        editing_conflict: {
+            one: '{{name}} is also editing this.',
+            two: '{{name1}} and {{name2}} are also editing this.',
+            many: '{{name}} and {{count}} others are also editing this.',
+            fallback_name: 'Collaborator',
+            last_writer_wins:
+                "Changes aren't locked. The last saved edit wins.",
+        },
+
         tool_tips: {
             double_click_to_edit: 'सम्पादन गर्नका लागि डबल क्लिक गर्नुहोस्',
         },

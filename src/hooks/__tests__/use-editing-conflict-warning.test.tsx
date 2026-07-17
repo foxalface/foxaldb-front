@@ -1,21 +1,44 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RemoteEditingViewModel } from '@/lib/realtime/editing-utils';
+import type { EditingConflictTranslate } from '@/lib/realtime/editing-conflict-utils';
 
-const { remoteEditorsState, EMPTY_REMOTE_EDITORS } = vi.hoisted(() => {
-    const emptyEditors: RemoteEditingViewModel[] = [];
+const { remoteEditorsState, EMPTY_REMOTE_EDITORS, translate } = vi.hoisted(
+    () => {
+        const emptyEditors: RemoteEditingViewModel[] = [];
 
-    return {
-        remoteEditorsState: {
-            current: emptyEditors,
-        },
-        EMPTY_REMOTE_EDITORS: emptyEditors,
-    };
-});
+        const translateStub: EditingConflictTranslate = (key, options) => {
+            switch (key) {
+                case 'editing_conflict.one':
+                    return `${options?.name ?? ''} is also editing this.`;
+                case 'editing_conflict.two':
+                    return `${options?.name1 ?? ''} and ${options?.name2 ?? ''} are also editing this.`;
+                case 'editing_conflict.many':
+                    return `${options?.name ?? ''} and ${options?.count ?? 0} others are also editing this.`;
+                case 'editing_conflict.fallback_name':
+                    return 'Collaborator';
+            }
+        };
+
+        return {
+            remoteEditorsState: {
+                current: emptyEditors,
+            },
+            EMPTY_REMOTE_EDITORS: emptyEditors,
+            translate: translateStub,
+        };
+    }
+);
 
 vi.mock('@/hooks/use-remote-editing', () => ({
     EMPTY_REMOTE_EDITORS,
     useEntityRemoteEditing: () => remoteEditorsState.current,
+}));
+
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: translate,
+    }),
 }));
 
 import { useEditingConflictWarning } from '../use-editing-conflict-warning';

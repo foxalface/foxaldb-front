@@ -768,6 +768,15 @@ export const fr: LanguageTranslation = {
         snap_to_grid_tooltip:
             'Aligner sur la grille (maintenir la touche {{key}})',
 
+        editing_conflict: {
+            one: '{{name}} est également en train de modifier ceci.',
+            two: '{{name1}} et {{name2}} sont également en train de modifier ceci.',
+            many: '{{name}} et {{count}} autres sont également en train de modifier ceci.',
+            fallback_name: 'Collaborateur',
+            last_writer_wins:
+                "Les modifications ne sont pas verrouillées. La dernière modification enregistrée l'emporte.",
+        },
+
         tool_tips: {
             double_click_to_edit: 'Double-cliquez pour modifier',
         },

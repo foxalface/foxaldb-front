@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
-    LAST_WRITER_WINS_MESSAGE,
     buildEditingConflictMessage,
     computeEditingConflictSeverity,
+    type EditingConflictTranslate,
 } from '../editing-conflict-utils';
 import type { RemoteEditingViewModel } from '../editing-utils';
 
@@ -18,6 +18,19 @@ const createEditor = (
     isSelf: false,
     ...overrides,
 });
+
+const translate: EditingConflictTranslate = (key, options) => {
+    switch (key) {
+        case 'editing_conflict.one':
+            return `${options?.name ?? ''} is also editing this.`;
+        case 'editing_conflict.two':
+            return `${options?.name1 ?? ''} and ${options?.name2 ?? ''} are also editing this.`;
+        case 'editing_conflict.many':
+            return `${options?.name ?? ''} and ${options?.count ?? 0} others are also editing this.`;
+        case 'editing_conflict.fallback_name':
+            return 'Collaborator';
+    }
+};
 
 describe('editing-conflict-utils', () => {
     describe('computeEditingConflictSeverity', () => {
@@ -49,51 +62,51 @@ describe('editing-conflict-utils', () => {
         });
     });
 
-    describe('LAST_WRITER_WINS_MESSAGE', () => {
-        it('exposes the last-writer-wins sentence separately', () => {
-            expect(LAST_WRITER_WINS_MESSAGE).toBe(
-                "Changes aren't locked. The last saved edit wins."
-            );
-        });
-    });
-
     describe('buildEditingConflictMessage', () => {
         it('returns an empty string for zero editors', () => {
-            expect(buildEditingConflictMessage([])).toBe('');
+            expect(buildEditingConflictMessage([], translate)).toBe('');
         });
 
         it('formats a single editor', () => {
             expect(
-                buildEditingConflictMessage([
-                    createEditor({ userId: 2, name: 'Alice' }),
-                ])
+                buildEditingConflictMessage(
+                    [createEditor({ userId: 2, name: 'Alice' })],
+                    translate
+                )
             ).toBe('Alice is also editing this.');
         });
 
         it('formats two editors', () => {
             expect(
-                buildEditingConflictMessage([
-                    createEditor({ userId: 2, name: 'Alice' }),
-                    createEditor({ userId: 3, name: 'Bob' }),
-                ])
+                buildEditingConflictMessage(
+                    [
+                        createEditor({ userId: 2, name: 'Alice' }),
+                        createEditor({ userId: 3, name: 'Bob' }),
+                    ],
+                    translate
+                )
             ).toBe('Alice and Bob are also editing this.');
         });
 
         it('formats three or more editors', () => {
             expect(
-                buildEditingConflictMessage([
-                    createEditor({ userId: 2, name: 'Alice' }),
-                    createEditor({ userId: 3, name: 'Bob' }),
-                    createEditor({ userId: 4, name: 'Carol' }),
-                ])
+                buildEditingConflictMessage(
+                    [
+                        createEditor({ userId: 2, name: 'Alice' }),
+                        createEditor({ userId: 3, name: 'Bob' }),
+                        createEditor({ userId: 4, name: 'Carol' }),
+                    ],
+                    translate
+                )
             ).toBe('Alice and 2 others are also editing this.');
         });
 
         it('falls back to Collaborator for blank names', () => {
             expect(
-                buildEditingConflictMessage([
-                    createEditor({ userId: 2, name: '   ' }),
-                ])
+                buildEditingConflictMessage(
+                    [createEditor({ userId: 2, name: '   ' })],
+                    translate
+                )
             ).toBe('Collaborator is also editing this.');
         });
 
@@ -104,7 +117,7 @@ describe('editing-conflict-utils', () => {
             ];
             const snapshot = editors.map((editor) => ({ ...editor }));
 
-            buildEditingConflictMessage(editors);
+            buildEditingConflictMessage(editors, translate);
 
             expect(editors).toEqual(snapshot);
         });
@@ -116,8 +129,8 @@ describe('editing-conflict-utils', () => {
                 createEditor({ userId: 4, name: 'Carol' }),
             ];
 
-            expect(buildEditingConflictMessage(editors)).toBe(
-                buildEditingConflictMessage(editors)
+            expect(buildEditingConflictMessage(editors, translate)).toBe(
+                buildEditingConflictMessage(editors, translate)
             );
         });
     });

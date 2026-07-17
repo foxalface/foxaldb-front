@@ -765,6 +765,15 @@ export const ko_KR: LanguageTranslation = {
 
         snap_to_grid_tooltip: '그리드에 맞추기 ({{key}}를 누른채 유지)',
 
+        editing_conflict: {
+            one: '{{name}} is also editing this.',
+            two: '{{name1}} and {{name2}} are also editing this.',
+            many: '{{name}} and {{count}} others are also editing this.',
+            fallback_name: 'Collaborator',
+            last_writer_wins:
+                "Changes aren't locked. The last saved edit wins.",
+        },
+
         tool_tips: {
             double_click_to_edit: '더블클릭하여 편집',
         },
