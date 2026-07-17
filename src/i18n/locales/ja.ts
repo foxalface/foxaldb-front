@@ -774,12 +774,12 @@ export const ja: LanguageTranslation = {
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}}もこれを編集しています。',
+            two: '{{name1}}と{{name2}}もこれを編集しています。',
+            many: '{{name}}と他{{count}}人もこれを編集しています。',
+            fallback_name: '共同編集者',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                '変更はロックされていません。最後に保存された編集が優先されます。',
         },
 
         tool_tips: {

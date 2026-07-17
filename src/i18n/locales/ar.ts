@@ -761,12 +761,12 @@ export const ar: LanguageTranslation = {
         snap_to_grid_tooltip: '({{key}} مغنظة الشبكة (اضغط مع الاستمرار على',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} يعدّل هذا أيضاً.',
+            two: '{{name1}} و{{name2}} يعدّلان هذا أيضاً.',
+            many: '{{name}} و{{count}} آخرون يعدّلون هذا أيضاً.',
+            fallback_name: 'متعاون',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'التغييرات غير مقفلة. التعديل المحفوظ الأخير هو الذي يسود.',
         },
 
         tool_tips: {

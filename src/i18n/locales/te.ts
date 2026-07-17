@@ -778,12 +778,12 @@ export const te: LanguageTranslation = {
 
         // TODO: Translate
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} కూడా దీన్ని సవరిస్తున్నారు.',
+            two: '{{name1}} మరియు {{name2}} కూడా దీన్ని సవరిస్తున్నారు.',
+            many: '{{name}} మరియు మరో {{count}} మంది కూడా దీన్ని సవరిస్తున్నారు.',
+            fallback_name: 'సహకారి',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'మార్పులు లాక్ చేయబడలేదు. చివరిగా సేవ్ చేసిన సవరణే గెలుస్తుంది.',
         },
 
         tool_tips: {

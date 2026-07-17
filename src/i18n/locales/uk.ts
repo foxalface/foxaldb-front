@@ -768,12 +768,12 @@ export const uk: LanguageTranslation = {
         snap_to_grid_tooltip: 'Вирівнювати за сіткою (Отримуйте {{key}})',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} також редагує це.',
+            two: '{{name1}} і {{name2}} також редагують це.',
+            many: '{{name}} і ще {{count}} також редагують це.',
+            fallback_name: 'Співавтор',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'Зміни не заблоковано. Перемагає останнє збережене редагування.',
         },
 
         tool_tips: {

@@ -776,12 +776,12 @@ export const hi: LanguageTranslation = {
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} भी इसे संपादित कर रहे हैं।',
+            two: '{{name1}} और {{name2}} भी इसे संपादित कर रहे हैं।',
+            many: '{{name}} और {{count}} अन्य भी इसे संपादित कर रहे हैं।',
+            fallback_name: 'सहयोगी',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'परिवर्तन लॉक नहीं हैं। अंतिम सहेजा गया संपादन ही मान्य होगा।',
         },
 
         tool_tips: {

@@ -774,12 +774,12 @@ export const ne: LanguageTranslation = {
         snap_to_grid_tooltip: 'ग्रिडमा स्न्याप गर्नुहोस् ({{key}} थिच्नुहोस)',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} ले यो पनि सम्पादन गर्दै हुनुहुन्छ।',
+            two: '{{name1}} र {{name2}} ले यो पनि सम्पादन गर्दै हुनुहुन्छ।',
+            many: '{{name}} र थप {{count}} जनाले यो पनि सम्पादन गर्दै हुनुहुन्छ।',
+            fallback_name: 'सहकर्मी',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'परिवर्तनहरू लक छैनन्। अन्तिम सुरक्षित सम्पादनले जित्छ।',
         },
 
         tool_tips: {

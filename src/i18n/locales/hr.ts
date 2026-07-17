@@ -764,12 +764,12 @@ export const hr: LanguageTranslation = {
         snap_to_grid_tooltip: 'Priljepljivanje na mrežu (Drži {{key}})',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} također uređuje ovo.',
+            two: '{{name1}} i {{name2}} također uređuju ovo.',
+            many: '{{name}} i još {{count}} također uređuju ovo.',
+            fallback_name: 'Suradnik',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'Promjene nisu zaključane. Pobjeđuje posljednja spremljena izmjena.',
         },
 
         tool_tips: {

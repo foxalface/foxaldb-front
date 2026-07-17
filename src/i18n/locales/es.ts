@@ -773,12 +773,12 @@ export const es: LanguageTranslation = {
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} también está editando esto.',
+            two: '{{name1}} y {{name2}} también están editando esto.',
+            many: '{{name}} y {{count}} más también están editando esto.',
+            fallback_name: 'Colaborador',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'Los cambios no están bloqueados. Se impone la última edición guardada.',
         },
 
         tool_tips: {

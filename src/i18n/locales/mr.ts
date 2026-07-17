@@ -783,12 +783,12 @@ export const mr: LanguageTranslation = {
 
         // TODO: Add translations
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} हे देखील संपादित करत आहेत.',
+            two: '{{name1}} आणि {{name2}} हे देखील संपादित करत आहेत.',
+            many: '{{name}} आणि आणखी {{count}} जण हे देखील संपादित करत आहेत.',
+            fallback_name: 'सहकारी',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'बदल लॉक केलेले नाहीत. शेवटचे जतन केलेले संपादन विजयी होते.',
         },
 
         tool_tips: {

@@ -766,12 +766,12 @@ export const ko_KR: LanguageTranslation = {
         snap_to_grid_tooltip: '그리드에 맞추기 ({{key}}를 누른채 유지)',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}}도 이것을 편집하고 있습니다.',
+            two: '{{name1}} 및 {{name2}}도 이것을 편집하고 있습니다.',
+            many: '{{name}} 외 {{count}}명도 이것을 편집하고 있습니다.',
+            fallback_name: '공동 작업자',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                '변경 사항은 잠기지 않습니다. 마지막으로 저장된 편집이 적용됩니다.',
         },
 
         tool_tips: {

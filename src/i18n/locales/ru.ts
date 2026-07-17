@@ -769,12 +769,12 @@ export const ru: LanguageTranslation = {
         copied: 'Скопировано!',
         snap_to_grid_tooltip: 'Выравнивание по сетке (Удерживайте {{key}})',
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} тоже редактирует это.',
+            two: '{{name1}} и {{name2}} тоже редактируют это.',
+            many: '{{name}} и ещё {{count}} тоже редактируют это.',
+            fallback_name: 'Участник',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'Изменения не заблокированы. Побеждает последнее сохранённое изменение.',
         },
 
         tool_tips: {

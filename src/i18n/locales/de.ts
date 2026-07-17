@@ -775,12 +775,12 @@ export const de: LanguageTranslation = {
         snap_to_grid_tooltip: 'Snap to Grid (Hold {{key}})',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} bearbeitet dies ebenfalls.',
+            two: '{{name1}} und {{name2}} bearbeiten dies ebenfalls.',
+            many: '{{name}} und {{count}} weitere bearbeiten dies ebenfalls.',
+            fallback_name: 'Kollaborator',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'Änderungen sind nicht gesperrt. Die zuletzt gespeicherte Bearbeitung gewinnt.',
         },
 
         tool_tips: {

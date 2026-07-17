@@ -759,12 +759,11 @@ export const zh_CN: LanguageTranslation = {
         snap_to_grid_tooltip: '对齐到网格（按住 {{key}}）',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
-            last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+            one: '{{name}} 也在编辑此项。',
+            two: '{{name1}} 和 {{name2}} 也在编辑此项。',
+            many: '{{name}} 和另外 {{count}} 人也在编辑此项。',
+            fallback_name: '协作者',
+            last_writer_wins: '更改未被锁定。最后保存的编辑生效。',
         },
 
         tool_tips: {

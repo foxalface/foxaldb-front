@@ -772,12 +772,12 @@ export const bn: LanguageTranslation = {
         snap_to_grid_tooltip: 'গ্রিডে স্ন্যাপ করুন (অবস্থান {{key}})',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} এটাও সম্পাদনা করছেন।',
+            two: '{{name1}} এবং {{name2}} এটাও সম্পাদনা করছেন।',
+            many: '{{name}} এবং আরও {{count}} জন এটাও সম্পাদনা করছেন।',
+            fallback_name: 'সহযোগী',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'পরিবর্তনগুলি লক করা নেই। শেষ সংরক্ষিত সম্পাদনাই প্রাধান্য পাবে।',
         },
 
         tool_tips: {

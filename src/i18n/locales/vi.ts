@@ -769,12 +769,12 @@ export const vi: LanguageTranslation = {
         snap_to_grid_tooltip: 'Căn lưới (Giữ phím {{key}})',
 
         editing_conflict: {
-            one: '{{name}} is also editing this.',
-            two: '{{name1}} and {{name2}} are also editing this.',
-            many: '{{name}} and {{count}} others are also editing this.',
-            fallback_name: 'Collaborator',
+            one: '{{name}} cũng đang chỉnh sửa mục này.',
+            two: '{{name1}} và {{name2}} cũng đang chỉnh sửa mục này.',
+            many: '{{name}} và {{count}} người khác cũng đang chỉnh sửa mục này.',
+            fallback_name: 'Cộng tác viên',
             last_writer_wins:
-                "Changes aren't locked. The last saved edit wins.",
+                'Thay đổi không bị khóa. Bản chỉnh sửa được lưu sau cùng sẽ thắng.',
         },
 
         tool_tips: {
