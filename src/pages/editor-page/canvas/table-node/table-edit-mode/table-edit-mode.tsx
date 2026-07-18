@@ -18,6 +18,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useUpdateTable } from '@/hooks/use-update-table';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { useEditingConflictWarning } from '@/hooks/use-editing-conflict-warning';
+import { useEditingConflictExplanation } from '@/hooks/use-editing-conflict-explanation';
 import { createTableEditingItem } from '@/lib/realtime/editing-utils';
 import { EntityConflictHint } from '@/components/presence/entity-conflict-hint';
 import { useTranslation } from 'react-i18next';
@@ -48,13 +49,14 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
             useChartDB();
         const { startEditing, stopEditing } = useEditingBroadcast();
         const [isLocallyEditing, setIsLocallyEditing] = useState(false);
-        const { message, editors } = useEditingConflictWarning(
+        const { message, editors, hasConflict } = useEditingConflictWarning(
             'table',
             table.id,
             {
                 isLocallyEditing,
             }
         );
+        const description = useEditingConflictExplanation(hasConflict);
         const { t } = useTranslation();
         const { openTableFromSidebar, selectSidebarSection } = useLayout();
         const { tableName, handleTableNameChange } = useUpdateTable(table);
@@ -330,7 +332,11 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
                         </Button>
                     </div>
                 </div>
-                <EntityConflictHint message={message} editors={editors} />
+                <EntityConflictHint
+                    message={message}
+                    editors={editors}
+                    description={description}
+                />
 
                 <ScrollArea ref={scrollAreaRef} className="nodrag flex-1 p-2">
                     {table.fields.map((field) => (

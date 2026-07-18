@@ -80,4 +80,58 @@ describe('EntityConflictHint', () => {
         expect(icon).not.toBeNull();
         expect(icon).toHaveAttribute('aria-hidden', 'true');
     });
+
+    it('renders a secondary description line when provided', () => {
+        render(
+            <EntityConflictHint
+                message="Alice is also editing this."
+                editors={[createEditor({ userId: 2, name: 'Alice' })]}
+                description="Changes aren't locked. The last saved edit wins."
+            />
+        );
+
+        expect(
+            screen.getByText('Alice is also editing this.')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText("Changes aren't locked. The last saved edit wins.")
+        ).toBeInTheDocument();
+    });
+
+    it('omits the secondary line when description is empty', () => {
+        render(
+            <EntityConflictHint
+                message="Alice is also editing this."
+                editors={[createEditor({ userId: 2, name: 'Alice' })]}
+                description=""
+            />
+        );
+
+        expect(
+            screen.getByText('Alice is also editing this.')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText(
+                "Changes aren't locked. The last saved edit wins."
+            )
+        ).toBeNull();
+    });
+
+    it('stays passive with a description present', () => {
+        const { container } = render(
+            <EntityConflictHint
+                message="Alice is also editing this."
+                editors={[createEditor({ userId: 2, name: 'Alice' })]}
+                description="Changes aren't locked. The last saved edit wins."
+            />
+        );
+
+        const root = container.firstElementChild;
+        expect(root).not.toBeNull();
+        expect(root).toHaveClass('pointer-events-none');
+        expect(root?.querySelectorAll('button, a, input').length).toBe(0);
+        expect(root?.querySelector('[tabindex]')).toBeNull();
+        expect(root?.getAttribute('role')).toBeNull();
+        expect(root?.getAttribute('aria-live')).toBeNull();
+    });
 });

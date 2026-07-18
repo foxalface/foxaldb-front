@@ -12,6 +12,7 @@ import type { RemoteEditingViewModel } from '@/lib/realtime/editing-utils';
 export interface EntityConflictHintProps {
     message: string;
     editors: readonly RemoteEditingViewModel[];
+    description?: string;
     className?: string;
 }
 
@@ -31,16 +32,20 @@ const areEditorsEqual = (
 const EntityConflictHintComponent: React.FC<EntityConflictHintProps> = ({
     message,
     editors,
+    description,
     className,
 }) => {
     if (message.length === 0 || editors.length === 0) {
         return null;
     }
 
+    const hasDescription = description !== undefined && description.length > 0;
+
     return (
         <div
             className={cn(
-                'pointer-events-none flex items-center gap-1 px-1 pb-1 text-[11px] leading-tight text-amber-700 dark:text-amber-400',
+                'pointer-events-none flex gap-1 px-1 pb-1 text-[11px] leading-tight text-amber-700 dark:text-amber-400',
+                hasDescription ? 'items-start' : 'items-center',
                 className
             )}
         >
@@ -48,7 +53,16 @@ const EntityConflictHintComponent: React.FC<EntityConflictHintProps> = ({
                 className="size-3 shrink-0 text-amber-600 dark:text-amber-400"
                 aria-hidden
             />
-            <span className="min-w-0 truncate">{message}</span>
+            {hasDescription ? (
+                <div className="flex min-w-0 flex-col gap-0.5">
+                    <span className="truncate">{message}</span>
+                    <span className="break-words opacity-80">
+                        {description}
+                    </span>
+                </div>
+            ) : (
+                <span className="min-w-0 truncate">{message}</span>
+            )}
         </div>
     );
 };
@@ -58,6 +72,7 @@ export const EntityConflictHint = React.memo(
     (previous, next) =>
         previous.message === next.message &&
         areEditorsEqual(previous.editors, next.editors) &&
+        previous.description === next.description &&
         previous.className === next.className
 );
 

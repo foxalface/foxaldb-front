@@ -6,6 +6,7 @@ import type { DatabaseType, DBTable } from '@/lib/domain';
 import { useUpdateTableField } from '@/hooks/use-update-table-field';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { useEditingConflictWarning } from '@/hooks/use-editing-conflict-warning';
+import { useEditingConflictExplanation } from '@/hooks/use-editing-conflict-explanation';
 import { createFieldEditingItem } from '@/lib/realtime/editing-utils';
 import { EntityConflictHint } from '@/components/presence/entity-conflict-hint';
 import {
@@ -32,13 +33,14 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
         const { startEditing, stopEditing } = useEditingBroadcast();
         const [showHighlight, setShowHighlight] = React.useState(false);
         const [isLocallyEditing, setIsLocallyEditing] = React.useState(false);
-        const { message, editors } = useEditingConflictWarning(
+        const { message, editors, hasConflict } = useEditingConflictWarning(
             'field',
             field.id,
             {
                 isLocallyEditing,
             }
         );
+        const description = useEditingConflictExplanation(hasConflict);
 
         const {
             dataFieldOptions,
@@ -230,7 +232,11 @@ export const TableEditModeField: React.FC<TableEditModeFieldProps> = React.memo(
                         </Tooltip>
                     </div>
                 </div>
-                <EntityConflictHint message={message} editors={editors} />
+                <EntityConflictHint
+                    message={message}
+                    editors={editors}
+                    description={description}
+                />
             </div>
         );
     }

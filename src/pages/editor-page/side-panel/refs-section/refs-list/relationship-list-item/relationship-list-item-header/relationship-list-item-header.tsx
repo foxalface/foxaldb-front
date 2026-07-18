@@ -13,6 +13,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { useEditingConflictWarning } from '@/hooks/use-editing-conflict-warning';
+import { useEditingConflictExplanation } from '@/hooks/use-editing-conflict-explanation';
 import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
 import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
 import { EntityConflictHint } from '@/components/presence/entity-conflict-hint';
@@ -48,13 +49,14 @@ export const RelationshipListItemHeader: React.FC<
     );
     const [editMode, setEditMode] = React.useState(false);
     const [isLocallyEditing, setIsLocallyEditing] = React.useState(false);
-    const { message, editors } = useEditingConflictWarning(
+    const { message, editors, hasConflict } = useEditingConflictWarning(
         'relationship',
         relationship.id,
         {
             isLocallyEditing,
         }
     );
+    const description = useEditingConflictExplanation(hasConflict);
     const [relationshipName, setRelationshipName] = React.useState(
         relationship.name
     );
@@ -212,7 +214,11 @@ export const RelationshipListItemHeader: React.FC<
                     )}
                 </div>
             </div>
-            <EntityConflictHint message={message} editors={editors} />
+            <EntityConflictHint
+                message={message}
+                editors={editors}
+                description={description}
+            />
         </div>
     );
 };
