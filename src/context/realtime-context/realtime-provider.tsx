@@ -186,6 +186,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     const selectionSubscriberRef = useRef(new SelectionActionSubscriber());
     const movementSubscriberRef = useRef(new MovementActionSubscriber());
     const editingSubscriberRef = useRef(new EditingActionSubscriber());
+    const reconnectConsumerListenersRef = useRef(new Set<() => void>());
     const presenceMembersRef = useRef(presence.members);
     presenceMembersRef.current = presence.members;
 
@@ -239,12 +240,31 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     useEffect(() => {
         const connectionManager = connectionManagerRef.current;
         const channelManager = channelManagerRef.current;
+        const consumerListeners = reconnectConsumerListenersRef.current;
 
-        return connectionManager.onReconnect(() => {
+        const unsubscribe = connectionManager.onReconnect(() => {
             dispatchPresence({ type: 'SET_DISCONNECTED' });
             channelManager.rejoinAll();
             setCurrentDiagramId(channelManager.getCurrentDiagramId());
+
+            // Notify only after rejoinAll completes. Snapshot so add/remove
+            // during notification cannot skip or double-invoke listeners.
+            for (const listener of [...consumerListeners]) {
+                try {
+                    listener();
+                } catch (error) {
+                    console.warn(
+                        '[Realtime] Post-rejoin consumer listener failed',
+                        error
+                    );
+                }
+            }
         });
+
+        return () => {
+            unsubscribe();
+            consumerListeners.clear();
+        };
     }, []);
 
     useEffect(() => {
@@ -361,6 +381,19 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const getDiagramPrivateChannel = useCallback(
+        () => channelManagerRef.current.getDiagramPrivateChannel() ?? null,
+        []
+    );
+
+    const onReconnect = useCallback((listener: () => void): (() => void) => {
+        reconnectConsumerListenersRef.current.add(listener);
+
+        return () => {
+            reconnectConsumerListenersRef.current.delete(listener);
+        };
+    }, []);
+
     const value = useMemo(
         () => ({
             connectionStatus,
@@ -368,6 +401,8 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             presence,
             joinDiagram,
             leaveDiagram,
+            getDiagramPrivateChannel,
+            onReconnect,
             sendCursor,
             subscribeToCursorActions,
             sendSelection,
@@ -384,6 +419,8 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             presence,
             joinDiagram,
             leaveDiagram,
+            getDiagramPrivateChannel,
+            onReconnect,
             sendCursor,
             subscribeToCursorActions,
             sendSelection,
