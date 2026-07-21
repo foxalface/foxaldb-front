@@ -4,15 +4,17 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DiagramComment } from '@/lib/comments/comment-types';
 import { EMPTY_COMMENTS } from '@/lib/comments/comment-selectors';
 import { CommentsContext } from '../comments-context';
-
-interface AuthValue {
-    user: { id: number; name: string; email: string } | null;
-    isAuthenticated: boolean;
-    isLoading: boolean;
-}
-
-let authValue: AuthValue;
-let currentDiagram: { id: string } | null;
+import { CommentsProvider } from '../comments-provider';
+import { useDiagramComments } from '@/hooks/use-diagram-comments';
+import { useCommentMutations } from '@/hooks/use-comment-mutations';
+import {
+    CommentsProviderTestWrapper,
+    createAuthenticatedAuth,
+    createCommentFixture,
+    createCommentsProviderTestEnv,
+    deferred,
+    resetCommentsProviderTestEnv,
+} from './comments-provider-test-utils';
 
 const {
     listDiagramComments,
@@ -26,12 +28,18 @@ const {
     deleteDiagramComment: vi.fn(),
 }));
 
+const env = createCommentsProviderTestEnv();
+
 vi.mock('@/hooks/use-auth', () => ({
-    useAuth: () => authValue,
+    useAuth: () => env.authValue,
 }));
 
 vi.mock('@/hooks/use-chartdb', () => ({
-    useChartDB: () => ({ currentDiagram }),
+    useChartDB: () => ({ currentDiagram: env.currentDiagram }),
+}));
+
+vi.mock('@/hooks/use-realtime', () => ({
+    useRealtime: () => env.realtimeValue,
 }));
 
 vi.mock('@/lib/api/diagram-comments', () => ({
@@ -41,47 +49,9 @@ vi.mock('@/lib/api/diagram-comments', () => ({
     deleteDiagramComment,
 }));
 
-import { CommentsProvider } from '../comments-provider';
-import { useDiagramComments } from '@/hooks/use-diagram-comments';
-import { useCommentMutations } from '@/hooks/use-comment-mutations';
-
-const comment = (
-    overrides: Partial<DiagramComment> & Pick<DiagramComment, 'id'>
-): DiagramComment => ({
-    diagramId: 42,
-    targetType: 'diagram',
-    targetId: null,
-    body: `body-${overrides.id}`,
-    user: { id: 1, name: 'Alice' },
-    createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
-    updatedAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
-    ...overrides,
-});
-
-const deferred = <T,>() => {
-    let resolve!: (value: T | PromiseLike<T>) => void;
-    let reject!: (reason?: unknown) => void;
-    const promise = new Promise<T>((res, rej) => {
-        resolve = res;
-        reject = rej;
-    });
-    return { promise, resolve, reject };
-};
-
-const wrapper = ({ children }: { children: React.ReactNode }) => (
-    <CommentsProvider>{children}</CommentsProvider>
-);
-
-const authenticatedAuth = (): AuthValue => ({
-    user: { id: 1, name: 'Alice', email: 'a@example.com' },
-    isAuthenticated: true,
-    isLoading: false,
-});
-
-describe('CommentsProvider', () => {
+describe('CommentsProvider HTTP lifecycle', () => {
     beforeEach(() => {
-        authValue = authenticatedAuth();
-        currentDiagram = { id: '42' };
+        resetCommentsProviderTestEnv(env);
         listDiagramComments.mockReset();
         createDiagramComment.mockReset();
         updateDiagramComment.mockReset();
@@ -91,12 +61,12 @@ describe('CommentsProvider', () => {
     describe('loading', () => {
         it('authenticated valid diagram triggers list and exposes ordered result', async () => {
             listDiagramComments.mockResolvedValue([
-                comment({ id: 2 }),
-                comment({ id: 1 }),
+                createCommentFixture({ id: 2 }),
+                createCommentFixture({ id: 1 }),
             ]);
 
             const { result } = renderHook(() => useDiagramComments(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             expect(result.current.status).toBe('loading');
@@ -117,14 +87,14 @@ describe('CommentsProvider', () => {
             listDiagramComments.mockReturnValue(pending.promise);
 
             const { result } = renderHook(() => useDiagramComments(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             expect(result.current.status).toBe('loading');
             expect(result.current.comments).toBe(EMPTY_COMMENTS);
 
             await act(async () => {
-                pending.resolve([comment({ id: 1 })]);
+                pending.resolve([createCommentFixture({ id: 1 })]);
             });
 
             await waitFor(() => {
@@ -137,7 +107,7 @@ describe('CommentsProvider', () => {
             listDiagramComments.mockRejectedValue(loadError);
 
             const { result } = renderHook(() => useDiagramComments(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             await waitFor(() => {
@@ -150,11 +120,11 @@ describe('CommentsProvider', () => {
         it('manual reload calls API again and retains comments while reloading', async () => {
             const reloadPending = deferred<DiagramComment[]>();
             listDiagramComments
-                .mockResolvedValueOnce([comment({ id: 1 })])
+                .mockResolvedValueOnce([createCommentFixture({ id: 1 })])
                 .mockReturnValueOnce(reloadPending.promise);
 
             const { result } = renderHook(() => useDiagramComments(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             await waitFor(() => {
@@ -175,7 +145,10 @@ describe('CommentsProvider', () => {
             expect(result.current.comments[0]?.id).toBe(1);
 
             await act(async () => {
-                reloadPending.resolve([comment({ id: 1 }), comment({ id: 2 })]);
+                reloadPending.resolve([
+                    createCommentFixture({ id: 1 }),
+                    createCommentFixture({ id: 2 }),
+                ]);
                 await reloadPromise;
             });
 
@@ -187,11 +160,11 @@ describe('CommentsProvider', () => {
         it('preserves comments array reference while same-diagram reload is loading', async () => {
             const reloadPending = deferred<DiagramComment[]>();
             listDiagramComments
-                .mockResolvedValueOnce([comment({ id: 1 })])
+                .mockResolvedValueOnce([createCommentFixture({ id: 1 })])
                 .mockReturnValueOnce(reloadPending.promise);
 
             const { result } = renderHook(() => useDiagramComments(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             await waitFor(() => {
@@ -213,7 +186,10 @@ describe('CommentsProvider', () => {
             expect(result.current.comments).toBe(commentsWhileReady);
 
             await act(async () => {
-                reloadPending.resolve([comment({ id: 1 }), comment({ id: 2 })]);
+                reloadPending.resolve([
+                    createCommentFixture({ id: 1 }),
+                    createCommentFixture({ id: 2 }),
+                ]);
                 await reloadPromise;
             });
 
@@ -225,11 +201,11 @@ describe('CommentsProvider', () => {
         it('preserves comments array reference when same-diagram reload fails', async () => {
             const reloadPending = deferred<DiagramComment[]>();
             listDiagramComments
-                .mockResolvedValueOnce([comment({ id: 1 })])
+                .mockResolvedValueOnce([createCommentFixture({ id: 1 })])
                 .mockReturnValueOnce(reloadPending.promise);
 
             const { result } = renderHook(() => useDiagramComments(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             await waitFor(() => {
@@ -269,20 +245,20 @@ describe('CommentsProvider', () => {
 
             const { result, rerender } = renderHook(
                 () => useDiagramComments(),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             expect(result.current.status).toBe('loading');
 
             await act(async () => {
-                first.resolve([comment({ id: 1, diagramId: 42 })]);
+                first.resolve([createCommentFixture({ id: 1, diagramId: 42 })]);
             });
 
             await waitFor(() => {
                 expect(result.current.comments).toHaveLength(1);
             });
 
-            currentDiagram = { id: '84' };
+            env.currentDiagram = { id: '84' };
             rerender();
 
             await waitFor(() => {
@@ -293,7 +269,7 @@ describe('CommentsProvider', () => {
 
             await act(async () => {
                 second.resolve([
-                    comment({ id: 9, diagramId: 84, body: 'new' }),
+                    createCommentFixture({ id: 9, diagramId: 84, body: 'new' }),
                 ]);
             });
 
@@ -312,14 +288,16 @@ describe('CommentsProvider', () => {
 
             const { result, rerender } = renderHook(
                 () => useDiagramComments(),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
-            currentDiagram = { id: '84' };
+            env.currentDiagram = { id: '84' };
             rerender();
 
             await act(async () => {
-                second.resolve([comment({ id: 9, diagramId: 84 })]);
+                second.resolve([
+                    createCommentFixture({ id: 9, diagramId: 84 }),
+                ]);
             });
 
             await waitFor(() => {
@@ -327,7 +305,7 @@ describe('CommentsProvider', () => {
             });
 
             await act(async () => {
-                first.resolve([comment({ id: 1, diagramId: 42 })]);
+                first.resolve([createCommentFixture({ id: 1, diagramId: 42 })]);
             });
 
             expect(result.current.comments.map((c) => c.id)).toEqual([9]);
@@ -343,14 +321,16 @@ describe('CommentsProvider', () => {
 
             const { result, rerender } = renderHook(
                 () => useDiagramComments(),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
-            currentDiagram = { id: '84' };
+            env.currentDiagram = { id: '84' };
             rerender();
 
             await act(async () => {
-                second.resolve([comment({ id: 9, diagramId: 84 })]);
+                second.resolve([
+                    createCommentFixture({ id: 9, diagramId: 84 }),
+                ]);
             });
 
             await waitFor(() => {
@@ -368,10 +348,10 @@ describe('CommentsProvider', () => {
         });
 
         it('guest/local diagram makes no request', async () => {
-            currentDiagram = { id: 'local-abc' };
+            env.currentDiagram = { id: 'local-abc' };
 
             const { result } = renderHook(() => useDiagramComments(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             expect(listDiagramComments).not.toHaveBeenCalled();
@@ -381,19 +361,19 @@ describe('CommentsProvider', () => {
         });
 
         it('invalid or missing diagram makes no request', async () => {
-            currentDiagram = { id: '' };
+            env.currentDiagram = { id: '' };
 
             const { result } = renderHook(() => useDiagramComments(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             expect(listDiagramComments).not.toHaveBeenCalled();
             expect(result.current.isActive).toBe(false);
 
-            currentDiagram = null;
+            env.currentDiagram = null;
             const { result: nullResult } = renderHook(
                 () => useDiagramComments(),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             expect(listDiagramComments).not.toHaveBeenCalled();
@@ -401,13 +381,13 @@ describe('CommentsProvider', () => {
         });
 
         it('auth loading makes no request', async () => {
-            authValue = {
-                ...authenticatedAuth(),
+            env.authValue = {
+                ...createAuthenticatedAuth(),
                 isLoading: true,
             };
 
             const { result } = renderHook(() => useDiagramComments(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             expect(listDiagramComments).not.toHaveBeenCalled();
@@ -416,18 +396,20 @@ describe('CommentsProvider', () => {
         });
 
         it('logout resets comments state', async () => {
-            listDiagramComments.mockResolvedValue([comment({ id: 1 })]);
+            listDiagramComments.mockResolvedValue([
+                createCommentFixture({ id: 1 }),
+            ]);
 
             const { result, rerender } = renderHook(
                 () => useDiagramComments(),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
                 expect(result.current.status).toBe('ready');
             });
 
-            authValue = {
+            env.authValue = {
                 user: null,
                 isAuthenticated: false,
                 isLoading: false,
@@ -461,7 +443,7 @@ describe('CommentsProvider', () => {
             unmount();
 
             await act(async () => {
-                pending.resolve([comment({ id: 1 })]);
+                pending.resolve([createCommentFixture({ id: 1 })]);
             });
 
             expect(
@@ -489,7 +471,7 @@ describe('CommentsProvider', () => {
         });
 
         it('create success upserts and returns', async () => {
-            const created = comment({ id: 5, body: 'hello' });
+            const created = createCommentFixture({ id: 5, body: 'hello' });
             createDiagramComment.mockResolvedValue(created);
 
             const { result } = renderHook(
@@ -497,7 +479,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -526,9 +508,9 @@ describe('CommentsProvider', () => {
 
         it('update success upserts and returns', async () => {
             listDiagramComments.mockResolvedValue([
-                comment({ id: 5, body: 'old' }),
+                createCommentFixture({ id: 5, body: 'old' }),
             ]);
-            const updated = comment({ id: 5, body: 'new' });
+            const updated = createCommentFixture({ id: 5, body: 'new' });
             updateDiagramComment.mockResolvedValue(updated);
 
             const { result } = renderHook(
@@ -536,7 +518,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -555,7 +537,9 @@ describe('CommentsProvider', () => {
         });
 
         it('delete success removes', async () => {
-            listDiagramComments.mockResolvedValue([comment({ id: 5 })]);
+            listDiagramComments.mockResolvedValue([
+                createCommentFixture({ id: 5 }),
+            ]);
             deleteDiagramComment.mockResolvedValue(undefined);
 
             const { result } = renderHook(
@@ -563,7 +547,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -587,7 +571,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -621,7 +605,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -634,7 +618,9 @@ describe('CommentsProvider', () => {
         });
 
         it('delete failure propagates unchanged', async () => {
-            listDiagramComments.mockResolvedValue([comment({ id: 5 })]);
+            listDiagramComments.mockResolvedValue([
+                createCommentFixture({ id: 5 }),
+            ]);
             const apiError = new Error('delete failed');
             deleteDiagramComment.mockRejectedValue(apiError);
 
@@ -643,7 +629,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -657,10 +643,10 @@ describe('CommentsProvider', () => {
         });
 
         it('inactive mutations reject with fresh Errors and without API calls', async () => {
-            currentDiagram = { id: 'local-x' };
+            env.currentDiagram = { id: 'local-x' };
 
             const { result } = renderHook(() => useCommentMutations(), {
-                wrapper,
+                wrapper: CommentsProviderTestWrapper,
             });
 
             let createErrorA!: unknown;
@@ -731,7 +717,9 @@ describe('CommentsProvider', () => {
         it('stale create after switch does not enter new state', async () => {
             listDiagramComments
                 .mockResolvedValueOnce([])
-                .mockResolvedValueOnce([comment({ id: 90, diagramId: 84 })]);
+                .mockResolvedValueOnce([
+                    createCommentFixture({ id: 90, diagramId: 84 }),
+                ]);
 
             const pendingCreate = deferred<DiagramComment>();
             createDiagramComment.mockReturnValue(pendingCreate.promise);
@@ -741,7 +729,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -757,7 +745,7 @@ describe('CommentsProvider', () => {
                 });
             });
 
-            currentDiagram = { id: '84' };
+            env.currentDiagram = { id: '84' };
             rerender();
 
             await waitFor(() => {
@@ -767,7 +755,7 @@ describe('CommentsProvider', () => {
                 expect(result.current.comments.status).toBe('ready');
             });
 
-            const created = comment({
+            const created = createCommentFixture({
                 id: 7,
                 diagramId: 42,
                 body: 'stale',
@@ -786,8 +774,12 @@ describe('CommentsProvider', () => {
 
         it('stale update after switch does not enter new state', async () => {
             listDiagramComments
-                .mockResolvedValueOnce([comment({ id: 5, diagramId: 42 })])
-                .mockResolvedValueOnce([comment({ id: 90, diagramId: 84 })]);
+                .mockResolvedValueOnce([
+                    createCommentFixture({ id: 5, diagramId: 42 }),
+                ])
+                .mockResolvedValueOnce([
+                    createCommentFixture({ id: 90, diagramId: 84 }),
+                ]);
 
             const pendingUpdate = deferred<DiagramComment>();
             updateDiagramComment.mockReturnValue(pendingUpdate.promise);
@@ -797,7 +789,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -811,7 +803,7 @@ describe('CommentsProvider', () => {
                 });
             });
 
-            currentDiagram = { id: '84' };
+            env.currentDiagram = { id: '84' };
             rerender();
 
             await waitFor(() => {
@@ -821,7 +813,7 @@ describe('CommentsProvider', () => {
                 expect(result.current.comments.status).toBe('ready');
             });
 
-            const updated = comment({
+            const updated = createCommentFixture({
                 id: 5,
                 diagramId: 42,
                 body: 'updated',
@@ -838,9 +830,15 @@ describe('CommentsProvider', () => {
 
         it('stale delete after switch does not remove from new state', async () => {
             listDiagramComments
-                .mockResolvedValueOnce([comment({ id: 5, diagramId: 42 })])
                 .mockResolvedValueOnce([
-                    comment({ id: 5, diagramId: 84, body: 'keep' }),
+                    createCommentFixture({ id: 5, diagramId: 42 }),
+                ])
+                .mockResolvedValueOnce([
+                    createCommentFixture({
+                        id: 5,
+                        diagramId: 84,
+                        body: 'keep',
+                    }),
                 ]);
 
             const pendingDelete = deferred<void>();
@@ -851,7 +849,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -863,7 +861,7 @@ describe('CommentsProvider', () => {
                 deletePromise = result.current.mutations.deleteComment(5);
             });
 
-            currentDiagram = { id: '84' };
+            env.currentDiagram = { id: '84' };
             rerender();
 
             await waitFor(() => {
@@ -894,7 +892,7 @@ describe('CommentsProvider', () => {
                     comments: useDiagramComments(),
                     mutations: useCommentMutations(),
                 }),
-                { wrapper }
+                { wrapper: CommentsProviderTestWrapper }
             );
 
             await waitFor(() => {
@@ -921,8 +919,8 @@ describe('CommentsProvider', () => {
             listDiagramComments.mockImplementation(() => {
                 resolveCount += 1;
                 return Promise.resolve([
-                    comment({ id: 1 }),
-                    comment({ id: 2 }),
+                    createCommentFixture({ id: 1 }),
+                    createCommentFixture({ id: 2 }),
                 ]);
             });
 
@@ -954,10 +952,12 @@ describe('CommentsProvider', () => {
     });
 
     it('does not expose reducer state, dispatch or Map on context value', async () => {
-        listDiagramComments.mockResolvedValue([comment({ id: 1 })]);
+        listDiagramComments.mockResolvedValue([
+            createCommentFixture({ id: 1 }),
+        ]);
 
         const { result } = renderHook(() => React.useContext(CommentsContext), {
-            wrapper,
+            wrapper: CommentsProviderTestWrapper,
         });
 
         await waitFor(() => {
@@ -969,5 +969,8 @@ describe('CommentsProvider', () => {
         expect(result.current).not.toHaveProperty('dispatch');
         expect(result.current).not.toHaveProperty('loadGeneration');
         expect(result.current?.comments).not.toBeInstanceOf(Map);
+        expect(result.current).not.toHaveProperty('subscribe');
+        expect(result.current).not.toHaveProperty('getDiagramPrivateChannel');
+        expect(result.current).not.toHaveProperty('onReconnect');
     });
 });

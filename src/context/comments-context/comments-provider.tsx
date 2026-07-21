@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useRealtime } from '@/hooks/use-realtime';
 import {
     createDiagramComment,
     deleteDiagramComment,
@@ -23,18 +24,29 @@ import type {
     DiagramComment,
     UpdateDiagramCommentInput,
 } from '@/lib/comments/comment-types';
+import { subscribeToDiagramCommentEvents } from '@/lib/realtime/comment-subscriber';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
     CommentsContext,
     createCommentsInactiveError,
     type CommentsContextValue,
 } from './comments-context';
+import {
+    adoptCommentSubscription,
+    clearActiveCommentSubscription,
+    type ActiveCommentSubscription,
+} from './comment-subscription-owner';
 
 export const CommentsProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { user, isAuthenticated, isLoading } = useAuth();
     const { currentDiagram } = useChartDB();
+    const {
+        currentDiagramId: realtimeCurrentDiagramId,
+        getDiagramPrivateChannel,
+        onReconnect,
+    } = useRealtime();
     const [state, dispatch] = useReducer(
         commentsReducer,
         undefined,
@@ -43,6 +55,13 @@ export const CommentsProvider: React.FC<React.PropsWithChildren> = ({
 
     const loadGenerationRef = useRef(0);
     const scopeDiagramIdRef = useRef<string | null>(null);
+    const activeCommentSubscriptionRef =
+        useRef<ActiveCommentSubscription | null>(null);
+    const getDiagramPrivateChannelRef = useRef(getDiagramPrivateChannel);
+    const realtimeCurrentDiagramIdRef = useRef(realtimeCurrentDiagramId);
+
+    getDiagramPrivateChannelRef.current = getDiagramPrivateChannel;
+    realtimeCurrentDiagramIdRef.current = realtimeCurrentDiagramId;
 
     const diagramId =
         currentDiagram !== null &&
@@ -60,6 +79,36 @@ export const CommentsProvider: React.FC<React.PropsWithChildren> = ({
     // that retain the same Map keep a stable comments array reference.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- state.byId
     const comments = useMemo(() => selectAllComments(state), [state.byId]);
+
+    const clearCommentSubscription = useCallback((): void => {
+        clearActiveCommentSubscription(activeCommentSubscriptionRef);
+    }, []);
+
+    const replaceCommentSubscription = useCallback((): (() => void) | null => {
+        clearCommentSubscription();
+
+        const targetDiagramId = scopeDiagramIdRef.current;
+        if (targetDiagramId === null) {
+            return null;
+        }
+
+        if (realtimeCurrentDiagramIdRef.current !== targetDiagramId) {
+            return null;
+        }
+
+        const channel = getDiagramPrivateChannelRef.current();
+        if (channel === null) {
+            return null;
+        }
+
+        const cleanup = subscribeToDiagramCommentEvents({
+            channel,
+            diagramId: targetDiagramId,
+            dispatch,
+        });
+
+        return adoptCommentSubscription(activeCommentSubscriptionRef, cleanup);
+    }, [clearCommentSubscription]);
 
     const loadComments = useCallback(
         async (targetDiagramId: string): Promise<void> => {
@@ -116,6 +165,33 @@ export const CommentsProvider: React.FC<React.PropsWithChildren> = ({
         };
     }, [isActive, diagramId, loadComments]);
 
+    useEffect(() => {
+        if (!isActive || diagramId === null) {
+            clearCommentSubscription();
+            return;
+        }
+
+        const releaseOwnedSubscription = replaceCommentSubscription();
+
+        return () => {
+            releaseOwnedSubscription?.();
+        };
+    }, [
+        isActive,
+        diagramId,
+        realtimeCurrentDiagramId,
+        clearCommentSubscription,
+        replaceCommentSubscription,
+    ]);
+
+    // Final unmount must clear the current subscription even when reconnect
+    // replaced the subscription owned by the last active effect setup.
+    useEffect(() => {
+        return () => {
+            clearCommentSubscription();
+        };
+    }, [clearCommentSubscription]);
+
     const reload = useCallback(async (): Promise<void> => {
         const targetDiagramId = scopeDiagramIdRef.current;
         if (targetDiagramId === null) {
@@ -124,6 +200,35 @@ export const CommentsProvider: React.FC<React.PropsWithChildren> = ({
 
         await loadComments(targetDiagramId);
     }, [loadComments]);
+
+    const reloadRef = useRef(reload);
+    reloadRef.current = reload;
+
+    const replaceCommentSubscriptionRef = useRef(replaceCommentSubscription);
+    replaceCommentSubscriptionRef.current = replaceCommentSubscription;
+
+    useEffect(() => {
+        if (!isActive) {
+            return;
+        }
+
+        return onReconnect(() => {
+            try {
+                replaceCommentSubscriptionRef.current();
+            } catch (error) {
+                console.warn(
+                    '[Comments] Failed to restore realtime comment subscription after reconnect',
+                    error
+                );
+            } finally {
+                if (scopeDiagramIdRef.current !== null) {
+                    void reloadRef.current().catch(() => {
+                        // LOAD_FAILED already stores the error.
+                    });
+                }
+            }
+        });
+    }, [isActive, onReconnect]);
 
     const createComment = useCallback(
         async (input: CreateDiagramCommentInput): Promise<DiagramComment> => {
