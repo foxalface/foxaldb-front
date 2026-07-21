@@ -36,6 +36,7 @@ import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-
 import { DiagramAccessProvider } from '@/context/diagram-access-context/diagram-access-provider';
 import { EditingBroadcastProvider } from '@/context/editing-broadcast-context/editing-broadcast-provider';
 import { RemoteEditingProvider } from '@/context/remote-editing-context/remote-editing-provider';
+import { CommentsProvider } from '@/context/comments-context/comments-provider';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -149,7 +150,9 @@ export const EditorPage: React.FC = () => (
                                                                         <KeyboardShortcutsProvider>
                                                                             <EditingBroadcastProvider>
                                                                                 <RemoteEditingProvider>
-                                                                                    <EditorPageComponent />
+                                                                                    <CommentsProvider>
+                                                                                        <EditorPageComponent />
+                                                                                    </CommentsProvider>
                                                                                 </RemoteEditingProvider>
                                                                             </EditingBroadcastProvider>
                                                                         </KeyboardShortcutsProvider>
