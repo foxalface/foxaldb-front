@@ -9,6 +9,7 @@ export const uk: LanguageTranslation = {
             refs: 'Зв’язки',
             dependencies: 'Залежності',
             custom_types: 'Користувацькі типи',
+            comments: 'Обговорення',
             visuals: 'Візуальні елементи',
         },
         menu: {
@@ -329,6 +330,33 @@ export const uk: LanguageTranslation = {
                         clear_field_highlight: 'Зняти виділення',
                     },
                     delete_custom_type: 'Видалити тип',
+                },
+            },
+            comments_section: {
+                title: 'Обговорення',
+                loading: 'Завантаження обговорень…',
+                inactive: {
+                    title: 'Обговорення недоступні',
+                    description:
+                        'Обговорення доступні лише для автентифікованих хмарних діаграм.',
+                },
+                empty: {
+                    title: 'Поки немає обговорень',
+                    description: 'Розмови про цю діаграму з’являться тут.',
+                },
+                errors: {
+                    load_title: 'Не вдалося завантажити обговорення',
+                    load_description:
+                        'Під час завантаження обговорень сталася помилка. Спробуйте ще раз.',
+                },
+                retry: 'Повторити',
+                deleted_user: 'Видалений користувач',
+                targets: {
+                    diagram: 'Обговорення діаграми',
+                    table: 'Обговорення таблиці',
+                    field: 'Обговорення поля',
+                    relationship: 'Обговорення зв’язку',
+                    unknown: 'Обговорення',
                 },
             },
         },

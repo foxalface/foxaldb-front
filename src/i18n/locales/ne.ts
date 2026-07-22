@@ -9,6 +9,7 @@ export const ne: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'निर्भरताहरू',
             custom_types: 'कस्टम प्रकारहरू',
+            comments: 'छलफलहरू',
             visuals: 'Visuals',
         },
         menu: {
@@ -330,6 +331,34 @@ export const ne: LanguageTranslation = {
                         clear_field_highlight: 'हाइलाइट हटाउनुहोस्',
                     },
                     delete_custom_type: 'प्रकार मेट्नुहोस्',
+                },
+            },
+            comments_section: {
+                title: 'छलफलहरू',
+                loading: 'छलफलहरू लोड हुँदै…',
+                inactive: {
+                    title: 'छलफलहरू उपलब्ध छैनन्',
+                    description:
+                        'छलफलहरू प्रमाणित क्लाउड रेखाचित्रहरूमा मात्र उपलब्ध छन्।',
+                },
+                empty: {
+                    title: 'अहिलेसम्म कुनै छलफल छैन',
+                    description:
+                        'यो रेखाचित्रका बारेका कुराकानीहरू यहाँ देखिने छन्।',
+                },
+                errors: {
+                    load_title: 'छलफलहरू लोड गर्न सकिएन',
+                    load_description:
+                        'छलफलहरू लोड गर्दा केही गलत भयो। कृपया फेरि प्रयास गर्नुहोस्।',
+                },
+                retry: 'फेरि प्रयास गर्नुहोस्',
+                deleted_user: 'मेटिएको प्रयोगकर्ता',
+                targets: {
+                    diagram: 'रेखाचित्र छलफल',
+                    table: 'तालिका छलफल',
+                    field: 'फिल्ड छलफल',
+                    relationship: 'सम्बन्ध छलफल',
+                    unknown: 'छलफल',
                 },
             },
         },

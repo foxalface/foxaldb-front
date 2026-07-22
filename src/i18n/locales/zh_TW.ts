@@ -9,6 +9,7 @@ export const zh_TW: LanguageTranslation = {
             refs: 'Refs',
             dependencies: '相依性',
             custom_types: '自定義類型',
+            comments: '討論',
             visuals: '視覺效果',
         },
         menu: {
@@ -323,6 +324,31 @@ export const zh_TW: LanguageTranslation = {
                         clear_field_highlight: '清除突出顯示',
                     },
                     delete_custom_type: '刪除類型',
+                },
+            },
+            comments_section: {
+                title: '討論',
+                loading: '正在載入討論…',
+                inactive: {
+                    title: '討論無法使用',
+                    description: '討論僅適用於已驗證的雲端圖表。',
+                },
+                empty: {
+                    title: '尚無討論',
+                    description: '與此圖表相關的對話會顯示在這裡。',
+                },
+                errors: {
+                    load_title: '無法載入討論',
+                    load_description: '載入討論時發生錯誤。請再試一次。',
+                },
+                retry: '重試',
+                deleted_user: '已刪除的使用者',
+                targets: {
+                    diagram: '圖表討論',
+                    table: '資料表討論',
+                    field: '欄位討論',
+                    relationship: '關聯討論',
+                    unknown: '討論',
                 },
             },
         },

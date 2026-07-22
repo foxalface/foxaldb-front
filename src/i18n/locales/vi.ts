@@ -9,6 +9,7 @@ export const vi: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Phụ thuộc',
             custom_types: 'Kiểu tùy chỉnh',
+            comments: 'Thảo luận',
             visuals: 'Hình ảnh',
         },
         menu: {
@@ -329,6 +330,34 @@ export const vi: LanguageTranslation = {
                         clear_field_highlight: 'Xóa Làm Nổi Bật',
                     },
                     delete_custom_type: 'Xóa Loại',
+                },
+            },
+            comments_section: {
+                title: 'Thảo luận',
+                loading: 'Đang tải thảo luận…',
+                inactive: {
+                    title: 'Thảo luận không khả dụng',
+                    description:
+                        'Thảo luận chỉ khả dụng trên các sơ đồ đám mây đã xác thực.',
+                },
+                empty: {
+                    title: 'Chưa có thảo luận nào',
+                    description:
+                        'Các cuộc trò chuyện về sơ đồ này sẽ xuất hiện tại đây.',
+                },
+                errors: {
+                    load_title: 'Không thể tải thảo luận',
+                    load_description:
+                        'Đã xảy ra lỗi khi tải thảo luận. Vui lòng thử lại.',
+                },
+                retry: 'Thử lại',
+                deleted_user: 'Người dùng đã xóa',
+                targets: {
+                    diagram: 'Thảo luận sơ đồ',
+                    table: 'Thảo luận bảng',
+                    field: 'Thảo luận trường',
+                    relationship: 'Thảo luận quan hệ',
+                    unknown: 'Thảo luận',
                 },
             },
         },

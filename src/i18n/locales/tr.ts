@@ -9,6 +9,7 @@ export const tr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Bağımlılıklar',
             custom_types: 'Özel Tipler',
+            comments: 'Tartışmalar',
             visuals: 'Görseller',
         },
         menu: {
@@ -328,6 +329,34 @@ export const tr: LanguageTranslation = {
                         clear_field_highlight: 'Vurguyu Kaldır',
                     },
                     delete_custom_type: 'Tipi Sil',
+                },
+            },
+            comments_section: {
+                title: 'Tartışmalar',
+                loading: 'Tartışmalar yükleniyor…',
+                inactive: {
+                    title: 'Tartışmalar kullanılamıyor',
+                    description:
+                        'Tartışmalar yalnızca kimliği doğrulanmış bulut diyagramlarında kullanılabilir.',
+                },
+                empty: {
+                    title: 'Henüz tartışma yok',
+                    description:
+                        'Bu diyagram hakkındaki konuşmalar burada görünecek.',
+                },
+                errors: {
+                    load_title: 'Tartışmalar yüklenemedi',
+                    load_description:
+                        'Tartışmalar yüklenirken bir sorun oluştu. Lütfen tekrar deneyin.',
+                },
+                retry: 'Yeniden dene',
+                deleted_user: 'Silinmiş kullanıcı',
+                targets: {
+                    diagram: 'Diyagram tartışması',
+                    table: 'Tablo tartışması',
+                    field: 'Alan tartışması',
+                    relationship: 'İlişki tartışması',
+                    unknown: 'Tartışma',
                 },
             },
         },

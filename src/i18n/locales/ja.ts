@@ -9,6 +9,7 @@ export const ja: LanguageTranslation = {
             refs: '参照',
             dependencies: '依存関係',
             custom_types: 'カスタムタイプ',
+            comments: 'ディスカッション',
             visuals: 'ビジュアル',
         },
         menu: {
@@ -332,6 +333,33 @@ export const ja: LanguageTranslation = {
                         clear_field_highlight: 'ハイライトを解除',
                     },
                     delete_custom_type: '型を削除',
+                },
+            },
+            comments_section: {
+                title: 'ディスカッション',
+                loading: 'ディスカッションを読み込み中…',
+                inactive: {
+                    title: 'ディスカッションは利用できません',
+                    description:
+                        'ディスカッションは認証済みのクラウド図でのみ利用できます。',
+                },
+                empty: {
+                    title: 'まだディスカッションはありません',
+                    description: 'この図に関する会話がここに表示されます。',
+                },
+                errors: {
+                    load_title: 'ディスカッションを読み込めませんでした',
+                    load_description:
+                        'ディスカッションの読み込み中に問題が発生しました。もう一度お試しください。',
+                },
+                retry: '再試行',
+                deleted_user: '削除されたユーザー',
+                targets: {
+                    diagram: '図のディスカッション',
+                    table: 'テーブルのディスカッション',
+                    field: 'フィールドのディスカッション',
+                    relationship: 'リレーションシップのディスカッション',
+                    unknown: 'ディスカッション',
                 },
             },
         },

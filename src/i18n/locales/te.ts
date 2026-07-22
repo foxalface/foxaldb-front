@@ -9,6 +9,7 @@ export const te: LanguageTranslation = {
             refs: 'సంబంధాలు',
             dependencies: 'ఆధారతలు',
             custom_types: 'కస్టమ్ టైప్స్',
+            comments: 'చర్చలు',
             visuals: 'Visuals',
         },
         menu: {
@@ -330,6 +331,34 @@ export const te: LanguageTranslation = {
                         clear_field_highlight: 'హైలైట్ తొలగించండి',
                     },
                     delete_custom_type: 'రకాన్ని తొలగించండి',
+                },
+            },
+            comments_section: {
+                title: 'చర్చలు',
+                loading: 'చర్చలు లోడ్ అవుతున్నాయి…',
+                inactive: {
+                    title: 'చర్చలు అందుబాటులో లేవు',
+                    description:
+                        'చర్చలు ప్రామాణీకృత క్లౌడ్ రేఖాచిత్రాలలో మాత్రమే అందుబాటులో ఉంటాయి.',
+                },
+                empty: {
+                    title: 'ఇంకా చర్చలు లేవు',
+                    description:
+                        'ఈ రేఖాచిత్రం గురించిన సంభాషణలు ఇక్కడ కనిపిస్తాయి.',
+                },
+                errors: {
+                    load_title: 'చర్చలను లోడ్ చేయలేకపోయాము',
+                    load_description:
+                        'చర్చలను లోడ్ చేస్తున్నప్పుడు ఏదో తప్పు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                },
+                retry: 'మళ్లీ ప్రయత్నించండి',
+                deleted_user: 'తొలగించబడిన వినియోగదారు',
+                targets: {
+                    diagram: 'రేఖాచిత్ర చర్చ',
+                    table: 'టేబుల్ చర్చ',
+                    field: 'ఫీల్డ్ చర్చ',
+                    relationship: 'రిలేషన్‌షిప్ చర్చ',
+                    unknown: 'చర్చ',
                 },
             },
         },

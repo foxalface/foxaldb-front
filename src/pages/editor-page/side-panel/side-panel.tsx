@@ -17,7 +17,9 @@ import { CustomTypesSection } from './custom-types-section/custom-types-section'
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { RefsSection } from './refs-section/refs-section';
 import { VisualsSection } from './visuals-section/visuals-section';
+import { CommentsSection } from './comments-section/comments-section';
 import { Spinner } from '@/components/spinner/spinner';
+import { useDiagramComments } from '@/hooks/use-diagram-comments';
 
 const DBMLSectionLazy = React.lazy(() =>
     import('./dbml-section/dbml-section').then((module) => ({
@@ -32,6 +34,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
     const { databaseType } = useChartDB();
     const { selectSidebarSection, selectedSidebarSection } = useLayout();
     const { isMd: isDesktop } = useBreakpoint('md');
+    const { isActive: commentsActive } = useDiagramComments();
 
     return (
         <aside className="flex h-full flex-col overflow-hidden">
@@ -70,6 +73,11 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                         )}
                                     </SelectItem>
                                 ) : null}
+                                {commentsActive ? (
+                                    <SelectItem value="comments">
+                                        {t('side_panel.comments_section.title')}
+                                    </SelectItem>
+                                ) : null}
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -91,6 +99,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 <RefsSection />
             ) : selectedSidebarSection === 'visuals' ? (
                 <VisualsSection />
+            ) : selectedSidebarSection === 'comments' ? (
+                <CommentsSection />
             ) : (
                 <CustomTypesSection />
             )}

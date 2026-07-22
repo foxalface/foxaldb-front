@@ -9,6 +9,7 @@ export const bn: LanguageTranslation = {
             refs: 'রেফস',
             dependencies: 'নির্ভরতা',
             custom_types: 'কাস্টম টাইপ',
+            comments: 'আলোচনা',
             visuals: 'ভিজ্যুয়াল',
         },
         menu: {
@@ -331,6 +332,34 @@ export const bn: LanguageTranslation = {
                         clear_field_highlight: 'হাইলাইট সরান',
                     },
                     delete_custom_type: 'টাইপ মুছুন',
+                },
+            },
+            comments_section: {
+                title: 'আলোচনা',
+                loading: 'আলোচনা লোড হচ্ছে…',
+                inactive: {
+                    title: 'আলোচনা উপলব্ধ নয়',
+                    description:
+                        'আলোচনা শুধুমাত্র প্রমাণীকৃত ক্লাউড ডায়াগ্রামে উপলব্ধ।',
+                },
+                empty: {
+                    title: 'এখনও কোনো আলোচনা নেই',
+                    description:
+                        'এই ডায়াগ্রাম সম্পর্কিত কথোপকথন এখানে দেখা যাবে।',
+                },
+                errors: {
+                    load_title: 'আলোচনা লোড করা যায়নি',
+                    load_description:
+                        'আলোচনা লোড করার সময় কিছু ভুল হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                },
+                retry: 'পুনরায় চেষ্টা করুন',
+                deleted_user: 'মুছে ফেলা ব্যবহারকারী',
+                targets: {
+                    diagram: 'ডায়াগ্রাম আলোচনা',
+                    table: 'টেবিল আলোচনা',
+                    field: 'ফিল্ড আলোচনা',
+                    relationship: 'রিলেশনশিপ আলোচনা',
+                    unknown: 'আলোচনা',
                 },
             },
         },

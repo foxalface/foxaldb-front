@@ -9,6 +9,7 @@ export const id_ID: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Ketergantungan',
             custom_types: 'Tipe Kustom',
+            comments: 'Diskusi',
             visuals: 'Visual',
         },
         menu: {
@@ -329,6 +330,34 @@ export const id_ID: LanguageTranslation = {
                         clear_field_highlight: 'Hapus Sorotan',
                     },
                     delete_custom_type: 'Hapus Tipe',
+                },
+            },
+            comments_section: {
+                title: 'Diskusi',
+                loading: 'Memuat diskusi…',
+                inactive: {
+                    title: 'Diskusi tidak tersedia',
+                    description:
+                        'Diskusi hanya tersedia pada diagram cloud yang terautentikasi.',
+                },
+                empty: {
+                    title: 'Belum ada diskusi',
+                    description:
+                        'Percakapan tentang diagram ini akan muncul di sini.',
+                },
+                errors: {
+                    load_title: 'Tidak dapat memuat diskusi',
+                    load_description:
+                        'Terjadi kesalahan saat memuat diskusi. Silakan coba lagi.',
+                },
+                retry: 'Coba lagi',
+                deleted_user: 'Pengguna dihapus',
+                targets: {
+                    diagram: 'Diskusi diagram',
+                    table: 'Diskusi tabel',
+                    field: 'Diskusi kolom',
+                    relationship: 'Diskusi relasi',
+                    unknown: 'Diskusi',
                 },
             },
         },

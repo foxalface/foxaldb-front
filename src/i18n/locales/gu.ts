@@ -9,6 +9,7 @@ export const gu: LanguageTranslation = {
             refs: 'રેફ્સ',
             dependencies: 'નિર્ભરતાઓ',
             custom_types: 'કસ્ટમ ટાઇપ',
+            comments: 'ચર્ચાઓ',
             visuals: 'Visuals',
         },
         menu: {
@@ -330,6 +331,33 @@ export const gu: LanguageTranslation = {
                         clear_field_highlight: 'હાઇલાઇટ કાઢો',
                     },
                     delete_custom_type: 'પ્રકાર કાઢી નાખો',
+                },
+            },
+            comments_section: {
+                title: 'ચર્ચાઓ',
+                loading: 'ચર્ચાઓ લોડ થઈ રહી છે…',
+                inactive: {
+                    title: 'ચર્ચાઓ ઉપલબ્ધ નથી',
+                    description:
+                        'ચર્ચાઓ ફક્ત પ્રમાણિત ક્લાઉડ ડાયાગ્રામ પર ઉપલબ્ધ છે.',
+                },
+                empty: {
+                    title: 'હજુ સુધી કોઈ ચર્ચા નથી',
+                    description: 'આ ડાયાગ્રામ વિશેની વાતચીત અહીં દેખાશે.',
+                },
+                errors: {
+                    load_title: 'ચર્ચાઓ લોડ કરી શકાઈ નથી',
+                    load_description:
+                        'ચર્ચાઓ લોડ કરતી વખતે કંઈક ખોટું થયું. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                },
+                retry: 'ફરી પ્રયાસ કરો',
+                deleted_user: 'કાઢી નાખેલ વપરાશકર્તા',
+                targets: {
+                    diagram: 'ડાયાગ્રામ ચર્ચા',
+                    table: 'ટેબલ ચર્ચા',
+                    field: 'ફીલ્ડ ચર્ચા',
+                    relationship: 'સંબંધ ચર્ચા',
+                    unknown: 'ચર્ચા',
                 },
             },
         },

@@ -9,6 +9,7 @@ export const fr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Dépendances',
             custom_types: 'Types Personnalisés',
+            comments: 'Discussions',
             visuals: 'Visuels',
         },
         menu: {
@@ -327,6 +328,34 @@ export const fr: LanguageTranslation = {
                         clear_field_highlight: 'Effacer le Surlignage',
                     },
                     delete_custom_type: 'Supprimer le Type',
+                },
+            },
+            comments_section: {
+                title: 'Discussions',
+                loading: 'Chargement des discussions…',
+                inactive: {
+                    title: 'Discussions indisponibles',
+                    description:
+                        'Les discussions sont disponibles uniquement sur les diagrammes cloud authentifiés.',
+                },
+                empty: {
+                    title: 'Aucune discussion pour le moment',
+                    description:
+                        'Les échanges sur ce diagramme apparaîtront ici.',
+                },
+                errors: {
+                    load_title: 'Impossible de charger les discussions',
+                    load_description:
+                        'Une erreur est survenue lors du chargement des discussions. Veuillez réessayer.',
+                },
+                retry: 'Réessayer',
+                deleted_user: 'Utilisateur supprimé',
+                targets: {
+                    diagram: 'Discussion sur le diagramme',
+                    table: 'Discussion sur la table',
+                    field: 'Discussion sur le champ',
+                    relationship: 'Discussion sur la relation',
+                    unknown: 'Discussion',
                 },
             },
         },

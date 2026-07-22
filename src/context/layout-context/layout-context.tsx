@@ -6,7 +6,8 @@ export type SidebarSection =
     | 'tables'
     | 'refs'
     | 'customTypes'
-    | 'visuals';
+    | 'visuals'
+    | 'comments';
 
 export type VisualsTab = 'areas' | 'notes';
 

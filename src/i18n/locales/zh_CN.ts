@@ -9,6 +9,7 @@ export const zh_CN: LanguageTranslation = {
             refs: '引用',
             dependencies: '依赖关系',
             custom_types: '自定义类型',
+            comments: '讨论',
             visuals: '视觉效果',
         },
         menu: {
@@ -323,6 +324,31 @@ export const zh_CN: LanguageTranslation = {
                         clear_field_highlight: '清除高亮',
                     },
                     delete_custom_type: '删除类型',
+                },
+            },
+            comments_section: {
+                title: '讨论',
+                loading: '正在加载讨论…',
+                inactive: {
+                    title: '讨论不可用',
+                    description: '讨论仅适用于已认证的云端图表。',
+                },
+                empty: {
+                    title: '暂无讨论',
+                    description: '有关此图表的对话将显示在此处。',
+                },
+                errors: {
+                    load_title: '无法加载讨论',
+                    load_description: '加载讨论时出错。请重试。',
+                },
+                retry: '重试',
+                deleted_user: '已删除的用户',
+                targets: {
+                    diagram: '图表讨论',
+                    table: '表讨论',
+                    field: '字段讨论',
+                    relationship: '关系讨论',
+                    unknown: '讨论',
                 },
             },
         },

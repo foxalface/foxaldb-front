@@ -17,6 +17,7 @@ import {
     Plus,
     FolderOpen,
     CodeXml,
+    MessageCircle,
 } from 'lucide-react';
 import { Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
@@ -30,6 +31,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
+import { useDiagramComments } from '@/hooks/use-diagram-comments';
 
 export interface SidebarItem {
     title: string;
@@ -53,6 +55,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { effectiveTheme } = useTheme();
     const { databaseType } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
+    const { isActive: commentsActive } = useDiagramComments();
 
     const diagramItems: SidebarItem[] = useMemo(
         () => [
@@ -128,6 +131,19 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active: selectedSidebarSection === 'visuals',
             },
+            ...(commentsActive
+                ? [
+                      {
+                          title: t('editor_sidebar.comments'),
+                          icon: MessageCircle,
+                          onClick: () => {
+                              showSidePanel();
+                              selectSidebarSection('comments');
+                          },
+                          active: selectedSidebarSection === 'comments',
+                      },
+                  ]
+                : []),
         ],
         [
             selectSidebarSection,
@@ -136,6 +152,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             showSidePanel,
             databaseType,
             selectVisualsTab,
+            commentsActive,
         ]
     );
 
@@ -231,7 +248,12 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                         isActive={item.active}
                                         asChild
                                     >
-                                        <button onClick={item.onClick}>
+                                        <button
+                                            type="button"
+                                            onClick={item.onClick}
+                                            aria-label={item.title}
+                                            title={item.title}
+                                        >
                                             <item.icon />
                                             <span>
                                                 {item.title

@@ -9,6 +9,7 @@ export const ru: LanguageTranslation = {
             refs: 'Ссылки',
             dependencies: 'Зависимости',
             custom_types: 'Пользовательские типы',
+            comments: 'Обсуждения',
             visuals: 'Визуальные элементы',
         },
         menu: {
@@ -328,6 +329,33 @@ export const ru: LanguageTranslation = {
                         clear_field_highlight: 'Снять выделение',
                     },
                     delete_custom_type: 'Удалить тип',
+                },
+            },
+            comments_section: {
+                title: 'Обсуждения',
+                loading: 'Загрузка обсуждений…',
+                inactive: {
+                    title: 'Обсуждения недоступны',
+                    description:
+                        'Обсуждения доступны только для аутентифицированных облачных диаграмм.',
+                },
+                empty: {
+                    title: 'Пока нет обсуждений',
+                    description: 'Разговоры об этой диаграмме появятся здесь.',
+                },
+                errors: {
+                    load_title: 'Не удалось загрузить обсуждения',
+                    load_description:
+                        'При загрузке обсуждений произошла ошибка. Попробуйте ещё раз.',
+                },
+                retry: 'Повторить',
+                deleted_user: 'Удалённый пользователь',
+                targets: {
+                    diagram: 'Обсуждение диаграммы',
+                    table: 'Обсуждение таблицы',
+                    field: 'Обсуждение поля',
+                    relationship: 'Обсуждение связи',
+                    unknown: 'Обсуждение',
                 },
             },
         },

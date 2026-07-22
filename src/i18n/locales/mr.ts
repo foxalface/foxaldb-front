@@ -9,6 +9,7 @@ export const mr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'अवलंबने',
             custom_types: 'कस्टम प्रकार',
+            comments: 'चर्चा',
             visuals: 'Visuals',
         },
         menu: {
@@ -334,6 +335,33 @@ export const mr: LanguageTranslation = {
                         clear_field_highlight: 'हायलाइट काढा',
                     },
                     delete_custom_type: 'प्रकार हटवा',
+                },
+            },
+            comments_section: {
+                title: 'चर्चा',
+                loading: 'चर्चा लोड होत आहेत…',
+                inactive: {
+                    title: 'चर्चा उपलब्ध नाहीत',
+                    description:
+                        'चर्चा फक्त प्रमाणित क्लाउड आकृतींवर उपलब्ध आहेत.',
+                },
+                empty: {
+                    title: 'अद्याप कोणतीही चर्चा नाही',
+                    description: 'या आकृतीबद्दलच्या संभाषणे येथे दिसतील.',
+                },
+                errors: {
+                    load_title: 'चर्चा लोड करता आल्या नाहीत',
+                    load_description:
+                        'चर्चा लोड करताना काहीतरी चुकले. कृपया पुन्हा प्रयत्न करा.',
+                },
+                retry: 'पुन्हा प्रयत्न करा',
+                deleted_user: 'हटवलेला वापरकर्ता',
+                targets: {
+                    diagram: 'आकृती चर्चा',
+                    table: 'टेबल चर्चा',
+                    field: 'फील्ड चर्चा',
+                    relationship: 'संबंध चर्चा',
+                    unknown: 'चर्चा',
                 },
             },
         },

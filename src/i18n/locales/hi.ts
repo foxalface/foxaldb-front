@@ -9,6 +9,7 @@ export const hi: LanguageTranslation = {
             refs: 'रेफ्स',
             dependencies: 'निर्भरताएं',
             custom_types: 'कस्टम टाइप',
+            comments: 'चर्चाएँ',
             visuals: 'Visuals',
         },
         menu: {
@@ -331,6 +332,33 @@ export const hi: LanguageTranslation = {
                         clear_field_highlight: 'हाइलाइट हटाएं',
                     },
                     delete_custom_type: 'प्रकार हटाएं',
+                },
+            },
+            comments_section: {
+                title: 'चर्चाएँ',
+                loading: 'चर्चाएँ लोड हो रही हैं…',
+                inactive: {
+                    title: 'चर्चाएँ उपलब्ध नहीं हैं',
+                    description:
+                        'चर्चाएँ केवल प्रमाणित क्लाउड आरेखों पर उपलब्ध हैं।',
+                },
+                empty: {
+                    title: 'अभी तक कोई चर्चा नहीं',
+                    description: 'इस आरेख के बारे में बातचीत यहाँ दिखाई देगी।',
+                },
+                errors: {
+                    load_title: 'चर्चाएँ लोड नहीं हो सकीं',
+                    load_description:
+                        'चर्चाएँ लोड करते समय कुछ गलत हुआ। कृपया फिर से प्रयास करें।',
+                },
+                retry: 'पुनः प्रयास करें',
+                deleted_user: 'हटाया गया उपयोगकर्ता',
+                targets: {
+                    diagram: 'आरेख चर्चा',
+                    table: 'तालिका चर्चा',
+                    field: 'फ़ील्ड चर्चा',
+                    relationship: 'संबंध चर्चा',
+                    unknown: 'चर्चा',
                 },
             },
         },

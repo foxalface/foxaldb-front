@@ -9,6 +9,7 @@ export const ar: LanguageTranslation = {
             refs: 'المراجع',
             dependencies: 'التبعيات',
             custom_types: 'الأنواع المخصصة',
+            comments: 'النقاشات',
             visuals: 'مرئيات',
         },
         menu: {
@@ -325,6 +326,33 @@ export const ar: LanguageTranslation = {
                         clear_field_highlight: 'إزالة التمييز',
                     },
                     delete_custom_type: 'حذف النوع',
+                },
+            },
+            comments_section: {
+                title: 'النقاشات',
+                loading: 'جاري تحميل النقاشات…',
+                inactive: {
+                    title: 'النقاشات غير متاحة',
+                    description:
+                        'النقاشات متاحة فقط لمخططات السحابة المصادق عليها.',
+                },
+                empty: {
+                    title: 'لا توجد نقاشات بعد',
+                    description: 'ستظهر هنا المحادثات حول هذا المخطط.',
+                },
+                errors: {
+                    load_title: 'تعذر تحميل النقاشات',
+                    load_description:
+                        'حدث خطأ أثناء تحميل النقاشات. يرجى المحاولة مرة أخرى.',
+                },
+                retry: 'إعادة المحاولة',
+                deleted_user: 'مستخدم محذوف',
+                targets: {
+                    diagram: 'نقاش حول المخطط',
+                    table: 'نقاش حول الجدول',
+                    field: 'نقاش حول الحقل',
+                    relationship: 'نقاش حول العلاقة',
+                    unknown: 'نقاش',
                 },
             },
         },

@@ -9,6 +9,7 @@ export const es: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Dependencias',
             custom_types: 'Tipos Personalizados',
+            comments: 'Discusiones',
             visuals: 'Visuales',
         },
         menu: {
@@ -330,6 +331,34 @@ export const es: LanguageTranslation = {
                         clear_field_highlight: 'Quitar Resaltado',
                     },
                     delete_custom_type: 'Eliminar Tipo',
+                },
+            },
+            comments_section: {
+                title: 'Discusiones',
+                loading: 'Cargando discusiones…',
+                inactive: {
+                    title: 'Discusiones no disponibles',
+                    description:
+                        'Las discusiones solo están disponibles en diagramas en la nube autenticados.',
+                },
+                empty: {
+                    title: 'Aún no hay discusiones',
+                    description:
+                        'Las conversaciones sobre este diagrama aparecerán aquí.',
+                },
+                errors: {
+                    load_title: 'No se pudieron cargar las discusiones',
+                    load_description:
+                        'Algo salió mal al cargar las discusiones. Inténtalo de nuevo.',
+                },
+                retry: 'Reintentar',
+                deleted_user: 'Usuario eliminado',
+                targets: {
+                    diagram: 'Discusión del diagrama',
+                    table: 'Discusión de la tabla',
+                    field: 'Discusión del campo',
+                    relationship: 'Discusión de la relación',
+                    unknown: 'Discusión',
                 },
             },
         },

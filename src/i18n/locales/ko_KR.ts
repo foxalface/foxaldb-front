@@ -9,6 +9,7 @@ export const ko_KR: LanguageTranslation = {
             refs: 'Refs',
             dependencies: '종속성',
             custom_types: '사용자 지정 타입',
+            comments: '토론',
             visuals: '시각화',
         },
         menu: {
@@ -329,6 +330,34 @@ export const ko_KR: LanguageTranslation = {
                         clear_field_highlight: '강조 표시 지우기',
                     },
                     delete_custom_type: '타입 삭제',
+                },
+            },
+            comments_section: {
+                title: '토론',
+                loading: '토론 불러오는 중…',
+                inactive: {
+                    title: '토론을 사용할 수 없음',
+                    description:
+                        '토론은 인증된 클라우드 다이어그램에서만 사용할 수 있습니다.',
+                },
+                empty: {
+                    title: '아직 토론이 없습니다',
+                    description:
+                        '이 다이어그램에 대한 대화가 여기에 표시됩니다.',
+                },
+                errors: {
+                    load_title: '토론을 불러올 수 없습니다',
+                    load_description:
+                        '토론을 불러오는 중 문제가 발생했습니다. 다시 시도해 주세요.',
+                },
+                retry: '다시 시도',
+                deleted_user: '삭제된 사용자',
+                targets: {
+                    diagram: '다이어그램 토론',
+                    table: '테이블 토론',
+                    field: '필드 토론',
+                    relationship: '관계 토론',
+                    unknown: '토론',
                 },
             },
         },

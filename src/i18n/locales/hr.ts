@@ -9,6 +9,7 @@ export const hr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Ovisnosti',
             custom_types: 'Prilagođeni Tipovi',
+            comments: 'Rasprave',
             visuals: 'Vizuali',
         },
         menu: {
@@ -326,6 +327,34 @@ export const hr: LanguageTranslation = {
                         delete_custom_type: 'Izbriši',
                     },
                     delete_custom_type: 'Izbriši tip',
+                },
+            },
+            comments_section: {
+                title: 'Rasprave',
+                loading: 'Učitavanje rasprava…',
+                inactive: {
+                    title: 'Rasprave nisu dostupne',
+                    description:
+                        'Rasprave su dostupne samo na autentificiranim cloud dijagramima.',
+                },
+                empty: {
+                    title: 'Još nema rasprava',
+                    description:
+                        'Razgovori o ovom dijagramu pojavit će se ovdje.',
+                },
+                errors: {
+                    load_title: 'Nije moguće učitati rasprave',
+                    load_description:
+                        'Došlo je do greške pri učitavanju rasprava. Pokušajte ponovno.',
+                },
+                retry: 'Pokušaj ponovno',
+                deleted_user: 'Izbrisani korisnik',
+                targets: {
+                    diagram: 'Rasprava o dijagramu',
+                    table: 'Rasprava o tablici',
+                    field: 'Rasprava o polju',
+                    relationship: 'Rasprava o vezi',
+                    unknown: 'Rasprava',
                 },
             },
         },

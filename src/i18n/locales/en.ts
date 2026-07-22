@@ -9,6 +9,7 @@ export const en = {
             refs: 'Refs',
             dependencies: 'Dependencies',
             custom_types: 'Custom Types',
+            comments: 'Discussions',
             visuals: 'Visuals',
         },
         menu: {
@@ -322,6 +323,34 @@ export const en = {
                         delete_custom_type: 'Delete',
                     },
                     delete_custom_type: 'Delete Type',
+                },
+            },
+            comments_section: {
+                title: 'Discussions',
+                loading: 'Loading discussions…',
+                inactive: {
+                    title: 'Discussions unavailable',
+                    description:
+                        'Discussions are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    title: 'No discussions yet',
+                    description:
+                        'Conversations about this diagram will appear here.',
+                },
+                errors: {
+                    load_title: 'Could not load discussions',
+                    load_description:
+                        'Something went wrong while loading discussions. Please try again.',
+                },
+                retry: 'Retry',
+                deleted_user: 'Deleted user',
+                targets: {
+                    diagram: 'Diagram discussion',
+                    table: 'Table discussion',
+                    field: 'Field discussion',
+                    relationship: 'Relationship discussion',
+                    unknown: 'Discussion',
                 },
             },
         },

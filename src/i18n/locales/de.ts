@@ -9,6 +9,7 @@ export const de: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Abhängigkeiten',
             custom_types: 'Benutzerdefinierte Typen',
+            comments: 'Diskussionen',
             visuals: 'Darstellungen',
         },
         menu: {
@@ -331,6 +332,34 @@ export const de: LanguageTranslation = {
                         clear_field_highlight: 'Hervorhebung entfernen',
                     },
                     delete_custom_type: 'Typ löschen',
+                },
+            },
+            comments_section: {
+                title: 'Diskussionen',
+                loading: 'Diskussionen werden geladen…',
+                inactive: {
+                    title: 'Diskussionen nicht verfügbar',
+                    description:
+                        'Diskussionen sind nur für authentifizierte Cloud-Diagramme verfügbar.',
+                },
+                empty: {
+                    title: 'Noch keine Diskussionen',
+                    description:
+                        'Unterhaltungen zu diesem Diagramm erscheinen hier.',
+                },
+                errors: {
+                    load_title: 'Diskussionen konnten nicht geladen werden',
+                    load_description:
+                        'Beim Laden der Diskussionen ist ein Fehler aufgetreten. Bitte erneut versuchen.',
+                },
+                retry: 'Erneut versuchen',
+                deleted_user: 'Gelöschter Benutzer',
+                targets: {
+                    diagram: 'Diagrammdiskussion',
+                    table: 'Tabellendiskussion',
+                    field: 'Felddiskussion',
+                    relationship: 'Beziehungsdiskussion',
+                    unknown: 'Diskussion',
                 },
             },
         },
