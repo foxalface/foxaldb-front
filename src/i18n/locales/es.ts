@@ -402,6 +402,28 @@ export const es: LanguageTranslation = {
                             'No se pudo publicar el mensaje. Inténtalo de nuevo.',
                     },
                 },
+                item_actions: {
+                    title: 'Acciones del comentario',
+                    edit: 'Editar',
+                },
+                edit: {
+                    label: 'Mensaje',
+                    form_aria_label: 'Editar mensaje de discusión',
+                    save: 'Guardar',
+                    saving: 'Guardando…',
+                    cancel: 'Cancelar',
+                    counter_aria_label:
+                        '{{count}} de {{max}} caracteres usados',
+                    errors: {
+                        empty: 'Introduce un mensaje para guardar.',
+                        too_long:
+                            'Los mensajes no pueden superar los 2000 caracteres.',
+                        update_failed:
+                            'No se pudo actualizar el mensaje. Inténtalo de nuevo.',
+                    },
+                    remote_updated_warning:
+                        'Este mensaje se actualizó en otro lugar. Guardar sobrescribirá esos cambios.',
+                },
             },
         },
 

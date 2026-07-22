@@ -386,6 +386,25 @@ export const zh_CN: LanguageTranslation = {
                         create_failed: '无法发布消息。请重试。',
                     },
                 },
+                item_actions: {
+                    title: '评论操作',
+                    edit: '编辑',
+                },
+                edit: {
+                    label: '消息',
+                    form_aria_label: '编辑讨论消息',
+                    save: '保存',
+                    saving: '正在保存…',
+                    cancel: '取消',
+                    counter_aria_label: '已使用 {{count}} / {{max}} 个字符',
+                    errors: {
+                        empty: '请输入要保存的消息。',
+                        too_long: '消息不能超过 2000 个字符。',
+                        update_failed: '无法更新消息。请重试。',
+                    },
+                    remote_updated_warning:
+                        '此消息已在其他地方更新。保存将覆盖那些更改。',
+                },
             },
         },
 

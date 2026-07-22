@@ -402,6 +402,28 @@ export const pt_BR: LanguageTranslation = {
                             'Não foi possível publicar a mensagem. Tente novamente.',
                     },
                 },
+                item_actions: {
+                    title: 'Ações do comentário',
+                    edit: 'Editar',
+                },
+                edit: {
+                    label: 'Mensagem',
+                    form_aria_label: 'Editar mensagem da discussão',
+                    save: 'Salvar',
+                    saving: 'Salvando…',
+                    cancel: 'Cancelar',
+                    counter_aria_label:
+                        '{{count}} de {{max}} caracteres usados',
+                    errors: {
+                        empty: 'Digite uma mensagem para salvar.',
+                        too_long:
+                            'As mensagens não podem exceder 2000 caracteres.',
+                        update_failed:
+                            'Não foi possível atualizar a mensagem. Tente novamente.',
+                    },
+                    remote_updated_warning:
+                        'Esta mensagem foi atualizada em outro lugar. Salvar substituirá essas alterações.',
+                },
             },
         },
 

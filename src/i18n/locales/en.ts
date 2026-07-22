@@ -391,6 +391,26 @@ export const en = {
                             'Could not post the message. Please try again.',
                     },
                 },
+                item_actions: {
+                    title: 'Comment actions',
+                    edit: 'Edit',
+                },
+                edit: {
+                    label: 'Message',
+                    form_aria_label: 'Edit discussion message',
+                    save: 'Save',
+                    saving: 'Saving…',
+                    cancel: 'Cancel',
+                    counter_aria_label: '{{count}} of {{max}} characters used',
+                    errors: {
+                        empty: 'Enter a message to save.',
+                        too_long: 'Messages cannot exceed 2000 characters.',
+                        update_failed:
+                            'Could not update the message. Please try again.',
+                    },
+                    remote_updated_warning:
+                        'This message was updated elsewhere. Saving will overwrite those changes.',
+                },
             },
         },
 

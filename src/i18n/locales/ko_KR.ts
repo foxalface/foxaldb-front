@@ -398,6 +398,26 @@ export const ko_KR: LanguageTranslation = {
                             '메시지를 게시할 수 없습니다. 다시 시도해 주세요.',
                     },
                 },
+                item_actions: {
+                    title: '댓글 작업',
+                    edit: '편집',
+                },
+                edit: {
+                    label: '메시지',
+                    form_aria_label: '토론 메시지 편집',
+                    save: '저장',
+                    saving: '저장 중…',
+                    cancel: '취소',
+                    counter_aria_label: '{{count}} / {{max}}자 사용 중',
+                    errors: {
+                        empty: '저장할 메시지를 입력하세요.',
+                        too_long: '메시지는 2000자를 초과할 수 없습니다.',
+                        update_failed:
+                            '메시지를 업데이트할 수 없습니다. 다시 시도해 주세요.',
+                    },
+                    remote_updated_warning:
+                        '이 메시지가 다른 곳에서 업데이트되었습니다. 저장하면 해당 변경 내용이 덮어씌워집니다.',
+                },
             },
         },
 

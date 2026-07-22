@@ -386,6 +386,25 @@ export const zh_TW: LanguageTranslation = {
                         create_failed: '無法發布訊息。請再試一次。',
                     },
                 },
+                item_actions: {
+                    title: '留言操作',
+                    edit: '編輯',
+                },
+                edit: {
+                    label: '訊息',
+                    form_aria_label: '編輯討論訊息',
+                    save: '儲存',
+                    saving: '儲存中…',
+                    cancel: '取消',
+                    counter_aria_label: '已使用 {{count}} / {{max}} 個字元',
+                    errors: {
+                        empty: '請輸入要儲存的訊息。',
+                        too_long: '訊息不能超過 2000 個字元。',
+                        update_failed: '無法更新訊息。請再試一次。',
+                    },
+                    remote_updated_warning:
+                        '此訊息已在其他地方更新。儲存將覆寫那些變更。',
+                },
             },
         },
 

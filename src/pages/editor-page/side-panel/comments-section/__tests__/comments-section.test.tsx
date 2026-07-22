@@ -766,7 +766,7 @@ describe('CommentsSection', () => {
         expect(container.innerHTML).toContain('&lt;script&gt;');
     });
 
-    it('has an accessible heading and bounded scroll area without edit or delete controls', () => {
+    it('has an accessible heading and bounded scroll area without Delete controls', () => {
         setState({
             status: 'ready',
             comments: [createComment({ id: 1, body: 'Hello' })],
@@ -789,8 +789,9 @@ describe('CommentsSection', () => {
             screen.queryByTestId('comments-composer')
         ).not.toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: /delete|edit/i })
+            screen.queryByRole('button', { name: /delete/i })
         ).not.toBeInTheDocument();
+        expect(screen.queryByText(/delete/i)).not.toBeInTheDocument();
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
 
@@ -931,7 +932,7 @@ describe('CommentsSection', () => {
         expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
     });
 
-    it('does not show counters outside the composer', () => {
+    it('does not show counters or Delete controls outside edit mode', () => {
         setState({
             status: 'ready',
             comments: [createComment({ id: 1 }), createComment({ id: 2 })],
@@ -944,8 +945,9 @@ describe('CommentsSection', () => {
         ).not.toBeInTheDocument();
         expect(within(container).queryByText(/^\d+$/)).not.toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: /delete|edit/i })
+            screen.queryByRole('button', { name: /delete/i })
         ).not.toBeInTheDocument();
+        expect(screen.queryByText(/delete/i)).not.toBeInTheDocument();
     });
 
     it('renders all comments in the all view without a composer', () => {

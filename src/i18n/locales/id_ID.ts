@@ -399,6 +399,27 @@ export const id_ID: LanguageTranslation = {
                             'Tidak dapat mengirim pesan. Silakan coba lagi.',
                     },
                 },
+                item_actions: {
+                    title: 'Tindakan komentar',
+                    edit: 'Edit',
+                },
+                edit: {
+                    label: 'Pesan',
+                    form_aria_label: 'Edit pesan diskusi',
+                    save: 'Simpan',
+                    saving: 'Menyimpan…',
+                    cancel: 'Batal',
+                    counter_aria_label:
+                        '{{count}} dari {{max}} karakter digunakan',
+                    errors: {
+                        empty: 'Masukkan pesan untuk disimpan.',
+                        too_long: 'Pesan tidak boleh melebihi 2000 karakter.',
+                        update_failed:
+                            'Tidak dapat memperbarui pesan. Silakan coba lagi.',
+                    },
+                    remote_updated_warning:
+                        'Pesan ini diperbarui di tempat lain. Menyimpan akan menimpa perubahan tersebut.',
+                },
             },
         },
 

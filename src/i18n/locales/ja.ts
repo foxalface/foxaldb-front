@@ -401,6 +401,27 @@ export const ja: LanguageTranslation = {
                             'メッセージを投稿できませんでした。もう一度お試しください。',
                     },
                 },
+                item_actions: {
+                    title: 'コメントの操作',
+                    edit: '編集',
+                },
+                edit: {
+                    label: 'メッセージ',
+                    form_aria_label: 'ディスカッションメッセージを編集',
+                    save: '保存',
+                    saving: '保存中…',
+                    cancel: 'キャンセル',
+                    counter_aria_label: '{{count}} / {{max}} 文字を使用中',
+                    errors: {
+                        empty: '保存するメッセージを入力してください。',
+                        too_long:
+                            'メッセージは2000文字を超えることはできません。',
+                        update_failed:
+                            'メッセージを更新できませんでした。もう一度お試しください。',
+                    },
+                    remote_updated_warning:
+                        'このメッセージは別の場所で更新されました。保存するとその変更が上書きされます。',
+                },
             },
         },
 

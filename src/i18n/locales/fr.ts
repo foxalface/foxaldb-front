@@ -399,6 +399,28 @@ export const fr: LanguageTranslation = {
                             'Impossible de publier le message. Veuillez réessayer.',
                     },
                 },
+                item_actions: {
+                    title: 'Actions du commentaire',
+                    edit: 'Modifier',
+                },
+                edit: {
+                    label: 'Message',
+                    form_aria_label: 'Modifier le message de discussion',
+                    save: 'Enregistrer',
+                    saving: 'Enregistrement…',
+                    cancel: 'Annuler',
+                    counter_aria_label:
+                        '{{count}} caractères utilisés sur {{max}}',
+                    errors: {
+                        empty: 'Saisissez un message à enregistrer.',
+                        too_long:
+                            'Les messages ne peuvent pas dépasser 2000 caractères.',
+                        update_failed:
+                            'Impossible de mettre à jour le message. Veuillez réessayer.',
+                    },
+                    remote_updated_warning:
+                        'Ce message a été modifié ailleurs. L’enregistrement écrasera ces modifications.',
+                },
             },
         },
 

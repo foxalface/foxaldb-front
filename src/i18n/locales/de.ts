@@ -404,6 +404,28 @@ export const de: LanguageTranslation = {
                             'Die Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.',
                     },
                 },
+                item_actions: {
+                    title: 'Kommentaraktionen',
+                    edit: 'Bearbeiten',
+                },
+                edit: {
+                    label: 'Nachricht',
+                    form_aria_label: 'Diskussionsnachricht bearbeiten',
+                    save: 'Speichern',
+                    saving: 'Wird gespeichert…',
+                    cancel: 'Abbrechen',
+                    counter_aria_label:
+                        '{{count}} von {{max}} Zeichen verwendet',
+                    errors: {
+                        empty: 'Gib eine Nachricht zum Speichern ein.',
+                        too_long:
+                            'Nachrichten dürfen maximal 2000 Zeichen lang sein.',
+                        update_failed:
+                            'Die Nachricht konnte nicht aktualisiert werden. Bitte versuche es erneut.',
+                    },
+                    remote_updated_warning:
+                        'Diese Nachricht wurde woanders aktualisiert. Speichern überschreibt diese Änderungen.',
+                },
             },
         },
 

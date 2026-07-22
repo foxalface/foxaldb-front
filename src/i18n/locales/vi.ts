@@ -398,6 +398,26 @@ export const vi: LanguageTranslation = {
                             'Không thể đăng tin nhắn. Vui lòng thử lại.',
                     },
                 },
+                item_actions: {
+                    title: 'Thao tác bình luận',
+                    edit: 'Chỉnh sửa',
+                },
+                edit: {
+                    label: 'Tin nhắn',
+                    form_aria_label: 'Chỉnh sửa tin nhắn thảo luận',
+                    save: 'Lưu',
+                    saving: 'Đang lưu…',
+                    cancel: 'Hủy',
+                    counter_aria_label: 'Đã dùng {{count}} / {{max}} ký tự',
+                    errors: {
+                        empty: 'Nhập tin nhắn để lưu.',
+                        too_long: 'Tin nhắn không được vượt quá 2000 ký tự.',
+                        update_failed:
+                            'Không thể cập nhật tin nhắn. Vui lòng thử lại.',
+                    },
+                    remote_updated_warning:
+                        'Tin nhắn này đã được cập nhật ở nơi khác. Việc lưu sẽ ghi đè những thay đổi đó.',
+                },
             },
         },
 

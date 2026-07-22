@@ -398,6 +398,27 @@ export const tr: LanguageTranslation = {
                             'Mesaj gönderilemedi. Lütfen tekrar deneyin.',
                     },
                 },
+                item_actions: {
+                    title: 'Yorum eylemleri',
+                    edit: 'Düzenle',
+                },
+                edit: {
+                    label: 'Mesaj',
+                    form_aria_label: 'Tartışma mesajını düzenle',
+                    save: 'Kaydet',
+                    saving: 'Kaydediliyor…',
+                    cancel: 'İptal',
+                    counter_aria_label:
+                        '{{count}} / {{max}} karakter kullanıldı',
+                    errors: {
+                        empty: 'Kaydetmek için bir mesaj girin.',
+                        too_long: 'Mesajlar 2000 karakteri aşamaz.',
+                        update_failed:
+                            'Mesaj güncellenemedi. Lütfen tekrar deneyin.',
+                    },
+                    remote_updated_warning:
+                        'Bu mesaj başka bir yerde güncellendi. Kaydetmek bu değişikliklerin üzerine yazacaktır.',
+                },
             },
         },
         toolbar: {

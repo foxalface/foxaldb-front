@@ -396,6 +396,27 @@ export const hr: LanguageTranslation = {
                             'Poruku nije bilo moguće objaviti. Pokušajte ponovno.',
                     },
                 },
+                item_actions: {
+                    title: 'Radnje komentara',
+                    edit: 'Uredi',
+                },
+                edit: {
+                    label: 'Poruka',
+                    form_aria_label: 'Uredi poruku rasprave',
+                    save: 'Spremi',
+                    saving: 'Spremanje…',
+                    cancel: 'Odustani',
+                    counter_aria_label:
+                        'Iskorišteno {{count}} od {{max}} znakova',
+                    errors: {
+                        empty: 'Unesite poruku za spremanje.',
+                        too_long: 'Poruke ne smiju premašiti 2000 znakova.',
+                        update_failed:
+                            'Poruku nije moguće ažurirati. Pokušajte ponovno.',
+                    },
+                    remote_updated_warning:
+                        'Ova je poruka ažurirana drugdje. Spremanje će prebrisati te promjene.',
+                },
             },
         },
 
