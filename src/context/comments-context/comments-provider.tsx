@@ -18,6 +18,10 @@ import {
     commentsReducer,
     initialCommentsState,
 } from '@/lib/comments/comment-reducer';
+import {
+    EMPTY_DISCUSSION_INDICATOR_INDEX,
+    selectDiscussionIndicatorIndex,
+} from '@/lib/comments/discussion-indicators';
 import { selectAllComments } from '@/lib/comments/comment-selectors';
 import type {
     CreateDiagramCommentInput,
@@ -32,6 +36,7 @@ import {
     createCommentsInactiveError,
     type CommentsContextValue,
 } from './comments-context';
+import { DiscussionIndicatorsContext } from './discussion-indicators-context';
 import {
     adoptCommentSubscription,
     clearActiveCommentSubscription,
@@ -80,6 +85,16 @@ export const CommentsProvider: React.FC<React.PropsWithChildren> = ({
     // that retain the same Map keep a stable comments array reference.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- state.byId
     const comments = useMemo(() => selectAllComments(state), [state.byId]);
+
+    // Rebuild indicators only when byId identity changes (or when inactive).
+    // Status/error/generation updates that keep the same Map must not churn.
+    const indicatorIndex = useMemo(() => {
+        if (!isActive) {
+            return EMPTY_DISCUSSION_INDICATOR_INDEX;
+        }
+
+        return selectDiscussionIndicatorIndex({ byId: state.byId });
+    }, [isActive, state.byId]);
 
     const clearCommentSubscription = useCallback((): void => {
         clearActiveCommentSubscription(activeCommentSubscriptionRef);
@@ -317,9 +332,11 @@ export const CommentsProvider: React.FC<React.PropsWithChildren> = ({
 
     return (
         <CommentsAvailabilityContext.Provider value={isActive}>
-            <CommentsContext.Provider value={value}>
-                {children}
-            </CommentsContext.Provider>
+            <DiscussionIndicatorsContext.Provider value={indicatorIndex}>
+                <CommentsContext.Provider value={value}>
+                    {children}
+                </CommentsContext.Provider>
+            </DiscussionIndicatorsContext.Provider>
         </CommentsAvailabilityContext.Provider>
     );
 };

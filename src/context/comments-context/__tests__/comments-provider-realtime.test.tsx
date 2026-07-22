@@ -12,6 +12,8 @@ import type { DiagramCommentEventChannel } from '@/lib/realtime/comment-subscrib
 import { CommentsProvider } from '../comments-provider';
 import { useDiagramComments } from '@/hooks/use-diagram-comments';
 import { useCommentMutations } from '@/hooks/use-comment-mutations';
+import { useTableDiscussionIndicator } from '@/hooks/use-discussion-indicators';
+import { EMPTY_DISCUSSION_INDICATOR } from '@/lib/comments/discussion-indicators';
 import {
     CommentsProviderTestWrapper,
     createCommentFixture,
@@ -1521,6 +1523,134 @@ describe('CommentsProvider realtime lifecycle', () => {
             });
 
             expect(result.current.comments.comments).toBe(EMPTY_COMMENTS);
+        });
+    });
+
+    describe('discussion indicators', () => {
+        it('realtime create and delete propagate through the indicator index', async () => {
+            const channel = createFakeChannel();
+            setManagedChannel(env, channel, '42');
+            listDiagramComments.mockResolvedValue([]);
+
+            const { result } = renderHook(
+                () => ({
+                    indicator: useTableDiscussionIndicator('t1'),
+                    comments: useDiagramComments(),
+                }),
+                { wrapper: CommentsProviderTestWrapper }
+            );
+
+            await waitFor(() => {
+                expect(result.current.comments.status).toBe('ready');
+            });
+
+            expect(result.current.indicator.hasDiscussion).toBe(false);
+            expect(listDiagramComments).toHaveBeenCalledTimes(1);
+            expect(channel.listenerCount()).toBe(3);
+
+            act(() => {
+                channel.emit(
+                    DIAGRAM_COMMENT_CREATED_EVENT,
+                    createdPayload({
+                        comment: createCommentFixture({
+                            id: 10,
+                            targetType: 'table',
+                            targetId: 't1',
+                        }),
+                    })
+                );
+            });
+
+            expect(result.current.indicator).toEqual({
+                commentCount: 1,
+                hasDiscussion: true,
+            });
+            expect(listDiagramComments).toHaveBeenCalledTimes(1);
+
+            act(() => {
+                channel.emit(
+                    DIAGRAM_COMMENT_DELETED_EVENT,
+                    deletedPayload({ commentId: 10 })
+                );
+            });
+
+            expect(result.current.indicator).toBe(EMPTY_DISCUSSION_INDICATOR);
+            expect(listDiagramComments).toHaveBeenCalledTimes(1);
+            expect(channel.listenerCount()).toBe(3);
+        });
+
+        it('reconnect reload replaces indicators from the authoritative snapshot', async () => {
+            const firstChannel = createFakeChannel();
+            const secondChannel = createFakeChannel();
+            let channel: FakeChannel = firstChannel;
+
+            env.reconnectListeners = new Set();
+            env.realtimeValue = {
+                currentDiagramId: '42',
+                getDiagramPrivateChannel: () => channel,
+                onReconnect: (listener) => {
+                    env.reconnectListeners.add(listener);
+                    return () => {
+                        env.reconnectListeners.delete(listener);
+                    };
+                },
+            };
+
+            const reconnectPending = deferred<DiagramComment[]>();
+            listDiagramComments
+                .mockResolvedValueOnce([
+                    createCommentFixture({
+                        id: 1,
+                        targetType: 'table',
+                        targetId: 'old',
+                    }),
+                ])
+                .mockReturnValueOnce(reconnectPending.promise);
+
+            const { result } = renderHook(
+                () => ({
+                    oldIndicator: useTableDiscussionIndicator('old'),
+                    newIndicator: useTableDiscussionIndicator('new'),
+                    comments: useDiagramComments(),
+                }),
+                { wrapper: CommentsProviderTestWrapper }
+            );
+
+            await waitFor(() => {
+                expect(result.current.oldIndicator.hasDiscussion).toBe(true);
+            });
+
+            channel = secondChannel;
+
+            await act(async () => {
+                fireReconnect(env.reconnectListeners);
+            });
+
+            await waitFor(() => {
+                expect(listDiagramComments).toHaveBeenCalledTimes(2);
+            });
+
+            await act(async () => {
+                reconnectPending.resolve([
+                    createCommentFixture({
+                        id: 2,
+                        targetType: 'table',
+                        targetId: 'new',
+                    }),
+                ]);
+            });
+
+            await waitFor(() => {
+                expect(result.current.newIndicator.hasDiscussion).toBe(true);
+            });
+
+            expect(result.current.oldIndicator).toBe(
+                EMPTY_DISCUSSION_INDICATOR
+            );
+            expect(result.current.newIndicator).toEqual({
+                commentCount: 1,
+                hasDiscussion: true,
+            });
         });
     });
 });

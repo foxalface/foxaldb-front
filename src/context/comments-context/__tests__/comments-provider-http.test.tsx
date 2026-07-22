@@ -7,6 +7,8 @@ import { CommentsContext } from '../comments-context';
 import { CommentsProvider } from '../comments-provider';
 import { useDiagramComments } from '@/hooks/use-diagram-comments';
 import { useCommentMutations } from '@/hooks/use-comment-mutations';
+import { useTableDiscussionIndicator } from '@/hooks/use-discussion-indicators';
+import { EMPTY_DISCUSSION_INDICATOR } from '@/lib/comments/discussion-indicators';
 import {
     CommentsProviderTestWrapper,
     createAuthenticatedAuth,
@@ -972,5 +974,58 @@ describe('CommentsProvider HTTP lifecycle', () => {
         expect(result.current).not.toHaveProperty('subscribe');
         expect(result.current).not.toHaveProperty('getDiagramPrivateChannel');
         expect(result.current).not.toHaveProperty('onReconnect');
+        expect(result.current).not.toHaveProperty('indicatorIndex');
+        expect(result.current).not.toHaveProperty('discussionIndicators');
+    });
+
+    describe('discussion indicators', () => {
+        it('HTTP create and delete propagate through the indicator index', async () => {
+            listDiagramComments.mockResolvedValue([]);
+            const created = createCommentFixture({
+                id: 5,
+                targetType: 'table',
+                targetId: 't1',
+                body: 'hello',
+            });
+            createDiagramComment.mockResolvedValue(created);
+            deleteDiagramComment.mockResolvedValue(undefined);
+
+            const { result } = renderHook(
+                () => ({
+                    indicator: useTableDiscussionIndicator('t1'),
+                    mutations: useCommentMutations(),
+                    comments: useDiagramComments(),
+                }),
+                { wrapper: CommentsProviderTestWrapper }
+            );
+
+            await waitFor(() => {
+                expect(result.current.comments.status).toBe('ready');
+            });
+
+            expect(result.current.indicator.hasDiscussion).toBe(false);
+            expect(listDiagramComments).toHaveBeenCalledTimes(1);
+
+            await act(async () => {
+                await result.current.mutations.createComment({
+                    targetType: 'table',
+                    targetId: 't1',
+                    body: 'hello',
+                });
+            });
+
+            expect(result.current.indicator).toEqual({
+                commentCount: 1,
+                hasDiscussion: true,
+            });
+            expect(listDiagramComments).toHaveBeenCalledTimes(1);
+
+            await act(async () => {
+                await result.current.mutations.deleteComment(5);
+            });
+
+            expect(result.current.indicator).toBe(EMPTY_DISCUSSION_INDICATOR);
+            expect(listDiagramComments).toHaveBeenCalledTimes(1);
+        });
     });
 });
