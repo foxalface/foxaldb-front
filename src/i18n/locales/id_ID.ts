@@ -359,6 +359,22 @@ export const id_ID: LanguageTranslation = {
                     relationship: 'Diskusi relasi',
                     unknown: 'Diskusi',
                 },
+                composer: {
+                    label: 'Pesan',
+                    placeholder: 'Tulis pesan diskusi…',
+                    submit: 'Kirim',
+                    submitting: 'Mengirim…',
+                    cancel: 'Batal',
+                    form_aria_label: 'Pesan diskusi baru',
+                    counter_aria_label:
+                        '{{count}} dari {{max}} karakter digunakan',
+                    errors: {
+                        empty: 'Masukkan pesan untuk dikirim.',
+                        too_long: 'Pesan tidak boleh melebihi 2000 karakter.',
+                        create_failed:
+                            'Tidak dapat mengirim pesan. Silakan coba lagi.',
+                    },
+                },
             },
         },
 

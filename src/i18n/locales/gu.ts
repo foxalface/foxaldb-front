@@ -359,6 +359,21 @@ export const gu: LanguageTranslation = {
                     relationship: 'સંબંધ ચર્ચા',
                     unknown: 'ચર્ચા',
                 },
+                composer: {
+                    label: 'સંદેશ',
+                    placeholder: 'ચર્ચાનો સંદેશ લખો…',
+                    submit: 'પોસ્ટ કરો',
+                    submitting: 'પોસ્ટ થઈ રહ્યું છે…',
+                    cancel: 'રદ કરો',
+                    form_aria_label: 'નવો ચર્ચા સંદેશ',
+                    counter_aria_label: '{{max}} માંથી {{count}} અક્ષરો વપરાયા',
+                    errors: {
+                        empty: 'પોસ્ટ કરવા માટે સંદેશ દાખલ કરો.',
+                        too_long: 'સંદેશ 2000 અક્ષરોથી વધુ ન હોઈ શકે.',
+                        create_failed:
+                            'સંદેશ પોસ્ટ કરી શકાયો નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                    },
+                },
             },
         },
 

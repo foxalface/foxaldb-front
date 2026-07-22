@@ -363,6 +363,22 @@ export const mr: LanguageTranslation = {
                     relationship: 'संबंध चर्चा',
                     unknown: 'चर्चा',
                 },
+                composer: {
+                    label: 'संदेश',
+                    placeholder: 'चर्चेचा संदेश लिहा…',
+                    submit: 'पोस्ट करा',
+                    submitting: 'पोस्ट होत आहे…',
+                    cancel: 'रद्द करा',
+                    form_aria_label: 'नवीन चर्चा संदेश',
+                    counter_aria_label: '{{max}} पैकी {{count}} अक्षरे वापरली',
+                    errors: {
+                        empty: 'पोस्ट करण्यासाठी संदेश लिहा.',
+                        too_long:
+                            'संदेश 2000 अक्षरांपेक्षा जास्त असू शकत नाहीत.',
+                        create_failed:
+                            'संदेश पोस्ट करता आला नाही. कृपया पुन्हा प्रयत्न करा.',
+                    },
+                },
             },
         },
 

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Spinner } from '@/components/spinner/spinner';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { useDiagramComments } from '@/hooks/use-diagram-comments';
+import { CommentsComposer } from './comments-composer';
 import { CommentsEmptyState } from './comments-empty-state';
 import {
     CommentsErrorState,
@@ -16,7 +17,8 @@ const COMMENTS_SECTION_HEADING_ID = 'comments-section-heading';
 
 export const CommentsSection: React.FC<CommentsSectionProps> = () => {
     const { t } = useTranslation();
-    const { comments, status, isActive, reload } = useDiagramComments();
+    const { comments, status, isActive, diagramId, reload } =
+        useDiagramComments();
     const [isRetrying, setIsRetrying] = useState(false);
     const retryInFlightRef = useRef(false);
     const isMountedRef = useRef(true);
@@ -53,6 +55,8 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
     const isReloadLoading = status === 'loading' && hasComments;
     const isLoadError = status === 'error' && !hasComments;
     const isReloadError = status === 'error' && hasComments;
+    const showComposer =
+        isActive && !isInitialLoading && !isLoadError && diagramId !== null;
 
     let content: React.ReactNode;
 
@@ -136,6 +140,15 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                 {content}
             </div>
+            {showComposer && diagramId !== null ? (
+                <CommentsComposer
+                    diagramId={diagramId}
+                    target={{
+                        targetType: 'diagram',
+                        targetId: null,
+                    }}
+                />
+            ) : null}
         </section>
     );
 };

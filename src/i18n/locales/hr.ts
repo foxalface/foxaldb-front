@@ -356,6 +356,22 @@ export const hr: LanguageTranslation = {
                     relationship: 'Rasprava o vezi',
                     unknown: 'Rasprava',
                 },
+                composer: {
+                    label: 'Poruka',
+                    placeholder: 'Napišite poruku rasprave…',
+                    submit: 'Objavi',
+                    submitting: 'Objavljivanje…',
+                    cancel: 'Odustani',
+                    form_aria_label: 'Nova poruka rasprave',
+                    counter_aria_label:
+                        'Iskorišteno {{count}} od {{max}} znakova',
+                    errors: {
+                        empty: 'Unesite poruku za objavu.',
+                        too_long: 'Poruke ne smiju prelaziti 2000 znakova.',
+                        create_failed:
+                            'Poruku nije bilo moguće objaviti. Pokušajte ponovno.',
+                    },
+                },
             },
         },
 

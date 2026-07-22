@@ -360,6 +360,22 @@ export const ne: LanguageTranslation = {
                     relationship: 'सम्बन्ध छलफल',
                     unknown: 'छलफल',
                 },
+                composer: {
+                    label: 'सन्देश',
+                    placeholder: 'छलफल सन्देश लेख्नुहोस्…',
+                    submit: 'पोस्ट गर्नुहोस्',
+                    submitting: 'पोस्ट हुँदैछ…',
+                    cancel: 'रद्द गर्नुहोस्',
+                    form_aria_label: 'नयाँ छलफल सन्देश',
+                    counter_aria_label:
+                        '{{max}} मध्ये {{count}} अक्षर प्रयोग भयो',
+                    errors: {
+                        empty: 'पोस्ट गर्न सन्देश प्रविष्ट गर्नुहोस्।',
+                        too_long: 'सन्देश २००० अक्षरभन्दा बढी हुन सक्दैन।',
+                        create_failed:
+                            'सन्देश पोस्ट गर्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
+                    },
+                },
             },
         },
 

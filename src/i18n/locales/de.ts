@@ -361,6 +361,23 @@ export const de: LanguageTranslation = {
                     relationship: 'Beziehungsdiskussion',
                     unknown: 'Diskussion',
                 },
+                composer: {
+                    label: 'Nachricht',
+                    placeholder: 'Diskussionsnachricht schreiben…',
+                    submit: 'Senden',
+                    submitting: 'Wird gesendet…',
+                    cancel: 'Abbrechen',
+                    form_aria_label: 'Neue Diskussionsnachricht',
+                    counter_aria_label:
+                        '{{count}} von {{max}} Zeichen verwendet',
+                    errors: {
+                        empty: 'Geben Sie eine Nachricht zum Senden ein.',
+                        too_long:
+                            'Nachrichten dürfen höchstens 2000 Zeichen lang sein.',
+                        create_failed:
+                            'Die Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.',
+                    },
+                },
             },
         },
 

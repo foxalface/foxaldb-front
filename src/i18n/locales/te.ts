@@ -360,6 +360,22 @@ export const te: LanguageTranslation = {
                     relationship: 'రిలేషన్‌షిప్ చర్చ',
                     unknown: 'చర్చ',
                 },
+                composer: {
+                    label: 'సందేశం',
+                    placeholder: 'చర్చ సందేశం రాయండి…',
+                    submit: 'పోస్ట్ చేయి',
+                    submitting: 'పోస్ట్ చేస్తోంది…',
+                    cancel: 'రద్దు చేయి',
+                    form_aria_label: 'కొత్త చర్చ సందేశం',
+                    counter_aria_label:
+                        '{{max}}లో {{count}} అక్షరాలు ఉపయోగించబడ్డాయి',
+                    errors: {
+                        empty: 'పోస్ట్ చేయడానికి సందేశం నమోదు చేయండి.',
+                        too_long: 'సందేశాలు 2000 అక్షరాలను మించకూడదు.',
+                        create_failed:
+                            'సందేశాన్ని పోస్ట్ చేయడం సాధ్యం కాలేదు. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                    },
+                },
             },
         },
 

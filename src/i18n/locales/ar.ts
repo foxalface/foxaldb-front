@@ -354,6 +354,22 @@ export const ar: LanguageTranslation = {
                     relationship: 'نقاش حول العلاقة',
                     unknown: 'نقاش',
                 },
+                composer: {
+                    label: 'الرسالة',
+                    placeholder: 'اكتب رسالة مناقشة…',
+                    submit: 'نشر',
+                    submitting: 'جارٍ النشر…',
+                    cancel: 'إلغاء',
+                    form_aria_label: 'رسالة مناقشة جديدة',
+                    counter_aria_label:
+                        'تم استخدام {{count}} من أصل {{max}} حرفًا',
+                    errors: {
+                        empty: 'أدخل رسالة لنشرها.',
+                        too_long: 'لا يمكن أن تتجاوز الرسائل 2000 حرف.',
+                        create_failed:
+                            'تعذر نشر الرسالة. يُرجى المحاولة مرة أخرى.',
+                    },
+                },
             },
         },
 

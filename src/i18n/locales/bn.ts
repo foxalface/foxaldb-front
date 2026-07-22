@@ -361,6 +361,22 @@ export const bn: LanguageTranslation = {
                     relationship: 'রিলেশনশিপ আলোচনা',
                     unknown: 'আলোচনা',
                 },
+                composer: {
+                    label: 'বার্তা',
+                    placeholder: 'আলোচনার বার্তা লিখুন…',
+                    submit: 'পোস্ট করুন',
+                    submitting: 'পোস্ট করা হচ্ছে…',
+                    cancel: 'বাতিল',
+                    form_aria_label: 'নতুন আলোচনার বার্তা',
+                    counter_aria_label:
+                        '{{max}}-এর মধ্যে {{count}} অক্ষর ব্যবহার হয়েছে',
+                    errors: {
+                        empty: 'পোস্ট করার জন্য একটি বার্তা লিখুন।',
+                        too_long: 'বার্তা ২০০০ অক্ষরের বেশি হতে পারে না।',
+                        create_failed:
+                            'বার্তা পোস্ট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                    },
+                },
             },
         },
 

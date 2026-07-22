@@ -359,6 +359,21 @@ export const ko_KR: LanguageTranslation = {
                     relationship: '관계 토론',
                     unknown: '토론',
                 },
+                composer: {
+                    label: '메시지',
+                    placeholder: '토론 메시지를 작성하세요…',
+                    submit: '게시',
+                    submitting: '게시 중…',
+                    cancel: '취소',
+                    form_aria_label: '새 토론 메시지',
+                    counter_aria_label: '{{max}}자 중 {{count}}자 사용',
+                    errors: {
+                        empty: '게시할 메시지를 입력하세요.',
+                        too_long: '메시지는 2000자를 초과할 수 없습니다.',
+                        create_failed:
+                            '메시지를 게시할 수 없습니다. 다시 시도해 주세요.',
+                    },
+                },
             },
         },
 

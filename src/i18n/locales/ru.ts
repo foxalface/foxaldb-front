@@ -357,6 +357,22 @@ export const ru: LanguageTranslation = {
                     relationship: 'Обсуждение связи',
                     unknown: 'Обсуждение',
                 },
+                composer: {
+                    label: 'Сообщение',
+                    placeholder: 'Напишите сообщение обсуждения…',
+                    submit: 'Отправить',
+                    submitting: 'Отправка…',
+                    cancel: 'Отмена',
+                    form_aria_label: 'Новое сообщение обсуждения',
+                    counter_aria_label:
+                        'Использовано {{count}} из {{max}} символов',
+                    errors: {
+                        empty: 'Введите сообщение для отправки.',
+                        too_long: 'Сообщение не может превышать 2000 символов.',
+                        create_failed:
+                            'Не удалось отправить сообщение. Попробуйте ещё раз.',
+                    },
+                },
             },
         },
 

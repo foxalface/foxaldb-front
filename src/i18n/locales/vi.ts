@@ -359,6 +359,21 @@ export const vi: LanguageTranslation = {
                     relationship: 'Thảo luận quan hệ',
                     unknown: 'Thảo luận',
                 },
+                composer: {
+                    label: 'Tin nhắn',
+                    placeholder: 'Viết tin nhắn thảo luận…',
+                    submit: 'Đăng',
+                    submitting: 'Đang đăng…',
+                    cancel: 'Hủy',
+                    form_aria_label: 'Tin nhắn thảo luận mới',
+                    counter_aria_label: 'Đã dùng {{count}} / {{max}} ký tự',
+                    errors: {
+                        empty: 'Nhập tin nhắn để đăng.',
+                        too_long: 'Tin nhắn không được vượt quá 2000 ký tự.',
+                        create_failed:
+                            'Không thể đăng tin nhắn. Vui lòng thử lại.',
+                    },
+                },
             },
         },
 

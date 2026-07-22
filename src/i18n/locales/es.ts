@@ -360,6 +360,23 @@ export const es: LanguageTranslation = {
                     relationship: 'Discusión de la relación',
                     unknown: 'Discusión',
                 },
+                composer: {
+                    label: 'Mensaje',
+                    placeholder: 'Escribe un mensaje de discusión…',
+                    submit: 'Publicar',
+                    submitting: 'Publicando…',
+                    cancel: 'Cancelar',
+                    form_aria_label: 'Nuevo mensaje de discusión',
+                    counter_aria_label:
+                        '{{count}} de {{max}} caracteres usados',
+                    errors: {
+                        empty: 'Escribe un mensaje para publicar.',
+                        too_long:
+                            'Los mensajes no pueden superar los 2000 caracteres.',
+                        create_failed:
+                            'No se pudo publicar el mensaje. Inténtalo de nuevo.',
+                    },
+                },
             },
         },
 

@@ -350,6 +350,20 @@ export const zh_CN: LanguageTranslation = {
                     relationship: '关系讨论',
                     unknown: '讨论',
                 },
+                composer: {
+                    label: '消息',
+                    placeholder: '撰写讨论消息…',
+                    submit: '发布',
+                    submitting: '正在发布…',
+                    cancel: '取消',
+                    form_aria_label: '新讨论消息',
+                    counter_aria_label: '已使用 {{count}} / {{max}} 个字符',
+                    errors: {
+                        empty: '请输入要发布的消息。',
+                        too_long: '消息不能超过 2000 个字符。',
+                        create_failed: '无法发布消息。请重试。',
+                    },
+                },
             },
         },
 

@@ -32,6 +32,25 @@ vi.mock('@/hooks/use-diagram-comments', () => ({
     useDiagramComments: () => commentsState.current,
 }));
 
+vi.mock('../comments-composer', () => ({
+    CommentsComposer: ({
+        diagramId,
+        target,
+    }: {
+        diagramId: string;
+        target: { targetType: string; targetId: string | null };
+    }) => (
+        <div
+            data-testid="comments-composer"
+            data-diagram-id={diagramId}
+            data-target-type={target.targetType}
+            data-target-id={target.targetId ?? ''}
+        >
+            Composer
+        </div>
+    ),
+}));
+
 vi.mock('@/hooks/use-theme', () => ({
     useTheme: () => ({ effectiveTheme: 'light' }),
 }));
@@ -166,7 +185,7 @@ describe('CommentsSection', () => {
                 'Conversations about this diagram will appear here.'
             )
         ).toBeInTheDocument();
-        expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
     });
 
     it('shows a load error with retry and never renders the raw error', async () => {
@@ -646,7 +665,7 @@ describe('CommentsSection', () => {
         expect(container.innerHTML).toContain('&lt;script&gt;');
     });
 
-    it('has an accessible heading and bounded scroll area without mutation controls', () => {
+    it('has an accessible heading and bounded scroll area without edit or delete controls', () => {
         setState({
             status: 'ready',
             comments: [createComment({ id: 1, body: 'Hello' })],
@@ -665,9 +684,9 @@ describe('CommentsSection', () => {
 
         expect(screen.getByTestId('comments-scroll-area')).toBeInTheDocument();
         expect(screen.getByRole('list')).toBeInTheDocument();
-        expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: /delete|edit|send|post/i })
+            screen.queryByRole('button', { name: /delete|edit/i })
         ).not.toBeInTheDocument();
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
@@ -693,7 +712,97 @@ describe('CommentsSection', () => {
         expect(reload).toHaveBeenCalledTimes(1);
     });
 
-    it('does not show composer, filters, or counters', () => {
+    it('hides the composer when inactive', () => {
+        setState({
+            isActive: false,
+            status: 'idle',
+            comments: [],
+            diagramId: null,
+        });
+
+        render(<CommentsSection />);
+
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
+    });
+
+    it('hides the composer during initial loading', () => {
+        setState({ status: 'loading', comments: [], diagramId: '42' });
+
+        render(<CommentsSection />);
+
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
+    });
+
+    it('hides the composer during a fatal load error', () => {
+        setState({
+            status: 'error',
+            comments: [],
+            error: new Error('fail'),
+            diagramId: '42',
+        });
+
+        render(<CommentsSection />);
+
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
+    });
+
+    it('shows the composer in the ready empty state', () => {
+        setState({ status: 'ready', comments: [], diagramId: '42' });
+
+        render(<CommentsSection />);
+
+        const composer = screen.getByTestId('comments-composer');
+        expect(composer).toHaveAttribute('data-diagram-id', '42');
+        expect(composer).toHaveAttribute('data-target-type', 'diagram');
+        expect(composer).toHaveAttribute('data-target-id', '');
+    });
+
+    it('shows the composer when comments already exist', () => {
+        setState({
+            status: 'ready',
+            comments: [createComment({ id: 1 })],
+            diagramId: '42',
+        });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
+    });
+
+    it('keeps the composer visible during reload loading', () => {
+        setState({
+            status: 'loading',
+            comments: [createComment({ id: 1, body: 'Still here' })],
+            diagramId: '42',
+        });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByText('Still here')).toBeInTheDocument();
+        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
+    });
+
+    it('keeps the composer visible during reload error', () => {
+        setState({
+            status: 'error',
+            error: new Error('reload failed'),
+            comments: [createComment({ id: 1, body: 'Keep me' })],
+            diagramId: '42',
+        });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByText('Keep me')).toBeInTheDocument();
+        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
+    });
+
+    it('does not show filters or counters outside the composer', () => {
         setState({
             status: 'ready',
             comments: [createComment({ id: 1 }), createComment({ id: 2 })],
@@ -701,8 +810,11 @@ describe('CommentsSection', () => {
 
         const { container } = render(<CommentsSection />);
 
-        expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
         expect(screen.queryByText(/filter/i)).not.toBeInTheDocument();
         expect(within(container).queryByText(/^\d+$/)).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: /delete|edit/i })
+        ).not.toBeInTheDocument();
     });
 });

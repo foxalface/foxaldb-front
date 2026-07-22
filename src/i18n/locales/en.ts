@@ -352,6 +352,21 @@ export const en = {
                     relationship: 'Relationship discussion',
                     unknown: 'Discussion',
                 },
+                composer: {
+                    label: 'Message',
+                    placeholder: 'Write a discussion message…',
+                    submit: 'Post',
+                    submitting: 'Posting…',
+                    cancel: 'Cancel',
+                    form_aria_label: 'New discussion message',
+                    counter_aria_label: '{{count}} of {{max}} characters used',
+                    errors: {
+                        empty: 'Enter a message to post.',
+                        too_long: 'Messages cannot exceed 2000 characters.',
+                        create_failed:
+                            'Could not post the message. Please try again.',
+                    },
+                },
             },
         },
 

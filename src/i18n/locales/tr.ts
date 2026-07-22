@@ -358,6 +358,22 @@ export const tr: LanguageTranslation = {
                     relationship: 'İlişki tartışması',
                     unknown: 'Tartışma',
                 },
+                composer: {
+                    label: 'Mesaj',
+                    placeholder: 'Bir tartışma mesajı yazın…',
+                    submit: 'Gönder',
+                    submitting: 'Gönderiliyor…',
+                    cancel: 'İptal',
+                    form_aria_label: 'Yeni tartışma mesajı',
+                    counter_aria_label:
+                        '{{max}} karakterden {{count}} kullanıldı',
+                    errors: {
+                        empty: 'Göndermek için bir mesaj girin.',
+                        too_long: 'Mesajlar 2000 karakteri aşamaz.',
+                        create_failed:
+                            'Mesaj gönderilemedi. Lütfen tekrar deneyin.',
+                    },
+                },
             },
         },
         toolbar: {

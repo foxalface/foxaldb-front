@@ -361,6 +361,21 @@ export const ja: LanguageTranslation = {
                     relationship: 'リレーションシップのディスカッション',
                     unknown: 'ディスカッション',
                 },
+                composer: {
+                    label: 'メッセージ',
+                    placeholder: 'ディスカッションのメッセージを入力…',
+                    submit: '投稿',
+                    submitting: '投稿中…',
+                    cancel: 'キャンセル',
+                    form_aria_label: '新しいディスカッションメッセージ',
+                    counter_aria_label: '{{max}} 文字中 {{count}} 文字使用中',
+                    errors: {
+                        empty: '投稿するメッセージを入力してください。',
+                        too_long: 'メッセージは 2000 文字以内にしてください。',
+                        create_failed:
+                            'メッセージを投稿できませんでした。もう一度お試しください。',
+                    },
+                },
             },
         },
 

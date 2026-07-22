@@ -350,6 +350,20 @@ export const zh_TW: LanguageTranslation = {
                     relationship: '關聯討論',
                     unknown: '討論',
                 },
+                composer: {
+                    label: '訊息',
+                    placeholder: '撰寫討論訊息…',
+                    submit: '發布',
+                    submitting: '正在發布…',
+                    cancel: '取消',
+                    form_aria_label: '新討論訊息',
+                    counter_aria_label: '已使用 {{count}} / {{max}} 個字元',
+                    errors: {
+                        empty: '請輸入要發布的訊息。',
+                        too_long: '訊息不能超過 2000 個字元。',
+                        create_failed: '無法發布訊息。請再試一次。',
+                    },
+                },
             },
         },
 
