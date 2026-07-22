@@ -348,6 +348,12 @@ export const mr: LanguageTranslation = {
                 empty: {
                     title: 'अद्याप कोणतीही चर्चा नाही',
                     description: 'या आकृतीबद्दलच्या संभाषणे येथे दिसतील.',
+                    diagram_title: 'अद्याप कोणतेही आकृती संदेश नाहीत',
+                    diagram_description:
+                        'संपूर्ण आकृतीबद्दलचे संदेश येथे दिसतील.',
+                    target_title: 'सध्याच्या निवडीसाठी अद्याप संदेश नाहीत',
+                    target_description:
+                        'सध्याच्या निवडीबद्दलचे संदेश येथे दिसतील.',
                 },
                 errors: {
                     load_title: 'चर्चा लोड करता आल्या नाहीत',
@@ -362,6 +368,21 @@ export const mr: LanguageTranslation = {
                     field: 'फील्ड चर्चा',
                     relationship: 'संबंध चर्चा',
                     unknown: 'चर्चा',
+                },
+                views: {
+                    all: 'सर्व',
+                    diagram: 'आकृती',
+                    current_target: 'सध्याचे',
+                },
+                target_header: {
+                    diagram: 'आकृती चर्चा',
+                    table: 'तक्ता {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'हटवलेला तक्ता',
+                    missing_field: 'हटवलेले फील्ड',
+                    missing_relationship: 'हटवलेला संबंध',
                 },
                 composer: {
                     label: 'संदेश',

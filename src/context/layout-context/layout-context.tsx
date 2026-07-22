@@ -1,5 +1,7 @@
 import { emptyFn } from '@/lib/utils';
 import { createContext } from 'react';
+import type { DiagramCommentTarget } from '@/lib/comments/comment-types';
+import { DIAGRAM_DISCUSSION_TARGET } from '@/lib/comments/resolve-discussion-target';
 
 export type SidebarSection =
     | 'dbml'
@@ -10,6 +12,8 @@ export type SidebarSection =
     | 'comments';
 
 export type VisualsTab = 'areas' | 'notes';
+
+export type DiscussionView = 'all' | 'diagram' | 'target';
 
 export interface LayoutContext {
     openedTableInSidebar: string | undefined;
@@ -48,6 +52,12 @@ export interface LayoutContext {
     hideSidePanel: () => void;
     showSidePanel: () => void;
     toggleSidePanel: () => void;
+
+    commentsTarget: DiagramCommentTarget;
+    discussionView: DiscussionView;
+    openAllDiscussions: () => void;
+    openDiagramDiscussion: () => void;
+    openTargetDiscussion: (target: DiagramCommentTarget) => void;
 }
 
 export const layoutContext = createContext<LayoutContext>({
@@ -87,4 +97,10 @@ export const layoutContext = createContext<LayoutContext>({
     hideSidePanel: emptyFn,
     showSidePanel: emptyFn,
     toggleSidePanel: emptyFn,
+
+    commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+    discussionView: 'all',
+    openAllDiscussions: emptyFn,
+    openDiagramDiscussion: emptyFn,
+    openTargetDiscussion: emptyFn,
 });

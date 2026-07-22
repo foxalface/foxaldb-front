@@ -339,6 +339,12 @@ export const ar: LanguageTranslation = {
                 empty: {
                     title: 'لا توجد نقاشات بعد',
                     description: 'ستظهر هنا المحادثات حول هذا المخطط.',
+                    diagram_title: 'لا توجد رسائل للمخطط بعد',
+                    diagram_description:
+                        'ستظهر هنا الرسائل المتعلقة بالمخطط ككل.',
+                    target_title: 'لا توجد رسائل للاختيار الحالي بعد',
+                    target_description:
+                        'ستظهر هنا الرسائل المتعلقة بالاختيار الحالي.',
                 },
                 errors: {
                     load_title: 'تعذر تحميل النقاشات',
@@ -353,6 +359,21 @@ export const ar: LanguageTranslation = {
                     field: 'نقاش حول الحقل',
                     relationship: 'نقاش حول العلاقة',
                     unknown: 'نقاش',
+                },
+                views: {
+                    all: 'الكل',
+                    diagram: 'المخطط',
+                    current_target: 'الحالي',
+                },
+                target_header: {
+                    diagram: 'نقاش المخطط',
+                    table: 'جدول {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'جدول محذوف',
+                    missing_field: 'حقل محذوف',
+                    missing_relationship: 'علاقة محذوفة',
                 },
                 composer: {
                     label: 'الرسالة',

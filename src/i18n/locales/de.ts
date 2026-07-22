@@ -346,6 +346,14 @@ export const de: LanguageTranslation = {
                     title: 'Noch keine Diskussionen',
                     description:
                         'Unterhaltungen zu diesem Diagramm erscheinen hier.',
+                    diagram_title:
+                        'Noch keine Nachrichten zur Diagrammdiskussion',
+                    diagram_description:
+                        'Nachrichten zum Diagramm insgesamt erscheinen hier.',
+                    target_title:
+                        'Noch keine Nachrichten zur aktuellen Auswahl',
+                    target_description:
+                        'Nachrichten zur aktuellen Auswahl erscheinen hier.',
                 },
                 errors: {
                     load_title: 'Diskussionen konnten nicht geladen werden',
@@ -360,6 +368,21 @@ export const de: LanguageTranslation = {
                     field: 'Felddiskussion',
                     relationship: 'Beziehungsdiskussion',
                     unknown: 'Diskussion',
+                },
+                views: {
+                    all: 'Alle',
+                    diagram: 'Diagramm',
+                    current_target: 'Aktuell',
+                },
+                target_header: {
+                    diagram: 'Diagrammdiskussion',
+                    table: 'Tabelle {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Gelöschte Tabelle',
+                    missing_field: 'Gelöschtes Feld',
+                    missing_relationship: 'Gelöschte Beziehung',
                 },
                 composer: {
                     label: 'Nachricht',

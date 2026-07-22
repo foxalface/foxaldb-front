@@ -344,6 +344,12 @@ export const vi: LanguageTranslation = {
                     title: 'Chưa có thảo luận nào',
                     description:
                         'Các cuộc trò chuyện về sơ đồ này sẽ xuất hiện tại đây.',
+                    diagram_title: 'Chưa có tin nhắn sơ đồ',
+                    diagram_description:
+                        'Các tin nhắn về toàn bộ sơ đồ sẽ xuất hiện tại đây.',
+                    target_title: 'Chưa có tin nhắn cho lựa chọn hiện tại',
+                    target_description:
+                        'Các tin nhắn về lựa chọn hiện tại sẽ xuất hiện tại đây.',
                 },
                 errors: {
                     load_title: 'Không thể tải thảo luận',
@@ -358,6 +364,21 @@ export const vi: LanguageTranslation = {
                     field: 'Thảo luận trường',
                     relationship: 'Thảo luận quan hệ',
                     unknown: 'Thảo luận',
+                },
+                views: {
+                    all: 'Tất cả',
+                    diagram: 'Sơ đồ',
+                    current_target: 'Hiện tại',
+                },
+                target_header: {
+                    diagram: 'Thảo luận sơ đồ',
+                    table: 'Bảng {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Bảng đã xóa',
+                    missing_field: 'Trường đã xóa',
+                    missing_relationship: 'Quan hệ đã xóa',
                 },
                 composer: {
                     label: 'Tin nhắn',

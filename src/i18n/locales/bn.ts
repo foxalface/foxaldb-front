@@ -346,6 +346,13 @@ export const bn: LanguageTranslation = {
                     title: 'এখনও কোনো আলোচনা নেই',
                     description:
                         'এই ডায়াগ্রাম সম্পর্কিত কথোপকথন এখানে দেখা যাবে।',
+                    diagram_title: 'এখনও কোনো ডায়াগ্রাম বার্তা নেই',
+                    diagram_description:
+                        'সম্পূর্ণ ডায়াগ্রাম সম্পর্কিত বার্তা এখানে দেখা যাবে।',
+                    target_title:
+                        'বর্তমান নির্বাচনের জন্য এখনও কোনো বার্তা নেই',
+                    target_description:
+                        'বর্তমান নির্বাচন সম্পর্কিত বার্তা এখানে দেখা যাবে।',
                 },
                 errors: {
                     load_title: 'আলোচনা লোড করা যায়নি',
@@ -360,6 +367,21 @@ export const bn: LanguageTranslation = {
                     field: 'ফিল্ড আলোচনা',
                     relationship: 'রিলেশনশিপ আলোচনা',
                     unknown: 'আলোচনা',
+                },
+                views: {
+                    all: 'সব',
+                    diagram: 'ডায়াগ্রাম',
+                    current_target: 'বর্তমান',
+                },
+                target_header: {
+                    diagram: 'ডায়াগ্রাম আলোচনা',
+                    table: 'টেবিল {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'মুছে ফেলা টেবিল',
+                    missing_field: 'মুছে ফেলা ফিল্ড',
+                    missing_relationship: 'মুছে ফেলা সম্পর্ক',
                 },
                 composer: {
                     label: 'বার্তা',

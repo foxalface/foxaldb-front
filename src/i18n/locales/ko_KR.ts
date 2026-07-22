@@ -344,6 +344,12 @@ export const ko_KR: LanguageTranslation = {
                     title: '아직 토론이 없습니다',
                     description:
                         '이 다이어그램에 대한 대화가 여기에 표시됩니다.',
+                    diagram_title: '아직 다이어그램 메시지가 없습니다',
+                    diagram_description:
+                        '다이어그램 전체에 대한 메시지가 여기에 표시됩니다.',
+                    target_title: '현재 선택에 대한 메시지가 아직 없습니다',
+                    target_description:
+                        '현재 선택에 대한 메시지가 여기에 표시됩니다.',
                 },
                 errors: {
                     load_title: '토론을 불러올 수 없습니다',
@@ -358,6 +364,21 @@ export const ko_KR: LanguageTranslation = {
                     field: '필드 토론',
                     relationship: '관계 토론',
                     unknown: '토론',
+                },
+                views: {
+                    all: '전체',
+                    diagram: '다이어그램',
+                    current_target: '현재',
+                },
+                target_header: {
+                    diagram: '다이어그램 토론',
+                    table: '테이블 {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: '삭제된 테이블',
+                    missing_field: '삭제된 필드',
+                    missing_relationship: '삭제된 관계',
                 },
                 composer: {
                     label: '메시지',

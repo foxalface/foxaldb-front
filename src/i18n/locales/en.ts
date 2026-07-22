@@ -337,6 +337,12 @@ export const en = {
                     title: 'No discussions yet',
                     description:
                         'Conversations about this diagram will appear here.',
+                    diagram_title: 'No diagram messages yet',
+                    diagram_description:
+                        'Messages about the diagram as a whole will appear here.',
+                    target_title: 'No messages for this selection yet',
+                    target_description:
+                        'Messages about the current selection will appear here.',
                 },
                 errors: {
                     load_title: 'Could not load discussions',
@@ -351,6 +357,21 @@ export const en = {
                     field: 'Field discussion',
                     relationship: 'Relationship discussion',
                     unknown: 'Discussion',
+                },
+                views: {
+                    all: 'All',
+                    diagram: 'Diagram',
+                    current_target: 'Current',
+                },
+                target_header: {
+                    diagram: 'Diagram discussion',
+                    table: 'Table {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Deleted table',
+                    missing_field: 'Deleted field',
+                    missing_relationship: 'Deleted relationship',
                 },
                 composer: {
                     label: 'Message',

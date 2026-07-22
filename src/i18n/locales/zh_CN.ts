@@ -336,6 +336,10 @@ export const zh_CN: LanguageTranslation = {
                 empty: {
                     title: '暂无讨论',
                     description: '有关此图表的对话将显示在此处。',
+                    diagram_title: '尚无图表消息',
+                    diagram_description: '关于整个图表的消息将显示在此处。',
+                    target_title: '当前选择尚无消息',
+                    target_description: '关于当前选择的消息将显示在此处。',
                 },
                 errors: {
                     load_title: '无法加载讨论',
@@ -349,6 +353,21 @@ export const zh_CN: LanguageTranslation = {
                     field: '字段讨论',
                     relationship: '关系讨论',
                     unknown: '讨论',
+                },
+                views: {
+                    all: '全部',
+                    diagram: '图表',
+                    current_target: '当前',
+                },
+                target_header: {
+                    diagram: '图表讨论',
+                    table: '表 {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: '已删除的表',
+                    missing_field: '已删除的字段',
+                    missing_relationship: '已删除的关系',
                 },
                 composer: {
                     label: '消息',

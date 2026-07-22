@@ -49,6 +49,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
         selectedSidebarSection,
         showSidePanel,
         selectVisualsTab,
+        openAllDiscussions,
     } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
@@ -137,8 +138,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                           title: t('editor_sidebar.comments'),
                           icon: MessageCircle,
                           onClick: () => {
-                              showSidePanel();
-                              selectSidebarSection('comments');
+                              openAllDiscussions();
                           },
                           active: selectedSidebarSection === 'comments',
                       },
@@ -153,6 +153,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             databaseType,
             selectVisualsTab,
             commentsActive,
+            openAllDiscussions,
         ]
     );
 

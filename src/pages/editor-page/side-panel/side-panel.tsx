@@ -32,9 +32,20 @@ export interface SidePanelProps {}
 export const SidePanel: React.FC<SidePanelProps> = () => {
     const { t } = useTranslation();
     const { databaseType } = useChartDB();
-    const { selectSidebarSection, selectedSidebarSection } = useLayout();
+    const { selectSidebarSection, selectedSidebarSection, openAllDiscussions } =
+        useLayout();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { isActive: commentsActive } = useDiagramComments();
+
+    const handleMobileSectionChange = (value: string) => {
+        if (value === 'comments') {
+            if (selectedSidebarSection !== 'comments') {
+                openAllDiscussions();
+            }
+            return;
+        }
+        selectSidebarSection(value as SidebarSection);
+    };
 
     return (
         <aside className="flex h-full flex-col overflow-hidden">
@@ -42,9 +53,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 <div className="flex justify-center border-b pt-0.5">
                     <Select
                         value={selectedSidebarSection}
-                        onValueChange={(value) =>
-                            selectSidebarSection(value as SidebarSection)
-                        }
+                        onValueChange={handleMobileSectionChange}
                     >
                         <SelectTrigger className="rounded-none border-none font-semibold shadow-none hover:bg-secondary hover:underline focus:border-transparent focus:ring-0">
                             <SelectValue />

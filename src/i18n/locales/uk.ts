@@ -343,6 +343,12 @@ export const uk: LanguageTranslation = {
                 empty: {
                     title: 'Поки немає обговорень',
                     description: 'Розмови про цю діаграму з’являться тут.',
+                    diagram_title: 'Поки немає повідомлень щодо діаграми',
+                    diagram_description:
+                        'Повідомлення про діаграму загалом з’являться тут.',
+                    target_title: 'Поки немає повідомлень для поточного вибору',
+                    target_description:
+                        'Повідомлення про поточний вибір з’являться тут.',
                 },
                 errors: {
                     load_title: 'Не вдалося завантажити обговорення',
@@ -357,6 +363,21 @@ export const uk: LanguageTranslation = {
                     field: 'Обговорення поля',
                     relationship: 'Обговорення зв’язку',
                     unknown: 'Обговорення',
+                },
+                views: {
+                    all: 'Усі',
+                    diagram: 'Діаграма',
+                    current_target: 'Поточний',
+                },
+                target_header: {
+                    diagram: 'Обговорення діаграми',
+                    table: 'Таблиця {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Видалена таблиця',
+                    missing_field: 'Видалене поле',
+                    missing_relationship: "Видалений зв'язок",
                 },
                 composer: {
                     label: 'Повідомлення',

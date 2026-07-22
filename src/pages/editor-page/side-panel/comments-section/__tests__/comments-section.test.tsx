@@ -2,8 +2,13 @@ import React from 'react';
 import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { DiagramComment } from '@/lib/comments/comment-types';
+import type {
+    DiagramComment,
+    DiagramCommentTarget,
+} from '@/lib/comments/comment-types';
 import type { UseDiagramCommentsResult } from '@/hooks/use-diagram-comments';
+import type { DiscussionView } from '@/context/layout-context/layout-context';
+import { DIAGRAM_DISCUSSION_TARGET } from '@/lib/comments/resolve-discussion-target';
 import { en } from '@/i18n/locales/en';
 import {
     isEnglishTimeAgoLocaleId,
@@ -12,24 +17,96 @@ import {
 } from '../comment-timeago-locale';
 import { format, register as registerLocale } from 'timeago.js';
 
-const { commentsState, i18nState } = vi.hoisted(() => ({
-    commentsState: {
-        current: {
-            comments: [],
-            status: 'idle',
-            error: null,
-            isActive: true,
-            diagramId: '42',
-            reload: vi.fn(async () => undefined),
-        } as UseDiagramCommentsResult,
-    },
-    i18nState: {
-        language: 'en',
-    },
-}));
+const { commentsState, i18nState, layoutState, accessState, chartDbState } =
+    vi.hoisted(() => ({
+        commentsState: {
+            current: {
+                comments: [],
+                status: 'idle',
+                error: null,
+                isActive: true,
+                diagramId: '42',
+                reload: vi.fn(async () => undefined),
+            } as UseDiagramCommentsResult,
+        },
+        i18nState: {
+            language: 'en',
+        },
+        layoutState: {
+            discussionView: 'all' as DiscussionView,
+            commentsTarget: {
+                targetType: 'diagram',
+                targetId: null,
+            } as DiagramCommentTarget,
+            openAllDiscussions: vi.fn(),
+            openDiagramDiscussion: vi.fn(),
+        },
+        accessState: {
+            can_edit: true as boolean | undefined,
+            available: true,
+        },
+        chartDbState: {
+            tables: [
+                {
+                    id: 'table-1',
+                    name: 'Clients',
+                    x: 0,
+                    y: 0,
+                    fields: [
+                        {
+                            id: 'field-1',
+                            name: 'email',
+                            type: { id: 'text', name: 'text' },
+                            primaryKey: false,
+                            unique: false,
+                            nullable: true,
+                            createdAt: 0,
+                        },
+                    ],
+                    indexes: [],
+                    color: '#fff',
+                    isView: false,
+                    createdAt: 0,
+                },
+            ],
+            relationships: [
+                {
+                    id: 'rel-1',
+                    name: 'orders_fk',
+                    sourceTableId: 'table-1',
+                    targetTableId: 'table-1',
+                    sourceFieldId: 'field-1',
+                    targetFieldId: 'field-1',
+                    sourceCardinality: 'one' as const,
+                    targetCardinality: 'many' as const,
+                    createdAt: 0,
+                },
+            ],
+        },
+    }));
 
 vi.mock('@/hooks/use-diagram-comments', () => ({
     useDiagramComments: () => commentsState.current,
+}));
+
+vi.mock('@/hooks/use-layout', () => ({
+    useLayout: () => layoutState,
+}));
+
+vi.mock('@/hooks/use-chartdb', () => ({
+    useChartDB: () => chartDbState,
+}));
+
+vi.mock('@/hooks/use-diagram-access', () => ({
+    useDiagramAccess: () => ({
+        diagramAccess: accessState.available
+            ? {
+                  role: accessState.can_edit ? 'editor' : 'viewer',
+                  can_edit: accessState.can_edit === true,
+                  can_manage_members: false,
+              }
+            : null,
+    }),
 }));
 
 vi.mock('../comments-composer', () => ({
@@ -57,7 +134,7 @@ vi.mock('@/hooks/use-theme', () => ({
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
-        t: (key: string) => {
+        t: (key: string, options?: Record<string, string>) => {
             const parts = key.split('.');
             let current: unknown = en.translation;
             for (const part of parts) {
@@ -70,7 +147,17 @@ vi.mock('react-i18next', () => ({
                 }
                 current = (current as Record<string, unknown>)[part];
             }
-            return typeof current === 'string' ? current : key;
+            if (typeof current !== 'string') {
+                return key;
+            }
+            if (!options) {
+                return current;
+            }
+            return current.replace(/\{\{(\w+)\}\}/g, (_, name: string) =>
+                Object.prototype.hasOwnProperty.call(options, name)
+                    ? options[name]
+                    : `{{${name}}}`
+            );
         },
         i18n: i18nState,
     }),
@@ -123,6 +210,10 @@ const setState = (partial: Partial<UseDiagramCommentsResult>) => {
     };
 };
 
+const setLayout = (partial: Partial<typeof layoutState>) => {
+    Object.assign(layoutState, partial);
+};
+
 const deferred = <T,>() => {
     let resolve!: (value: T | PromiseLike<T>) => void;
     let reject!: (reason?: unknown) => void;
@@ -136,6 +227,14 @@ const deferred = <T,>() => {
 describe('CommentsSection', () => {
     beforeEach(() => {
         i18nState.language = 'en';
+        accessState.can_edit = true;
+        accessState.available = true;
+        setLayout({
+            discussionView: 'all',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+            openAllDiscussions: vi.fn(),
+            openDiagramDiscussion: vi.fn(),
+        });
         setState({ isActive: true, status: 'ready', comments: [] });
     });
 
@@ -185,7 +284,9 @@ describe('CommentsSection', () => {
                 'Conversations about this diagram will appear here.'
             )
         ).toBeInTheDocument();
-        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
     });
 
     it('shows a load error with retry and never renders the raw error', async () => {
@@ -684,7 +785,9 @@ describe('CommentsSection', () => {
 
         expect(screen.getByTestId('comments-scroll-area')).toBeInTheDocument();
         expect(screen.getByRole('list')).toBeInTheDocument();
-        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
         expect(
             screen.queryByRole('button', { name: /delete|edit/i })
         ).not.toBeInTheDocument();
@@ -752,7 +855,21 @@ describe('CommentsSection', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('shows the composer in the ready empty state', () => {
+    it('hides the composer in the all view even when ready and empty', () => {
+        setState({ status: 'ready', comments: [], diagramId: '42' });
+
+        render(<CommentsSection />);
+
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
+    });
+
+    it('shows the diagram composer in the diagram view for editable roles', () => {
+        setLayout({
+            discussionView: 'diagram',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+        });
         setState({ status: 'ready', comments: [], diagramId: '42' });
 
         render(<CommentsSection />);
@@ -763,7 +880,11 @@ describe('CommentsSection', () => {
         expect(composer).toHaveAttribute('data-target-id', '');
     });
 
-    it('shows the composer when comments already exist', () => {
+    it('shows the composer when comments already exist in diagram view', () => {
+        setLayout({
+            discussionView: 'diagram',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+        });
         setState({
             status: 'ready',
             comments: [createComment({ id: 1 })],
@@ -775,7 +896,11 @@ describe('CommentsSection', () => {
         expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
     });
 
-    it('keeps the composer visible during reload loading', () => {
+    it('keeps the composer visible during reload loading in diagram view', () => {
+        setLayout({
+            discussionView: 'diagram',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+        });
         setState({
             status: 'loading',
             comments: [createComment({ id: 1, body: 'Still here' })],
@@ -788,7 +913,11 @@ describe('CommentsSection', () => {
         expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
     });
 
-    it('keeps the composer visible during reload error', () => {
+    it('keeps the composer visible during reload error in diagram view', () => {
+        setLayout({
+            discussionView: 'diagram',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+        });
         setState({
             status: 'error',
             error: new Error('reload failed'),
@@ -802,7 +931,7 @@ describe('CommentsSection', () => {
         expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
     });
 
-    it('does not show filters or counters outside the composer', () => {
+    it('does not show counters outside the composer', () => {
         setState({
             status: 'ready',
             comments: [createComment({ id: 1 }), createComment({ id: 2 })],
@@ -810,11 +939,461 @@ describe('CommentsSection', () => {
 
         const { container } = render(<CommentsSection />);
 
-        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
-        expect(screen.queryByText(/filter/i)).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
         expect(within(container).queryByText(/^\d+$/)).not.toBeInTheDocument();
         expect(
             screen.queryByRole('button', { name: /delete|edit/i })
         ).not.toBeInTheDocument();
+    });
+
+    it('renders all comments in the all view without a composer', () => {
+        setState({
+            status: 'ready',
+            comments: [
+                createComment({ id: 1, body: 'Diagram note' }),
+                createComment({
+                    id: 2,
+                    body: 'Table note',
+                    targetType: 'table',
+                    targetId: 'table-1',
+                }),
+            ],
+        });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByText('Diagram note')).toBeInTheDocument();
+        expect(screen.getByText('Table note')).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
+    });
+
+    it('filters to diagram comments in the diagram view', () => {
+        setLayout({
+            discussionView: 'diagram',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+        });
+        setState({
+            status: 'ready',
+            comments: [
+                createComment({ id: 1, body: 'Diagram note' }),
+                createComment({
+                    id: 2,
+                    body: 'Table note',
+                    targetType: 'table',
+                    targetId: 'table-1',
+                }),
+            ],
+        });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByText('Diagram note')).toBeInTheDocument();
+        expect(screen.queryByText('Table note')).not.toBeInTheDocument();
+    });
+
+    it('filters to the exact target and matches composer target', () => {
+        const target = {
+            targetType: 'table' as const,
+            targetId: 'table-1',
+        };
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: target,
+        });
+        setState({
+            status: 'ready',
+            comments: [
+                createComment({ id: 1, body: 'Diagram note' }),
+                createComment({
+                    id: 2,
+                    body: 'Table note',
+                    targetType: 'table',
+                    targetId: 'table-1',
+                }),
+                createComment({
+                    id: 3,
+                    body: 'Other table',
+                    targetType: 'table',
+                    targetId: 'table-other',
+                }),
+            ],
+        });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByText('Table note')).toBeInTheDocument();
+        expect(screen.queryByText('Diagram note')).not.toBeInTheDocument();
+        expect(screen.queryByText('Other table')).not.toBeInTheDocument();
+
+        const composer = screen.getByTestId('comments-composer');
+        expect(composer).toHaveAttribute('data-target-type', 'table');
+        expect(composer).toHaveAttribute('data-target-id', 'table-1');
+        expect(screen.getByTestId('comments-current-target')).toHaveTextContent(
+            'Table Clients'
+        );
+        expect(screen.queryByText('table-1')).not.toBeInTheDocument();
+    });
+
+    it('hides the composer for viewers while keeping scoped comments', () => {
+        accessState.can_edit = false;
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: {
+                targetType: 'table',
+                targetId: 'table-1',
+            },
+        });
+        setState({
+            status: 'ready',
+            comments: [
+                createComment({
+                    id: 1,
+                    body: 'Visible to viewer',
+                    targetType: 'table',
+                    targetId: 'table-1',
+                }),
+            ],
+        });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByText('Visible to viewer')).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
+    });
+
+    it('shows missing target fallback without raw ids', () => {
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: {
+                targetType: 'table',
+                targetId: 'missing-table-id',
+            },
+        });
+        setState({ status: 'ready', comments: [] });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByTestId('comments-current-target')).toHaveTextContent(
+            'Deleted table'
+        );
+        expect(screen.queryByText('missing-table-id')).not.toBeInTheDocument();
+    });
+
+    it('shows scoped empty states for diagram and target views', () => {
+        setLayout({
+            discussionView: 'diagram',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+        });
+        setState({
+            status: 'ready',
+            comments: [
+                createComment({
+                    id: 1,
+                    body: 'Other scope',
+                    targetType: 'table',
+                    targetId: 'table-1',
+                }),
+            ],
+        });
+
+        const { rerender } = render(<CommentsSection />);
+        expect(screen.getByText('No diagram messages yet')).toBeInTheDocument();
+        expect(screen.queryByText('Other scope')).not.toBeInTheDocument();
+
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: {
+                targetType: 'field',
+                targetId: 'field-1',
+            },
+        });
+        rerender(<CommentsSection />);
+        expect(
+            screen.getByText('No messages for this selection yet')
+        ).toBeInTheDocument();
+    });
+
+    it('retains scoped comments during reload loading and error', () => {
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: {
+                targetType: 'table',
+                targetId: 'table-1',
+            },
+        });
+        setState({
+            status: 'loading',
+            comments: [
+                createComment({
+                    id: 1,
+                    body: 'Scoped keep',
+                    targetType: 'table',
+                    targetId: 'table-1',
+                }),
+                createComment({ id: 2, body: 'Diagram other' }),
+            ],
+        });
+
+        const { rerender } = render(<CommentsSection />);
+        expect(screen.getByText('Scoped keep')).toBeInTheDocument();
+        expect(screen.queryByText('Diagram other')).not.toBeInTheDocument();
+
+        setState({
+            status: 'error',
+            error: new Error('reload failed'),
+            comments: [
+                createComment({
+                    id: 1,
+                    body: 'Scoped keep',
+                    targetType: 'table',
+                    targetId: 'table-1',
+                }),
+                createComment({ id: 2, body: 'Diagram other' }),
+            ],
+        });
+        rerender(<CommentsSection />);
+        expect(screen.getByText('Scoped keep')).toBeInTheDocument();
+        expect(screen.queryByText('Diagram other')).not.toBeInTheDocument();
+    });
+
+    it('forwards a changed target to the composer', () => {
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: {
+                targetType: 'table',
+                targetId: 'table-1',
+            },
+        });
+        setState({ status: 'ready', comments: [] });
+
+        const { rerender } = render(<CommentsSection />);
+        expect(screen.getByTestId('comments-composer')).toHaveAttribute(
+            'data-target-id',
+            'table-1'
+        );
+
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: {
+                targetType: 'field',
+                targetId: 'field-1',
+            },
+        });
+        rerender(<CommentsSection />);
+        expect(screen.getByTestId('comments-composer')).toHaveAttribute(
+            'data-target-type',
+            'field'
+        );
+        expect(screen.getByTestId('comments-composer')).toHaveAttribute(
+            'data-target-id',
+            'field-1'
+        );
+    });
+
+    it('hides the composer while diagram access is unknown', () => {
+        accessState.available = false;
+        setLayout({
+            discussionView: 'diagram',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+        });
+        setState({ status: 'ready', comments: [] });
+
+        render(<CommentsSection />);
+
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
+    });
+
+    it('shows scoped empty and reload banner when target is empty but global comments exist', async () => {
+        const user = userEvent.setup();
+        const reload = vi.fn(async () => undefined);
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: {
+                targetType: 'table',
+                targetId: 'table-1',
+            },
+        });
+        setState({
+            status: 'error',
+            error: new Error('secret reload failure'),
+            comments: [
+                createComment({
+                    id: 1,
+                    body: 'Other target only',
+                    targetType: 'table',
+                    targetId: 'table-other',
+                }),
+            ],
+            reload,
+        });
+
+        render(<CommentsSection />);
+
+        expect(
+            screen.getByText('No messages for this selection yet')
+        ).toBeInTheDocument();
+        expect(screen.getByRole('alert')).toBeInTheDocument();
+        expect(
+            screen.queryByText('Could not load discussions')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('secret reload failure')
+        ).not.toBeInTheDocument();
+        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
+
+        await user.click(screen.getByRole('button', { name: 'Retry' }));
+        expect(reload).toHaveBeenCalledTimes(1);
+    });
+
+    it('shows diagram empty and reload banner when diagram scope is empty but entity comments exist', () => {
+        setLayout({
+            discussionView: 'diagram',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+        });
+        setState({
+            status: 'error',
+            error: new Error('secret reload failure'),
+            comments: [
+                createComment({
+                    id: 1,
+                    body: 'Entity only',
+                    targetType: 'table',
+                    targetId: 'table-1',
+                }),
+            ],
+        });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByText('No diagram messages yet')).toBeInTheDocument();
+        expect(screen.getByRole('alert')).toBeInTheDocument();
+        expect(
+            screen.queryByText('Could not load discussions')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('secret reload failure')
+        ).not.toBeInTheDocument();
+        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
+    });
+
+    it.each([
+        {
+            label: 'table',
+            target: { targetType: 'table' as const, targetId: 'gone-table' },
+            missingLabel: 'Deleted table',
+        },
+        {
+            label: 'field',
+            target: { targetType: 'field' as const, targetId: 'gone-field' },
+            missingLabel: 'Deleted field',
+        },
+        {
+            label: 'relationship',
+            target: {
+                targetType: 'relationship' as const,
+                targetId: 'gone-rel',
+            },
+            missingLabel: 'Deleted relationship',
+        },
+    ])(
+        'hides the composer for a missing $label target while keeping history readable',
+        ({ target, missingLabel }) => {
+            setLayout({
+                discussionView: 'target',
+                commentsTarget: target,
+            });
+            setState({
+                status: 'ready',
+                comments: [
+                    createComment({
+                        id: 1,
+                        body: 'Historical orphan',
+                        targetType: target.targetType,
+                        targetId: target.targetId,
+                    }),
+                ],
+            });
+
+            render(<CommentsSection />);
+
+            expect(
+                screen.getByTestId('comments-current-target')
+            ).toHaveTextContent(missingLabel);
+            expect(screen.getByText('Historical orphan')).toBeInTheDocument();
+            expect(
+                screen.queryByTestId('comments-composer')
+            ).not.toBeInTheDocument();
+            expect(screen.queryByText(target.targetId)).not.toBeInTheDocument();
+            expect(
+                screen.getByRole('button', { name: 'All' })
+            ).toBeInTheDocument();
+            expect(
+                screen.getByRole('button', { name: 'Diagram' })
+            ).toBeInTheDocument();
+        }
+    );
+
+    it('keeps missing-target read-only for viewers', () => {
+        accessState.can_edit = false;
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: {
+                targetType: 'table',
+                targetId: 'gone-table',
+            },
+        });
+        setState({
+            status: 'ready',
+            comments: [
+                createComment({
+                    id: 1,
+                    body: 'Viewer history',
+                    targetType: 'table',
+                    targetId: 'gone-table',
+                }),
+            ],
+        });
+
+        render(<CommentsSection />);
+
+        expect(screen.getByText('Viewer history')).toBeInTheDocument();
+        expect(screen.getByTestId('comments-current-target')).toHaveTextContent(
+            'Deleted table'
+        );
+        expect(
+            screen.queryByTestId('comments-composer')
+        ).not.toBeInTheDocument();
+    });
+
+    it('still shows the composer for a valid table target and diagram view', () => {
+        setLayout({
+            discussionView: 'target',
+            commentsTarget: {
+                targetType: 'table',
+                targetId: 'table-1',
+            },
+        });
+        setState({ status: 'ready', comments: [] });
+
+        const { rerender } = render(<CommentsSection />);
+        expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
+
+        setLayout({
+            discussionView: 'diagram',
+            commentsTarget: DIAGRAM_DISCUSSION_TARGET,
+        });
+        rerender(<CommentsSection />);
+        expect(screen.getByTestId('comments-composer')).toHaveAttribute(
+            'data-target-type',
+            'diagram'
+        );
     });
 });

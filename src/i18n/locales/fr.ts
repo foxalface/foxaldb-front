@@ -342,6 +342,13 @@ export const fr: LanguageTranslation = {
                     title: 'Aucune discussion pour le moment',
                     description:
                         'Les échanges sur ce diagramme apparaîtront ici.',
+                    diagram_title:
+                        'Aucun message sur le diagramme pour le moment',
+                    diagram_description:
+                        'Les messages concernant le diagramme dans son ensemble apparaîtront ici.',
+                    target_title: 'Aucun message pour la sélection actuelle',
+                    target_description:
+                        'Les messages concernant la sélection actuelle apparaîtront ici.',
                 },
                 errors: {
                     load_title: 'Impossible de charger les discussions',
@@ -356,6 +363,21 @@ export const fr: LanguageTranslation = {
                     field: 'Discussion sur le champ',
                     relationship: 'Discussion sur la relation',
                     unknown: 'Discussion',
+                },
+                views: {
+                    all: 'Tout',
+                    diagram: 'Diagramme',
+                    current_target: 'Sélection',
+                },
+                target_header: {
+                    diagram: 'Discussion sur le diagramme',
+                    table: 'Table {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Table supprimée',
+                    missing_field: 'Champ supprimé',
+                    missing_relationship: 'Relation supprimée',
                 },
                 composer: {
                     label: 'Message',

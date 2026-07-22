@@ -346,6 +346,12 @@ export const pt_BR: LanguageTranslation = {
                     title: 'Nenhuma discussão ainda',
                     description:
                         'As conversas sobre este diagrama aparecerão aqui.',
+                    diagram_title: 'Ainda não há mensagens do diagrama',
+                    diagram_description:
+                        'As mensagens sobre o diagrama como um todo aparecerão aqui.',
+                    target_title: 'Ainda não há mensagens para a seleção atual',
+                    target_description:
+                        'As mensagens sobre a seleção atual aparecerão aqui.',
                 },
                 errors: {
                     load_title: 'Não foi possível carregar as discussões',
@@ -360,6 +366,21 @@ export const pt_BR: LanguageTranslation = {
                     field: 'Discussão do campo',
                     relationship: 'Discussão do relacionamento',
                     unknown: 'Discussão',
+                },
+                views: {
+                    all: 'Todas',
+                    diagram: 'Diagrama',
+                    current_target: 'Atual',
+                },
+                target_header: {
+                    diagram: 'Discussão do diagrama',
+                    table: 'Tabela {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Tabela excluída',
+                    missing_field: 'Campo excluído',
+                    missing_relationship: 'Relacionamento excluído',
                 },
                 composer: {
                     label: 'Mensagem',

@@ -345,6 +345,12 @@ export const hi: LanguageTranslation = {
                 empty: {
                     title: 'अभी तक कोई चर्चा नहीं',
                     description: 'इस आरेख के बारे में बातचीत यहाँ दिखाई देगी।',
+                    diagram_title: 'अभी तक कोई डायग्राम संदेश नहीं',
+                    diagram_description:
+                        'पूरे डायग्राम से जुड़े संदेश यहाँ दिखाई देंगे।',
+                    target_title: 'वर्तमान चयन के लिए अभी कोई संदेश नहीं',
+                    target_description:
+                        'वर्तमान चयन से जुड़े संदेश यहाँ दिखाई देंगे।',
                 },
                 errors: {
                     load_title: 'चर्चाएँ लोड नहीं हो सकीं',
@@ -359,6 +365,21 @@ export const hi: LanguageTranslation = {
                     field: 'फ़ील्ड चर्चा',
                     relationship: 'संबंध चर्चा',
                     unknown: 'चर्चा',
+                },
+                views: {
+                    all: 'सभी',
+                    diagram: 'डायग्राम',
+                    current_target: 'वर्तमान',
+                },
+                target_header: {
+                    diagram: 'डायग्राम चर्चा',
+                    table: 'तालिका {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'हटाई गई तालिका',
+                    missing_field: 'हटाया गया फ़ील्ड',
+                    missing_relationship: 'हटाया गया संबंध',
                 },
                 composer: {
                     label: 'संदेश',

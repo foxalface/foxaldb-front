@@ -343,6 +343,12 @@ export const tr: LanguageTranslation = {
                     title: 'Henüz tartışma yok',
                     description:
                         'Bu diyagram hakkındaki konuşmalar burada görünecek.',
+                    diagram_title: 'Henüz diyagram mesajı yok',
+                    diagram_description:
+                        'Diyagramın geneline dair mesajlar burada görünür.',
+                    target_title: 'Geçerli seçim için henüz mesaj yok',
+                    target_description:
+                        'Geçerli seçime dair mesajlar burada görünür.',
                 },
                 errors: {
                     load_title: 'Tartışmalar yüklenemedi',
@@ -357,6 +363,21 @@ export const tr: LanguageTranslation = {
                     field: 'Alan tartışması',
                     relationship: 'İlişki tartışması',
                     unknown: 'Tartışma',
+                },
+                views: {
+                    all: 'Tümü',
+                    diagram: 'Diyagram',
+                    current_target: 'Geçerli',
+                },
+                target_header: {
+                    diagram: 'Diyagram tartışması',
+                    table: 'Tablo {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Silinmiş tablo',
+                    missing_field: 'Silinmiş alan',
+                    missing_relationship: 'Silinmiş ilişki',
                 },
                 composer: {
                     label: 'Mesaj',

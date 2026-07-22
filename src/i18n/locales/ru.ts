@@ -342,6 +342,12 @@ export const ru: LanguageTranslation = {
                 empty: {
                     title: 'Пока нет обсуждений',
                     description: 'Разговоры об этой диаграмме появятся здесь.',
+                    diagram_title: 'Пока нет сообщений по диаграмме',
+                    diagram_description:
+                        'Сообщения о диаграмме в целом появятся здесь.',
+                    target_title: 'Пока нет сообщений для текущего выбора',
+                    target_description:
+                        'Сообщения о текущем выборе появятся здесь.',
                 },
                 errors: {
                     load_title: 'Не удалось загрузить обсуждения',
@@ -356,6 +362,21 @@ export const ru: LanguageTranslation = {
                     field: 'Обсуждение поля',
                     relationship: 'Обсуждение связи',
                     unknown: 'Обсуждение',
+                },
+                views: {
+                    all: 'Все',
+                    diagram: 'Диаграмма',
+                    current_target: 'Текущий',
+                },
+                target_header: {
+                    diagram: 'Обсуждение диаграммы',
+                    table: 'Таблица {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Удалённая таблица',
+                    missing_field: 'Удалённое поле',
+                    missing_relationship: 'Удалённая связь',
                 },
                 composer: {
                     label: 'Сообщение',

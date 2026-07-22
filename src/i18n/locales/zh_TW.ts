@@ -336,6 +336,10 @@ export const zh_TW: LanguageTranslation = {
                 empty: {
                     title: '尚無討論',
                     description: '與此圖表相關的對話會顯示在這裡。',
+                    diagram_title: '尚無圖表訊息',
+                    diagram_description: '關於整個圖表的訊息將顯示於此。',
+                    target_title: '目前選取項目尚無訊息',
+                    target_description: '關於目前選取項目的訊息將顯示於此。',
                 },
                 errors: {
                     load_title: '無法載入討論',
@@ -349,6 +353,21 @@ export const zh_TW: LanguageTranslation = {
                     field: '欄位討論',
                     relationship: '關聯討論',
                     unknown: '討論',
+                },
+                views: {
+                    all: '全部',
+                    diagram: '圖表',
+                    current_target: '目前',
+                },
+                target_header: {
+                    diagram: '圖表討論',
+                    table: '資料表 {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: '已刪除的資料表',
+                    missing_field: '已刪除的欄位',
+                    missing_relationship: '已刪除的關係',
                 },
                 composer: {
                     label: '訊息',

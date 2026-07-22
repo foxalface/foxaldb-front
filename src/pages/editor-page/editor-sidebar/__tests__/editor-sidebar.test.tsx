@@ -13,6 +13,7 @@ const { layoutState, commentsState } = vi.hoisted(() => ({
         selectSidebarSection: vi.fn(),
         showSidePanel: vi.fn(),
         selectVisualsTab: vi.fn(),
+        openAllDiscussions: vi.fn(),
     },
     commentsState: {
         isActive: true,
@@ -88,6 +89,7 @@ describe('EditorSidebar comments entry', () => {
         layoutState.selectSidebarSection = vi.fn();
         layoutState.showSidePanel = vi.fn();
         layoutState.selectVisualsTab = vi.fn();
+        layoutState.openAllDiscussions = vi.fn();
         commentsState.isActive = true;
     });
 
@@ -109,21 +111,15 @@ describe('EditorSidebar comments entry', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('opens the side panel and selects comments on click', async () => {
+    it('opens all discussions through openAllDiscussions on click', async () => {
         const user = userEvent.setup();
         renderSidebar();
 
         await user.click(screen.getByRole('button', { name: 'Discussions' }));
 
-        expect(layoutState.showSidePanel).toHaveBeenCalledTimes(1);
-        expect(layoutState.selectSidebarSection).toHaveBeenCalledWith(
-            'comments'
-        );
-        expect(
-            layoutState.showSidePanel.mock.invocationCallOrder[0]
-        ).toBeLessThan(
-            layoutState.selectSidebarSection.mock.invocationCallOrder[0]
-        );
+        expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
+        expect(layoutState.showSidePanel).not.toHaveBeenCalled();
+        expect(layoutState.selectSidebarSection).not.toHaveBeenCalled();
     });
 
     it('marks the Discussions control active when comments is selected', () => {

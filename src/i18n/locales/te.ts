@@ -345,6 +345,12 @@ export const te: LanguageTranslation = {
                     title: 'ఇంకా చర్చలు లేవు',
                     description:
                         'ఈ రేఖాచిత్రం గురించిన సంభాషణలు ఇక్కడ కనిపిస్తాయి.',
+                    diagram_title: 'ఇంకా డైగ్రామ్ సందేశాలు లేవు',
+                    diagram_description:
+                        'మొత్తం డైగ్రామ్ గురించిన సందేశాలు ఇక్కడ కనిపిస్తాయి.',
+                    target_title: 'ప్రస్తుత ఎంపికకు ఇంకా సందేశాలు లేవు',
+                    target_description:
+                        'ప్రస్తుత ఎంపిక గురించిన సందేశాలు ఇక్కడ కనిపిస్తాయి.',
                 },
                 errors: {
                     load_title: 'చర్చలను లోడ్ చేయలేకపోయాము',
@@ -359,6 +365,21 @@ export const te: LanguageTranslation = {
                     field: 'ఫీల్డ్ చర్చ',
                     relationship: 'రిలేషన్‌షిప్ చర్చ',
                     unknown: 'చర్చ',
+                },
+                views: {
+                    all: 'అన్నీ',
+                    diagram: 'డైగ్రామ్',
+                    current_target: 'ప్రస్తుతం',
+                },
+                target_header: {
+                    diagram: 'డైగ్రామ్ చర్చ',
+                    table: 'పట్టిక {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'తొలగించిన పట్టిక',
+                    missing_field: 'తొలగించిన ఫీల్డ్',
+                    missing_relationship: 'తొలగించిన సంబంధం',
                 },
                 composer: {
                     label: 'సందేశం',

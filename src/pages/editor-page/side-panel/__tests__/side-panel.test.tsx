@@ -10,9 +10,13 @@ const { layoutState, commentsState, breakpointState } = vi.hoisted(() => {
     const state = {
         selectedSidebarSection: 'tables' as SidebarSection,
         selectSidebarSection: vi.fn(),
+        openAllDiscussions: vi.fn(),
     };
     state.selectSidebarSection = vi.fn((section: SidebarSection) => {
         state.selectedSidebarSection = section;
+    });
+    state.openAllDiscussions = vi.fn(() => {
+        state.selectedSidebarSection = 'comments';
     });
     return {
         layoutState: state,
@@ -32,6 +36,9 @@ vi.mock('@/hooks/use-layout', () => ({
         },
         selectSidebarSection: (section: SidebarSection) => {
             layoutState.selectSidebarSection(section);
+        },
+        openAllDiscussions: () => {
+            layoutState.openAllDiscussions();
         },
     }),
 }));
@@ -209,6 +216,9 @@ describe('SidePanel comments routing', () => {
         layoutState.selectSidebarSection = vi.fn((section: SidebarSection) => {
             layoutState.selectedSidebarSection = section;
         });
+        layoutState.openAllDiscussions = vi.fn(() => {
+            layoutState.selectedSidebarSection = 'comments';
+        });
         commentsState.isActive = true;
         breakpointState.isMd = false;
     });
@@ -260,15 +270,51 @@ describe('SidePanel comments routing', () => {
         expect(screen.getByTestId('custom-types-section')).toBeInTheDocument();
     });
 
-    it('uses the same comments section value from the mobile selector', async () => {
+    it('calls openAllDiscussions when selecting mobile Discussions', async () => {
         const user = userEvent.setup();
         render(<SidePanel />);
 
         await user.click(screen.getByRole('option', { name: 'Discussions' }));
 
-        expect(layoutState.selectSidebarSection).toHaveBeenCalledWith(
+        expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
+        expect(layoutState.selectSidebarSection).not.toHaveBeenCalledWith(
             'comments'
         );
+    });
+
+    it('keeps other mobile sections on the existing selection path', async () => {
+        const user = userEvent.setup();
+        render(<SidePanel />);
+
+        await user.click(screen.getByRole('option', { name: 'Refs' }));
+
+        expect(layoutState.selectSidebarSection).toHaveBeenCalledWith('refs');
+        expect(layoutState.openAllDiscussions).not.toHaveBeenCalled();
+    });
+
+    it('does not re-open all discussions when comments is already selected', async () => {
+        const user = userEvent.setup();
+        layoutState.selectedSidebarSection = 'comments';
+        render(<SidePanel />);
+
+        await user.click(screen.getByRole('option', { name: 'Discussions' }));
+
+        expect(layoutState.openAllDiscussions).not.toHaveBeenCalled();
+    });
+
+    it('restores all discussions after leaving comments and selecting Discussions again', async () => {
+        const user = userEvent.setup();
+        layoutState.selectedSidebarSection = 'comments';
+        const { rerender } = render(<SidePanel />);
+
+        await user.click(screen.getByRole('option', { name: 'Refs' }));
+        expect(layoutState.selectSidebarSection).toHaveBeenCalledWith('refs');
+        expect(layoutState.selectedSidebarSection).toBe('refs');
+
+        rerender(<SidePanel />);
+
+        await user.click(screen.getByRole('option', { name: 'Discussions' }));
+        expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
     });
 
     it('does not show the mobile selector on desktop while still routing comments', () => {

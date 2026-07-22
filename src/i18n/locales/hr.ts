@@ -341,6 +341,12 @@ export const hr: LanguageTranslation = {
                     title: 'Još nema rasprava',
                     description:
                         'Razgovori o ovom dijagramu pojavit će se ovdje.',
+                    diagram_title: 'Još nema poruka o dijagramu',
+                    diagram_description:
+                        'Poruke o dijagramu u cjelini pojavit će se ovdje.',
+                    target_title: 'Još nema poruka za trenutni odabir',
+                    target_description:
+                        'Poruke o trenutnom odabiru pojavit će se ovdje.',
                 },
                 errors: {
                     load_title: 'Nije moguće učitati rasprave',
@@ -355,6 +361,21 @@ export const hr: LanguageTranslation = {
                     field: 'Rasprava o polju',
                     relationship: 'Rasprava o vezi',
                     unknown: 'Rasprava',
+                },
+                views: {
+                    all: 'Sve',
+                    diagram: 'Dijagram',
+                    current_target: 'Trenutno',
+                },
+                target_header: {
+                    diagram: 'Rasprava o dijagramu',
+                    table: 'Tablica {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Izbrisana tablica',
+                    missing_field: 'Izbrisano polje',
+                    missing_relationship: 'Izbrisana veza',
                 },
                 composer: {
                     label: 'Poruka',

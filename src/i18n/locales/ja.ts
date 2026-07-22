@@ -346,6 +346,13 @@ export const ja: LanguageTranslation = {
                 empty: {
                     title: 'まだディスカッションはありません',
                     description: 'この図に関する会話がここに表示されます。',
+                    diagram_title: 'ダイアグラムのメッセージはまだありません',
+                    diagram_description:
+                        'ダイアグラム全体に関するメッセージがここに表示されます。',
+                    target_title:
+                        '現在の選択に関するメッセージはまだありません',
+                    target_description:
+                        '現在の選択に関するメッセージがここに表示されます。',
                 },
                 errors: {
                     load_title: 'ディスカッションを読み込めませんでした',
@@ -360,6 +367,21 @@ export const ja: LanguageTranslation = {
                     field: 'フィールドのディスカッション',
                     relationship: 'リレーションシップのディスカッション',
                     unknown: 'ディスカッション',
+                },
+                views: {
+                    all: 'すべて',
+                    diagram: 'ダイアグラム',
+                    current_target: '現在',
+                },
+                target_header: {
+                    diagram: 'ダイアグラムのディスカッション',
+                    table: 'テーブル {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: '削除されたテーブル',
+                    missing_field: '削除されたフィールド',
+                    missing_relationship: '削除されたリレーションシップ',
                 },
                 composer: {
                     label: 'メッセージ',

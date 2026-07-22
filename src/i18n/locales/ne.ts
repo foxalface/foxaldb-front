@@ -345,6 +345,12 @@ export const ne: LanguageTranslation = {
                     title: 'अहिलेसम्म कुनै छलफल छैन',
                     description:
                         'यो रेखाचित्रका बारेका कुराकानीहरू यहाँ देखिने छन्।',
+                    diagram_title: 'अहिलेसम्म कुनै चित्र सन्देश छैन',
+                    diagram_description:
+                        'समग्र चित्रसम्बन्धी सन्देशहरू यहाँ देखिनेछन्।',
+                    target_title: 'हालको चयनका लागि अहिलेसम्म सन्देश छैन',
+                    target_description:
+                        'हालको चयनसम्बन्धी सन्देशहरू यहाँ देखिनेछन्।',
                 },
                 errors: {
                     load_title: 'छलफलहरू लोड गर्न सकिएन',
@@ -359,6 +365,21 @@ export const ne: LanguageTranslation = {
                     field: 'फिल्ड छलफल',
                     relationship: 'सम्बन्ध छलफल',
                     unknown: 'छलफल',
+                },
+                views: {
+                    all: 'सबै',
+                    diagram: 'चित्र',
+                    current_target: 'हालको',
+                },
+                target_header: {
+                    diagram: 'चित्र छलफल',
+                    table: 'तालिका {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'मेटिएको तालिका',
+                    missing_field: 'मेटिएको फिल्ड',
+                    missing_relationship: 'मेटिएको सम्बन्ध',
                 },
                 composer: {
                     label: 'सन्देश',

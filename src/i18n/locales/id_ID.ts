@@ -344,6 +344,12 @@ export const id_ID: LanguageTranslation = {
                     title: 'Belum ada diskusi',
                     description:
                         'Percakapan tentang diagram ini akan muncul di sini.',
+                    diagram_title: 'Belum ada pesan diagram',
+                    diagram_description:
+                        'Pesan tentang diagram secara keseluruhan akan muncul di sini.',
+                    target_title: 'Belum ada pesan untuk pilihan saat ini',
+                    target_description:
+                        'Pesan tentang pilihan saat ini akan muncul di sini.',
                 },
                 errors: {
                     load_title: 'Tidak dapat memuat diskusi',
@@ -358,6 +364,21 @@ export const id_ID: LanguageTranslation = {
                     field: 'Diskusi kolom',
                     relationship: 'Diskusi relasi',
                     unknown: 'Diskusi',
+                },
+                views: {
+                    all: 'Semua',
+                    diagram: 'Diagram',
+                    current_target: 'Saat ini',
+                },
+                target_header: {
+                    diagram: 'Diskusi diagram',
+                    table: 'Tabel {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Tabel yang dihapus',
+                    missing_field: 'Bidang yang dihapus',
+                    missing_relationship: 'Relasi yang dihapus',
                 },
                 composer: {
                     label: 'Pesan',

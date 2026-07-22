@@ -1,16 +1,35 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import type {
+    DiscussionView,
     LayoutContext,
     SidebarSection,
     VisualsTab,
 } from './layout-context';
 import { layoutContext } from './layout-context';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useChartDB } from '@/hooks/use-chartdb';
+import type { DiagramCommentTarget } from '@/lib/comments/comment-types';
+import { DIAGRAM_DISCUSSION_TARGET } from '@/lib/comments/resolve-discussion-target';
+
+const resetDiscussionNavigation = (
+    setDiscussionView: React.Dispatch<React.SetStateAction<DiscussionView>>,
+    setCommentsTarget: React.Dispatch<
+        React.SetStateAction<DiagramCommentTarget>
+    >
+): void => {
+    setDiscussionView('all');
+    setCommentsTarget(DIAGRAM_DISCUSSION_TARGET);
+};
 
 export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { isMd: isDesktop } = useBreakpoint('md');
+    // LayoutProvider must sit under ChartDBEditorProvider so diagram identity
+    // is available without a provider cycle (see editor-page provider tree).
+    const { diagramId } = useChartDB();
+    const previousDiagramIdRef = useRef(diagramId);
+
     const [openedTableInSidebar, setOpenedTableInSidebar] = React.useState<
         string | undefined
     >();
@@ -31,123 +50,205 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         React.useState<VisualsTab>('areas');
     const [isSidePanelShowed, setIsSidePanelShowed] =
         React.useState<boolean>(isDesktop);
+    const [discussionView, setDiscussionView] =
+        React.useState<DiscussionView>('all');
+    const [commentsTarget, setCommentsTarget] =
+        React.useState<DiagramCommentTarget>(DIAGRAM_DISCUSSION_TARGET);
 
-    const closeAllTablesInSidebar: LayoutContext['closeAllTablesInSidebar'] =
-        () => setOpenedTableInSidebar('');
+    useEffect(() => {
+        if (previousDiagramIdRef.current === diagramId) {
+            return;
+        }
+        previousDiagramIdRef.current = diagramId;
+        resetDiscussionNavigation(setDiscussionView, setCommentsTarget);
+    }, [diagramId]);
 
-    const closeAllRelationshipsInSidebar: LayoutContext['closeAllRelationshipsInSidebar'] =
-        () => setOpenedRefInSidebar('');
+    const closeAllTablesInSidebar = useCallback(() => {
+        setOpenedTableInSidebar('');
+    }, []);
 
-    const closeAllDependenciesInSidebar: LayoutContext['closeAllDependenciesInSidebar'] =
-        () => setOpenedRefInSidebar('');
-
-    const closeAllRefsInSidebar: LayoutContext['closeAllRefsInSidebar'] = () =>
+    const closeAllRelationshipsInSidebar = useCallback(() => {
         setOpenedRefInSidebar('');
+    }, []);
 
-    const closeAllAreasInSidebar: LayoutContext['closeAllAreasInSidebar'] =
-        () => setOpenedAreaInSidebar('');
+    const closeAllDependenciesInSidebar = useCallback(() => {
+        setOpenedRefInSidebar('');
+    }, []);
 
-    const closeAllNotesInSidebar: LayoutContext['closeAllNotesInSidebar'] =
-        () => setOpenedNoteInSidebar('');
+    const closeAllRefsInSidebar = useCallback(() => {
+        setOpenedRefInSidebar('');
+    }, []);
 
-    const closeAllCustomTypesInSidebar: LayoutContext['closeAllCustomTypesInSidebar'] =
-        () => setOpenedCustomTypeInSidebar('');
+    const closeAllAreasInSidebar = useCallback(() => {
+        setOpenedAreaInSidebar('');
+    }, []);
 
-    const hideSidePanel: LayoutContext['hideSidePanel'] = () =>
+    const closeAllNotesInSidebar = useCallback(() => {
+        setOpenedNoteInSidebar('');
+    }, []);
+
+    const closeAllCustomTypesInSidebar = useCallback(() => {
+        setOpenedCustomTypeInSidebar('');
+    }, []);
+
+    const hideSidePanel = useCallback(() => {
         setIsSidePanelShowed(false);
+    }, []);
 
-    const showSidePanel: LayoutContext['showSidePanel'] = () =>
+    const showSidePanel = useCallback(() => {
         setIsSidePanelShowed(true);
+    }, []);
 
-    const toggleSidePanel: LayoutContext['toggleSidePanel'] = () => {
+    const toggleSidePanel = useCallback(() => {
         setIsSidePanelShowed((prevIsSidePanelShowed) => !prevIsSidePanelShowed);
-    };
+    }, []);
 
-    const openTableFromSidebar: LayoutContext['openTableFromSidebar'] = (
-        tableId
-    ) => {
-        showSidePanel();
+    const openTableFromSidebar = useCallback((tableId: string) => {
+        setIsSidePanelShowed(true);
         setSelectedSidebarSection('tables');
         setOpenedTableInSidebar(tableId);
-    };
+    }, []);
 
-    const openRelationshipFromSidebar: LayoutContext['openRelationshipFromSidebar'] =
-        (relationshipId) => {
-            showSidePanel();
+    const openRelationshipFromSidebar = useCallback(
+        (relationshipId: string) => {
+            setIsSidePanelShowed(true);
             setSelectedSidebarSection('refs');
             setOpenedRefInSidebar(relationshipId);
-        };
+        },
+        []
+    );
 
-    const openDependencyFromSidebar: LayoutContext['openDependencyFromSidebar'] =
-        (dependencyId) => {
-            showSidePanel();
-            setSelectedSidebarSection('refs');
-            setOpenedRefInSidebar(dependencyId);
-        };
+    const openDependencyFromSidebar = useCallback((dependencyId: string) => {
+        setIsSidePanelShowed(true);
+        setSelectedSidebarSection('refs');
+        setOpenedRefInSidebar(dependencyId);
+    }, []);
 
-    const openRefFromSidebar: LayoutContext['openRefFromSidebar'] = (refId) => {
-        showSidePanel();
+    const openRefFromSidebar = useCallback((refId: string) => {
+        setIsSidePanelShowed(true);
         setSelectedSidebarSection('refs');
         setOpenedRefInSidebar(refId);
-    };
+    }, []);
 
-    const openAreaFromSidebar: LayoutContext['openAreaFromSidebar'] = (
-        areaId
-    ) => {
-        showSidePanel();
+    const openAreaFromSidebar = useCallback((areaId: string) => {
+        setIsSidePanelShowed(true);
         setSelectedSidebarSection('visuals');
         setSelectedVisualsTab('areas');
         setOpenedAreaInSidebar(areaId);
-    };
+    }, []);
 
-    const openNoteFromSidebar: LayoutContext['openNoteFromSidebar'] = (
-        noteId
-    ) => {
-        showSidePanel();
+    const openNoteFromSidebar = useCallback((noteId: string) => {
+        setIsSidePanelShowed(true);
         setSelectedSidebarSection('visuals');
         setSelectedVisualsTab('notes');
         setOpenedNoteInSidebar(noteId);
-    };
+    }, []);
 
-    const openCustomTypeFromSidebar: LayoutContext['openCustomTypeFromSidebar'] =
-        (customTypeId) => {
-            showSidePanel();
-            setSelectedSidebarSection('customTypes');
-            setOpenedTableInSidebar(customTypeId);
-        };
+    const openCustomTypeFromSidebar = useCallback((customTypeId: string) => {
+        setIsSidePanelShowed(true);
+        setSelectedSidebarSection('customTypes');
+        setOpenedTableInSidebar(customTypeId);
+    }, []);
+
+    const openAllDiscussions = useCallback(() => {
+        setDiscussionView('all');
+        setCommentsTarget(DIAGRAM_DISCUSSION_TARGET);
+        setSelectedSidebarSection('comments');
+        setIsSidePanelShowed(true);
+    }, []);
+
+    const openDiagramDiscussion = useCallback(() => {
+        setDiscussionView('diagram');
+        setCommentsTarget(DIAGRAM_DISCUSSION_TARGET);
+        setSelectedSidebarSection('comments');
+        setIsSidePanelShowed(true);
+    }, []);
+
+    const openTargetDiscussion = useCallback((target: DiagramCommentTarget) => {
+        // Defensive: callers may pass the diagram target; normalize to the
+        // dedicated diagram view instead of storing a spurious target view.
+        if (target.targetType === 'diagram') {
+            setDiscussionView('diagram');
+            setCommentsTarget(DIAGRAM_DISCUSSION_TARGET);
+        } else {
+            setDiscussionView('target');
+            setCommentsTarget(target);
+        }
+        setSelectedSidebarSection('comments');
+        setIsSidePanelShowed(true);
+    }, []);
+
+    const value = useMemo<LayoutContext>(
+        () => ({
+            openedTableInSidebar,
+            selectedSidebarSection,
+            openTableFromSidebar,
+            selectSidebarSection: setSelectedSidebarSection,
+            openRelationshipFromSidebar,
+            closeAllTablesInSidebar,
+            closeAllRelationshipsInSidebar,
+            isSidePanelShowed,
+            hideSidePanel,
+            showSidePanel,
+            toggleSidePanel,
+            openDependencyFromSidebar,
+            closeAllDependenciesInSidebar,
+            openedRefInSidebar,
+            openRefFromSidebar,
+            closeAllRefsInSidebar,
+            openedAreaInSidebar,
+            openAreaFromSidebar,
+            closeAllAreasInSidebar,
+            openedNoteInSidebar,
+            openNoteFromSidebar,
+            closeAllNotesInSidebar,
+            openedCustomTypeInSidebar,
+            openCustomTypeFromSidebar,
+            closeAllCustomTypesInSidebar,
+            selectedVisualsTab,
+            selectVisualsTab: setSelectedVisualsTab,
+            commentsTarget,
+            discussionView,
+            openAllDiscussions,
+            openDiagramDiscussion,
+            openTargetDiscussion,
+        }),
+        [
+            openedTableInSidebar,
+            selectedSidebarSection,
+            openTableFromSidebar,
+            openRelationshipFromSidebar,
+            closeAllTablesInSidebar,
+            closeAllRelationshipsInSidebar,
+            isSidePanelShowed,
+            hideSidePanel,
+            showSidePanel,
+            toggleSidePanel,
+            openDependencyFromSidebar,
+            closeAllDependenciesInSidebar,
+            openedRefInSidebar,
+            openRefFromSidebar,
+            closeAllRefsInSidebar,
+            openedAreaInSidebar,
+            openAreaFromSidebar,
+            closeAllAreasInSidebar,
+            openedNoteInSidebar,
+            openNoteFromSidebar,
+            closeAllNotesInSidebar,
+            openedCustomTypeInSidebar,
+            openCustomTypeFromSidebar,
+            closeAllCustomTypesInSidebar,
+            selectedVisualsTab,
+            commentsTarget,
+            discussionView,
+            openAllDiscussions,
+            openDiagramDiscussion,
+            openTargetDiscussion,
+        ]
+    );
 
     return (
-        <layoutContext.Provider
-            value={{
-                openedTableInSidebar,
-                selectedSidebarSection,
-                openTableFromSidebar,
-                selectSidebarSection: setSelectedSidebarSection,
-                openRelationshipFromSidebar,
-                closeAllTablesInSidebar,
-                closeAllRelationshipsInSidebar,
-                isSidePanelShowed,
-                hideSidePanel,
-                showSidePanel,
-                toggleSidePanel,
-                openDependencyFromSidebar,
-                closeAllDependenciesInSidebar,
-                openedRefInSidebar,
-                openRefFromSidebar,
-                closeAllRefsInSidebar,
-                openedAreaInSidebar,
-                openAreaFromSidebar,
-                closeAllAreasInSidebar,
-                openedNoteInSidebar,
-                openNoteFromSidebar,
-                closeAllNotesInSidebar,
-                openedCustomTypeInSidebar,
-                openCustomTypeFromSidebar,
-                closeAllCustomTypesInSidebar,
-                selectedVisualsTab,
-                selectVisualsTab: setSelectedVisualsTab,
-            }}
-        >
+        <layoutContext.Provider value={value}>
             {children}
         </layoutContext.Provider>
     );

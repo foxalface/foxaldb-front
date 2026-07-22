@@ -133,13 +133,19 @@ export const EditorPage: React.FC = () => (
     <LocalConfigProvider>
         <ThemeProvider>
             <FullScreenLoaderProvider>
-                <LayoutProvider>
-                    <StorageProvider>
-                        <ConfigProvider>
-                            <RedoUndoStackProvider>
-                                <DiffProvider>
-                                    <DiagramAccessProvider>
-                                        <ChartDBEditorProvider>
+                <StorageProvider>
+                    <ConfigProvider>
+                        <RedoUndoStackProvider>
+                            <DiffProvider>
+                                <DiagramAccessProvider>
+                                    <ChartDBEditorProvider>
+                                        {/*
+                                          LayoutProvider sits under ChartDB so
+                                          discussion navigation can reset on
+                                          diagram identity changes without a
+                                          provider cycle.
+                                        */}
+                                        <LayoutProvider>
                                             <DiagramFilterProvider>
                                                 <HistoryProvider>
                                                     <ReactFlowProvider>
@@ -163,13 +169,13 @@ export const EditorPage: React.FC = () => (
                                                     </ReactFlowProvider>
                                                 </HistoryProvider>
                                             </DiagramFilterProvider>
-                                        </ChartDBEditorProvider>
-                                    </DiagramAccessProvider>
-                                </DiffProvider>
-                            </RedoUndoStackProvider>
-                        </ConfigProvider>
-                    </StorageProvider>
-                </LayoutProvider>
+                                        </LayoutProvider>
+                                    </ChartDBEditorProvider>
+                                </DiagramAccessProvider>
+                            </DiffProvider>
+                        </RedoUndoStackProvider>
+                    </ConfigProvider>
+                </StorageProvider>
             </FullScreenLoaderProvider>
         </ThemeProvider>
     </LocalConfigProvider>

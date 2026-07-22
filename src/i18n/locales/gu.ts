@@ -344,6 +344,12 @@ export const gu: LanguageTranslation = {
                 empty: {
                     title: 'હજુ સુધી કોઈ ચર્ચા નથી',
                     description: 'આ ડાયાગ્રામ વિશેની વાતચીત અહીં દેખાશે.',
+                    diagram_title: 'હજુ સુધી કોઈ ડાયાગ્રામ સંદેશા નથી',
+                    diagram_description:
+                        'સમગ્ર ડાયાગ્રામ વિશેના સંદેશા અહીં દેખાશે.',
+                    target_title: 'વર્તમાન પસંદગી માટે હજુ કોઈ સંદેશા નથી',
+                    target_description:
+                        'વર્તમાન પસંદગી વિશેના સંદેશા અહીં દેખાશે.',
                 },
                 errors: {
                     load_title: 'ચર્ચાઓ લોડ કરી શકાઈ નથી',
@@ -358,6 +364,21 @@ export const gu: LanguageTranslation = {
                     field: 'ફીલ્ડ ચર્ચા',
                     relationship: 'સંબંધ ચર્ચા',
                     unknown: 'ચર્ચા',
+                },
+                views: {
+                    all: 'બધા',
+                    diagram: 'ડાયાગ્રામ',
+                    current_target: 'વર્તમાન',
+                },
+                target_header: {
+                    diagram: 'ડાયાગ્રામ ચર્ચા',
+                    table: 'કોષ્ટક {{name}}',
+                    field: '{{table}}.{{field}}',
+                    relationship: '{{name}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'કાઢી નાખેલ કોષ્ટક',
+                    missing_field: 'કાઢી નાખેલ ફીલ્ડ',
+                    missing_relationship: 'કાઢી નાખેલ સંબંધ',
                 },
                 composer: {
                     label: 'સંદેશ',

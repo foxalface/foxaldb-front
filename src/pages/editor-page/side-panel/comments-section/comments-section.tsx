@@ -1,8 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from '@/components/spinner/spinner';
 import { EmptyState } from '@/components/empty-state/empty-state';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useDiagramComments } from '@/hooks/use-diagram-comments';
+import { useLayout } from '@/hooks/use-layout';
+import { useTargetComments } from '@/hooks/use-target-comments';
+import { resolveDiscussionTarget } from '@/lib/comments/resolve-discussion-target';
 import { CommentsComposer } from './comments-composer';
 import { CommentsEmptyState } from './comments-empty-state';
 import {
@@ -10,6 +21,7 @@ import {
     CommentsReloadErrorBanner,
 } from './comments-error-state';
 import { CommentsList } from './comments-list';
+import { CommentsTargetHeader } from './comments-target-header';
 
 export interface CommentsSectionProps {}
 
@@ -17,8 +29,22 @@ const COMMENTS_SECTION_HEADING_ID = 'comments-section-heading';
 
 export const CommentsSection: React.FC<CommentsSectionProps> = () => {
     const { t } = useTranslation();
-    const { comments, status, isActive, diagramId, reload } =
-        useDiagramComments();
+    const {
+        comments: allComments,
+        status,
+        isActive,
+        diagramId,
+        reload,
+    } = useDiagramComments();
+    const {
+        discussionView,
+        commentsTarget,
+        openAllDiscussions,
+        openDiagramDiscussion,
+    } = useLayout();
+    const scopedComments = useTargetComments(commentsTarget);
+    const { tables, relationships } = useChartDB();
+    const { diagramAccess } = useDiagramAccess();
     const [isRetrying, setIsRetrying] = useState(false);
     const retryInFlightRef = useRef(false);
     const isMountedRef = useRef(true);
@@ -50,13 +76,69 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
         }
     }, [reload]);
 
-    const hasComments = comments.length > 0;
-    const isInitialLoading = status === 'loading' && !hasComments;
-    const isReloadLoading = status === 'loading' && hasComments;
-    const isLoadError = status === 'error' && !hasComments;
-    const isReloadError = status === 'error' && hasComments;
+    const visibleComments =
+        discussionView === 'all' ? allComments : scopedComments;
+
+    const resolvedTarget = useMemo(
+        () =>
+            resolveDiscussionTarget(commentsTarget, {
+                tables,
+                relationships,
+            }),
+        [commentsTarget, tables, relationships]
+    );
+
+    const hasAnyComments = allComments.length > 0;
+    const hasVisibleComments = visibleComments.length > 0;
+    const isInitialLoading = status === 'loading' && !hasAnyComments;
+    const isReloadLoading = status === 'loading' && hasAnyComments;
+    const isLoadError = status === 'error' && !hasAnyComments;
+    const isReloadError = status === 'error' && hasAnyComments;
+    const canEdit = diagramAccess?.can_edit === true;
+    const canComposeInCurrentView =
+        canEdit &&
+        discussionView !== 'all' &&
+        !(discussionView === 'target' && resolvedTarget.kind === 'missing');
     const showComposer =
-        isActive && !isInitialLoading && !isLoadError && diagramId !== null;
+        isActive &&
+        canComposeInCurrentView &&
+        !isInitialLoading &&
+        !isLoadError &&
+        diagramId !== null;
+
+    const reloadErrorBanner = isReloadError ? (
+        <CommentsReloadErrorBanner
+            onRetry={() => {
+                void handleRetry();
+            }}
+            isRetrying={isRetrying}
+        />
+    ) : null;
+
+    let emptyContent: React.ReactNode = null;
+    if (discussionView === 'diagram') {
+        emptyContent = (
+            <EmptyState
+                title={t('side_panel.comments_section.empty.diagram_title')}
+                description={t(
+                    'side_panel.comments_section.empty.diagram_description'
+                )}
+                className="mt-12 px-2"
+            />
+        );
+    } else if (discussionView === 'target') {
+        emptyContent = (
+            <EmptyState
+                title={t('side_panel.comments_section.empty.target_title')}
+                description={t(
+                    'side_panel.comments_section.empty.target_description'
+                )}
+                className="mt-12 px-2"
+            />
+        );
+    } else {
+        emptyContent = <CommentsEmptyState />;
+    }
 
     let content: React.ReactNode;
 
@@ -92,22 +174,20 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
                 isRetrying={isRetrying}
             />
         );
-    } else if (!hasComments) {
-        content = <CommentsEmptyState />;
+    } else if (!hasVisibleComments) {
+        content = (
+            <div className="flex min-h-0 flex-1 flex-col">
+                {reloadErrorBanner}
+                {emptyContent}
+            </div>
+        );
     } else {
         content = (
             <div className="flex min-h-0 flex-1 flex-col">
-                {isReloadError ? (
-                    <CommentsReloadErrorBanner
-                        onRetry={() => {
-                            void handleRetry();
-                        }}
-                        isRetrying={isRetrying}
-                    />
-                ) : null}
+                {reloadErrorBanner}
                 <div className="min-h-0 flex-1">
                     <CommentsList
-                        comments={comments}
+                        comments={visibleComments}
                         labelledBy={COMMENTS_SECTION_HEADING_ID}
                     />
                 </div>
@@ -121,20 +201,32 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
             aria-labelledby={COMMENTS_SECTION_HEADING_ID}
             data-vaul-no-drag
         >
-            <header className="flex shrink-0 items-center justify-between gap-2 py-2">
-                <h2
-                    id={COMMENTS_SECTION_HEADING_ID}
-                    className="text-sm font-semibold text-foreground"
-                >
-                    {t('side_panel.comments_section.title')}
-                </h2>
-                {isReloadLoading ? (
-                    <span
-                        role="status"
-                        aria-label={t('side_panel.comments_section.loading')}
+            <header className="flex shrink-0 flex-col gap-1 py-2">
+                <div className="flex items-center justify-between gap-2">
+                    <h2
+                        id={COMMENTS_SECTION_HEADING_ID}
+                        className="text-sm font-semibold text-foreground"
                     >
-                        <Spinner size="small" className="size-4" />
-                    </span>
+                        {t('side_panel.comments_section.title')}
+                    </h2>
+                    {isReloadLoading ? (
+                        <span
+                            role="status"
+                            aria-label={t(
+                                'side_panel.comments_section.loading'
+                            )}
+                        >
+                            <Spinner size="small" className="size-4" />
+                        </span>
+                    ) : null}
+                </div>
+                {isActive ? (
+                    <CommentsTargetHeader
+                        view={discussionView}
+                        resolvedTarget={resolvedTarget}
+                        onShowAll={openAllDiscussions}
+                        onShowDiagram={openDiagramDiscussion}
+                    />
                 ) : null}
             </header>
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
@@ -143,10 +235,7 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
             {showComposer && diagramId !== null ? (
                 <CommentsComposer
                     diagramId={diagramId}
-                    target={{
-                        targetType: 'diagram',
-                        targetId: null,
-                    }}
+                    target={commentsTarget}
                 />
             ) : null}
         </section>
