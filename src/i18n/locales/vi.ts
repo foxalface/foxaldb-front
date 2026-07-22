@@ -170,6 +170,7 @@ export const vi: LanguageTranslation = {
                     field_type: 'Loại trường',
                     field_actions: {
                         title: 'Thuộc tính trường',
+                        open_discussion: 'Mở thảo luận',
                         unique: 'Giá trị duy nhất',
                         auto_increment: 'Tự động tăng',
                         comments: 'Bình luận',

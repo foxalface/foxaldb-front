@@ -167,6 +167,7 @@ export const zh_TW: LanguageTranslation = {
                     field_type: '類型',
                     field_actions: {
                         title: '欄位屬性',
+                        open_discussion: '開啟討論',
                         unique: '唯一',
                         auto_increment: '自動遞增',
                         comments: '註解',

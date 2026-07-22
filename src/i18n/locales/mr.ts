@@ -173,6 +173,7 @@ export const mr: LanguageTranslation = {
                     field_type: 'प्रकार',
                     field_actions: {
                         title: 'फील्ड गुणधर्म',
+                        open_discussion: 'चर्चा उघडा',
                         unique: 'युनिक',
                         auto_increment: 'ऑटो इंक्रिमेंट',
                         comments: 'टिप्पण्या',

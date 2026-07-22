@@ -171,6 +171,7 @@ export const de: LanguageTranslation = {
                     field_type: 'Datentyp',
                     field_actions: {
                         title: 'Feldattribute',
+                        open_discussion: 'Diskussion öffnen',
                         unique: 'Eindeutig',
                         auto_increment: 'Automatisch hochzählen',
                         comments: 'Kommentare',

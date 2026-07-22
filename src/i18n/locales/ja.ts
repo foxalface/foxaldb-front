@@ -173,6 +173,7 @@ export const ja: LanguageTranslation = {
                     field_type: 'タイプ',
                     field_actions: {
                         title: 'フィールド属性',
+                        open_discussion: 'ディスカッションを開く',
                         unique: 'ユニーク',
                         auto_increment: 'オートインクリメント',
                         comments: 'コメント',

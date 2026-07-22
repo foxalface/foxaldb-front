@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
-import { Ellipsis, Trash2 } from 'lucide-react';
+import { Ellipsis, MessageCircle, Trash2 } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
 import { Separator } from '@/components/separator/separator';
@@ -32,6 +32,8 @@ import {
     SelectValue,
 } from '@/components/select/select';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useLayout } from '@/hooks/use-layout';
+import { useCommentsAvailability } from '@/hooks/use-comments-availability';
 
 export interface TableFieldPopoverProps {
     field: DBField;
@@ -53,6 +55,8 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     onOpenChange: controlledOnOpenChange,
 }) => {
     const { readonly } = useChartDB();
+    const { openTargetDiscussion } = useLayout();
+    const commentsActive = useCommentsAvailability();
     const { t } = useTranslation();
     const [localField, setLocalField] = React.useState<DBField>(field);
     const [internalOpen, setInternalOpen] = React.useState(false);
@@ -71,6 +75,14 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
         },
         [controlledOnOpenChange, setInternalOpen]
     );
+
+    const openFieldDiscussion = useCallback(() => {
+        openTargetDiscussion({
+            targetType: 'field',
+            targetId: field.id,
+        });
+        setIsOpen(false);
+    }, [field.id, openTargetDiscussion, setIsOpen]);
 
     // Check if this field is the only primary key in the table
     const isOnlyPrimaryKey = React.useMemo(() => {
@@ -155,10 +167,14 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
         >
             <PopoverTrigger asChild>
                 <Button
+                    type="button"
                     variant="ghost"
+                    aria-label={t(
+                        'side_panel.tables_section.table.field_actions.title'
+                    )}
                     className="h-8 w-[32px] p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                 >
-                    <Ellipsis className="size-3.5" />
+                    <Ellipsis className="size-3.5" aria-hidden="true" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-52">
@@ -496,15 +512,35 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                             />
                         </div>
                     </div>
+                    {commentsActive ? (
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="flex gap-2"
+                            onClick={openFieldDiscussion}
+                        >
+                            <MessageCircle
+                                className="size-3.5"
+                                aria-hidden="true"
+                            />
+                            {t(
+                                'side_panel.tables_section.table.field_actions.open_discussion'
+                            )}
+                        </Button>
+                    ) : null}
                     {!readonly ? (
                         <>
                             <Separator orientation="horizontal" />
                             <Button
+                                type="button"
                                 variant="outline"
                                 className="flex gap-2 !text-red-700"
                                 onClick={removeField}
                             >
-                                <Trash2 className="size-3.5 text-red-700" />
+                                <Trash2
+                                    className="size-3.5 text-red-700"
+                                    aria-hidden="true"
+                                />
                                 {t(
                                     'side_panel.tables_section.table.field_actions.delete_field'
                                 )}

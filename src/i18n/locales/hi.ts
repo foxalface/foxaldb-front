@@ -171,6 +171,7 @@ export const hi: LanguageTranslation = {
                     field_type: 'प्रकार',
                     field_actions: {
                         title: 'फ़ील्ड विशेषताएँ',
+                        open_discussion: 'चर्चा खोलें',
                         unique: 'अद्वितीय',
                         auto_increment: 'ऑटो इंक्रीमेंट',
                         comments: 'टिप्पणियाँ',

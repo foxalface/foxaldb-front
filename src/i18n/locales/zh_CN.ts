@@ -167,6 +167,7 @@ export const zh_CN: LanguageTranslation = {
                     field_type: '类型',
                     field_actions: {
                         title: '字段属性',
+                        open_discussion: '打开讨论',
                         unique: '唯一',
                         auto_increment: '自动递增',
                         comments: '注释',

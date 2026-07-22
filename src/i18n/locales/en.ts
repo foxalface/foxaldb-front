@@ -167,6 +167,7 @@ export const en = {
                     field_type: 'Type',
                     field_actions: {
                         title: 'Field Attributes',
+                        open_discussion: 'Open discussion',
                         unique: 'Unique',
                         auto_increment: 'Auto Increment',
                         character_length: 'Max Length',

@@ -170,6 +170,7 @@ export const ar: LanguageTranslation = {
                     field_type: 'النوع',
                     field_actions: {
                         title: 'خصائص الحقل',
+                        open_discussion: 'فتح النقاش',
                         unique: 'فريد',
                         auto_increment: 'زيادة تلقائية',
                         comments: 'تعليقات',

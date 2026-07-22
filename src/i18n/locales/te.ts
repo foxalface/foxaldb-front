@@ -171,6 +171,7 @@ export const te: LanguageTranslation = {
                     field_type: 'ప్రకృతి',
                     field_actions: {
                         title: 'ఫీల్డ్ గుణాలు',
+                        open_discussion: 'చర్చను తెరవండి',
                         unique: 'అద్వితీయ',
                         auto_increment: 'ఆటో ఇంక్రిమెంట్',
                         comments: 'వ్యాఖ్యలు',

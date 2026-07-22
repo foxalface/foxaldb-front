@@ -170,6 +170,7 @@ export const ko_KR: LanguageTranslation = {
                     field_type: '타입',
                     field_actions: {
                         title: '필드 속성',
+                        open_discussion: '토론 열기',
                         unique: '유니크 여부',
                         auto_increment: '자동 증가',
                         comments: '주석',

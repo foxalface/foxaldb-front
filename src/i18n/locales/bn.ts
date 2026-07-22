@@ -171,6 +171,7 @@ export const bn: LanguageTranslation = {
                     field_type: 'ধরন',
                     field_actions: {
                         title: 'ফিল্ড কর্ম',
+                        open_discussion: 'আলোচনা খুলুন',
                         unique: 'অদ্বিতীয়',
                         auto_increment: 'স্বয়ংক্রিয় বৃদ্ধি',
                         comments: 'মন্তব্য',

@@ -168,6 +168,7 @@ export const ru: LanguageTranslation = {
                     field_type: 'Тип',
                     field_actions: {
                         title: 'Атрибуты поля',
+                        open_discussion: 'Открыть обсуждение',
                         unique: 'Уникальный',
                         auto_increment: 'Автоинкремент',
                         comments: 'Комментарии',

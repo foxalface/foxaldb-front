@@ -170,6 +170,7 @@ export const es: LanguageTranslation = {
                     no_types_found: 'No se encontraron tipos',
                     field_actions: {
                         title: 'Atributos del Campo',
+                        open_discussion: 'Abrir discusión',
                         unique: 'Único',
                         auto_increment: 'Autoincremento',
                         comments: 'Comentarios',

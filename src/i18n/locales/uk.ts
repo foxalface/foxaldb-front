@@ -169,6 +169,7 @@ export const uk: LanguageTranslation = {
                     field_type: 'Тип',
                     field_actions: {
                         title: 'Атрибути полів',
+                        open_discussion: 'Відкрити обговорення',
                         unique: 'Унікальне',
                         auto_increment: 'Автоінкремент',
                         comments: 'Коментарі',

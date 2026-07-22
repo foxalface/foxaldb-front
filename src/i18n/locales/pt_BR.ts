@@ -171,6 +171,7 @@ export const pt_BR: LanguageTranslation = {
                     field_type: 'Tipo',
                     field_actions: {
                         title: 'Atributos do Campo',
+                        open_discussion: 'Abrir discussão',
                         unique: 'Único',
                         auto_increment: 'Incremento Automático',
                         comments: 'Comentários',

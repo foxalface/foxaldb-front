@@ -171,6 +171,7 @@ export const ne: LanguageTranslation = {
                     field_type: 'प्रकार',
                     field_actions: {
                         title: 'क्षेत्र विशेषताहरू',
+                        open_discussion: 'छलफल खोल्नुहोस्',
                         unique: 'अनन्य',
                         auto_increment: 'स्वचालित वृद्धि',
                         comments: 'टिप्पणीहरू',

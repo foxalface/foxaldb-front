@@ -170,6 +170,7 @@ export const tr: LanguageTranslation = {
                     field_type: 'Tür',
                     field_actions: {
                         title: 'Alan Özellikleri',
+                        open_discussion: 'Tartışmayı aç',
                         unique: 'Tekil',
                         auto_increment: 'Otomatik Artış',
                         comments: 'Yorumlar',

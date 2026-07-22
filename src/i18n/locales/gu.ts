@@ -172,6 +172,7 @@ export const gu: LanguageTranslation = {
                     field_type: 'પ્રકાર',
                     field_actions: {
                         title: 'ફીલ્ડ લક્ષણો',
+                        open_discussion: 'ચર્ચા ખોલો',
                         unique: 'અદ્વિતીય',
                         auto_increment: 'ઑટો ઇન્ક્રિમેન્ટ',
                         comments: 'ટિપ્પણીઓ',

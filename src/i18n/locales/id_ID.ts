@@ -170,6 +170,7 @@ export const id_ID: LanguageTranslation = {
                     field_type: 'Tipe',
                     field_actions: {
                         title: 'Atribut Kolom',
+                        open_discussion: 'Buka diskusi',
                         unique: 'Unik',
                         auto_increment: 'Kenaikan Otomatis',
                         comments: 'Komentar',

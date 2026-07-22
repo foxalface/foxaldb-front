@@ -168,6 +168,7 @@ export const hr: LanguageTranslation = {
                     field_type: 'Tip',
                     field_actions: {
                         title: 'Atributi polja',
+                        open_discussion: 'Otvori raspravu',
                         unique: 'Jedinstven',
                         auto_increment: 'Automatsko povećavanje',
                         character_length: 'Maksimalna dužina',
