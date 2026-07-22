@@ -400,6 +400,7 @@ export const ru: LanguageTranslation = {
                 item_actions: {
                     title: 'Действия с комментарием',
                     edit: 'Редактировать',
+                    delete: 'Удалить',
                 },
                 edit: {
                     label: 'Сообщение',
@@ -417,6 +418,18 @@ export const ru: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Это сообщение было обновлено в другом месте. Сохранение перезапишет эти изменения.',
+                },
+                delete_dialog: {
+                    title: 'Удалить сообщение',
+                    description:
+                        'Вы уверены, что хотите удалить это сообщение? Это действие нельзя отменить.',
+                    cancel: 'Отмена',
+                    confirm: 'Удалить',
+                    deleting: 'Удаление…',
+                    errors: {
+                        delete_failed:
+                            'Не удалось удалить это сообщение. Попробуйте ещё раз.',
+                    },
                 },
             },
         },

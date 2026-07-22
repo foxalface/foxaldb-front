@@ -406,6 +406,7 @@ export const mr: LanguageTranslation = {
                 item_actions: {
                     title: 'टिप्पणी क्रिया',
                     edit: 'संपादित करा',
+                    delete: 'हटवा',
                 },
                 edit: {
                     label: 'संदेश',
@@ -423,6 +424,18 @@ export const mr: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'हा संदेश इतरत्र अद्यतनित झाला होता. जतन केल्यास ते बदल अधिलेखित होतील.',
+                },
+                delete_dialog: {
+                    title: 'संदेश हटवा',
+                    description:
+                        'तुम्हाला खरोखर हा संदेश हटवायचा आहे का? ही क्रिया पूर्ववत करता येणार नाही.',
+                    cancel: 'रद्द करा',
+                    confirm: 'हटवा',
+                    deleting: 'हटवत आहे…',
+                    errors: {
+                        delete_failed:
+                            'हा संदेश हटवता आला नाही. कृपया पुन्हा प्रयत्न करा.',
+                    },
                 },
             },
         },

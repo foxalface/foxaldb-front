@@ -401,6 +401,7 @@ export const vi: LanguageTranslation = {
                 item_actions: {
                     title: 'Thao tác bình luận',
                     edit: 'Chỉnh sửa',
+                    delete: 'Xóa',
                 },
                 edit: {
                     label: 'Tin nhắn',
@@ -417,6 +418,18 @@ export const vi: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Tin nhắn này đã được cập nhật ở nơi khác. Việc lưu sẽ ghi đè những thay đổi đó.',
+                },
+                delete_dialog: {
+                    title: 'Xóa tin nhắn',
+                    description:
+                        'Bạn có chắc muốn xóa tin nhắn này không? Hành động này không thể hoàn tác.',
+                    cancel: 'Hủy',
+                    confirm: 'Xóa',
+                    deleting: 'Đang xóa…',
+                    errors: {
+                        delete_failed:
+                            'Không thể xóa tin nhắn này. Vui lòng thử lại.',
+                    },
                 },
             },
         },

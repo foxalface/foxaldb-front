@@ -399,6 +399,7 @@ export const hr: LanguageTranslation = {
                 item_actions: {
                     title: 'Radnje komentara',
                     edit: 'Uredi',
+                    delete: 'Izbriši',
                 },
                 edit: {
                     label: 'Poruka',
@@ -416,6 +417,18 @@ export const hr: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Ova je poruka ažurirana drugdje. Spremanje će prebrisati te promjene.',
+                },
+                delete_dialog: {
+                    title: 'Izbriši poruku',
+                    description:
+                        'Jeste li sigurni da želite izbrisati ovu poruku? Ova se radnja ne može poništiti.',
+                    cancel: 'Odustani',
+                    confirm: 'Izbriši',
+                    deleting: 'Brisanje…',
+                    errors: {
+                        delete_failed:
+                            'Nije moguće izbrisati ovu poruku. Pokušajte ponovno.',
+                    },
                 },
             },
         },

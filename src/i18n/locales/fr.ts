@@ -402,6 +402,7 @@ export const fr: LanguageTranslation = {
                 item_actions: {
                     title: 'Actions du commentaire',
                     edit: 'Modifier',
+                    delete: 'Supprimer',
                 },
                 edit: {
                     label: 'Message',
@@ -420,6 +421,18 @@ export const fr: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Ce message a été modifié ailleurs. L’enregistrement écrasera ces modifications.',
+                },
+                delete_dialog: {
+                    title: 'Supprimer le message',
+                    description:
+                        'Voulez-vous vraiment supprimer ce message ? Cette action est irréversible.',
+                    cancel: 'Annuler',
+                    confirm: 'Supprimer',
+                    deleting: 'Suppression…',
+                    errors: {
+                        delete_failed:
+                            'Impossible de supprimer ce message. Réessayez.',
+                    },
                 },
             },
         },

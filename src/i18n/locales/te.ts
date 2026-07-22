@@ -403,6 +403,7 @@ export const te: LanguageTranslation = {
                 item_actions: {
                     title: 'వ్యాఖ్య చర్యలు',
                     edit: 'సవరించు',
+                    delete: 'తొలగించు',
                 },
                 edit: {
                     label: 'సందేశం',
@@ -420,6 +421,18 @@ export const te: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'ఈ సందేశం వేరే చోట నవీకరించబడింది. సేవ్ చేస్తే ఆ మార్పులు ఓవర్‌రైట్ అవుతాయి.',
+                },
+                delete_dialog: {
+                    title: 'సందేశాన్ని తొలగించు',
+                    description:
+                        'మీరు నిజంగా ఈ సందేశాన్ని తొలగించాలనుకుంటున్నారా? ఈ చర్యను రద్దు చేయలేరు.',
+                    cancel: 'రద్దు చేయి',
+                    confirm: 'తొలగించు',
+                    deleting: 'తొలగిస్తోంది…',
+                    errors: {
+                        delete_failed:
+                            'ఈ సందేశాన్ని తొలగించలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                    },
                 },
             },
         },

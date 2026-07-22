@@ -401,6 +401,7 @@ export const gu: LanguageTranslation = {
                 item_actions: {
                     title: 'ટિપ્પણી ક્રિયાઓ',
                     edit: 'સંપાદિત કરો',
+                    delete: 'કાઢી નાખો',
                 },
                 edit: {
                     label: 'સંદેશ',
@@ -417,6 +418,18 @@ export const gu: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'આ સંદેશ અન્યત્ર અપડેટ થયો હતો. સાચવવાથી તે ફેરફારો ઓવરરાઈટ થશે.',
+                },
+                delete_dialog: {
+                    title: 'સંદેશ કાઢી નાખો',
+                    description:
+                        'શું તમે ખરેખર આ સંદેશ કાઢી નાખવા માંગો છો? આ ક્રિયા પૂર્વવત્ કરી શકાતી નથી.',
+                    cancel: 'રદ કરો',
+                    confirm: 'કાઢી નાખો',
+                    deleting: 'કાઢી નાખી રહ્યા છીએ…',
+                    errors: {
+                        delete_failed:
+                            'આ સંદેશ કાઢી નાખી શકાયો નથી. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                    },
                 },
             },
         },

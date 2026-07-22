@@ -401,6 +401,7 @@ export const ko_KR: LanguageTranslation = {
                 item_actions: {
                     title: '댓글 작업',
                     edit: '편집',
+                    delete: '삭제',
                 },
                 edit: {
                     label: '메시지',
@@ -417,6 +418,18 @@ export const ko_KR: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         '이 메시지가 다른 곳에서 업데이트되었습니다. 저장하면 해당 변경 내용이 덮어씌워집니다.',
+                },
+                delete_dialog: {
+                    title: '메시지 삭제',
+                    description:
+                        '이 메시지를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.',
+                    cancel: '취소',
+                    confirm: '삭제',
+                    deleting: '삭제 중…',
+                    errors: {
+                        delete_failed:
+                            '이 메시지를 삭제할 수 없습니다. 다시 시도해 주세요.',
+                    },
                 },
             },
         },

@@ -389,6 +389,7 @@ export const zh_TW: LanguageTranslation = {
                 item_actions: {
                     title: '留言操作',
                     edit: '編輯',
+                    delete: '刪除',
                 },
                 edit: {
                     label: '訊息',
@@ -404,6 +405,16 @@ export const zh_TW: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         '此訊息已在其他地方更新。儲存將覆寫那些變更。',
+                },
+                delete_dialog: {
+                    title: '刪除訊息',
+                    description: '確定要刪除此訊息嗎？此操作無法復原。',
+                    cancel: '取消',
+                    confirm: '刪除',
+                    deleting: '正在刪除…',
+                    errors: {
+                        delete_failed: '無法刪除此訊息。請再試一次。',
+                    },
                 },
             },
         },

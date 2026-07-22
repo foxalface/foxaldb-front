@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { en } from '@/i18n/locales/en';
@@ -39,37 +39,100 @@ describe('CommentActionsMenu', () => {
         vi.restoreAllMocks();
     });
 
-    it('renders no trigger when canEdit is false', () => {
-        render(<CommentActionsMenu canEdit={false} onEdit={vi.fn()} />);
+    it('renders no trigger when neither action exists', () => {
+        render(
+            <CommentActionsMenu
+                canEdit={false}
+                canDelete={false}
+                onEdit={vi.fn()}
+                onDelete={vi.fn()}
+            />
+        );
 
         expect(
             screen.queryByRole('button', { name: 'Comment actions' })
         ).not.toBeInTheDocument();
         expect(screen.queryByText('Edit')).not.toBeInTheDocument();
-        expect(screen.queryByText(/delete/i)).not.toBeInTheDocument();
+        expect(screen.queryByText('Delete')).not.toBeInTheDocument();
     });
 
-    it('renders an accessible trigger and translated Edit item when canEdit is true', async () => {
+    it('renders Edit only when canEdit is true and canDelete is false', async () => {
         const user = userEvent.setup();
-        const onEdit = vi.fn();
-        render(<CommentActionsMenu canEdit={true} onEdit={onEdit} />);
+        render(
+            <CommentActionsMenu
+                canEdit={true}
+                canDelete={false}
+                onEdit={vi.fn()}
+                onDelete={vi.fn()}
+            />
+        );
 
-        const trigger = screen.getByRole('button', {
-            name: 'Comment actions',
-        });
-        expect(trigger).toBeInTheDocument();
-
-        await user.click(trigger);
+        await user.click(
+            screen.getByRole('button', { name: 'Comment actions' })
+        );
 
         expect(screen.getByText('Edit')).toBeInTheDocument();
-        expect(screen.queryByText(/delete/i)).not.toBeInTheDocument();
-        expect(screen.queryByText(/^\d+$/)).not.toBeInTheDocument();
+        expect(screen.queryByText('Delete')).not.toBeInTheDocument();
+        expect(screen.queryByRole('separator')).not.toBeInTheDocument();
+    });
+
+    it('renders Delete only when canDelete is true and canEdit is false', async () => {
+        const user = userEvent.setup();
+        render(
+            <CommentActionsMenu
+                canEdit={false}
+                canDelete={true}
+                onEdit={vi.fn()}
+                onDelete={vi.fn()}
+            />
+        );
+
+        await user.click(
+            screen.getByRole('button', { name: 'Comment actions' })
+        );
+
+        expect(screen.queryByText('Edit')).not.toBeInTheDocument();
+        expect(screen.getByText('Delete')).toBeInTheDocument();
+        expect(screen.queryByRole('separator')).not.toBeInTheDocument();
+    });
+
+    it('renders Edit and Delete with a separator only when both exist', async () => {
+        const user = userEvent.setup();
+        render(
+            <CommentActionsMenu
+                canEdit={true}
+                canDelete={true}
+                onEdit={vi.fn()}
+                onDelete={vi.fn()}
+            />
+        );
+
+        await user.click(
+            screen.getByRole('button', { name: 'Comment actions' })
+        );
+
+        const menu = screen.getByRole('menu');
+        expect(within(menu).getByText('Edit')).toBeInTheDocument();
+        expect(within(menu).getByText('Delete')).toBeInTheDocument();
+        expect(within(menu).getByRole('separator')).toBeInTheDocument();
+
+        const children = Array.from(menu.children);
+        expect(children[0]).toHaveTextContent('Edit');
+        expect(children[1]).toHaveAttribute('role', 'separator');
+        expect(children[2]).toHaveTextContent('Delete');
     });
 
     it('invokes onEdit once when Edit is selected', async () => {
         const user = userEvent.setup();
         const onEdit = vi.fn();
-        render(<CommentActionsMenu canEdit={true} onEdit={onEdit} />);
+        render(
+            <CommentActionsMenu
+                canEdit={true}
+                canDelete={true}
+                onEdit={onEdit}
+                onDelete={vi.fn()}
+            />
+        );
 
         await user.click(
             screen.getByRole('button', { name: 'Comment actions' })
@@ -79,12 +142,34 @@ describe('CommentActionsMenu', () => {
         expect(onEdit).toHaveBeenCalledTimes(1);
     });
 
+    it('invokes onDelete once when Delete is selected', async () => {
+        const user = userEvent.setup();
+        const onDelete = vi.fn();
+        render(
+            <CommentActionsMenu
+                canEdit={true}
+                canDelete={true}
+                onEdit={vi.fn()}
+                onDelete={onDelete}
+            />
+        );
+
+        await user.click(
+            screen.getByRole('button', { name: 'Comment actions' })
+        );
+        await user.click(screen.getByText('Delete'));
+
+        expect(onDelete).toHaveBeenCalledTimes(1);
+    });
+
     it('disables the trigger when disabled', () => {
         render(
             <CommentActionsMenu
                 canEdit={true}
+                canDelete={true}
                 disabled={true}
                 onEdit={vi.fn()}
+                onDelete={vi.fn()}
             />
         );
 
@@ -93,10 +178,17 @@ describe('CommentActionsMenu', () => {
         ).toBeDisabled();
     });
 
-    it('supports keyboard activation of the Edit item', async () => {
+    it('supports keyboard activation of the Delete item', async () => {
         const user = userEvent.setup();
-        const onEdit = vi.fn();
-        render(<CommentActionsMenu canEdit={true} onEdit={onEdit} />);
+        const onDelete = vi.fn();
+        render(
+            <CommentActionsMenu
+                canEdit={false}
+                canDelete={true}
+                onEdit={vi.fn()}
+                onDelete={onDelete}
+            />
+        );
 
         const trigger = screen.getByRole('button', {
             name: 'Comment actions',
@@ -105,18 +197,30 @@ describe('CommentActionsMenu', () => {
         await user.keyboard('{Enter}');
         await user.keyboard('{Enter}');
 
-        expect(onEdit).toHaveBeenCalledTimes(1);
+        expect(onDelete).toHaveBeenCalledTimes(1);
     });
 
-    it('does not render a Delete item or badge', async () => {
+    it('uses translated names and destructive Delete styling without badges', async () => {
         const user = userEvent.setup();
-        render(<CommentActionsMenu canEdit={true} onEdit={vi.fn()} />);
+        render(
+            <CommentActionsMenu
+                canEdit={true}
+                canDelete={true}
+                onEdit={vi.fn()}
+                onDelete={vi.fn()}
+            />
+        );
+
+        expect(
+            screen.getByRole('button', { name: 'Comment actions' })
+        ).toBeInTheDocument();
 
         await user.click(
             screen.getByRole('button', { name: 'Comment actions' })
         );
 
-        expect(screen.queryByText(/delete/i)).not.toBeInTheDocument();
+        const deleteItem = screen.getByRole('menuitem', { name: 'Delete' });
+        expect(deleteItem).toHaveClass('!text-red-700');
         expect(screen.queryByRole('status')).not.toBeInTheDocument();
         expect(screen.queryByText(/^\d+$/)).not.toBeInTheDocument();
     });

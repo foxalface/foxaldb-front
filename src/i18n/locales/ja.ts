@@ -404,6 +404,7 @@ export const ja: LanguageTranslation = {
                 item_actions: {
                     title: 'コメントの操作',
                     edit: '編集',
+                    delete: '削除',
                 },
                 edit: {
                     label: 'メッセージ',
@@ -421,6 +422,18 @@ export const ja: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'このメッセージは別の場所で更新されました。保存するとその変更が上書きされます。',
+                },
+                delete_dialog: {
+                    title: 'メッセージを削除',
+                    description:
+                        'このメッセージを削除しますか？この操作は元に戻せません。',
+                    cancel: 'キャンセル',
+                    confirm: '削除',
+                    deleting: '削除中…',
+                    errors: {
+                        delete_failed:
+                            'このメッセージを削除できませんでした。もう一度お試しください。',
+                    },
                 },
             },
         },

@@ -405,6 +405,7 @@ export const bn: LanguageTranslation = {
                 item_actions: {
                     title: 'মন্তব্যের কাজ',
                     edit: 'সম্পাদনা',
+                    delete: 'মুছুন',
                 },
                 edit: {
                     label: 'বার্তা',
@@ -422,6 +423,18 @@ export const bn: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'এই বার্তা অন্য কোথাও আপডেট হয়েছে। সংরক্ষণ করলে সেই পরিবর্তনগুলো ওভাররাইট হবে।',
+                },
+                delete_dialog: {
+                    title: 'বার্তা মুছুন',
+                    description:
+                        'আপনি কি নিশ্চিত যে এই বার্তাটি মুছতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।',
+                    cancel: 'বাতিল',
+                    confirm: 'মুছুন',
+                    deleting: 'মুছে ফেলা হচ্ছে…',
+                    errors: {
+                        delete_failed:
+                            'এই বার্তাটি মুছতে পারা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                    },
                 },
             },
         },

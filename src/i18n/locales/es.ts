@@ -405,6 +405,7 @@ export const es: LanguageTranslation = {
                 item_actions: {
                     title: 'Acciones del comentario',
                     edit: 'Editar',
+                    delete: 'Eliminar',
                 },
                 edit: {
                     label: 'Mensaje',
@@ -423,6 +424,18 @@ export const es: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Este mensaje se actualizó en otro lugar. Guardar sobrescribirá esos cambios.',
+                },
+                delete_dialog: {
+                    title: 'Eliminar mensaje',
+                    description:
+                        '¿Seguro que quieres eliminar este mensaje? Esta acción no se puede deshacer.',
+                    cancel: 'Cancelar',
+                    confirm: 'Eliminar',
+                    deleting: 'Eliminando…',
+                    errors: {
+                        delete_failed:
+                            'No se pudo eliminar este mensaje. Inténtalo de nuevo.',
+                    },
                 },
             },
         },

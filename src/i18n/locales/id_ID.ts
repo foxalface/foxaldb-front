@@ -402,6 +402,7 @@ export const id_ID: LanguageTranslation = {
                 item_actions: {
                     title: 'Tindakan komentar',
                     edit: 'Edit',
+                    delete: 'Hapus',
                 },
                 edit: {
                     label: 'Pesan',
@@ -419,6 +420,18 @@ export const id_ID: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Pesan ini diperbarui di tempat lain. Menyimpan akan menimpa perubahan tersebut.',
+                },
+                delete_dialog: {
+                    title: 'Hapus pesan',
+                    description:
+                        'Yakin ingin menghapus pesan ini? Tindakan ini tidak dapat dibatalkan.',
+                    cancel: 'Batal',
+                    confirm: 'Hapus',
+                    deleting: 'Menghapus…',
+                    errors: {
+                        delete_failed:
+                            'Tidak dapat menghapus pesan ini. Silakan coba lagi.',
+                    },
                 },
             },
         },

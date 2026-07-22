@@ -405,6 +405,7 @@ export const pt_BR: LanguageTranslation = {
                 item_actions: {
                     title: 'Ações do comentário',
                     edit: 'Editar',
+                    delete: 'Excluir',
                 },
                 edit: {
                     label: 'Mensagem',
@@ -423,6 +424,18 @@ export const pt_BR: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Esta mensagem foi atualizada em outro lugar. Salvar substituirá essas alterações.',
+                },
+                delete_dialog: {
+                    title: 'Excluir mensagem',
+                    description:
+                        'Tem certeza de que deseja excluir esta mensagem? Esta ação não pode ser desfeita.',
+                    cancel: 'Cancelar',
+                    confirm: 'Excluir',
+                    deleting: 'Excluindo…',
+                    errors: {
+                        delete_failed:
+                            'Não foi possível excluir esta mensagem. Tente novamente.',
+                    },
                 },
             },
         },

@@ -403,6 +403,7 @@ export const ne: LanguageTranslation = {
                 item_actions: {
                     title: 'टिप्पणी कार्यहरू',
                     edit: 'सम्पादन गर्नुहोस्',
+                    delete: 'मेटाउनुहोस्',
                 },
                 edit: {
                     label: 'सन्देश',
@@ -420,6 +421,18 @@ export const ne: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'यो सन्देश अन्यत्र अद्यावधिक गरिएको थियो। बचत गर्दा ती परिवर्तनहरू अधिलेखन हुनेछन्।',
+                },
+                delete_dialog: {
+                    title: 'सन्देश मेटाउनुहोस्',
+                    description:
+                        'के तपाईं साँच्चै यो सन्देश मेटाउन चाहनुहुन्छ? यो कार्य उल्ट्याउन सकिँदैन।',
+                    cancel: 'रद्द गर्नुहोस्',
+                    confirm: 'मेटाउनुहोस्',
+                    deleting: 'मेटाउँदै…',
+                    errors: {
+                        delete_failed:
+                            'यो सन्देश मेटाउन सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
+                    },
                 },
             },
         },

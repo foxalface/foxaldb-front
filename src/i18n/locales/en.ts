@@ -394,6 +394,7 @@ export const en = {
                 item_actions: {
                     title: 'Comment actions',
                     edit: 'Edit',
+                    delete: 'Delete',
                 },
                 edit: {
                     label: 'Message',
@@ -410,6 +411,18 @@ export const en = {
                     },
                     remote_updated_warning:
                         'This message was updated elsewhere. Saving will overwrite those changes.',
+                },
+                delete_dialog: {
+                    title: 'Delete message',
+                    description:
+                        'Are you sure you want to delete this message? This action cannot be undone.',
+                    cancel: 'Cancel',
+                    confirm: 'Delete',
+                    deleting: 'Deleting…',
+                    errors: {
+                        delete_failed:
+                            'Unable to delete this message. Please try again.',
+                    },
                 },
             },
         },

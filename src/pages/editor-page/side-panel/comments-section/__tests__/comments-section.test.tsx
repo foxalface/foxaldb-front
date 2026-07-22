@@ -766,7 +766,7 @@ describe('CommentsSection', () => {
         expect(container.innerHTML).toContain('&lt;script&gt;');
     });
 
-    it('has an accessible heading and bounded scroll area without Delete controls', () => {
+    it('has an accessible heading and bounded scroll area without unauthorized actions', () => {
         setState({
             status: 'ready',
             comments: [createComment({ id: 1, body: 'Hello' })],
@@ -789,10 +789,10 @@ describe('CommentsSection', () => {
             screen.queryByTestId('comments-composer')
         ).not.toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: /delete/i })
+            screen.queryByRole('button', { name: 'Comment actions' })
         ).not.toBeInTheDocument();
-        expect(screen.queryByText(/delete/i)).not.toBeInTheDocument();
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+        expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
 
     it('ensures interactive controls have accessible names', async () => {
@@ -932,7 +932,7 @@ describe('CommentsSection', () => {
         expect(screen.getByTestId('comments-composer')).toBeInTheDocument();
     });
 
-    it('does not show counters or Delete controls outside edit mode', () => {
+    it('does not show counters or action triggers without auth', () => {
         setState({
             status: 'ready',
             comments: [createComment({ id: 1 }), createComment({ id: 2 })],
@@ -945,9 +945,9 @@ describe('CommentsSection', () => {
         ).not.toBeInTheDocument();
         expect(within(container).queryByText(/^\d+$/)).not.toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: /delete/i })
+            screen.queryByRole('button', { name: 'Comment actions' })
         ).not.toBeInTheDocument();
-        expect(screen.queryByText(/delete/i)).not.toBeInTheDocument();
+        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
 
     it('renders all comments in the all view without a composer', () => {

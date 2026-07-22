@@ -402,6 +402,7 @@ export const uk: LanguageTranslation = {
                 item_actions: {
                     title: 'Дії з коментарем',
                     edit: 'Редагувати',
+                    delete: 'Видалити',
                 },
                 edit: {
                     label: 'Повідомлення',
@@ -420,6 +421,18 @@ export const uk: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Це повідомлення було оновлено в іншому місці. Збереження перезапише ці зміни.',
+                },
+                delete_dialog: {
+                    title: 'Видалити повідомлення',
+                    description:
+                        'Ви впевнені, що хочете видалити це повідомлення? Цю дію не можна скасувати.',
+                    cancel: 'Скасувати',
+                    confirm: 'Видалити',
+                    deleting: 'Видалення…',
+                    errors: {
+                        delete_failed:
+                            'Не вдалося видалити це повідомлення. Спробуйте ще раз.',
+                    },
                 },
             },
         },

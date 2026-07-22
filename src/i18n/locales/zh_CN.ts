@@ -389,6 +389,7 @@ export const zh_CN: LanguageTranslation = {
                 item_actions: {
                     title: '评论操作',
                     edit: '编辑',
+                    delete: '删除',
                 },
                 edit: {
                     label: '消息',
@@ -404,6 +405,16 @@ export const zh_CN: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         '此消息已在其他地方更新。保存将覆盖那些更改。',
+                },
+                delete_dialog: {
+                    title: '删除消息',
+                    description: '确定要删除这条消息吗？此操作无法撤销。',
+                    cancel: '取消',
+                    confirm: '删除',
+                    deleting: '正在删除…',
+                    errors: {
+                        delete_failed: '无法删除此消息。请重试。',
+                    },
                 },
             },
         },

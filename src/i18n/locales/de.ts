@@ -407,6 +407,7 @@ export const de: LanguageTranslation = {
                 item_actions: {
                     title: 'Kommentaraktionen',
                     edit: 'Bearbeiten',
+                    delete: 'Löschen',
                 },
                 edit: {
                     label: 'Nachricht',
@@ -425,6 +426,18 @@ export const de: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Diese Nachricht wurde woanders aktualisiert. Speichern überschreibt diese Änderungen.',
+                },
+                delete_dialog: {
+                    title: 'Nachricht löschen',
+                    description:
+                        'Möchten Sie diese Nachricht wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
+                    cancel: 'Abbrechen',
+                    confirm: 'Löschen',
+                    deleting: 'Wird gelöscht…',
+                    errors: {
+                        delete_failed:
+                            'Diese Nachricht konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.',
+                    },
                 },
             },
         },

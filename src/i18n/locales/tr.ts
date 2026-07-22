@@ -401,6 +401,7 @@ export const tr: LanguageTranslation = {
                 item_actions: {
                     title: 'Yorum eylemleri',
                     edit: 'Düzenle',
+                    delete: 'Sil',
                 },
                 edit: {
                     label: 'Mesaj',
@@ -418,6 +419,18 @@ export const tr: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'Bu mesaj başka bir yerde güncellendi. Kaydetmek bu değişikliklerin üzerine yazacaktır.',
+                },
+                delete_dialog: {
+                    title: 'Mesajı sil',
+                    description:
+                        'Bu mesajı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+                    cancel: 'İptal',
+                    confirm: 'Sil',
+                    deleting: 'Siliniyor…',
+                    errors: {
+                        delete_failed:
+                            'Bu mesaj silinemedi. Lütfen tekrar deneyin.',
+                    },
                 },
             },
         },

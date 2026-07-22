@@ -397,6 +397,7 @@ export const ar: LanguageTranslation = {
                 item_actions: {
                     title: 'إجراءات التعليق',
                     edit: 'تعديل',
+                    delete: 'حذف',
                 },
                 edit: {
                     label: 'الرسالة',
@@ -414,6 +415,18 @@ export const ar: LanguageTranslation = {
                     },
                     remote_updated_warning:
                         'تم تحديث هذه الرسالة في مكان آخر. سيؤدي الحفظ إلى الكتابة فوق تلك التغييرات.',
+                },
+                delete_dialog: {
+                    title: 'حذف الرسالة',
+                    description:
+                        'هل أنت متأكد أنك تريد حذف هذه الرسالة؟ لا يمكن التراجع عن هذا الإجراء.',
+                    cancel: 'إلغاء',
+                    confirm: 'حذف',
+                    deleting: 'جارٍ الحذف…',
+                    errors: {
+                        delete_failed:
+                            'تعذر حذف هذه الرسالة. يُرجى المحاولة مرة أخرى.',
+                    },
                 },
             },
         },
