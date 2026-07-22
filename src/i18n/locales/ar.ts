@@ -196,6 +196,7 @@ export const ar: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'إجراءات الجدول',
+                        open_discussion: 'فتح النقاش',
                         change_schema: 'تغيير المخطط',
                         add_field: 'إضافة حقل',
                         add_index: 'إضافة فهرس',
@@ -232,6 +233,7 @@ export const ar: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'إجراءات',
+                        open_discussion: 'فتح النقاش',
                         delete_relationship: 'حذف',
                     },
                 },

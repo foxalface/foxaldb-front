@@ -195,6 +195,7 @@ export const fr: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Actions de la Table',
+                        open_discussion: 'Ouvrir la discussion',
                         add_field: 'Ajouter un Champ',
                         add_index: 'Ajouter un Index',
                         duplicate_table: 'Tableau dupliqué',
@@ -231,6 +232,7 @@ export const fr: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Actions',
+                        open_discussion: 'Ouvrir la discussion',
                         delete_relationship: 'Supprimer',
                     },
                 },

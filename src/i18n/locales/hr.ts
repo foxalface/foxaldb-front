@@ -193,6 +193,7 @@ export const hr: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Radnje nad tablicom',
+                        open_discussion: 'Otvori raspravu',
                         change_schema: 'Promijeni shemu',
                         add_field: 'Dodaj polje',
                         add_index: 'Dodaj indeks',
@@ -229,6 +230,7 @@ export const hr: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Radnje',
+                        open_discussion: 'Otvori raspravu',
                         delete_relationship: 'Izbriši',
                     },
                 },

@@ -198,6 +198,7 @@ export const ne: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'तालिका विशेषताहरू',
+                        open_discussion: 'छलफल खोल्नुहोस्',
                         change_schema: 'स्कीम परिवर्तन गर्नुहोस्',
                         add_field: 'क्षेत्र थप्नुहोस्',
                         add_index: 'सूचक थप्नुहोस्',
@@ -234,6 +235,7 @@ export const ne: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'कार्यहरू',
+                        open_discussion: 'छलफल खोल्नुहोस्',
                         delete_relationship: 'हटाउनुहोस्',
                     },
                 },

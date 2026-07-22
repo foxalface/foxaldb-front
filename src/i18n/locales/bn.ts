@@ -198,6 +198,7 @@ export const bn: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'টেবিল কর্ম',
+                        open_discussion: 'আলোচনা খুলুন',
                         change_schema: 'স্কিমা পরিবর্তন করুন',
                         add_field: 'ফিল্ড যোগ করুন',
                         add_index: 'ইনডেক্স যোগ করুন',
@@ -234,6 +235,7 @@ export const bn: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'কর্ম',
+                        open_discussion: 'আলোচনা খুলুন',
                         delete_relationship: 'মুছুন',
                     },
                 },

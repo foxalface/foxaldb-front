@@ -52,3 +52,10 @@ export const INACTIVE_COMMENTS_CONTEXT: CommentsContextValue = {
 };
 
 export const CommentsContext = createContext<CommentsContextValue | null>(null);
+
+/**
+ * Narrow boolean boundary for consumers that only need comments availability.
+ * Stays referentially stable while `isActive` is unchanged, so comment
+ * collection updates do not rerender availability-only subscribers.
+ */
+export const CommentsAvailabilityContext = createContext(false);

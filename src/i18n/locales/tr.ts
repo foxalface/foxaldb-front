@@ -197,6 +197,7 @@ export const tr: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Tablo İşlemleri',
+                        open_discussion: 'Tartışmayı aç',
                         change_schema: 'Şemayı Değiştir',
                         add_field: 'Alan Ekle',
                         add_index: 'İndeks Ekle',
@@ -234,6 +235,7 @@ export const tr: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'İşlemler',
+                        open_discussion: 'Tartışmayı aç',
                         delete_relationship: 'Sil',
                     },
                 },

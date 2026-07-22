@@ -198,6 +198,7 @@ export const hi: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'तालिका क्रियाएँ',
+                        open_discussion: 'चर्चा खोलें',
                         change_schema: 'स्कीमा बदलें',
                         add_field: 'फ़ील्ड जोड़ें',
                         add_index: 'सूचकांक जोड़ें',
@@ -234,6 +235,7 @@ export const hi: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'क्रियाएँ',
+                        open_discussion: 'चर्चा खोलें',
                         delete_relationship: 'हटाएँ',
                     },
                 },

@@ -5,16 +5,19 @@ import {
     CircleDotDashed,
     Trash2,
     Check,
+    MessageCircle,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '../../../../list-item-header-button/list-item-header-button';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useCommentsAvailability } from '@/hooks/use-comments-availability';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { useEditingConflictWarning } from '@/hooks/use-editing-conflict-warning';
 import { useEditingConflictExplanation } from '@/hooks/use-editing-conflict-explanation';
 import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
+import { useLayout } from '@/hooks/use-layout';
 import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
 import { EntityConflictHint } from '@/components/presence/entity-conflict-hint';
 import { createRelationshipEditingItem } from '@/lib/realtime/editing-utils';
@@ -43,6 +46,8 @@ export const RelationshipListItemHeader: React.FC<
     const { t } = useTranslation();
     const { focusOnRelationship } = useFocusOn();
     const { startEditing, stopEditing } = useEditingBroadcast();
+    const { openTargetDiscussion } = useLayout();
+    const commentsActive = useCommentsAvailability();
     const remoteEditors = useEntityRemoteEditing(
         'relationship',
         relationship.id
@@ -61,6 +66,7 @@ export const RelationshipListItemHeader: React.FC<
         relationship.name
     );
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const showDropDownMenu = !readonly || commentsActive;
 
     const editRelationshipName = useCallback(() => {
         if (!editMode) return;
@@ -115,12 +121,27 @@ export const RelationshipListItemHeader: React.FC<
         });
     }, [relationship.id, removeRelationship, deleteElements]);
 
+    const openRelationshipDiscussion = useCallback(
+        (e: React.MouseEvent) => {
+            e.stopPropagation();
+            openTargetDiscussion({
+                targetType: 'relationship',
+                targetId: relationship.id,
+            });
+        },
+        [openTargetDiscussion, relationship.id]
+    );
+
     const renderDropDownMenu = useCallback(
         () => (
             <DropdownMenu>
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger
+                    aria-label={t(
+                        'side_panel.refs_section.relationship.relationship_actions.title'
+                    )}
+                >
                     <ListItemHeaderButton>
-                        <EllipsisVertical />
+                        <EllipsisVertical aria-hidden="true" />
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-40">
@@ -129,22 +150,46 @@ export const RelationshipListItemHeader: React.FC<
                             'side_panel.refs_section.relationship.relationship_actions.title'
                         )}
                     </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem
-                            onClick={deleteRelationshipHandler}
-                            className="flex justify-between !text-red-700"
-                        >
-                            {t(
-                                'side_panel.refs_section.relationship.relationship_actions.delete_relationship'
-                            )}
-                            <Trash2 className="size-3.5 text-red-700" />
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
+                    {!readonly ? <DropdownMenuSeparator /> : null}
+                    {commentsActive ? (
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem
+                                className="flex justify-between gap-4"
+                                onClick={openRelationshipDiscussion}
+                            >
+                                {t(
+                                    'side_panel.refs_section.relationship.relationship_actions.open_discussion'
+                                )}
+                                <MessageCircle className="size-3.5" />
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    ) : null}
+                    {commentsActive && !readonly ? (
+                        <DropdownMenuSeparator />
+                    ) : null}
+                    {!readonly ? (
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem
+                                onClick={deleteRelationshipHandler}
+                                className="flex justify-between !text-red-700"
+                            >
+                                {t(
+                                    'side_panel.refs_section.relationship.relationship_actions.delete_relationship'
+                                )}
+                                <Trash2 className="size-3.5 text-red-700" />
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    ) : null}
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
-        [deleteRelationshipHandler, t]
+        [
+            deleteRelationshipHandler,
+            t,
+            commentsActive,
+            readonly,
+            openRelationshipDiscussion,
+        ]
     );
 
     return (
@@ -189,7 +234,7 @@ export const RelationshipListItemHeader: React.FC<
                 <div className="flex flex-row-reverse items-center">
                     {!editMode ? (
                         <>
-                            {!readonly ? (
+                            {showDropDownMenu ? (
                                 <div>{renderDropDownMenu()}</div>
                             ) : null}
                             <div className="flex flex-row-reverse md:hidden md:group-hover:flex">

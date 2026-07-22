@@ -27,6 +27,7 @@ import type {
 import { subscribeToDiagramCommentEvents } from '@/lib/realtime/comment-subscriber';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
+    CommentsAvailabilityContext,
     CommentsContext,
     createCommentsInactiveError,
     type CommentsContextValue,
@@ -315,8 +316,10 @@ export const CommentsProvider: React.FC<React.PropsWithChildren> = ({
     );
 
     return (
-        <CommentsContext.Provider value={value}>
-            {children}
-        </CommentsContext.Provider>
+        <CommentsAvailabilityContext.Provider value={isActive}>
+            <CommentsContext.Provider value={value}>
+                {children}
+            </CommentsContext.Provider>
+        </CommentsAvailabilityContext.Provider>
     );
 };

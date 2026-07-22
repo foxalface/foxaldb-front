@@ -10,12 +10,15 @@ import {
     Check,
     Group,
     Copy,
+    MessageCircle,
 } from 'lucide-react';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useCommentsAvailability } from '@/hooks/use-comments-availability';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
+import { useLayout } from '@/hooks/use-layout';
 import { createTableEditingItem } from '@/lib/realtime/editing-utils';
 import { useClickAway, useKeyPressEvent } from 'react-use';
 import { useSortable } from '@dnd-kit/sortable';
@@ -64,10 +67,13 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const { startEditing, stopEditing } = useEditingBroadcast();
     const { t } = useTranslation();
     const { focusOnTable } = useFocusOn();
+    const { openTargetDiscussion } = useLayout();
+    const commentsActive = useCommentsAvailability();
     const [editMode, setEditMode] = React.useState(false);
     const [tableName, setTableName] = React.useState(table.name);
     const inputRef = React.useRef<HTMLInputElement>(null);
     const { listeners } = useSortable({ id: table.id });
+    const showDropDownMenu = !readonly || commentsActive;
 
     const editTableName = useCallback(() => {
         if (!editMode) return;
@@ -140,12 +146,31 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         [createTable, table]
     );
 
-    const renderDropDownMenu = useCallback(
-        () => (
+    const openTableDiscussion = useCallback(
+        (e: React.MouseEvent) => {
+            e.stopPropagation();
+            openTargetDiscussion({
+                targetType: 'table',
+                targetId: table.id,
+            });
+        },
+        [openTargetDiscussion, table.id]
+    );
+
+    const renderDropDownMenu = useCallback(() => {
+        const showSchemaAction =
+            !readonly &&
+            (schemas.length > 0 || Boolean(defaultSchemas?.[databaseType]));
+
+        return (
             <DropdownMenu>
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger
+                    aria-label={t(
+                        'side_panel.tables_section.table.table_actions.title'
+                    )}
+                >
                     <ListItemHeaderButton>
-                        <EllipsisVertical />
+                        <EllipsisVertical aria-hidden="true" />
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-fit min-w-40">
@@ -154,94 +179,116 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             'side_panel.tables_section.table.table_actions.title'
                         )}
                     </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {schemas.length > 0 || defaultSchemas?.[databaseType] ? (
+                    {!readonly ? <DropdownMenuSeparator /> : null}
+                    {commentsActive ? (
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem
+                                className="flex justify-between gap-4"
+                                onClick={openTableDiscussion}
+                            >
+                                {t(
+                                    'side_panel.tables_section.table.table_actions.open_discussion'
+                                )}
+                                <MessageCircle className="size-3.5" />
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    ) : null}
+                    {commentsActive && !readonly ? (
+                        <DropdownMenuSeparator />
+                    ) : null}
+                    {!readonly ? (
                         <>
+                            {showSchemaAction ? (
+                                <>
+                                    <DropdownMenuGroup>
+                                        <DropdownMenuItem
+                                            className="flex justify-between gap-4"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                changeSchema();
+                                            }}
+                                        >
+                                            {t(
+                                                'side_panel.tables_section.table.table_actions.change_schema'
+                                            )}
+                                            <Group className="size-3.5" />
+                                        </DropdownMenuItem>
+                                    </DropdownMenuGroup>
+                                    <DropdownMenuSeparator />
+                                </>
+                            ) : null}
                             <DropdownMenuGroup>
                                 <DropdownMenuItem
                                     className="flex justify-between gap-4"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        changeSchema();
+                                        createField(table.id);
                                     }}
                                 >
                                     {t(
-                                        'side_panel.tables_section.table.table_actions.change_schema'
+                                        'side_panel.tables_section.table.table_actions.add_field'
                                     )}
-                                    <Group className="size-3.5" />
+                                    <FileType2 className="size-3.5" />
+                                </DropdownMenuItem>
+                                {!table.isView ? (
+                                    <DropdownMenuItem
+                                        className="flex justify-between gap-4"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            createIndex(table.id);
+                                        }}
+                                    >
+                                        {t(
+                                            'side_panel.tables_section.table.table_actions.add_index'
+                                        )}
+                                        <FileKey2 className="size-3.5" />
+                                    </DropdownMenuItem>
+                                ) : null}
+                            </DropdownMenuGroup>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem
+                                    onClick={duplicateTableHandler}
+                                    className="flex justify-between"
+                                >
+                                    {t(
+                                        'side_panel.tables_section.table.table_actions.duplicate_table'
+                                    )}
+                                    <Copy className="size-3.5" />
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem
+                                    onClick={deleteTableHandler}
+                                    className="flex justify-between !text-red-700"
+                                >
+                                    {t(
+                                        'side_panel.tables_section.table.table_actions.delete_table'
+                                    )}
+                                    <Trash2 className="size-3.5 text-red-700" />
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup>
                         </>
                     ) : null}
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem
-                            className="flex justify-between gap-4"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                createField(table.id);
-                            }}
-                        >
-                            {t(
-                                'side_panel.tables_section.table.table_actions.add_field'
-                            )}
-                            <FileType2 className="size-3.5" />
-                        </DropdownMenuItem>
-                        {!table.isView ? (
-                            <DropdownMenuItem
-                                className="flex justify-between gap-4"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    createIndex(table.id);
-                                }}
-                            >
-                                {t(
-                                    'side_panel.tables_section.table.table_actions.add_index'
-                                )}
-                                <FileKey2 className="size-3.5" />
-                            </DropdownMenuItem>
-                        ) : null}
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem
-                            onClick={duplicateTableHandler}
-                            className="flex justify-between"
-                        >
-                            {t(
-                                'side_panel.tables_section.table.table_actions.duplicate_table'
-                            )}
-                            <Copy className="size-3.5" />
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem
-                            onClick={deleteTableHandler}
-                            className="flex justify-between !text-red-700"
-                        >
-                            {t(
-                                'side_panel.tables_section.table.table_actions.delete_table'
-                            )}
-                            <Trash2 className="size-3.5 text-red-700" />
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
-        ),
-        [
-            table.id,
-            table.isView,
-            createField,
-            createIndex,
-            deleteTableHandler,
-            duplicateTableHandler,
-            t,
-            changeSchema,
-            schemas.length,
-            databaseType,
-        ]
-    );
+        );
+    }, [
+        table.id,
+        table.isView,
+        createField,
+        createIndex,
+        deleteTableHandler,
+        duplicateTableHandler,
+        t,
+        changeSchema,
+        schemas.length,
+        databaseType,
+        commentsActive,
+        readonly,
+        openTableDiscussion,
+    ]);
 
     const schemaToDisplay = useMemo(() => {
         if (schemasDisplayed.length > 1) {
@@ -312,7 +359,9 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
             <div className="flex flex-row-reverse items-center">
                 {!editMode ? (
                     <>
-                        {!readonly ? <div>{renderDropDownMenu()}</div> : null}
+                        {showDropDownMenu ? (
+                            <div>{renderDropDownMenu()}</div>
+                        ) : null}
                         {table.isView ? (
                             <span className="rounded bg-muted px-1.5 py-0 text-[10px] font-medium text-muted-foreground">
                                 View

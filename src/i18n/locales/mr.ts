@@ -200,6 +200,7 @@ export const mr: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'टेबल एक्शन',
+                        open_discussion: 'चर्चा उघडा',
                         change_schema: 'स्कीमा बदला',
                         add_field: 'फील्ड जोडा',
                         add_index: 'इंडेक्स जोडा',
@@ -237,6 +238,7 @@ export const mr: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'क्रिया',
+                        open_discussion: 'चर्चा उघडा',
                         delete_relationship: 'हटवा',
                     },
                 },

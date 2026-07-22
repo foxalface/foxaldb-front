@@ -198,6 +198,7 @@ export const te: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'పట్టిక చర్యలు',
+                        open_discussion: 'చర్చను తెరవండి',
                         change_schema: 'స్కీమాను మార్చు',
                         add_field: 'ఫీల్డ్ జోడించు',
                         add_index: 'ఇండెక్స్ జోడించు',
@@ -235,6 +236,7 @@ export const te: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'చర్యలు',
+                        open_discussion: 'చర్చను తెరవండి',
                         delete_relationship: 'సంబంధం తొలగించు',
                     },
                 },

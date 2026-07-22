@@ -197,6 +197,7 @@ export const vi: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Hành động',
+                        open_discussion: 'Mở thảo luận',
                         change_schema: 'Thay đổi lược đồ',
                         add_field: 'Thêm trường',
                         add_index: 'Thêm chỉ mục',
@@ -233,6 +234,7 @@ export const vi: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Hành động',
+                        open_discussion: 'Mở thảo luận',
                         delete_relationship: 'Xóa',
                     },
                 },

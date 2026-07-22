@@ -199,6 +199,7 @@ export const gu: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'ટેબલ ક્રિયાઓ',
+                        open_discussion: 'ચર્ચા ખોલો',
                         change_schema: 'સ્કીમા બદલો',
                         add_field: 'ફીલ્ડ ઉમેરો',
                         add_index: 'ઇન્ડેક્સ ઉમેરો',
@@ -235,6 +236,7 @@ export const gu: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'ક્રિયાઓ',
+                        open_discussion: 'ચર્ચા ખોલો',
                         delete_relationship: 'કાઢી નાખો',
                     },
                 },

@@ -196,6 +196,7 @@ export const uk: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Дії з таблицею',
+                        open_discussion: 'Відкрити обговорення',
                         change_schema: 'Змінити схему',
                         add_field: 'Додати поле',
                         add_index: 'Додати індекс',
@@ -232,6 +233,7 @@ export const uk: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Дії',
+                        open_discussion: 'Відкрити обговорення',
                         delete_relationship: 'Видалити',
                     },
                 },

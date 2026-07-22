@@ -194,6 +194,7 @@ export const zh_TW: LanguageTranslation = {
                     },
                     table_actions: {
                         title: '表格操作',
+                        open_discussion: '開啟討論',
                         change_schema: '變更 Schema',
                         add_field: '新增欄位',
                         add_index: '新增索引',
@@ -230,6 +231,7 @@ export const zh_TW: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: '操作',
+                        open_discussion: '開啟討論',
                         delete_relationship: '刪除',
                     },
                 },

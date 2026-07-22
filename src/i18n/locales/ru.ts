@@ -194,6 +194,7 @@ export const ru: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Действия',
+                        open_discussion: 'Открыть обсуждение',
                         change_schema: 'Изменить схему',
                         add_field: 'Добавить поле',
                         add_index: 'Добавить индекс',
@@ -230,6 +231,7 @@ export const ru: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Действия',
+                        open_discussion: 'Открыть обсуждение',
                         delete_relationship: 'Удалить',
                     },
                 },

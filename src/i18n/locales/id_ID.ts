@@ -197,6 +197,7 @@ export const id_ID: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Aksi Tabel',
+                        open_discussion: 'Buka diskusi',
                         change_schema: 'Ubah Skema',
                         add_field: 'Tambah Kolom',
                         add_index: 'Tambah Indeks',
@@ -233,6 +234,7 @@ export const id_ID: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Aksi',
+                        open_discussion: 'Buka diskusi',
                         delete_relationship: 'Hapus',
                     },
                 },

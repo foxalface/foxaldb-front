@@ -192,6 +192,7 @@ export const en = {
                     },
                     table_actions: {
                         title: 'Table Actions',
+                        open_discussion: 'Open discussion',
                         change_schema: 'Change Schema',
                         add_field: 'Add Field',
                         add_index: 'Add Index',
@@ -228,6 +229,7 @@ export const en = {
                     },
                     relationship_actions: {
                         title: 'Actions',
+                        open_discussion: 'Open discussion',
                         delete_relationship: 'Delete',
                     },
                 },

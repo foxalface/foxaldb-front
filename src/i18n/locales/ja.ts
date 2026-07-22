@@ -200,6 +200,7 @@ export const ja: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'テーブル操作',
+                        open_discussion: 'ディスカッションを開く',
                         change_schema: 'スキーマを変更',
                         add_field: 'フィールドを追加',
                         add_index: 'インデックスを追加',
@@ -236,6 +237,7 @@ export const ja: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: '操作',
+                        open_discussion: 'ディスカッションを開く',
                         delete_relationship: '削除',
                     },
                 },

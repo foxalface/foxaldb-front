@@ -197,6 +197,7 @@ export const ko_KR: LanguageTranslation = {
                     },
                     table_actions: {
                         title: '테이블 작업',
+                        open_discussion: '토론 열기',
                         change_schema: '스키마 변경',
                         add_field: '필드 추가',
                         add_index: '인덱스 추가',
@@ -233,6 +234,7 @@ export const ko_KR: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: '연관 관계 작업',
+                        open_discussion: '토론 열기',
                         delete_relationship: '연관 관계 삭제',
                     },
                 },

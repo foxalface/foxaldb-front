@@ -198,6 +198,7 @@ export const pt_BR: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Ações da Tabela',
+                        open_discussion: 'Abrir discussão',
                         change_schema: 'Alterar Esquema',
                         add_field: 'Adicionar Campo',
                         add_index: 'Adicionar Índice',
@@ -234,6 +235,7 @@ export const pt_BR: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Ações',
+                        open_discussion: 'Abrir discussão',
                         delete_relationship: 'Excluir',
                     },
                 },
