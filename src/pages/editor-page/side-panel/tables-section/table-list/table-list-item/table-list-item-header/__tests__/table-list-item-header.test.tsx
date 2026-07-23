@@ -4,6 +4,10 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
+import {
+    EMPTY_DISCUSSION_INDICATOR,
+    type DiscussionIndicator,
+} from '@/lib/comments/discussion-indicators';
 import { en } from '@/i18n/locales/en';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
 import { TableListItemHeader } from '../table-list-item-header';
@@ -11,6 +15,10 @@ import { TableListItemHeader } from '../table-list-item-header';
 const {
     chartDBState,
     commentsState,
+    discussionIndicatorState,
+    useTableDiscussionIndicator,
+    useFieldDiscussionIndicator,
+    useRelationshipDiscussionIndicator,
     createField,
     createIndex,
     removeTable,
@@ -28,6 +36,17 @@ const {
     commentsState: {
         isActive: true,
     },
+    discussionIndicatorState: {
+        indicator: {
+            commentCount: 0,
+            hasDiscussion: false,
+        } as DiscussionIndicator,
+    },
+    useTableDiscussionIndicator: vi.fn(
+        (): DiscussionIndicator => discussionIndicatorState.indicator
+    ),
+    useFieldDiscussionIndicator: vi.fn(),
+    useRelationshipDiscussionIndicator: vi.fn(),
     createField: vi.fn(),
     createIndex: vi.fn(),
     removeTable: vi.fn(),
@@ -62,6 +81,12 @@ vi.mock('@/hooks/use-layout', () => ({
 
 vi.mock('@/hooks/use-comments-availability', () => ({
     useCommentsAvailability: () => commentsState.isActive,
+}));
+
+vi.mock('@/hooks/use-discussion-indicators', () => ({
+    useTableDiscussionIndicator,
+    useFieldDiscussionIndicator,
+    useRelationshipDiscussionIndicator,
 }));
 
 vi.mock('@/hooks/use-editing-broadcast', () => ({
@@ -127,6 +152,11 @@ const baseTable: DBTable = {
     createdAt: 0,
 };
 
+const withDiscussion = (commentCount: number): DiscussionIndicator => ({
+    commentCount,
+    hasDiscussion: commentCount > 0,
+});
+
 const renderHeader = (table: DBTable = baseTable) =>
     render(
         <TooltipProvider>
@@ -149,6 +179,10 @@ describe('TableListItemHeader discussion entry', () => {
         chartDBState.schemas = [];
         chartDBState.databaseType = DatabaseType.SQLITE;
         commentsState.isActive = true;
+        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
+        useTableDiscussionIndicator.mockClear();
+        useFieldDiscussionIndicator.mockClear();
+        useRelationshipDiscussionIndicator.mockClear();
         createField.mockClear();
         createIndex.mockClear();
         removeTable.mockClear();
@@ -311,12 +345,161 @@ describe('TableListItemHeader discussion entry', () => {
     });
 });
 
+describe('TableListItemHeader discussion indicator', () => {
+    beforeEach(() => {
+        chartDBState.readonly = false;
+        chartDBState.schemas = [];
+        chartDBState.databaseType = DatabaseType.SQLITE;
+        commentsState.isActive = true;
+        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
+        useTableDiscussionIndicator.mockClear();
+        useFieldDiscussionIndicator.mockClear();
+        useRelationshipDiscussionIndicator.mockClear();
+        openTargetDiscussion.mockClear();
+    });
+
+    it('hides the indicator when the table hook returns the empty indicator', () => {
+        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
+        renderHeader();
+
+        expect(
+            screen.queryByTestId('discussion-indicator')
+        ).not.toBeInTheDocument();
+    });
+
+    it('shows the indicator when hasDiscussion is true', () => {
+        discussionIndicatorState.indicator = withDiscussion(1);
+        renderHeader();
+
+        const indicator = screen.getByTestId('discussion-indicator');
+        expect(indicator).toBeInTheDocument();
+        expect(indicator).toHaveAttribute('aria-hidden', 'true');
+    });
+
+    it('does not render a numeric count even when commentCount is greater than one', () => {
+        discussionIndicatorState.indicator = withDiscussion(4);
+        renderHeader();
+
+        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(screen.queryByText('4')).not.toBeInTheDocument();
+        expect(screen.queryByText(/\d+/)).not.toBeInTheDocument();
+    });
+
+    it('calls useTableDiscussionIndicator with the exact table id', () => {
+        renderHeader();
+
+        expect(useTableDiscussionIndicator).toHaveBeenCalledWith('table-1');
+    });
+
+    it('uses only the table specialized hook', () => {
+        renderHeader();
+
+        expect(useTableDiscussionIndicator).toHaveBeenCalled();
+        expect(useFieldDiscussionIndicator).not.toHaveBeenCalled();
+        expect(useRelationshipDiscussionIndicator).not.toHaveBeenCalled();
+    });
+
+    it('shows the indicator for readonly viewers', () => {
+        chartDBState.readonly = true;
+        discussionIndicatorState.indicator = withDiscussion(2);
+        renderHeader();
+
+        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(menuTrigger()).toBeInTheDocument();
+    });
+
+    it('keeps the indicator visible when comments are inactive if the hook reports presence', () => {
+        // Visibility is owned by the specialized hook / private index (inactive
+        // providers resolve to empty). The header does not gate on write access.
+        commentsState.isActive = false;
+        discussionIndicatorState.indicator = withDiscussion(1);
+        renderHeader();
+
+        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+    });
+
+    it('does not show a table indicator when the hook stays empty for a field-partition hit', () => {
+        // Partition isolation is owned by useTableDiscussionIndicator /
+        // getDiscussionIndicator. A field comment with the same ID must not
+        // populate the table hook result.
+        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
+        renderHeader({ ...baseTable, id: 'shared-id' });
+
+        expect(useTableDiscussionIndicator).toHaveBeenCalledWith('shared-id');
+        expect(
+            screen.queryByTestId('discussion-indicator')
+        ).not.toBeInTheDocument();
+    });
+
+    it('coexists with the table actions trigger', () => {
+        discussionIndicatorState.indicator = withDiscussion(1);
+        renderHeader();
+
+        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(menuTrigger()).toBeInTheDocument();
+    });
+
+    it('does not open a discussion when the decorative indicator is clicked', async () => {
+        const user = userEvent.setup();
+        discussionIndicatorState.indicator = withDiscussion(1);
+        renderHeader();
+
+        await user.click(screen.getByTestId('discussion-indicator'));
+
+        expect(openTargetDiscussion).not.toHaveBeenCalled();
+    });
+
+    it('keeps Open discussion functional while the indicator is visible', async () => {
+        discussionIndicatorState.indicator = withDiscussion(3);
+        const user = await openMenu();
+
+        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        await user.click(
+            screen.getByRole('menuitem', { name: /Open discussion/i })
+        );
+
+        expect(openTargetDiscussion).toHaveBeenCalledTimes(1);
+        expect(openTargetDiscussion).toHaveBeenCalledWith({
+            targetType: 'table',
+            targetId: 'table-1',
+        });
+    });
+
+    it('does not render raw target ids or badge count text', () => {
+        discussionIndicatorState.indicator = withDiscussion(2);
+        renderHeader();
+
+        expect(screen.queryByText('table-1')).not.toBeInTheDocument();
+        expect(screen.queryByText('2')).not.toBeInTheDocument();
+        expect(screen.queryByTestId(/badge|count/i)).not.toBeInTheDocument();
+    });
+
+    it('marks the indicator decorative for assistive technology', () => {
+        discussionIndicatorState.indicator = withDiscussion(1);
+        renderHeader();
+
+        const indicator = screen.getByTestId('discussion-indicator');
+        expect(indicator).toHaveAttribute('aria-hidden', 'true');
+        expect(indicator).not.toHaveAttribute('tabindex');
+        expect(indicator.tagName).toBe('SPAN');
+    });
+
+    it('keeps shrink-0 and pointer-events-none for narrow layouts', () => {
+        discussionIndicatorState.indicator = withDiscussion(1);
+        renderHeader();
+
+        const indicator = screen.getByTestId('discussion-indicator');
+        expect(indicator).toHaveClass('shrink-0', 'pointer-events-none');
+    });
+});
+
 describe('TableListItemHeader legacy actions', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
         chartDBState.schemas = [];
         chartDBState.databaseType = DatabaseType.SQLITE;
         commentsState.isActive = true;
+        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
         createField.mockClear();
         createIndex.mockClear();
         removeTable.mockClear();

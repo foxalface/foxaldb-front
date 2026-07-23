@@ -17,6 +17,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useCommentsAvailability } from '@/hooks/use-comments-availability';
+import { useTableDiscussionIndicator } from '@/hooks/use-discussion-indicators';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { useLayout } from '@/hooks/use-layout';
 import { createTableEditingItem } from '@/lib/realtime/editing-utils';
@@ -43,6 +44,7 @@ import { cloneTable } from '@/lib/clone';
 import type { DBSchema } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -69,6 +71,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const { focusOnTable } = useFocusOn();
     const { openTargetDiscussion } = useLayout();
     const commentsActive = useCommentsAvailability();
+    const discussionIndicator = useTableDiscussionIndicator(table.id);
     const [editMode, setEditMode] = React.useState(false);
     const [tableName, setTableName] = React.useState(table.name);
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -356,6 +359,10 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     </div>
                 )}
             </div>
+            <DiscussionIndicator
+                indicator={discussionIndicator}
+                className="mr-1"
+            />
             <div className="flex flex-row-reverse items-center">
                 {!editMode ? (
                     <>
