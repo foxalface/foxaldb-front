@@ -12,6 +12,7 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useCommentsAvailability } from '@/hooks/use-comments-availability';
+import { useRelationshipDiscussionIndicator } from '@/hooks/use-discussion-indicators';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { useEditingConflictWarning } from '@/hooks/use-editing-conflict-warning';
@@ -33,6 +34,7 @@ import {
 } from '@/components/dropdown-menu/dropdown-menu';
 import { Input } from '@/components/input/input';
 import { useTranslation } from 'react-i18next';
+import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
 
 export interface RelationshipListItemHeaderProps {
     relationship: DBRelationship;
@@ -48,6 +50,9 @@ export const RelationshipListItemHeader: React.FC<
     const { startEditing, stopEditing } = useEditingBroadcast();
     const { openTargetDiscussion } = useLayout();
     const commentsActive = useCommentsAvailability();
+    const discussionIndicator = useRelationshipDiscussionIndicator(
+        relationship.id
+    );
     const remoteEditors = useEntityRemoteEditing(
         'relationship',
         relationship.id
@@ -225,6 +230,10 @@ export const RelationshipListItemHeader: React.FC<
                         <div className="truncate">{relationship.name}</div>
                     )}
                 </div>
+                <DiscussionIndicator
+                    indicator={discussionIndicator}
+                    className="mr-1"
+                />
                 {remoteEditors.length > 0 ? (
                     <EntityEditingBadge
                         editors={remoteEditors}
