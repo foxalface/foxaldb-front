@@ -26,7 +26,7 @@ import {
     CommentsErrorState,
     CommentsReloadErrorBanner,
 } from './comments-error-state';
-import { CommentsList } from './comments-list';
+import { CommentsScrollRegion } from './comments-scroll-region';
 import { CommentsTargetHeader } from './comments-target-header';
 
 export interface CommentsSectionProps {}
@@ -66,8 +66,13 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
     }, []);
 
     const scrollScopeKey = useMemo(
-        () => buildDiscussionScrollScopeKey(discussionView, commentsTarget),
-        [discussionView, commentsTarget]
+        () =>
+            buildDiscussionScrollScopeKey(
+                discussionView,
+                commentsTarget,
+                diagramId
+            ),
+        [discussionView, commentsTarget, diagramId]
     );
     const scrollToLatestOnOpen = shouldScrollToLatestOnOpen(discussionView);
 
@@ -118,7 +123,6 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
     );
 
     const hasAnyComments = allComments.length > 0;
-    const hasVisibleComments = visibleComments.length > 0;
     const isInitialLoading = status === 'loading' && !hasAnyComments;
     const isReloadLoading = status === 'loading' && hasAnyComments;
     const isLoadError = status === 'error' && !hasAnyComments;
@@ -203,27 +207,17 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
                 isRetrying={isRetrying}
             />
         );
-    } else if (!hasVisibleComments) {
-        content = (
-            <div className="flex min-h-0 flex-1 flex-col">
-                {reloadErrorBanner}
-                {emptyContent}
-            </div>
-        );
     } else {
         content = (
-            <div className="flex min-h-0 flex-1 flex-col">
-                {reloadErrorBanner}
-                <div className="min-h-0 flex-1">
-                    <CommentsList
-                        comments={visibleComments}
-                        labelledBy={COMMENTS_SECTION_HEADING_ID}
-                        scopeKey={scrollScopeKey}
-                        scrollToLatestOnOpen={scrollToLatestOnOpen}
-                        scrollIntent={scrollIntent}
-                    />
-                </div>
-            </div>
+            <CommentsScrollRegion
+                comments={visibleComments}
+                emptyContent={emptyContent}
+                labelledBy={COMMENTS_SECTION_HEADING_ID}
+                scopeKey={scrollScopeKey}
+                scrollToLatestOnOpen={scrollToLatestOnOpen}
+                scrollIntent={scrollIntent}
+                reloadErrorBanner={reloadErrorBanner}
+            />
         );
     }
 

@@ -2,16 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DiagramComment } from '@/lib/comments/comment-types';
-import type { DiscussionScrollIntent } from '@/lib/comments/discussion-scroll';
 import { CommentsList } from '../comments-list';
-
-const { useDiscussionScrollMock } = vi.hoisted(() => ({
-    useDiscussionScrollMock: vi.fn(),
-}));
-
-vi.mock('@/hooks/use-discussion-scroll', () => ({
-    useDiscussionScroll: (args: unknown) => useDiscussionScrollMock(args),
-}));
 
 vi.mock('../comment-list-item', () => ({
     CommentListItem: ({ comment }: { comment: DiagramComment }) => (
@@ -47,57 +38,59 @@ const comment = (
 
 describe('CommentsList scroll wiring', () => {
     beforeEach(() => {
-        useDiscussionScrollMock.mockReset();
-        useDiscussionScrollMock.mockReturnValue({
-            scrollAreaRef: vi.fn(),
-            setCommentItemRef: vi.fn(),
-        });
+        vi.restoreAllMocks();
     });
 
-    it('passes scope, open behavior, and navigation intent into the scroll hook', () => {
+    it('wires viewport and item refs without owning scroll state', () => {
+        const scrollAreaRef = vi.fn();
+        const setCommentItemRef = vi.fn();
         const comments = [comment({ id: 1 }), comment({ id: 2 })];
-        const scrollIntent: DiscussionScrollIntent = {
-            targetCommentId: 2,
-            reason: 'local-create',
-            generation: 3,
-        };
 
         render(
             <CommentsList
                 comments={comments}
                 labelledBy="heading"
-                scopeKey="target:table:t1"
-                scrollToLatestOnOpen
-                scrollIntent={scrollIntent}
+                scrollAreaRef={scrollAreaRef}
+                setCommentItemRef={setCommentItemRef}
             />
         );
 
-        expect(useDiscussionScrollMock).toHaveBeenCalledWith({
-            scopeKey: 'target:table:t1',
-            scrollToLatestOnOpen: true,
-            comments,
-            scrollIntent,
-        });
+        expect(scrollAreaRef).toHaveBeenCalled();
+        expect(setCommentItemRef).toHaveBeenCalledWith(
+            1,
+            expect.any(HTMLElement)
+        );
+        expect(setCommentItemRef).toHaveBeenCalledWith(
+            2,
+            expect.any(HTMLElement)
+        );
     });
 
-    it('preserves all-discussions mode by disabling open-to-latest', () => {
-        render(
+    it('keeps a stable ScrollArea DOM node when only comment bodies change', () => {
+        const scrollAreaRef = vi.fn();
+        const setCommentItemRef = vi.fn();
+
+        const { getByTestId, rerender } = render(
             <CommentsList
                 comments={[comment({ id: 1 })]}
                 labelledBy="heading"
-                scopeKey="all"
-                scrollToLatestOnOpen={false}
-                scrollIntent={null}
+                scrollAreaRef={scrollAreaRef}
+                setCommentItemRef={setCommentItemRef}
             />
         );
 
-        expect(useDiscussionScrollMock).toHaveBeenCalledWith(
-            expect.objectContaining({
-                scopeKey: 'all',
-                scrollToLatestOnOpen: false,
-                scrollIntent: null,
-            })
+        const first = getByTestId('comments-scroll-area');
+
+        rerender(
+            <CommentsList
+                comments={[comment({ id: 1, body: 'updated' })]}
+                labelledBy="heading"
+                scrollAreaRef={scrollAreaRef}
+                setCommentItemRef={setCommentItemRef}
+            />
         );
+
+        expect(getByTestId('comments-scroll-area')).toBe(first);
     });
 
     it('renders comment items without scroll mutation callbacks', () => {
@@ -105,9 +98,8 @@ describe('CommentsList scroll wiring', () => {
             <CommentsList
                 comments={[comment({ id: 7 })]}
                 labelledBy="heading"
-                scopeKey="diagram"
-                scrollToLatestOnOpen
-                scrollIntent={null}
+                scrollAreaRef={vi.fn()}
+                setCommentItemRef={vi.fn()}
             />
         );
 

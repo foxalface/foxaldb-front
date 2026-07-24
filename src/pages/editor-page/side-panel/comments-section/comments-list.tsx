@@ -1,32 +1,25 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, type RefCallback } from 'react';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
-import { useDiscussionScroll } from '@/hooks/use-discussion-scroll';
 import type { DiagramComment } from '@/lib/comments/comment-types';
-import type { DiscussionScrollIntent } from '@/lib/comments/discussion-scroll';
 import { CommentListItem } from './comment-list-item';
 
 export interface CommentsListProps {
     comments: ReadonlyArray<DiagramComment>;
     labelledBy: string;
-    scopeKey: string;
-    scrollToLatestOnOpen: boolean;
-    scrollIntent: DiscussionScrollIntent | null;
+    scrollAreaRef: RefCallback<HTMLDivElement | null>;
+    setCommentItemRef: (commentId: number, node: HTMLElement | null) => void;
 }
 
+/**
+ * Presentational comment list. Scroll lifecycle and position state are owned
+ * by {@link useDiscussionScroll} via a stable parent region.
+ */
 export const CommentsList: React.FC<CommentsListProps> = ({
     comments,
     labelledBy,
-    scopeKey,
-    scrollToLatestOnOpen,
-    scrollIntent,
+    scrollAreaRef,
+    setCommentItemRef,
 }) => {
-    const { scrollAreaRef, setCommentItemRef } = useDiscussionScroll({
-        scopeKey,
-        scrollToLatestOnOpen,
-        comments,
-        scrollIntent,
-    });
-
     const itemRefCallbacks = useMemo(() => {
         const map = new Map<number, React.RefCallback<HTMLLIElement>>();
         for (const comment of comments) {

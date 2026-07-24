@@ -17,9 +17,9 @@ export interface CommentCapabilities {
  * Mirrors backend DiagramCommentPolicy for UX only.
  * Not an authorization boundary — the API remains authoritative.
  *
- * `hasActions` is true when any capability is true (including future Delete).
- * UI surfaces must render only actions they actually implement — never key a
- * menu trigger off `hasActions` alone while Delete is not yet exposed.
+ * `hasActions` is true when the current user can edit and/or delete the
+ * comment. UI surfaces should still gate individual menu items on `canEdit`
+ * and `canDelete` rather than showing actions the user cannot perform.
  */
 export const getCommentCapabilities = (
     input: CommentCapabilitiesInput

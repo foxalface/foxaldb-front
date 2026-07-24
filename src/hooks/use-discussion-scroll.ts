@@ -8,6 +8,7 @@ import {
 import type { DiagramComment } from '@/lib/comments/comment-types';
 import {
     DISCUSSION_SCROLL_NEAR_BOTTOM_PX,
+    discussionScrollScopeDiagramNamespace,
     findRemovedCommentIds,
     findScrollAnchorAfterDelete,
     getCommentIds,
@@ -47,8 +48,13 @@ type PendingScroll =
 
 /**
  * Owns Discussions list scrolling: scope open-to-latest, delete-neighbor
- * inference, near-bottom realtime stickiness, and explicit navigation intents.
+ * inference, near-bottom realtime stickiness, explicit navigation intents,
+ * and ephemeral per-scope scrollTop restoration (especially All).
  * Never steals focus.
+ *
+ * Imperative behavior depends only on committed layout-effect lifecycle.
+ * Render performs no ref mutation that influences listeners, capture,
+ * restoration, or the position cache.
  */
 export const useDiscussionScroll = ({
     scopeKey,
@@ -60,18 +66,22 @@ export const useDiscussionScroll = ({
     const itemNodesRef = useRef<Map<number, HTMLElement>>(new Map());
     const isNearBottomRef = useRef(true);
     const prevScopeKeyRef = useRef<string | null>(null);
+    /** Authoritative scope for listener attribution — layout setup only. */
+    const committedScopeKeyRef = useRef<string | null>(null);
+    /**
+     * Last trusted scrollTop for capture/restore. Updated by user scrolls,
+     * programmatic restore, scrollIntoView, and empty-scope viewport detach.
+     * Not overwritten by content-collapse clamps (see handleScroll).
+     */
+    const liveScrollTopRef = useRef(0);
+    const hasTrustedLiveScrollTopRef = useRef(false);
+    const scopeScrollTopRef = useRef<Map<string, number>>(new Map());
     const prevCommentIdsRef = useRef<ReadonlyArray<number>>([]);
     const pendingScrollRef = useRef<PendingScroll | null>(null);
     const lastConsumedGenerationRef = useRef(0);
     const isMountedRef = useRef(true);
-
-    useEffect(() => {
-        isMountedRef.current = true;
-        return () => {
-            isMountedRef.current = false;
-            pendingScrollRef.current = null;
-        };
-    }, []);
+    const boundViewportRef = useRef<HTMLElement | null>(null);
+    const boundScrollHandlerRef = useRef<(() => void) | null>(null);
 
     const syncNearBottomFromViewport = useCallback(() => {
         const viewport = getRadixScrollAreaViewport(scrollAreaNodeRef.current);
@@ -85,15 +95,145 @@ export const useDiscussionScroll = ({
         );
     }, []);
 
+    const rememberCommittedScrollTop = useCallback(
+        (key: string, scrollTop: number) => {
+            liveScrollTopRef.current = scrollTop;
+            hasTrustedLiveScrollTopRef.current = true;
+            scopeScrollTopRef.current.set(key, scrollTop);
+        },
+        []
+    );
+
+    const captureOutgoingPosition = useCallback((outgoingKey: string) => {
+        // Authoritative value: last trusted live scrollTop for this scope
+        // (user scroll, restore, scrollIntoView, or empty-scope detach).
+        // Never invent geometry from a possibly clamped viewport.
+        if (!hasTrustedLiveScrollTopRef.current) {
+            return;
+        }
+
+        scopeScrollTopRef.current.set(outgoingKey, liveScrollTopRef.current);
+    }, []);
+
+    const unbindViewportScroll = useCallback(() => {
+        const viewport = boundViewportRef.current;
+        const handler = boundScrollHandlerRef.current;
+        if (viewport !== null && handler !== null) {
+            viewport.removeEventListener('scroll', handler);
+        }
+        boundViewportRef.current = null;
+        boundScrollHandlerRef.current = null;
+    }, []);
+
+    const bindViewportScroll = useCallback(
+        (viewport: HTMLElement) => {
+            unbindViewportScroll();
+
+            const handleScroll = () => {
+                const committedKey = committedScopeKeyRef.current;
+                if (committedKey === null) {
+                    return;
+                }
+
+                isNearBottomRef.current = isScrollNearBottom(
+                    viewport,
+                    DISCUSSION_SCROLL_NEAR_BOTTOM_PX
+                );
+
+                const nextTop = viewport.scrollTop;
+                if (hasTrustedLiveScrollTopRef.current) {
+                    const maxScroll = Math.max(
+                        0,
+                        viewport.scrollHeight - viewport.clientHeight
+                    );
+                    // Content-collapse clamp: previous offset is no longer
+                    // representable. Keep the trusted outgoing value so layout
+                    // cleanup can still capture it. Same-scope layouts adopt
+                    // the clamped viewport after commit when scope is unchanged.
+                    if (
+                        nextTop < liveScrollTopRef.current &&
+                        maxScroll < liveScrollTopRef.current
+                    ) {
+                        return;
+                    }
+                }
+
+                rememberCommittedScrollTop(committedKey, nextTop);
+            };
+
+            boundViewportRef.current = viewport;
+            boundScrollHandlerRef.current = handleScroll;
+            isNearBottomRef.current = isScrollNearBottom(
+                viewport,
+                DISCUSSION_SCROLL_NEAR_BOTTOM_PX
+            );
+            viewport.addEventListener('scroll', handleScroll, {
+                passive: true,
+            });
+        },
+        [rememberCommittedScrollTop, unbindViewportScroll]
+    );
+
+    const rebindViewportScroll = useCallback(() => {
+        const viewport = getRadixScrollAreaViewport(scrollAreaNodeRef.current);
+        if (viewport !== null) {
+            bindViewportScroll(viewport);
+        }
+    }, [bindViewportScroll]);
+
     const scrollAreaRef = useCallback<RefCallback<HTMLDivElement | null>>(
         (node) => {
+            if (node === null) {
+                const viewport = boundViewportRef.current;
+                const committedKey = committedScopeKeyRef.current;
+                if (
+                    isMountedRef.current &&
+                    viewport !== null &&
+                    committedKey !== null
+                ) {
+                    // Empty-scope list unmount: scrollTop is still outgoing.
+                    rememberCommittedScrollTop(
+                        committedKey,
+                        viewport.scrollTop
+                    );
+                }
+                unbindViewportScroll();
+                scrollAreaNodeRef.current = null;
+                return;
+            }
+
+            if (!isMountedRef.current) {
+                return;
+            }
+
             scrollAreaNodeRef.current = node;
-            if (node !== null) {
+            const viewport = getRadixScrollAreaViewport(node);
+            if (viewport !== null) {
+                bindViewportScroll(viewport);
+            } else {
                 syncNearBottomFromViewport();
             }
         },
-        [syncNearBottomFromViewport]
+        [
+            bindViewportScroll,
+            rememberCommittedScrollTop,
+            syncNearBottomFromViewport,
+            unbindViewportScroll,
+        ]
     );
+
+    // Genuine mount/unmount. Strict Mode replays cleanup+setup: rebind the
+    // still-mounted viewport after replay. Pending work is gated by
+    // isMountedRef so replay does not need to wipe layout-queued scrolls.
+    useEffect(() => {
+        isMountedRef.current = true;
+        rebindViewportScroll();
+
+        return () => {
+            isMountedRef.current = false;
+            unbindViewportScroll();
+        };
+    }, [rebindViewportScroll, unbindViewportScroll]);
 
     const runPendingScroll = useCallback(() => {
         if (!isMountedRef.current) {
@@ -138,10 +278,20 @@ export const useDiscussionScroll = ({
         } else {
             syncNearBottomFromViewport();
         }
-    }, [comments, syncNearBottomFromViewport]);
+
+        const viewport = getRadixScrollAreaViewport(scrollAreaNodeRef.current);
+        const committedKey = committedScopeKeyRef.current;
+        if (viewport !== null && committedKey !== null) {
+            rememberCommittedScrollTop(committedKey, viewport.scrollTop);
+        }
+    }, [comments, rememberCommittedScrollTop, syncNearBottomFromViewport]);
 
     const setCommentItemRef = useCallback(
         (commentId: number, node: HTMLElement | null) => {
+            if (!isMountedRef.current) {
+                return;
+            }
+
             if (node === null) {
                 itemNodesRef.current.delete(commentId);
                 return;
@@ -153,43 +303,32 @@ export const useDiscussionScroll = ({
         [runPendingScroll]
     );
 
-    useEffect(() => {
-        const root = scrollAreaNodeRef.current;
-        const viewport = getRadixScrollAreaViewport(root);
-        if (viewport === null) {
-            return;
-        }
-
-        const handleScroll = () => {
-            isNearBottomRef.current = isScrollNearBottom(
-                viewport,
-                DISCUSSION_SCROLL_NEAR_BOTTOM_PX
-            );
-        };
-
-        handleScroll();
-        viewport.addEventListener('scroll', handleScroll, { passive: true });
-        return () => {
-            viewport.removeEventListener('scroll', handleScroll);
-        };
-    }, [scopeKey, comments.length]);
-
     useLayoutEffect(() => {
+        const effectScopeKey = scopeKey;
         const previousScopeKey = prevScopeKeyRef.current;
         const scopeChanged =
-            previousScopeKey === null || previousScopeKey !== scopeKey;
-        prevScopeKeyRef.current = scopeKey;
+            previousScopeKey === null || previousScopeKey !== effectScopeKey;
 
         const previousIds = prevCommentIdsRef.current;
         const nextIds = getCommentIds(comments);
+        const viewport = getRadixScrollAreaViewport(scrollAreaNodeRef.current);
 
         if (scopeChanged) {
-            isNearBottomRef.current = true;
+            // Outgoing cleanup already captured under the previous key.
+            if (
+                previousScopeKey !== null &&
+                discussionScrollScopeDiagramNamespace(previousScopeKey) !==
+                    discussionScrollScopeDiagramNamespace(effectScopeKey)
+            ) {
+                scopeScrollTopRef.current.clear();
+                liveScrollTopRef.current = 0;
+                hasTrustedLiveScrollTopRef.current = false;
+            }
+
             pendingScrollRef.current = null;
             prevCommentIdsRef.current = nextIds;
+            prevScopeKeyRef.current = effectScopeKey;
 
-            // Invalidate any intent that belonged to the previous scope by
-            // consuming its generation without scrolling to it.
             if (
                 scrollIntent !== null &&
                 scrollIntent.generation > lastConsumedGenerationRef.current
@@ -198,18 +337,23 @@ export const useDiscussionScroll = ({
             }
 
             if (scrollToLatestOnOpen && nextIds.length > 0) {
+                isNearBottomRef.current = true;
                 pendingScrollRef.current = {
                     mode: 'latest',
                     behavior: 'auto',
                 };
+            } else if (!scrollToLatestOnOpen) {
+                const storedScrollTop =
+                    scopeScrollTopRef.current.get(effectScopeKey);
+                if (viewport !== null && storedScrollTop !== undefined) {
+                    viewport.scrollTop = storedScrollTop;
+                    rememberCommittedScrollTop(effectScopeKey, storedScrollTop);
+                }
+                syncNearBottomFromViewport();
+            } else {
+                isNearBottomRef.current = true;
             }
-
-            runPendingScroll();
-            return;
-        }
-
-        // Explicit target-oriented navigation (e.g. local create).
-        if (
+        } else if (
             scrollIntent !== null &&
             scrollIntent.generation > lastConsumedGenerationRef.current
         ) {
@@ -221,73 +365,88 @@ export const useDiscussionScroll = ({
                 block: 'end',
             };
             prevCommentIdsRef.current = nextIds;
-            runPendingScroll();
-            return;
-        }
+        } else {
+            const previousLastId =
+                previousIds.length > 0
+                    ? previousIds[previousIds.length - 1]
+                    : undefined;
+            const nextLastId =
+                nextIds.length > 0 ? nextIds[nextIds.length - 1] : undefined;
 
-        const previousLastId =
-            previousIds.length > 0
-                ? previousIds[previousIds.length - 1]
-                : undefined;
-        const nextLastId =
-            nextIds.length > 0 ? nextIds[nextIds.length - 1] : undefined;
+            const appendedNewLatest =
+                nextLastId !== undefined &&
+                nextLastId !== previousLastId &&
+                !previousIds.includes(nextLastId);
 
-        const appendedNewLatest =
-            nextLastId !== undefined &&
-            nextLastId !== previousLastId &&
-            !previousIds.includes(nextLastId);
+            const removedIds = findRemovedCommentIds(previousIds, nextIds);
+            const remainingSet = new Set(nextIds);
 
-        const removedIds = findRemovedCommentIds(previousIds, nextIds);
-        const remainingSet = new Set(nextIds);
+            prevCommentIdsRef.current = nextIds;
 
-        prevCommentIdsRef.current = nextIds;
+            if (appendedNewLatest && isNearBottomRef.current) {
+                const pending = pendingScrollRef.current;
+                const alreadyPendingTarget =
+                    pending?.mode === 'comment' &&
+                    pending.commentId === nextLastId;
 
-        if (appendedNewLatest && isNearBottomRef.current) {
-            const pending = pendingScrollRef.current;
-            const alreadyPendingTarget =
-                pending?.mode === 'comment' && pending.commentId === nextLastId;
-
-            if (!alreadyPendingTarget) {
-                pendingScrollRef.current = {
-                    mode: 'comment',
-                    commentId: nextLastId,
-                    behavior: 'smooth',
-                    block: 'end',
-                };
-            }
-            runPendingScroll();
-            return;
-        }
-
-        // Deletion: keep surrounding context; never jump to the bottom.
-        if (removedIds.length > 0 && !appendedNewLatest) {
-            const deletedId = removedIds[0];
-            if (deletedId !== undefined) {
-                const anchorId = findScrollAnchorAfterDelete(
-                    previousIds,
-                    deletedId,
-                    remainingSet
-                );
-                if (anchorId !== null) {
+                if (!alreadyPendingTarget) {
                     pendingScrollRef.current = {
                         mode: 'comment',
-                        commentId: anchorId,
-                        behavior: 'auto',
-                        block: 'nearest',
+                        commentId: nextLastId,
+                        behavior: 'smooth',
+                        block: 'end',
                     };
                 }
+            } else if (removedIds.length > 0 && !appendedNewLatest) {
+                const deletedId = removedIds[0];
+                if (deletedId !== undefined) {
+                    const anchorId = findScrollAnchorAfterDelete(
+                        previousIds,
+                        deletedId,
+                        remainingSet
+                    );
+                    if (anchorId !== null) {
+                        pendingScrollRef.current = {
+                            mode: 'comment',
+                            commentId: anchorId,
+                            behavior: 'auto',
+                            block: 'nearest',
+                        };
+                    }
+                }
             }
-            runPendingScroll();
-            return;
+
+            // Same-scope content may have clamped the viewport; adopt it now
+            // so trusted live matches committed geometry after the guard.
+            if (viewport !== null && hasTrustedLiveScrollTopRef.current) {
+                rememberCommittedScrollTop(effectScopeKey, viewport.scrollTop);
+            }
         }
 
+        committedScopeKeyRef.current = effectScopeKey;
+        // Rebind after cleanup unbind (and after Strict Mode useEffect replay).
+        rebindViewportScroll();
         runPendingScroll();
+
+        return () => {
+            // Capture under this effect's closed-over outgoing key, then detach
+            // the listener so post-cleanup transitional events cannot write.
+            // Do not clear pendingScrollRef: Strict Mode replays cleanup before
+            // setup, and deferred item-ref flushes still need the queued work.
+            captureOutgoingPosition(effectScopeKey);
+            unbindViewportScroll();
+        };
     }, [
+        captureOutgoingPosition,
         comments,
+        rebindViewportScroll,
+        rememberCommittedScrollTop,
         runPendingScroll,
         scopeKey,
         scrollIntent,
         scrollToLatestOnOpen,
+        syncNearBottomFromViewport,
+        unbindViewportScroll,
     ]);
 
     return {

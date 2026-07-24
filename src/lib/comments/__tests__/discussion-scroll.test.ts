@@ -6,6 +6,7 @@ import type {
 import {
     DISCUSSION_SCROLL_NEAR_BOTTOM_PX,
     buildDiscussionScrollScopeKey,
+    discussionScrollScopeDiagramNamespace,
     findRemovedCommentIds,
     findScrollAnchorAfterDelete,
     getCommentIds,
@@ -23,55 +24,100 @@ describe('discussion-scroll helpers', () => {
             targetId: null,
         };
 
-        it('uses a single key for the all view', () => {
+        it('uses a diagram-namespaced key for the all view', () => {
             expect(
-                buildDiscussionScrollScopeKey('all', {
-                    targetType: 'table',
-                    targetId: 't1',
-                })
-            ).toBe('all');
-            expect(buildDiscussionScrollScopeKey('all', diagramTarget)).toBe(
-                'all'
-            );
+                buildDiscussionScrollScopeKey(
+                    'all',
+                    {
+                        targetType: 'table',
+                        targetId: 't1',
+                    },
+                    42
+                )
+            ).toBe('42:all');
+            expect(
+                buildDiscussionScrollScopeKey('all', diagramTarget, '84')
+            ).toBe('84:all');
         });
 
-        it('uses a diagram key for diagram view', () => {
+        it('uses a diagram-namespaced key for diagram view', () => {
             expect(
-                buildDiscussionScrollScopeKey('diagram', diagramTarget)
-            ).toBe('diagram');
+                buildDiscussionScrollScopeKey('diagram', diagramTarget, 42)
+            ).toBe('42:diagram');
         });
 
         it('partitions target scopes by type and id', () => {
             expect(
-                buildDiscussionScrollScopeKey('target', {
-                    targetType: 'table',
-                    targetId: 't1',
-                })
-            ).toBe('target:table:t1');
+                buildDiscussionScrollScopeKey(
+                    'target',
+                    {
+                        targetType: 'table',
+                        targetId: 't1',
+                    },
+                    42
+                )
+            ).toBe('42:target:table:t1');
             expect(
-                buildDiscussionScrollScopeKey('target', {
-                    targetType: 'field',
-                    targetId: 'f1',
-                })
-            ).toBe('target:field:f1');
+                buildDiscussionScrollScopeKey(
+                    'target',
+                    {
+                        targetType: 'field',
+                        targetId: 'f1',
+                    },
+                    42
+                )
+            ).toBe('42:target:field:f1');
             expect(
-                buildDiscussionScrollScopeKey('target', {
-                    targetType: 'relationship',
-                    targetId: 'r1',
-                })
-            ).toBe('target:relationship:r1');
+                buildDiscussionScrollScopeKey(
+                    'target',
+                    {
+                        targetType: 'relationship',
+                        targetId: 'r1',
+                    },
+                    42
+                )
+            ).toBe('42:target:relationship:r1');
         });
 
         it('does not leak table scroll state into field scopes', () => {
-            const tableKey = buildDiscussionScrollScopeKey('target', {
-                targetType: 'table',
-                targetId: 'same-id',
-            });
-            const fieldKey = buildDiscussionScrollScopeKey('target', {
-                targetType: 'field',
-                targetId: 'same-id',
-            });
+            const tableKey = buildDiscussionScrollScopeKey(
+                'target',
+                {
+                    targetType: 'table',
+                    targetId: 'same-id',
+                },
+                42
+            );
+            const fieldKey = buildDiscussionScrollScopeKey(
+                'target',
+                {
+                    targetType: 'field',
+                    targetId: 'same-id',
+                },
+                42
+            );
             expect(tableKey).not.toBe(fieldKey);
+        });
+
+        it('does not share All keys across diagrams', () => {
+            expect(
+                buildDiscussionScrollScopeKey('all', diagramTarget, 42)
+            ).not.toBe(buildDiscussionScrollScopeKey('all', diagramTarget, 84));
+        });
+
+        it('uses a placeholder namespace when diagramId is null', () => {
+            expect(
+                buildDiscussionScrollScopeKey('all', diagramTarget, null)
+            ).toBe('_:all');
+        });
+    });
+
+    describe('discussionScrollScopeDiagramNamespace', () => {
+        it('reads the diagram namespace from a scope key', () => {
+            expect(discussionScrollScopeDiagramNamespace('42:all')).toBe('42');
+            expect(
+                discussionScrollScopeDiagramNamespace('84:target:table:t1')
+            ).toBe('84');
         });
     });
 

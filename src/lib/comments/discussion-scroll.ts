@@ -30,20 +30,34 @@ export interface DiscussionScrollIntent {
 /**
  * Stable key for the active discussion scope. Scroll state must never leak
  * across different keys.
+ *
+ * `diagramId` namespaces keys so All/diagram/target positions from one diagram
+ * cannot restore into another while the Discussions UI stays mounted.
  */
 export const buildDiscussionScrollScopeKey = (
     view: DiscussionScrollView,
-    target: DiagramCommentTarget
+    target: DiagramCommentTarget,
+    diagramId: string | number | null
 ): string => {
+    const namespace = diagramId == null ? '_' : String(diagramId);
+
     if (view === 'all') {
-        return 'all';
+        return `${namespace}:all`;
     }
 
     if (view === 'diagram' || target.targetType === 'diagram') {
-        return 'diagram';
+        return `${namespace}:diagram`;
     }
 
-    return `target:${target.targetType}:${target.targetId}`;
+    return `${namespace}:target:${target.targetType}:${target.targetId}`;
+};
+
+/** Diagram namespace prefix of a scope key produced by {@link buildDiscussionScrollScopeKey}. */
+export const discussionScrollScopeDiagramNamespace = (
+    scopeKey: string
+): string => {
+    const separatorIndex = scopeKey.indexOf(':');
+    return separatorIndex === -1 ? scopeKey : scopeKey.slice(0, separatorIndex);
 };
 
 /**
