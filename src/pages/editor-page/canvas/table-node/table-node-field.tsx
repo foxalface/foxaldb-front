@@ -38,6 +38,8 @@ import { useCanvas } from '@/hooks/use-canvas';
 import { useLayout } from '@/hooks/use-layout';
 import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
 import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
+import { useFieldDiscussionIndicator } from '@/hooks/use-discussion-indicators';
+import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
 export const RIGHT_HANDLE_ID_PREFIX = 'right_rel_';
@@ -346,6 +348,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         ]);
 
         const remoteEditors = useEntityRemoteEditing('field', field.id);
+        const discussionIndicator = useFieldDiscussionIndicator(field.id);
 
         return (
             <div
@@ -466,6 +469,10 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             </TooltipContent>
                         </Tooltip>
                     ) : null}
+                    <DiscussionIndicator
+                        indicator={discussionIndicator}
+                        className="scale-90"
+                    />
                 </div>
 
                 <div

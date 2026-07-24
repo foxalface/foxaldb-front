@@ -43,7 +43,6 @@ import { useTranslation } from 'react-i18next';
 import { TableNodeContextMenu } from './table-node-context-menu';
 import { cn } from '@/lib/utils';
 import { TableNodeDependencyIndicator } from './table-node-dependency-indicator';
-import type { EdgeType } from '../canvas';
 import {
     Tooltip,
     TooltipContent,
@@ -57,6 +56,8 @@ import { useEntityRemoteSelections } from '@/hooks/use-remote-selections';
 import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
 import { EntityCollaboratorsBadge } from '@/components/presence/entity-collaborators-badge';
 import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
+import { useTableDiscussionIndicator } from '@/hooks/use-discussion-indicators';
+import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
 
 // Remote table selection/editing UI: plain div/span only via
 // EntityCollaboratorsBadge / EntityEditingBadge. No Popover, Tooltip, Avatar,
@@ -95,7 +96,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
-        const edges = useStore((store) => store.edges) as EdgeType[];
+        const edges = useStore((store) => store.edges);
         const {
             openTableFromSidebar,
             selectSidebarSection,
@@ -119,6 +120,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const primaryRemoteRingClass = remoteCollaborators[0]?.ringColorClass;
         const remoteEditors = useEntityRemoteEditing('table', table.id);
         const hasRemoteEditing = remoteEditors.length > 0;
+        const discussionIndicator = useTableDiscussionIndicator(table.id);
 
         // Get edit mode state directly from context
         const editTableMode = useMemo(
@@ -229,12 +231,18 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 
             const relEdges: RelationshipEdgeType[] = [];
             for (const edge of edges) {
+                if (edge.type !== 'relationship-edge') {
+                    continue;
+                }
+
+                const relationshipEdge = edge as RelationshipEdgeType;
                 if (
-                    edge.type === 'relationship-edge' &&
-                    (edge.source === id || edge.target === id) &&
-                    (edge.selected || edge.data?.highlighted)
+                    (relationshipEdge.source === id ||
+                        relationshipEdge.target === id) &&
+                    (relationshipEdge.selected ||
+                        relationshipEdge.data?.highlighted)
                 ) {
-                    relEdges.push(edge as RelationshipEdgeType);
+                    relEdges.push(relationshipEdge);
                 }
             }
             return relEdges;
@@ -615,6 +623,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     {table.name}
                                 </Label>
                             )}
+                            <DiscussionIndicator
+                                indicator={discussionIndicator}
+                                className="mr-0.5"
+                            />
                         </div>
                         <div className="hidden shrink-0 flex-row group-hover:flex">
                             {readonly ? null : (
