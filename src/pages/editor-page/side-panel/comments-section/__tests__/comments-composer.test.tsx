@@ -262,6 +262,55 @@ describe('CommentsComposer', () => {
         expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     });
 
+    it('notifies onCommentCreated after a successful submit without moving focus away', async () => {
+        const user = userEvent.setup();
+        const created = createdComment({ id: 42, body: 'Persisted' });
+        createCommentMock.mockResolvedValue(created);
+        const onCommentCreated = vi.fn();
+
+        render(
+            <CommentsComposer
+                diagramId="42"
+                target={{ targetType: 'diagram', targetId: null }}
+                onCommentCreated={onCommentCreated}
+            />
+        );
+
+        const textarea = screen.getByRole('textbox');
+        await user.type(textarea, 'Persisted');
+        await user.click(screen.getByRole('button', { name: 'Post' }));
+
+        await waitFor(() => {
+            expect(onCommentCreated).toHaveBeenCalledWith(created);
+        });
+        expect(onCommentCreated).toHaveBeenCalledTimes(1);
+        await waitFor(() => {
+            expect(textarea).toHaveFocus();
+        });
+    });
+
+    it('does not notify onCommentCreated when create fails', async () => {
+        const user = userEvent.setup();
+        createCommentMock.mockRejectedValue(new Error('fail'));
+        const onCommentCreated = vi.fn();
+
+        render(
+            <CommentsComposer
+                diagramId="42"
+                target={{ targetType: 'diagram', targetId: null }}
+                onCommentCreated={onCommentCreated}
+            />
+        );
+
+        await user.type(screen.getByRole('textbox'), 'Nope');
+        await user.click(screen.getByRole('button', { name: 'Post' }));
+
+        await waitFor(() => {
+            expect(screen.getByRole('alert')).toBeInTheDocument();
+        });
+        expect(onCommentCreated).not.toHaveBeenCalled();
+    });
+
     it('keeps the exact draft and shows a generic error on failure', async () => {
         const user = userEvent.setup();
         createCommentMock.mockRejectedValue(

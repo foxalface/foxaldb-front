@@ -13,6 +13,12 @@ import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useDiagramComments } from '@/hooks/use-diagram-comments';
 import { useLayout } from '@/hooks/use-layout';
 import { useTargetComments } from '@/hooks/use-target-comments';
+import type { DiagramComment } from '@/lib/comments/comment-types';
+import {
+    buildDiscussionScrollScopeKey,
+    shouldScrollToLatestOnOpen,
+    type DiscussionScrollIntent,
+} from '@/lib/comments/discussion-scroll';
 import { resolveDiscussionTarget } from '@/lib/comments/resolve-discussion-target';
 import { CommentsComposer } from './comments-composer';
 import { CommentsEmptyState } from './comments-empty-state';
@@ -46,6 +52,9 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
     const { tables, relationships } = useChartDB();
     const { diagramAccess } = useDiagramAccess();
     const [isRetrying, setIsRetrying] = useState(false);
+    const [scrollIntent, setScrollIntent] =
+        useState<DiscussionScrollIntent | null>(null);
+    const scrollIntentGenerationRef = useRef(0);
     const retryInFlightRef = useRef(false);
     const isMountedRef = useRef(true);
 
@@ -54,6 +63,26 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
         return () => {
             isMountedRef.current = false;
         };
+    }, []);
+
+    const scrollScopeKey = useMemo(
+        () => buildDiscussionScrollScopeKey(discussionView, commentsTarget),
+        [discussionView, commentsTarget]
+    );
+    const scrollToLatestOnOpen = shouldScrollToLatestOnOpen(discussionView);
+
+    // Drop stale navigation intent when the discussion scope changes.
+    useEffect(() => {
+        setScrollIntent(null);
+    }, [scrollScopeKey]);
+
+    const handleCommentCreated = useCallback((comment: DiagramComment) => {
+        scrollIntentGenerationRef.current += 1;
+        setScrollIntent({
+            targetCommentId: comment.id,
+            reason: 'local-create',
+            generation: scrollIntentGenerationRef.current,
+        });
     }, []);
 
     const handleRetry = useCallback(async () => {
@@ -189,6 +218,9 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
                     <CommentsList
                         comments={visibleComments}
                         labelledBy={COMMENTS_SECTION_HEADING_ID}
+                        scopeKey={scrollScopeKey}
+                        scrollToLatestOnOpen={scrollToLatestOnOpen}
+                        scrollIntent={scrollIntent}
                     />
                 </div>
             </div>
@@ -236,6 +268,7 @@ export const CommentsSection: React.FC<CommentsSectionProps> = () => {
                 <CommentsComposer
                     diagramId={diagramId}
                     target={commentsTarget}
+                    onCommentCreated={handleCommentCreated}
                 />
             ) : null}
         </section>

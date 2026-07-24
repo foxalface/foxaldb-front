@@ -4,7 +4,10 @@ import { Button } from '@/components/button/button';
 import { Label } from '@/components/label/label';
 import { Textarea } from '@/components/textarea/textarea';
 import { useCommentMutations } from '@/hooks/use-comment-mutations';
-import type { DiagramCommentTarget } from '@/lib/comments/comment-types';
+import type {
+    DiagramComment,
+    DiagramCommentTarget,
+} from '@/lib/comments/comment-types';
 
 // Keep in sync with backend DiagramCommentController validation.
 const MAX_BODY_LENGTH = 2000;
@@ -32,11 +35,13 @@ const scopesEqual = (a: ComposerScope, b: ComposerScope): boolean =>
 export interface CommentsComposerProps {
     target: DiagramCommentTarget;
     diagramId: string;
+    onCommentCreated?: (comment: DiagramComment) => void;
 }
 
 export const CommentsComposer: React.FC<CommentsComposerProps> = ({
     target,
     diagramId,
+    onCommentCreated,
 }) => {
     const { t } = useTranslation();
     const { createComment } = useCommentMutations();
@@ -161,7 +166,7 @@ export const CommentsComposer: React.FC<CommentsComposerProps> = ({
             scopesEqual(scopeRef.current, submissionScope);
 
         try {
-            await createComment({
+            const created = await createComment({
                 ...target,
                 body: nextTrimmedBody,
             });
@@ -171,6 +176,7 @@ export const CommentsComposer: React.FC<CommentsComposerProps> = ({
             }
 
             clearDraftAndErrors();
+            onCommentCreated?.(created);
             focusTextarea();
         } catch {
             if (!isCurrentScope()) {
@@ -190,7 +196,15 @@ export const CommentsComposer: React.FC<CommentsComposerProps> = ({
             }
             // Stale completion: leave the new scope's lock, draft, and errors alone.
         }
-    }, [body, clearDraftAndErrors, createComment, focusTextarea, t, target]);
+    }, [
+        body,
+        clearDraftAndErrors,
+        createComment,
+        focusTextarea,
+        onCommentCreated,
+        t,
+        target,
+    ]);
 
     const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
