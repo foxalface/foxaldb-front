@@ -4,7 +4,15 @@ import {
     selectEntryFlowDialog,
     selectEntryFlowReady,
 } from '../entry-flow-selectors';
-import type { EntryFlowState } from '../entry-flow-types';
+import type { EntryFlowState, RemoteDiagramSummary } from '../entry-flow-types';
+
+const sampleRemoteSummary = (): RemoteDiagramSummary => ({
+    id: '1',
+    name: 'Diagram 1',
+    tablesCount: 0,
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-01T00:00:00.000Z',
+});
 
 const allStates: EntryFlowState[] = [
     { kind: 'restoringSession' },
@@ -25,7 +33,7 @@ const allStates: EntryFlowState[] = [
     {
         kind: 'selectingRemoteDiagram',
         entrySource: 'startup',
-        diagrams: [{ id: '1' }],
+        diagrams: [sampleRemoteSummary()],
     },
     { kind: 'creatingDiagram', entrySource: 'guestContinuation' },
     {
@@ -133,7 +141,7 @@ describe('selectEntryFlowBlocking', () => {
         {
             kind: 'selectingRemoteDiagram',
             entrySource: 'startup',
-            diagrams: [{ id: '1' }],
+            diagrams: [sampleRemoteSummary()],
         },
         { kind: 'creatingDiagram', entrySource: 'startup' },
         { kind: 'ready' },

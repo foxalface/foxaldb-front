@@ -7,6 +7,8 @@ const openAuthDialog = vi.fn();
 const closeAuthDialog = vi.fn();
 const openCreateDiagramDialog = vi.fn();
 const closeCreateDiagramDialog = vi.fn();
+const openOpenDiagramDialog = vi.fn();
+const closeOpenDiagramDialog = vi.fn();
 const openGuestDiagramMigrationDialog = vi.fn();
 const closeGuestDiagramMigrationDialog = vi.fn();
 
@@ -16,6 +18,8 @@ vi.mock('@/hooks/use-dialog', () => ({
         closeAuthDialog,
         openCreateDiagramDialog,
         closeCreateDiagramDialog,
+        openOpenDiagramDialog,
+        closeOpenDiagramDialog,
         openGuestDiagramMigrationDialog,
         closeGuestDiagramMigrationDialog,
     }),
@@ -27,6 +31,8 @@ describe('useEntryFlowDialogSync', () => {
         closeAuthDialog.mockClear();
         openCreateDiagramDialog.mockClear();
         closeCreateDiagramDialog.mockClear();
+        openOpenDiagramDialog.mockClear();
+        closeOpenDiagramDialog.mockClear();
         openGuestDiagramMigrationDialog.mockClear();
         closeGuestDiagramMigrationDialog.mockClear();
     });
@@ -50,6 +56,28 @@ describe('useEntryFlowDialogSync', () => {
 
         expect(openCreateDiagramDialog).toHaveBeenCalledTimes(1);
         expect(closeCreateDiagramDialog).not.toHaveBeenCalled();
+    });
+
+    it('opens open diagram dialog when entry flow requests openDiagram', () => {
+        renderHook(() => useEntryFlowDialogSync('openDiagram'));
+
+        expect(openOpenDiagramDialog).toHaveBeenCalledWith({ canClose: false });
+        expect(closeOpenDiagramDialog).not.toHaveBeenCalled();
+    });
+
+    it('closes open diagram dialog when entry flow leaves open ownership', () => {
+        const { rerender } = renderHook(
+            ({ dialog }: { dialog: EntryFlowDialog }) =>
+                useEntryFlowDialogSync(dialog),
+            { initialProps: { dialog: 'openDiagram' as EntryFlowDialog } }
+        );
+
+        openOpenDiagramDialog.mockClear();
+
+        rerender({ dialog: null });
+
+        expect(closeOpenDiagramDialog).toHaveBeenCalledTimes(1);
+        expect(openOpenDiagramDialog).not.toHaveBeenCalled();
     });
 
     it('closes auth dialog when entry flow leaves auth ownership', () => {

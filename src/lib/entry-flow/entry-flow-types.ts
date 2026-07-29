@@ -46,6 +46,12 @@ export interface GuestMigrationContext {
 /** Minimal remote diagram identity for selection UI. Extensible without raw ID arrays. */
 export interface RemoteDiagramSummary {
     id: string;
+    name: string;
+    tablesCount: number;
+    databaseType?: string;
+    databaseEdition?: string | null;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export type EntryFlowState =
@@ -119,6 +125,10 @@ export type EntryFlowEvent =
     | { type: 'NO_REMOTE_DIAGRAMS' }
     | { type: 'REMOTE_DIAGRAMS_LOAD_FAILED'; messageKey?: string }
     | { type: 'REMOTE_DIAGRAM_SELECTED'; diagramId: string }
+    | { type: 'REMOTE_DIAGRAM_SELECTION_CANCELLED' }
+    | { type: 'REMOTE_DIAGRAM_CREATE_REQUESTED' }
+    | { type: 'ROUTE_DIAGRAM_REQUESTED'; diagramId: string }
+    | { type: 'ACCESS_DENIED_RECOVERY' }
     | { type: 'DIAGRAM_CREATED'; diagramId: string }
     | { type: 'DIAGRAM_OPENED' }
     | { type: 'DIAGRAM_OPEN_FAILED'; messageKey?: string }

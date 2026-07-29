@@ -6,6 +6,10 @@ import { useEntryFlow } from '@/hooks/use-entry-flow';
 
 const openAuthDialog = vi.fn();
 const closeAuthDialog = vi.fn();
+const openCreateDiagramDialog = vi.fn();
+const closeCreateDiagramDialog = vi.fn();
+const openOpenDiagramDialog = vi.fn();
+const closeOpenDiagramDialog = vi.fn();
 let useEntryFlowCallDepth = 0;
 let useEntryFlowMaxCallDepth = 0;
 
@@ -41,7 +45,55 @@ vi.mock('@/hooks/use-dialog', () => ({
     useDialog: () => ({
         openAuthDialog,
         closeAuthDialog,
+        openCreateDiagramDialog,
+        closeCreateDiagramDialog,
+        openOpenDiagramDialog,
+        closeOpenDiagramDialog,
+        openGuestDiagramMigrationDialog: vi.fn(),
+        closeGuestDiagramMigrationDialog: vi.fn(),
         openStarUsDialog: vi.fn(),
+    }),
+}));
+
+vi.mock('@/hooks/use-config', () => ({
+    useConfig: () => ({
+        config: {},
+        updateConfig: vi.fn().mockResolvedValue(undefined),
+    }),
+}));
+
+vi.mock('@/hooks/use-chartdb', () => ({
+    useChartDB: () => ({
+        currentDiagram: null,
+        loadDiagram: vi.fn(),
+        loadDiagramFromData: vi.fn(),
+    }),
+}));
+
+vi.mock('@/hooks/use-storage', () => ({
+    useStorage: () => ({
+        listDiagrams: vi.fn(),
+    }),
+}));
+
+vi.mock('@/hooks/use-diagram-access', () => ({
+    useDiagramAccess: () => ({
+        clearDiagramAccess: vi.fn(),
+        setDiagramAccess: vi.fn(),
+    }),
+}));
+
+vi.mock('@/hooks/use-entry-flow-guest-resolution', () => ({
+    useEntryFlowGuestResolution: () => ({ guestInitialDiagram: undefined }),
+}));
+
+vi.mock('@/hooks/use-entry-flow-guest-migration', () => ({
+    useEntryFlowGuestMigration: () => undefined,
+}));
+
+vi.mock('@/hooks/use-entry-flow-authenticated-resolution', () => ({
+    useEntryFlowAuthenticatedResolution: () => ({
+        authenticatedInitialDiagram: undefined,
     }),
 }));
 

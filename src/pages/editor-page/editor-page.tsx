@@ -22,7 +22,6 @@ import { Helmet } from 'react-helmet-async';
 import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
 import { HIDE_CHARTDB_CLOUD } from '@/lib/env';
-import { useDiagramLoader } from './use-diagram-loader';
 import { useDiagramAccessListener } from './use-diagram-access-listener';
 import { useDiagramAutosave } from './use-diagram-autosave';
 import { useDiagramOperationSync } from './use-diagram-operation-sync';
@@ -35,6 +34,7 @@ import { EntryFlowDialogSyncMount } from './entry-flow-dialog-sync-mount';
 import type { EntryFlowActiveDiagramDeletionActions } from './entry-flow-active-diagram-deletion-actions';
 import type { EntryFlowCreateDiagramActions } from './entry-flow-create-diagram-actions';
 import type { EntryFlowGuestMigrationActions } from './entry-flow-guest-migration-actions';
+import type { EntryFlowOpenDiagramActions } from './entry-flow-open-diagram-actions';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
@@ -64,10 +64,7 @@ const EditorPageContent: React.FC<
     const { isMd: isDesktop } = useBreakpoint('md');
     const { starUsDialogLastOpen, setStarUsDialogLastOpen, githubRepoOpened } =
         useLocalConfig();
-    const { initialDiagram: loaderInitialDiagram } = useDiagramLoader({
-        enabled: entryFlow.allowsLegacyAuthenticatedLoader,
-    });
-    const initialDiagram = entryFlow.initialDiagram ?? loaderInitialDiagram;
+    const initialDiagram = entryFlow.initialDiagram;
     useDiagramAutosave();
     useDiagramAccessListener();
     useDiagramChannelLifecycle();
@@ -182,8 +179,31 @@ const EditorPageComponent: React.FC = () => {
         (): EntryFlowCreateDiagramActions | undefined =>
             entryFlow.dialog === 'createDiagram'
                 ? {
+                      target:
+                          entryFlow.state.kind === 'creatingDiagram' &&
+                          entryFlow.state.entrySource === 'guestContinuation'
+                              ? 'guest'
+                              : 'remote',
                       onDiagramCreated: (diagramId) =>
                           entryFlow.notifyDiagramCreated(diagramId),
+                  }
+                : undefined,
+        [entryFlow]
+    );
+
+    const entryOpenDiagramActions = useMemo(
+        (): EntryFlowOpenDiagramActions | undefined =>
+            entryFlow.dialog === 'openDiagram' &&
+            entryFlow.remoteDiagramSummaries !== undefined
+                ? {
+                      diagrams: entryFlow.remoteDiagramSummaries,
+                      canClose: false,
+                      onRemoteDiagramSelected: (diagramId) =>
+                          entryFlow.notifyRemoteDiagramSelected(diagramId),
+                      onRemoteDiagramSelectionCancelled: () =>
+                          entryFlow.cancelRemoteDiagramSelection(),
+                      onRequestRemoteDiagramCreate: () =>
+                          entryFlow.requestRemoteDiagramCreate(),
                   }
                 : undefined,
         [entryFlow]
@@ -211,6 +231,7 @@ const EditorPageComponent: React.FC = () => {
         <DialogProvider
             entryAuthActions={entryAuthActions}
             entryCreateDiagramActions={entryCreateDiagramActions}
+            entryOpenDiagramActions={entryOpenDiagramActions}
             entryGuestMigrationActions={entryGuestMigrationActions}
             isGuestMigrationInProgress={isGuestMigrationInProgress}
         >

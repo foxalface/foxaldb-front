@@ -23,7 +23,13 @@ const reduceChain = (
 };
 
 const remoteSummaries = (ids: string[]): RemoteDiagramSummary[] =>
-    ids.map((id) => ({ id }));
+    ids.map((id) => ({
+        id,
+        name: `Diagram ${id}`,
+        tablesCount: 0,
+        createdAt: '2024-01-01T00:00:00.000Z',
+        updatedAt: '2024-01-01T00:00:00.000Z',
+    }));
 
 describe('entryFlowReducer — initial session', () => {
     it('initial state is restoringSession', () => {
@@ -225,7 +231,7 @@ describe('entryFlowReducer — authenticated', () => {
         });
         expect(
             state.kind === 'selectingRemoteDiagram' && state.diagrams[0]
-        ).toEqual({ id: '1' });
+        ).toEqual(summaries[0]);
         expect(
             state.kind === 'selectingRemoteDiagram' &&
                 typeof state.diagrams[0] === 'object' &&
@@ -656,5 +662,69 @@ describe('entryFlowReducer — session restore failure', () => {
         ]);
 
         expect(state).toEqual({ kind: 'restoringSession' });
+    });
+});
+
+describe('entryFlowReducer — authenticated remote selection', () => {
+    const selecting: EntryFlowState = {
+        kind: 'selectingRemoteDiagram',
+        entrySource: 'startup',
+        diagrams: remoteSummaries(['1', '2']),
+    };
+
+    it('REMOTE_DIAGRAM_SELECTION_CANCELLED → loadingRemoteDiagrams', () => {
+        const state = reduce(selecting, {
+            type: 'REMOTE_DIAGRAM_SELECTION_CANCELLED',
+        });
+
+        expect(state).toEqual({
+            kind: 'loadingRemoteDiagrams',
+            entrySource: 'startup',
+        });
+    });
+
+    it('REMOTE_DIAGRAM_CREATE_REQUESTED → creatingDiagram', () => {
+        const state = reduce(selecting, {
+            type: 'REMOTE_DIAGRAM_CREATE_REQUESTED',
+        });
+
+        expect(state).toEqual({
+            kind: 'creatingDiagram',
+            entrySource: 'startup',
+        });
+    });
+
+    it('ROUTE_DIAGRAM_REQUESTED from ready → openingDiagram directRoute', () => {
+        const state = reduce(
+            { kind: 'ready' },
+            {
+                type: 'ROUTE_DIAGRAM_REQUESTED',
+                diagramId: '42',
+            }
+        );
+
+        expect(state).toEqual({
+            kind: 'openingDiagram',
+            diagramId: '42',
+            diagramSource: 'directRoute',
+            entrySource: 'startup',
+        });
+    });
+
+    it('ACCESS_DENIED_RECOVERY from openingDiagram → loadingRemoteDiagrams', () => {
+        const state = reduce(
+            {
+                kind: 'openingDiagram',
+                diagramId: '1',
+                diagramSource: 'directRoute',
+                entrySource: 'login',
+            },
+            { type: 'ACCESS_DENIED_RECOVERY' }
+        );
+
+        expect(state).toEqual({
+            kind: 'loadingRemoteDiagrams',
+            entrySource: 'login',
+        });
     });
 });

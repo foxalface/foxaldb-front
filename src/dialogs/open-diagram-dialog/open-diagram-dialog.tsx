@@ -22,20 +22,35 @@ import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
 import { getDiagrams, type DiagramApiResource } from '@/lib/api/diagrams';
 import type { Diagram } from '@/lib/domain/diagram';
-import React, { useCallback, useEffect, useState } from 'react';
+import type { RemoteDiagramSummary } from '@/lib/entry-flow';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useDebounce } from '@/hooks/use-debounce';
 import { DiagramRowActionsMenu } from './diagram-row-actions-menu/diagram-row-actions-menu';
+import type { EntryFlowOpenDiagramActions } from '@/pages/editor-page/entry-flow-open-diagram-actions';
+
+const remoteSummaryToDiagram = (summary: RemoteDiagramSummary): Diagram =>
+    ({
+        id: summary.id,
+        name: summary.name,
+        createdAt: new Date(summary.createdAt || 0),
+        updatedAt: new Date(summary.updatedAt || 0),
+        tables: Array.from({ length: summary.tablesCount }),
+        databaseType: summary.databaseType,
+        databaseEdition: summary.databaseEdition,
+    }) as Diagram;
 
 export interface OpenDiagramDialogProps extends BaseDialogProps {
     canClose?: boolean;
+    entryOpenDiagramActions?: EntryFlowOpenDiagramActions;
 }
 
 export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     dialog,
     canClose = true,
+    entryOpenDiagramActions,
 }) => {
     const { closeOpenDiagramDialog, openCreateDiagramDialog } = useDialog();
     const { t } = useTranslation();
@@ -45,6 +60,17 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     const [selectedDiagramId, setSelectedDiagramId] = useState<
         string | undefined
     >();
+
+    const isEntryFlowOwned = entryOpenDiagramActions !== undefined;
+    const effectiveCanClose = isEntryFlowOwned
+        ? entryOpenDiagramActions.canClose
+        : canClose;
+
+    const entryDiagrams = useMemo(
+        () =>
+            entryOpenDiagramActions?.diagrams.map(remoteSummaryToDiagram) ?? [],
+        [entryOpenDiagramActions?.diagrams]
+    );
 
     const fetchDiagrams = useCallback(async () => {
         const diagramsFromApi = await getDiagrams();
@@ -71,19 +97,58 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         if (!dialog.open) {
             return;
         }
+
         setSelectedDiagramId(undefined);
+
+        if (isEntryFlowOwned) {
+            setDiagrams(entryDiagrams);
+            return;
+        }
+
         fetchDiagrams();
-    }, [dialog.open, fetchDiagrams]);
+    }, [dialog.open, fetchDiagrams, isEntryFlowOwned, entryDiagrams]);
 
     const openDiagram = useCallback(
         (diagramId: string) => {
-            if (diagramId) {
-                updateConfig({ config: { defaultDiagramId: diagramId } });
-                navigate(`/diagrams/${diagramId}`);
+            if (!diagramId) {
+                return;
+            }
+
+            if (entryOpenDiagramActions) {
+                entryOpenDiagramActions.onRemoteDiagramSelected(diagramId);
+                return;
+            }
+
+            updateConfig({ config: { defaultDiagramId: diagramId } });
+            navigate(`/diagrams/${diagramId}`);
+        },
+        [entryOpenDiagramActions, updateConfig, navigate]
+    );
+
+    const handleOpenConfirmed = useCallback(
+        (diagramId: string) => {
+            openDiagram(diagramId);
+
+            if (!entryOpenDiagramActions) {
+                closeOpenDiagramDialog();
             }
         },
-        [updateConfig, navigate]
+        [openDiagram, entryOpenDiagramActions, closeOpenDiagramDialog]
     );
+
+    const handleRequestCreateDiagram = useCallback(() => {
+        if (entryOpenDiagramActions) {
+            entryOpenDiagramActions.onRequestRemoteDiagramCreate();
+            return;
+        }
+
+        closeOpenDiagramDialog();
+        openCreateDiagramDialog();
+    }, [
+        entryOpenDiagramActions,
+        closeOpenDiagramDialog,
+        openCreateDiagramDialog,
+    ]);
 
     const handleRowKeyDown = useCallback(
         (e: React.KeyboardEvent<HTMLTableRowElement>) => {
@@ -101,8 +166,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                 case 'Enter':
                 case ' ':
                     e.preventDefault();
-                    openDiagram(diagramId);
-                    closeOpenDiagramDialog();
+                    handleOpenConfirmed(diagramId);
                     break;
                 case 'ArrowDown': {
                     e.preventDefault();
@@ -126,7 +190,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                 }
             }
         },
-        [openDiagram, closeOpenDiagramDialog]
+        [handleOpenConfirmed]
     );
 
     const onFocusHandler = useDebounce(
@@ -138,14 +202,19 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         <Dialog
             {...dialog}
             onOpenChange={(open) => {
-                if (!open && canClose) {
+                if (!open && effectiveCanClose) {
+                    if (entryOpenDiagramActions) {
+                        entryOpenDiagramActions.onRemoteDiagramSelectionCancelled();
+                        return;
+                    }
+
                     closeOpenDiagramDialog();
                 }
             }}
         >
             <DialogContent
                 className="flex h-[30rem] max-h-screen flex-col overflow-y-auto md:min-w-[80vw] xl:min-w-[55vw]"
-                showClose={canClose}
+                showClose={effectiveCanClose}
             >
                 <DialogHeader>
                     <DialogTitle>{t('open_diagram_dialog.title')}</DialogTitle>
@@ -202,8 +271,9 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                                     );
                                                     break;
                                                 case 2:
-                                                    openDiagram(diagram.id);
-                                                    closeOpenDiagramDialog();
+                                                    handleOpenConfirmed(
+                                                        diagram.id
+                                                    );
                                                     break;
                                                 default:
                                                     setSelectedDiagramId(
@@ -239,8 +309,9 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                             <DiagramRowActionsMenu
                                                 diagram={diagram}
                                                 onOpen={() => {
-                                                    openDiagram(diagram.id);
-                                                    closeOpenDiagramDialog();
+                                                    handleOpenConfirmed(
+                                                        diagram.id
+                                                    );
                                                 }}
                                                 onDuplicate={() => {
                                                     closeOpenDiagramDialog();
@@ -259,7 +330,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                 </DialogInternalContent>
 
                 <DialogFooter className="flex !justify-between gap-2">
-                    {canClose ? (
+                    {effectiveCanClose ? (
                         <DialogClose asChild>
                             <Button type="button" variant="secondary">
                                 {t('open_diagram_dialog.cancel')}
@@ -272,10 +343,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                         <Button
                             type="button"
                             variant="secondary"
-                            onClick={() => {
-                                closeOpenDiagramDialog();
-                                openCreateDiagramDialog();
-                            }}
+                            onClick={handleRequestCreateDiagram}
                         >
                             {t('open_diagram_dialog.new_database')}
                         </Button>
@@ -284,7 +352,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                 type="submit"
                                 disabled={!selectedDiagramId}
                                 onClick={() =>
-                                    openDiagram(selectedDiagramId ?? '')
+                                    handleOpenConfirmed(selectedDiagramId ?? '')
                                 }
                             >
                                 {t('open_diagram_dialog.open')}

@@ -13,8 +13,13 @@ export type {
 export { entryFlowReducer, initialEntryFlowState } from './entry-flow-reducer';
 
 export {
-    selectEntryFlowAllowsLegacyAuthenticatedLoader,
     selectEntryFlowBlocking,
     selectEntryFlowDialog,
     selectEntryFlowReady,
+    selectEntryFlowRemoteDiagramSummaries,
 } from './entry-flow-selectors';
+
+export {
+    toRemoteDiagramSummary,
+    toRemoteDiagramSummaries,
+} from './remote-diagram-summaries';

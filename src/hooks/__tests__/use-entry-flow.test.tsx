@@ -60,10 +60,6 @@ vi.mock('@/hooks/use-local-config', () => ({
     }),
 }));
 
-vi.mock('@/pages/editor-page/use-diagram-loader', () => ({
-    useDiagramLoader: () => ({ initialDiagram: undefined }),
-}));
-
 vi.mock('@/pages/editor-page/use-diagram-autosave', () => ({
     useDiagramAutosave: () => undefined,
 }));
@@ -102,6 +98,12 @@ vi.mock('@/hooks/use-entry-flow-guest-resolution', () => ({
 
 vi.mock('@/hooks/use-entry-flow-guest-migration', () => ({
     useEntryFlowGuestMigration: () => undefined,
+}));
+
+vi.mock('@/hooks/use-entry-flow-authenticated-resolution', () => ({
+    useEntryFlowAuthenticatedResolution: () => ({
+        authenticatedInitialDiagram: undefined,
+    }),
 }));
 
 function EntryGateProbe(): React.ReactElement {
@@ -614,7 +616,15 @@ describe('useEntryFlow', () => {
         });
 
         act(() => {
-            result.current.notifyRemoteDiagramsFound([{ id: '1' }]);
+            result.current.notifyRemoteDiagramsFound([
+                {
+                    id: '1',
+                    name: 'Diagram 1',
+                    tablesCount: 0,
+                    createdAt: '2024-01-01T00:00:00.000Z',
+                    updatedAt: '2024-01-01T00:00:00.000Z',
+                },
+            ]);
         });
         expect(result.current.state.kind).toBe('selectingRemoteDiagram');
 

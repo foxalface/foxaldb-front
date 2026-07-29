@@ -2,14 +2,15 @@ import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 import { useEntryFlowGuestResolution } from '@/hooks/use-entry-flow-guest-resolution';
+import { useEntryFlowAuthenticatedResolution } from '@/hooks/use-entry-flow-authenticated-resolution';
 import type { Diagram } from '@/lib/domain/diagram';
 import {
     entryFlowReducer,
     initialEntryFlowState,
-    selectEntryFlowAllowsLegacyAuthenticatedLoader,
     selectEntryFlowBlocking,
     selectEntryFlowDialog,
     selectEntryFlowReady,
+    selectEntryFlowRemoteDiagramSummaries,
     type EntryFlowDialog,
     type EntryFlowEvent,
     type EntryFlowState,
@@ -32,7 +33,7 @@ export interface UseEntryFlowResult {
     dialog: EntryFlowDialog;
     isBlocking: boolean;
     isReady: boolean;
-    allowsLegacyAuthenticatedLoader: boolean;
+    remoteDiagramSummaries: RemoteDiagramSummary[] | undefined;
     initialDiagram: Diagram | undefined;
     beginResolution: () => number;
     isResolutionCurrent: (token: number) => boolean;
@@ -46,6 +47,8 @@ export interface UseEntryFlowResult {
     notifyNoRemoteDiagrams: () => void;
     notifyRemoteDiagramsLoadFailed: (messageKey?: string) => void;
     notifyRemoteDiagramSelected: (diagramId: string) => void;
+    cancelRemoteDiagramSelection: () => void;
+    requestRemoteDiagramCreate: () => void;
     notifyDiagramCreated: (diagramId: string) => void;
     notifyDiagramOpened: () => void;
     notifyDiagramOpenFailed: (messageKey?: string) => void;
@@ -243,6 +246,14 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         [dispatchEvent]
     );
 
+    const cancelRemoteDiagramSelection = useCallback(() => {
+        dispatchEvent({ type: 'REMOTE_DIAGRAM_SELECTION_CANCELLED' });
+    }, [dispatchEvent]);
+
+    const requestRemoteDiagramCreate = useCallback(() => {
+        dispatchEvent({ type: 'REMOTE_DIAGRAM_CREATE_REQUESTED' });
+    }, [dispatchEvent]);
+
     const notifyDiagramCreated = useCallback(
         (diagramId: string) => {
             dispatchEvent({ type: 'DIAGRAM_CREATED', diagramId });
@@ -295,8 +306,7 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     const dialog = selectEntryFlowDialog(state);
     const isBlocking = selectEntryFlowBlocking(state);
     const isReady = selectEntryFlowReady(state);
-    const allowsLegacyAuthenticatedLoader =
-        selectEntryFlowAllowsLegacyAuthenticatedLoader(state);
+    const remoteDiagramSummaries = selectEntryFlowRemoteDiagramSummaries(state);
 
     const { guestInitialDiagram } = useEntryFlowGuestResolution({
         state,
@@ -316,13 +326,29 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         dispatchEvent,
     });
 
+    const { authenticatedInitialDiagram } = useEntryFlowAuthenticatedResolution(
+        {
+            state,
+            isAuthenticated,
+            isAuthLoading: isLoading,
+            routeDiagramId,
+            beginResolution,
+            isResolutionCurrent,
+            dispatchEvent,
+        }
+    );
+
+    const initialDiagram = isAuthenticated
+        ? (authenticatedInitialDiagram ?? guestInitialDiagram)
+        : guestInitialDiagram;
+
     return {
         state,
         dialog,
         isBlocking,
         isReady,
-        allowsLegacyAuthenticatedLoader,
-        initialDiagram: guestInitialDiagram,
+        remoteDiagramSummaries,
+        initialDiagram,
         beginResolution,
         isResolutionCurrent,
         invalidateResolution,
@@ -335,6 +361,8 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         notifyNoRemoteDiagrams,
         notifyRemoteDiagramsLoadFailed,
         notifyRemoteDiagramSelected,
+        cancelRemoteDiagramSelection,
+        requestRemoteDiagramCreate,
         notifyDiagramCreated,
         notifyDiagramOpened,
         notifyDiagramOpenFailed,

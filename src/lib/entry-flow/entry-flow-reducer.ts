@@ -284,6 +284,45 @@ export const entryFlowReducer = (
                 entrySource: state.entrySource,
             };
 
+        case 'REMOTE_DIAGRAM_SELECTION_CANCELLED':
+            if (state.kind !== 'selectingRemoteDiagram') {
+                return state;
+            }
+
+            return toLoadingRemoteDiagrams(state.entrySource);
+
+        case 'REMOTE_DIAGRAM_CREATE_REQUESTED':
+            if (state.kind !== 'selectingRemoteDiagram') {
+                return state;
+            }
+
+            return {
+                kind: 'creatingDiagram',
+                entrySource: state.entrySource,
+            };
+
+        case 'ROUTE_DIAGRAM_REQUESTED':
+            if (state.kind !== 'ready') {
+                return state;
+            }
+
+            return {
+                kind: 'openingDiagram',
+                diagramId: event.diagramId,
+                diagramSource: 'directRoute',
+                entrySource: 'startup',
+            };
+
+        case 'ACCESS_DENIED_RECOVERY':
+            if (
+                state.kind !== 'openingDiagram' &&
+                state.kind !== 'recoverableError'
+            ) {
+                return state;
+            }
+
+            return toLoadingRemoteDiagrams(state.entrySource);
+
         case 'DIAGRAM_CREATED':
             if (state.kind !== 'creatingDiagram') {
                 return state;

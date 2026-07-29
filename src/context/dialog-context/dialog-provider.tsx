@@ -30,6 +30,7 @@ import { LaravelMigrationDiffDialog } from '@/dialogs/laravel-migration-diff-dia
 import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
 import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
 import type { EntryFlowGuestMigrationActions } from '@/pages/editor-page/entry-flow-guest-migration-actions';
+import type { EntryFlowOpenDiagramActions } from '@/pages/editor-page/entry-flow-open-diagram-actions';
 import { GuestDiagramMigrationDialog } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
 import type { GuestDiagramMigrationDialogProps } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
 
@@ -59,6 +60,7 @@ export const DialogProvider: React.FC<
     React.PropsWithChildren<{
         entryAuthActions?: EntryFlowAuthActions;
         entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
+        entryOpenDiagramActions?: EntryFlowOpenDiagramActions;
         entryGuestMigrationActions?: EntryFlowGuestMigrationActions;
         isGuestMigrationInProgress?: boolean;
     }>
@@ -66,6 +68,7 @@ export const DialogProvider: React.FC<
     children,
     entryAuthActions,
     entryCreateDiagramActions,
+    entryOpenDiagramActions,
     entryGuestMigrationActions,
     isGuestMigrationInProgress = false,
 }) => {
@@ -332,6 +335,7 @@ export const DialogProvider: React.FC<
             ) : null}
             <OpenDiagramDialog
                 dialog={{ open: openOpenDiagramDialog }}
+                entryOpenDiagramActions={entryOpenDiagramActions}
                 {...openDiagramDialogParams}
             />
             {exportSQLDialogMounted ? (

@@ -58,6 +58,12 @@ vi.mock('@/hooks/use-entry-flow-guest-migration', () => ({
     useEntryFlowGuestMigration: () => undefined,
 }));
 
+vi.mock('@/hooks/use-entry-flow-authenticated-resolution', () => ({
+    useEntryFlowAuthenticatedResolution: () => ({
+        authenticatedInitialDiagram: undefined,
+    }),
+}));
+
 const completeAuthAsGuest = () => {
     authState.user = null;
     authState.isAuthenticated = false;

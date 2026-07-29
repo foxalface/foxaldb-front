@@ -13,7 +13,8 @@ export interface KickOutOfDiagramOptions {
     loadDiagramFromData: (diagram: Diagram) => void;
     navigate: NavigateFunction;
     showAlert: (params: BaseAlertDialogProps) => void;
-    openOpenDiagramDialog: (params?: { canClose?: boolean }) => void;
+    openOpenDiagramDialog?: (params?: { canClose?: boolean }) => void;
+    skipOpenDiagramDialog?: boolean;
 }
 
 let activeKickOutKey: string | null = null;
@@ -38,6 +39,7 @@ export const kickOutOfDiagram = ({
     navigate,
     showAlert,
     openOpenDiagramDialog,
+    skipOpenDiagramDialog,
 }: KickOutOfDiagramOptions): void => {
     const key = dedupeKey ?? `${title}:${message}`;
 
@@ -58,7 +60,9 @@ export const kickOutOfDiagram = ({
         closeLabel: 'OK',
     });
 
-    openOpenDiagramDialog({ canClose: false });
+    if (!skipOpenDiagramDialog && openOpenDiagramDialog) {
+        openOpenDiagramDialog({ canClose: false });
+    }
 
     window.setTimeout(() => {
         if (activeKickOutKey === key) {

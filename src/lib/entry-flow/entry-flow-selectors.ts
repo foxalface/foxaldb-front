@@ -1,4 +1,8 @@
-import type { EntryFlowDialog, EntryFlowState } from './entry-flow-types';
+import type {
+    EntryFlowDialog,
+    EntryFlowState,
+    RemoteDiagramSummary,
+} from './entry-flow-types';
 
 /**
  * Derives the single entry dialog required by the current state.
@@ -50,22 +54,7 @@ export const selectEntryFlowBlocking = (state: EntryFlowState): boolean => {
 export const selectEntryFlowReady = (state: EntryFlowState): boolean =>
     state.kind === 'ready';
 
-/**
- * M1.5 bridge: legacy authenticated bootstrap in useDiagramLoader remains
- * active only when guest migration is not in progress and migrated opening
- * is not handled by the migration hook.
- */
-export const selectEntryFlowAllowsLegacyAuthenticatedLoader = (
+export const selectEntryFlowRemoteDiagramSummaries = (
     state: EntryFlowState
-): boolean => {
-    switch (state.kind) {
-        case 'checkingGuestMigration':
-        case 'askingGuestMigration':
-        case 'migratingGuestDiagram':
-            return false;
-        case 'openingDiagram':
-            return state.diagramSource !== 'migrated';
-        default:
-            return true;
-    }
-};
+): RemoteDiagramSummary[] | undefined =>
+    state.kind === 'selectingRemoteDiagram' ? state.diagrams : undefined;
