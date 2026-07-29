@@ -904,6 +904,7 @@ export const te: LanguageTranslation = {
                 register_description:
                     'మరిన్ని డయాగ్రామ్‌లను సేవ్ చేయడానికి ఖాతా సృష్టించండి.',
                 checking_session: 'సెషన్ తనిఖీ చేస్తోంది...',
+                continue_without_account: 'ఖాతా లేకుండా కొనసాగించండి',
             },
             login: {
                 title: 'లాగిన్',

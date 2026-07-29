@@ -890,6 +890,7 @@ export const ko_KR: LanguageTranslation = {
                 register_description:
                     '계정을 만들어 더 많은 다이어그램을 저장하세요.',
                 checking_session: '세션 확인 중...',
+                continue_without_account: '계정 없이 계속',
             },
             login: {
                 title: '로그인',

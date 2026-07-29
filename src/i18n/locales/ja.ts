@@ -899,6 +899,7 @@ export const ja: LanguageTranslation = {
                 register_description:
                     'アカウントを作成して、より多くのダイアグラムを保存しましょう。',
                 checking_session: 'セッションを確認中...',
+                continue_without_account: 'アカウントなしで続行',
             },
             login: {
                 title: 'ログイン',

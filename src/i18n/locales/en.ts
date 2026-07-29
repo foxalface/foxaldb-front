@@ -884,6 +884,7 @@ export const en = {
                 register_description:
                     'Create an account to save more diagrams.',
                 checking_session: 'Checking session...',
+                continue_without_account: 'Continue without an account',
             },
             login: {
                 title: 'Log in',

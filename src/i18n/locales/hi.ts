@@ -901,6 +901,7 @@ export const hi: LanguageTranslation = {
                 register_description:
                     'अधिक डायग्राम सहेजने के लिए एक खाता बनाएं।',
                 checking_session: 'सत्र की जाँच हो रही है...',
+                continue_without_account: 'खाते के बिना जारी रखें',
             },
             login: {
                 title: 'लॉग इन',

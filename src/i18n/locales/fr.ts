@@ -898,6 +898,7 @@ export const fr: LanguageTranslation = {
                 register_description:
                     'Créez un compte pour enregistrer plus de diagrammes.',
                 checking_session: 'Vérification de la session...',
+                continue_without_account: 'Continuer sans compte',
             },
             login: {
                 title: 'Connexion',

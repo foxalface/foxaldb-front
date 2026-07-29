@@ -905,6 +905,7 @@ export const de: LanguageTranslation = {
                 register_description:
                     'Erstellen Sie ein Konto, um mehr Diagramme zu speichern.',
                 checking_session: 'Sitzung wird geprüft...',
+                continue_without_account: 'Ohne Konto fortfahren',
             },
             login: {
                 title: 'Anmelden',

@@ -888,6 +888,7 @@ export const tr: LanguageTranslation = {
                 register_description:
                     'Daha fazla diyagram kaydetmek için bir hesap oluşturun.',
                 checking_session: 'Oturum kontrol ediliyor...',
+                continue_without_account: 'Hesap olmadan devam et',
             },
             login: {
                 title: 'Giriş yap',

@@ -899,6 +899,7 @@ export const bn: LanguageTranslation = {
                 register_description:
                     'আরও ডায়াগ্রাম সংরক্ষণ করতে একটি অ্যাকাউন্ট তৈরি করুন।',
                 checking_session: 'সেশন পরীক্ষা করা হচ্ছে...',
+                continue_without_account: 'অ্যাকাউন্ট ছাড়াই চালিয়ে যান',
             },
             login: {
                 title: 'লগ ইন',

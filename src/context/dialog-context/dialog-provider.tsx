@@ -27,6 +27,7 @@ import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migratio
 import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 import { LaravelMigrationImportDialog } from '@/dialogs/laravel-migration-import-dialog/laravel-migration-import-dialog';
 import { LaravelMigrationDiffDialog } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
+import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
 
 const CreateDiagramDialogLazy = lazy(() =>
     import('@/dialogs/create-diagram-dialog/create-diagram-dialog').then(
@@ -50,9 +51,11 @@ const ImportDatabaseDialogLazy = lazy(() =>
     )
 );
 
-export const DialogProvider: React.FC<React.PropsWithChildren> = ({
-    children,
-}) => {
+export const DialogProvider: React.FC<
+    React.PropsWithChildren<{
+        entryAuthActions?: EntryFlowAuthActions;
+    }>
+> = ({ children, entryAuthActions }) => {
     const [openNewDiagramDialog, setOpenNewDiagramDialog] = useState(false);
     const [newDiagramDialogParams, setNewDiagramDialogParams] =
         useState<Omit<CreateDiagramDialogProps, 'dialog'>>();
@@ -328,7 +331,10 @@ export const DialogProvider: React.FC<React.PropsWithChildren> = ({
                 {...tableSchemaDialogParams}
             />
             <StarUsDialog dialog={{ open: openStarUsDialog }} />
-            <AuthDialog dialog={{ open: openAuthDialog }} />
+            <AuthDialog
+                dialog={{ open: openAuthDialog }}
+                entryAuthActions={entryAuthActions}
+            />
             <ExportImageDialog
                 dialog={{ open: openExportImageDialog }}
                 {...exportImageDialogParams}

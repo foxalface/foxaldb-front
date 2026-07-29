@@ -871,6 +871,7 @@ export const zh_TW: LanguageTranslation = {
                 login_description: '登入以儲存更多圖表並保持同步。',
                 register_description: '建立帳戶以儲存更多圖表。',
                 checking_session: '正在檢查工作階段...',
+                continue_without_account: '免帳號繼續',
             },
             login: {
                 title: '登入',

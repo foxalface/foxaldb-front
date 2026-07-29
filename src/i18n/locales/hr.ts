@@ -890,6 +890,7 @@ export const hr: LanguageTranslation = {
                 register_description:
                     'Stvorite račun kako biste spremili više dijagrama.',
                 checking_session: 'Provjera sesije...',
+                continue_without_account: 'Nastavi bez računa',
             },
             login: {
                 title: 'Prijava',

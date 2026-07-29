@@ -894,6 +894,7 @@ export const ru: LanguageTranslation = {
                 register_description:
                     'Создайте аккаунт, чтобы сохранять больше диаграмм.',
                 checking_session: 'Проверка сессии...',
+                continue_without_account: 'Продолжить без аккаунта',
             },
             login: {
                 title: 'Вход',

@@ -871,6 +871,7 @@ export const zh_CN: LanguageTranslation = {
                 login_description: '登录以保存更多图表并保持同步。',
                 register_description: '创建账户以保存更多图表。',
                 checking_session: '正在检查会话...',
+                continue_without_account: '免账号继续',
             },
             login: {
                 title: '登录',

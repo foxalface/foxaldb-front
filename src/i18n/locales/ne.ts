@@ -900,6 +900,7 @@ export const ne: LanguageTranslation = {
                 register_description:
                     'थप डायाग्रामहरू बचत गर्न खाता सिर्जना गर्नुहोस्।',
                 checking_session: 'सत्र जाँच गर्दै...',
+                continue_without_account: 'खाता बिना जारी राख्नुहोस्',
             },
             login: {
                 title: 'लग इन',

@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { Toaster } from '@/components/toast/toaster';
@@ -31,7 +31,8 @@ import { useDiagramPresenceActivity } from './use-diagram-presence-activity';
 import { useDiagramRealtime } from './use-diagram-realtime';
 import { useDiagramReconnectRefresh } from './use-diagram-reconnect-refresh';
 import { useGuestDiagramMigration } from './use-guest-diagram-migration';
-import { useEntryFlow } from '@/hooks/use-entry-flow';
+import { useEntryFlow, type UseEntryFlowResult } from '@/hooks/use-entry-flow';
+import { EntryFlowDialogSyncMount } from './entry-flow-dialog-sync-mount';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
@@ -51,14 +52,17 @@ export const EditorMobileLayoutLazy = React.lazy(
     () => import('./editor-mobile-layout')
 );
 
-const EditorPageComponent: React.FC = () => {
-    const entryFlow = useEntryFlow();
+const EditorPageContent: React.FC<{ entryFlow: UseEntryFlowResult }> = ({
+    entryFlow,
+}) => {
     const { diagramName, currentDiagram } = useChartDB();
     const { openStarUsDialog } = useDialog();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { starUsDialogLastOpen, setStarUsDialogLastOpen, githubRepoOpened } =
         useLocalConfig();
-    const { initialDiagram } = useDiagramLoader();
+    const { initialDiagram } = useDiagramLoader({
+        entryFlowState: entryFlow.state,
+    });
     useDiagramAutosave();
     useDiagramAccessListener();
     useDiagramChannelLifecycle();
@@ -94,8 +98,9 @@ const EditorPageComponent: React.FC = () => {
     ]);
 
     /*
-     * Staged integration (M1.2): only restoringSession blocks the editor shell.
-     * loadingRemoteDiagrams / openingDiagram remain legacy-owned until M1.3–M1.5.
+     * Staged integration (M1.2–M1.3): only restoringSession blocks the editor shell.
+     * M1.4 will replace guest bootstrap during checkingLocalDiagram.
+     * M1.5 will replace authenticated bootstrap during loadingRemoteDiagrams.
      */
     const isEntrySessionRestoring = entryFlow.state.kind === 'restoringSession';
 
@@ -150,6 +155,40 @@ const EditorPageComponent: React.FC = () => {
     );
 };
 
+const EditorPageComponent: React.FC = () => {
+    const entryFlow = useEntryFlow();
+    const entryAuthActions = useMemo(
+        () =>
+            entryFlow.dialog === 'auth'
+                ? {
+                      onContinueAsGuest: entryFlow.continueAsGuest,
+                      onLoginSuccess: () =>
+                          entryFlow.notifyAuthenticationSucceeded('login'),
+                      onRegistrationSuccess: () =>
+                          entryFlow.notifyAuthenticationSucceeded(
+                              'registration'
+                          ),
+                  }
+                : undefined,
+        [entryFlow]
+    );
+
+    return (
+        <DialogProvider entryAuthActions={entryAuthActions}>
+            <EntryFlowDialogSyncMount entryFlowDialog={entryFlow.dialog} />
+            <KeyboardShortcutsProvider>
+                <EditingBroadcastProvider>
+                    <RemoteEditingProvider>
+                        <CommentsProvider>
+                            <EditorPageContent entryFlow={entryFlow} />
+                        </CommentsProvider>
+                    </RemoteEditingProvider>
+                </EditingBroadcastProvider>
+            </KeyboardShortcutsProvider>
+        </DialogProvider>
+    );
+};
+
 export const EditorPage: React.FC = () => (
     <LocalConfigProvider>
         <ThemeProvider>
@@ -173,17 +212,7 @@ export const EditorPage: React.FC = () => (
                                                         <CanvasProvider>
                                                             <ExportImageProvider>
                                                                 <AlertProvider>
-                                                                    <DialogProvider>
-                                                                        <KeyboardShortcutsProvider>
-                                                                            <EditingBroadcastProvider>
-                                                                                <RemoteEditingProvider>
-                                                                                    <CommentsProvider>
-                                                                                        <EditorPageComponent />
-                                                                                    </CommentsProvider>
-                                                                                </RemoteEditingProvider>
-                                                                            </EditingBroadcastProvider>
-                                                                        </KeyboardShortcutsProvider>
-                                                                    </DialogProvider>
+                                                                    <EditorPageComponent />
                                                                 </AlertProvider>
                                                             </ExportImageProvider>
                                                         </CanvasProvider>

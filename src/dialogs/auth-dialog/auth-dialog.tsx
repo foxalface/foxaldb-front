@@ -6,9 +6,11 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/dialog/dialog';
+import { Button } from '@/components/button/button';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useAuth } from '@/hooks/use-auth';
 import { useDialog } from '@/hooks/use-dialog';
+import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
 import {
     AuthenticatedAccountPanel,
     LoginFormPanel,
@@ -18,13 +20,19 @@ import { useTranslation } from 'react-i18next';
 
 type AuthDialogMode = 'login' | 'register';
 
-export interface AuthDialogProps extends BaseDialogProps {}
+export interface AuthDialogProps extends BaseDialogProps {
+    entryAuthActions?: EntryFlowAuthActions;
+}
 
-export const AuthDialog: React.FC<AuthDialogProps> = ({ dialog }) => {
+export const AuthDialog: React.FC<AuthDialogProps> = ({
+    dialog,
+    entryAuthActions,
+}) => {
     const { t } = useTranslation();
     const { isAuthenticated, isLoading } = useAuth();
     const { closeAuthDialog } = useDialog();
     const [mode, setMode] = useState<AuthDialogMode>('login');
+    const isEntryMode = entryAuthActions !== undefined;
 
     useEffect(() => {
         if (dialog.open) {
@@ -36,6 +44,31 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({ dialog }) => {
         closeAuthDialog();
         setMode('login');
     }, [closeAuthDialog]);
+
+    const handleLoginSuccess = useCallback(() => {
+        if (isEntryMode) {
+            entryAuthActions.onLoginSuccess();
+            return;
+        }
+
+        closeDialog();
+    }, [isEntryMode, entryAuthActions, closeDialog]);
+
+    const handleRegisterSuccess = useCallback(() => {
+        if (isEntryMode) {
+            entryAuthActions.onRegistrationSuccess();
+            return;
+        }
+
+        closeDialog();
+    }, [isEntryMode, entryAuthActions, closeDialog]);
+
+    const handleContinueWithoutAccount = useCallback(() => {
+        entryAuthActions?.onContinueAsGuest();
+    }, [entryAuthActions]);
+
+    const showContinueWithoutAccount =
+        isEntryMode && !isLoading && !isAuthenticated;
 
     return (
         <Dialog
@@ -72,15 +105,26 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({ dialog }) => {
                     <AuthenticatedAccountPanel onBack={closeDialog} />
                 ) : mode === 'login' ? (
                     <LoginFormPanel
-                        onSuccess={closeDialog}
+                        onSuccess={handleLoginSuccess}
                         onSwitchToRegister={() => setMode('register')}
                     />
                 ) : (
                     <RegisterFormPanel
-                        onSuccess={closeDialog}
+                        onSuccess={handleRegisterSuccess}
                         onSwitchToLogin={() => setMode('login')}
                     />
                 )}
+
+                {showContinueWithoutAccount ? (
+                    <Button
+                        className="mt-2"
+                        type="button"
+                        variant="secondary"
+                        onClick={handleContinueWithoutAccount}
+                    >
+                        {t('auth.dialog.continue_without_account')}
+                    </Button>
+                ) : null}
             </DialogContent>
         </Dialog>
     );

@@ -892,6 +892,7 @@ export const vi: LanguageTranslation = {
                     'Đăng nhập để lưu thêm sơ đồ và đồng bộ chúng.',
                 register_description: 'Tạo tài khoản để lưu thêm sơ đồ.',
                 checking_session: 'Đang kiểm tra phiên...',
+                continue_without_account: 'Tiếp tục không cần tài khoản',
             },
             login: {
                 title: 'Đăng nhập',

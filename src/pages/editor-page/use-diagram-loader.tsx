@@ -14,11 +14,17 @@ import {
     kickOutOfDiagram,
 } from '@/lib/realtime/kick-out-of-diagram';
 import type { Diagram } from '@/lib/domain/diagram';
+import type { EntryFlowState } from '@/lib/entry-flow';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export const useDiagramLoader = () => {
+export interface UseDiagramLoaderOptions {
+    entryFlowState?: EntryFlowState;
+}
+
+export const useDiagramLoader = (options?: UseDiagramLoaderOptions) => {
+    const entryFlowState = options?.entryFlowState;
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config } = useConfig();
@@ -45,6 +51,17 @@ export const useDiagramLoader = () => {
         }
 
         if (!isAuthenticated) {
+            /*
+             * M1.3: legacy guest bootstrap runs only during checkingLocalDiagram.
+             * M1.4 will replace this path with entry-flow resolution.
+             */
+            if (
+                !entryFlowState ||
+                entryFlowState.kind !== 'checkingLocalDiagram'
+            ) {
+                return;
+            }
+
             if (currentDiagramLoadingRef.current === 'guest') {
                 return;
             }
@@ -168,6 +185,7 @@ export const useDiagramLoader = () => {
         navigate,
         showAlert,
         t,
+        entryFlowState,
     ]);
 
     return { initialDiagram };

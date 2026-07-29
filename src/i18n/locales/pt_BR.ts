@@ -901,6 +901,7 @@ export const pt_BR: LanguageTranslation = {
                 register_description:
                     'Crie uma conta para salvar mais diagramas.',
                 checking_session: 'Verificando sessão...',
+                continue_without_account: 'Continuar sem conta',
             },
             login: {
                 title: 'Entrar',

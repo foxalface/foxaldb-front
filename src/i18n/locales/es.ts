@@ -902,6 +902,7 @@ export const es: LanguageTranslation = {
                 register_description:
                     'Crea una cuenta para guardar más diagramas.',
                 checking_session: 'Comprobando la sesión...',
+                continue_without_account: 'Continuar sin cuenta',
             },
             login: {
                 title: 'Iniciar sesión',

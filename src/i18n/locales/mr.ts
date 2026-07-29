@@ -908,6 +908,7 @@ export const mr: LanguageTranslation = {
                 register_description:
                     'अधिक डायग्राम जतन करण्यासाठी खाते तयार करा.',
                 checking_session: 'सत्र तपासत आहे...',
+                continue_without_account: 'खाते न करता सुरू ठेवा',
             },
             login: {
                 title: 'लॉग इन',

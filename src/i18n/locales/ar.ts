@@ -885,6 +885,7 @@ export const ar: LanguageTranslation = {
                     'سجّل الدخول لحفظ المزيد من المخططات ومزامنتها.',
                 register_description: 'أنشئ حسابًا لحفظ المزيد من المخططات.',
                 checking_session: 'جارٍ التحقق من الجلسة...',
+                continue_without_account: 'المتابعة بدون حساب',
             },
             login: {
                 title: 'تسجيل الدخول',

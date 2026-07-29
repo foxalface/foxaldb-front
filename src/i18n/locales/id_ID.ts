@@ -896,6 +896,7 @@ export const id_ID: LanguageTranslation = {
                 register_description:
                     'Buat akun untuk menyimpan lebih banyak diagram.',
                 checking_session: 'Memeriksa sesi...',
+                continue_without_account: 'Lanjutkan tanpa akun',
             },
             login: {
                 title: 'Masuk',

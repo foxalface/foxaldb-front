@@ -894,6 +894,7 @@ export const gu: LanguageTranslation = {
                 register_description:
                     'વધુ ડાયાગ્રામ સાચવવા માટે એકાઉન્ટ બનાવો.',
                 checking_session: 'સત્ર તપાસી રહ્યા છીએ...',
+                continue_without_account: 'એકાઉન્ટ વગર ચાલુ રાખો',
             },
             login: {
                 title: 'લૉગ ઇન',

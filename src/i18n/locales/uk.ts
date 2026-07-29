@@ -895,6 +895,7 @@ export const uk: LanguageTranslation = {
                 register_description:
                     'Створіть обліковий запис, щоб зберігати більше діаграм.',
                 checking_session: 'Перевірка сесії...',
+                continue_without_account: 'Продовжити без облікового запису',
             },
             login: {
                 title: 'Вхід',
