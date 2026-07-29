@@ -59,8 +59,8 @@ export const useDiagramPresence = (): DiagramPresenceState => {
         if (!members.some((member) => member.isSelf)) {
             members.unshift({
                 id: user.id,
-                name: user.name,
-                initials: getInitialsFromName(user.name),
+                name: user.full_name,
+                initials: getInitialsFromName(user.full_name),
                 colorClass: getPresenceColorClass(user.id),
                 isSelf: true,
                 active: true,

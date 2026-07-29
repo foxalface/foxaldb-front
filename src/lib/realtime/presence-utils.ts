@@ -108,8 +108,11 @@ export const getPresenceRingColorClass = (userId: number): string => {
     return PRESENCE_RING_COLOR_CLASSES[index];
 };
 
-export const getInitialsFromName = (name: string): string => {
-    const parts = name.trim().split(/\s+/).filter(Boolean);
+export const getInitialsFromName = (
+    name: string | null | undefined
+): string => {
+    const trimmed = (name ?? '').trim();
+    const parts = trimmed.split(/\s+/).filter(Boolean);
 
     if (parts.length === 0) {
         return '?';

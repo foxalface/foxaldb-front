@@ -82,7 +82,9 @@ export const ShareMemberList: React.FC<ShareMemberListProps> = ({
             <div className="flex flex-col gap-2 rounded-md border p-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium">{owner.name}</p>
+                        <p className="truncate font-medium">
+                            {owner.full_name}
+                        </p>
                         <p className="truncate text-sm text-muted-foreground">
                             {owner.email}
                         </p>
