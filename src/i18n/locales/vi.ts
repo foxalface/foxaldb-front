@@ -882,6 +882,60 @@ export const vi: LanguageTranslation = {
             double_click_to_edit: 'Nhấp đúp để chỉnh sửa',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Tài khoản',
+                login_title: 'Đăng nhập vào FoxalDB',
+                register_title: 'Tạo tài khoản FoxalDB',
+                account_description: 'Quản lý phiên hiện tại của bạn.',
+                login_description:
+                    'Đăng nhập để lưu thêm sơ đồ và đồng bộ chúng.',
+                register_description: 'Tạo tài khoản để lưu thêm sơ đồ.',
+                checking_session: 'Đang kiểm tra phiên...',
+            },
+            login: {
+                title: 'Đăng nhập',
+                email_label: 'Email',
+                password_label: 'Mật khẩu',
+                submit: 'Đăng nhập',
+                submitting: 'Đang đăng nhập...',
+                switch_to_register: 'Đăng ký',
+                no_account: 'Chưa có tài khoản?',
+            },
+            register: {
+                title: 'Đăng ký',
+                first_name_label: 'Tên',
+                last_name_label: 'Họ',
+                email_label: 'Email',
+                password_label: 'Mật khẩu',
+                password_confirmation_label: 'Xác nhận mật khẩu',
+                submit: 'Tạo tài khoản',
+                submitting: 'Đang tạo tài khoản...',
+                switch_to_login: 'Đăng nhập',
+                already_have_account: 'Đã có tài khoản?',
+            },
+            account: {
+                signed_in_as: 'Đã đăng nhập với tư cách',
+                logout: 'Đăng xuất',
+                back_to_editor: 'Quay lại trình chỉnh sửa',
+            },
+            nav: {
+                sign_in: 'Đăng nhập',
+                logout: 'Đăng xuất',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Đăng nhập',
+                register_title: 'FoxalDB — Đăng ký',
+                checking_session: 'Đang kiểm tra phiên…',
+            },
+            errors: {
+                first_name_required: 'Tên là bắt buộc.',
+                last_name_required: 'Họ là bắt buộc.',
+                generic: 'Đã xảy ra lỗi.',
+            },
+        },
+
         language_select: {
             change_language: 'Ngôn ngữ',
         },

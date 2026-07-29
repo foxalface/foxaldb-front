@@ -56,14 +56,16 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
 
     const register = useCallback(
         async (
-            name: string,
+            firstName: string,
+            lastName: string,
             email: string,
             password: string,
             passwordConfirmation: string
         ): Promise<void> => {
             await initCsrf();
             const registeredUser = await apiRegister(
-                name,
+                firstName,
+                lastName,
                 email,
                 password,
                 passwordConfirmation

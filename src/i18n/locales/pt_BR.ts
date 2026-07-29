@@ -890,6 +890,61 @@ export const pt_BR: LanguageTranslation = {
             double_click_to_edit: 'Duplo clique para editar',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Conta',
+                login_title: 'Entrar no FoxalDB',
+                register_title: 'Criar uma conta FoxalDB',
+                account_description: 'Gerencie sua sessão atual.',
+                login_description:
+                    'Entre para salvar mais diagramas e mantê-los sincronizados.',
+                register_description:
+                    'Crie uma conta para salvar mais diagramas.',
+                checking_session: 'Verificando sessão...',
+            },
+            login: {
+                title: 'Entrar',
+                email_label: 'E-mail',
+                password_label: 'Senha',
+                submit: 'Entrar',
+                submitting: 'Entrando...',
+                switch_to_register: 'Cadastrar',
+                no_account: 'Não tem conta?',
+            },
+            register: {
+                title: 'Cadastro',
+                first_name_label: 'Nome',
+                last_name_label: 'Sobrenome',
+                email_label: 'E-mail',
+                password_label: 'Senha',
+                password_confirmation_label: 'Confirmar senha',
+                submit: 'Criar conta',
+                submitting: 'Criando conta...',
+                switch_to_login: 'Entrar',
+                already_have_account: 'Já tem uma conta?',
+            },
+            account: {
+                signed_in_as: 'Conectado como',
+                logout: 'Sair',
+                back_to_editor: 'Voltar ao editor',
+            },
+            nav: {
+                sign_in: 'Entrar',
+                logout: 'Sair',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Entrar',
+                register_title: 'FoxalDB — Cadastro',
+                checking_session: 'Verificando sessão…',
+            },
+            errors: {
+                first_name_required: 'O nome é obrigatório.',
+                last_name_required: 'O sobrenome é obrigatório.',
+                generic: 'Algo deu errado.',
+            },
+        },
+
         language_select: {
             change_language: 'Idioma',
         },

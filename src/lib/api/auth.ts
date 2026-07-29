@@ -1,4 +1,5 @@
 import { apiRequest, BACKEND_URL } from './client';
+import { parseAuthUser } from './parse-auth-user';
 
 export interface AuthUser {
     id: number;
@@ -40,11 +41,18 @@ export const login = async (
         method: 'POST',
         data: { email, password },
     });
-    return response.user;
+
+    const user = parseAuthUser(response.user);
+    if (user === null) {
+        throw new Error('Invalid login response');
+    }
+
+    return user;
 };
 
 export const register = async (
-    name: string,
+    firstName: string,
+    lastName: string,
     email: string,
     password: string,
     passwordConfirmation: string
@@ -52,13 +60,20 @@ export const register = async (
     const response = await apiRequest<AuthUserResponse>('/register', {
         method: 'POST',
         data: {
-            name,
+            first_name: firstName,
+            last_name: lastName,
             email,
             password,
             password_confirmation: passwordConfirmation,
         },
     });
-    return response.user;
+
+    const user = parseAuthUser(response.user);
+    if (user === null) {
+        throw new Error('Invalid registration response');
+    }
+
+    return user;
 };
 
 export const logout = async (): Promise<void> => {
@@ -67,10 +82,21 @@ export const logout = async (): Promise<void> => {
 
 export const fetchSessionUser = async (): Promise<AuthUser | null> => {
     const response = await apiRequest<SessionUserResponse>('/session');
-    return response.user;
+
+    if (response.user === null) {
+        return null;
+    }
+
+    return parseAuthUser(response.user);
 };
 
 export const fetchCurrentUser = async (): Promise<AuthUser> => {
     const response = await apiRequest<AuthUserResponse>('/me');
-    return response.user;
+    const user = parseAuthUser(response.user);
+
+    if (user === null) {
+        throw new Error('Invalid current user response');
+    }
+
+    return user;
 };

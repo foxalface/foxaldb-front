@@ -862,6 +862,59 @@ export const zh_TW: LanguageTranslation = {
             double_click_to_edit: '雙擊以編輯',
         },
 
+        auth: {
+            dialog: {
+                account_title: '帳戶',
+                login_title: '登入 FoxalDB',
+                register_title: '建立 FoxalDB 帳戶',
+                account_description: '管理目前的工作階段。',
+                login_description: '登入以儲存更多圖表並保持同步。',
+                register_description: '建立帳戶以儲存更多圖表。',
+                checking_session: '正在檢查工作階段...',
+            },
+            login: {
+                title: '登入',
+                email_label: '電子郵件',
+                password_label: '密碼',
+                submit: '登入',
+                submitting: '正在登入...',
+                switch_to_register: '註冊',
+                no_account: '沒有帳戶？',
+            },
+            register: {
+                title: '註冊',
+                first_name_label: '名字',
+                last_name_label: '姓氏',
+                email_label: '電子郵件',
+                password_label: '密碼',
+                password_confirmation_label: '確認密碼',
+                submit: '建立帳戶',
+                submitting: '正在建立帳戶...',
+                switch_to_login: '登入',
+                already_have_account: '已有帳戶？',
+            },
+            account: {
+                signed_in_as: '已登入為',
+                logout: '登出',
+                back_to_editor: '返回編輯器',
+            },
+            nav: {
+                sign_in: '登入',
+                logout: '登出',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — 登入',
+                register_title: 'FoxalDB — 註冊',
+                checking_session: '正在檢查工作階段…',
+            },
+            errors: {
+                first_name_required: '名字為必填項。',
+                last_name_required: '姓氏為必填項。',
+                generic: '發生錯誤。',
+            },
+        },
+
         language_select: {
             change_language: '變更語言',
         },

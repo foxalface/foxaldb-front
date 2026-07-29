@@ -884,6 +884,61 @@ export const uk: LanguageTranslation = {
             double_click_to_edit: 'Подвійне клацання для редагування',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Обліковий запис',
+                login_title: 'Увійти до FoxalDB',
+                register_title: 'Створити обліковий запис FoxalDB',
+                account_description: 'Керуйте поточною сесією.',
+                login_description:
+                    'Увійдіть, щоб зберігати більше діаграм і синхронізувати їх.',
+                register_description:
+                    'Створіть обліковий запис, щоб зберігати більше діаграм.',
+                checking_session: 'Перевірка сесії...',
+            },
+            login: {
+                title: 'Вхід',
+                email_label: 'Електронна пошта',
+                password_label: 'Пароль',
+                submit: 'Увійти',
+                submitting: 'Вхід...',
+                switch_to_register: 'Реєстрація',
+                no_account: 'Немає облікового запису?',
+            },
+            register: {
+                title: 'Реєстрація',
+                first_name_label: "Ім'я",
+                last_name_label: 'Прізвище',
+                email_label: 'Електронна пошта',
+                password_label: 'Пароль',
+                password_confirmation_label: 'Підтвердіть пароль',
+                submit: 'Створити обліковий запис',
+                submitting: 'Створення облікового запису...',
+                switch_to_login: 'Увійти',
+                already_have_account: 'Вже є обліковий запис?',
+            },
+            account: {
+                signed_in_as: 'Ви увійшли як',
+                logout: 'Вийти',
+                back_to_editor: 'Назад до редактора',
+            },
+            nav: {
+                sign_in: 'Увійти',
+                logout: 'Вийти',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Вхід',
+                register_title: 'FoxalDB — Реєстрація',
+                checking_session: 'Перевірка сесії…',
+            },
+            errors: {
+                first_name_required: "Ім'я є обов'язковим.",
+                last_name_required: "Прізвище є обов'язковим.",
+                generic: 'Щось пішло не так.',
+            },
+        },
+
         language_select: {
             change_language: 'Мова',
         },

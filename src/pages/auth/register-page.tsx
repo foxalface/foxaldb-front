@@ -8,8 +8,10 @@ import {
     AuthenticatedAccountPanel,
     RegisterFormPanel,
 } from './auth-form-panels';
+import { useTranslation } from 'react-i18next';
 
 const RegisterPageContent: React.FC = () => {
+    const { t } = useTranslation();
     const { isAuthenticated, isLoading } = useAuth();
     const navigate = useNavigate();
 
@@ -23,7 +25,9 @@ const RegisterPageContent: React.FC = () => {
 
     if (isLoading) {
         return (
-            <p className="text-sm text-muted-foreground">Checking session…</p>
+            <p className="text-sm text-muted-foreground">
+                {t('auth.pages.checking_session')}
+            </p>
         );
     }
 
@@ -40,10 +44,12 @@ const RegisterPageContent: React.FC = () => {
 };
 
 const RegisterPageComponent: React.FC = () => {
+    const { t } = useTranslation();
+
     return (
         <>
             <Helmet>
-                <title>FoxalDB — Register</title>
+                <title>{t('auth.pages.register_title')}</title>
             </Helmet>
             <section className="flex min-h-screen flex-col bg-background px-4 py-10">
                 <div className="mx-auto w-full max-w-md">

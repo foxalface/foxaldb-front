@@ -5,8 +5,10 @@ import { LocalConfigProvider } from '@/context/local-config-context/local-config
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useAuth } from '@/hooks/use-auth';
 import { AuthenticatedAccountPanel, LoginFormPanel } from './auth-form-panels';
+import { useTranslation } from 'react-i18next';
 
 const LoginPageContent: React.FC = () => {
+    const { t } = useTranslation();
     const { isAuthenticated, isLoading } = useAuth();
     const navigate = useNavigate();
 
@@ -20,7 +22,9 @@ const LoginPageContent: React.FC = () => {
 
     if (isLoading) {
         return (
-            <p className="text-sm text-muted-foreground">Checking session…</p>
+            <p className="text-sm text-muted-foreground">
+                {t('auth.pages.checking_session')}
+            </p>
         );
     }
 
@@ -37,10 +41,12 @@ const LoginPageContent: React.FC = () => {
 };
 
 const LoginPageComponent: React.FC = () => {
+    const { t } = useTranslation();
+
     return (
         <>
             <Helmet>
-                <title>FoxalDB — Log in</title>
+                <title>{t('auth.pages.login_title')}</title>
             </Helmet>
             <section className="flex min-h-screen flex-col bg-background px-4 py-10">
                 <div className="mx-auto w-full max-w-md">

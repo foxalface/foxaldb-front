@@ -877,6 +877,61 @@ export const tr: LanguageTranslation = {
             double_click_to_edit: 'Double-click to edit',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Hesap',
+                login_title: "FoxalDB'ye giriş yap",
+                register_title: 'FoxalDB hesabı oluştur',
+                account_description: 'Mevcut oturumunuzu yönetin.',
+                login_description:
+                    'Daha fazla diyagram kaydetmek ve senkronize etmek için giriş yapın.',
+                register_description:
+                    'Daha fazla diyagram kaydetmek için bir hesap oluşturun.',
+                checking_session: 'Oturum kontrol ediliyor...',
+            },
+            login: {
+                title: 'Giriş yap',
+                email_label: 'E-posta',
+                password_label: 'Şifre',
+                submit: 'Giriş yap',
+                submitting: 'Giriş yapılıyor...',
+                switch_to_register: 'Kayıt ol',
+                no_account: 'Hesabınız yok mu?',
+            },
+            register: {
+                title: 'Kayıt ol',
+                first_name_label: 'Ad',
+                last_name_label: 'Soyad',
+                email_label: 'E-posta',
+                password_label: 'Şifre',
+                password_confirmation_label: 'Şifreyi onayla',
+                submit: 'Hesap oluştur',
+                submitting: 'Hesap oluşturuluyor...',
+                switch_to_login: 'Giriş yap',
+                already_have_account: 'Zaten hesabınız var mı?',
+            },
+            account: {
+                signed_in_as: 'Giriş yapıldı:',
+                logout: 'Çıkış yap',
+                back_to_editor: 'Düzenleyiciye dön',
+            },
+            nav: {
+                sign_in: 'Giriş yap',
+                logout: 'Çıkış yap',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Giriş yap',
+                register_title: 'FoxalDB — Kayıt ol',
+                checking_session: 'Oturum kontrol ediliyor…',
+            },
+            errors: {
+                first_name_required: 'Ad gereklidir.',
+                last_name_required: 'Soyad gereklidir.',
+                generic: 'Bir şeyler ters gitti.',
+            },
+        },
+
         language_select: {
             change_language: 'Dil',
         },

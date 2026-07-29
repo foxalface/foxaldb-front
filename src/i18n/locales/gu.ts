@@ -883,6 +883,61 @@ export const gu: LanguageTranslation = {
             double_click_to_edit: 'સંપાદિત કરવા માટે ડબલ-ક્લિક કરો',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'એકાઉન્ટ',
+                login_title: 'FoxalDB માં સાઇન ઇન કરો',
+                register_title: 'FoxalDB એકાઉન્ટ બનાવો',
+                account_description: 'તમારા વર્તમાન સત્રનું સંચાલન કરો.',
+                login_description:
+                    'વધુ ડાયાગ્રામ સાચવવા અને સિંક કરવા માટે સાઇન ઇન કરો.',
+                register_description:
+                    'વધુ ડાયાગ્રામ સાચવવા માટે એકાઉન્ટ બનાવો.',
+                checking_session: 'સત્ર તપાસી રહ્યા છીએ...',
+            },
+            login: {
+                title: 'લૉગ ઇન',
+                email_label: 'ઇમેઇલ',
+                password_label: 'પાસવર્ડ',
+                submit: 'સાઇન ઇન',
+                submitting: 'સાઇન ઇન થઈ રહ્યું છે...',
+                switch_to_register: 'નોંધણી',
+                no_account: 'એકાઉન્ટ નથી?',
+            },
+            register: {
+                title: 'નોંધણી',
+                first_name_label: 'પ્રથમ નામ',
+                last_name_label: 'અટક',
+                email_label: 'ઇમેઇલ',
+                password_label: 'પાસવર્ડ',
+                password_confirmation_label: 'પાસવર્ડની પુષ્ટિ કરો',
+                submit: 'એકાઉન્ટ બનાવો',
+                submitting: 'એકાઉન્ટ બનાવી રહ્યા છીએ...',
+                switch_to_login: 'લૉગ ઇન',
+                already_have_account: 'પહેલેથી એકાઉન્ટ છે?',
+            },
+            account: {
+                signed_in_as: 'આ રૂપે સાઇન ઇન',
+                logout: 'લૉગ આઉટ',
+                back_to_editor: 'એડિટર પર પાછા જાઓ',
+            },
+            nav: {
+                sign_in: 'સાઇન ઇન',
+                logout: 'લૉગ આઉટ',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — લૉગ ઇન',
+                register_title: 'FoxalDB — નોંધણી',
+                checking_session: 'સત્ર તપાસી રહ્યા છીએ…',
+            },
+            errors: {
+                first_name_required: 'પ્રથમ નામ જરૂરી છે.',
+                last_name_required: 'અટક જરૂરી છે.',
+                generic: 'કંઈક ખોટું થયું.',
+            },
+        },
+
         language_select: {
             change_language: 'ભાષા બદલો',
         },

@@ -894,6 +894,61 @@ export const de: LanguageTranslation = {
             double_click_to_edit: 'Doppelklicken zum Bearbeiten',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Konto',
+                login_title: 'Bei FoxalDB anmelden',
+                register_title: 'FoxalDB-Konto erstellen',
+                account_description: 'Verwalten Sie Ihre aktuelle Sitzung.',
+                login_description:
+                    'Melden Sie sich an, um mehr Diagramme zu speichern und zu synchronisieren.',
+                register_description:
+                    'Erstellen Sie ein Konto, um mehr Diagramme zu speichern.',
+                checking_session: 'Sitzung wird geprüft...',
+            },
+            login: {
+                title: 'Anmelden',
+                email_label: 'E-Mail',
+                password_label: 'Passwort',
+                submit: 'Anmelden',
+                submitting: 'Anmeldung...',
+                switch_to_register: 'Registrieren',
+                no_account: 'Noch kein Konto?',
+            },
+            register: {
+                title: 'Registrieren',
+                first_name_label: 'Vorname',
+                last_name_label: 'Nachname',
+                email_label: 'E-Mail',
+                password_label: 'Passwort',
+                password_confirmation_label: 'Passwort bestätigen',
+                submit: 'Konto erstellen',
+                submitting: 'Konto wird erstellt...',
+                switch_to_login: 'Anmelden',
+                already_have_account: 'Sie haben bereits ein Konto?',
+            },
+            account: {
+                signed_in_as: 'Angemeldet als',
+                logout: 'Abmelden',
+                back_to_editor: 'Zurück zum Editor',
+            },
+            nav: {
+                sign_in: 'Anmelden',
+                logout: 'Abmelden',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Anmelden',
+                register_title: 'FoxalDB — Registrieren',
+                checking_session: 'Sitzung wird geprüft…',
+            },
+            errors: {
+                first_name_required: 'Der Vorname ist erforderlich.',
+                last_name_required: 'Der Nachname ist erforderlich.',
+                generic: 'Etwas ist schiefgelaufen.',
+            },
+        },
+
         language_select: {
             change_language: 'Sprache',
         },

@@ -889,6 +889,61 @@ export const ne: LanguageTranslation = {
             double_click_to_edit: 'सम्पादन गर्नका लागि डबल क्लिक गर्नुहोस्',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'खाता',
+                login_title: 'FoxalDB मा साइन इन गर्नुहोस्',
+                register_title: 'FoxalDB खाता सिर्जना गर्नुहोस्',
+                account_description: 'आफ्नो हालको सत्र व्यवस्थापन गर्नुहोस्।',
+                login_description:
+                    'थप डायाग्रामहरू बचत गर्न र सिङ्क गर्न साइन इन गर्नुहोस्।',
+                register_description:
+                    'थप डायाग्रामहरू बचत गर्न खाता सिर्जना गर्नुहोस्।',
+                checking_session: 'सत्र जाँच गर्दै...',
+            },
+            login: {
+                title: 'लग इन',
+                email_label: 'इमेल',
+                password_label: 'पासवर्ड',
+                submit: 'साइन इन गर्नुहोस्',
+                submitting: 'साइन इन गर्दै...',
+                switch_to_register: 'दर्ता',
+                no_account: 'खाता छैन?',
+            },
+            register: {
+                title: 'दर्ता',
+                first_name_label: 'पहिलो नाम',
+                last_name_label: 'थर',
+                email_label: 'इमेल',
+                password_label: 'पासवर्ड',
+                password_confirmation_label: 'पासवर्ड पुष्टि गर्नुहोस्',
+                submit: 'खाता सिर्जना गर्नुहोस्',
+                submitting: 'खाता सिर्जना गर्दै...',
+                switch_to_login: 'लग इन',
+                already_have_account: 'पहिले नै खाता छ?',
+            },
+            account: {
+                signed_in_as: 'यस रूपमा साइन इन',
+                logout: 'लग आउट',
+                back_to_editor: 'सम्पादकमा फर्कनुहोस्',
+            },
+            nav: {
+                sign_in: 'साइन इन',
+                logout: 'लग आउट',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — लग इन',
+                register_title: 'FoxalDB — दर्ता',
+                checking_session: 'सत्र जाँच गर्दै…',
+            },
+            errors: {
+                first_name_required: 'पहिलो नाम आवश्यक छ।',
+                last_name_required: 'थर आवश्यक छ।',
+                generic: 'केही गलत भयो।',
+            },
+        },
+
         language_select: {
             change_language: 'भाषा परिवर्तन गर्नुहोस्',
         },

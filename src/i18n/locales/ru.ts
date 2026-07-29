@@ -883,6 +883,61 @@ export const ru: LanguageTranslation = {
             double_click_to_edit: 'Кликните дважды, чтобы изменить',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Аккаунт',
+                login_title: 'Войти в FoxalDB',
+                register_title: 'Создать аккаунт FoxalDB',
+                account_description: 'Управляйте текущей сессией.',
+                login_description:
+                    'Войдите, чтобы сохранять больше диаграмм и синхронизировать их.',
+                register_description:
+                    'Создайте аккаунт, чтобы сохранять больше диаграмм.',
+                checking_session: 'Проверка сессии...',
+            },
+            login: {
+                title: 'Вход',
+                email_label: 'Электронная почта',
+                password_label: 'Пароль',
+                submit: 'Войти',
+                submitting: 'Вход...',
+                switch_to_register: 'Регистрация',
+                no_account: 'Нет аккаунта?',
+            },
+            register: {
+                title: 'Регистрация',
+                first_name_label: 'Имя',
+                last_name_label: 'Фамилия',
+                email_label: 'Электронная почта',
+                password_label: 'Пароль',
+                password_confirmation_label: 'Подтвердите пароль',
+                submit: 'Создать аккаунт',
+                submitting: 'Создание аккаунта...',
+                switch_to_login: 'Войти',
+                already_have_account: 'Уже есть аккаунт?',
+            },
+            account: {
+                signed_in_as: 'Вы вошли как',
+                logout: 'Выйти',
+                back_to_editor: 'Назад к редактору',
+            },
+            nav: {
+                sign_in: 'Войти',
+                logout: 'Выйти',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Вход',
+                register_title: 'FoxalDB — Регистрация',
+                checking_session: 'Проверка сессии…',
+            },
+            errors: {
+                first_name_required: 'Имя обязательно.',
+                last_name_required: 'Фамилия обязательна.',
+                generic: 'Что-то пошло не так.',
+            },
+        },
+
         language_select: {
             change_language: 'Сменить язык',
         },

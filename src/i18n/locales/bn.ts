@@ -888,6 +888,61 @@ export const bn: LanguageTranslation = {
             double_click_to_edit: 'সম্পাদনা করতে ডাবল-ক্লিক করুন',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'অ্যাকাউন্ট',
+                login_title: 'FoxalDB-তে সাইন ইন করুন',
+                register_title: 'FoxalDB অ্যাকাউন্ট তৈরি করুন',
+                account_description: 'আপনার বর্তমান সেশন পরিচালনা করুন।',
+                login_description:
+                    'আরও ডায়াগ্রাম সংরক্ষণ ও সিঙ্ক করতে সাইন ইন করুন।',
+                register_description:
+                    'আরও ডায়াগ্রাম সংরক্ষণ করতে একটি অ্যাকাউন্ট তৈরি করুন।',
+                checking_session: 'সেশন পরীক্ষা করা হচ্ছে...',
+            },
+            login: {
+                title: 'লগ ইন',
+                email_label: 'ইমেইল',
+                password_label: 'পাসওয়ার্ড',
+                submit: 'সাইন ইন',
+                submitting: 'সাইন ইন হচ্ছে...',
+                switch_to_register: 'নিবন্ধন',
+                no_account: 'অ্যাকাউন্ট নেই?',
+            },
+            register: {
+                title: 'নিবন্ধন',
+                first_name_label: 'নামের প্রথম অংশ',
+                last_name_label: 'নামের শেষ অংশ',
+                email_label: 'ইমেইল',
+                password_label: 'পাসওয়ার্ড',
+                password_confirmation_label: 'পাসওয়ার্ড নিশ্চিত করুন',
+                submit: 'অ্যাকাউন্ট তৈরি করুন',
+                submitting: 'অ্যাকাউন্ট তৈরি হচ্ছে...',
+                switch_to_login: 'লগ ইন',
+                already_have_account: 'ইতিমধ্যে অ্যাকাউন্ট আছে?',
+            },
+            account: {
+                signed_in_as: 'সাইন ইন করা হয়েছে',
+                logout: 'লগ আউট',
+                back_to_editor: 'এডিটরে ফিরে যান',
+            },
+            nav: {
+                sign_in: 'সাইন ইন',
+                logout: 'লগ আউট',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — লগ ইন',
+                register_title: 'FoxalDB — নিবন্ধন',
+                checking_session: 'সেশন পরীক্ষা করা হচ্ছে…',
+            },
+            errors: {
+                first_name_required: 'নামের প্রথম অংশ প্রয়োজন।',
+                last_name_required: 'নামের শেষ অংশ প্রয়োজন।',
+                generic: 'কিছু ভুল হয়েছে।',
+            },
+        },
+
         language_select: {
             change_language: 'ভাষা পরিবর্তন করুন',
         },

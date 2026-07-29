@@ -14,12 +14,14 @@ import {
     LoginFormPanel,
     RegisterFormPanel,
 } from '@/pages/auth/auth-form-panels';
+import { useTranslation } from 'react-i18next';
 
 type AuthDialogMode = 'login' | 'register';
 
 export interface AuthDialogProps extends BaseDialogProps {}
 
 export const AuthDialog: React.FC<AuthDialogProps> = ({ dialog }) => {
+    const { t } = useTranslation();
     const { isAuthenticated, isLoading } = useAuth();
     const { closeAuthDialog } = useDialog();
     const [mode, setMode] = useState<AuthDialogMode>('login');
@@ -48,23 +50,23 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({ dialog }) => {
                 <DialogHeader>
                     <DialogTitle>
                         {isAuthenticated
-                            ? 'Account'
+                            ? t('auth.dialog.account_title')
                             : mode === 'login'
-                              ? 'Sign in to FoxalDB'
-                              : 'Create a FoxalDB account'}
+                              ? t('auth.dialog.login_title')
+                              : t('auth.dialog.register_title')}
                     </DialogTitle>
                     <DialogDescription>
                         {isAuthenticated
-                            ? 'Manage your current session.'
+                            ? t('auth.dialog.account_description')
                             : mode === 'login'
-                              ? 'Sign in to save more diagrams and keep them synced.'
-                              : 'Create an account to save more diagrams.'}
+                              ? t('auth.dialog.login_description')
+                              : t('auth.dialog.register_description')}
                     </DialogDescription>
                 </DialogHeader>
 
                 {isLoading ? (
                     <p className="text-sm text-muted-foreground">
-                        Checking session...
+                        {t('auth.dialog.checking_session')}
                     </p>
                 ) : isAuthenticated ? (
                     <AuthenticatedAccountPanel onBack={closeDialog} />

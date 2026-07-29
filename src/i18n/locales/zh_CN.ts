@@ -862,6 +862,59 @@ export const zh_CN: LanguageTranslation = {
             double_click_to_edit: '双击编辑',
         },
 
+        auth: {
+            dialog: {
+                account_title: '账户',
+                login_title: '登录 FoxalDB',
+                register_title: '创建 FoxalDB 账户',
+                account_description: '管理当前会话。',
+                login_description: '登录以保存更多图表并保持同步。',
+                register_description: '创建账户以保存更多图表。',
+                checking_session: '正在检查会话...',
+            },
+            login: {
+                title: '登录',
+                email_label: '电子邮件',
+                password_label: '密码',
+                submit: '登录',
+                submitting: '正在登录...',
+                switch_to_register: '注册',
+                no_account: '没有账户？',
+            },
+            register: {
+                title: '注册',
+                first_name_label: '名',
+                last_name_label: '姓',
+                email_label: '电子邮件',
+                password_label: '密码',
+                password_confirmation_label: '确认密码',
+                submit: '创建账户',
+                submitting: '正在创建账户...',
+                switch_to_login: '登录',
+                already_have_account: '已有账户？',
+            },
+            account: {
+                signed_in_as: '已登录为',
+                logout: '退出登录',
+                back_to_editor: '返回编辑器',
+            },
+            nav: {
+                sign_in: '登录',
+                logout: '退出登录',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — 登录',
+                register_title: 'FoxalDB — 注册',
+                checking_session: '正在检查会话…',
+            },
+            errors: {
+                first_name_required: '名为必填项。',
+                last_name_required: '姓为必填项。',
+                generic: '出了点问题。',
+            },
+        },
+
         language_select: {
             change_language: '语言',
         },

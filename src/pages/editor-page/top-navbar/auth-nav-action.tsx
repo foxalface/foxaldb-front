@@ -3,12 +3,14 @@ import { Button } from '@/components/button/button';
 import { useAuth } from '@/hooks/use-auth';
 import { useDialog } from '@/hooks/use-dialog';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export interface AuthNavActionProps {
     compact?: boolean;
 }
 
 export const AuthNavAction: React.FC<AuthNavActionProps> = ({ compact }) => {
+    const { t } = useTranslation();
     const { user, isAuthenticated, isLoading, logout } = useAuth();
     const { openAuthDialog } = useDialog();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -28,7 +30,7 @@ export const AuthNavAction: React.FC<AuthNavActionProps> = ({ compact }) => {
     if (isLoading) {
         return (
             <Button disabled size="sm" type="button" variant="secondary">
-                ...
+                {t('auth.nav.loading')}
             </Button>
         );
     }
@@ -41,7 +43,7 @@ export const AuthNavAction: React.FC<AuthNavActionProps> = ({ compact }) => {
                 type="button"
                 onClick={openAuthDialog}
             >
-                Sign in
+                {t('auth.nav.sign_in')}
             </Button>
         );
     }
@@ -53,9 +55,9 @@ export const AuthNavAction: React.FC<AuthNavActionProps> = ({ compact }) => {
                     'truncate text-xs text-muted-foreground',
                     compact ? 'max-w-20' : 'max-w-36'
                 )}
-                title={user?.email}
+                title={user?.full_name}
             >
-                {user?.email}
+                {user?.full_name}
             </span>
             <Button
                 disabled={isLoggingOut}
@@ -64,7 +66,7 @@ export const AuthNavAction: React.FC<AuthNavActionProps> = ({ compact }) => {
                 type="button"
                 variant="secondary"
             >
-                {isLoggingOut ? '...' : 'Logout'}
+                {isLoggingOut ? t('auth.nav.loading') : t('auth.nav.logout')}
             </Button>
         </div>
     );

@@ -890,6 +890,61 @@ export const hi: LanguageTranslation = {
             double_click_to_edit: 'संपादित करने के लिए डबल-क्लिक करें',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'खाता',
+                login_title: 'FoxalDB में साइन इन करें',
+                register_title: 'FoxalDB खाता बनाएं',
+                account_description: 'अपने वर्तमान सत्र का प्रबंधन करें।',
+                login_description:
+                    'अधिक डायग्राम सहेजने और उन्हें सिंक करने के लिए साइन इन करें।',
+                register_description:
+                    'अधिक डायग्राम सहेजने के लिए एक खाता बनाएं।',
+                checking_session: 'सत्र की जाँच हो रही है...',
+            },
+            login: {
+                title: 'लॉग इन',
+                email_label: 'ईमेल',
+                password_label: 'पासवर्ड',
+                submit: 'साइन इन करें',
+                submitting: 'साइन इन हो रहा है...',
+                switch_to_register: 'पंजीकरण',
+                no_account: 'खाता नहीं है?',
+            },
+            register: {
+                title: 'पंजीकरण',
+                first_name_label: 'पहला नाम',
+                last_name_label: 'अंतिम नाम',
+                email_label: 'ईमेल',
+                password_label: 'पासवर्ड',
+                password_confirmation_label: 'पासवर्ड की पुष्टि करें',
+                submit: 'खाता बनाएं',
+                submitting: 'खाता बनाया जा रहा है...',
+                switch_to_login: 'लॉग इन',
+                already_have_account: 'पहले से खाता है?',
+            },
+            account: {
+                signed_in_as: 'इस रूप में साइन इन',
+                logout: 'लॉग आउट',
+                back_to_editor: 'संपादक पर वापस जाएं',
+            },
+            nav: {
+                sign_in: 'साइन इन',
+                logout: 'लॉग आउट',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — लॉग इन',
+                register_title: 'FoxalDB — पंजीकरण',
+                checking_session: 'सत्र की जाँच हो रही है…',
+            },
+            errors: {
+                first_name_required: 'पहला नाम आवश्यक है।',
+                last_name_required: 'अंतिम नाम आवश्यक है।',
+                generic: 'कुछ गलत हो गया।',
+            },
+        },
+
         language_select: {
             change_language: 'भाषा बदलें',
         },

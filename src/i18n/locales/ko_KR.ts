@@ -879,6 +879,61 @@ export const ko_KR: LanguageTranslation = {
             double_click_to_edit: '더블클릭하여 편집',
         },
 
+        auth: {
+            dialog: {
+                account_title: '계정',
+                login_title: 'FoxalDB에 로그인',
+                register_title: 'FoxalDB 계정 만들기',
+                account_description: '현재 세션을 관리합니다.',
+                login_description:
+                    '로그인하여 더 많은 다이어그램을 저장하고 동기화하세요.',
+                register_description:
+                    '계정을 만들어 더 많은 다이어그램을 저장하세요.',
+                checking_session: '세션 확인 중...',
+            },
+            login: {
+                title: '로그인',
+                email_label: '이메일',
+                password_label: '비밀번호',
+                submit: '로그인',
+                submitting: '로그인 중...',
+                switch_to_register: '회원가입',
+                no_account: '계정이 없으신가요?',
+            },
+            register: {
+                title: '회원가입',
+                first_name_label: '이름',
+                last_name_label: '성',
+                email_label: '이메일',
+                password_label: '비밀번호',
+                password_confirmation_label: '비밀번호 확인',
+                submit: '계정 만들기',
+                submitting: '계정 생성 중...',
+                switch_to_login: '로그인',
+                already_have_account: '이미 계정이 있으신가요?',
+            },
+            account: {
+                signed_in_as: '로그인됨',
+                logout: '로그아웃',
+                back_to_editor: '편집기로 돌아가기',
+            },
+            nav: {
+                sign_in: '로그인',
+                logout: '로그아웃',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — 로그인',
+                register_title: 'FoxalDB — 회원가입',
+                checking_session: '세션 확인 중…',
+            },
+            errors: {
+                first_name_required: '이름은 필수입니다.',
+                last_name_required: '성은 필수입니다.',
+                generic: '문제가 발생했습니다.',
+            },
+        },
+
         language_select: {
             change_language: '언어',
         },

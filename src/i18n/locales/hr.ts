@@ -879,6 +879,61 @@ export const hr: LanguageTranslation = {
             double_click_to_edit: 'Dvostruki klik za uređivanje',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Račun',
+                login_title: 'Prijava u FoxalDB',
+                register_title: 'Stvorite FoxalDB račun',
+                account_description: 'Upravljajte trenutnom sesijom.',
+                login_description:
+                    'Prijavite se kako biste spremili više dijagrama i sinkronizirali ih.',
+                register_description:
+                    'Stvorite račun kako biste spremili više dijagrama.',
+                checking_session: 'Provjera sesije...',
+            },
+            login: {
+                title: 'Prijava',
+                email_label: 'E-pošta',
+                password_label: 'Lozinka',
+                submit: 'Prijavi se',
+                submitting: 'Prijava...',
+                switch_to_register: 'Registracija',
+                no_account: 'Nemate račun?',
+            },
+            register: {
+                title: 'Registracija',
+                first_name_label: 'Ime',
+                last_name_label: 'Prezime',
+                email_label: 'E-pošta',
+                password_label: 'Lozinka',
+                password_confirmation_label: 'Potvrdite lozinku',
+                submit: 'Stvori račun',
+                submitting: 'Stvaranje računa...',
+                switch_to_login: 'Prijava',
+                already_have_account: 'Već imate račun?',
+            },
+            account: {
+                signed_in_as: 'Prijavljeni kao',
+                logout: 'Odjava',
+                back_to_editor: 'Natrag u uređivač',
+            },
+            nav: {
+                sign_in: 'Prijava',
+                logout: 'Odjava',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Prijava',
+                register_title: 'FoxalDB — Registracija',
+                checking_session: 'Provjera sesije…',
+            },
+            errors: {
+                first_name_required: 'Ime je obavezno.',
+                last_name_required: 'Prezime je obavezno.',
+                generic: 'Nešto je pošlo po zlu.',
+            },
+        },
+
         language_select: {
             change_language: 'Jezik',
         },

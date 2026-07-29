@@ -888,6 +888,61 @@ export const ja: LanguageTranslation = {
             double_click_to_edit: 'ダブルクリックして編集',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'アカウント',
+                login_title: 'FoxalDBにサインイン',
+                register_title: 'FoxalDBアカウントを作成',
+                account_description: '現在のセッションを管理します。',
+                login_description:
+                    'サインインして、より多くのダイアグラムを保存し同期しましょう。',
+                register_description:
+                    'アカウントを作成して、より多くのダイアグラムを保存しましょう。',
+                checking_session: 'セッションを確認中...',
+            },
+            login: {
+                title: 'ログイン',
+                email_label: 'メールアドレス',
+                password_label: 'パスワード',
+                submit: 'サインイン',
+                submitting: 'サインイン中...',
+                switch_to_register: '登録',
+                no_account: 'アカウントをお持ちでないですか？',
+            },
+            register: {
+                title: '登録',
+                first_name_label: '名',
+                last_name_label: '姓',
+                email_label: 'メールアドレス',
+                password_label: 'パスワード',
+                password_confirmation_label: 'パスワードの確認',
+                submit: 'アカウントを作成',
+                submitting: 'アカウントを作成中...',
+                switch_to_login: 'ログイン',
+                already_have_account: 'すでにアカウントをお持ちですか？',
+            },
+            account: {
+                signed_in_as: 'ログイン中',
+                logout: 'ログアウト',
+                back_to_editor: 'エディターに戻る',
+            },
+            nav: {
+                sign_in: 'サインイン',
+                logout: 'ログアウト',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — ログイン',
+                register_title: 'FoxalDB — 登録',
+                checking_session: 'セッションを確認中…',
+            },
+            errors: {
+                first_name_required: '名は必須です。',
+                last_name_required: '姓は必須です。',
+                generic: '問題が発生しました。',
+            },
+        },
+
         language_select: {
             change_language: '言語',
         },

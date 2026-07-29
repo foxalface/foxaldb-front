@@ -897,6 +897,61 @@ export const mr: LanguageTranslation = {
             double_click_to_edit: 'Double-click to edit',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'खाते',
+                login_title: 'FoxalDB मध्ये साइन इन करा',
+                register_title: 'FoxalDB खाते तयार करा',
+                account_description: 'तुमचे सध्याचे सत्र व्यवस्थापित करा.',
+                login_description:
+                    'अधिक डायग्राम जतन करण्यासाठी आणि सिंक करण्यासाठी साइन इन करा.',
+                register_description:
+                    'अधिक डायग्राम जतन करण्यासाठी खाते तयार करा.',
+                checking_session: 'सत्र तपासत आहे...',
+            },
+            login: {
+                title: 'लॉग इन',
+                email_label: 'ईमेल',
+                password_label: 'पासवर्ड',
+                submit: 'साइन इन करा',
+                submitting: 'साइन इन होत आहे...',
+                switch_to_register: 'नोंदणी',
+                no_account: 'खाते नाही?',
+            },
+            register: {
+                title: 'नोंदणी',
+                first_name_label: 'पहिले नाव',
+                last_name_label: 'आडनाव',
+                email_label: 'ईमेल',
+                password_label: 'पासवर्ड',
+                password_confirmation_label: 'पासवर्डची पुष्टी करा',
+                submit: 'खाते तयार करा',
+                submitting: 'खाते तयार होत आहे...',
+                switch_to_login: 'लॉग इन',
+                already_have_account: 'आधीच खाते आहे?',
+            },
+            account: {
+                signed_in_as: 'या रूपात साइन इन',
+                logout: 'लॉग आउट',
+                back_to_editor: 'संपादकावर परत जा',
+            },
+            nav: {
+                sign_in: 'साइन इन',
+                logout: 'लॉग आउट',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — लॉग इन',
+                register_title: 'FoxalDB — नोंदणी',
+                checking_session: 'सत्र तपासत आहे…',
+            },
+            errors: {
+                first_name_required: 'पहिले नाव आवश्यक आहे.',
+                last_name_required: 'आडनाव आवश्यक आहे.',
+                generic: 'काहीतरी चुकले.',
+            },
+        },
+
         language_select: {
             change_language: 'भाषा बदला',
         },

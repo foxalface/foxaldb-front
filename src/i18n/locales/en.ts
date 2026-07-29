@@ -873,6 +873,61 @@ export const en = {
             double_click_to_edit: 'Double-click to edit',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Account',
+                login_title: 'Sign in to FoxalDB',
+                register_title: 'Create a FoxalDB account',
+                account_description: 'Manage your current session.',
+                login_description:
+                    'Sign in to save more diagrams and keep them synced.',
+                register_description:
+                    'Create an account to save more diagrams.',
+                checking_session: 'Checking session...',
+            },
+            login: {
+                title: 'Log in',
+                email_label: 'Email',
+                password_label: 'Password',
+                submit: 'Sign in',
+                submitting: 'Signing in...',
+                switch_to_register: 'Register',
+                no_account: 'No account?',
+            },
+            register: {
+                title: 'Register',
+                first_name_label: 'First name',
+                last_name_label: 'Last name',
+                email_label: 'Email',
+                password_label: 'Password',
+                password_confirmation_label: 'Confirm password',
+                submit: 'Create account',
+                submitting: 'Creating account...',
+                switch_to_login: 'Log in',
+                already_have_account: 'Already have an account?',
+            },
+            account: {
+                signed_in_as: 'Signed in as',
+                logout: 'Logout',
+                back_to_editor: 'Back to editor',
+            },
+            nav: {
+                sign_in: 'Sign in',
+                logout: 'Logout',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Log in',
+                register_title: 'FoxalDB — Register',
+                checking_session: 'Checking session…',
+            },
+            errors: {
+                first_name_required: 'First name is required.',
+                last_name_required: 'Last name is required.',
+                generic: 'Something went wrong.',
+            },
+        },
+
         language_select: {
             change_language: 'Language',
         },

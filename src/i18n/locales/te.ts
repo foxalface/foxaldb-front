@@ -893,6 +893,61 @@ export const te: LanguageTranslation = {
             double_click_to_edit: 'Double-click to edit',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'ఖాతా',
+                login_title: 'FoxalDBకి సైన్ ఇన్ చేయండి',
+                register_title: 'FoxalDB ఖాతా సృష్టించండి',
+                account_description: 'మీ ప్రస్తుత సెషన్‌ను నిర్వహించండి.',
+                login_description:
+                    'మరిన్ని డయాగ్రామ్‌లను సేవ్ చేసి సమకాలీకరించడానికి సైన్ ఇన్ చేయండి.',
+                register_description:
+                    'మరిన్ని డయాగ్రామ్‌లను సేవ్ చేయడానికి ఖాతా సృష్టించండి.',
+                checking_session: 'సెషన్ తనిఖీ చేస్తోంది...',
+            },
+            login: {
+                title: 'లాగిన్',
+                email_label: 'ఇమెయిల్',
+                password_label: 'పాస్‌వర్డ్',
+                submit: 'సైన్ ఇన్',
+                submitting: 'సైన్ ఇన్ అవుతోంది...',
+                switch_to_register: 'నమోదు',
+                no_account: 'ఖాతా లేదా?',
+            },
+            register: {
+                title: 'నమోదు',
+                first_name_label: 'మొదటి పేరు',
+                last_name_label: 'చివరి పేరు',
+                email_label: 'ఇమెయిల్',
+                password_label: 'పాస్‌వర్డ్',
+                password_confirmation_label: 'పాస్‌వర్డ్ నిర్ధారించండి',
+                submit: 'ఖాతా సృష్టించండి',
+                submitting: 'ఖాతా సృష్టిస్తోంది...',
+                switch_to_login: 'లాగిన్',
+                already_have_account: 'ఇప్పటికే ఖాతా ఉందా?',
+            },
+            account: {
+                signed_in_as: 'ఇలా సైన్ ఇన్ అయ్యారు',
+                logout: 'లాగ్ అవుట్',
+                back_to_editor: 'ఎడిటర్‌కు తిరిగి వెళ్ళండి',
+            },
+            nav: {
+                sign_in: 'సైన్ ఇన్',
+                logout: 'లాగ్ అవుట్',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — లాగిన్',
+                register_title: 'FoxalDB — నమోదు',
+                checking_session: 'సెషన్ తనిఖీ చేస్తోంది…',
+            },
+            errors: {
+                first_name_required: 'మొదటి పేరు అవసరం.',
+                last_name_required: 'చివరి పేరు అవసరం.',
+                generic: 'ఏదో తప్పు జరిగింది.',
+            },
+        },
+
         language_select: {
             change_language: 'భాష మార్చు',
         },

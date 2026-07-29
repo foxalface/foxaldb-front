@@ -885,6 +885,61 @@ export const id_ID: LanguageTranslation = {
             double_click_to_edit: 'Klik ganda untuk mengedit',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Akun',
+                login_title: 'Masuk ke FoxalDB',
+                register_title: 'Buat akun FoxalDB',
+                account_description: 'Kelola sesi Anda saat ini.',
+                login_description:
+                    'Masuk untuk menyimpan lebih banyak diagram dan menyinkronkannya.',
+                register_description:
+                    'Buat akun untuk menyimpan lebih banyak diagram.',
+                checking_session: 'Memeriksa sesi...',
+            },
+            login: {
+                title: 'Masuk',
+                email_label: 'Email',
+                password_label: 'Kata sandi',
+                submit: 'Masuk',
+                submitting: 'Sedang masuk...',
+                switch_to_register: 'Daftar',
+                no_account: 'Belum punya akun?',
+            },
+            register: {
+                title: 'Daftar',
+                first_name_label: 'Nama depan',
+                last_name_label: 'Nama belakang',
+                email_label: 'Email',
+                password_label: 'Kata sandi',
+                password_confirmation_label: 'Konfirmasi kata sandi',
+                submit: 'Buat akun',
+                submitting: 'Membuat akun...',
+                switch_to_login: 'Masuk',
+                already_have_account: 'Sudah punya akun?',
+            },
+            account: {
+                signed_in_as: 'Masuk sebagai',
+                logout: 'Keluar',
+                back_to_editor: 'Kembali ke editor',
+            },
+            nav: {
+                sign_in: 'Masuk',
+                logout: 'Keluar',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Masuk',
+                register_title: 'FoxalDB — Daftar',
+                checking_session: 'Memeriksa sesi…',
+            },
+            errors: {
+                first_name_required: 'Nama depan wajib diisi.',
+                last_name_required: 'Nama belakang wajib diisi.',
+                generic: 'Terjadi kesalahan.',
+            },
+        },
+
         language_select: {
             change_language: 'Bahasa',
         },

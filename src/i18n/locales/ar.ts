@@ -875,6 +875,60 @@ export const ar: LanguageTranslation = {
             double_click_to_edit: 'انقر مرتين للتعديل',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'الحساب',
+                login_title: 'تسجيل الدخول إلى FoxalDB',
+                register_title: 'إنشاء حساب FoxalDB',
+                account_description: 'إدارة جلستك الحالية.',
+                login_description:
+                    'سجّل الدخول لحفظ المزيد من المخططات ومزامنتها.',
+                register_description: 'أنشئ حسابًا لحفظ المزيد من المخططات.',
+                checking_session: 'جارٍ التحقق من الجلسة...',
+            },
+            login: {
+                title: 'تسجيل الدخول',
+                email_label: 'البريد الإلكتروني',
+                password_label: 'كلمة المرور',
+                submit: 'تسجيل الدخول',
+                submitting: 'جارٍ تسجيل الدخول...',
+                switch_to_register: 'إنشاء حساب',
+                no_account: 'ليس لديك حساب؟',
+            },
+            register: {
+                title: 'إنشاء حساب',
+                first_name_label: 'الاسم الأول',
+                last_name_label: 'اسم العائلة',
+                email_label: 'البريد الإلكتروني',
+                password_label: 'كلمة المرور',
+                password_confirmation_label: 'تأكيد كلمة المرور',
+                submit: 'إنشاء حساب',
+                submitting: 'جارٍ إنشاء الحساب...',
+                switch_to_login: 'تسجيل الدخول',
+                already_have_account: 'لديك حساب بالفعل؟',
+            },
+            account: {
+                signed_in_as: 'مسجّل الدخول باسم',
+                logout: 'تسجيل الخروج',
+                back_to_editor: 'العودة إلى المحرر',
+            },
+            nav: {
+                sign_in: 'تسجيل الدخول',
+                logout: 'تسجيل الخروج',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — تسجيل الدخول',
+                register_title: 'FoxalDB — إنشاء حساب',
+                checking_session: 'جارٍ التحقق من الجلسة…',
+            },
+            errors: {
+                first_name_required: 'الاسم الأول مطلوب.',
+                last_name_required: 'اسم العائلة مطلوب.',
+                generic: 'حدث خطأ ما.',
+            },
+        },
+
         language_select: {
             change_language: 'اللغة',
         },

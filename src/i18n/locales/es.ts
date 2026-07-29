@@ -891,6 +891,61 @@ export const es: LanguageTranslation = {
             double_click_to_edit: 'Doble clic para editar',
         },
 
+        auth: {
+            dialog: {
+                account_title: 'Cuenta',
+                login_title: 'Iniciar sesión en FoxalDB',
+                register_title: 'Crear una cuenta de FoxalDB',
+                account_description: 'Administra tu sesión actual.',
+                login_description:
+                    'Inicia sesión para guardar más diagramas y mantenerlos sincronizados.',
+                register_description:
+                    'Crea una cuenta para guardar más diagramas.',
+                checking_session: 'Comprobando la sesión...',
+            },
+            login: {
+                title: 'Iniciar sesión',
+                email_label: 'Correo electrónico',
+                password_label: 'Contraseña',
+                submit: 'Iniciar sesión',
+                submitting: 'Iniciando sesión...',
+                switch_to_register: 'Registrarse',
+                no_account: '¿No tienes cuenta?',
+            },
+            register: {
+                title: 'Registrarse',
+                first_name_label: 'Nombre',
+                last_name_label: 'Apellido',
+                email_label: 'Correo electrónico',
+                password_label: 'Contraseña',
+                password_confirmation_label: 'Confirmar contraseña',
+                submit: 'Crear cuenta',
+                submitting: 'Creando cuenta...',
+                switch_to_login: 'Iniciar sesión',
+                already_have_account: '¿Ya tienes una cuenta?',
+            },
+            account: {
+                signed_in_as: 'Sesión iniciada como',
+                logout: 'Cerrar sesión',
+                back_to_editor: 'Volver al editor',
+            },
+            nav: {
+                sign_in: 'Iniciar sesión',
+                logout: 'Cerrar sesión',
+                loading: '...',
+            },
+            pages: {
+                login_title: 'FoxalDB — Iniciar sesión',
+                register_title: 'FoxalDB — Registrarse',
+                checking_session: 'Comprobando la sesión…',
+            },
+            errors: {
+                first_name_required: 'El nombre es obligatorio.',
+                last_name_required: 'El apellido es obligatorio.',
+                generic: 'Algo salió mal.',
+            },
+        },
+
         language_select: {
             change_language: 'Idioma',
         },
