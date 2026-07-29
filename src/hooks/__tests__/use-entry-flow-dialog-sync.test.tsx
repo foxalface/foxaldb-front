@@ -7,6 +7,8 @@ const openAuthDialog = vi.fn();
 const closeAuthDialog = vi.fn();
 const openCreateDiagramDialog = vi.fn();
 const closeCreateDiagramDialog = vi.fn();
+const openGuestDiagramMigrationDialog = vi.fn();
+const closeGuestDiagramMigrationDialog = vi.fn();
 
 vi.mock('@/hooks/use-dialog', () => ({
     useDialog: () => ({
@@ -14,6 +16,8 @@ vi.mock('@/hooks/use-dialog', () => ({
         closeAuthDialog,
         openCreateDiagramDialog,
         closeCreateDiagramDialog,
+        openGuestDiagramMigrationDialog,
+        closeGuestDiagramMigrationDialog,
     }),
 }));
 
@@ -23,6 +27,15 @@ describe('useEntryFlowDialogSync', () => {
         closeAuthDialog.mockClear();
         openCreateDiagramDialog.mockClear();
         closeCreateDiagramDialog.mockClear();
+        openGuestDiagramMigrationDialog.mockClear();
+        closeGuestDiagramMigrationDialog.mockClear();
+    });
+
+    it('opens guest migration dialog when entry flow requests guestMigration', () => {
+        renderHook(() => useEntryFlowDialogSync('guestMigration'));
+
+        expect(openGuestDiagramMigrationDialog).toHaveBeenCalledTimes(1);
+        expect(closeGuestDiagramMigrationDialog).not.toHaveBeenCalled();
     });
 
     it('opens auth dialog when entry flow requests auth', () => {

@@ -953,6 +953,24 @@ export const mr: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'स्थानिक डायग्राम आयात करायचा?',
+            description:
+                'या डिव्हाइसवर एक डायग्राम सेव्ह केले आहे. कुठूनही प्रवेश करण्यासाठी ते आपल्या खात्यात आयात करा.',
+            import: 'खात्यात आयात करा',
+            continue_without_import: 'आयात न करता सुरू ठेवा',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                'स्थानिक डायग्राम आयात करू शकलो नाही. स्थानिक प्रत साठवली आहे.',
+            activation_failed:
+                'डायग्राम तयार झाला पण उघडू शकला नाही. स्थानिक प्रत साठवली आहे.',
+            cleanup_failed:
+                'डायग्राम आयात झाला पण स्थानिक प्रत काढता आली नाही. ती मॅन्युअली हटवू शकता.',
+            check_failed: 'स्थानिक डायग्राम वाचू शकलो नाही.',
+        },
+
         language_select: {
             change_language: 'भाषा बदला',
         },

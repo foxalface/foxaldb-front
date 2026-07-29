@@ -13,6 +13,7 @@ import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/act
 import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
+import type { GuestDiagramMigrationDialogProps } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -85,6 +86,12 @@ export interface DialogContext {
     openAuthDialog: () => void;
     closeAuthDialog: () => void;
 
+    // Guest diagram migration dialog
+    openGuestDiagramMigrationDialog: (
+        params?: Omit<GuestDiagramMigrationDialogProps, 'dialog'>
+    ) => void;
+    closeGuestDiagramMigrationDialog: () => void;
+
     // Export image dialog
     openExportImageDialog: (
         params: Omit<ExportImageDialogProps, 'dialog'>
@@ -131,6 +138,8 @@ export const dialogContext = createContext<DialogContext>({
     closeStarUsDialog: emptyFn,
     openAuthDialog: emptyFn,
     closeAuthDialog: emptyFn,
+    openGuestDiagramMigrationDialog: emptyFn,
+    closeGuestDiagramMigrationDialog: emptyFn,
     openExportImageDialog: emptyFn,
     closeExportImageDialog: emptyFn,
     openExportDiagramDialog: emptyFn,

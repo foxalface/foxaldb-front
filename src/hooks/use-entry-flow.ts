@@ -6,6 +6,7 @@ import type { Diagram } from '@/lib/domain/diagram';
 import {
     entryFlowReducer,
     initialEntryFlowState,
+    selectEntryFlowAllowsLegacyAuthenticatedLoader,
     selectEntryFlowBlocking,
     selectEntryFlowDialog,
     selectEntryFlowReady,
@@ -14,6 +15,7 @@ import {
     type EntryFlowState,
     type RemoteDiagramSummary,
 } from '@/lib/entry-flow';
+import { useEntryFlowGuestMigration } from '@/hooks/use-entry-flow-guest-migration';
 
 const normalizeRouteDiagramId = (
     diagramId: string | undefined
@@ -30,6 +32,7 @@ export interface UseEntryFlowResult {
     dialog: EntryFlowDialog;
     isBlocking: boolean;
     isReady: boolean;
+    allowsLegacyAuthenticatedLoader: boolean;
     initialDiagram: Diagram | undefined;
     beginResolution: () => number;
     isResolutionCurrent: (token: number) => boolean;
@@ -47,6 +50,9 @@ export interface UseEntryFlowResult {
     notifyDiagramOpened: () => void;
     notifyDiagramOpenFailed: (messageKey?: string) => void;
     notifyGuestActiveDiagramDeleted: () => void;
+    notifyGuestMigrationLocalNotFound: () => void;
+    acceptGuestMigration: () => void;
+    declineGuestMigration: () => void;
     retry: () => void;
     reset: () => void;
     notifyLoggedOut: () => void;
@@ -127,6 +133,18 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         }
 
         const previousUserId = previousUserIdRef.current;
+
+        if (
+            previousUserId === null &&
+            userId !== null &&
+            sessionResolvedRef.current
+        ) {
+            invalidateResolution();
+            dispatchEvent({
+                type: 'GUEST_SESSION_AUTHENTICATED',
+                entrySource: 'login',
+            });
+        }
 
         if (
             previousUserId !== null &&
@@ -248,6 +266,18 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         dispatchEvent({ type: 'GUEST_ACTIVE_DIAGRAM_DELETED' });
     }, [dispatchEvent, invalidateResolution]);
 
+    const notifyGuestMigrationLocalNotFound = useCallback(() => {
+        dispatchEvent({ type: 'GUEST_MIGRATION_LOCAL_NOT_FOUND' });
+    }, [dispatchEvent]);
+
+    const acceptGuestMigration = useCallback(() => {
+        dispatchEvent({ type: 'GUEST_MIGRATION_ACCEPTED' });
+    }, [dispatchEvent]);
+
+    const declineGuestMigration = useCallback(() => {
+        dispatchEvent({ type: 'GUEST_MIGRATION_DECLINED' });
+    }, [dispatchEvent]);
+
     const retry = useCallback(() => {
         dispatchEvent({ type: 'RETRY' });
     }, [dispatchEvent]);
@@ -265,8 +295,19 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     const dialog = selectEntryFlowDialog(state);
     const isBlocking = selectEntryFlowBlocking(state);
     const isReady = selectEntryFlowReady(state);
+    const allowsLegacyAuthenticatedLoader =
+        selectEntryFlowAllowsLegacyAuthenticatedLoader(state);
 
     const { guestInitialDiagram } = useEntryFlowGuestResolution({
+        state,
+        isAuthenticated,
+        isAuthLoading: isLoading,
+        beginResolution,
+        isResolutionCurrent,
+        dispatchEvent,
+    });
+
+    useEntryFlowGuestMigration({
         state,
         isAuthenticated,
         isAuthLoading: isLoading,
@@ -280,6 +321,7 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         dialog,
         isBlocking,
         isReady,
+        allowsLegacyAuthenticatedLoader,
         initialDiagram: guestInitialDiagram,
         beginResolution,
         isResolutionCurrent,
@@ -297,6 +339,9 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         notifyDiagramOpened,
         notifyDiagramOpenFailed,
         notifyGuestActiveDiagramDeleted,
+        notifyGuestMigrationLocalNotFound,
+        acceptGuestMigration,
+        declineGuestMigration,
         retry,
         reset,
         notifyLoggedOut,

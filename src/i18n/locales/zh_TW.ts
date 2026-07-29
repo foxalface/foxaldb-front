@@ -916,6 +916,21 @@ export const zh_TW: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: '匯入本機圖表？',
+            description:
+                '此裝置上保存了一個圖表。將其匯入您的帳戶以便隨時存取。',
+            import: '匯入到帳戶',
+            continue_without_import: '不匯入並繼續',
+        },
+
+        guest_migration_errors: {
+            import_failed: '無法匯入本機圖表。本機副本已保留。',
+            activation_failed: '圖表已建立但無法開啟。本機副本已保留。',
+            cleanup_failed: '圖表已匯入但無法刪除本機副本。您可以手動刪除。',
+            check_failed: '無法讀取本機圖表。',
+        },
+
         language_select: {
             change_language: '變更語言',
         },

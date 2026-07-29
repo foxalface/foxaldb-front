@@ -108,6 +108,17 @@ describe('useDiagramLoader guest startup', () => {
         expect(openOpenDiagramDialog).not.toHaveBeenCalled();
         expect(openCreateDiagramDialog).not.toHaveBeenCalled();
     });
+
+    it('does not run when legacy loader is disabled', async () => {
+        authState.isAuthenticated = true;
+        getDiagrams.mockResolvedValue([{ id: '1' }]);
+
+        renderHook(() => useDiagramLoader({ enabled: false }));
+
+        await waitFor(() => {
+            expect(getDiagrams).not.toHaveBeenCalled();
+        });
+    });
 });
 
 describe('useDiagramLoader authenticated startup', () => {

@@ -943,6 +943,24 @@ export const fr: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'Importer le diagramme local ?',
+            description:
+                'Vous avez un diagramme enregistré sur cet appareil. Importez-le dans votre compte pour y accéder partout.',
+            import: 'Importer dans le compte',
+            continue_without_import: 'Continuer sans importer',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                "Impossible d'importer votre diagramme local. Votre copie locale a été conservée.",
+            activation_failed:
+                "Le diagramme a été créé mais n'a pas pu être ouvert. Votre copie locale a été conservée.",
+            cleanup_failed:
+                "Votre diagramme a été importé mais la copie locale n'a pas pu être supprimée. Vous pouvez la supprimer manuellement.",
+            check_failed: 'Impossible de lire votre diagramme local.',
+        },
+
         language_select: {
             change_language: 'Langue',
         },

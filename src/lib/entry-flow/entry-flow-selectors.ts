@@ -10,6 +10,8 @@ export const selectEntryFlowDialog = (
     switch (state.kind) {
         case 'awaitingGuestChoice':
             return 'auth';
+        case 'askingGuestMigration':
+            return 'guestMigration';
         case 'selectingRemoteDiagram':
             return 'openDiagram';
         case 'creatingDiagram':
@@ -22,7 +24,7 @@ export const selectEntryFlowDialog = (
 /**
  * True while the entry flow performs a blocking async operation.
  * False when an entry dialog intentionally awaits user input
- * (awaitingGuestChoice, selectingRemoteDiagram, creatingDiagram).
+ * (awaitingGuestChoice, askingGuestMigration, selectingRemoteDiagram, creatingDiagram).
  *
  * recoverableError returns false — the user chooses retry or logout;
  * the hook may still show a non-blocking error affordance.
@@ -31,6 +33,8 @@ export const selectEntryFlowBlocking = (state: EntryFlowState): boolean => {
     switch (state.kind) {
         case 'restoringSession':
         case 'checkingLocalDiagram':
+        case 'checkingGuestMigration':
+        case 'migratingGuestDiagram':
         case 'loadingRemoteDiagrams':
         case 'openingDiagram':
             return true;
@@ -45,3 +49,23 @@ export const selectEntryFlowBlocking = (state: EntryFlowState): boolean => {
  */
 export const selectEntryFlowReady = (state: EntryFlowState): boolean =>
     state.kind === 'ready';
+
+/**
+ * M1.5 bridge: legacy authenticated bootstrap in useDiagramLoader remains
+ * active only when guest migration is not in progress and migrated opening
+ * is not handled by the migration hook.
+ */
+export const selectEntryFlowAllowsLegacyAuthenticatedLoader = (
+    state: EntryFlowState
+): boolean => {
+    switch (state.kind) {
+        case 'checkingGuestMigration':
+        case 'askingGuestMigration':
+        case 'migratingGuestDiagram':
+            return false;
+        case 'openingDiagram':
+            return state.diagramSource !== 'migrated';
+        default:
+            return true;
+    }
+};

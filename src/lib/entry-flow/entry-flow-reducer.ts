@@ -17,12 +17,22 @@ const toAwaitingGuestChoice = (): EntryFlowState => ({
 const toRecoverableError = (
     error: EntryFlowError,
     entrySource: EntrySource,
-    openingContext?: OpeningDiagramContext
+    openingContext?: OpeningDiagramContext,
+    migrationContext?: {
+        localDiagramId: string;
+        remoteDiagramId?: string;
+    }
 ): EntryFlowState => ({
     kind: 'recoverableError',
     error,
     entrySource,
     openingContext,
+    migrationContext,
+});
+
+const toLoadingRemoteDiagrams = (entrySource: EntrySource): EntryFlowState => ({
+    kind: 'loadingRemoteDiagrams',
+    entrySource,
 });
 
 export const entryFlowReducer = (
@@ -58,10 +68,7 @@ export const entryFlowReducer = (
                 };
             }
 
-            return {
-                kind: 'loadingRemoteDiagrams',
-                entrySource: 'startup',
-            };
+            return toLoadingRemoteDiagrams('startup');
 
         case 'SESSION_UNAUTHENTICATED':
             if (state.kind !== 'restoringSession') {
@@ -96,9 +103,105 @@ export const entryFlowReducer = (
             }
 
             return {
-                kind: 'loadingRemoteDiagrams',
+                kind: 'checkingGuestMigration',
                 entrySource: event.entrySource,
             };
+
+        case 'GUEST_SESSION_AUTHENTICATED':
+            if (state.kind !== 'ready') {
+                return state;
+            }
+
+            return {
+                kind: 'checkingGuestMigration',
+                entrySource: event.entrySource,
+            };
+
+        case 'GUEST_MIGRATION_LOCAL_FOUND':
+            if (state.kind !== 'checkingGuestMigration') {
+                return state;
+            }
+
+            return {
+                kind: 'askingGuestMigration',
+                entrySource: state.entrySource,
+                localDiagramId: event.diagramId,
+            };
+
+        case 'GUEST_MIGRATION_LOCAL_NOT_FOUND':
+            if (state.kind !== 'checkingGuestMigration') {
+                return state;
+            }
+
+            return toLoadingRemoteDiagrams(state.entrySource);
+
+        case 'GUEST_MIGRATION_CHECK_FAILED':
+            if (state.kind !== 'checkingGuestMigration') {
+                return state;
+            }
+
+            return toRecoverableError(
+                {
+                    kind: 'guestMigrationCheck',
+                    messageKey: event.messageKey,
+                },
+                state.entrySource
+            );
+
+        case 'GUEST_MIGRATION_ACCEPTED':
+            if (state.kind !== 'askingGuestMigration') {
+                return state;
+            }
+
+            return {
+                kind: 'migratingGuestDiagram',
+                entrySource: state.entrySource,
+                localDiagramId: state.localDiagramId,
+            };
+
+        case 'GUEST_MIGRATION_DECLINED':
+            if (state.kind !== 'askingGuestMigration') {
+                return state;
+            }
+
+            return toLoadingRemoteDiagrams(state.entrySource);
+
+        case 'GUEST_MIGRATION_REMOTE_CREATED':
+            if (state.kind !== 'migratingGuestDiagram') {
+                return state;
+            }
+
+            return {
+                ...state,
+                remoteDiagramId: event.remoteDiagramId,
+            };
+
+        case 'GUEST_MIGRATION_SUCCEEDED':
+            if (state.kind !== 'migratingGuestDiagram') {
+                return state;
+            }
+
+            return {
+                kind: 'openingDiagram',
+                diagramId: event.remoteDiagramId,
+                diagramSource: 'migrated',
+                entrySource: state.entrySource,
+            };
+
+        case 'GUEST_MIGRATION_FAILED':
+            if (state.kind !== 'migratingGuestDiagram') {
+                return state;
+            }
+
+            return toLoadingRemoteDiagrams(state.entrySource);
+
+        case 'GUEST_MIGRATION_CLEANUP_FAILED':
+            if (state.kind !== 'migratingGuestDiagram') {
+                return state;
+            }
+
+            // Remote diagram is already active; local cleanup failed only.
+            return { kind: 'ready' };
 
         case 'LOCAL_DIAGRAM_FOUND':
             if (state.kind !== 'checkingLocalDiagram') {
@@ -239,11 +342,27 @@ export const entryFlowReducer = (
                 case 'localDiagramCheck':
                     return { kind: 'checkingLocalDiagram' };
 
-                case 'remoteDiagramLoad':
+                case 'guestMigrationCheck':
+                    if (
+                        state.entrySource !== 'login' &&
+                        state.entrySource !== 'registration'
+                    ) {
+                        return state;
+                    }
+
                     return {
-                        kind: 'loadingRemoteDiagrams',
+                        kind: 'checkingGuestMigration',
                         entrySource: state.entrySource,
                     };
+
+                case 'guestMigration':
+                    return toLoadingRemoteDiagrams(state.entrySource);
+
+                case 'guestMigrationCleanup':
+                    return toLoadingRemoteDiagrams(state.entrySource);
+
+                case 'remoteDiagramLoad':
+                    return toLoadingRemoteDiagrams(state.entrySource);
 
                 case 'diagramOpen':
                     if (state.openingContext === undefined) {

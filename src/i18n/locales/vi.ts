@@ -937,6 +937,24 @@ export const vi: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'Nhập sơ đồ cục bộ?',
+            description:
+                'Bạn có một sơ đồ được lưu trên thiết bị này. Hãy nhập vào tài khoản để truy cập từ mọi nơi.',
+            import: 'Nhập vào tài khoản',
+            continue_without_import: 'Tiếp tục không nhập',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                'Không thể nhập sơ đồ cục bộ. Bản sao cục bộ đã được giữ lại.',
+            activation_failed:
+                'Sơ đồ đã được tạo nhưng không mở được. Bản sao cục bộ đã được giữ lại.',
+            cleanup_failed:
+                'Sơ đồ đã được nhập nhưng không thể xóa bản sao cục bộ. Bạn có thể xóa thủ công.',
+            check_failed: 'Không thể đọc sơ đồ cục bộ.',
+        },
+
         language_select: {
             change_language: 'Ngôn ngữ',
         },

@@ -935,6 +935,24 @@ export const hr: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'Uvesti lokalni dijagram?',
+            description:
+                'Na ovom uređaju je spremljen dijagram. Uvezite ga u račun za pristup s bilo kojeg mjesta.',
+            import: 'Uvezi u račun',
+            continue_without_import: 'Nastavi bez uvoza',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                'Lokalni dijagram nije mogao biti uvezen. Lokalna kopija je sačuvana.',
+            activation_failed:
+                'Dijagram je stvoren ali se nije mogao otvoriti. Lokalna kopija je sačuvana.',
+            cleanup_failed:
+                'Dijagram je uvezen ali lokalna kopija nije uklonjena. Možete je ručno izbrisati.',
+            check_failed: 'Lokalni dijagram nije mogao biti pročitan.',
+        },
+
         language_select: {
             change_language: 'Jezik',
         },

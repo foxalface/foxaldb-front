@@ -916,6 +916,21 @@ export const zh_CN: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: '导入本地图表？',
+            description:
+                '此设备上保存了一个图表。将其导入您的账户以便随时访问。',
+            import: '导入到账户',
+            continue_without_import: '不导入并继续',
+        },
+
+        guest_migration_errors: {
+            import_failed: '无法导入本地图表。本地副本已保留。',
+            activation_failed: '图表已创建但无法打开。本地副本已保留。',
+            cleanup_failed: '图表已导入但无法删除本地副本。您可以手动删除。',
+            check_failed: '无法读取本地图表。',
+        },
+
         language_select: {
             change_language: '语言',
         },

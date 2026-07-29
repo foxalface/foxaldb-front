@@ -29,6 +29,9 @@ import { LaravelMigrationImportDialog } from '@/dialogs/laravel-migration-import
 import { LaravelMigrationDiffDialog } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
 import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
+import type { EntryFlowGuestMigrationActions } from '@/pages/editor-page/entry-flow-guest-migration-actions';
+import { GuestDiagramMigrationDialog } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
+import type { GuestDiagramMigrationDialogProps } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
 
 const CreateDiagramDialogLazy = lazy(() =>
     import('@/dialogs/create-diagram-dialog/create-diagram-dialog').then(
@@ -56,8 +59,16 @@ export const DialogProvider: React.FC<
     React.PropsWithChildren<{
         entryAuthActions?: EntryFlowAuthActions;
         entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
+        entryGuestMigrationActions?: EntryFlowGuestMigrationActions;
+        isGuestMigrationInProgress?: boolean;
     }>
-> = ({ children, entryAuthActions, entryCreateDiagramActions }) => {
+> = ({
+    children,
+    entryAuthActions,
+    entryCreateDiagramActions,
+    entryGuestMigrationActions,
+    isGuestMigrationInProgress = false,
+}) => {
     const [openNewDiagramDialog, setOpenNewDiagramDialog] = useState(false);
     const [newDiagramDialogParams, setNewDiagramDialogParams] =
         useState<Omit<CreateDiagramDialogProps, 'dialog'>>();
@@ -98,6 +109,14 @@ export const DialogProvider: React.FC<
 
     const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
     const [openAuthDialog, setOpenAuthDialog] = useState(false);
+    const [
+        openGuestDiagramMigrationDialog,
+        setOpenGuestDiagramMigrationDialog,
+    ] = useState(false);
+    const [
+        guestDiagramMigrationDialogParams,
+        setGuestDiagramMigrationDialogParams,
+    ] = useState<Omit<GuestDiagramMigrationDialogProps, 'dialog'>>();
 
     // Export image dialog
     const [openExportImageDialog, setOpenExportImageDialog] = useState(false);
@@ -285,6 +304,12 @@ export const DialogProvider: React.FC<
                 closeStarUsDialog: () => setOpenStarUsDialog(false),
                 openAuthDialog: () => setOpenAuthDialog(true),
                 closeAuthDialog: () => setOpenAuthDialog(false),
+                openGuestDiagramMigrationDialog: (params) => {
+                    setGuestDiagramMigrationDialogParams(params);
+                    setOpenGuestDiagramMigrationDialog(true);
+                },
+                closeGuestDiagramMigrationDialog: () =>
+                    setOpenGuestDiagramMigrationDialog(false),
                 closeExportImageDialog: () => setOpenExportImageDialog(false),
                 openExportImageDialog: openExportImageDialogHandler,
                 openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
@@ -337,6 +362,12 @@ export const DialogProvider: React.FC<
             <AuthDialog
                 dialog={{ open: openAuthDialog }}
                 entryAuthActions={entryAuthActions}
+            />
+            <GuestDiagramMigrationDialog
+                dialog={{ open: openGuestDiagramMigrationDialog }}
+                entryGuestMigrationActions={entryGuestMigrationActions}
+                isMigrating={isGuestMigrationInProgress}
+                {...guestDiagramMigrationDialogParams}
             />
             <ExportImageDialog
                 dialog={{ open: openExportImageDialog }}

@@ -92,12 +92,16 @@ vi.mock('@/pages/editor-page/use-diagram-operation-sync', () => ({
     useDiagramOperationSync: () => undefined,
 }));
 
-vi.mock('@/pages/editor-page/use-guest-diagram-migration', () => ({
-    useGuestDiagramMigration: () => undefined,
-}));
-
 vi.mock('@/lib/env', () => ({
     HIDE_CHARTDB_CLOUD: true,
+}));
+
+vi.mock('@/hooks/use-entry-flow-guest-resolution', () => ({
+    useEntryFlowGuestResolution: () => ({ guestInitialDiagram: undefined }),
+}));
+
+vi.mock('@/hooks/use-entry-flow-guest-migration', () => ({
+    useEntryFlowGuestMigration: () => undefined,
 }));
 
 function EntryGateProbe(): React.ReactElement {
@@ -312,7 +316,7 @@ describe('useEntryFlow', () => {
         });
 
         expect(result.current.state).toEqual({
-            kind: 'loadingRemoteDiagrams',
+            kind: 'checkingGuestMigration',
             entrySource: 'login',
         });
     });
@@ -332,7 +336,7 @@ describe('useEntryFlow', () => {
         });
 
         expect(result.current.state).toEqual({
-            kind: 'loadingRemoteDiagrams',
+            kind: 'checkingGuestMigration',
             entrySource: 'login',
         });
     });
@@ -352,7 +356,7 @@ describe('useEntryFlow', () => {
         });
 
         expect(result.current.state).toEqual({
-            kind: 'loadingRemoteDiagrams',
+            kind: 'checkingGuestMigration',
             entrySource: 'registration',
         });
     });
@@ -602,6 +606,7 @@ describe('useEntryFlow', () => {
 
         act(() => {
             result.current.notifyAuthenticationSucceeded('login');
+            result.current.notifyGuestMigrationLocalNotFound();
         });
         expect(result.current.state).toEqual({
             kind: 'loadingRemoteDiagrams',

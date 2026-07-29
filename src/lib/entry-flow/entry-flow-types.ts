@@ -11,13 +11,21 @@ export type EntrySource =
     | 'guestContinuation';
 
 /** Origin of the diagram being opened. */
-export type DiagramSource = 'local' | 'remote' | 'created' | 'directRoute';
+export type DiagramSource =
+    | 'local'
+    | 'remote'
+    | 'created'
+    | 'directRoute'
+    | 'migrated';
 
 export type EntryFlowErrorKind =
     | 'sessionRestore'
     | 'localDiagramCheck'
     | 'remoteDiagramLoad'
-    | 'diagramOpen';
+    | 'diagramOpen'
+    | 'guestMigrationCheck'
+    | 'guestMigration'
+    | 'guestMigrationCleanup';
 
 /** Serializable domain error — no raw Error instances or translated text. */
 export interface EntryFlowError {
@@ -30,6 +38,11 @@ export interface OpeningDiagramContext {
     diagramSource: DiagramSource;
 }
 
+export interface GuestMigrationContext {
+    localDiagramId: string;
+    remoteDiagramId?: string;
+}
+
 /** Minimal remote diagram identity for selection UI. Extensible without raw ID arrays. */
 export interface RemoteDiagramSummary {
     id: string;
@@ -39,6 +52,21 @@ export type EntryFlowState =
     | { kind: 'restoringSession' }
     | { kind: 'awaitingGuestChoice' }
     | { kind: 'checkingLocalDiagram' }
+    | {
+          kind: 'checkingGuestMigration';
+          entrySource: 'login' | 'registration';
+      }
+    | {
+          kind: 'askingGuestMigration';
+          entrySource: EntrySource;
+          localDiagramId: string;
+      }
+    | {
+          kind: 'migratingGuestDiagram';
+          entrySource: EntrySource;
+          localDiagramId: string;
+          remoteDiagramId?: string;
+      }
     | { kind: 'loadingRemoteDiagrams'; entrySource: EntrySource }
     | {
           kind: 'selectingRemoteDiagram';
@@ -58,6 +86,7 @@ export type EntryFlowState =
           error: EntryFlowError;
           entrySource: EntrySource;
           openingContext?: OpeningDiagramContext;
+          migrationContext?: GuestMigrationContext;
       };
 
 export type EntryFlowEvent =
@@ -72,6 +101,19 @@ export type EntryFlowEvent =
           type: 'AUTHENTICATION_SUCCEEDED';
           entrySource: 'login' | 'registration';
       }
+    | {
+          type: 'GUEST_SESSION_AUTHENTICATED';
+          entrySource: 'login' | 'registration';
+      }
+    | { type: 'GUEST_MIGRATION_LOCAL_FOUND'; diagramId: string }
+    | { type: 'GUEST_MIGRATION_LOCAL_NOT_FOUND' }
+    | { type: 'GUEST_MIGRATION_CHECK_FAILED'; messageKey?: string }
+    | { type: 'GUEST_MIGRATION_ACCEPTED' }
+    | { type: 'GUEST_MIGRATION_DECLINED' }
+    | { type: 'GUEST_MIGRATION_REMOTE_CREATED'; remoteDiagramId: string }
+    | { type: 'GUEST_MIGRATION_SUCCEEDED'; remoteDiagramId: string }
+    | { type: 'GUEST_MIGRATION_FAILED'; messageKey?: string }
+    | { type: 'GUEST_MIGRATION_CLEANUP_FAILED'; remoteDiagramId: string }
     | { type: 'LOGGED_OUT' }
     | { type: 'REMOTE_DIAGRAMS_FOUND'; diagrams: RemoteDiagramSummary[] }
     | { type: 'NO_REMOTE_DIAGRAMS' }
@@ -84,4 +126,9 @@ export type EntryFlowEvent =
     | { type: 'RETRY' }
     | { type: 'RESET' };
 
-export type EntryFlowDialog = 'auth' | 'openDiagram' | 'createDiagram' | null;
+export type EntryFlowDialog =
+    | 'auth'
+    | 'openDiagram'
+    | 'createDiagram'
+    | 'guestMigration'
+    | null;

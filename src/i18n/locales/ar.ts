@@ -930,6 +930,24 @@ export const ar: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'استيراد المخطط المحلي؟',
+            description:
+                'لديك مخطط محفوظ على هذا الجهاز. استورده إلى حسابك للوصول إليه من أي مكان.',
+            import: 'استيراد إلى الحساب',
+            continue_without_import: 'المتابعة دون استيراد',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                'تعذر استيراد المخطط المحلي. تم الاحتفاظ بالنسخة المحلية.',
+            activation_failed:
+                'تم إنشاء المخطط ولكن تعذر فتحه. تم الاحتفاظ بالنسخة المحلية.',
+            cleanup_failed:
+                'تم استيراد المخطط ولكن تعذر إزالة النسخة المحلية. يمكنك حذفها يدويًا.',
+            check_failed: 'تعذر قراءة المخطط المحلي.',
+        },
+
         language_select: {
             change_language: 'اللغة',
         },

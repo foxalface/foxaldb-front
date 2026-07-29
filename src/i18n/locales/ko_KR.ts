@@ -935,6 +935,24 @@ export const ko_KR: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: '로컬 다이어그램을 가져오시겠습니까?',
+            description:
+                '이 기기에 저장된 다이어그램이 있습니다. 계정으로 가져와 어디서나 접근하세요.',
+            import: '계정으로 가져오기',
+            continue_without_import: '가져오지 않고 계속',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                '로컬 다이어그램을 가져올 수 없습니다. 로컬 사본이 보존되었습니다.',
+            activation_failed:
+                '다이어그램이 생성되었지만 열 수 없습니다. 로컬 사본이 보존되었습니다.',
+            cleanup_failed:
+                '다이어그램은 가져왔지만 로컬 사본을 제거할 수 없습니다. 수동으로 삭제할 수 있습니다.',
+            check_failed: '로컬 다이어그램을 읽을 수 없습니다.',
+        },
+
         language_select: {
             change_language: '언어',
         },

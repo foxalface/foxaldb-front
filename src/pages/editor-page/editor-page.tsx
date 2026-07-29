@@ -30,11 +30,11 @@ import { useDiagramChannelLifecycle } from './use-diagram-channel-lifecycle';
 import { useDiagramPresenceActivity } from './use-diagram-presence-activity';
 import { useDiagramRealtime } from './use-diagram-realtime';
 import { useDiagramReconnectRefresh } from './use-diagram-reconnect-refresh';
-import { useGuestDiagramMigration } from './use-guest-diagram-migration';
 import { useEntryFlow, type UseEntryFlowResult } from '@/hooks/use-entry-flow';
 import { EntryFlowDialogSyncMount } from './entry-flow-dialog-sync-mount';
 import type { EntryFlowActiveDiagramDeletionActions } from './entry-flow-active-diagram-deletion-actions';
 import type { EntryFlowCreateDiagramActions } from './entry-flow-create-diagram-actions';
+import type { EntryFlowGuestMigrationActions } from './entry-flow-guest-migration-actions';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
@@ -64,7 +64,9 @@ const EditorPageContent: React.FC<
     const { isMd: isDesktop } = useBreakpoint('md');
     const { starUsDialogLastOpen, setStarUsDialogLastOpen, githubRepoOpened } =
         useLocalConfig();
-    const { initialDiagram: loaderInitialDiagram } = useDiagramLoader();
+    const { initialDiagram: loaderInitialDiagram } = useDiagramLoader({
+        enabled: entryFlow.allowsLegacyAuthenticatedLoader,
+    });
     const initialDiagram = entryFlow.initialDiagram ?? loaderInitialDiagram;
     useDiagramAutosave();
     useDiagramAccessListener();
@@ -73,7 +75,6 @@ const EditorPageContent: React.FC<
     useDiagramRealtime();
     useDiagramReconnectRefresh();
     useDiagramOperationSync();
-    useGuestDiagramMigration();
 
     useEffect(() => {
         if (HIDE_CHARTDB_CLOUD) {
@@ -188,6 +189,20 @@ const EditorPageComponent: React.FC = () => {
         [entryFlow]
     );
 
+    const entryGuestMigrationActions = useMemo(
+        (): EntryFlowGuestMigrationActions | undefined =>
+            entryFlow.dialog === 'guestMigration'
+                ? {
+                      onAcceptMigration: entryFlow.acceptGuestMigration,
+                      onDeclineMigration: entryFlow.declineGuestMigration,
+                  }
+                : undefined,
+        [entryFlow]
+    );
+
+    const isGuestMigrationInProgress =
+        entryFlow.state.kind === 'migratingGuestDiagram';
+
     const onActiveDiagramDeleted = useCallback(() => {
         entryFlow.notifyGuestActiveDiagramDeleted();
     }, [entryFlow]);
@@ -196,6 +211,8 @@ const EditorPageComponent: React.FC = () => {
         <DialogProvider
             entryAuthActions={entryAuthActions}
             entryCreateDiagramActions={entryCreateDiagramActions}
+            entryGuestMigrationActions={entryGuestMigrationActions}
+            isGuestMigrationInProgress={isGuestMigrationInProgress}
         >
             <EntryFlowDialogSyncMount entryFlowDialog={entryFlow.dialog} />
             <KeyboardShortcutsProvider>

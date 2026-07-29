@@ -929,6 +929,24 @@ export const en = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'Import local diagram?',
+            description:
+                'You have a diagram saved on this device. Import it into your account to access it from anywhere.',
+            import: 'Import to account',
+            continue_without_import: 'Continue without importing',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                'Could not import your local diagram. Your local copy was preserved.',
+            activation_failed:
+                'The diagram was created but could not be opened. Your local copy was preserved.',
+            cleanup_failed:
+                'Your diagram was imported but the local copy could not be removed. You can delete it manually.',
+            check_failed: 'Could not read your local diagram.',
+        },
+
         language_select: {
             change_language: 'Language',
         },

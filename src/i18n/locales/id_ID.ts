@@ -941,6 +941,24 @@ export const id_ID: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'Impor diagram lokal?',
+            description:
+                'Anda memiliki diagram yang disimpan di perangkat ini. Impor ke akun untuk mengakses dari mana saja.',
+            import: 'Impor ke akun',
+            continue_without_import: 'Lanjut tanpa mengimpor',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                'Tidak dapat mengimpor diagram lokal. Salinan lokal tetap disimpan.',
+            activation_failed:
+                'Diagram dibuat tetapi tidak dapat dibuka. Salinan lokal tetap disimpan.',
+            cleanup_failed:
+                'Diagram diimpor tetapi salinan lokal tidak dapat dihapus. Anda dapat menghapusnya secara manual.',
+            check_failed: 'Tidak dapat membaca diagram lokal.',
+        },
+
         language_select: {
             change_language: 'Bahasa',
         },

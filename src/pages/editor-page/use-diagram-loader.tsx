@@ -17,7 +17,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export const useDiagramLoader = () => {
+export const useDiagramLoader = ({
+    enabled = true,
+}: {
+    enabled?: boolean;
+} = {}) => {
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config } = useConfig();
@@ -38,7 +42,7 @@ export const useDiagramLoader = () => {
     const currentDiagramLoadingRef = useRef<string | undefined>(undefined);
 
     useEffect(() => {
-        if (!config || isAuthLoading) {
+        if (!enabled || !config || isAuthLoading) {
             return;
         }
 
@@ -117,6 +121,7 @@ export const useDiagramLoader = () => {
 
         loadDefaultDiagram();
     }, [
+        enabled,
         diagramId,
         openCreateDiagramDialog,
         openOpenDiagramDialog,

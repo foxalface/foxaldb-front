@@ -946,6 +946,24 @@ export const pt_BR: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'Importar diagrama local?',
+            description:
+                'Você tem um diagrama salvo neste dispositivo. Importe para sua conta para acessar de qualquer lugar.',
+            import: 'Importar para a conta',
+            continue_without_import: 'Continuar sem importar',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                'Não foi possível importar seu diagrama local. A cópia local foi preservada.',
+            activation_failed:
+                'O diagrama foi criado, mas não pôde ser aberto. A cópia local foi preservada.',
+            cleanup_failed:
+                'Seu diagrama foi importado, mas a cópia local não pôde ser removida. Você pode excluí-la manualmente.',
+            check_failed: 'Não foi possível ler seu diagrama local.',
+        },
+
         language_select: {
             change_language: 'Idioma',
         },

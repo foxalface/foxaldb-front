@@ -10,6 +10,17 @@ const allStates: EntryFlowState[] = [
     { kind: 'restoringSession' },
     { kind: 'awaitingGuestChoice' },
     { kind: 'checkingLocalDiagram' },
+    { kind: 'checkingGuestMigration', entrySource: 'login' },
+    {
+        kind: 'askingGuestMigration',
+        entrySource: 'login',
+        localDiagramId: 'guest-1',
+    },
+    {
+        kind: 'migratingGuestDiagram',
+        entrySource: 'login',
+        localDiagramId: 'guest-1',
+    },
     { kind: 'loadingRemoteDiagrams', entrySource: 'startup' },
     {
         kind: 'selectingRemoteDiagram',
@@ -68,6 +79,18 @@ describe('selectEntryFlowDialog', () => {
         }
     });
 
+    it('only askingGuestMigration derives guestMigration dialog', () => {
+        for (const state of allStates) {
+            const dialog = selectEntryFlowDialog(state);
+
+            if (state.kind === 'askingGuestMigration') {
+                expect(dialog).toBe('guestMigration');
+            } else {
+                expect(dialog).not.toBe('guestMigration');
+            }
+        }
+    });
+
     it('no state derives more than one dialog', () => {
         for (const state of allStates) {
             const dialog = selectEntryFlowDialog(state);
@@ -75,9 +98,12 @@ describe('selectEntryFlowDialog', () => {
             if (dialog === null) {
                 expect(dialog).toBeNull();
             } else {
-                expect(['auth', 'openDiagram', 'createDiagram']).toContain(
-                    dialog
-                );
+                expect([
+                    'auth',
+                    'openDiagram',
+                    'createDiagram',
+                    'guestMigration',
+                ]).toContain(dialog);
             }
         }
     });
@@ -87,6 +113,12 @@ describe('selectEntryFlowBlocking', () => {
     const blockingStates: EntryFlowState[] = [
         { kind: 'restoringSession' },
         { kind: 'checkingLocalDiagram' },
+        { kind: 'checkingGuestMigration', entrySource: 'login' },
+        {
+            kind: 'migratingGuestDiagram',
+            entrySource: 'login',
+            localDiagramId: 'guest-1',
+        },
         { kind: 'loadingRemoteDiagrams', entrySource: 'startup' },
         {
             kind: 'openingDiagram',

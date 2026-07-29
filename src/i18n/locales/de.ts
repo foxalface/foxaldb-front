@@ -950,6 +950,24 @@ export const de: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'Lokales Diagramm importieren?',
+            description:
+                'Sie haben ein Diagramm auf diesem Gerät gespeichert. Importieren Sie es in Ihr Konto, um von jedem Ort darauf zuzugreifen.',
+            import: 'In Konto importieren',
+            continue_without_import: 'Ohne Import fortfahren',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                'Das lokale Diagramm konnte nicht importiert werden. Ihre lokale Kopie wurde beibehalten.',
+            activation_failed:
+                'Das Diagramm wurde erstellt, konnte aber nicht geöffnet werden. Ihre lokale Kopie wurde beibehalten.',
+            cleanup_failed:
+                'Ihr Diagramm wurde importiert, aber die lokale Kopie konnte nicht entfernt werden. Sie können sie manuell löschen.',
+            check_failed: 'Das lokale Diagramm konnte nicht gelesen werden.',
+        },
+
         language_select: {
             change_language: 'Sprache',
         },

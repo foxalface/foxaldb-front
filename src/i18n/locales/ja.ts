@@ -944,6 +944,24 @@ export const ja: LanguageTranslation = {
             },
         },
 
+        guest_migration_dialog: {
+            title: 'ローカル図をインポートしますか？',
+            description:
+                'このデバイスに保存された図があります。アカウントにインポートしてどこからでもアクセスできます。',
+            import: 'アカウントにインポート',
+            continue_without_import: 'インポートせずに続行',
+        },
+
+        guest_migration_errors: {
+            import_failed:
+                'ローカル図をインポートできませんでした。ローカルコピーは保持されています。',
+            activation_failed:
+                '図は作成されましたが開けませんでした。ローカルコピーは保持されています。',
+            cleanup_failed:
+                '図はインポートされましたがローカルコピーを削除できませんでした。手動で削除できます。',
+            check_failed: 'ローカル図を読み取れませんでした。',
+        },
+
         language_select: {
             change_language: '言語',
         },

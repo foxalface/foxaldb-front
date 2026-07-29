@@ -198,14 +198,14 @@ describe('entryFlowReducer — guest', () => {
 describe('entryFlowReducer — authenticated', () => {
     const awaitingGuest: EntryFlowState = { kind: 'awaitingGuestChoice' };
 
-    it('authentication success → loadingRemoteDiagrams', () => {
+    it('authentication success → checkingGuestMigration', () => {
         const state = reduce(awaitingGuest, {
             type: 'AUTHENTICATION_SUCCEEDED',
             entrySource: 'login',
         });
 
         expect(state).toEqual({
-            kind: 'loadingRemoteDiagrams',
+            kind: 'checkingGuestMigration',
             entrySource: 'login',
         });
     });
