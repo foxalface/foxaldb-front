@@ -63,6 +63,7 @@ export const useCommentEditSession = ({
 
     const updateInFlightRef = useRef(false);
     const isMountedRef = useRef(true);
+    const baselineBodyRef = useRef(comment.body);
     const baselineUpdatedAtRef = useRef(comment.updatedAt);
     const latestUpdatedAtRef = useRef(comment.updatedAt);
     const commentSnapshotRef = useRef(comment);
@@ -95,6 +96,7 @@ export const useCommentEditSession = ({
             diagramId,
             generation: sessionRef.current.generation + 1,
         };
+        baselineBodyRef.current = latest.body;
         baselineUpdatedAtRef.current = latest.updatedAt;
         latestUpdatedAtRef.current = latest.updatedAt;
         setBody(latest.body);
@@ -107,12 +109,24 @@ export const useCommentEditSession = ({
 
     useEffect(() => {
         if (
-            comment.updatedAt !== baselineUpdatedAtRef.current &&
-            !updateInFlightRef.current
+            comment.updatedAt === baselineUpdatedAtRef.current ||
+            updateInFlightRef.current
         ) {
-            setShowRemoteWarning(true);
+            return;
         }
-    }, [comment.updatedAt]);
+
+        const latest = commentSnapshotRef.current;
+
+        if (body === baselineBodyRef.current) {
+            setBody(latest.body);
+            baselineBodyRef.current = latest.body;
+            baselineUpdatedAtRef.current = latest.updatedAt;
+            setShowRemoteWarning(false);
+            return;
+        }
+
+        setShowRemoteWarning(true);
+    }, [comment.updatedAt, body]);
 
     const trimmedBody = body.trim();
     const characterCount = countUnicodeCharacters(trimmedBody);

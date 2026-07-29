@@ -88,6 +88,36 @@ describe('useCommentEditSession', () => {
         expect(result.current.canSave).toBe(true);
     });
 
+    it('tracks a clean remote update without warning', () => {
+        let comment = baseComment({
+            body: 'Original body',
+            updatedAt: '2026-07-22T10:00:00.000Z',
+        });
+        const { result, rerender } = renderHook(
+            ({ comment: next }) =>
+                useCommentEditSession({
+                    comment: next,
+                    diagramId: '42',
+                    onCancel: vi.fn(),
+                    onSaved: vi.fn(),
+                    onRequestFocus: vi.fn(),
+                }),
+            { initialProps: { comment } }
+        );
+
+        expect(result.current.body).toBe('Original body');
+        expect(result.current.showRemoteWarning).toBe(false);
+
+        comment = baseComment({
+            body: 'Remote body',
+            updatedAt: '2026-07-22T11:00:00.000Z',
+        });
+        rerender({ comment });
+
+        expect(result.current.body).toBe('Remote body');
+        expect(result.current.showRemoteWarning).toBe(false);
+    });
+
     it('resets draft on identity change but preserves draft on same-identity remote update', () => {
         let comment = baseComment({ body: 'Local base' });
         const { result, rerender } = renderHook(
