@@ -4,6 +4,7 @@ import { Button } from '@/components/button/button';
 import { Label } from '@/components/label/label';
 import { Textarea } from '@/components/textarea/textarea';
 import { useCommentMutations } from '@/hooks/use-comment-mutations';
+import { countUnicodeCharacters } from '@/lib/comments/count-unicode-characters';
 import type {
     DiagramComment,
     DiagramCommentTarget,
@@ -11,13 +12,6 @@ import type {
 
 // Keep in sync with backend DiagramCommentController validation.
 const MAX_BODY_LENGTH = 2000;
-
-/**
- * Count Unicode code points (matches Laravel `max:2000` / mb_strlen),
- * not UTF-16 code units and not grapheme clusters.
- */
-const countUnicodeCharacters = (value: string): number =>
-    Array.from(value).length;
 
 interface ComposerScope {
     diagramId: string;
