@@ -115,4 +115,79 @@ describe('normalizeDiagramCommentFromApi', () => {
             body
         );
     });
+
+    it('rejects a malformed author', () => {
+        expect(() =>
+            normalizeDiagramCommentFromApi(
+                baseDto({
+                    user: {
+                        id: 7,
+                        first_name: '',
+                        last_name: '',
+                        full_name: '',
+                    },
+                })
+            )
+        ).toThrow('Invalid diagram comment payload: user is malformed');
+    });
+
+    it('rejects a malformed target type', () => {
+        expect(() =>
+            normalizeDiagramCommentFromApi(
+                baseDto({
+                    target_type: 'note' as DiagramCommentDto['target_type'],
+                })
+            )
+        ).toThrow('Invalid diagram comment payload: target_type is invalid');
+    });
+
+    it('rejects a diagram target with a non-null target_id', () => {
+        expect(() =>
+            normalizeDiagramCommentFromApi(
+                baseDto({
+                    target_type: 'diagram',
+                    target_id: 'should-be-null',
+                })
+            )
+        ).toThrow(
+            'Invalid diagram comment payload: target_id is inconsistent with target_type'
+        );
+    });
+
+    it('rejects an entity target with an empty target_id', () => {
+        expect(() =>
+            normalizeDiagramCommentFromApi(
+                baseDto({
+                    target_type: 'table',
+                    target_id: '',
+                })
+            )
+        ).toThrow(
+            'Invalid diagram comment payload: target_id is inconsistent with target_type'
+        );
+    });
+
+    it('rejects a malformed comment id', () => {
+        expect(() =>
+            normalizeDiagramCommentFromApi(
+                baseDto({ id: Number.NaN as unknown as number })
+            )
+        ).toThrow(
+            'Invalid diagram comment payload: id must be a finite integer'
+        );
+    });
+
+    it('rejects malformed timestamps', () => {
+        expect(() =>
+            normalizeDiagramCommentFromApi(baseDto({ created_at: '' }))
+        ).toThrow(
+            'Invalid diagram comment payload: created_at must be a non-empty string'
+        );
+
+        expect(() =>
+            normalizeDiagramCommentFromApi(baseDto({ updated_at: '' }))
+        ).toThrow(
+            'Invalid diagram comment payload: updated_at must be a non-empty string'
+        );
+    });
 });

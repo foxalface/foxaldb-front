@@ -9,7 +9,10 @@ import {
     EMPTY_COMMENTS,
     selectAllComments,
     selectCommentById,
+    selectCommentCount,
     selectCommentsForTarget,
+    selectDiagramComments,
+    selectTargetCommentCount,
 } from '../comment-selectors';
 import type { DiagramComment } from '../comment-types';
 
@@ -103,6 +106,60 @@ describe('commentsReducer', () => {
 
         expect(state.byId.size).toBe(1);
         expect(state.byId.get(1)?.body).toBe('second');
+    });
+
+    it('LOAD_STARTED activates a diagram and clears comments when switching diagrams', () => {
+        const loaded = loadSucceeded(initialCommentsState(), [
+            comment({ id: 1 }),
+        ]);
+
+        const loadingNewDiagram = commentsReducer(loaded, {
+            type: 'LOAD_STARTED',
+            diagramId: '99',
+            generation: 2,
+        });
+
+        expect(loadingNewDiagram.diagramId).toBe('99');
+        expect(loadingNewDiagram.status).toBe('loading');
+        expect(loadingNewDiagram.error).toBeNull();
+        expect(loadingNewDiagram.loadGeneration).toBe(2);
+        expect(loadingNewDiagram.byId.size).toBe(0);
+        expect(loadingNewDiagram.byId).not.toBe(loaded.byId);
+    });
+
+    it('LOAD_STARTED keeps byId when reloading the same diagram', () => {
+        const loaded = loadSucceeded(initialCommentsState(), [
+            comment({ id: 1 }),
+        ]);
+
+        const reloading = commentsReducer(loaded, {
+            type: 'LOAD_STARTED',
+            diagramId: '42',
+            generation: 2,
+        });
+
+        expect(reloading.byId).toBe(loaded.byId);
+        expect(reloading.byId.size).toBe(1);
+    });
+
+    it('LOAD_FAILED stores the error for the active generation', () => {
+        const loading = commentsReducer(initialCommentsState(), {
+            type: 'LOAD_STARTED',
+            diagramId: '42',
+            generation: 1,
+        });
+        const error = new Error('network');
+
+        const state = commentsReducer(loading, {
+            type: 'LOAD_FAILED',
+            diagramId: '42',
+            generation: 1,
+            error,
+        });
+
+        expect(state.status).toBe('error');
+        expect(state.error).toBe(error);
+        expect(state.byId.size).toBe(0);
     });
 
     it('ignores stale LOAD_SUCCEEDED and LOAD_FAILED responses', () => {
@@ -567,5 +624,113 @@ describe('comment selectors', () => {
 
         expect(Array.from(state.byId.keys())).toEqual(keysBefore);
         expect(selectAllComments(state).map((item) => item.id)).toEqual([1, 2]);
+    });
+
+    it('selectDiagramComments returns only diagram-level comments', () => {
+        const state = loadSucceeded(initialCommentsState(), [
+            comment({
+                id: 1,
+                targetType: 'diagram',
+                targetId: null,
+            }),
+            comment({
+                id: 2,
+                targetType: 'table',
+                targetId: 'users',
+            }),
+        ]);
+
+        expect(selectDiagramComments(state).map((item) => item.id)).toEqual([
+            1,
+        ]);
+    });
+
+    it('selectCommentCount returns total comments in byId', () => {
+        const state = loadSucceeded(initialCommentsState(), [
+            comment({ id: 1 }),
+            comment({ id: 2 }),
+        ]);
+
+        expect(selectCommentCount(state)).toBe(2);
+        expect(selectCommentCount(initialCommentsState())).toBe(0);
+    });
+
+    it('selectTargetCommentCount counts only matching targets', () => {
+        const state = loadSucceeded(initialCommentsState(), [
+            comment({
+                id: 1,
+                targetType: 'table',
+                targetId: 'shared-id',
+            }),
+            comment({
+                id: 2,
+                targetType: 'field',
+                targetId: 'shared-id',
+            }),
+            comment({
+                id: 3,
+                targetType: 'table',
+                targetId: 'shared-id',
+            }),
+        ]);
+
+        expect(
+            selectTargetCommentCount(state, {
+                targetType: 'table',
+                targetId: 'shared-id',
+            })
+        ).toBe(2);
+        expect(
+            selectTargetCommentCount(state, {
+                targetType: 'field',
+                targetId: 'shared-id',
+            })
+        ).toBe(1);
+        expect(
+            selectTargetCommentCount(state, {
+                targetType: 'relationship',
+                targetId: 'shared-id',
+            })
+        ).toBe(0);
+    });
+
+    it('partitioned target filters remain collision-safe across entity types', () => {
+        const sharedId = 'shared-id';
+        const state = loadSucceeded(initialCommentsState(), [
+            comment({
+                id: 1,
+                targetType: 'table',
+                targetId: sharedId,
+            }),
+            comment({
+                id: 2,
+                targetType: 'field',
+                targetId: sharedId,
+            }),
+            comment({
+                id: 3,
+                targetType: 'relationship',
+                targetId: sharedId,
+            }),
+        ]);
+
+        expect(
+            selectCommentsForTarget(state, {
+                targetType: 'table',
+                targetId: sharedId,
+            }).map((item) => item.id)
+        ).toEqual([1]);
+        expect(
+            selectCommentsForTarget(state, {
+                targetType: 'field',
+                targetId: sharedId,
+            }).map((item) => item.id)
+        ).toEqual([2]);
+        expect(
+            selectCommentsForTarget(state, {
+                targetType: 'relationship',
+                targetId: sharedId,
+            }).map((item) => item.id)
+        ).toEqual([3]);
     });
 });

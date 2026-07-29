@@ -304,5 +304,38 @@ describe('diagram-comments API', () => {
 
             await expect(listDiagramComments('42')).rejects.toBe(error);
         });
+
+        it('rejects malformed list responses during normalization', async () => {
+            apiRequestMock.mockResolvedValueOnce({
+                data: [
+                    sampleDto({
+                        target_type: 'table',
+                        target_id: null,
+                    }),
+                ],
+            });
+
+            await expect(listDiagramComments('42')).rejects.toThrow(
+                'Invalid diagram comment payload: target_id is inconsistent with target_type'
+            );
+        });
+
+        it('rejects malformed create responses during normalization', async () => {
+            apiRequestMock.mockResolvedValueOnce(
+                sampleDto({
+                    id: Number.NaN as unknown as number,
+                })
+            );
+
+            await expect(
+                createDiagramComment('42', {
+                    targetType: 'diagram',
+                    targetId: null,
+                    body: 'Note',
+                })
+            ).rejects.toThrow(
+                'Invalid diagram comment payload: id must be a finite integer'
+            );
+        });
     });
 });

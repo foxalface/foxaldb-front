@@ -82,3 +82,36 @@ export const selectCommentById = (
     state: CommentsState,
     commentId: number
 ): DiagramComment | undefined => state.byId.get(commentId);
+
+export const selectDiagramComments = (
+    state: CommentsState
+): ReadonlyArray<DiagramComment> =>
+    selectCommentsForTarget(state, {
+        targetType: 'diagram',
+        targetId: null,
+    });
+
+export const selectCommentCount = (state: CommentsState): number =>
+    state.byId.size;
+
+export const selectTargetCommentCount = (
+    state: CommentsState,
+    target: DiagramCommentTarget
+): number => {
+    if (state.byId.size === 0) {
+        return 0;
+    }
+
+    let count = 0;
+
+    for (const comment of state.byId.values()) {
+        if (
+            comment.targetType === target.targetType &&
+            comment.targetId === target.targetId
+        ) {
+            count += 1;
+        }
+    }
+
+    return count;
+};
