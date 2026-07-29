@@ -217,6 +217,16 @@ export const entryFlowReducer = (
                 }
             );
 
+        case 'GUEST_ACTIVE_DIAGRAM_DELETED':
+            if (state.kind !== 'ready') {
+                return state;
+            }
+
+            return {
+                kind: 'creatingDiagram',
+                entrySource: 'guestContinuation',
+            };
+
         case 'RETRY':
             if (state.kind !== 'recoverableError') {
                 return state;

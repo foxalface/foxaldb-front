@@ -143,6 +143,56 @@ describe('entryFlowReducer — guest', () => {
 
         expect(state).toEqual({ kind: 'checkingLocalDiagram' });
     });
+
+    it('guest active diagram deleted from ready → creatingDiagram with guestContinuation', () => {
+        const state = reduce(
+            { kind: 'ready' },
+            { type: 'GUEST_ACTIVE_DIAGRAM_DELETED' }
+        );
+
+        expect(state).toEqual({
+            kind: 'creatingDiagram',
+            entrySource: 'guestContinuation',
+        });
+    });
+
+    it('guest active diagram deleted is ignored outside ready', () => {
+        const states: EntryFlowState[] = [
+            { kind: 'awaitingGuestChoice' },
+            { kind: 'checkingLocalDiagram' },
+            { kind: 'creatingDiagram', entrySource: 'guestContinuation' },
+            {
+                kind: 'openingDiagram',
+                diagramId: 'guest-1',
+                diagramSource: 'local',
+                entrySource: 'guestContinuation',
+            },
+            {
+                kind: 'recoverableError',
+                error: { kind: 'diagramOpen' },
+                entrySource: 'guestContinuation',
+            },
+        ];
+
+        for (const state of states) {
+            expect(
+                reduce(state, { type: 'GUEST_ACTIVE_DIAGRAM_DELETED' })
+            ).toEqual(state);
+        }
+    });
+
+    it('replacement diagram after guest deletion follows DIAGRAM_CREATED → openingDiagram → ready', () => {
+        const state = reduceChain(
+            [
+                { type: 'GUEST_ACTIVE_DIAGRAM_DELETED' },
+                { type: 'DIAGRAM_CREATED', diagramId: 'guest-new' },
+                { type: 'DIAGRAM_OPENED' },
+            ],
+            { kind: 'ready' }
+        );
+
+        expect(state).toEqual({ kind: 'ready' });
+    });
 });
 
 describe('entryFlowReducer — authenticated', () => {

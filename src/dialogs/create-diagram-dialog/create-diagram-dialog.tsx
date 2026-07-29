@@ -20,6 +20,7 @@ import { ImportDatabase } from '../common/import-database/import-database';
 import { SelectTables } from '../common/select-tables/select-tables';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
+import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
 import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
 import { filterMetadataByTables } from '@/lib/data/import-metadata/filter-metadata';
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
@@ -27,10 +28,13 @@ import type { ImportMethod } from '@/lib/import-method/import-method';
 import { useToast } from '@/components/toast/use-toast';
 import { ToastAction } from '@/components/toast/toast';
 
-export interface CreateDiagramDialogProps extends BaseDialogProps {}
+export interface CreateDiagramDialogProps extends BaseDialogProps {
+    entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
+}
 
 export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     dialog,
+    entryCreateDiagramActions,
 }) => {
     const { isAuthenticated } = useAuth();
     const { loadDiagramFromData } = useChartDB();
@@ -177,6 +181,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
             const id = await persistDiagram(diagram);
 
+            if (entryCreateDiagramActions) {
+                entryCreateDiagramActions.onDiagramCreated(id);
+                return;
+            }
+
             closeCreateDiagramDialog();
 
             if (isAuthenticated) {
@@ -199,6 +208,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             isAuthenticated,
             listDiagrams,
             showGuestLimitToast,
+            entryCreateDiagramActions,
         ]
     );
 
@@ -225,6 +235,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
         const id = await persistDiagram(diagram);
 
+        if (entryCreateDiagramActions) {
+            entryCreateDiagramActions.onDiagramCreated(id);
+            return;
+        }
+
         closeCreateDiagramDialog();
 
         if (isAuthenticated) {
@@ -244,6 +259,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         isAuthenticated,
         listDiagrams,
         showGuestLimitToast,
+        entryCreateDiagramActions,
     ]);
 
     const importNewDiagramOrFilterTables = useCallback(async () => {
@@ -286,8 +302,27 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     }, [importMethod, scriptResult, importNewDiagram]);
 
     return (
-        <Dialog {...dialog}>
-            <DialogContent className="flex max-h-dvh w-full flex-col md:max-w-[900px]">
+        <Dialog
+            {...dialog}
+            onOpenChange={(open) => {
+                if (!open && entryCreateDiagramActions) {
+                    return;
+                }
+            }}
+        >
+            <DialogContent
+                className="flex max-h-dvh w-full flex-col md:max-w-[900px]"
+                onInteractOutside={(event) => {
+                    if (entryCreateDiagramActions) {
+                        event.preventDefault();
+                    }
+                }}
+                onEscapeKeyDown={(event) => {
+                    if (entryCreateDiagramActions) {
+                        event.preventDefault();
+                    }
+                }}
+            >
                 {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
                     <SelectDatabase
                         createNewDiagram={createEmptyDiagram}

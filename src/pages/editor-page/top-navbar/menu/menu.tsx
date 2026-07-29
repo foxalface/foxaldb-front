@@ -34,7 +34,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useAuth } from '@/hooks/use-auth';
 
-export interface MenuProps {}
+export interface MenuProps {
+    onActiveDiagramDeleted?: () => void;
+}
 
 const isValidBackendDiagramId = (id: unknown): id is string | number => {
     if (typeof id === 'number') {
@@ -48,12 +50,13 @@ const isValidBackendDiagramId = (id: unknown): id is string | number => {
     return false;
 };
 
-export const Menu: React.FC<MenuProps> = () => {
+export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
     const {
         clearDiagramData,
         updateDiagramUpdatedAt,
         databaseType,
         currentDiagram,
+        deleteDiagram: deleteLocalDiagram,
     } = useChartDB();
     const {
         openCreateDiagramDialog,
@@ -89,11 +92,33 @@ export const Menu: React.FC<MenuProps> = () => {
     const navigate = useNavigate();
 
     const handleDeleteDiagramAction = useCallback(async () => {
-        if (currentDiagram?.id) {
-            await deleteDiagramApi(currentDiagram.id);
+        if (!currentDiagram?.id) {
+            return;
         }
-        navigate('/');
-    }, [currentDiagram?.id, navigate]);
+
+        if (isAuthenticated && isValidBackendDiagramId(currentDiagram.id)) {
+            await deleteDiagramApi(String(currentDiagram.id));
+            navigate('/');
+            return;
+        }
+
+        if (isAuthenticated) {
+            return;
+        }
+
+        try {
+            await deleteLocalDiagram();
+            onActiveDiagramDeleted?.();
+        } catch {
+            // Deletion failure must not transition entry flow to creatingDiagram.
+        }
+    }, [
+        currentDiagram?.id,
+        isAuthenticated,
+        deleteLocalDiagram,
+        onActiveDiagramDeleted,
+        navigate,
+    ]);
 
     const createNewDiagram = () => {
         openCreateDiagramDialog();

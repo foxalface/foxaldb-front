@@ -12,9 +12,13 @@ import { ActivityFeedAction } from './activity-feed-action';
 import { DiagramAccessRoleIndicator } from './diagram-access-role-indicator';
 import { PresenceAvatarStack } from '@/components/presence/presence-avatar-stack';
 
-export interface TopNavbarMobileProps {}
+import type { EntryFlowActiveDiagramDeletionActions } from '@/pages/editor-page/entry-flow-active-diagram-deletion-actions';
 
-export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
+export interface TopNavbarMobileProps extends EntryFlowActiveDiagramDeletionActions {}
+
+export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = ({
+    onActiveDiagramDeleted,
+}) => {
     const { toggleSidebar } = useSidebar();
 
     return (
@@ -53,7 +57,7 @@ export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = () => {
                         <LanguageNav />
                     </div>
                 </div>
-                <Menu />
+                <Menu onActiveDiagramDeleted={onActiveDiagramDeleted} />
             </div>
 
             <div className="flex flex-1 justify-center pb-2 pt-1">

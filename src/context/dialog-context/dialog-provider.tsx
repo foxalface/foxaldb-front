@@ -28,6 +28,7 @@ import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migratio
 import { LaravelMigrationImportDialog } from '@/dialogs/laravel-migration-import-dialog/laravel-migration-import-dialog';
 import { LaravelMigrationDiffDialog } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
+import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
 
 const CreateDiagramDialogLazy = lazy(() =>
     import('@/dialogs/create-diagram-dialog/create-diagram-dialog').then(
@@ -54,8 +55,9 @@ const ImportDatabaseDialogLazy = lazy(() =>
 export const DialogProvider: React.FC<
     React.PropsWithChildren<{
         entryAuthActions?: EntryFlowAuthActions;
+        entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
     }>
-> = ({ children, entryAuthActions }) => {
+> = ({ children, entryAuthActions, entryCreateDiagramActions }) => {
     const [openNewDiagramDialog, setOpenNewDiagramDialog] = useState(false);
     const [newDiagramDialogParams, setNewDiagramDialogParams] =
         useState<Omit<CreateDiagramDialogProps, 'dialog'>>();
@@ -298,6 +300,7 @@ export const DialogProvider: React.FC<
                 <Suspense fallback={null}>
                     <CreateDiagramDialogLazy
                         dialog={{ open: openNewDiagramDialog }}
+                        entryCreateDiagramActions={entryCreateDiagramActions}
                         {...newDiagramDialogParams}
                     />
                 </Suspense>

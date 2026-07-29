@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
+import { useEntryFlowGuestResolution } from '@/hooks/use-entry-flow-guest-resolution';
+import type { Diagram } from '@/lib/domain/diagram';
 import {
     entryFlowReducer,
     initialEntryFlowState,
@@ -28,6 +30,7 @@ export interface UseEntryFlowResult {
     dialog: EntryFlowDialog;
     isBlocking: boolean;
     isReady: boolean;
+    initialDiagram: Diagram | undefined;
     beginResolution: () => number;
     isResolutionCurrent: (token: number) => boolean;
     invalidateResolution: () => void;
@@ -43,6 +46,7 @@ export interface UseEntryFlowResult {
     notifyDiagramCreated: (diagramId: string) => void;
     notifyDiagramOpened: () => void;
     notifyDiagramOpenFailed: (messageKey?: string) => void;
+    notifyGuestActiveDiagramDeleted: () => void;
     retry: () => void;
     reset: () => void;
     notifyLoggedOut: () => void;
@@ -239,6 +243,11 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         [dispatchEvent]
     );
 
+    const notifyGuestActiveDiagramDeleted = useCallback(() => {
+        invalidateResolution();
+        dispatchEvent({ type: 'GUEST_ACTIVE_DIAGRAM_DELETED' });
+    }, [dispatchEvent, invalidateResolution]);
+
     const retry = useCallback(() => {
         dispatchEvent({ type: 'RETRY' });
     }, [dispatchEvent]);
@@ -257,11 +266,21 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     const isBlocking = selectEntryFlowBlocking(state);
     const isReady = selectEntryFlowReady(state);
 
+    const { guestInitialDiagram } = useEntryFlowGuestResolution({
+        state,
+        isAuthenticated,
+        isAuthLoading: isLoading,
+        beginResolution,
+        isResolutionCurrent,
+        dispatchEvent,
+    });
+
     return {
         state,
         dialog,
         isBlocking,
         isReady,
+        initialDiagram: guestInitialDiagram,
         beginResolution,
         isResolutionCurrent,
         invalidateResolution,
@@ -277,6 +296,7 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         notifyDiagramCreated,
         notifyDiagramOpened,
         notifyDiagramOpenFailed,
+        notifyGuestActiveDiagramDeleted,
         retry,
         reset,
         notifyLoggedOut,

@@ -80,6 +80,7 @@ export type EntryFlowEvent =
     | { type: 'DIAGRAM_CREATED'; diagramId: string }
     | { type: 'DIAGRAM_OPENED' }
     | { type: 'DIAGRAM_OPEN_FAILED'; messageKey?: string }
+    | { type: 'GUEST_ACTIVE_DIAGRAM_DELETED' }
     | { type: 'RETRY' }
     | { type: 'RESET' };
 

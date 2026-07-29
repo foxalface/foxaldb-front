@@ -3,7 +3,6 @@ import { useAlert } from '@/context/alert-context/alert-context';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useConfig } from '@/hooks/use-config';
-import { useStorage } from '@/hooks/use-storage';
 import { useDialog } from '@/hooks/use-dialog';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
@@ -14,24 +13,17 @@ import {
     kickOutOfDiagram,
 } from '@/lib/realtime/kick-out-of-diagram';
 import type { Diagram } from '@/lib/domain/diagram';
-import type { EntryFlowState } from '@/lib/entry-flow';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-export interface UseDiagramLoaderOptions {
-    entryFlowState?: EntryFlowState;
-}
-
-export const useDiagramLoader = (options?: UseDiagramLoaderOptions) => {
-    const entryFlowState = options?.entryFlowState;
+export const useDiagramLoader = () => {
     const [initialDiagram, setInitialDiagram] = useState<Diagram | undefined>();
     const { diagramId } = useParams<{ diagramId: string }>();
     const { config } = useConfig();
     const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
     const { setDiagramAccess, clearDiagramAccess } = useDiagramAccess();
-    const { listDiagrams } = useStorage();
-    const { currentDiagram, loadDiagram, loadDiagramFromData } = useChartDB();
+    const { currentDiagram, loadDiagramFromData } = useChartDB();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
     const {
@@ -51,46 +43,6 @@ export const useDiagramLoader = (options?: UseDiagramLoaderOptions) => {
         }
 
         if (!isAuthenticated) {
-            /*
-             * M1.3: legacy guest bootstrap runs only during checkingLocalDiagram.
-             * M1.4 will replace this path with entry-flow resolution.
-             */
-            if (
-                !entryFlowState ||
-                entryFlowState.kind !== 'checkingLocalDiagram'
-            ) {
-                return;
-            }
-
-            if (currentDiagramLoadingRef.current === 'guest') {
-                return;
-            }
-
-            currentDiagramLoadingRef.current = 'guest';
-            clearDiagramAccess();
-
-            void (async () => {
-                try {
-                    const diagrams = await listDiagrams();
-
-                    if (diagrams.length > 0) {
-                        const loaded = await loadDiagram(diagrams[0].id);
-                        if (loaded) {
-                            setInitialDiagram(loaded);
-                        } else {
-                            setInitialDiagram(undefined);
-                            openCreateDiagramDialog();
-                        }
-                    } else {
-                        setInitialDiagram(undefined);
-                        openCreateDiagramDialog();
-                    }
-                } catch {
-                    setInitialDiagram(undefined);
-                    openCreateDiagramDialog();
-                }
-            })();
-
             return;
         }
 
@@ -177,15 +129,12 @@ export const useDiagramLoader = (options?: UseDiagramLoaderOptions) => {
         hideLoader,
         showLoader,
         currentDiagram?.id,
-        loadDiagram,
         loadDiagramFromData,
-        listDiagrams,
         setDiagramAccess,
         clearDiagramAccess,
         navigate,
         showAlert,
         t,
-        entryFlowState,
     ]);
 
     return { initialDiagram };

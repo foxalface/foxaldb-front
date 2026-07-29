@@ -12,9 +12,13 @@ import { ShareDiagramAction } from './share-diagram-action';
 import { ActivityFeedAction } from './activity-feed-action';
 import { DiagramAccessRoleIndicator } from './diagram-access-role-indicator';
 
-export interface TopNavbarProps {}
+import type { EntryFlowActiveDiagramDeletionActions } from '@/pages/editor-page/entry-flow-active-diagram-deletion-actions';
 
-export const TopNavbar: React.FC<TopNavbarProps> = () => {
+export interface TopNavbarProps extends EntryFlowActiveDiagramDeletionActions {}
+
+export const TopNavbar: React.FC<TopNavbarProps> = ({
+    onActiveDiagramDeleted,
+}) => {
     const { effectiveTheme } = useTheme();
 
     return (
@@ -37,7 +41,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = () => {
                         />
                     </a>
                 </div>
-                <Menu />
+                <Menu onActiveDiagramDeleted={onActiveDiagramDeleted} />
             </div>
             <DiagramName />
             <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">

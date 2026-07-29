@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useMemo } from 'react';
+import React, { Suspense, useCallback, useEffect, useMemo } from 'react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { Toaster } from '@/components/toast/toaster';
@@ -33,6 +33,8 @@ import { useDiagramReconnectRefresh } from './use-diagram-reconnect-refresh';
 import { useGuestDiagramMigration } from './use-guest-diagram-migration';
 import { useEntryFlow, type UseEntryFlowResult } from '@/hooks/use-entry-flow';
 import { EntryFlowDialogSyncMount } from './entry-flow-dialog-sync-mount';
+import type { EntryFlowActiveDiagramDeletionActions } from './entry-flow-active-diagram-deletion-actions';
+import type { EntryFlowCreateDiagramActions } from './entry-flow-create-diagram-actions';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
@@ -52,17 +54,18 @@ export const EditorMobileLayoutLazy = React.lazy(
     () => import('./editor-mobile-layout')
 );
 
-const EditorPageContent: React.FC<{ entryFlow: UseEntryFlowResult }> = ({
-    entryFlow,
-}) => {
+const EditorPageContent: React.FC<
+    {
+        entryFlow: UseEntryFlowResult;
+    } & EntryFlowActiveDiagramDeletionActions
+> = ({ entryFlow, onActiveDiagramDeleted }) => {
     const { diagramName, currentDiagram } = useChartDB();
     const { openStarUsDialog } = useDialog();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { starUsDialogLastOpen, setStarUsDialogLastOpen, githubRepoOpened } =
         useLocalConfig();
-    const { initialDiagram } = useDiagramLoader({
-        entryFlowState: entryFlow.state,
-    });
+    const { initialDiagram: loaderInitialDiagram } = useDiagramLoader();
+    const initialDiagram = entryFlow.initialDiagram ?? loaderInitialDiagram;
     useDiagramAutosave();
     useDiagramAccessListener();
     useDiagramChannelLifecycle();
@@ -98,8 +101,7 @@ const EditorPageContent: React.FC<{ entryFlow: UseEntryFlowResult }> = ({
     ]);
 
     /*
-     * Staged integration (M1.2–M1.3): only restoringSession blocks the editor shell.
-     * M1.4 will replace guest bootstrap during checkingLocalDiagram.
+     * Staged integration (M1.2–M1.4): only restoringSession blocks the editor shell.
      * M1.5 will replace authenticated bootstrap during loadingRemoteDiagrams.
      */
     const isEntrySessionRestoring = entryFlow.state.kind === 'restoringSession';
@@ -141,10 +143,12 @@ const EditorPageContent: React.FC<{ entryFlow: UseEntryFlowResult }> = ({
                         {isDesktop ? (
                             <EditorDesktopLayoutLazy
                                 initialDiagram={initialDiagram}
+                                onActiveDiagramDeleted={onActiveDiagramDeleted}
                             />
                         ) : (
                             <EditorMobileLayoutLazy
                                 initialDiagram={initialDiagram}
+                                onActiveDiagramDeleted={onActiveDiagramDeleted}
                             />
                         )}
                     </Suspense>
@@ -173,14 +177,35 @@ const EditorPageComponent: React.FC = () => {
         [entryFlow]
     );
 
+    const entryCreateDiagramActions = useMemo(
+        (): EntryFlowCreateDiagramActions | undefined =>
+            entryFlow.dialog === 'createDiagram'
+                ? {
+                      onDiagramCreated: (diagramId) =>
+                          entryFlow.notifyDiagramCreated(diagramId),
+                  }
+                : undefined,
+        [entryFlow]
+    );
+
+    const onActiveDiagramDeleted = useCallback(() => {
+        entryFlow.notifyGuestActiveDiagramDeleted();
+    }, [entryFlow]);
+
     return (
-        <DialogProvider entryAuthActions={entryAuthActions}>
+        <DialogProvider
+            entryAuthActions={entryAuthActions}
+            entryCreateDiagramActions={entryCreateDiagramActions}
+        >
             <EntryFlowDialogSyncMount entryFlowDialog={entryFlow.dialog} />
             <KeyboardShortcutsProvider>
                 <EditingBroadcastProvider>
                     <RemoteEditingProvider>
                         <CommentsProvider>
-                            <EditorPageContent entryFlow={entryFlow} />
+                            <EditorPageContent
+                                entryFlow={entryFlow}
+                                onActiveDiagramDeleted={onActiveDiagramDeleted}
+                            />
                         </CommentsProvider>
                     </RemoteEditingProvider>
                 </EditingBroadcastProvider>

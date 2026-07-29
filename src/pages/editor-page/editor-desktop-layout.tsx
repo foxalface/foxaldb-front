@@ -13,17 +13,20 @@ import { SidebarProvider } from '@/components/sidebar/sidebar';
 import { EditorSidebar } from './editor-sidebar/editor-sidebar';
 import { TopNavbar } from './top-navbar/top-navbar';
 
-export interface EditorDesktopLayoutProps {
+import type { EntryFlowActiveDiagramDeletionActions } from '@/pages/editor-page/entry-flow-active-diagram-deletion-actions';
+
+export interface EditorDesktopLayoutProps extends EntryFlowActiveDiagramDeletionActions {
     initialDiagram?: Diagram;
 }
 export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
     initialDiagram,
+    onActiveDiagramDeleted,
 }) => {
     const { isSidePanelShowed } = useLayout();
 
     return (
         <>
-            <TopNavbar />
+            <TopNavbar onActiveDiagramDeleted={onActiveDiagramDeleted} />
             <SidebarProvider
                 defaultOpen={false}
                 open={false}

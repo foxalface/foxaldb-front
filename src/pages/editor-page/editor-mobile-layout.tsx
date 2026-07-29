@@ -15,11 +15,14 @@ import { TopNavbarMobile } from './top-navbar/top-navbar-mobile';
 import { SidebarProvider } from '@/components/sidebar/sidebar';
 import { EditorSidebar } from './editor-sidebar/editor-sidebar';
 
-export interface EditorMobileLayoutProps {
+import type { EntryFlowActiveDiagramDeletionActions } from '@/pages/editor-page/entry-flow-active-diagram-deletion-actions';
+
+export interface EditorMobileLayoutProps extends EntryFlowActiveDiagramDeletionActions {
     initialDiagram?: Diagram;
 }
 export const EditorMobileLayout: React.FC<EditorMobileLayoutProps> = ({
     initialDiagram,
+    onActiveDiagramDeleted,
 }) => {
     const { isSidePanelShowed, hideSidePanel } = useLayout();
     return (
@@ -30,7 +33,9 @@ export const EditorMobileLayout: React.FC<EditorMobileLayoutProps> = ({
                 className="flex-col"
             >
                 <EditorSidebar />
-                <TopNavbarMobile />
+                <TopNavbarMobile
+                    onActiveDiagramDeleted={onActiveDiagramDeleted}
+                />
                 <Drawer
                     open={isSidePanelShowed}
                     onClose={() => hideSidePanel()}
