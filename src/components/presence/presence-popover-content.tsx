@@ -26,7 +26,7 @@ export const PresencePopoverContent: React.FC<PresencePopoverContentProps> = ({
                         </AvatarFallback>
                     </Avatar>
                     <span className="truncate">
-                        {member.isSelf ? 'You' : member.name}
+                        {member.isSelf ? 'You' : member.fullName}
                     </span>
                 </li>
             ))}

@@ -2,7 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { EditingAction } from '@/lib/realtime/editing-reducer';
 import type { PresenceState } from '@/lib/realtime/presence-reducer';
-import type { DiagramPresenceUser } from '@/lib/realtime/diagram-presence';
+import { createDiagramPresenceUser } from '@/lib/realtime/diagram-presence';
 
 interface AuthValue {
     user: { id: number } | null;
@@ -49,7 +49,7 @@ import {
 } from '@/lib/realtime/editing-utils';
 
 const buildPresence = (
-    members: [number, DiagramPresenceUser][]
+    members: [number, ReturnType<typeof createDiagramPresenceUser>][]
 ): PresenceState => ({
     members: new Map(members),
     status: 'active',
@@ -71,8 +71,8 @@ describe('useRemoteEditing', () => {
         };
         currentDiagram = { id: '42' };
         presence = buildPresence([
-            [2, { id: 2, name: 'Bob', active: true }],
-            [3, { id: 3, name: 'Alice', active: true }],
+            [2, createDiagramPresenceUser(2, 'Bob', 'Smith')],
+            [3, createDiagramPresenceUser(3, 'Alice', 'Anderson')],
         ]);
         capturedListener = null;
         subscribeToEditingActions.mockClear();
@@ -190,8 +190,8 @@ describe('useEntityRemoteEditing', () => {
     it('reads editors for the requested entity from context', () => {
         const editor: RemoteEditingViewModel = {
             userId: 2,
-            name: 'Bob',
-            initials: 'BO',
+            name: 'Bob Smith',
+            initials: 'BS',
             colorClass: 'bg-red-500',
             borderColorClass: 'border-red-500',
             strokeColorClass: '!stroke-red-500',

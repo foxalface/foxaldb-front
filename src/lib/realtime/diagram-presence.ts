@@ -1,6 +1,13 @@
+import {
+    buildUserIdentity,
+    parsePresenceUserIdentityFromChannel,
+} from '@/lib/user';
+
 export interface DiagramPresenceUser {
     id: number;
-    name: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
     active: boolean;
 }
 
@@ -10,21 +17,33 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 export const parseDiagramPresenceUser = (
     value: unknown
 ): DiagramPresenceUser | null => {
-    if (!isRecord(value)) {
+    const identity = parsePresenceUserIdentityFromChannel(value);
+
+    if (identity === null) {
         return null;
     }
 
-    const id = typeof value.id === 'number' ? value.id : Number(value.id);
-    const name = typeof value.name === 'string' ? value.name : '';
-
-    if (!Number.isInteger(id) || id <= 0 || name.length === 0) {
+    if (!isRecord(value)) {
         return null;
     }
 
     const active = value.active === false ? false : true;
 
-    return { id, name, active };
+    return {
+        ...identity,
+        active,
+    };
 };
+
+export const createDiagramPresenceUser = (
+    id: number,
+    firstName: string,
+    lastName: string,
+    active = true
+): DiagramPresenceUser => ({
+    ...buildUserIdentity(id, firstName, lastName),
+    active,
+});
 
 export const parseDiagramPresenceMemberInfo = (
     member: unknown
@@ -39,3 +58,11 @@ export const parseDiagramPresenceMemberInfo = (
 
     return parseDiagramPresenceUser(member);
 };
+
+export const toPresenceMemberIdentity = (
+    member: DiagramPresenceUser
+): Pick<DiagramPresenceUser, 'firstName' | 'lastName' | 'fullName'> => ({
+    firstName: member.firstName,
+    lastName: member.lastName,
+    fullName: member.fullName,
+});

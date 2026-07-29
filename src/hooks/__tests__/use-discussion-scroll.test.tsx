@@ -1,4 +1,5 @@
 import React from 'react';
+import { aliceAuthor } from '@/test/user-identity-fixtures';
 import {
     act,
     render,
@@ -20,7 +21,7 @@ const comment = (
     targetType: 'diagram',
     targetId: null,
     body: `body-${overrides.id}`,
-    user: { id: 1, name: 'Alice' },
+    user: aliceAuthor,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     ...overrides,

@@ -1,28 +1,29 @@
 import { describe, expect, it } from 'vitest';
 import { initialPresenceState, presenceReducer } from '../presence-reducer';
-import {
-    getInitialsFromName,
-    getPresenceColorClass,
-    hashUserId,
-} from '../presence-utils';
+import { getPresenceColorClass, hashUserId } from '../presence-utils';
+import { createDiagramPresenceUser } from '../diagram-presence';
 
-const member = (id: number, name: string, active = true) => ({
-    id,
-    name,
-    active,
-});
+const member = (
+    id: number,
+    firstName: string,
+    lastName: string,
+    active = true
+) => createDiagramPresenceUser(id, firstName, lastName, active);
 
 describe('presenceReducer', () => {
     it('HERE rebuilds the complete member map', () => {
         const state = presenceReducer(
             {
                 ...initialPresenceState(),
-                members: new Map([[1, member(1, 'Alice')]]),
+                members: new Map([[1, member(1, 'Alice', 'Anderson')]]),
                 status: 'joining',
             },
             {
                 type: 'HERE',
-                members: [member(2, 'Bob'), member(3, 'Carol')],
+                members: [
+                    member(2, 'Bob', 'Smith'),
+                    member(3, 'Carol', 'Jones'),
+                ],
             }
         );
 
@@ -33,12 +34,12 @@ describe('presenceReducer', () => {
     it('JOINING upserts a member in the existing map', () => {
         const initial = presenceReducer(initialPresenceState(), {
             type: 'HERE',
-            members: [member(1, 'Alice')],
+            members: [member(1, 'Alice', 'Anderson')],
         });
 
         const state = presenceReducer(initial, {
             type: 'JOINING',
-            member: member(2, 'Bob'),
+            member: member(2, 'Bob', 'Smith'),
         });
 
         expect(Array.from(state.members.keys())).toEqual([1, 2]);
@@ -47,21 +48,24 @@ describe('presenceReducer', () => {
     it('JOINING replaces an existing member with the same id', () => {
         const initial = presenceReducer(initialPresenceState(), {
             type: 'HERE',
-            members: [member(1, 'Alice')],
+            members: [member(1, 'Alice', 'Anderson')],
         });
 
         const state = presenceReducer(initial, {
             type: 'JOINING',
-            member: member(1, 'Alice Updated'),
+            member: member(1, 'Alice', 'Updated'),
         });
 
-        expect(state.members.get(1)).toEqual(member(1, 'Alice Updated'));
+        expect(state.members.get(1)).toEqual(member(1, 'Alice', 'Updated'));
     });
 
     it('LEAVING removes a member from the map', () => {
         const initial = presenceReducer(initialPresenceState(), {
             type: 'HERE',
-            members: [member(1, 'Alice'), member(2, 'Bob')],
+            members: [
+                member(1, 'Alice', 'Anderson'),
+                member(2, 'Bob', 'Smith'),
+            ],
         });
 
         const state = presenceReducer(initial, {
@@ -76,20 +80,20 @@ describe('presenceReducer', () => {
         const state = presenceReducer(initialPresenceState(), {
             type: 'HERE',
             members: [
-                member(1, 'Alice'),
-                member(1, 'Alice Duplicate'),
-                member(2, 'Bob'),
+                member(1, 'Alice', 'Anderson'),
+                member(1, 'Alice', 'Duplicate'),
+                member(2, 'Bob', 'Smith'),
             ],
         });
 
         expect(state.members.size).toBe(2);
-        expect(state.members.get(1)).toEqual(member(1, 'Alice Duplicate'));
+        expect(state.members.get(1)).toEqual(member(1, 'Alice', 'Duplicate'));
     });
 
     it('RESET clears members and returns idle status', () => {
         const initial = presenceReducer(initialPresenceState(), {
             type: 'HERE',
-            members: [member(1, 'Alice')],
+            members: [member(1, 'Alice', 'Anderson')],
         });
 
         const state = presenceReducer(initial, { type: 'RESET' });
@@ -101,7 +105,10 @@ describe('presenceReducer', () => {
     it('SET_DISCONNECTED clears members for reconnect', () => {
         const initial = presenceReducer(initialPresenceState(), {
             type: 'HERE',
-            members: [member(1, 'Alice'), member(2, 'Bob')],
+            members: [
+                member(1, 'Alice', 'Anderson'),
+                member(2, 'Bob', 'Smith'),
+            ],
         });
 
         const disconnected = presenceReducer(initial, {
@@ -113,7 +120,7 @@ describe('presenceReducer', () => {
 
         const reconnected = presenceReducer(disconnected, {
             type: 'HERE',
-            members: [member(1, 'Alice')],
+            members: [member(1, 'Alice', 'Anderson')],
         });
 
         expect(Array.from(reconnected.members.keys())).toEqual([1]);
@@ -131,7 +138,10 @@ describe('presenceReducer', () => {
     it('SET_ACTIVITY updates only the targeted member activity state', () => {
         const initial = presenceReducer(initialPresenceState(), {
             type: 'HERE',
-            members: [member(1, 'Alice'), member(2, 'Bob')],
+            members: [
+                member(1, 'Alice', 'Anderson'),
+                member(2, 'Bob', 'Smith'),
+            ],
         });
 
         const inactive = presenceReducer(initial, {
@@ -154,18 +164,6 @@ describe('presenceReducer', () => {
 });
 
 describe('presence-utils', () => {
-    it('generates initials from a full name', () => {
-        expect(getInitialsFromName('Jane Doe')).toBe('JD');
-    });
-
-    it('generates initials from a single name', () => {
-        expect(getInitialsFromName('Jane')).toBe('JA');
-    });
-
-    it('returns a fallback for empty names', () => {
-        expect(getInitialsFromName('   ')).toBe('?');
-    });
-
     it('assigns deterministic colors from user id', () => {
         const first = getPresenceColorClass(42);
         const second = getPresenceColorClass(42);

@@ -1,10 +1,5 @@
 import { apiRequest } from './client';
-
-export interface DiagramActivityUser {
-    id: number;
-    name: string;
-    email: string;
-}
+import { normalizeDiagramActivityFromApi } from './normalize-diagram-activity';
 
 export type DiagramActivityAction =
     | 'add_tables'
@@ -73,18 +68,44 @@ export interface EntityIdsActivityMetadata {
     dependencyIds?: string[];
 }
 
-export interface DiagramActivityResource {
+export interface DiagramActivityUserDto {
+    id: number;
+    first_name: string;
+    last_name: string;
+    full_name: string;
+    email: string;
+}
+
+export interface DiagramActivityResourceDto {
     id: number;
     diagram_id: number;
     user_id: number | null;
-    user: DiagramActivityUser | null;
+    user: DiagramActivityUserDto | null;
     action: string;
     metadata: unknown;
     created_at: string;
 }
 
+export interface DiagramActivityUser {
+    id: number;
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    email: string;
+}
+
+export interface DiagramActivityResource {
+    id: number;
+    diagramId: number;
+    userId: number | null;
+    user: DiagramActivityUser | null;
+    action: string;
+    metadata: unknown;
+    createdAt: string;
+}
+
 interface ListDiagramActivitiesResponse {
-    data: DiagramActivityResource[];
+    data: DiagramActivityResourceDto[];
 }
 
 export const listDiagramActivities = async (
@@ -94,5 +115,5 @@ export const listDiagramActivities = async (
         `/diagrams/${diagramId}/activities`
     );
 
-    return response.data;
+    return response.data.map(normalizeDiagramActivityFromApi);
 };

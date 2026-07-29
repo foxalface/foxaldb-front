@@ -5,6 +5,7 @@ import type { DiagramComment } from '@/lib/comments/comment-types';
 import { EMPTY_DISCUSSION_INDICATOR } from '@/lib/comments/discussion-indicators';
 import { useCommentMutations } from '../use-comment-mutations';
 import { useDiagramComments } from '../use-diagram-comments';
+import { aliceAuthor, testAuthAlice } from '@/test/user-identity-fixtures';
 import {
     useFieldDiscussionIndicator,
     useRelationshipDiscussionIndicator,
@@ -12,7 +13,7 @@ import {
 } from '../use-discussion-indicators';
 
 interface AuthValue {
-    user: { id: number; name: string; email: string } | null;
+    user: ReturnType<typeof testAuthAlice> | null;
     isAuthenticated: boolean;
     isLoading: boolean;
 }
@@ -64,7 +65,7 @@ const comment = (
     targetType: 'diagram',
     targetId: null,
     body: `body-${overrides.id}`,
-    user: { id: 1, name: 'Alice' },
+    user: aliceAuthor,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     ...overrides,
@@ -77,7 +78,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe('use*DiscussionIndicator hooks', () => {
     beforeEach(() => {
         authValue = {
-            user: { id: 1, name: 'Alice', email: 'a@example.com' },
+            user: testAuthAlice(),
             isAuthenticated: true,
             isLoading: false,
         };

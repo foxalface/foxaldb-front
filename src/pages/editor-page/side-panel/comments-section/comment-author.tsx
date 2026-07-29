@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { register as registerLocale } from 'timeago.js';
 import { Avatar, AvatarFallback } from '@/components/avatar/avatar';
 import type { CommentAuthor as CommentAuthorModel } from '@/lib/comments/comment-types';
-import { getInitialsFromName } from '@/lib/realtime/presence-utils';
+import { getUserInitials } from '@/lib/user';
 import { resolveTimeAgoLocale } from './comment-timeago-locale';
 
 export interface CommentAuthorProps {
@@ -45,16 +45,17 @@ export const CommentAuthor: React.FC<CommentAuthorProps> = ({
         setTimeAgoLocale(registerTimeAgoLanguage(i18n.language));
     }, [i18n.language]);
 
-    const displayName = user?.name?.trim()
-        ? user.name.trim()
+    const displayName = user?.fullName?.trim()
+        ? user.fullName.trim()
         : t('side_panel.comments_section.deleted_user');
 
     const initials = useMemo(() => {
-        if (!user?.name?.trim()) {
+        if (!user) {
             return '?';
         }
-        return getInitialsFromName(user.name);
-    }, [user?.name]);
+
+        return getUserInitials(user.firstName, user.lastName);
+    }, [user]);
 
     const parsedCreatedAt = useMemo(
         () => parseCreatedAt(createdAt),

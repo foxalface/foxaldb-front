@@ -9,7 +9,9 @@ export type CommentTargetType = (typeof COMMENT_TARGET_TYPES)[number];
 
 export interface CommentAuthor {
     id: number;
-    name: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
 }
 
 export interface DiagramComment {

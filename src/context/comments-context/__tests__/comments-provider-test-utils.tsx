@@ -3,9 +3,16 @@ import React from 'react';
 import type { DiagramComment } from '@/lib/comments/comment-types';
 import type { DiagramCommentEventChannel } from '@/lib/realtime/comment-subscriber';
 import { CommentsProvider } from '../comments-provider';
+import { aliceAuthor, testAuthAlice } from '@/test/user-identity-fixtures';
 
 export interface AuthValue {
-    user: { id: number; name: string; email: string } | null;
+    user: {
+        id: number;
+        first_name: string;
+        last_name: string;
+        full_name: string;
+        email: string;
+    } | null;
     isAuthenticated: boolean;
     isLoading: boolean;
 }
@@ -44,7 +51,7 @@ export interface CommentsProviderTestEnv {
 }
 
 export const createAuthenticatedAuth = (): AuthValue => ({
-    user: { id: 1, name: 'Alice', email: 'a@example.com' },
+    user: testAuthAlice(),
     isAuthenticated: true,
     isLoading: false,
 });
@@ -69,7 +76,7 @@ export const createCommentFixture = (
     targetType: 'diagram',
     targetId: null,
     body: `body-${overrides.id}`,
-    user: { id: 1, name: 'Alice' },
+    user: aliceAuthor,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     ...overrides,

@@ -3,6 +3,7 @@ import {
     commentsReducer,
     initialCommentsState,
 } from '@/lib/comments/comment-reducer';
+import { aliceCommentAuthor } from '@/test/user-identity-fixtures';
 import type { CommentsAction } from '@/lib/comments/comment-reducer';
 import type { DiagramComment } from '@/lib/comments/comment-types';
 import {
@@ -85,7 +86,7 @@ const baseComment = (
     targetType: 'diagram',
     targetId: null,
     body: 'Hello',
-    user: { id: 7, name: 'Alice' },
+    user: aliceCommentAuthor,
     createdAt: '2026-07-19T10:00:00.000Z',
     updatedAt: '2026-07-19T10:05:00.000Z',
     ...overrides,

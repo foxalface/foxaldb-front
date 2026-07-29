@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { presenceIdentity } from '@/test/user-identity-fixtures';
 import {
     initialRemoteSelectionsState,
     selectionReducer,
@@ -71,8 +72,8 @@ describe('selection-utils', () => {
             const byEntity = buildSelectionsByEntity(state, {
                 selfUserId: 1,
                 presenceMembers: new Map([
-                    [2, { name: 'Bob' }],
-                    [3, { name: 'Alice' }],
+                    [2, presenceIdentity('Bob', 'Smith')],
+                    [3, presenceIdentity('Alice', 'Anderson')],
                 ]),
                 knownPresenceUserIds: new Set([2, 3]),
             });
@@ -101,7 +102,7 @@ describe('selection-utils', () => {
 
             const byEntity = buildSelectionsByEntity(state, {
                 selfUserId: 1,
-                presenceMembers: new Map([[1, { name: 'Me' }]]),
+                presenceMembers: new Map([[1, presenceIdentity('Me', 'User')]]),
                 knownPresenceUserIds: new Set([1]),
             });
 
@@ -124,7 +125,9 @@ describe('selection-utils', () => {
 
             const byEntity = buildSelectionsByEntity(state, {
                 selfUserId: 1,
-                presenceMembers: new Map([[2, { name: 'Bob' }]]),
+                presenceMembers: new Map([
+                    [2, presenceIdentity('Bob', 'Smith')],
+                ]),
                 knownPresenceUserIds: new Set([2]),
             });
 
@@ -144,7 +147,9 @@ describe('selection-utils', () => {
 
             const byEntity = buildSelectionsByEntity(state, {
                 selfUserId: 1,
-                presenceMembers: new Map([[2, { name: 'Bob' }]]),
+                presenceMembers: new Map([
+                    [2, presenceIdentity('Bob', 'Smith')],
+                ]),
                 knownPresenceUserIds: new Set([2]),
             });
 

@@ -4,9 +4,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DiagramComment } from '@/lib/comments/comment-types';
 import { EMPTY_COMMENTS } from '@/lib/comments/comment-selectors';
 import { INACTIVE_COMMENTS_CONTEXT } from '@/context/comments-context/comments-context';
+import { aliceAuthor, testAuthAlice } from '@/test/user-identity-fixtures';
 
 interface AuthValue {
-    user: { id: number; name: string; email: string } | null;
+    user: ReturnType<typeof testAuthAlice> | null;
     isAuthenticated: boolean;
     isLoading: boolean;
 }
@@ -43,7 +44,7 @@ const comment = (
     targetType: 'diagram',
     targetId: null,
     body: `body-${overrides.id}`,
-    user: { id: 1, name: 'Alice' },
+    user: aliceAuthor,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     ...overrides,
@@ -56,7 +57,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe('useDiagramComments', () => {
     beforeEach(() => {
         authValue = {
-            user: { id: 1, name: 'Alice', email: 'a@example.com' },
+            user: testAuthAlice(),
             isAuthenticated: true,
             isLoading: false,
         };

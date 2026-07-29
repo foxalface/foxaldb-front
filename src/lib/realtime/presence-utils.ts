@@ -107,23 +107,3 @@ export const getPresenceRingColorClass = (userId: number): string => {
     const index = hashUserId(userId) % PRESENCE_RING_COLOR_CLASSES.length;
     return PRESENCE_RING_COLOR_CLASSES[index];
 };
-
-export const getInitialsFromName = (
-    name: string | null | undefined
-): string => {
-    const trimmed = (name ?? '').trim();
-    const parts = trimmed.split(/\s+/).filter(Boolean);
-
-    if (parts.length === 0) {
-        return '?';
-    }
-
-    if (parts.length === 1) {
-        return parts[0].slice(0, 2).toUpperCase();
-    }
-
-    const firstInitial = parts[0][0] ?? '';
-    const lastInitial = parts[parts.length - 1][0] ?? '';
-
-    return `${firstInitial}${lastInitial}`.toUpperCase();
-};

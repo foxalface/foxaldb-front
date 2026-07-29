@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DiagramComment } from '@/lib/comments/comment-types';
 import { en } from '@/i18n/locales/en';
+import { aliceAuthor } from '@/test/user-identity-fixtures';
 
 const { deleteCommentMock } = vi.hoisted(() => ({
     deleteCommentMock: vi.fn(),
@@ -55,7 +56,7 @@ const comment = (overrides: Partial<DiagramComment> = {}): DiagramComment => ({
     targetType: 'diagram',
     targetId: null,
     body: 'Secret body that must not appear',
-    user: { id: 1, name: 'Alice' },
+    user: aliceAuthor,
     createdAt: '2026-07-22T10:00:00.000Z',
     updatedAt: '2026-07-22T10:00:00.000Z',
     ...overrides,

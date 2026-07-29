@@ -1,5 +1,6 @@
 import type { DiagramComment } from '@/lib/comments/comment-types';
 import type { DiagramCommentDto } from './diagram-comments';
+import { parseUserIdentityFromHttp } from '@/lib/user';
 
 export const normalizeDiagramCommentFromApi = (
     comment: DiagramCommentDto
@@ -10,12 +11,7 @@ export const normalizeDiagramCommentFromApi = (
     targetId: comment.target_id,
     body: comment.body,
     user:
-        comment.user === null
-            ? null
-            : {
-                  id: comment.user.id,
-                  name: comment.user.name,
-              },
+        comment.user === null ? null : parseUserIdentityFromHttp(comment.user),
     createdAt: comment.created_at,
     updatedAt: comment.updated_at,
 });

@@ -10,6 +10,7 @@ import type { UseDiagramCommentsResult } from '@/hooks/use-diagram-comments';
 import type { DiscussionView } from '@/context/layout-context/layout-context';
 import { DIAGRAM_DISCUSSION_TARGET } from '@/lib/comments/resolve-discussion-target';
 import { en } from '@/i18n/locales/en';
+import { aliceWonderAuthor } from '@/test/user-identity-fixtures';
 import {
     isEnglishTimeAgoLocaleId,
     OFFICIAL_APPLICATION_LOCALES,
@@ -192,7 +193,7 @@ const createComment = (
     targetType: 'diagram',
     targetId: null,
     body: `body-${overrides.id}`,
-    user: { id: 1, name: 'Alice Wonder' },
+    user: aliceWonderAuthor,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     ...overrides,
@@ -552,7 +553,7 @@ describe('CommentsSection', () => {
             comments: [
                 createComment({
                     id: 1,
-                    user: { id: 7, name: 'Alice Wonder' },
+                    user: aliceWonderAuthor,
                 }),
             ],
         });

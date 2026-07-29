@@ -1,4 +1,5 @@
 import React from 'react';
+import { aliceAuthor } from '@/test/user-identity-fixtures';
 import {
     act,
     fireEvent,
@@ -74,7 +75,7 @@ const createdComment = (
     targetType: 'diagram',
     targetId: null,
     body: 'Hello world',
-    user: { id: 1, name: 'Alice' },
+    user: aliceAuthor,
     createdAt: '2026-07-22T10:00:00.000Z',
     updatedAt: '2026-07-22T10:00:00.000Z',
     ...overrides,

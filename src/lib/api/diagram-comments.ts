@@ -16,7 +16,9 @@ export interface DiagramCommentDto {
     body: string;
     user: {
         id: number;
-        name: string;
+        first_name: string;
+        last_name: string;
+        full_name: string;
     } | null;
     created_at: string;
     updated_at: string;

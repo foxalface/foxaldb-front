@@ -2,15 +2,13 @@ import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useRealtime } from '@/hooks/use-realtime';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
-import {
-    getInitialsFromName,
-    getPresenceColorClass,
-} from '@/lib/realtime/presence-utils';
+import { getPresenceColorClass } from '@/lib/realtime/presence-utils';
+import { getUserInitials, userIdentityFromAuthUser } from '@/lib/user';
 import { useMemo } from 'react';
 
 export interface PresenceMember {
     id: number;
-    name: string;
+    fullName: string;
     initials: string;
     colorClass: string;
     isSelf: boolean;
@@ -49,18 +47,23 @@ export const useDiagramPresence = (): DiagramPresenceState => {
             presence.members.values()
         ).map((member) => ({
             id: member.id,
-            name: member.name,
-            initials: getInitialsFromName(member.name),
+            fullName: member.fullName,
+            initials: getUserInitials(member.firstName, member.lastName),
             colorClass: getPresenceColorClass(member.id),
             isSelf: member.id === user.id,
             active: member.active,
         }));
 
         if (!members.some((member) => member.isSelf)) {
+            const selfIdentity = userIdentityFromAuthUser(user);
+
             members.unshift({
-                id: user.id,
-                name: user.full_name,
-                initials: getInitialsFromName(user.full_name),
+                id: selfIdentity.id,
+                fullName: selfIdentity.fullName,
+                initials: getUserInitials(
+                    selfIdentity.firstName,
+                    selfIdentity.lastName
+                ),
                 colorClass: getPresenceColorClass(user.id),
                 isSelf: true,
                 active: true,
@@ -76,7 +79,7 @@ export const useDiagramPresence = (): DiagramPresenceState => {
                 return 1;
             }
 
-            return left.name.localeCompare(right.name);
+            return left.fullName.localeCompare(right.fullName);
         });
 
         return {

@@ -1,10 +1,11 @@
 import {
-    getInitialsFromName,
     getPresenceBorderColorClass,
     getPresenceColorClass,
     getPresenceRingColorClass,
     getPresenceStrokeColorClass,
 } from './presence-utils';
+import type { PresenceMemberIdentity } from '@/lib/user';
+import { getUserInitials } from '@/lib/user';
 import type {
     SelectionEntityType,
     SelectionItem,
@@ -63,16 +64,16 @@ export const areSelectionSnapshotsEqual = (
 
 const toViewModel = (
     userId: number,
-    presenceMembers: ReadonlyMap<number, { name: string }>,
+    presenceMembers: ReadonlyMap<number, PresenceMemberIdentity>,
     selfUserId: number
 ): RemoteSelectionViewModel => {
     const member = presenceMembers.get(userId);
-    const name = member?.name ?? 'Collaborator';
+    const name = member?.fullName ?? 'Collaborator';
 
     return {
         userId,
         name,
-        initials: getInitialsFromName(name),
+        initials: getUserInitials(member?.firstName, member?.lastName),
         colorClass: getPresenceColorClass(userId),
         borderColorClass: getPresenceBorderColorClass(userId),
         strokeColorClass: getPresenceStrokeColorClass(userId),
@@ -85,7 +86,7 @@ export const buildSelectionsByEntity = (
     remoteSelections: ReadonlyMap<number, UserSelectionState>,
     options: {
         selfUserId: number;
-        presenceMembers: ReadonlyMap<number, { name: string }>;
+        presenceMembers: ReadonlyMap<number, PresenceMemberIdentity>;
         knownPresenceUserIds: ReadonlySet<number>;
     }
 ): SelectionsByEntity => {

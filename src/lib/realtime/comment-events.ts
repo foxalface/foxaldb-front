@@ -3,6 +3,7 @@ import {
     type CommentTargetType,
     type DiagramComment,
 } from '@/lib/comments/comment-types';
+import { parseUserIdentityFromWebSocket } from '@/lib/user';
 
 export const DIAGRAM_COMMENT_CREATED_EVENT = '.DiagramCommentCreated';
 
@@ -58,17 +59,9 @@ const parseCommentAuthor = (
         return null;
     }
 
-    if (!isRecord(value)) {
-        return undefined;
-    }
+    const identity = parseUserIdentityFromWebSocket(value);
 
-    const { id, name } = value;
-
-    if (!isFiniteInteger(id) || typeof name !== 'string') {
-        return undefined;
-    }
-
-    return { id, name };
+    return identity === null ? undefined : identity;
 };
 
 const isTargetConsistent = (

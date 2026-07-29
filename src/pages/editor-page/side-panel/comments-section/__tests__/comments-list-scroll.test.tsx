@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DiagramComment } from '@/lib/comments/comment-types';
 import { CommentsList } from '../comments-list';
+import { aliceAuthor } from '@/test/user-identity-fixtures';
 
 vi.mock('../comment-list-item', () => ({
     CommentListItem: ({ comment }: { comment: DiagramComment }) => (
@@ -30,7 +31,7 @@ const comment = (
     targetType: 'diagram',
     targetId: null,
     body: `body-${overrides.id}`,
-    user: { id: 1, name: 'Alice' },
+    user: aliceAuthor,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     ...overrides,

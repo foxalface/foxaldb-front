@@ -1,10 +1,11 @@
 import {
-    getInitialsFromName,
     getPresenceBorderColorClass,
     getPresenceColorClass,
     getPresenceRingColorClass,
     getPresenceStrokeColorClass,
 } from './presence-utils';
+import type { PresenceMemberIdentity } from '@/lib/user';
+import { getUserInitials } from '@/lib/user';
 import type {
     EditingEntityType,
     EditingItem,
@@ -91,16 +92,16 @@ export const areEditingSnapshotsEqual = (
 
 const toViewModel = (
     userId: number,
-    presenceMembers: ReadonlyMap<number, { name: string }>,
+    presenceMembers: ReadonlyMap<number, PresenceMemberIdentity>,
     selfUserId: number
 ): RemoteEditingViewModel => {
     const member = presenceMembers.get(userId);
-    const name = member?.name ?? 'Collaborator';
+    const name = member?.fullName ?? 'Collaborator';
 
     return {
         userId,
         name,
-        initials: getInitialsFromName(name),
+        initials: getUserInitials(member?.firstName, member?.lastName),
         colorClass: getPresenceColorClass(userId),
         borderColorClass: getPresenceBorderColorClass(userId),
         strokeColorClass: getPresenceStrokeColorClass(userId),
@@ -113,7 +114,7 @@ export const buildEditingByEntity = (
     remoteEditing: ReadonlyMap<number, UserEditingState>,
     options: {
         selfUserId: number;
-        presenceMembers: ReadonlyMap<number, { name: string }>;
+        presenceMembers: ReadonlyMap<number, PresenceMemberIdentity>;
         knownPresenceUserIds: ReadonlySet<number>;
         now?: number;
         staleMs?: number;

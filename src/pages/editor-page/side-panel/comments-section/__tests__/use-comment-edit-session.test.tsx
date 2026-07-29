@@ -2,6 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DiagramComment } from '@/lib/comments/comment-types';
 import { en } from '@/i18n/locales/en';
+import { aliceAuthor } from '@/test/user-identity-fixtures';
 
 const { updateCommentMock } = vi.hoisted(() => ({
     updateCommentMock: vi.fn(),
@@ -55,7 +56,7 @@ const baseComment = (
     targetType: 'diagram',
     targetId: null,
     body: 'Original body',
-    user: { id: 1, name: 'Alice' },
+    user: aliceAuthor,
     createdAt: '2026-07-22T10:00:00.000Z',
     updatedAt: '2026-07-22T10:00:00.000Z',
     ...overrides,

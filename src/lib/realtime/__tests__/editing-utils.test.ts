@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { presenceIdentity } from '@/test/user-identity-fixtures';
 import { editingReducer, initialRemoteEditingState } from '../editing-reducer';
 import {
     areEditingSnapshotsEqual,
@@ -101,8 +102,8 @@ describe('editing-utils', () => {
             const byEntity = buildEditingByEntity(state, {
                 selfUserId: 1,
                 presenceMembers: new Map([
-                    [2, { name: 'Bob' }],
-                    [3, { name: 'Alice' }],
+                    [2, presenceIdentity('Bob', 'Smith')],
+                    [3, presenceIdentity('Alice', 'Anderson')],
                 ]),
                 knownPresenceUserIds: new Set([2, 3]),
             });
@@ -113,6 +114,8 @@ describe('editing-utils', () => {
 
             expect(collaborators?.map((item) => item.userId)).toEqual([3, 2]);
             expect(collaborators?.every((item) => !item.isSelf)).toBe(true);
+            expect(collaborators?.[0]?.name).toBe('Alice Anderson');
+            expect(collaborators?.[0]?.initials).toBe('AA');
         });
 
         it('filters self and unknown presence users', () => {
@@ -131,7 +134,7 @@ describe('editing-utils', () => {
 
             const byEntity = buildEditingByEntity(state, {
                 selfUserId: 1,
-                presenceMembers: new Map([[1, { name: 'Me' }]]),
+                presenceMembers: new Map([[1, presenceIdentity('Me', 'User')]]),
                 knownPresenceUserIds: new Set([1]),
             });
 
@@ -154,7 +157,9 @@ describe('editing-utils', () => {
 
             const byEntity = buildEditingByEntity(state, {
                 selfUserId: 1,
-                presenceMembers: new Map([[2, { name: 'Bob' }]]),
+                presenceMembers: new Map([
+                    [2, presenceIdentity('Bob', 'Smith')],
+                ]),
                 knownPresenceUserIds: new Set([2]),
             });
 
@@ -175,7 +180,9 @@ describe('editing-utils', () => {
 
             const byEntity = buildEditingByEntity(state, {
                 selfUserId: 1,
-                presenceMembers: new Map([[2, { name: 'Bob' }]]),
+                presenceMembers: new Map([
+                    [2, presenceIdentity('Bob', 'Smith')],
+                ]),
                 knownPresenceUserIds: new Set([2]),
             });
 
@@ -200,7 +207,9 @@ describe('editing-utils', () => {
 
             const byEntity = buildEditingByEntity(state, {
                 selfUserId: 1,
-                presenceMembers: new Map([[2, { name: 'Bob' }]]),
+                presenceMembers: new Map([
+                    [2, presenceIdentity('Bob', 'Smith')],
+                ]),
                 knownPresenceUserIds: new Set([2]),
                 now: 1_000 + REMOTE_EDITING_STALE_MS,
             });

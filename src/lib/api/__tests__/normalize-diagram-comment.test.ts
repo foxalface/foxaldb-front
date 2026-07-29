@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { DiagramCommentDto } from '../diagram-comments';
 import { normalizeDiagramCommentFromApi } from '../normalize-diagram-comment';
+import { buildUserIdentity } from '@/lib/user';
 
 const baseDto = (
     overrides: Partial<DiagramCommentDto> = {}
@@ -12,7 +13,9 @@ const baseDto = (
     body: 'Hello comment',
     user: {
         id: 7,
-        name: 'Alex',
+        first_name: 'Alex',
+        last_name: 'Renart',
+        full_name: 'Alex Renart',
     },
     created_at: '2026-07-19T10:00:00.000000Z',
     updated_at: '2026-07-19T11:00:00.000000Z',
@@ -21,19 +24,19 @@ const baseDto = (
 
 describe('normalizeDiagramCommentFromApi', () => {
     it('maps a full snake_case DTO to the camelCase domain model', () => {
-        expect(normalizeDiagramCommentFromApi(baseDto())).toEqual({
+        const normalized = normalizeDiagramCommentFromApi(baseDto());
+
+        expect(normalized).toEqual({
             id: 10,
             diagramId: 42,
             targetType: 'diagram',
             targetId: null,
             body: 'Hello comment',
-            user: {
-                id: 7,
-                name: 'Alex',
-            },
+            user: buildUserIdentity(7, 'Alex', 'Renart'),
             createdAt: '2026-07-19T10:00:00.000000Z',
             updatedAt: '2026-07-19T11:00:00.000000Z',
         });
+        expect(normalized.user).not.toHaveProperty('name');
     });
 
     it('preserves a null user', () => {
@@ -91,7 +94,12 @@ describe('normalizeDiagramCommentFromApi', () => {
 
     it('does not mutate the input DTO', () => {
         const dto = baseDto({
-            user: { id: 1, name: 'Sam' },
+            user: {
+                id: 1,
+                first_name: 'Sam',
+                last_name: 'Taylor',
+                full_name: 'Sam Taylor',
+            },
         });
         const snapshot = structuredClone(dto);
 

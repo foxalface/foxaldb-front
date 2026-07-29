@@ -16,6 +16,7 @@ vi.mock('../client', async () => {
 });
 
 import { ApiError } from '../client';
+import { alexAuthor } from '@/test/user-identity-fixtures';
 import {
     createDiagramComment,
     deleteDiagramComment,
@@ -35,7 +36,9 @@ const sampleDto = (
     body: 'Note',
     user: {
         id: 7,
-        name: 'Alex',
+        first_name: 'Alex',
+        last_name: 'Renart',
+        full_name: 'Alex Renart',
     },
     created_at: '2026-07-19T10:00:00.000000Z',
     updated_at: '2026-07-19T11:00:00.000000Z',
@@ -146,7 +149,7 @@ describe('diagram-comments API', () => {
                     targetType: 'diagram',
                     targetId: null,
                     body: 'Note',
-                    user: { id: 7, name: 'Alex' },
+                    user: alexAuthor,
                     createdAt: '2026-07-19T10:00:00.000000Z',
                     updatedAt: '2026-07-19T11:00:00.000000Z',
                 },
@@ -222,7 +225,7 @@ describe('diagram-comments API', () => {
                 targetType: 'relationship',
                 targetId: 'rel-9',
                 body: 'Rel note',
-                user: { id: 7, name: 'Alex' },
+                user: alexAuthor,
                 createdAt: '2026-07-19T10:00:00.000000Z',
                 updatedAt: '2026-07-19T11:00:00.000000Z',
             });

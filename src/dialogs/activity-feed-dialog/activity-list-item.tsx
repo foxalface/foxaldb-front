@@ -14,7 +14,7 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({
     currentUserId,
 }) => {
     const { t } = useTranslation();
-    const createdAt = new Date(activity.created_at);
+    const createdAt = new Date(activity.createdAt);
     const Icon = getActivityActionIcon(activity.action);
 
     return (
@@ -29,7 +29,7 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
                     {Number.isNaN(createdAt.getTime())
-                        ? activity.created_at
+                        ? activity.createdAt
                         : createdAt.toLocaleString()}
                 </p>
             </div>

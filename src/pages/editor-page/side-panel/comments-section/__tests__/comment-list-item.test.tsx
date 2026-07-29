@@ -3,17 +3,25 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DiagramAccess } from '@/lib/api/diagrams';
+import type { AuthUser } from '@/lib/api/auth';
 import type { DiagramComment } from '@/lib/comments/comment-types';
+import {
+    aliceWonderAuthor,
+    bobAuthor,
+    testAuthAlice,
+} from '@/test/user-identity-fixtures';
 import { en } from '@/i18n/locales/en';
 
 const { authState, accessState, updateCommentMock, deleteCommentMock } =
     vi.hoisted(() => ({
         authState: {
-            user: { id: 1, name: 'Alice', email: 'a@example.com' } as {
-                id: number;
-                name: string;
-                email: string;
-            } | null,
+            user: {
+                id: 1,
+                first_name: 'Alice',
+                last_name: 'Anderson',
+                full_name: 'Alice Anderson',
+                email: 'a@example.com',
+            } as AuthUser | null,
         },
         accessState: {
             diagramAccess: {
@@ -111,7 +119,7 @@ const comment = (overrides: Partial<DiagramComment> = {}): DiagramComment => ({
     targetType: 'table',
     targetId: 'table-1',
     body: 'Persisted body',
-    user: { id: 1, name: 'Alice Wonder' },
+    user: aliceWonderAuthor,
     createdAt: '2026-07-22T10:00:00.000Z',
     updatedAt: '2026-07-22T10:00:00.000Z',
     ...overrides,
@@ -123,7 +131,7 @@ const openActions = async (user: ReturnType<typeof userEvent.setup>) => {
 
 describe('CommentListItem', () => {
     beforeEach(() => {
-        authState.user = { id: 1, name: 'Alice', email: 'a@example.com' };
+        authState.user = testAuthAlice();
         accessState.diagramAccess = {
             role: 'owner',
             can_edit: true,
@@ -148,11 +156,7 @@ describe('CommentListItem', () => {
 
     it('shows Delete only for owner on another user comment', async () => {
         const user = userEvent.setup();
-        render(
-            <CommentListItem
-                comment={comment({ user: { id: 2, name: 'Bob' } })}
-            />
-        );
+        render(<CommentListItem comment={comment({ user: bobAuthor })} />);
 
         await openActions(user);
         expect(screen.queryByText('Edit')).not.toBeInTheDocument();
@@ -190,9 +194,7 @@ describe('CommentListItem', () => {
             can_manage_members: false,
         };
         const { unmount } = render(
-            <CommentListItem
-                comment={comment({ user: { id: 2, name: 'Bob' } })}
-            />
+            <CommentListItem comment={comment({ user: bobAuthor })} />
         );
         expect(
             screen.queryByRole('button', { name: 'Comment actions' })

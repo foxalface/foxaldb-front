@@ -17,6 +17,7 @@ import {
     getPresenceColorClass,
     getPresenceTextColorClass,
 } from '@/lib/realtime/presence-utils';
+import type { PresenceMemberIdentity } from '@/lib/user';
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
 const STALE_CHECK_INTERVAL_MS = 250;
@@ -37,11 +38,11 @@ export interface UseRemoteCursorsResult {
 
 const toViewModels = (
     cursors: CursorState[],
-    presenceMembers: ReadonlyMap<number, { name: string }>
+    presenceMembers: ReadonlyMap<number, PresenceMemberIdentity>
 ): RemoteCursorViewModel[] =>
     cursors.map((cursor) => {
         const member = presenceMembers.get(cursor.userId);
-        const name = member?.name ?? 'Collaborator';
+        const name = member?.fullName ?? 'Collaborator';
 
         return {
             userId: cursor.userId,

@@ -128,7 +128,7 @@ export const resolveActivityActorName = (
         return t('activity_feed_dialog.you');
     }
 
-    return activity.user?.name ?? t('activity_feed_dialog.unknown_user');
+    return activity.user?.fullName ?? t('activity_feed_dialog.unknown_user');
 };
 
 export const formatActivityMessage = (

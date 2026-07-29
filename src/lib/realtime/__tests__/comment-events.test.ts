@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { DiagramComment } from '@/lib/comments/comment-types';
+import { buildUserIdentity } from '@/lib/user';
 import {
     DIAGRAM_COMMENT_CREATED_EVENT,
     DIAGRAM_COMMENT_DELETED_EVENT,
@@ -18,7 +19,7 @@ const baseComment = (
     targetType: 'diagram',
     targetId: null,
     body: 'Hello',
-    user: { id: 7, name: 'Alice' },
+    user: buildUserIdentity(7, 'Alice', 'Martin'),
     createdAt: '2026-07-19T10:00:00.000Z',
     updatedAt: '2026-07-19T10:05:00.000Z',
     ...overrides,
@@ -102,14 +103,17 @@ describe.each([
         expect(parse(input)?.comment.user).toBeNull();
     });
 
-    it('preserves user id and name', () => {
+    it('preserves structured user identity', () => {
         const input = baseMutationPayload({
             comment: baseComment({
-                user: { id: 99, name: 'Bob' },
+                user: buildUserIdentity(99, 'Bob', 'Smith'),
             }),
         });
 
-        expect(parse(input)?.comment.user).toEqual({ id: 99, name: 'Bob' });
+        expect(parse(input)?.comment.user).toEqual(
+            buildUserIdentity(99, 'Bob', 'Smith')
+        );
+        expect(parse(input)?.comment.user).not.toHaveProperty('name');
     });
 
     it('preserves timestamp strings exactly', () => {
@@ -298,7 +302,12 @@ describe.each([
             parse(
                 baseMutationPayload({
                     comment: baseComment({
-                        user: { id: 1.5, name: 'Alice' } as never,
+                        user: {
+                            id: 1.5,
+                            firstName: 'Alice',
+                            lastName: 'Martin',
+                            fullName: 'Alice Martin',
+                        } as never,
                     }),
                 })
             )
@@ -307,7 +316,12 @@ describe.each([
             parse(
                 baseMutationPayload({
                     comment: baseComment({
-                        user: { id: 1, name: 2 } as never,
+                        user: {
+                            id: 1,
+                            firstName: 2,
+                            lastName: 'Martin',
+                            fullName: '2 Martin',
+                        } as never,
                     }),
                 })
             )
@@ -323,13 +337,26 @@ describe.each([
         ).toBeNull();
     });
 
+    it('rejects legacy name-only author payloads', () => {
+        expect(
+            parse(
+                baseMutationPayload({
+                    comment: {
+                        ...baseComment(),
+                        user: { id: 1, name: 'Alice' } as never,
+                    },
+                })
+            )
+        ).toBeNull();
+    });
+
     it('rejects missing body', () => {
         const withoutBody = {
             id: 10,
             diagramId: 42,
             targetType: 'diagram' as const,
             targetId: null,
-            user: { id: 7, name: 'Alice' },
+            user: buildUserIdentity(7, 'Alice', 'Martin'),
             createdAt: '2026-07-19T10:00:00.000Z',
             updatedAt: '2026-07-19T10:05:00.000Z',
         };

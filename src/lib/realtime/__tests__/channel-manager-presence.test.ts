@@ -4,6 +4,7 @@ import type { PresenceChannel } from 'laravel-echo';
 import { ChannelManager } from '../channel-manager';
 import { EventDispatcher } from '../event-dispatcher';
 import { clearEchoInstance, setEchoInstance } from '../echo';
+import { createDiagramPresenceUser } from '../diagram-presence';
 
 const createPresenceChannelMock = () => {
     const callbacks: {
@@ -81,13 +82,13 @@ describe('ChannelManager presence lifecycle', () => {
         expect(presence.channel.joining).toHaveBeenCalled();
 
         presence.callbacks.here?.([
-            { id: 1, name: 'Alice' },
-            { id: 2, name: 'Bob' },
+            { id: 1, first_name: 'Alice', last_name: 'Anderson' },
+            { id: 2, first_name: 'Bob', last_name: 'Smith' },
         ]);
 
         expect(onHere).toHaveBeenCalledWith([
-            { id: 1, name: 'Alice', active: true },
-            { id: 2, name: 'Bob', active: true },
+            createDiagramPresenceUser(1, 'Alice', 'Anderson'),
+            createDiagramPresenceUser(2, 'Bob', 'Smith'),
         ]);
     });
 
@@ -107,19 +108,23 @@ describe('ChannelManager presence lifecycle', () => {
         manager.joinUserChannel(1);
         manager.joinDiagram('42');
 
-        presence.callbacks.joining?.({ id: 2, name: 'Bob' });
-        presence.callbacks.leaving?.({ id: 2, name: 'Bob' });
+        presence.callbacks.joining?.({
+            id: 2,
+            first_name: 'Bob',
+            last_name: 'Smith',
+        });
+        presence.callbacks.leaving?.({
+            id: 2,
+            first_name: 'Bob',
+            last_name: 'Smith',
+        });
 
-        expect(onJoining).toHaveBeenCalledWith({
-            id: 2,
-            name: 'Bob',
-            active: true,
-        });
-        expect(onLeaving).toHaveBeenCalledWith({
-            id: 2,
-            name: 'Bob',
-            active: true,
-        });
+        expect(onJoining).toHaveBeenCalledWith(
+            createDiagramPresenceUser(2, 'Bob', 'Smith')
+        );
+        expect(onLeaving).toHaveBeenCalledWith(
+            createDiagramPresenceUser(2, 'Bob', 'Smith')
+        );
     });
 
     it('leaves the previous diagram channel before joining another', () => {

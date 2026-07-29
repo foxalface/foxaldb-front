@@ -105,7 +105,7 @@ export const ShareMemberList: React.FC<ShareMemberListProps> = ({
                     >
                         <div className="min-w-0 flex-1">
                             <p className="truncate font-medium">
-                                {member.user.name}
+                                {member.user.fullName}
                             </p>
                             <p className="truncate text-sm text-muted-foreground">
                                 {member.user.email}

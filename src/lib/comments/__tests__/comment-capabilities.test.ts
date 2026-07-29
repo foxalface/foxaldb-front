@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import { buildUserIdentity } from '@/lib/user';
 import type { DiagramAccess } from '@/lib/api/diagrams';
 import type { CommentAuthor } from '@/lib/comments/comment-types';
 import { getCommentCapabilities } from '../comment-capabilities';
 
-const author = (id: number): CommentAuthor => ({ id, name: `User ${id}` });
+const author = (id: number): CommentAuthor =>
+    buildUserIdentity(id, 'User', String(id));
 
 const access = (
     partial: Partial<DiagramAccess> & Pick<DiagramAccess, 'role'>
