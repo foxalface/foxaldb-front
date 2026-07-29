@@ -228,10 +228,10 @@ describe('SidePanel comments routing', () => {
         render(<SidePanel />);
 
         expect(
-            screen.getByRole('option', { name: 'Discussions' })
+            screen.getByRole('option', { name: 'Conversations' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('option', { name: 'Discussions' })
+            screen.getByRole('option', { name: 'Conversations' })
         ).toHaveAttribute('data-value', 'comments');
     });
 
@@ -240,7 +240,7 @@ describe('SidePanel comments routing', () => {
         render(<SidePanel />);
 
         expect(
-            screen.queryByRole('option', { name: 'Discussions' })
+            screen.queryByRole('option', { name: 'Conversations' })
         ).not.toBeInTheDocument();
     });
 
@@ -270,11 +270,11 @@ describe('SidePanel comments routing', () => {
         expect(screen.getByTestId('custom-types-section')).toBeInTheDocument();
     });
 
-    it('calls openAllDiscussions when selecting mobile Discussions', async () => {
+    it('calls openAllDiscussions when selecting mobile Conversations', async () => {
         const user = userEvent.setup();
         render(<SidePanel />);
 
-        await user.click(screen.getByRole('option', { name: 'Discussions' }));
+        await user.click(screen.getByRole('option', { name: 'Conversations' }));
 
         expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
         expect(layoutState.selectSidebarSection).not.toHaveBeenCalledWith(
@@ -292,17 +292,17 @@ describe('SidePanel comments routing', () => {
         expect(layoutState.openAllDiscussions).not.toHaveBeenCalled();
     });
 
-    it('does not re-open all discussions when comments is already selected', async () => {
+    it('does not re-open all conversations when comments is already selected', async () => {
         const user = userEvent.setup();
         layoutState.selectedSidebarSection = 'comments';
         render(<SidePanel />);
 
-        await user.click(screen.getByRole('option', { name: 'Discussions' }));
+        await user.click(screen.getByRole('option', { name: 'Conversations' }));
 
         expect(layoutState.openAllDiscussions).not.toHaveBeenCalled();
     });
 
-    it('restores all discussions after leaving comments and selecting Discussions again', async () => {
+    it('restores all conversations after leaving comments and selecting Conversations again', async () => {
         const user = userEvent.setup();
         layoutState.selectedSidebarSection = 'comments';
         const { rerender } = render(<SidePanel />);
@@ -313,7 +313,7 @@ describe('SidePanel comments routing', () => {
 
         rerender(<SidePanel />);
 
-        await user.click(screen.getByRole('option', { name: 'Discussions' }));
+        await user.click(screen.getByRole('option', { name: 'Conversations' }));
         expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
     });
 

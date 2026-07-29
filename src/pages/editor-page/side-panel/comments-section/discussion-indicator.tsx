@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageCircle } from 'lucide-react';
+import { SlBubbles } from 'react-icons/sl';
 import type { DiscussionIndicator as DiscussionIndicatorValue } from '@/lib/comments/discussion-indicators';
 import { cn } from '@/lib/utils';
 
@@ -29,7 +29,7 @@ export const DiscussionIndicator: React.FC<DiscussionIndicatorProps> = ({
                 className
             )}
         >
-            <MessageCircle className="size-3.5" aria-hidden="true" />
+            <SlBubbles className="size-3.5" aria-hidden="true" />
         </span>
     );
 };

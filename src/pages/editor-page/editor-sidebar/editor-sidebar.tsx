@@ -17,8 +17,8 @@ import {
     Plus,
     FolderOpen,
     CodeXml,
-    MessageCircle,
 } from 'lucide-react';
+import { SlBubbles } from 'react-icons/sl';
 import { Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
@@ -136,7 +136,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 ? [
                       {
                           title: t('editor_sidebar.comments'),
-                          icon: MessageCircle,
+                          icon: SlBubbles,
                           onClick: () => {
                               openAllDiscussions();
                           },

@@ -9,7 +9,7 @@ export const id_ID: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Ketergantungan',
             custom_types: 'Tipe Kustom',
-            comments: 'Diskusi',
+            comments: 'Percakapan',
             visuals: 'Visual',
         },
         menu: {
@@ -170,7 +170,7 @@ export const id_ID: LanguageTranslation = {
                     field_type: 'Tipe',
                     field_actions: {
                         title: 'Atribut Kolom',
-                        open_discussion: 'Buka diskusi',
+                        open_discussion: 'Buka percakapan',
                         unique: 'Unik',
                         auto_increment: 'Kenaikan Otomatis',
                         comments: 'Komentar',
@@ -198,7 +198,7 @@ export const id_ID: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Aksi Tabel',
-                        open_discussion: 'Buka diskusi',
+                        open_discussion: 'Buka percakapan',
                         change_schema: 'Ubah Skema',
                         add_field: 'Tambah Kolom',
                         add_index: 'Tambah Indeks',
@@ -235,7 +235,7 @@ export const id_ID: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Aksi',
-                        open_discussion: 'Buka diskusi',
+                        open_discussion: 'Buka percakapan',
                         delete_relationship: 'Hapus',
                     },
                 },
@@ -336,15 +336,15 @@ export const id_ID: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'Diskusi',
-                loading: 'Memuat diskusi…',
+                title: 'Percakapan',
+                loading: 'Memuat percakapan…',
                 inactive: {
-                    title: 'Diskusi tidak tersedia',
+                    title: 'Percakapan tidak tersedia',
                     description:
-                        'Diskusi hanya tersedia pada diagram cloud yang terautentikasi.',
+                        'Percakapan hanya tersedia pada diagram cloud yang diautentikasi.',
                 },
                 empty: {
-                    title: 'Belum ada diskusi',
+                    title: 'Belum ada percakapan',
                     description:
                         'Percakapan tentang diagram ini akan muncul di sini.',
                     diagram_title: 'Belum ada pesan diagram',
@@ -355,26 +355,26 @@ export const id_ID: LanguageTranslation = {
                         'Pesan tentang pilihan saat ini akan muncul di sini.',
                 },
                 errors: {
-                    load_title: 'Tidak dapat memuat diskusi',
+                    load_title: 'Tidak dapat memuat percakapan',
                     load_description:
-                        'Terjadi kesalahan saat memuat diskusi. Silakan coba lagi.',
+                        'Terjadi kesalahan saat memuat percakapan. Silakan coba lagi.',
                 },
                 retry: 'Coba lagi',
                 deleted_user: 'Pengguna dihapus',
                 targets: {
-                    diagram: 'Diskusi diagram',
-                    table: 'Diskusi tabel',
-                    field: 'Diskusi kolom',
-                    relationship: 'Diskusi relasi',
-                    unknown: 'Diskusi',
+                    diagram: 'Diagram',
+                    table: 'Tabel',
+                    field: 'Kolom',
+                    relationship: 'Relasi',
+                    unknown: 'Percakapan',
                 },
                 views: {
-                    all: 'Semua',
+                    all: 'Semua percakapan',
                     diagram: 'Diagram',
                     current_target: 'Saat ini',
                 },
                 target_header: {
-                    diagram: 'Diskusi diagram',
+                    diagram: 'Diagram',
                     table: 'Tabel {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -385,11 +385,11 @@ export const id_ID: LanguageTranslation = {
                 },
                 composer: {
                     label: 'Pesan',
-                    placeholder: 'Tulis pesan diskusi…',
+                    placeholder: 'Tulis pesan…',
                     submit: 'Kirim',
                     submitting: 'Mengirim…',
                     cancel: 'Batal',
-                    form_aria_label: 'Pesan diskusi baru',
+                    form_aria_label: 'Pesan baru',
                     counter_aria_label:
                         '{{count}} dari {{max}} karakter digunakan',
                     errors: {
@@ -406,7 +406,7 @@ export const id_ID: LanguageTranslation = {
                 },
                 edit: {
                     label: 'Pesan',
-                    form_aria_label: 'Edit pesan diskusi',
+                    form_aria_label: 'Edit pesan',
                     save: 'Simpan',
                     saving: 'Menyimpan…',
                     cancel: 'Batal',

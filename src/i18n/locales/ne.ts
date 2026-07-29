@@ -9,7 +9,7 @@ export const ne: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'निर्भरताहरू',
             custom_types: 'कस्टम प्रकारहरू',
-            comments: 'छलफलहरू',
+            comments: 'कुराकानी',
             visuals: 'Visuals',
         },
         menu: {
@@ -171,7 +171,7 @@ export const ne: LanguageTranslation = {
                     field_type: 'प्रकार',
                     field_actions: {
                         title: 'क्षेत्र विशेषताहरू',
-                        open_discussion: 'छलफल खोल्नुहोस्',
+                        open_discussion: 'कुराकानी खोल्नुहोस्',
                         unique: 'अनन्य',
                         auto_increment: 'स्वचालित वृद्धि',
                         comments: 'टिप्पणीहरू',
@@ -199,7 +199,7 @@ export const ne: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'तालिका विशेषताहरू',
-                        open_discussion: 'छलफल खोल्नुहोस्',
+                        open_discussion: 'कुराकानी खोल्नुहोस्',
                         change_schema: 'स्कीम परिवर्तन गर्नुहोस्',
                         add_field: 'क्षेत्र थप्नुहोस्',
                         add_index: 'सूचक थप्नुहोस्',
@@ -236,7 +236,7 @@ export const ne: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'कार्यहरू',
-                        open_discussion: 'छलफल खोल्नुहोस्',
+                        open_discussion: 'कुराकानी खोल्नुहोस्',
                         delete_relationship: 'हटाउनुहोस्',
                     },
                 },
@@ -337,18 +337,18 @@ export const ne: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'छलफलहरू',
-                loading: 'छलफलहरू लोड हुँदै…',
+                title: 'कुराकानी',
+                loading: 'कुराकानी लोड हुँदैछ…',
                 inactive: {
-                    title: 'छलफलहरू उपलब्ध छैनन्',
+                    title: 'कुराकानी उपलब्ध छैन',
                     description:
-                        'छलफलहरू प्रमाणित क्लाउड रेखाचित्रहरूमा मात्र उपलब्ध छन्।',
+                        'कुराकानी प्रमाणित क्लाउड डायाग्राममा मात्र उपलब्ध छ।',
                 },
                 empty: {
-                    title: 'अहिलेसम्म कुनै छलफल छैन',
+                    title: 'अहिलेसम्म कुनै कुराकानी छैन',
                     description:
                         'यो रेखाचित्रका बारेका कुराकानीहरू यहाँ देखिने छन्।',
-                    diagram_title: 'अहिलेसम्म कुनै चित्र सन्देश छैन',
+                    diagram_title: 'अहिलेसम्म कुनै डायाग्राम सन्देश छैन',
                     diagram_description:
                         'समग्र चित्रसम्बन्धी सन्देशहरू यहाँ देखिनेछन्।',
                     target_title: 'हालको चयनका लागि अहिलेसम्म सन्देश छैन',
@@ -356,26 +356,26 @@ export const ne: LanguageTranslation = {
                         'हालको चयनसम्बन्धी सन्देशहरू यहाँ देखिनेछन्।',
                 },
                 errors: {
-                    load_title: 'छलफलहरू लोड गर्न सकिएन',
+                    load_title: 'कुराकानी लोड गर्न सकिएन',
                     load_description:
-                        'छलफलहरू लोड गर्दा केही गलत भयो। कृपया फेरि प्रयास गर्नुहोस्।',
+                        'कुराकानी लोड गर्दा त्रुटि भयो। कृपया फेरि प्रयास गर्नुहोस्।',
                 },
                 retry: 'फेरि प्रयास गर्नुहोस्',
                 deleted_user: 'मेटिएको प्रयोगकर्ता',
                 targets: {
-                    diagram: 'रेखाचित्र छलफल',
-                    table: 'तालिका छलफल',
-                    field: 'फिल्ड छलफल',
-                    relationship: 'सम्बन्ध छलफल',
-                    unknown: 'छलफल',
+                    diagram: 'डायाग्राम',
+                    table: 'टेबल',
+                    field: 'फिल्ड',
+                    relationship: 'सम्बन्ध',
+                    unknown: 'कुराकानी',
                 },
                 views: {
-                    all: 'सबै',
+                    all: 'सबै कुराकानी',
                     diagram: 'चित्र',
                     current_target: 'हालको',
                 },
                 target_header: {
-                    diagram: 'चित्र छलफल',
+                    diagram: 'डायाग्राम',
                     table: 'तालिका {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -386,11 +386,11 @@ export const ne: LanguageTranslation = {
                 },
                 composer: {
                     label: 'सन्देश',
-                    placeholder: 'छलफल सन्देश लेख्नुहोस्…',
+                    placeholder: 'सन्देश लेख्नुहोस्…',
                     submit: 'पोस्ट गर्नुहोस्',
                     submitting: 'पोस्ट हुँदैछ…',
                     cancel: 'रद्द गर्नुहोस्',
-                    form_aria_label: 'नयाँ छलफल सन्देश',
+                    form_aria_label: 'नयाँ सन्देश',
                     counter_aria_label:
                         '{{max}} मध्ये {{count}} अक्षर प्रयोग भयो',
                     errors: {
@@ -407,7 +407,7 @@ export const ne: LanguageTranslation = {
                 },
                 edit: {
                     label: 'सन्देश',
-                    form_aria_label: 'छलफल सन्देश सम्पादन गर्नुहोस्',
+                    form_aria_label: 'सन्देश सम्पादन गर्नुहोस्',
                     save: 'बचत गर्नुहोस्',
                     saving: 'बचत हुँदैछ…',
                     cancel: 'रद्द गर्नुहोस्',

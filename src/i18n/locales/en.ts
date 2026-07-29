@@ -9,7 +9,7 @@ export const en = {
             refs: 'Refs',
             dependencies: 'Dependencies',
             custom_types: 'Custom Types',
-            comments: 'Discussions',
+            comments: 'Conversations',
             visuals: 'Visuals',
         },
         menu: {
@@ -167,7 +167,7 @@ export const en = {
                     field_type: 'Type',
                     field_actions: {
                         title: 'Field Attributes',
-                        open_discussion: 'Open discussion',
+                        open_discussion: 'Open conversation',
                         unique: 'Unique',
                         auto_increment: 'Auto Increment',
                         character_length: 'Max Length',
@@ -193,7 +193,7 @@ export const en = {
                     },
                     table_actions: {
                         title: 'Table Actions',
-                        open_discussion: 'Open discussion',
+                        open_discussion: 'Open conversation',
                         change_schema: 'Change Schema',
                         add_field: 'Add Field',
                         add_index: 'Add Index',
@@ -230,7 +230,7 @@ export const en = {
                     },
                     relationship_actions: {
                         title: 'Actions',
-                        open_discussion: 'Open discussion',
+                        open_discussion: 'Open conversation',
                         delete_relationship: 'Delete',
                     },
                 },
@@ -329,15 +329,15 @@ export const en = {
                 },
             },
             comments_section: {
-                title: 'Discussions',
-                loading: 'Loading discussions…',
+                title: 'Conversations',
+                loading: 'Loading conversations…',
                 inactive: {
-                    title: 'Discussions unavailable',
+                    title: 'Conversations unavailable',
                     description:
-                        'Discussions are only available on authenticated cloud diagrams.',
+                        'Conversations are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    title: 'No discussions yet',
+                    title: 'No conversations yet',
                     description:
                         'Conversations about this diagram will appear here.',
                     diagram_title: 'No diagram messages yet',
@@ -348,26 +348,26 @@ export const en = {
                         'Messages about the current selection will appear here.',
                 },
                 errors: {
-                    load_title: 'Could not load discussions',
+                    load_title: 'Could not load conversations',
                     load_description:
-                        'Something went wrong while loading discussions. Please try again.',
+                        'Something went wrong while loading conversations. Please try again.',
                 },
                 retry: 'Retry',
                 deleted_user: 'Deleted user',
                 targets: {
-                    diagram: 'Diagram discussion',
-                    table: 'Table discussion',
-                    field: 'Field discussion',
-                    relationship: 'Relationship discussion',
-                    unknown: 'Discussion',
+                    diagram: 'Diagram',
+                    table: 'Table',
+                    field: 'Field',
+                    relationship: 'Relationship',
+                    unknown: 'Conversation',
                 },
                 views: {
-                    all: 'All',
+                    all: 'All conversations',
                     diagram: 'Diagram',
                     current_target: 'Current',
                 },
                 target_header: {
-                    diagram: 'Diagram discussion',
+                    diagram: 'Diagram',
                     table: 'Table {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -378,11 +378,11 @@ export const en = {
                 },
                 composer: {
                     label: 'Message',
-                    placeholder: 'Write a discussion message…',
+                    placeholder: 'Write a message…',
                     submit: 'Post',
                     submitting: 'Posting…',
                     cancel: 'Cancel',
-                    form_aria_label: 'New discussion message',
+                    form_aria_label: 'New message',
                     counter_aria_label: '{{count}} of {{max}} characters used',
                     errors: {
                         empty: 'Enter a message to post.',
@@ -398,7 +398,7 @@ export const en = {
                 },
                 edit: {
                     label: 'Message',
-                    form_aria_label: 'Edit discussion message',
+                    form_aria_label: 'Edit message',
                     save: 'Save',
                     saving: 'Saving…',
                     cancel: 'Cancel',

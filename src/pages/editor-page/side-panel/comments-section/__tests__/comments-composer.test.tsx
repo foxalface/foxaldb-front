@@ -120,7 +120,7 @@ describe('CommentsComposer', () => {
             screen.getByRole('button', { name: 'Cancel' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('form', { name: 'New discussion message' })
+            screen.getByRole('form', { name: 'New message' })
         ).toBeInTheDocument();
     });
 

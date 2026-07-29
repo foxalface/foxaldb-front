@@ -93,7 +93,7 @@ describe('CommentsScrollRegion', () => {
             <CommentsScrollRegion
                 comments={[]}
                 emptyContent={
-                    <div data-testid="scoped-empty">No discussions yet</div>
+                    <div data-testid="scoped-empty">No conversations yet</div>
                 }
                 labelledBy="heading"
                 scopeKey="42:diagram"

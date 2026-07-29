@@ -204,7 +204,7 @@ const fieldAttributesTrigger = () =>
 const schemaCommentMarker = (container: HTMLElement) =>
     container.querySelector('.border-t-pink-500');
 
-describe('TableField discussion indicator', () => {
+describe('TableField indicator', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
         commentsState.isActive = true;
@@ -350,7 +350,7 @@ describe('TableField discussion indicator', () => {
         expect(openTargetDiscussion).not.toHaveBeenCalled();
     });
 
-    it('keeps Open discussion functional while the indicator is visible', async () => {
+    it('keeps Open conversation functional while the indicator is visible', async () => {
         const user = userEvent.setup();
         discussionIndicatorState.indicator = withDiscussion(3);
         renderField();
@@ -358,7 +358,7 @@ describe('TableField discussion indicator', () => {
         expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
         await user.click(fieldAttributesTrigger());
         await user.click(
-            screen.getByRole('button', { name: 'Open discussion' })
+            screen.getByRole('button', { name: 'Open conversation' })
         );
 
         expect(openTargetDiscussion).toHaveBeenCalledTimes(1);

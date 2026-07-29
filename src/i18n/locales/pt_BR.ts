@@ -9,7 +9,7 @@ export const pt_BR: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Dependências',
             custom_types: 'Tipos Personalizados',
-            comments: 'Discussões',
+            comments: 'Conversas',
             visuals: 'Visuais',
         },
         menu: {
@@ -171,7 +171,7 @@ export const pt_BR: LanguageTranslation = {
                     field_type: 'Tipo',
                     field_actions: {
                         title: 'Atributos do Campo',
-                        open_discussion: 'Abrir discussão',
+                        open_discussion: 'Abrir conversa',
                         unique: 'Único',
                         auto_increment: 'Incremento Automático',
                         comments: 'Comentários',
@@ -199,7 +199,7 @@ export const pt_BR: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Ações da Tabela',
-                        open_discussion: 'Abrir discussão',
+                        open_discussion: 'Abrir conversa',
                         change_schema: 'Alterar Esquema',
                         add_field: 'Adicionar Campo',
                         add_index: 'Adicionar Índice',
@@ -236,7 +236,7 @@ export const pt_BR: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Ações',
-                        open_discussion: 'Abrir discussão',
+                        open_discussion: 'Abrir conversa',
                         delete_relationship: 'Excluir',
                     },
                 },
@@ -338,15 +338,15 @@ export const pt_BR: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'Discussões',
-                loading: 'Carregando discussões…',
+                title: 'Conversas',
+                loading: 'Carregando conversas…',
                 inactive: {
-                    title: 'Discussões indisponíveis',
+                    title: 'Conversas indisponíveis',
                     description:
-                        'As discussões estão disponíveis apenas em diagramas na nuvem autenticados.',
+                        'As conversas estão disponíveis apenas em diagramas na nuvem autenticados.',
                 },
                 empty: {
-                    title: 'Nenhuma discussão ainda',
+                    title: 'Ainda não há conversas',
                     description:
                         'As conversas sobre este diagrama aparecerão aqui.',
                     diagram_title: 'Ainda não há mensagens do diagrama',
@@ -357,26 +357,26 @@ export const pt_BR: LanguageTranslation = {
                         'As mensagens sobre a seleção atual aparecerão aqui.',
                 },
                 errors: {
-                    load_title: 'Não foi possível carregar as discussões',
+                    load_title: 'Não foi possível carregar as conversas',
                     load_description:
-                        'Algo deu errado ao carregar as discussões. Tente novamente.',
+                        'Algo deu errado ao carregar as conversas. Tente novamente.',
                 },
                 retry: 'Tentar novamente',
                 deleted_user: 'Usuário excluído',
                 targets: {
-                    diagram: 'Discussão do diagrama',
-                    table: 'Discussão da tabela',
-                    field: 'Discussão do campo',
-                    relationship: 'Discussão do relacionamento',
-                    unknown: 'Discussão',
+                    diagram: 'Diagrama',
+                    table: 'Tabela',
+                    field: 'Campo',
+                    relationship: 'Relação',
+                    unknown: 'Conversa',
                 },
                 views: {
-                    all: 'Todas',
+                    all: 'Todas as conversas',
                     diagram: 'Diagrama',
                     current_target: 'Atual',
                 },
                 target_header: {
-                    diagram: 'Discussão do diagrama',
+                    diagram: 'Diagrama',
                     table: 'Tabela {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -387,11 +387,11 @@ export const pt_BR: LanguageTranslation = {
                 },
                 composer: {
                     label: 'Mensagem',
-                    placeholder: 'Escreva uma mensagem de discussão…',
+                    placeholder: 'Escreva uma mensagem…',
                     submit: 'Publicar',
                     submitting: 'Publicando…',
                     cancel: 'Cancelar',
-                    form_aria_label: 'Nova mensagem de discussão',
+                    form_aria_label: 'Nova mensagem',
                     counter_aria_label:
                         '{{count}} de {{max}} caracteres usados',
                     errors: {
@@ -409,7 +409,7 @@ export const pt_BR: LanguageTranslation = {
                 },
                 edit: {
                     label: 'Mensagem',
-                    form_aria_label: 'Editar mensagem da discussão',
+                    form_aria_label: 'Editar mensagem',
                     save: 'Salvar',
                     saving: 'Salvando…',
                     cancel: 'Cancelar',

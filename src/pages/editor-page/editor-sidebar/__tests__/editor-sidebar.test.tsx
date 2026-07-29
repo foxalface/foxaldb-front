@@ -93,48 +93,48 @@ describe('EditorSidebar comments entry', () => {
         commentsState.isActive = true;
     });
 
-    it('shows the Discussions item when comments are active', () => {
+    it('shows the Conversations item when comments are active', () => {
         commentsState.isActive = true;
         renderSidebar();
 
         expect(
-            screen.getByRole('button', { name: 'Discussions' })
+            screen.getByRole('button', { name: 'Conversations' })
         ).toBeInTheDocument();
     });
 
-    it('hides the Discussions item when comments are inactive', () => {
+    it('hides the Conversations item when comments are inactive', () => {
         commentsState.isActive = false;
         renderSidebar();
 
         expect(
-            screen.queryByRole('button', { name: 'Discussions' })
+            screen.queryByRole('button', { name: 'Conversations' })
         ).not.toBeInTheDocument();
     });
 
-    it('opens all discussions through openAllDiscussions on click', async () => {
+    it('opens all conversations through openAllDiscussions on click', async () => {
         const user = userEvent.setup();
         renderSidebar();
 
-        await user.click(screen.getByRole('button', { name: 'Discussions' }));
+        await user.click(screen.getByRole('button', { name: 'Conversations' }));
 
         expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
         expect(layoutState.showSidePanel).not.toHaveBeenCalled();
         expect(layoutState.selectSidebarSection).not.toHaveBeenCalled();
     });
 
-    it('marks the Discussions control active when comments is selected', () => {
+    it('marks the Conversations control active when comments is selected', () => {
         layoutState.selectedSidebarSection = 'comments';
         renderSidebar();
 
-        const button = screen.getByRole('button', { name: 'Discussions' });
+        const button = screen.getByRole('button', { name: 'Conversations' });
         expect(button).toHaveAttribute('data-active', 'true');
-        expect(button).toHaveAccessibleName('Discussions');
+        expect(button).toHaveAccessibleName('Conversations');
     });
 
-    it('does not render a badge or counter for Discussions', () => {
+    it('does not render a badge or counter for Conversations', () => {
         renderSidebar();
 
-        const button = screen.getByRole('button', { name: 'Discussions' });
+        const button = screen.getByRole('button', { name: 'Conversations' });
         expect(button.parentElement?.querySelector('.rounded-full')).toBeNull();
         expect(button.textContent).not.toMatch(/\d/);
     });

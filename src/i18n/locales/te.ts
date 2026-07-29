@@ -9,7 +9,7 @@ export const te: LanguageTranslation = {
             refs: 'సంబంధాలు',
             dependencies: 'ఆధారతలు',
             custom_types: 'కస్టమ్ టైప్స్',
-            comments: 'చర్చలు',
+            comments: 'సంభాషణలు',
             visuals: 'Visuals',
         },
         menu: {
@@ -171,7 +171,7 @@ export const te: LanguageTranslation = {
                     field_type: 'ప్రకృతి',
                     field_actions: {
                         title: 'ఫీల్డ్ గుణాలు',
-                        open_discussion: 'చర్చను తెరవండి',
+                        open_discussion: 'సంభాషణ తెరవండి',
                         unique: 'అద్వితీయ',
                         auto_increment: 'ఆటో ఇంక్రిమెంట్',
                         comments: 'వ్యాఖ్యలు',
@@ -199,7 +199,7 @@ export const te: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'పట్టిక చర్యలు',
-                        open_discussion: 'చర్చను తెరవండి',
+                        open_discussion: 'సంభాషణ తెరవండి',
                         change_schema: 'స్కీమాను మార్చు',
                         add_field: 'ఫీల్డ్ జోడించు',
                         add_index: 'ఇండెక్స్ జోడించు',
@@ -237,7 +237,7 @@ export const te: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'చర్యలు',
-                        open_discussion: 'చర్చను తెరవండి',
+                        open_discussion: 'సంభాషణ తెరవండి',
                         delete_relationship: 'సంబంధం తొలగించు',
                     },
                 },
@@ -337,15 +337,15 @@ export const te: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'చర్చలు',
-                loading: 'చర్చలు లోడ్ అవుతున్నాయి…',
+                title: 'సంభాషణలు',
+                loading: 'సంభాషణలు లోడ్ అవుతున్నాయి…',
                 inactive: {
-                    title: 'చర్చలు అందుబాటులో లేవు',
+                    title: 'సంభాషణలు అందుబాటులో లేవు',
                     description:
-                        'చర్చలు ప్రామాణీకృత క్లౌడ్ రేఖాచిత్రాలలో మాత్రమే అందుబాటులో ఉంటాయి.',
+                        'సంభాషణలు ప్రమాణీకృత క్లౌడ్ డయాగ్రామ్‌లలో మాత్రమే అందుబాటులో ఉంటాయి.',
                 },
                 empty: {
-                    title: 'ఇంకా చర్చలు లేవు',
+                    title: 'ఇంకా సంభాషణలు లేవు',
                     description:
                         'ఈ రేఖాచిత్రం గురించిన సంభాషణలు ఇక్కడ కనిపిస్తాయి.',
                     diagram_title: 'ఇంకా డైగ్రామ్ సందేశాలు లేవు',
@@ -356,26 +356,26 @@ export const te: LanguageTranslation = {
                         'ప్రస్తుత ఎంపిక గురించిన సందేశాలు ఇక్కడ కనిపిస్తాయి.',
                 },
                 errors: {
-                    load_title: 'చర్చలను లోడ్ చేయలేకపోయాము',
+                    load_title: 'సంభాషణలు లోడ్ చేయలేకపోయాము',
                     load_description:
-                        'చర్చలను లోడ్ చేస్తున్నప్పుడు ఏదో తప్పు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                        'సంభాషణలు లోడ్ చేస్తున్నప్పుడు లోపం సంభవించింది. దయచేసి మళ్లీ ప్రయత్నించండి.',
                 },
                 retry: 'మళ్లీ ప్రయత్నించండి',
                 deleted_user: 'తొలగించబడిన వినియోగదారు',
                 targets: {
-                    diagram: 'రేఖాచిత్ర చర్చ',
-                    table: 'టేబుల్ చర్చ',
-                    field: 'ఫీల్డ్ చర్చ',
-                    relationship: 'రిలేషన్‌షిప్ చర్చ',
-                    unknown: 'చర్చ',
+                    diagram: 'డయాగ్రామ్',
+                    table: 'టేబుల్',
+                    field: 'ఫీల్డ్',
+                    relationship: 'సంబంధం',
+                    unknown: 'సంభాషణ',
                 },
                 views: {
-                    all: 'అన్నీ',
+                    all: 'అన్ని సంభాషణలు',
                     diagram: 'డైగ్రామ్',
                     current_target: 'ప్రస్తుతం',
                 },
                 target_header: {
-                    diagram: 'డైగ్రామ్ చర్చ',
+                    diagram: 'డయాగ్రామ్',
                     table: 'పట్టిక {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -386,11 +386,11 @@ export const te: LanguageTranslation = {
                 },
                 composer: {
                     label: 'సందేశం',
-                    placeholder: 'చర్చ సందేశం రాయండి…',
+                    placeholder: 'సందేశం రాయండి…',
                     submit: 'పోస్ట్ చేయి',
                     submitting: 'పోస్ట్ చేస్తోంది…',
                     cancel: 'రద్దు చేయి',
-                    form_aria_label: 'కొత్త చర్చ సందేశం',
+                    form_aria_label: 'నూతన సందేశం',
                     counter_aria_label:
                         '{{max}}లో {{count}} అక్షరాలు ఉపయోగించబడ్డాయి',
                     errors: {
@@ -407,7 +407,7 @@ export const te: LanguageTranslation = {
                 },
                 edit: {
                     label: 'సందేశం',
-                    form_aria_label: 'చర్చ సందేశాన్ని సవరించు',
+                    form_aria_label: 'సందేశం సవరించండి',
                     save: 'సేవ్ చేయి',
                     saving: 'సేవ్ చేస్తోంది…',
                     cancel: 'రద్దు చేయి',

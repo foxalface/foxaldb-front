@@ -9,7 +9,7 @@ export const ru: LanguageTranslation = {
             refs: 'Ссылки',
             dependencies: 'Зависимости',
             custom_types: 'Пользовательские типы',
-            comments: 'Обсуждения',
+            comments: 'Беседы',
             visuals: 'Визуальные элементы',
         },
         menu: {
@@ -168,7 +168,7 @@ export const ru: LanguageTranslation = {
                     field_type: 'Тип',
                     field_actions: {
                         title: 'Атрибуты поля',
-                        open_discussion: 'Открыть обсуждение',
+                        open_discussion: 'Открыть беседу',
                         unique: 'Уникальный',
                         auto_increment: 'Автоинкремент',
                         comments: 'Комментарии',
@@ -195,7 +195,7 @@ export const ru: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Действия',
-                        open_discussion: 'Открыть обсуждение',
+                        open_discussion: 'Открыть беседу',
                         change_schema: 'Изменить схему',
                         add_field: 'Добавить поле',
                         add_index: 'Добавить индекс',
@@ -232,7 +232,7 @@ export const ru: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Действия',
-                        open_discussion: 'Открыть обсуждение',
+                        open_discussion: 'Открыть беседу',
                         delete_relationship: 'Удалить',
                     },
                 },
@@ -335,17 +335,17 @@ export const ru: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'Обсуждения',
-                loading: 'Загрузка обсуждений…',
+                title: 'Беседы',
+                loading: 'Загрузка бесед…',
                 inactive: {
-                    title: 'Обсуждения недоступны',
+                    title: 'Беседы недоступны',
                     description:
-                        'Обсуждения доступны только для аутентифицированных облачных диаграмм.',
+                        'Беседы доступны только для аутентифицированных облачных диаграмм.',
                 },
                 empty: {
-                    title: 'Пока нет обсуждений',
+                    title: 'Пока нет бесед',
                     description: 'Разговоры об этой диаграмме появятся здесь.',
-                    diagram_title: 'Пока нет сообщений по диаграмме',
+                    diagram_title: 'Пока нет сообщений о диаграмме',
                     diagram_description:
                         'Сообщения о диаграмме в целом появятся здесь.',
                     target_title: 'Пока нет сообщений для текущего выбора',
@@ -353,26 +353,26 @@ export const ru: LanguageTranslation = {
                         'Сообщения о текущем выборе появятся здесь.',
                 },
                 errors: {
-                    load_title: 'Не удалось загрузить обсуждения',
+                    load_title: 'Не удалось загрузить беседы',
                     load_description:
-                        'При загрузке обсуждений произошла ошибка. Попробуйте ещё раз.',
+                        'При загрузке бесед произошла ошибка. Попробуйте снова.',
                 },
                 retry: 'Повторить',
                 deleted_user: 'Удалённый пользователь',
                 targets: {
-                    diagram: 'Обсуждение диаграммы',
-                    table: 'Обсуждение таблицы',
-                    field: 'Обсуждение поля',
-                    relationship: 'Обсуждение связи',
-                    unknown: 'Обсуждение',
+                    diagram: 'Диаграмма',
+                    table: 'Таблица',
+                    field: 'Поле',
+                    relationship: 'Связь',
+                    unknown: 'Беседа',
                 },
                 views: {
-                    all: 'Все',
+                    all: 'Все беседы',
                     diagram: 'Диаграмма',
                     current_target: 'Текущий',
                 },
                 target_header: {
-                    diagram: 'Обсуждение диаграммы',
+                    diagram: 'Диаграмма',
                     table: 'Таблица {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -383,11 +383,11 @@ export const ru: LanguageTranslation = {
                 },
                 composer: {
                     label: 'Сообщение',
-                    placeholder: 'Напишите сообщение обсуждения…',
+                    placeholder: 'Напишите сообщение…',
                     submit: 'Отправить',
                     submitting: 'Отправка…',
                     cancel: 'Отмена',
-                    form_aria_label: 'Новое сообщение обсуждения',
+                    form_aria_label: 'Новое сообщение',
                     counter_aria_label:
                         'Использовано {{count}} из {{max}} символов',
                     errors: {
@@ -404,7 +404,7 @@ export const ru: LanguageTranslation = {
                 },
                 edit: {
                     label: 'Сообщение',
-                    form_aria_label: 'Редактировать сообщение обсуждения',
+                    form_aria_label: 'Редактировать сообщение',
                     save: 'Сохранить',
                     saving: 'Сохранение…',
                     cancel: 'Отмена',

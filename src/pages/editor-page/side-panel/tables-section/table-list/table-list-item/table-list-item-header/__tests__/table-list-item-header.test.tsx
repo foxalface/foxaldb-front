@@ -200,16 +200,16 @@ describe('TableListItemHeader discussion entry', () => {
         await user.click(trigger);
         expect(trigger).toHaveAttribute('aria-expanded', 'true');
         expect(
-            screen.getByRole('menuitem', { name: 'Open discussion' })
+            screen.getByRole('menuitem', { name: 'Open conversation' })
         ).toBeInTheDocument();
         await user.keyboard('{Escape}');
     });
 
-    it('shows Open discussion when comments are active and the table is editable', async () => {
+    it('shows Open conversation when comments are active and the table is editable', async () => {
         await openMenu();
 
         expect(
-            screen.getByRole('menuitem', { name: /Open discussion/i })
+            screen.getByRole('menuitem', { name: /Open conversation/i })
         ).toBeInTheDocument();
         expect(
             screen.getByRole('menuitem', { name: /Add Field/i })
@@ -219,12 +219,12 @@ describe('TableListItemHeader discussion entry', () => {
         ).toBeInTheDocument();
     });
 
-    it('shows Open discussion for readonly viewers when comments are active', async () => {
+    it('shows Open conversation for readonly viewers when comments are active', async () => {
         chartDBState.readonly = true;
         await openMenu();
 
         expect(
-            screen.getByRole('menuitem', { name: /Open discussion/i })
+            screen.getByRole('menuitem', { name: /Open conversation/i })
         ).toBeInTheDocument();
     });
 
@@ -249,12 +249,12 @@ describe('TableListItemHeader discussion entry', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('hides Open discussion when comments are inactive', async () => {
+    it('hides Open conversation when comments are inactive', async () => {
         commentsState.isActive = false;
         await openMenu();
 
         expect(
-            screen.queryByRole('menuitem', { name: /Open discussion/i })
+            screen.queryByRole('menuitem', { name: /Open conversation/i })
         ).not.toBeInTheDocument();
         expect(
             screen.getByRole('menuitem', { name: /Add Field/i })
@@ -276,7 +276,7 @@ describe('TableListItemHeader discussion entry', () => {
         const user = await openMenu();
 
         await user.click(
-            screen.getByRole('menuitem', { name: /Open discussion/i })
+            screen.getByRole('menuitem', { name: /Open conversation/i })
         );
 
         expect(openTargetDiscussion).toHaveBeenCalledTimes(1);
@@ -299,18 +299,18 @@ describe('TableListItemHeader discussion entry', () => {
         await openMenu();
 
         expect(
-            screen.getByRole('menuitem', { name: 'Open discussion' })
+            screen.getByRole('menuitem', { name: 'Open conversation' })
         ).toBeInTheDocument();
     });
 
-    it('viewer menu contains only Open discussion without separators', async () => {
+    it('viewer menu contains only Open conversation without separators', async () => {
         chartDBState.readonly = true;
         await openMenu();
 
         const menu = screen.getByRole('menu');
         const items = within(menu).getAllByRole('menuitem');
         expect(items).toHaveLength(1);
-        expect(items[0]).toHaveAccessibleName('Open discussion');
+        expect(items[0]).toHaveAccessibleName('Open conversation');
         expect(within(menu).queryAllByRole('separator')).toHaveLength(0);
     });
 
@@ -333,7 +333,7 @@ describe('TableListItemHeader discussion entry', () => {
         }
 
         const discussion = screen.getByRole('menuitem', {
-            name: 'Open discussion',
+            name: 'Open conversation',
         });
         const deleteItem = screen.getByRole('menuitem', {
             name: 'Delete Table',
@@ -449,13 +449,13 @@ describe('TableListItemHeader discussion indicator', () => {
         expect(openTargetDiscussion).not.toHaveBeenCalled();
     });
 
-    it('keeps Open discussion functional while the indicator is visible', async () => {
+    it('keeps Open conversation functional while the indicator is visible', async () => {
         discussionIndicatorState.indicator = withDiscussion(3);
         const user = await openMenu();
 
         expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
         await user.click(
-            screen.getByRole('menuitem', { name: /Open discussion/i })
+            screen.getByRole('menuitem', { name: /Open conversation/i })
         );
 
         expect(openTargetDiscussion).toHaveBeenCalledTimes(1);

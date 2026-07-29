@@ -34,7 +34,7 @@ describe('DiscussionIndicator', () => {
         expect(container).toBeEmptyDOMElement();
     });
 
-    it('renders a decorative MessageCircle when hasDiscussion is true', () => {
+    it('renders a decorative icon when hasDiscussion is true', () => {
         render(<DiscussionIndicator indicator={withDiscussion(1)} />);
 
         const indicator = screen.getByTestId('discussion-indicator');

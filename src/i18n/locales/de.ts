@@ -9,7 +9,7 @@ export const de: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Abhängigkeiten',
             custom_types: 'Benutzerdefinierte Typen',
-            comments: 'Diskussionen',
+            comments: 'Unterhaltungen',
             visuals: 'Darstellungen',
         },
         menu: {
@@ -171,7 +171,7 @@ export const de: LanguageTranslation = {
                     field_type: 'Datentyp',
                     field_actions: {
                         title: 'Feldattribute',
-                        open_discussion: 'Diskussion öffnen',
+                        open_discussion: 'Unterhaltung öffnen',
                         unique: 'Eindeutig',
                         auto_increment: 'Automatisch hochzählen',
                         comments: 'Kommentare',
@@ -199,7 +199,7 @@ export const de: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Tabellenaktionen',
-                        open_discussion: 'Diskussion öffnen',
+                        open_discussion: 'Unterhaltung öffnen',
                         change_schema: 'Schema ändern',
                         add_field: 'Feld hinzufügen',
                         add_index: 'Index hinzufügen',
@@ -236,7 +236,7 @@ export const de: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Aktionen',
-                        open_discussion: 'Diskussion öffnen',
+                        open_discussion: 'Unterhaltung öffnen',
                         delete_relationship: 'Löschen',
                     },
                 },
@@ -338,19 +338,18 @@ export const de: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'Diskussionen',
-                loading: 'Diskussionen werden geladen…',
+                title: 'Unterhaltungen',
+                loading: 'Unterhaltungen werden geladen…',
                 inactive: {
-                    title: 'Diskussionen nicht verfügbar',
+                    title: 'Unterhaltungen nicht verfügbar',
                     description:
-                        'Diskussionen sind nur für authentifizierte Cloud-Diagramme verfügbar.',
+                        'Unterhaltungen sind nur für authentifizierte Cloud-Diagramme verfügbar.',
                 },
                 empty: {
-                    title: 'Noch keine Diskussionen',
+                    title: 'Noch keine Unterhaltungen',
                     description:
                         'Unterhaltungen zu diesem Diagramm erscheinen hier.',
-                    diagram_title:
-                        'Noch keine Nachrichten zur Diagrammdiskussion',
+                    diagram_title: 'Noch keine Diagramm-Nachrichten',
                     diagram_description:
                         'Nachrichten zum Diagramm insgesamt erscheinen hier.',
                     target_title:
@@ -359,26 +358,26 @@ export const de: LanguageTranslation = {
                         'Nachrichten zur aktuellen Auswahl erscheinen hier.',
                 },
                 errors: {
-                    load_title: 'Diskussionen konnten nicht geladen werden',
+                    load_title: 'Unterhaltungen konnten nicht geladen werden',
                     load_description:
-                        'Beim Laden der Diskussionen ist ein Fehler aufgetreten. Bitte erneut versuchen.',
+                        'Beim Laden der Unterhaltungen ist ein Fehler aufgetreten. Bitte erneut versuchen.',
                 },
                 retry: 'Erneut versuchen',
                 deleted_user: 'Gelöschter Benutzer',
                 targets: {
-                    diagram: 'Diagrammdiskussion',
-                    table: 'Tabellendiskussion',
-                    field: 'Felddiskussion',
-                    relationship: 'Beziehungsdiskussion',
-                    unknown: 'Diskussion',
+                    diagram: 'Diagramm',
+                    table: 'Tabelle',
+                    field: 'Feld',
+                    relationship: 'Beziehung',
+                    unknown: 'Unterhaltung',
                 },
                 views: {
-                    all: 'Alle',
+                    all: 'Alle Unterhaltungen',
                     diagram: 'Diagramm',
                     current_target: 'Aktuell',
                 },
                 target_header: {
-                    diagram: 'Diagrammdiskussion',
+                    diagram: 'Diagramm',
                     table: 'Tabelle {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -389,11 +388,11 @@ export const de: LanguageTranslation = {
                 },
                 composer: {
                     label: 'Nachricht',
-                    placeholder: 'Diskussionsnachricht schreiben…',
+                    placeholder: 'Nachricht schreiben…',
                     submit: 'Senden',
                     submitting: 'Wird gesendet…',
                     cancel: 'Abbrechen',
-                    form_aria_label: 'Neue Diskussionsnachricht',
+                    form_aria_label: 'Neue Nachricht',
                     counter_aria_label:
                         '{{count}} von {{max}} Zeichen verwendet',
                     errors: {
@@ -411,7 +410,7 @@ export const de: LanguageTranslation = {
                 },
                 edit: {
                     label: 'Nachricht',
-                    form_aria_label: 'Diskussionsnachricht bearbeiten',
+                    form_aria_label: 'Nachricht bearbeiten',
                     save: 'Speichern',
                     saving: 'Wird gespeichert…',
                     cancel: 'Abbrechen',

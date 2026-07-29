@@ -9,7 +9,7 @@ export const gu: LanguageTranslation = {
             refs: 'રેફ્સ',
             dependencies: 'નિર્ભરતાઓ',
             custom_types: 'કસ્ટમ ટાઇપ',
-            comments: 'ચર્ચાઓ',
+            comments: 'વાતચીત',
             visuals: 'Visuals',
         },
         menu: {
@@ -172,7 +172,7 @@ export const gu: LanguageTranslation = {
                     field_type: 'પ્રકાર',
                     field_actions: {
                         title: 'ફીલ્ડ લક્ષણો',
-                        open_discussion: 'ચર્ચા ખોલો',
+                        open_discussion: 'વાતચીત ખોલો',
                         unique: 'અદ્વિતીય',
                         auto_increment: 'ઑટો ઇન્ક્રિમેન્ટ',
                         comments: 'ટિપ્પણીઓ',
@@ -200,7 +200,7 @@ export const gu: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'ટેબલ ક્રિયાઓ',
-                        open_discussion: 'ચર્ચા ખોલો',
+                        open_discussion: 'વાતચીત ખોલો',
                         change_schema: 'સ્કીમા બદલો',
                         add_field: 'ફીલ્ડ ઉમેરો',
                         add_index: 'ઇન્ડેક્સ ઉમેરો',
@@ -237,7 +237,7 @@ export const gu: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'ક્રિયાઓ',
-                        open_discussion: 'ચર્ચા ખોલો',
+                        open_discussion: 'વાતચીત ખોલો',
                         delete_relationship: 'કાઢી નાખો',
                     },
                 },
@@ -337,15 +337,15 @@ export const gu: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'ચર્ચાઓ',
-                loading: 'ચર્ચાઓ લોડ થઈ રહી છે…',
+                title: 'વાતચીત',
+                loading: 'વાતચીત લોડ થાય છે…',
                 inactive: {
-                    title: 'ચર્ચાઓ ઉપલબ્ધ નથી',
+                    title: 'વાતચીત ઉપલબ્ધ નથી',
                     description:
-                        'ચર્ચાઓ ફક્ત પ્રમાણિત ક્લાઉડ ડાયાગ્રામ પર ઉપલબ્ધ છે.',
+                        'વાતચીત ફક્ત પ્રમાણિત ક્લાઉડ ડાયાગ્રામ પર ઉપલબ્ધ છે.',
                 },
                 empty: {
-                    title: 'હજુ સુધી કોઈ ચર્ચા નથી',
+                    title: 'હજી કોઈ વાતચીત નથી',
                     description: 'આ ડાયાગ્રામ વિશેની વાતચીત અહીં દેખાશે.',
                     diagram_title: 'હજુ સુધી કોઈ ડાયાગ્રામ સંદેશા નથી',
                     diagram_description:
@@ -355,26 +355,26 @@ export const gu: LanguageTranslation = {
                         'વર્તમાન પસંદગી વિશેના સંદેશા અહીં દેખાશે.',
                 },
                 errors: {
-                    load_title: 'ચર્ચાઓ લોડ કરી શકાઈ નથી',
+                    load_title: 'વાતચીત લોડ કરી શકાઈ નથી',
                     load_description:
-                        'ચર્ચાઓ લોડ કરતી વખતે કંઈક ખોટું થયું. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                        'વાતચીત લોડ કરતી વખતે ભૂલ આવી. કૃપા કરીને ફરી પ્રયાસ કરો.',
                 },
                 retry: 'ફરી પ્રયાસ કરો',
                 deleted_user: 'કાઢી નાખેલ વપરાશકર્તા',
                 targets: {
-                    diagram: 'ડાયાગ્રામ ચર્ચા',
-                    table: 'ટેબલ ચર્ચા',
-                    field: 'ફીલ્ડ ચર્ચા',
-                    relationship: 'સંબંધ ચર્ચા',
-                    unknown: 'ચર્ચા',
+                    diagram: 'ડાયાગ્રામ',
+                    table: 'ટેબલ',
+                    field: 'ફીલ્ડ',
+                    relationship: 'સંબંધ',
+                    unknown: 'વાતચીત',
                 },
                 views: {
-                    all: 'બધા',
+                    all: 'બધી વાતચીત',
                     diagram: 'ડાયાગ્રામ',
                     current_target: 'વર્તમાન',
                 },
                 target_header: {
-                    diagram: 'ડાયાગ્રામ ચર્ચા',
+                    diagram: 'ડાયાગ્રામ',
                     table: 'કોષ્ટક {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -385,11 +385,11 @@ export const gu: LanguageTranslation = {
                 },
                 composer: {
                     label: 'સંદેશ',
-                    placeholder: 'ચર્ચાનો સંદેશ લખો…',
+                    placeholder: 'સંદેશ લખો…',
                     submit: 'પોસ્ટ કરો',
                     submitting: 'પોસ્ટ થઈ રહ્યું છે…',
                     cancel: 'રદ કરો',
-                    form_aria_label: 'નવો ચર્ચા સંદેશ',
+                    form_aria_label: 'નવો સંદેશ',
                     counter_aria_label: '{{max}} માંથી {{count}} અક્ષરો વપરાયા',
                     errors: {
                         empty: 'પોસ્ટ કરવા માટે સંદેશ દાખલ કરો.',
@@ -405,7 +405,7 @@ export const gu: LanguageTranslation = {
                 },
                 edit: {
                     label: 'સંદેશ',
-                    form_aria_label: 'ચર્ચા સંદેશ સંપાદિત કરો',
+                    form_aria_label: 'સંદેશ સંપાદિત કરો',
                     save: 'સાચવો',
                     saving: 'સાચવી રહ્યા છીએ…',
                     cancel: 'રદ કરો',

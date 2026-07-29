@@ -9,7 +9,7 @@ export const bn: LanguageTranslation = {
             refs: 'রেফস',
             dependencies: 'নির্ভরতা',
             custom_types: 'কাস্টম টাইপ',
-            comments: 'আলোচনা',
+            comments: 'কথোপকথন',
             visuals: 'ভিজ্যুয়াল',
         },
         menu: {
@@ -171,7 +171,7 @@ export const bn: LanguageTranslation = {
                     field_type: 'ধরন',
                     field_actions: {
                         title: 'ফিল্ড কর্ম',
-                        open_discussion: 'আলোচনা খুলুন',
+                        open_discussion: 'কথোপকথন খুলুন',
                         unique: 'অদ্বিতীয়',
                         auto_increment: 'স্বয়ংক্রিয় বৃদ্ধি',
                         comments: 'মন্তব্য',
@@ -199,7 +199,7 @@ export const bn: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'টেবিল কর্ম',
-                        open_discussion: 'আলোচনা খুলুন',
+                        open_discussion: 'কথোপকথন খুলুন',
                         change_schema: 'স্কিমা পরিবর্তন করুন',
                         add_field: 'ফিল্ড যোগ করুন',
                         add_index: 'ইনডেক্স যোগ করুন',
@@ -236,7 +236,7 @@ export const bn: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'কর্ম',
-                        open_discussion: 'আলোচনা খুলুন',
+                        open_discussion: 'কথোপকথন খুলুন',
                         delete_relationship: 'মুছুন',
                     },
                 },
@@ -338,15 +338,15 @@ export const bn: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'আলোচনা',
-                loading: 'আলোচনা লোড হচ্ছে…',
+                title: 'কথোপকথন',
+                loading: 'কথোপকথন লোড হচ্ছে…',
                 inactive: {
-                    title: 'আলোচনা উপলব্ধ নয়',
+                    title: 'কথোপকথন উপলব্ধ নয়',
                     description:
-                        'আলোচনা শুধুমাত্র প্রমাণীকৃত ক্লাউড ডায়াগ্রামে উপলব্ধ।',
+                        'কথোপকথন শুধুমাত্র প্রমাণিত ক্লাউড ডায়াগ্রামে উপলব্ধ।',
                 },
                 empty: {
-                    title: 'এখনও কোনো আলোচনা নেই',
+                    title: 'এখনো কোনো কথোপকথন নেই',
                     description:
                         'এই ডায়াগ্রাম সম্পর্কিত কথোপকথন এখানে দেখা যাবে।',
                     diagram_title: 'এখনও কোনো ডায়াগ্রাম বার্তা নেই',
@@ -358,26 +358,26 @@ export const bn: LanguageTranslation = {
                         'বর্তমান নির্বাচন সম্পর্কিত বার্তা এখানে দেখা যাবে।',
                 },
                 errors: {
-                    load_title: 'আলোচনা লোড করা যায়নি',
+                    load_title: 'কথোপকথন লোড করা যায়নি',
                     load_description:
-                        'আলোচনা লোড করার সময় কিছু ভুল হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                        'কথোপকথন লোড করার সময় একটি ত্রুটি ঘটেছে। আবার চেষ্টা করুন।',
                 },
                 retry: 'পুনরায় চেষ্টা করুন',
                 deleted_user: 'মুছে ফেলা ব্যবহারকারী',
                 targets: {
-                    diagram: 'ডায়াগ্রাম আলোচনা',
-                    table: 'টেবিল আলোচনা',
-                    field: 'ফিল্ড আলোচনা',
-                    relationship: 'রিলেশনশিপ আলোচনা',
-                    unknown: 'আলোচনা',
+                    diagram: 'ডায়াগ্রাম',
+                    table: 'টেবিল',
+                    field: 'ফিল্ড',
+                    relationship: 'সম্পর্ক',
+                    unknown: 'কথোপকথন',
                 },
                 views: {
-                    all: 'সব',
+                    all: 'সমস্ত কথোপকথন',
                     diagram: 'ডায়াগ্রাম',
                     current_target: 'বর্তমান',
                 },
                 target_header: {
-                    diagram: 'ডায়াগ্রাম আলোচনা',
+                    diagram: 'ডায়াগ্রাম',
                     table: 'টেবিল {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -388,11 +388,11 @@ export const bn: LanguageTranslation = {
                 },
                 composer: {
                     label: 'বার্তা',
-                    placeholder: 'আলোচনার বার্তা লিখুন…',
+                    placeholder: 'একটি বার্তা লিখুন…',
                     submit: 'পোস্ট করুন',
                     submitting: 'পোস্ট করা হচ্ছে…',
                     cancel: 'বাতিল',
-                    form_aria_label: 'নতুন আলোচনার বার্তা',
+                    form_aria_label: 'নতুন বার্তা',
                     counter_aria_label:
                         '{{max}}-এর মধ্যে {{count}} অক্ষর ব্যবহার হয়েছে',
                     errors: {
@@ -409,7 +409,7 @@ export const bn: LanguageTranslation = {
                 },
                 edit: {
                     label: 'বার্তা',
-                    form_aria_label: 'আলোচনার বার্তা সম্পাদনা করুন',
+                    form_aria_label: 'বার্তা সম্পাদনা করুন',
                     save: 'সংরক্ষণ',
                     saving: 'সংরক্ষণ করা হচ্ছে…',
                     cancel: 'বাতিল',

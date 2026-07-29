@@ -9,7 +9,7 @@ export const tr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Bağımlılıklar',
             custom_types: 'Özel Tipler',
-            comments: 'Tartışmalar',
+            comments: 'Konuşmalar',
             visuals: 'Görseller',
         },
         menu: {
@@ -170,7 +170,7 @@ export const tr: LanguageTranslation = {
                     field_type: 'Tür',
                     field_actions: {
                         title: 'Alan Özellikleri',
-                        open_discussion: 'Tartışmayı aç',
+                        open_discussion: 'Konuşmayı aç',
                         unique: 'Tekil',
                         auto_increment: 'Otomatik Artış',
                         comments: 'Yorumlar',
@@ -198,7 +198,7 @@ export const tr: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Tablo İşlemleri',
-                        open_discussion: 'Tartışmayı aç',
+                        open_discussion: 'Konuşmayı aç',
                         change_schema: 'Şemayı Değiştir',
                         add_field: 'Alan Ekle',
                         add_index: 'İndeks Ekle',
@@ -236,7 +236,7 @@ export const tr: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'İşlemler',
-                        open_discussion: 'Tartışmayı aç',
+                        open_discussion: 'Konuşmayı aç',
                         delete_relationship: 'Sil',
                     },
                 },
@@ -335,15 +335,15 @@ export const tr: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'Tartışmalar',
-                loading: 'Tartışmalar yükleniyor…',
+                title: 'Konuşmalar',
+                loading: 'Konuşmalar yükleniyor…',
                 inactive: {
-                    title: 'Tartışmalar kullanılamıyor',
+                    title: 'Konuşmalar kullanılamıyor',
                     description:
-                        'Tartışmalar yalnızca kimliği doğrulanmış bulut diyagramlarında kullanılabilir.',
+                        'Konuşmalar yalnızca kimliği doğrulanmış bulut diyagramlarında kullanılabilir.',
                 },
                 empty: {
-                    title: 'Henüz tartışma yok',
+                    title: 'Henüz konuşma yok',
                     description:
                         'Bu diyagram hakkındaki konuşmalar burada görünecek.',
                     diagram_title: 'Henüz diyagram mesajı yok',
@@ -354,26 +354,26 @@ export const tr: LanguageTranslation = {
                         'Geçerli seçime dair mesajlar burada görünür.',
                 },
                 errors: {
-                    load_title: 'Tartışmalar yüklenemedi',
+                    load_title: 'Konuşmalar yüklenemedi',
                     load_description:
-                        'Tartışmalar yüklenirken bir sorun oluştu. Lütfen tekrar deneyin.',
+                        'Konuşmalar yüklenirken bir hata oluştu. Lütfen tekrar deneyin.',
                 },
                 retry: 'Yeniden dene',
                 deleted_user: 'Silinmiş kullanıcı',
                 targets: {
-                    diagram: 'Diyagram tartışması',
-                    table: 'Tablo tartışması',
-                    field: 'Alan tartışması',
-                    relationship: 'İlişki tartışması',
-                    unknown: 'Tartışma',
+                    diagram: 'Diyagram',
+                    table: 'Tablo',
+                    field: 'Alan',
+                    relationship: 'İlişki',
+                    unknown: 'Konuşma',
                 },
                 views: {
-                    all: 'Tümü',
+                    all: 'Tüm konuşmalar',
                     diagram: 'Diyagram',
                     current_target: 'Geçerli',
                 },
                 target_header: {
-                    diagram: 'Diyagram tartışması',
+                    diagram: 'Diyagram',
                     table: 'Tablo {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -384,11 +384,11 @@ export const tr: LanguageTranslation = {
                 },
                 composer: {
                     label: 'Mesaj',
-                    placeholder: 'Bir tartışma mesajı yazın…',
+                    placeholder: 'Bir mesaj yazın…',
                     submit: 'Gönder',
                     submitting: 'Gönderiliyor…',
                     cancel: 'İptal',
-                    form_aria_label: 'Yeni tartışma mesajı',
+                    form_aria_label: 'Yeni mesaj',
                     counter_aria_label:
                         '{{max}} karakterden {{count}} kullanıldı',
                     errors: {
@@ -405,7 +405,7 @@ export const tr: LanguageTranslation = {
                 },
                 edit: {
                     label: 'Mesaj',
-                    form_aria_label: 'Tartışma mesajını düzenle',
+                    form_aria_label: 'Mesajı düzenle',
                     save: 'Kaydet',
                     saving: 'Kaydediliyor…',
                     cancel: 'İptal',

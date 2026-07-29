@@ -9,7 +9,7 @@ export const uk: LanguageTranslation = {
             refs: 'Зв’язки',
             dependencies: 'Залежності',
             custom_types: 'Користувацькі типи',
-            comments: 'Обговорення',
+            comments: 'Розмови',
             visuals: 'Візуальні елементи',
         },
         menu: {
@@ -169,7 +169,7 @@ export const uk: LanguageTranslation = {
                     field_type: 'Тип',
                     field_actions: {
                         title: 'Атрибути полів',
-                        open_discussion: 'Відкрити обговорення',
+                        open_discussion: 'Відкрити розмову',
                         unique: 'Унікальне',
                         auto_increment: 'Автоінкремент',
                         comments: 'Коментарі',
@@ -197,7 +197,7 @@ export const uk: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Дії з таблицею',
-                        open_discussion: 'Відкрити обговорення',
+                        open_discussion: 'Відкрити розмову',
                         change_schema: 'Змінити схему',
                         add_field: 'Додати поле',
                         add_index: 'Додати індекс',
@@ -234,7 +234,7 @@ export const uk: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Дії',
-                        open_discussion: 'Відкрити обговорення',
+                        open_discussion: 'Відкрити розмову',
                         delete_relationship: 'Видалити',
                     },
                 },
@@ -336,15 +336,15 @@ export const uk: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'Обговорення',
-                loading: 'Завантаження обговорень…',
+                title: 'Розмови',
+                loading: 'Завантаження розмов…',
                 inactive: {
-                    title: 'Обговорення недоступні',
+                    title: 'Розмови недоступні',
                     description:
-                        'Обговорення доступні лише для автентифікованих хмарних діаграм.',
+                        'Розмови доступні лише на автентифікованих облачних діаграмах.',
                 },
                 empty: {
-                    title: 'Поки немає обговорень',
+                    title: 'Ще немає розмов',
                     description: 'Розмови про цю діаграму з’являться тут.',
                     diagram_title: 'Поки немає повідомлень щодо діаграми',
                     diagram_description:
@@ -354,26 +354,26 @@ export const uk: LanguageTranslation = {
                         'Повідомлення про поточний вибір з’являться тут.',
                 },
                 errors: {
-                    load_title: 'Не вдалося завантажити обговорення',
+                    load_title: 'Не вдалося завантажити розмови',
                     load_description:
-                        'Під час завантаження обговорень сталася помилка. Спробуйте ще раз.',
+                        'Під час завантаження розмов сталася помилка. Спробуйте ще раз.',
                 },
                 retry: 'Повторити',
                 deleted_user: 'Видалений користувач',
                 targets: {
-                    diagram: 'Обговорення діаграми',
-                    table: 'Обговорення таблиці',
-                    field: 'Обговорення поля',
-                    relationship: 'Обговорення зв’язку',
-                    unknown: 'Обговорення',
+                    diagram: 'Діаграма',
+                    table: 'Таблиця',
+                    field: 'Поле',
+                    relationship: "Зв'язок",
+                    unknown: 'Розмова',
                 },
                 views: {
-                    all: 'Усі',
+                    all: 'Усі розмови',
                     diagram: 'Діаграма',
                     current_target: 'Поточний',
                 },
                 target_header: {
-                    diagram: 'Обговорення діаграми',
+                    diagram: 'Діаграма',
                     table: 'Таблиця {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -384,11 +384,11 @@ export const uk: LanguageTranslation = {
                 },
                 composer: {
                     label: 'Повідомлення',
-                    placeholder: 'Напишіть повідомлення обговорення…',
+                    placeholder: 'Напишіть повідомлення…',
                     submit: 'Надіслати',
                     submitting: 'Надсилання…',
                     cancel: 'Скасувати',
-                    form_aria_label: 'Нове повідомлення обговорення',
+                    form_aria_label: 'Нове повідомлення',
                     counter_aria_label:
                         'Використано {{count}} з {{max}} символів',
                     errors: {
@@ -406,7 +406,7 @@ export const uk: LanguageTranslation = {
                 },
                 edit: {
                     label: 'Повідомлення',
-                    form_aria_label: 'Редагувати повідомлення обговорення',
+                    form_aria_label: 'Редагувати повідомлення',
                     save: 'Зберегти',
                     saving: 'Збереження…',
                     cancel: 'Скасувати',

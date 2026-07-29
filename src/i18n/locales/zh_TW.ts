@@ -9,7 +9,7 @@ export const zh_TW: LanguageTranslation = {
             refs: 'Refs',
             dependencies: '相依性',
             custom_types: '自定義類型',
-            comments: '討論',
+            comments: '對話',
             visuals: '視覺效果',
         },
         menu: {
@@ -167,7 +167,7 @@ export const zh_TW: LanguageTranslation = {
                     field_type: '類型',
                     field_actions: {
                         title: '欄位屬性',
-                        open_discussion: '開啟討論',
+                        open_discussion: '開啟對話',
                         unique: '唯一',
                         auto_increment: '自動遞增',
                         comments: '註解',
@@ -195,7 +195,7 @@ export const zh_TW: LanguageTranslation = {
                     },
                     table_actions: {
                         title: '表格操作',
-                        open_discussion: '開啟討論',
+                        open_discussion: '開啟對話',
                         change_schema: '變更 Schema',
                         add_field: '新增欄位',
                         add_index: '新增索引',
@@ -232,7 +232,7 @@ export const zh_TW: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: '操作',
-                        open_discussion: '開啟討論',
+                        open_discussion: '開啟對話',
                         delete_relationship: '刪除',
                     },
                 },
@@ -330,14 +330,14 @@ export const zh_TW: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: '討論',
-                loading: '正在載入討論…',
+                title: '對話',
+                loading: '正在載入對話…',
                 inactive: {
-                    title: '討論無法使用',
-                    description: '討論僅適用於已驗證的雲端圖表。',
+                    title: '對話不可用',
+                    description: '對話僅在已認證的雲端圖表中可用。',
                 },
                 empty: {
-                    title: '尚無討論',
+                    title: '尚無對話',
                     description: '與此圖表相關的對話會顯示在這裡。',
                     diagram_title: '尚無圖表訊息',
                     diagram_description: '關於整個圖表的訊息將顯示於此。',
@@ -345,25 +345,25 @@ export const zh_TW: LanguageTranslation = {
                     target_description: '關於目前選取項目的訊息將顯示於此。',
                 },
                 errors: {
-                    load_title: '無法載入討論',
-                    load_description: '載入討論時發生錯誤。請再試一次。',
+                    load_title: '無法載入對話',
+                    load_description: '載入對話時發生錯誤。請重試。',
                 },
                 retry: '重試',
                 deleted_user: '已刪除的使用者',
                 targets: {
-                    diagram: '圖表討論',
-                    table: '資料表討論',
-                    field: '欄位討論',
-                    relationship: '關聯討論',
-                    unknown: '討論',
+                    diagram: '圖表',
+                    table: '表格',
+                    field: '欄位',
+                    relationship: '關聯',
+                    unknown: '對話',
                 },
                 views: {
-                    all: '全部',
+                    all: '所有對話',
                     diagram: '圖表',
                     current_target: '目前',
                 },
                 target_header: {
-                    diagram: '圖表討論',
+                    diagram: '圖表',
                     table: '資料表 {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -374,11 +374,11 @@ export const zh_TW: LanguageTranslation = {
                 },
                 composer: {
                     label: '訊息',
-                    placeholder: '撰寫討論訊息…',
+                    placeholder: '輸入訊息…',
                     submit: '發布',
                     submitting: '正在發布…',
                     cancel: '取消',
-                    form_aria_label: '新討論訊息',
+                    form_aria_label: '新訊息',
                     counter_aria_label: '已使用 {{count}} / {{max}} 個字元',
                     errors: {
                         empty: '請輸入要發布的訊息。',
@@ -393,7 +393,7 @@ export const zh_TW: LanguageTranslation = {
                 },
                 edit: {
                     label: '訊息',
-                    form_aria_label: '編輯討論訊息',
+                    form_aria_label: '編輯訊息',
                     save: '儲存',
                     saving: '儲存中…',
                     cancel: '取消',

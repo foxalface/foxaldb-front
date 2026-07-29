@@ -9,7 +9,7 @@ export const ko_KR: LanguageTranslation = {
             refs: 'Refs',
             dependencies: '종속성',
             custom_types: '사용자 지정 타입',
-            comments: '토론',
+            comments: '대화',
             visuals: '시각화',
         },
         menu: {
@@ -170,7 +170,7 @@ export const ko_KR: LanguageTranslation = {
                     field_type: '타입',
                     field_actions: {
                         title: '필드 속성',
-                        open_discussion: '토론 열기',
+                        open_discussion: '대화 열기',
                         unique: '유니크 여부',
                         auto_increment: '자동 증가',
                         comments: '주석',
@@ -198,7 +198,7 @@ export const ko_KR: LanguageTranslation = {
                     },
                     table_actions: {
                         title: '테이블 작업',
-                        open_discussion: '토론 열기',
+                        open_discussion: '대화 열기',
                         change_schema: '스키마 변경',
                         add_field: '필드 추가',
                         add_index: '인덱스 추가',
@@ -235,7 +235,7 @@ export const ko_KR: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: '연관 관계 작업',
-                        open_discussion: '토론 열기',
+                        open_discussion: '대화 열기',
                         delete_relationship: '연관 관계 삭제',
                     },
                 },
@@ -336,15 +336,15 @@ export const ko_KR: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: '토론',
-                loading: '토론 불러오는 중…',
+                title: '대화',
+                loading: '대화를 불러오는 중…',
                 inactive: {
-                    title: '토론을 사용할 수 없음',
+                    title: '대화를 사용할 수 없습니다',
                     description:
-                        '토론은 인증된 클라우드 다이어그램에서만 사용할 수 있습니다.',
+                        '대화는 인증된 클라우드 다이어그램에서만 사용할 수 있습니다.',
                 },
                 empty: {
-                    title: '아직 토론이 없습니다',
+                    title: '아직 대화가 없습니다',
                     description:
                         '이 다이어그램에 대한 대화가 여기에 표시됩니다.',
                     diagram_title: '아직 다이어그램 메시지가 없습니다',
@@ -355,26 +355,26 @@ export const ko_KR: LanguageTranslation = {
                         '현재 선택에 대한 메시지가 여기에 표시됩니다.',
                 },
                 errors: {
-                    load_title: '토론을 불러올 수 없습니다',
+                    load_title: '대화를 불러올 수 없습니다',
                     load_description:
-                        '토론을 불러오는 중 문제가 발생했습니다. 다시 시도해 주세요.',
+                        '대화를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.',
                 },
                 retry: '다시 시도',
                 deleted_user: '삭제된 사용자',
                 targets: {
-                    diagram: '다이어그램 토론',
-                    table: '테이블 토론',
-                    field: '필드 토론',
-                    relationship: '관계 토론',
-                    unknown: '토론',
+                    diagram: '다이어그램',
+                    table: '테이블',
+                    field: '필드',
+                    relationship: '관계',
+                    unknown: '대화',
                 },
                 views: {
-                    all: '전체',
+                    all: '모든 대화',
                     diagram: '다이어그램',
                     current_target: '현재',
                 },
                 target_header: {
-                    diagram: '다이어그램 토론',
+                    diagram: '다이어그램',
                     table: '테이블 {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -385,11 +385,11 @@ export const ko_KR: LanguageTranslation = {
                 },
                 composer: {
                     label: '메시지',
-                    placeholder: '토론 메시지를 작성하세요…',
+                    placeholder: '메시지를 입력하세요…',
                     submit: '게시',
                     submitting: '게시 중…',
                     cancel: '취소',
-                    form_aria_label: '새 토론 메시지',
+                    form_aria_label: '새 메시지',
                     counter_aria_label: '{{max}}자 중 {{count}}자 사용',
                     errors: {
                         empty: '게시할 메시지를 입력하세요.',
@@ -405,7 +405,7 @@ export const ko_KR: LanguageTranslation = {
                 },
                 edit: {
                     label: '메시지',
-                    form_aria_label: '토론 메시지 편집',
+                    form_aria_label: '메시지 수정',
                     save: '저장',
                     saving: '저장 중…',
                     cancel: '취소',

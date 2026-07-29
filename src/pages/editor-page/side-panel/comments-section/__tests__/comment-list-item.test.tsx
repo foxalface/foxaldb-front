@@ -307,7 +307,7 @@ describe('CommentListItem', () => {
         await user.click(screen.getByText('Edit'));
 
         expect(
-            screen.getByRole('form', { name: 'Edit discussion message' })
+            screen.getByRole('form', { name: 'Edit message' })
         ).toBeInTheDocument();
         expect(
             screen.queryByRole('button', { name: 'Comment actions' })
@@ -572,12 +572,12 @@ describe('CommentListItem', () => {
 
         expect(screen.getByText('Persisted body')).toBeInTheDocument();
         expect(
-            screen.getByRole('form', { name: 'Edit discussion message' })
+            screen.getByRole('form', { name: 'Edit message' })
         ).toBeInTheDocument();
         expect(screen.getByRole('textbox')).toHaveValue('Persisted body');
         expect(screen.getByText('Alice Wonder')).toBeInTheDocument();
         expect(screen.getByTestId('relative-time')).toBeInTheDocument();
-        expect(screen.getByText('Table discussion')).toBeInTheDocument();
+        expect(screen.getByText('Table')).toBeInTheDocument();
     });
 
     it('restores the body on Cancel and shows the Provider-updated body after Save', async () => {
@@ -590,7 +590,7 @@ describe('CommentListItem', () => {
 
         expect(screen.getByText('Persisted body')).toBeInTheDocument();
         expect(
-            screen.queryByRole('form', { name: 'Edit discussion message' })
+            screen.queryByRole('form', { name: 'Edit message' })
         ).not.toBeInTheDocument();
 
         updateCommentMock.mockResolvedValue(
@@ -630,7 +630,7 @@ describe('CommentListItem', () => {
         await openActions(user);
         await user.click(screen.getByText('Edit'));
         expect(
-            screen.getByRole('form', { name: 'Edit discussion message' })
+            screen.getByRole('form', { name: 'Edit message' })
         ).toBeInTheDocument();
 
         accessState.diagramAccess = {
@@ -641,7 +641,7 @@ describe('CommentListItem', () => {
         rerender(<CommentListItem comment={comment()} />);
 
         expect(
-            screen.queryByRole('form', { name: 'Edit discussion message' })
+            screen.queryByRole('form', { name: 'Edit message' })
         ).not.toBeInTheDocument();
         expect(screen.getByText('Persisted body')).toBeInTheDocument();
         expect(
@@ -711,7 +711,7 @@ describe('CommentListItem', () => {
         rerender(<CommentListItem comment={comment()} />);
 
         expect(
-            screen.queryByRole('form', { name: 'Edit discussion message' })
+            screen.queryByRole('form', { name: 'Edit message' })
         ).not.toBeInTheDocument();
         expect(
             screen.queryByRole('button', { name: 'Comment actions' })
@@ -728,7 +728,7 @@ describe('CommentListItem', () => {
         });
 
         expect(
-            screen.queryByRole('form', { name: 'Edit discussion message' })
+            screen.queryByRole('form', { name: 'Edit message' })
         ).not.toBeInTheDocument();
         expect(screen.getByText('Persisted body')).toBeInTheDocument();
         expect(screen.queryByText('Should not reopen')).not.toBeInTheDocument();

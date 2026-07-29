@@ -9,7 +9,7 @@ export const vi: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Phụ thuộc',
             custom_types: 'Kiểu tùy chỉnh',
-            comments: 'Thảo luận',
+            comments: 'Cuộc trò chuyện',
             visuals: 'Hình ảnh',
         },
         menu: {
@@ -170,7 +170,7 @@ export const vi: LanguageTranslation = {
                     field_type: 'Loại trường',
                     field_actions: {
                         title: 'Thuộc tính trường',
-                        open_discussion: 'Mở thảo luận',
+                        open_discussion: 'Mở cuộc trò chuyện',
                         unique: 'Giá trị duy nhất',
                         auto_increment: 'Tự động tăng',
                         comments: 'Bình luận',
@@ -198,7 +198,7 @@ export const vi: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Hành động',
-                        open_discussion: 'Mở thảo luận',
+                        open_discussion: 'Mở cuộc trò chuyện',
                         change_schema: 'Thay đổi lược đồ',
                         add_field: 'Thêm trường',
                         add_index: 'Thêm chỉ mục',
@@ -235,7 +235,7 @@ export const vi: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Hành động',
-                        open_discussion: 'Mở thảo luận',
+                        open_discussion: 'Mở cuộc trò chuyện',
                         delete_relationship: 'Xóa',
                     },
                 },
@@ -336,18 +336,18 @@ export const vi: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'Thảo luận',
-                loading: 'Đang tải thảo luận…',
+                title: 'Cuộc trò chuyện',
+                loading: 'Đang tải cuộc trò chuyện…',
                 inactive: {
-                    title: 'Thảo luận không khả dụng',
+                    title: 'Cuộc trò chuyện không khả dụng',
                     description:
-                        'Thảo luận chỉ khả dụng trên các sơ đồ đám mây đã xác thực.',
+                        'Cuộc trò chuyện chỉ khả dụng trên sơ đồ đám mây đã xác thực.',
                 },
                 empty: {
-                    title: 'Chưa có thảo luận nào',
+                    title: 'Chưa có cuộc trò chuyện',
                     description:
                         'Các cuộc trò chuyện về sơ đồ này sẽ xuất hiện tại đây.',
-                    diagram_title: 'Chưa có tin nhắn sơ đồ',
+                    diagram_title: 'Chưa có tin nhắn về sơ đồ',
                     diagram_description:
                         'Các tin nhắn về toàn bộ sơ đồ sẽ xuất hiện tại đây.',
                     target_title: 'Chưa có tin nhắn cho lựa chọn hiện tại',
@@ -355,26 +355,26 @@ export const vi: LanguageTranslation = {
                         'Các tin nhắn về lựa chọn hiện tại sẽ xuất hiện tại đây.',
                 },
                 errors: {
-                    load_title: 'Không thể tải thảo luận',
+                    load_title: 'Không thể tải cuộc trò chuyện',
                     load_description:
-                        'Đã xảy ra lỗi khi tải thảo luận. Vui lòng thử lại.',
+                        'Đã xảy ra lỗi khi tải cuộc trò chuyện. Vui lòng thử lại.',
                 },
                 retry: 'Thử lại',
                 deleted_user: 'Người dùng đã xóa',
                 targets: {
-                    diagram: 'Thảo luận sơ đồ',
-                    table: 'Thảo luận bảng',
-                    field: 'Thảo luận trường',
-                    relationship: 'Thảo luận quan hệ',
-                    unknown: 'Thảo luận',
+                    diagram: 'Sơ đồ',
+                    table: 'Bảng',
+                    field: 'Trường',
+                    relationship: 'Quan hệ',
+                    unknown: 'Cuộc trò chuyện',
                 },
                 views: {
-                    all: 'Tất cả',
+                    all: 'Tất cả cuộc trò chuyện',
                     diagram: 'Sơ đồ',
                     current_target: 'Hiện tại',
                 },
                 target_header: {
-                    diagram: 'Thảo luận sơ đồ',
+                    diagram: 'Sơ đồ',
                     table: 'Bảng {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -385,11 +385,11 @@ export const vi: LanguageTranslation = {
                 },
                 composer: {
                     label: 'Tin nhắn',
-                    placeholder: 'Viết tin nhắn thảo luận…',
+                    placeholder: 'Viết tin nhắn…',
                     submit: 'Đăng',
                     submitting: 'Đang đăng…',
                     cancel: 'Hủy',
-                    form_aria_label: 'Tin nhắn thảo luận mới',
+                    form_aria_label: 'Tin nhắn mới',
                     counter_aria_label: 'Đã dùng {{count}} / {{max}} ký tự',
                     errors: {
                         empty: 'Nhập tin nhắn để đăng.',
@@ -405,7 +405,7 @@ export const vi: LanguageTranslation = {
                 },
                 edit: {
                     label: 'Tin nhắn',
-                    form_aria_label: 'Chỉnh sửa tin nhắn thảo luận',
+                    form_aria_label: 'Sửa tin nhắn',
                     save: 'Lưu',
                     saving: 'Đang lưu…',
                     cancel: 'Hủy',

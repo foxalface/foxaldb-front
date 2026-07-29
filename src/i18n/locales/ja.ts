@@ -9,7 +9,7 @@ export const ja: LanguageTranslation = {
             refs: '参照',
             dependencies: '依存関係',
             custom_types: 'カスタムタイプ',
-            comments: 'ディスカッション',
+            comments: '会話',
             visuals: 'ビジュアル',
         },
         menu: {
@@ -173,7 +173,7 @@ export const ja: LanguageTranslation = {
                     field_type: 'タイプ',
                     field_actions: {
                         title: 'フィールド属性',
-                        open_discussion: 'ディスカッションを開く',
+                        open_discussion: '会話を開く',
                         unique: 'ユニーク',
                         auto_increment: 'オートインクリメント',
                         comments: 'コメント',
@@ -201,7 +201,7 @@ export const ja: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'テーブル操作',
-                        open_discussion: 'ディスカッションを開く',
+                        open_discussion: '会話を開く',
                         change_schema: 'スキーマを変更',
                         add_field: 'フィールドを追加',
                         add_index: 'インデックスを追加',
@@ -238,7 +238,7 @@ export const ja: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: '操作',
-                        open_discussion: 'ディスカッションを開く',
+                        open_discussion: '会話を開く',
                         delete_relationship: '削除',
                     },
                 },
@@ -339,17 +339,17 @@ export const ja: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'ディスカッション',
-                loading: 'ディスカッションを読み込み中…',
+                title: '会話',
+                loading: '会話を読み込み中…',
                 inactive: {
-                    title: 'ディスカッションは利用できません',
+                    title: '会話は利用できません',
                     description:
-                        'ディスカッションは認証済みのクラウド図でのみ利用できます。',
+                        '会話は認証済みのクラウド図でのみ利用できます。',
                 },
                 empty: {
-                    title: 'まだディスカッションはありません',
+                    title: 'まだ会話がありません',
                     description: 'この図に関する会話がここに表示されます。',
-                    diagram_title: 'ダイアグラムのメッセージはまだありません',
+                    diagram_title: 'まだ図のメッセージがありません',
                     diagram_description:
                         'ダイアグラム全体に関するメッセージがここに表示されます。',
                     target_title:
@@ -358,26 +358,26 @@ export const ja: LanguageTranslation = {
                         '現在の選択に関するメッセージがここに表示されます。',
                 },
                 errors: {
-                    load_title: 'ディスカッションを読み込めませんでした',
+                    load_title: '会話を読み込めませんでした',
                     load_description:
-                        'ディスカッションの読み込み中に問題が発生しました。もう一度お試しください。',
+                        '会話の読み込み中にエラーが発生しました。もう一度お試しください。',
                 },
                 retry: '再試行',
                 deleted_user: '削除されたユーザー',
                 targets: {
-                    diagram: '図のディスカッション',
-                    table: 'テーブルのディスカッション',
-                    field: 'フィールドのディスカッション',
-                    relationship: 'リレーションシップのディスカッション',
-                    unknown: 'ディスカッション',
+                    diagram: '図',
+                    table: 'テーブル',
+                    field: 'フィールド',
+                    relationship: 'リレーション',
+                    unknown: '会話',
                 },
                 views: {
-                    all: 'すべて',
+                    all: 'すべての会話',
                     diagram: 'ダイアグラム',
                     current_target: '現在',
                 },
                 target_header: {
-                    diagram: 'ダイアグラムのディスカッション',
+                    diagram: '図',
                     table: 'テーブル {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -388,11 +388,11 @@ export const ja: LanguageTranslation = {
                 },
                 composer: {
                     label: 'メッセージ',
-                    placeholder: 'ディスカッションのメッセージを入力…',
+                    placeholder: 'メッセージを入力…',
                     submit: '投稿',
                     submitting: '投稿中…',
                     cancel: 'キャンセル',
-                    form_aria_label: '新しいディスカッションメッセージ',
+                    form_aria_label: '新しいメッセージ',
                     counter_aria_label: '{{max}} 文字中 {{count}} 文字使用中',
                     errors: {
                         empty: '投稿するメッセージを入力してください。',
@@ -408,7 +408,7 @@ export const ja: LanguageTranslation = {
                 },
                 edit: {
                     label: 'メッセージ',
-                    form_aria_label: 'ディスカッションメッセージを編集',
+                    form_aria_label: 'メッセージを編集',
                     save: '保存',
                     saving: '保存中…',
                     cancel: 'キャンセル',

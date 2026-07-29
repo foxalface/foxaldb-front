@@ -9,7 +9,7 @@ export const hr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Ovisnosti',
             custom_types: 'Prilagođeni Tipovi',
-            comments: 'Rasprave',
+            comments: 'Razgovori',
             visuals: 'Vizuali',
         },
         menu: {
@@ -168,7 +168,7 @@ export const hr: LanguageTranslation = {
                     field_type: 'Tip',
                     field_actions: {
                         title: 'Atributi polja',
-                        open_discussion: 'Otvori raspravu',
+                        open_discussion: 'Otvori razgovor',
                         unique: 'Jedinstven',
                         auto_increment: 'Automatsko povećavanje',
                         character_length: 'Maksimalna dužina',
@@ -194,7 +194,7 @@ export const hr: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'Radnje nad tablicom',
-                        open_discussion: 'Otvori raspravu',
+                        open_discussion: 'Otvori razgovor',
                         change_schema: 'Promijeni shemu',
                         add_field: 'Dodaj polje',
                         add_index: 'Dodaj indeks',
@@ -231,7 +231,7 @@ export const hr: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'Radnje',
-                        open_discussion: 'Otvori raspravu',
+                        open_discussion: 'Otvori razgovor',
                         delete_relationship: 'Izbriši',
                     },
                 },
@@ -333,15 +333,15 @@ export const hr: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'Rasprave',
-                loading: 'Učitavanje rasprava…',
+                title: 'Razgovori',
+                loading: 'Učitavanje razgovora…',
                 inactive: {
-                    title: 'Rasprave nisu dostupne',
+                    title: 'Razgovori nisu dostupni',
                     description:
-                        'Rasprave su dostupne samo na autentificiranim cloud dijagramima.',
+                        'Razgovori su dostupni samo na autentificiranim oblak dijagramima.',
                 },
                 empty: {
-                    title: 'Još nema rasprava',
+                    title: 'Još nema razgovora',
                     description:
                         'Razgovori o ovom dijagramu pojavit će se ovdje.',
                     diagram_title: 'Još nema poruka o dijagramu',
@@ -352,26 +352,26 @@ export const hr: LanguageTranslation = {
                         'Poruke o trenutnom odabiru pojavit će se ovdje.',
                 },
                 errors: {
-                    load_title: 'Nije moguće učitati rasprave',
+                    load_title: 'Nije moguće učitati razgovore',
                     load_description:
-                        'Došlo je do greške pri učitavanju rasprava. Pokušajte ponovno.',
+                        'Došlo je do greške pri učitavanju razgovora. Pokušajte ponovno.',
                 },
                 retry: 'Pokušaj ponovno',
                 deleted_user: 'Izbrisani korisnik',
                 targets: {
-                    diagram: 'Rasprava o dijagramu',
-                    table: 'Rasprava o tablici',
-                    field: 'Rasprava o polju',
-                    relationship: 'Rasprava o vezi',
-                    unknown: 'Rasprava',
+                    diagram: 'Dijagram',
+                    table: 'Tablica',
+                    field: 'Polje',
+                    relationship: 'Relacija',
+                    unknown: 'Razgovor',
                 },
                 views: {
-                    all: 'Sve',
+                    all: 'Svi razgovori',
                     diagram: 'Dijagram',
                     current_target: 'Trenutno',
                 },
                 target_header: {
-                    diagram: 'Rasprava o dijagramu',
+                    diagram: 'Dijagram',
                     table: 'Tablica {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -382,11 +382,11 @@ export const hr: LanguageTranslation = {
                 },
                 composer: {
                     label: 'Poruka',
-                    placeholder: 'Napišite poruku rasprave…',
+                    placeholder: 'Napišite poruku…',
                     submit: 'Objavi',
                     submitting: 'Objavljivanje…',
                     cancel: 'Odustani',
-                    form_aria_label: 'Nova poruka rasprave',
+                    form_aria_label: 'Nova poruka',
                     counter_aria_label:
                         'Iskorišteno {{count}} od {{max}} znakova',
                     errors: {
@@ -403,7 +403,7 @@ export const hr: LanguageTranslation = {
                 },
                 edit: {
                     label: 'Poruka',
-                    form_aria_label: 'Uredi poruku rasprave',
+                    form_aria_label: 'Uredi poruku',
                     save: 'Spremi',
                     saving: 'Spremanje…',
                     cancel: 'Odustani',

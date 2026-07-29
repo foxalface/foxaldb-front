@@ -10,8 +10,8 @@ import {
     Check,
     Group,
     Copy,
-    MessageCircle,
 } from 'lucide-react';
+import { SlBubbles } from 'react-icons/sl';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
@@ -192,7 +192,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                 {t(
                                     'side_panel.tables_section.table.table_actions.open_discussion'
                                 )}
-                                <MessageCircle className="size-3.5" />
+                                <SlBubbles className="size-3.5" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     ) : null}

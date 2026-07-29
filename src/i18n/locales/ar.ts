@@ -9,7 +9,7 @@ export const ar: LanguageTranslation = {
             refs: 'المراجع',
             dependencies: 'التبعيات',
             custom_types: 'الأنواع المخصصة',
-            comments: 'النقاشات',
+            comments: 'المحادثات',
             visuals: 'مرئيات',
         },
         menu: {
@@ -170,7 +170,7 @@ export const ar: LanguageTranslation = {
                     field_type: 'النوع',
                     field_actions: {
                         title: 'خصائص الحقل',
-                        open_discussion: 'فتح النقاش',
+                        open_discussion: 'فتح المحادثة',
                         unique: 'فريد',
                         auto_increment: 'زيادة تلقائية',
                         comments: 'تعليقات',
@@ -197,7 +197,7 @@ export const ar: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'إجراءات الجدول',
-                        open_discussion: 'فتح النقاش',
+                        open_discussion: 'فتح المحادثة',
                         change_schema: 'تغيير المخطط',
                         add_field: 'إضافة حقل',
                         add_index: 'إضافة فهرس',
@@ -234,7 +234,7 @@ export const ar: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'إجراءات',
-                        open_discussion: 'فتح النقاش',
+                        open_discussion: 'فتح المحادثة',
                         delete_relationship: 'حذف',
                     },
                 },
@@ -332,15 +332,15 @@ export const ar: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'النقاشات',
-                loading: 'جاري تحميل النقاشات…',
+                title: 'المحادثات',
+                loading: 'جارٍ تحميل المحادثات…',
                 inactive: {
-                    title: 'النقاشات غير متاحة',
+                    title: 'المحادثات غير متاحة',
                     description:
-                        'النقاشات متاحة فقط لمخططات السحابة المصادق عليها.',
+                        'المحادثات متاحة فقط على مخططات السحابة المصادَق عليها.',
                 },
                 empty: {
-                    title: 'لا توجد نقاشات بعد',
+                    title: 'لا توجد محادثات بعد',
                     description: 'ستظهر هنا المحادثات حول هذا المخطط.',
                     diagram_title: 'لا توجد رسائل للمخطط بعد',
                     diagram_description:
@@ -350,26 +350,26 @@ export const ar: LanguageTranslation = {
                         'ستظهر هنا الرسائل المتعلقة بالاختيار الحالي.',
                 },
                 errors: {
-                    load_title: 'تعذر تحميل النقاشات',
+                    load_title: 'تعذّر تحميل المحادثات',
                     load_description:
-                        'حدث خطأ أثناء تحميل النقاشات. يرجى المحاولة مرة أخرى.',
+                        'حدث خطأ أثناء تحميل المحادثات. يُرجى المحاولة مرة أخرى.',
                 },
                 retry: 'إعادة المحاولة',
                 deleted_user: 'مستخدم محذوف',
                 targets: {
-                    diagram: 'نقاش حول المخطط',
-                    table: 'نقاش حول الجدول',
-                    field: 'نقاش حول الحقل',
-                    relationship: 'نقاش حول العلاقة',
-                    unknown: 'نقاش',
+                    diagram: 'المخطط',
+                    table: 'الجدول',
+                    field: 'الحقل',
+                    relationship: 'العلاقة',
+                    unknown: 'محادثة',
                 },
                 views: {
-                    all: 'الكل',
+                    all: 'جميع المحادثات',
                     diagram: 'المخطط',
                     current_target: 'الحالي',
                 },
                 target_header: {
-                    diagram: 'نقاش المخطط',
+                    diagram: 'المخطط',
                     table: 'جدول {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -380,11 +380,11 @@ export const ar: LanguageTranslation = {
                 },
                 composer: {
                     label: 'الرسالة',
-                    placeholder: 'اكتب رسالة مناقشة…',
+                    placeholder: 'اكتب رسالة…',
                     submit: 'نشر',
                     submitting: 'جارٍ النشر…',
                     cancel: 'إلغاء',
-                    form_aria_label: 'رسالة مناقشة جديدة',
+                    form_aria_label: 'رسالة جديدة',
                     counter_aria_label:
                         'تم استخدام {{count}} من أصل {{max}} حرفًا',
                     errors: {
@@ -401,7 +401,7 @@ export const ar: LanguageTranslation = {
                 },
                 edit: {
                     label: 'الرسالة',
-                    form_aria_label: 'تعديل رسالة النقاش',
+                    form_aria_label: 'تعديل الرسالة',
                     save: 'حفظ',
                     saving: 'جارٍ الحفظ…',
                     cancel: 'إلغاء',

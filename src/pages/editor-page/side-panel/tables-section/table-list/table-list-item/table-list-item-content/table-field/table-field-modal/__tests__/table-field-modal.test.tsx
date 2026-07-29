@@ -148,15 +148,15 @@ describe('TableFieldPopover discussion entry', () => {
         await user.click(trigger);
         expect(trigger).toHaveAttribute('aria-expanded', 'true');
         expect(
-            screen.getByRole('button', { name: 'Open discussion' })
+            screen.getByRole('button', { name: 'Open conversation' })
         ).toBeInTheDocument();
     });
 
-    it('shows Open discussion when comments are active and the field is editable', async () => {
+    it('shows Open conversation when comments are active and the field is editable', async () => {
         await openPopover();
 
         expect(
-            screen.getByRole('button', { name: 'Open discussion' })
+            screen.getByRole('button', { name: 'Open conversation' })
         ).toBeInTheDocument();
         expect(
             screen.getByRole('button', { name: 'Delete Field' })
@@ -165,12 +165,12 @@ describe('TableFieldPopover discussion entry', () => {
         expect(screen.getByText('Default Value')).toBeInTheDocument();
     });
 
-    it('shows Open discussion for readonly viewers when comments are active', async () => {
+    it('shows Open conversation for readonly viewers when comments are active', async () => {
         chartDBState.readonly = true;
         await openPopover();
 
         expect(
-            screen.getByRole('button', { name: 'Open discussion' })
+            screen.getByRole('button', { name: 'Open conversation' })
         ).toBeInTheDocument();
     });
 
@@ -189,12 +189,12 @@ describe('TableFieldPopover discussion entry', () => {
         expect(defaultInput).toHaveAttribute('readonly');
     });
 
-    it('hides Open discussion when comments are inactive', async () => {
+    it('hides Open conversation when comments are inactive', async () => {
         commentsState.isActive = false;
         await openPopover();
 
         expect(
-            screen.queryByRole('button', { name: 'Open discussion' })
+            screen.queryByRole('button', { name: 'Open conversation' })
         ).not.toBeInTheDocument();
         expect(
             screen.getByRole('button', { name: 'Delete Field' })
@@ -208,7 +208,7 @@ describe('TableFieldPopover discussion entry', () => {
         await openPopover();
 
         expect(
-            screen.queryByRole('button', { name: 'Open discussion' })
+            screen.queryByRole('button', { name: 'Open conversation' })
         ).not.toBeInTheDocument();
         expect(
             screen.queryByRole('button', { name: 'Delete Field' })
@@ -236,7 +236,7 @@ describe('TableFieldPopover discussion entry', () => {
         renderPopover({ defaultOpen: true, onOpenChange });
 
         await user.click(
-            screen.getByRole('button', { name: 'Open discussion' })
+            screen.getByRole('button', { name: 'Open conversation' })
         );
 
         expect(openTargetDiscussion).toHaveBeenCalledTimes(1);
@@ -270,12 +270,12 @@ describe('TableFieldPopover discussion entry', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('viewer footer contains only Open discussion without orphan separators', async () => {
+    it('viewer footer contains only Open conversation without orphan separators', async () => {
         chartDBState.readonly = true;
         await openPopover();
 
         const discussion = screen.getByRole('button', {
-            name: 'Open discussion',
+            name: 'Open conversation',
         });
         expect(
             screen.queryByRole('button', { name: 'Delete Field' })
@@ -302,7 +302,7 @@ describe('TableFieldPopover discussion entry', () => {
         await openPopover();
 
         const discussion = screen.getByRole('button', {
-            name: 'Open discussion',
+            name: 'Open conversation',
         });
         const deleteButton = screen.getByRole('button', {
             name: 'Delete Field',
@@ -334,14 +334,14 @@ describe('TableFieldPopover discussion entry', () => {
         expect(orientations[discussionIndex + 1]).toBe('horizontal');
     });
 
-    it('Open discussion remains keyboard accessible for viewers', async () => {
+    it('Open conversation remains keyboard accessible for viewers', async () => {
         chartDBState.readonly = true;
         const onOpenChange = vi.fn();
         const user = userEvent.setup();
         renderPopover({ defaultOpen: true, onOpenChange });
 
         const discussion = screen.getByRole('button', {
-            name: 'Open discussion',
+            name: 'Open conversation',
         });
         discussion.focus();
         expect(discussion).toHaveFocus();

@@ -5,8 +5,8 @@ import {
     CircleDotDashed,
     Trash2,
     Check,
-    MessageCircle,
 } from 'lucide-react';
+import { SlBubbles } from 'react-icons/sl';
 import { ListItemHeaderButton } from '../../../../list-item-header-button/list-item-header-button';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
@@ -165,7 +165,7 @@ export const RelationshipListItemHeader: React.FC<
                                 {t(
                                     'side_panel.refs_section.relationship.relationship_actions.open_discussion'
                                 )}
-                                <MessageCircle className="size-3.5" />
+                                <SlBubbles className="size-3.5" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     ) : null}

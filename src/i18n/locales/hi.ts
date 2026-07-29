@@ -9,7 +9,7 @@ export const hi: LanguageTranslation = {
             refs: 'रेफ्स',
             dependencies: 'निर्भरताएं',
             custom_types: 'कस्टम टाइप',
-            comments: 'चर्चाएँ',
+            comments: 'वार्तालाप',
             visuals: 'Visuals',
         },
         menu: {
@@ -171,7 +171,7 @@ export const hi: LanguageTranslation = {
                     field_type: 'प्रकार',
                     field_actions: {
                         title: 'फ़ील्ड विशेषताएँ',
-                        open_discussion: 'चर्चा खोलें',
+                        open_discussion: 'वार्तालाप खोलें',
                         unique: 'अद्वितीय',
                         auto_increment: 'ऑटो इंक्रीमेंट',
                         comments: 'टिप्पणियाँ',
@@ -199,7 +199,7 @@ export const hi: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'तालिका क्रियाएँ',
-                        open_discussion: 'चर्चा खोलें',
+                        open_discussion: 'वार्तालाप खोलें',
                         change_schema: 'स्कीमा बदलें',
                         add_field: 'फ़ील्ड जोड़ें',
                         add_index: 'सूचकांक जोड़ें',
@@ -236,7 +236,7 @@ export const hi: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'क्रियाएँ',
-                        open_discussion: 'चर्चा खोलें',
+                        open_discussion: 'वार्तालाप खोलें',
                         delete_relationship: 'हटाएँ',
                     },
                 },
@@ -338,15 +338,15 @@ export const hi: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'चर्चाएँ',
-                loading: 'चर्चाएँ लोड हो रही हैं…',
+                title: 'वार्तालाप',
+                loading: 'वार्तालाप लोड हो रहे हैं…',
                 inactive: {
-                    title: 'चर्चाएँ उपलब्ध नहीं हैं',
+                    title: 'वार्तालाप उपलब्ध नहीं हैं',
                     description:
-                        'चर्चाएँ केवल प्रमाणित क्लाउड आरेखों पर उपलब्ध हैं।',
+                        'वार्तालाप केवल प्रमाणित क्लाउड आरेखों पर उपलब्ध हैं।',
                 },
                 empty: {
-                    title: 'अभी तक कोई चर्चा नहीं',
+                    title: 'अभी कोई वार्तालाप नहीं',
                     description: 'इस आरेख के बारे में बातचीत यहाँ दिखाई देगी।',
                     diagram_title: 'अभी तक कोई डायग्राम संदेश नहीं',
                     diagram_description:
@@ -356,26 +356,26 @@ export const hi: LanguageTranslation = {
                         'वर्तमान चयन से जुड़े संदेश यहाँ दिखाई देंगे।',
                 },
                 errors: {
-                    load_title: 'चर्चाएँ लोड नहीं हो सकीं',
+                    load_title: 'वार्तालाप लोड नहीं हो सके',
                     load_description:
-                        'चर्चाएँ लोड करते समय कुछ गलत हुआ। कृपया फिर से प्रयास करें।',
+                        'वार्तालाप लोड करने में त्रुटि हुई। कृपया पुनः प्रयास करें।',
                 },
                 retry: 'पुनः प्रयास करें',
                 deleted_user: 'हटाया गया उपयोगकर्ता',
                 targets: {
-                    diagram: 'आरेख चर्चा',
-                    table: 'तालिका चर्चा',
-                    field: 'फ़ील्ड चर्चा',
-                    relationship: 'संबंध चर्चा',
-                    unknown: 'चर्चा',
+                    diagram: 'आरेख',
+                    table: 'तालिका',
+                    field: 'फ़ील्ड',
+                    relationship: 'संबंध',
+                    unknown: 'वार्तालाप',
                 },
                 views: {
-                    all: 'सभी',
+                    all: 'सभी वार्तालाप',
                     diagram: 'डायग्राम',
                     current_target: 'वर्तमान',
                 },
                 target_header: {
-                    diagram: 'डायग्राम चर्चा',
+                    diagram: 'आरेख',
                     table: 'तालिका {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -386,11 +386,11 @@ export const hi: LanguageTranslation = {
                 },
                 composer: {
                     label: 'संदेश',
-                    placeholder: 'चर्चा संदेश लिखें…',
+                    placeholder: 'संदेश लिखें…',
                     submit: 'पोस्ट करें',
                     submitting: 'पोस्ट हो रहा है…',
                     cancel: 'रद्द करें',
-                    form_aria_label: 'नया चर्चा संदेश',
+                    form_aria_label: 'नया संदेश',
                     counter_aria_label:
                         '{{max}} में से {{count}} अक्षर उपयोग किए गए',
                     errors: {
@@ -407,7 +407,7 @@ export const hi: LanguageTranslation = {
                 },
                 edit: {
                     label: 'संदेश',
-                    form_aria_label: 'चर्चा संदेश संपादित करें',
+                    form_aria_label: 'संदेश संपादित करें',
                     save: 'सहेजें',
                     saving: 'सहेजा जा रहा है…',
                     cancel: 'रद्द करें',

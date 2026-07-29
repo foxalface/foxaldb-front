@@ -53,12 +53,11 @@ const renderHeader = (
 };
 
 describe('CommentsTargetHeader', () => {
-    it('marks All as active', () => {
+    it('marks All conversations as active', () => {
         renderHeader({ view: 'all' });
-        expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute(
-            'aria-pressed',
-            'true'
-        );
+        expect(
+            screen.getByRole('button', { name: 'All conversations' })
+        ).toHaveAttribute('aria-pressed', 'true');
         expect(screen.getByRole('button', { name: 'Diagram' })).toHaveAttribute(
             'aria-pressed',
             'false'
@@ -145,7 +144,9 @@ describe('CommentsTargetHeader', () => {
         const user = userEvent.setup();
         const { onShowAll, onShowDiagram } = renderHeader({ view: 'target' });
 
-        await user.click(screen.getByRole('button', { name: 'All' }));
+        await user.click(
+            screen.getByRole('button', { name: 'All conversations' })
+        );
         await user.click(screen.getByRole('button', { name: 'Diagram' }));
 
         expect(onShowAll).toHaveBeenCalledTimes(1);
@@ -162,7 +163,9 @@ describe('CommentsTargetHeader', () => {
             />
         );
 
-        expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'All conversations' })
+        ).toBeInTheDocument();
         expect(
             screen.getByRole('button', { name: 'Diagram' })
         ).toBeInTheDocument();

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
-import { Ellipsis, MessageCircle, Trash2 } from 'lucide-react';
+import { Ellipsis, Trash2 } from 'lucide-react';
+import { SlBubbles } from 'react-icons/sl';
 import { Input } from '@/components/input/input';
 import { Button } from '@/components/button/button';
 import { Separator } from '@/components/separator/separator';
@@ -519,7 +520,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                             className="flex gap-2"
                             onClick={openFieldDiscussion}
                         >
-                            <MessageCircle
+                            <SlBubbles
                                 className="size-3.5"
                                 aria-hidden="true"
                             />

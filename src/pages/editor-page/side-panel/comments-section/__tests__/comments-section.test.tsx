@@ -254,10 +254,12 @@ describe('CommentsSection', () => {
 
         render(<CommentsSection />);
 
-        expect(screen.getByText('Discussions unavailable')).toBeInTheDocument();
+        expect(
+            screen.getByText('Conversations unavailable')
+        ).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Discussions are only available on authenticated cloud diagrams.'
+                'Conversations are only available on authenticated cloud diagrams.'
             )
         ).toBeInTheDocument();
         expect(reload).not.toHaveBeenCalled();
@@ -270,7 +272,7 @@ describe('CommentsSection', () => {
         render(<CommentsSection />);
 
         expect(screen.getByRole('status')).toHaveAttribute('aria-busy', 'true');
-        expect(screen.getByText('Loading discussions…')).toBeInTheDocument();
+        expect(screen.getByText('Loading conversations…')).toBeInTheDocument();
         expect(screen.queryByRole('list')).not.toBeInTheDocument();
     });
 
@@ -279,7 +281,7 @@ describe('CommentsSection', () => {
 
         render(<CommentsSection />);
 
-        expect(screen.getByText('No discussions yet')).toBeInTheDocument();
+        expect(screen.getByText('No conversations yet')).toBeInTheDocument();
         expect(
             screen.getByText(
                 'Conversations about this diagram will appear here.'
@@ -303,7 +305,7 @@ describe('CommentsSection', () => {
         render(<CommentsSection />);
 
         expect(
-            screen.getByText('Could not load discussions')
+            screen.getByText('Could not load conversations')
         ).toBeInTheDocument();
         expect(
             screen.queryByText('secret backend failure XYZ')
@@ -401,7 +403,7 @@ describe('CommentsSection', () => {
         });
 
         expect(
-            screen.getByText('Could not load discussions')
+            screen.getByText('Could not load conversations')
         ).toBeInTheDocument();
         expect(screen.queryByText('network down')).not.toBeInTheDocument();
         expect(
@@ -461,10 +463,10 @@ describe('CommentsSection', () => {
         expect(screen.getByText('Still here')).toBeInTheDocument();
         expect(screen.getByRole('list')).toBeInTheDocument();
         expect(
-            screen.queryByText('Loading discussions…')
+            screen.queryByText('Loading conversations…')
         ).not.toBeInTheDocument();
         expect(
-            screen.getByRole('status', { name: 'Loading discussions…' })
+            screen.getByRole('status', { name: 'Loading conversations…' })
         ).toBeInTheDocument();
     });
 
@@ -694,10 +696,10 @@ describe('CommentsSection', () => {
     });
 
     it.each([
-        ['diagram', null, 'Diagram discussion'],
-        ['table', 'tbl-1', 'Table discussion'],
-        ['field', 'fld-1', 'Field discussion'],
-        ['relationship', 'rel-1', 'Relationship discussion'],
+        ['diagram', null, 'Diagram'],
+        ['table', 'tbl-1', 'Table'],
+        ['field', 'fld-1', 'Field'],
+        ['relationship', 'rel-1', 'Relationship'],
     ] as const)(
         'renders %s target context without raw target ids',
         (targetType, targetId, label) => {
@@ -715,7 +717,8 @@ describe('CommentsSection', () => {
 
             render(<CommentsSection />);
 
-            expect(screen.getByText(label)).toBeInTheDocument();
+            const commentArticle = screen.getAllByRole('article')[0];
+            expect(within(commentArticle).getByText(label)).toBeInTheDocument();
             if (targetId) {
                 expect(screen.queryByText(targetId)).not.toBeInTheDocument();
             }
@@ -775,7 +778,7 @@ describe('CommentsSection', () => {
 
         render(<CommentsSection />);
 
-        const heading = screen.getByRole('heading', { name: 'Discussions' });
+        const heading = screen.getByRole('heading', { name: 'Conversations' });
         expect(heading).toHaveAttribute('id', 'comments-section-heading');
 
         const section = heading.closest('section');
@@ -1245,7 +1248,7 @@ describe('CommentsSection', () => {
         ).toBeInTheDocument();
         expect(screen.getByRole('alert')).toBeInTheDocument();
         expect(
-            screen.queryByText('Could not load discussions')
+            screen.queryByText('Could not load conversations')
         ).not.toBeInTheDocument();
         expect(
             screen.queryByText('secret reload failure')
@@ -1279,7 +1282,7 @@ describe('CommentsSection', () => {
         expect(screen.getByText('No diagram messages yet')).toBeInTheDocument();
         expect(screen.getByRole('alert')).toBeInTheDocument();
         expect(
-            screen.queryByText('Could not load discussions')
+            screen.queryByText('Could not load conversations')
         ).not.toBeInTheDocument();
         expect(
             screen.queryByText('secret reload failure')
@@ -1336,7 +1339,7 @@ describe('CommentsSection', () => {
             ).not.toBeInTheDocument();
             expect(screen.queryByText(target.targetId)).not.toBeInTheDocument();
             expect(
-                screen.getByRole('button', { name: 'All' })
+                screen.getByRole('button', { name: 'All conversations' })
             ).toBeInTheDocument();
             expect(
                 screen.getByRole('button', { name: 'Diagram' })

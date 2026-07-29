@@ -9,7 +9,7 @@ export const mr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'अवलंबने',
             custom_types: 'कस्टम प्रकार',
-            comments: 'चर्चा',
+            comments: 'संवाद',
             visuals: 'Visuals',
         },
         menu: {
@@ -173,7 +173,7 @@ export const mr: LanguageTranslation = {
                     field_type: 'प्रकार',
                     field_actions: {
                         title: 'फील्ड गुणधर्म',
-                        open_discussion: 'चर्चा उघडा',
+                        open_discussion: 'संवाद उघडा',
                         unique: 'युनिक',
                         auto_increment: 'ऑटो इंक्रिमेंट',
                         comments: 'टिप्पण्या',
@@ -201,7 +201,7 @@ export const mr: LanguageTranslation = {
                     },
                     table_actions: {
                         title: 'टेबल एक्शन',
-                        open_discussion: 'चर्चा उघडा',
+                        open_discussion: 'संवाद उघडा',
                         change_schema: 'स्कीमा बदला',
                         add_field: 'फील्ड जोडा',
                         add_index: 'इंडेक्स जोडा',
@@ -239,7 +239,7 @@ export const mr: LanguageTranslation = {
                     },
                     relationship_actions: {
                         title: 'क्रिया',
-                        open_discussion: 'चर्चा उघडा',
+                        open_discussion: 'संवाद उघडा',
                         delete_relationship: 'हटवा',
                     },
                 },
@@ -341,15 +341,15 @@ export const mr: LanguageTranslation = {
                 },
             },
             comments_section: {
-                title: 'चर्चा',
-                loading: 'चर्चा लोड होत आहेत…',
+                title: 'संवाद',
+                loading: 'संवाद लोड होत आहेत…',
                 inactive: {
-                    title: 'चर्चा उपलब्ध नाहीत',
+                    title: 'संवाद उपलब्ध नाहीत',
                     description:
-                        'चर्चा फक्त प्रमाणित क्लाउड आकृतींवर उपलब्ध आहेत.',
+                        'संवाद केवळ प्रमाणित क्लाउड आकृत्यांवर उपलब्ध आहेत.',
                 },
                 empty: {
-                    title: 'अद्याप कोणतीही चर्चा नाही',
+                    title: 'अद्याप कोणतेही संवाद नाहीत',
                     description: 'या आकृतीबद्दलच्या संभाषणे येथे दिसतील.',
                     diagram_title: 'अद्याप कोणतेही आकृती संदेश नाहीत',
                     diagram_description:
@@ -359,26 +359,26 @@ export const mr: LanguageTranslation = {
                         'सध्याच्या निवडीबद्दलचे संदेश येथे दिसतील.',
                 },
                 errors: {
-                    load_title: 'चर्चा लोड करता आल्या नाहीत',
+                    load_title: 'संवाद लोड करू शकलो नाही',
                     load_description:
-                        'चर्चा लोड करताना काहीतरी चुकले. कृपया पुन्हा प्रयत्न करा.',
+                        'संवाद लोड करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.',
                 },
                 retry: 'पुन्हा प्रयत्न करा',
                 deleted_user: 'हटवलेला वापरकर्ता',
                 targets: {
-                    diagram: 'आकृती चर्चा',
-                    table: 'टेबल चर्चा',
-                    field: 'फील्ड चर्चा',
-                    relationship: 'संबंध चर्चा',
-                    unknown: 'चर्चा',
+                    diagram: 'आकृती',
+                    table: 'टेबल',
+                    field: 'फील्ड',
+                    relationship: 'संबंध',
+                    unknown: 'संवाद',
                 },
                 views: {
-                    all: 'सर्व',
+                    all: 'सर्व संवाद',
                     diagram: 'आकृती',
                     current_target: 'सध्याचे',
                 },
                 target_header: {
-                    diagram: 'आकृती चर्चा',
+                    diagram: 'आकृती',
                     table: 'तक्ता {{name}}',
                     field: '{{table}}.{{field}}',
                     relationship: '{{name}}',
@@ -389,11 +389,11 @@ export const mr: LanguageTranslation = {
                 },
                 composer: {
                     label: 'संदेश',
-                    placeholder: 'चर्चेचा संदेश लिहा…',
+                    placeholder: 'संदेश लिखा…',
                     submit: 'पोस्ट करा',
                     submitting: 'पोस्ट होत आहे…',
                     cancel: 'रद्द करा',
-                    form_aria_label: 'नवीन चर्चा संदेश',
+                    form_aria_label: 'नवीन संदेश',
                     counter_aria_label: '{{max}} पैकी {{count}} अक्षरे वापरली',
                     errors: {
                         empty: 'पोस्ट करण्यासाठी संदेश लिहा.',
@@ -410,7 +410,7 @@ export const mr: LanguageTranslation = {
                 },
                 edit: {
                     label: 'संदेश',
-                    form_aria_label: 'चर्चा संदेश संपादित करा',
+                    form_aria_label: 'संदेश संपादित करा',
                     save: 'जतन करा',
                     saving: 'जतन करत आहे…',
                     cancel: 'रद्द करा',
