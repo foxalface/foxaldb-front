@@ -17,17 +17,12 @@ const toAwaitingGuestChoice = (): EntryFlowState => ({
 const toRecoverableError = (
     error: EntryFlowError,
     entrySource: EntrySource,
-    openingContext?: OpeningDiagramContext,
-    migrationContext?: {
-        localDiagramId: string;
-        remoteDiagramId?: string;
-    }
+    openingContext?: OpeningDiagramContext
 ): EntryFlowState => ({
     kind: 'recoverableError',
     error,
     entrySource,
     openingContext,
-    migrationContext,
 });
 
 const toLoadingRemoteDiagrams = (entrySource: EntrySource): EntryFlowState => ({

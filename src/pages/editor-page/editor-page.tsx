@@ -98,10 +98,7 @@ const EditorPageContent: React.FC<
         starUsDialogLastOpen,
     ]);
 
-    /*
-     * Staged integration (M1.2–M1.4): only restoringSession blocks the editor shell.
-     * M1.5 will replace authenticated bootstrap during loadingRemoteDiagrams.
-     */
+    // Only restoringSession blocks the editor shell until auth session is resolved.
     const isEntrySessionRestoring = entryFlow.state.kind === 'restoringSession';
 
     return (

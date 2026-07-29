@@ -1,6 +1,13 @@
 /**
  * Pure entry-flow domain types.
  * No React, IO, or UI dependencies.
+ *
+ * Startup architecture (single owner: useEntryFlow in EditorPageComponent):
+ * - Pure reducer + selectors in this module
+ * - Side effects in useEntryFlowGuestResolution, useEntryFlowGuestMigration,
+ *   useEntryFlowAuthenticatedResolution
+ * - Dialog visibility derived from selectEntryFlowDialog; opened via
+ *   useEntryFlowDialogSync
  */
 
 /** Why the current branch was entered. */
@@ -36,11 +43,6 @@ export interface EntryFlowError {
 export interface OpeningDiagramContext {
     diagramId: string;
     diagramSource: DiagramSource;
-}
-
-export interface GuestMigrationContext {
-    localDiagramId: string;
-    remoteDiagramId?: string;
 }
 
 /** Minimal remote diagram identity for selection UI. Extensible without raw ID arrays. */
@@ -92,7 +94,6 @@ export type EntryFlowState =
           error: EntryFlowError;
           entrySource: EntrySource;
           openingContext?: OpeningDiagramContext;
-          migrationContext?: GuestMigrationContext;
       };
 
 export type EntryFlowEvent =

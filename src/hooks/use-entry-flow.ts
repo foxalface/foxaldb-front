@@ -61,6 +61,10 @@ export interface UseEntryFlowResult {
     notifyLoggedOut: () => void;
 }
 
+/**
+ * Single entry-flow orchestrator for editor startup.
+ * Owns the pure reducer; side effects live in guest/authenticated resolution hooks.
+ */
 export const useEntryFlow = (): UseEntryFlowResult => {
     const [state, dispatch] = useReducer(
         entryFlowReducer,
@@ -339,7 +343,7 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     );
 
     const initialDiagram = isAuthenticated
-        ? (authenticatedInitialDiagram ?? guestInitialDiagram)
+        ? authenticatedInitialDiagram
         : guestInitialDiagram;
 
     return {

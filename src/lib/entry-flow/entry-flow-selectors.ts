@@ -6,7 +6,7 @@ import type {
 
 /**
  * Derives the single entry dialog required by the current state.
- * Acts as the future dialog mutex — never more than one dialog at a time.
+ * Entry-flow dialog mutex — never more than one entry dialog at a time.
  */
 export const selectEntryFlowDialog = (
     state: EntryFlowState

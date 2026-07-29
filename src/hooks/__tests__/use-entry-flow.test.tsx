@@ -677,7 +677,7 @@ describe('entry startup gate', () => {
         expect(queryByTestId('editor-desktop-layout')).not.toBeInTheDocument();
     });
 
-    it('allows legacy editor bootstrap after session restoration', async () => {
+    it('shows editor content after session restoration completes', async () => {
         const { result, rerender } = renderHook(() => {
             const entryFlow = useEntryFlow();
             return entryFlow.state.kind !== 'restoringSession';

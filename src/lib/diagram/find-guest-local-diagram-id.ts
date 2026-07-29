@@ -6,8 +6,8 @@ type DiagramListItem = Pick<Diagram, 'id'> | { id: string };
 export const isGuestLocalDiagramId = (id: string): boolean => !/^\d+$/.test(id);
 
 /**
- * Returns the first local guest diagram id, matching the legacy guest bootstrap
- * convention of one diagram per guest session.
+ * Returns the first local guest diagram id.
+ * Guest sessions store at most one diagram in IndexedDB.
  */
 export const findGuestLocalDiagramId = async (
     listDiagrams: () => Promise<DiagramListItem[]>
