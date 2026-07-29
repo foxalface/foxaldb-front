@@ -16,6 +16,7 @@ import { useCallback, useEffect } from 'react';
 const shouldSkipOutboundSync = (): boolean =>
     isRemoteSyncActive() || isOutboundReplayActive();
 
+const UPDATE_DIAGRAM_NAME_DEBOUNCE_MS = 150;
 const UPDATE_TABLE_DEBOUNCE_MS = 120;
 const UPDATE_FIELD_DEBOUNCE_MS = 150;
 const UPDATE_RELATIONSHIP_DEBOUNCE_MS = 150;
@@ -23,6 +24,10 @@ const UPDATE_NOTE_DEBOUNCE_MS = 150;
 const UPDATE_AREA_DEBOUNCE_MS = 150;
 const UPDATE_DEPENDENCY_DEBOUNCE_MS = 150;
 
+const updateDiagramNameTimeouts = new Map<
+    string,
+    ReturnType<typeof setTimeout>
+>();
 const updateTableTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 const updateFieldTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 const updateRelationshipTimeouts = new Map<
@@ -44,6 +49,7 @@ const clearTimeoutMap = (
 };
 
 export const clearPendingDiagramOperationSyncTimers = (): void => {
+    clearTimeoutMap(updateDiagramNameTimeouts);
     clearTimeoutMap(updateTableTimeouts);
     clearTimeoutMap(updateFieldTimeouts);
     clearTimeoutMap(updateRelationshipTimeouts);
@@ -54,6 +60,8 @@ export const clearPendingDiagramOperationSyncTimers = (): void => {
 
 const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
     switch (event.action) {
+        case 'update_diagram_name':
+            return event.data.name.trim().length > 0;
         case 'add_tables':
             return event.data.tables.length > 0;
         case 'remove_tables':
@@ -148,6 +156,26 @@ export const useDiagramOperationSync = (): void => {
                     }
                 );
             };
+
+            if (event.action === 'update_diagram_name') {
+                const existing = updateDiagramNameTimeouts.get(diagramId);
+                if (existing) clearTimeout(existing);
+
+                const timeout = setTimeout(() => {
+                    updateDiagramNameTimeouts.delete(diagramId);
+
+                    if (shouldSkipOutboundSync()) return;
+
+                    postOperation({
+                        action: 'update_diagram_name',
+                        data: { name: event.data.name },
+                        clientId: getClientId(),
+                    });
+                }, UPDATE_DIAGRAM_NAME_DEBOUNCE_MS);
+
+                updateDiagramNameTimeouts.set(diagramId, timeout);
+                return;
+            }
 
             // ===== TABLE =====
 

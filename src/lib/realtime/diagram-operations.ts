@@ -21,6 +21,7 @@ import type { DBTable } from '@/lib/domain/db-table';
 import type { Note } from '@/lib/domain/note';
 
 export type DiagramOperationAction =
+    | 'update_diagram_name'
     | 'add_tables'
     | 'update_table'
     | 'remove_tables'
@@ -66,7 +67,12 @@ export type UpdateDependencyOperationData = {
     attributes: Partial<DBDependency>;
 };
 
+export type UpdateDiagramNameOperationData = {
+    name: string;
+};
+
 export type DiagramOperationData =
+    | UpdateDiagramNameOperationData
     | CreateTableEvent['data']
     | UpdateTableEvent['data']
     | RemoveTableEvent['data']
@@ -101,6 +107,10 @@ export interface DiagramOperationPayload {
 }
 
 export interface DiagramOperationMutators {
+    updateDiagramName: (
+        name: string,
+        options: { updateHistory: false }
+    ) => Promise<void>;
     addTables: (
         tables: DBTable[],
         options: { updateHistory: false }
@@ -206,6 +216,7 @@ const isDexieConstraintError = (error: unknown): boolean =>
     error instanceof Error && error.name === 'ConstraintError';
 
 const DIAGRAM_OPERATION_ACTIONS: readonly DiagramOperationAction[] = [
+    'update_diagram_name',
     'add_tables',
     'update_table',
     'remove_tables',
@@ -233,6 +244,16 @@ export const isDiagramOperationAction = (
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
     typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const validateUpdateDiagramNameData = (
+    data: unknown
+): data is UpdateDiagramNameOperationData => {
+    return (
+        isRecord(data) &&
+        typeof data.name === 'string' &&
+        data.name.trim().length > 0
+    );
+};
 
 const validateAddTablesData = (
     data: unknown
@@ -415,6 +436,19 @@ export const applyRemoteDiagramOperation = async (
     const historyOptions = { updateHistory: false as const };
 
     switch (payload.action) {
+        case 'update_diagram_name': {
+            if (!validateUpdateDiagramNameData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid update_diagram_name payload',
+                    payload.data
+                );
+                return;
+            }
+
+            await mutators.updateDiagramName(payload.data.name, historyOptions);
+            return;
+        }
+
         case 'add_tables': {
             if (!validateAddTablesData(payload.data)) {
                 console.warn(

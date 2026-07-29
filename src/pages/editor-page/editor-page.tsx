@@ -27,6 +27,7 @@ import { useDiagramAccessListener } from './use-diagram-access-listener';
 import { useDiagramAutosave } from './use-diagram-autosave';
 import { useDiagramOperationSync } from './use-diagram-operation-sync';
 import { useDiagramChannelLifecycle } from './use-diagram-channel-lifecycle';
+import { useDiagramPresenceActivity } from './use-diagram-presence-activity';
 import { useDiagramRealtime } from './use-diagram-realtime';
 import { useDiagramReconnectRefresh } from './use-diagram-reconnect-refresh';
 import { useGuestDiagramMigration } from './use-guest-diagram-migration';
@@ -59,6 +60,7 @@ const EditorPageComponent: React.FC = () => {
     useDiagramAutosave();
     useDiagramAccessListener();
     useDiagramChannelLifecycle();
+    useDiagramPresenceActivity();
     useDiagramRealtime();
     useDiagramReconnectRefresh();
     useDiagramOperationSync();

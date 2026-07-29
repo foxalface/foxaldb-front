@@ -71,8 +71,8 @@ describe('useRemoteEditing', () => {
         };
         currentDiagram = { id: '42' };
         presence = buildPresence([
-            [2, { id: 2, name: 'Bob' }],
-            [3, { id: 3, name: 'Alice' }],
+            [2, { id: 2, name: 'Bob', active: true }],
+            [3, { id: 3, name: 'Alice', active: true }],
         ]);
         capturedListener = null;
         subscribeToEditingActions.mockClear();

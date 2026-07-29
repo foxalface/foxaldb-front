@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 export const useDiagramChannelLifecycle = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
     const { currentDiagram } = useChartDB();
-    const { joinDiagram, leaveDiagram } = useRealtime();
+    const { joinDiagram, leaveDiagram, connectionStatus } = useRealtime();
 
     const diagramId =
         currentDiagram && isValidBackendDiagramId(currentDiagram.id)
@@ -19,10 +19,21 @@ export const useDiagramChannelLifecycle = (): void => {
             return;
         }
 
+        if (connectionStatus !== 'connected') {
+            return;
+        }
+
         joinDiagram(diagramId);
 
         return () => {
             leaveDiagram();
         };
-    }, [isLoading, isAuthenticated, diagramId, joinDiagram, leaveDiagram]);
+    }, [
+        isLoading,
+        isAuthenticated,
+        diagramId,
+        connectionStatus,
+        joinDiagram,
+        leaveDiagram,
+    ]);
 };

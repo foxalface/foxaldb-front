@@ -1,6 +1,7 @@
 export interface DiagramPresenceUser {
     id: number;
     name: string;
+    active: boolean;
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -20,7 +21,9 @@ export const parseDiagramPresenceUser = (
         return null;
     }
 
-    return { id, name };
+    const active = value.active === false ? false : true;
+
+    return { id, name, active };
 };
 
 export const parseDiagramPresenceMemberInfo = (

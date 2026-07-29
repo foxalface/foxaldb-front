@@ -4,6 +4,10 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import path from 'path';
 import UnpluginInjectPreload from 'unplugin-inject-preload/vite';
 
+// HMR host for LAN QA (Docker injects VITE_HMR_HOST from root DEV_HOST).
+// Defaults to localhost so single-machine dev is unchanged.
+const hmrHost: string = process.env.VITE_HMR_HOST || 'localhost';
+
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
@@ -25,6 +29,12 @@ export default defineConfig({
             ],
         }),
     ],
+    server: {
+        host: true,
+        hmr: {
+            host: hmrHost,
+        },
+    },
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),

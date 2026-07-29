@@ -34,6 +34,7 @@ import {
     type DBCustomType,
 } from '@/lib/domain/db-custom-type';
 import { getDefaultPrimaryKeyType } from '@/lib/data/data-types/data-types';
+import { isRemoteSyncActive } from '@/lib/realtime/diagram-sync-state';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -280,6 +281,13 @@ export const ChartDBProvider: React.FC<
                 attributes: { name, updatedAt },
             });
 
+            if (!isRemoteSyncActive()) {
+                events.emit({
+                    action: 'update_diagram_name',
+                    data: { name },
+                });
+            }
+
             if (options.updateHistory) {
                 addUndoAction({
                     action: 'updateDiagramName',
@@ -296,6 +304,7 @@ export const ChartDBProvider: React.FC<
             addUndoAction,
             diagramName,
             resetRedoStack,
+            events,
         ]
     );
 

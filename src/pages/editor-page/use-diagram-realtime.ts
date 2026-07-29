@@ -94,6 +94,7 @@ export const useDiagramRealtime = (): void => {
         dependencies,
         notes,
         areas,
+        updateDiagramName,
         addTables,
         updateTable,
         removeTables,
@@ -152,6 +153,7 @@ export const useDiagramRealtime = (): void => {
     diagramIdRef.current = diagramId;
 
     const mutatorsRef = useRef<DiagramOperationMutators>({
+        updateDiagramName,
         addTables,
         updateTable,
         removeTables,
@@ -172,6 +174,7 @@ export const useDiagramRealtime = (): void => {
         updateDependency,
     });
     mutatorsRef.current = {
+        updateDiagramName,
         addTables,
         updateTable,
         removeTables,

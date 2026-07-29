@@ -6,7 +6,11 @@ import {
     hashUserId,
 } from '../presence-utils';
 
-const member = (id: number, name: string) => ({ id, name });
+const member = (id: number, name: string, active = true) => ({
+    id,
+    name,
+    active,
+});
 
 describe('presenceReducer', () => {
     it('HERE rebuilds the complete member map', () => {
@@ -122,6 +126,30 @@ describe('presenceReducer', () => {
         });
 
         expect(state.status).toBe('joining');
+    });
+
+    it('SET_ACTIVITY updates only the targeted member activity state', () => {
+        const initial = presenceReducer(initialPresenceState(), {
+            type: 'HERE',
+            members: [member(1, 'Alice'), member(2, 'Bob')],
+        });
+
+        const inactive = presenceReducer(initial, {
+            type: 'SET_ACTIVITY',
+            memberId: 2,
+            active: false,
+        });
+
+        expect(inactive.members.get(1)?.active).toBe(true);
+        expect(inactive.members.get(2)?.active).toBe(false);
+
+        const unchanged = presenceReducer(inactive, {
+            type: 'SET_ACTIVITY',
+            memberId: 2,
+            active: false,
+        });
+
+        expect(unchanged).toBe(inactive);
     });
 });
 

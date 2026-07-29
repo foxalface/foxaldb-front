@@ -19,6 +19,7 @@ export type PresenceAction =
     | { type: 'HERE'; members: DiagramPresenceUser[] }
     | { type: 'JOINING'; member: DiagramPresenceUser }
     | { type: 'LEAVING'; memberId: number }
+    | { type: 'SET_ACTIVITY'; memberId: number; active: boolean }
     | { type: 'SET_ERROR'; error: unknown }
     | { type: 'SET_DISCONNECTED' };
 
@@ -86,6 +87,25 @@ export const presenceReducer = (
 
             const members = new Map(state.members);
             members.delete(action.memberId);
+
+            return {
+                ...state,
+                members,
+            };
+        }
+
+        case 'SET_ACTIVITY': {
+            const existing = state.members.get(action.memberId);
+
+            if (existing === undefined || existing.active === action.active) {
+                return state;
+            }
+
+            const members = new Map(state.members);
+            members.set(action.memberId, {
+                ...existing,
+                active: action.active,
+            });
 
             return {
                 ...state,

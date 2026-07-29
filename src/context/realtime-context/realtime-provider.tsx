@@ -181,7 +181,34 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
 
     const connectionManagerRef = useRef(new ConnectionManager());
     const dispatcherRef = useRef(new EventDispatcher());
-    const channelManagerRef = useRef(new ChannelManager(dispatcherRef.current));
+    const requestedDiagramIdRef = useRef<string | null>(null);
+    const dispatchPresenceRef = useRef(dispatchPresence);
+    dispatchPresenceRef.current = dispatchPresence;
+    const channelManagerInitializedRef = useRef(false);
+    const channelManagerRef = useRef<ChannelManager>(undefined!);
+
+    if (!channelManagerInitializedRef.current) {
+        const channelManager = new ChannelManager(dispatcherRef.current);
+        channelManager.setPresenceHandlers({
+            onHere: (members) => {
+                dispatchPresenceRef.current({ type: 'HERE', members });
+            },
+            onJoining: (member) => {
+                dispatchPresenceRef.current({ type: 'JOINING', member });
+            },
+            onLeaving: (member) => {
+                dispatchPresenceRef.current({
+                    type: 'LEAVING',
+                    memberId: member.id,
+                });
+            },
+            onError: (error) =>
+                dispatchPresenceRef.current({ type: 'SET_ERROR', error }),
+        });
+        channelManagerRef.current = channelManager;
+        channelManagerInitializedRef.current = true;
+    }
+
     const cursorSubscriberRef = useRef(new CursorActionSubscriber());
     const selectionSubscriberRef = useRef(new SelectionActionSubscriber());
     const movementSubscriberRef = useRef(new MovementActionSubscriber());
@@ -206,6 +233,15 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         channelManagerRef.current.setEditingOnAction((action) => {
             editingSubscriberRef.current.dispatch(action);
         });
+        channelManagerRef.current.setPresenceActivityOnChange(
+            (memberId, active) => {
+                dispatchPresenceRef.current({
+                    type: 'SET_ACTIVITY',
+                    memberId,
+                    active,
+                });
+            }
+        );
     }, []);
 
     useEffect(() => {
@@ -218,23 +254,6 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
                 dispatchPresence({ type: 'SET_DISCONNECTED' });
             }
         });
-    }, []);
-
-    useEffect(() => {
-        const channelManager = channelManagerRef.current;
-
-        channelManager.setPresenceHandlers({
-            onHere: (members) => dispatchPresence({ type: 'HERE', members }),
-            onJoining: (member) =>
-                dispatchPresence({ type: 'JOINING', member }),
-            onLeaving: (member) =>
-                dispatchPresence({ type: 'LEAVING', memberId: member.id }),
-            onError: (error) => dispatchPresence({ type: 'SET_ERROR', error }),
-        });
-
-        return () => {
-            channelManager.setPresenceHandlers(null);
-        };
     }, []);
 
     useEffect(() => {
@@ -278,6 +297,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
 
         if (!isAuthenticated || user === null) {
             dispatchPresence({ type: 'RESET' });
+            requestedDiagramIdRef.current = null;
             channelManager.clearAll();
             dispatcher.clear();
             connectionManager.disconnect();
@@ -295,6 +315,14 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         connectionManager.attach();
         channelManager.joinUserChannel(user.id);
 
+        const requestedDiagramId = requestedDiagramIdRef.current;
+        if (requestedDiagramId !== null) {
+            channelManager.joinDiagram(requestedDiagramId);
+            setCurrentDiagramId(
+                channelManager.getCurrentDiagramId() ?? requestedDiagramId
+            );
+        }
+
         return () => {
             dispatchPresence({ type: 'RESET' });
             channelManager.clearAll();
@@ -310,16 +338,38 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             return;
         }
 
+        const normalizedDiagramId = String(diagramId);
+        requestedDiagramIdRef.current = normalizedDiagramId;
         dispatchPresence({ type: 'SET_JOINING' });
-        channelManagerRef.current.joinDiagram(String(diagramId));
-        setCurrentDiagramId(channelManagerRef.current.getCurrentDiagramId());
+        channelManagerRef.current.joinDiagram(normalizedDiagramId);
+        setCurrentDiagramId(
+            channelManagerRef.current.getCurrentDiagramId() ??
+                normalizedDiagramId
+        );
     }, []);
 
     const leaveDiagram = useCallback(() => {
+        requestedDiagramIdRef.current = null;
         channelManagerRef.current.leaveDiagram();
         dispatchPresence({ type: 'RESET' });
         setCurrentDiagramId(null);
     }, []);
+
+    const sendPresenceActivity = useCallback(
+        (active: boolean) => {
+            if (user === null) {
+                return;
+            }
+
+            dispatchPresence({
+                type: 'SET_ACTIVITY',
+                memberId: user.id,
+                active,
+            });
+            channelManagerRef.current.sendPresenceActivity(active);
+        },
+        [user]
+    );
 
     const on = useCallback(
         <T extends RealtimeEventName>(
@@ -411,6 +461,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             subscribeToMovementActions,
             sendEditing,
             subscribeToEditingActions,
+            sendPresenceActivity,
             on,
         }),
         [
@@ -429,6 +480,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             subscribeToMovementActions,
             sendEditing,
             subscribeToEditingActions,
+            sendPresenceActivity,
             on,
         ]
     );

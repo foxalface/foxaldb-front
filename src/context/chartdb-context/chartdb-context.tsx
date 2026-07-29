@@ -16,6 +16,7 @@ import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { Note } from '@/lib/domain/note';
 
 export type ChartDBEventType =
+    | 'update_diagram_name'
     | 'add_tables'
     | 'update_table'
     | 'remove_tables'
@@ -130,7 +131,13 @@ export type LoadDiagramEvent = ChartDBEventBase<
     { diagram: Diagram }
 >;
 
+export type UpdateDiagramNameEvent = ChartDBEventBase<
+    'update_diagram_name',
+    { name: string }
+>;
+
 export type ChartDBEvent =
+    | UpdateDiagramNameEvent
     | CreateTableEvent
     | UpdateTableEvent
     | RemoveTableEvent

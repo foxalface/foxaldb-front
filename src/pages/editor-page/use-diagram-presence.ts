@@ -14,6 +14,7 @@ export interface PresenceMember {
     initials: string;
     colorClass: string;
     isSelf: boolean;
+    active: boolean;
 }
 
 export interface DiagramPresenceState {
@@ -52,6 +53,7 @@ export const useDiagramPresence = (): DiagramPresenceState => {
             initials: getInitialsFromName(member.name),
             colorClass: getPresenceColorClass(member.id),
             isSelf: member.id === user.id,
+            active: member.active,
         }));
 
         if (!members.some((member) => member.isSelf)) {
@@ -61,6 +63,7 @@ export const useDiagramPresence = (): DiagramPresenceState => {
                 initials: getInitialsFromName(user.name),
                 colorClass: getPresenceColorClass(user.id),
                 isSelf: true,
+                active: true,
             });
         }
 

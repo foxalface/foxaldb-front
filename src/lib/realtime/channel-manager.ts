@@ -22,6 +22,7 @@ import { EditingTransport } from './editing-transport';
 import type { EditingWhisperPayload } from './editing-types';
 import type { EventDispatcher } from './event-dispatcher';
 import type { RealtimePingPayload } from './events';
+import { PresenceActivityTransport } from './presence-activity-transport';
 import {
     parseDiagramPresenceMemberInfo,
     type DiagramPresenceUser,
@@ -48,6 +49,7 @@ export class ChannelManager {
     private selectionTransport: SelectionTransport | null = null;
     private movementTransport: MovementTransport | null = null;
     private editingTransport: EditingTransport | null = null;
+    private presenceActivityTransport: PresenceActivityTransport | null = null;
     private isKnownPresenceUser: (userId: number) => boolean = () => false;
     private cursorOnAction: (action: CursorAction) => void = () => undefined;
     private selectionOnAction: (action: SelectionAction) => void = () =>
@@ -55,6 +57,10 @@ export class ChannelManager {
     private movementOnAction: (action: MovementAction) => void = () =>
         undefined;
     private editingOnAction: (action: EditingAction) => void = () => undefined;
+    private presenceActivityOnChange: (
+        userId: number,
+        active: boolean
+    ) => void = () => undefined;
 
     constructor(private readonly dispatcher: EventDispatcher) {}
 
@@ -92,6 +98,17 @@ export class ChannelManager {
 
     setEditingOnAction(handler: (action: EditingAction) => void): void {
         this.editingOnAction = handler;
+    }
+
+    setPresenceActivityOnChange(
+        handler: (userId: number, active: boolean) => void
+    ): void {
+        this.presenceActivityOnChange = handler;
+    }
+
+    sendPresenceActivity(active: boolean): void {
+        this.ensurePresenceActivityTransport();
+        this.presenceActivityTransport?.sendActivity(active);
     }
 
     sendMovement(payload: MovementWhisperPayload): void {
@@ -145,7 +162,10 @@ export class ChannelManager {
             return;
         }
 
-        if (this.currentDiagramId === diagramId) {
+        if (
+            this.currentDiagramId === diagramId &&
+            this.diagramPresenceChannel !== null
+        ) {
             return;
         }
 
@@ -169,10 +189,6 @@ export class ChannelManager {
 
             const presenceChannel = echo.join(diagramPrivateChannel(diagramId));
             this.diagramPresenceChannel = presenceChannel;
-            this.ensureCursorTransport();
-            this.ensureSelectionTransport();
-            this.ensureMovementTransport();
-            this.ensureEditingTransport();
 
             presenceChannel
                 .here((members: unknown[]) => {
@@ -208,12 +224,19 @@ export class ChannelManager {
                     );
                     this.presenceHandlers?.onError(error);
                 });
+
+            this.ensureCursorTransport();
+            this.ensureSelectionTransport();
+            this.ensureMovementTransport();
+            this.ensureEditingTransport();
+            this.ensurePresenceActivityTransport();
         } catch (error) {
             console.warn(
                 `[Realtime] Failed to join diagram channels for ${diagramId}`,
                 error
             );
             this.leaveDiagramChannels();
+            this.currentDiagramId = null;
         }
     }
 
@@ -298,6 +321,7 @@ export class ChannelManager {
         this.clearSelectionTransport();
         this.clearMovementTransport();
         this.clearEditingTransport();
+        this.clearPresenceActivityTransport();
         this.diagramPrivateChannel = null;
         this.diagramPresenceChannel = null;
         this.pingHandler = null;
@@ -393,5 +417,29 @@ export class ChannelManager {
     private clearEditingTransport(): void {
         this.editingTransport?.stop();
         this.editingTransport = null;
+    }
+
+    private ensurePresenceActivityTransport(): void {
+        if (this.userId === null || this.diagramPresenceChannel === null) {
+            return;
+        }
+
+        if (this.presenceActivityTransport !== null) {
+            return;
+        }
+
+        this.presenceActivityTransport = new PresenceActivityTransport({
+            getPresenceChannel: () => this.getDiagramPresenceChannel(),
+            selfUserId: this.userId,
+            isKnownPresenceUser: (userId) => this.isKnownPresenceUser(userId),
+            onActivityChange: (userId, active) =>
+                this.presenceActivityOnChange(userId, active),
+        });
+        this.presenceActivityTransport.start();
+    }
+
+    private clearPresenceActivityTransport(): void {
+        this.presenceActivityTransport?.stop();
+        this.presenceActivityTransport = null;
     }
 }

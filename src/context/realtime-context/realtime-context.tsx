@@ -47,6 +47,7 @@ export interface RealtimeContextValue {
     ) => () => void;
     sendEditing: (payload: EditingWhisperPayload) => void;
     subscribeToEditingActions: (listener: EditingActionListener) => () => void;
+    sendPresenceActivity: (active: boolean) => void;
     on: <T extends RealtimeEventName>(
         event: T,
         handler: RealtimeEventHandler<T>
@@ -69,5 +70,6 @@ export const RealtimeContext = createContext<RealtimeContextValue>({
     subscribeToMovementActions: () => emptyFn,
     sendEditing: emptyFn,
     subscribeToEditingActions: () => emptyFn,
+    sendPresenceActivity: emptyFn,
     on: () => emptyFn,
 });

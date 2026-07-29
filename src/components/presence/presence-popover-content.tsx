@@ -18,7 +18,8 @@ export const PresencePopoverContent: React.FC<PresencePopoverContentProps> = ({
                         <AvatarFallback
                             className={cn(
                                 'text-[10px] font-medium text-white',
-                                member.colorClass
+                                member.colorClass,
+                                !member.active && 'opacity-50'
                             )}
                         >
                             {member.initials}
