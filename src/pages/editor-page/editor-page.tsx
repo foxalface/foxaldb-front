@@ -31,6 +31,7 @@ import { useDiagramPresenceActivity } from './use-diagram-presence-activity';
 import { useDiagramRealtime } from './use-diagram-realtime';
 import { useDiagramReconnectRefresh } from './use-diagram-reconnect-refresh';
 import { useGuestDiagramMigration } from './use-guest-diagram-migration';
+import { useEntryFlow } from '@/hooks/use-entry-flow';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
@@ -51,6 +52,7 @@ export const EditorMobileLayoutLazy = React.lazy(
 );
 
 const EditorPageComponent: React.FC = () => {
+    const entryFlow = useEntryFlow();
     const { diagramName, currentDiagram } = useChartDB();
     const { openStarUsDialog } = useDialog();
     const { isMd: isDesktop } = useBreakpoint('md');
@@ -91,6 +93,12 @@ const EditorPageComponent: React.FC = () => {
         starUsDialogLastOpen,
     ]);
 
+    /*
+     * Staged integration (M1.2): only restoringSession blocks the editor shell.
+     * loadingRemoteDiagrams / openingDiagram remain legacy-owned until M1.3–M1.5.
+     */
+    const isEntrySessionRestoring = entryFlow.state.kind === 'restoringSession';
+
     return (
         <>
             <Helmet>
@@ -100,32 +108,43 @@ const EditorPageComponent: React.FC = () => {
                         : 'FoxalDB - Visual Database Builder'}
                 </title>
             </Helmet>
-            <section
-                className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex select-none flex-col overflow-x-hidden`}
-            >
-                <Suspense
-                    fallback={
-                        <>
-                            <TopNavbarMock />
-                            <div className="flex flex-1 items-center justify-center">
-                                <Spinner
-                                    size={isDesktop ? 'large' : 'medium'}
-                                />
-                            </div>
-                        </>
-                    }
+            {isEntrySessionRestoring ? (
+                <section
+                    className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex select-none flex-col overflow-x-hidden`}
                 >
-                    {isDesktop ? (
-                        <EditorDesktopLayoutLazy
-                            initialDiagram={initialDiagram}
-                        />
-                    ) : (
-                        <EditorMobileLayoutLazy
-                            initialDiagram={initialDiagram}
-                        />
-                    )}
-                </Suspense>
-            </section>
+                    <TopNavbarMock />
+                    <div className="flex flex-1 items-center justify-center">
+                        <Spinner size={isDesktop ? 'large' : 'medium'} />
+                    </div>
+                </section>
+            ) : (
+                <section
+                    className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex select-none flex-col overflow-x-hidden`}
+                >
+                    <Suspense
+                        fallback={
+                            <>
+                                <TopNavbarMock />
+                                <div className="flex flex-1 items-center justify-center">
+                                    <Spinner
+                                        size={isDesktop ? 'large' : 'medium'}
+                                    />
+                                </div>
+                            </>
+                        }
+                    >
+                        {isDesktop ? (
+                            <EditorDesktopLayoutLazy
+                                initialDiagram={initialDiagram}
+                            />
+                        ) : (
+                            <EditorMobileLayoutLazy
+                                initialDiagram={initialDiagram}
+                            />
+                        )}
+                    </Suspense>
+                </section>
+            )}
             <Toaster />
         </>
     );
