@@ -42,6 +42,7 @@ import { DiagramAccessProvider } from '@/context/diagram-access-context/diagram-
 import { EditingBroadcastProvider } from '@/context/editing-broadcast-context/editing-broadcast-provider';
 import { RemoteEditingProvider } from '@/context/remote-editing-context/remote-editing-provider';
 import { CommentsProvider } from '@/context/comments-context/comments-provider';
+import { ConversationsProvider } from '@/context/conversations-context/conversations-provider';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
 const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
@@ -237,10 +238,14 @@ const EditorPageComponent: React.FC = () => {
                 <EditingBroadcastProvider>
                     <RemoteEditingProvider>
                         <CommentsProvider>
-                            <EditorPageContent
-                                entryFlow={entryFlow}
-                                onActiveDiagramDeleted={onActiveDiagramDeleted}
-                            />
+                            <ConversationsProvider>
+                                <EditorPageContent
+                                    entryFlow={entryFlow}
+                                    onActiveDiagramDeleted={
+                                        onActiveDiagramDeleted
+                                    }
+                                />
+                            </ConversationsProvider>
                         </CommentsProvider>
                     </RemoteEditingProvider>
                 </EditingBroadcastProvider>
