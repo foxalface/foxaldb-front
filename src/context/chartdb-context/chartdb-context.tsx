@@ -54,7 +54,11 @@ export type UpdateTableEvent = ChartDBEventBase<
 
 export type RemoveTableEvent = ChartDBEventBase<
     'remove_tables',
-    { tableIds: string[] }
+    {
+        tableIds: string[];
+        fieldIds: string[];
+        relationshipIds: string[];
+    }
 >;
 
 export type AddFieldEvent = ChartDBEventBase<

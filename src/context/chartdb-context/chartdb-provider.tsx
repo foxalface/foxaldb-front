@@ -28,6 +28,7 @@ import type { Area } from '@/lib/domain/area';
 import type { Note } from '@/lib/domain/note';
 import { storageInitialValue } from '../storage-context/storage-context';
 import { useDiff } from '../diff-context/use-diff';
+import { buildRemoveTablesOperationData } from '@/lib/realtime/remove-tables-operation';
 import type { DiffCalculatedEvent } from '../diff-context/diff-context';
 import {
     DBCustomTypeKind,
@@ -428,7 +429,14 @@ export const ChartDBProvider: React.FC<
                 tables.filter((table) => !ids.includes(table.id))
             );
 
-            events.emit({ action: 'remove_tables', data: { tableIds: ids } });
+            events.emit({
+                action: 'remove_tables',
+                data: buildRemoveTablesOperationData(
+                    ids,
+                    tables,
+                    relationshipsToRemove
+                ),
+            });
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
@@ -593,7 +601,11 @@ export const ChartDBProvider: React.FC<
             if (tableIdsToRemove.length > 0) {
                 events.emit({
                     action: 'remove_tables',
-                    data: { tableIds: tableIdsToRemove },
+                    data: buildRemoveTablesOperationData(
+                        tableIdsToRemove,
+                        tablesToDelete,
+                        relationshipsToRemove
+                    ),
                 });
             }
 

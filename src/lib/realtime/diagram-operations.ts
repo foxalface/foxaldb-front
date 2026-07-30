@@ -272,7 +272,12 @@ const validateUpdateTableData = (
 const validateRemoveTablesData = (
     data: unknown
 ): data is RemoveTableEvent['data'] => {
-    return isRecord(data) && Array.isArray(data.tableIds);
+    return (
+        isRecord(data) &&
+        Array.isArray(data.tableIds) &&
+        Array.isArray(data.fieldIds) &&
+        Array.isArray(data.relationshipIds)
+    );
 };
 
 const validateAddFieldData = (data: unknown): data is AddFieldEvent['data'] => {
