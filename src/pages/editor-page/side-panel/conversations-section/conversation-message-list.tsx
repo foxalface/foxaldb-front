@@ -3,12 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { Spinner } from '@/components/spinner/spinner';
 import { Button } from '@/components/button/button';
 import { EmptyState } from '@/components/empty-state/empty-state';
-import type { DiagramConversationMessage } from '@/lib/conversations/conversation-types';
+import type {
+    ConversationStatus,
+    DiagramConversationMessage,
+} from '@/lib/conversations/conversation-types';
 import { ConversationMessageItem } from './conversation-message-item';
 import { ConversationsErrorState } from './conversations-error-state';
 
 export interface ConversationMessageListProps {
     messages: ReadonlyArray<DiagramConversationMessage>;
+    conversationId: number;
+    conversationStatus: ConversationStatus;
+    editingMessageId: number | null;
+    onStartEdit: (messageId: number) => void;
+    onCancelEdit: () => void;
+    onEditSaved: () => void;
     listLabelId: string;
     isInitialLoading: boolean;
     isLoadError: boolean;
@@ -23,6 +32,12 @@ export const ConversationMessageList: React.FC<
     ConversationMessageListProps
 > = ({
     messages,
+    conversationId,
+    conversationStatus,
+    editingMessageId,
+    onStartEdit,
+    onCancelEdit,
+    onEditSaved,
     listLabelId,
     isInitialLoading,
     isLoadError,
@@ -111,7 +126,15 @@ export const ConversationMessageList: React.FC<
                         key={message.id}
                         className="border-b border-border/60 last:border-b-0"
                     >
-                        <ConversationMessageItem message={message} />
+                        <ConversationMessageItem
+                            message={message}
+                            conversationId={conversationId}
+                            conversationStatus={conversationStatus}
+                            editingMessageId={editingMessageId}
+                            onStartEdit={onStartEdit}
+                            onCancelEdit={onCancelEdit}
+                            onEditSaved={onEditSaved}
+                        />
                     </li>
                 ))}
             </ul>

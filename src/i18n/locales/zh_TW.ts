@@ -496,6 +496,53 @@ export const zh_TW: LanguageTranslation = {
                     message: {
                         edited: '（已編輯）',
                         edited_aria: '訊息已編輯',
+                        actions: {
+                            title: '訊息操作',
+                            edit: '編輯',
+                            delete: '刪除',
+                        },
+                    },
+                    composer: {
+                        label: '訊息',
+                        placeholder: '撰寫訊息…',
+                        submit: '傳送',
+                        submitting: '傳送中…',
+                        form_aria_label: '新對話訊息',
+                        keyboard_hint: '按 Enter 傳送。Shift+Enter 換行。',
+                        counter_aria_label: '已使用 {{count}} / {{max}} 個字元',
+                        errors: {
+                            empty: '請輸入要傳送的訊息。',
+                            too_long: '訊息不能超過 2000 個字元。',
+                            create_failed: '無法傳送訊息。請再試一次。',
+                        },
+                    },
+                    edit: {
+                        label: '訊息',
+                        form_aria_label: '編輯對話訊息',
+                        save: '儲存',
+                        saving: '儲存中…',
+                        cancel: '取消',
+                        counter_aria_label: '已使用 {{count}} / {{max}} 個字元',
+                        errors: {
+                            empty: '請輸入要儲存的訊息。',
+                            too_long: '訊息不能超過 2000 個字元。',
+                            update_failed: '無法更新訊息。請再試一次。',
+                        },
+                    },
+                    delete_dialog: {
+                        title: '刪除訊息',
+                        description: '確定要刪除此訊息嗎？此動作無法復原。',
+                        cancel: '取消',
+                        confirm: '刪除',
+                        deleting: '刪除中…',
+                        errors: {
+                            delete_failed: '無法刪除此訊息。請再試一次。',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: '您沒有權限變更此訊息。',
+                        archived: '此對話已封存，為唯讀狀態。',
+                        not_found: '此對話或訊息已不可用。',
                     },
                 },
 

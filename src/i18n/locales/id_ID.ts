@@ -515,6 +515,64 @@ export const id_ID: LanguageTranslation = {
                     message: {
                         edited: '(diedit)',
                         edited_aria: 'Pesan telah diedit',
+                        actions: {
+                            title: 'Tindakan pesan',
+                            edit: 'Edit',
+                            delete: 'Hapus',
+                        },
+                    },
+                    composer: {
+                        label: 'Pesan',
+                        placeholder: 'Tulis pesan…',
+                        submit: 'Kirim',
+                        submitting: 'Mengirim…',
+                        form_aria_label: 'Pesan percakapan baru',
+                        keyboard_hint:
+                            'Tekan Enter untuk mengirim. Shift+Enter untuk baris baru.',
+                        counter_aria_label:
+                            '{{count}} dari {{max}} karakter digunakan',
+                        errors: {
+                            empty: 'Masukkan pesan untuk dikirim.',
+                            too_long:
+                                'Pesan tidak boleh melebihi 2000 karakter.',
+                            create_failed:
+                                'Tidak dapat mengirim pesan. Silakan coba lagi.',
+                        },
+                    },
+                    edit: {
+                        label: 'Pesan',
+                        form_aria_label: 'Edit pesan percakapan',
+                        save: 'Simpan',
+                        saving: 'Menyimpan…',
+                        cancel: 'Batal',
+                        counter_aria_label:
+                            '{{count}} dari {{max}} karakter digunakan',
+                        errors: {
+                            empty: 'Masukkan pesan untuk disimpan.',
+                            too_long:
+                                'Pesan tidak boleh melebihi 2000 karakter.',
+                            update_failed:
+                                'Tidak dapat memperbarui pesan. Silakan coba lagi.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'Hapus pesan',
+                        description:
+                            'Yakin ingin menghapus pesan ini? Tindakan ini tidak dapat dibatalkan.',
+                        cancel: 'Batal',
+                        confirm: 'Hapus',
+                        deleting: 'Menghapus…',
+                        errors: {
+                            delete_failed:
+                                'Tidak dapat menghapus pesan ini. Silakan coba lagi.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden:
+                            'Anda tidak memiliki izin untuk mengubah pesan ini.',
+                        archived: 'Percakapan ini diarsipkan dan hanya-baca.',
+                        not_found:
+                            'Percakapan atau pesan ini tidak lagi tersedia.',
                     },
                 },
 

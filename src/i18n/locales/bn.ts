@@ -518,6 +518,58 @@ export const bn: LanguageTranslation = {
                     message: {
                         edited: '(সম্পাদিত)',
                         edited_aria: 'বার্তা সম্পাদিত হয়েছে',
+                        actions: {
+                            title: 'বার্তার ক্রিয়া',
+                            edit: 'সম্পাদনা',
+                            delete: 'মুছুন',
+                        },
+                    },
+                    composer: {
+                        label: 'বার্তা',
+                        placeholder: 'একটি বার্তা লিখুন…',
+                        submit: 'পাঠান',
+                        submitting: 'পাঠানো হচ্ছে…',
+                        form_aria_label: 'নতুন কথোপকথন বার্তা',
+                        keyboard_hint:
+                            'পাঠাতে Enter চাপুন। নতুন লাইনের জন্য Shift+Enter।',
+                        counter_aria_label: '{{count}} / {{max}} অক্ষর ব্যবহৃত',
+                        errors: {
+                            empty: 'পাঠানোর জন্য একটি বার্তা লিখুন।',
+                            too_long: 'বার্তা ২০০০ অক্ষরের বেশি হতে পারবে না।',
+                            create_failed:
+                                'বার্তা পাঠানো যায়নি। আবার চেষ্টা করুন।',
+                        },
+                    },
+                    edit: {
+                        label: 'বার্তা',
+                        form_aria_label: 'কথোপকথন বার্তা সম্পাদনা',
+                        save: 'সংরক্ষণ',
+                        saving: 'সংরক্ষণ করা হচ্ছে…',
+                        cancel: 'বাতিল',
+                        counter_aria_label: '{{count}} / {{max}} অক্ষর ব্যবহৃত',
+                        errors: {
+                            empty: 'সংরক্ষণের জন্য একটি বার্তা লিখুন।',
+                            too_long: 'বার্তা ২০০০ অক্ষরের বেশি হতে পারবে না।',
+                            update_failed:
+                                'বার্তা আপডেট করা যায়নি। আবার চেষ্টা করুন।',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'বার্তা মুছুন',
+                        description:
+                            'আপনি কি নিশ্চিত যে এই বার্তাটি মুছতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না।',
+                        cancel: 'বাতিল',
+                        confirm: 'মুছুন',
+                        deleting: 'মুছে ফেলা হচ্ছে…',
+                        errors: {
+                            delete_failed:
+                                'এই বার্তা মুছে ফেলা যায়নি। আবার চেষ্টা করুন।',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: 'এই বার্তা পরিবর্তনের অনুমতি আপনার নেই।',
+                        archived: 'এই কথোপকথন সংরক্ষিত এবং শুধুমাত্র পঠনযোগ্য।',
+                        not_found: 'এই কথোপকথন বা বার্তা আর উপলব্ধ নেই।',
                     },
                 },
 

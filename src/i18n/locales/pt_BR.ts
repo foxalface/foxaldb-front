@@ -519,6 +519,65 @@ export const pt_BR: LanguageTranslation = {
                     message: {
                         edited: '(editado)',
                         edited_aria: 'Mensagem editada',
+                        actions: {
+                            title: 'Ações da mensagem',
+                            edit: 'Editar',
+                            delete: 'Excluir',
+                        },
+                    },
+                    composer: {
+                        label: 'Mensagem',
+                        placeholder: 'Escreva uma mensagem…',
+                        submit: 'Enviar',
+                        submitting: 'Enviando…',
+                        form_aria_label: 'Nova mensagem da conversa',
+                        keyboard_hint:
+                            'Pressione Enter para enviar. Shift+Enter adiciona uma nova linha.',
+                        counter_aria_label:
+                            '{{count}} de {{max}} caracteres usados',
+                        errors: {
+                            empty: 'Digite uma mensagem para enviar.',
+                            too_long:
+                                'As mensagens não podem exceder 2000 caracteres.',
+                            create_failed:
+                                'Não foi possível enviar a mensagem. Tente novamente.',
+                        },
+                    },
+                    edit: {
+                        label: 'Mensagem',
+                        form_aria_label: 'Editar mensagem da conversa',
+                        save: 'Salvar',
+                        saving: 'Salvando…',
+                        cancel: 'Cancelar',
+                        counter_aria_label:
+                            '{{count}} de {{max}} caracteres usados',
+                        errors: {
+                            empty: 'Digite uma mensagem para salvar.',
+                            too_long:
+                                'As mensagens não podem exceder 2000 caracteres.',
+                            update_failed:
+                                'Não foi possível atualizar a mensagem. Tente novamente.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'Excluir mensagem',
+                        description:
+                            'Tem certeza de que deseja excluir esta mensagem? Esta ação não pode ser desfeita.',
+                        cancel: 'Cancelar',
+                        confirm: 'Excluir',
+                        deleting: 'Excluindo…',
+                        errors: {
+                            delete_failed:
+                                'Não foi possível excluir esta mensagem. Tente novamente.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden:
+                            'Você não tem permissão para alterar esta mensagem.',
+                        archived:
+                            'Esta conversa está arquivada e é somente leitura.',
+                        not_found:
+                            'Esta conversa ou mensagem não está mais disponível.',
                     },
                 },
 

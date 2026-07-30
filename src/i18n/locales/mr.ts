@@ -519,6 +519,60 @@ export const mr: LanguageTranslation = {
                     message: {
                         edited: '(संपादित)',
                         edited_aria: 'संदेश संपादित केला गेला',
+                        actions: {
+                            title: 'संदेश क्रिया',
+                            edit: 'संपादित करा',
+                            delete: 'हटवा',
+                        },
+                    },
+                    composer: {
+                        label: 'संदेश',
+                        placeholder: 'संदेश लिहा…',
+                        submit: 'पाठवा',
+                        submitting: 'पाठवत आहे…',
+                        form_aria_label: 'नवीन संभाषण संदेश',
+                        keyboard_hint:
+                            'पाठवण्यासाठी Enter दाबा. नवीन ओळीसाठी Shift+Enter.',
+                        counter_aria_label: '{{count}} / {{max}} वर्ण वापरले',
+                        errors: {
+                            empty: 'पाठवण्यासाठी संदेश प्रविष्ट करा.',
+                            too_long:
+                                'संदेश 2000 वर्णांपेक्षा जास्त असू शकत नाहीत.',
+                            create_failed:
+                                'संदेश पाठवता आला नाही. कृपया पुन्हा प्रयत्न करा.',
+                        },
+                    },
+                    edit: {
+                        label: 'संदेश',
+                        form_aria_label: 'संभाषण संदेश संपादित करा',
+                        save: 'जतन करा',
+                        saving: 'जतन करत आहे…',
+                        cancel: 'रद्द करा',
+                        counter_aria_label: '{{count}} / {{max}} वर्ण वापरले',
+                        errors: {
+                            empty: 'जतन करण्यासाठी संदेश प्रविष्ट करा.',
+                            too_long:
+                                'संदेश 2000 वर्णांपेक्षा जास्त असू शकत नाहीत.',
+                            update_failed:
+                                'संदेश अद्यतनित करता आला नाही. कृपया पुन्हा प्रयत्न करा.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'संदेश हटवा',
+                        description:
+                            'तुम्हाला खात्री आहे की हा संदेश हटवायचा आहे? ही क्रिया पूर्ववत करता येणार नाही.',
+                        cancel: 'रद्द करा',
+                        confirm: 'हटवा',
+                        deleting: 'हटवत आहे…',
+                        errors: {
+                            delete_failed:
+                                'हा संदेश हटवता आला नाही. कृपया पुन्हा प्रयत्न करा.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: 'तुम्हाला हा संदेश बदलण्याची परवानगी नाही.',
+                        archived: 'हे संभाषण संग्रहित आहे आणि फक्त वाचनीय आहे.',
+                        not_found: 'हे संभाषण किंवा संदेश आता उपलब्ध नाही.',
                     },
                 },
 

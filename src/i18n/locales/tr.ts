@@ -514,6 +514,61 @@ export const tr: LanguageTranslation = {
                     message: {
                         edited: '(düzenlendi)',
                         edited_aria: 'Mesaj düzenlendi',
+                        actions: {
+                            title: 'Mesaj işlemleri',
+                            edit: 'Düzenle',
+                            delete: 'Sil',
+                        },
+                    },
+                    composer: {
+                        label: 'Mesaj',
+                        placeholder: 'Bir mesaj yazın…',
+                        submit: 'Gönder',
+                        submitting: 'Gönderiliyor…',
+                        form_aria_label: 'Yeni konuşma mesajı',
+                        keyboard_hint:
+                            'Göndermek için Enter. Yeni satır için Shift+Enter.',
+                        counter_aria_label:
+                            '{{count}} / {{max}} karakter kullanıldı',
+                        errors: {
+                            empty: 'Göndermek için bir mesaj girin.',
+                            too_long: 'Mesajlar 2000 karakteri aşamaz.',
+                            create_failed:
+                                'Mesaj gönderilemedi. Lütfen tekrar deneyin.',
+                        },
+                    },
+                    edit: {
+                        label: 'Mesaj',
+                        form_aria_label: 'Konuşma mesajını düzenle',
+                        save: 'Kaydet',
+                        saving: 'Kaydediliyor…',
+                        cancel: 'İptal',
+                        counter_aria_label:
+                            '{{count}} / {{max}} karakter kullanıldı',
+                        errors: {
+                            empty: 'Kaydetmek için bir mesaj girin.',
+                            too_long: 'Mesajlar 2000 karakteri aşamaz.',
+                            update_failed:
+                                'Mesaj güncellenemedi. Lütfen tekrar deneyin.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'Mesajı sil',
+                        description:
+                            'Bu mesajı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+                        cancel: 'İptal',
+                        confirm: 'Sil',
+                        deleting: 'Siliniyor…',
+                        errors: {
+                            delete_failed:
+                                'Bu mesaj silinemedi. Lütfen tekrar deneyin.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: 'Bu mesajı değiştirme izniniz yok.',
+                        archived: 'Bu konuşma arşivlendi ve salt okunur.',
+                        not_found:
+                            'Bu konuşma veya mesaj artık kullanılamıyor.',
                     },
                 },
 

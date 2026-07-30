@@ -517,6 +517,59 @@ export const ja: LanguageTranslation = {
                     message: {
                         edited: '（編集済み）',
                         edited_aria: 'メッセージは編集されました',
+                        actions: {
+                            title: 'メッセージの操作',
+                            edit: '編集',
+                            delete: '削除',
+                        },
+                    },
+                    composer: {
+                        label: 'メッセージ',
+                        placeholder: 'メッセージを入力…',
+                        submit: '送信',
+                        submitting: '送信中…',
+                        form_aria_label: '新しい会話メッセージ',
+                        keyboard_hint: 'Enter で送信。Shift+Enter で改行。',
+                        counter_aria_label: '{{count}} / {{max}} 文字を使用',
+                        errors: {
+                            empty: '送信するメッセージを入力してください。',
+                            too_long: 'メッセージは2000文字を超えられません。',
+                            create_failed:
+                                'メッセージを送信できませんでした。もう一度お試しください。',
+                        },
+                    },
+                    edit: {
+                        label: 'メッセージ',
+                        form_aria_label: '会話メッセージを編集',
+                        save: '保存',
+                        saving: '保存中…',
+                        cancel: 'キャンセル',
+                        counter_aria_label: '{{count}} / {{max}} 文字を使用',
+                        errors: {
+                            empty: '保存するメッセージを入力してください。',
+                            too_long: 'メッセージは2000文字を超えられません。',
+                            update_failed:
+                                'メッセージを更新できませんでした。もう一度お試しください。',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'メッセージを削除',
+                        description:
+                            'このメッセージを削除してもよろしいですか？この操作は元に戻せません。',
+                        cancel: 'キャンセル',
+                        confirm: '削除',
+                        deleting: '削除中…',
+                        errors: {
+                            delete_failed:
+                                'このメッセージを削除できませんでした。もう一度お試しください。',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: 'このメッセージを変更する権限がありません。',
+                        archived:
+                            'この会話はアーカイブされており、読み取り専用です。',
+                        not_found:
+                            'この会話またはメッセージは利用できなくなりました。',
                     },
                 },
 

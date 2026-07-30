@@ -1,7 +1,10 @@
-import React, { useId } from 'react';
+import React, { useCallback, useId, useState } from 'react';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
+import { canCreateConversationMessage } from '@/lib/conversations/conversation-message-capabilities';
 import { ConversationArchiveBanner } from './conversation-archive-banner';
 import { ConversationDetailHeader } from './conversation-detail-header';
+import { ConversationMessageComposer } from './conversation-message-composer';
 import { ConversationMessageList } from './conversation-message-list';
 import { useConversationDetail } from './use-conversation-detail';
 
@@ -15,6 +18,11 @@ export const ConversationDetail: React.FC<ConversationDetailProps> = ({
     onBack,
 }) => {
     const messagesHeadingId = useId();
+    const { diagramAccess } = useDiagramAccess();
+    const [editingMessageId, setEditingMessageId] = useState<number | null>(
+        null
+    );
+
     const {
         messages,
         status,
@@ -28,6 +36,22 @@ export const ConversationDetail: React.FC<ConversationDetailProps> = ({
 
     const isArchived = conversation.status === 'archived';
     const hasLoadError = status === 'error' && messages.length === 0;
+    const canCreate = canCreateConversationMessage(
+        diagramAccess,
+        conversation.status
+    );
+
+    const handleStartEdit = useCallback((messageId: number) => {
+        setEditingMessageId(messageId);
+    }, []);
+
+    const handleCancelEdit = useCallback(() => {
+        setEditingMessageId(null);
+    }, []);
+
+    const handleEditSaved = useCallback(() => {
+        setEditingMessageId(null);
+    }, []);
 
     return (
         <div
@@ -44,6 +68,12 @@ export const ConversationDetail: React.FC<ConversationDetailProps> = ({
 
             <ConversationMessageList
                 messages={messages}
+                conversationId={conversation.id}
+                conversationStatus={conversation.status}
+                editingMessageId={editingMessageId}
+                onStartEdit={handleStartEdit}
+                onCancelEdit={handleCancelEdit}
+                onEditSaved={handleEditSaved}
                 listLabelId={messagesHeadingId}
                 isInitialLoading={isInitialLoading}
                 isLoadError={hasLoadError}
@@ -56,6 +86,12 @@ export const ConversationDetail: React.FC<ConversationDetailProps> = ({
                 onRetry={() => {
                     void handleRetry();
                 }}
+            />
+
+            <ConversationMessageComposer
+                conversationId={conversation.id}
+                conversationStatus={conversation.status}
+                canCreate={canCreate}
             />
         </div>
     );

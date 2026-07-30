@@ -513,6 +513,59 @@ export const gu: LanguageTranslation = {
                     message: {
                         edited: '(સંપાદિત)',
                         edited_aria: 'સંદેશ સંપાદિત કરવામાં આવ્યો',
+                        actions: {
+                            title: 'સંદેશ ક્રિયાઓ',
+                            edit: 'સંપાદિત કરો',
+                            delete: 'કાઢી નાખો',
+                        },
+                    },
+                    composer: {
+                        label: 'સંદેશ',
+                        placeholder: 'સંદેશ લખો…',
+                        submit: 'મોકલો',
+                        submitting: 'મોકલી રહ્યા છીએ…',
+                        form_aria_label: 'નવો વાર્તાલાપ સંદેશ',
+                        keyboard_hint:
+                            'મોકલવા માટે Enter દબાવો. નવી લાઇન માટે Shift+Enter.',
+                        counter_aria_label: '{{count}} / {{max}} અક્ષરો વપરાયા',
+                        errors: {
+                            empty: 'મોકલવા માટે સંદેશ દાખલ કરો.',
+                            too_long: 'સંદેશ 2000 અક્ષરથી વધુ ન હોઈ શકે.',
+                            create_failed:
+                                'સંદેશ મોકલી શકાયો નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                        },
+                    },
+                    edit: {
+                        label: 'સંદેશ',
+                        form_aria_label: 'વાર્તાલાપ સંદેશ સંપાદિત કરો',
+                        save: 'સાચવો',
+                        saving: 'સાચવી રહ્યા છીએ…',
+                        cancel: 'રદ કરો',
+                        counter_aria_label: '{{count}} / {{max}} અક્ષરો વપરાયા',
+                        errors: {
+                            empty: 'સાચવવા માટે સંદેશ દાખલ કરો.',
+                            too_long: 'સંદેશ 2000 અક્ષરથી વધુ ન હોઈ શકે.',
+                            update_failed:
+                                'સંદેશ અપડેટ થઈ શક્યો નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'સંદેશ કાઢી નાખો',
+                        description:
+                            'શું તમે ખરેખર આ સંદેશ કાઢી નાખવા માંગો છો? આ ક્રિયા પૂર્વવત્ થઈ શકશે નહીં.',
+                        cancel: 'રદ કરો',
+                        confirm: 'કાઢી નાખો',
+                        deleting: 'કાઢી નાખી રહ્યા છીએ…',
+                        errors: {
+                            delete_failed:
+                                'આ સંદેશ કાઢી શકાયો નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: 'તમને આ સંદેશ બદલવાની પરવાનગી નથી.',
+                        archived:
+                            'આ વાર્તાલાપ સંગ્રહિત છે અને ફક્ત વાંચવા યોગ્ય છે.',
+                        not_found: 'આ વાર્તાલાપ અથવા સંદેશ હવે ઉપલબ્ધ નથી.',
                     },
                 },
 

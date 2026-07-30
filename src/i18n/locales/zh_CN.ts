@@ -496,6 +496,53 @@ export const zh_CN: LanguageTranslation = {
                     message: {
                         edited: '（已编辑）',
                         edited_aria: '消息已编辑',
+                        actions: {
+                            title: '消息操作',
+                            edit: '编辑',
+                            delete: '删除',
+                        },
+                    },
+                    composer: {
+                        label: '消息',
+                        placeholder: '撰写消息…',
+                        submit: '发送',
+                        submitting: '发送中…',
+                        form_aria_label: '新对话消息',
+                        keyboard_hint: '按 Enter 发送。Shift+Enter 换行。',
+                        counter_aria_label: '已使用 {{count}} / {{max}} 个字符',
+                        errors: {
+                            empty: '请输入要发送的消息。',
+                            too_long: '消息不能超过 2000 个字符。',
+                            create_failed: '无法发送消息。请重试。',
+                        },
+                    },
+                    edit: {
+                        label: '消息',
+                        form_aria_label: '编辑对话消息',
+                        save: '保存',
+                        saving: '保存中…',
+                        cancel: '取消',
+                        counter_aria_label: '已使用 {{count}} / {{max}} 个字符',
+                        errors: {
+                            empty: '请输入要保存的消息。',
+                            too_long: '消息不能超过 2000 个字符。',
+                            update_failed: '无法更新消息。请重试。',
+                        },
+                    },
+                    delete_dialog: {
+                        title: '删除消息',
+                        description: '确定要删除此消息吗？此操作无法撤销。',
+                        cancel: '取消',
+                        confirm: '删除',
+                        deleting: '删除中…',
+                        errors: {
+                            delete_failed: '无法删除此消息。请重试。',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: '您无权更改此消息。',
+                        archived: '此对话已归档，为只读状态。',
+                        not_found: '此对话或消息已不可用。',
                     },
                 },
 

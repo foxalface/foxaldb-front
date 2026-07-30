@@ -512,6 +512,62 @@ export const hr: LanguageTranslation = {
                     message: {
                         edited: '(uređeno)',
                         edited_aria: 'Poruka je uređena',
+                        actions: {
+                            title: 'Radnje poruke',
+                            edit: 'Uredi',
+                            delete: 'Izbriši',
+                        },
+                    },
+                    composer: {
+                        label: 'Poruka',
+                        placeholder: 'Napišite poruku…',
+                        submit: 'Pošalji',
+                        submitting: 'Slanje…',
+                        form_aria_label: 'Nova poruka razgovora',
+                        keyboard_hint:
+                            'Pritisnite Enter za slanje. Shift+Enter za novi red.',
+                        counter_aria_label:
+                            '{{count}} od {{max}} znakova iskorišteno',
+                        errors: {
+                            empty: 'Unesite poruku za slanje.',
+                            too_long: 'Poruke ne smiju premašiti 2000 znakova.',
+                            create_failed:
+                                'Poruka nije poslana. Pokušajte ponovno.',
+                        },
+                    },
+                    edit: {
+                        label: 'Poruka',
+                        form_aria_label: 'Uredi poruku razgovora',
+                        save: 'Spremi',
+                        saving: 'Spremanje…',
+                        cancel: 'Odustani',
+                        counter_aria_label:
+                            '{{count}} od {{max}} znakova iskorišteno',
+                        errors: {
+                            empty: 'Unesite poruku za spremanje.',
+                            too_long: 'Poruke ne smiju premašiti 2000 znakova.',
+                            update_failed:
+                                'Poruka nije ažurirana. Pokušajte ponovno.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'Izbriši poruku',
+                        description:
+                            'Jeste li sigurni da želite izbrisati ovu poruku? Ova radnja se ne može poništiti.',
+                        cancel: 'Odustani',
+                        confirm: 'Izbriši',
+                        deleting: 'Brisanje…',
+                        errors: {
+                            delete_failed:
+                                'Ova poruka nije izbrisana. Pokušajte ponovno.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: 'Nemate dopuštenje za promjenu ove poruke.',
+                        archived:
+                            'Ovaj razgovor je arhiviran i samo za čitanje.',
+                        not_found:
+                            'Ovaj razgovor ili poruka više nije dostupna.',
                     },
                 },
 

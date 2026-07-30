@@ -513,6 +513,59 @@ export const ko_KR: LanguageTranslation = {
                     message: {
                         edited: '(수정됨)',
                         edited_aria: '메시지가 수정되었습니다',
+                        actions: {
+                            title: '메시지 작업',
+                            edit: '편집',
+                            delete: '삭제',
+                        },
+                    },
+                    composer: {
+                        label: '메시지',
+                        placeholder: '메시지를 입력하세요…',
+                        submit: '보내기',
+                        submitting: '보내는 중…',
+                        form_aria_label: '새 대화 메시지',
+                        keyboard_hint:
+                            'Enter로 보냅니다. Shift+Enter로 줄바꿈합니다.',
+                        counter_aria_label: '{{count}} / {{max}}자 사용됨',
+                        errors: {
+                            empty: '보낼 메시지를 입력하세요.',
+                            too_long: '메시지는 2000자를 초과할 수 없습니다.',
+                            create_failed:
+                                '메시지를 보낼 수 없습니다. 다시 시도하세요.',
+                        },
+                    },
+                    edit: {
+                        label: '메시지',
+                        form_aria_label: '대화 메시지 편집',
+                        save: '저장',
+                        saving: '저장 중…',
+                        cancel: '취소',
+                        counter_aria_label: '{{count}} / {{max}}자 사용됨',
+                        errors: {
+                            empty: '저장할 메시지를 입력하세요.',
+                            too_long: '메시지는 2000자를 초과할 수 없습니다.',
+                            update_failed:
+                                '메시지를 업데이트할 수 없습니다. 다시 시도하세요.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: '메시지 삭제',
+                        description:
+                            '이 메시지를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
+                        cancel: '취소',
+                        confirm: '삭제',
+                        deleting: '삭제 중…',
+                        errors: {
+                            delete_failed:
+                                '이 메시지를 삭제할 수 없습니다. 다시 시도하세요.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: '이 메시지를 변경할 권한이 없습니다.',
+                        archived: '이 대화는 보관되어 읽기 전용입니다.',
+                        not_found:
+                            '이 대화 또는 메시지를 더 이상 사용할 수 없습니다.',
                     },
                 },
 

@@ -514,6 +514,61 @@ export const vi: LanguageTranslation = {
                     message: {
                         edited: '(đã chỉnh sửa)',
                         edited_aria: 'Tin nhắn đã được chỉnh sửa',
+                        actions: {
+                            title: 'Thao tác tin nhắn',
+                            edit: 'Chỉnh sửa',
+                            delete: 'Xóa',
+                        },
+                    },
+                    composer: {
+                        label: 'Tin nhắn',
+                        placeholder: 'Viết tin nhắn…',
+                        submit: 'Gửi',
+                        submitting: 'Đang gửi…',
+                        form_aria_label: 'Tin nhắn hội thoại mới',
+                        keyboard_hint:
+                            'Nhấn Enter để gửi. Shift+Enter để xuống dòng.',
+                        counter_aria_label: 'Đã dùng {{count}} / {{max}} ký tự',
+                        errors: {
+                            empty: 'Nhập tin nhắn để gửi.',
+                            too_long:
+                                'Tin nhắn không được vượt quá 2000 ký tự.',
+                            create_failed:
+                                'Không thể gửi tin nhắn. Vui lòng thử lại.',
+                        },
+                    },
+                    edit: {
+                        label: 'Tin nhắn',
+                        form_aria_label: 'Chỉnh sửa tin nhắn hội thoại',
+                        save: 'Lưu',
+                        saving: 'Đang lưu…',
+                        cancel: 'Hủy',
+                        counter_aria_label: 'Đã dùng {{count}} / {{max}} ký tự',
+                        errors: {
+                            empty: 'Nhập tin nhắn để lưu.',
+                            too_long:
+                                'Tin nhắn không được vượt quá 2000 ký tự.',
+                            update_failed:
+                                'Không thể cập nhật tin nhắn. Vui lòng thử lại.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'Xóa tin nhắn',
+                        description:
+                            'Bạn có chắc muốn xóa tin nhắn này? Hành động này không thể hoàn tác.',
+                        cancel: 'Hủy',
+                        confirm: 'Xóa',
+                        deleting: 'Đang xóa…',
+                        errors: {
+                            delete_failed:
+                                'Không thể xóa tin nhắn này. Vui lòng thử lại.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: 'Bạn không có quyền thay đổi tin nhắn này.',
+                        archived: 'Hội thoại này đã được lưu trữ và chỉ đọc.',
+                        not_found:
+                            'Hội thoại hoặc tin nhắn này không còn khả dụng.',
                     },
                 },
 

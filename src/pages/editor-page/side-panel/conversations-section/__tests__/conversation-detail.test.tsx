@@ -137,6 +137,20 @@ vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartDbState,
 }));
 
+vi.mock('@/hooks/use-auth', () => ({
+    useAuth: () => ({ user: { id: 1 } }),
+}));
+
+vi.mock('@/hooks/use-diagram-access', () => ({
+    useDiagramAccess: () => ({
+        diagramAccess: {
+            role: 'editor',
+            can_edit: true,
+            can_manage_members: false,
+        },
+    }),
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, options?: Record<string, unknown>) => {
@@ -490,8 +504,14 @@ describe('ConversationsSection detail view (M9)', () => {
             'conversation-detail-header.tsx',
             'conversation-message-list.tsx',
             'conversation-message-item.tsx',
+            'conversation-message-composer.tsx',
+            'conversation-message-edit-form.tsx',
+            'conversation-message-delete-dialog.tsx',
             'conversation-archive-banner.tsx',
             'use-conversation-detail.ts',
+            'use-conversation-message-composer-session.ts',
+            'use-conversation-message-edit-session.ts',
+            'use-conversation-message-delete-session.ts',
             'use-conversation-panel-navigation.ts',
         ];
 

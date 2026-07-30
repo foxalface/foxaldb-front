@@ -517,6 +517,65 @@ export const fr: LanguageTranslation = {
                     message: {
                         edited: '(modifié)',
                         edited_aria: 'Message modifié',
+                        actions: {
+                            title: 'Actions du message',
+                            edit: 'Modifier',
+                            delete: 'Supprimer',
+                        },
+                    },
+                    composer: {
+                        label: 'Message',
+                        placeholder: 'Écrire un message…',
+                        submit: 'Envoyer',
+                        submitting: 'Envoi…',
+                        form_aria_label: 'Nouveau message de conversation',
+                        keyboard_hint:
+                            'Appuyez sur Entrée pour envoyer. Maj+Entrée ajoute une nouvelle ligne.',
+                        counter_aria_label:
+                            '{{count}} sur {{max}} caractères utilisés',
+                        errors: {
+                            empty: 'Saisissez un message à envoyer.',
+                            too_long:
+                                'Les messages ne peuvent pas dépasser 2000 caractères.',
+                            create_failed:
+                                'Impossible d’envoyer le message. Veuillez réessayer.',
+                        },
+                    },
+                    edit: {
+                        label: 'Message',
+                        form_aria_label: 'Modifier le message de conversation',
+                        save: 'Enregistrer',
+                        saving: 'Enregistrement…',
+                        cancel: 'Annuler',
+                        counter_aria_label:
+                            '{{count}} sur {{max}} caractères utilisés',
+                        errors: {
+                            empty: 'Saisissez un message à enregistrer.',
+                            too_long:
+                                'Les messages ne peuvent pas dépasser 2000 caractères.',
+                            update_failed:
+                                'Impossible de mettre à jour le message. Veuillez réessayer.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'Supprimer le message',
+                        description:
+                            'Voulez-vous vraiment supprimer ce message ? Cette action est irréversible.',
+                        cancel: 'Annuler',
+                        confirm: 'Supprimer',
+                        deleting: 'Suppression…',
+                        errors: {
+                            delete_failed:
+                                'Impossible de supprimer ce message. Veuillez réessayer.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden:
+                            'Vous n’avez pas la permission de modifier ce message.',
+                        archived:
+                            'Cette conversation est archivée et en lecture seule.',
+                        not_found:
+                            'Cette conversation ou ce message n’est plus disponible.',
                     },
                 },
 

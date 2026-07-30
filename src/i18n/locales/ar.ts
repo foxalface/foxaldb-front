@@ -510,6 +510,60 @@ export const ar: LanguageTranslation = {
                     message: {
                         edited: '(معدّل)',
                         edited_aria: 'تم تعديل الرسالة',
+                        actions: {
+                            title: 'إجراءات الرسالة',
+                            edit: 'تعديل',
+                            delete: 'حذف',
+                        },
+                    },
+                    composer: {
+                        label: 'رسالة',
+                        placeholder: 'اكتب رسالة…',
+                        submit: 'إرسال',
+                        submitting: 'جارٍ الإرسال…',
+                        form_aria_label: 'رسالة محادثة جديدة',
+                        keyboard_hint:
+                            'اضغط Enter للإرسال. Shift+Enter لإضافة سطر جديد.',
+                        counter_aria_label:
+                            '{{count}} من {{max}} حرفًا مستخدمًا',
+                        errors: {
+                            empty: 'أدخل رسالة للإرسال.',
+                            too_long: 'لا يمكن أن تتجاوز الرسائل 2000 حرفًا.',
+                            create_failed:
+                                'تعذر إرسال الرسالة. يرجى المحاولة مرة أخرى.',
+                        },
+                    },
+                    edit: {
+                        label: 'رسالة',
+                        form_aria_label: 'تعديل رسالة المحادثة',
+                        save: 'حفظ',
+                        saving: 'جارٍ الحفظ…',
+                        cancel: 'إلغاء',
+                        counter_aria_label:
+                            '{{count}} من {{max}} حرفًا مستخدمًا',
+                        errors: {
+                            empty: 'أدخل رسالة للحفظ.',
+                            too_long: 'لا يمكن أن تتجاوز الرسائل 2000 حرفًا.',
+                            update_failed:
+                                'تعذر تحديث الرسالة. يرجى المحاولة مرة أخرى.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'حذف الرسالة',
+                        description:
+                            'هل أنت متأكد أنك تريد حذف هذه الرسالة؟ لا يمكن التراجع عن هذا الإجراء.',
+                        cancel: 'إلغاء',
+                        confirm: 'حذف',
+                        deleting: 'جارٍ الحذف…',
+                        errors: {
+                            delete_failed:
+                                'تعذر حذف هذه الرسالة. يرجى المحاولة مرة أخرى.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden: 'ليس لديك إذن لتغيير هذه الرسالة.',
+                        archived: 'هذه المحادثة مؤرشفة وللقراءة فقط.',
+                        not_found: 'هذه المحادثة أو الرسالة لم تعد متاحة.',
                     },
                 },
 

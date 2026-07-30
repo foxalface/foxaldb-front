@@ -106,6 +106,20 @@ vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartDbState,
 }));
 
+vi.mock('@/hooks/use-auth', () => ({
+    useAuth: () => ({ user: { id: 1 } }),
+}));
+
+vi.mock('@/hooks/use-diagram-access', () => ({
+    useDiagramAccess: () => ({
+        diagramAccess: {
+            role: 'editor',
+            can_edit: true,
+            can_manage_members: false,
+        },
+    }),
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, options?: Record<string, unknown>) => {

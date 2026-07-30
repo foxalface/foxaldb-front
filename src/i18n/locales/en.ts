@@ -507,6 +507,63 @@ export const en = {
                     message: {
                         edited: '(edited)',
                         edited_aria: 'Message was edited',
+                        actions: {
+                            title: 'Message actions',
+                            edit: 'Edit',
+                            delete: 'Delete',
+                        },
+                    },
+                    composer: {
+                        label: 'Message',
+                        placeholder: 'Write a message…',
+                        submit: 'Send',
+                        submitting: 'Sending…',
+                        form_aria_label: 'New conversation message',
+                        keyboard_hint:
+                            'Press Enter to send. Shift+Enter adds a new line.',
+                        counter_aria_label:
+                            '{{count}} of {{max}} characters used',
+                        errors: {
+                            empty: 'Enter a message to send.',
+                            too_long: 'Messages cannot exceed 2000 characters.',
+                            create_failed:
+                                'Could not send the message. Please try again.',
+                        },
+                    },
+                    edit: {
+                        label: 'Message',
+                        form_aria_label: 'Edit conversation message',
+                        save: 'Save',
+                        saving: 'Saving…',
+                        cancel: 'Cancel',
+                        counter_aria_label:
+                            '{{count}} of {{max}} characters used',
+                        errors: {
+                            empty: 'Enter a message to save.',
+                            too_long: 'Messages cannot exceed 2000 characters.',
+                            update_failed:
+                                'Could not update the message. Please try again.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'Delete message',
+                        description:
+                            'Are you sure you want to delete this message? This action cannot be undone.',
+                        cancel: 'Cancel',
+                        confirm: 'Delete',
+                        deleting: 'Deleting…',
+                        errors: {
+                            delete_failed:
+                                'Unable to delete this message. Please try again.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden:
+                            'You do not have permission to change this message.',
+                        archived:
+                            'This conversation is archived and read-only.',
+                        not_found:
+                            'This conversation or message is no longer available.',
                     },
                 },
                 targets: {

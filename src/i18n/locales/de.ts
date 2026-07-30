@@ -521,6 +521,65 @@ export const de: LanguageTranslation = {
                     message: {
                         edited: '(bearbeitet)',
                         edited_aria: 'Nachricht wurde bearbeitet',
+                        actions: {
+                            title: 'Nachrichtenaktionen',
+                            edit: 'Bearbeiten',
+                            delete: 'Löschen',
+                        },
+                    },
+                    composer: {
+                        label: 'Nachricht',
+                        placeholder: 'Nachricht schreiben…',
+                        submit: 'Senden',
+                        submitting: 'Wird gesendet…',
+                        form_aria_label: 'Neue Konversationsnachricht',
+                        keyboard_hint:
+                            'Eingabetaste zum Senden. Umschalt+Eingabe für eine neue Zeile.',
+                        counter_aria_label:
+                            '{{count}} von {{max}} Zeichen verwendet',
+                        errors: {
+                            empty: 'Geben Sie eine Nachricht zum Senden ein.',
+                            too_long:
+                                'Nachrichten dürfen höchstens 2000 Zeichen haben.',
+                            create_failed:
+                                'Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.',
+                        },
+                    },
+                    edit: {
+                        label: 'Nachricht',
+                        form_aria_label: 'Konversationsnachricht bearbeiten',
+                        save: 'Speichern',
+                        saving: 'Wird gespeichert…',
+                        cancel: 'Abbrechen',
+                        counter_aria_label:
+                            '{{count}} von {{max}} Zeichen verwendet',
+                        errors: {
+                            empty: 'Geben Sie eine Nachricht zum Speichern ein.',
+                            too_long:
+                                'Nachrichten dürfen höchstens 2000 Zeichen haben.',
+                            update_failed:
+                                'Nachricht konnte nicht aktualisiert werden. Bitte erneut versuchen.',
+                        },
+                    },
+                    delete_dialog: {
+                        title: 'Nachricht löschen',
+                        description:
+                            'Möchten Sie diese Nachricht wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
+                        cancel: 'Abbrechen',
+                        confirm: 'Löschen',
+                        deleting: 'Wird gelöscht…',
+                        errors: {
+                            delete_failed:
+                                'Diese Nachricht konnte nicht gelöscht werden. Bitte erneut versuchen.',
+                        },
+                    },
+                    mutation_errors: {
+                        forbidden:
+                            'Sie haben keine Berechtigung, diese Nachricht zu ändern.',
+                        archived:
+                            'Diese Konversation ist archiviert und schreibgeschützt.',
+                        not_found:
+                            'Diese Konversation oder Nachricht ist nicht mehr verfügbar.',
                     },
                 },
 
