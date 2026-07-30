@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import type {
+    ConversationNavigationIntent,
     DiscussionView,
     LayoutContext,
     SidebarSection,
@@ -15,10 +16,14 @@ const resetDiscussionNavigation = (
     setDiscussionView: React.Dispatch<React.SetStateAction<DiscussionView>>,
     setCommentsTarget: React.Dispatch<
         React.SetStateAction<DiagramCommentTarget>
+    >,
+    setConversationNavigationIntent: React.Dispatch<
+        React.SetStateAction<ConversationNavigationIntent | null>
     >
 ): void => {
     setDiscussionView('all');
     setCommentsTarget(DIAGRAM_DISCUSSION_TARGET);
+    setConversationNavigationIntent(null);
 };
 
 export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
@@ -54,13 +59,19 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         React.useState<DiscussionView>('all');
     const [commentsTarget, setCommentsTarget] =
         React.useState<DiagramCommentTarget>(DIAGRAM_DISCUSSION_TARGET);
+    const [conversationNavigationIntent, setConversationNavigationIntent] =
+        React.useState<ConversationNavigationIntent | null>(null);
 
     useEffect(() => {
         if (previousDiagramIdRef.current === diagramId) {
             return;
         }
         previousDiagramIdRef.current = diagramId;
-        resetDiscussionNavigation(setDiscussionView, setCommentsTarget);
+        resetDiscussionNavigation(
+            setDiscussionView,
+            setCommentsTarget,
+            setConversationNavigationIntent
+        );
     }, [diagramId]);
 
     const closeAllTablesInSidebar = useCallback(() => {
@@ -183,6 +194,16 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         setIsSidePanelShowed(true);
     }, []);
 
+    const openConversationDetail = useCallback((conversationId: number) => {
+        setConversationNavigationIntent({ conversationId });
+        setSelectedSidebarSection('conversations');
+        setIsSidePanelShowed(true);
+    }, []);
+
+    const clearConversationNavigationIntent = useCallback(() => {
+        setConversationNavigationIntent(null);
+    }, []);
+
     const value = useMemo<LayoutContext>(
         () => ({
             openedTableInSidebar,
@@ -218,6 +239,9 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             openDiagramDiscussion,
             openTargetDiscussion,
             openConversationsPanel,
+            conversationNavigationIntent,
+            openConversationDetail,
+            clearConversationNavigationIntent,
         }),
         [
             openedTableInSidebar,
@@ -251,6 +275,9 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             openDiagramDiscussion,
             openTargetDiscussion,
             openConversationsPanel,
+            conversationNavigationIntent,
+            openConversationDetail,
+            clearConversationNavigationIntent,
         ]
     );
 

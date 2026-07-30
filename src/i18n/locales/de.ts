@@ -11,6 +11,8 @@ export const de: LanguageTranslation = {
             custom_types: 'Benutzerdefinierte Typen',
             comments: 'Unterhaltungen',
             conversations: 'Unterhaltungen',
+            legacy_comments: 'Kommentare (Legacy)',
+            legacy_comments_aria: 'Legacy-Kommentarpanel öffnen',
             visuals: 'Darstellungen',
         },
         menu: {
@@ -440,6 +442,9 @@ export const de: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Kommentare (Legacy)',
+            },
             conversations_section: {
                 title: 'Unterhaltungen',
                 tabs_label: 'Unterhaltungslisten',
@@ -475,6 +480,32 @@ export const de: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Die Unterhaltung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.',
+                },
+                target_entry: {
+                    open: 'Unterhaltung öffnen',
+                    start: 'Unterhaltung starten',
+                    pending: 'Unterhaltung wird gestartet…',
+                    diagram_name: 'Diagramm',
+                    open_aria: 'Unterhaltung für {{name}} öffnen',
+                    start_aria: 'Unterhaltung für {{name}} starten',
+                    open_tooltip: 'Unterhaltung für {{name}} öffnen',
+                    start_tooltip: 'Unterhaltung für {{name}} starten',
+                    pending_tooltip:
+                        'Unterhaltung für {{name}} wird gestartet…',
+                    unavailable_description:
+                        'Sie können auf diesem Diagramm keine Unterhaltungen starten.',
+                    errors: {
+                        validation:
+                            'Dieses Ziel ist für eine Unterhaltung nicht gültig.',
+                        forbidden:
+                            'Sie haben keine Berechtigung, diese Unterhaltung zu starten.',
+                        not_found:
+                            'Dieses Ziel ist im Diagramm nicht mehr verfügbar.',
+                        conflict:
+                            'Diese Unterhaltung konnte gerade nicht gestartet werden. Bitte versuchen Sie es erneut.',
+                        generic:
+                            'Diese Unterhaltung konnte nicht geöffnet werden. Bitte versuchen Sie es erneut.',
+                    },
                 },
                 actions: {
                     archive: 'Archivieren',

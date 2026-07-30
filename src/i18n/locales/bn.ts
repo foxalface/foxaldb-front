@@ -11,6 +11,8 @@ export const bn: LanguageTranslation = {
             custom_types: 'কাস্টম টাইপ',
             comments: 'কথোপকথন',
             conversations: 'কথোপকথন',
+            legacy_comments: 'মন্তব্য (পুরনো)',
+            legacy_comments_aria: 'পুরনো মন্তব্য প্যানেল খুলুন',
             visuals: 'ভিজ্যুয়াল',
         },
         menu: {
@@ -438,6 +440,9 @@ export const bn: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'মন্তব্য (পুরনো)',
+            },
             conversations_section: {
                 title: 'কথোপকথন',
                 tabs_label: 'কথোপকথন',
@@ -473,6 +478,27 @@ export const bn: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'কথোপকথন খুলুন',
+                    start: 'কথোপকথন শুরু করুন',
+                    pending: 'কথোপকথন শুরু হচ্ছে…',
+                    diagram_name: 'ডায়াগ্রাম',
+                    open_aria: '{{name}}-এর জন্য কথোপকথন খুলুন',
+                    start_aria: '{{name}}-এর জন্য কথোপকথন শুরু করুন',
+                    open_tooltip: '{{name}}-এর জন্য কথোপকথন খুলুন',
+                    start_tooltip: '{{name}}-এর জন্য কথোপকথন শুরু করুন',
+                    pending_tooltip: '{{name}}-এর জন্য কথোপকথন শুরু হচ্ছে…',
+                    unavailable_description:
+                        'আপনি এই ডায়াগ্রামে কথোপকথন শুরু করতে পারবেন না।',
+                    errors: {
+                        validation: 'এই লক্ষ্যটি কথোপকথনের জন্য বৈধ নয়।',
+                        forbidden: 'এই কথোপকথন শুরু করার অনুমতি আপনার নেই।',
+                        not_found: 'এই লক্ষ্যটি ডায়াগ্রামে আর উপলব্ধ নেই।',
+                        conflict:
+                            'এই মুহূর্তে কথোপকথন শুরু করা যায়নি। আবার চেষ্টা করুন।',
+                        generic: 'এই কথোপকথন খোলা যায়নি। আবার চেষ্টা করুন।',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

@@ -33,8 +33,7 @@ import {
     SelectValue,
 } from '@/components/select/select';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useLayout } from '@/hooks/use-layout';
-import { useCommentsAvailability } from '@/hooks/use-comments-availability';
+import { useTargetConversationMenuAction } from '@/hooks/use-target-conversation-menu-action';
 
 export interface TableFieldPopoverProps {
     field: DBField;
@@ -56,8 +55,10 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     onOpenChange: controlledOnOpenChange,
 }) => {
     const { readonly } = useChartDB();
-    const { openTargetDiscussion } = useLayout();
-    const commentsActive = useCommentsAvailability();
+    const conversationMenu = useTargetConversationMenuAction(
+        { targetType: 'field', targetId: field.id },
+        { targetType: 'field', targetId: field.id }
+    );
     const { t } = useTranslation();
     const [localField, setLocalField] = React.useState<DBField>(field);
     const [internalOpen, setInternalOpen] = React.useState(false);
@@ -78,12 +79,14 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     );
 
     const openFieldDiscussion = useCallback(() => {
-        openTargetDiscussion({
-            targetType: 'field',
-            targetId: field.id,
-        });
+        conversationMenu.openConversationAction();
         setIsOpen(false);
-    }, [field.id, openTargetDiscussion, setIsOpen]);
+    }, [conversationMenu, setIsOpen]);
+
+    const openFieldComments = useCallback(() => {
+        conversationMenu.openCommentsAction();
+        setIsOpen(false);
+    }, [conversationMenu, setIsOpen]);
 
     // Check if this field is the only primary key in the table
     const isOnlyPrimaryKey = React.useMemo(() => {
@@ -513,12 +516,28 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                             />
                         </div>
                     </div>
-                    {commentsActive ? (
+                    {conversationMenu.showConversationAction ? (
                         <Button
                             type="button"
                             variant="outline"
                             className="flex gap-2"
                             onClick={openFieldDiscussion}
+                            disabled={conversationMenu.isConversationPending}
+                            aria-busy={conversationMenu.isConversationPending}
+                        >
+                            <SlBubbles
+                                className="size-3.5"
+                                aria-hidden="true"
+                            />
+                            {conversationMenu.conversationLabel}
+                        </Button>
+                    ) : null}
+                    {conversationMenu.showCommentsAction ? (
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="flex gap-2"
+                            onClick={openFieldComments}
                         >
                             <SlBubbles
                                 className="size-3.5"

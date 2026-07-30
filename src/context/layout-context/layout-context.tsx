@@ -16,6 +16,10 @@ export type VisualsTab = 'areas' | 'notes';
 
 export type DiscussionView = 'all' | 'diagram' | 'target';
 
+export interface ConversationNavigationIntent {
+    conversationId: number;
+}
+
 export interface LayoutContext {
     openedTableInSidebar: string | undefined;
     openTableFromSidebar: (tableId: string) => void;
@@ -60,6 +64,9 @@ export interface LayoutContext {
     openDiagramDiscussion: () => void;
     openTargetDiscussion: (target: DiagramCommentTarget) => void;
     openConversationsPanel: () => void;
+    conversationNavigationIntent: ConversationNavigationIntent | null;
+    openConversationDetail: (conversationId: number) => void;
+    clearConversationNavigationIntent: () => void;
 }
 
 export const layoutContext = createContext<LayoutContext>({
@@ -106,4 +113,7 @@ export const layoutContext = createContext<LayoutContext>({
     openDiagramDiscussion: emptyFn,
     openTargetDiscussion: emptyFn,
     openConversationsPanel: emptyFn,
+    conversationNavigationIntent: null,
+    openConversationDetail: emptyFn,
+    clearConversationNavigationIntent: emptyFn,
 });

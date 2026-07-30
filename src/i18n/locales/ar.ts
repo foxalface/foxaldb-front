@@ -11,6 +11,8 @@ export const ar: LanguageTranslation = {
             custom_types: 'الأنواع المخصصة',
             comments: 'المحادثات',
             conversations: 'المحادثات',
+            legacy_comments: 'تعليقات (قديم)',
+            legacy_comments_aria: 'فتح لوحة التعليقات القديمة',
             visuals: 'مرئيات',
         },
         menu: {
@@ -430,6 +432,9 @@ export const ar: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'تعليقات (قديم)',
+            },
             conversations_section: {
                 title: 'المحادثات',
                 tabs_label: 'المحادثات',
@@ -465,6 +470,28 @@ export const ar: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'فتح المحادثة',
+                    start: 'بدء محادثة',
+                    pending: 'جارٍ بدء المحادثة…',
+                    diagram_name: 'المخطط',
+                    open_aria: 'فتح المحادثة لـ {{name}}',
+                    start_aria: 'بدء محادثة لـ {{name}}',
+                    open_tooltip: 'فتح المحادثة لـ {{name}}',
+                    start_tooltip: 'بدء محادثة لـ {{name}}',
+                    pending_tooltip: 'جارٍ بدء المحادثة لـ {{name}}…',
+                    unavailable_description:
+                        'لا يمكنك بدء محادثات على هذا المخطط.',
+                    errors: {
+                        validation: 'هذا الهدف غير صالح لمحادثة.',
+                        forbidden: 'ليس لديك إذن لبدء هذه المحادثة.',
+                        not_found: 'هذا الهدف لم يعد متاحًا على المخطط.',
+                        conflict:
+                            'تعذر بدء هذه المحادثة الآن. يرجى المحاولة مرة أخرى.',
+                        generic:
+                            'تعذر فتح هذه المحادثة. يرجى المحاولة مرة أخرى.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

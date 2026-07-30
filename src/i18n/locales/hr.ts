@@ -11,6 +11,8 @@ export const hr: LanguageTranslation = {
             custom_types: 'Prilagođeni Tipovi',
             comments: 'Razgovori',
             conversations: 'Razgovori',
+            legacy_comments: 'Komentari (naslijeđeno)',
+            legacy_comments_aria: 'Otvori naslijeđenu ploču komentara',
             visuals: 'Vizuali',
         },
         menu: {
@@ -432,6 +434,9 @@ export const hr: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Komentari (naslijeđeno)',
+            },
             conversations_section: {
                 title: 'Razgovori',
                 tabs_label: 'Razgovori',
@@ -467,6 +472,29 @@ export const hr: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'Otvori razgovor',
+                    start: 'Započni razgovor',
+                    pending: 'Pokretanje razgovora…',
+                    diagram_name: 'Dijagram',
+                    open_aria: 'Otvori razgovor za {{name}}',
+                    start_aria: 'Započni razgovor za {{name}}',
+                    open_tooltip: 'Otvori razgovor za {{name}}',
+                    start_tooltip: 'Započni razgovor za {{name}}',
+                    pending_tooltip: 'Pokretanje razgovora za {{name}}…',
+                    unavailable_description:
+                        'Ne možete započeti razgovore na ovom dijagramu.',
+                    errors: {
+                        validation: 'Ovaj cilj nije valjan za razgovor.',
+                        forbidden:
+                            'Nemate dopuštenje za pokretanje ovog razgovora.',
+                        not_found: 'Ovaj cilj više nije dostupan na dijagramu.',
+                        conflict:
+                            'Razgovor se trenutno nije mogao pokrenuti. Pokušajte ponovno.',
+                        generic:
+                            'Nije moguće otvoriti ovaj razgovor. Pokušajte ponovno.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

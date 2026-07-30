@@ -32,6 +32,7 @@ import {
     selectMessagesNextCursorForConversation,
     selectMessagesStatusForConversation,
 } from '@/lib/conversations/conversation-selectors';
+import { selectConversationIndicatorIndex } from '@/lib/conversations/conversation-indicators';
 import type {
     CreateConversationMessageInput,
     DiagramConversation,
@@ -52,6 +53,7 @@ import {
     createConversationsInactiveError,
     type ConversationsContextValue,
 } from './conversations-context';
+import { ConversationIndicatorsContext } from './conversation-indicators-context';
 
 export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -102,6 +104,11 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     const archivedConversations = useMemo(
         () => selectArchivedConversations(summariesById),
         [summariesById]
+    );
+
+    const indicatorIndex = useMemo(
+        () => selectConversationIndicatorIndex(state),
+        [state]
     );
 
     const clearConversationSubscription = useCallback((): void => {
@@ -761,9 +768,11 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
 
     return (
         <ConversationsAvailabilityContext.Provider value={isActive}>
-            <ConversationsContext.Provider value={value}>
-                {children}
-            </ConversationsContext.Provider>
+            <ConversationIndicatorsContext.Provider value={indicatorIndex}>
+                <ConversationsContext.Provider value={value}>
+                    {children}
+                </ConversationsContext.Provider>
+            </ConversationIndicatorsContext.Provider>
         </ConversationsAvailabilityContext.Provider>
     );
 };

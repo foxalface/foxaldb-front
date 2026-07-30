@@ -11,6 +11,8 @@ export const fr: LanguageTranslation = {
             custom_types: 'Types Personnalisés',
             comments: 'Conversations',
             conversations: 'Conversations',
+            legacy_comments: 'Commentaires (ancien)',
+            legacy_comments_aria: 'Ouvrir le panneau de commentaires hérité',
             visuals: 'Visuels',
         },
         menu: {
@@ -436,6 +438,9 @@ export const fr: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Commentaires (ancien)',
+            },
             conversations_section: {
                 title: 'Conversations',
                 tabs_label: 'Listes de conversations',
@@ -471,6 +476,32 @@ export const fr: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Impossible de mettre à jour la conversation. Veuillez réessayer.',
+                },
+                target_entry: {
+                    open: 'Ouvrir la conversation',
+                    start: 'Démarrer une conversation',
+                    pending: 'Démarrage de la conversation…',
+                    diagram_name: 'Diagramme',
+                    open_aria: 'Ouvrir la conversation pour {{name}}',
+                    start_aria: 'Démarrer une conversation pour {{name}}',
+                    open_tooltip: 'Ouvrir la conversation pour {{name}}',
+                    start_tooltip: 'Démarrer une conversation pour {{name}}',
+                    pending_tooltip:
+                        'Démarrage de la conversation pour {{name}}…',
+                    unavailable_description:
+                        'Vous ne pouvez pas démarrer de conversations sur ce diagramme.',
+                    errors: {
+                        validation:
+                            'Cette cible n’est pas valide pour une conversation.',
+                        forbidden:
+                            'Vous n’avez pas l’autorisation de démarrer cette conversation.',
+                        not_found:
+                            'Cette cible n’est plus disponible sur le diagramme.',
+                        conflict:
+                            'Cette conversation n’a pas pu être démarrée. Veuillez réessayer.',
+                        generic:
+                            'Impossible d’ouvrir cette conversation. Veuillez réessayer.',
+                    },
                 },
                 actions: {
                     archive: 'Archiver',

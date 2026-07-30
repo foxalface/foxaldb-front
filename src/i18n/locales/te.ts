@@ -11,6 +11,8 @@ export const te: LanguageTranslation = {
             custom_types: 'కస్టమ్ టైప్స్',
             comments: 'సంభాషణలు',
             conversations: 'సంభాషణలు',
+            legacy_comments: 'వ్యాఖ్యలు (పాత)',
+            legacy_comments_aria: 'పాత వ్యాఖ్యల ప్యానెల్‌ను తెరవండి',
             visuals: 'Visuals',
         },
         menu: {
@@ -436,6 +438,9 @@ export const te: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'వ్యాఖ్యలు (పాత)',
+            },
             conversations_section: {
                 title: 'సంభాషణలు',
                 tabs_label: 'సంభాషణలు',
@@ -471,6 +476,28 @@ export const te: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'సంభాషణ తెరవండి',
+                    start: 'సంభాషణ ప్రారంభించండి',
+                    pending: 'సంభాషణ ప్రారంభమవుతోంది…',
+                    diagram_name: 'డయాగ్రామ్',
+                    open_aria: '{{name}} కోసం సంభాషణ తెరవండి',
+                    start_aria: '{{name}} కోసం సంభాషణ ప్రారంభించండి',
+                    open_tooltip: '{{name}} కోసం సంభాషణ తెరవండి',
+                    start_tooltip: '{{name}} కోసం సంభాషణ ప్రారంభించండి',
+                    pending_tooltip: '{{name}} కోసం సంభాషణ ప్రారంభమవుతోంది…',
+                    unavailable_description:
+                        'ఈ డయాగ్రామ్‌లో మీరు సంభాషణలను ప్రారంభించలేరు.',
+                    errors: {
+                        validation: 'ఈ లక్ష్యం సంభాషణకు చెల్లదు.',
+                        forbidden: 'ఈ సంభాషణను ప్రారంభించే అనుమతి మీకు లేదు.',
+                        not_found: 'ఈ లక్ష్యం డయాగ్రామ్‌లో ఇక అందుబాటులో లేదు.',
+                        conflict:
+                            'ఇప్పుడు ఈ సంభాషణను ప్రారంభించలేకపోయాం. మళ్లీ ప్రయత్నించండి.',
+                        generic:
+                            'ఈ సంభాషణను తెరవలేకపోయాం. మళ్లీ ప్రయత్నించండి.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

@@ -11,11 +11,13 @@ import { useConversationDetail } from './use-conversation-detail';
 export interface ConversationDetailProps {
     conversation: DiagramConversation;
     onBack: () => void;
+    regionRef?: React.Ref<HTMLDivElement>;
 }
 
 export const ConversationDetail: React.FC<ConversationDetailProps> = ({
     conversation,
     onBack,
+    regionRef,
 }) => {
     const messagesHeadingId = useId();
     const { diagramAccess } = useDiagramAccess();
@@ -55,7 +57,9 @@ export const ConversationDetail: React.FC<ConversationDetailProps> = ({
 
     return (
         <div
-            className="flex min-h-0 flex-1 flex-col overflow-hidden"
+            ref={regionRef}
+            tabIndex={-1}
+            className="flex min-h-0 flex-1 flex-col overflow-hidden outline-none"
             data-testid={`conversation-detail-${conversation.id}`}
         >
             <ConversationDetailHeader

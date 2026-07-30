@@ -11,6 +11,8 @@ export const hi: LanguageTranslation = {
             custom_types: 'कस्टम टाइप',
             comments: 'वार्तालाप',
             conversations: 'वार्तालाप',
+            legacy_comments: 'टिप्पणियाँ (पुराना)',
+            legacy_comments_aria: 'पुराना टिप्पणी पैनल खोलें',
             visuals: 'Visuals',
         },
         menu: {
@@ -436,6 +438,9 @@ export const hi: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'टिप्पणियाँ (पुराना)',
+            },
             conversations_section: {
                 title: 'वार्तालाप',
                 tabs_label: 'वार्तालाप',
@@ -471,6 +476,30 @@ export const hi: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'वार्तालाप खोलें',
+                    start: 'वार्तालाप शुरू करें',
+                    pending: 'वार्तालाप शुरू हो रहा है…',
+                    diagram_name: 'आरेख',
+                    open_aria: '{{name}} के लिए वार्तालाप खोलें',
+                    start_aria: '{{name}} के लिए वार्तालाप शुरू करें',
+                    open_tooltip: '{{name}} के लिए वार्तालाप खोलें',
+                    start_tooltip: '{{name}} के लिए वार्तालाप शुरू करें',
+                    pending_tooltip:
+                        '{{name}} के लिए वार्तालाप शुरू हो रहा है…',
+                    unavailable_description:
+                        'आप इस आरेख पर वार्तालाप शुरू नहीं कर सकते।',
+                    errors: {
+                        validation: 'यह लक्ष्य वार्तालाप के लिए मान्य नहीं है।',
+                        forbidden:
+                            'आपके पास यह वार्तालाप शुरू करने की अनुमति नहीं है।',
+                        not_found: 'यह लक्ष्य आरेख पर अब उपलब्ध नहीं है।',
+                        conflict:
+                            'अभी यह वार्तालाप शुरू नहीं हो सका। कृपया पुनः प्रयास करें।',
+                        generic:
+                            'यह वार्तालाप खोला नहीं जा सका। कृपया पुनः प्रयास करें।',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

@@ -11,6 +11,8 @@ export const pt_BR: LanguageTranslation = {
             custom_types: 'Tipos Personalizados',
             comments: 'Conversas',
             conversations: 'Conversas',
+            legacy_comments: 'Comentários (legado)',
+            legacy_comments_aria: 'Abrir o painel de comentários legado',
             visuals: 'Visuais',
         },
         menu: {
@@ -439,6 +441,9 @@ export const pt_BR: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Comentários (legado)',
+            },
             conversations_section: {
                 title: 'Conversas',
                 tabs_label: 'Conversas',
@@ -474,6 +479,30 @@ export const pt_BR: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'Abrir conversa',
+                    start: 'Iniciar conversa',
+                    pending: 'Iniciando conversa…',
+                    diagram_name: 'Diagrama',
+                    open_aria: 'Abrir conversa para {{name}}',
+                    start_aria: 'Iniciar conversa para {{name}}',
+                    open_tooltip: 'Abrir conversa para {{name}}',
+                    start_tooltip: 'Iniciar conversa para {{name}}',
+                    pending_tooltip: 'Iniciando conversa para {{name}}…',
+                    unavailable_description:
+                        'Você não pode iniciar conversas neste diagrama.',
+                    errors: {
+                        validation: 'Este alvo não é válido para uma conversa.',
+                        forbidden:
+                            'Você não tem permissão para iniciar esta conversa.',
+                        not_found:
+                            'Este alvo não está mais disponível no diagrama.',
+                        conflict:
+                            'Não foi possível iniciar esta conversa agora. Tente novamente.',
+                        generic:
+                            'Não foi possível abrir esta conversa. Tente novamente.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

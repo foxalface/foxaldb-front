@@ -11,6 +11,8 @@ export const zh_CN: LanguageTranslation = {
             custom_types: '自定义类型',
             comments: '对话',
             conversations: '对话',
+            legacy_comments: '评论（旧版）',
+            legacy_comments_aria: '打开旧版评论面板',
             visuals: '视觉效果',
         },
         menu: {
@@ -418,6 +420,9 @@ export const zh_CN: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: '评论（旧版）',
+            },
             conversations_section: {
                 title: '对话',
                 tabs_label: '对话',
@@ -453,6 +458,25 @@ export const zh_CN: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: '打开对话',
+                    start: '开始对话',
+                    pending: '正在开始对话…',
+                    diagram_name: '图表',
+                    open_aria: '打开 {{name}} 的对话',
+                    start_aria: '为 {{name}} 开始对话',
+                    open_tooltip: '打开 {{name}} 的对话',
+                    start_tooltip: '为 {{name}} 开始对话',
+                    pending_tooltip: '正在为 {{name}} 开始对话…',
+                    unavailable_description: '您无法在此图表上开始对话。',
+                    errors: {
+                        validation: '此目标不适用于对话。',
+                        forbidden: '您没有权限开始此对话。',
+                        not_found: '此目标在图表上已不存在。',
+                        conflict: '暂时无法开始此对话。请重试。',
+                        generic: '无法打开此对话。请重试。',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

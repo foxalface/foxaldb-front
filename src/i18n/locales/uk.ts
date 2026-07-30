@@ -11,6 +11,8 @@ export const uk: LanguageTranslation = {
             custom_types: 'Користувацькі типи',
             comments: 'Розмови',
             conversations: 'Розмови',
+            legacy_comments: 'Коментарі (застар.)',
+            legacy_comments_aria: 'Відкрити застарілу панель коментарів',
             visuals: 'Візуальні елементи',
         },
         menu: {
@@ -436,6 +438,9 @@ export const uk: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Комментарі (застар.)',
+            },
             conversations_section: {
                 title: 'Розмови',
                 tabs_label: 'Розмови',
@@ -471,6 +476,28 @@ export const uk: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'Відкрити розмову',
+                    start: 'Почати розмову',
+                    pending: 'Запуск розмови…',
+                    diagram_name: 'Діаграма',
+                    open_aria: 'Відкрити розмову для {{name}}',
+                    start_aria: 'Почати розмову для {{name}}',
+                    open_tooltip: 'Відкрити розмову для {{name}}',
+                    start_tooltip: 'Почати розмову для {{name}}',
+                    pending_tooltip: 'Запуск розмови для {{name}}…',
+                    unavailable_description:
+                        'Ви не можете починати розмови на цій діаграмі.',
+                    errors: {
+                        validation: 'Ця ціль непридатна для розмови.',
+                        forbidden: 'У вас немає дозволу почати цю розмову.',
+                        not_found: 'Ця ціль більше недоступна на діаграмі.',
+                        conflict:
+                            'Не вдалося почати розмову. Спробуйте ще раз.',
+                        generic:
+                            'Не вдалося відкрити розмову. Спробуйте ще раз.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

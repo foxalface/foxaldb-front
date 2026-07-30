@@ -11,6 +11,8 @@ export const gu: LanguageTranslation = {
             custom_types: 'કસ્ટમ ટાઇપ',
             comments: 'વાતચીત',
             conversations: 'વાતચીત',
+            legacy_comments: 'ટિપ્પણીઓ (જૂના)',
+            legacy_comments_aria: 'જૂના ટિપ્પણી પેનલ ખોલો',
             visuals: 'Visuals',
         },
         menu: {
@@ -433,6 +435,9 @@ export const gu: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'ટિપ્પણીઓ (જૂના)',
+            },
             conversations_section: {
                 title: 'વાતચીત',
                 tabs_label: 'વાતચીત',
@@ -468,6 +473,27 @@ export const gu: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'વાતચીત ખોલો',
+                    start: 'વાતચીત શરૂ કરો',
+                    pending: 'વાતચીત શરૂ થઈ રહી છે…',
+                    diagram_name: 'ડાયાગ્રામ',
+                    open_aria: '{{name}} માટે વાતચીત ખોલો',
+                    start_aria: '{{name}} માટે વાતચીત શરૂ કરો',
+                    open_tooltip: '{{name}} માટે વાતચીત ખોલો',
+                    start_tooltip: '{{name}} માટે વાતચીત શરૂ કરો',
+                    pending_tooltip: '{{name}} માટે વાતચીત શરૂ થઈ રહી છે…',
+                    unavailable_description:
+                        'તમે આ ડાયાગ્રામ પર વાતચીત શરૂ કરી શકતા નથી.',
+                    errors: {
+                        validation: 'આ લક્ષ્ય વાતચીત માટે માન્ય નથી.',
+                        forbidden: 'તમને આ વાતચીત શરૂ કરવાની પરવાનગી નથી.',
+                        not_found: 'આ લક્ષ્ય ડાયાગ્રામ પર હવે ઉપલબ્ધ નથી.',
+                        conflict:
+                            'હમણાં આ વાતચીત શરૂ થઈ શકી નથી. ફરી પ્રયાસ કરો.',
+                        generic: 'આ વાતચીત ખોલી શકાઈ નથી. ફરી પ્રયાસ કરો.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

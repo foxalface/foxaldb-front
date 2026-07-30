@@ -11,6 +11,8 @@ export const ru: LanguageTranslation = {
             custom_types: 'Пользовательские типы',
             comments: 'Беседы',
             conversations: 'Беседы',
+            legacy_comments: 'Комментарии (устар.)',
+            legacy_comments_aria: 'Открыть устаревшую панель комментариев',
             visuals: 'Визуальные элементы',
         },
         menu: {
@@ -433,6 +435,9 @@ export const ru: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Комментарии (устар.)',
+            },
             conversations_section: {
                 title: 'Беседы',
                 tabs_label: 'Беседы',
@@ -468,6 +473,28 @@ export const ru: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'Открыть беседу',
+                    start: 'Начать беседу',
+                    pending: 'Запуск беседы…',
+                    diagram_name: 'Диаграмма',
+                    open_aria: 'Открыть беседу для {{name}}',
+                    start_aria: 'Начать беседу для {{name}}',
+                    open_tooltip: 'Открыть беседу для {{name}}',
+                    start_tooltip: 'Начать беседу для {{name}}',
+                    pending_tooltip: 'Запуск беседы для {{name}}…',
+                    unavailable_description:
+                        'Вы не можете начинать беседы на этой диаграмме.',
+                    errors: {
+                        validation: 'Эта цель недопустима для беседы.',
+                        forbidden: 'У вас нет разрешения начать эту беседу.',
+                        not_found: 'Эта цель больше недоступна на диаграмме.',
+                        conflict:
+                            'Не удалось начать беседу. Попробуйте ещё раз.',
+                        generic:
+                            'Не удалось открыть беседу. Попробуйте ещё раз.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

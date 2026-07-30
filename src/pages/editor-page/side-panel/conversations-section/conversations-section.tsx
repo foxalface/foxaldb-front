@@ -10,6 +10,7 @@ import {
 } from '@/components/tabs/tabs';
 import { ConversationsList } from './conversations-list';
 import { ConversationDetail } from './conversation-detail';
+import { ConversationDiagramHeaderAction } from './conversation-diagram-header-action';
 import { useConversationsPanel } from './use-conversations-panel';
 
 export interface ConversationsSectionProps {}
@@ -45,6 +46,7 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
         handleLoadMoreActive,
         handleLoadMoreArchived,
         handleRetry,
+        detailRegionRef,
     } = useConversationsPanel();
 
     const hasActiveLoadError =
@@ -94,16 +96,19 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
                     >
                         {t('side_panel.conversations_section.title')}
                     </h2>
-                    {status === 'loading' && !isInitialLoading ? (
-                        <span
-                            role="status"
-                            aria-label={t(
-                                'side_panel.conversations_section.loading'
-                            )}
-                        >
-                            <Spinner size="small" className="size-4" />
-                        </span>
-                    ) : null}
+                    <div className="flex items-center gap-2">
+                        <ConversationDiagramHeaderAction />
+                        {status === 'loading' && !isInitialLoading ? (
+                            <span
+                                role="status"
+                                aria-label={t(
+                                    'side_panel.conversations_section.loading'
+                                )}
+                            >
+                                <Spinner size="small" className="size-4" />
+                            </span>
+                        ) : null}
+                    </div>
                 </div>
             </header>
 
@@ -131,6 +136,7 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
                 <ConversationDetail
                     conversation={selectedConversation}
                     onBack={clearSelectedConversation}
+                    regionRef={detailRegionRef}
                 />
             ) : (
                 <Tabs

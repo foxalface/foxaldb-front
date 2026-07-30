@@ -11,6 +11,8 @@ export const ja: LanguageTranslation = {
             custom_types: 'カスタムタイプ',
             comments: '会話',
             conversations: '会話',
+            legacy_comments: 'コメント（レガシー）',
+            legacy_comments_aria: 'レガシーコメントパネルを開く',
             visuals: 'ビジュアル',
         },
         menu: {
@@ -437,6 +439,9 @@ export const ja: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'コメント（レガシー）',
+            },
             conversations_section: {
                 title: '会話',
                 tabs_label: '会話',
@@ -472,6 +477,29 @@ export const ja: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: '会話を開く',
+                    start: '会話を開始',
+                    pending: '会話を開始しています…',
+                    diagram_name: 'ダイアグラム',
+                    open_aria: '{{name}} の会話を開く',
+                    start_aria: '{{name}} の会話を開始',
+                    open_tooltip: '{{name}} の会話を開く',
+                    start_tooltip: '{{name}} の会話を開始',
+                    pending_tooltip: '{{name}} の会話を開始しています…',
+                    unavailable_description:
+                        'このダイアグラムでは会話を開始できません。',
+                    errors: {
+                        validation: 'このターゲットは会話に使用できません。',
+                        forbidden: 'この会話を開始する権限がありません。',
+                        not_found:
+                            'このターゲットはダイアグラム上に存在しません。',
+                        conflict:
+                            '会話を開始できませんでした。もう一度お試しください。',
+                        generic:
+                            '会話を開けませんでした。もう一度お試しください。',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

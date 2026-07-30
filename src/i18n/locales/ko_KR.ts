@@ -11,6 +11,8 @@ export const ko_KR: LanguageTranslation = {
             custom_types: '사용자 지정 타입',
             comments: '대화',
             conversations: '대화',
+            legacy_comments: '댓글(레거시)',
+            legacy_comments_aria: '레거시 댓글 패널 열기',
             visuals: '시각화',
         },
         menu: {
@@ -433,6 +435,9 @@ export const ko_KR: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: '댓글(레거시)',
+            },
             conversations_section: {
                 title: '대화',
                 tabs_label: '대화',
@@ -468,6 +473,28 @@ export const ko_KR: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: '대화 열기',
+                    start: '대화 시작',
+                    pending: '대화를 시작하는 중…',
+                    diagram_name: '다이어그램',
+                    open_aria: '{{name}} 대화 열기',
+                    start_aria: '{{name}} 대화 시작',
+                    open_tooltip: '{{name}} 대화 열기',
+                    start_tooltip: '{{name}} 대화 시작',
+                    pending_tooltip: '{{name}} 대화를 시작하는 중…',
+                    unavailable_description:
+                        '이 다이어그램에서는 대화를 시작할 수 없습니다.',
+                    errors: {
+                        validation: '이 대상은 대화에 사용할 수 없습니다.',
+                        forbidden: '이 대화를 시작할 권한이 없습니다.',
+                        not_found:
+                            '이 대상은 다이어그램에서 더 이상 사용할 수 없습니다.',
+                        conflict:
+                            '지금은 대화를 시작할 수 없습니다. 다시 시도하세요.',
+                        generic: '대화를 열 수 없습니다. 다시 시도하세요.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

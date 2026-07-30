@@ -11,6 +11,8 @@ export const ne: LanguageTranslation = {
             custom_types: 'कस्टम प्रकारहरू',
             comments: 'कुराकानी',
             conversations: 'कुराकानी',
+            legacy_comments: 'टिप्पणीहरू (पुरानो)',
+            legacy_comments_aria: 'पुरानो टिप्पणी प्यानल खोल्नुहोस्',
             visuals: 'Visuals',
         },
         menu: {
@@ -436,6 +438,9 @@ export const ne: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'टिप्पणीहरू (पुरानो)',
+            },
             conversations_section: {
                 title: 'कुराकानी',
                 tabs_label: 'कुराकानी',
@@ -471,6 +476,29 @@ export const ne: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'कुराकानी खोल्नुहोस्',
+                    start: 'कुराकानी सुरु गर्नुहोस्',
+                    pending: 'कुराकानी सुरु हुँदैछ…',
+                    diagram_name: 'डायाग्राम',
+                    open_aria: '{{name}} को लागि कुराकानी खोल्नुहोस्',
+                    start_aria: '{{name}} को लागि कुराकानी सुरु गर्नुहोस्',
+                    open_tooltip: '{{name}} को लागि कुराकानी खोल्नुहोस्',
+                    start_tooltip: '{{name}} को लागि कुराकानी सुरु गर्नुहोस्',
+                    pending_tooltip: '{{name}} को लागि कुराकानी सुरु हुँदैछ…',
+                    unavailable_description:
+                        'तपाईं यस डायाग्राममा कुराकानी सुरु गर्न सक्नुहुन्न।',
+                    errors: {
+                        validation: 'यो लक्ष्य कुराकानीका लागि मान्य छैन।',
+                        forbidden:
+                            'यो कुराकानी सुरु गर्ने अनुमति तपाईंसँग छैन।',
+                        not_found: 'यो लक्ष्य डायाग्राममा अब उपलब्ध छैन।',
+                        conflict:
+                            'अहिले यो कुराकानी सुरु गर्न सकिएन। फेरि प्रयास गर्नुहोस्।',
+                        generic:
+                            'यो कुराकानी खोल्न सकिएन। फेरि प्रयास गर्नुहोस्।',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

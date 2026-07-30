@@ -11,6 +11,8 @@ export const mr: LanguageTranslation = {
             custom_types: 'कस्टम प्रकार',
             comments: 'संवाद',
             conversations: 'संभाषणे',
+            legacy_comments: 'टिप्पण्या (जुने)',
+            legacy_comments_aria: 'जुने टिप्पणी पॅनेल उघडा',
             visuals: 'Visuals',
         },
         menu: {
@@ -439,6 +441,9 @@ export const mr: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'टिप्पण्या (जुने)',
+            },
             conversations_section: {
                 title: 'संभाषणे',
                 tabs_label: 'संभाषणे',
@@ -474,6 +479,28 @@ export const mr: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'संवाद उघडा',
+                    start: 'संवाद सुरू करा',
+                    pending: 'संवाद सुरू होत आहे…',
+                    diagram_name: 'आकृती',
+                    open_aria: '{{name}} साठी संवाद उघडा',
+                    start_aria: '{{name}} साठी संवाद सुरू करा',
+                    open_tooltip: '{{name}} साठी संवाद उघडा',
+                    start_tooltip: '{{name}} साठी संवाद सुरू करा',
+                    pending_tooltip: '{{name}} साठी संवाद सुरू होत आहे…',
+                    unavailable_description:
+                        'या आकृतीवर तुम्ही संवाद सुरू करू शकत नाही.',
+                    errors: {
+                        validation: 'हा लक्ष्य संवादासाठी वैध नाही.',
+                        forbidden:
+                            'हा संवाद सुरू करण्याची तुम्हाला परवानगी नाही.',
+                        not_found: 'हा लक्ष्य आकृतीवर आता उपलब्ध नाही.',
+                        conflict:
+                            'आत्ता हा संवाद सुरू होऊ शकला नाही. पुन्हा प्रयत्न करा.',
+                        generic: 'हा संवाद उघडता आला नाही. पुन्हा प्रयत्न करा.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

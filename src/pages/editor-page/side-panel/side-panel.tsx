@@ -20,8 +20,7 @@ import { VisualsSection } from './visuals-section/visuals-section';
 import { CommentsSection } from './comments-section/comments-section';
 import { ConversationsSection } from './conversations-section/conversations-section';
 import { Spinner } from '@/components/spinner/spinner';
-import { useDiagramComments } from '@/hooks/use-diagram-comments';
-import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
+import { useEditorDiscussionAvailability } from '@/hooks/use-editor-discussion-availability';
 
 const DBMLSectionLazy = React.lazy(() =>
     import('./dbml-section/dbml-section').then((module) => ({
@@ -41,8 +40,11 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
         openConversationsPanel,
     } = useLayout();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const { isActive: commentsActive } = useDiagramComments();
-    const conversationsAvailable = useConversationsAvailability();
+    const {
+        conversationsAvailable,
+        showLegacyCommentsEntry,
+        showStandardCommentsEntry,
+    } = useEditorDiscussionAvailability();
 
     const handleMobileSectionChange = (value: string) => {
         if (value === 'conversations') {
@@ -95,9 +97,16 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                         )}
                                     </SelectItem>
                                 ) : null}
-                                {commentsActive && !conversationsAvailable ? (
+                                {showStandardCommentsEntry ? (
                                     <SelectItem value="comments">
                                         {t('side_panel.comments_section.title')}
+                                    </SelectItem>
+                                ) : null}
+                                {showLegacyCommentsEntry ? (
+                                    <SelectItem value="comments">
+                                        {t(
+                                            'side_panel.legacy_comments_section.title'
+                                        )}
                                     </SelectItem>
                                 ) : null}
                                 {conversationsAvailable ? (

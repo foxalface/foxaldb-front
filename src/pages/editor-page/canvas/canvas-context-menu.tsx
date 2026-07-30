@@ -10,6 +10,8 @@ import {
 } from '@/components/context-menu/context-menu';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
+import { useOpenTargetConversation } from '@/hooks/use-open-target-conversation';
 import { useDialog } from '@/hooks/use-dialog';
 import { useReactFlow, useStore } from '@xyflow/react';
 import React, { useCallback } from 'react';
@@ -25,6 +27,7 @@ import {
     Plus,
     SquareArrowOutUpRight,
 } from 'lucide-react';
+import { SlBubbles } from 'react-icons/sl';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useCanvas } from '@/hooks/use-canvas';
@@ -57,6 +60,19 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     const { showAlert } = useAlert();
 
     const { isMd: isDesktop } = useBreakpoint('md');
+    const conversationsAvailable = useConversationsAvailability();
+    const {
+        hasActiveConversation: hasDiagramConversation,
+        canCreate: canCreateDiagramConversation,
+        isPending: isDiagramConversationPending,
+        openConversation: openDiagramConversation,
+    } = useOpenTargetConversation({
+        targetType: 'diagram',
+        targetId: null,
+    });
+    const showDiagramConversationAction =
+        conversationsAvailable &&
+        (hasDiagramConversation || canCreateDiagramConversation);
 
     // Reactively detect selected tables
     const selectedTableIds = useStore((state) =>
@@ -334,6 +350,32 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                     <StickyNote className="size-3.5" />
                 </ContextMenuItem>
                 <ContextMenuSeparator />
+                {showDiagramConversationAction ? (
+                    <>
+                        <ContextMenuItem
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                void openDiagramConversation();
+                            }}
+                            disabled={isDiagramConversationPending}
+                            className="flex justify-between gap-4"
+                        >
+                            {hasDiagramConversation
+                                ? t(
+                                      'side_panel.conversations_section.target_entry.open'
+                                  )
+                                : isDiagramConversationPending
+                                  ? t(
+                                        'side_panel.conversations_section.target_entry.pending'
+                                    )
+                                  : t(
+                                        'side_panel.conversations_section.target_entry.start'
+                                    )}
+                            <SlBubbles className="size-3.5" />
+                        </ContextMenuItem>
+                        <ContextMenuSeparator />
+                    </>
+                ) : null}
                 <ContextMenuItem
                     onClick={importSqlDbmlHandler}
                     className="flex justify-between gap-4"

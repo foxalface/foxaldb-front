@@ -11,6 +11,8 @@ export const en = {
             custom_types: 'Custom Types',
             comments: 'Conversations',
             conversations: 'Conversations',
+            legacy_comments: 'Comments (legacy)',
+            legacy_comments_aria: 'Open legacy comments panel',
             visuals: 'Visuals',
         },
         menu: {
@@ -426,6 +428,9 @@ export const en = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Comments (legacy)',
+            },
             conversations_section: {
                 title: 'Conversations',
                 tabs_label: 'Conversation lists',
@@ -461,6 +466,31 @@ export const en = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'Open conversation',
+                    start: 'Start conversation',
+                    pending: 'Starting conversation…',
+                    diagram_name: 'Diagram',
+                    open_aria: 'Open conversation for {{name}}',
+                    start_aria: 'Start conversation for {{name}}',
+                    open_tooltip: 'Open conversation for {{name}}',
+                    start_tooltip: 'Start conversation for {{name}}',
+                    pending_tooltip: 'Starting conversation for {{name}}…',
+                    unavailable_description:
+                        'You cannot start conversations on this diagram.',
+                    errors: {
+                        validation:
+                            'This target is not valid for a conversation.',
+                        forbidden:
+                            'You do not have permission to start this conversation.',
+                        not_found:
+                            'This target is no longer available on the diagram.',
+                        conflict:
+                            'This conversation could not be started right now. Please try again.',
+                        generic:
+                            'Could not open this conversation. Please try again.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

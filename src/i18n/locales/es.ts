@@ -11,6 +11,8 @@ export const es: LanguageTranslation = {
             custom_types: 'Tipos Personalizados',
             comments: 'Conversaciones',
             conversations: 'Conversaciones',
+            legacy_comments: 'Comentarios (heredado)',
+            legacy_comments_aria: 'Abrir el panel de comentarios heredado',
             visuals: 'Visuales',
         },
         menu: {
@@ -439,6 +441,9 @@ export const es: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Comentarios (heredado)',
+            },
             conversations_section: {
                 title: 'Conversaciones',
                 tabs_label: 'Conversaciones',
@@ -474,6 +479,31 @@ export const es: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'Abrir conversación',
+                    start: 'Iniciar conversación',
+                    pending: 'Iniciando conversación…',
+                    diagram_name: 'Diagrama',
+                    open_aria: 'Abrir conversación para {{name}}',
+                    start_aria: 'Iniciar conversación para {{name}}',
+                    open_tooltip: 'Abrir conversación para {{name}}',
+                    start_tooltip: 'Iniciar conversación para {{name}}',
+                    pending_tooltip: 'Iniciando conversación para {{name}}…',
+                    unavailable_description:
+                        'No puede iniciar conversaciones en este diagrama.',
+                    errors: {
+                        validation:
+                            'Este objetivo no es válido para una conversación.',
+                        forbidden:
+                            'No tiene permiso para iniciar esta conversación.',
+                        not_found:
+                            'Este objetivo ya no está disponible en el diagrama.',
+                        conflict:
+                            'No se pudo iniciar esta conversación ahora. Inténtelo de nuevo.',
+                        generic:
+                            'No se pudo abrir esta conversación. Inténtelo de nuevo.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

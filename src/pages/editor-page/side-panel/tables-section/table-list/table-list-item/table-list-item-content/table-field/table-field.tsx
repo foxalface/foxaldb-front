@@ -4,6 +4,7 @@ import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useUpdateTableField } from '@/hooks/use-update-table-field';
 import { useFieldDiscussionIndicator } from '@/hooks/use-discussion-indicators';
+import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { createFieldEditingItem } from '@/lib/realtime/editing-utils';
 import {
@@ -18,6 +19,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { SelectBox } from '@/components/select-box/select-box';
 import { TableFieldPopover } from './table-field-modal/table-field-modal';
 import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
+import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
 import type { DatabaseType, DBTable } from '@/lib/domain';
 import { requiresNotNull } from '@/lib/data/data-types/data-types';
 
@@ -41,6 +43,7 @@ export const TableField: React.FC<TableFieldProps> = ({
     const { t } = useTranslation();
     const { startEditing, stopEditing } = useEditingBroadcast();
     const discussionIndicator = useFieldDiscussionIndicator(field.id);
+    const conversationsAvailable = useConversationsAvailability();
 
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
@@ -167,7 +170,14 @@ export const TableField: React.FC<TableFieldProps> = ({
                 </Tooltip>
             </div>
             <div className="flex shrink-0 items-center justify-end gap-1">
-                <DiscussionIndicator indicator={discussionIndicator} />
+                {conversationsAvailable ? (
+                    <ConversationIndicator
+                        target={{ targetType: 'field', targetId: field.id }}
+                        targetName={field.name}
+                    />
+                ) : (
+                    <DiscussionIndicator indicator={discussionIndicator} />
+                )}
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span>

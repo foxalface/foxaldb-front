@@ -11,6 +11,8 @@ export const id_ID: LanguageTranslation = {
             custom_types: 'Tipe Kustom',
             comments: 'Percakapan',
             conversations: 'Percakapan',
+            legacy_comments: 'Komentar (lama)',
+            legacy_comments_aria: 'Buka panel komentar lama',
             visuals: 'Visual',
         },
         menu: {
@@ -435,6 +437,9 @@ export const id_ID: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Komentar (lama)',
+            },
             conversations_section: {
                 title: 'Percakapan',
                 tabs_label: 'Percakapan',
@@ -470,6 +475,30 @@ export const id_ID: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'Buka percakapan',
+                    start: 'Mulai percakapan',
+                    pending: 'Memulai percakapan…',
+                    diagram_name: 'Diagram',
+                    open_aria: 'Buka percakapan untuk {{name}}',
+                    start_aria: 'Mulai percakapan untuk {{name}}',
+                    open_tooltip: 'Buka percakapan untuk {{name}}',
+                    start_tooltip: 'Mulai percakapan untuk {{name}}',
+                    pending_tooltip: 'Memulai percakapan untuk {{name}}…',
+                    unavailable_description:
+                        'Anda tidak dapat memulai percakapan pada diagram ini.',
+                    errors: {
+                        validation: 'Target ini tidak valid untuk percakapan.',
+                        forbidden:
+                            'Anda tidak memiliki izin untuk memulai percakapan ini.',
+                        not_found:
+                            'Target ini tidak lagi tersedia pada diagram.',
+                        conflict:
+                            'Percakapan tidak dapat dimulai sekarang. Silakan coba lagi.',
+                        generic:
+                            'Tidak dapat membuka percakapan ini. Silakan coba lagi.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

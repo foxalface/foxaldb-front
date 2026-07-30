@@ -74,6 +74,10 @@ vi.mock('@/hooks/use-conversations-availability', () => ({
         conversationsAvailabilityState.isAvailable,
 }));
 
+vi.mock('@/hooks/use-comments-availability', () => ({
+    useCommentsAvailability: () => commentsState.isActive,
+}));
+
 vi.mock('@/hooks/use-breakpoint', () => ({
     useBreakpoint: () => ({ isMd: breakpointState.isMd }),
 }));
@@ -394,18 +398,31 @@ describe('SidePanel conversations routing', () => {
         expect(layoutState.openConversationsPanel).toHaveBeenCalledTimes(1);
     });
 
-    it('hides legacy comments from the mobile selector when conversations are available', () => {
+    it('exposes legacy Comments in the mobile selector when both stacks are available', () => {
         render(<SidePanel />);
 
-        const options = screen.getAllByRole('option');
-        const conversationOptions = options.filter(
-            (option) => option.getAttribute('data-value') === 'conversations'
-        );
-        const commentOptions = options.filter(
-            (option) => option.getAttribute('data-value') === 'comments'
+        expect(
+            screen.getByRole('option', { name: 'Comments (legacy)' })
+        ).toHaveAttribute('data-value', 'comments');
+    });
+
+    it('opens the legacy Comments panel from the mobile selector', async () => {
+        const user = userEvent.setup();
+        render(<SidePanel />);
+
+        await user.click(
+            screen.getByRole('option', { name: 'Comments (legacy)' })
         );
 
-        expect(conversationOptions).toHaveLength(1);
-        expect(commentOptions).toHaveLength(0);
+        expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not show legacy Comments when comments are unavailable', () => {
+        commentsState.isActive = false;
+        render(<SidePanel />);
+
+        expect(
+            screen.queryByRole('option', { name: 'Comments (legacy)' })
+        ).not.toBeInTheDocument();
     });
 });

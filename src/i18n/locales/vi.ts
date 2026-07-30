@@ -11,6 +11,8 @@ export const vi: LanguageTranslation = {
             custom_types: 'Kiểu tùy chỉnh',
             comments: 'Cuộc trò chuyện',
             conversations: 'Cuộc trò chuyện',
+            legacy_comments: 'Bình luận (cũ)',
+            legacy_comments_aria: 'Mở bảng bình luận cũ',
             visuals: 'Hình ảnh',
         },
         menu: {
@@ -433,6 +435,9 @@ export const vi: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Bình luận (cũ)',
+            },
             conversations_section: {
                 title: 'Cuộc trò chuyện',
                 tabs_label: 'Cuộc trò chuyện',
@@ -468,6 +473,31 @@ export const vi: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'Mở cuộc trò chuyện',
+                    start: 'Bắt đầu cuộc trò chuyện',
+                    pending: 'Đang bắt đầu cuộc trò chuyện…',
+                    diagram_name: 'Sơ đồ',
+                    open_aria: 'Mở cuộc trò chuyện cho {{name}}',
+                    start_aria: 'Bắt đầu cuộc trò chuyện cho {{name}}',
+                    open_tooltip: 'Mở cuộc trò chuyện cho {{name}}',
+                    start_tooltip: 'Bắt đầu cuộc trò chuyện cho {{name}}',
+                    pending_tooltip:
+                        'Đang bắt đầu cuộc trò chuyện cho {{name}}…',
+                    unavailable_description:
+                        'Bạn không thể bắt đầu cuộc trò chuyện trên sơ đồ này.',
+                    errors: {
+                        validation:
+                            'Mục tiêu này không hợp lệ cho cuộc trò chuyện.',
+                        forbidden:
+                            'Bạn không có quyền bắt đầu cuộc trò chuyện này.',
+                        not_found: 'Mục tiêu này không còn trên sơ đồ.',
+                        conflict:
+                            'Không thể bắt đầu cuộc trò chuyện lúc này. Vui lòng thử lại.',
+                        generic:
+                            'Không thể mở cuộc trò chuyện này. Vui lòng thử lại.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

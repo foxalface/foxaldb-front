@@ -11,6 +11,8 @@ export const zh_TW: LanguageTranslation = {
             custom_types: '自定義類型',
             comments: '對話',
             conversations: '對話',
+            legacy_comments: '留言（舊版）',
+            legacy_comments_aria: '開啟舊版留言面板',
             visuals: '視覺效果',
         },
         menu: {
@@ -418,6 +420,9 @@ export const zh_TW: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: '留言（舊版）',
+            },
             conversations_section: {
                 title: '對話',
                 tabs_label: '對話',
@@ -453,6 +458,25 @@ export const zh_TW: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: '開啟對話',
+                    start: '開始對話',
+                    pending: '正在開始對話…',
+                    diagram_name: '圖表',
+                    open_aria: '開啟 {{name}} 的對話',
+                    start_aria: '為 {{name}} 開始對話',
+                    open_tooltip: '開啟 {{name}} 的對話',
+                    start_tooltip: '為 {{name}} 開始對話',
+                    pending_tooltip: '正在為 {{name}} 開始對話…',
+                    unavailable_description: '您無法在此圖表上開始對話。',
+                    errors: {
+                        validation: '此目標不適用於對話。',
+                        forbidden: '您沒有權限開始此對話。',
+                        not_found: '此目標在圖表上已不存在。',
+                        conflict: '暫時無法開始此對話。請再試一次。',
+                        generic: '無法開啟此對話。請再試一次。',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

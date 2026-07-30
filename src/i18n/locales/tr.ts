@@ -11,6 +11,8 @@ export const tr: LanguageTranslation = {
             custom_types: 'Özel Tipler',
             comments: 'Konuşmalar',
             conversations: 'Konuşmalar',
+            legacy_comments: 'Yorumlar (eski)',
+            legacy_comments_aria: 'Eski yorum panelini aç',
             visuals: 'Görseller',
         },
         menu: {
@@ -434,6 +436,9 @@ export const tr: LanguageTranslation = {
                     },
                 },
             },
+            legacy_comments_section: {
+                title: 'Yorumlar (eski)',
+            },
             conversations_section: {
                 title: 'Konuşmalar',
                 tabs_label: 'Konuşmalar',
@@ -469,6 +474,27 @@ export const tr: LanguageTranslation = {
                 mutation_errors: {
                     generic:
                         'Could not update the conversation. Please try again.',
+                },
+                target_entry: {
+                    open: 'Konuşmayı aç',
+                    start: 'Konuşma başlat',
+                    pending: 'Konuşma başlatılıyor…',
+                    diagram_name: 'Diyagram',
+                    open_aria: '{{name}} için konuşmayı aç',
+                    start_aria: '{{name}} için konuşma başlat',
+                    open_tooltip: '{{name}} için konuşmayı aç',
+                    start_tooltip: '{{name}} için konuşma başlat',
+                    pending_tooltip: '{{name}} için konuşma başlatılıyor…',
+                    unavailable_description:
+                        'Bu diyagramda konuşma başlatamazsınız.',
+                    errors: {
+                        validation: 'Bu hedef bir konuşma için geçerli değil.',
+                        forbidden: 'Bu konuşmayı başlatma izniniz yok.',
+                        not_found: 'Bu hedef artık diyagramda mevcut değil.',
+                        conflict:
+                            'Bu konuşma şu anda başlatılamadı. Lütfen tekrar deneyin.',
+                        generic: 'Bu konuşma açılamadı. Lütfen tekrar deneyin.',
+                    },
                 },
                 actions: {
                     archive: 'Archive',

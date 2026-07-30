@@ -1,6 +1,14 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+    type RefObject,
+} from 'react';
 import { useDiagramConversations } from '@/hooks/use-diagram-conversations';
 import { useConversationMutations } from '@/hooks/use-conversation-mutations';
+import { useLayout } from '@/hooks/use-layout';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import { useConversationPanelNavigation } from './use-conversation-panel-navigation';
 
@@ -13,6 +21,7 @@ export interface UseConversationsPanelResult {
     selectedConversation: DiagramConversation | null;
     selectConversation: (conversationId: number) => void;
     clearSelectedConversation: () => void;
+    detailRegionRef: RefObject<HTMLDivElement>;
     activeConversations: ReturnType<
         typeof useDiagramConversations
     >['activeConversations'];
@@ -58,11 +67,14 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
     } = useDiagramConversations();
     const { archiveConversation, reopenConversation } =
         useConversationMutations();
+    const { conversationNavigationIntent, clearConversationNavigationIntent } =
+        useLayout();
     const {
         selectedConversationId,
         selectConversation,
         clearSelectedConversation,
     } = useConversationPanelNavigation();
+    const detailRegionRef = useRef<HTMLDivElement>(null);
 
     const [selectedTab, setSelectedTab] =
         useState<ConversationsPanelTab>('active');
@@ -77,6 +89,39 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
     const [isRetrying, setIsRetrying] = useState(false);
     const archivesLoadStartedRef = useRef(false);
     const retryInFlightRef = useRef(false);
+    const consumedNavigationIntentRef = useRef<number | null>(null);
+
+    useEffect(() => {
+        if (conversationNavigationIntent === null) {
+            consumedNavigationIntentRef.current = null;
+            return;
+        }
+
+        if (
+            consumedNavigationIntentRef.current ===
+            conversationNavigationIntent.conversationId
+        ) {
+            return;
+        }
+
+        consumedNavigationIntentRef.current =
+            conversationNavigationIntent.conversationId;
+        setSelectedTab('active');
+        selectConversation(conversationNavigationIntent.conversationId);
+        clearConversationNavigationIntent();
+    }, [
+        clearConversationNavigationIntent,
+        conversationNavigationIntent,
+        selectConversation,
+    ]);
+
+    useEffect(() => {
+        if (selectedConversationId === null) {
+            return;
+        }
+
+        detailRegionRef.current?.focus();
+    }, [selectedConversationId]);
 
     useEffect(() => {
         if (selectedTab !== 'archives' || archivesLoadStartedRef.current) {
@@ -254,6 +299,7 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
         selectedConversation,
         selectConversation,
         clearSelectedConversation,
+        detailRegionRef,
         activeConversations,
         archivedConversations,
         status,

@@ -57,7 +57,9 @@ import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
 import { EntityCollaboratorsBadge } from '@/components/presence/entity-collaborators-badge';
 import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
 import { useTableDiscussionIndicator } from '@/hooks/use-discussion-indicators';
+import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
+import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
 
 // Remote table selection/editing UI: plain div/span only via
 // EntityCollaboratorsBadge / EntityEditingBadge. No Popover, Tooltip, Avatar,
@@ -121,6 +123,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         const remoteEditors = useEntityRemoteEditing('table', table.id);
         const hasRemoteEditing = remoteEditors.length > 0;
         const discussionIndicator = useTableDiscussionIndicator(table.id);
+        const conversationsAvailable = useConversationsAvailability();
 
         // Get edit mode state directly from context
         const editTableMode = useMemo(
@@ -623,10 +626,21 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     {table.name}
                                 </Label>
                             )}
-                            <DiscussionIndicator
-                                indicator={discussionIndicator}
-                                className="mr-0.5"
-                            />
+                            {conversationsAvailable ? (
+                                <ConversationIndicator
+                                    target={{
+                                        targetType: 'table',
+                                        targetId: table.id,
+                                    }}
+                                    targetName={table.name}
+                                    className="mr-0.5"
+                                />
+                            ) : (
+                                <DiscussionIndicator
+                                    indicator={discussionIndicator}
+                                    className="mr-0.5"
+                                />
+                            )}
                         </div>
                         <div className="hidden shrink-0 flex-row group-hover:flex">
                             {readonly ? null : (

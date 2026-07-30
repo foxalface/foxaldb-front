@@ -31,8 +31,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
-import { useDiagramComments } from '@/hooks/use-diagram-comments';
-import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
+import { useEditorDiscussionAvailability } from '@/hooks/use-editor-discussion-availability';
 
 export interface SidebarItem {
     title: string;
@@ -40,6 +39,8 @@ export interface SidebarItem {
     onClick: () => void;
     active: boolean;
     badge?: string;
+    secondary?: boolean;
+    ariaLabel?: string;
 }
 
 export interface EditorSidebarProps {}
@@ -58,8 +59,11 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { effectiveTheme } = useTheme();
     const { databaseType } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
-    const { isActive: commentsActive } = useDiagramComments();
-    const conversationsAvailable = useConversationsAvailability();
+    const {
+        conversationsAvailable,
+        showLegacyCommentsEntry,
+        showStandardCommentsEntry,
+    } = useEditorDiscussionAvailability();
 
     const diagramItems: SidebarItem[] = useMemo(
         () => [
@@ -146,7 +150,21 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                           active: selectedSidebarSection === 'conversations',
                       },
                   ]
-                : commentsActive
+                : []),
+            ...(showLegacyCommentsEntry
+                ? [
+                      {
+                          title: t('editor_sidebar.legacy_comments'),
+                          icon: SlBubbles,
+                          onClick: () => {
+                              openAllDiscussions();
+                          },
+                          active: selectedSidebarSection === 'comments',
+                          secondary: true,
+                          ariaLabel: t('editor_sidebar.legacy_comments_aria'),
+                      },
+                  ]
+                : showStandardCommentsEntry
                   ? [
                         {
                             title: t('editor_sidebar.comments'),
@@ -166,10 +184,11 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             showSidePanel,
             databaseType,
             selectVisualsTab,
-            commentsActive,
             openAllDiscussions,
             conversationsAvailable,
             openConversationsPanel,
+            showLegacyCommentsEntry,
+            showStandardCommentsEntry,
         ]
     );
 
@@ -268,8 +287,15 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                         <button
                                             type="button"
                                             onClick={item.onClick}
-                                            aria-label={item.title}
-                                            title={item.title}
+                                            aria-label={
+                                                item.ariaLabel ?? item.title
+                                            }
+                                            title={item.ariaLabel ?? item.title}
+                                            className={
+                                                item.secondary
+                                                    ? 'text-muted-foreground'
+                                                    : undefined
+                                            }
                                         >
                                             <item.icon />
                                             <span>

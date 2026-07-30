@@ -45,6 +45,10 @@ vi.mock('@/hooks/use-conversations-availability', () => ({
         conversationsAvailabilityState.isAvailable,
 }));
 
+vi.mock('@/hooks/use-comments-availability', () => ({
+    useCommentsAvailability: () => commentsState.isActive,
+}));
+
 vi.mock('@/hooks/use-breakpoint', () => ({
     useBreakpoint: () => ({ isMd: true }),
 }));
@@ -187,12 +191,44 @@ describe('EditorSidebar conversations entry', () => {
         ).toHaveAttribute('data-active', 'true');
     });
 
-    it('hides the legacy comments sidebar item when conversations are available', () => {
+    it('shows legacy Comments access when both stacks are available', () => {
         renderSidebar();
 
-        expect(layoutState.openAllDiscussions).not.toHaveBeenCalled();
+        const legacyButton = screen.getByRole('button', {
+            name: 'Open legacy comments panel',
+        });
+        expect(legacyButton).toBeInTheDocument();
+        expect(legacyButton.textContent).toContain('Comments');
+        expect(legacyButton.textContent).toContain('legacy');
+    });
+
+    it('opens the legacy Comments panel through openAllDiscussions', async () => {
+        const user = userEvent.setup();
+        renderSidebar();
+
+        await user.click(
+            screen.getByRole('button', { name: 'Open legacy comments panel' })
+        );
+
+        expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
+        expect(layoutState.openConversationsPanel).not.toHaveBeenCalled();
+    });
+
+    it('marks the legacy comments control active when comments is selected', () => {
+        layoutState.selectedSidebarSection = 'comments';
+        renderSidebar();
+
         expect(
-            screen.getAllByRole('button', { name: 'Conversations' })
-        ).toHaveLength(1);
+            screen.getByRole('button', { name: 'Open legacy comments panel' })
+        ).toHaveAttribute('data-active', 'true');
+    });
+
+    it('does not show legacy Comments when comments are unavailable', () => {
+        commentsState.isActive = false;
+        renderSidebar();
+
+        expect(
+            screen.queryByRole('button', { name: 'Open legacy comments panel' })
+        ).not.toBeInTheDocument();
     });
 });
