@@ -11,6 +11,7 @@ export interface UseConversationMessagesResult {
     messages: ReadonlyArray<DiagramConversationMessage>;
     status: ConversationMessagesStatus;
     error: unknown;
+    hasMore: boolean;
     loadMessages: () => Promise<void>;
     loadMoreMessages: () => Promise<void>;
 }
@@ -37,6 +38,13 @@ export const useConversationMessages = (
     const error =
         conversationId === null ? null : value.getMessagesError(conversationId);
 
+    const nextCursor =
+        conversationId === null
+            ? null
+            : value.getMessagesNextCursor(conversationId);
+
+    const hasMore = nextCursor !== null;
+
     const loadMessages = useMemo(() => {
         if (conversationId === null) {
             return async (): Promise<void> => undefined;
@@ -57,6 +65,7 @@ export const useConversationMessages = (
         messages,
         status,
         error,
+        hasMore,
         loadMessages,
         loadMoreMessages,
     };

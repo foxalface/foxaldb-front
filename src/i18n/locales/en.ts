@@ -474,6 +474,40 @@ export const en = {
                     message_count: '{{count}} messages',
                     no_messages: 'No messages yet',
                     last_activity: 'Last activity',
+                    open_aria: 'Open conversation for {{target}}',
+                },
+                detail: {
+                    back: 'Back',
+                    back_aria: 'Back to conversation list',
+                    loading: 'Loading messages…',
+                    loading_more: 'Loading older messages…',
+                    load_older: 'Load older messages',
+                    empty: {
+                        title: 'No messages yet',
+                        description:
+                            'This conversation does not have any messages.',
+                    },
+                    errors: {
+                        load_title: 'Could not load messages',
+                        load_description:
+                            'Something went wrong while loading messages. Please try again.',
+                    },
+                    archive_banner: {
+                        title: 'Archived conversation',
+                        description:
+                            'This conversation is read-only. Messages cannot be added, edited, or deleted.',
+                    },
+                    metadata: {
+                        status_label: 'Status',
+                        status_active: 'Active',
+                        status_archived: 'Archived',
+                        message_count_label: 'Message count',
+                        message_count: '{{count}} messages',
+                    },
+                    message: {
+                        edited: '(edited)',
+                        edited_aria: 'Message was edited',
+                    },
                 },
                 targets: {
                     diagram: 'Diagram',

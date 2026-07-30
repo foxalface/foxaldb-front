@@ -16,6 +16,7 @@ export interface ConversationsListProps {
     isLoadingMore: boolean;
     hasMore: boolean;
     isMutationPending: (conversationId: number) => boolean;
+    onSelect?: (conversationId: number) => void;
     onArchive?: (conversationId: number) => void;
     onReopen?: (conversationId: number) => void;
     onLoadMore: () => void;
@@ -32,6 +33,7 @@ export const ConversationsList: React.FC<ConversationsListProps> = ({
     isLoadingMore,
     hasMore,
     isMutationPending,
+    onSelect,
     onArchive,
     onReopen,
     onLoadMore,
@@ -105,6 +107,7 @@ export const ConversationsList: React.FC<ConversationsListProps> = ({
                             isMutationPending={isMutationPending(
                                 conversation.id
                             )}
+                            onSelect={onSelect}
                             onArchive={onArchive}
                             onReopen={onReopen}
                         />

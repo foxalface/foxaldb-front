@@ -9,6 +9,7 @@ import {
     TabsTrigger,
 } from '@/components/tabs/tabs';
 import { ConversationsList } from './conversations-list';
+import { ConversationDetail } from './conversation-detail';
 import { useConversationsPanel } from './use-conversations-panel';
 
 export interface ConversationsSectionProps {}
@@ -22,6 +23,9 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
     const {
         selectedTab,
         setSelectedTab,
+        selectedConversation,
+        selectConversation,
+        clearSelectedConversation,
         activeConversations,
         archivedConversations,
         status,
@@ -123,85 +127,98 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
                 </div>
             ) : null}
 
-            <Tabs
-                value={selectedTab}
-                onValueChange={(value) => {
-                    setSelectedTab(value as 'active' | 'archives');
-                }}
-                className="flex min-h-0 flex-1 flex-col overflow-hidden"
-            >
-                <TabsList
-                    className="grid w-full shrink-0 grid-cols-2"
-                    aria-label={t(
-                        'side_panel.conversations_section.tabs_label'
-                    )}
+            {selectedConversation !== null ? (
+                <ConversationDetail
+                    conversation={selectedConversation}
+                    onBack={clearSelectedConversation}
+                />
+            ) : (
+                <Tabs
+                    value={selectedTab}
+                    onValueChange={(value) => {
+                        setSelectedTab(value as 'active' | 'archives');
+                    }}
+                    className="flex min-h-0 flex-1 flex-col overflow-hidden"
                 >
-                    <TabsTrigger value="active">
-                        {t('side_panel.conversations_section.tabs.active')}
-                    </TabsTrigger>
-                    <TabsTrigger value="archives">
-                        {t('side_panel.conversations_section.tabs.archives')}
-                    </TabsTrigger>
-                </TabsList>
+                    <TabsList
+                        className="grid w-full shrink-0 grid-cols-2"
+                        aria-label={t(
+                            'side_panel.conversations_section.tabs_label'
+                        )}
+                    >
+                        <TabsTrigger value="active">
+                            {t('side_panel.conversations_section.tabs.active')}
+                        </TabsTrigger>
+                        <TabsTrigger value="archives">
+                            {t(
+                                'side_panel.conversations_section.tabs.archives'
+                            )}
+                        </TabsTrigger>
+                    </TabsList>
 
-                <TabsContent
-                    value="active"
-                    className="mt-2 flex min-h-0 flex-1 flex-col overflow-hidden data-[state=inactive]:hidden"
-                >
-                    <h3 id={activeTabLabelId} className="sr-only">
-                        {t('side_panel.conversations_section.tabs.active')}
-                    </h3>
-                    <ConversationsList
-                        conversations={activeConversations}
-                        isArchived={false}
-                        isInitialLoading={isInitialLoading}
-                        isLoadError={hasActiveLoadError}
-                        isRetrying={isRetrying}
-                        isLoadingMore={isLoadingMoreActive}
-                        hasMore={activeSummariesNextCursor !== null}
-                        isMutationPending={isMutationPending}
-                        onArchive={(conversationId) => {
-                            void handleArchive(conversationId);
-                        }}
-                        onLoadMore={() => {
-                            void handleLoadMoreActive();
-                        }}
-                        onRetry={() => {
-                            void handleRetry();
-                        }}
-                        listLabelId={activeTabLabelId}
-                    />
-                </TabsContent>
+                    <TabsContent
+                        value="active"
+                        className="mt-2 flex min-h-0 flex-1 flex-col overflow-hidden data-[state=inactive]:hidden"
+                    >
+                        <h3 id={activeTabLabelId} className="sr-only">
+                            {t('side_panel.conversations_section.tabs.active')}
+                        </h3>
+                        <ConversationsList
+                            conversations={activeConversations}
+                            isArchived={false}
+                            isInitialLoading={isInitialLoading}
+                            isLoadError={hasActiveLoadError}
+                            isRetrying={isRetrying}
+                            isLoadingMore={isLoadingMoreActive}
+                            hasMore={activeSummariesNextCursor !== null}
+                            isMutationPending={isMutationPending}
+                            onSelect={selectConversation}
+                            onArchive={(conversationId) => {
+                                void handleArchive(conversationId);
+                            }}
+                            onLoadMore={() => {
+                                void handleLoadMoreActive();
+                            }}
+                            onRetry={() => {
+                                void handleRetry();
+                            }}
+                            listLabelId={activeTabLabelId}
+                        />
+                    </TabsContent>
 
-                <TabsContent
-                    value="archives"
-                    className="mt-2 flex min-h-0 flex-1 flex-col overflow-hidden data-[state=inactive]:hidden"
-                >
-                    <h3 id={archivesTabLabelId} className="sr-only">
-                        {t('side_panel.conversations_section.tabs.archives')}
-                    </h3>
-                    <ConversationsList
-                        conversations={archivedConversations}
-                        isArchived
-                        isInitialLoading={isArchivesInitialLoading}
-                        isLoadError={hasArchivedLoadError}
-                        isRetrying={isRetrying}
-                        isLoadingMore={isLoadingMoreArchived}
-                        hasMore={archivedSummariesNextCursor !== null}
-                        isMutationPending={isMutationPending}
-                        onReopen={(conversationId) => {
-                            void handleReopen(conversationId);
-                        }}
-                        onLoadMore={() => {
-                            void handleLoadMoreArchived();
-                        }}
-                        onRetry={() => {
-                            void handleRetry();
-                        }}
-                        listLabelId={archivesTabLabelId}
-                    />
-                </TabsContent>
-            </Tabs>
+                    <TabsContent
+                        value="archives"
+                        className="mt-2 flex min-h-0 flex-1 flex-col overflow-hidden data-[state=inactive]:hidden"
+                    >
+                        <h3 id={archivesTabLabelId} className="sr-only">
+                            {t(
+                                'side_panel.conversations_section.tabs.archives'
+                            )}
+                        </h3>
+                        <ConversationsList
+                            conversations={archivedConversations}
+                            isArchived
+                            isInitialLoading={isArchivesInitialLoading}
+                            isLoadError={hasArchivedLoadError}
+                            isRetrying={isRetrying}
+                            isLoadingMore={isLoadingMoreArchived}
+                            hasMore={archivedSummariesNextCursor !== null}
+                            isMutationPending={isMutationPending}
+                            onSelect={selectConversation}
+                            onReopen={(conversationId) => {
+                                void handleReopen(conversationId);
+                            }}
+                            onLoadMore={() => {
+                                void handleLoadMoreArchived();
+                            }}
+                            onRetry={() => {
+                                void handleRetry();
+                            }}
+                            listLabelId={archivesTabLabelId}
+                        />
+                    </TabsContent>
+                </Tabs>
+            )}
         </section>
     );
 };

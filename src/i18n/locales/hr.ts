@@ -480,7 +480,41 @@ export const hr: LanguageTranslation = {
                     message_count: '{{count}} poruka',
                     no_messages: 'Još nema poruka',
                     last_activity: 'Zadnja aktivnost',
+                    open_aria: 'Otvori razgovor za {{target}}',
                 },
+                detail: {
+                    back: 'Natrag',
+                    back_aria: 'Natrag na popis razgovora',
+                    loading: 'Učitavanje poruka…',
+                    loading_more: 'Učitavanje starijih poruka…',
+                    load_older: 'Učitaj starije poruke',
+                    empty: {
+                        title: 'Još nema poruka',
+                        description: 'Ovaj razgovor nema poruka.',
+                    },
+                    errors: {
+                        load_title: 'Nije moguće učitati poruke',
+                        load_description:
+                            'Došlo je do pogreške pri učitavanju poruka. Pokušajte ponovno.',
+                    },
+                    archive_banner: {
+                        title: 'Arhivirani razgovor',
+                        description:
+                            'Ovaj razgovor je samo za čitanje. Poruke se ne mogu dodavati, uređivati ni brisati.',
+                    },
+                    metadata: {
+                        status_label: 'Status',
+                        status_active: 'Aktivan',
+                        status_archived: 'Arhiviran',
+                        message_count_label: 'Broj poruka',
+                        message_count: '{{count}} poruka',
+                    },
+                    message: {
+                        edited: '(uređeno)',
+                        edited_aria: 'Poruka je uređena',
+                    },
+                },
+
                 targets: {
                     diagram: 'Dijagram',
                     table: 'Tablica',

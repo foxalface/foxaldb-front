@@ -486,7 +486,41 @@ export const bn: LanguageTranslation = {
                     message_count: '{{count}}টি বার্তা',
                     no_messages: 'এখনও কোনো বার্তা নেই',
                     last_activity: 'সর্বশেষ কার্যকলাপ',
+                    open_aria: '{{target}}-এর জন্য কথোপকথন খুলুন',
                 },
+                detail: {
+                    back: 'পিছনে',
+                    back_aria: 'কথোপকথনের তালিকায় ফিরে যান',
+                    loading: 'বার্তা লোড হচ্ছে…',
+                    loading_more: 'পুরনো বার্তা লোড হচ্ছে…',
+                    load_older: 'পুরনো বার্তা লোড করুন',
+                    empty: {
+                        title: 'এখনও কোনো বার্তা নেই',
+                        description: 'এই কথোপকথনে কোনো বার্তা নেই।',
+                    },
+                    errors: {
+                        load_title: 'বার্তা লোড করা যায়নি',
+                        load_description:
+                            'বার্তা লোড করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                    },
+                    archive_banner: {
+                        title: 'আর্কাইভ করা কথোপকথন',
+                        description:
+                            'এই কথোপকথন শুধুমাত্র পঠনযোগ্য। বার্তা যোগ, সম্পাদনা বা মুছে ফেলা যাবে না।',
+                    },
+                    metadata: {
+                        status_label: 'অবস্থা',
+                        status_active: 'সক্রিয়',
+                        status_archived: 'আর্কাইভ করা',
+                        message_count_label: 'বার্তার সংখ্যা',
+                        message_count: '{{count}}টি বার্তা',
+                    },
+                    message: {
+                        edited: '(সম্পাদিত)',
+                        edited_aria: 'বার্তা সম্পাদিত হয়েছে',
+                    },
+                },
+
                 targets: {
                     diagram: 'ডায়াগ্রাম',
                     table: 'টেবিল',

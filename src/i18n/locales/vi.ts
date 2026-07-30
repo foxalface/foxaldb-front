@@ -481,7 +481,42 @@ export const vi: LanguageTranslation = {
                     message_count: '{{count}} tin nhắn',
                     no_messages: 'Chưa có tin nhắn',
                     last_activity: 'Hoạt động gần nhất',
+                    open_aria: 'Mở cuộc trò chuyện cho {{target}}',
                 },
+                detail: {
+                    back: 'Quay lại',
+                    back_aria: 'Quay lại danh sách cuộc trò chuyện',
+                    loading: 'Đang tải tin nhắn…',
+                    loading_more: 'Đang tải tin nhắn cũ hơn…',
+                    load_older: 'Tải tin nhắn cũ hơn',
+                    empty: {
+                        title: 'Chưa có tin nhắn',
+                        description:
+                            'Cuộc trò chuyện này chưa có tin nhắn nào.',
+                    },
+                    errors: {
+                        load_title: 'Không thể tải tin nhắn',
+                        load_description:
+                            'Đã xảy ra lỗi khi tải tin nhắn. Vui lòng thử lại.',
+                    },
+                    archive_banner: {
+                        title: 'Cuộc trò chuyện đã lưu trữ',
+                        description:
+                            'Cuộc trò chuyện này chỉ đọc. Không thể thêm, chỉnh sửa hoặc xóa tin nhắn.',
+                    },
+                    metadata: {
+                        status_label: 'Trạng thái',
+                        status_active: 'Đang hoạt động',
+                        status_archived: 'Đã lưu trữ',
+                        message_count_label: 'Số lượng tin nhắn',
+                        message_count: '{{count}} tin nhắn',
+                    },
+                    message: {
+                        edited: '(đã chỉnh sửa)',
+                        edited_aria: 'Tin nhắn đã được chỉnh sửa',
+                    },
+                },
+
                 targets: {
                     diagram: 'Sơ đồ',
                     table: 'Bảng',

@@ -484,7 +484,41 @@ export const ne: LanguageTranslation = {
                     message_count: '{{count}} सन्देश',
                     no_messages: 'अहिलेसम्म कुनै सन्देश छैन',
                     last_activity: 'अन्तिम गतिविधि',
+                    open_aria: '{{target}} को लागि कुराकानी खोल्नुहोस्',
                 },
+                detail: {
+                    back: 'पछाडि',
+                    back_aria: 'कुराकानी सूचीमा फर्कनुहोस्',
+                    loading: 'सन्देशहरू लोड हुँदैछ…',
+                    loading_more: 'पुराना सन्देशहरू लोड हुँदैछ…',
+                    load_older: 'पुराना सन्देशहरू लोड गर्नुहोस्',
+                    empty: {
+                        title: 'अहिलेसम्म कुनै सन्देश छैन',
+                        description: 'यो कुराकानीमा कुनै सन्देश छैन।',
+                    },
+                    errors: {
+                        load_title: 'सन्देशहरू लोड गर्न सकिएन',
+                        load_description:
+                            'सन्देशहरू लोड गर्दा समस्या भयो। कृपया फेरि प्रयास गर्नुहोस्।',
+                    },
+                    archive_banner: {
+                        title: 'अभिलेखित कुराकानी',
+                        description:
+                            'यो कुराकानी केवल पढ्न मिल्ने हो। सन्देशहरू थप्न, सम्पादन गर्न वा मेटाउन सकिँदैन।',
+                    },
+                    metadata: {
+                        status_label: 'स्थिति',
+                        status_active: 'सक्रिय',
+                        status_archived: 'अभिलेखित',
+                        message_count_label: 'सन्देश संख्या',
+                        message_count: '{{count}} सन्देशहरू',
+                    },
+                    message: {
+                        edited: '(सम्पादित)',
+                        edited_aria: 'सन्देश सम्पादन गरिएको छ',
+                    },
+                },
+
                 targets: {
                     diagram: 'रेखाचित्र',
                     table: 'तालिका',

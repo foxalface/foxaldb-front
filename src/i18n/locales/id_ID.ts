@@ -483,7 +483,41 @@ export const id_ID: LanguageTranslation = {
                     message_count: '{{count}} pesan',
                     no_messages: 'Belum ada pesan',
                     last_activity: 'Aktivitas terakhir',
+                    open_aria: 'Buka percakapan untuk {{target}}',
                 },
+                detail: {
+                    back: 'Kembali',
+                    back_aria: 'Kembali ke daftar percakapan',
+                    loading: 'Memuat pesan…',
+                    loading_more: 'Memuat pesan yang lebih lama…',
+                    load_older: 'Muat pesan yang lebih lama',
+                    empty: {
+                        title: 'Belum ada pesan',
+                        description: 'Percakapan ini tidak memiliki pesan.',
+                    },
+                    errors: {
+                        load_title: 'Tidak dapat memuat pesan',
+                        load_description:
+                            'Terjadi kesalahan saat memuat pesan. Silakan coba lagi.',
+                    },
+                    archive_banner: {
+                        title: 'Percakapan diarsipkan',
+                        description:
+                            'Percakapan ini hanya baca. Pesan tidak dapat ditambahkan, diedit, atau dihapus.',
+                    },
+                    metadata: {
+                        status_label: 'Status',
+                        status_active: 'Aktif',
+                        status_archived: 'Diarsipkan',
+                        message_count_label: 'Jumlah pesan',
+                        message_count: '{{count}} pesan',
+                    },
+                    message: {
+                        edited: '(diedit)',
+                        edited_aria: 'Pesan telah diedit',
+                    },
+                },
+
                 targets: {
                     diagram: 'Diagram',
                     table: 'Tabel',

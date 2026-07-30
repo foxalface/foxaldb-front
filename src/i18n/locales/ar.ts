@@ -478,7 +478,41 @@ export const ar: LanguageTranslation = {
                     message_count: '{{count}} رسائل',
                     no_messages: 'لا توجد رسائل بعد',
                     last_activity: 'آخر نشاط',
+                    open_aria: 'فتح المحادثة لـ {{target}}',
                 },
+                detail: {
+                    back: 'رجوع',
+                    back_aria: 'العودة إلى قائمة المحادثات',
+                    loading: 'جارٍ تحميل الرسائل…',
+                    loading_more: 'جارٍ تحميل الرسائل الأقدم…',
+                    load_older: 'تحميل الرسائل الأقدم',
+                    empty: {
+                        title: 'لا توجد رسائل بعد',
+                        description: 'لا تحتوي هذه المحادثة على أي رسائل.',
+                    },
+                    errors: {
+                        load_title: 'تعذر تحميل الرسائل',
+                        load_description:
+                            'حدث خطأ أثناء تحميل الرسائل. يرجى المحاولة مرة أخرى.',
+                    },
+                    archive_banner: {
+                        title: 'محادثة مؤرشفة',
+                        description:
+                            'هذه المحادثة للقراءة فقط. لا يمكن إضافة الرسائل أو تعديلها أو حذفها.',
+                    },
+                    metadata: {
+                        status_label: 'الحالة',
+                        status_active: 'نشطة',
+                        status_archived: 'مؤرشفة',
+                        message_count_label: 'عدد الرسائل',
+                        message_count: '{{count}} رسائل',
+                    },
+                    message: {
+                        edited: '(معدّل)',
+                        edited_aria: 'تم تعديل الرسالة',
+                    },
+                },
+
                 targets: {
                     diagram: 'المخطط',
                     table: 'جدول',

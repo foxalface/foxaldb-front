@@ -481,7 +481,41 @@ export const ko_KR: LanguageTranslation = {
                     message_count: '메시지 {{count}}개',
                     no_messages: '아직 메시지가 없습니다',
                     last_activity: '마지막 활동',
+                    open_aria: '{{target}} 대화 열기',
                 },
+                detail: {
+                    back: '뒤로',
+                    back_aria: '대화 목록으로 돌아가기',
+                    loading: '메시지 불러오는 중…',
+                    loading_more: '이전 메시지 불러오는 중…',
+                    load_older: '이전 메시지 불러오기',
+                    empty: {
+                        title: '아직 메시지가 없습니다',
+                        description: '이 대화에는 메시지가 없습니다.',
+                    },
+                    errors: {
+                        load_title: '메시지를 불러올 수 없습니다',
+                        load_description:
+                            '메시지를 불러오는 중 문제가 발생했습니다. 다시 시도해 주세요.',
+                    },
+                    archive_banner: {
+                        title: '보관된 대화',
+                        description:
+                            '이 대화는 읽기 전용입니다. 메시지를 추가, 수정 또는 삭제할 수 없습니다.',
+                    },
+                    metadata: {
+                        status_label: '상태',
+                        status_active: '활성',
+                        status_archived: '보관됨',
+                        message_count_label: '메시지 수',
+                        message_count: '메시지 {{count}}개',
+                    },
+                    message: {
+                        edited: '(수정됨)',
+                        edited_aria: '메시지가 수정되었습니다',
+                    },
+                },
+
                 targets: {
                     diagram: '다이어그램',
                     table: '테이블',

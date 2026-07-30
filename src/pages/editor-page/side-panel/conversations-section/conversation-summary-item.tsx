@@ -14,13 +14,21 @@ export interface ConversationSummaryItemProps {
     conversation: DiagramConversation;
     isArchived: boolean;
     isMutationPending: boolean;
+    onSelect?: (conversationId: number) => void;
     onArchive?: (conversationId: number) => void;
     onReopen?: (conversationId: number) => void;
 }
 
 export const ConversationSummaryItem: React.FC<
     ConversationSummaryItemProps
-> = ({ conversation, isArchived, isMutationPending, onArchive, onReopen }) => {
+> = ({
+    conversation,
+    isArchived,
+    isMutationPending,
+    onSelect,
+    onArchive,
+    onReopen,
+}) => {
     const { t } = useTranslation();
     const { tables, relationships, diagramName } = useChartDB();
 
@@ -79,6 +87,10 @@ export const ConversationSummaryItem: React.FC<
         onArchive?.(conversation.id);
     };
 
+    const handleOpen = () => {
+        onSelect?.(conversation.id);
+    };
+
     return (
         <article
             className={`flex flex-col gap-2 rounded-md border px-3 py-2.5 ${
@@ -90,29 +102,41 @@ export const ConversationSummaryItem: React.FC<
             data-archived={isArchived ? 'true' : 'false'}
             data-testid={`conversation-summary-${conversation.id}`}
         >
-            <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                    <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                        {targetLabel.typeLabel}
-                    </p>
-                    <h3
-                        className={`truncate text-sm font-semibold ${
-                            targetLabel.isMissing
-                                ? 'italic text-muted-foreground'
-                                : 'text-foreground'
-                        }`}
-                    >
-                        {targetLabel.title}
-                    </h3>
+            <button
+                type="button"
+                className="flex w-full flex-col gap-2 text-left"
+                onClick={handleOpen}
+                aria-label={t(
+                    'side_panel.conversations_section.summary.open_aria',
+                    { target: targetLabel.title }
+                )}
+            >
+                <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                        <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                            {targetLabel.typeLabel}
+                        </p>
+                        <h3
+                            className={`truncate text-sm font-semibold ${
+                                targetLabel.isMissing
+                                    ? 'italic text-muted-foreground'
+                                    : 'text-foreground'
+                            }`}
+                        >
+                            {targetLabel.title}
+                        </h3>
+                    </div>
+                    <ConversationSummaryTimestamp
+                        timestamp={activityTimestamp}
+                    />
                 </div>
-                <ConversationSummaryTimestamp timestamp={activityTimestamp} />
-            </div>
 
-            {preview ? (
-                <p className="line-clamp-2 text-xs text-muted-foreground">
-                    {preview}
-                </p>
-            ) : null}
+                {preview ? (
+                    <p className="line-clamp-2 text-xs text-muted-foreground">
+                        {preview}
+                    </p>
+                ) : null}
+            </button>
 
             <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">

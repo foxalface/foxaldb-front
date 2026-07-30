@@ -487,7 +487,41 @@ export const es: LanguageTranslation = {
                     message_count: '{{count}} mensajes',
                     no_messages: 'Aún no hay mensajes',
                     last_activity: 'Última actividad',
+                    open_aria: 'Abrir conversación de {{target}}',
                 },
+                detail: {
+                    back: 'Volver',
+                    back_aria: 'Volver a la lista de conversaciones',
+                    loading: 'Cargando mensajes…',
+                    loading_more: 'Cargando mensajes más antiguos…',
+                    load_older: 'Cargar mensajes más antiguos',
+                    empty: {
+                        title: 'Aún no hay mensajes',
+                        description: 'Esta conversación no tiene mensajes.',
+                    },
+                    errors: {
+                        load_title: 'No se pudieron cargar los mensajes',
+                        load_description:
+                            'Algo salió mal al cargar los mensajes. Inténtalo de nuevo.',
+                    },
+                    archive_banner: {
+                        title: 'Conversación archivada',
+                        description:
+                            'Esta conversación es de solo lectura. No se pueden añadir, editar ni eliminar mensajes.',
+                    },
+                    metadata: {
+                        status_label: 'Estado',
+                        status_active: 'Activa',
+                        status_archived: 'Archivada',
+                        message_count_label: 'Número de mensajes',
+                        message_count: '{{count}} mensajes',
+                    },
+                    message: {
+                        edited: '(editado)',
+                        edited_aria: 'Mensaje editado',
+                    },
+                },
+
                 targets: {
                     diagram: 'Diagrama',
                     table: 'Tabla',

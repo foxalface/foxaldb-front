@@ -379,6 +379,13 @@ describe('ConversationsSection', () => {
             'conversations-list.tsx',
             'conversation-summary-item.tsx',
             'use-conversations-panel.ts',
+            'conversation-detail.tsx',
+            'conversation-detail-header.tsx',
+            'conversation-message-list.tsx',
+            'conversation-message-item.tsx',
+            'conversation-archive-banner.tsx',
+            'use-conversation-detail.ts',
+            'use-conversation-panel-navigation.ts',
         ];
 
         for (const file of files) {

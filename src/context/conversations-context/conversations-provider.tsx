@@ -29,6 +29,7 @@ import {
     selectArchivedConversations,
     selectMessagesErrorForConversation,
     selectMessagesForConversation,
+    selectMessagesNextCursorForConversation,
     selectMessagesStatusForConversation,
 } from '@/lib/conversations/conversation-selectors';
 import type {
@@ -695,6 +696,12 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
         [state]
     );
 
+    const getMessagesNextCursor = useCallback(
+        (conversationId: number) =>
+            selectMessagesNextCursorForConversation(state, conversationId),
+        [state]
+    );
+
     const value = useMemo<ConversationsContextValue>(
         () => ({
             activeConversations,
@@ -714,6 +721,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             getMessages,
             getMessagesStatus,
             getMessagesError,
+            getMessagesNextCursor,
             findOrCreateConversation,
             archiveConversation,
             reopenConversation,
@@ -740,6 +748,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             getMessages,
             getMessagesStatus,
             getMessagesError,
+            getMessagesNextCursor,
             findOrCreateConversation,
             archiveConversation,
             reopenConversation,

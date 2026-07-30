@@ -484,7 +484,41 @@ export const te: LanguageTranslation = {
                     message_count: '{{count}} సందేశాలు',
                     no_messages: 'ఇంకా సందేశాలు లేవు',
                     last_activity: 'చివరి కార్యకలాపం',
+                    open_aria: '{{target}} కోసం సంభాషణను తెరవండి',
                 },
+                detail: {
+                    back: 'వెనక్కి',
+                    back_aria: 'సంభాషణ జాబితాకు తిరిగి వెళ్లండి',
+                    loading: 'సందేశాలు లోడ్ అవుతున్నాయి…',
+                    loading_more: 'పాత సందేశాలు లోడ్ అవుతున్నాయి…',
+                    load_older: 'పాత సందేశాలను లోడ్ చేయండి',
+                    empty: {
+                        title: 'ఇంకా సందేశాలు లేవు',
+                        description: 'ఈ సంభాషణలో సందేశాలు లేవు.',
+                    },
+                    errors: {
+                        load_title: 'సందేశాలను లోడ్ చేయలేకపోయాం',
+                        load_description:
+                            'సందేశాలను లోడ్ చేస్తున్నప్పుడు సమస్య ఏర్పడింది. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                    },
+                    archive_banner: {
+                        title: 'ఆర్కైవ్ చేసిన సంభాషణ',
+                        description:
+                            'ఈ సంభాషణ చదవడానికి మాత్రమే. సందేశాలను జోడించలు, సవరించలు లేదా తొలగించలు.',
+                    },
+                    metadata: {
+                        status_label: 'స్థితి',
+                        status_active: 'సక్రియం',
+                        status_archived: 'ఆర్కైవ్ చేయబడింది',
+                        message_count_label: 'సందేశాల సంఖ్య',
+                        message_count: '{{count}} సందేశాలు',
+                    },
+                    message: {
+                        edited: '(సవరించబడింది)',
+                        edited_aria: 'సందేశం సవరించబడింది',
+                    },
+                },
+
                 targets: {
                     diagram: 'రేఖాచిత్రం',
                     table: 'పట్టిక',

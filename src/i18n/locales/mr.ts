@@ -487,7 +487,41 @@ export const mr: LanguageTranslation = {
                     message_count: '{{count}} संदेश',
                     no_messages: 'अद्याप संदेश नाहीत',
                     last_activity: 'शेवटची क्रियाकलाप',
+                    open_aria: '{{target}} साठी संभाषण उघडा',
                 },
+                detail: {
+                    back: 'मागे',
+                    back_aria: 'संभाषण यादीवर परत जा',
+                    loading: 'संदेश लोड होत आहेत…',
+                    loading_more: 'जुने संदेश लोड होत आहेत…',
+                    load_older: 'जुने संदेश लोड करा',
+                    empty: {
+                        title: 'अद्याप कोणतेही संदेश नाहीत',
+                        description: 'या संभाषणात कोणतेही संदेश नाहीत.',
+                    },
+                    errors: {
+                        load_title: 'संदेश लोड करता आले नाहीत',
+                        load_description:
+                            'संदेश लोड करताना समस्या आली. कृपया पुन्हा प्रयत्न करा.',
+                    },
+                    archive_banner: {
+                        title: 'संग्रहित संभाषण',
+                        description:
+                            'हे संभाषण केवळ वाचनीय आहे. संदेश जोडले, संपादित किंवा हटवले जाऊ शकत नाहीत.',
+                    },
+                    metadata: {
+                        status_label: 'स्थिती',
+                        status_active: 'सक्रिय',
+                        status_archived: 'संग्रहित',
+                        message_count_label: 'संदेशांची संख्या',
+                        message_count: '{{count}} संदेश',
+                    },
+                    message: {
+                        edited: '(संपादित)',
+                        edited_aria: 'संदेश संपादित केला गेला',
+                    },
+                },
+
                 targets: {
                     diagram: 'आकृती',
                     table: 'तक्ता',

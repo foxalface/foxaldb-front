@@ -488,7 +488,42 @@ export const de: LanguageTranslation = {
                     message_count: '{{count}} Nachrichten',
                     no_messages: 'Noch keine Nachrichten',
                     last_activity: 'Letzte Aktivität',
+                    open_aria: 'Unterhaltung für {{target}} öffnen',
                 },
+                detail: {
+                    back: 'Zurück',
+                    back_aria: 'Zurück zur Unterhaltungsliste',
+                    loading: 'Nachrichten werden geladen…',
+                    loading_more: 'Ältere Nachrichten werden geladen…',
+                    load_older: 'Ältere Nachrichten laden',
+                    empty: {
+                        title: 'Noch keine Nachrichten',
+                        description:
+                            'Diese Unterhaltung enthält keine Nachrichten.',
+                    },
+                    errors: {
+                        load_title: 'Nachrichten konnten nicht geladen werden',
+                        load_description:
+                            'Beim Laden der Nachrichten ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+                    },
+                    archive_banner: {
+                        title: 'Archivierte Unterhaltung',
+                        description:
+                            'Diese Unterhaltung ist schreibgeschützt. Nachrichten können nicht hinzugefügt, bearbeitet oder gelöscht werden.',
+                    },
+                    metadata: {
+                        status_label: 'Status',
+                        status_active: 'Aktiv',
+                        status_archived: 'Archiviert',
+                        message_count_label: 'Anzahl der Nachrichten',
+                        message_count: '{{count}} Nachrichten',
+                    },
+                    message: {
+                        edited: '(bearbeitet)',
+                        edited_aria: 'Nachricht wurde bearbeitet',
+                    },
+                },
+
                 targets: {
                     diagram: 'Diagramm',
                     table: 'Tabelle',

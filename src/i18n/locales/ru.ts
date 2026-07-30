@@ -481,7 +481,41 @@ export const ru: LanguageTranslation = {
                     message_count: '{{count}} сообщений',
                     no_messages: 'Сообщений пока нет',
                     last_activity: 'Последняя активность',
+                    open_aria: 'Открыть беседу для {{target}}',
                 },
+                detail: {
+                    back: 'Назад',
+                    back_aria: 'Вернуться к списку бесед',
+                    loading: 'Загрузка сообщений…',
+                    loading_more: 'Загрузка более старых сообщений…',
+                    load_older: 'Загрузить более старые сообщения',
+                    empty: {
+                        title: 'Сообщений пока нет',
+                        description: 'В этой беседе нет сообщений.',
+                    },
+                    errors: {
+                        load_title: 'Не удалось загрузить сообщения',
+                        load_description:
+                            'При загрузке сообщений произошла ошибка. Попробуйте снова.',
+                    },
+                    archive_banner: {
+                        title: 'Архивная беседа',
+                        description:
+                            'Эта беседа доступна только для чтения. Сообщения нельзя добавлять, редактировать или удалять.',
+                    },
+                    metadata: {
+                        status_label: 'Статус',
+                        status_active: 'Активная',
+                        status_archived: 'Архивная',
+                        message_count_label: 'Количество сообщений',
+                        message_count: '{{count}} сообщений',
+                    },
+                    message: {
+                        edited: '(изменено)',
+                        edited_aria: 'Сообщение было изменено',
+                    },
+                },
+
                 targets: {
                     diagram: 'Диаграмма',
                     table: 'Таблица',

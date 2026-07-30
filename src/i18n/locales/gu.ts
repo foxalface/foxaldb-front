@@ -481,7 +481,41 @@ export const gu: LanguageTranslation = {
                     message_count: '{{count}} સંદેશા',
                     no_messages: 'હજી સંદેશા નથી',
                     last_activity: 'છેલ્લી પ્રવૃત્તિ',
+                    open_aria: '{{target}} માટે વાતચીત ખોલો',
                 },
+                detail: {
+                    back: 'પાછા',
+                    back_aria: 'વાતચીતની સૂચિ પર પાછા જાઓ',
+                    loading: 'સંદેશાઓ લોડ થઈ રહ્યા છે…',
+                    loading_more: 'જૂના સંદેશાઓ લોડ થઈ રહ્યા છે…',
+                    load_older: 'જૂના સંદેશાઓ લોડ કરો',
+                    empty: {
+                        title: 'હજી સુધી કોઈ સંદેશ નથી',
+                        description: 'આ વાતચીતમાં કોઈ સંદેશ નથી.',
+                    },
+                    errors: {
+                        load_title: 'સંદેશાઓ લોડ કરી શકાયા નહીં',
+                        load_description:
+                            'સંદેશાઓ લોડ કરતી વખતે સમસ્યા આવી. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                    },
+                    archive_banner: {
+                        title: 'આર્કાઇવ કરેલી વાતચીત',
+                        description:
+                            'આ વાતચીત ફક્ત વાંચવા માટે છે. સંદેશાઓ ઉમેરી, સંપાદિત અથવા કાઢી શકાતા નથી.',
+                    },
+                    metadata: {
+                        status_label: 'સ્થિતિ',
+                        status_active: 'સક્રિય',
+                        status_archived: 'આર્કાઇવ કરેલી',
+                        message_count_label: 'સંદેશોની સંખ્યા',
+                        message_count: '{{count}} સંદેશાઓ',
+                    },
+                    message: {
+                        edited: '(સંપાદિત)',
+                        edited_aria: 'સંદેશ સંપાદિત કરવામાં આવ્યો',
+                    },
+                },
+
                 targets: {
                     diagram: 'આકૃતિ',
                     table: 'કોષ્ટક',

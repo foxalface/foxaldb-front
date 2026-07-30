@@ -1,12 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDiagramConversations } from '@/hooks/use-diagram-conversations';
 import { useConversationMutations } from '@/hooks/use-conversation-mutations';
+import type { DiagramConversation } from '@/lib/conversations/conversation-types';
+import { useConversationPanelNavigation } from './use-conversation-panel-navigation';
 
 export type ConversationsPanelTab = 'active' | 'archives';
 
 export interface UseConversationsPanelResult {
     selectedTab: ConversationsPanelTab;
     setSelectedTab: (tab: ConversationsPanelTab) => void;
+    selectedConversationId: number | null;
+    selectedConversation: DiagramConversation | null;
+    selectConversation: (conversationId: number) => void;
+    clearSelectedConversation: () => void;
     activeConversations: ReturnType<
         typeof useDiagramConversations
     >['activeConversations'];
@@ -52,6 +58,11 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
     } = useDiagramConversations();
     const { archiveConversation, reopenConversation } =
         useConversationMutations();
+    const {
+        selectedConversationId,
+        selectConversation,
+        clearSelectedConversation,
+    } = useConversationPanelNavigation();
 
     const [selectedTab, setSelectedTab] =
         useState<ConversationsPanelTab>('active');
@@ -86,6 +97,41 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
 
     const isInitialLoading =
         status === 'loading' && activeConversations.length === 0;
+
+    const selectedConversation = useMemo((): DiagramConversation | null => {
+        if (selectedConversationId === null) {
+            return null;
+        }
+
+        const fromActive = activeConversations.find(
+            (conversation) => conversation.id === selectedConversationId
+        );
+        if (fromActive !== undefined) {
+            return fromActive;
+        }
+
+        const fromArchived = archivedConversations.find(
+            (conversation) => conversation.id === selectedConversationId
+        );
+        return fromArchived ?? null;
+    }, [activeConversations, archivedConversations, selectedConversationId]);
+
+    useEffect(() => {
+        if (
+            selectedConversationId !== null &&
+            selectedConversation === null &&
+            !isInitialLoading &&
+            !isArchivesInitialLoading
+        ) {
+            clearSelectedConversation();
+        }
+    }, [
+        clearSelectedConversation,
+        isArchivesInitialLoading,
+        isInitialLoading,
+        selectedConversation,
+        selectedConversationId,
+    ]);
 
     const clearMutationError = useCallback(() => {
         setMutationError(null);
@@ -204,6 +250,10 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
     return {
         selectedTab,
         setSelectedTab,
+        selectedConversationId,
+        selectedConversation,
+        selectConversation,
+        clearSelectedConversation,
         activeConversations,
         archivedConversations,
         status,

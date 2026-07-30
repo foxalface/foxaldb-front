@@ -484,7 +484,41 @@ export const uk: LanguageTranslation = {
                     message_count: '{{count}} повідомлень',
                     no_messages: 'Ще немає повідомлень',
                     last_activity: 'Остання активність',
+                    open_aria: 'Відкрити бесіду для {{target}}',
                 },
+                detail: {
+                    back: 'Назад',
+                    back_aria: 'Повернутися до списку бесід',
+                    loading: 'Завантаження повідомлень…',
+                    loading_more: 'Завантаження старіших повідомлень…',
+                    load_older: 'Завантажити старіші повідомлення',
+                    empty: {
+                        title: 'Повідомлень ще немає',
+                        description: 'У цій бесіді немає повідомлень.',
+                    },
+                    errors: {
+                        load_title: 'Не вдалося завантажити повідомлення',
+                        load_description:
+                            'Під час завантаження повідомлень сталася помилка. Спробуйте ще раз.',
+                    },
+                    archive_banner: {
+                        title: 'Архівна бесіда',
+                        description:
+                            'Ця бесіда доступна лише для читання. Повідомлення не можна додавати, редагувати або видаляти.',
+                    },
+                    metadata: {
+                        status_label: 'Статус',
+                        status_active: 'Активна',
+                        status_archived: 'Архівна',
+                        message_count_label: 'Кількість повідомлень',
+                        message_count: '{{count}} повідомлень',
+                    },
+                    message: {
+                        edited: '(змінено)',
+                        edited_aria: 'Повідомлення було змінено',
+                    },
+                },
+
                 targets: {
                     diagram: 'Діаграма',
                     table: 'Таблиця',

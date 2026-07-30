@@ -482,7 +482,41 @@ export const tr: LanguageTranslation = {
                     message_count: '{{count}} mesaj',
                     no_messages: 'Henüz mesaj yok',
                     last_activity: 'Son etkinlik',
+                    open_aria: '{{target}} için sohbeti aç',
                 },
+                detail: {
+                    back: 'Geri',
+                    back_aria: 'Sohbet listesine dön',
+                    loading: 'Mesajlar yükleniyor…',
+                    loading_more: 'Daha eski mesajlar yükleniyor…',
+                    load_older: 'Daha eski mesajları yükle',
+                    empty: {
+                        title: 'Henüz mesaj yok',
+                        description: 'Bu sohbette mesaj bulunmuyor.',
+                    },
+                    errors: {
+                        load_title: 'Mesajlar yüklenemedi',
+                        load_description:
+                            'Mesajlar yüklenirken bir sorun oluştu. Lütfen tekrar deneyin.',
+                    },
+                    archive_banner: {
+                        title: 'Arşivlenmiş sohbet',
+                        description:
+                            'Bu sohbet salt okunurdur. Mesaj eklenemez, düzenlenemez veya silinemez.',
+                    },
+                    metadata: {
+                        status_label: 'Durum',
+                        status_active: 'Aktif',
+                        status_archived: 'Arşivlendi',
+                        message_count_label: 'Mesaj sayısı',
+                        message_count: '{{count}} mesaj',
+                    },
+                    message: {
+                        edited: '(düzenlendi)',
+                        edited_aria: 'Mesaj düzenlendi',
+                    },
+                },
+
                 targets: {
                     diagram: 'Diyagram',
                     table: 'Tablo',

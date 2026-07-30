@@ -466,7 +466,39 @@ export const zh_TW: LanguageTranslation = {
                     message_count: '{{count}} 則訊息',
                     no_messages: '尚無訊息',
                     last_activity: '最近活動',
+                    open_aria: '開啟 {{target}} 的對話',
                 },
+                detail: {
+                    back: '返回',
+                    back_aria: '返回對話列表',
+                    loading: '正在載入訊息…',
+                    loading_more: '正在載入較早的訊息…',
+                    load_older: '載入較早的訊息',
+                    empty: {
+                        title: '尚無訊息',
+                        description: '此對話沒有任何訊息。',
+                    },
+                    errors: {
+                        load_title: '無法載入訊息',
+                        load_description: '載入訊息時發生錯誤，請再試一次。',
+                    },
+                    archive_banner: {
+                        title: '已封存的對話',
+                        description: '此對話為唯讀。無法新增、編輯或刪除訊息。',
+                    },
+                    metadata: {
+                        status_label: '狀態',
+                        status_active: '使用中',
+                        status_archived: '已封存',
+                        message_count_label: '訊息數量',
+                        message_count: '{{count}} 則訊息',
+                    },
+                    message: {
+                        edited: '（已編輯）',
+                        edited_aria: '訊息已編輯',
+                    },
+                },
+
                 targets: {
                     diagram: '圖表',
                     table: '資料表',

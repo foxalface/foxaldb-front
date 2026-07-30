@@ -485,7 +485,41 @@ export const ja: LanguageTranslation = {
                     message_count: '{{count}} 件のメッセージ',
                     no_messages: 'メッセージはまだありません',
                     last_activity: '最終アクティビティ',
+                    open_aria: '{{target}} の会話を開く',
                 },
+                detail: {
+                    back: '戻る',
+                    back_aria: '会話一覧に戻る',
+                    loading: 'メッセージを読み込み中…',
+                    loading_more: '古いメッセージを読み込み中…',
+                    load_older: '古いメッセージを読み込む',
+                    empty: {
+                        title: 'まだメッセージがありません',
+                        description: 'この会話にはメッセージがありません。',
+                    },
+                    errors: {
+                        load_title: 'メッセージを読み込めませんでした',
+                        load_description:
+                            'メッセージの読み込み中に問題が発生しました。もう一度お試しください。',
+                    },
+                    archive_banner: {
+                        title: 'アーカイブされた会話',
+                        description:
+                            'この会話は読み取り専用です。メッセージの追加、編集、削除はできません。',
+                    },
+                    metadata: {
+                        status_label: 'ステータス',
+                        status_active: 'アクティブ',
+                        status_archived: 'アーカイブ済み',
+                        message_count_label: 'メッセージ数',
+                        message_count: '{{count}} 件のメッセージ',
+                    },
+                    message: {
+                        edited: '（編集済み）',
+                        edited_aria: 'メッセージは編集されました',
+                    },
+                },
+
                 targets: {
                     diagram: 'ダイアグラム',
                     table: 'テーブル',

@@ -466,7 +466,39 @@ export const zh_CN: LanguageTranslation = {
                     message_count: '{{count}} 条消息',
                     no_messages: '暂无消息',
                     last_activity: '最近活动',
+                    open_aria: '打开 {{target}} 的对话',
                 },
+                detail: {
+                    back: '返回',
+                    back_aria: '返回对话列表',
+                    loading: '正在加载消息…',
+                    loading_more: '正在加载更早的消息…',
+                    load_older: '加载更早的消息',
+                    empty: {
+                        title: '暂无消息',
+                        description: '此对话没有任何消息。',
+                    },
+                    errors: {
+                        load_title: '无法加载消息',
+                        load_description: '加载消息时出错，请重试。',
+                    },
+                    archive_banner: {
+                        title: '已归档的对话',
+                        description: '此对话为只读。无法添加、编辑或删除消息。',
+                    },
+                    metadata: {
+                        status_label: '状态',
+                        status_active: '活跃',
+                        status_archived: '已归档',
+                        message_count_label: '消息数量',
+                        message_count: '{{count}} 条消息',
+                    },
+                    message: {
+                        edited: '（已编辑）',
+                        edited_aria: '消息已编辑',
+                    },
+                },
+
                 targets: {
                     diagram: '图表',
                     table: '表',

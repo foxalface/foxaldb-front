@@ -484,7 +484,41 @@ export const hi: LanguageTranslation = {
                     message_count: '{{count}} संदेश',
                     no_messages: 'अभी कोई संदेश नहीं',
                     last_activity: 'अंतिम गतिविधि',
+                    open_aria: '{{target}} के लिए बातचीत खोलें',
                 },
+                detail: {
+                    back: 'वापस',
+                    back_aria: 'बातचीत सूची पर वापस जाएँ',
+                    loading: 'संदेश लोड हो रहे हैं…',
+                    loading_more: 'पुराने संदेश लोड हो रहे हैं…',
+                    load_older: 'पुराने संदेश लोड करें',
+                    empty: {
+                        title: 'अभी कोई संदेश नहीं',
+                        description: 'इस बातचीत में कोई संदेश नहीं है।',
+                    },
+                    errors: {
+                        load_title: 'संदेश लोड नहीं हो सके',
+                        load_description:
+                            'संदेश लोड करते समय समस्या हुई। कृपया पुनः प्रयास करें।',
+                    },
+                    archive_banner: {
+                        title: 'संग्रहीत बातचीत',
+                        description:
+                            'यह बातचीत केवल पढ़ने योग्य है। संदेश जोड़े, संपादित या हटाए नहीं जा सकते।',
+                    },
+                    metadata: {
+                        status_label: 'स्थिति',
+                        status_active: 'सक्रिय',
+                        status_archived: 'संग्रहीत',
+                        message_count_label: 'संदेशों की संख्या',
+                        message_count: '{{count}} संदेश',
+                    },
+                    message: {
+                        edited: '(संपादित)',
+                        edited_aria: 'संदेश संपादित किया गया',
+                    },
+                },
+
                 targets: {
                     diagram: 'आरेख',
                     table: 'तालिका',

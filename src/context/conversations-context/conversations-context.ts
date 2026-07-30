@@ -35,6 +35,7 @@ export interface ConversationsContextValue {
     ) => ReadonlyArray<DiagramConversationMessage>;
     getMessagesStatus: (conversationId: number) => ConversationMessagesStatus;
     getMessagesError: (conversationId: number) => unknown;
+    getMessagesNextCursor: (conversationId: number) => string | null;
     findOrCreateConversation: (
         input: FindOrCreateDiagramConversationInput
     ) => Promise<DiagramConversation>;
@@ -108,6 +109,7 @@ export const INACTIVE_CONVERSATIONS_CONTEXT: ConversationsContextValue = {
     getMessages: () => EMPTY_CONVERSATION_MESSAGES,
     getMessagesStatus: () => 'idle',
     getMessagesError: () => null,
+    getMessagesNextCursor: () => null,
     findOrCreateConversation: inactiveFindOrCreate,
     archiveConversation: inactiveArchive,
     reopenConversation: inactiveReopen,

@@ -484,7 +484,42 @@ export const fr: LanguageTranslation = {
                     message_count: '{{count}} messages',
                     no_messages: 'Aucun message pour l’instant',
                     last_activity: 'Dernière activité',
+                    open_aria: 'Ouvrir la conversation pour {{target}}',
                 },
+                detail: {
+                    back: 'Retour',
+                    back_aria: 'Retour à la liste des conversations',
+                    loading: 'Chargement des messages…',
+                    loading_more: 'Chargement des messages plus anciens…',
+                    load_older: 'Charger les messages plus anciens',
+                    empty: {
+                        title: 'Aucun message pour le moment',
+                        description:
+                            'Cette conversation ne contient aucun message.',
+                    },
+                    errors: {
+                        load_title: 'Impossible de charger les messages',
+                        load_description:
+                            'Une erreur s’est produite lors du chargement des messages. Veuillez réessayer.',
+                    },
+                    archive_banner: {
+                        title: 'Conversation archivée',
+                        description:
+                            'Cette conversation est en lecture seule. Les messages ne peuvent pas être ajoutés, modifiés ou supprimés.',
+                    },
+                    metadata: {
+                        status_label: 'Statut',
+                        status_active: 'Active',
+                        status_archived: 'Archivée',
+                        message_count_label: 'Nombre de messages',
+                        message_count: '{{count}} messages',
+                    },
+                    message: {
+                        edited: '(modifié)',
+                        edited_aria: 'Message modifié',
+                    },
+                },
+
                 targets: {
                     diagram: 'Diagramme',
                     table: 'Table',
