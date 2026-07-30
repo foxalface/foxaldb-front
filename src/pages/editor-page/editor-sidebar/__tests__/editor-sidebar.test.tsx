@@ -7,18 +7,23 @@ import type { SidebarSection } from '@/context/layout-context/layout-context';
 import { en } from '@/i18n/locales/en';
 import { SidebarProvider } from '@/components/sidebar/sidebar';
 
-const { layoutState, commentsState } = vi.hoisted(() => ({
-    layoutState: {
-        selectedSidebarSection: 'tables' as SidebarSection,
-        selectSidebarSection: vi.fn(),
-        showSidePanel: vi.fn(),
-        selectVisualsTab: vi.fn(),
-        openAllDiscussions: vi.fn(),
-    },
-    commentsState: {
-        isActive: true,
-    },
-}));
+const { layoutState, commentsState, conversationsAvailabilityState } =
+    vi.hoisted(() => ({
+        layoutState: {
+            selectedSidebarSection: 'tables' as SidebarSection,
+            selectSidebarSection: vi.fn(),
+            showSidePanel: vi.fn(),
+            selectVisualsTab: vi.fn(),
+            openAllDiscussions: vi.fn(),
+            openConversationsPanel: vi.fn(),
+        },
+        commentsState: {
+            isActive: true,
+        },
+        conversationsAvailabilityState: {
+            isAvailable: false,
+        },
+    }));
 
 vi.mock('@/hooks/use-layout', () => ({
     useLayout: () => layoutState,
@@ -33,6 +38,11 @@ vi.mock('@/hooks/use-diagram-comments', () => ({
         diagramId: null,
         reload: vi.fn(),
     }),
+}));
+
+vi.mock('@/hooks/use-conversations-availability', () => ({
+    useConversationsAvailability: () =>
+        conversationsAvailabilityState.isAvailable,
 }));
 
 vi.mock('@/hooks/use-breakpoint', () => ({
@@ -90,7 +100,9 @@ describe('EditorSidebar comments entry', () => {
         layoutState.showSidePanel = vi.fn();
         layoutState.selectVisualsTab = vi.fn();
         layoutState.openAllDiscussions = vi.fn();
+        layoutState.openConversationsPanel = vi.fn();
         commentsState.isActive = true;
+        conversationsAvailabilityState.isAvailable = false;
     });
 
     it('shows the Conversations item when comments are active', () => {
@@ -137,5 +149,50 @@ describe('EditorSidebar comments entry', () => {
         const button = screen.getByRole('button', { name: 'Conversations' });
         expect(button.parentElement?.querySelector('.rounded-full')).toBeNull();
         expect(button.textContent).not.toMatch(/\d/);
+    });
+});
+
+describe('EditorSidebar conversations entry', () => {
+    beforeEach(() => {
+        layoutState.selectedSidebarSection = 'tables';
+        layoutState.openConversationsPanel = vi.fn();
+        commentsState.isActive = true;
+        conversationsAvailabilityState.isAvailable = true;
+    });
+
+    it('shows the new Conversations item when conversations are available', () => {
+        renderSidebar();
+
+        expect(
+            screen.getByRole('button', { name: 'Conversations' })
+        ).toBeInTheDocument();
+    });
+
+    it('opens the conversations panel instead of legacy comments', async () => {
+        const user = userEvent.setup();
+        renderSidebar();
+
+        await user.click(screen.getByRole('button', { name: 'Conversations' }));
+
+        expect(layoutState.openConversationsPanel).toHaveBeenCalledTimes(1);
+        expect(layoutState.openAllDiscussions).not.toHaveBeenCalled();
+    });
+
+    it('marks the conversations control active when conversations is selected', () => {
+        layoutState.selectedSidebarSection = 'conversations';
+        renderSidebar();
+
+        expect(
+            screen.getByRole('button', { name: 'Conversations' })
+        ).toHaveAttribute('data-active', 'true');
+    });
+
+    it('hides the legacy comments sidebar item when conversations are available', () => {
+        renderSidebar();
+
+        expect(layoutState.openAllDiscussions).not.toHaveBeenCalled();
+        expect(
+            screen.getAllByRole('button', { name: 'Conversations' })
+        ).toHaveLength(1);
     });
 });

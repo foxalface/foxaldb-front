@@ -10,6 +10,7 @@ export const gu: LanguageTranslation = {
             dependencies: 'નિર્ભરતાઓ',
             custom_types: 'કસ્ટમ ટાઇપ',
             comments: 'વાતચીત',
+            conversations: 'વાતચીત',
             visuals: 'Visuals',
         },
         menu: {
@@ -430,6 +431,72 @@ export const gu: LanguageTranslation = {
                         delete_failed:
                             'આ સંદેશ કાઢી નાખી શકાયો નથી. કૃપા કરીને ફરી પ્રયાસ કરો.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'વાતચીત',
+                tabs_label: 'વાતચીત',
+                tabs: {
+                    active: 'સક્રિય',
+                    archives: 'આર્કાઇવ',
+                },
+                loading: 'વાતચીત લોડ થઈ રહી છે…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'ફરી પ્રયાસ કરો',
+                dismiss: 'Dismiss',
+                read_only: 'માત્ર વાંચવા યોગ્ય',
+                deleted_user: 'કાઢી નાખેલો વપરાશકર્તા',
+                inactive: {
+                    title: 'વાતચીત unavailable',
+                    description:
+                        'વાતચીત are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active વાતચીત',
+                    active_description:
+                        'Active વાતચીત for this diagram will appear here.',
+                    archives_title: 'No archived વાતચીત',
+                    archives_description:
+                        'Archived વાતચીત will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load વાતચીત',
+                    load_description:
+                        'Something went wrong while loading વાતચીત. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} સંદેશા',
+                    no_messages: 'હજી સંદેશા નથી',
+                    last_activity: 'છેલ્લી પ્રવૃત્તિ',
+                },
+                targets: {
+                    diagram: 'આકૃતિ',
+                    table: 'કોષ્ટક',
+                    field: 'ફીલ્ડ',
+                    relationship: 'સંબંધ',
+                    unknown: 'વાતચીત',
+                },
+                target_labels: {
+                    diagram: 'આકૃતિ',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'કાઢી નાખેલું કોષ્ટક',
+                    missing_field: 'કાઢી નાખેલું ફીલ્ડ',
+                    missing_relationship: 'કાઢી નાખેલો સંબંધ',
+                    unknown: 'વાતચીત',
                 },
             },
         },

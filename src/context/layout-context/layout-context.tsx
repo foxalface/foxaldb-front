@@ -9,7 +9,8 @@ export type SidebarSection =
     | 'refs'
     | 'customTypes'
     | 'visuals'
-    | 'comments';
+    | 'comments'
+    | 'conversations';
 
 export type VisualsTab = 'areas' | 'notes';
 
@@ -58,6 +59,7 @@ export interface LayoutContext {
     openAllDiscussions: () => void;
     openDiagramDiscussion: () => void;
     openTargetDiscussion: (target: DiagramCommentTarget) => void;
+    openConversationsPanel: () => void;
 }
 
 export const layoutContext = createContext<LayoutContext>({
@@ -103,4 +105,5 @@ export const layoutContext = createContext<LayoutContext>({
     openAllDiscussions: emptyFn,
     openDiagramDiscussion: emptyFn,
     openTargetDiscussion: emptyFn,
+    openConversationsPanel: emptyFn,
 });

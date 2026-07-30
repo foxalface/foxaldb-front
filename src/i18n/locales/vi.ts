@@ -10,6 +10,7 @@ export const vi: LanguageTranslation = {
             dependencies: 'Phụ thuộc',
             custom_types: 'Kiểu tùy chỉnh',
             comments: 'Cuộc trò chuyện',
+            conversations: 'Cuộc trò chuyện',
             visuals: 'Hình ảnh',
         },
         menu: {
@@ -430,6 +431,72 @@ export const vi: LanguageTranslation = {
                         delete_failed:
                             'Không thể xóa tin nhắn này. Vui lòng thử lại.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Cuộc trò chuyện',
+                tabs_label: 'Cuộc trò chuyện',
+                tabs: {
+                    active: 'Đang hoạt động',
+                    archives: 'Lưu trữ',
+                },
+                loading: 'Đang tải cuộc trò chuyện…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'Thử lại',
+                dismiss: 'Dismiss',
+                read_only: 'Chỉ đọc',
+                deleted_user: 'Người dùng đã xóa',
+                inactive: {
+                    title: 'Cuộc trò chuyện unavailable',
+                    description:
+                        'Cuộc trò chuyện are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active cuộc trò chuyện',
+                    active_description:
+                        'Active cuộc trò chuyện for this diagram will appear here.',
+                    archives_title: 'No archived cuộc trò chuyện',
+                    archives_description:
+                        'Archived cuộc trò chuyện will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load cuộc trò chuyện',
+                    load_description:
+                        'Something went wrong while loading cuộc trò chuyện. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} tin nhắn',
+                    no_messages: 'Chưa có tin nhắn',
+                    last_activity: 'Hoạt động gần nhất',
+                },
+                targets: {
+                    diagram: 'Sơ đồ',
+                    table: 'Bảng',
+                    field: 'Trường',
+                    relationship: 'Quan hệ',
+                    unknown: 'Cuộc trò chuyện',
+                },
+                target_labels: {
+                    diagram: 'Sơ đồ',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Bảng đã xóa',
+                    missing_field: 'Trường đã xóa',
+                    missing_relationship: 'Quan hệ đã xóa',
+                    unknown: 'Cuộc trò chuyện',
                 },
             },
         },

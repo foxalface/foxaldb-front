@@ -10,6 +10,7 @@ export const hi: LanguageTranslation = {
             dependencies: 'निर्भरताएं',
             custom_types: 'कस्टम टाइप',
             comments: 'वार्तालाप',
+            conversations: 'वार्तालाप',
             visuals: 'Visuals',
         },
         menu: {
@@ -433,6 +434,72 @@ export const hi: LanguageTranslation = {
                         delete_failed:
                             'यह संदेश नहीं हटाया जा सका। कृपया फिर से प्रयास करें।',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'वार्तालाप',
+                tabs_label: 'वार्तालाप',
+                tabs: {
+                    active: 'सक्रिय',
+                    archives: 'संग्रह',
+                },
+                loading: 'वार्तालाप लोड हो रहे हैं…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'पुनः प्रयास करें',
+                dismiss: 'Dismiss',
+                read_only: 'केवल पढ़ने योग्य',
+                deleted_user: 'हटाया गया उपयोगकर्ता',
+                inactive: {
+                    title: 'वार्तालाप unavailable',
+                    description:
+                        'वार्तालाप are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active वार्तालाप',
+                    active_description:
+                        'Active वार्तालाप for this diagram will appear here.',
+                    archives_title: 'No archived वार्तालाप',
+                    archives_description:
+                        'Archived वार्तालाप will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load वार्तालाप',
+                    load_description:
+                        'Something went wrong while loading वार्तालाप. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} संदेश',
+                    no_messages: 'अभी कोई संदेश नहीं',
+                    last_activity: 'अंतिम गतिविधि',
+                },
+                targets: {
+                    diagram: 'आरेख',
+                    table: 'तालिका',
+                    field: 'फ़ील्ड',
+                    relationship: 'संबंध',
+                    unknown: 'वार्तालाप',
+                },
+                target_labels: {
+                    diagram: 'आरेख',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'हटाई गई तालिका',
+                    missing_field: 'हटाया गया फ़ील्ड',
+                    missing_relationship: 'हटाया गया संबंध',
+                    unknown: 'वार्तालाप',
                 },
             },
         },

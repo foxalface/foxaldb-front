@@ -10,6 +10,7 @@ export const ru: LanguageTranslation = {
             dependencies: 'Зависимости',
             custom_types: 'Пользовательские типы',
             comments: 'Беседы',
+            conversations: 'Беседы',
             visuals: 'Визуальные элементы',
         },
         menu: {
@@ -430,6 +431,72 @@ export const ru: LanguageTranslation = {
                         delete_failed:
                             'Не удалось удалить это сообщение. Попробуйте ещё раз.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Беседы',
+                tabs_label: 'Беседы',
+                tabs: {
+                    active: 'Активные',
+                    archives: 'Архив',
+                },
+                loading: 'Загрузка бесед…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'Повторить',
+                dismiss: 'Dismiss',
+                read_only: 'Только чтение',
+                deleted_user: 'Удалённый пользователь',
+                inactive: {
+                    title: 'Беседы unavailable',
+                    description:
+                        'Беседы are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active беседы',
+                    active_description:
+                        'Active беседы for this diagram will appear here.',
+                    archives_title: 'No archived беседы',
+                    archives_description:
+                        'Archived беседы will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load беседы',
+                    load_description:
+                        'Something went wrong while loading беседы. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} сообщений',
+                    no_messages: 'Сообщений пока нет',
+                    last_activity: 'Последняя активность',
+                },
+                targets: {
+                    diagram: 'Диаграмма',
+                    table: 'Таблица',
+                    field: 'Поле',
+                    relationship: 'Связь',
+                    unknown: 'Беседа',
+                },
+                target_labels: {
+                    diagram: 'Диаграмма',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Удалённая таблица',
+                    missing_field: 'Удалённое поле',
+                    missing_relationship: 'Удалённая связь',
+                    unknown: 'Беседа',
                 },
             },
         },

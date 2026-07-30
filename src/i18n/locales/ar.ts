@@ -10,6 +10,7 @@ export const ar: LanguageTranslation = {
             dependencies: 'التبعيات',
             custom_types: 'الأنواع المخصصة',
             comments: 'المحادثات',
+            conversations: 'المحادثات',
             visuals: 'مرئيات',
         },
         menu: {
@@ -427,6 +428,72 @@ export const ar: LanguageTranslation = {
                         delete_failed:
                             'تعذر حذف هذه الرسالة. يُرجى المحاولة مرة أخرى.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'المحادثات',
+                tabs_label: 'المحادثات',
+                tabs: {
+                    active: 'نشطة',
+                    archives: 'الأرشيف',
+                },
+                loading: 'جارٍ تحميل المحادثات…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'إعادة المحاولة',
+                dismiss: 'Dismiss',
+                read_only: 'للقراءة فقط',
+                deleted_user: 'مستخدم محذوف',
+                inactive: {
+                    title: 'المحادثات unavailable',
+                    description:
+                        'المحادثات are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active المحادثات',
+                    active_description:
+                        'Active المحادثات for this diagram will appear here.',
+                    archives_title: 'No archived المحادثات',
+                    archives_description:
+                        'Archived المحادثات will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load المحادثات',
+                    load_description:
+                        'Something went wrong while loading المحادثات. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} رسائل',
+                    no_messages: 'لا توجد رسائل بعد',
+                    last_activity: 'آخر نشاط',
+                },
+                targets: {
+                    diagram: 'المخطط',
+                    table: 'جدول',
+                    field: 'حقل',
+                    relationship: 'علاقة',
+                    unknown: 'محادثة',
+                },
+                target_labels: {
+                    diagram: 'المخطط',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'جدول محذوف',
+                    missing_field: 'حقل محذوف',
+                    missing_relationship: 'علاقة محذوفة',
+                    unknown: 'محادثة',
                 },
             },
         },

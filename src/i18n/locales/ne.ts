@@ -10,6 +10,7 @@ export const ne: LanguageTranslation = {
             dependencies: 'निर्भरताहरू',
             custom_types: 'कस्टम प्रकारहरू',
             comments: 'कुराकानी',
+            conversations: 'कुराकानी',
             visuals: 'Visuals',
         },
         menu: {
@@ -433,6 +434,72 @@ export const ne: LanguageTranslation = {
                         delete_failed:
                             'यो सन्देश मेटाउन सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'कुराकानी',
+                tabs_label: 'कुराकानी',
+                tabs: {
+                    active: 'सक्रिय',
+                    archives: 'अभिलेख',
+                },
+                loading: 'कुराकानी लोड हुँदैछ…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'पुन: प्रयास गर्नुहोस्',
+                dismiss: 'Dismiss',
+                read_only: 'पढ्न मात्र',
+                deleted_user: 'मेटाइएको प्रयोगकर्ता',
+                inactive: {
+                    title: 'कुराकानी unavailable',
+                    description:
+                        'कुराकानी are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active कुराकानी',
+                    active_description:
+                        'Active कुराकानी for this diagram will appear here.',
+                    archives_title: 'No archived कुराकानी',
+                    archives_description:
+                        'Archived कुराकानी will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load कुराकानी',
+                    load_description:
+                        'Something went wrong while loading कुराकानी. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} सन्देश',
+                    no_messages: 'अहिलेसम्म कुनै सन्देश छैन',
+                    last_activity: 'अन्तिम गतिविधि',
+                },
+                targets: {
+                    diagram: 'रेखाचित्र',
+                    table: 'तालिका',
+                    field: 'फिल्ड',
+                    relationship: 'सम्बन्ध',
+                    unknown: 'कुराकानी',
+                },
+                target_labels: {
+                    diagram: 'रेखाचित्र',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'मेटाइएको तालिका',
+                    missing_field: 'मेटाइएको फिल्ड',
+                    missing_relationship: 'मेटाइएको सम्बन्ध',
+                    unknown: 'कुराकानी',
                 },
             },
         },

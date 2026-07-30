@@ -10,6 +10,7 @@ export const tr: LanguageTranslation = {
             dependencies: 'Bağımlılıklar',
             custom_types: 'Özel Tipler',
             comments: 'Konuşmalar',
+            conversations: 'Konuşmalar',
             visuals: 'Görseller',
         },
         menu: {
@@ -431,6 +432,72 @@ export const tr: LanguageTranslation = {
                         delete_failed:
                             'Bu mesaj silinemedi. Lütfen tekrar deneyin.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Konuşmalar',
+                tabs_label: 'Konuşmalar',
+                tabs: {
+                    active: 'Aktif',
+                    archives: 'Arşiv',
+                },
+                loading: 'Konuşmalar yükleniyor…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'Yeniden dene',
+                dismiss: 'Dismiss',
+                read_only: 'Salt okunur',
+                deleted_user: 'Silinmiş kullanıcı',
+                inactive: {
+                    title: 'Konuşmalar unavailable',
+                    description:
+                        'Konuşmalar are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active konuşmalar',
+                    active_description:
+                        'Active konuşmalar for this diagram will appear here.',
+                    archives_title: 'No archived konuşmalar',
+                    archives_description:
+                        'Archived konuşmalar will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load konuşmalar',
+                    load_description:
+                        'Something went wrong while loading konuşmalar. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} mesaj',
+                    no_messages: 'Henüz mesaj yok',
+                    last_activity: 'Son etkinlik',
+                },
+                targets: {
+                    diagram: 'Diyagram',
+                    table: 'Tablo',
+                    field: 'Alan',
+                    relationship: 'İlişki',
+                    unknown: 'Konuşma',
+                },
+                target_labels: {
+                    diagram: 'Diyagram',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Silinmiş tablo',
+                    missing_field: 'Silinmiş alan',
+                    missing_relationship: 'Silinmiş ilişki',
+                    unknown: 'Konuşma',
                 },
             },
         },

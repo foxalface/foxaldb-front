@@ -10,6 +10,7 @@ export const mr: LanguageTranslation = {
             dependencies: 'अवलंबने',
             custom_types: 'कस्टम प्रकार',
             comments: 'संवाद',
+            conversations: 'संभाषणे',
             visuals: 'Visuals',
         },
         menu: {
@@ -436,6 +437,72 @@ export const mr: LanguageTranslation = {
                         delete_failed:
                             'हा संदेश हटवता आला नाही. कृपया पुन्हा प्रयत्न करा.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'संभाषणे',
+                tabs_label: 'संभाषणे',
+                tabs: {
+                    active: 'सक्रिय',
+                    archives: 'संग्रहण',
+                },
+                loading: 'संभाषणे लोड होत आहेत…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'पुन्हा प्रयत्न करा',
+                dismiss: 'Dismiss',
+                read_only: 'फक्त वाचनीय',
+                deleted_user: 'हटवलेला वापरकर्ता',
+                inactive: {
+                    title: 'संभाषणे unavailable',
+                    description:
+                        'संभाषणे are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active संभाषणे',
+                    active_description:
+                        'Active संभाषणे for this diagram will appear here.',
+                    archives_title: 'No archived संभाषणे',
+                    archives_description:
+                        'Archived संभाषणे will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load संभाषणे',
+                    load_description:
+                        'Something went wrong while loading संभाषणे. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} संदेश',
+                    no_messages: 'अद्याप संदेश नाहीत',
+                    last_activity: 'शेवटची क्रियाकलाप',
+                },
+                targets: {
+                    diagram: 'आकृती',
+                    table: 'तक्ता',
+                    field: 'फील्ड',
+                    relationship: 'संबंध',
+                    unknown: 'संभाषण',
+                },
+                target_labels: {
+                    diagram: 'आकृती',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'हटवलेला तक्ता',
+                    missing_field: 'हटवलेले फील्ड',
+                    missing_relationship: 'हटवलेला संबंध',
+                    unknown: 'संभाषण',
                 },
             },
         },

@@ -32,6 +32,7 @@ import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
 import { useDiagramComments } from '@/hooks/use-diagram-comments';
+import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 
 export interface SidebarItem {
     title: string;
@@ -50,6 +51,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
         showSidePanel,
         selectVisualsTab,
         openAllDiscussions,
+        openConversationsPanel,
     } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
@@ -57,6 +59,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { databaseType } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const { isActive: commentsActive } = useDiagramComments();
+    const conversationsAvailable = useConversationsAvailability();
 
     const diagramItems: SidebarItem[] = useMemo(
         () => [
@@ -132,18 +135,29 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active: selectedSidebarSection === 'visuals',
             },
-            ...(commentsActive
+            ...(conversationsAvailable
                 ? [
                       {
-                          title: t('editor_sidebar.comments'),
+                          title: t('editor_sidebar.conversations'),
                           icon: SlBubbles,
                           onClick: () => {
-                              openAllDiscussions();
+                              openConversationsPanel();
                           },
-                          active: selectedSidebarSection === 'comments',
+                          active: selectedSidebarSection === 'conversations',
                       },
                   ]
-                : []),
+                : commentsActive
+                  ? [
+                        {
+                            title: t('editor_sidebar.comments'),
+                            icon: SlBubbles,
+                            onClick: () => {
+                                openAllDiscussions();
+                            },
+                            active: selectedSidebarSection === 'comments',
+                        },
+                    ]
+                  : []),
         ],
         [
             selectSidebarSection,
@@ -154,6 +168,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             selectVisualsTab,
             commentsActive,
             openAllDiscussions,
+            conversationsAvailable,
+            openConversationsPanel,
         ]
     );
 

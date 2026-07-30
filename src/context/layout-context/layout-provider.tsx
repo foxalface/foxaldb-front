@@ -178,6 +178,11 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         setIsSidePanelShowed(true);
     }, []);
 
+    const openConversationsPanel = useCallback(() => {
+        setSelectedSidebarSection('conversations');
+        setIsSidePanelShowed(true);
+    }, []);
+
     const value = useMemo<LayoutContext>(
         () => ({
             openedTableInSidebar,
@@ -212,6 +217,7 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             openAllDiscussions,
             openDiagramDiscussion,
             openTargetDiscussion,
+            openConversationsPanel,
         }),
         [
             openedTableInSidebar,
@@ -244,6 +250,7 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             openAllDiscussions,
             openDiagramDiscussion,
             openTargetDiscussion,
+            openConversationsPanel,
         ]
     );
 

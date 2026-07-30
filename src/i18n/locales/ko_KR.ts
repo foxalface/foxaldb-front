@@ -10,6 +10,7 @@ export const ko_KR: LanguageTranslation = {
             dependencies: '종속성',
             custom_types: '사용자 지정 타입',
             comments: '대화',
+            conversations: '대화',
             visuals: '시각화',
         },
         menu: {
@@ -430,6 +431,72 @@ export const ko_KR: LanguageTranslation = {
                         delete_failed:
                             '이 메시지를 삭제할 수 없습니다. 다시 시도해 주세요.',
                     },
+                },
+            },
+            conversations_section: {
+                title: '대화',
+                tabs_label: '대화',
+                tabs: {
+                    active: '활성',
+                    archives: '보관함',
+                },
+                loading: '대화 불러오는 중…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: '다시 시도',
+                dismiss: 'Dismiss',
+                read_only: '읽기 전용',
+                deleted_user: '삭제된 사용자',
+                inactive: {
+                    title: '대화 unavailable',
+                    description:
+                        '대화 are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active 대화',
+                    active_description:
+                        'Active 대화 for this diagram will appear here.',
+                    archives_title: 'No archived 대화',
+                    archives_description:
+                        'Archived 대화 will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load 대화',
+                    load_description:
+                        'Something went wrong while loading 대화. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '메시지 {{count}}개',
+                    no_messages: '아직 메시지가 없습니다',
+                    last_activity: '마지막 활동',
+                },
+                targets: {
+                    diagram: '다이어그램',
+                    table: '테이블',
+                    field: '필드',
+                    relationship: '관계',
+                    unknown: '대화',
+                },
+                target_labels: {
+                    diagram: '다이어그램',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: '삭제된 테이블',
+                    missing_field: '삭제된 필드',
+                    missing_relationship: '삭제된 관계',
+                    unknown: '대화',
                 },
             },
         },

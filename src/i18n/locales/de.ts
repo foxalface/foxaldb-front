@@ -10,6 +10,7 @@ export const de: LanguageTranslation = {
             dependencies: 'Abhängigkeiten',
             custom_types: 'Benutzerdefinierte Typen',
             comments: 'Unterhaltungen',
+            conversations: 'Unterhaltungen',
             visuals: 'Darstellungen',
         },
         menu: {
@@ -437,6 +438,72 @@ export const de: LanguageTranslation = {
                         delete_failed:
                             'Diese Nachricht konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Unterhaltungen',
+                tabs_label: 'Unterhaltungslisten',
+                tabs: {
+                    active: 'Aktiv',
+                    archives: 'Archiv',
+                },
+                loading: 'Unterhaltungen werden geladen…',
+                loading_more: 'Weitere werden geladen…',
+                load_more: 'Mehr laden',
+                retry: 'Erneut versuchen',
+                dismiss: 'Schließen',
+                read_only: 'Nur Lesen',
+                deleted_user: 'Gelöschter Benutzer',
+                inactive: {
+                    title: 'Unterhaltungen nicht verfügbar',
+                    description:
+                        'Unterhaltungen sind nur bei authentifizierten Cloud-Diagrammen verfügbar.',
+                },
+                empty: {
+                    active_title: 'Keine aktiven Unterhaltungen',
+                    active_description:
+                        'Aktive Unterhaltungen zu diesem Diagramm erscheinen hier.',
+                    archives_title: 'Keine archivierten Unterhaltungen',
+                    archives_description:
+                        'Archivierte Unterhaltungen erscheinen hier, wenn Sie einen Thread schließen.',
+                },
+                errors: {
+                    load_title: 'Unterhaltungen konnten nicht geladen werden',
+                    load_description:
+                        'Beim Laden der Unterhaltungen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Die Unterhaltung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.',
+                },
+                actions: {
+                    archive: 'Archivieren',
+                    archiving: 'Archivierung…',
+                    reopen: 'Wiedereröffnen',
+                    reopening: 'Wird wiedereröffnet…',
+                    archive_aria: 'Unterhaltung für {{target}} archivieren',
+                    reopen_aria: 'Unterhaltung für {{target}} wiedereröffnen',
+                },
+                summary: {
+                    message_count: '{{count}} Nachrichten',
+                    no_messages: 'Noch keine Nachrichten',
+                    last_activity: 'Letzte Aktivität',
+                },
+                targets: {
+                    diagram: 'Diagramm',
+                    table: 'Tabelle',
+                    field: 'Feld',
+                    relationship: 'Beziehung',
+                    unknown: 'Unterhaltung',
+                },
+                target_labels: {
+                    diagram: 'Diagramm',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Gelöschte Tabelle',
+                    missing_field: 'Gelöschtes Feld',
+                    missing_relationship: 'Gelöschte Beziehung',
+                    unknown: 'Unterhaltung',
                 },
             },
         },

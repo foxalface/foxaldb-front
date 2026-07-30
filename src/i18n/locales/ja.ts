@@ -10,6 +10,7 @@ export const ja: LanguageTranslation = {
             dependencies: '依存関係',
             custom_types: 'カスタムタイプ',
             comments: '会話',
+            conversations: '会話',
             visuals: 'ビジュアル',
         },
         menu: {
@@ -434,6 +435,72 @@ export const ja: LanguageTranslation = {
                         delete_failed:
                             'このメッセージを削除できませんでした。もう一度お試しください。',
                     },
+                },
+            },
+            conversations_section: {
+                title: '会話',
+                tabs_label: '会話',
+                tabs: {
+                    active: 'アクティブ',
+                    archives: 'アーカイブ',
+                },
+                loading: '会話を読み込み中…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: '再試行',
+                dismiss: 'Dismiss',
+                read_only: '読み取り専用',
+                deleted_user: '削除されたユーザー',
+                inactive: {
+                    title: '会話 unavailable',
+                    description:
+                        '会話 are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active 会話',
+                    active_description:
+                        'Active 会話 for this diagram will appear here.',
+                    archives_title: 'No archived 会話',
+                    archives_description:
+                        'Archived 会話 will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load 会話',
+                    load_description:
+                        'Something went wrong while loading 会話. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} 件のメッセージ',
+                    no_messages: 'メッセージはまだありません',
+                    last_activity: '最終アクティビティ',
+                },
+                targets: {
+                    diagram: 'ダイアグラム',
+                    table: 'テーブル',
+                    field: 'フィールド',
+                    relationship: 'リレーションシップ',
+                    unknown: '会話',
+                },
+                target_labels: {
+                    diagram: 'ダイアグラム',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: '削除されたテーブル',
+                    missing_field: '削除されたフィールド',
+                    missing_relationship: '削除されたリレーションシップ',
+                    unknown: '会話',
                 },
             },
         },

@@ -10,6 +10,7 @@ export const hr: LanguageTranslation = {
             dependencies: 'Ovisnosti',
             custom_types: 'Prilagođeni Tipovi',
             comments: 'Razgovori',
+            conversations: 'Razgovori',
             visuals: 'Vizuali',
         },
         menu: {
@@ -429,6 +430,72 @@ export const hr: LanguageTranslation = {
                         delete_failed:
                             'Nije moguće izbrisati ovu poruku. Pokušajte ponovno.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Razgovori',
+                tabs_label: 'Razgovori',
+                tabs: {
+                    active: 'Aktivni',
+                    archives: 'Arhiva',
+                },
+                loading: 'Učitavanje razgovora…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'Pokušaj ponovno',
+                dismiss: 'Dismiss',
+                read_only: 'Samo za čitanje',
+                deleted_user: 'Izbrisani korisnik',
+                inactive: {
+                    title: 'Razgovori unavailable',
+                    description:
+                        'Razgovori are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active razgovori',
+                    active_description:
+                        'Active razgovori for this diagram will appear here.',
+                    archives_title: 'No archived razgovori',
+                    archives_description:
+                        'Archived razgovori will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load razgovori',
+                    load_description:
+                        'Something went wrong while loading razgovori. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} poruka',
+                    no_messages: 'Još nema poruka',
+                    last_activity: 'Zadnja aktivnost',
+                },
+                targets: {
+                    diagram: 'Dijagram',
+                    table: 'Tablica',
+                    field: 'Polje',
+                    relationship: 'Veza',
+                    unknown: 'Razgovor',
+                },
+                target_labels: {
+                    diagram: 'Dijagram',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Izbrisana tablica',
+                    missing_field: 'Izbrisano polje',
+                    missing_relationship: 'Izbrisana veza',
+                    unknown: 'Razgovor',
                 },
             },
         },

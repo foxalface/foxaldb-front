@@ -10,6 +10,7 @@ export const en = {
             dependencies: 'Dependencies',
             custom_types: 'Custom Types',
             comments: 'Conversations',
+            conversations: 'Conversations',
             visuals: 'Visuals',
         },
         menu: {
@@ -423,6 +424,72 @@ export const en = {
                         delete_failed:
                             'Unable to delete this message. Please try again.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Conversations',
+                tabs_label: 'Conversation lists',
+                tabs: {
+                    active: 'Active',
+                    archives: 'Archives',
+                },
+                loading: 'Loading conversations…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'Retry',
+                dismiss: 'Dismiss',
+                read_only: 'Read-only',
+                deleted_user: 'Deleted user',
+                inactive: {
+                    title: 'Conversations unavailable',
+                    description:
+                        'Conversations are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active conversations',
+                    active_description:
+                        'Active conversations for this diagram will appear here.',
+                    archives_title: 'No archived conversations',
+                    archives_description:
+                        'Archived conversations will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load conversations',
+                    load_description:
+                        'Something went wrong while loading conversations. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} messages',
+                    no_messages: 'No messages yet',
+                    last_activity: 'Last activity',
+                },
+                targets: {
+                    diagram: 'Diagram',
+                    table: 'Table',
+                    field: 'Field',
+                    relationship: 'Relationship',
+                    unknown: 'Conversation',
+                },
+                target_labels: {
+                    diagram: 'Diagram',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Deleted table',
+                    missing_field: 'Deleted field',
+                    missing_relationship: 'Deleted relationship',
+                    unknown: 'Conversation',
                 },
             },
         },

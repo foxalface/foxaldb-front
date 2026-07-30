@@ -10,6 +10,7 @@ export const pt_BR: LanguageTranslation = {
             dependencies: 'Dependências',
             custom_types: 'Tipos Personalizados',
             comments: 'Conversas',
+            conversations: 'Conversas',
             visuals: 'Visuais',
         },
         menu: {
@@ -436,6 +437,72 @@ export const pt_BR: LanguageTranslation = {
                         delete_failed:
                             'Não foi possível excluir esta mensagem. Tente novamente.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Conversas',
+                tabs_label: 'Conversas',
+                tabs: {
+                    active: 'Ativas',
+                    archives: 'Arquivo',
+                },
+                loading: 'Carregando conversas…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'Tentar novamente',
+                dismiss: 'Dismiss',
+                read_only: 'Somente leitura',
+                deleted_user: 'Usuário excluído',
+                inactive: {
+                    title: 'Conversas unavailable',
+                    description:
+                        'Conversas are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active conversas',
+                    active_description:
+                        'Active conversas for this diagram will appear here.',
+                    archives_title: 'No archived conversas',
+                    archives_description:
+                        'Archived conversas will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load conversas',
+                    load_description:
+                        'Something went wrong while loading conversas. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} mensagens',
+                    no_messages: 'Ainda não há mensagens',
+                    last_activity: 'Última atividade',
+                },
+                targets: {
+                    diagram: 'Diagrama',
+                    table: 'Tabela',
+                    field: 'Campo',
+                    relationship: 'Relacionamento',
+                    unknown: 'Conversa',
+                },
+                target_labels: {
+                    diagram: 'Diagrama',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Tabela excluída',
+                    missing_field: 'Campo excluído',
+                    missing_relationship: 'Relacionamento excluído',
+                    unknown: 'Conversa',
                 },
             },
         },

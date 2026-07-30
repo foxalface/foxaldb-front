@@ -10,6 +10,7 @@ export const zh_CN: LanguageTranslation = {
             dependencies: '依赖关系',
             custom_types: '自定义类型',
             comments: '对话',
+            conversations: '对话',
             visuals: '视觉效果',
         },
         menu: {
@@ -415,6 +416,72 @@ export const zh_CN: LanguageTranslation = {
                     errors: {
                         delete_failed: '无法删除此消息。请重试。',
                     },
+                },
+            },
+            conversations_section: {
+                title: '对话',
+                tabs_label: '对话',
+                tabs: {
+                    active: '活跃',
+                    archives: '归档',
+                },
+                loading: '正在加载对话…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: '重试',
+                dismiss: 'Dismiss',
+                read_only: '只读',
+                deleted_user: '已删除用户',
+                inactive: {
+                    title: '对话 unavailable',
+                    description:
+                        '对话 are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active 对话',
+                    active_description:
+                        'Active 对话 for this diagram will appear here.',
+                    archives_title: 'No archived 对话',
+                    archives_description:
+                        'Archived 对话 will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load 对话',
+                    load_description:
+                        'Something went wrong while loading 对话. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} 条消息',
+                    no_messages: '暂无消息',
+                    last_activity: '最近活动',
+                },
+                targets: {
+                    diagram: '图表',
+                    table: '表',
+                    field: '字段',
+                    relationship: '关系',
+                    unknown: '对话',
+                },
+                target_labels: {
+                    diagram: '图表',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: '已删除的表',
+                    missing_field: '已删除的字段',
+                    missing_relationship: '已删除的关系',
+                    unknown: '对话',
                 },
             },
         },

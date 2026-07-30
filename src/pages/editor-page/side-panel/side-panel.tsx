@@ -18,8 +18,10 @@ import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { RefsSection } from './refs-section/refs-section';
 import { VisualsSection } from './visuals-section/visuals-section';
 import { CommentsSection } from './comments-section/comments-section';
+import { ConversationsSection } from './conversations-section/conversations-section';
 import { Spinner } from '@/components/spinner/spinner';
 import { useDiagramComments } from '@/hooks/use-diagram-comments';
+import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 
 const DBMLSectionLazy = React.lazy(() =>
     import('./dbml-section/dbml-section').then((module) => ({
@@ -32,12 +34,23 @@ export interface SidePanelProps {}
 export const SidePanel: React.FC<SidePanelProps> = () => {
     const { t } = useTranslation();
     const { databaseType } = useChartDB();
-    const { selectSidebarSection, selectedSidebarSection, openAllDiscussions } =
-        useLayout();
+    const {
+        selectSidebarSection,
+        selectedSidebarSection,
+        openAllDiscussions,
+        openConversationsPanel,
+    } = useLayout();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { isActive: commentsActive } = useDiagramComments();
+    const conversationsAvailable = useConversationsAvailability();
 
     const handleMobileSectionChange = (value: string) => {
+        if (value === 'conversations') {
+            if (selectedSidebarSection !== 'conversations') {
+                openConversationsPanel();
+            }
+            return;
+        }
         if (value === 'comments') {
             if (selectedSidebarSection !== 'comments') {
                 openAllDiscussions();
@@ -82,9 +95,16 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                         )}
                                     </SelectItem>
                                 ) : null}
-                                {commentsActive ? (
+                                {commentsActive && !conversationsAvailable ? (
                                     <SelectItem value="comments">
                                         {t('side_panel.comments_section.title')}
+                                    </SelectItem>
+                                ) : null}
+                                {conversationsAvailable ? (
+                                    <SelectItem value="conversations">
+                                        {t(
+                                            'side_panel.conversations_section.title'
+                                        )}
                                     </SelectItem>
                                 ) : null}
                             </SelectGroup>
@@ -110,6 +130,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 <VisualsSection />
             ) : selectedSidebarSection === 'comments' ? (
                 <CommentsSection />
+            ) : selectedSidebarSection === 'conversations' ? (
+                <ConversationsSection />
             ) : (
                 <CustomTypesSection />
             )}

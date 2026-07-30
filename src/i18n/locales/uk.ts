@@ -10,6 +10,7 @@ export const uk: LanguageTranslation = {
             dependencies: 'Залежності',
             custom_types: 'Користувацькі типи',
             comments: 'Розмови',
+            conversations: 'Розмови',
             visuals: 'Візуальні елементи',
         },
         menu: {
@@ -433,6 +434,72 @@ export const uk: LanguageTranslation = {
                         delete_failed:
                             'Не вдалося видалити це повідомлення. Спробуйте ще раз.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Розмови',
+                tabs_label: 'Розмови',
+                tabs: {
+                    active: 'Активні',
+                    archives: 'Архів',
+                },
+                loading: 'Завантаження розмов…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'Повторити',
+                dismiss: 'Dismiss',
+                read_only: 'Лише читання',
+                deleted_user: 'Видалений користувач',
+                inactive: {
+                    title: 'Розмови unavailable',
+                    description:
+                        'Розмови are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active розмови',
+                    active_description:
+                        'Active розмови for this diagram will appear here.',
+                    archives_title: 'No archived розмови',
+                    archives_description:
+                        'Archived розмови will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load розмови',
+                    load_description:
+                        'Something went wrong while loading розмови. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} повідомлень',
+                    no_messages: 'Ще немає повідомлень',
+                    last_activity: 'Остання активність',
+                },
+                targets: {
+                    diagram: 'Діаграма',
+                    table: 'Таблиця',
+                    field: 'Поле',
+                    relationship: 'Зв’язок',
+                    unknown: 'Розмова',
+                },
+                target_labels: {
+                    diagram: 'Діаграма',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Видалена таблиця',
+                    missing_field: 'Видалене поле',
+                    missing_relationship: 'Видалений зв’язок',
+                    unknown: 'Розмова',
                 },
             },
         },

@@ -10,6 +10,7 @@ export const bn: LanguageTranslation = {
             dependencies: 'নির্ভরতা',
             custom_types: 'কাস্টম টাইপ',
             comments: 'কথোপকথন',
+            conversations: 'কথোপকথন',
             visuals: 'ভিজ্যুয়াল',
         },
         menu: {
@@ -435,6 +436,72 @@ export const bn: LanguageTranslation = {
                         delete_failed:
                             'এই বার্তাটি মুছতে পারা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'কথোপকথন',
+                tabs_label: 'কথোপকথন',
+                tabs: {
+                    active: 'সক্রিয়',
+                    archives: 'আর্কাইভ',
+                },
+                loading: 'কথোপকথন লোড হচ্ছে…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'আবার চেষ্টা করুন',
+                dismiss: 'Dismiss',
+                read_only: 'শুধু পঠনযোগ্য',
+                deleted_user: 'মুছে ফেলা ব্যবহারকারী',
+                inactive: {
+                    title: 'কথোপকথন unavailable',
+                    description:
+                        'কথোপকথন are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active কথোপকথন',
+                    active_description:
+                        'Active কথোপকথন for this diagram will appear here.',
+                    archives_title: 'No archived কথোপকথন',
+                    archives_description:
+                        'Archived কথোপকথন will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load কথোপকথন',
+                    load_description:
+                        'Something went wrong while loading কথোপকথন. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}}টি বার্তা',
+                    no_messages: 'এখনও কোনো বার্তা নেই',
+                    last_activity: 'সর্বশেষ কার্যকলাপ',
+                },
+                targets: {
+                    diagram: 'ডায়াগ্রাম',
+                    table: 'টেবিল',
+                    field: 'ফিল্ড',
+                    relationship: 'সম্পর্ক',
+                    unknown: 'কথোপকথন',
+                },
+                target_labels: {
+                    diagram: 'ডায়াগ্রাম',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'মুছে ফেলা টেবিল',
+                    missing_field: 'মুছে ফেলা ফিল্ড',
+                    missing_relationship: 'মুছে ফেলা সম্পর্ক',
+                    unknown: 'কথোপকথন',
                 },
             },
         },

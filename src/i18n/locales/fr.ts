@@ -10,6 +10,7 @@ export const fr: LanguageTranslation = {
             dependencies: 'Dépendances',
             custom_types: 'Types Personnalisés',
             comments: 'Conversations',
+            conversations: 'Conversations',
             visuals: 'Visuels',
         },
         menu: {
@@ -433,6 +434,72 @@ export const fr: LanguageTranslation = {
                         delete_failed:
                             'Impossible de supprimer ce message. Réessayez.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Conversations',
+                tabs_label: 'Listes de conversations',
+                tabs: {
+                    active: 'Actives',
+                    archives: 'Archives',
+                },
+                loading: 'Chargement des conversations…',
+                loading_more: 'Chargement supplémentaire…',
+                load_more: 'Charger plus',
+                retry: 'Réessayer',
+                dismiss: 'Fermer',
+                read_only: 'Lecture seule',
+                deleted_user: 'Utilisateur supprimé',
+                inactive: {
+                    title: 'Conversations indisponibles',
+                    description:
+                        'Les conversations sont disponibles uniquement sur les diagrammes cloud authentifiés.',
+                },
+                empty: {
+                    active_title: 'Aucune conversation active',
+                    active_description:
+                        'Les conversations actives de ce diagramme apparaîtront ici.',
+                    archives_title: 'Aucune conversation archivée',
+                    archives_description:
+                        'Les conversations archivées apparaîtront ici lorsque vous fermerez un fil.',
+                },
+                errors: {
+                    load_title: 'Impossible de charger les conversations',
+                    load_description:
+                        'Une erreur s’est produite lors du chargement des conversations. Veuillez réessayer.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Impossible de mettre à jour la conversation. Veuillez réessayer.',
+                },
+                actions: {
+                    archive: 'Archiver',
+                    archiving: 'Archivage…',
+                    reopen: 'Rouvrir',
+                    reopening: 'Réouverture…',
+                    archive_aria: 'Archiver la conversation pour {{target}}',
+                    reopen_aria: 'Rouvrir la conversation pour {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} messages',
+                    no_messages: 'Aucun message pour l’instant',
+                    last_activity: 'Dernière activité',
+                },
+                targets: {
+                    diagram: 'Diagramme',
+                    table: 'Table',
+                    field: 'Champ',
+                    relationship: 'Relation',
+                    unknown: 'Conversation',
+                },
+                target_labels: {
+                    diagram: 'Diagramme',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Table supprimée',
+                    missing_field: 'Champ supprimé',
+                    missing_relationship: 'Relation supprimée',
+                    unknown: 'Conversation',
                 },
             },
         },

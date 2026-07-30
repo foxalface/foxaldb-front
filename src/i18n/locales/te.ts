@@ -10,6 +10,7 @@ export const te: LanguageTranslation = {
             dependencies: 'ఆధారతలు',
             custom_types: 'కస్టమ్ టైప్స్',
             comments: 'సంభాషణలు',
+            conversations: 'సంభాషణలు',
             visuals: 'Visuals',
         },
         menu: {
@@ -433,6 +434,72 @@ export const te: LanguageTranslation = {
                         delete_failed:
                             'ఈ సందేశాన్ని తొలగించలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'సంభాషణలు',
+                tabs_label: 'సంభాషణలు',
+                tabs: {
+                    active: 'సక్రియ',
+                    archives: 'ఆర్కైవ్',
+                },
+                loading: 'సంభాషణలు లోడ్ అవుతున్నాయి…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'మళ్లీ ప్రయత్నించండి',
+                dismiss: 'Dismiss',
+                read_only: 'చదవడానికి మాత్రమే',
+                deleted_user: 'తొలగించిన వినియోగదారు',
+                inactive: {
+                    title: 'సంభాషణలు unavailable',
+                    description:
+                        'సంభాషణలు are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active సంభాషణలు',
+                    active_description:
+                        'Active సంభాషణలు for this diagram will appear here.',
+                    archives_title: 'No archived సంభాషణలు',
+                    archives_description:
+                        'Archived సంభాషణలు will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load సంభాషణలు',
+                    load_description:
+                        'Something went wrong while loading సంభాషణలు. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} సందేశాలు',
+                    no_messages: 'ఇంకా సందేశాలు లేవు',
+                    last_activity: 'చివరి కార్యకలాపం',
+                },
+                targets: {
+                    diagram: 'రేఖాచిత్రం',
+                    table: 'పట్టిక',
+                    field: 'ఫీల్డ్',
+                    relationship: 'సంబంధం',
+                    unknown: 'సంభాషణ',
+                },
+                target_labels: {
+                    diagram: 'రేఖాచిత్రం',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'తొలగించిన పట్టిక',
+                    missing_field: 'తొలగించిన ఫీల్డ్',
+                    missing_relationship: 'తొలగించిన సంబంధం',
+                    unknown: 'సంభాషణ',
                 },
             },
         },

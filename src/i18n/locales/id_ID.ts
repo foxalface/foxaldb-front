@@ -10,6 +10,7 @@ export const id_ID: LanguageTranslation = {
             dependencies: 'Ketergantungan',
             custom_types: 'Tipe Kustom',
             comments: 'Percakapan',
+            conversations: 'Percakapan',
             visuals: 'Visual',
         },
         menu: {
@@ -432,6 +433,72 @@ export const id_ID: LanguageTranslation = {
                         delete_failed:
                             'Tidak dapat menghapus pesan ini. Silakan coba lagi.',
                     },
+                },
+            },
+            conversations_section: {
+                title: 'Percakapan',
+                tabs_label: 'Percakapan',
+                tabs: {
+                    active: 'Aktif',
+                    archives: 'Arsip',
+                },
+                loading: 'Memuat percakapan…',
+                loading_more: 'Loading more…',
+                load_more: 'Load more',
+                retry: 'Coba lagi',
+                dismiss: 'Dismiss',
+                read_only: 'Hanya baca',
+                deleted_user: 'Pengguna dihapus',
+                inactive: {
+                    title: 'Percakapan unavailable',
+                    description:
+                        'Percakapan are only available on authenticated cloud diagrams.',
+                },
+                empty: {
+                    active_title: 'No active percakapan',
+                    active_description:
+                        'Active percakapan for this diagram will appear here.',
+                    archives_title: 'No archived percakapan',
+                    archives_description:
+                        'Archived percakapan will appear here when you close a thread.',
+                },
+                errors: {
+                    load_title: 'Could not load percakapan',
+                    load_description:
+                        'Something went wrong while loading percakapan. Please try again.',
+                },
+                mutation_errors: {
+                    generic:
+                        'Could not update the conversation. Please try again.',
+                },
+                actions: {
+                    archive: 'Archive',
+                    archiving: 'Archiving…',
+                    reopen: 'Reopen',
+                    reopening: 'Reopening…',
+                    archive_aria: 'Archive conversation for {{target}}',
+                    reopen_aria: 'Reopen conversation for {{target}}',
+                },
+                summary: {
+                    message_count: '{{count}} pesan',
+                    no_messages: 'Belum ada pesan',
+                    last_activity: 'Aktivitas terakhir',
+                },
+                targets: {
+                    diagram: 'Diagram',
+                    table: 'Tabel',
+                    field: 'Kolom',
+                    relationship: 'Relasi',
+                    unknown: 'Percakapan',
+                },
+                target_labels: {
+                    diagram: 'Diagram',
+                    field: '{{table}}.{{field}}',
+                    relationship_endpoints: '{{source}} → {{target}}',
+                    missing_table: 'Tabel dihapus',
+                    missing_field: 'Kolom dihapus',
+                    missing_relationship: 'Relasi dihapus',
+                    unknown: 'Percakapan',
                 },
             },
         },

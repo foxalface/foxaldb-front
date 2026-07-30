@@ -6,11 +6,17 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { SidebarSection } from '@/context/layout-context/layout-context';
 import { en } from '@/i18n/locales/en';
 
-const { layoutState, commentsState, breakpointState } = vi.hoisted(() => {
+const {
+    layoutState,
+    commentsState,
+    conversationsAvailabilityState,
+    breakpointState,
+} = vi.hoisted(() => {
     const state = {
         selectedSidebarSection: 'tables' as SidebarSection,
         selectSidebarSection: vi.fn(),
         openAllDiscussions: vi.fn(),
+        openConversationsPanel: vi.fn(),
     };
     state.selectSidebarSection = vi.fn((section: SidebarSection) => {
         state.selectedSidebarSection = section;
@@ -18,10 +24,16 @@ const { layoutState, commentsState, breakpointState } = vi.hoisted(() => {
     state.openAllDiscussions = vi.fn(() => {
         state.selectedSidebarSection = 'comments';
     });
+    state.openConversationsPanel = vi.fn(() => {
+        state.selectedSidebarSection = 'conversations';
+    });
     return {
         layoutState: state,
         commentsState: {
             isActive: true,
+        },
+        conversationsAvailabilityState: {
+            isAvailable: false,
         },
         breakpointState: {
             isMd: false,
@@ -40,6 +52,9 @@ vi.mock('@/hooks/use-layout', () => ({
         openAllDiscussions: () => {
             layoutState.openAllDiscussions();
         },
+        openConversationsPanel: () => {
+            layoutState.openConversationsPanel();
+        },
     }),
 }));
 
@@ -52,6 +67,11 @@ vi.mock('@/hooks/use-diagram-comments', () => ({
         diagramId: '42',
         reload: vi.fn(),
     }),
+}));
+
+vi.mock('@/hooks/use-conversations-availability', () => ({
+    useConversationsAvailability: () =>
+        conversationsAvailabilityState.isAvailable,
 }));
 
 vi.mock('@/hooks/use-breakpoint', () => ({
@@ -204,6 +224,12 @@ vi.mock('../comments-section/comments-section', () => ({
     ),
 }));
 
+vi.mock('../conversations-section/conversations-section', () => ({
+    ConversationsSection: () => (
+        <div data-testid="conversations-section">ConversationsSection</div>
+    ),
+}));
+
 vi.mock('../dbml-section/dbml-section', () => ({
     DBMLSection: () => <div data-testid="dbml-section">DBMLSection</div>,
 }));
@@ -219,7 +245,11 @@ describe('SidePanel comments routing', () => {
         layoutState.openAllDiscussions = vi.fn(() => {
             layoutState.selectedSidebarSection = 'comments';
         });
+        layoutState.openConversationsPanel = vi.fn(() => {
+            layoutState.selectedSidebarSection = 'conversations';
+        });
         commentsState.isActive = true;
+        conversationsAvailabilityState.isAvailable = false;
         breakpointState.isMd = false;
     });
 
@@ -326,5 +356,56 @@ describe('SidePanel comments routing', () => {
             screen.queryByTestId('mobile-section-select')
         ).not.toBeInTheDocument();
         expect(screen.getByTestId('comments-section')).toBeInTheDocument();
+    });
+});
+
+describe('SidePanel conversations routing', () => {
+    beforeEach(() => {
+        layoutState.selectedSidebarSection = 'tables';
+        layoutState.openConversationsPanel = vi.fn(() => {
+            layoutState.selectedSidebarSection = 'conversations';
+        });
+        commentsState.isActive = true;
+        conversationsAvailabilityState.isAvailable = true;
+        breakpointState.isMd = false;
+    });
+
+    it('includes Conversations in the mobile selector when conversations are available', () => {
+        render(<SidePanel />);
+
+        expect(
+            screen.getByRole('option', { name: 'Conversations' })
+        ).toHaveAttribute('data-value', 'conversations');
+    });
+
+    it('renders ConversationsSection when selectedSidebarSection is conversations', () => {
+        layoutState.selectedSidebarSection = 'conversations';
+        render(<SidePanel />);
+
+        expect(screen.getByTestId('conversations-section')).toBeInTheDocument();
+    });
+
+    it('calls openConversationsPanel when selecting mobile Conversations', async () => {
+        const user = userEvent.setup();
+        render(<SidePanel />);
+
+        await user.click(screen.getByRole('option', { name: 'Conversations' }));
+
+        expect(layoutState.openConversationsPanel).toHaveBeenCalledTimes(1);
+    });
+
+    it('hides legacy comments from the mobile selector when conversations are available', () => {
+        render(<SidePanel />);
+
+        const options = screen.getAllByRole('option');
+        const conversationOptions = options.filter(
+            (option) => option.getAttribute('data-value') === 'conversations'
+        );
+        const commentOptions = options.filter(
+            (option) => option.getAttribute('data-value') === 'comments'
+        );
+
+        expect(conversationOptions).toHaveLength(1);
+        expect(commentOptions).toHaveLength(0);
     });
 });
