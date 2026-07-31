@@ -17,10 +17,9 @@ import { CustomTypesSection } from './custom-types-section/custom-types-section'
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { RefsSection } from './refs-section/refs-section';
 import { VisualsSection } from './visuals-section/visuals-section';
-import { CommentsSection } from './comments-section/comments-section';
 import { ConversationsSection } from './conversations-section/conversations-section';
 import { Spinner } from '@/components/spinner/spinner';
-import { useEditorDiscussionAvailability } from '@/hooks/use-editor-discussion-availability';
+import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 
 const DBMLSectionLazy = React.lazy(() =>
     import('./dbml-section/dbml-section').then((module) => ({
@@ -36,26 +35,15 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
     const {
         selectSidebarSection,
         selectedSidebarSection,
-        openAllDiscussions,
         openConversationsPanel,
     } = useLayout();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const {
-        conversationsAvailable,
-        showLegacyCommentsEntry,
-        showStandardCommentsEntry,
-    } = useEditorDiscussionAvailability();
+    const conversationsAvailable = useConversationsAvailability();
 
     const handleMobileSectionChange = (value: string) => {
         if (value === 'conversations') {
             if (selectedSidebarSection !== 'conversations') {
                 openConversationsPanel();
-            }
-            return;
-        }
-        if (value === 'comments') {
-            if (selectedSidebarSection !== 'comments') {
-                openAllDiscussions();
             }
             return;
         }
@@ -97,18 +85,6 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                         )}
                                     </SelectItem>
                                 ) : null}
-                                {showStandardCommentsEntry ? (
-                                    <SelectItem value="comments">
-                                        {t('side_panel.comments_section.title')}
-                                    </SelectItem>
-                                ) : null}
-                                {showLegacyCommentsEntry ? (
-                                    <SelectItem value="comments">
-                                        {t(
-                                            'side_panel.legacy_comments_section.title'
-                                        )}
-                                    </SelectItem>
-                                ) : null}
                                 {conversationsAvailable ? (
                                     <SelectItem value="conversations">
                                         {t(
@@ -137,8 +113,6 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 <RefsSection />
             ) : selectedSidebarSection === 'visuals' ? (
                 <VisualsSection />
-            ) : selectedSidebarSection === 'comments' ? (
-                <CommentsSection />
             ) : selectedSidebarSection === 'conversations' ? (
                 <ConversationsSection />
             ) : (

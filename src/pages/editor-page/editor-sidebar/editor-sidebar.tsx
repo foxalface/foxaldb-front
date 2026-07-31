@@ -31,7 +31,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
-import { useEditorDiscussionAvailability } from '@/hooks/use-editor-discussion-availability';
+import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 
 export interface SidebarItem {
     title: string;
@@ -51,7 +51,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
         selectedSidebarSection,
         showSidePanel,
         selectVisualsTab,
-        openAllDiscussions,
         openConversationsPanel,
     } = useLayout();
     const { t } = useTranslation();
@@ -59,11 +58,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { effectiveTheme } = useTheme();
     const { databaseType } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
-    const {
-        conversationsAvailable,
-        showLegacyCommentsEntry,
-        showStandardCommentsEntry,
-    } = useEditorDiscussionAvailability();
+    const conversationsAvailable = useConversationsAvailability();
 
     const diagramItems: SidebarItem[] = useMemo(
         () => [
@@ -151,31 +146,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                       },
                   ]
                 : []),
-            ...(showLegacyCommentsEntry
-                ? [
-                      {
-                          title: t('editor_sidebar.legacy_comments'),
-                          icon: SlBubbles,
-                          onClick: () => {
-                              openAllDiscussions();
-                          },
-                          active: selectedSidebarSection === 'comments',
-                          secondary: true,
-                          ariaLabel: t('editor_sidebar.legacy_comments_aria'),
-                      },
-                  ]
-                : showStandardCommentsEntry
-                  ? [
-                        {
-                            title: t('editor_sidebar.comments'),
-                            icon: SlBubbles,
-                            onClick: () => {
-                                openAllDiscussions();
-                            },
-                            active: selectedSidebarSection === 'comments',
-                        },
-                    ]
-                  : []),
         ],
         [
             selectSidebarSection,
@@ -184,11 +154,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             showSidePanel,
             databaseType,
             selectVisualsTab,
-            openAllDiscussions,
             conversationsAvailable,
             openConversationsPanel,
-            showLegacyCommentsEntry,
-            showStandardCommentsEntry,
         ]
     );
 

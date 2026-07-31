@@ -9,10 +9,7 @@ export const id_ID: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Ketergantungan',
             custom_types: 'Tipe Kustom',
-            comments: 'Percakapan',
             conversations: 'Percakapan',
-            legacy_comments: 'Komentar (lama)',
-            legacy_comments_aria: 'Buka panel komentar lama',
             visuals: 'Visual',
         },
         menu: {
@@ -162,7 +159,6 @@ export const id_ID: LanguageTranslation = {
                     primary_key: 'Kunci Utama',
                     indexes: 'Indeks',
                     check_constraints: 'Batasan Pemeriksaan',
-                    comments: 'Komentar',
                     no_comments: 'Tidak ada komentar',
                     add_field: 'Tambah Kolom',
                     add_index: 'Tambah Indeks',
@@ -176,7 +172,6 @@ export const id_ID: LanguageTranslation = {
                         open_discussion: 'Buka percakapan',
                         unique: 'Unik',
                         auto_increment: 'Kenaikan Otomatis',
-                        comments: 'Komentar',
                         no_comments: 'Tidak ada komentar',
                         delete_field: 'Hapus Kolom',
                         // TODO: Translate
@@ -337,108 +332,6 @@ export const id_ID: LanguageTranslation = {
                     },
                     delete_custom_type: 'Hapus Tipe',
                 },
-            },
-            comments_section: {
-                title: 'Percakapan',
-                loading: 'Memuat percakapan…',
-                inactive: {
-                    title: 'Percakapan tidak tersedia',
-                    description:
-                        'Percakapan hanya tersedia pada diagram cloud yang diautentikasi.',
-                },
-                empty: {
-                    title: 'Belum ada percakapan',
-                    description:
-                        'Percakapan tentang diagram ini akan muncul di sini.',
-                    diagram_title: 'Belum ada pesan diagram',
-                    diagram_description:
-                        'Pesan tentang diagram secara keseluruhan akan muncul di sini.',
-                    target_title: 'Belum ada pesan untuk pilihan saat ini',
-                    target_description:
-                        'Pesan tentang pilihan saat ini akan muncul di sini.',
-                },
-                errors: {
-                    load_title: 'Tidak dapat memuat percakapan',
-                    load_description:
-                        'Terjadi kesalahan saat memuat percakapan. Silakan coba lagi.',
-                },
-                retry: 'Coba lagi',
-                deleted_user: 'Pengguna dihapus',
-                targets: {
-                    diagram: 'Diagram',
-                    table: 'Tabel',
-                    field: 'Kolom',
-                    relationship: 'Relasi',
-                    unknown: 'Percakapan',
-                },
-                views: {
-                    all: 'Semua percakapan',
-                    diagram: 'Diagram',
-                    current_target: 'Saat ini',
-                },
-                target_header: {
-                    diagram: 'Diagram',
-                    table: 'Tabel {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Tabel yang dihapus',
-                    missing_field: 'Bidang yang dihapus',
-                    missing_relationship: 'Relasi yang dihapus',
-                },
-                composer: {
-                    label: 'Pesan',
-                    placeholder: 'Tulis pesan…',
-                    submit: 'Kirim',
-                    submitting: 'Mengirim…',
-                    cancel: 'Batal',
-                    form_aria_label: 'Pesan baru',
-                    counter_aria_label:
-                        '{{count}} dari {{max}} karakter digunakan',
-                    errors: {
-                        empty: 'Masukkan pesan untuk dikirim.',
-                        too_long: 'Pesan tidak boleh melebihi 2000 karakter.',
-                        create_failed:
-                            'Tidak dapat mengirim pesan. Silakan coba lagi.',
-                    },
-                },
-                item_actions: {
-                    title: 'Tindakan komentar',
-                    edit: 'Edit',
-                    delete: 'Hapus',
-                },
-                edit: {
-                    label: 'Pesan',
-                    form_aria_label: 'Edit pesan',
-                    save: 'Simpan',
-                    saving: 'Menyimpan…',
-                    cancel: 'Batal',
-                    counter_aria_label:
-                        '{{count}} dari {{max}} karakter digunakan',
-                    errors: {
-                        empty: 'Masukkan pesan untuk disimpan.',
-                        too_long: 'Pesan tidak boleh melebihi 2000 karakter.',
-                        update_failed:
-                            'Tidak dapat memperbarui pesan. Silakan coba lagi.',
-                    },
-                    remote_updated_warning:
-                        'Pesan ini diperbarui di tempat lain. Menyimpan akan menimpa perubahan tersebut.',
-                },
-                delete_dialog: {
-                    title: 'Hapus pesan',
-                    description:
-                        'Yakin ingin menghapus pesan ini? Tindakan ini tidak dapat dibatalkan.',
-                    cancel: 'Batal',
-                    confirm: 'Hapus',
-                    deleting: 'Menghapus…',
-                    errors: {
-                        delete_failed:
-                            'Tidak dapat menghapus pesan ini. Silakan coba lagi.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Komentar (lama)',
             },
             conversations_section: {
                 title: 'Percakapan',

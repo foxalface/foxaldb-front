@@ -9,10 +9,7 @@ export const en = {
             refs: 'Refs',
             dependencies: 'Dependencies',
             custom_types: 'Custom Types',
-            comments: 'Conversations',
             conversations: 'Conversations',
-            legacy_comments: 'Comments (legacy)',
-            legacy_comments_aria: 'Open legacy comments panel',
             visuals: 'Visuals',
         },
         menu: {
@@ -159,7 +156,6 @@ export const en = {
                     primary_key: 'Primary Key',
                     indexes: 'Indexes',
                     check_constraints: 'Check Constraints',
-                    comments: 'Comments',
                     no_comments: 'No comments',
                     add_field: 'Add Field',
                     add_index: 'Add Index',
@@ -176,7 +172,6 @@ export const en = {
                         character_length: 'Max Length',
                         precision: 'Precision',
                         scale: 'Scale',
-                        comments: 'Comments',
                         no_comments: 'No comments',
                         default_value: 'Default Value',
                         no_default: 'No default',
@@ -330,106 +325,6 @@ export const en = {
                     },
                     delete_custom_type: 'Delete Type',
                 },
-            },
-            comments_section: {
-                title: 'Conversations',
-                loading: 'Loading conversations…',
-                inactive: {
-                    title: 'Conversations unavailable',
-                    description:
-                        'Conversations are only available on authenticated cloud diagrams.',
-                },
-                empty: {
-                    title: 'No conversations yet',
-                    description:
-                        'Conversations about this diagram will appear here.',
-                    diagram_title: 'No diagram messages yet',
-                    diagram_description:
-                        'Messages about the diagram as a whole will appear here.',
-                    target_title: 'No messages for this selection yet',
-                    target_description:
-                        'Messages about the current selection will appear here.',
-                },
-                errors: {
-                    load_title: 'Could not load conversations',
-                    load_description:
-                        'Something went wrong while loading conversations. Please try again.',
-                },
-                retry: 'Retry',
-                deleted_user: 'Deleted user',
-                targets: {
-                    diagram: 'Diagram',
-                    table: 'Table',
-                    field: 'Field',
-                    relationship: 'Relationship',
-                    unknown: 'Conversation',
-                },
-                views: {
-                    all: 'All conversations',
-                    diagram: 'Diagram',
-                    current_target: 'Current',
-                },
-                target_header: {
-                    diagram: 'Diagram',
-                    table: 'Table {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Deleted table',
-                    missing_field: 'Deleted field',
-                    missing_relationship: 'Deleted relationship',
-                },
-                composer: {
-                    label: 'Message',
-                    placeholder: 'Write a message…',
-                    submit: 'Post',
-                    submitting: 'Posting…',
-                    cancel: 'Cancel',
-                    form_aria_label: 'New message',
-                    counter_aria_label: '{{count}} of {{max}} characters used',
-                    errors: {
-                        empty: 'Enter a message to post.',
-                        too_long: 'Messages cannot exceed 2000 characters.',
-                        create_failed:
-                            'Could not post the message. Please try again.',
-                    },
-                },
-                item_actions: {
-                    title: 'Comment actions',
-                    edit: 'Edit',
-                    delete: 'Delete',
-                },
-                edit: {
-                    label: 'Message',
-                    form_aria_label: 'Edit message',
-                    save: 'Save',
-                    saving: 'Saving…',
-                    cancel: 'Cancel',
-                    counter_aria_label: '{{count}} of {{max}} characters used',
-                    errors: {
-                        empty: 'Enter a message to save.',
-                        too_long: 'Messages cannot exceed 2000 characters.',
-                        update_failed:
-                            'Could not update the message. Please try again.',
-                    },
-                    remote_updated_warning:
-                        'This message was updated elsewhere. Saving will overwrite those changes.',
-                },
-                delete_dialog: {
-                    title: 'Delete message',
-                    description:
-                        'Are you sure you want to delete this message? This action cannot be undone.',
-                    cancel: 'Cancel',
-                    confirm: 'Delete',
-                    deleting: 'Deleting…',
-                    errors: {
-                        delete_failed:
-                            'Unable to delete this message. Please try again.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Comments (legacy)',
             },
             conversations_section: {
                 title: 'Conversations',

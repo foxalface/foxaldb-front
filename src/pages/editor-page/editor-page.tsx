@@ -41,7 +41,6 @@ import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-
 import { DiagramAccessProvider } from '@/context/diagram-access-context/diagram-access-provider';
 import { EditingBroadcastProvider } from '@/context/editing-broadcast-context/editing-broadcast-provider';
 import { RemoteEditingProvider } from '@/context/remote-editing-context/remote-editing-provider';
-import { CommentsProvider } from '@/context/comments-context/comments-provider';
 import { ConversationsProvider } from '@/context/conversations-context/conversations-provider';
 
 const OPEN_STAR_US_AFTER_SECONDS = 30;
@@ -237,16 +236,12 @@ const EditorPageComponent: React.FC = () => {
             <KeyboardShortcutsProvider>
                 <EditingBroadcastProvider>
                     <RemoteEditingProvider>
-                        <CommentsProvider>
-                            <ConversationsProvider>
-                                <EditorPageContent
-                                    entryFlow={entryFlow}
-                                    onActiveDiagramDeleted={
-                                        onActiveDiagramDeleted
-                                    }
-                                />
-                            </ConversationsProvider>
-                        </CommentsProvider>
+                        <ConversationsProvider>
+                            <EditorPageContent
+                                entryFlow={entryFlow}
+                                onActiveDiagramDeleted={onActiveDiagramDeleted}
+                            />
+                        </ConversationsProvider>
                     </RemoteEditingProvider>
                 </EditingBroadcastProvider>
             </KeyboardShortcutsProvider>

@@ -9,10 +9,7 @@ export const ar: LanguageTranslation = {
             refs: 'المراجع',
             dependencies: 'التبعيات',
             custom_types: 'الأنواع المخصصة',
-            comments: 'المحادثات',
             conversations: 'المحادثات',
-            legacy_comments: 'تعليقات (قديم)',
-            legacy_comments_aria: 'فتح لوحة التعليقات القديمة',
             visuals: 'مرئيات',
         },
         menu: {
@@ -162,7 +159,6 @@ export const ar: LanguageTranslation = {
                     primary_key: 'المفتاح الأساسي',
                     indexes: 'الفهارس',
                     check_constraints: 'قيود التحقق',
-                    comments: 'تعليقات',
                     no_comments: 'لا توجد تعليقات',
                     add_field: 'إضافة حقل',
                     add_index: 'إضافة فهرس',
@@ -176,7 +172,6 @@ export const ar: LanguageTranslation = {
                         open_discussion: 'فتح المحادثة',
                         unique: 'فريد',
                         auto_increment: 'زيادة تلقائية',
-                        comments: 'تعليقات',
                         no_comments: 'لا يوجد تعليقات',
                         delete_field: 'حذف الحقل',
                         // TODO: Translate
@@ -333,107 +328,6 @@ export const ar: LanguageTranslation = {
                     },
                     delete_custom_type: 'حذف النوع',
                 },
-            },
-            comments_section: {
-                title: 'المحادثات',
-                loading: 'جارٍ تحميل المحادثات…',
-                inactive: {
-                    title: 'المحادثات غير متاحة',
-                    description:
-                        'المحادثات متاحة فقط على مخططات السحابة المصادَق عليها.',
-                },
-                empty: {
-                    title: 'لا توجد محادثات بعد',
-                    description: 'ستظهر هنا المحادثات حول هذا المخطط.',
-                    diagram_title: 'لا توجد رسائل للمخطط بعد',
-                    diagram_description:
-                        'ستظهر هنا الرسائل المتعلقة بالمخطط ككل.',
-                    target_title: 'لا توجد رسائل للاختيار الحالي بعد',
-                    target_description:
-                        'ستظهر هنا الرسائل المتعلقة بالاختيار الحالي.',
-                },
-                errors: {
-                    load_title: 'تعذّر تحميل المحادثات',
-                    load_description:
-                        'حدث خطأ أثناء تحميل المحادثات. يُرجى المحاولة مرة أخرى.',
-                },
-                retry: 'إعادة المحاولة',
-                deleted_user: 'مستخدم محذوف',
-                targets: {
-                    diagram: 'المخطط',
-                    table: 'الجدول',
-                    field: 'الحقل',
-                    relationship: 'العلاقة',
-                    unknown: 'محادثة',
-                },
-                views: {
-                    all: 'جميع المحادثات',
-                    diagram: 'المخطط',
-                    current_target: 'الحالي',
-                },
-                target_header: {
-                    diagram: 'المخطط',
-                    table: 'جدول {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'جدول محذوف',
-                    missing_field: 'حقل محذوف',
-                    missing_relationship: 'علاقة محذوفة',
-                },
-                composer: {
-                    label: 'الرسالة',
-                    placeholder: 'اكتب رسالة…',
-                    submit: 'نشر',
-                    submitting: 'جارٍ النشر…',
-                    cancel: 'إلغاء',
-                    form_aria_label: 'رسالة جديدة',
-                    counter_aria_label:
-                        'تم استخدام {{count}} من أصل {{max}} حرفًا',
-                    errors: {
-                        empty: 'أدخل رسالة لنشرها.',
-                        too_long: 'لا يمكن أن تتجاوز الرسائل 2000 حرف.',
-                        create_failed:
-                            'تعذر نشر الرسالة. يُرجى المحاولة مرة أخرى.',
-                    },
-                },
-                item_actions: {
-                    title: 'إجراءات التعليق',
-                    edit: 'تعديل',
-                    delete: 'حذف',
-                },
-                edit: {
-                    label: 'الرسالة',
-                    form_aria_label: 'تعديل الرسالة',
-                    save: 'حفظ',
-                    saving: 'جارٍ الحفظ…',
-                    cancel: 'إلغاء',
-                    counter_aria_label:
-                        'تم استخدام {{count}} من أصل {{max}} حرفًا',
-                    errors: {
-                        empty: 'أدخل رسالة للحفظ.',
-                        too_long: 'لا يمكن أن تتجاوز الرسائل 2000 حرف.',
-                        update_failed:
-                            'تعذّر تحديث الرسالة. يُرجى المحاولة مرة أخرى.',
-                    },
-                    remote_updated_warning:
-                        'تم تحديث هذه الرسالة في مكان آخر. سيؤدي الحفظ إلى الكتابة فوق تلك التغييرات.',
-                },
-                delete_dialog: {
-                    title: 'حذف الرسالة',
-                    description:
-                        'هل أنت متأكد أنك تريد حذف هذه الرسالة؟ لا يمكن التراجع عن هذا الإجراء.',
-                    cancel: 'إلغاء',
-                    confirm: 'حذف',
-                    deleting: 'جارٍ الحذف…',
-                    errors: {
-                        delete_failed:
-                            'تعذر حذف هذه الرسالة. يُرجى المحاولة مرة أخرى.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'تعليقات (قديم)',
             },
             conversations_section: {
                 title: 'المحادثات',

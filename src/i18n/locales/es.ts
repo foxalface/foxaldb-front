@@ -9,10 +9,7 @@ export const es: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Dependencias',
             custom_types: 'Tipos Personalizados',
-            comments: 'Conversaciones',
             conversations: 'Conversaciones',
-            legacy_comments: 'Comentarios (heredado)',
-            legacy_comments_aria: 'Abrir el panel de comentarios heredado',
             visuals: 'Visuales',
         },
         menu: {
@@ -162,7 +159,6 @@ export const es: LanguageTranslation = {
                     primary_key: 'Clave Primaria',
                     indexes: 'Índices',
                     check_constraints: 'Restricciones de verificación',
-                    comments: 'Comentarios',
                     no_comments: 'Sin comentarios',
                     add_field: 'Agregar Campo',
                     add_index: 'Agregar Índice',
@@ -176,7 +172,6 @@ export const es: LanguageTranslation = {
                         open_discussion: 'Abrir conversación',
                         unique: 'Único',
                         auto_increment: 'Autoincremento',
-                        comments: 'Comentarios',
                         no_comments: 'Sin comentarios',
                         delete_field: 'Eliminar Campo',
                         // TODO: Translate
@@ -338,111 +333,6 @@ export const es: LanguageTranslation = {
                     },
                     delete_custom_type: 'Eliminar Tipo',
                 },
-            },
-            comments_section: {
-                title: 'Conversaciones',
-                loading: 'Cargando conversaciones…',
-                inactive: {
-                    title: 'Conversaciones no disponibles',
-                    description:
-                        'Las conversaciones solo están disponibles en diagramas en la nube autenticados.',
-                },
-                empty: {
-                    title: 'Aún no hay conversaciones',
-                    description:
-                        'Las conversaciones sobre este diagrama aparecerán aquí.',
-                    diagram_title: 'Aún no hay mensajes del diagrama',
-                    diagram_description:
-                        'Los mensajes sobre el diagrama en conjunto aparecerán aquí.',
-                    target_title:
-                        'Aún no hay mensajes para la selección actual',
-                    target_description:
-                        'Los mensajes sobre la selección actual aparecerán aquí.',
-                },
-                errors: {
-                    load_title: 'No se pudieron cargar las conversaciones',
-                    load_description:
-                        'Algo salió mal al cargar las conversaciones. Inténtalo de nuevo.',
-                },
-                retry: 'Reintentar',
-                deleted_user: 'Usuario eliminado',
-                targets: {
-                    diagram: 'Diagrama',
-                    table: 'Tabla',
-                    field: 'Campo',
-                    relationship: 'Relación',
-                    unknown: 'Conversación',
-                },
-                views: {
-                    all: 'Todas las conversaciones',
-                    diagram: 'Diagrama',
-                    current_target: 'Actual',
-                },
-                target_header: {
-                    diagram: 'Diagrama',
-                    table: 'Tabla {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Tabla eliminada',
-                    missing_field: 'Campo eliminado',
-                    missing_relationship: 'Relación eliminada',
-                },
-                composer: {
-                    label: 'Mensaje',
-                    placeholder: 'Escribe un mensaje…',
-                    submit: 'Publicar',
-                    submitting: 'Publicando…',
-                    cancel: 'Cancelar',
-                    form_aria_label: 'Nuevo mensaje',
-                    counter_aria_label:
-                        '{{count}} de {{max}} caracteres usados',
-                    errors: {
-                        empty: 'Escribe un mensaje para publicar.',
-                        too_long:
-                            'Los mensajes no pueden superar los 2000 caracteres.',
-                        create_failed:
-                            'No se pudo publicar el mensaje. Inténtalo de nuevo.',
-                    },
-                },
-                item_actions: {
-                    title: 'Acciones del comentario',
-                    edit: 'Editar',
-                    delete: 'Eliminar',
-                },
-                edit: {
-                    label: 'Mensaje',
-                    form_aria_label: 'Editar mensaje',
-                    save: 'Guardar',
-                    saving: 'Guardando…',
-                    cancel: 'Cancelar',
-                    counter_aria_label:
-                        '{{count}} de {{max}} caracteres usados',
-                    errors: {
-                        empty: 'Introduce un mensaje para guardar.',
-                        too_long:
-                            'Los mensajes no pueden superar los 2000 caracteres.',
-                        update_failed:
-                            'No se pudo actualizar el mensaje. Inténtalo de nuevo.',
-                    },
-                    remote_updated_warning:
-                        'Este mensaje se actualizó en otro lugar. Guardar sobrescribirá esos cambios.',
-                },
-                delete_dialog: {
-                    title: 'Eliminar mensaje',
-                    description:
-                        '¿Seguro que quieres eliminar este mensaje? Esta acción no se puede deshacer.',
-                    cancel: 'Cancelar',
-                    confirm: 'Eliminar',
-                    deleting: 'Eliminando…',
-                    errors: {
-                        delete_failed:
-                            'No se pudo eliminar este mensaje. Inténtalo de nuevo.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Comentarios (heredado)',
             },
             conversations_section: {
                 title: 'Conversaciones',

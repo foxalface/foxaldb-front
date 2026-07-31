@@ -9,10 +9,7 @@ export const gu: LanguageTranslation = {
             refs: 'રેફ્સ',
             dependencies: 'નિર્ભરતાઓ',
             custom_types: 'કસ્ટમ ટાઇપ',
-            comments: 'વાતચીત',
             conversations: 'વાતચીત',
-            legacy_comments: 'ટિપ્પણીઓ (જૂના)',
-            legacy_comments_aria: 'જૂના ટિપ્પણી પેનલ ખોલો',
             visuals: 'Visuals',
         },
         menu: {
@@ -164,7 +161,6 @@ export const gu: LanguageTranslation = {
                     primary_key: 'પ્રાથમિક કી',
                     indexes: 'ઈન્ડેક્સ',
                     check_constraints: 'ચકાસણી નિયંત્રણો',
-                    comments: 'ટિપ્પણીઓ',
                     no_comments: 'કોઈ ટિપ્પણીઓ નથી',
                     add_field: 'ફીલ્ડ ઉમેરો',
                     add_index: 'ઈન્ડેક્સ ઉમેરો',
@@ -178,7 +174,6 @@ export const gu: LanguageTranslation = {
                         open_discussion: 'વાતચીત ખોલો',
                         unique: 'અદ્વિતીય',
                         auto_increment: 'ઑટો ઇન્ક્રિમેન્ટ',
-                        comments: 'ટિપ્પણીઓ',
                         no_comments: 'કોઈ ટિપ્પણીઓ નથી',
                         delete_field: 'ફીલ્ડ કાઢી નાખો',
                         // TODO: Translate
@@ -338,105 +333,6 @@ export const gu: LanguageTranslation = {
                     },
                     delete_custom_type: 'પ્રકાર કાઢી નાખો',
                 },
-            },
-            comments_section: {
-                title: 'વાતચીત',
-                loading: 'વાતચીત લોડ થાય છે…',
-                inactive: {
-                    title: 'વાતચીત ઉપલબ્ધ નથી',
-                    description:
-                        'વાતચીત ફક્ત પ્રમાણિત ક્લાઉડ ડાયાગ્રામ પર ઉપલબ્ધ છે.',
-                },
-                empty: {
-                    title: 'હજી કોઈ વાતચીત નથી',
-                    description: 'આ ડાયાગ્રામ વિશેની વાતચીત અહીં દેખાશે.',
-                    diagram_title: 'હજુ સુધી કોઈ ડાયાગ્રામ સંદેશા નથી',
-                    diagram_description:
-                        'સમગ્ર ડાયાગ્રામ વિશેના સંદેશા અહીં દેખાશે.',
-                    target_title: 'વર્તમાન પસંદગી માટે હજુ કોઈ સંદેશા નથી',
-                    target_description:
-                        'વર્તમાન પસંદગી વિશેના સંદેશા અહીં દેખાશે.',
-                },
-                errors: {
-                    load_title: 'વાતચીત લોડ કરી શકાઈ નથી',
-                    load_description:
-                        'વાતચીત લોડ કરતી વખતે ભૂલ આવી. કૃપા કરીને ફરી પ્રયાસ કરો.',
-                },
-                retry: 'ફરી પ્રયાસ કરો',
-                deleted_user: 'કાઢી નાખેલ વપરાશકર્તા',
-                targets: {
-                    diagram: 'ડાયાગ્રામ',
-                    table: 'ટેબલ',
-                    field: 'ફીલ્ડ',
-                    relationship: 'સંબંધ',
-                    unknown: 'વાતચીત',
-                },
-                views: {
-                    all: 'બધી વાતચીત',
-                    diagram: 'ડાયાગ્રામ',
-                    current_target: 'વર્તમાન',
-                },
-                target_header: {
-                    diagram: 'ડાયાગ્રામ',
-                    table: 'કોષ્ટક {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'કાઢી નાખેલ કોષ્ટક',
-                    missing_field: 'કાઢી નાખેલ ફીલ્ડ',
-                    missing_relationship: 'કાઢી નાખેલ સંબંધ',
-                },
-                composer: {
-                    label: 'સંદેશ',
-                    placeholder: 'સંદેશ લખો…',
-                    submit: 'પોસ્ટ કરો',
-                    submitting: 'પોસ્ટ થઈ રહ્યું છે…',
-                    cancel: 'રદ કરો',
-                    form_aria_label: 'નવો સંદેશ',
-                    counter_aria_label: '{{max}} માંથી {{count}} અક્ષરો વપરાયા',
-                    errors: {
-                        empty: 'પોસ્ટ કરવા માટે સંદેશ દાખલ કરો.',
-                        too_long: 'સંદેશ 2000 અક્ષરોથી વધુ ન હોઈ શકે.',
-                        create_failed:
-                            'સંદેશ પોસ્ટ કરી શકાયો નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
-                    },
-                },
-                item_actions: {
-                    title: 'ટિપ્પણી ક્રિયાઓ',
-                    edit: 'સંપાદિત કરો',
-                    delete: 'કાઢી નાખો',
-                },
-                edit: {
-                    label: 'સંદેશ',
-                    form_aria_label: 'સંદેશ સંપાદિત કરો',
-                    save: 'સાચવો',
-                    saving: 'સાચવી રહ્યા છીએ…',
-                    cancel: 'રદ કરો',
-                    counter_aria_label: '{{max}} માંથી {{count}} અક્ષરો વપરાયા',
-                    errors: {
-                        empty: 'સાચવવા માટે સંદેશ દાખલ કરો.',
-                        too_long: 'સંદેશો 2000 અક્ષરોથી વધુ ન હોઈ શકે.',
-                        update_failed:
-                            'સંદેશ અપડેટ કરી શકાયો નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
-                    },
-                    remote_updated_warning:
-                        'આ સંદેશ અન્યત્ર અપડેટ થયો હતો. સાચવવાથી તે ફેરફારો ઓવરરાઈટ થશે.',
-                },
-                delete_dialog: {
-                    title: 'સંદેશ કાઢી નાખો',
-                    description:
-                        'શું તમે ખરેખર આ સંદેશ કાઢી નાખવા માંગો છો? આ ક્રિયા પૂર્વવત્ કરી શકાતી નથી.',
-                    cancel: 'રદ કરો',
-                    confirm: 'કાઢી નાખો',
-                    deleting: 'કાઢી નાખી રહ્યા છીએ…',
-                    errors: {
-                        delete_failed:
-                            'આ સંદેશ કાઢી નાખી શકાયો નથી. કૃપા કરીને ફરી પ્રયાસ કરો.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'ટિપ્પણીઓ (જૂના)',
             },
             conversations_section: {
                 title: 'વાતચીત',

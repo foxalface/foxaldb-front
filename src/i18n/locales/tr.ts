@@ -9,10 +9,7 @@ export const tr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Bağımlılıklar',
             custom_types: 'Özel Tipler',
-            comments: 'Konuşmalar',
             conversations: 'Konuşmalar',
-            legacy_comments: 'Yorumlar (eski)',
-            legacy_comments_aria: 'Eski yorum panelini aç',
             visuals: 'Görseller',
         },
         menu: {
@@ -162,7 +159,6 @@ export const tr: LanguageTranslation = {
                     primary_key: 'Birincil Anahtar',
                     indexes: 'İndeksler',
                     check_constraints: 'Kontrol Kısıtlamaları',
-                    comments: 'Yorumlar',
                     no_comments: 'Yorum yok',
                     add_field: 'Alan Ekle',
                     add_index: 'İndeks Ekle',
@@ -176,7 +172,6 @@ export const tr: LanguageTranslation = {
                         open_discussion: 'Konuşmayı aç',
                         unique: 'Tekil',
                         auto_increment: 'Otomatik Artış',
-                        comments: 'Yorumlar',
                         no_comments: 'Yorum yok',
                         delete_field: 'Alanı Sil',
                         // TODO: Translate
@@ -336,108 +331,6 @@ export const tr: LanguageTranslation = {
                     },
                     delete_custom_type: 'Tipi Sil',
                 },
-            },
-            comments_section: {
-                title: 'Konuşmalar',
-                loading: 'Konuşmalar yükleniyor…',
-                inactive: {
-                    title: 'Konuşmalar kullanılamıyor',
-                    description:
-                        'Konuşmalar yalnızca kimliği doğrulanmış bulut diyagramlarında kullanılabilir.',
-                },
-                empty: {
-                    title: 'Henüz konuşma yok',
-                    description:
-                        'Bu diyagram hakkındaki konuşmalar burada görünecek.',
-                    diagram_title: 'Henüz diyagram mesajı yok',
-                    diagram_description:
-                        'Diyagramın geneline dair mesajlar burada görünür.',
-                    target_title: 'Geçerli seçim için henüz mesaj yok',
-                    target_description:
-                        'Geçerli seçime dair mesajlar burada görünür.',
-                },
-                errors: {
-                    load_title: 'Konuşmalar yüklenemedi',
-                    load_description:
-                        'Konuşmalar yüklenirken bir hata oluştu. Lütfen tekrar deneyin.',
-                },
-                retry: 'Yeniden dene',
-                deleted_user: 'Silinmiş kullanıcı',
-                targets: {
-                    diagram: 'Diyagram',
-                    table: 'Tablo',
-                    field: 'Alan',
-                    relationship: 'İlişki',
-                    unknown: 'Konuşma',
-                },
-                views: {
-                    all: 'Tüm konuşmalar',
-                    diagram: 'Diyagram',
-                    current_target: 'Geçerli',
-                },
-                target_header: {
-                    diagram: 'Diyagram',
-                    table: 'Tablo {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Silinmiş tablo',
-                    missing_field: 'Silinmiş alan',
-                    missing_relationship: 'Silinmiş ilişki',
-                },
-                composer: {
-                    label: 'Mesaj',
-                    placeholder: 'Bir mesaj yazın…',
-                    submit: 'Gönder',
-                    submitting: 'Gönderiliyor…',
-                    cancel: 'İptal',
-                    form_aria_label: 'Yeni mesaj',
-                    counter_aria_label:
-                        '{{max}} karakterden {{count}} kullanıldı',
-                    errors: {
-                        empty: 'Göndermek için bir mesaj girin.',
-                        too_long: 'Mesajlar 2000 karakteri aşamaz.',
-                        create_failed:
-                            'Mesaj gönderilemedi. Lütfen tekrar deneyin.',
-                    },
-                },
-                item_actions: {
-                    title: 'Yorum eylemleri',
-                    edit: 'Düzenle',
-                    delete: 'Sil',
-                },
-                edit: {
-                    label: 'Mesaj',
-                    form_aria_label: 'Mesajı düzenle',
-                    save: 'Kaydet',
-                    saving: 'Kaydediliyor…',
-                    cancel: 'İptal',
-                    counter_aria_label:
-                        '{{count}} / {{max}} karakter kullanıldı',
-                    errors: {
-                        empty: 'Kaydetmek için bir mesaj girin.',
-                        too_long: 'Mesajlar 2000 karakteri aşamaz.',
-                        update_failed:
-                            'Mesaj güncellenemedi. Lütfen tekrar deneyin.',
-                    },
-                    remote_updated_warning:
-                        'Bu mesaj başka bir yerde güncellendi. Kaydetmek bu değişikliklerin üzerine yazacaktır.',
-                },
-                delete_dialog: {
-                    title: 'Mesajı sil',
-                    description:
-                        'Bu mesajı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
-                    cancel: 'İptal',
-                    confirm: 'Sil',
-                    deleting: 'Siliniyor…',
-                    errors: {
-                        delete_failed:
-                            'Bu mesaj silinemedi. Lütfen tekrar deneyin.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Yorumlar (eski)',
             },
             conversations_section: {
                 title: 'Konuşmalar',

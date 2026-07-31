@@ -3,7 +3,6 @@ import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useUpdateTableField } from '@/hooks/use-update-table-field';
-import { useFieldDiscussionIndicator } from '@/hooks/use-discussion-indicators';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { createFieldEditingItem } from '@/lib/realtime/editing-utils';
@@ -18,7 +17,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { SelectBox } from '@/components/select-box/select-box';
 import { TableFieldPopover } from './table-field-modal/table-field-modal';
-import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
 import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
 import type { DatabaseType, DBTable } from '@/lib/domain';
 import { requiresNotNull } from '@/lib/data/data-types/data-types';
@@ -42,7 +40,6 @@ export const TableField: React.FC<TableFieldProps> = ({
 }) => {
     const { t } = useTranslation();
     const { startEditing, stopEditing } = useEditingBroadcast();
-    const discussionIndicator = useFieldDiscussionIndicator(field.id);
     const conversationsAvailable = useConversationsAvailability();
 
     const { attributes, listeners, setNodeRef, transform, transition } =
@@ -175,9 +172,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                         target={{ targetType: 'field', targetId: field.id }}
                         targetName={field.name}
                     />
-                ) : (
-                    <DiscussionIndicator indicator={discussionIndicator} />
-                )}
+                ) : null}
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span>

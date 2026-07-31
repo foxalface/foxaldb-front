@@ -9,10 +9,7 @@ export const uk: LanguageTranslation = {
             refs: 'Зв’язки',
             dependencies: 'Залежності',
             custom_types: 'Користувацькі типи',
-            comments: 'Розмови',
             conversations: 'Розмови',
-            legacy_comments: 'Коментарі (застар.)',
-            legacy_comments_aria: 'Відкрити застарілу панель коментарів',
             visuals: 'Візуальні елементи',
         },
         menu: {
@@ -161,7 +158,6 @@ export const uk: LanguageTranslation = {
                     primary_key: 'Первинний ключ',
                     indexes: 'Індекси',
                     check_constraints: 'Перевірочні обмеження',
-                    comments: 'Коментарі',
                     no_comments: 'Немає коментарів',
                     add_field: 'Додати поле',
                     add_index: 'Додати індекс',
@@ -175,7 +171,6 @@ export const uk: LanguageTranslation = {
                         open_discussion: 'Відкрити розмову',
                         unique: 'Унікальне',
                         auto_increment: 'Автоінкремент',
-                        comments: 'Коментарі',
                         no_comments: 'Немає коментарів',
                         delete_field: 'Видалити поле',
                         // TODO: Translate
@@ -337,109 +332,6 @@ export const uk: LanguageTranslation = {
                     },
                     delete_custom_type: 'Видалити тип',
                 },
-            },
-            comments_section: {
-                title: 'Розмови',
-                loading: 'Завантаження розмов…',
-                inactive: {
-                    title: 'Розмови недоступні',
-                    description:
-                        'Розмови доступні лише на автентифікованих облачних діаграмах.',
-                },
-                empty: {
-                    title: 'Ще немає розмов',
-                    description: 'Розмови про цю діаграму з’являться тут.',
-                    diagram_title: 'Поки немає повідомлень щодо діаграми',
-                    diagram_description:
-                        'Повідомлення про діаграму загалом з’являться тут.',
-                    target_title: 'Поки немає повідомлень для поточного вибору',
-                    target_description:
-                        'Повідомлення про поточний вибір з’являться тут.',
-                },
-                errors: {
-                    load_title: 'Не вдалося завантажити розмови',
-                    load_description:
-                        'Під час завантаження розмов сталася помилка. Спробуйте ще раз.',
-                },
-                retry: 'Повторити',
-                deleted_user: 'Видалений користувач',
-                targets: {
-                    diagram: 'Діаграма',
-                    table: 'Таблиця',
-                    field: 'Поле',
-                    relationship: "Зв'язок",
-                    unknown: 'Розмова',
-                },
-                views: {
-                    all: 'Усі розмови',
-                    diagram: 'Діаграма',
-                    current_target: 'Поточний',
-                },
-                target_header: {
-                    diagram: 'Діаграма',
-                    table: 'Таблиця {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Видалена таблиця',
-                    missing_field: 'Видалене поле',
-                    missing_relationship: "Видалений зв'язок",
-                },
-                composer: {
-                    label: 'Повідомлення',
-                    placeholder: 'Напишіть повідомлення…',
-                    submit: 'Надіслати',
-                    submitting: 'Надсилання…',
-                    cancel: 'Скасувати',
-                    form_aria_label: 'Нове повідомлення',
-                    counter_aria_label:
-                        'Використано {{count}} з {{max}} символів',
-                    errors: {
-                        empty: 'Введіть повідомлення для надсилання.',
-                        too_long:
-                            'Повідомлення не може перевищувати 2000 символів.',
-                        create_failed:
-                            'Не вдалося надіслати повідомлення. Спробуйте ще раз.',
-                    },
-                },
-                item_actions: {
-                    title: 'Дії з коментарем',
-                    edit: 'Редагувати',
-                    delete: 'Видалити',
-                },
-                edit: {
-                    label: 'Повідомлення',
-                    form_aria_label: 'Редагувати повідомлення',
-                    save: 'Зберегти',
-                    saving: 'Збереження…',
-                    cancel: 'Скасувати',
-                    counter_aria_label:
-                        'Використано {{count}} з {{max}} символів',
-                    errors: {
-                        empty: 'Введіть повідомлення для збереження.',
-                        too_long:
-                            'Повідомлення не можуть перевищувати 2000 символів.',
-                        update_failed:
-                            'Не вдалося оновити повідомлення. Спробуйте ще раз.',
-                    },
-                    remote_updated_warning:
-                        'Це повідомлення було оновлено в іншому місці. Збереження перезапише ці зміни.',
-                },
-                delete_dialog: {
-                    title: 'Видалити повідомлення',
-                    description:
-                        'Ви впевнені, що хочете видалити це повідомлення? Цю дію не можна скасувати.',
-                    cancel: 'Скасувати',
-                    confirm: 'Видалити',
-                    deleting: 'Видалення…',
-                    errors: {
-                        delete_failed:
-                            'Не вдалося видалити це повідомлення. Спробуйте ще раз.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Комментарі (застар.)',
             },
             conversations_section: {
                 title: 'Розмови',

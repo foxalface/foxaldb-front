@@ -4,57 +4,48 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBTable } from '@/lib/domain/db-table';
-import {
-    EMPTY_DISCUSSION_INDICATOR,
-    type DiscussionIndicator,
-} from '@/lib/comments/discussion-indicators';
 import { en } from '@/i18n/locales/en';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
 import { TableListItemHeader } from '../table-list-item-header';
 
 const {
     chartDBState,
-    commentsState,
-    discussionIndicatorState,
-    useTableDiscussionIndicator,
-    useFieldDiscussionIndicator,
-    useRelationshipDiscussionIndicator,
+    conversationsState,
+    conversationMenuState,
+    useTargetConversationMenuAction,
     createField,
     createIndex,
     removeTable,
     createTable,
     openTableSchemaDialog,
-    openTargetDiscussion,
-    showSidePanel,
-    selectSidebarSection,
 } = vi.hoisted(() => ({
     chartDBState: {
         readonly: false,
         schemas: [] as Array<{ id: string; name: string }>,
         databaseType: 'sqlite' as string,
     },
-    commentsState: {
-        isActive: true,
+    conversationsState: {
+        isAvailable: true,
     },
-    discussionIndicatorState: {
-        indicator: {
-            commentCount: 0,
-            hasDiscussion: false,
-        } as DiscussionIndicator,
+    conversationMenuState: {
+        showConversationAction: true,
+        conversationLabel: 'Open conversation',
+        isConversationPending: false,
+        openConversationAction: vi.fn(),
     },
-    useTableDiscussionIndicator: vi.fn(
-        (): DiscussionIndicator => discussionIndicatorState.indicator
-    ),
-    useFieldDiscussionIndicator: vi.fn(),
-    useRelationshipDiscussionIndicator: vi.fn(),
+    useTargetConversationMenuAction: vi.fn(() => ({
+        showConversationAction:
+            conversationsState.isAvailable &&
+            conversationMenuState.showConversationAction,
+        conversationLabel: conversationMenuState.conversationLabel,
+        isConversationPending: conversationMenuState.isConversationPending,
+        openConversationAction: conversationMenuState.openConversationAction,
+    })),
     createField: vi.fn(),
     createIndex: vi.fn(),
     removeTable: vi.fn(),
     createTable: vi.fn(),
     openTableSchemaDialog: vi.fn(),
-    openTargetDiscussion: vi.fn(),
-    showSidePanel: vi.fn(),
-    selectSidebarSection: vi.fn(),
 }));
 
 vi.mock('@/hooks/use-chartdb', () => ({
@@ -71,22 +62,32 @@ vi.mock('@/hooks/use-chartdb', () => ({
     }),
 }));
 
-vi.mock('@/hooks/use-layout', () => ({
-    useLayout: () => ({
-        openTargetDiscussion,
-        showSidePanel,
-        selectSidebarSection,
-    }),
+vi.mock('@/hooks/use-conversations-availability', () => ({
+    useConversationsAvailability: () => conversationsState.isAvailable,
 }));
 
-vi.mock('@/hooks/use-comments-availability', () => ({
-    useCommentsAvailability: () => commentsState.isActive,
+vi.mock('@/hooks/use-target-conversation-menu-action', () => ({
+    useTargetConversationMenuAction,
 }));
 
-vi.mock('@/hooks/use-discussion-indicators', () => ({
-    useTableDiscussionIndicator,
-    useFieldDiscussionIndicator,
-    useRelationshipDiscussionIndicator,
+vi.mock('@/components/conversation-indicator/conversation-indicator', () => ({
+    ConversationIndicator: ({
+        target,
+        targetName,
+        className,
+    }: {
+        target: { targetType: string; targetId: string };
+        targetName: string;
+        className?: string;
+    }) => (
+        <span
+            data-testid="conversation-indicator"
+            data-target-type={target.targetType}
+            data-target-id={target.targetId}
+            data-target-name={targetName}
+            className={className}
+        />
+    ),
 }));
 
 vi.mock('@/hooks/use-editing-broadcast', () => ({
@@ -152,11 +153,6 @@ const baseTable: DBTable = {
     createdAt: 0,
 };
 
-const withDiscussion = (commentCount: number): DiscussionIndicator => ({
-    commentCount,
-    hasDiscussion: commentCount > 0,
-});
-
 const renderHeader = (table: DBTable = baseTable) =>
     render(
         <TooltipProvider>
@@ -173,24 +169,31 @@ const openMenu = async (table: DBTable = baseTable) => {
     return user;
 };
 
-describe('TableListItemHeader discussion entry', () => {
+describe('TableListItemHeader conversation entry', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
         chartDBState.schemas = [];
         chartDBState.databaseType = DatabaseType.SQLITE;
-        commentsState.isActive = true;
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        useTableDiscussionIndicator.mockClear();
-        useFieldDiscussionIndicator.mockClear();
-        useRelationshipDiscussionIndicator.mockClear();
+        conversationsState.isAvailable = true;
+        conversationMenuState.showConversationAction = true;
+        conversationMenuState.conversationLabel = 'Open conversation';
+        conversationMenuState.isConversationPending = false;
+        useTargetConversationMenuAction.mockClear();
+        conversationMenuState.openConversationAction.mockClear();
         createField.mockClear();
         createIndex.mockClear();
         removeTable.mockClear();
         createTable.mockClear();
         openTableSchemaDialog.mockClear();
-        openTargetDiscussion.mockClear();
-        showSidePanel.mockClear();
-        selectSidebarSection.mockClear();
+    });
+
+    it('calls useTargetConversationMenuAction with the table target', () => {
+        renderHeader();
+
+        expect(useTargetConversationMenuAction).toHaveBeenCalledWith({
+            targetType: 'table',
+            targetId: 'table-1',
+        });
     });
 
     it('exposes a translated accessible name on the dropdown trigger', async () => {
@@ -205,7 +208,7 @@ describe('TableListItemHeader discussion entry', () => {
         await user.keyboard('{Escape}');
     });
 
-    it('shows Open conversation when comments are active and the table is editable', async () => {
+    it('shows Open conversation when conversations are available and the table is editable', async () => {
         await openMenu();
 
         expect(
@@ -219,7 +222,7 @@ describe('TableListItemHeader discussion entry', () => {
         ).toBeInTheDocument();
     });
 
-    it('shows Open conversation for readonly viewers when comments are active', async () => {
+    it('shows Open conversation for readonly viewers when conversations are available', async () => {
         chartDBState.readonly = true;
         await openMenu();
 
@@ -249,8 +252,8 @@ describe('TableListItemHeader discussion entry', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('hides Open conversation when comments are inactive', async () => {
-        commentsState.isActive = false;
+    it('hides Open conversation when the menu action is unavailable', async () => {
+        conversationMenuState.showConversationAction = false;
         await openMenu();
 
         expect(
@@ -261,9 +264,10 @@ describe('TableListItemHeader discussion entry', () => {
         ).toBeInTheDocument();
     });
 
-    it('does not render an empty dropdown when readonly and comments are inactive', () => {
+    it('does not render an empty dropdown when readonly and conversations are unavailable', () => {
         chartDBState.readonly = true;
-        commentsState.isActive = false;
+        conversationsState.isAvailable = false;
+        conversationMenuState.showConversationAction = false;
         renderHeader();
 
         expect(
@@ -272,20 +276,16 @@ describe('TableListItemHeader discussion entry', () => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
 
-    it('calls openTargetDiscussion once with the table target payload', async () => {
+    it('calls openConversationAction once when the menu item is selected', async () => {
         const user = await openMenu();
 
         await user.click(
             screen.getByRole('menuitem', { name: /Open conversation/i })
         );
 
-        expect(openTargetDiscussion).toHaveBeenCalledTimes(1);
-        expect(openTargetDiscussion).toHaveBeenCalledWith({
-            targetType: 'table',
-            targetId: 'table-1',
-        });
-        expect(showSidePanel).not.toHaveBeenCalled();
-        expect(selectSidebarSection).not.toHaveBeenCalled();
+        expect(
+            conversationMenuState.openConversationAction
+        ).toHaveBeenCalledTimes(1);
     });
 
     it('does not render a badge or comment count', async () => {
@@ -314,7 +314,7 @@ describe('TableListItemHeader discussion entry', () => {
         expect(within(menu).queryAllByRole('separator')).toHaveLength(0);
     });
 
-    it('editable menu separates discussion from destructive actions', async () => {
+    it('editable menu separates conversation from destructive actions', async () => {
         await openMenu();
 
         const menu = screen.getByRole('menu');
@@ -332,164 +332,92 @@ describe('TableListItemHeader discussion entry', () => {
             }
         }
 
-        const discussion = screen.getByRole('menuitem', {
+        const conversation = screen.getByRole('menuitem', {
             name: 'Open conversation',
         });
         const deleteItem = screen.getByRole('menuitem', {
             name: 'Delete Table',
         });
         expect(
-            discussion.compareDocumentPosition(deleteItem) &
+            conversation.compareDocumentPosition(deleteItem) &
                 Node.DOCUMENT_POSITION_FOLLOWING
         ).toBeTruthy();
     });
 });
 
-describe('TableListItemHeader discussion indicator', () => {
+describe('TableListItemHeader conversation indicator', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
-        chartDBState.schemas = [];
-        chartDBState.databaseType = DatabaseType.SQLITE;
-        commentsState.isActive = true;
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        useTableDiscussionIndicator.mockClear();
-        useFieldDiscussionIndicator.mockClear();
-        useRelationshipDiscussionIndicator.mockClear();
-        openTargetDiscussion.mockClear();
+        conversationsState.isAvailable = true;
+        conversationMenuState.showConversationAction = true;
+        useTargetConversationMenuAction.mockClear();
     });
 
-    it('hides the indicator when the table hook returns the empty indicator', () => {
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
+    it('renders ConversationIndicator when conversations are available', () => {
+        renderHeader();
+
+        const indicator = screen.getByTestId('conversation-indicator');
+        expect(indicator).toHaveAttribute('data-target-type', 'table');
+        expect(indicator).toHaveAttribute('data-target-id', 'table-1');
+        expect(indicator).toHaveAttribute('data-target-name', 'Clients');
+    });
+
+    it('hides ConversationIndicator when conversations are unavailable', () => {
+        conversationsState.isAvailable = false;
         renderHeader();
 
         expect(
-            screen.queryByTestId('discussion-indicator')
+            screen.queryByTestId('conversation-indicator')
         ).not.toBeInTheDocument();
     });
 
-    it('shows the indicator when hasDiscussion is true', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
+    it('passes the table target to ConversationIndicator for another table id', () => {
+        renderHeader({ ...baseTable, id: 'table-99', name: 'Orders' });
 
-        const indicator = screen.getByTestId('discussion-indicator');
-        expect(indicator).toBeInTheDocument();
-        expect(indicator).toHaveAttribute('aria-hidden', 'true');
+        const indicator = screen.getByTestId('conversation-indicator');
+        expect(indicator).toHaveAttribute('data-target-id', 'table-99');
+        expect(indicator).toHaveAttribute('data-target-name', 'Orders');
     });
 
-    it('does not render a numeric count even when commentCount is greater than one', () => {
-        discussionIndicatorState.indicator = withDiscussion(4);
-        renderHeader();
-
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
-        expect(screen.queryByText('4')).not.toBeInTheDocument();
-        expect(screen.queryByText(/\d+/)).not.toBeInTheDocument();
-    });
-
-    it('calls useTableDiscussionIndicator with the exact table id', () => {
-        renderHeader();
-
-        expect(useTableDiscussionIndicator).toHaveBeenCalledWith('table-1');
-    });
-
-    it('uses only the table specialized hook', () => {
-        renderHeader();
-
-        expect(useTableDiscussionIndicator).toHaveBeenCalled();
-        expect(useFieldDiscussionIndicator).not.toHaveBeenCalled();
-        expect(useRelationshipDiscussionIndicator).not.toHaveBeenCalled();
-    });
-
-    it('shows the indicator for readonly viewers', () => {
+    it('shows the indicator for readonly viewers when conversations are available', () => {
         chartDBState.readonly = true;
-        discussionIndicatorState.indicator = withDiscussion(2);
         renderHeader();
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
-        expect(menuTrigger()).toBeInTheDocument();
-    });
-
-    it('keeps the indicator visible when comments are inactive if the hook reports presence', () => {
-        // Visibility is owned by the specialized hook / private index (inactive
-        // providers resolve to empty). The header does not gate on write access.
-        commentsState.isActive = false;
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
-
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
-    });
-
-    it('does not show a table indicator when the hook stays empty for a field-partition hit', () => {
-        // Partition isolation is owned by useTableDiscussionIndicator /
-        // getDiscussionIndicator. A field comment with the same ID must not
-        // populate the table hook result.
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        renderHeader({ ...baseTable, id: 'shared-id' });
-
-        expect(useTableDiscussionIndicator).toHaveBeenCalledWith('shared-id');
         expect(
-            screen.queryByTestId('discussion-indicator')
-        ).not.toBeInTheDocument();
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
+        expect(menuTrigger()).toBeInTheDocument();
     });
 
     it('coexists with the table actions trigger', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
         renderHeader();
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
         expect(menuTrigger()).toBeInTheDocument();
     });
 
-    it('does not open a discussion when the decorative indicator is clicked', async () => {
-        const user = userEvent.setup();
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
-
-        await user.click(screen.getByTestId('discussion-indicator'));
-
-        expect(openTargetDiscussion).not.toHaveBeenCalled();
-    });
-
     it('keeps Open conversation functional while the indicator is visible', async () => {
-        discussionIndicatorState.indicator = withDiscussion(3);
         const user = await openMenu();
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
         await user.click(
             screen.getByRole('menuitem', { name: /Open conversation/i })
         );
 
-        expect(openTargetDiscussion).toHaveBeenCalledTimes(1);
-        expect(openTargetDiscussion).toHaveBeenCalledWith({
-            targetType: 'table',
-            targetId: 'table-1',
-        });
+        expect(
+            conversationMenuState.openConversationAction
+        ).toHaveBeenCalledTimes(1);
     });
 
     it('does not render raw target ids or badge count text', () => {
-        discussionIndicatorState.indicator = withDiscussion(2);
         renderHeader();
 
         expect(screen.queryByText('table-1')).not.toBeInTheDocument();
-        expect(screen.queryByText('2')).not.toBeInTheDocument();
         expect(screen.queryByTestId(/badge|count/i)).not.toBeInTheDocument();
-    });
-
-    it('marks the indicator decorative for assistive technology', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
-
-        const indicator = screen.getByTestId('discussion-indicator');
-        expect(indicator).toHaveAttribute('aria-hidden', 'true');
-        expect(indicator).not.toHaveAttribute('tabindex');
-        expect(indicator.tagName).toBe('SPAN');
-    });
-
-    it('keeps shrink-0 and pointer-events-none for narrow layouts', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
-
-        const indicator = screen.getByTestId('discussion-indicator');
-        expect(indicator).toHaveClass('shrink-0', 'pointer-events-none');
     });
 });
 
@@ -498,14 +426,14 @@ describe('TableListItemHeader legacy actions', () => {
         chartDBState.readonly = false;
         chartDBState.schemas = [];
         chartDBState.databaseType = DatabaseType.SQLITE;
-        commentsState.isActive = true;
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
+        conversationsState.isAvailable = true;
+        conversationMenuState.showConversationAction = true;
         createField.mockClear();
         createIndex.mockClear();
         removeTable.mockClear();
         createTable.mockClear();
         openTableSchemaDialog.mockClear();
-        openTargetDiscussion.mockClear();
+        conversationMenuState.openConversationAction.mockClear();
     });
 
     it('shows Change Schema when schema conditions are met and opens the dialog once', async () => {

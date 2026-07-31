@@ -18,7 +18,7 @@ import type {
     DiagramConversationMessage,
 } from '@/lib/conversations/conversation-types';
 import { getUserInitials } from '@/lib/user';
-import { resolveTimeAgoLocale } from '../comments-section/comment-timeago-locale';
+import { resolveTimeAgoLocale } from '@/lib/i18n/timeago-locale';
 import { ConversationMessageActionsMenu } from './conversation-message-actions-menu';
 import { ConversationMessageDeleteDialog } from './conversation-message-delete-dialog';
 import { ConversationMessageEditForm } from './conversation-message-edit-form';

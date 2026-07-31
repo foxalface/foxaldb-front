@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components -- shared Vitest helpers, not a UI module */
 import React from 'react';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
-import type { DiagramConversationEventChannel } from '@/lib/realtime/conversation-subscriber';
+import type { DiagramPrivateEventChannel } from '@/lib/realtime/diagram-private-channel';
 import { ConversationsProvider } from '../conversations-provider';
 import { aliceAuthor, testAuthAlice } from '@/test/user-identity-fixtures';
 
@@ -19,14 +19,14 @@ export interface AuthValue {
 
 export type EventCallback = (payload: unknown) => void;
 
-export type FakeChannel = DiagramConversationEventChannel & {
+export type FakeChannel = DiagramPrivateEventChannel & {
     listeners: Map<string, Set<EventCallback>>;
     emit: (event: string, payload: unknown) => void;
 };
 
 export interface RealtimeMockValue {
     currentDiagramId: string | null;
-    getDiagramPrivateChannel: () => DiagramConversationEventChannel | null;
+    getDiagramPrivateChannel: () => DiagramPrivateEventChannel | null;
     onReconnect: (listener: () => void) => () => void;
 }
 

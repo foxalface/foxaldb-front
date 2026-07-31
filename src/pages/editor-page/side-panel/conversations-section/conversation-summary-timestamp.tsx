@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useMemo, useState } from 'react';
 import TimeAgo from 'timeago-react';
 import { useTranslation } from 'react-i18next';
 import { register as registerLocale } from 'timeago.js';
-import { resolveTimeAgoLocale } from '../comments-section/comment-timeago-locale';
+import { resolveTimeAgoLocale } from '@/lib/i18n/timeago-locale';
 
 export interface ConversationSummaryTimestampProps {
     timestamp: string | null;

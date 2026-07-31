@@ -9,10 +9,7 @@ export const bn: LanguageTranslation = {
             refs: 'রেফস',
             dependencies: 'নির্ভরতা',
             custom_types: 'কাস্টম টাইপ',
-            comments: 'কথোপকথন',
             conversations: 'কথোপকথন',
-            legacy_comments: 'মন্তব্য (পুরনো)',
-            legacy_comments_aria: 'পুরনো মন্তব্য প্যানেল খুলুন',
             visuals: 'ভিজ্যুয়াল',
         },
         menu: {
@@ -163,7 +160,6 @@ export const bn: LanguageTranslation = {
                     primary_key: 'প্রাথমিক কী',
                     indexes: 'ইনডেক্স',
                     check_constraints: 'চেক সীমাবদ্ধতা',
-                    comments: 'মন্তব্য',
                     no_comments: 'কোনো মন্তব্য নেই',
                     add_field: 'ফিল্ড যোগ করুন',
                     add_index: 'ইনডেক্স যোগ করুন',
@@ -177,7 +173,6 @@ export const bn: LanguageTranslation = {
                         open_discussion: 'কথোপকথন খুলুন',
                         unique: 'অদ্বিতীয়',
                         auto_increment: 'স্বয়ংক্রিয় বৃদ্ধি',
-                        comments: 'মন্তব্য',
                         no_comments: 'কোনো মন্তব্য নেই',
                         delete_field: 'ফিল্ড মুছুন',
                         // TODO: Translate
@@ -339,109 +334,6 @@ export const bn: LanguageTranslation = {
                     },
                     delete_custom_type: 'টাইপ মুছুন',
                 },
-            },
-            comments_section: {
-                title: 'কথোপকথন',
-                loading: 'কথোপকথন লোড হচ্ছে…',
-                inactive: {
-                    title: 'কথোপকথন উপলব্ধ নয়',
-                    description:
-                        'কথোপকথন শুধুমাত্র প্রমাণিত ক্লাউড ডায়াগ্রামে উপলব্ধ।',
-                },
-                empty: {
-                    title: 'এখনো কোনো কথোপকথন নেই',
-                    description:
-                        'এই ডায়াগ্রাম সম্পর্কিত কথোপকথন এখানে দেখা যাবে।',
-                    diagram_title: 'এখনও কোনো ডায়াগ্রাম বার্তা নেই',
-                    diagram_description:
-                        'সম্পূর্ণ ডায়াগ্রাম সম্পর্কিত বার্তা এখানে দেখা যাবে।',
-                    target_title:
-                        'বর্তমান নির্বাচনের জন্য এখনও কোনো বার্তা নেই',
-                    target_description:
-                        'বর্তমান নির্বাচন সম্পর্কিত বার্তা এখানে দেখা যাবে।',
-                },
-                errors: {
-                    load_title: 'কথোপকথন লোড করা যায়নি',
-                    load_description:
-                        'কথোপকথন লোড করার সময় একটি ত্রুটি ঘটেছে। আবার চেষ্টা করুন।',
-                },
-                retry: 'পুনরায় চেষ্টা করুন',
-                deleted_user: 'মুছে ফেলা ব্যবহারকারী',
-                targets: {
-                    diagram: 'ডায়াগ্রাম',
-                    table: 'টেবিল',
-                    field: 'ফিল্ড',
-                    relationship: 'সম্পর্ক',
-                    unknown: 'কথোপকথন',
-                },
-                views: {
-                    all: 'সমস্ত কথোপকথন',
-                    diagram: 'ডায়াগ্রাম',
-                    current_target: 'বর্তমান',
-                },
-                target_header: {
-                    diagram: 'ডায়াগ্রাম',
-                    table: 'টেবিল {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'মুছে ফেলা টেবিল',
-                    missing_field: 'মুছে ফেলা ফিল্ড',
-                    missing_relationship: 'মুছে ফেলা সম্পর্ক',
-                },
-                composer: {
-                    label: 'বার্তা',
-                    placeholder: 'একটি বার্তা লিখুন…',
-                    submit: 'পোস্ট করুন',
-                    submitting: 'পোস্ট করা হচ্ছে…',
-                    cancel: 'বাতিল',
-                    form_aria_label: 'নতুন বার্তা',
-                    counter_aria_label:
-                        '{{max}}-এর মধ্যে {{count}} অক্ষর ব্যবহার হয়েছে',
-                    errors: {
-                        empty: 'পোস্ট করার জন্য একটি বার্তা লিখুন।',
-                        too_long: 'বার্তা ২০০০ অক্ষরের বেশি হতে পারে না।',
-                        create_failed:
-                            'বার্তা পোস্ট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।',
-                    },
-                },
-                item_actions: {
-                    title: 'মন্তব্যের কাজ',
-                    edit: 'সম্পাদনা',
-                    delete: 'মুছুন',
-                },
-                edit: {
-                    label: 'বার্তা',
-                    form_aria_label: 'বার্তা সম্পাদনা করুন',
-                    save: 'সংরক্ষণ',
-                    saving: 'সংরক্ষণ করা হচ্ছে…',
-                    cancel: 'বাতিল',
-                    counter_aria_label:
-                        '{{max}}-এর মধ্যে {{count}}টি অক্ষর ব্যবহৃত',
-                    errors: {
-                        empty: 'সংরক্ষণ করতে একটি বার্তা লিখুন।',
-                        too_long: 'বার্তা ২০০০ অক্ষরের বেশি হতে পারে না।',
-                        update_failed:
-                            'বার্তা আপডেট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।',
-                    },
-                    remote_updated_warning:
-                        'এই বার্তা অন্য কোথাও আপডেট হয়েছে। সংরক্ষণ করলে সেই পরিবর্তনগুলো ওভাররাইট হবে।',
-                },
-                delete_dialog: {
-                    title: 'বার্তা মুছুন',
-                    description:
-                        'আপনি কি নিশ্চিত যে এই বার্তাটি মুছতে চান? এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।',
-                    cancel: 'বাতিল',
-                    confirm: 'মুছুন',
-                    deleting: 'মুছে ফেলা হচ্ছে…',
-                    errors: {
-                        delete_failed:
-                            'এই বার্তাটি মুছতে পারা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'মন্তব্য (পুরনো)',
             },
             conversations_section: {
                 title: 'কথোপকথন',

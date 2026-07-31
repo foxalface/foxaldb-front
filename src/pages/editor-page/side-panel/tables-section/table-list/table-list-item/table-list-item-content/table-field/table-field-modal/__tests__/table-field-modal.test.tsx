@@ -10,22 +10,21 @@ import { TableFieldPopover } from '../table-field-modal';
 
 const {
     chartDBState,
-    commentsState,
-    openTargetDiscussion,
-    showSidePanel,
-    selectSidebarSection,
+    conversationMenuState,
+    useTargetConversationMenuAction,
     updateField,
     removeField,
 } = vi.hoisted(() => ({
     chartDBState: {
         readonly: false,
     },
-    commentsState: {
-        isActive: true,
+    conversationMenuState: {
+        showConversationAction: true,
+        conversationLabel: 'Open conversation',
+        isConversationPending: false,
+        openConversationAction: vi.fn(),
     },
-    openTargetDiscussion: vi.fn(),
-    showSidePanel: vi.fn(),
-    selectSidebarSection: vi.fn(),
+    useTargetConversationMenuAction: vi.fn(() => conversationMenuState),
     updateField: vi.fn(),
     removeField: vi.fn(),
 }));
@@ -36,16 +35,8 @@ vi.mock('@/hooks/use-chartdb', () => ({
     }),
 }));
 
-vi.mock('@/hooks/use-layout', () => ({
-    useLayout: () => ({
-        openTargetDiscussion,
-        showSidePanel,
-        selectSidebarSection,
-    }),
-}));
-
-vi.mock('@/hooks/use-comments-availability', () => ({
-    useCommentsAvailability: () => commentsState.isActive,
+vi.mock('@/hooks/use-target-conversation-menu-action', () => ({
+    useTargetConversationMenuAction,
 }));
 
 vi.mock('react-i18next', () => ({
@@ -130,15 +121,25 @@ const openPopover = async (props: PopoverHarnessProps = {}) => {
     return user;
 };
 
-describe('TableFieldPopover discussion entry', () => {
+describe('TableFieldPopover conversation entry', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
-        commentsState.isActive = true;
-        openTargetDiscussion.mockClear();
-        showSidePanel.mockClear();
-        selectSidebarSection.mockClear();
+        conversationMenuState.showConversationAction = true;
+        conversationMenuState.conversationLabel = 'Open conversation';
+        conversationMenuState.isConversationPending = false;
+        useTargetConversationMenuAction.mockClear();
+        conversationMenuState.openConversationAction.mockClear();
         updateField.mockClear();
         removeField.mockClear();
+    });
+
+    it('requests conversation menu action for the field target', () => {
+        renderPopover();
+
+        expect(useTargetConversationMenuAction).toHaveBeenCalledWith({
+            targetType: 'field',
+            targetId: 'field-1',
+        });
     });
 
     it('exposes a translated accessible name on the popover trigger', async () => {
@@ -152,7 +153,7 @@ describe('TableFieldPopover discussion entry', () => {
         ).toBeInTheDocument();
     });
 
-    it('shows Open conversation when comments are active and the field is editable', async () => {
+    it('shows Open conversation when the menu action is available and the field is editable', async () => {
         await openPopover();
 
         expect(
@@ -165,7 +166,7 @@ describe('TableFieldPopover discussion entry', () => {
         expect(screen.getByText('Default Value')).toBeInTheDocument();
     });
 
-    it('shows Open conversation for readonly viewers when comments are active', async () => {
+    it('shows Open conversation for readonly viewers when the menu action is available', async () => {
         chartDBState.readonly = true;
         await openPopover();
 
@@ -189,8 +190,8 @@ describe('TableFieldPopover discussion entry', () => {
         expect(defaultInput).toHaveAttribute('readonly');
     });
 
-    it('hides Open conversation when comments are inactive', async () => {
-        commentsState.isActive = false;
+    it('hides Open conversation when the menu action is unavailable', async () => {
+        conversationMenuState.showConversationAction = false;
         await openPopover();
 
         expect(
@@ -202,9 +203,9 @@ describe('TableFieldPopover discussion entry', () => {
         expect(screen.getByText('Unique')).toBeInTheDocument();
     });
 
-    it('does not leave an empty footer for readonly viewers when comments are inactive', async () => {
+    it('does not leave an empty footer for readonly viewers when the menu action is unavailable', async () => {
         chartDBState.readonly = true;
-        commentsState.isActive = false;
+        conversationMenuState.showConversationAction = false;
         await openPopover();
 
         expect(
@@ -222,7 +223,6 @@ describe('TableFieldPopover discussion entry', () => {
         const separators = contentRoot!.querySelectorAll(
             '[data-orientation="horizontal"]'
         );
-        // Title separator only — no orphan footer separator
         expect(separators).toHaveLength(1);
         const children = Array.from(contentRoot!.children);
         expect(
@@ -230,7 +230,7 @@ describe('TableFieldPopover discussion entry', () => {
         ).not.toBe('horizontal');
     });
 
-    it('calls openTargetDiscussion once with the field target payload and closes the popover', async () => {
+    it('calls openConversationAction and closes the popover', async () => {
         const onOpenChange = vi.fn();
         const user = userEvent.setup();
         renderPopover({ defaultOpen: true, onOpenChange });
@@ -239,13 +239,9 @@ describe('TableFieldPopover discussion entry', () => {
             screen.getByRole('button', { name: 'Open conversation' })
         );
 
-        expect(openTargetDiscussion).toHaveBeenCalledTimes(1);
-        expect(openTargetDiscussion).toHaveBeenCalledWith({
-            targetType: 'field',
-            targetId: 'field-1',
-        });
-        expect(showSidePanel).not.toHaveBeenCalled();
-        expect(selectSidebarSection).not.toHaveBeenCalled();
+        expect(
+            conversationMenuState.openConversationAction
+        ).toHaveBeenCalledTimes(1);
         expect(updateField).not.toHaveBeenCalled();
         expect(removeField).not.toHaveBeenCalled();
         expect(onOpenChange).toHaveBeenCalledWith(false);
@@ -258,7 +254,9 @@ describe('TableFieldPopover discussion entry', () => {
         await user.click(screen.getByRole('button', { name: 'Delete Field' }));
 
         expect(removeField).toHaveBeenCalledTimes(1);
-        expect(openTargetDiscussion).not.toHaveBeenCalled();
+        expect(
+            conversationMenuState.openConversationAction
+        ).not.toHaveBeenCalled();
     });
 
     it('does not render a badge or comment count', async () => {
@@ -347,11 +345,21 @@ describe('TableFieldPopover discussion entry', () => {
         expect(discussion).toHaveFocus();
         await user.keyboard('{Enter}');
 
-        expect(openTargetDiscussion).toHaveBeenCalledTimes(1);
-        expect(openTargetDiscussion).toHaveBeenCalledWith({
-            targetType: 'field',
-            targetId: 'field-1',
-        });
+        expect(
+            conversationMenuState.openConversationAction
+        ).toHaveBeenCalledTimes(1);
         expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('reflects the pending conversation label from the menu action hook', async () => {
+        conversationMenuState.conversationLabel = 'Starting conversation…';
+        conversationMenuState.isConversationPending = true;
+        await openPopover();
+
+        const discussion = screen.getByRole('button', {
+            name: 'Starting conversation…',
+        });
+        expect(discussion).toHaveAttribute('aria-busy', 'true');
+        expect(discussion).toBeDisabled();
     });
 });

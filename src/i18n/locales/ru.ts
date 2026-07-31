@@ -9,10 +9,7 @@ export const ru: LanguageTranslation = {
             refs: 'Ссылки',
             dependencies: 'Зависимости',
             custom_types: 'Пользовательские типы',
-            comments: 'Беседы',
             conversations: 'Беседы',
-            legacy_comments: 'Комментарии (устар.)',
-            legacy_comments_aria: 'Открыть устаревшую панель комментариев',
             visuals: 'Визуальные элементы',
         },
         menu: {
@@ -160,7 +157,6 @@ export const ru: LanguageTranslation = {
                     primary_key: 'Первичный ключ',
                     indexes: 'Индексы',
                     check_constraints: 'Проверочные ограничения',
-                    comments: 'Комментарии',
                     no_comments: 'Нет комментария',
                     add_field: 'Добавить поле',
                     add_index: 'Добавить индекс',
@@ -174,7 +170,6 @@ export const ru: LanguageTranslation = {
                         open_discussion: 'Открыть беседу',
                         unique: 'Уникальный',
                         auto_increment: 'Автоинкремент',
-                        comments: 'Комментарии',
                         no_comments: 'Нет комментария',
                         delete_field: 'Удалить поле',
                         // TODO: Translate
@@ -336,107 +331,6 @@ export const ru: LanguageTranslation = {
                     },
                     delete_custom_type: 'Удалить тип',
                 },
-            },
-            comments_section: {
-                title: 'Беседы',
-                loading: 'Загрузка бесед…',
-                inactive: {
-                    title: 'Беседы недоступны',
-                    description:
-                        'Беседы доступны только для аутентифицированных облачных диаграмм.',
-                },
-                empty: {
-                    title: 'Пока нет бесед',
-                    description: 'Разговоры об этой диаграмме появятся здесь.',
-                    diagram_title: 'Пока нет сообщений о диаграмме',
-                    diagram_description:
-                        'Сообщения о диаграмме в целом появятся здесь.',
-                    target_title: 'Пока нет сообщений для текущего выбора',
-                    target_description:
-                        'Сообщения о текущем выборе появятся здесь.',
-                },
-                errors: {
-                    load_title: 'Не удалось загрузить беседы',
-                    load_description:
-                        'При загрузке бесед произошла ошибка. Попробуйте снова.',
-                },
-                retry: 'Повторить',
-                deleted_user: 'Удалённый пользователь',
-                targets: {
-                    diagram: 'Диаграмма',
-                    table: 'Таблица',
-                    field: 'Поле',
-                    relationship: 'Связь',
-                    unknown: 'Беседа',
-                },
-                views: {
-                    all: 'Все беседы',
-                    diagram: 'Диаграмма',
-                    current_target: 'Текущий',
-                },
-                target_header: {
-                    diagram: 'Диаграмма',
-                    table: 'Таблица {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Удалённая таблица',
-                    missing_field: 'Удалённое поле',
-                    missing_relationship: 'Удалённая связь',
-                },
-                composer: {
-                    label: 'Сообщение',
-                    placeholder: 'Напишите сообщение…',
-                    submit: 'Отправить',
-                    submitting: 'Отправка…',
-                    cancel: 'Отмена',
-                    form_aria_label: 'Новое сообщение',
-                    counter_aria_label:
-                        'Использовано {{count}} из {{max}} символов',
-                    errors: {
-                        empty: 'Введите сообщение для отправки.',
-                        too_long: 'Сообщение не может превышать 2000 символов.',
-                        create_failed:
-                            'Не удалось отправить сообщение. Попробуйте ещё раз.',
-                    },
-                },
-                item_actions: {
-                    title: 'Действия с комментарием',
-                    edit: 'Редактировать',
-                    delete: 'Удалить',
-                },
-                edit: {
-                    label: 'Сообщение',
-                    form_aria_label: 'Редактировать сообщение',
-                    save: 'Сохранить',
-                    saving: 'Сохранение…',
-                    cancel: 'Отмена',
-                    counter_aria_label:
-                        'Использовано {{count}} из {{max}} символов',
-                    errors: {
-                        empty: 'Введите сообщение для сохранения.',
-                        too_long: 'Сообщения не могут превышать 2000 символов.',
-                        update_failed:
-                            'Не удалось обновить сообщение. Попробуйте ещё раз.',
-                    },
-                    remote_updated_warning:
-                        'Это сообщение было обновлено в другом месте. Сохранение перезапишет эти изменения.',
-                },
-                delete_dialog: {
-                    title: 'Удалить сообщение',
-                    description:
-                        'Вы уверены, что хотите удалить это сообщение? Это действие нельзя отменить.',
-                    cancel: 'Отмена',
-                    confirm: 'Удалить',
-                    deleting: 'Удаление…',
-                    errors: {
-                        delete_failed:
-                            'Не удалось удалить это сообщение. Попробуйте ещё раз.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Комментарии (устар.)',
             },
             conversations_section: {
                 title: 'Беседы',

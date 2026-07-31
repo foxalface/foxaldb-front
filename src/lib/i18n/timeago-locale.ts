@@ -156,8 +156,8 @@ export interface ResolvedTimeAgoLocale {
 }
 
 /**
- * Synchronous resolution so CommentAuthor can register before paint and avoid
- * an English flash for official locales.
+ * Synchronous resolution so relative timestamps can register before paint and
+ * avoid an English flash for official locales.
  */
 export const resolveTimeAgoLocale = (
     language: string

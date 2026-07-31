@@ -9,10 +9,7 @@ export const de: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Abhängigkeiten',
             custom_types: 'Benutzerdefinierte Typen',
-            comments: 'Unterhaltungen',
             conversations: 'Unterhaltungen',
-            legacy_comments: 'Kommentare (Legacy)',
-            legacy_comments_aria: 'Legacy-Kommentarpanel öffnen',
             visuals: 'Darstellungen',
         },
         menu: {
@@ -163,7 +160,6 @@ export const de: LanguageTranslation = {
                     primary_key: 'Primärschlüssel',
                     indexes: 'Indizes',
                     check_constraints: 'Prüfbedingungen',
-                    comments: 'Kommentare',
                     no_comments: 'Keine Kommentare',
                     add_field: 'Feld hinzufügen',
                     add_index: 'Index hinzufügen',
@@ -177,7 +173,6 @@ export const de: LanguageTranslation = {
                         open_discussion: 'Unterhaltung öffnen',
                         unique: 'Eindeutig',
                         auto_increment: 'Automatisch hochzählen',
-                        comments: 'Kommentare',
                         no_comments: 'Keine Kommentare',
                         delete_field: 'Feld löschen',
                         // TODO: Translate
@@ -339,111 +334,6 @@ export const de: LanguageTranslation = {
                     },
                     delete_custom_type: 'Typ löschen',
                 },
-            },
-            comments_section: {
-                title: 'Unterhaltungen',
-                loading: 'Unterhaltungen werden geladen…',
-                inactive: {
-                    title: 'Unterhaltungen nicht verfügbar',
-                    description:
-                        'Unterhaltungen sind nur für authentifizierte Cloud-Diagramme verfügbar.',
-                },
-                empty: {
-                    title: 'Noch keine Unterhaltungen',
-                    description:
-                        'Unterhaltungen zu diesem Diagramm erscheinen hier.',
-                    diagram_title: 'Noch keine Diagramm-Nachrichten',
-                    diagram_description:
-                        'Nachrichten zum Diagramm insgesamt erscheinen hier.',
-                    target_title:
-                        'Noch keine Nachrichten zur aktuellen Auswahl',
-                    target_description:
-                        'Nachrichten zur aktuellen Auswahl erscheinen hier.',
-                },
-                errors: {
-                    load_title: 'Unterhaltungen konnten nicht geladen werden',
-                    load_description:
-                        'Beim Laden der Unterhaltungen ist ein Fehler aufgetreten. Bitte erneut versuchen.',
-                },
-                retry: 'Erneut versuchen',
-                deleted_user: 'Gelöschter Benutzer',
-                targets: {
-                    diagram: 'Diagramm',
-                    table: 'Tabelle',
-                    field: 'Feld',
-                    relationship: 'Beziehung',
-                    unknown: 'Unterhaltung',
-                },
-                views: {
-                    all: 'Alle Unterhaltungen',
-                    diagram: 'Diagramm',
-                    current_target: 'Aktuell',
-                },
-                target_header: {
-                    diagram: 'Diagramm',
-                    table: 'Tabelle {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Gelöschte Tabelle',
-                    missing_field: 'Gelöschtes Feld',
-                    missing_relationship: 'Gelöschte Beziehung',
-                },
-                composer: {
-                    label: 'Nachricht',
-                    placeholder: 'Nachricht schreiben…',
-                    submit: 'Senden',
-                    submitting: 'Wird gesendet…',
-                    cancel: 'Abbrechen',
-                    form_aria_label: 'Neue Nachricht',
-                    counter_aria_label:
-                        '{{count}} von {{max}} Zeichen verwendet',
-                    errors: {
-                        empty: 'Geben Sie eine Nachricht zum Senden ein.',
-                        too_long:
-                            'Nachrichten dürfen höchstens 2000 Zeichen lang sein.',
-                        create_failed:
-                            'Die Nachricht konnte nicht gesendet werden. Bitte erneut versuchen.',
-                    },
-                },
-                item_actions: {
-                    title: 'Kommentaraktionen',
-                    edit: 'Bearbeiten',
-                    delete: 'Löschen',
-                },
-                edit: {
-                    label: 'Nachricht',
-                    form_aria_label: 'Nachricht bearbeiten',
-                    save: 'Speichern',
-                    saving: 'Wird gespeichert…',
-                    cancel: 'Abbrechen',
-                    counter_aria_label:
-                        '{{count}} von {{max}} Zeichen verwendet',
-                    errors: {
-                        empty: 'Gib eine Nachricht zum Speichern ein.',
-                        too_long:
-                            'Nachrichten dürfen maximal 2000 Zeichen lang sein.',
-                        update_failed:
-                            'Die Nachricht konnte nicht aktualisiert werden. Bitte versuche es erneut.',
-                    },
-                    remote_updated_warning:
-                        'Diese Nachricht wurde woanders aktualisiert. Speichern überschreibt diese Änderungen.',
-                },
-                delete_dialog: {
-                    title: 'Nachricht löschen',
-                    description:
-                        'Möchten Sie diese Nachricht wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
-                    cancel: 'Abbrechen',
-                    confirm: 'Löschen',
-                    deleting: 'Wird gelöscht…',
-                    errors: {
-                        delete_failed:
-                            'Diese Nachricht konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Kommentare (Legacy)',
             },
             conversations_section: {
                 title: 'Unterhaltungen',

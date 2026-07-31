@@ -3,53 +3,44 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
-import {
-    EMPTY_DISCUSSION_INDICATOR,
-    type DiscussionIndicator,
-} from '@/lib/comments/discussion-indicators';
 import type { RemoteEditingViewModel } from '@/lib/realtime/editing-utils';
 import { en } from '@/i18n/locales/en';
 import { RelationshipListItemHeader } from '../relationship-list-item-header';
 
 const {
     chartDBState,
-    commentsState,
+    conversationsState,
+    conversationMenuState,
     remoteEditorsState,
-    discussionIndicatorState,
-    useTableDiscussionIndicator,
-    useFieldDiscussionIndicator,
-    useRelationshipDiscussionIndicator,
+    useTargetConversationMenuAction,
     removeRelationship,
     deleteElements,
-    openTargetDiscussion,
-    showSidePanel,
-    selectSidebarSection,
 } = vi.hoisted(() => ({
     chartDBState: {
         readonly: false,
     },
-    commentsState: {
-        isActive: true,
+    conversationsState: {
+        isAvailable: true,
+    },
+    conversationMenuState: {
+        showConversationAction: true,
+        conversationLabel: 'Open conversation',
+        isConversationPending: false,
+        openConversationAction: vi.fn(),
     },
     remoteEditorsState: {
         editors: [] as RemoteEditingViewModel[],
     },
-    discussionIndicatorState: {
-        indicator: {
-            commentCount: 0,
-            hasDiscussion: false,
-        } as DiscussionIndicator,
-    },
-    useTableDiscussionIndicator: vi.fn(),
-    useFieldDiscussionIndicator: vi.fn(),
-    useRelationshipDiscussionIndicator: vi.fn(
-        (): DiscussionIndicator => discussionIndicatorState.indicator
-    ),
+    useTargetConversationMenuAction: vi.fn(() => ({
+        showConversationAction:
+            conversationsState.isAvailable &&
+            conversationMenuState.showConversationAction,
+        conversationLabel: conversationMenuState.conversationLabel,
+        isConversationPending: conversationMenuState.isConversationPending,
+        openConversationAction: conversationMenuState.openConversationAction,
+    })),
     removeRelationship: vi.fn(),
     deleteElements: vi.fn(),
-    openTargetDiscussion: vi.fn(),
-    showSidePanel: vi.fn(),
-    selectSidebarSection: vi.fn(),
 }));
 
 vi.mock('@/hooks/use-chartdb', () => ({
@@ -60,22 +51,32 @@ vi.mock('@/hooks/use-chartdb', () => ({
     }),
 }));
 
-vi.mock('@/hooks/use-layout', () => ({
-    useLayout: () => ({
-        openTargetDiscussion,
-        showSidePanel,
-        selectSidebarSection,
-    }),
+vi.mock('@/hooks/use-conversations-availability', () => ({
+    useConversationsAvailability: () => conversationsState.isAvailable,
 }));
 
-vi.mock('@/hooks/use-comments-availability', () => ({
-    useCommentsAvailability: () => commentsState.isActive,
+vi.mock('@/hooks/use-target-conversation-menu-action', () => ({
+    useTargetConversationMenuAction,
 }));
 
-vi.mock('@/hooks/use-discussion-indicators', () => ({
-    useTableDiscussionIndicator,
-    useFieldDiscussionIndicator,
-    useRelationshipDiscussionIndicator,
+vi.mock('@/components/conversation-indicator/conversation-indicator', () => ({
+    ConversationIndicator: ({
+        target,
+        targetName,
+        className,
+    }: {
+        target: { targetType: string; targetId: string };
+        targetName: string;
+        className?: string;
+    }) => (
+        <span
+            data-testid="conversation-indicator"
+            data-target-type={target.targetType}
+            data-target-id={target.targetId}
+            data-target-name={targetName}
+            className={className}
+        />
+    ),
 }));
 
 vi.mock('@xyflow/react', () => ({
@@ -145,11 +146,6 @@ const relationship: DBRelationship = {
     createdAt: 0,
 };
 
-const withDiscussion = (commentCount: number): DiscussionIndicator => ({
-    commentCount,
-    hasDiscussion: commentCount > 0,
-});
-
 const createRemoteEditor = (
     overrides: Partial<RemoteEditingViewModel> &
         Pick<RemoteEditingViewModel, 'userId' | 'name'>
@@ -175,20 +171,27 @@ const openMenu = async (rel: DBRelationship = relationship) => {
     return user;
 };
 
-describe('RelationshipListItemHeader discussion entry', () => {
+describe('RelationshipListItemHeader conversation entry', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
-        commentsState.isActive = true;
+        conversationsState.isAvailable = true;
+        conversationMenuState.showConversationAction = true;
+        conversationMenuState.conversationLabel = 'Open conversation';
+        conversationMenuState.isConversationPending = false;
         remoteEditorsState.editors = [];
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        useTableDiscussionIndicator.mockClear();
-        useFieldDiscussionIndicator.mockClear();
-        useRelationshipDiscussionIndicator.mockClear();
+        useTargetConversationMenuAction.mockClear();
+        conversationMenuState.openConversationAction.mockClear();
         removeRelationship.mockClear();
         deleteElements.mockClear();
-        openTargetDiscussion.mockClear();
-        showSidePanel.mockClear();
-        selectSidebarSection.mockClear();
+    });
+
+    it('calls useTargetConversationMenuAction with the relationship target', () => {
+        renderHeader();
+
+        expect(useTargetConversationMenuAction).toHaveBeenCalledWith({
+            targetType: 'relationship',
+            targetId: 'rel-1',
+        });
     });
 
     it('exposes a translated accessible name on the dropdown trigger', async () => {
@@ -203,7 +206,7 @@ describe('RelationshipListItemHeader discussion entry', () => {
         await user.keyboard('{Escape}');
     });
 
-    it('shows Open conversation when comments are active and editable', async () => {
+    it('shows Open conversation when conversations are available and editable', async () => {
         await openMenu();
 
         expect(
@@ -214,7 +217,7 @@ describe('RelationshipListItemHeader discussion entry', () => {
         ).toBeInTheDocument();
     });
 
-    it('shows Open conversation for readonly viewers when comments are active', async () => {
+    it('shows Open conversation for readonly viewers when conversations are available', async () => {
         chartDBState.readonly = true;
         await openMenu();
 
@@ -232,8 +235,8 @@ describe('RelationshipListItemHeader discussion entry', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('hides Open conversation when comments are inactive', async () => {
-        commentsState.isActive = false;
+    it('hides Open conversation when the menu action is unavailable', async () => {
+        conversationMenuState.showConversationAction = false;
         await openMenu();
 
         expect(
@@ -246,7 +249,8 @@ describe('RelationshipListItemHeader discussion entry', () => {
 
     it('does not render an empty dropdown when no action is available', () => {
         chartDBState.readonly = true;
-        commentsState.isActive = false;
+        conversationsState.isAvailable = false;
+        conversationMenuState.showConversationAction = false;
         renderHeader();
 
         expect(
@@ -255,20 +259,16 @@ describe('RelationshipListItemHeader discussion entry', () => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
 
-    it('calls openTargetDiscussion once with the relationship target payload', async () => {
+    it('calls openConversationAction once when the menu item is selected', async () => {
         const user = await openMenu();
 
         await user.click(
             screen.getByRole('menuitem', { name: /Open conversation/i })
         );
 
-        expect(openTargetDiscussion).toHaveBeenCalledTimes(1);
-        expect(openTargetDiscussion).toHaveBeenCalledWith({
-            targetType: 'relationship',
-            targetId: 'rel-1',
-        });
-        expect(showSidePanel).not.toHaveBeenCalled();
-        expect(selectSidebarSection).not.toHaveBeenCalled();
+        expect(
+            conversationMenuState.openConversationAction
+        ).toHaveBeenCalledTimes(1);
     });
 
     it('keeps existing delete behavior unchanged', async () => {
@@ -312,7 +312,7 @@ describe('RelationshipListItemHeader discussion entry', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('editable menu separates discussion from delete', async () => {
+    it('editable menu separates conversation from delete', async () => {
         await openMenu();
 
         const menu = screen.getByRole('menu');
@@ -330,166 +330,95 @@ describe('RelationshipListItemHeader discussion entry', () => {
             }
         }
 
-        const discussion = screen.getByRole('menuitem', {
+        const conversation = screen.getByRole('menuitem', {
             name: 'Open conversation',
         });
         const deleteItem = screen.getByRole('menuitem', { name: 'Delete' });
         expect(
-            discussion.compareDocumentPosition(deleteItem) &
+            conversation.compareDocumentPosition(deleteItem) &
                 Node.DOCUMENT_POSITION_FOLLOWING
         ).toBeTruthy();
     });
 });
 
-describe('RelationshipListItemHeader discussion indicator', () => {
+describe('RelationshipListItemHeader conversation indicator', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
-        commentsState.isActive = true;
+        conversationsState.isAvailable = true;
+        conversationMenuState.showConversationAction = true;
         remoteEditorsState.editors = [];
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        useTableDiscussionIndicator.mockClear();
-        useFieldDiscussionIndicator.mockClear();
-        useRelationshipDiscussionIndicator.mockClear();
-        removeRelationship.mockClear();
-        deleteElements.mockClear();
-        openTargetDiscussion.mockClear();
-        showSidePanel.mockClear();
-        selectSidebarSection.mockClear();
+        useTargetConversationMenuAction.mockClear();
     });
 
-    it('calls useRelationshipDiscussionIndicator with the exact relationship id', () => {
+    it('renders ConversationIndicator when conversations are available', () => {
         renderHeader();
 
-        expect(useRelationshipDiscussionIndicator).toHaveBeenCalledWith(
-            'rel-1'
+        const indicator = screen.getByTestId('conversation-indicator');
+        expect(indicator).toHaveAttribute('data-target-type', 'relationship');
+        expect(indicator).toHaveAttribute('data-target-id', 'rel-1');
+        expect(indicator).toHaveAttribute(
+            'data-target-name',
+            'orders_clients_fk'
         );
     });
 
-    it('uses only the relationship specialized hook', () => {
-        renderHeader();
-
-        expect(useRelationshipDiscussionIndicator).toHaveBeenCalled();
-        expect(useTableDiscussionIndicator).not.toHaveBeenCalled();
-        expect(useFieldDiscussionIndicator).not.toHaveBeenCalled();
-    });
-
-    it('hides the indicator when the relationship hook returns the empty indicator', () => {
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
+    it('hides ConversationIndicator when conversations are unavailable', () => {
+        conversationsState.isAvailable = false;
         renderHeader();
 
         expect(
-            screen.queryByTestId('discussion-indicator')
+            screen.queryByTestId('conversation-indicator')
         ).not.toBeInTheDocument();
     });
 
-    it('shows the indicator when hasDiscussion is true', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
+    it('passes the relationship target for another relationship id', () => {
+        renderHeader({ ...relationship, id: 'rel-99' });
 
-        const indicator = screen.getByTestId('discussion-indicator');
-        expect(indicator).toBeInTheDocument();
-        expect(indicator).toHaveAttribute('aria-hidden', 'true');
+        expect(screen.getByTestId('conversation-indicator')).toHaveAttribute(
+            'data-target-id',
+            'rel-99'
+        );
     });
 
-    it('hides the indicator when hasDiscussion is false even if count is positive', () => {
-        discussionIndicatorState.indicator = {
-            commentCount: 5,
-            hasDiscussion: false,
-        };
-        renderHeader();
-
-        expect(
-            screen.queryByTestId('discussion-indicator')
-        ).not.toBeInTheDocument();
-    });
-
-    it('does not render a numeric count even when commentCount is greater than one', () => {
-        discussionIndicatorState.indicator = withDiscussion(4);
-        renderHeader();
-
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
-        expect(screen.queryByText('4')).not.toBeInTheDocument();
-        expect(
-            within(screen.getByTestId('discussion-indicator')).queryByText(
-                /\d+/
-            )
-        ).not.toBeInTheDocument();
-    });
-
-    it('shows the indicator for readonly viewers', () => {
+    it('shows the indicator for readonly viewers when conversations are available', () => {
         chartDBState.readonly = true;
-        discussionIndicatorState.indicator = withDiscussion(2);
         renderHeader();
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
         expect(menuTrigger()).toBeInTheDocument();
     });
 
-    it('keeps the indicator visible when comments are inactive if the hook reports presence', () => {
-        // Visibility is owned by the specialized hook / private index (inactive
-        // providers resolve to empty). The header does not gate on write access.
-        commentsState.isActive = false;
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
-
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
-    });
-
-    it('keeps the indicator visible for readonly viewers when write permissions are denied', () => {
+    it('hides the actions menu for readonly viewers when conversations are unavailable', () => {
         chartDBState.readonly = true;
-        commentsState.isActive = false;
-        discussionIndicatorState.indicator = withDiscussion(1);
+        conversationsState.isAvailable = false;
         renderHeader();
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('conversation-indicator')
+        ).not.toBeInTheDocument();
         expect(
             screen.queryByRole('button', { name: 'Actions' })
         ).not.toBeInTheDocument();
     });
 
-    it('does not show a relationship indicator when the hook stays empty for a table-partition hit', () => {
-        // Partition isolation is owned by useRelationshipDiscussionIndicator /
-        // getDiscussionIndicator. A table comment with the same ID must not
-        // populate the relationship hook result.
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        renderHeader({ ...relationship, id: 'shared-id' });
-
-        expect(useRelationshipDiscussionIndicator).toHaveBeenCalledWith(
-            'shared-id'
-        );
-        expect(
-            screen.queryByTestId('discussion-indicator')
-        ).not.toBeInTheDocument();
-    });
-
-    it('does not show a relationship indicator when the hook stays empty for a field-partition hit', () => {
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        renderHeader({ ...relationship, id: 'shared-field-id' });
-
-        expect(useRelationshipDiscussionIndicator).toHaveBeenCalledWith(
-            'shared-field-id'
-        );
-        expect(
-            screen.queryByTestId('discussion-indicator')
-        ).not.toBeInTheDocument();
-    });
-
     it('coexists with the relationship actions trigger', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
         renderHeader();
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
         expect(menuTrigger()).toBeInTheDocument();
     });
 
     it('coexists with EntityEditingBadge without overlapping controls', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
         remoteEditorsState.editors = [
             createRemoteEditor({ userId: 2, name: 'Alice' }),
         ];
         renderHeader();
 
-        const indicator = screen.getByTestId('discussion-indicator');
+        const indicator = screen.getByTestId('conversation-indicator');
         expect(indicator).toBeInTheDocument();
         expect(screen.getByTitle('Alice is editing')).toBeInTheDocument();
         expect(menuTrigger()).toBeInTheDocument();
@@ -497,93 +426,38 @@ describe('RelationshipListItemHeader discussion indicator', () => {
         const row = indicator.parentElement;
         expect(row).not.toBeNull();
         expect(row).toHaveClass('overflow-hidden');
-        expect(indicator).toHaveClass(
-            'mr-1',
-            'shrink-0',
-            'pointer-events-none'
-        );
+        expect(indicator).toHaveClass('mr-1');
     });
 
     it('keeps Open conversation functional while the indicator is visible', async () => {
-        discussionIndicatorState.indicator = withDiscussion(3);
         const user = await openMenu();
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
         await user.click(
             screen.getByRole('menuitem', { name: /Open conversation/i })
         );
 
-        expect(openTargetDiscussion).toHaveBeenCalledTimes(1);
-        expect(openTargetDiscussion).toHaveBeenCalledWith({
-            targetType: 'relationship',
-            targetId: 'rel-1',
-        });
-    });
-
-    it('does not open a discussion when the decorative indicator is clicked', async () => {
-        const user = userEvent.setup();
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
-
-        await user.click(screen.getByTestId('discussion-indicator'));
-
-        expect(openTargetDiscussion).not.toHaveBeenCalled();
-    });
-
-    it('is not a button, link, or keyboard tab stop', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
-
-        const indicator = screen.getByTestId('discussion-indicator');
-        expect(indicator.tagName).toBe('SPAN');
-        expect(indicator).not.toHaveAttribute('tabindex');
-        expect(indicator).not.toHaveAttribute('role');
-        expect(indicator).not.toHaveAttribute('href');
+        expect(
+            conversationMenuState.openConversationAction
+        ).toHaveBeenCalledTimes(1);
     });
 
     it('does not render raw relationship ids or badge count text', () => {
-        discussionIndicatorState.indicator = withDiscussion(2);
         renderHeader();
 
         expect(screen.queryByText('rel-1')).not.toBeInTheDocument();
-        expect(
-            within(screen.getByTestId('discussion-indicator')).queryByText('2')
-        ).not.toBeInTheDocument();
         expect(screen.queryByTestId(/badge|count/i)).not.toBeInTheDocument();
-    });
-
-    it('marks the indicator decorative for assistive technology', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
-
-        const indicator = screen.getByTestId('discussion-indicator');
-        expect(indicator).toHaveAttribute('aria-hidden', 'true');
-        expect(indicator).not.toHaveAttribute('tabindex');
-        expect(indicator.tagName).toBe('SPAN');
-    });
-
-    it('keeps shrink-0 and pointer-events-none for narrow and mobile layouts', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderHeader();
-
-        const indicator = screen.getByTestId('discussion-indicator');
-        expect(indicator).toHaveClass(
-            'shrink-0',
-            'pointer-events-none',
-            'mr-1'
-        );
-
-        const identity = screen.getByText('orders_clients_fk');
-        expect(identity).toHaveClass('truncate');
-        expect(identity.parentElement).toHaveClass('min-w-0', 'flex-1');
     });
 
     it('preserves readonly menu behavior while the indicator is visible', async () => {
         chartDBState.readonly = true;
-        discussionIndicatorState.indicator = withDiscussion(1);
         await openMenu();
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
         expect(
             screen.getByRole('menuitem', { name: 'Open conversation' })
         ).toBeInTheDocument();
@@ -593,7 +467,6 @@ describe('RelationshipListItemHeader discussion indicator', () => {
     });
 
     it('preserves delete behavior while the indicator is visible', async () => {
-        discussionIndicatorState.indicator = withDiscussion(2);
         const user = await openMenu();
 
         await user.click(screen.getByRole('menuitem', { name: /^Delete$/i }));
@@ -605,19 +478,18 @@ describe('RelationshipListItemHeader discussion indicator', () => {
     });
 
     it('preserves separator structure while the indicator is visible', async () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
         await openMenu();
 
         const menu = screen.getByRole('menu');
         const separators = within(menu).getAllByRole('separator');
         expect(separators.length).toBeGreaterThanOrEqual(1);
 
-        const discussion = screen.getByRole('menuitem', {
+        const conversation = screen.getByRole('menuitem', {
             name: 'Open conversation',
         });
         const deleteItem = screen.getByRole('menuitem', { name: 'Delete' });
         expect(
-            discussion.compareDocumentPosition(deleteItem) &
+            conversation.compareDocumentPosition(deleteItem) &
                 Node.DOCUMENT_POSITION_FOLLOWING
         ).toBeTruthy();
     });
@@ -626,24 +498,21 @@ describe('RelationshipListItemHeader discussion indicator', () => {
 describe('RelationshipListItemHeader legacy actions', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
-        commentsState.isActive = true;
+        conversationsState.isAvailable = true;
+        conversationMenuState.showConversationAction = true;
         remoteEditorsState.editors = [];
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        useRelationshipDiscussionIndicator.mockClear();
         removeRelationship.mockClear();
         deleteElements.mockClear();
-        openTargetDiscussion.mockClear();
     });
 
     it('keeps relationship identity truncation and control shrink classes intact', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
         renderHeader();
 
         const identity = screen.getByText('orders_clients_fk');
         expect(identity).toHaveClass('truncate');
         expect(identity.parentElement).toHaveClass('min-w-0', 'flex-1');
-        expect(screen.getByTestId('discussion-indicator')).toHaveClass(
-            'shrink-0'
+        expect(screen.getByTestId('conversation-indicator')).toHaveClass(
+            'mr-1'
         );
     });
 

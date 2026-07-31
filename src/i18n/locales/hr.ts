@@ -9,10 +9,7 @@ export const hr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Ovisnosti',
             custom_types: 'Prilagođeni Tipovi',
-            comments: 'Razgovori',
             conversations: 'Razgovori',
-            legacy_comments: 'Komentari (naslijeđeno)',
-            legacy_comments_aria: 'Otvori naslijeđenu ploču komentara',
             visuals: 'Vizuali',
         },
         menu: {
@@ -160,7 +157,6 @@ export const hr: LanguageTranslation = {
                     primary_key: 'Primarni ključ',
                     indexes: 'Indeksi',
                     check_constraints: 'Provjerna ograničenja',
-                    comments: 'Komentari',
                     no_comments: 'Nema komentara',
                     add_field: 'Dodaj polje',
                     add_index: 'Dodaj indeks',
@@ -177,7 +173,6 @@ export const hr: LanguageTranslation = {
                         character_length: 'Maksimalna dužina',
                         precision: 'Preciznost',
                         scale: 'Skala',
-                        comments: 'Komentari',
                         no_comments: 'Nema komentara',
                         default_value: 'Zadana vrijednost',
                         no_default: 'Nema zadane vrijednosti',
@@ -334,108 +329,6 @@ export const hr: LanguageTranslation = {
                     },
                     delete_custom_type: 'Izbriši tip',
                 },
-            },
-            comments_section: {
-                title: 'Razgovori',
-                loading: 'Učitavanje razgovora…',
-                inactive: {
-                    title: 'Razgovori nisu dostupni',
-                    description:
-                        'Razgovori su dostupni samo na autentificiranim oblak dijagramima.',
-                },
-                empty: {
-                    title: 'Još nema razgovora',
-                    description:
-                        'Razgovori o ovom dijagramu pojavit će se ovdje.',
-                    diagram_title: 'Još nema poruka o dijagramu',
-                    diagram_description:
-                        'Poruke o dijagramu u cjelini pojavit će se ovdje.',
-                    target_title: 'Još nema poruka za trenutni odabir',
-                    target_description:
-                        'Poruke o trenutnom odabiru pojavit će se ovdje.',
-                },
-                errors: {
-                    load_title: 'Nije moguće učitati razgovore',
-                    load_description:
-                        'Došlo je do greške pri učitavanju razgovora. Pokušajte ponovno.',
-                },
-                retry: 'Pokušaj ponovno',
-                deleted_user: 'Izbrisani korisnik',
-                targets: {
-                    diagram: 'Dijagram',
-                    table: 'Tablica',
-                    field: 'Polje',
-                    relationship: 'Relacija',
-                    unknown: 'Razgovor',
-                },
-                views: {
-                    all: 'Svi razgovori',
-                    diagram: 'Dijagram',
-                    current_target: 'Trenutno',
-                },
-                target_header: {
-                    diagram: 'Dijagram',
-                    table: 'Tablica {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Izbrisana tablica',
-                    missing_field: 'Izbrisano polje',
-                    missing_relationship: 'Izbrisana veza',
-                },
-                composer: {
-                    label: 'Poruka',
-                    placeholder: 'Napišite poruku…',
-                    submit: 'Objavi',
-                    submitting: 'Objavljivanje…',
-                    cancel: 'Odustani',
-                    form_aria_label: 'Nova poruka',
-                    counter_aria_label:
-                        'Iskorišteno {{count}} od {{max}} znakova',
-                    errors: {
-                        empty: 'Unesite poruku za objavu.',
-                        too_long: 'Poruke ne smiju prelaziti 2000 znakova.',
-                        create_failed:
-                            'Poruku nije bilo moguće objaviti. Pokušajte ponovno.',
-                    },
-                },
-                item_actions: {
-                    title: 'Radnje komentara',
-                    edit: 'Uredi',
-                    delete: 'Izbriši',
-                },
-                edit: {
-                    label: 'Poruka',
-                    form_aria_label: 'Uredi poruku',
-                    save: 'Spremi',
-                    saving: 'Spremanje…',
-                    cancel: 'Odustani',
-                    counter_aria_label:
-                        'Iskorišteno {{count}} od {{max}} znakova',
-                    errors: {
-                        empty: 'Unesite poruku za spremanje.',
-                        too_long: 'Poruke ne smiju premašiti 2000 znakova.',
-                        update_failed:
-                            'Poruku nije moguće ažurirati. Pokušajte ponovno.',
-                    },
-                    remote_updated_warning:
-                        'Ova je poruka ažurirana drugdje. Spremanje će prebrisati te promjene.',
-                },
-                delete_dialog: {
-                    title: 'Izbriši poruku',
-                    description:
-                        'Jeste li sigurni da želite izbrisati ovu poruku? Ova se radnja ne može poništiti.',
-                    cancel: 'Odustani',
-                    confirm: 'Izbriši',
-                    deleting: 'Brisanje…',
-                    errors: {
-                        delete_failed:
-                            'Nije moguće izbrisati ovu poruku. Pokušajte ponovno.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Komentari (naslijeđeno)',
             },
             conversations_section: {
                 title: 'Razgovori',

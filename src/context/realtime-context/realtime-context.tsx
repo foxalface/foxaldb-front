@@ -13,7 +13,7 @@ import type { SelectionAction } from '@/lib/realtime/selection-reducer';
 import type { SelectionWhisperPayload } from '@/lib/realtime/selection-types';
 import type { EditingAction } from '@/lib/realtime/editing-reducer';
 import type { EditingWhisperPayload } from '@/lib/realtime/editing-types';
-import type { DiagramCommentEventChannel } from '@/lib/realtime/comment-subscriber';
+import type { DiagramPrivateEventChannel } from '@/lib/realtime/diagram-private-channel';
 import {
     initialPresenceState,
     type PresenceState,
@@ -33,7 +33,7 @@ export interface RealtimeContextValue {
     presence: PresenceState;
     joinDiagram: (diagramId: string) => void;
     leaveDiagram: () => void;
-    getDiagramPrivateChannel: () => DiagramCommentEventChannel | null;
+    getDiagramPrivateChannel: () => DiagramPrivateEventChannel | null;
     onReconnect: (listener: () => void) => () => void;
     sendCursor: (payload: CursorWhisperPayload) => void;
     subscribeToCursorActions: (listener: CursorActionListener) => () => void;

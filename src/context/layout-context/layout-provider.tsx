@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import type {
     ConversationNavigationIntent,
-    DiscussionView,
     LayoutContext,
     SidebarSection,
     VisualsTab,
@@ -9,20 +8,12 @@ import type {
 import { layoutContext } from './layout-context';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useChartDB } from '@/hooks/use-chartdb';
-import type { DiagramCommentTarget } from '@/lib/comments/comment-types';
-import { DIAGRAM_DISCUSSION_TARGET } from '@/lib/comments/resolve-discussion-target';
 
-const resetDiscussionNavigation = (
-    setDiscussionView: React.Dispatch<React.SetStateAction<DiscussionView>>,
-    setCommentsTarget: React.Dispatch<
-        React.SetStateAction<DiagramCommentTarget>
-    >,
+const resetConversationNavigation = (
     setConversationNavigationIntent: React.Dispatch<
         React.SetStateAction<ConversationNavigationIntent | null>
     >
 ): void => {
-    setDiscussionView('all');
-    setCommentsTarget(DIAGRAM_DISCUSSION_TARGET);
     setConversationNavigationIntent(null);
 };
 
@@ -55,10 +46,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         React.useState<VisualsTab>('areas');
     const [isSidePanelShowed, setIsSidePanelShowed] =
         React.useState<boolean>(isDesktop);
-    const [discussionView, setDiscussionView] =
-        React.useState<DiscussionView>('all');
-    const [commentsTarget, setCommentsTarget] =
-        React.useState<DiagramCommentTarget>(DIAGRAM_DISCUSSION_TARGET);
     const [conversationNavigationIntent, setConversationNavigationIntent] =
         React.useState<ConversationNavigationIntent | null>(null);
 
@@ -67,11 +54,7 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             return;
         }
         previousDiagramIdRef.current = diagramId;
-        resetDiscussionNavigation(
-            setDiscussionView,
-            setCommentsTarget,
-            setConversationNavigationIntent
-        );
+        resetConversationNavigation(setConversationNavigationIntent);
     }, [diagramId]);
 
     const closeAllTablesInSidebar = useCallback(() => {
@@ -161,34 +144,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         setOpenedTableInSidebar(customTypeId);
     }, []);
 
-    const openAllDiscussions = useCallback(() => {
-        setDiscussionView('all');
-        setCommentsTarget(DIAGRAM_DISCUSSION_TARGET);
-        setSelectedSidebarSection('comments');
-        setIsSidePanelShowed(true);
-    }, []);
-
-    const openDiagramDiscussion = useCallback(() => {
-        setDiscussionView('diagram');
-        setCommentsTarget(DIAGRAM_DISCUSSION_TARGET);
-        setSelectedSidebarSection('comments');
-        setIsSidePanelShowed(true);
-    }, []);
-
-    const openTargetDiscussion = useCallback((target: DiagramCommentTarget) => {
-        // Defensive: callers may pass the diagram target; normalize to the
-        // dedicated diagram view instead of storing a spurious target view.
-        if (target.targetType === 'diagram') {
-            setDiscussionView('diagram');
-            setCommentsTarget(DIAGRAM_DISCUSSION_TARGET);
-        } else {
-            setDiscussionView('target');
-            setCommentsTarget(target);
-        }
-        setSelectedSidebarSection('comments');
-        setIsSidePanelShowed(true);
-    }, []);
-
     const openConversationsPanel = useCallback(() => {
         setSelectedSidebarSection('conversations');
         setIsSidePanelShowed(true);
@@ -233,11 +188,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             closeAllCustomTypesInSidebar,
             selectedVisualsTab,
             selectVisualsTab: setSelectedVisualsTab,
-            commentsTarget,
-            discussionView,
-            openAllDiscussions,
-            openDiagramDiscussion,
-            openTargetDiscussion,
             openConversationsPanel,
             conversationNavigationIntent,
             openConversationDetail,
@@ -269,11 +219,6 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             openCustomTypeFromSidebar,
             closeAllCustomTypesInSidebar,
             selectedVisualsTab,
-            commentsTarget,
-            discussionView,
-            openAllDiscussions,
-            openDiagramDiscussion,
-            openTargetDiscussion,
             openConversationsPanel,
             conversationNavigationIntent,
             openConversationDetail,

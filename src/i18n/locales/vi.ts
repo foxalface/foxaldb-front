@@ -9,10 +9,7 @@ export const vi: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Phụ thuộc',
             custom_types: 'Kiểu tùy chỉnh',
-            comments: 'Cuộc trò chuyện',
             conversations: 'Cuộc trò chuyện',
-            legacy_comments: 'Bình luận (cũ)',
-            legacy_comments_aria: 'Mở bảng bình luận cũ',
             visuals: 'Hình ảnh',
         },
         menu: {
@@ -162,7 +159,6 @@ export const vi: LanguageTranslation = {
                     primary_key: 'Khóa chính',
                     indexes: 'Chỉ mục',
                     check_constraints: 'Ràng buộc kiểm tra',
-                    comments: 'Bình luận',
                     no_comments: 'Không có bình luận',
                     add_field: 'Thêm trường',
                     add_index: 'Thêm chỉ mục',
@@ -176,7 +172,6 @@ export const vi: LanguageTranslation = {
                         open_discussion: 'Mở cuộc trò chuyện',
                         unique: 'Giá trị duy nhất',
                         auto_increment: 'Tự động tăng',
-                        comments: 'Bình luận',
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',
                         // TODO: Translate
@@ -337,106 +332,6 @@ export const vi: LanguageTranslation = {
                     },
                     delete_custom_type: 'Xóa Loại',
                 },
-            },
-            comments_section: {
-                title: 'Cuộc trò chuyện',
-                loading: 'Đang tải cuộc trò chuyện…',
-                inactive: {
-                    title: 'Cuộc trò chuyện không khả dụng',
-                    description:
-                        'Cuộc trò chuyện chỉ khả dụng trên sơ đồ đám mây đã xác thực.',
-                },
-                empty: {
-                    title: 'Chưa có cuộc trò chuyện',
-                    description:
-                        'Các cuộc trò chuyện về sơ đồ này sẽ xuất hiện tại đây.',
-                    diagram_title: 'Chưa có tin nhắn về sơ đồ',
-                    diagram_description:
-                        'Các tin nhắn về toàn bộ sơ đồ sẽ xuất hiện tại đây.',
-                    target_title: 'Chưa có tin nhắn cho lựa chọn hiện tại',
-                    target_description:
-                        'Các tin nhắn về lựa chọn hiện tại sẽ xuất hiện tại đây.',
-                },
-                errors: {
-                    load_title: 'Không thể tải cuộc trò chuyện',
-                    load_description:
-                        'Đã xảy ra lỗi khi tải cuộc trò chuyện. Vui lòng thử lại.',
-                },
-                retry: 'Thử lại',
-                deleted_user: 'Người dùng đã xóa',
-                targets: {
-                    diagram: 'Sơ đồ',
-                    table: 'Bảng',
-                    field: 'Trường',
-                    relationship: 'Quan hệ',
-                    unknown: 'Cuộc trò chuyện',
-                },
-                views: {
-                    all: 'Tất cả cuộc trò chuyện',
-                    diagram: 'Sơ đồ',
-                    current_target: 'Hiện tại',
-                },
-                target_header: {
-                    diagram: 'Sơ đồ',
-                    table: 'Bảng {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Bảng đã xóa',
-                    missing_field: 'Trường đã xóa',
-                    missing_relationship: 'Quan hệ đã xóa',
-                },
-                composer: {
-                    label: 'Tin nhắn',
-                    placeholder: 'Viết tin nhắn…',
-                    submit: 'Đăng',
-                    submitting: 'Đang đăng…',
-                    cancel: 'Hủy',
-                    form_aria_label: 'Tin nhắn mới',
-                    counter_aria_label: 'Đã dùng {{count}} / {{max}} ký tự',
-                    errors: {
-                        empty: 'Nhập tin nhắn để đăng.',
-                        too_long: 'Tin nhắn không được vượt quá 2000 ký tự.',
-                        create_failed:
-                            'Không thể đăng tin nhắn. Vui lòng thử lại.',
-                    },
-                },
-                item_actions: {
-                    title: 'Thao tác bình luận',
-                    edit: 'Chỉnh sửa',
-                    delete: 'Xóa',
-                },
-                edit: {
-                    label: 'Tin nhắn',
-                    form_aria_label: 'Sửa tin nhắn',
-                    save: 'Lưu',
-                    saving: 'Đang lưu…',
-                    cancel: 'Hủy',
-                    counter_aria_label: 'Đã dùng {{count}} / {{max}} ký tự',
-                    errors: {
-                        empty: 'Nhập tin nhắn để lưu.',
-                        too_long: 'Tin nhắn không được vượt quá 2000 ký tự.',
-                        update_failed:
-                            'Không thể cập nhật tin nhắn. Vui lòng thử lại.',
-                    },
-                    remote_updated_warning:
-                        'Tin nhắn này đã được cập nhật ở nơi khác. Việc lưu sẽ ghi đè những thay đổi đó.',
-                },
-                delete_dialog: {
-                    title: 'Xóa tin nhắn',
-                    description:
-                        'Bạn có chắc muốn xóa tin nhắn này không? Hành động này không thể hoàn tác.',
-                    cancel: 'Hủy',
-                    confirm: 'Xóa',
-                    deleting: 'Đang xóa…',
-                    errors: {
-                        delete_failed:
-                            'Không thể xóa tin nhắn này. Vui lòng thử lại.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Bình luận (cũ)',
             },
             conversations_section: {
                 title: 'Cuộc trò chuyện',

@@ -55,10 +55,10 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
     onOpenChange: controlledOnOpenChange,
 }) => {
     const { readonly } = useChartDB();
-    const conversationMenu = useTargetConversationMenuAction(
-        { targetType: 'field', targetId: field.id },
-        { targetType: 'field', targetId: field.id }
-    );
+    const conversationMenu = useTargetConversationMenuAction({
+        targetType: 'field',
+        targetId: field.id,
+    });
     const { t } = useTranslation();
     const [localField, setLocalField] = React.useState<DBField>(field);
     const [internalOpen, setInternalOpen] = React.useState(false);
@@ -80,11 +80,6 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
 
     const openFieldDiscussion = useCallback(() => {
         conversationMenu.openConversationAction();
-        setIsOpen(false);
-    }, [conversationMenu, setIsOpen]);
-
-    const openFieldComments = useCallback(() => {
-        conversationMenu.openCommentsAction();
         setIsOpen(false);
     }, [conversationMenu, setIsOpen]);
 
@@ -530,22 +525,6 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                 aria-hidden="true"
                             />
                             {conversationMenu.conversationLabel}
-                        </Button>
-                    ) : null}
-                    {conversationMenu.showCommentsAction ? (
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="flex gap-2"
-                            onClick={openFieldComments}
-                        >
-                            <SlBubbles
-                                className="size-3.5"
-                                aria-hidden="true"
-                            />
-                            {t(
-                                'side_panel.tables_section.table.field_actions.open_discussion'
-                            )}
                         </Button>
                     ) : null}
                     {!readonly ? (

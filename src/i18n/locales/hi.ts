@@ -9,10 +9,7 @@ export const hi: LanguageTranslation = {
             refs: 'रेफ्स',
             dependencies: 'निर्भरताएं',
             custom_types: 'कस्टम टाइप',
-            comments: 'वार्तालाप',
             conversations: 'वार्तालाप',
-            legacy_comments: 'टिप्पणियाँ (पुराना)',
-            legacy_comments_aria: 'पुराना टिप्पणी पैनल खोलें',
             visuals: 'Visuals',
         },
         menu: {
@@ -163,7 +160,6 @@ export const hi: LanguageTranslation = {
                     primary_key: 'प्राथमिक कुंजी',
                     indexes: 'सूचकांक',
                     check_constraints: 'जाँच प्रतिबंध',
-                    comments: 'टिप्पणियाँ',
                     no_comments: 'कोई टिप्पणी नहीं',
                     add_field: 'फ़ील्ड जोड़ें',
                     add_index: 'सूचकांक जोड़ें',
@@ -177,7 +173,6 @@ export const hi: LanguageTranslation = {
                         open_discussion: 'वार्तालाप खोलें',
                         unique: 'अद्वितीय',
                         auto_increment: 'ऑटो इंक्रीमेंट',
-                        comments: 'टिप्पणियाँ',
                         no_comments: 'कोई टिप्पणी नहीं',
                         delete_field: 'फ़ील्ड हटाएँ',
                         // TODO: Translate
@@ -339,107 +334,6 @@ export const hi: LanguageTranslation = {
                     },
                     delete_custom_type: 'प्रकार हटाएं',
                 },
-            },
-            comments_section: {
-                title: 'वार्तालाप',
-                loading: 'वार्तालाप लोड हो रहे हैं…',
-                inactive: {
-                    title: 'वार्तालाप उपलब्ध नहीं हैं',
-                    description:
-                        'वार्तालाप केवल प्रमाणित क्लाउड आरेखों पर उपलब्ध हैं।',
-                },
-                empty: {
-                    title: 'अभी कोई वार्तालाप नहीं',
-                    description: 'इस आरेख के बारे में बातचीत यहाँ दिखाई देगी।',
-                    diagram_title: 'अभी तक कोई डायग्राम संदेश नहीं',
-                    diagram_description:
-                        'पूरे डायग्राम से जुड़े संदेश यहाँ दिखाई देंगे।',
-                    target_title: 'वर्तमान चयन के लिए अभी कोई संदेश नहीं',
-                    target_description:
-                        'वर्तमान चयन से जुड़े संदेश यहाँ दिखाई देंगे।',
-                },
-                errors: {
-                    load_title: 'वार्तालाप लोड नहीं हो सके',
-                    load_description:
-                        'वार्तालाप लोड करने में त्रुटि हुई। कृपया पुनः प्रयास करें।',
-                },
-                retry: 'पुनः प्रयास करें',
-                deleted_user: 'हटाया गया उपयोगकर्ता',
-                targets: {
-                    diagram: 'आरेख',
-                    table: 'तालिका',
-                    field: 'फ़ील्ड',
-                    relationship: 'संबंध',
-                    unknown: 'वार्तालाप',
-                },
-                views: {
-                    all: 'सभी वार्तालाप',
-                    diagram: 'डायग्राम',
-                    current_target: 'वर्तमान',
-                },
-                target_header: {
-                    diagram: 'आरेख',
-                    table: 'तालिका {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'हटाई गई तालिका',
-                    missing_field: 'हटाया गया फ़ील्ड',
-                    missing_relationship: 'हटाया गया संबंध',
-                },
-                composer: {
-                    label: 'संदेश',
-                    placeholder: 'संदेश लिखें…',
-                    submit: 'पोस्ट करें',
-                    submitting: 'पोस्ट हो रहा है…',
-                    cancel: 'रद्द करें',
-                    form_aria_label: 'नया संदेश',
-                    counter_aria_label:
-                        '{{max}} में से {{count}} अक्षर उपयोग किए गए',
-                    errors: {
-                        empty: 'पोस्ट करने के लिए संदेश दर्ज करें।',
-                        too_long: 'संदेश 2000 अक्षरों से अधिक नहीं हो सकते।',
-                        create_failed:
-                            'संदेश पोस्ट नहीं किया जा सका। कृपया पुनः प्रयास करें।',
-                    },
-                },
-                item_actions: {
-                    title: 'टिप्पणी क्रियाएँ',
-                    edit: 'संपादित करें',
-                    delete: 'हटाएँ',
-                },
-                edit: {
-                    label: 'संदेश',
-                    form_aria_label: 'संदेश संपादित करें',
-                    save: 'सहेजें',
-                    saving: 'सहेजा जा रहा है…',
-                    cancel: 'रद्द करें',
-                    counter_aria_label:
-                        '{{max}} में से {{count}} वर्ण उपयोग किए गए',
-                    errors: {
-                        empty: 'सहेजने के लिए एक संदेश दर्ज करें।',
-                        too_long: 'संदेश 2000 वर्णों से अधिक नहीं हो सकते।',
-                        update_failed:
-                            'संदेश अपडेट नहीं किया जा सका। कृपया फिर से प्रयास करें।',
-                    },
-                    remote_updated_warning:
-                        'यह संदेश कहीं और अपडेट किया गया था। सहेजने पर वे परिवर्तन अधिलेखित हो जाएंगे।',
-                },
-                delete_dialog: {
-                    title: 'संदेश हटाएँ',
-                    description:
-                        'क्या आप वाकई इस संदेश को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।',
-                    cancel: 'रद्द करें',
-                    confirm: 'हटाएँ',
-                    deleting: 'हटाया जा रहा है…',
-                    errors: {
-                        delete_failed:
-                            'यह संदेश नहीं हटाया जा सका। कृपया फिर से प्रयास करें।',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'टिप्पणियाँ (पुराना)',
             },
             conversations_section: {
                 title: 'वार्तालाप',

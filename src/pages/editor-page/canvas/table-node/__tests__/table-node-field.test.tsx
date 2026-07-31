@@ -3,10 +3,6 @@ import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DBField } from '@/lib/domain/db-field';
-import {
-    EMPTY_DISCUSSION_INDICATOR,
-    type DiscussionIndicator,
-} from '@/lib/comments/discussion-indicators';
 import type { RemoteEditingViewModel } from '@/lib/realtime/editing-utils';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
 import {
@@ -17,11 +13,8 @@ import {
 
 const {
     chartDBState,
+    conversationsState,
     remoteEditorsState,
-    discussionIndicatorState,
-    useTableDiscussionIndicator,
-    useFieldDiscussionIndicator,
-    useRelationshipDiscussionIndicator,
     setEditTableModeTable,
     closeAllTablesInSidebar,
     stableConnection,
@@ -32,12 +25,6 @@ const {
     const setEditTableModeTable = vi.fn();
     const closeAllTablesInSidebar = vi.fn();
     const updateNodeInternals = vi.fn();
-    const discussionIndicatorState = {
-        indicator: {
-            commentCount: 0,
-            hasDiscussion: false,
-        } as DiscussionIndicator,
-    };
 
     return {
         chartDBState: {
@@ -53,15 +40,12 @@ const {
             highlightedCustomType: null as null,
             databaseType: 'sqlite',
         },
+        conversationsState: {
+            isAvailable: true,
+        },
         remoteEditorsState: {
             editors: [] as RemoteEditingViewModel[],
         },
-        discussionIndicatorState,
-        useTableDiscussionIndicator: vi.fn(),
-        useFieldDiscussionIndicator: vi.fn(
-            (): DiscussionIndicator => discussionIndicatorState.indicator
-        ),
-        useRelationshipDiscussionIndicator: vi.fn(),
         setEditTableModeTable,
         closeAllTablesInSidebar,
         updateNodeInternals,
@@ -87,10 +71,28 @@ const {
     };
 });
 
-vi.mock('@/hooks/use-discussion-indicators', () => ({
-    useTableDiscussionIndicator,
-    useFieldDiscussionIndicator,
-    useRelationshipDiscussionIndicator,
+vi.mock('@/hooks/use-conversations-availability', () => ({
+    useConversationsAvailability: () => conversationsState.isAvailable,
+}));
+
+vi.mock('@/components/conversation-indicator/conversation-indicator', () => ({
+    ConversationIndicator: ({
+        target,
+        targetName,
+        className,
+    }: {
+        target: { targetType: string; targetId: string };
+        targetName: string;
+        className?: string;
+    }) => (
+        <span
+            data-testid="conversation-indicator"
+            data-target-type={target.targetType}
+            data-target-id={target.targetId}
+            data-target-name={targetName}
+            className={className}
+        />
+    ),
 }));
 
 vi.mock('@/hooks/use-chartdb', () => ({
@@ -151,11 +153,6 @@ const baseField: DBField = {
     createdAt: 0,
 };
 
-const withDiscussion = (commentCount: number): DiscussionIndicator => ({
-    commentCount,
-    hasDiscussion: commentCount > 0,
-});
-
 const remoteEditor = (
     overrides: Partial<RemoteEditingViewModel> = {}
 ): RemoteEditingViewModel => ({
@@ -200,7 +197,7 @@ const renderField = ({
     );
 };
 
-describe('TableNodeField discussion indicator', () => {
+describe('TableNodeField conversation indicator', () => {
     afterEach(() => {
         cleanup();
     });
@@ -208,82 +205,51 @@ describe('TableNodeField discussion indicator', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
         chartDBState.relationships = [];
+        conversationsState.isAvailable = true;
         remoteEditorsState.editors = [];
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        useTableDiscussionIndicator.mockClear();
-        useFieldDiscussionIndicator.mockClear();
-        useRelationshipDiscussionIndicator.mockClear();
         setEditTableModeTable.mockClear();
         closeAllTablesInSidebar.mockClear();
         updateNodeInternals.mockClear();
     });
 
-    it('calls useFieldDiscussionIndicator with the exact field id', () => {
+    it('renders ConversationIndicator when conversations are available', () => {
         renderField();
 
-        expect(useFieldDiscussionIndicator).toHaveBeenCalledWith('field-1');
+        const indicator = screen.getByTestId('conversation-indicator');
+        expect(indicator).toHaveAttribute('data-target-type', 'field');
+        expect(indicator).toHaveAttribute('data-target-id', 'field-1');
+        expect(indicator).toHaveAttribute('data-target-name', 'email');
     });
 
-    it('uses only the field specialized hook', () => {
-        renderField();
-
-        expect(useFieldDiscussionIndicator).toHaveBeenCalled();
-        expect(useTableDiscussionIndicator).not.toHaveBeenCalled();
-        expect(useRelationshipDiscussionIndicator).not.toHaveBeenCalled();
-    });
-
-    it('hides the indicator when the field hook returns the empty indicator', () => {
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
+    it('hides ConversationIndicator when conversations are unavailable', () => {
+        conversationsState.isAvailable = false;
         renderField();
 
         expect(
-            screen.queryByTestId('discussion-indicator')
+            screen.queryByTestId('conversation-indicator')
         ).not.toBeInTheDocument();
     });
 
-    it('shows the indicator when hasDiscussion is true', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderField();
+    it('passes the field target for another field id', () => {
+        renderField({
+            field: { ...baseField, id: 'field-99', name: 'status' },
+        });
 
-        const indicator = screen.getByTestId('discussion-indicator');
-        expect(indicator).toBeInTheDocument();
-        expect(indicator).toHaveAttribute('aria-hidden', 'true');
+        const indicator = screen.getByTestId('conversation-indicator');
+        expect(indicator).toHaveAttribute('data-target-id', 'field-99');
+        expect(indicator).toHaveAttribute('data-target-name', 'status');
     });
 
-    it('hides the indicator when hasDiscussion is false even with a positive commentCount', () => {
-        discussionIndicatorState.indicator = {
-            commentCount: 5,
-            hasDiscussion: false,
-        };
-        renderField();
-
-        expect(
-            screen.queryByTestId('discussion-indicator')
-        ).not.toBeInTheDocument();
-    });
-
-    it('does not render a numeric count', () => {
-        discussionIndicatorState.indicator = withDiscussion(4);
-        renderField();
-
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
-        expect(
-            within(screen.getByTestId('discussion-indicator')).queryByText(
-                /\d+/
-            )
-        ).not.toBeInTheDocument();
-    });
-
-    it('shows the indicator for readonly viewers', () => {
-        discussionIndicatorState.indicator = withDiscussion(2);
+    it('shows the indicator for readonly viewers when conversations are available', () => {
         renderField({ readonly: true });
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
         expect(screen.getByText('email')).toBeInTheDocument();
     });
 
     it('coexists with PK, nullable, and schema-comment markers', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
         renderField({
             field: {
                 ...baseField,
@@ -293,7 +259,9 @@ describe('TableNodeField discussion indicator', () => {
             },
         });
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
         expect(screen.getByText('email')).toBeInTheDocument();
         expect(
             document.querySelector('.lucide-message-circle-more')
@@ -304,15 +272,15 @@ describe('TableNodeField discussion indicator', () => {
 
     it('coexists with EntityEditingBadge when remote editors are present', () => {
         remoteEditorsState.editors = [remoteEditor()];
-        discussionIndicatorState.indicator = withDiscussion(1);
         renderField();
 
-        expect(screen.getByTestId('discussion-indicator')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
         expect(screen.getByTitle('Grace is editing')).toBeInTheDocument();
     });
 
-    it('keeps relationship handles present and accessible', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
+    it('keeps relationship handles present while the indicator is visible', () => {
         renderField({ focused: true });
 
         expect(
@@ -321,72 +289,43 @@ describe('TableNodeField discussion indicator', () => {
         expect(
             screen.getByTestId(`handle-${LEFT_HANDLE_ID_PREFIX}field-1`)
         ).toBeInTheDocument();
-        expect(screen.getByTestId('discussion-indicator')).toHaveClass(
-            'pointer-events-none'
-        );
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
     });
 
-    it('does not trigger edit mode or navigation when the indicator is clicked', async () => {
-        const user = userEvent.setup();
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderField();
-
-        await user.click(screen.getByTestId('discussion-indicator'));
-
-        expect(setEditTableModeTable).not.toHaveBeenCalled();
-        expect(closeAllTablesInSidebar).not.toHaveBeenCalled();
-    });
-
-    it('is not a button or link and does not become a tab stop', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
-        renderField();
-
-        const indicator = screen.getByTestId('discussion-indicator');
-        expect(indicator.tagName).toBe('SPAN');
-        expect(indicator).not.toHaveAttribute('role');
-        expect(indicator).not.toHaveAttribute('href');
-        expect(indicator).not.toHaveAttribute('tabindex');
-    });
-
-    it('does not render the raw field id', () => {
-        discussionIndicatorState.indicator = withDiscussion(2);
+    it('does not render the raw field id or numeric badge text', () => {
         renderField();
 
         expect(screen.queryByText('field-1')).not.toBeInTheDocument();
         expect(
-            within(screen.getByTestId('discussion-indicator')).queryByText('2')
+            within(screen.getByTestId('conversation-indicator')).queryByText(
+                /\d+/
+            )
         ).not.toBeInTheDocument();
     });
 
-    it('preserves truncation on the field identity and shrink-0 on the indicator', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
+    it('preserves truncation on the field identity', () => {
         const { container } = renderField();
 
         expect(container.querySelector('.truncate.min-w-0')).not.toBeNull();
-        expect(screen.getByTestId('discussion-indicator')).toHaveClass(
-            'shrink-0',
-            'pointer-events-none'
+        expect(screen.getByTestId('conversation-indicator')).toHaveClass(
+            'scale-90'
         );
     });
 
-    it('does not render hidden field indicators when the row is collapsed away', () => {
-        discussionIndicatorState.indicator = withDiscussion(1);
+    it('still mounts ConversationIndicator when the row is collapsed away', () => {
         const { container } = renderField({ visible: false });
 
         const row = container.firstElementChild as HTMLElement;
         expect(row).toHaveClass('max-h-0', 'overflow-hidden', 'opacity-0');
-        // Collapsed tables omit field rows entirely in TableNode; when a row is
-        // still mounted with visible=false it must not expose an interactive mark.
-        const indicator = screen.queryByTestId('discussion-indicator');
-        if (indicator) {
-            expect(indicator).toHaveAttribute('aria-hidden', 'true');
-            expect(indicator).toHaveClass('pointer-events-none');
-        }
+        expect(
+            screen.getByTestId('conversation-indicator')
+        ).toBeInTheDocument();
     });
 
     it('keeps the pencil edit control functional while the indicator is visible', async () => {
         const user = userEvent.setup();
-        discussionIndicatorState.indicator = withDiscussion(1);
         const { container } = renderField();
 
         const editButton = container.querySelector(
@@ -399,15 +338,5 @@ describe('TableNodeField discussion indicator', () => {
             tableId: 'table-1',
             fieldId: 'field-1',
         });
-    });
-
-    it('does not show a field indicator when the hook stays empty for a table-partition hit', () => {
-        discussionIndicatorState.indicator = EMPTY_DISCUSSION_INDICATOR;
-        renderField({ field: { ...baseField, id: 'shared-id' } });
-
-        expect(useFieldDiscussionIndicator).toHaveBeenCalledWith('shared-id');
-        expect(
-            screen.queryByTestId('discussion-indicator')
-        ).not.toBeInTheDocument();
     });
 });

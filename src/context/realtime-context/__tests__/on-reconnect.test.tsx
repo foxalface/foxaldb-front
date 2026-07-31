@@ -3,7 +3,7 @@ import { act, render, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { clearEchoInstance } from '@/lib/realtime/echo';
 import { useRealtime } from '@/hooks/use-realtime';
-import type { DiagramCommentEventChannel } from '@/lib/realtime/comment-subscriber';
+import type { DiagramPrivateEventChannel } from '@/lib/realtime/diagram-private-channel';
 import { ConnectionManager } from '@/lib/realtime/connection-manager';
 
 interface ConnectionLike {
@@ -253,13 +253,13 @@ describe('RealtimeContext managed private channel and onReconnect', () => {
     });
 
     it('notifies same-commit descendant after managed channel rejoin', async () => {
-        let channelBeforeReconnect: DiagramCommentEventChannel | null = null;
-        let channelSeenByConsumer: DiagramCommentEventChannel | null = null;
+        let channelBeforeReconnect: DiagramPrivateEventChannel | null = null;
+        let channelSeenByConsumer: DiagramPrivateEventChannel | null = null;
         const consumerCalls = vi.fn();
         const api = {
             joinDiagram: null as ((diagramId: string) => void) | null,
             getDiagramPrivateChannel: null as
-                | (() => DiagramCommentEventChannel | null)
+                | (() => DiagramPrivateEventChannel | null)
                 | null,
         };
 
@@ -312,13 +312,13 @@ describe('RealtimeContext managed private channel and onReconnect', () => {
     });
 
     it('notifies same-commit descendant after rejoin under Strict Mode without leaks', async () => {
-        let channelBeforeReconnect: DiagramCommentEventChannel | null = null;
-        let channelSeenByConsumer: DiagramCommentEventChannel | null = null;
+        let channelBeforeReconnect: DiagramPrivateEventChannel | null = null;
+        let channelSeenByConsumer: DiagramPrivateEventChannel | null = null;
         const consumerCalls = vi.fn();
         const api = {
             joinDiagram: null as ((diagramId: string) => void) | null,
             getDiagramPrivateChannel: null as
-                | (() => DiagramCommentEventChannel | null)
+                | (() => DiagramPrivateEventChannel | null)
                 | null,
         };
 

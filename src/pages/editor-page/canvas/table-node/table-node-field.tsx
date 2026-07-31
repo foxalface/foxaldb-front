@@ -38,9 +38,7 @@ import { useCanvas } from '@/hooks/use-canvas';
 import { useLayout } from '@/hooks/use-layout';
 import { useEntityRemoteEditing } from '@/hooks/use-remote-editing';
 import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
-import { useFieldDiscussionIndicator } from '@/hooks/use-discussion-indicators';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
-import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
 import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
 
 export const LEFT_HANDLE_ID_PREFIX = 'left_rel_';
@@ -350,7 +348,6 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         ]);
 
         const remoteEditors = useEntityRemoteEditing('field', field.id);
-        const discussionIndicator = useFieldDiscussionIndicator(field.id);
         const conversationsAvailable = useConversationsAvailability();
 
         return (
@@ -478,12 +475,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             targetName={field.name}
                             className="scale-90"
                         />
-                    ) : (
-                        <DiscussionIndicator
-                            indicator={discussionIndicator}
-                            className="scale-90"
-                        />
-                    )}
+                    ) : null}
                 </div>
 
                 <div

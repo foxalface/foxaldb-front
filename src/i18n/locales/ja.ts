@@ -9,10 +9,7 @@ export const ja: LanguageTranslation = {
             refs: '参照',
             dependencies: '依存関係',
             custom_types: 'カスタムタイプ',
-            comments: '会話',
             conversations: '会話',
-            legacy_comments: 'コメント（レガシー）',
-            legacy_comments_aria: 'レガシーコメントパネルを開く',
             visuals: 'ビジュアル',
         },
         menu: {
@@ -165,7 +162,6 @@ export const ja: LanguageTranslation = {
                     primary_key: '主キー',
                     indexes: 'インデックス',
                     check_constraints: 'チェック制約',
-                    comments: 'コメント',
                     no_comments: 'コメントがありません',
                     add_field: 'フィールドを追加',
                     add_index: 'インデックスを追加',
@@ -179,7 +175,6 @@ export const ja: LanguageTranslation = {
                         open_discussion: '会話を開く',
                         unique: 'ユニーク',
                         auto_increment: 'オートインクリメント',
-                        comments: 'コメント',
                         no_comments: 'コメントがありません',
                         delete_field: 'フィールドを削除',
                         // TODO: Translate
@@ -340,107 +335,6 @@ export const ja: LanguageTranslation = {
                     },
                     delete_custom_type: '型を削除',
                 },
-            },
-            comments_section: {
-                title: '会話',
-                loading: '会話を読み込み中…',
-                inactive: {
-                    title: '会話は利用できません',
-                    description:
-                        '会話は認証済みのクラウド図でのみ利用できます。',
-                },
-                empty: {
-                    title: 'まだ会話がありません',
-                    description: 'この図に関する会話がここに表示されます。',
-                    diagram_title: 'まだ図のメッセージがありません',
-                    diagram_description:
-                        'ダイアグラム全体に関するメッセージがここに表示されます。',
-                    target_title:
-                        '現在の選択に関するメッセージはまだありません',
-                    target_description:
-                        '現在の選択に関するメッセージがここに表示されます。',
-                },
-                errors: {
-                    load_title: '会話を読み込めませんでした',
-                    load_description:
-                        '会話の読み込み中にエラーが発生しました。もう一度お試しください。',
-                },
-                retry: '再試行',
-                deleted_user: '削除されたユーザー',
-                targets: {
-                    diagram: '図',
-                    table: 'テーブル',
-                    field: 'フィールド',
-                    relationship: 'リレーション',
-                    unknown: '会話',
-                },
-                views: {
-                    all: 'すべての会話',
-                    diagram: 'ダイアグラム',
-                    current_target: '現在',
-                },
-                target_header: {
-                    diagram: '図',
-                    table: 'テーブル {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: '削除されたテーブル',
-                    missing_field: '削除されたフィールド',
-                    missing_relationship: '削除されたリレーションシップ',
-                },
-                composer: {
-                    label: 'メッセージ',
-                    placeholder: 'メッセージを入力…',
-                    submit: '投稿',
-                    submitting: '投稿中…',
-                    cancel: 'キャンセル',
-                    form_aria_label: '新しいメッセージ',
-                    counter_aria_label: '{{max}} 文字中 {{count}} 文字使用中',
-                    errors: {
-                        empty: '投稿するメッセージを入力してください。',
-                        too_long: 'メッセージは 2000 文字以内にしてください。',
-                        create_failed:
-                            'メッセージを投稿できませんでした。もう一度お試しください。',
-                    },
-                },
-                item_actions: {
-                    title: 'コメントの操作',
-                    edit: '編集',
-                    delete: '削除',
-                },
-                edit: {
-                    label: 'メッセージ',
-                    form_aria_label: 'メッセージを編集',
-                    save: '保存',
-                    saving: '保存中…',
-                    cancel: 'キャンセル',
-                    counter_aria_label: '{{count}} / {{max}} 文字を使用中',
-                    errors: {
-                        empty: '保存するメッセージを入力してください。',
-                        too_long:
-                            'メッセージは2000文字を超えることはできません。',
-                        update_failed:
-                            'メッセージを更新できませんでした。もう一度お試しください。',
-                    },
-                    remote_updated_warning:
-                        'このメッセージは別の場所で更新されました。保存するとその変更が上書きされます。',
-                },
-                delete_dialog: {
-                    title: 'メッセージを削除',
-                    description:
-                        'このメッセージを削除しますか？この操作は元に戻せません。',
-                    cancel: 'キャンセル',
-                    confirm: '削除',
-                    deleting: '削除中…',
-                    errors: {
-                        delete_failed:
-                            'このメッセージを削除できませんでした。もう一度お試しください。',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'コメント（レガシー）',
             },
             conversations_section: {
                 title: '会話',

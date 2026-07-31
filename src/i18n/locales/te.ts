@@ -9,10 +9,7 @@ export const te: LanguageTranslation = {
             refs: 'సంబంధాలు',
             dependencies: 'ఆధారతలు',
             custom_types: 'కస్టమ్ టైప్స్',
-            comments: 'సంభాషణలు',
             conversations: 'సంభాషణలు',
-            legacy_comments: 'వ్యాఖ్యలు (పాత)',
-            legacy_comments_aria: 'పాత వ్యాఖ్యల ప్యానెల్‌ను తెరవండి',
             visuals: 'Visuals',
         },
         menu: {
@@ -163,7 +160,6 @@ export const te: LanguageTranslation = {
                     primary_key: 'ప్రాథమిక కీ',
                     indexes: 'ఇండెక్సులు',
                     check_constraints: 'తనిఖీ పరిమితులు',
-                    comments: 'వ్యాఖ్యలు',
                     no_comments: 'వ్యాఖ్యలు లేవు',
                     add_field: 'ఫీల్డ్ జోడించు',
                     add_index: 'ఇండెక్స్ జోడించు',
@@ -177,7 +173,6 @@ export const te: LanguageTranslation = {
                         open_discussion: 'సంభాషణ తెరవండి',
                         unique: 'అద్వితీయ',
                         auto_increment: 'ఆటో ఇంక్రిమెంట్',
-                        comments: 'వ్యాఖ్యలు',
                         no_comments: 'వ్యాఖ్యలు లేవు',
                         delete_field: 'ఫీల్డ్ తొలగించు',
                         // TODO: Translate
@@ -338,108 +333,6 @@ export const te: LanguageTranslation = {
                     },
                     delete_custom_type: 'రకాన్ని తొలగించండి',
                 },
-            },
-            comments_section: {
-                title: 'సంభాషణలు',
-                loading: 'సంభాషణలు లోడ్ అవుతున్నాయి…',
-                inactive: {
-                    title: 'సంభాషణలు అందుబాటులో లేవు',
-                    description:
-                        'సంభాషణలు ప్రమాణీకృత క్లౌడ్ డయాగ్రామ్‌లలో మాత్రమే అందుబాటులో ఉంటాయి.',
-                },
-                empty: {
-                    title: 'ఇంకా సంభాషణలు లేవు',
-                    description:
-                        'ఈ రేఖాచిత్రం గురించిన సంభాషణలు ఇక్కడ కనిపిస్తాయి.',
-                    diagram_title: 'ఇంకా డైగ్రామ్ సందేశాలు లేవు',
-                    diagram_description:
-                        'మొత్తం డైగ్రామ్ గురించిన సందేశాలు ఇక్కడ కనిపిస్తాయి.',
-                    target_title: 'ప్రస్తుత ఎంపికకు ఇంకా సందేశాలు లేవు',
-                    target_description:
-                        'ప్రస్తుత ఎంపిక గురించిన సందేశాలు ఇక్కడ కనిపిస్తాయి.',
-                },
-                errors: {
-                    load_title: 'సంభాషణలు లోడ్ చేయలేకపోయాము',
-                    load_description:
-                        'సంభాషణలు లోడ్ చేస్తున్నప్పుడు లోపం సంభవించింది. దయచేసి మళ్లీ ప్రయత్నించండి.',
-                },
-                retry: 'మళ్లీ ప్రయత్నించండి',
-                deleted_user: 'తొలగించబడిన వినియోగదారు',
-                targets: {
-                    diagram: 'డయాగ్రామ్',
-                    table: 'టేబుల్',
-                    field: 'ఫీల్డ్',
-                    relationship: 'సంబంధం',
-                    unknown: 'సంభాషణ',
-                },
-                views: {
-                    all: 'అన్ని సంభాషణలు',
-                    diagram: 'డైగ్రామ్',
-                    current_target: 'ప్రస్తుతం',
-                },
-                target_header: {
-                    diagram: 'డయాగ్రామ్',
-                    table: 'పట్టిక {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'తొలగించిన పట్టిక',
-                    missing_field: 'తొలగించిన ఫీల్డ్',
-                    missing_relationship: 'తొలగించిన సంబంధం',
-                },
-                composer: {
-                    label: 'సందేశం',
-                    placeholder: 'సందేశం రాయండి…',
-                    submit: 'పోస్ట్ చేయి',
-                    submitting: 'పోస్ట్ చేస్తోంది…',
-                    cancel: 'రద్దు చేయి',
-                    form_aria_label: 'నూతన సందేశం',
-                    counter_aria_label:
-                        '{{max}}లో {{count}} అక్షరాలు ఉపయోగించబడ్డాయి',
-                    errors: {
-                        empty: 'పోస్ట్ చేయడానికి సందేశం నమోదు చేయండి.',
-                        too_long: 'సందేశాలు 2000 అక్షరాలను మించకూడదు.',
-                        create_failed:
-                            'సందేశాన్ని పోస్ట్ చేయడం సాధ్యం కాలేదు. దయచేసి మళ్లీ ప్రయత్నించండి.',
-                    },
-                },
-                item_actions: {
-                    title: 'వ్యాఖ్య చర్యలు',
-                    edit: 'సవరించు',
-                    delete: 'తొలగించు',
-                },
-                edit: {
-                    label: 'సందేశం',
-                    form_aria_label: 'సందేశం సవరించండి',
-                    save: 'సేవ్ చేయి',
-                    saving: 'సేవ్ చేస్తోంది…',
-                    cancel: 'రద్దు చేయి',
-                    counter_aria_label:
-                        '{{max}}లో {{count}} అక్షరాలు ఉపయోగించబడ్డాయి',
-                    errors: {
-                        empty: 'సేవ్ చేయడానికి సందేశాన్ని నమోదు చేయండి.',
-                        too_long: 'సందేశాలు 2000 అక్షరాలను మించకూడదు.',
-                        update_failed:
-                            'సందేశాన్ని నవీకరించడం సాధ్యపడలేదు. దయచేసి మళ్లీ ప్రయత్నించండి.',
-                    },
-                    remote_updated_warning:
-                        'ఈ సందేశం వేరే చోట నవీకరించబడింది. సేవ్ చేస్తే ఆ మార్పులు ఓవర్‌రైట్ అవుతాయి.',
-                },
-                delete_dialog: {
-                    title: 'సందేశాన్ని తొలగించు',
-                    description:
-                        'మీరు నిజంగా ఈ సందేశాన్ని తొలగించాలనుకుంటున్నారా? ఈ చర్యను రద్దు చేయలేరు.',
-                    cancel: 'రద్దు చేయి',
-                    confirm: 'తొలగించు',
-                    deleting: 'తొలగిస్తోంది…',
-                    errors: {
-                        delete_failed:
-                            'ఈ సందేశాన్ని తొలగించలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'వ్యాఖ్యలు (పాత)',
             },
             conversations_section: {
                 title: 'సంభాషణలు',

@@ -9,10 +9,7 @@ export const ko_KR: LanguageTranslation = {
             refs: 'Refs',
             dependencies: '종속성',
             custom_types: '사용자 지정 타입',
-            comments: '대화',
             conversations: '대화',
-            legacy_comments: '댓글(레거시)',
-            legacy_comments_aria: '레거시 댓글 패널 열기',
             visuals: '시각화',
         },
         menu: {
@@ -162,7 +159,6 @@ export const ko_KR: LanguageTranslation = {
                     primary_key: '기본키',
                     indexes: '인덱스',
                     check_constraints: '체크 제약조건',
-                    comments: '주석',
                     no_comments: '주석 없음',
                     add_field: '필드 추가',
                     add_index: '인덱스 추가',
@@ -176,7 +172,6 @@ export const ko_KR: LanguageTranslation = {
                         open_discussion: '대화 열기',
                         unique: '유니크 여부',
                         auto_increment: '자동 증가',
-                        comments: '주석',
                         no_comments: '주석 없음',
                         delete_field: '필드 삭제',
                         // TODO: Translate
@@ -337,106 +332,6 @@ export const ko_KR: LanguageTranslation = {
                     },
                     delete_custom_type: '타입 삭제',
                 },
-            },
-            comments_section: {
-                title: '대화',
-                loading: '대화를 불러오는 중…',
-                inactive: {
-                    title: '대화를 사용할 수 없습니다',
-                    description:
-                        '대화는 인증된 클라우드 다이어그램에서만 사용할 수 있습니다.',
-                },
-                empty: {
-                    title: '아직 대화가 없습니다',
-                    description:
-                        '이 다이어그램에 대한 대화가 여기에 표시됩니다.',
-                    diagram_title: '아직 다이어그램 메시지가 없습니다',
-                    diagram_description:
-                        '다이어그램 전체에 대한 메시지가 여기에 표시됩니다.',
-                    target_title: '현재 선택에 대한 메시지가 아직 없습니다',
-                    target_description:
-                        '현재 선택에 대한 메시지가 여기에 표시됩니다.',
-                },
-                errors: {
-                    load_title: '대화를 불러올 수 없습니다',
-                    load_description:
-                        '대화를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.',
-                },
-                retry: '다시 시도',
-                deleted_user: '삭제된 사용자',
-                targets: {
-                    diagram: '다이어그램',
-                    table: '테이블',
-                    field: '필드',
-                    relationship: '관계',
-                    unknown: '대화',
-                },
-                views: {
-                    all: '모든 대화',
-                    diagram: '다이어그램',
-                    current_target: '현재',
-                },
-                target_header: {
-                    diagram: '다이어그램',
-                    table: '테이블 {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: '삭제된 테이블',
-                    missing_field: '삭제된 필드',
-                    missing_relationship: '삭제된 관계',
-                },
-                composer: {
-                    label: '메시지',
-                    placeholder: '메시지를 입력하세요…',
-                    submit: '게시',
-                    submitting: '게시 중…',
-                    cancel: '취소',
-                    form_aria_label: '새 메시지',
-                    counter_aria_label: '{{max}}자 중 {{count}}자 사용',
-                    errors: {
-                        empty: '게시할 메시지를 입력하세요.',
-                        too_long: '메시지는 2000자를 초과할 수 없습니다.',
-                        create_failed:
-                            '메시지를 게시할 수 없습니다. 다시 시도해 주세요.',
-                    },
-                },
-                item_actions: {
-                    title: '댓글 작업',
-                    edit: '편집',
-                    delete: '삭제',
-                },
-                edit: {
-                    label: '메시지',
-                    form_aria_label: '메시지 수정',
-                    save: '저장',
-                    saving: '저장 중…',
-                    cancel: '취소',
-                    counter_aria_label: '{{count}} / {{max}}자 사용 중',
-                    errors: {
-                        empty: '저장할 메시지를 입력하세요.',
-                        too_long: '메시지는 2000자를 초과할 수 없습니다.',
-                        update_failed:
-                            '메시지를 업데이트할 수 없습니다. 다시 시도해 주세요.',
-                    },
-                    remote_updated_warning:
-                        '이 메시지가 다른 곳에서 업데이트되었습니다. 저장하면 해당 변경 내용이 덮어씌워집니다.',
-                },
-                delete_dialog: {
-                    title: '메시지 삭제',
-                    description:
-                        '이 메시지를 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.',
-                    cancel: '취소',
-                    confirm: '삭제',
-                    deleting: '삭제 중…',
-                    errors: {
-                        delete_failed:
-                            '이 메시지를 삭제할 수 없습니다. 다시 시도해 주세요.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: '댓글(레거시)',
             },
             conversations_section: {
                 title: '대화',

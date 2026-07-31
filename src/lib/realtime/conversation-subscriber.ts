@@ -1,5 +1,6 @@
 import type { ConversationsAction } from '@/lib/conversations/conversation-reducer';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
+import type { DiagramPrivateEventChannel } from './diagram-private-channel';
 import { isValidBackendDiagramId } from './diagram-id';
 import {
     DIAGRAM_CONVERSATION_ARCHIVED_EVENT,
@@ -18,23 +19,8 @@ import {
     parseDiagramConversationReopenedPayload,
 } from './conversation-events';
 
-/**
- * Narrow Echo private-channel surface used by the conversation subscriber.
- * Matches ChannelManager's PrivateChannel listen / stopListening API.
- */
-export interface DiagramConversationEventChannel {
-    listen(
-        event: string,
-        callback: (payload: unknown) => void
-    ): DiagramConversationEventChannel;
-    stopListening(
-        event: string,
-        callback?: (payload: unknown) => void
-    ): DiagramConversationEventChannel;
-}
-
 export interface SubscribeToDiagramConversationEventsOptions {
-    channel: DiagramConversationEventChannel;
+    channel: DiagramPrivateEventChannel;
     diagramId: string;
     dispatch: (action: ConversationsAction) => void;
 }

@@ -11,9 +11,7 @@ import { ListItemHeaderButton } from '../../../../list-item-header-button/list-i
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useCommentsAvailability } from '@/hooks/use-comments-availability';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
-import { useRelationshipDiscussionIndicator } from '@/hooks/use-discussion-indicators';
 import { useTargetConversationMenuAction } from '@/hooks/use-target-conversation-menu-action';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
@@ -35,7 +33,6 @@ import {
 } from '@/components/dropdown-menu/dropdown-menu';
 import { Input } from '@/components/input/input';
 import { useTranslation } from 'react-i18next';
-import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
 import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
 
 export interface RelationshipListItemHeaderProps {
@@ -50,15 +47,11 @@ export const RelationshipListItemHeader: React.FC<
     const { t } = useTranslation();
     const { focusOnRelationship } = useFocusOn();
     const { startEditing, stopEditing } = useEditingBroadcast();
-    const commentsActive = useCommentsAvailability();
     const conversationsAvailable = useConversationsAvailability();
-    const discussionIndicator = useRelationshipDiscussionIndicator(
-        relationship.id
-    );
-    const conversationMenu = useTargetConversationMenuAction(
-        { targetType: 'relationship', targetId: relationship.id },
-        { targetType: 'relationship', targetId: relationship.id }
-    );
+    const conversationMenu = useTargetConversationMenuAction({
+        targetType: 'relationship',
+        targetId: relationship.id,
+    });
     const remoteEditors = useEntityRemoteEditing(
         'relationship',
         relationship.id
@@ -77,8 +70,7 @@ export const RelationshipListItemHeader: React.FC<
         relationship.name
     );
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const showDropDownMenu =
-        !readonly || commentsActive || conversationsAvailable;
+    const showDropDownMenu = !readonly || conversationsAvailable;
 
     const editRelationshipName = useCallback(() => {
         if (!editMode) return;
@@ -141,14 +133,6 @@ export const RelationshipListItemHeader: React.FC<
         [conversationMenu]
     );
 
-    const openRelationshipComments = useCallback(
-        (e: React.MouseEvent) => {
-            e.stopPropagation();
-            conversationMenu.openCommentsAction();
-        },
-        [conversationMenu]
-    );
-
     const renderDropDownMenu = useCallback(
         () => (
             <DropdownMenu>
@@ -182,22 +166,7 @@ export const RelationshipListItemHeader: React.FC<
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     ) : null}
-                    {conversationMenu.showCommentsAction ? (
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                className="flex justify-between gap-4"
-                                onClick={openRelationshipComments}
-                            >
-                                {t(
-                                    'side_panel.refs_section.relationship.relationship_actions.open_discussion'
-                                )}
-                                <SlBubbles className="size-3.5" />
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                    ) : null}
-                    {(conversationMenu.showConversationAction ||
-                        conversationMenu.showCommentsAction) &&
-                    !readonly ? (
+                    {conversationMenu.showConversationAction && !readonly ? (
                         <DropdownMenuSeparator />
                     ) : null}
                     {!readonly ? (
@@ -222,7 +191,6 @@ export const RelationshipListItemHeader: React.FC<
             conversationMenu,
             readonly,
             openRelationshipDiscussion,
-            openRelationshipComments,
         ]
     );
 
@@ -268,12 +236,7 @@ export const RelationshipListItemHeader: React.FC<
                         targetName={relationship.name}
                         className="mr-1"
                     />
-                ) : (
-                    <DiscussionIndicator
-                        indicator={discussionIndicator}
-                        className="mr-1"
-                    />
-                )}
+                ) : null}
                 {remoteEditors.length > 0 ? (
                     <EntityEditingBadge
                         editors={remoteEditors}

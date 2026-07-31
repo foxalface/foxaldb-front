@@ -9,10 +9,7 @@ export const fr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Dépendances',
             custom_types: 'Types Personnalisés',
-            comments: 'Conversations',
             conversations: 'Conversations',
-            legacy_comments: 'Commentaires (ancien)',
-            legacy_comments_aria: 'Ouvrir le panneau de commentaires hérité',
             visuals: 'Visuels',
         },
         menu: {
@@ -160,7 +157,6 @@ export const fr: LanguageTranslation = {
                     primary_key: 'Clé Primaire',
                     indexes: 'Index',
                     check_constraints: 'Contraintes de vérification',
-                    comments: 'Commentaires',
                     no_comments: 'Pas de commentaires',
                     add_field: 'Ajouter un Champ',
                     add_index: 'Ajouter un Index',
@@ -174,7 +170,6 @@ export const fr: LanguageTranslation = {
                         open_discussion: 'Ouvrir la conversation',
                         unique: 'Unique',
                         auto_increment: 'Auto-incrément',
-                        comments: 'Commentaires',
                         no_comments: 'Pas de commentaires',
                         delete_field: 'Supprimer le Champ',
                         // TODO: Translate
@@ -335,111 +330,6 @@ export const fr: LanguageTranslation = {
                     },
                     delete_custom_type: 'Supprimer le Type',
                 },
-            },
-            comments_section: {
-                title: 'Conversations',
-                loading: 'Chargement des conversations…',
-                inactive: {
-                    title: 'Conversations indisponibles',
-                    description:
-                        'Les conversations sont disponibles uniquement sur les diagrammes cloud authentifiés.',
-                },
-                empty: {
-                    title: 'Aucune conversation pour le moment',
-                    description:
-                        'Les échanges sur ce diagramme apparaîtront ici.',
-                    diagram_title:
-                        'Aucun message sur le diagramme pour le moment',
-                    diagram_description:
-                        'Les messages concernant le diagramme dans son ensemble apparaîtront ici.',
-                    target_title: 'Aucun message pour la sélection actuelle',
-                    target_description:
-                        'Les messages concernant la sélection actuelle apparaîtront ici.',
-                },
-                errors: {
-                    load_title: 'Impossible de charger les conversations',
-                    load_description:
-                        'Une erreur est survenue lors du chargement des conversations. Veuillez réessayer.',
-                },
-                retry: 'Réessayer',
-                deleted_user: 'Utilisateur supprimé',
-                targets: {
-                    diagram: 'Diagramme',
-                    table: 'Table',
-                    field: 'Champ',
-                    relationship: 'Relation',
-                    unknown: 'Conversation',
-                },
-                views: {
-                    all: 'Toutes les conversations',
-                    diagram: 'Diagramme',
-                    current_target: 'Sélection',
-                },
-                target_header: {
-                    diagram: 'Diagramme',
-                    table: 'Table {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Table supprimée',
-                    missing_field: 'Champ supprimé',
-                    missing_relationship: 'Relation supprimée',
-                },
-                composer: {
-                    label: 'Message',
-                    placeholder: 'Écrire un message…',
-                    submit: 'Publier',
-                    submitting: 'Publication…',
-                    cancel: 'Annuler',
-                    form_aria_label: 'Nouveau message',
-                    counter_aria_label:
-                        '{{count}} caractères utilisés sur {{max}}',
-                    errors: {
-                        empty: 'Saisissez un message à publier.',
-                        too_long:
-                            'Les messages ne peuvent pas dépasser 2000 caractères.',
-                        create_failed:
-                            'Impossible de publier le message. Veuillez réessayer.',
-                    },
-                },
-                item_actions: {
-                    title: 'Actions du commentaire',
-                    edit: 'Modifier',
-                    delete: 'Supprimer',
-                },
-                edit: {
-                    label: 'Message',
-                    form_aria_label: 'Modifier le message',
-                    save: 'Enregistrer',
-                    saving: 'Enregistrement…',
-                    cancel: 'Annuler',
-                    counter_aria_label:
-                        '{{count}} caractères utilisés sur {{max}}',
-                    errors: {
-                        empty: 'Saisissez un message à enregistrer.',
-                        too_long:
-                            'Les messages ne peuvent pas dépasser 2000 caractères.',
-                        update_failed:
-                            'Impossible de mettre à jour le message. Veuillez réessayer.',
-                    },
-                    remote_updated_warning:
-                        'Ce message a été modifié ailleurs. L’enregistrement écrasera ces modifications.',
-                },
-                delete_dialog: {
-                    title: 'Supprimer le message',
-                    description:
-                        'Voulez-vous vraiment supprimer ce message ? Cette action est irréversible.',
-                    cancel: 'Annuler',
-                    confirm: 'Supprimer',
-                    deleting: 'Suppression…',
-                    errors: {
-                        delete_failed:
-                            'Impossible de supprimer ce message. Réessayez.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Commentaires (ancien)',
             },
             conversations_section: {
                 title: 'Conversations',

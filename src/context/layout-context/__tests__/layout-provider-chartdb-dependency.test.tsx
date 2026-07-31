@@ -8,7 +8,6 @@ import {
     chartDBContext,
     type ChartDBContext,
 } from '@/context/chartdb-context/chartdb-context';
-import { DIAGRAM_DISCUSSION_TARGET } from '@/lib/comments/resolve-discussion-target';
 import { useLayout } from '@/hooks/use-layout';
 import { LayoutProvider } from '../layout-provider';
 
@@ -62,11 +61,11 @@ describe('LayoutProvider ChartDB dependency', () => {
 
         const { result } = renderHook(() => useLayout(), { wrapper });
 
-        expect(result.current.discussionView).toBe('all');
+        expect(result.current.selectedSidebarSection).toBe('tables');
         expect(screen.queryByText(/missing|error/i)).not.toBeInTheDocument();
     });
 
-    it('resets discussion navigation when ChartDB diagramId changes without remounting', () => {
+    it('resets conversation navigation when ChartDB diagramId changes without remounting', () => {
         let diagramId = '42';
         let layoutProviderMounts = 0;
 
@@ -103,20 +102,16 @@ describe('LayoutProvider ChartDB dependency', () => {
         });
 
         act(() => {
-            result.current.openTargetDiscussion({
-                targetType: 'table',
-                targetId: 'table-1',
-            });
+            result.current.openConversationDetail(7);
         });
-        expect(result.current.discussionView).toBe('target');
+        expect(result.current.conversationNavigationIntent).toEqual({
+            conversationId: 7,
+        });
 
         diagramId = '84';
         rerender();
 
-        expect(result.current.discussionView).toBe('all');
-        expect(result.current.commentsTarget).toEqual(
-            DIAGRAM_DISCUSSION_TARGET
-        );
+        expect(result.current.conversationNavigationIntent).toBeNull();
         expect(layoutProviderMounts).toBe(1);
     });
 });

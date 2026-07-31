@@ -9,10 +9,7 @@ export const ne: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'निर्भरताहरू',
             custom_types: 'कस्टम प्रकारहरू',
-            comments: 'कुराकानी',
             conversations: 'कुराकानी',
-            legacy_comments: 'टिप्पणीहरू (पुरानो)',
-            legacy_comments_aria: 'पुरानो टिप्पणी प्यानल खोल्नुहोस्',
             visuals: 'Visuals',
         },
         menu: {
@@ -163,7 +160,6 @@ export const ne: LanguageTranslation = {
                     primary_key: 'प्राथमिक कुंजी',
                     indexes: 'सूचकहरू',
                     check_constraints: 'जाँच प्रतिबन्धहरू',
-                    comments: 'टिप्पणीहरू',
                     no_comments: 'कुनै टिप्पणीहरू छैनन्',
                     add_field: 'क्षेत्र थप्नुहोस्',
                     add_index: 'सूचक थप्नुहोस्',
@@ -177,7 +173,6 @@ export const ne: LanguageTranslation = {
                         open_discussion: 'कुराकानी खोल्नुहोस्',
                         unique: 'अनन्य',
                         auto_increment: 'स्वचालित वृद्धि',
-                        comments: 'टिप्पणीहरू',
                         no_comments: 'कुनै टिप्पणीहरू छैनन्',
                         delete_field: 'क्षेत्र हटाउनुहोस्',
                         // TODO: Translate
@@ -338,108 +333,6 @@ export const ne: LanguageTranslation = {
                     },
                     delete_custom_type: 'प्रकार मेट्नुहोस्',
                 },
-            },
-            comments_section: {
-                title: 'कुराकानी',
-                loading: 'कुराकानी लोड हुँदैछ…',
-                inactive: {
-                    title: 'कुराकानी उपलब्ध छैन',
-                    description:
-                        'कुराकानी प्रमाणित क्लाउड डायाग्राममा मात्र उपलब्ध छ।',
-                },
-                empty: {
-                    title: 'अहिलेसम्म कुनै कुराकानी छैन',
-                    description:
-                        'यो रेखाचित्रका बारेका कुराकानीहरू यहाँ देखिने छन्।',
-                    diagram_title: 'अहिलेसम्म कुनै डायाग्राम सन्देश छैन',
-                    diagram_description:
-                        'समग्र चित्रसम्बन्धी सन्देशहरू यहाँ देखिनेछन्।',
-                    target_title: 'हालको चयनका लागि अहिलेसम्म सन्देश छैन',
-                    target_description:
-                        'हालको चयनसम्बन्धी सन्देशहरू यहाँ देखिनेछन्।',
-                },
-                errors: {
-                    load_title: 'कुराकानी लोड गर्न सकिएन',
-                    load_description:
-                        'कुराकानी लोड गर्दा त्रुटि भयो। कृपया फेरि प्रयास गर्नुहोस्।',
-                },
-                retry: 'फेरि प्रयास गर्नुहोस्',
-                deleted_user: 'मेटिएको प्रयोगकर्ता',
-                targets: {
-                    diagram: 'डायाग्राम',
-                    table: 'टेबल',
-                    field: 'फिल्ड',
-                    relationship: 'सम्बन्ध',
-                    unknown: 'कुराकानी',
-                },
-                views: {
-                    all: 'सबै कुराकानी',
-                    diagram: 'चित्र',
-                    current_target: 'हालको',
-                },
-                target_header: {
-                    diagram: 'डायाग्राम',
-                    table: 'तालिका {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'मेटिएको तालिका',
-                    missing_field: 'मेटिएको फिल्ड',
-                    missing_relationship: 'मेटिएको सम्बन्ध',
-                },
-                composer: {
-                    label: 'सन्देश',
-                    placeholder: 'सन्देश लेख्नुहोस्…',
-                    submit: 'पोस्ट गर्नुहोस्',
-                    submitting: 'पोस्ट हुँदैछ…',
-                    cancel: 'रद्द गर्नुहोस्',
-                    form_aria_label: 'नयाँ सन्देश',
-                    counter_aria_label:
-                        '{{max}} मध्ये {{count}} अक्षर प्रयोग भयो',
-                    errors: {
-                        empty: 'पोस्ट गर्न सन्देश प्रविष्ट गर्नुहोस्।',
-                        too_long: 'सन्देश २००० अक्षरभन्दा बढी हुन सक्दैन।',
-                        create_failed:
-                            'सन्देश पोस्ट गर्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
-                    },
-                },
-                item_actions: {
-                    title: 'टिप्पणी कार्यहरू',
-                    edit: 'सम्पादन गर्नुहोस्',
-                    delete: 'मेटाउनुहोस्',
-                },
-                edit: {
-                    label: 'सन्देश',
-                    form_aria_label: 'सन्देश सम्पादन गर्नुहोस्',
-                    save: 'बचत गर्नुहोस्',
-                    saving: 'बचत हुँदैछ…',
-                    cancel: 'रद्द गर्नुहोस्',
-                    counter_aria_label:
-                        '{{max}} मध्ये {{count}} वर्ण प्रयोग भएका छन्',
-                    errors: {
-                        empty: 'बचत गर्न सन्देश प्रविष्ट गर्नुहोस्।',
-                        too_long: 'सन्देशहरू २००० वर्णभन्दा बढी हुन सक्दैनन्।',
-                        update_failed:
-                            'सन्देश अद्यावधिक गर्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
-                    },
-                    remote_updated_warning:
-                        'यो सन्देश अन्यत्र अद्यावधिक गरिएको थियो। बचत गर्दा ती परिवर्तनहरू अधिलेखन हुनेछन्।',
-                },
-                delete_dialog: {
-                    title: 'सन्देश मेटाउनुहोस्',
-                    description:
-                        'के तपाईं साँच्चै यो सन्देश मेटाउन चाहनुहुन्छ? यो कार्य उल्ट्याउन सकिँदैन।',
-                    cancel: 'रद्द गर्नुहोस्',
-                    confirm: 'मेटाउनुहोस्',
-                    deleting: 'मेटाउँदै…',
-                    errors: {
-                        delete_failed:
-                            'यो सन्देश मेटाउन सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'टिप्पणीहरू (पुरानो)',
             },
             conversations_section: {
                 title: 'कुराकानी',

@@ -9,10 +9,7 @@ export const mr: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'अवलंबने',
             custom_types: 'कस्टम प्रकार',
-            comments: 'संवाद',
             conversations: 'संभाषणे',
-            legacy_comments: 'टिप्पण्या (जुने)',
-            legacy_comments_aria: 'जुने टिप्पणी पॅनेल उघडा',
             visuals: 'Visuals',
         },
         menu: {
@@ -165,7 +162,6 @@ export const mr: LanguageTranslation = {
                     primary_key: 'प्राथमिक की',
                     indexes: 'सूचकांक',
                     check_constraints: 'तपासणी निर्बंध',
-                    comments: 'टिप्पण्या',
                     no_comments: 'कोणत्याही टिप्पणी नाहीत',
                     add_field: 'फील्ड जोडा',
                     add_index: 'सूचकांक जोडा',
@@ -179,7 +175,6 @@ export const mr: LanguageTranslation = {
                         open_discussion: 'संवाद उघडा',
                         unique: 'युनिक',
                         auto_increment: 'ऑटो इंक्रिमेंट',
-                        comments: 'टिप्पण्या',
                         no_comments: 'कोणत्याही टिप्पणी नाहीत',
                         delete_field: 'फील्ड हटवा',
                         // TODO: Translate
@@ -342,107 +337,6 @@ export const mr: LanguageTranslation = {
                     },
                     delete_custom_type: 'प्रकार हटवा',
                 },
-            },
-            comments_section: {
-                title: 'संवाद',
-                loading: 'संवाद लोड होत आहेत…',
-                inactive: {
-                    title: 'संवाद उपलब्ध नाहीत',
-                    description:
-                        'संवाद केवळ प्रमाणित क्लाउड आकृत्यांवर उपलब्ध आहेत.',
-                },
-                empty: {
-                    title: 'अद्याप कोणतेही संवाद नाहीत',
-                    description: 'या आकृतीबद्दलच्या संभाषणे येथे दिसतील.',
-                    diagram_title: 'अद्याप कोणतेही आकृती संदेश नाहीत',
-                    diagram_description:
-                        'संपूर्ण आकृतीबद्दलचे संदेश येथे दिसतील.',
-                    target_title: 'सध्याच्या निवडीसाठी अद्याप संदेश नाहीत',
-                    target_description:
-                        'सध्याच्या निवडीबद्दलचे संदेश येथे दिसतील.',
-                },
-                errors: {
-                    load_title: 'संवाद लोड करू शकलो नाही',
-                    load_description:
-                        'संवाद लोड करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.',
-                },
-                retry: 'पुन्हा प्रयत्न करा',
-                deleted_user: 'हटवलेला वापरकर्ता',
-                targets: {
-                    diagram: 'आकृती',
-                    table: 'टेबल',
-                    field: 'फील्ड',
-                    relationship: 'संबंध',
-                    unknown: 'संवाद',
-                },
-                views: {
-                    all: 'सर्व संवाद',
-                    diagram: 'आकृती',
-                    current_target: 'सध्याचे',
-                },
-                target_header: {
-                    diagram: 'आकृती',
-                    table: 'तक्ता {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'हटवलेला तक्ता',
-                    missing_field: 'हटवलेले फील्ड',
-                    missing_relationship: 'हटवलेला संबंध',
-                },
-                composer: {
-                    label: 'संदेश',
-                    placeholder: 'संदेश लिखा…',
-                    submit: 'पोस्ट करा',
-                    submitting: 'पोस्ट होत आहे…',
-                    cancel: 'रद्द करा',
-                    form_aria_label: 'नवीन संदेश',
-                    counter_aria_label: '{{max}} पैकी {{count}} अक्षरे वापरली',
-                    errors: {
-                        empty: 'पोस्ट करण्यासाठी संदेश लिहा.',
-                        too_long:
-                            'संदेश 2000 अक्षरांपेक्षा जास्त असू शकत नाहीत.',
-                        create_failed:
-                            'संदेश पोस्ट करता आला नाही. कृपया पुन्हा प्रयत्न करा.',
-                    },
-                },
-                item_actions: {
-                    title: 'टिप्पणी क्रिया',
-                    edit: 'संपादित करा',
-                    delete: 'हटवा',
-                },
-                edit: {
-                    label: 'संदेश',
-                    form_aria_label: 'संदेश संपादित करा',
-                    save: 'जतन करा',
-                    saving: 'जतन करत आहे…',
-                    cancel: 'रद्द करा',
-                    counter_aria_label: '{{max}} पैकी {{count}} अक्षरे वापरली',
-                    errors: {
-                        empty: 'जतन करण्यासाठी संदेश प्रविष्ट करा.',
-                        too_long:
-                            'संदेश 2000 अक्षरांपेक्षा जास्त असू शकत नाहीत.',
-                        update_failed:
-                            'संदेश अद्यतनित करता आला नाही. कृपया पुन्हा प्रयत्न करा.',
-                    },
-                    remote_updated_warning:
-                        'हा संदेश इतरत्र अद्यतनित झाला होता. जतन केल्यास ते बदल अधिलेखित होतील.',
-                },
-                delete_dialog: {
-                    title: 'संदेश हटवा',
-                    description:
-                        'तुम्हाला खरोखर हा संदेश हटवायचा आहे का? ही क्रिया पूर्ववत करता येणार नाही.',
-                    cancel: 'रद्द करा',
-                    confirm: 'हटवा',
-                    deleting: 'हटवत आहे…',
-                    errors: {
-                        delete_failed:
-                            'हा संदेश हटवता आला नाही. कृपया पुन्हा प्रयत्न करा.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'टिप्पण्या (जुने)',
             },
             conversations_section: {
                 title: 'संभाषणे',

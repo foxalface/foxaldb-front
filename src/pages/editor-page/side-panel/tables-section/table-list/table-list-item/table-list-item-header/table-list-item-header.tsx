@@ -16,9 +16,7 @@ import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-h
 import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useCommentsAvailability } from '@/hooks/use-comments-availability';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
-import { useTableDiscussionIndicator } from '@/hooks/use-discussion-indicators';
 import { useTargetConversationMenuAction } from '@/hooks/use-target-conversation-menu-action';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { createTableEditingItem } from '@/lib/realtime/editing-utils';
@@ -45,7 +43,6 @@ import { cloneTable } from '@/lib/clone';
 import type { DBSchema } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
-import { DiscussionIndicator } from '@/pages/editor-page/side-panel/comments-section/discussion-indicator';
 import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
 
 export interface TableListItemHeaderProps {
@@ -71,19 +68,16 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const { startEditing, stopEditing } = useEditingBroadcast();
     const { t } = useTranslation();
     const { focusOnTable } = useFocusOn();
-    const commentsActive = useCommentsAvailability();
     const conversationsAvailable = useConversationsAvailability();
-    const discussionIndicator = useTableDiscussionIndicator(table.id);
-    const conversationMenu = useTargetConversationMenuAction(
-        { targetType: 'table', targetId: table.id },
-        { targetType: 'table', targetId: table.id }
-    );
+    const conversationMenu = useTargetConversationMenuAction({
+        targetType: 'table',
+        targetId: table.id,
+    });
     const [editMode, setEditMode] = React.useState(false);
     const [tableName, setTableName] = React.useState(table.name);
     const inputRef = React.useRef<HTMLInputElement>(null);
     const { listeners } = useSortable({ id: table.id });
-    const showDropDownMenu =
-        !readonly || commentsActive || conversationsAvailable;
+    const showDropDownMenu = !readonly || conversationsAvailable;
 
     const editTableName = useCallback(() => {
         if (!editMode) return;
@@ -164,14 +158,6 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         [conversationMenu]
     );
 
-    const openTableComments = useCallback(
-        (e: React.MouseEvent) => {
-            e.stopPropagation();
-            conversationMenu.openCommentsAction();
-        },
-        [conversationMenu]
-    );
-
     const renderDropDownMenu = useCallback(() => {
         const showSchemaAction =
             !readonly &&
@@ -209,22 +195,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     ) : null}
-                    {conversationMenu.showCommentsAction ? (
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                className="flex justify-between gap-4"
-                                onClick={openTableComments}
-                            >
-                                {t(
-                                    'side_panel.tables_section.table.table_actions.open_discussion'
-                                )}
-                                <SlBubbles className="size-3.5" />
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                    ) : null}
-                    {(conversationMenu.showConversationAction ||
-                        conversationMenu.showCommentsAction) &&
-                    !readonly ? (
+                    {conversationMenu.showConversationAction && !readonly ? (
                         <DropdownMenuSeparator />
                     ) : null}
                     {!readonly ? (
@@ -319,7 +290,6 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         conversationMenu,
         readonly,
         openTableDiscussion,
-        openTableComments,
     ]);
 
     const schemaToDisplay = useMemo(() => {
@@ -394,12 +364,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     targetName={table.name}
                     className="mr-1"
                 />
-            ) : (
-                <DiscussionIndicator
-                    indicator={discussionIndicator}
-                    className="mr-1"
-                />
-            )}
+            ) : null}
             <div className="flex flex-row-reverse items-center">
                 {!editMode ? (
                     <>

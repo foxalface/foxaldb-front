@@ -6,40 +6,29 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { SidebarSection } from '@/context/layout-context/layout-context';
 import { en } from '@/i18n/locales/en';
 
-const {
-    layoutState,
-    commentsState,
-    conversationsAvailabilityState,
-    breakpointState,
-} = vi.hoisted(() => {
-    const state = {
-        selectedSidebarSection: 'tables' as SidebarSection,
-        selectSidebarSection: vi.fn(),
-        openAllDiscussions: vi.fn(),
-        openConversationsPanel: vi.fn(),
-    };
-    state.selectSidebarSection = vi.fn((section: SidebarSection) => {
-        state.selectedSidebarSection = section;
+const { layoutState, conversationsAvailabilityState, breakpointState } =
+    vi.hoisted(() => {
+        const state = {
+            selectedSidebarSection: 'tables' as SidebarSection,
+            selectSidebarSection: vi.fn(),
+            openConversationsPanel: vi.fn(),
+        };
+        state.selectSidebarSection = vi.fn((section: SidebarSection) => {
+            state.selectedSidebarSection = section;
+        });
+        state.openConversationsPanel = vi.fn(() => {
+            state.selectedSidebarSection = 'conversations';
+        });
+        return {
+            layoutState: state,
+            conversationsAvailabilityState: {
+                isAvailable: false,
+            },
+            breakpointState: {
+                isMd: false,
+            },
+        };
     });
-    state.openAllDiscussions = vi.fn(() => {
-        state.selectedSidebarSection = 'comments';
-    });
-    state.openConversationsPanel = vi.fn(() => {
-        state.selectedSidebarSection = 'conversations';
-    });
-    return {
-        layoutState: state,
-        commentsState: {
-            isActive: true,
-        },
-        conversationsAvailabilityState: {
-            isAvailable: false,
-        },
-        breakpointState: {
-            isMd: false,
-        },
-    };
-});
 
 vi.mock('@/hooks/use-layout', () => ({
     useLayout: () => ({
@@ -49,23 +38,9 @@ vi.mock('@/hooks/use-layout', () => ({
         selectSidebarSection: (section: SidebarSection) => {
             layoutState.selectSidebarSection(section);
         },
-        openAllDiscussions: () => {
-            layoutState.openAllDiscussions();
-        },
         openConversationsPanel: () => {
             layoutState.openConversationsPanel();
         },
-    }),
-}));
-
-vi.mock('@/hooks/use-diagram-comments', () => ({
-    useDiagramComments: () => ({
-        isActive: commentsState.isActive,
-        comments: [],
-        status: 'ready',
-        error: null,
-        diagramId: '42',
-        reload: vi.fn(),
     }),
 }));
 
@@ -74,20 +49,12 @@ vi.mock('@/hooks/use-conversations-availability', () => ({
         conversationsAvailabilityState.isAvailable,
 }));
 
-vi.mock('@/hooks/use-comments-availability', () => ({
-    useCommentsAvailability: () => commentsState.isActive,
-}));
-
 vi.mock('@/hooks/use-breakpoint', () => ({
     useBreakpoint: () => ({ isMd: breakpointState.isMd }),
 }));
 
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => ({ databaseType: DatabaseType.POSTGRESQL }),
-}));
-
-vi.mock('@/hooks/use-theme', () => ({
-    useTheme: () => ({ effectiveTheme: 'light' }),
 }));
 
 vi.mock('react-i18next', () => ({
@@ -110,7 +77,6 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
-// Keep SidePanel routing real; stub Radix Select so options stay queryable in happy-dom.
 vi.mock('@/components/select/select', () => ({
     Select: ({
         children,
@@ -222,12 +188,6 @@ vi.mock('../custom-types-section/custom-types-section', () => ({
     ),
 }));
 
-vi.mock('../comments-section/comments-section', () => ({
-    CommentsSection: () => (
-        <div data-testid="comments-section">CommentsSection</div>
-    ),
-}));
-
 vi.mock('../conversations-section/conversations-section', () => ({
     ConversationsSection: () => (
         <div data-testid="conversations-section">ConversationsSection</div>
@@ -240,37 +200,30 @@ vi.mock('../dbml-section/dbml-section', () => ({
 
 import { SidePanel } from '../side-panel';
 
-describe('SidePanel comments routing', () => {
+describe('SidePanel conversations routing', () => {
     beforeEach(() => {
         layoutState.selectedSidebarSection = 'tables';
         layoutState.selectSidebarSection = vi.fn((section: SidebarSection) => {
             layoutState.selectedSidebarSection = section;
         });
-        layoutState.openAllDiscussions = vi.fn(() => {
-            layoutState.selectedSidebarSection = 'comments';
-        });
         layoutState.openConversationsPanel = vi.fn(() => {
             layoutState.selectedSidebarSection = 'conversations';
         });
-        commentsState.isActive = true;
         conversationsAvailabilityState.isAvailable = false;
         breakpointState.isMd = false;
     });
 
-    it('includes Discussions in the mobile selector when comments are active', () => {
-        commentsState.isActive = true;
+    it('includes Conversations in the mobile selector when conversations are available', () => {
+        conversationsAvailabilityState.isAvailable = true;
         render(<SidePanel />);
 
         expect(
             screen.getByRole('option', { name: 'Conversations' })
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole('option', { name: 'Conversations' })
-        ).toHaveAttribute('data-value', 'comments');
+        ).toHaveAttribute('data-value', 'conversations');
     });
 
-    it('excludes Discussions from the mobile selector when comments are inactive', () => {
-        commentsState.isActive = false;
+    it('excludes Conversations from the mobile selector when unavailable', () => {
+        conversationsAvailabilityState.isAvailable = false;
         render(<SidePanel />);
 
         expect(
@@ -278,11 +231,11 @@ describe('SidePanel comments routing', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('renders CommentsSection when selectedSidebarSection is comments', () => {
-        layoutState.selectedSidebarSection = 'comments';
+    it('renders ConversationsSection when selectedSidebarSection is conversations', () => {
+        layoutState.selectedSidebarSection = 'conversations';
         render(<SidePanel />);
 
-        expect(screen.getByTestId('comments-section')).toBeInTheDocument();
+        expect(screen.getByTestId('conversations-section')).toBeInTheDocument();
         expect(screen.queryByTestId('tables-section')).not.toBeInTheDocument();
     });
 
@@ -304,16 +257,14 @@ describe('SidePanel comments routing', () => {
         expect(screen.getByTestId('custom-types-section')).toBeInTheDocument();
     });
 
-    it('calls openAllDiscussions when selecting mobile Conversations', async () => {
+    it('calls openConversationsPanel when selecting mobile Conversations', async () => {
+        conversationsAvailabilityState.isAvailable = true;
         const user = userEvent.setup();
         render(<SidePanel />);
 
         await user.click(screen.getByRole('option', { name: 'Conversations' }));
 
-        expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
-        expect(layoutState.selectSidebarSection).not.toHaveBeenCalledWith(
-            'comments'
-        );
+        expect(layoutState.openConversationsPanel).toHaveBeenCalledTimes(1);
     });
 
     it('keeps other mobile sections on the existing selection path', async () => {
@@ -323,106 +274,32 @@ describe('SidePanel comments routing', () => {
         await user.click(screen.getByRole('option', { name: 'Refs' }));
 
         expect(layoutState.selectSidebarSection).toHaveBeenCalledWith('refs');
-        expect(layoutState.openAllDiscussions).not.toHaveBeenCalled();
+        expect(layoutState.openConversationsPanel).not.toHaveBeenCalled();
     });
 
-    it('does not re-open all conversations when comments is already selected', async () => {
-        const user = userEvent.setup();
-        layoutState.selectedSidebarSection = 'comments';
+    it('does not expose legacy Comments options in the mobile selector', () => {
+        conversationsAvailabilityState.isAvailable = true;
         render(<SidePanel />);
 
-        await user.click(screen.getByRole('option', { name: 'Conversations' }));
-
-        expect(layoutState.openAllDiscussions).not.toHaveBeenCalled();
+        expect(
+            screen.queryByRole('option', { name: /legacy/i })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('option', { name: 'Comments (legacy)' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('option', { name: 'comments' })
+        ).not.toBeInTheDocument();
     });
 
-    it('restores all conversations after leaving comments and selecting Conversations again', async () => {
-        const user = userEvent.setup();
-        layoutState.selectedSidebarSection = 'comments';
-        const { rerender } = render(<SidePanel />);
-
-        await user.click(screen.getByRole('option', { name: 'Refs' }));
-        expect(layoutState.selectSidebarSection).toHaveBeenCalledWith('refs');
-        expect(layoutState.selectedSidebarSection).toBe('refs');
-
-        rerender(<SidePanel />);
-
-        await user.click(screen.getByRole('option', { name: 'Conversations' }));
-        expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
-    });
-
-    it('does not show the mobile selector on desktop while still routing comments', () => {
+    it('does not show the mobile selector on desktop', () => {
         breakpointState.isMd = true;
-        layoutState.selectedSidebarSection = 'comments';
+        layoutState.selectedSidebarSection = 'conversations';
         render(<SidePanel />);
 
         expect(
             screen.queryByTestId('mobile-section-select')
         ).not.toBeInTheDocument();
-        expect(screen.getByTestId('comments-section')).toBeInTheDocument();
-    });
-});
-
-describe('SidePanel conversations routing', () => {
-    beforeEach(() => {
-        layoutState.selectedSidebarSection = 'tables';
-        layoutState.openConversationsPanel = vi.fn(() => {
-            layoutState.selectedSidebarSection = 'conversations';
-        });
-        commentsState.isActive = true;
-        conversationsAvailabilityState.isAvailable = true;
-        breakpointState.isMd = false;
-    });
-
-    it('includes Conversations in the mobile selector when conversations are available', () => {
-        render(<SidePanel />);
-
-        expect(
-            screen.getByRole('option', { name: 'Conversations' })
-        ).toHaveAttribute('data-value', 'conversations');
-    });
-
-    it('renders ConversationsSection when selectedSidebarSection is conversations', () => {
-        layoutState.selectedSidebarSection = 'conversations';
-        render(<SidePanel />);
-
         expect(screen.getByTestId('conversations-section')).toBeInTheDocument();
-    });
-
-    it('calls openConversationsPanel when selecting mobile Conversations', async () => {
-        const user = userEvent.setup();
-        render(<SidePanel />);
-
-        await user.click(screen.getByRole('option', { name: 'Conversations' }));
-
-        expect(layoutState.openConversationsPanel).toHaveBeenCalledTimes(1);
-    });
-
-    it('exposes legacy Comments in the mobile selector when both stacks are available', () => {
-        render(<SidePanel />);
-
-        expect(
-            screen.getByRole('option', { name: 'Comments (legacy)' })
-        ).toHaveAttribute('data-value', 'comments');
-    });
-
-    it('opens the legacy Comments panel from the mobile selector', async () => {
-        const user = userEvent.setup();
-        render(<SidePanel />);
-
-        await user.click(
-            screen.getByRole('option', { name: 'Comments (legacy)' })
-        );
-
-        expect(layoutState.openAllDiscussions).toHaveBeenCalledTimes(1);
-    });
-
-    it('does not show legacy Comments when comments are unavailable', () => {
-        commentsState.isActive = false;
-        render(<SidePanel />);
-
-        expect(
-            screen.queryByRole('option', { name: 'Comments (legacy)' })
-        ).not.toBeInTheDocument();
     });
 });

@@ -6,20 +6,18 @@ import {
     DIAGRAM_CONVERSATION_DELETED_EVENT,
     DIAGRAM_CONVERSATION_MESSAGE_CREATED_EVENT,
 } from '../conversation-events';
-import {
-    subscribeToDiagramConversationEvents,
-    type DiagramConversationEventChannel,
-} from '../conversation-subscriber';
+import type { DiagramPrivateEventChannel } from '../diagram-private-channel';
+import { subscribeToDiagramConversationEvents } from '../conversation-subscriber';
 
 type EventCallback = (payload: unknown) => void;
 
-const createFakeChannel = (): DiagramConversationEventChannel & {
+const createFakeChannel = (): DiagramPrivateEventChannel & {
     listeners: Map<string, Set<EventCallback>>;
     emit: (event: string, payload: unknown) => void;
 } => {
     const listeners = new Map<string, Set<EventCallback>>();
 
-    const channel: DiagramConversationEventChannel & {
+    const channel: DiagramPrivateEventChannel & {
         listeners: Map<string, Set<EventCallback>>;
         emit: (event: string, payload: unknown) => void;
     } = {

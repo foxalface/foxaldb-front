@@ -9,10 +9,7 @@ export const pt_BR: LanguageTranslation = {
             refs: 'Refs',
             dependencies: 'Dependências',
             custom_types: 'Tipos Personalizados',
-            comments: 'Conversas',
             conversations: 'Conversas',
-            legacy_comments: 'Comentários (legado)',
-            legacy_comments_aria: 'Abrir o painel de comentários legado',
             visuals: 'Visuais',
         },
         menu: {
@@ -163,7 +160,6 @@ export const pt_BR: LanguageTranslation = {
                     primary_key: 'Chave Primária',
                     indexes: 'Índices',
                     check_constraints: 'Restrições de verificação',
-                    comments: 'Comentários',
                     no_comments: 'Sem comentários',
                     add_field: 'Adicionar Campo',
                     add_index: 'Adicionar Índice',
@@ -177,7 +173,6 @@ export const pt_BR: LanguageTranslation = {
                         open_discussion: 'Abrir conversa',
                         unique: 'Único',
                         auto_increment: 'Incremento Automático',
-                        comments: 'Comentários',
                         no_comments: 'Sem comentários',
                         delete_field: 'Excluir Campo',
                         // TODO: Translate
@@ -339,110 +334,6 @@ export const pt_BR: LanguageTranslation = {
                     },
                     delete_custom_type: 'Excluir Tipo',
                 },
-            },
-            comments_section: {
-                title: 'Conversas',
-                loading: 'Carregando conversas…',
-                inactive: {
-                    title: 'Conversas indisponíveis',
-                    description:
-                        'As conversas estão disponíveis apenas em diagramas na nuvem autenticados.',
-                },
-                empty: {
-                    title: 'Ainda não há conversas',
-                    description:
-                        'As conversas sobre este diagrama aparecerão aqui.',
-                    diagram_title: 'Ainda não há mensagens do diagrama',
-                    diagram_description:
-                        'As mensagens sobre o diagrama como um todo aparecerão aqui.',
-                    target_title: 'Ainda não há mensagens para a seleção atual',
-                    target_description:
-                        'As mensagens sobre a seleção atual aparecerão aqui.',
-                },
-                errors: {
-                    load_title: 'Não foi possível carregar as conversas',
-                    load_description:
-                        'Algo deu errado ao carregar as conversas. Tente novamente.',
-                },
-                retry: 'Tentar novamente',
-                deleted_user: 'Usuário excluído',
-                targets: {
-                    diagram: 'Diagrama',
-                    table: 'Tabela',
-                    field: 'Campo',
-                    relationship: 'Relação',
-                    unknown: 'Conversa',
-                },
-                views: {
-                    all: 'Todas as conversas',
-                    diagram: 'Diagrama',
-                    current_target: 'Atual',
-                },
-                target_header: {
-                    diagram: 'Diagrama',
-                    table: 'Tabela {{name}}',
-                    field: '{{table}}.{{field}}',
-                    relationship: '{{name}}',
-                    relationship_endpoints: '{{source}} → {{target}}',
-                    missing_table: 'Tabela excluída',
-                    missing_field: 'Campo excluído',
-                    missing_relationship: 'Relacionamento excluído',
-                },
-                composer: {
-                    label: 'Mensagem',
-                    placeholder: 'Escreva uma mensagem…',
-                    submit: 'Publicar',
-                    submitting: 'Publicando…',
-                    cancel: 'Cancelar',
-                    form_aria_label: 'Nova mensagem',
-                    counter_aria_label:
-                        '{{count}} de {{max}} caracteres usados',
-                    errors: {
-                        empty: 'Digite uma mensagem para publicar.',
-                        too_long:
-                            'As mensagens não podem ter mais de 2000 caracteres.',
-                        create_failed:
-                            'Não foi possível publicar a mensagem. Tente novamente.',
-                    },
-                },
-                item_actions: {
-                    title: 'Ações do comentário',
-                    edit: 'Editar',
-                    delete: 'Excluir',
-                },
-                edit: {
-                    label: 'Mensagem',
-                    form_aria_label: 'Editar mensagem',
-                    save: 'Salvar',
-                    saving: 'Salvando…',
-                    cancel: 'Cancelar',
-                    counter_aria_label:
-                        '{{count}} de {{max}} caracteres usados',
-                    errors: {
-                        empty: 'Digite uma mensagem para salvar.',
-                        too_long:
-                            'As mensagens não podem exceder 2000 caracteres.',
-                        update_failed:
-                            'Não foi possível atualizar a mensagem. Tente novamente.',
-                    },
-                    remote_updated_warning:
-                        'Esta mensagem foi atualizada em outro lugar. Salvar substituirá essas alterações.',
-                },
-                delete_dialog: {
-                    title: 'Excluir mensagem',
-                    description:
-                        'Tem certeza de que deseja excluir esta mensagem? Esta ação não pode ser desfeita.',
-                    cancel: 'Cancelar',
-                    confirm: 'Excluir',
-                    deleting: 'Excluindo…',
-                    errors: {
-                        delete_failed:
-                            'Não foi possível excluir esta mensagem. Tente novamente.',
-                    },
-                },
-            },
-            legacy_comments_section: {
-                title: 'Comentários (legado)',
             },
             conversations_section: {
                 title: 'Conversas',
