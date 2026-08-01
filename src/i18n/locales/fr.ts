@@ -378,6 +378,7 @@ export const fr: LanguageTranslation = {
                     start_tooltip: 'Démarrer une conversation pour {{name}}',
                     pending_tooltip:
                         'Démarrage de la conversation pour {{name}}…',
+                    action_tooltip: 'Conversation',
                     unavailable_description:
                         'Vous ne pouvez pas démarrer de conversations sur ce diagramme.',
                     errors: {

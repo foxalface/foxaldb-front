@@ -382,6 +382,7 @@ export const ja: LanguageTranslation = {
                     open_tooltip: '{{name}} の会話を開く',
                     start_tooltip: '{{name}} の会話を開始',
                     pending_tooltip: '{{name}} の会話を開始しています…',
+                    action_tooltip: '会話',
                     unavailable_description:
                         'このダイアグラムでは会話を開始できません。',
                     errors: {

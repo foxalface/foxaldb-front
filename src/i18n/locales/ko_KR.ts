@@ -379,6 +379,7 @@ export const ko_KR: LanguageTranslation = {
                     open_tooltip: '{{name}} 대화 열기',
                     start_tooltip: '{{name}} 대화 시작',
                     pending_tooltip: '{{name}} 대화를 시작하는 중…',
+                    action_tooltip: '대화',
                     unavailable_description:
                         '이 다이어그램에서는 대화를 시작할 수 없습니다.',
                     errors: {

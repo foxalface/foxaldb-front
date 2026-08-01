@@ -384,6 +384,7 @@ export const mr: LanguageTranslation = {
                     open_tooltip: '{{name}} साठी संवाद उघडा',
                     start_tooltip: '{{name}} साठी संवाद सुरू करा',
                     pending_tooltip: '{{name}} साठी संवाद सुरू होत आहे…',
+                    action_tooltip: 'संवाद',
                     unavailable_description:
                         'या आकृतीवर तुम्ही संवाद सुरू करू शकत नाही.',
                     errors: {

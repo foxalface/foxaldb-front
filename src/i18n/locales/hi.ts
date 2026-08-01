@@ -382,6 +382,7 @@ export const hi: LanguageTranslation = {
                     start_tooltip: '{{name}} के लिए वार्तालाप शुरू करें',
                     pending_tooltip:
                         '{{name}} के लिए वार्तालाप शुरू हो रहा है…',
+                    action_tooltip: 'वार्तालाप',
                     unavailable_description:
                         'आप इस आरेख पर वार्तालाप शुरू नहीं कर सकते।',
                     errors: {

@@ -212,6 +212,24 @@ describe('ConversationIndicator', () => {
         expect(container).toBeEmptyDOMElement();
     });
 
+    it('omits the tooltip when showTooltip is false', () => {
+        render(
+            <ConversationIndicator
+                target={{ targetType: 'table', targetId: 't1' }}
+                targetName="Users"
+                showTooltip={false}
+            />,
+            { wrapper }
+        );
+
+        expect(
+            screen.getByLabelText('Start conversation for Users')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText('Start conversation for Users')
+        ).not.toBeInTheDocument();
+    });
+
     it('supports keyboard activation', async () => {
         const user = userEvent.setup();
         conversationsState.activeConversations = [

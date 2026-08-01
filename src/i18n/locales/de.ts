@@ -382,6 +382,7 @@ export const de: LanguageTranslation = {
                     start_tooltip: 'Unterhaltung für {{name}} starten',
                     pending_tooltip:
                         'Unterhaltung für {{name}} wird gestartet…',
+                    action_tooltip: 'Konversation',
                     unavailable_description:
                         'Sie können auf diesem Diagramm keine Unterhaltungen starten.',
                     errors: {

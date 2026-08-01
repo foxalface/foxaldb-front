@@ -380,6 +380,7 @@ export const gu: LanguageTranslation = {
                     open_tooltip: '{{name}} માટે વાતચીત ખોલો',
                     start_tooltip: '{{name}} માટે વાતચીત શરૂ કરો',
                     pending_tooltip: '{{name}} માટે વાતચીત શરૂ થઈ રહી છે…',
+                    action_tooltip: 'વાતચીત',
                     unavailable_description:
                         'તમે આ ડાયાગ્રામ પર વાતચીત શરૂ કરી શકતા નથી.',
                     errors: {

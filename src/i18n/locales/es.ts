@@ -380,6 +380,7 @@ export const es: LanguageTranslation = {
                     open_tooltip: 'Abrir conversación para {{name}}',
                     start_tooltip: 'Iniciar conversación para {{name}}',
                     pending_tooltip: 'Iniciando conversación para {{name}}…',
+                    action_tooltip: 'Conversación',
                     unavailable_description:
                         'No puede iniciar conversaciones en este diagrama.',
                     errors: {

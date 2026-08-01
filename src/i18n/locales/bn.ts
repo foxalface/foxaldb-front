@@ -381,6 +381,7 @@ export const bn: LanguageTranslation = {
                     open_tooltip: '{{name}}-এর জন্য কথোপকথন খুলুন',
                     start_tooltip: '{{name}}-এর জন্য কথোপকথন শুরু করুন',
                     pending_tooltip: '{{name}}-এর জন্য কথোপকথন শুরু হচ্ছে…',
+                    action_tooltip: 'কথোপকথন',
                     unavailable_description:
                         'আপনি এই ডায়াগ্রামে কথোপকথন শুরু করতে পারবেন না।',
                     errors: {

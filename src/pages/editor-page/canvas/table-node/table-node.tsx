@@ -623,18 +623,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     {table.name}
                                 </Label>
                             )}
-                            {conversationsAvailable ? (
-                                <ConversationIndicator
-                                    target={{
-                                        targetType: 'table',
-                                        targetId: table.id,
-                                    }}
-                                    targetName={table.name}
-                                    className="mr-0.5"
-                                />
-                            ) : null}
                         </div>
-                        <div className="hidden shrink-0 flex-row group-hover:flex">
+                        <div className="hidden shrink-0 flex-row group-focus-within:flex group-hover:flex">
                             {readonly ? null : (
                                 <Button
                                     variant="ghost"
@@ -644,6 +634,18 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     <CircleDotDashed className="size-4" />
                                 </Button>
                             )}
+                            {conversationsAvailable ? (
+                                <ConversationIndicator
+                                    target={{
+                                        targetType: 'table',
+                                        targetId: table.id,
+                                    }}
+                                    targetName={table.name}
+                                    highlightWhenActive={false}
+                                    showTooltip={false}
+                                    buttonClassName="p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                                />
+                            ) : null}
                             <Button
                                 variant="ghost"
                                 className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"

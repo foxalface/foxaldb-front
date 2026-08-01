@@ -375,6 +375,7 @@ export const ar: LanguageTranslation = {
                     open_tooltip: 'فتح المحادثة لـ {{name}}',
                     start_tooltip: 'بدء محادثة لـ {{name}}',
                     pending_tooltip: 'جارٍ بدء المحادثة لـ {{name}}…',
+                    action_tooltip: 'محادثة',
                     unavailable_description:
                         'لا يمكنك بدء محادثات على هذا المخطط.',
                     errors: {

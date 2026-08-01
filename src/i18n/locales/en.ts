@@ -372,6 +372,7 @@ export const en = {
                     open_tooltip: 'Open conversation for {{name}}',
                     start_tooltip: 'Start conversation for {{name}}',
                     pending_tooltip: 'Starting conversation for {{name}}…',
+                    action_tooltip: 'Conversation',
                     unavailable_description:
                         'You cannot start conversations on this diagram.',
                     errors: {

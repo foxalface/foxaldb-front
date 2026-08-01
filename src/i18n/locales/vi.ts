@@ -380,6 +380,7 @@ export const vi: LanguageTranslation = {
                     start_tooltip: 'Bắt đầu cuộc trò chuyện cho {{name}}',
                     pending_tooltip:
                         'Đang bắt đầu cuộc trò chuyện cho {{name}}…',
+                    action_tooltip: 'Trò chuyện',
                     unavailable_description:
                         'Bạn không thể bắt đầu cuộc trò chuyện trên sơ đồ này.',
                     errors: {

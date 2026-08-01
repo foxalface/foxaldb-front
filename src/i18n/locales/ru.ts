@@ -378,6 +378,7 @@ export const ru: LanguageTranslation = {
                     open_tooltip: 'Открыть беседу для {{name}}',
                     start_tooltip: 'Начать беседу для {{name}}',
                     pending_tooltip: 'Запуск беседы для {{name}}…',
+                    action_tooltip: 'Беседа',
                     unavailable_description:
                         'Вы не можете начинать беседы на этой диаграмме.',
                     errors: {

@@ -11,6 +11,7 @@ const {
     chartDBState,
     conversationsState,
     remoteEditorsState,
+    openConversationMock,
     updateTable,
     openTableFromSidebar,
     selectSidebarSection,
@@ -37,6 +38,7 @@ const {
     const setEditTableModeTable = vi.fn();
     const setHoveringTableId = vi.fn();
     const showCreateRelationshipNode = vi.fn();
+    const openConversationMock = vi.fn();
 
     return {
         chartDBState: {
@@ -44,10 +46,12 @@ const {
         },
         conversationsState: {
             isAvailable: true,
+            isPending: false,
         },
         remoteEditorsState: {
             editors: [] as RemoteEditingViewModel[],
         },
+        openConversationMock,
         updateTable,
         openTableFromSidebar,
         selectSidebarSection,
@@ -90,18 +94,28 @@ vi.mock('@/components/conversation-indicator/conversation-indicator', () => ({
     ConversationIndicator: ({
         target,
         targetName,
-        className,
+        buttonClassName,
+        highlightWhenActive,
     }: {
         target: { targetType: string; targetId: string };
         targetName: string;
-        className?: string;
+        buttonClassName?: string;
+        highlightWhenActive?: boolean;
     }) => (
-        <span
+        <button
+            type="button"
             data-testid="conversation-indicator"
             data-target-type={target.targetType}
             data-target-id={target.targetId}
             data-target-name={targetName}
-            className={className}
+            data-button-class={buttonClassName ?? ''}
+            data-highlight-when-active={String(highlightWhenActive ?? true)}
+            aria-busy={conversationsState.isPending}
+            disabled={conversationsState.isPending}
+            onClick={(event) => {
+                event.stopPropagation();
+                openConversationMock(target);
+            }}
         />
     ),
 }));
@@ -238,6 +252,15 @@ const renderTableNode = (
     return render(<TableNode {...props} />);
 };
 
+const getTableActionCluster = () => {
+    const indicator = screen.getByTestId('conversation-indicator');
+    const cluster = indicator.closest(
+        '.group-hover\\:flex.group-focus-within\\:flex'
+    );
+    expect(cluster).not.toBeNull();
+    return cluster as HTMLElement;
+};
+
 describe('TableNode conversation indicator', () => {
     afterEach(() => {
         cleanup();
@@ -246,7 +269,9 @@ describe('TableNode conversation indicator', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
         conversationsState.isAvailable = true;
+        conversationsState.isPending = false;
         remoteEditorsState.editors = [];
+        openConversationMock.mockClear();
         updateTable.mockClear();
         openTableFromSidebar.mockClear();
         selectSidebarSection.mockClear();
@@ -256,13 +281,46 @@ describe('TableNode conversation indicator', () => {
         showCreateRelationshipNode.mockClear();
     });
 
-    it('renders ConversationIndicator when conversations are available', () => {
+    it('renders ConversationIndicator in the table contextual action cluster', () => {
         renderTableNode();
 
         const indicator = screen.getByTestId('conversation-indicator');
         expect(indicator).toHaveAttribute('data-target-type', 'table');
         expect(indicator).toHaveAttribute('data-target-id', 'table-1');
         expect(indicator).toHaveAttribute('data-target-name', 'Clients');
+
+        const cluster = getTableActionCluster();
+        expect(cluster.className).toContain('hidden');
+        expect(cluster.className).toContain('group-hover:flex');
+        expect(cluster.className).toContain('group-focus-within:flex');
+    });
+
+    it('uses canvas action styling without active highlight', () => {
+        renderTableNode();
+
+        const indicator = screen.getByTestId('conversation-indicator');
+        expect(indicator).toHaveAttribute(
+            'data-highlight-when-active',
+            'false'
+        );
+        expect(indicator).toHaveAttribute(
+            'data-button-class',
+            'p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200'
+        );
+    });
+
+    it('does not leave a permanently visible duplicate beside the table name', () => {
+        const { container } = renderTableNode();
+
+        expect(screen.getAllByTestId('conversation-indicator')).toHaveLength(1);
+
+        const nameArea = container.querySelector(
+            '.flex.min-w-0.flex-1.items-center.gap-2'
+        );
+        expect(nameArea).not.toBeNull();
+        expect(
+            nameArea!.querySelector('[data-testid="conversation-indicator"]')
+        ).toBeNull();
     });
 
     it('hides ConversationIndicator when conversations are unavailable', () => {
@@ -284,6 +342,33 @@ describe('TableNode conversation indicator', () => {
         expect(screen.getByText('Clients')).toBeInTheDocument();
     });
 
+    it('opens the table conversation without triggering edit mode', () => {
+        const { container } = renderTableNode();
+
+        fireEvent.click(screen.getByTestId('conversation-indicator'));
+
+        expect(openConversationMock).toHaveBeenCalledWith({
+            targetType: 'table',
+            targetId: 'table-1',
+        });
+        expect(setEditTableModeTable).not.toHaveBeenCalled();
+
+        const tableShell = container.querySelector('.relative');
+        fireEvent.click(tableShell!, { detail: 2 });
+        expect(setEditTableModeTable).toHaveBeenCalledWith({
+            tableId: 'table-1',
+        });
+    });
+
+    it('disables duplicate activation while pending', () => {
+        conversationsState.isPending = true;
+        renderTableNode();
+
+        const indicator = screen.getByTestId('conversation-indicator');
+        expect(indicator).toBeDisabled();
+        expect(indicator).toHaveAttribute('aria-busy', 'true');
+    });
+
     it('coexists with EntityEditingBadge', () => {
         remoteEditorsState.editors = [remoteEditor()];
         renderTableNode();
@@ -295,7 +380,7 @@ describe('TableNode conversation indicator', () => {
         expect(screen.getByTitle('Ada is editing')).toBeInTheDocument();
     });
 
-    it('preserves selection chrome while the indicator is visible', () => {
+    it('preserves selection chrome while the indicator is present', () => {
         const { container } = renderTableNode({
             selected: true,
             dragging: false,
@@ -307,7 +392,7 @@ describe('TableNode conversation indicator', () => {
         ).toBeInTheDocument();
     });
 
-    it('keeps collapse control functional while the indicator is visible', () => {
+    it('keeps collapse control functional while the indicator is present', () => {
         const manyFields: DBField[] = Array.from(
             { length: 12 },
             (_, index) => ({
@@ -329,15 +414,14 @@ describe('TableNode conversation indicator', () => {
         });
     });
 
-    it('keeps header open-sidebar action available', () => {
-        const { container } = renderTableNode();
+    it('keeps header open-sidebar action in the same contextual cluster', () => {
+        renderTableNode();
 
-        const header = container.querySelector('.group.flex.h-9');
-        expect(header).not.toBeNull();
-        const openSidebarButton = header!.querySelector('button');
-        expect(openSidebarButton).not.toBeNull();
+        const cluster = getTableActionCluster();
+        const buttons = cluster.querySelectorAll('button');
+        expect(buttons.length).toBeGreaterThanOrEqual(2);
 
-        fireEvent.click(openSidebarButton!);
+        fireEvent.click(buttons[0]!);
 
         expect(selectSidebarSection).toHaveBeenCalledWith('tables');
         expect(openTableFromSidebar).toHaveBeenCalledWith('table-1');

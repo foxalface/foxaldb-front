@@ -378,6 +378,7 @@ export const tr: LanguageTranslation = {
                     open_tooltip: '{{name}} için konuşmayı aç',
                     start_tooltip: '{{name}} için konuşma başlat',
                     pending_tooltip: '{{name}} için konuşma başlatılıyor…',
+                    action_tooltip: 'Konuşma',
                     unavailable_description:
                         'Bu diyagramda konuşma başlatamazsınız.',
                     errors: {

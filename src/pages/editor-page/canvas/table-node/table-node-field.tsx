@@ -469,13 +469,6 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             </TooltipContent>
                         </Tooltip>
                     ) : null}
-                    {conversationsAvailable ? (
-                        <ConversationIndicator
-                            target={{ targetType: 'field', targetId: field.id }}
-                            targetName={field.name}
-                            className="scale-90"
-                        />
-                    ) : null}
                 </div>
 
                 <div
@@ -625,20 +618,34 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         </span>
                     </div>
                 </div>
-                {readonly ? null : (
-                    <div className="ml-2 hidden shrink-0 flex-row group-hover:flex">
-                        <Button
-                            variant="ghost"
-                            className="size-6 p-0 hover:bg-primary-foreground"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                openEditTableOnField();
-                            }}
-                        >
-                            <Pencil className="!size-3.5 text-pink-600" />
-                        </Button>
+                {conversationsAvailable || !readonly ? (
+                    <div className="ml-2 hidden shrink-0 flex-row group-focus-within:flex group-hover:flex">
+                        {conversationsAvailable ? (
+                            <ConversationIndicator
+                                target={{
+                                    targetType: 'field',
+                                    targetId: field.id,
+                                }}
+                                targetName={field.name}
+                                highlightWhenActive={false}
+                                showTooltip={false}
+                                buttonClassName="p-0 hover:bg-primary-foreground"
+                            />
+                        ) : null}
+                        {readonly ? null : (
+                            <Button
+                                variant="ghost"
+                                className="size-6 p-0 hover:bg-primary-foreground"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    openEditTableOnField();
+                                }}
+                            >
+                                <Pencil className="!size-3.5 text-pink-600" />
+                            </Button>
+                        )}
                     </div>
-                )}
+                ) : null}
                 {remoteEditors.length > 0 ? (
                     <EntityEditingBadge
                         editors={remoteEditors}

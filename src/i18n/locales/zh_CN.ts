@@ -373,6 +373,7 @@ export const zh_CN: LanguageTranslation = {
                     open_tooltip: '打开 {{name}} 的对话',
                     start_tooltip: '为 {{name}} 开始对话',
                     pending_tooltip: '正在为 {{name}} 开始对话…',
+                    action_tooltip: '对话',
                     unavailable_description: '您无法在此图表上开始对话。',
                     errors: {
                         validation: '此目标不适用于对话。',

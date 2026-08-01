@@ -379,6 +379,7 @@ export const uk: LanguageTranslation = {
                     open_tooltip: 'Відкрити розмову для {{name}}',
                     start_tooltip: 'Почати розмову для {{name}}',
                     pending_tooltip: 'Запуск розмови для {{name}}…',
+                    action_tooltip: 'Розмова',
                     unavailable_description:
                         'Ви не можете починати розмови на цій діаграмі.',
                     errors: {

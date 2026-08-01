@@ -380,6 +380,7 @@ export const te: LanguageTranslation = {
                     open_tooltip: '{{name}} కోసం సంభాషణ తెరవండి',
                     start_tooltip: '{{name}} కోసం సంభాషణ ప్రారంభించండి',
                     pending_tooltip: '{{name}} కోసం సంభాషణ ప్రారంభమవుతోంది…',
+                    action_tooltip: 'సంభాషణ',
                     unavailable_description:
                         'ఈ డయాగ్రామ్‌లో మీరు సంభాషణలను ప్రారంభించలేరు.',
                     errors: {

@@ -379,6 +379,7 @@ export const id_ID: LanguageTranslation = {
                     open_tooltip: 'Buka percakapan untuk {{name}}',
                     start_tooltip: 'Mulai percakapan untuk {{name}}',
                     pending_tooltip: 'Memulai percakapan untuk {{name}}…',
+                    action_tooltip: 'Percakapan',
                     unavailable_description:
                         'Anda tidak dapat memulai percakapan pada diagram ini.',
                     errors: {

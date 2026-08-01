@@ -376,6 +376,7 @@ export const hr: LanguageTranslation = {
                     open_tooltip: 'Otvori razgovor za {{name}}',
                     start_tooltip: 'Započni razgovor za {{name}}',
                     pending_tooltip: 'Pokretanje razgovora za {{name}}…',
+                    action_tooltip: 'Razgovor',
                     unavailable_description:
                         'Ne možete započeti razgovore na ovom dijagramu.',
                     errors: {

@@ -1,11 +1,17 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { Trash2, ArrowLeftRight, CircleDotDashed } from 'lucide-react';
+import { SlBubbles } from 'react-icons/sl';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
+import { Spinner } from '@/components/spinner/spinner';
 import type { Cardinality } from '@/lib/domain/db-relationship';
 import { cn } from '@/lib/utils';
 import { useClickAway } from 'react-use';
 import { useCanvas } from '@/hooks/use-canvas';
 import { useLayout } from '@/hooks/use-layout';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
+import { useOpenTargetConversation } from '@/hooks/use-open-target-conversation';
 
 export interface EditRelationshipPopoverProps {
     anchorPosition: { x: number; y: number };
@@ -45,6 +51,33 @@ export const EditRelationshipPopover: React.FC<
     const popoverRef = useRef<HTMLDivElement>(null);
     const { closeRelationshipPopover } = useCanvas();
     const { selectSidebarSection, openRelationshipFromSidebar } = useLayout();
+    const { relationships } = useChartDB();
+    const { t } = useTranslation();
+    const conversationsAvailable = useConversationsAvailability();
+    const relationshipName = useMemo(
+        () =>
+            relationships.find(
+                (relationship) => relationship.id === relationshipId
+            )?.name ?? relationshipId,
+        [relationshipId, relationships]
+    );
+    const { hasActiveConversation, canCreate, isPending, openConversation } =
+        useOpenTargetConversation({
+            targetType: 'relationship',
+            targetId: relationshipId,
+        });
+    const showConversationAction =
+        conversationsAvailable && (hasActiveConversation || canCreate);
+    const conversationAriaLabel = hasActiveConversation
+        ? t('side_panel.conversations_section.target_entry.open_aria', {
+              name: relationshipName,
+          })
+        : t('side_panel.conversations_section.target_entry.start_aria', {
+              name: relationshipName,
+          });
+    const conversationTooltip = t(
+        'side_panel.conversations_section.target_entry.action_tooltip'
+    );
 
     useClickAway(popoverRef, closeRelationshipPopover);
 
@@ -58,6 +91,15 @@ export const EditRelationshipPopover: React.FC<
         relationshipId,
         closeRelationshipPopover,
     ]);
+
+    const handleOpenConversation = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>) => {
+            event.preventDefault();
+            event.stopPropagation();
+            void openConversation();
+        },
+        [openConversation]
+    );
 
     return (
         <div
@@ -123,6 +165,27 @@ export const EditRelationshipPopover: React.FC<
                 >
                     <CircleDotDashed className="!size-3.5" />
                 </Button>
+                {showConversationAction ? (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="size-7 p-0 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                        onClick={handleOpenConversation}
+                        disabled={isPending}
+                        aria-busy={isPending}
+                        aria-label={conversationAriaLabel}
+                        title={conversationTooltip}
+                    >
+                        {isPending ? (
+                            <Spinner size="small" className="!size-3.5" />
+                        ) : (
+                            <SlBubbles
+                                className="!size-3.5"
+                                aria-hidden="true"
+                            />
+                        )}
+                    </Button>
+                ) : null}
                 <Button
                     variant="ghost"
                     size="sm"

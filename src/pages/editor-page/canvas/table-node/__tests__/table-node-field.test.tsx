@@ -15,6 +15,7 @@ const {
     chartDBState,
     conversationsState,
     remoteEditorsState,
+    openConversationMock,
     setEditTableModeTable,
     closeAllTablesInSidebar,
     stableConnection,
@@ -25,6 +26,7 @@ const {
     const setEditTableModeTable = vi.fn();
     const closeAllTablesInSidebar = vi.fn();
     const updateNodeInternals = vi.fn();
+    const openConversationMock = vi.fn();
 
     return {
         chartDBState: {
@@ -42,10 +44,12 @@ const {
         },
         conversationsState: {
             isAvailable: true,
+            isPending: false,
         },
         remoteEditorsState: {
             editors: [] as RemoteEditingViewModel[],
         },
+        openConversationMock,
         setEditTableModeTable,
         closeAllTablesInSidebar,
         updateNodeInternals,
@@ -79,18 +83,28 @@ vi.mock('@/components/conversation-indicator/conversation-indicator', () => ({
     ConversationIndicator: ({
         target,
         targetName,
-        className,
+        buttonClassName,
+        highlightWhenActive,
     }: {
         target: { targetType: string; targetId: string };
         targetName: string;
-        className?: string;
+        buttonClassName?: string;
+        highlightWhenActive?: boolean;
     }) => (
-        <span
+        <button
+            type="button"
             data-testid="conversation-indicator"
             data-target-type={target.targetType}
             data-target-id={target.targetId}
             data-target-name={targetName}
-            className={className}
+            data-button-class={buttonClassName ?? ''}
+            data-highlight-when-active={String(highlightWhenActive ?? true)}
+            aria-busy={conversationsState.isPending}
+            disabled={conversationsState.isPending}
+            onClick={(event) => {
+                event.stopPropagation();
+                openConversationMock(target);
+            }}
         />
     ),
 }));
@@ -197,6 +211,15 @@ const renderField = ({
     );
 };
 
+const getFieldActionCluster = () => {
+    const indicator = screen.getByTestId('conversation-indicator');
+    const cluster = indicator.closest(
+        '.group-hover\\:flex.group-focus-within\\:flex'
+    );
+    expect(cluster).not.toBeNull();
+    return cluster as HTMLElement;
+};
+
 describe('TableNodeField conversation indicator', () => {
     afterEach(() => {
         cleanup();
@@ -206,19 +229,57 @@ describe('TableNodeField conversation indicator', () => {
         chartDBState.readonly = false;
         chartDBState.relationships = [];
         conversationsState.isAvailable = true;
+        conversationsState.isPending = false;
         remoteEditorsState.editors = [];
+        openConversationMock.mockClear();
         setEditTableModeTable.mockClear();
         closeAllTablesInSidebar.mockClear();
         updateNodeInternals.mockClear();
     });
 
-    it('renders ConversationIndicator when conversations are available', () => {
+    it('places ConversationIndicator beside the Edit action in the shared cluster', () => {
+        renderField();
+
+        const cluster = getFieldActionCluster();
+        expect(cluster.className).toContain('hidden');
+        expect(cluster.className).toContain('group-hover:flex');
+        expect(cluster.className).toContain('group-focus-within:flex');
+
+        const buttons = cluster.querySelectorAll('button');
+        expect(buttons).toHaveLength(2);
+        expect(buttons[0]).toHaveAttribute(
+            'data-testid',
+            'conversation-indicator'
+        );
+        expect(buttons[1]?.querySelector('.lucide-pencil')).not.toBeNull();
+    });
+
+    it('uses canvas action styling without active highlight', () => {
         renderField();
 
         const indicator = screen.getByTestId('conversation-indicator');
-        expect(indicator).toHaveAttribute('data-target-type', 'field');
-        expect(indicator).toHaveAttribute('data-target-id', 'field-1');
-        expect(indicator).toHaveAttribute('data-target-name', 'email');
+        expect(indicator).toHaveAttribute(
+            'data-highlight-when-active',
+            'false'
+        );
+        expect(indicator).toHaveAttribute(
+            'data-button-class',
+            'p-0 hover:bg-primary-foreground'
+        );
+    });
+
+    it('does not leave a permanently visible duplicate beside the field name', () => {
+        const { container } = renderField();
+
+        expect(screen.getAllByTestId('conversation-indicator')).toHaveLength(1);
+
+        const nameArea = container.querySelector(
+            '.flex.items-center.gap-1.min-w-0.text-left'
+        );
+        expect(nameArea).not.toBeNull();
+        expect(
+            nameArea!.querySelector('[data-testid="conversation-indicator"]')
+        ).toBeNull();
     });
 
     it('hides ConversationIndicator when conversations are unavailable', () => {
@@ -247,6 +308,31 @@ describe('TableNodeField conversation indicator', () => {
             screen.getByTestId('conversation-indicator')
         ).toBeInTheDocument();
         expect(screen.getByText('email')).toBeInTheDocument();
+        expect(
+            getFieldActionCluster().querySelector('.lucide-pencil')
+        ).toBeNull();
+    });
+
+    it('opens the field conversation without triggering edit mode', async () => {
+        const user = userEvent.setup();
+        renderField();
+
+        await user.click(screen.getByTestId('conversation-indicator'));
+
+        expect(openConversationMock).toHaveBeenCalledWith({
+            targetType: 'field',
+            targetId: 'field-1',
+        });
+        expect(setEditTableModeTable).not.toHaveBeenCalled();
+    });
+
+    it('disables duplicate activation while pending', () => {
+        conversationsState.isPending = true;
+        renderField();
+
+        const indicator = screen.getByTestId('conversation-indicator');
+        expect(indicator).toBeDisabled();
+        expect(indicator).toHaveAttribute('aria-busy', 'true');
     });
 
     it('coexists with PK, nullable, and schema-comment markers', () => {
@@ -280,7 +366,7 @@ describe('TableNodeField conversation indicator', () => {
         expect(screen.getByTitle('Grace is editing')).toBeInTheDocument();
     });
 
-    it('keeps relationship handles present while the indicator is visible', () => {
+    it('keeps relationship handles present while the indicator is present', () => {
         renderField({ focused: true });
 
         expect(
@@ -309,9 +395,6 @@ describe('TableNodeField conversation indicator', () => {
         const { container } = renderField();
 
         expect(container.querySelector('.truncate.min-w-0')).not.toBeNull();
-        expect(screen.getByTestId('conversation-indicator')).toHaveClass(
-            'scale-90'
-        );
     });
 
     it('still mounts ConversationIndicator when the row is collapsed away', () => {
@@ -324,19 +407,22 @@ describe('TableNodeField conversation indicator', () => {
         ).toBeInTheDocument();
     });
 
-    it('keeps the pencil edit control functional while the indicator is visible', async () => {
+    it('keeps the pencil edit control functional and separate from conversation', async () => {
         const user = userEvent.setup();
-        const { container } = renderField();
+        renderField();
 
-        const editButton = container.querySelector(
-            'button'
-        ) as HTMLButtonElement | null;
+        const cluster = getFieldActionCluster();
+        const editButton = cluster.querySelector(
+            'button:not([data-testid="conversation-indicator"])'
+        ) as HTMLButtonElement;
         expect(editButton).not.toBeNull();
-        await user.click(editButton!);
+
+        await user.click(editButton);
 
         expect(setEditTableModeTable).toHaveBeenCalledWith({
             tableId: 'table-1',
             fieldId: 'field-1',
         });
+        expect(openConversationMock).not.toHaveBeenCalled();
     });
 });

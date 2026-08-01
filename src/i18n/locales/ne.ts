@@ -380,6 +380,7 @@ export const ne: LanguageTranslation = {
                     open_tooltip: '{{name}} को लागि कुराकानी खोल्नुहोस्',
                     start_tooltip: '{{name}} को लागि कुराकानी सुरु गर्नुहोस्',
                     pending_tooltip: '{{name}} को लागि कुराकानी सुरु हुँदैछ…',
+                    action_tooltip: 'कुराकानी',
                     unavailable_description:
                         'तपाईं यस डायाग्राममा कुराकानी सुरु गर्न सक्नुहुन्न।',
                     errors: {
