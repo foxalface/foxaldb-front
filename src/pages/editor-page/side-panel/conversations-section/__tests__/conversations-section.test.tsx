@@ -9,6 +9,7 @@ import type { UseDiagramConversationsResult } from '@/hooks/use-diagram-conversa
 import type { UseConversationMutationsResult } from '@/hooks/use-conversation-mutations';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import { en } from '@/i18n/locales/en';
+import { fr } from '@/i18n/locales/fr';
 import { aliceWonderAuthor } from '@/test/user-identity-fixtures';
 
 const buildActiveConversation = (
@@ -188,19 +189,37 @@ describe('ConversationsSection', () => {
 
         render(<ConversationsSection />);
 
+        expect(screen.getByRole('tab', { name: 'Active' })).toBeInTheDocument();
         expect(
-            screen.getByRole('heading', { name: 'Conversations' })
+            screen.getByRole('tab', { name: 'Archived' })
         ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('heading', { name: 'Conversations' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: 'Start conversation' })
+        ).not.toBeInTheDocument();
+        expect(screen.getByRole('tab', { name: 'Active' })).toHaveAttribute(
+            'aria-selected',
+            'true'
+        );
+        expect(
+            screen.getByRole('tablist', { name: 'Conversation lists' })
+        ).toBeInTheDocument();
+        expect(document.querySelector('.lucide-archive')).not.toBeNull();
+        expect(
+            screen.getByRole('tab', { name: 'Active' }).querySelector('svg')
+        ).not.toBeNull();
         expect(screen.getByText('Clients')).toBeInTheDocument();
         expect(screen.getByText('Latest update')).toBeInTheDocument();
         expect(screen.getByText('2 messages')).toBeInTheDocument();
     });
 
-    it('lazy-loads archived summaries when switching to the Archives tab', async () => {
+    it('lazy-loads archived summaries when switching to the Archived tab', async () => {
         const user = userEvent.setup();
         render(<ConversationsSection />);
 
-        await user.click(screen.getByRole('tab', { name: 'Archives' }));
+        await user.click(screen.getByRole('tab', { name: 'Archived' }));
 
         await waitFor(() => {
             expect(
@@ -213,7 +232,7 @@ describe('ConversationsSection', () => {
         const user = userEvent.setup();
         render(<ConversationsSection />);
 
-        await user.click(screen.getByRole('tab', { name: 'Archives' }));
+        await user.click(screen.getByRole('tab', { name: 'Archived' }));
         await waitFor(() => {
             expect(
                 conversationsState.current.loadArchivedSummaries
@@ -221,7 +240,7 @@ describe('ConversationsSection', () => {
         });
 
         await user.click(screen.getByRole('tab', { name: 'Active' }));
-        await user.click(screen.getByRole('tab', { name: 'Archives' }));
+        await user.click(screen.getByRole('tab', { name: 'Archived' }));
 
         expect(
             conversationsState.current.loadArchivedSummaries
@@ -254,7 +273,7 @@ describe('ConversationsSection', () => {
         conversationsState.current.archivedSummariesNextCursor = 'cursor-2';
 
         render(<ConversationsSection />);
-        await user.click(screen.getByRole('tab', { name: 'Archives' }));
+        await user.click(screen.getByRole('tab', { name: 'Archived' }));
 
         await waitFor(() => {
             expect(
@@ -297,7 +316,7 @@ describe('ConversationsSection', () => {
         ];
 
         render(<ConversationsSection />);
-        await user.click(screen.getByRole('tab', { name: 'Archives' }));
+        await user.click(screen.getByRole('tab', { name: 'Archived' }));
 
         await waitFor(() => {
             expect(screen.getByText('Read-only')).toBeInTheDocument();
@@ -326,7 +345,75 @@ describe('ConversationsSection', () => {
     it('shows an empty state when there are no active conversations', () => {
         render(<ConversationsSection />);
 
-        expect(screen.getByText('No active conversations')).toBeInTheDocument();
+        expect(screen.getByText('No conversation')).toBeInTheDocument();
+        expect(
+            screen.getByText('Create a conversation to get started')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText('No active conversations')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText(
+                'Active conversations for this diagram will appear here.'
+            )
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: /conversation/i })
+        ).toBeNull();
+        expect(
+            document.querySelector('[data-slot="empty-icon"]')
+        ).not.toBeNull();
+        expect(
+            document.querySelector('[data-slot="empty-title"]')
+        ).not.toBeNull();
+        expect(
+            document.querySelector('[data-slot="empty-description"]')
+        ).not.toBeNull();
+    });
+
+    it('uses the shared side panel empty state layout for active conversations', () => {
+        const source = readFileSync(
+            join(
+                dirname(fileURLToPath(import.meta.url)),
+                '../conversations-empty-state.tsx'
+            ),
+            'utf8'
+        );
+
+        expect(source).toContain(
+            '@/components/side-panel-empty-state/side-panel-empty-state'
+        );
+        expect(source).toContain('SidePanelEmptyStateViewport');
+        expect(source).not.toContain('secondaryAction');
+    });
+
+    it('uses French active empty-state copy', () => {
+        expect(
+            fr.translation.side_panel.conversations_section.empty.active_title
+        ).toBe('Aucune conversation');
+        expect(
+            fr.translation.side_panel.conversations_section.empty
+                .active_description
+        ).toBe('Créer une conversation pour commencer');
+    });
+
+    it('keeps archive-specific empty-state copy on the Archived tab', async () => {
+        const user = userEvent.setup();
+        render(<ConversationsSection />);
+
+        await user.click(screen.getByRole('tab', { name: 'Archived' }));
+
+        await waitFor(() => {
+            expect(
+                screen.getByText('No archived conversations')
+            ).toBeInTheDocument();
+        });
+        expect(
+            screen.getByText(
+                'Archived conversations will appear here when you close a thread.'
+            )
+        ).toBeInTheDocument();
+        expect(screen.queryByText('No conversation')).not.toBeInTheDocument();
     });
 
     it('shows an error state with retry for the active tab', async () => {
@@ -383,6 +470,32 @@ describe('ConversationsSection', () => {
         expect(
             screen.getByText('Conversations unavailable')
         ).toBeInTheDocument();
+    });
+
+    it('uses the shared side panel section tabs primitive', () => {
+        const source = readFileSync(
+            join(
+                dirname(fileURLToPath(import.meta.url)),
+                '../conversations-section.tsx'
+            ),
+            'utf8'
+        );
+
+        expect(source).toContain(
+            '@/components/side-panel-section-tabs/side-panel-section-tabs'
+        );
+        expect(source).toContain('SidePanelSectionTabsToolbar');
+        expect(source).toContain('SidePanelSectionTabsList');
+        expect(source).toContain('SidePanelSectionTabsTrigger');
+    });
+
+    it('uses the French archived tab label Archivées', () => {
+        expect(
+            fr.translation.side_panel.conversations_section.tabs.archives
+        ).toBe('Archivées');
+        expect(
+            fr.translation.side_panel.conversations_section.tabs.active
+        ).toBe('Actives');
     });
 
     it('does not import the conversations API client in UI components', () => {

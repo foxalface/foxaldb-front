@@ -336,7 +336,7 @@ export const fr: LanguageTranslation = {
                 tabs_label: 'Listes de conversations',
                 tabs: {
                     active: 'Actives',
-                    archives: 'Archives',
+                    archives: 'Archivées',
                 },
                 loading: 'Chargement des conversations…',
                 loading_more: 'Chargement supplémentaire…',
@@ -351,9 +351,8 @@ export const fr: LanguageTranslation = {
                         'Les conversations sont disponibles uniquement sur les diagrammes cloud authentifiés.',
                 },
                 empty: {
-                    active_title: 'Aucune conversation active',
-                    active_description:
-                        'Les conversations actives de ce diagramme apparaîtront ici.',
+                    active_title: 'Aucune conversation',
+                    active_description: 'Créer une conversation pour commencer',
                     archives_title: 'Aucune conversation archivée',
                     archives_description:
                         'Les conversations archivées apparaîtront ici lorsque vous fermerez un fil.',

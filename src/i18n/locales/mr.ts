@@ -343,7 +343,7 @@ export const mr: LanguageTranslation = {
                 tabs_label: 'संभाषणे',
                 tabs: {
                     active: 'सक्रिय',
-                    archives: 'संग्रहण',
+                    archives: 'संग्रहित',
                 },
                 loading: 'संभाषणे लोड होत आहेत…',
                 loading_more: 'Loading more…',
@@ -358,9 +358,8 @@ export const mr: LanguageTranslation = {
                         'संभाषणे are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active संभाषणे',
-                    active_description:
-                        'Active संभाषणे for this diagram will appear here.',
+                    active_title: 'कोणतेही संभाषण नाही',
+                    active_description: 'सुरू करण्यासाठी संभाषण तयार करा',
                     archives_title: 'No archived संभाषणे',
                     archives_description:
                         'Archived संभाषणे will appear here when you close a thread.',

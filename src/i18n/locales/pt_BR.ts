@@ -340,7 +340,7 @@ export const pt_BR: LanguageTranslation = {
                 tabs_label: 'Conversas',
                 tabs: {
                     active: 'Ativas',
-                    archives: 'Arquivo',
+                    archives: 'Arquivadas',
                 },
                 loading: 'Carregando conversas…',
                 loading_more: 'Loading more…',
@@ -355,9 +355,8 @@ export const pt_BR: LanguageTranslation = {
                         'Conversas are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active conversas',
-                    active_description:
-                        'Active conversas for this diagram will appear here.',
+                    active_title: 'Nenhuma conversa',
+                    active_description: 'Crie uma conversa para começar',
                     archives_title: 'No archived conversas',
                     archives_description:
                         'Archived conversas will appear here when you close a thread.',

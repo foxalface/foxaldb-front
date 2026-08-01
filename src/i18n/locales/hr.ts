@@ -335,7 +335,7 @@ export const hr: LanguageTranslation = {
                 tabs_label: 'Razgovori',
                 tabs: {
                     active: 'Aktivni',
-                    archives: 'Arhiva',
+                    archives: 'Arhivirane',
                 },
                 loading: 'Učitavanje razgovora…',
                 loading_more: 'Loading more…',
@@ -350,9 +350,8 @@ export const hr: LanguageTranslation = {
                         'Razgovori are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active razgovori',
-                    active_description:
-                        'Active razgovori for this diagram will appear here.',
+                    active_title: 'Nema razgovora',
+                    active_description: 'Stvorite razgovor za početak',
                     archives_title: 'No archived razgovori',
                     archives_description:
                         'Archived razgovori will appear here when you close a thread.',

@@ -339,7 +339,7 @@ export const gu: LanguageTranslation = {
                 tabs_label: 'વાતચીત',
                 tabs: {
                     active: 'સક્રિય',
-                    archives: 'આર્કાઇવ',
+                    archives: 'આર્કાઇવ કરેલી',
                 },
                 loading: 'વાતચીત લોડ થઈ રહી છે…',
                 loading_more: 'Loading more…',
@@ -354,9 +354,8 @@ export const gu: LanguageTranslation = {
                         'વાતચીત are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active વાતચીત',
-                    active_description:
-                        'Active વાતચીત for this diagram will appear here.',
+                    active_title: 'કોઈ વાતચીત નથી',
+                    active_description: 'શરૂ કરવા માટે વાતચીત બનાવો',
                     archives_title: 'No archived વાતચીત',
                     archives_description:
                         'Archived વાતચીત will appear here when you close a thread.',

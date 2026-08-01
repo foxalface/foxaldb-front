@@ -320,7 +320,7 @@ describe('Conversation message mutations (M10)', () => {
             messagesState.current.status = 'ready';
 
             render(<ConversationsSection />);
-            await user.click(screen.getByRole('tab', { name: 'Archives' }));
+            await user.click(screen.getByRole('tab', { name: 'Archived' }));
             await user.click(
                 screen.getByRole('button', {
                     name: 'Open conversation for Clients',
@@ -656,7 +656,7 @@ describe('Conversation message mutations (M10)', () => {
             messagesState.current.status = 'ready';
 
             render(<ConversationsSection />);
-            await user.click(screen.getByRole('tab', { name: 'Archives' }));
+            await user.click(screen.getByRole('tab', { name: 'Archived' }));
             await user.click(
                 screen.getByRole('button', {
                     name: 'Open conversation for Clients',
@@ -796,7 +796,7 @@ describe('Conversation message mutations (M10)', () => {
             messagesState.current.status = 'ready';
 
             render(<ConversationsSection />);
-            await user.click(screen.getByRole('tab', { name: 'Archives' }));
+            await user.click(screen.getByRole('tab', { name: 'Archived' }));
             await user.click(
                 screen.getByRole('button', {
                     name: 'Open conversation for Clients',

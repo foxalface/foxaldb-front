@@ -339,7 +339,7 @@ export const ne: LanguageTranslation = {
                 tabs_label: 'कुराकानी',
                 tabs: {
                     active: 'सक्रिय',
-                    archives: 'अभिलेख',
+                    archives: 'अभिलेख गरिएको',
                 },
                 loading: 'कुराकानी लोड हुँदैछ…',
                 loading_more: 'Loading more…',
@@ -354,9 +354,8 @@ export const ne: LanguageTranslation = {
                         'कुराकानी are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active कुराकानी',
-                    active_description:
-                        'Active कुराकानी for this diagram will appear here.',
+                    active_title: 'कुनै कुराकानी छैन',
+                    active_description: 'सुरु गर्न कुराकानी सिर्जना गर्नुहोस्',
                     archives_title: 'No archived कुराकानी',
                     archives_description:
                         'Archived कुराकानी will appear here when you close a thread.',

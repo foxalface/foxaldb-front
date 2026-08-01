@@ -337,7 +337,7 @@ export const ru: LanguageTranslation = {
                 tabs_label: 'Беседы',
                 tabs: {
                     active: 'Активные',
-                    archives: 'Архив',
+                    archives: 'Архивные',
                 },
                 loading: 'Загрузка бесед…',
                 loading_more: 'Loading more…',
@@ -352,9 +352,8 @@ export const ru: LanguageTranslation = {
                         'Беседы are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active беседы',
-                    active_description:
-                        'Active беседы for this diagram will appear here.',
+                    active_title: 'Нет беседы',
+                    active_description: 'Создайте беседу, чтобы начать',
                     archives_title: 'No archived беседы',
                     archives_description:
                         'Archived беседы will appear here when you close a thread.',

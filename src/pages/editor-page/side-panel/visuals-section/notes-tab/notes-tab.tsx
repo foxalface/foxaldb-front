@@ -5,8 +5,10 @@ import { Input } from '@/components/input/input';
 import type { Note } from '@/lib/domain/note';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
-import { EmptyState } from '@/components/empty-state/empty-state';
-import { ScrollArea } from '@/components/scroll-area/scroll-area';
+import {
+    SidePanelEmptyState,
+    SidePanelEmptyStateViewport,
+} from '@/components/side-panel-empty-state/side-panel-empty-state';
 import { useTranslation } from 'react-i18next';
 import { useViewport } from '@xyflow/react';
 import { NotesList } from './notes-list/notes-list';
@@ -81,48 +83,43 @@ export const NotesTab: React.FC<NotesTabProps> = () => {
                     </Button>
                 ) : null}
             </div>
-            <div className="flex flex-1 flex-col overflow-hidden">
-                <ScrollArea className="h-full">
-                    {notes.length === 0 ? (
-                        <EmptyState
-                            title={t(
-                                'side_panel.notes_section.empty_state.title'
-                            )}
-                            description={t(
-                                'side_panel.notes_section.empty_state.description'
-                            )}
-                            className="mt-20"
-                            secondaryAction={
-                                !readonly
-                                    ? {
-                                          label: t(
-                                              'side_panel.notes_section.add_note'
-                                          ),
-                                          onClick: handleCreateNote,
-                                      }
-                                    : undefined
-                            }
-                        />
-                    ) : filterText && filteredNotes.length === 0 ? (
-                        <div className="mt-10 flex flex-col items-center gap-2">
-                            <div className="text-sm text-muted-foreground">
-                                {t('side_panel.notes_section.no_results')}
-                            </div>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={handleClearFilter}
-                                className="gap-1"
-                            >
-                                <X className="size-3.5" />
-                                {t('side_panel.notes_section.clear')}
-                            </Button>
+            <SidePanelEmptyStateViewport>
+                {notes.length === 0 ? (
+                    <SidePanelEmptyState
+                        title={t('side_panel.notes_section.empty_state.title')}
+                        description={t(
+                            'side_panel.notes_section.empty_state.description'
+                        )}
+                        secondaryAction={
+                            !readonly
+                                ? {
+                                      label: t(
+                                          'side_panel.notes_section.add_note'
+                                      ),
+                                      onClick: handleCreateNote,
+                                  }
+                                : undefined
+                        }
+                    />
+                ) : filterText && filteredNotes.length === 0 ? (
+                    <div className="mt-10 flex flex-col items-center gap-2">
+                        <div className="text-sm text-muted-foreground">
+                            {t('side_panel.notes_section.no_results')}
                         </div>
-                    ) : (
-                        <NotesList notes={filteredNotes} />
-                    )}
-                </ScrollArea>
-            </div>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleClearFilter}
+                            className="gap-1"
+                        >
+                            <X className="size-3.5" />
+                            {t('side_panel.notes_section.clear')}
+                        </Button>
+                    </div>
+                ) : (
+                    <NotesList notes={filteredNotes} />
+                )}
+            </SidePanelEmptyStateViewport>
         </div>
     );
 };

@@ -338,7 +338,7 @@ export const id_ID: LanguageTranslation = {
                 tabs_label: 'Percakapan',
                 tabs: {
                     active: 'Aktif',
-                    archives: 'Arsip',
+                    archives: 'Diarsipkan',
                 },
                 loading: 'Memuat percakapan…',
                 loading_more: 'Loading more…',
@@ -353,9 +353,8 @@ export const id_ID: LanguageTranslation = {
                         'Percakapan are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active percakapan',
-                    active_description:
-                        'Active percakapan for this diagram will appear here.',
+                    active_title: 'Tidak ada percakapan',
+                    active_description: 'Buat percakapan untuk memulai',
                     archives_title: 'No archived percakapan',
                     archives_description:
                         'Archived percakapan will appear here when you close a thread.',

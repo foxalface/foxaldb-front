@@ -334,7 +334,7 @@ export const ar: LanguageTranslation = {
                 tabs_label: 'المحادثات',
                 tabs: {
                     active: 'نشطة',
-                    archives: 'الأرشيف',
+                    archives: 'مؤرشفة',
                 },
                 loading: 'جارٍ تحميل المحادثات…',
                 loading_more: 'Loading more…',
@@ -349,9 +349,8 @@ export const ar: LanguageTranslation = {
                         'المحادثات are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active المحادثات',
-                    active_description:
-                        'Active المحادثات for this diagram will appear here.',
+                    active_title: 'لا توجد محادثة',
+                    active_description: 'أنشئ محادثة للبدء',
                     archives_title: 'No archived المحادثات',
                     archives_description:
                         'Archived المحادثات will appear here when you close a thread.',

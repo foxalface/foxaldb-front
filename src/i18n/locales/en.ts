@@ -331,7 +331,7 @@ export const en = {
                 tabs_label: 'Conversation lists',
                 tabs: {
                     active: 'Active',
-                    archives: 'Archives',
+                    archives: 'Archived',
                 },
                 loading: 'Loading conversations…',
                 loading_more: 'Loading more…',
@@ -346,9 +346,8 @@ export const en = {
                         'Conversations are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active conversations',
-                    active_description:
-                        'Active conversations for this diagram will appear here.',
+                    active_title: 'No conversation',
+                    active_description: 'Create a conversation to get started',
                     archives_title: 'No archived conversations',
                     archives_description:
                         'Archived conversations will appear here when you close a thread.',

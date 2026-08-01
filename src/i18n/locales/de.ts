@@ -340,7 +340,7 @@ export const de: LanguageTranslation = {
                 tabs_label: 'Unterhaltungslisten',
                 tabs: {
                     active: 'Aktiv',
-                    archives: 'Archiv',
+                    archives: 'Archivierte',
                 },
                 loading: 'Unterhaltungen werden geladen…',
                 loading_more: 'Weitere werden geladen…',
@@ -355,9 +355,9 @@ export const de: LanguageTranslation = {
                         'Unterhaltungen sind nur bei authentifizierten Cloud-Diagrammen verfügbar.',
                 },
                 empty: {
-                    active_title: 'Keine aktiven Unterhaltungen',
+                    active_title: 'Keine Unterhaltung',
                     active_description:
-                        'Aktive Unterhaltungen zu diesem Diagramm erscheinen hier.',
+                        'Erstellen Sie eine Unterhaltung, um zu beginnen',
                     archives_title: 'Keine archivierten Unterhaltungen',
                     archives_description:
                         'Archivierte Unterhaltungen erscheinen hier, wenn Sie einen Thread schließen.',

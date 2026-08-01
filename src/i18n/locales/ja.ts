@@ -341,7 +341,7 @@ export const ja: LanguageTranslation = {
                 tabs_label: '会話',
                 tabs: {
                     active: 'アクティブ',
-                    archives: 'アーカイブ',
+                    archives: 'アーカイブ済み',
                 },
                 loading: '会話を読み込み中…',
                 loading_more: 'Loading more…',
@@ -356,9 +356,8 @@ export const ja: LanguageTranslation = {
                         '会話 are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active 会話',
-                    active_description:
-                        'Active 会話 for this diagram will appear here.',
+                    active_title: '会話がありません',
+                    active_description: '会話を作成して始めましょう',
                     archives_title: 'No archived 会話',
                     archives_description:
                         'Archived 会話 will appear here when you close a thread.',

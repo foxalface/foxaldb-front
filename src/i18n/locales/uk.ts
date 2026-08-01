@@ -338,7 +338,7 @@ export const uk: LanguageTranslation = {
                 tabs_label: 'Розмови',
                 tabs: {
                     active: 'Активні',
-                    archives: 'Архів',
+                    archives: 'Архівовані',
                 },
                 loading: 'Завантаження розмов…',
                 loading_more: 'Loading more…',
@@ -353,9 +353,8 @@ export const uk: LanguageTranslation = {
                         'Розмови are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active розмови',
-                    active_description:
-                        'Active розмови for this diagram will appear here.',
+                    active_title: 'Немає розмови',
+                    active_description: 'Створіть розмову, щоб почати',
                     archives_title: 'No archived розмови',
                     archives_description:
                         'Archived розмови will appear here when you close a thread.',

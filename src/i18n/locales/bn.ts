@@ -340,7 +340,7 @@ export const bn: LanguageTranslation = {
                 tabs_label: 'কথোপকথন',
                 tabs: {
                     active: 'সক্রিয়',
-                    archives: 'আর্কাইভ',
+                    archives: 'আর্কাইভ করা',
                 },
                 loading: 'কথোপকথন লোড হচ্ছে…',
                 loading_more: 'Loading more…',
@@ -355,9 +355,8 @@ export const bn: LanguageTranslation = {
                         'কথোপকথন are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active কথোপকথন',
-                    active_description:
-                        'Active কথোপকথন for this diagram will appear here.',
+                    active_title: 'কোনো কথোপকথন নেই',
+                    active_description: 'শুরু করতে একটি কথোপকথন তৈরি করুন',
                     archives_title: 'No archived কথোপকথন',
                     archives_description:
                         'Archived কথোপকথন will appear here when you close a thread.',

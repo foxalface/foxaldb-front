@@ -337,7 +337,7 @@ export const tr: LanguageTranslation = {
                 tabs_label: 'Konuşmalar',
                 tabs: {
                     active: 'Aktif',
-                    archives: 'Arşiv',
+                    archives: 'Arşivlenmiş',
                 },
                 loading: 'Konuşmalar yükleniyor…',
                 loading_more: 'Loading more…',
@@ -352,9 +352,8 @@ export const tr: LanguageTranslation = {
                         'Konuşmalar are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active konuşmalar',
-                    active_description:
-                        'Active konuşmalar for this diagram will appear here.',
+                    active_title: 'Konuşma yok',
+                    active_description: 'Başlamak için bir konuşma oluşturun',
                     archives_title: 'No archived konuşmalar',
                     archives_description:
                         'Archived konuşmalar will appear here when you close a thread.',

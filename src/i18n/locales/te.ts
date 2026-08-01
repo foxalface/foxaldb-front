@@ -339,7 +339,7 @@ export const te: LanguageTranslation = {
                 tabs_label: 'సంభాషణలు',
                 tabs: {
                     active: 'సక్రియ',
-                    archives: 'ఆర్కైవ్',
+                    archives: 'ఆర్కైవ్ చేసిన',
                 },
                 loading: 'సంభాషణలు లోడ్ అవుతున్నాయి…',
                 loading_more: 'Loading more…',
@@ -354,9 +354,8 @@ export const te: LanguageTranslation = {
                         'సంభాషణలు are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active సంభాషణలు',
-                    active_description:
-                        'Active సంభాషణలు for this diagram will appear here.',
+                    active_title: 'సంభాషణ లేదు',
+                    active_description: 'ప్రారంభించడానికి సంభాషణను సృష్టించండి',
                     archives_title: 'No archived సంభాషణలు',
                     archives_description:
                         'Archived సంభాషణలు will appear here when you close a thread.',

@@ -332,7 +332,7 @@ export const zh_CN: LanguageTranslation = {
                 tabs_label: '对话',
                 tabs: {
                     active: '活跃',
-                    archives: '归档',
+                    archives: '已归档',
                 },
                 loading: '正在加载对话…',
                 loading_more: 'Loading more…',
@@ -347,9 +347,8 @@ export const zh_CN: LanguageTranslation = {
                         '对话 are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active 对话',
-                    active_description:
-                        'Active 对话 for this diagram will appear here.',
+                    active_title: '暂无对话',
+                    active_description: '创建对话以开始',
                     archives_title: 'No archived 对话',
                     archives_description:
                         'Archived 对话 will appear here when you close a thread.',

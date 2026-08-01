@@ -338,7 +338,7 @@ export const vi: LanguageTranslation = {
                 tabs_label: 'Cuộc trò chuyện',
                 tabs: {
                     active: 'Đang hoạt động',
-                    archives: 'Lưu trữ',
+                    archives: 'Đã lưu trữ',
                 },
                 loading: 'Đang tải cuộc trò chuyện…',
                 loading_more: 'Loading more…',
@@ -353,9 +353,8 @@ export const vi: LanguageTranslation = {
                         'Cuộc trò chuyện are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active cuộc trò chuyện',
-                    active_description:
-                        'Active cuộc trò chuyện for this diagram will appear here.',
+                    active_title: 'Không có cuộc trò chuyện',
+                    active_description: 'Tạo một cuộc trò chuyện để bắt đầu',
                     archives_title: 'No archived cuộc trò chuyện',
                     archives_description:
                         'Archived cuộc trò chuyện will appear here when you close a thread.',

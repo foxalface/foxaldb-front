@@ -425,7 +425,7 @@ describe('ConversationsSection detail view (M9)', () => {
         messagesState.current.status = 'ready';
 
         render(<ConversationsSection />);
-        await user.click(screen.getByRole('tab', { name: 'Archives' }));
+        await user.click(screen.getByRole('tab', { name: 'Archived' }));
 
         await user.click(
             screen.getByRole('button', {

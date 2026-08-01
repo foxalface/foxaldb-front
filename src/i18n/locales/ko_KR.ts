@@ -338,7 +338,7 @@ export const ko_KR: LanguageTranslation = {
                 tabs_label: '대화',
                 tabs: {
                     active: '활성',
-                    archives: '보관함',
+                    archives: '보관됨',
                 },
                 loading: '대화 불러오는 중…',
                 loading_more: 'Loading more…',
@@ -353,9 +353,8 @@ export const ko_KR: LanguageTranslation = {
                         '대화 are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active 대화',
-                    active_description:
-                        'Active 대화 for this diagram will appear here.',
+                    active_title: '대화 없음',
+                    active_description: '대화를 만들어 시작하세요',
                     archives_title: 'No archived 대화',
                     archives_description:
                         'Archived 대화 will appear here when you close a thread.',

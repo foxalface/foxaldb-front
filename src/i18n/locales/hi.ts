@@ -340,7 +340,7 @@ export const hi: LanguageTranslation = {
                 tabs_label: 'वार्तालाप',
                 tabs: {
                     active: 'सक्रिय',
-                    archives: 'संग्रह',
+                    archives: 'संगृहीत',
                 },
                 loading: 'वार्तालाप लोड हो रहे हैं…',
                 loading_more: 'Loading more…',
@@ -355,9 +355,8 @@ export const hi: LanguageTranslation = {
                         'वार्तालाप are only available on authenticated cloud diagrams.',
                 },
                 empty: {
-                    active_title: 'No active वार्तालाप',
-                    active_description:
-                        'Active वार्तालाप for this diagram will appear here.',
+                    active_title: 'कोई वार्तालाप नहीं',
+                    active_description: 'शुरू करने के लिए एक वार्तालाप बनाएँ',
                     archives_title: 'No archived वार्तालाप',
                     archives_description:
                         'Archived वार्तालाप will appear here when you close a thread.',

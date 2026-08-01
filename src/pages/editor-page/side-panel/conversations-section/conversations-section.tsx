@@ -1,21 +1,19 @@
 import React, { useId } from 'react';
+import { Archive } from 'lucide-react';
+import { SlBubbles } from 'react-icons/sl';
 import { useTranslation } from 'react-i18next';
-import { Spinner } from '@/components/spinner/spinner';
 import { EmptyState } from '@/components/empty-state/empty-state';
+import { Tabs, TabsContent } from '@/components/tabs/tabs';
 import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from '@/components/tabs/tabs';
+    SidePanelSectionTabsList,
+    SidePanelSectionTabsToolbar,
+    SidePanelSectionTabsTrigger,
+} from '@/components/side-panel-section-tabs/side-panel-section-tabs';
 import { ConversationsList } from './conversations-list';
 import { ConversationDetail } from './conversation-detail';
-import { ConversationDiagramHeaderAction } from './conversation-diagram-header-action';
 import { useConversationsPanel } from './use-conversations-panel';
 
 export interface ConversationsSectionProps {}
-
-const CONVERSATIONS_SECTION_HEADING_ID = 'conversations-section-heading';
 
 export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
     const { t } = useTranslation();
@@ -59,63 +57,35 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
     if (!isActive) {
         return (
             <section
-                className="flex h-full min-h-0 flex-1 flex-col overflow-hidden px-2"
-                aria-labelledby={CONVERSATIONS_SECTION_HEADING_ID}
+                className="flex h-full min-h-0 flex-1 flex-col overflow-hidden"
+                aria-label={t('side_panel.conversations_section.title')}
                 data-vaul-no-drag
             >
-                <header className="flex shrink-0 flex-col gap-1 py-2">
-                    <h2
-                        id={CONVERSATIONS_SECTION_HEADING_ID}
-                        className="text-sm font-semibold text-foreground"
-                    >
-                        {t('side_panel.conversations_section.title')}
-                    </h2>
-                </header>
-                <EmptyState
-                    title={t('side_panel.conversations_section.inactive.title')}
-                    description={t(
-                        'side_panel.conversations_section.inactive.description'
-                    )}
-                    className="mt-12 px-2"
-                />
+                <div className="px-2">
+                    <EmptyState
+                        title={t(
+                            'side_panel.conversations_section.inactive.title'
+                        )}
+                        description={t(
+                            'side_panel.conversations_section.inactive.description'
+                        )}
+                        className="mt-12"
+                    />
+                </div>
             </section>
         );
     }
 
     return (
         <section
-            className="flex h-full min-h-0 flex-1 flex-col overflow-hidden px-2"
-            aria-labelledby={CONVERSATIONS_SECTION_HEADING_ID}
+            className="flex h-full min-h-0 flex-1 flex-col overflow-hidden"
+            aria-label={t('side_panel.conversations_section.title')}
             data-vaul-no-drag
         >
-            <header className="flex shrink-0 flex-col gap-1 py-2">
-                <div className="flex items-center justify-between gap-2">
-                    <h2
-                        id={CONVERSATIONS_SECTION_HEADING_ID}
-                        className="text-sm font-semibold text-foreground"
-                    >
-                        {t('side_panel.conversations_section.title')}
-                    </h2>
-                    <div className="flex items-center gap-2">
-                        <ConversationDiagramHeaderAction />
-                        {status === 'loading' && !isInitialLoading ? (
-                            <span
-                                role="status"
-                                aria-label={t(
-                                    'side_panel.conversations_section.loading'
-                                )}
-                            >
-                                <Spinner size="small" className="size-4" />
-                            </span>
-                        ) : null}
-                    </div>
-                </div>
-            </header>
-
             {mutationError ? (
                 <div
                     role="alert"
-                    className="mb-2 flex shrink-0 items-center gap-2 rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2"
+                    className="mx-2 mb-2 flex shrink-0 items-center gap-2 rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2"
                 >
                     <p className="flex-1 text-xs text-muted-foreground">
                         {t(
@@ -146,25 +116,36 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
                     }}
                     className="flex min-h-0 flex-1 flex-col overflow-hidden"
                 >
-                    <TabsList
-                        className="grid w-full shrink-0 grid-cols-2"
-                        aria-label={t(
-                            'side_panel.conversations_section.tabs_label'
-                        )}
-                    >
-                        <TabsTrigger value="active">
-                            {t('side_panel.conversations_section.tabs.active')}
-                        </TabsTrigger>
-                        <TabsTrigger value="archives">
-                            {t(
-                                'side_panel.conversations_section.tabs.archives'
+                    <SidePanelSectionTabsToolbar>
+                        <SidePanelSectionTabsList
+                            aria-label={t(
+                                'side_panel.conversations_section.tabs_label'
                             )}
-                        </TabsTrigger>
-                    </TabsList>
+                        >
+                            <SidePanelSectionTabsTrigger value="active">
+                                <SlBubbles
+                                    className="size-3.5"
+                                    aria-hidden="true"
+                                />
+                                {t(
+                                    'side_panel.conversations_section.tabs.active'
+                                )}
+                            </SidePanelSectionTabsTrigger>
+                            <SidePanelSectionTabsTrigger value="archives">
+                                <Archive
+                                    className="size-3.5"
+                                    aria-hidden="true"
+                                />
+                                {t(
+                                    'side_panel.conversations_section.tabs.archives'
+                                )}
+                            </SidePanelSectionTabsTrigger>
+                        </SidePanelSectionTabsList>
+                    </SidePanelSectionTabsToolbar>
 
                     <TabsContent
                         value="active"
-                        className="mt-2 flex min-h-0 flex-1 flex-col overflow-hidden data-[state=inactive]:hidden"
+                        className="mt-0 flex min-h-0 flex-1 flex-col overflow-hidden px-2 data-[state=inactive]:hidden"
                     >
                         <h3 id={activeTabLabelId} className="sr-only">
                             {t('side_panel.conversations_section.tabs.active')}
@@ -194,7 +175,7 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
 
                     <TabsContent
                         value="archives"
-                        className="mt-2 flex min-h-0 flex-1 flex-col overflow-hidden data-[state=inactive]:hidden"
+                        className="mt-0 flex min-h-0 flex-1 flex-col overflow-hidden px-2 data-[state=inactive]:hidden"
                     >
                         <h3 id={archivesTabLabelId} className="sr-only">
                             {t(

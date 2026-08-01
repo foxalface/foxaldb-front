@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from '@/components/spinner/spinner';
 import { Button } from '@/components/button/button';
-import { EmptyState } from '@/components/empty-state/empty-state';
+import { ConversationsEmptyState } from './conversations-empty-state';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import { ConversationSummaryItem } from './conversation-summary-item';
 import { ConversationsErrorState } from './conversations-error-state';
@@ -67,29 +67,7 @@ export const ConversationsList: React.FC<ConversationsListProps> = ({
     }
 
     if (conversations.length === 0) {
-        return (
-            <EmptyState
-                title={
-                    isArchived
-                        ? t(
-                              'side_panel.conversations_section.empty.archives_title'
-                          )
-                        : t(
-                              'side_panel.conversations_section.empty.active_title'
-                          )
-                }
-                description={
-                    isArchived
-                        ? t(
-                              'side_panel.conversations_section.empty.archives_description'
-                          )
-                        : t(
-                              'side_panel.conversations_section.empty.active_description'
-                          )
-                }
-                className="mt-12 px-2"
-            />
-        );
+        return <ConversationsEmptyState isArchived={isArchived} />;
     }
 
     return (
