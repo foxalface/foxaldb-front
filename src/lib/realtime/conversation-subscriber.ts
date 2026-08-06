@@ -8,6 +8,7 @@ import {
     DIAGRAM_CONVERSATION_DELETED_EVENT,
     DIAGRAM_CONVERSATION_MESSAGE_CREATED_EVENT,
     DIAGRAM_CONVERSATION_MESSAGE_DELETED_EVENT,
+    DIAGRAM_CONVERSATION_MESSAGE_REACTIONS_UPDATED_EVENT,
     DIAGRAM_CONVERSATION_MESSAGE_UPDATED_EVENT,
     DIAGRAM_CONVERSATION_REOPENED_EVENT,
     parseDiagramConversationArchivedPayload,
@@ -15,6 +16,7 @@ import {
     parseDiagramConversationDeletedPayload,
     parseDiagramConversationMessageCreatedPayload,
     parseDiagramConversationMessageDeletedPayload,
+    parseDiagramConversationMessageReactionsUpdatedPayload,
     parseDiagramConversationMessageUpdatedPayload,
     parseDiagramConversationReopenedPayload,
 } from './conversation-events';
@@ -23,6 +25,7 @@ export interface SubscribeToDiagramConversationEventsOptions {
     channel: DiagramPrivateEventChannel;
     diagramId: string;
     dispatch: (action: ConversationsAction) => void;
+    getCurrentUserId?: () => number | null;
 }
 
 const resolveActiveDiagramId = (diagramId: string): number | null => {
@@ -52,7 +55,7 @@ const upsertConversation = (
 export const subscribeToDiagramConversationEvents = (
     options: SubscribeToDiagramConversationEventsOptions
 ): (() => void) => {
-    const { channel, diagramId, dispatch } = options;
+    const { channel, diagramId, dispatch, getCurrentUserId } = options;
     const activeDiagramId = resolveActiveDiagramId(diagramId);
 
     const onConversationCreated = (raw: unknown): void => {
@@ -187,6 +190,28 @@ export const subscribeToDiagramConversationEvents = (
         });
     };
 
+    const onMessageReactionsUpdated = (raw: unknown): void => {
+        if (activeDiagramId === null) {
+            return;
+        }
+
+        const payload =
+            parseDiagramConversationMessageReactionsUpdatedPayload(raw);
+
+        if (payload === null || payload.diagramId !== activeDiagramId) {
+            return;
+        }
+
+        dispatch({
+            type: 'MESSAGE_REACTIONS_UPDATED',
+            conversationId: payload.conversationId,
+            messageId: payload.messageId,
+            reactions: payload.reactions,
+            ownership: 'reconcile',
+            currentUserId: getCurrentUserId?.() ?? null,
+        });
+    };
+
     channel.listen(DIAGRAM_CONVERSATION_CREATED_EVENT, onConversationCreated);
     channel.listen(DIAGRAM_CONVERSATION_ARCHIVED_EVENT, onConversationArchived);
     channel.listen(DIAGRAM_CONVERSATION_REOPENED_EVENT, onConversationReopened);
@@ -202,6 +227,10 @@ export const subscribeToDiagramConversationEvents = (
     channel.listen(
         DIAGRAM_CONVERSATION_MESSAGE_DELETED_EVENT,
         onMessageDeleted
+    );
+    channel.listen(
+        DIAGRAM_CONVERSATION_MESSAGE_REACTIONS_UPDATED_EVENT,
+        onMessageReactionsUpdated
     );
 
     let cleanedUp = false;
@@ -240,6 +269,10 @@ export const subscribeToDiagramConversationEvents = (
         channel.stopListening(
             DIAGRAM_CONVERSATION_MESSAGE_DELETED_EVENT,
             onMessageDeleted
+        );
+        channel.stopListening(
+            DIAGRAM_CONVERSATION_MESSAGE_REACTIONS_UPDATED_EVENT,
+            onMessageReactionsUpdated
         );
     };
 };

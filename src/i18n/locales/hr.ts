@@ -460,6 +460,27 @@ export const hr: LanguageTranslation = {
                             edit: 'Uredi',
                             delete: 'Izbriši',
                         },
+                        reactions: {
+                            add_aria: 'Dodaj reakciju',
+                            add_tooltip: 'Dodaj reakciju',
+                            picker_loading: 'Učitavanje birača emojija…',
+                            picker_aria_label: 'Birač emojija',
+                            picker_search_placeholder: 'Pretraži emoji…',
+                            picker_empty: 'Nije pronađen nijedan emoji.',
+                            chip_aria: 'Reakcija {{emoji}}, {{count}}',
+                            preview_and_others_one: 'i još {{count}}',
+                            preview_and_others_other: 'i još {{count}}',
+                            errors: {
+                                generic:
+                                    'Reakciju nije moguće ažurirati. Pokušajte ponovno.',
+                                forbidden:
+                                    'Nemate dopuštenje reagirati na ovu poruku.',
+                                archived:
+                                    'Ovaj razgovor je arhiviran i reakcije su samo za čitanje.',
+                                not_found: 'Ova poruka više nije dostupna.',
+                                invalid_emoji: 'Ovaj emoji nije valjan.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Poruka',

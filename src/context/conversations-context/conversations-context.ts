@@ -56,6 +56,16 @@ export interface ConversationsContextValue {
         input: UpdateConversationMessageInput
     ) => Promise<DiagramConversationMessage>;
     deleteMessage: (conversationId: number, messageId: number) => Promise<void>;
+    addReaction: (
+        conversationId: number,
+        messageId: number,
+        emoji: string
+    ) => Promise<void>;
+    removeReaction: (
+        conversationId: number,
+        messageId: number,
+        emoji: string
+    ) => Promise<void>;
 }
 
 /** Internal developer error — not user-facing copy. Fresh instance per call. */
@@ -91,6 +101,12 @@ const inactiveUpdateMessage: ConversationsContextValue['updateMessage'] = () =>
 const inactiveDeleteMessage: ConversationsContextValue['deleteMessage'] = () =>
     Promise.reject(createConversationsInactiveError());
 
+const inactiveAddReaction: ConversationsContextValue['addReaction'] = () =>
+    Promise.reject(createConversationsInactiveError());
+
+const inactiveRemoveReaction: ConversationsContextValue['removeReaction'] =
+    () => Promise.reject(createConversationsInactiveError());
+
 export const INACTIVE_CONVERSATIONS_CONTEXT: ConversationsContextValue = {
     activeConversations: EMPTY_CONVERSATIONS,
     archivedConversations: EMPTY_CONVERSATIONS,
@@ -117,6 +133,8 @@ export const INACTIVE_CONVERSATIONS_CONTEXT: ConversationsContextValue = {
     createMessage: inactiveCreateMessage,
     updateMessage: inactiveUpdateMessage,
     deleteMessage: inactiveDeleteMessage,
+    addReaction: inactiveAddReaction,
+    removeReaction: inactiveRemoveReaction,
 };
 
 export const ConversationsContext =

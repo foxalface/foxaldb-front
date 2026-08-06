@@ -461,6 +461,28 @@ export const ko_KR: LanguageTranslation = {
                             edit: '편집',
                             delete: '삭제',
                         },
+                        reactions: {
+                            add_aria: '반응 추가',
+                            add_tooltip: '반응 추가',
+                            picker_loading: '이모지 선택기를 불러오는 중…',
+                            picker_aria_label: '이모지 선택기',
+                            picker_search_placeholder: '이모지 검색…',
+                            picker_empty: '이모지를 찾을 수 없습니다.',
+                            chip_aria: '{{emoji}} 반응, {{count}}',
+                            preview_and_others_one: '외 {{count}}명',
+                            preview_and_others_other: '외 {{count}}명',
+                            errors: {
+                                generic:
+                                    '반응을 업데이트할 수 없습니다. 다시 시도해 주세요.',
+                                forbidden:
+                                    '이 메시지에 반응할 권한이 없습니다.',
+                                archived:
+                                    '이 대화는 보관되어 반응은 읽기 전용입니다.',
+                                not_found:
+                                    '이 메시지를 더 이상 사용할 수 없습니다.',
+                                invalid_emoji: '유효하지 않은 이모지입니다.',
+                            },
+                        },
                     },
                     composer: {
                         label: '메시지',

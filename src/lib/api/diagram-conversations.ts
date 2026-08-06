@@ -1,6 +1,7 @@
 import type {
     ConversationStatus,
     ConversationTargetType,
+    ConversationMessageReactionsSnapshot,
     CreateConversationMessageInput,
     DiagramConversation,
     DiagramConversationMessage,
@@ -12,6 +13,10 @@ import type {
 import { apiRequest } from './client';
 import { normalizeDiagramConversationFromApi } from './normalize-diagram-conversation';
 import { normalizeDiagramConversationMessageFromApi } from './normalize-diagram-conversation-message';
+import {
+    normalizeConversationReactionAggregatesFromHttp,
+    type ConversationReactionAggregateHttpDto,
+} from './normalize-diagram-conversation-reaction';
 
 export interface DiagramConversationDto {
     id: number;
@@ -45,6 +50,14 @@ export interface DiagramConversationMessageDto {
     } | null;
     created_at: string;
     updated_at: string;
+    reactions: ConversationReactionAggregateHttpDto[];
+}
+
+interface ConversationMessageReactionsMutationResponse {
+    data: {
+        message_id: number;
+        reactions: ConversationReactionAggregateHttpDto[];
+    };
 }
 
 interface DiagramConversationsListResponse {
@@ -82,6 +95,27 @@ const messagePath = (
     conversationId: number,
     messageId: number
 ): string => `${messagesPath(diagramId, conversationId)}/${messageId}`;
+
+const messageReactionsPath = (
+    diagramId: string,
+    conversationId: number,
+    messageId: number
+): string => `${messagePath(diagramId, conversationId, messageId)}/reactions`;
+
+const normalizeMessageReactionsMutationResponse = (
+    response: ConversationMessageReactionsMutationResponse
+): ConversationMessageReactionsSnapshot => {
+    if (!Number.isInteger(response.data.message_id)) {
+        throw new Error('Invalid reaction mutation response: message_id');
+    }
+
+    return {
+        messageId: response.data.message_id,
+        reactions: normalizeConversationReactionAggregatesFromHttp(
+            response.data.reactions
+        ),
+    };
+};
 
 const normalizePaginatedConversations = (
     response: DiagramConversationsListResponse
@@ -305,4 +339,44 @@ export const deleteConversationMessage = async (
     await apiRequest<null>(messagePath(diagramId, conversationId, messageId), {
         method: 'DELETE',
     });
+};
+
+export const addConversationMessageReaction = async (
+    diagramId: string,
+    conversationId: number,
+    messageId: number,
+    emoji: string
+): Promise<ConversationMessageReactionsSnapshot> => {
+    const response =
+        await apiRequest<ConversationMessageReactionsMutationResponse>(
+            messageReactionsPath(diagramId, conversationId, messageId),
+            {
+                method: 'POST',
+                data: {
+                    emoji,
+                },
+            }
+        );
+
+    return normalizeMessageReactionsMutationResponse(response);
+};
+
+export const removeConversationMessageReaction = async (
+    diagramId: string,
+    conversationId: number,
+    messageId: number,
+    emoji: string
+): Promise<ConversationMessageReactionsSnapshot> => {
+    const response =
+        await apiRequest<ConversationMessageReactionsMutationResponse>(
+            messageReactionsPath(diagramId, conversationId, messageId),
+            {
+                method: 'DELETE',
+                data: {
+                    emoji,
+                },
+            }
+        );
+
+    return normalizeMessageReactionsMutationResponse(response);
 };

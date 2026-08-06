@@ -464,6 +464,27 @@ export const ne: LanguageTranslation = {
                             edit: 'सम्पादन गर्नुहोस्',
                             delete: 'मेटाउनुहोस्',
                         },
+                        reactions: {
+                            add_aria: 'प्रतिक्रिया थप्नुहोस्',
+                            add_tooltip: 'प्रतिक्रिया थप्नुहोस्',
+                            picker_loading: 'इमोजी पिकर लोड हुँदैछ…',
+                            picker_aria_label: 'इमोजी पिकर',
+                            picker_search_placeholder: 'इमोजी खोज्नुहोस्…',
+                            picker_empty: 'कुनै इमोजी फेला परेन।',
+                            chip_aria: '{{emoji}} प्रतिक्रिया, {{count}}',
+                            preview_and_others_one: 'र अन्य {{count}}',
+                            preview_and_others_other: 'र अन्य {{count}}',
+                            errors: {
+                                generic:
+                                    'प्रतिक्रिया अपडेट गर्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
+                                forbidden:
+                                    'तपाईंलाई यो सन्देशमा प्रतिक्रिया दिन अनुमति छैन।',
+                                archived:
+                                    'यो कुराकानी अभिलेखित छ र प्रतिक्रियाहरू केवल पढ्न मिल्छ।',
+                                not_found: 'यो सन्देश अब उपलब्ध छैन।',
+                                invalid_emoji: 'यो इमोजी मान्य छैन।',
+                            },
+                        },
                     },
                     composer: {
                         label: 'सन्देश',

@@ -460,6 +460,28 @@ export const en = {
                             edit: 'Edit',
                             delete: 'Delete',
                         },
+                        reactions: {
+                            add_aria: 'Add reaction',
+                            add_tooltip: 'Add reaction',
+                            picker_loading: 'Loading emoji picker…',
+                            picker_aria_label: 'Emoji picker',
+                            picker_search_placeholder: 'Search emoji…',
+                            picker_empty: 'No emoji found.',
+                            chip_aria: '{{emoji}} reaction, {{count}}',
+                            preview_and_others_one: 'and {{count}} other',
+                            preview_and_others_other: 'and {{count}} others',
+                            errors: {
+                                generic:
+                                    'Could not update the reaction. Please try again.',
+                                forbidden:
+                                    'You are not allowed to react to this message.',
+                                archived:
+                                    'This conversation is archived and reactions are read-only.',
+                                not_found:
+                                    'This message is no longer available.',
+                                invalid_emoji: 'This emoji is not valid.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Message',

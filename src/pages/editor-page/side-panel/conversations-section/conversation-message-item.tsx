@@ -22,12 +22,12 @@ import {
     ConversationMessageHeaderMeta,
     ConversationMessageHeaderTitleRow,
     ConversationMessageLayout,
-    ConversationMessageReactionTrigger,
-    ConversationMessageReactions,
 } from '@/components/conversation-message';
 import { useAuth } from '@/hooks/use-auth';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import { ConversationMessageReactionsBar } from '@/components/conversation-message/conversation-message-reactions-bar';
 import { getConversationMessageCapabilities } from '@/lib/conversations/conversation-message-capabilities';
+import { canReactToConversationMessage } from '@/lib/conversations/conversation-reaction-capabilities';
 import type {
     ConversationStatus,
     DiagramConversationMessage,
@@ -37,6 +37,7 @@ import { resolveTimeAgoLocale } from '@/lib/i18n/timeago-locale';
 import { ConversationMessageActionsMenu } from './conversation-message-actions-menu';
 import { ConversationMessageDeleteDialog } from './conversation-message-delete-dialog';
 import { ConversationMessageEditForm } from './conversation-message-edit-form';
+import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 
 export interface ConversationMessageItemProps {
     message: DiagramConversationMessage;
@@ -85,6 +86,7 @@ export const ConversationMessageItem: React.FC<
     const { t, i18n } = useTranslation();
     const { user } = useAuth();
     const { diagramAccess } = useDiagramAccess();
+    const isConversationsActive = useConversationsAvailability();
     const [timeAgoLocale, setTimeAgoLocale] = useState(() =>
         registerTimeAgoLanguage(i18n.language)
     );
@@ -108,6 +110,16 @@ export const ConversationMessageItem: React.FC<
                 conversationStatus,
             }),
         [conversationStatus, diagramAccess, message, user?.id]
+    );
+
+    const canReact = useMemo(
+        () =>
+            canReactToConversationMessage({
+                isConversationsActive,
+                conversationStatus,
+                diagramAccess,
+            }),
+        [conversationStatus, diagramAccess, isConversationsActive]
     );
 
     useLayoutEffect(() => {
@@ -266,8 +278,13 @@ export const ConversationMessageItem: React.FC<
                         </ConversationMessageBody>
                     )}
                     <ConversationMessageFooter>
-                        <ConversationMessageReactions />
-                        <ConversationMessageReactionTrigger />
+                        <ConversationMessageReactionsBar
+                            conversationId={conversationId}
+                            messageId={message.id}
+                            reactions={message.reactions}
+                            canReact={canReact}
+                            isEditing={isEditing}
+                        />
                     </ConversationMessageFooter>
                 </ConversationMessageContent>
             </ConversationMessageLayout>

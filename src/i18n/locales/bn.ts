@@ -462,6 +462,27 @@ export const bn: LanguageTranslation = {
                             edit: 'সম্পাদনা',
                             delete: 'মুছুন',
                         },
+                        reactions: {
+                            add_aria: 'প্রতিক্রিয়া যোগ করুন',
+                            add_tooltip: 'প্রতিক্রিয়া যোগ করুন',
+                            picker_loading: 'ইমোজি পিকার লোড হচ্ছে…',
+                            picker_aria_label: 'ইমোজি পিকার',
+                            picker_search_placeholder: 'ইমোজি খুঁজুন…',
+                            picker_empty: 'কোনো ইমোজি পাওয়া যায়নি।',
+                            chip_aria: '{{emoji}} প্রতিক্রিয়া, {{count}}',
+                            preview_and_others_one: 'এবং আরও {{count}}',
+                            preview_and_others_other: 'এবং আরও {{count}}',
+                            errors: {
+                                generic:
+                                    'প্রতিক্রিয়া আপডেট করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                                forbidden:
+                                    'আপনার এই বার্তায় প্রতিক্রিয়া জানানোর অনুমতি নেই।',
+                                archived:
+                                    'এই কথোপকথন আর্কাইভ করা হয়েছে এবং প্রতিক্রিয়াগুলো শুধু পঠনযোগ্য।',
+                                not_found: 'এই বার্তা আর উপলব্ধ নেই।',
+                                invalid_emoji: 'এই ইমোজি বৈধ নয়।',
+                            },
+                        },
                     },
                     composer: {
                         label: 'বার্তা',

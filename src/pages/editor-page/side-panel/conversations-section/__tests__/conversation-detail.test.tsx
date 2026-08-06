@@ -53,6 +53,7 @@ const buildMessage = (
     user: aliceWonderAuthor,
     createdAt: '2026-01-02T10:00:00.000Z',
     updatedAt: '2026-01-02T10:00:00.000Z',
+    reactions: [],
     ...overrides,
 });
 
@@ -126,6 +127,8 @@ vi.mock('@/hooks/use-conversation-mutations', () => ({
         createMessage: vi.fn(),
         updateMessage: vi.fn(),
         deleteMessage: vi.fn(),
+        addReaction: vi.fn(),
+        removeReaction: vi.fn(),
     }),
 }));
 

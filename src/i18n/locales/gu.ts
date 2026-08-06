@@ -461,6 +461,27 @@ export const gu: LanguageTranslation = {
                             edit: 'સંપાદિત કરો',
                             delete: 'કાઢી નાખો',
                         },
+                        reactions: {
+                            add_aria: 'પ્રતિક્રિયા ઉમેરો',
+                            add_tooltip: 'પ્રતિક્રિયા ઉમેરો',
+                            picker_loading: 'ઇમોજી પિકર લોડ થઈ રહ્યું છે…',
+                            picker_aria_label: 'ઇમોજી પિકર',
+                            picker_search_placeholder: 'ઇમોજી શોધો…',
+                            picker_empty: 'કોઈ ઇમોજી મળ્યું નથી.',
+                            chip_aria: '{{emoji}} પ્રતિક્રિયા, {{count}}',
+                            preview_and_others_one: 'અને વધુ {{count}}',
+                            preview_and_others_other: 'અને વધુ {{count}}',
+                            errors: {
+                                generic:
+                                    'પ્રતિક્રિયા અપડેટ કરી શકાઈ નથી. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                                forbidden:
+                                    'તમને આ સંદેશ પર પ્રતિક્રિયા આપવાની પરવાનગી નથી.',
+                                archived:
+                                    'આ વાતચીત આર્કાઇવ થયેલી છે અને પ્રતિક્રિયાઓ માત્ર વાંચવા યોગ્ય છે.',
+                                not_found: 'આ સંદેશ હવે ઉપલબ્ધ નથી.',
+                                invalid_emoji: 'આ ઇમોજી માન્ય નથી.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'સંદેશ',

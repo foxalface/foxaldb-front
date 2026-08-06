@@ -467,6 +467,27 @@ export const vi: LanguageTranslation = {
                             edit: 'Chỉnh sửa',
                             delete: 'Xóa',
                         },
+                        reactions: {
+                            add_aria: 'Thêm phản ứng',
+                            add_tooltip: 'Thêm phản ứng',
+                            picker_loading: 'Đang tải bộ chọn emoji…',
+                            picker_aria_label: 'Bộ chọn emoji',
+                            picker_search_placeholder: 'Tìm emoji…',
+                            picker_empty: 'Không tìm thấy emoji.',
+                            chip_aria: 'Phản ứng {{emoji}}, {{count}}',
+                            preview_and_others_one: 'và {{count}} người khác',
+                            preview_and_others_other: 'và {{count}} người khác',
+                            errors: {
+                                generic:
+                                    'Không thể cập nhật phản ứng. Vui lòng thử lại.',
+                                forbidden:
+                                    'Bạn không được phép phản ứng với tin nhắn này.',
+                                archived:
+                                    'Cuộc trò chuyện này đã được lưu trữ và phản ứng chỉ đọc.',
+                                not_found: 'Tin nhắn này không còn khả dụng.',
+                                invalid_emoji: 'Emoji này không hợp lệ.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Tin nhắn',

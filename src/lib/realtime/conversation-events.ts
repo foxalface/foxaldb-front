@@ -5,8 +5,13 @@ import {
     type ConversationTargetType,
     type DiagramConversation,
     type DiagramConversationMessage,
+    type ConversationReactionAggregate,
 } from '@/lib/conversations/conversation-types';
 import { parseUserIdentityFromWebSocket } from '@/lib/user';
+import {
+    normalizeConversationReactionAggregatesFromWebSocket,
+    type ConversationReactionAggregateWebSocketDto,
+} from '@/lib/api/normalize-diagram-conversation-reaction';
 
 export const DIAGRAM_CONVERSATION_CREATED_EVENT = '.DiagramConversationCreated';
 
@@ -26,6 +31,9 @@ export const DIAGRAM_CONVERSATION_MESSAGE_UPDATED_EVENT =
 
 export const DIAGRAM_CONVERSATION_MESSAGE_DELETED_EVENT =
     '.DiagramConversationMessageDeleted';
+
+export const DIAGRAM_CONVERSATION_MESSAGE_REACTIONS_UPDATED_EVENT =
+    '.DiagramConversationMessageReactionsUpdated';
 
 export interface DiagramConversationMutationPayload {
     conversation: DiagramConversation;
@@ -63,6 +71,14 @@ export interface DiagramConversationMessageDeletedPayload {
     messageId: number;
     conversationId: number;
     conversation: DiagramConversation;
+    userId: number;
+}
+
+export interface DiagramConversationMessageReactionsUpdatedPayload {
+    diagramId: number;
+    conversationId: number;
+    messageId: number;
+    reactions: Array<Omit<ConversationReactionAggregate, 'reactedByMe'>>;
     userId: number;
 }
 
@@ -211,7 +227,8 @@ const parseDiagramConversationMessage = (
         return null;
     }
 
-    const { id, conversationId, body, user, createdAt, updatedAt } = value;
+    const { id, conversationId, body, user, createdAt, updatedAt, reactions } =
+        value;
 
     if (!isFiniteInteger(id) || !isFiniteInteger(conversationId)) {
         return null;
@@ -231,6 +248,22 @@ const parseDiagramConversationMessage = (
         return null;
     }
 
+    let parsedReactions: DiagramConversationMessage['reactions'] = [];
+
+    if (reactions !== undefined) {
+        try {
+            parsedReactions =
+                normalizeConversationReactionAggregatesFromWebSocket(
+                    reactions
+                ).map((reaction) => ({
+                    ...reaction,
+                    reactedByMe: false,
+                }));
+        } catch {
+            return null;
+        }
+    }
+
     return {
         id,
         conversationId,
@@ -238,6 +271,7 @@ const parseDiagramConversationMessage = (
         user: parsedUser,
         createdAt,
         updatedAt,
+        reactions: parsedReactions,
     };
 };
 
@@ -378,4 +412,40 @@ export const parseDiagramConversationMessageDeletedPayload = (
         conversation: parsedConversation,
         userId,
     };
+};
+
+export const parseDiagramConversationMessageReactionsUpdatedPayload = (
+    value: unknown
+): DiagramConversationMessageReactionsUpdatedPayload | null => {
+    if (!isRecord(value)) {
+        return null;
+    }
+
+    const { diagramId, conversationId, messageId, reactions, userId } = value;
+
+    if (
+        !isFiniteInteger(diagramId) ||
+        !isFiniteInteger(conversationId) ||
+        !isFiniteInteger(messageId) ||
+        !isFiniteInteger(userId)
+    ) {
+        return null;
+    }
+
+    try {
+        const parsedReactions =
+            normalizeConversationReactionAggregatesFromWebSocket(
+                reactions as ConversationReactionAggregateWebSocketDto[]
+            );
+
+        return {
+            diagramId,
+            conversationId,
+            messageId,
+            reactions: parsedReactions,
+            userId,
+        };
+    } catch {
+        return null;
+    }
 };

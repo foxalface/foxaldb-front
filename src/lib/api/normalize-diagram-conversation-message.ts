@@ -1,6 +1,7 @@
 import type { DiagramConversationMessage } from '@/lib/conversations/conversation-types';
 import { parseUserIdentityFromHttp } from '@/lib/user';
 import type { DiagramConversationMessageDto } from './diagram-conversations';
+import { normalizeConversationReactionAggregatesFromHttp } from './normalize-diagram-conversation-reaction';
 
 const isFiniteInteger = (value: unknown): value is number =>
     typeof value === 'number' && Number.isInteger(value);
@@ -50,6 +51,10 @@ export const normalizeDiagramConversationMessageFromApi = (
         throw invalidPayload('updated_at must be a non-empty string');
     }
 
+    const reactions = normalizeConversationReactionAggregatesFromHttp(
+        message.reactions
+    );
+
     return {
         id: message.id,
         conversationId: message.conversation_id,
@@ -57,5 +62,6 @@ export const normalizeDiagramConversationMessageFromApi = (
         user,
         createdAt: message.created_at,
         updatedAt: message.updated_at,
+        reactions,
     };
 };

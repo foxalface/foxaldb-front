@@ -461,6 +461,27 @@ export const ru: LanguageTranslation = {
                             edit: 'Редактировать',
                             delete: 'Удалить',
                         },
+                        reactions: {
+                            add_aria: 'Добавить реакцию',
+                            add_tooltip: 'Добавить реакцию',
+                            picker_loading: 'Загрузка выбора эмодзи…',
+                            picker_aria_label: 'Выбор эмодзи',
+                            picker_search_placeholder: 'Поиск эмодзи…',
+                            picker_empty: 'Эмодзи не найдены.',
+                            chip_aria: 'Реакция {{emoji}}, {{count}}',
+                            preview_and_others_one: 'и ещё {{count}}',
+                            preview_and_others_other: 'и ещё {{count}}',
+                            errors: {
+                                generic:
+                                    'Не удалось обновить реакцию. Попробуйте снова.',
+                                forbidden:
+                                    'Вам не разрешено реагировать на это сообщение.',
+                                archived:
+                                    'Эта беседа архивирована, реакции доступны только для просмотра.',
+                                not_found: 'Это сообщение больше недоступно.',
+                                invalid_emoji: 'Это эмодзи недействительно.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Сообщение',

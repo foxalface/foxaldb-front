@@ -462,6 +462,27 @@ export const uk: LanguageTranslation = {
                             edit: 'Редагувати',
                             delete: 'Видалити',
                         },
+                        reactions: {
+                            add_aria: 'Додати реакцію',
+                            add_tooltip: 'Додати реакцію',
+                            picker_loading: 'Завантаження вибору емодзі…',
+                            picker_aria_label: 'Вибір емодзі',
+                            picker_search_placeholder: 'Пошук емодзі…',
+                            picker_empty: 'Емодзі не знайдено.',
+                            chip_aria: 'Реакція {{emoji}}, {{count}}',
+                            preview_and_others_one: 'та ще {{count}}',
+                            preview_and_others_other: 'та ще {{count}}',
+                            errors: {
+                                generic:
+                                    'Не вдалося оновити реакцію. Спробуйте ще раз.',
+                                forbidden:
+                                    'Вам не дозволено реагувати на це повідомлення.',
+                                archived:
+                                    'Ця розмова архівована, реакції доступні лише для перегляду.',
+                                not_found: 'Це повідомлення більше недоступне.',
+                                invalid_emoji: 'Це емодзі недійсне.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Повідомлення',

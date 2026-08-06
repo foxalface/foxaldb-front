@@ -467,6 +467,28 @@ export const es: LanguageTranslation = {
                             edit: 'Editar',
                             delete: 'Eliminar',
                         },
+                        reactions: {
+                            add_aria: 'Añadir reacción',
+                            add_tooltip: 'Añadir reacción',
+                            picker_loading: 'Cargando selector de emojis…',
+                            picker_aria_label: 'Selector de emojis',
+                            picker_search_placeholder: 'Buscar emoji…',
+                            picker_empty: 'No se encontró ningún emoji.',
+                            chip_aria: 'Reacción {{emoji}}, {{count}}',
+                            preview_and_others_one: 'y {{count}} más',
+                            preview_and_others_other: 'y {{count}} más',
+                            errors: {
+                                generic:
+                                    'No se pudo actualizar la reacción. Inténtalo de nuevo.',
+                                forbidden:
+                                    'No tienes permiso para reaccionar a este mensaje.',
+                                archived:
+                                    'Esta conversación está archivada y las reacciones son de solo lectura.',
+                                not_found:
+                                    'Este mensaje ya no está disponible.',
+                                invalid_emoji: 'Este emoji no es válido.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Mensaje',

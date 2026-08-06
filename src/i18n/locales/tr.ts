@@ -459,6 +459,26 @@ export const tr: LanguageTranslation = {
                             edit: 'Düzenle',
                             delete: 'Sil',
                         },
+                        reactions: {
+                            add_aria: 'Tepki ekle',
+                            add_tooltip: 'Tepki ekle',
+                            picker_loading: 'Emoji seçici yükleniyor…',
+                            picker_aria_label: 'Emoji seçici',
+                            picker_search_placeholder: 'Emoji ara…',
+                            picker_empty: 'Emoji bulunamadı.',
+                            chip_aria: '{{emoji}} tepkisi, {{count}}',
+                            preview_and_others_one: 've {{count}} kişi daha',
+                            preview_and_others_other: 've {{count}} kişi daha',
+                            errors: {
+                                generic:
+                                    'Tepki güncellenemedi. Lütfen tekrar deneyin.',
+                                forbidden: 'Bu mesaja tepki verme izniniz yok.',
+                                archived:
+                                    'Bu konuşma arşivlendi ve tepkiler salt okunurdur.',
+                                not_found: 'Bu mesaj artık mevcut değil.',
+                                invalid_emoji: 'Bu emoji geçerli değil.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Mesaj',

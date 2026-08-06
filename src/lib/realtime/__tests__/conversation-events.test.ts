@@ -7,11 +7,13 @@ import {
     DIAGRAM_CONVERSATION_DELETED_EVENT,
     DIAGRAM_CONVERSATION_MESSAGE_CREATED_EVENT,
     DIAGRAM_CONVERSATION_MESSAGE_DELETED_EVENT,
+    DIAGRAM_CONVERSATION_MESSAGE_REACTIONS_UPDATED_EVENT,
     parseDiagramConversationArchivedPayload,
     parseDiagramConversationCreatedPayload,
     parseDiagramConversationDeletedPayload,
     parseDiagramConversationMessageCreatedPayload,
     parseDiagramConversationMessageDeletedPayload,
+    parseDiagramConversationMessageReactionsUpdatedPayload,
 } from '../conversation-events';
 
 const baseConversation = (
@@ -48,6 +50,9 @@ describe('conversation event names', () => {
         );
         expect(DIAGRAM_CONVERSATION_MESSAGE_DELETED_EVENT).toBe(
             '.DiagramConversationMessageDeleted'
+        );
+        expect(DIAGRAM_CONVERSATION_MESSAGE_REACTIONS_UPDATED_EVENT).toBe(
+            '.DiagramConversationMessageReactionsUpdated'
         );
     });
 });
@@ -109,6 +114,7 @@ describe('parseDiagramConversationMessageCreatedPayload', () => {
                 user: buildUserIdentity(7, 'Alice', 'Martin'),
                 createdAt: '2026-07-19T11:00:00.000Z',
                 updatedAt: '2026-07-19T11:00:00.000Z',
+                reactions: [],
             },
             conversation,
             userId: 7,
@@ -154,5 +160,61 @@ describe('parseDiagramConversationMessageDeletedPayload', () => {
             conversation,
             userId: 7,
         });
+    });
+});
+
+describe('parseDiagramConversationMessageReactionsUpdatedPayload', () => {
+    it('parses valid reaction snapshots', () => {
+        expect(
+            parseDiagramConversationMessageReactionsUpdatedPayload({
+                diagramId: 42,
+                conversationId: 10,
+                messageId: 3,
+                reactions: [
+                    {
+                        emoji: '👍',
+                        count: 12,
+                        previewUsers: [],
+                        previewTruncated: true,
+                    },
+                ],
+                userId: 7,
+            })
+        ).toEqual({
+            diagramId: 42,
+            conversationId: 10,
+            messageId: 3,
+            reactions: [
+                {
+                    emoji: '👍',
+                    count: 12,
+                    previewUsers: [],
+                    previewTruncated: true,
+                },
+            ],
+            userId: 7,
+        });
+    });
+
+    it('rejects malformed payloads', () => {
+        expect(
+            parseDiagramConversationMessageReactionsUpdatedPayload(null)
+        ).toBeNull();
+        expect(
+            parseDiagramConversationMessageReactionsUpdatedPayload({
+                diagramId: 42,
+                conversationId: 10,
+                messageId: 3,
+                reactions: [
+                    {
+                        emoji: '',
+                        count: 1,
+                        previewUsers: [],
+                        previewTruncated: false,
+                    },
+                ],
+                userId: 7,
+            })
+        ).toBeNull();
     });
 });

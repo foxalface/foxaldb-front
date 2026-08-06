@@ -457,6 +457,28 @@ export const ar: LanguageTranslation = {
                             edit: 'تعديل',
                             delete: 'حذف',
                         },
+                        reactions: {
+                            add_aria: 'إضافة تفاعل',
+                            add_tooltip: 'إضافة تفاعل',
+                            picker_loading:
+                                'جارٍ تحميل منتقي الرموز التعبيرية…',
+                            picker_aria_label: 'منتقي الرموز التعبيرية',
+                            picker_search_placeholder: 'ابحث عن رمز تعبيري…',
+                            picker_empty: 'لم يتم العثور على رموز تعبيرية.',
+                            chip_aria: 'تفاعل {{emoji}}، {{count}}',
+                            preview_and_others_one: 'و{{count}} آخر',
+                            preview_and_others_other: 'و{{count}} آخرين',
+                            errors: {
+                                generic:
+                                    'تعذر تحديث التفاعل. يرجى المحاولة مرة أخرى.',
+                                forbidden:
+                                    'غير مسموح لك بالتفاعل مع هذه الرسالة.',
+                                archived:
+                                    'هذه المحادثة مؤرشفة والتفاعلات للقراءة فقط.',
+                                not_found: 'هذه الرسالة لم تعد متاحة.',
+                                invalid_emoji: 'هذا الرمز التعبيري غير صالح.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'رسالة',

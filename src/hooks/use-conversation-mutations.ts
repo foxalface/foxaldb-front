@@ -32,6 +32,16 @@ export interface UseConversationMutationsResult {
         input: UpdateConversationMessageInput
     ) => Promise<DiagramConversationMessage>;
     deleteMessage: (conversationId: number, messageId: number) => Promise<void>;
+    addReaction: (
+        conversationId: number,
+        messageId: number,
+        emoji: string
+    ) => Promise<void>;
+    removeReaction: (
+        conversationId: number,
+        messageId: number,
+        emoji: string
+    ) => Promise<void>;
 }
 
 export const useConversationMutations = (): UseConversationMutationsResult => {
@@ -46,5 +56,7 @@ export const useConversationMutations = (): UseConversationMutationsResult => {
         createMessage: value.createMessage,
         updateMessage: value.updateMessage,
         deleteMessage: value.deleteMessage,
+        addReaction: value.addReaction,
+        removeReaction: value.removeReaction,
     };
 };

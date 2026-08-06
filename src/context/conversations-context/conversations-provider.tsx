@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useRealtime } from '@/hooks/use-realtime';
 import {
+    addConversationMessageReaction,
     archiveDiagramConversation,
     createConversationMessage,
     deleteConversationMessage,
@@ -17,6 +18,7 @@ import {
     getDiagramConversation,
     listConversationMessages,
     listDiagramConversations,
+    removeConversationMessageReaction,
     reopenDiagramConversation,
     updateConversationMessage,
 } from '@/lib/api/diagram-conversations';
@@ -74,6 +76,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     const summariesLoadGenerationRef = useRef(0);
     const messagesLoadGenerationRef = useRef<Map<number, number>>(new Map());
     const scopeDiagramIdRef = useRef<string | null>(null);
+    const currentUserIdRef = useRef<number | null>(null);
     const activeConversationSubscriptionRef =
         useRef<ActiveConversationSubscription | null>(null);
     const getDiagramPrivateChannelRef = useRef(getDiagramPrivateChannel);
@@ -93,6 +96,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
         !isLoading && isAuthenticated && user !== null && diagramId !== null;
 
     scopeDiagramIdRef.current = isActive ? diagramId : null;
+    currentUserIdRef.current = isActive && user !== null ? user.id : null;
 
     const summariesById = state.summariesById;
 
@@ -138,6 +142,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             channel,
             diagramId: targetDiagramId,
             dispatch,
+            getCurrentUserId: () => currentUserIdRef.current,
         });
 
         return adoptConversationSubscription(
@@ -685,6 +690,68 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const addReaction = useCallback(
+        async (
+            conversationId: number,
+            messageId: number,
+            emoji: string
+        ): Promise<void> => {
+            const targetDiagramId = scopeDiagramIdRef.current;
+            if (targetDiagramId === null) {
+                return Promise.reject(createConversationsInactiveError());
+            }
+
+            const snapshot = await addConversationMessageReaction(
+                targetDiagramId,
+                conversationId,
+                messageId,
+                emoji
+            );
+
+            if (scopeDiagramIdRef.current === targetDiagramId) {
+                dispatch({
+                    type: 'MESSAGE_REACTIONS_UPDATED',
+                    conversationId,
+                    messageId: snapshot.messageId,
+                    reactions: snapshot.reactions,
+                    ownership: 'authoritative',
+                });
+            }
+        },
+        []
+    );
+
+    const removeReaction = useCallback(
+        async (
+            conversationId: number,
+            messageId: number,
+            emoji: string
+        ): Promise<void> => {
+            const targetDiagramId = scopeDiagramIdRef.current;
+            if (targetDiagramId === null) {
+                return Promise.reject(createConversationsInactiveError());
+            }
+
+            const snapshot = await removeConversationMessageReaction(
+                targetDiagramId,
+                conversationId,
+                messageId,
+                emoji
+            );
+
+            if (scopeDiagramIdRef.current === targetDiagramId) {
+                dispatch({
+                    type: 'MESSAGE_REACTIONS_UPDATED',
+                    conversationId,
+                    messageId: snapshot.messageId,
+                    reactions: snapshot.reactions,
+                    ownership: 'authoritative',
+                });
+            }
+        },
+        []
+    );
+
     const getMessages = useCallback(
         (conversationId: number) =>
             selectMessagesForConversation(state, conversationId),
@@ -736,6 +803,8 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             createMessage,
             updateMessage,
             deleteMessage,
+            addReaction,
+            removeReaction,
         }),
         [
             activeConversations,
@@ -763,6 +832,8 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             createMessage,
             updateMessage,
             deleteMessage,
+            addReaction,
+            removeReaction,
         ]
     );
 

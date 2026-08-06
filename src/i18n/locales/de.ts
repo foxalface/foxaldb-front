@@ -471,6 +471,28 @@ export const de: LanguageTranslation = {
                             edit: 'Bearbeiten',
                             delete: 'Löschen',
                         },
+                        reactions: {
+                            add_aria: 'Reaktion hinzufügen',
+                            add_tooltip: 'Reaktion hinzufügen',
+                            picker_loading: 'Emoji-Auswahl wird geladen…',
+                            picker_aria_label: 'Emoji-Auswahl',
+                            picker_search_placeholder: 'Emoji suchen…',
+                            picker_empty: 'Kein Emoji gefunden.',
+                            chip_aria: 'Reaktion {{emoji}}, {{count}}',
+                            preview_and_others_one: 'und {{count}} weiterer',
+                            preview_and_others_other: 'und {{count}} weitere',
+                            errors: {
+                                generic:
+                                    'Die Reaktion konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.',
+                                forbidden:
+                                    'Sie dürfen auf diese Nachricht nicht reagieren.',
+                                archived:
+                                    'Diese Unterhaltung ist archiviert und Reaktionen sind schreibgeschützt.',
+                                not_found:
+                                    'Diese Nachricht ist nicht mehr verfügbar.',
+                                invalid_emoji: 'Dieses Emoji ist ungültig.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Nachricht',

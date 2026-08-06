@@ -30,6 +30,14 @@ export interface DiagramConversation {
     updatedAt: string;
 }
 
+export interface ConversationReactionAggregate {
+    emoji: string;
+    count: number;
+    reactedByMe: boolean;
+    previewUsers: Array<ConversationAuthor | null>;
+    previewTruncated: boolean;
+}
+
 export interface DiagramConversationMessage {
     id: number;
     conversationId: number;
@@ -37,6 +45,12 @@ export interface DiagramConversationMessage {
     user: ConversationAuthor | null;
     createdAt: string;
     updatedAt: string;
+    reactions: ConversationReactionAggregate[];
+}
+
+export interface ConversationMessageReactionsSnapshot {
+    messageId: number;
+    reactions: ConversationReactionAggregate[];
 }
 
 export type DiagramConversationTarget =

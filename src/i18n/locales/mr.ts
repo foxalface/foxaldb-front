@@ -467,6 +467,27 @@ export const mr: LanguageTranslation = {
                             edit: 'संपादित करा',
                             delete: 'हटवा',
                         },
+                        reactions: {
+                            add_aria: 'प्रतिक्रिया जोडा',
+                            add_tooltip: 'प्रतिक्रिया जोडा',
+                            picker_loading: 'इमोजी पिकर लोड होत आहे…',
+                            picker_aria_label: 'इमोजी पिकर',
+                            picker_search_placeholder: 'इमोजी शोधा…',
+                            picker_empty: 'कोणताही इमोजी सापडला नाही.',
+                            chip_aria: '{{emoji}} प्रतिक्रिया, {{count}}',
+                            preview_and_others_one: 'आणि आणखी {{count}}',
+                            preview_and_others_other: 'आणि आणखी {{count}}',
+                            errors: {
+                                generic:
+                                    'प्रतिक्रिया अद्यतन करता आली नाही. कृपया पुन्हा प्रयत्न करा.',
+                                forbidden:
+                                    'तुम्हाला या संदेशावर प्रतिक्रिया देण्याची परवानगी नाही.',
+                                archived:
+                                    'ही संभाषण संग्रहित आहे आणि प्रतिक्रिया केवळ वाचनीय आहेत.',
+                                not_found: 'हा संदेश आता उपलब्ध नाही.',
+                                invalid_emoji: 'हा इमोजी वैध नाही.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'संदेश',

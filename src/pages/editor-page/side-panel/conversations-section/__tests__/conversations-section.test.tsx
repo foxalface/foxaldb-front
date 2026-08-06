@@ -100,6 +100,8 @@ vi.mock('@/hooks/use-conversation-mutations', () => ({
         createMessage: vi.fn(),
         updateMessage: vi.fn(),
         deleteMessage: vi.fn(),
+        addReaction: vi.fn(),
+        removeReaction: vi.fn(),
     }),
 }));
 

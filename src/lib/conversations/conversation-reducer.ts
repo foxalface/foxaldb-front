@@ -1,7 +1,12 @@
 import type {
     DiagramConversation,
     DiagramConversationMessage,
+    ConversationReactionAggregate,
 } from './conversation-types';
+import {
+    reconcileConversationReactionAggregates,
+    type ConversationReactionAggregateWithoutOwnership,
+} from './conversation-reaction-reconcile';
 
 export type ConversationsStatus = 'idle' | 'loading' | 'ready' | 'error';
 
@@ -75,6 +80,16 @@ export type ConversationsAction =
           type: 'MESSAGE_REMOVED';
           conversationId: number;
           messageId: number;
+      }
+    | {
+          type: 'MESSAGE_REACTIONS_UPDATED';
+          conversationId: number;
+          messageId: number;
+          reactions:
+              | ConversationReactionAggregate[]
+              | ConversationReactionAggregateWithoutOwnership[];
+          ownership: 'authoritative' | 'reconcile';
+          currentUserId?: number | null;
       }
     | { type: 'RESET' };
 
@@ -448,6 +463,49 @@ export const conversationsReducer = (
 
             const byId = new Map(currentSlice.byId);
             byId.delete(action.messageId);
+
+            return {
+                ...state,
+                messagesByConversationId: setMessagesSlice(
+                    state,
+                    action.conversationId,
+                    {
+                        ...currentSlice,
+                        byId,
+                    }
+                ),
+            };
+        }
+
+        case 'MESSAGE_REACTIONS_UPDATED': {
+            const currentSlice = state.messagesByConversationId.get(
+                action.conversationId
+            );
+
+            if (currentSlice === undefined) {
+                return state;
+            }
+
+            const existingMessage = currentSlice.byId.get(action.messageId);
+
+            if (existingMessage === undefined) {
+                return state;
+            }
+
+            const reactions =
+                action.ownership === 'authoritative'
+                    ? (action.reactions as ConversationReactionAggregate[])
+                    : reconcileConversationReactionAggregates(
+                          action.reactions as ConversationReactionAggregateWithoutOwnership[],
+                          existingMessage.reactions,
+                          action.currentUserId
+                      );
+
+            const byId = new Map(currentSlice.byId);
+            byId.set(action.messageId, {
+                ...existingMessage,
+                reactions,
+            });
 
             return {
                 ...state,

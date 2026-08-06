@@ -466,6 +466,27 @@ export const hi: LanguageTranslation = {
                             edit: 'संपादित करें',
                             delete: 'हटाएँ',
                         },
+                        reactions: {
+                            add_aria: 'प्रतिक्रिया जोड़ें',
+                            add_tooltip: 'प्रतिक्रिया जोड़ें',
+                            picker_loading: 'इमोजी पिकर लोड हो रहा है…',
+                            picker_aria_label: 'इमोजी पिकर',
+                            picker_search_placeholder: 'इमोजी खोजें…',
+                            picker_empty: 'कोई इमोजी नहीं मिला।',
+                            chip_aria: '{{emoji}} प्रतिक्रिया, {{count}}',
+                            preview_and_others_one: 'और {{count}} अन्य',
+                            preview_and_others_other: 'और {{count}} अन्य',
+                            errors: {
+                                generic:
+                                    'प्रतिक्रिया अपडेट नहीं हो सकी। कृपया पुनः प्रयास करें।',
+                                forbidden:
+                                    'आपको इस संदेश पर प्रतिक्रिया देने की अनुमति नहीं है।',
+                                archived:
+                                    'यह वार्तालाप संग्रहीत है और प्रतिक्रियाएँ केवल पढ़ने योग्य हैं।',
+                                not_found: 'यह संदेश अब उपलब्ध नहीं है।',
+                                invalid_emoji: 'यह इमोजी मान्य नहीं है।',
+                            },
+                        },
                     },
                     composer: {
                         label: 'संदेश',

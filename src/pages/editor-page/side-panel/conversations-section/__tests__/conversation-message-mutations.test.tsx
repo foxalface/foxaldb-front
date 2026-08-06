@@ -61,6 +61,7 @@ const buildMessage = (
     user: aliceWonderAuthor,
     createdAt: '2026-01-02T10:00:00.000Z',
     updatedAt: '2026-01-02T10:00:00.000Z',
+    reactions: [],
     ...overrides,
 });
 
@@ -108,6 +109,8 @@ const {
                 buildMessage({ body: 'Updated body' })
         ),
         deleteMessage: vi.fn(async () => undefined),
+        addReaction: vi.fn(async () => undefined),
+        removeReaction: vi.fn(async () => undefined),
         archiveConversation: vi.fn(),
         reopenConversation: vi.fn(),
     },
@@ -169,6 +172,8 @@ vi.mock('@/hooks/use-conversation-mutations', () => ({
         createMessage: mutationsState.createMessage,
         updateMessage: mutationsState.updateMessage,
         deleteMessage: mutationsState.deleteMessage,
+        addReaction: mutationsState.addReaction,
+        removeReaction: mutationsState.removeReaction,
     }),
 }));
 

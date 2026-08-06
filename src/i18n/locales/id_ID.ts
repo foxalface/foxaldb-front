@@ -464,6 +464,27 @@ export const id_ID: LanguageTranslation = {
                             edit: 'Edit',
                             delete: 'Hapus',
                         },
+                        reactions: {
+                            add_aria: 'Tambah reaksi',
+                            add_tooltip: 'Tambah reaksi',
+                            picker_loading: 'Memuat pemilih emoji…',
+                            picker_aria_label: 'Pemilih emoji',
+                            picker_search_placeholder: 'Cari emoji…',
+                            picker_empty: 'Tidak ada emoji ditemukan.',
+                            chip_aria: 'Reaksi {{emoji}}, {{count}}',
+                            preview_and_others_one: 'dan {{count}} lainnya',
+                            preview_and_others_other: 'dan {{count}} lainnya',
+                            errors: {
+                                generic:
+                                    'Tidak dapat memperbarui reaksi. Silakan coba lagi.',
+                                forbidden:
+                                    'Anda tidak diizinkan memberi reaksi pada pesan ini.',
+                                archived:
+                                    'Percakapan ini diarsipkan dan reaksi hanya-baca.',
+                                not_found: 'Pesan ini tidak lagi tersedia.',
+                                invalid_emoji: 'Emoji ini tidak valid.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Pesan',

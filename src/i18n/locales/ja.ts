@@ -465,6 +465,28 @@ export const ja: LanguageTranslation = {
                             edit: '編集',
                             delete: '削除',
                         },
+                        reactions: {
+                            add_aria: 'リアクションを追加',
+                            add_tooltip: 'リアクションを追加',
+                            picker_loading: '絵文字ピッカーを読み込み中…',
+                            picker_aria_label: '絵文字ピッカー',
+                            picker_search_placeholder: '絵文字を検索…',
+                            picker_empty: '絵文字が見つかりません。',
+                            chip_aria: '{{emoji}} のリアクション、{{count}}',
+                            preview_and_others_one: '他 {{count}} 人',
+                            preview_and_others_other: '他 {{count}} 人',
+                            errors: {
+                                generic:
+                                    'リアクションを更新できませんでした。もう一度お試しください。',
+                                forbidden:
+                                    'このメッセージにリアクションする権限がありません。',
+                                archived:
+                                    'この会話はアーカイブされており、リアクションは読み取り専用です。',
+                                not_found:
+                                    'このメッセージは利用できなくなりました。',
+                                invalid_emoji: 'この絵文字は無効です。',
+                            },
+                        },
                     },
                     composer: {
                         label: 'メッセージ',

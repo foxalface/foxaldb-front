@@ -111,6 +111,7 @@ describe('conversationsReducer', () => {
                         user: aliceAuthor,
                         createdAt: '2026-01-01T10:00:00.000Z',
                         updatedAt: '2026-01-01T10:00:00.000Z',
+                        reactions: [],
                     },
                 ],
                 nextCursor: null,
@@ -188,6 +189,82 @@ describe('conversationsReducer', () => {
             ]),
             { type: 'RESET' }
         );
+
+        expect(state).toEqual(initialConversationsState());
+    });
+
+    it('MESSAGE_REACTIONS_UPDATED patches a loaded message', () => {
+        const withMessages = conversationsReducer(
+            conversationsReducer(
+                loadActiveSucceeded(initialConversationsState(), [
+                    conversation({ id: 1 }),
+                ]),
+                {
+                    type: 'MESSAGES_LOAD_STARTED',
+                    conversationId: 1,
+                    generation: 1,
+                }
+            ),
+            {
+                type: 'MESSAGES_LOAD_SUCCEEDED',
+                conversationId: 1,
+                generation: 1,
+                messages: [
+                    {
+                        id: 5,
+                        conversationId: 1,
+                        body: 'hello',
+                        user: aliceAuthor,
+                        createdAt: '2026-01-01T10:00:00.000Z',
+                        updatedAt: '2026-01-01T10:00:00.000Z',
+                        reactions: [],
+                    },
+                ],
+                nextCursor: null,
+                append: false,
+            }
+        );
+
+        const state = conversationsReducer(withMessages, {
+            type: 'MESSAGE_REACTIONS_UPDATED',
+            conversationId: 1,
+            messageId: 5,
+            ownership: 'authoritative',
+            reactions: [
+                {
+                    emoji: '👍',
+                    count: 1,
+                    reactedByMe: true,
+                    previewUsers: [aliceAuthor],
+                    previewTruncated: false,
+                },
+            ],
+        });
+
+        expect(
+            state.messagesByConversationId.get(1)?.byId.get(5)?.reactions
+        ).toEqual([
+            {
+                emoji: '👍',
+                count: 1,
+                reactedByMe: true,
+                previewUsers: [aliceAuthor],
+                previewTruncated: false,
+            },
+        ]);
+        expect(state.messagesByConversationId.get(1)?.byId.get(5)?.body).toBe(
+            'hello'
+        );
+    });
+
+    it('MESSAGE_REACTIONS_UPDATED ignores unloaded messages', () => {
+        const state = conversationsReducer(initialConversationsState(), {
+            type: 'MESSAGE_REACTIONS_UPDATED',
+            conversationId: 1,
+            messageId: 5,
+            ownership: 'authoritative',
+            reactions: [],
+        });
 
         expect(state).toEqual(initialConversationsState());
     });

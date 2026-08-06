@@ -466,6 +466,27 @@ export const fr: LanguageTranslation = {
                             edit: 'Modifier',
                             delete: 'Supprimer',
                         },
+                        reactions: {
+                            add_aria: 'Ajouter une réaction',
+                            add_tooltip: 'Ajouter une réaction',
+                            picker_loading: 'Chargement du sélecteur d’emoji…',
+                            picker_aria_label: 'Sélecteur d’emoji',
+                            picker_search_placeholder: 'Rechercher un emoji…',
+                            picker_empty: 'Aucun emoji trouvé.',
+                            chip_aria: 'Réaction {{emoji}}, {{count}}',
+                            preview_and_others_one: 'et {{count}} autre',
+                            preview_and_others_other: 'et {{count}} autres',
+                            errors: {
+                                generic:
+                                    'Impossible de mettre à jour la réaction. Veuillez réessayer.',
+                                forbidden:
+                                    'Vous n’êtes pas autorisé à réagir à ce message.',
+                                archived:
+                                    'Cette conversation est archivée et les réactions sont en lecture seule.',
+                                not_found: 'Ce message n’est plus disponible.',
+                                invalid_emoji: 'Cet emoji n’est pas valide.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'Message',

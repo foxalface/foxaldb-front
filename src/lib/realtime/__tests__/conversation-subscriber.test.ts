@@ -5,6 +5,7 @@ import {
     DIAGRAM_CONVERSATION_CREATED_EVENT,
     DIAGRAM_CONVERSATION_DELETED_EVENT,
     DIAGRAM_CONVERSATION_MESSAGE_CREATED_EVENT,
+    DIAGRAM_CONVERSATION_MESSAGE_REACTIONS_UPDATED_EVENT,
 } from '../conversation-events';
 import type { DiagramPrivateEventChannel } from '../diagram-private-channel';
 import { subscribeToDiagramConversationEvents } from '../conversation-subscriber';
@@ -76,7 +77,7 @@ const baseConversation = (
 });
 
 describe('subscribeToDiagramConversationEvents', () => {
-    it('subscribes to all seven conversation event names', () => {
+    it('subscribes to all eight conversation event names', () => {
         const channel = createFakeChannel();
 
         subscribeToDiagramConversationEvents({
@@ -85,7 +86,7 @@ describe('subscribeToDiagramConversationEvents', () => {
             dispatch: vi.fn(),
         });
 
-        expect(channel.listeners.size).toBe(7);
+        expect(channel.listeners.size).toBe(8);
         expect(channel.listeners.has(DIAGRAM_CONVERSATION_CREATED_EVENT)).toBe(
             true
         );
@@ -149,6 +150,7 @@ describe('subscribeToDiagramConversationEvents', () => {
             user: buildUserIdentity(7, 'Alice', 'Martin'),
             createdAt: '2026-07-19T11:00:00.000Z',
             updatedAt: '2026-07-19T11:00:00.000Z',
+            reactions: [],
         };
 
         subscribeToDiagramConversationEvents({
@@ -185,6 +187,49 @@ describe('subscribeToDiagramConversationEvents', () => {
 
         cleanup();
 
-        expect(stopListening).toHaveBeenCalledTimes(7);
+        expect(stopListening).toHaveBeenCalledTimes(8);
+    });
+
+    it('dispatches MESSAGE_REACTIONS_UPDATED for valid reaction snapshots', () => {
+        const channel = createFakeChannel();
+        const dispatch = vi.fn();
+
+        subscribeToDiagramConversationEvents({
+            channel,
+            diagramId: '42',
+            dispatch,
+            getCurrentUserId: () => 7,
+        });
+
+        channel.emit(DIAGRAM_CONVERSATION_MESSAGE_REACTIONS_UPDATED_EVENT, {
+            diagramId: 42,
+            conversationId: 10,
+            messageId: 99,
+            reactions: [
+                {
+                    emoji: '👍',
+                    count: 2,
+                    previewUsers: [],
+                    previewTruncated: false,
+                },
+            ],
+            userId: 7,
+        });
+
+        expect(dispatch).toHaveBeenCalledWith({
+            type: 'MESSAGE_REACTIONS_UPDATED',
+            conversationId: 10,
+            messageId: 99,
+            reactions: [
+                {
+                    emoji: '👍',
+                    count: 2,
+                    previewUsers: [],
+                    previewTruncated: false,
+                },
+            ],
+            ownership: 'reconcile',
+            currentUserId: 7,
+        });
     });
 });

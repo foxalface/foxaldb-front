@@ -462,6 +462,27 @@ export const te: LanguageTranslation = {
                             edit: 'సవరించు',
                             delete: 'తొలగించు',
                         },
+                        reactions: {
+                            add_aria: 'ప్రతిస్పందన జోడించండి',
+                            add_tooltip: 'ప్రతిస్పందన జోడించండి',
+                            picker_loading: 'ఎమోజీ పికర్ లోడ్ అవుతోంది…',
+                            picker_aria_label: 'ఎమోజీ పికర్',
+                            picker_search_placeholder: 'ఎమోజీ వెతకండి…',
+                            picker_empty: 'ఎమోజీ కనుగొనబడలేదు.',
+                            chip_aria: '{{emoji}} ప్రతిస్పందన, {{count}}',
+                            preview_and_others_one: 'మరియు మరో {{count}}',
+                            preview_and_others_other: 'మరియు మరో {{count}}',
+                            errors: {
+                                generic:
+                                    'ప్రతిస్పందనను నవీకరించలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                                forbidden:
+                                    'ఈ సందేశానికి ప్రతిస్పందించే అనుమతి మీకు లేదు.',
+                                archived:
+                                    'ఈ సంభాషణ ఆర్కైవ్ చేయబడింది, ప్రతిస్పందనలు చదవడానికి మాత్రమే.',
+                                not_found: 'ఈ సందేశం ఇప్పుడు అందుబాటులో లేదు.',
+                                invalid_emoji: 'ఈ ఎమోజీ చెల్లదు.',
+                            },
+                        },
                     },
                     composer: {
                         label: 'సందేశం',
