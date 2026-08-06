@@ -10,6 +10,21 @@ import TimeAgo from 'timeago-react';
 import { useTranslation } from 'react-i18next';
 import { register as registerLocale } from 'timeago.js';
 import { Avatar, AvatarFallback } from '@/components/avatar/avatar';
+import {
+    ConversationMessage,
+    ConversationMessageAuthor,
+    ConversationMessageAvatar,
+    ConversationMessageBody,
+    ConversationMessageBodyText,
+    ConversationMessageContent,
+    ConversationMessageFooter,
+    ConversationMessageHeader,
+    ConversationMessageHeaderMeta,
+    ConversationMessageHeaderTitleRow,
+    ConversationMessageLayout,
+    ConversationMessageReactionTrigger,
+    ConversationMessageReactions,
+} from '@/components/conversation-message';
 import { useAuth } from '@/hooks/use-auth';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { getConversationMessageCapabilities } from '@/lib/conversations/conversation-message-capabilities';
@@ -79,6 +94,10 @@ export const ConversationMessageItem: React.FC<
     const shouldRestoreDeleteFocusRef = useRef(false);
 
     const isEditing = editingMessageId === message.id;
+    const isCurrentUser =
+        user?.id !== undefined &&
+        message.user?.id !== undefined &&
+        user.id === message.user.id;
 
     const capabilities = useMemo(
         () =>
@@ -176,23 +195,25 @@ export const ConversationMessageItem: React.FC<
     }, [onEditSaved]);
 
     return (
-        <article
-            className="flex flex-col gap-1.5 px-1 py-3"
+        <ConversationMessage
+            isCurrentUser={isCurrentUser}
             data-testid={`conversation-message-${message.id}`}
         >
-            <div className="flex min-w-0 items-start gap-2">
-                <Avatar className="size-7 shrink-0" aria-hidden="true">
-                    <AvatarFallback className="text-[10px] font-medium">
-                        {initials}
-                    </AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                    <div className="flex min-w-0 items-start justify-between gap-2">
-                        <div className="min-w-0 flex-1">
-                            <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
-                                <span className="truncate text-sm font-medium text-foreground">
+            <ConversationMessageLayout>
+                <ConversationMessageAvatar>
+                    <Avatar className="size-7" aria-hidden="true">
+                        <AvatarFallback className="text-[10px] font-medium">
+                            {initials}
+                        </AvatarFallback>
+                    </Avatar>
+                </ConversationMessageAvatar>
+                <ConversationMessageContent isCurrentUser={isCurrentUser}>
+                    <ConversationMessageHeader>
+                        <ConversationMessageHeaderMeta>
+                            <ConversationMessageHeaderTitleRow>
+                                <ConversationMessageAuthor>
                                     {displayName}
-                                </span>
+                                </ConversationMessageAuthor>
                                 {parsedCreatedAt ? (
                                     <time
                                         className="shrink-0 text-xs text-muted-foreground"
@@ -217,8 +238,8 @@ export const ConversationMessageItem: React.FC<
                                         )}
                                     </span>
                                 ) : null}
-                            </div>
-                        </div>
+                            </ConversationMessageHeaderTitleRow>
+                        </ConversationMessageHeaderMeta>
                         {!isEditing ? (
                             <ConversationMessageActionsMenu
                                 ref={actionsTriggerRef}
@@ -228,7 +249,7 @@ export const ConversationMessageItem: React.FC<
                                 onDelete={handleDelete}
                             />
                         ) : null}
-                    </div>
+                    </ConversationMessageHeader>
                     {isEditing ? (
                         <ConversationMessageEditForm
                             message={message}
@@ -238,12 +259,18 @@ export const ConversationMessageItem: React.FC<
                             onSaved={handleSavedEdit}
                         />
                     ) : (
-                        <p className="mt-1 whitespace-pre-wrap break-words text-sm text-foreground [overflow-wrap:anywhere]">
-                            {message.body}
-                        </p>
+                        <ConversationMessageBody isCurrentUser={isCurrentUser}>
+                            <ConversationMessageBodyText>
+                                {message.body}
+                            </ConversationMessageBodyText>
+                        </ConversationMessageBody>
                     )}
-                </div>
-            </div>
+                    <ConversationMessageFooter>
+                        <ConversationMessageReactions />
+                        <ConversationMessageReactionTrigger />
+                    </ConversationMessageFooter>
+                </ConversationMessageContent>
+            </ConversationMessageLayout>
             {capabilities.canDelete ? (
                 <ConversationMessageDeleteDialog
                     conversationId={conversationId}
@@ -255,6 +282,6 @@ export const ConversationMessageItem: React.FC<
                     onCloseAutoFocus={handleDeleteCloseAutoFocus}
                 />
             ) : null}
-        </article>
+        </ConversationMessage>
     );
 };
