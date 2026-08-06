@@ -34,6 +34,10 @@ import { useCanvas } from '@/hooks/use-canvas';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { arrangeTablesForArea } from '@/lib/utils/area-utils';
+import {
+    SIDE_PANEL_ACTION_MENU_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
+} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 
 export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
     children,
@@ -313,41 +317,41 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             <ContextMenuContent>
                 <ContextMenuItem
                     onClick={createTableHandler}
-                    className="flex justify-between gap-4"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
+                    <Table className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     {t('canvas_context_menu.new_table')}
-                    <Table className="size-3.5" />
                 </ContextMenuItem>
                 {showDBViews ? (
                     <ContextMenuItem
                         onClick={createViewHandler}
-                        className="flex justify-between gap-4"
+                        className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                     >
+                        <View className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                         {t('canvas_context_menu.new_view')}
-                        <View className="size-3.5" />
                     </ContextMenuItem>
                 ) : null}
                 <ContextMenuItem
                     onClick={createRelationshipHandler}
-                    className="flex justify-between gap-4"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
+                    <Workflow className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     {t('canvas_context_menu.new_relationship')}
-                    <Workflow className="size-3.5" />
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem
                     onClick={createAreaHandler}
-                    className="flex justify-between gap-4"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
+                    <Group className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     {t('canvas_context_menu.new_area')}
-                    <Group className="size-3.5" />
                 </ContextMenuItem>
                 <ContextMenuItem
                     onClick={createNoteHandler}
-                    className="flex justify-between gap-4"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
+                    <StickyNote className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     {t('canvas_context_menu.new_note')}
-                    <StickyNote className="size-3.5" />
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 {showDiagramConversationAction ? (
@@ -358,8 +362,11 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                                 void openDiagramConversation();
                             }}
                             disabled={isDiagramConversationPending}
-                            className="flex justify-between gap-4"
+                            className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                         >
+                            <SlBubbles
+                                className={SIDE_PANEL_ACTION_MENU_ICON_CLASS}
+                            />
                             {hasDiagramConversation
                                 ? t(
                                       'side_panel.conversations_section.target_entry.open'
@@ -371,37 +378,44 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                                   : t(
                                         'side_panel.conversations_section.target_entry.start'
                                     )}
-                            <SlBubbles className="size-3.5" />
                         </ContextMenuItem>
                         <ContextMenuSeparator />
                     </>
                 ) : null}
                 <ContextMenuItem
                     onClick={importSqlDbmlHandler}
-                    className="flex justify-between gap-4"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
+                    <Import className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     Import SQL/DBML
-                    <Import className="size-3.5" />
                 </ContextMenuItem>
                 {hasSelectedTables && (
                     <>
                         <ContextMenuSeparator />
                         <ContextMenuSub>
-                            <ContextMenuSubTrigger className="flex items-center gap-3">
-                                <span>
-                                    {`${t('table_node_context_menu.move_to_area')} (${selectedTableIds.length})`}
-                                </span>
-                                <SquareArrowOutUpRight className="ml-auto size-3.5" />
+                            <ContextMenuSubTrigger
+                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
+                            >
+                                <SquareArrowOutUpRight
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                    }
+                                />
+                                {`${t('table_node_context_menu.move_to_area')} (${selectedTableIds.length})`}
                             </ContextMenuSubTrigger>
                             <ContextMenuSubContent>
                                 <ContextMenuItem
                                     onClick={createAreaForSelectedHandler}
-                                    className="flex items-center gap-2"
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_ITEM_CLASS
+                                    }
                                 >
-                                    <Plus className="size-3.5" />
-                                    <span>
-                                        {t('canvas_context_menu.new_area')}
-                                    </span>
+                                    <Plus
+                                        className={
+                                            SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                        }
+                                    />
+                                    {t('canvas_context_menu.new_area')}
                                 </ContextMenuItem>
                                 {areas.length > 0 && <ContextMenuSeparator />}
                                 {areas.map((area) => (
@@ -410,7 +424,9 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                                         onClick={() =>
                                             moveSelectedToArea(area.id)
                                         }
-                                        className="flex items-center gap-2"
+                                        className={
+                                            SIDE_PANEL_ACTION_MENU_ITEM_CLASS
+                                        }
                                     >
                                         <div
                                             className="size-2.5 shrink-0 rounded-full"
@@ -418,7 +434,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                                                 backgroundColor: area.color,
                                             }}
                                         />
-                                        <span>{area.name}</span>
+                                        {area.name}
                                     </ContextMenuItem>
                                 ))}
                             </ContextMenuSubContent>
@@ -428,10 +444,10 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                 <ContextMenuSeparator />
                 <ContextMenuItem
                     onClick={autoArrangeHandler}
-                    className="flex justify-between gap-4"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
+                    <LayoutGrid className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     {t('toolbar.reorder_diagram')}
-                    <LayoutGrid className="size-3.5" />
                 </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>

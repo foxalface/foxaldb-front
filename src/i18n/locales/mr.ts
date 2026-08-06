@@ -409,6 +409,28 @@ export const mr: LanguageTranslation = {
                     no_messages: 'अद्याप संदेश नाहीत',
                     last_activity: 'शेवटची क्रियाकलाप',
                     open_aria: '{{target}} साठी संभाषण उघडा',
+                    author_tooltip: '{{name}} चा शेवटचा संदेश',
+                    author_missing_tooltip: 'लेखकाची माहिती नाही',
+                    actions: {
+                        menu_aria: 'संभाषण पर्याय',
+                        open: 'उघडा',
+                        delete: 'हटवा',
+                    },
+                    delete_dialog: {
+                        title: 'संभाषण हटवायचे?',
+                        description:
+                            'हे संभाषण आणि त्यातील सर्व संदेश कायमस्वरूपी हटवेल.',
+                        cancel: 'रद्द करा',
+                        confirm: 'हटवा',
+                        deleting: 'हटवत आहे…',
+                        errors: {
+                            delete_failed:
+                                'हे संभाषण हटवता आले नाही. कृपया पुन्हा प्रयत्न करा.',
+                            forbidden:
+                                'हे संभाषण हटवण्याची तुमची परवानगी नाही.',
+                            not_found: 'हे संभाषण आता उपलब्ध नाही.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'मागे',

@@ -408,6 +408,29 @@ export const pt_BR: LanguageTranslation = {
                     no_messages: 'Ainda não há mensagens',
                     last_activity: 'Última atividade',
                     open_aria: 'Abrir conversa de {{target}}',
+                    author_tooltip: 'Última mensagem de {{name}}',
+                    author_missing_tooltip: 'Sem informações do autor',
+                    actions: {
+                        menu_aria: 'Opções da conversa',
+                        open: 'Abrir',
+                        delete: 'Excluir',
+                    },
+                    delete_dialog: {
+                        title: 'Excluir conversa?',
+                        description:
+                            'Isso excluirá permanentemente esta conversa e todas as suas mensagens.',
+                        cancel: 'Cancelar',
+                        confirm: 'Excluir',
+                        deleting: 'Excluindo…',
+                        errors: {
+                            delete_failed:
+                                'Não foi possível excluir esta conversa. Tente novamente.',
+                            forbidden:
+                                'Você não tem permissão para excluir esta conversa.',
+                            not_found:
+                                'Esta conversa não está mais disponível.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Voltar',

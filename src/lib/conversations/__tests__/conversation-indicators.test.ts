@@ -23,7 +23,7 @@ const conversation = (
     archivedAt: null,
     messageCount: 0,
     lastMessageAt: null,
-    lastMessagePreview: null,
+    lastMessageBody: null,
     lastMessageAuthor: aliceAuthor,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T11:00:00.000Z`,

@@ -140,7 +140,7 @@ const parseDiagramConversation = (
         archivedAt,
         messageCount,
         lastMessageAt,
-        lastMessagePreview,
+        lastMessageBody,
         lastMessageAuthor,
         createdAt,
         updatedAt,
@@ -174,7 +174,7 @@ const parseDiagramConversation = (
         return null;
     }
 
-    if (!isNullableString(lastMessagePreview)) {
+    if (!isNullableString(lastMessageBody)) {
         return null;
     }
 
@@ -197,7 +197,7 @@ const parseDiagramConversation = (
         archivedAt,
         messageCount,
         lastMessageAt,
-        lastMessagePreview,
+        lastMessageBody,
         lastMessageAuthor: parsedLastMessageAuthor,
         createdAt,
         updatedAt,

@@ -12,6 +12,11 @@ import { arrangeTablesForArea } from '@/lib/utils/area-utils';
 import { LayoutGrid, Pencil, Trash2 } from 'lucide-react';
 import React, { useCallback } from 'react';
 import { useReactFlow } from '@xyflow/react';
+import {
+    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
+} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 
 export interface AreaNodeContextMenuProps {
     area: Area;
@@ -85,26 +90,30 @@ export const AreaNodeContextMenu: React.FC<
                 {onEditName ? (
                     <ContextMenuItem
                         onClick={onEditName}
-                        className="flex justify-between gap-3"
+                        className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                     >
-                        <span>Edit Area Name</span>
-                        <Pencil className="size-3.5" />
+                        <Pencil className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
+                        Edit Area Name
                     </ContextMenuItem>
                 ) : null}
                 <ContextMenuItem
                     onClick={autoArrangeHandler}
-                    className="flex justify-between gap-3"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
-                    <span>Auto Arrange</span>
-                    <LayoutGrid className="size-3.5" />
+                    <LayoutGrid className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
+                    Auto Arrange
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem
                     onClick={removeAreaHandler}
-                    className="flex justify-between gap-3"
+                    className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} !text-red-700`}
                 >
-                    <span>Delete Area</span>
-                    <Trash2 className="size-3.5 text-red-700" />
+                    <Trash2
+                        className={
+                            SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
+                        }
+                    />
+                    Delete Area
                 </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>

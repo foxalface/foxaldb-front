@@ -41,6 +41,7 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
         isMutationPending,
         handleArchive,
         handleReopen,
+        handleDelete,
         handleLoadMoreActive,
         handleLoadMoreArchived,
         handleRetry,
@@ -163,6 +164,9 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
                             onArchive={(conversationId) => {
                                 void handleArchive(conversationId);
                             }}
+                            onDelete={(conversationId) =>
+                                handleDelete(conversationId)
+                            }
                             onLoadMore={() => {
                                 void handleLoadMoreActive();
                             }}
@@ -195,6 +199,9 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
                             onReopen={(conversationId) => {
                                 void handleReopen(conversationId);
                             }}
+                            onDelete={(conversationId) =>
+                                handleDelete(conversationId)
+                            }
                             onLoadMore={() => {
                                 void handleLoadMoreArchived();
                             }}

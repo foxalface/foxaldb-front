@@ -408,6 +408,27 @@ export const ja: LanguageTranslation = {
                     no_messages: 'メッセージはまだありません',
                     last_activity: '最終アクティビティ',
                     open_aria: '{{target}} の会話を開く',
+                    author_tooltip: '{{name}} の最新メッセージ',
+                    author_missing_tooltip: '作成者情報がありません',
+                    actions: {
+                        menu_aria: '会話のオプション',
+                        open: '開く',
+                        delete: '削除',
+                    },
+                    delete_dialog: {
+                        title: '会話を削除しますか？',
+                        description:
+                            'この会話とすべてのメッセージが完全に削除されます。',
+                        cancel: 'キャンセル',
+                        confirm: '削除',
+                        deleting: '削除中…',
+                        errors: {
+                            delete_failed:
+                                'この会話を削除できませんでした。もう一度お試しください。',
+                            forbidden: 'この会話を削除する権限がありません。',
+                            not_found: 'この会話は利用できなくなりました。',
+                        },
+                    },
                 },
                 detail: {
                     back: '戻る',

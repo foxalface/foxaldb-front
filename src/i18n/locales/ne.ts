@@ -406,6 +406,28 @@ export const ne: LanguageTranslation = {
                     no_messages: 'अहिलेसम्म कुनै सन्देश छैन',
                     last_activity: 'अन्तिम गतिविधि',
                     open_aria: '{{target}} को लागि कुराकानी खोल्नुहोस्',
+                    author_tooltip: '{{name}} को अन्तिम सन्देश',
+                    author_missing_tooltip: 'लेखकको जानकारी छैन',
+                    actions: {
+                        menu_aria: 'कुराकानी विकल्पहरू',
+                        open: 'खोल्नुहोस्',
+                        delete: 'मेटाउनुहोस्',
+                    },
+                    delete_dialog: {
+                        title: 'कुराकानी मेटाउने?',
+                        description:
+                            'यसले यो कुराकानी र यसका सबै सन्देशहरू स्थायी रूपमा मेटाउनेछ।',
+                        cancel: 'रद्द गर्नुहोस्',
+                        confirm: 'मेटाउनुहोस्',
+                        deleting: 'मेटाउँदै…',
+                        errors: {
+                            delete_failed:
+                                'यो कुराकानी मेटाउन सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
+                            forbidden:
+                                'तपाईंसँग यो कुराकानी मेटाउने अनुमति छैन।',
+                            not_found: 'यो कुराकानी अब उपलब्ध छैन।',
+                        },
+                    },
                 },
                 detail: {
                     back: 'पछाडि',

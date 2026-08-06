@@ -22,7 +22,7 @@ const conversation = (
     archivedAt: null,
     messageCount: 0,
     lastMessageAt: null,
-    lastMessagePreview: null,
+    lastMessageBody: null,
     lastMessageAuthor: null,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T11:00:00.000Z`,
@@ -83,13 +83,15 @@ describe('conversationsReducer', () => {
                 conversation: conversation({
                     id: 1,
                     messageCount: 3,
-                    lastMessagePreview: 'Updated',
+                    lastMessageBody: 'Updated full body',
                 }),
             }
         );
 
         expect(state.summariesById.get(1)?.messageCount).toBe(3);
-        expect(state.summariesById.get(1)?.lastMessagePreview).toBe('Updated');
+        expect(state.summariesById.get(1)?.lastMessageBody).toBe(
+            'Updated full body'
+        );
     });
 
     it('CONVERSATION_REMOVED deletes summary and message slice', () => {

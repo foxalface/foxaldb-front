@@ -26,4 +26,14 @@
 
     .nodrag {
     }
+
+    .conversation-summary-preview {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        text-overflow: ellipsis;
+    }
 }

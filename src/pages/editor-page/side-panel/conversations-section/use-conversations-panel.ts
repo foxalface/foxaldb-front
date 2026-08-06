@@ -45,6 +45,7 @@ export interface UseConversationsPanelResult {
     isMutationPending: (conversationId: number) => boolean;
     handleArchive: (conversationId: number) => Promise<void>;
     handleReopen: (conversationId: number) => Promise<void>;
+    handleDelete: (conversationId: number) => Promise<void>;
     handleLoadMoreActive: () => Promise<void>;
     handleLoadMoreArchived: () => Promise<void>;
     handleRetry: () => Promise<void>;
@@ -65,7 +66,7 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
         loadMoreActiveSummaries,
         loadMoreArchivedSummaries,
     } = useDiagramConversations();
-    const { archiveConversation, reopenConversation } =
+    const { archiveConversation, reopenConversation, deleteConversation } =
         useConversationMutations();
     const { conversationNavigationIntent, clearConversationNavigationIntent } =
         useLayout();
@@ -236,6 +237,41 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
         [reopenConversation, runMutation]
     );
 
+    const handleDelete = useCallback(
+        async (conversationId: number): Promise<void> => {
+            if (pendingMutations.has(conversationId)) {
+                return;
+            }
+
+            if (selectedConversationId === conversationId) {
+                clearSelectedConversation();
+            }
+
+            setMutationError(null);
+            setPendingMutations((current) => {
+                const next = new Set(current);
+                next.add(conversationId);
+                return next;
+            });
+
+            try {
+                await deleteConversation(conversationId);
+            } finally {
+                setPendingMutations((current) => {
+                    const next = new Set(current);
+                    next.delete(conversationId);
+                    return next;
+                });
+            }
+        },
+        [
+            clearSelectedConversation,
+            deleteConversation,
+            pendingMutations,
+            selectedConversationId,
+        ]
+    );
+
     const handleLoadMoreActive = useCallback(async (): Promise<void> => {
         if (isLoadingMoreActive || activeSummariesNextCursor === null) {
             return;
@@ -319,6 +355,7 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
         isMutationPending,
         handleArchive,
         handleReopen,
+        handleDelete,
         handleLoadMoreActive,
         handleLoadMoreArchived,
         handleRetry,

@@ -23,7 +23,7 @@ const buildActiveConversation = (
     archivedAt: null,
     messageCount: 2,
     lastMessageAt: '2026-01-02T12:00:00.000Z',
-    lastMessagePreview: 'Latest update',
+    lastMessageBody: 'Latest update',
     lastMessageAuthor: aliceWonderAuthor,
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-02T12:00:00.000Z',
@@ -153,6 +153,14 @@ vi.mock('react-i18next', () => ({
 }));
 
 import { ConversationsSection } from '../conversations-section';
+import { TooltipProvider } from '@/components/tooltip/tooltip';
+
+const renderSection = () =>
+    render(
+        <TooltipProvider>
+            <ConversationsSection />
+        </TooltipProvider>
+    );
 
 const resetState = () => {
     conversationsState.current = {
@@ -187,7 +195,7 @@ describe('ConversationsSection', () => {
             buildActiveConversation(),
         ];
 
-        render(<ConversationsSection />);
+        renderSection();
 
         expect(screen.getByRole('tab', { name: 'Active' })).toBeInTheDocument();
         expect(
@@ -212,12 +220,13 @@ describe('ConversationsSection', () => {
         ).not.toBeNull();
         expect(screen.getByText('Clients')).toBeInTheDocument();
         expect(screen.getByText('Latest update')).toBeInTheDocument();
-        expect(screen.getByText('2 messages')).toBeInTheDocument();
+        expect(screen.getByText('2')).toBeInTheDocument();
+        expect(screen.queryByText('2 messages')).not.toBeInTheDocument();
     });
 
     it('lazy-loads archived summaries when switching to the Archived tab', async () => {
         const user = userEvent.setup();
-        render(<ConversationsSection />);
+        renderSection();
 
         await user.click(screen.getByRole('tab', { name: 'Archived' }));
 
@@ -230,7 +239,7 @@ describe('ConversationsSection', () => {
 
     it('does not reload archived summaries when switching tabs again', async () => {
         const user = userEvent.setup();
-        render(<ConversationsSection />);
+        renderSection();
 
         await user.click(screen.getByRole('tab', { name: 'Archived' }));
         await waitFor(() => {
@@ -254,7 +263,7 @@ describe('ConversationsSection', () => {
         ];
         conversationsState.current.activeSummariesNextCursor = 'cursor-1';
 
-        render(<ConversationsSection />);
+        renderSection();
 
         await user.click(screen.getByRole('button', { name: 'Load more' }));
 
@@ -272,7 +281,7 @@ describe('ConversationsSection', () => {
         ];
         conversationsState.current.archivedSummariesNextCursor = 'cursor-2';
 
-        render(<ConversationsSection />);
+        renderSection();
         await user.click(screen.getByRole('tab', { name: 'Archived' }));
 
         await waitFor(() => {
@@ -296,13 +305,12 @@ describe('ConversationsSection', () => {
             buildActiveConversation(),
         ];
 
-        render(<ConversationsSection />);
+        renderSection();
 
         await user.click(
-            screen.getByRole('button', {
-                name: 'Archive conversation for Clients',
-            })
+            screen.getByRole('button', { name: 'Conversation options' })
         );
+        await user.click(screen.getByRole('menuitem', { name: 'Archive' }));
 
         await waitFor(() => {
             expect(mutationsState.archiveConversation).toHaveBeenCalledWith(10);
@@ -315,18 +323,13 @@ describe('ConversationsSection', () => {
             buildArchivedConversation(),
         ];
 
-        render(<ConversationsSection />);
+        renderSection();
         await user.click(screen.getByRole('tab', { name: 'Archived' }));
 
-        await waitFor(() => {
-            expect(screen.getByText('Read-only')).toBeInTheDocument();
-        });
-
         await user.click(
-            screen.getByRole('button', {
-                name: 'Reopen conversation for Clients',
-            })
+            screen.getByRole('button', { name: 'Conversation options' })
         );
+        await user.click(screen.getByRole('menuitem', { name: 'Reopen' }));
 
         await waitFor(() => {
             expect(mutationsState.reopenConversation).toHaveBeenCalledWith(20);
@@ -336,14 +339,14 @@ describe('ConversationsSection', () => {
     it('shows a loading state for the initial active load', () => {
         conversationsState.current.status = 'loading';
 
-        render(<ConversationsSection />);
+        renderSection();
 
         expect(screen.getByRole('status')).toBeInTheDocument();
         expect(screen.getByText('Loading conversations…')).toBeInTheDocument();
     });
 
     it('shows an empty state when there are no active conversations', () => {
-        render(<ConversationsSection />);
+        renderSection();
 
         expect(screen.getByText('No conversation')).toBeInTheDocument();
         expect(
@@ -399,7 +402,7 @@ describe('ConversationsSection', () => {
 
     it('keeps archive-specific empty-state copy on the Archived tab', async () => {
         const user = userEvent.setup();
-        render(<ConversationsSection />);
+        renderSection();
 
         await user.click(screen.getByRole('tab', { name: 'Archived' }));
 
@@ -421,7 +424,7 @@ describe('ConversationsSection', () => {
         conversationsState.current.status = 'error';
         conversationsState.current.reload = vi.fn(async () => undefined);
 
-        render(<ConversationsSection />);
+        renderSection();
 
         expect(
             screen.getByText('Could not load conversations')
@@ -447,16 +450,17 @@ describe('ConversationsSection', () => {
                 })
         );
 
-        render(<ConversationsSection />);
+        renderSection();
 
-        const archiveButton = screen.getByRole('button', {
-            name: 'Archive conversation for Clients',
+        const optionsButton = screen.getByRole('button', {
+            name: 'Conversation options',
         });
-        await user.click(archiveButton);
+        await user.click(optionsButton);
+        await user.click(screen.getByRole('menuitem', { name: 'Archive' }));
 
         await waitFor(() => {
-            expect(archiveButton).toBeDisabled();
-            expect(archiveButton).toHaveTextContent('Archiving…');
+            expect(mutationsState.archiveConversation).toHaveBeenCalledTimes(1);
+            expect(optionsButton).toBeDisabled();
         });
 
         resolveArchive?.();
@@ -465,7 +469,7 @@ describe('ConversationsSection', () => {
     it('shows inactive messaging when conversations are unavailable', () => {
         conversationsState.current.isActive = false;
 
-        render(<ConversationsSection />);
+        renderSection();
 
         expect(
             screen.getByText('Conversations unavailable')
@@ -505,6 +509,9 @@ describe('ConversationsSection', () => {
             'conversations-section.tsx',
             'conversations-list.tsx',
             'conversation-summary-item.tsx',
+            'conversation-summary-actions-menu.tsx',
+            'conversation-summary-delete-dialog.tsx',
+            'use-conversation-delete-session.ts',
             'use-conversations-panel.ts',
             'conversation-detail.tsx',
             'conversation-detail-header.tsx',

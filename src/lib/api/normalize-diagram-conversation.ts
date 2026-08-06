@@ -86,8 +86,8 @@ export const normalizeDiagramConversationFromApi = (
         throw invalidPayload('last_message_at must be a string or null');
     }
 
-    if (!isNullableString(conversation.last_message_preview)) {
-        throw invalidPayload('last_message_preview must be a string or null');
+    if (!isNullableString(conversation.last_message_body)) {
+        throw invalidPayload('last_message_body must be a string or null');
     }
 
     let lastMessageAuthor: DiagramConversation['lastMessageAuthor'] = null;
@@ -121,7 +121,7 @@ export const normalizeDiagramConversationFromApi = (
         archivedAt: conversation.archived_at,
         messageCount: conversation.message_count,
         lastMessageAt: conversation.last_message_at,
-        lastMessagePreview: conversation.last_message_preview,
+        lastMessageBody: conversation.last_message_body,
         lastMessageAuthor,
         createdAt: conversation.created_at,
         updatedAt: conversation.updated_at,

@@ -395,6 +395,25 @@ export const zh_TW: LanguageTranslation = {
                     no_messages: '尚無訊息',
                     last_activity: '最近活動',
                     open_aria: '開啟 {{target}} 的對話',
+                    author_tooltip: '{{name}} 的最新訊息',
+                    author_missing_tooltip: '無作者資訊',
+                    actions: {
+                        menu_aria: '對話選項',
+                        open: '開啟',
+                        delete: '刪除',
+                    },
+                    delete_dialog: {
+                        title: '刪除對話？',
+                        description: '這將永久刪除此對話及其所有訊息。',
+                        cancel: '取消',
+                        confirm: '刪除',
+                        deleting: '正在刪除…',
+                        errors: {
+                            delete_failed: '無法刪除此對話。請再試一次。',
+                            forbidden: '您沒有刪除此對話的權限。',
+                            not_found: '此對話已無法使用。',
+                        },
+                    },
                 },
                 detail: {
                     back: '返回',

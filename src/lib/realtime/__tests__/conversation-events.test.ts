@@ -25,7 +25,7 @@ const baseConversation = (
     archivedAt: null,
     messageCount: 1,
     lastMessageAt: '2026-07-19T10:00:00.000Z',
-    lastMessagePreview: 'Hello',
+    lastMessageBody: 'Hello',
     lastMessageAuthor: buildUserIdentity(7, 'Alice', 'Martin'),
     createdAt: '2026-07-19T10:00:00.000Z',
     updatedAt: '2026-07-19T10:05:00.000Z',

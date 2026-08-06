@@ -16,10 +16,12 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
+import {
+    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
+} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { mergeRefs } from '@/lib/utils';
@@ -75,21 +77,19 @@ export const NoteListItem = React.forwardRef<HTMLDivElement, NoteListItemProps>(
                         </ListItemHeaderButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-fit min-w-40">
-                        <DropdownMenuLabel>
-                            {t(
-                                'side_panel.notes_section.note.note_actions.title'
-                            )}
-                        </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem
                                 onClick={handleDelete}
-                                className="flex justify-between !text-red-700"
+                                className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} !text-red-700`}
                             >
+                                <Trash2
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
+                                    }
+                                />
                                 {t(
                                     'side_panel.notes_section.note.note_actions.delete_note'
                                 )}
-                                <Trash2 className="size-3.5 text-red-700" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     </DropdownMenuContent>

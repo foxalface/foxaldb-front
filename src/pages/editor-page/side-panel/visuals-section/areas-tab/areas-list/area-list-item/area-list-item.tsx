@@ -25,10 +25,14 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
+import {
+    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
+} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import { mergeRefs } from '@/lib/utils';
 import { useFocusOn } from '@/hooks/use-focus-on';
@@ -109,36 +113,38 @@ export const AreaListItem = React.forwardRef<HTMLDivElement, AreaListItemProps>(
                         </ListItemHeaderButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-fit min-w-40">
-                        <DropdownMenuLabel>
-                            {t(
-                                'side_panel.areas_section.area.area_actions.title'
-                            )}
-                        </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem
-                                className="flex justify-between gap-4"
+                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     enterEditMode(e);
                                 }}
                             >
+                                <Pencil
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                    }
+                                />
                                 {t(
                                     'side_panel.areas_section.area.area_actions.edit_name'
                                 )}
-                                <Pencil className="size-3.5" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem
                                 onClick={handleDelete}
-                                className="flex justify-between !text-red-700"
+                                className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} !text-red-700`}
                             >
+                                <Trash2
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
+                                    }
+                                />
                                 {t(
                                     'side_panel.areas_section.area.area_actions.delete_area'
                                 )}
-                                <Trash2 className="size-3.5 text-red-700" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     </DropdownMenuContent>

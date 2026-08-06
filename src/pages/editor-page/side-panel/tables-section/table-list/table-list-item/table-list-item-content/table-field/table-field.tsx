@@ -71,7 +71,7 @@ export const TableField: React.FC<TableFieldProps> = ({
 
     return (
         <div
-            className="flex flex-1 touch-none flex-row justify-between gap-2 p-1"
+            className="group flex flex-1 touch-none flex-row justify-between gap-2 p-1"
             ref={setNodeRef}
             style={style}
             onFocus={
@@ -168,10 +168,15 @@ export const TableField: React.FC<TableFieldProps> = ({
             </div>
             <div className="flex shrink-0 items-center justify-end gap-1">
                 {conversationsAvailable ? (
-                    <ConversationIndicator
-                        target={{ targetType: 'field', targetId: field.id }}
-                        targetName={field.name}
-                    />
+                    <div className="hidden shrink-0 group-focus-within:flex group-hover:flex">
+                        <ConversationIndicator
+                            target={{
+                                targetType: 'field',
+                                targetId: field.id,
+                            }}
+                            targetName={field.name}
+                        />
+                    </div>
                 ) : null}
                 <Tooltip>
                     <TooltipTrigger asChild>

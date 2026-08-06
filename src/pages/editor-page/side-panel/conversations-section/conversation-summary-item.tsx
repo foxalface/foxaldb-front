@@ -1,14 +1,30 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { History, MessageSquare, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Archive, ArchiveRestore } from 'lucide-react';
-import { Button } from '@/components/button/button';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
+import { cn } from '@/lib/utils';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
+import { getConversationSummaryCapabilities } from '@/lib/conversations/conversation-summary-capabilities';
+import { resolveConversationSummaryDisplayText } from '@/lib/conversations/conversation-summary-body';
 import { ConversationSummaryTimestamp } from './conversation-summary-timestamp';
+import { ConversationSummaryActionsMenu } from './conversation-summary-actions-menu';
+import { ConversationSummaryDeleteDialog } from './conversation-summary-delete-dialog';
 import {
     resolveConversationTargetLabel,
     type ResolvedConversationTargetLabel,
 } from './resolve-conversation-target-label';
+
+export const CONVERSATION_SUMMARY_CARD_HEIGHT_CLASS = 'h-[7.75rem]';
+
+export const CONVERSATION_SUMMARY_PREVIEW_CLASS =
+    'conversation-summary-preview min-h-8 w-full min-w-0 shrink-0 text-xs leading-4 text-muted-foreground';
 
 export interface ConversationSummaryItemProps {
     conversation: DiagramConversation;
@@ -17,6 +33,7 @@ export interface ConversationSummaryItemProps {
     onSelect?: (conversationId: number) => void;
     onArchive?: (conversationId: number) => void;
     onReopen?: (conversationId: number) => void;
+    onDelete?: (conversationId: number) => Promise<void>;
 }
 
 export const ConversationSummaryItem: React.FC<
@@ -28,9 +45,13 @@ export const ConversationSummaryItem: React.FC<
     onSelect,
     onArchive,
     onReopen,
+    onDelete,
 }) => {
     const { t } = useTranslation();
     const { tables, relationships, diagramName } = useChartDB();
+    const { diagramAccess } = useDiagramAccess();
+    const actionsTriggerRef = useRef<HTMLButtonElement>(null);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     const targetLabel: ResolvedConversationTargetLabel = useMemo(
         () =>
@@ -43,149 +64,235 @@ export const ConversationSummaryItem: React.FC<
         [conversation, diagramName, tables, relationships, t]
     );
 
+    const capabilities = useMemo(
+        () => getConversationSummaryCapabilities(diagramAccess),
+        [diagramAccess]
+    );
+
     const authorName = conversation.lastMessageAuthor?.fullName?.trim()
         ? conversation.lastMessageAuthor.fullName.trim()
         : conversation.lastMessageAuthor
           ? t('side_panel.conversations_section.deleted_user')
           : null;
 
-    const preview =
-        conversation.lastMessagePreview?.trim() ??
-        (conversation.messageCount === 0
-            ? t('side_panel.conversations_section.summary.no_messages')
-            : null);
+    const visibleAuthorLabel =
+        authorName ??
+        t('side_panel.conversations_section.summary.author_missing_tooltip');
+
+    const visiblePreview = useMemo(
+        () =>
+            resolveConversationSummaryDisplayText(
+                conversation.lastMessageBody,
+                t('side_panel.conversations_section.summary.no_messages')
+            ),
+        [conversation.lastMessageBody, t]
+    );
 
     const activityTimestamp =
         conversation.lastMessageAt ?? conversation.updatedAt;
 
-    const actionLabel = isArchived
-        ? isMutationPending
-            ? t('side_panel.conversations_section.actions.reopening')
-            : t('side_panel.conversations_section.actions.reopen')
-        : isMutationPending
-          ? t('side_panel.conversations_section.actions.archiving')
-          : t('side_panel.conversations_section.actions.archive');
+    const authorTooltip =
+        authorName !== null
+            ? t('side_panel.conversations_section.summary.author_tooltip', {
+                  name: authorName,
+              })
+            : t(
+                  'side_panel.conversations_section.summary.author_missing_tooltip'
+              );
 
-    const actionAriaLabel = isArchived
-        ? t('side_panel.conversations_section.actions.reopen_aria', {
-              target: targetLabel.title,
-          })
-        : t('side_panel.conversations_section.actions.archive_aria', {
-              target: targetLabel.title,
-          });
+    const messageCountTooltip = t(
+        'side_panel.conversations_section.summary.message_count',
+        { count: conversation.messageCount }
+    );
 
-    const handleAction = () => {
+    const handleOpen = useCallback(() => {
+        onSelect?.(conversation.id);
+    }, [conversation.id, onSelect]);
+
+    const handleOpenKeyDown = useCallback(
+        (event: React.KeyboardEvent<HTMLDivElement>) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleOpen();
+            }
+        },
+        [handleOpen]
+    );
+
+    const openAriaLabel = t(
+        'side_panel.conversations_section.summary.open_aria',
+        { target: targetLabel.title }
+    );
+
+    const handleArchive = useCallback(() => {
         if (isMutationPending) {
             return;
         }
 
-        if (isArchived) {
-            onReopen?.(conversation.id);
+        onArchive?.(conversation.id);
+    }, [conversation.id, isMutationPending, onArchive]);
+
+    const handleReopen = useCallback(() => {
+        if (isMutationPending) {
             return;
         }
 
-        onArchive?.(conversation.id);
-    };
+        onReopen?.(conversation.id);
+    }, [conversation.id, isMutationPending, onReopen]);
 
-    const handleOpen = () => {
-        onSelect?.(conversation.id);
-    };
+    const handleDeleteRequest = useCallback(() => {
+        if (isMutationPending) {
+            return;
+        }
+
+        setIsDeleteDialogOpen(true);
+    }, [isMutationPending]);
+
+    const restoreActionsFocus = useCallback(() => {
+        actionsTriggerRef.current?.focus();
+    }, []);
+
+    const handleConfirmDelete = useCallback(
+        async (conversationId: number) => {
+            await onDelete?.(conversationId);
+        },
+        [onDelete]
+    );
+
+    const handleDeleted = useCallback(() => {
+        restoreActionsFocus();
+    }, [restoreActionsFocus]);
 
     return (
         <article
-            className={`flex flex-col gap-2 rounded-md border px-3 py-2.5 ${
+            className={cn(
+                'relative flex overflow-hidden rounded-md border px-3 py-2.5',
+                CONVERSATION_SUMMARY_CARD_HEIGHT_CLASS,
                 isArchived
                     ? 'border-muted bg-muted/30 opacity-90'
                     : 'border-border bg-background'
-            }`}
+            )}
             aria-label={targetLabel.title}
             data-archived={isArchived ? 'true' : 'false'}
             data-testid={`conversation-summary-${conversation.id}`}
         >
-            <button
-                type="button"
-                className="flex w-full flex-col gap-2 text-left"
-                onClick={handleOpen}
-                aria-label={t(
-                    'side_panel.conversations_section.summary.open_aria',
-                    { target: targetLabel.title }
-                )}
-            >
-                <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                        <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2">
+                <div
+                    role="button"
+                    tabIndex={0}
+                    className="flex min-h-0 min-w-0 flex-1 cursor-pointer flex-col gap-2 text-left"
+                    onClick={handleOpen}
+                    onKeyDown={handleOpenKeyDown}
+                    aria-label={openAriaLabel}
+                >
+                    <div className="min-w-0 shrink-0 pr-7">
+                        <p className="truncate text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                             {targetLabel.typeLabel}
                         </p>
                         <h3
-                            className={`truncate text-sm font-semibold ${
+                            className={cn(
+                                'truncate text-sm font-semibold',
                                 targetLabel.isMissing
                                     ? 'italic text-muted-foreground'
                                     : 'text-foreground'
-                            }`}
+                            )}
                         >
                             {targetLabel.title}
                         </h3>
                     </div>
-                    <ConversationSummaryTimestamp
-                        timestamp={activityTimestamp}
-                    />
+
+                    <div
+                        className={CONVERSATION_SUMMARY_PREVIEW_CLASS}
+                        data-testid="conversation-summary-preview"
+                    >
+                        {visiblePreview}
+                    </div>
                 </div>
 
-                {preview ? (
-                    <p className="line-clamp-2 text-xs text-muted-foreground">
-                        {preview}
-                    </p>
-                ) : null}
-            </button>
+                <TooltipProvider>
+                    <div
+                        className="mt-auto flex w-full min-w-0 shrink-0 items-center gap-3 overflow-hidden whitespace-nowrap text-xs text-muted-foreground"
+                        data-testid="conversation-summary-metadata"
+                    >
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <span className="inline-flex shrink-0 items-center gap-1">
+                                    <MessageSquare
+                                        className="size-3.5 shrink-0"
+                                        aria-hidden="true"
+                                    />
+                                    <span>{conversation.messageCount}</span>
+                                </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                {messageCountTooltip}
+                            </TooltipContent>
+                        </Tooltip>
 
-            <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
-                    <span>
-                        {t(
-                            'side_panel.conversations_section.summary.message_count',
-                            {
-                                count: conversation.messageCount,
-                            }
-                        )}
-                    </span>
-                    {authorName ? (
-                        <>
-                            <span aria-hidden="true">·</span>
-                            <span className="truncate">{authorName}</span>
-                        </>
-                    ) : null}
-                    {isArchived ? (
-                        <>
-                            <span aria-hidden="true">·</span>
-                            <span className="font-medium text-muted-foreground">
-                                {t(
-                                    'side_panel.conversations_section.read_only'
-                                )}
-                            </span>
-                        </>
-                    ) : null}
-                </div>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <span
+                                    className="inline-flex min-w-0 flex-1 items-center gap-1"
+                                    data-testid="conversation-summary-author"
+                                >
+                                    <User
+                                        className={cn(
+                                            'size-3.5 shrink-0',
+                                            authorName === null && 'opacity-50'
+                                        )}
+                                        aria-hidden="true"
+                                    />
+                                    <span className="truncate">
+                                        {visibleAuthorLabel}
+                                    </span>
+                                </span>
+                            </TooltipTrigger>
+                            <TooltipContent>{authorTooltip}</TooltipContent>
+                        </Tooltip>
 
-                <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-7 shrink-0 gap-1 px-2 text-xs"
-                    onClick={handleAction}
-                    disabled={isMutationPending}
-                    aria-label={actionAriaLabel}
-                >
-                    {isArchived ? (
-                        <ArchiveRestore
-                            className="size-3.5"
-                            aria-hidden="true"
-                        />
-                    ) : (
-                        <Archive className="size-3.5" aria-hidden="true" />
-                    )}
-                    {actionLabel}
-                </Button>
+                        <span
+                            className="ml-auto inline-flex shrink-0 items-center gap-1"
+                            data-testid="conversation-summary-timestamp"
+                        >
+                            <History
+                                className="size-3.5 shrink-0"
+                                aria-hidden="true"
+                            />
+                            <ConversationSummaryTimestamp
+                                timestamp={activityTimestamp}
+                            />
+                        </span>
+                    </div>
+                </TooltipProvider>
             </div>
+
+            <div
+                className="absolute right-2 top-2.5 z-10"
+                onClick={(event) => event.stopPropagation()}
+            >
+                <ConversationSummaryActionsMenu
+                    ref={actionsTriggerRef}
+                    isArchived={isArchived}
+                    canDelete={capabilities.canDelete}
+                    disabled={isMutationPending}
+                    onOpen={handleOpen}
+                    onArchive={handleArchive}
+                    onReopen={handleReopen}
+                    onDelete={handleDeleteRequest}
+                    onCloseAutoFocus={restoreActionsFocus}
+                />
+            </div>
+
+            {capabilities.canDelete ? (
+                <ConversationSummaryDeleteDialog
+                    conversationId={conversation.id}
+                    open={isDeleteDialogOpen}
+                    onOpenChange={setIsDeleteDialogOpen}
+                    onConfirmDelete={handleConfirmDelete}
+                    onDeleted={handleDeleted}
+                    onCloseAutoFocus={restoreActionsFocus}
+                />
+            ) : null}
         </article>
     );
 };

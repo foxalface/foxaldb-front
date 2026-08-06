@@ -7,12 +7,22 @@ import {
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
 import { Button } from '@/components/button/button';
-import { Ellipsis, Layers2, SquareArrowOutUpRight, Trash2 } from 'lucide-react';
+import {
+    EllipsisVertical,
+    Layers2,
+    SquareArrowOutUpRight,
+    Trash2,
+} from 'lucide-react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import type { Diagram } from '@/lib/domain';
 import { useTranslation } from 'react-i18next';
 import { deleteDiagram, duplicateDiagram } from '@/lib/api/diagrams';
 import { useNavigate } from 'react-router-dom';
+import {
+    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
+} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 
 interface DiagramRowActionsMenuProps {
     diagram: Diagram;
@@ -60,33 +70,39 @@ export const DiagramRowActionsMenu: React.FC<DiagramRowActionsMenuProps> = ({
                     className="size-8 p-0"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <Ellipsis className="size-4" />
+                    <EllipsisVertical className="size-4" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem
                     onClick={onOpen}
-                    className="flex justify-between gap-4"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
+                    <SquareArrowOutUpRight
+                        className={SIDE_PANEL_ACTION_MENU_ICON_CLASS}
+                    />
                     {t('open_diagram_dialog.diagram_actions.open')}
-                    <SquareArrowOutUpRight className="size-3.5" />
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
                     onClick={handleDuplicate}
-                    className="flex justify-between gap-4"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
+                    <Layers2 className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     {t('open_diagram_dialog.diagram_actions.duplicate')}
-                    <Layers2 className="size-3.5" />
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     onClick={onDelete}
-                    className="flex justify-between gap-4 text-red-700"
+                    className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} text-red-700`}
                 >
+                    <Trash2
+                        className={
+                            SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
+                        }
+                    />
                     {t('open_diagram_dialog.diagram_actions.delete')}
-                    <Trash2 className="size-3.5 text-red-700" />
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

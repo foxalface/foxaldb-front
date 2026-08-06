@@ -27,10 +27,14 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
+import {
+    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
+} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/hooks/use-dialog';
@@ -175,23 +179,21 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-fit min-w-40">
-                    <DropdownMenuLabel>
-                        {t(
-                            'side_panel.tables_section.table.table_actions.title'
-                        )}
-                    </DropdownMenuLabel>
-                    {!readonly ? <DropdownMenuSeparator /> : null}
                     {conversationMenu.showConversationAction ? (
                         <DropdownMenuGroup>
                             <DropdownMenuItem
-                                className="flex justify-between gap-4"
+                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                                 onClick={openTableDiscussion}
                                 disabled={
                                     conversationMenu.isConversationPending
                                 }
                             >
+                                <SlBubbles
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                    }
+                                />
                                 {conversationMenu.conversationLabel}
-                                <SlBubbles className="size-3.5" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     ) : null}
@@ -204,16 +206,22 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                 <>
                                     <DropdownMenuGroup>
                                         <DropdownMenuItem
-                                            className="flex justify-between gap-4"
+                                            className={
+                                                SIDE_PANEL_ACTION_MENU_ITEM_CLASS
+                                            }
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 changeSchema();
                                             }}
                                         >
+                                            <Group
+                                                className={
+                                                    SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                                }
+                                            />
                                             {t(
                                                 'side_panel.tables_section.table.table_actions.change_schema'
                                             )}
-                                            <Group className="size-3.5" />
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator />
@@ -221,29 +229,41 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             ) : null}
                             <DropdownMenuGroup>
                                 <DropdownMenuItem
-                                    className="flex justify-between gap-4"
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_ITEM_CLASS
+                                    }
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         createField(table.id);
                                     }}
                                 >
+                                    <FileType2
+                                        className={
+                                            SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                        }
+                                    />
                                     {t(
                                         'side_panel.tables_section.table.table_actions.add_field'
                                     )}
-                                    <FileType2 className="size-3.5" />
                                 </DropdownMenuItem>
                                 {!table.isView ? (
                                     <DropdownMenuItem
-                                        className="flex justify-between gap-4"
+                                        className={
+                                            SIDE_PANEL_ACTION_MENU_ITEM_CLASS
+                                        }
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             createIndex(table.id);
                                         }}
                                     >
+                                        <FileKey2
+                                            className={
+                                                SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                            }
+                                        />
                                         {t(
                                             'side_panel.tables_section.table.table_actions.add_index'
                                         )}
-                                        <FileKey2 className="size-3.5" />
                                     </DropdownMenuItem>
                                 ) : null}
                             </DropdownMenuGroup>
@@ -251,24 +271,34 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             <DropdownMenuGroup>
                                 <DropdownMenuItem
                                     onClick={duplicateTableHandler}
-                                    className="flex justify-between"
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_ITEM_CLASS
+                                    }
                                 >
+                                    <Copy
+                                        className={
+                                            SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                        }
+                                    />
                                     {t(
                                         'side_panel.tables_section.table.table_actions.duplicate_table'
                                     )}
-                                    <Copy className="size-3.5" />
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>
                                 <DropdownMenuItem
                                     onClick={deleteTableHandler}
-                                    className="flex justify-between !text-red-700"
+                                    className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} !text-red-700`}
                                 >
+                                    <Trash2
+                                        className={
+                                            SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
+                                        }
+                                    />
                                     {t(
                                         'side_panel.tables_section.table.table_actions.delete_table'
                                     )}
-                                    <Trash2 className="size-3.5 text-red-700" />
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                         </>
@@ -358,13 +388,6 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                     </div>
                 )}
             </div>
-            {conversationsAvailable ? (
-                <ConversationIndicator
-                    target={{ targetType: 'table', targetId: table.id }}
-                    targetName={table.name}
-                    className="mr-1"
-                />
-            ) : null}
             <div className="flex flex-row-reverse items-center">
                 {!editMode ? (
                     <>
@@ -376,15 +399,27 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                 View
                             </span>
                         ) : null}
-                        <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
+                        <div className="flex items-center md:hidden md:group-focus-within:flex md:group-hover:flex">
+                            <ListItemHeaderButton onClick={handleFocusOnTable}>
+                                <CircleDotDashed />
+                            </ListItemHeaderButton>
+                            {conversationsAvailable ? (
+                                <ConversationIndicator
+                                    appearance="list-item-header"
+                                    highlightWhenActive={false}
+                                    showTooltip={false}
+                                    target={{
+                                        targetType: 'table',
+                                        targetId: table.id,
+                                    }}
+                                    targetName={table.name}
+                                />
+                            ) : null}
                             {!readonly ? (
                                 <ListItemHeaderButton onClick={enterEditMode}>
                                     <Pencil />
                                 </ListItemHeaderButton>
                             ) : null}
-                            <ListItemHeaderButton onClick={handleFocusOnTable}>
-                                <CircleDotDashed />
-                            </ListItemHeaderButton>
                         </div>
                     </>
                 ) : (

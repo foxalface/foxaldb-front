@@ -395,6 +395,25 @@ export const zh_CN: LanguageTranslation = {
                     no_messages: '暂无消息',
                     last_activity: '最近活动',
                     open_aria: '打开 {{target}} 的对话',
+                    author_tooltip: '{{name}} 的最新消息',
+                    author_missing_tooltip: '无作者信息',
+                    actions: {
+                        menu_aria: '对话选项',
+                        open: '打开',
+                        delete: '删除',
+                    },
+                    delete_dialog: {
+                        title: '删除对话？',
+                        description: '这将永久删除此对话及其所有消息。',
+                        cancel: '取消',
+                        confirm: '删除',
+                        deleting: '正在删除…',
+                        errors: {
+                            delete_failed: '无法删除此对话。请重试。',
+                            forbidden: '您没有删除此对话的权限。',
+                            not_found: '此对话已不可用。',
+                        },
+                    },
                 },
                 detail: {
                     back: '返回',

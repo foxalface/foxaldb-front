@@ -402,6 +402,27 @@ export const tr: LanguageTranslation = {
                     no_messages: 'Henüz mesaj yok',
                     last_activity: 'Son etkinlik',
                     open_aria: '{{target}} için sohbeti aç',
+                    author_tooltip: '{{name}} adlı kullanıcının son mesajı',
+                    author_missing_tooltip: 'Yazar bilgisi yok',
+                    actions: {
+                        menu_aria: 'Konuşma seçenekleri',
+                        open: 'Aç',
+                        delete: 'Sil',
+                    },
+                    delete_dialog: {
+                        title: 'Konuşma silinsin mi?',
+                        description:
+                            'Bu, konuşmayı ve tüm mesajlarını kalıcı olarak silecektir.',
+                        cancel: 'İptal',
+                        confirm: 'Sil',
+                        deleting: 'Siliniyor…',
+                        errors: {
+                            delete_failed:
+                                'Bu konuşma silinemedi. Lütfen tekrar deneyin.',
+                            forbidden: 'Bu konuşmayı silme izniniz yok.',
+                            not_found: 'Bu konuşma artık kullanılamıyor.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Geri',

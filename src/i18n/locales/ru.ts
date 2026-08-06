@@ -403,6 +403,28 @@ export const ru: LanguageTranslation = {
                     no_messages: 'Сообщений пока нет',
                     last_activity: 'Последняя активность',
                     open_aria: 'Открыть беседу для {{target}}',
+                    author_tooltip: 'Последнее сообщение от {{name}}',
+                    author_missing_tooltip: 'Нет информации об авторе',
+                    actions: {
+                        menu_aria: 'Параметры беседы',
+                        open: 'Открыть',
+                        delete: 'Удалить',
+                    },
+                    delete_dialog: {
+                        title: 'Удалить беседу?',
+                        description:
+                            'Это навсегда удалит эту беседу и все её сообщения.',
+                        cancel: 'Отмена',
+                        confirm: 'Удалить',
+                        deleting: 'Удаление…',
+                        errors: {
+                            delete_failed:
+                                'Не удалось удалить эту беседу. Повторите попытку.',
+                            forbidden:
+                                'У вас нет прав на удаление этой беседы.',
+                            not_found: 'Эта беседа больше недоступна.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Назад',

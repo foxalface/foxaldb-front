@@ -406,6 +406,29 @@ export const fr: LanguageTranslation = {
                     no_messages: 'Aucun message pour l’instant',
                     last_activity: 'Dernière activité',
                     open_aria: 'Ouvrir la conversation pour {{target}}',
+                    author_tooltip: 'Dernier message de {{name}}',
+                    author_missing_tooltip: 'Aucune information sur l’auteur',
+                    actions: {
+                        menu_aria: 'Options de la conversation',
+                        open: 'Ouvrir',
+                        delete: 'Supprimer',
+                    },
+                    delete_dialog: {
+                        title: 'Supprimer la conversation ?',
+                        description:
+                            'Cette action supprimera définitivement cette conversation et tous ses messages.',
+                        cancel: 'Annuler',
+                        confirm: 'Supprimer',
+                        deleting: 'Suppression…',
+                        errors: {
+                            delete_failed:
+                                'Impossible de supprimer cette conversation. Veuillez réessayer.',
+                            forbidden:
+                                'Vous n’avez pas la permission de supprimer cette conversation.',
+                            not_found:
+                                'Cette conversation n’est plus disponible.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Retour',

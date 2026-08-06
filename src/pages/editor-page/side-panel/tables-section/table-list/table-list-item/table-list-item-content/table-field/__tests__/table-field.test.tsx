@@ -225,6 +225,9 @@ describe('TableField conversations', () => {
         expect(controlsColumn).toContainElement(
             screen.getByTestId('conversation-indicator')
         );
+        expect(
+            screen.getByTestId('conversation-indicator').parentElement
+        ).toHaveClass('hidden', 'group-hover:flex', 'group-focus-within:flex');
     });
 });
 

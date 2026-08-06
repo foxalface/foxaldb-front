@@ -22,7 +22,7 @@ export interface DiagramConversationDto {
     archived_at: string | null;
     message_count: number;
     last_message_at: string | null;
-    last_message_preview: string | null;
+    last_message_body: string | null;
     last_message_author: {
         id: number;
         first_name: string;

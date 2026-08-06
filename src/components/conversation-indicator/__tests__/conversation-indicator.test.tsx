@@ -131,6 +131,22 @@ describe('ConversationIndicator', () => {
         ).toBeInTheDocument();
     });
 
+    it('renders list-item-header appearance as a real button', () => {
+        render(
+            <ConversationIndicator
+                target={{ targetType: 'table', targetId: 't1' }}
+                targetName="Users"
+                appearance="list-item-header"
+                showTooltip={false}
+            />,
+            { wrapper }
+        );
+
+        const button = screen.getByTestId('conversation-indicator');
+        expect(button.tagName).toBe('BUTTON');
+        expect(button).toHaveClass('size-8');
+    });
+
     it('opens an existing conversation without calling find-or-create', async () => {
         const user = userEvent.setup();
         conversationsState.activeConversations = [
@@ -143,7 +159,7 @@ describe('ConversationIndicator', () => {
                 archivedAt: null,
                 messageCount: 1,
                 lastMessageAt: null,
-                lastMessagePreview: null,
+                lastMessageBody: null,
                 lastMessageAuthor: null,
                 createdAt: '2026-01-01T10:00:00.000Z',
                 updatedAt: '2026-01-01T10:00:00.000Z',
@@ -174,7 +190,7 @@ describe('ConversationIndicator', () => {
             archivedAt: null,
             messageCount: 0,
             lastMessageAt: null,
-            lastMessagePreview: null,
+            lastMessageBody: null,
             lastMessageAuthor: null,
             createdAt: '2026-01-01T10:00:00.000Z',
             updatedAt: '2026-01-01T10:00:00.000Z',
@@ -242,7 +258,7 @@ describe('ConversationIndicator', () => {
                 archivedAt: null,
                 messageCount: 0,
                 lastMessageAt: null,
-                lastMessagePreview: null,
+                lastMessageBody: null,
                 lastMessageAuthor: null,
                 createdAt: '2026-01-01T10:00:00.000Z',
                 updatedAt: '2026-01-01T10:00:00.000Z',

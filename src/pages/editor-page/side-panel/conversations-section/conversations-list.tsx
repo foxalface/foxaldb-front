@@ -19,6 +19,7 @@ export interface ConversationsListProps {
     onSelect?: (conversationId: number) => void;
     onArchive?: (conversationId: number) => void;
     onReopen?: (conversationId: number) => void;
+    onDelete?: (conversationId: number) => Promise<void>;
     onLoadMore: () => void;
     onRetry: () => void;
     listLabelId: string;
@@ -36,6 +37,7 @@ export const ConversationsList: React.FC<ConversationsListProps> = ({
     onSelect,
     onArchive,
     onReopen,
+    onDelete,
     onLoadMore,
     onRetry,
     listLabelId,
@@ -88,6 +90,7 @@ export const ConversationsList: React.FC<ConversationsListProps> = ({
                             onSelect={onSelect}
                             onArchive={onArchive}
                             onReopen={onReopen}
+                            onDelete={onDelete}
                         />
                     </li>
                 ))}

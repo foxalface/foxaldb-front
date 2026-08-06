@@ -400,6 +400,27 @@ export const ar: LanguageTranslation = {
                     no_messages: 'لا توجد رسائل بعد',
                     last_activity: 'آخر نشاط',
                     open_aria: 'فتح المحادثة لـ {{target}}',
+                    author_tooltip: 'آخر رسالة من {{name}}',
+                    author_missing_tooltip: 'لا توجد معلومات عن المؤلف',
+                    actions: {
+                        menu_aria: 'خيارات المحادثة',
+                        open: 'فتح',
+                        delete: 'حذف',
+                    },
+                    delete_dialog: {
+                        title: 'حذف المحادثة؟',
+                        description:
+                            'سيؤدي هذا إلى حذف هذه المحادثة وجميع رسائلها نهائيًا.',
+                        cancel: 'إلغاء',
+                        confirm: 'حذف',
+                        deleting: 'جارٍ الحذف…',
+                        errors: {
+                            delete_failed:
+                                'تعذر حذف هذه المحادثة. يرجى المحاولة مرة أخرى.',
+                            forbidden: 'ليس لديك إذن لحذف هذه المحادثة.',
+                            not_found: 'لم تعد هذه المحادثة متاحة.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'رجوع',

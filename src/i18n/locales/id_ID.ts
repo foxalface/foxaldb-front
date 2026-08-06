@@ -406,6 +406,28 @@ export const id_ID: LanguageTranslation = {
                     no_messages: 'Belum ada pesan',
                     last_activity: 'Aktivitas terakhir',
                     open_aria: 'Buka percakapan untuk {{target}}',
+                    author_tooltip: 'Pesan terakhir dari {{name}}',
+                    author_missing_tooltip: 'Tidak ada informasi penulis',
+                    actions: {
+                        menu_aria: 'Opsi percakapan',
+                        open: 'Buka',
+                        delete: 'Hapus',
+                    },
+                    delete_dialog: {
+                        title: 'Hapus percakapan?',
+                        description:
+                            'Ini akan menghapus percakapan ini dan semua pesannya secara permanen.',
+                        cancel: 'Batal',
+                        confirm: 'Hapus',
+                        deleting: 'Menghapus…',
+                        errors: {
+                            delete_failed:
+                                'Tidak dapat menghapus percakapan ini. Silakan coba lagi.',
+                            forbidden:
+                                'Anda tidak memiliki izin untuk menghapus percakapan ini.',
+                            not_found: 'Percakapan ini tidak lagi tersedia.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Kembali',

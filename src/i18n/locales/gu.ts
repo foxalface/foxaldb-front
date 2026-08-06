@@ -404,6 +404,27 @@ export const gu: LanguageTranslation = {
                     no_messages: 'હજી સંદેશા નથી',
                     last_activity: 'છેલ્લી પ્રવૃત્તિ',
                     open_aria: '{{target}} માટે વાતચીત ખોલો',
+                    author_tooltip: '{{name}} નો છેલ્લો સંદેશ',
+                    author_missing_tooltip: 'લેખકની માહિતી નથી',
+                    actions: {
+                        menu_aria: 'વાતચીત વિકલ્પો',
+                        open: 'ખોલો',
+                        delete: 'કાઢી નાખો',
+                    },
+                    delete_dialog: {
+                        title: 'વાતચીત કાઢી નાખીએ?',
+                        description:
+                            'આ વાતચીત અને તેના બધા સંદેશાઓ કાયમી રીતે કાઢી નાખશે.',
+                        cancel: 'રદ કરો',
+                        confirm: 'કાઢી નાખો',
+                        deleting: 'કાઢી નાખી રહ્યાં છીએ…',
+                        errors: {
+                            delete_failed:
+                                'આ વાતચીત કાઢી શકાઈ નથી. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                            forbidden: 'તમને આ વાતચીત કાઢવાની પરવાનગી નથી.',
+                            not_found: 'આ વાતચીત હવે ઉપલબ્ધ નથી.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'પાછા',

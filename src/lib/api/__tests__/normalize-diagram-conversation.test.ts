@@ -14,7 +14,7 @@ const baseDto = (
     archived_at: null,
     message_count: 2,
     last_message_at: '2026-07-19T10:00:00.000000Z',
-    last_message_preview: 'Latest preview',
+    last_message_body: 'Latest full message body',
     last_message_author: {
         id: 7,
         first_name: 'Alex',
@@ -39,7 +39,7 @@ describe('normalizeDiagramConversationFromApi', () => {
             archivedAt: null,
             messageCount: 2,
             lastMessageAt: '2026-07-19T10:00:00.000000Z',
-            lastMessagePreview: 'Latest preview',
+            lastMessageBody: 'Latest full message body',
             lastMessageAuthor: buildUserIdentity(7, 'Alex', 'Renart'),
             createdAt: '2026-07-19T10:00:00.000000Z',
             updatedAt: '2026-07-19T11:00:00.000000Z',

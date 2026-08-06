@@ -404,6 +404,27 @@ export const ko_KR: LanguageTranslation = {
                     no_messages: '아직 메시지가 없습니다',
                     last_activity: '마지막 활동',
                     open_aria: '{{target}} 대화 열기',
+                    author_tooltip: '{{name}}의 최근 메시지',
+                    author_missing_tooltip: '작성자 정보 없음',
+                    actions: {
+                        menu_aria: '대화 옵션',
+                        open: '열기',
+                        delete: '삭제',
+                    },
+                    delete_dialog: {
+                        title: '대화를 삭제하시겠습니까?',
+                        description:
+                            '이 대화와 모든 메시지가 영구적으로 삭제됩니다.',
+                        cancel: '취소',
+                        confirm: '삭제',
+                        deleting: '삭제 중…',
+                        errors: {
+                            delete_failed:
+                                '이 대화를 삭제할 수 없습니다. 다시 시도해 주세요.',
+                            forbidden: '이 대화를 삭제할 권한이 없습니다.',
+                            not_found: '이 대화를 더 이상 사용할 수 없습니다.',
+                        },
+                    },
                 },
                 detail: {
                     back: '뒤로',

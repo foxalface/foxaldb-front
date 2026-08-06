@@ -408,6 +408,29 @@ export const es: LanguageTranslation = {
                     no_messages: 'Aún no hay mensajes',
                     last_activity: 'Última actividad',
                     open_aria: 'Abrir conversación de {{target}}',
+                    author_tooltip: 'Último mensaje de {{name}}',
+                    author_missing_tooltip: 'Sin información del autor',
+                    actions: {
+                        menu_aria: 'Opciones de la conversación',
+                        open: 'Abrir',
+                        delete: 'Eliminar',
+                    },
+                    delete_dialog: {
+                        title: '¿Eliminar conversación?',
+                        description:
+                            'Esto eliminará permanentemente esta conversación y todos sus mensajes.',
+                        cancel: 'Cancelar',
+                        confirm: 'Eliminar',
+                        deleting: 'Eliminando…',
+                        errors: {
+                            delete_failed:
+                                'No se pudo eliminar esta conversación. Inténtalo de nuevo.',
+                            forbidden:
+                                'No tienes permiso para eliminar esta conversación.',
+                            not_found:
+                                'Esta conversación ya no está disponible.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Volver',

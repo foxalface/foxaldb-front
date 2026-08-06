@@ -27,10 +27,14 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
+import {
+    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
+} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 import { Input } from '@/components/input/input';
 import { useTranslation } from 'react-i18next';
 import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
@@ -146,23 +150,21 @@ export const RelationshipListItemHeader: React.FC<
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-40">
-                    <DropdownMenuLabel>
-                        {t(
-                            'side_panel.refs_section.relationship.relationship_actions.title'
-                        )}
-                    </DropdownMenuLabel>
-                    {!readonly ? <DropdownMenuSeparator /> : null}
                     {conversationMenu.showConversationAction ? (
                         <DropdownMenuGroup>
                             <DropdownMenuItem
-                                className="flex justify-between gap-4"
+                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                                 onClick={openRelationshipDiscussion}
                                 disabled={
                                     conversationMenu.isConversationPending
                                 }
                             >
+                                <SlBubbles
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                    }
+                                />
                                 {conversationMenu.conversationLabel}
-                                <SlBubbles className="size-3.5" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     ) : null}
@@ -173,12 +175,16 @@ export const RelationshipListItemHeader: React.FC<
                         <DropdownMenuGroup>
                             <DropdownMenuItem
                                 onClick={deleteRelationshipHandler}
-                                className="flex justify-between !text-red-700"
+                                className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} !text-red-700`}
                             >
+                                <Trash2
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
+                                    }
+                                />
                                 {t(
                                     'side_panel.refs_section.relationship.relationship_actions.delete_relationship'
                                 )}
-                                <Trash2 className="size-3.5 text-red-700" />
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     ) : null}
@@ -227,16 +233,6 @@ export const RelationshipListItemHeader: React.FC<
                         <div className="truncate">{relationship.name}</div>
                     )}
                 </div>
-                {conversationsAvailable ? (
-                    <ConversationIndicator
-                        target={{
-                            targetType: 'relationship',
-                            targetId: relationship.id,
-                        }}
-                        targetName={relationship.name}
-                        className="mr-1"
-                    />
-                ) : null}
                 {remoteEditors.length > 0 ? (
                     <EntityEditingBadge
                         editors={remoteEditors}
@@ -249,7 +245,24 @@ export const RelationshipListItemHeader: React.FC<
                             {showDropDownMenu ? (
                                 <div>{renderDropDownMenu()}</div>
                             ) : null}
-                            <div className="flex flex-row-reverse md:hidden md:group-hover:flex">
+                            <div className="flex items-center md:hidden md:group-focus-within:flex md:group-hover:flex">
+                                <ListItemHeaderButton
+                                    onClick={handleFocusOnRelationship}
+                                >
+                                    <CircleDotDashed />
+                                </ListItemHeaderButton>
+                                {conversationsAvailable ? (
+                                    <ConversationIndicator
+                                        appearance="list-item-header"
+                                        highlightWhenActive={false}
+                                        showTooltip={false}
+                                        target={{
+                                            targetType: 'relationship',
+                                            targetId: relationship.id,
+                                        }}
+                                        targetName={relationship.name}
+                                    />
+                                ) : null}
                                 {!readonly ? (
                                     <ListItemHeaderButton
                                         onClick={enterEditMode}
@@ -257,11 +270,6 @@ export const RelationshipListItemHeader: React.FC<
                                         <Pencil />
                                     </ListItemHeaderButton>
                                 ) : null}
-                                <ListItemHeaderButton
-                                    onClick={handleFocusOnRelationship}
-                                >
-                                    <CircleDotDashed />
-                                </ListItemHeaderButton>
                             </div>
                         </>
                     ) : (

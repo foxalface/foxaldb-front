@@ -411,6 +411,29 @@ export const de: LanguageTranslation = {
                     no_messages: 'Noch keine Nachrichten',
                     last_activity: 'Letzte Aktivität',
                     open_aria: 'Unterhaltung für {{target}} öffnen',
+                    author_tooltip: 'Letzte Nachricht von {{name}}',
+                    author_missing_tooltip: 'Keine Autoreninformationen',
+                    actions: {
+                        menu_aria: 'Unterhaltungsoptionen',
+                        open: 'Öffnen',
+                        delete: 'Löschen',
+                    },
+                    delete_dialog: {
+                        title: 'Unterhaltung löschen?',
+                        description:
+                            'Dadurch werden diese Unterhaltung und alle ihre Nachrichten dauerhaft gelöscht.',
+                        cancel: 'Abbrechen',
+                        confirm: 'Löschen',
+                        deleting: 'Wird gelöscht…',
+                        errors: {
+                            delete_failed:
+                                'Diese Unterhaltung konnte nicht gelöscht werden. Bitte versuchen Sie es erneut.',
+                            forbidden:
+                                'Sie haben keine Berechtigung, diese Unterhaltung zu löschen.',
+                            not_found:
+                                'Diese Unterhaltung ist nicht mehr verfügbar.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Zurück',

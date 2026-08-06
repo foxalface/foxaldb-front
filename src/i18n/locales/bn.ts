@@ -405,6 +405,27 @@ export const bn: LanguageTranslation = {
                     no_messages: 'এখনও কোনো বার্তা নেই',
                     last_activity: 'সর্বশেষ কার্যকলাপ',
                     open_aria: '{{target}}-এর জন্য কথোপকথন খুলুন',
+                    author_tooltip: '{{name}}-এর শেষ বার্তা',
+                    author_missing_tooltip: 'লেখকের তথ্য নেই',
+                    actions: {
+                        menu_aria: 'কথোপকথনের বিকল্প',
+                        open: 'খুলুন',
+                        delete: 'মুছুন',
+                    },
+                    delete_dialog: {
+                        title: 'কথোপকথন মুছবেন?',
+                        description:
+                            'এটি এই কথোপকথন এবং এর সমস্ত বার্তা স্থায়ীভাবে মুছে ফেলবে।',
+                        cancel: 'বাতিল',
+                        confirm: 'মুছুন',
+                        deleting: 'মুছে ফেলা হচ্ছে…',
+                        errors: {
+                            delete_failed:
+                                'এই কথোপকথন মুছতে পারা যায়নি। আবার চেষ্টা করুন।',
+                            forbidden: 'এই কথোপকথন মুছতে আপনার অনুমতি নেই।',
+                            not_found: 'এই কথোপকথন আর উপলব্ধ নেই।',
+                        },
+                    },
                 },
                 detail: {
                     back: 'পিছনে',

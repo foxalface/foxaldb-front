@@ -27,6 +27,11 @@ import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCanvas } from '@/hooks/use-canvas';
 import { useReactFlow, useStore } from '@xyflow/react';
+import {
+    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
+} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 
 export interface TableNodeContextMenuProps {
     table: DBTable;
@@ -229,49 +234,53 @@ export const TableNodeContextMenu: React.FC<
             <ContextMenuContent>
                 <ContextMenuItem
                     onClick={editTableHandler}
-                    className="flex justify-between gap-3"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
-                    <span>{t('table_node_context_menu.edit_table')}</span>
-                    <Pencil className="size-3.5" />
+                    <Pencil className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
+                    {t('table_node_context_menu.edit_table')}
                 </ContextMenuItem>
                 <ContextMenuItem
                     onClick={duplicateTableHandler}
-                    className="flex justify-between gap-3"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
-                    <span>{t('table_node_context_menu.duplicate_table')}</span>
-                    <Copy className="size-3.5" />
+                    <Copy className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
+                    {t('table_node_context_menu.duplicate_table')}
                 </ContextMenuItem>
                 <ContextMenuItem
                     onClick={addRelationshipHandler}
-                    className="flex justify-between gap-3"
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                 >
-                    <span>{t('table_node_context_menu.add_relationship')}</span>
-                    <Workflow className="size-3.5" />
+                    <Workflow className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
+                    {t('table_node_context_menu.add_relationship')}
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuSub>
-                    <ContextMenuSubTrigger className="flex items-center gap-3">
-                        <span>
-                            {isMultiSelect
-                                ? `${t('table_node_context_menu.move_to_area')} (${selectedTableIds.length})`
-                                : t('table_node_context_menu.move_to_area')}
-                        </span>
-                        <SquareArrowOutUpRight className="ml-auto size-3.5" />
+                    <ContextMenuSubTrigger
+                        className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
+                    >
+                        <SquareArrowOutUpRight
+                            className={SIDE_PANEL_ACTION_MENU_ICON_CLASS}
+                        />
+                        {isMultiSelect
+                            ? `${t('table_node_context_menu.move_to_area')} (${selectedTableIds.length})`
+                            : t('table_node_context_menu.move_to_area')}
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent>
                         <ContextMenuItem
                             onClick={createAreaHandler}
-                            className="flex items-center gap-2"
+                            className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                         >
-                            <Plus className="size-3.5" />
-                            <span>{t('canvas_context_menu.new_area')}</span>
+                            <Plus
+                                className={SIDE_PANEL_ACTION_MENU_ICON_CLASS}
+                            />
+                            {t('canvas_context_menu.new_area')}
                         </ContextMenuItem>
                         {areas.length > 0 && <ContextMenuSeparator />}
                         {areas.map((area) => (
                             <ContextMenuItem
                                 key={area.id}
                                 onClick={() => moveToAreaHandler(area.id)}
-                                className="flex items-center gap-2"
+                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                             >
                                 <div
                                     className="size-2.5 shrink-0 rounded-full"
@@ -279,10 +288,14 @@ export const TableNodeContextMenu: React.FC<
                                         backgroundColor: area.color,
                                     }}
                                 />
-                                <span>{area.name}</span>
+                                <span className="min-w-0 flex-1 truncate">
+                                    {area.name}
+                                </span>
                                 {!isMultiSelect &&
                                     table.parentAreaId === area.id && (
-                                        <Check className="ml-auto size-3.5" />
+                                        <Check
+                                            className={`${SIDE_PANEL_ACTION_MENU_ICON_CLASS} ml-auto`}
+                                        />
                                     )}
                             </ContextMenuItem>
                         ))}
@@ -294,13 +307,17 @@ export const TableNodeContextMenu: React.FC<
                                     disabled={
                                         !isMultiSelect && !table.parentAreaId
                                     }
-                                    className="flex items-center gap-2"
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_ITEM_CLASS
+                                    }
                                 >
-                                    <span>
+                                    <span className="min-w-0 flex-1">
                                         {t('table_node_context_menu.no_area')}
                                     </span>
                                     {!isMultiSelect && !table.parentAreaId && (
-                                        <Check className="ml-auto size-3.5" />
+                                        <Check
+                                            className={`${SIDE_PANEL_ACTION_MENU_ICON_CLASS} ml-auto`}
+                                        />
                                     )}
                                 </ContextMenuItem>
                             </>
@@ -310,10 +327,14 @@ export const TableNodeContextMenu: React.FC<
                 <ContextMenuSeparator />
                 <ContextMenuItem
                     onClick={removeTableHandler}
-                    className="flex justify-between gap-3"
+                    className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} !text-red-700`}
                 >
-                    <span>{t('table_node_context_menu.delete_table')}</span>
-                    <Trash2 className="size-3.5 text-red-700" />
+                    <Trash2
+                        className={
+                            SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
+                        }
+                    />
+                    {t('table_node_context_menu.delete_table')}
                 </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>

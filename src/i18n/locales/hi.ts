@@ -408,6 +408,28 @@ export const hi: LanguageTranslation = {
                     no_messages: 'अभी कोई संदेश नहीं',
                     last_activity: 'अंतिम गतिविधि',
                     open_aria: '{{target}} के लिए बातचीत खोलें',
+                    author_tooltip: '{{name}} का अंतिम संदेश',
+                    author_missing_tooltip: 'लेखक की जानकारी नहीं',
+                    actions: {
+                        menu_aria: 'वार्तालाप विकल्प',
+                        open: 'खोलें',
+                        delete: 'हटाएँ',
+                    },
+                    delete_dialog: {
+                        title: 'वार्तालाप हटाएँ?',
+                        description:
+                            'यह इस वार्तालाप और उसके सभी संदेशों को स्थायी रूप से हटा देगा।',
+                        cancel: 'रद्द करें',
+                        confirm: 'हटाएँ',
+                        deleting: 'हटाया जा रहा है…',
+                        errors: {
+                            delete_failed:
+                                'यह वार्तालाप हटाया नहीं जा सका। कृपया पुनः प्रयास करें।',
+                            forbidden:
+                                'आपके पास इस वार्तालाप को हटाने की अनुमति नहीं है।',
+                            not_found: 'यह वार्तालाप अब उपलब्ध नहीं है।',
+                        },
+                    },
                 },
                 detail: {
                     back: 'वापस',

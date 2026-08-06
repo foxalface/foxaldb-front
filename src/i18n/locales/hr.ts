@@ -402,6 +402,28 @@ export const hr: LanguageTranslation = {
                     no_messages: 'Još nema poruka',
                     last_activity: 'Zadnja aktivnost',
                     open_aria: 'Otvori razgovor za {{target}}',
+                    author_tooltip: 'Zadnja poruka od {{name}}',
+                    author_missing_tooltip: 'Nema informacija o autoru',
+                    actions: {
+                        menu_aria: 'Opcije razgovora',
+                        open: 'Otvori',
+                        delete: 'Izbriši',
+                    },
+                    delete_dialog: {
+                        title: 'Izbrisati razgovor?',
+                        description:
+                            'Ovo će trajno izbrisati ovaj razgovor i sve njegove poruke.',
+                        cancel: 'Odustani',
+                        confirm: 'Izbriši',
+                        deleting: 'Brisanje…',
+                        errors: {
+                            delete_failed:
+                                'Nije moguće izbrisati ovaj razgovor. Pokušajte ponovno.',
+                            forbidden:
+                                'Nemate dopuštenje za brisanje ovog razgovora.',
+                            not_found: 'Ovaj razgovor više nije dostupan.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Natrag',

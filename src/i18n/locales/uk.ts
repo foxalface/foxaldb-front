@@ -404,6 +404,28 @@ export const uk: LanguageTranslation = {
                     no_messages: 'Ще немає повідомлень',
                     last_activity: 'Остання активність',
                     open_aria: 'Відкрити бесіду для {{target}}',
+                    author_tooltip: 'Останнє повідомлення від {{name}}',
+                    author_missing_tooltip: 'Немає інформації про автора',
+                    actions: {
+                        menu_aria: 'Параметри розмови',
+                        open: 'Відкрити',
+                        delete: 'Видалити',
+                    },
+                    delete_dialog: {
+                        title: 'Видалити розмову?',
+                        description:
+                            'Це назавжди видалить цю розмову та всі її повідомлення.',
+                        cancel: 'Скасувати',
+                        confirm: 'Видалити',
+                        deleting: 'Видалення…',
+                        errors: {
+                            delete_failed:
+                                'Не вдалося видалити цю розмову. Спробуйте ще раз.',
+                            forbidden:
+                                'У вас немає дозволу на видалення цієї розмови.',
+                            not_found: 'Ця розмова більше недоступна.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Назад',

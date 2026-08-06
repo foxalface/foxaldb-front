@@ -17,10 +17,13 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
+import {
+    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ICON_CLASS,
+    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
+} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 import { useTranslation } from 'react-i18next';
 import {
     Tooltip,
@@ -124,34 +127,34 @@ export const CustomTypeListItemHeader: React.FC<
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-fit min-w-40">
-                    <DropdownMenuLabel>
-                        {t(
-                            'side_panel.custom_types_section.custom_type.custom_type_actions.title'
-                        )}
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             onClick={toggleHighlightCustomType}
                             disabled={!canHighlight}
-                            className="flex justify-between"
+                            className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
                         >
+                            <Highlighter
+                                className={SIDE_PANEL_ACTION_MENU_ICON_CLASS}
+                            />
                             {t(
                                 isHighlighted
                                     ? 'side_panel.custom_types_section.custom_type.custom_type_actions.clear_field_highlight'
                                     : 'side_panel.custom_types_section.custom_type.custom_type_actions.highlight_fields'
                             )}
-                            <Highlighter className="size-3.5" />
                         </DropdownMenuItem>
                         {!readonly ? (
                             <DropdownMenuItem
                                 onClick={deleteCustomTypeHandler}
-                                className="flex justify-between !text-red-700"
+                                className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} !text-red-700`}
                             >
+                                <Trash2
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
+                                    }
+                                />
                                 {t(
                                     'side_panel.custom_types_section.custom_type.custom_type_actions.delete_custom_type'
                                 )}
-                                <Trash2 className="size-3.5 text-red-700" />
                             </DropdownMenuItem>
                         ) : null}
                     </DropdownMenuGroup>

@@ -26,7 +26,7 @@ const buildActiveConversation = (
     archivedAt: null,
     messageCount: 2,
     lastMessageAt: '2026-01-02T12:00:00.000Z',
-    lastMessagePreview: 'Latest update',
+    lastMessageBody: 'Latest update',
     lastMessageAuthor: aliceWonderAuthor,
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-02T12:00:00.000Z',

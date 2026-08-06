@@ -24,7 +24,7 @@ export interface DiagramConversation {
     archivedAt: string | null;
     messageCount: number;
     lastMessageAt: string | null;
-    lastMessagePreview: string | null;
+    lastMessageBody: string | null;
     lastMessageAuthor: ConversationAuthor | null;
     createdAt: string;
     updatedAt: string;

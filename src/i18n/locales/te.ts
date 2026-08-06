@@ -405,6 +405,27 @@ export const te: LanguageTranslation = {
                     no_messages: 'ఇంకా సందేశాలు లేవు',
                     last_activity: 'చివరి కార్యకలాపం',
                     open_aria: '{{target}} కోసం సంభాషణను తెరవండి',
+                    author_tooltip: '{{name}} యొక్క చివరి సందేశం',
+                    author_missing_tooltip: 'రచయిత సమాచారం లేదు',
+                    actions: {
+                        menu_aria: 'సంభాషణ ఎంపికలు',
+                        open: 'తెరవండి',
+                        delete: 'తొలగించు',
+                    },
+                    delete_dialog: {
+                        title: 'సంభాషణను తొలగించాలా?',
+                        description:
+                            'ఇది ఈ సంభాషణను మరియు దాని అన్ని సందేశాలను శాశ్వతంగా తొలగిస్తుంది.',
+                        cancel: 'రద్దు చేయి',
+                        confirm: 'తొలగించు',
+                        deleting: 'తొలగిస్తోంది…',
+                        errors: {
+                            delete_failed:
+                                'ఈ సంభాషణను తొలగించలేకపోయాం. మళ్లీ ప్రయత్నించండి.',
+                            forbidden: 'ఈ సంభాషణను తొలగించే అనుమతి మీకు లేదు.',
+                            not_found: 'ఈ సంభాషణ ఇక అందుబాటులో లేదు.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'వెనక్కి',

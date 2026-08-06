@@ -423,10 +423,13 @@ describe('RelationshipListItemHeader conversation indicator', () => {
         expect(screen.getByTitle('Alice is editing')).toBeInTheDocument();
         expect(menuTrigger()).toBeInTheDocument();
 
-        const row = indicator.parentElement;
+        const actions = indicator.closest('.md\\:group-hover\\:flex');
+        expect(actions).not.toBeNull();
+        expect(actions).toHaveClass('flex', 'items-center');
+
+        const row = actions?.closest('.overflow-hidden');
         expect(row).not.toBeNull();
         expect(row).toHaveClass('overflow-hidden');
-        expect(indicator).toHaveClass('mr-1');
     });
 
     it('keeps Open conversation functional while the indicator is visible', async () => {
@@ -511,8 +514,14 @@ describe('RelationshipListItemHeader legacy actions', () => {
         const identity = screen.getByText('orders_clients_fk');
         expect(identity).toHaveClass('truncate');
         expect(identity.parentElement).toHaveClass('min-w-0', 'flex-1');
-        expect(screen.getByTestId('conversation-indicator')).toHaveClass(
-            'mr-1'
+        const indicator = screen.getByTestId('conversation-indicator');
+        const actions = indicator.closest('.md\\:group-hover\\:flex');
+        expect(actions).not.toBeNull();
+        expect(actions).toHaveClass(
+            'flex',
+            'items-center',
+            'md:hidden',
+            'md:group-hover:flex'
         );
     });
 
@@ -531,7 +540,7 @@ describe('RelationshipListItemHeader legacy actions', () => {
         );
 
         const hoverActions = row?.querySelector(
-            '.md\\:hidden.md\\:group-hover\\:flex'
+            '.md\\:hidden.md\\:group-focus-within\\:flex.md\\:group-hover\\:flex'
         );
         expect(hoverActions).not.toBeNull();
     });

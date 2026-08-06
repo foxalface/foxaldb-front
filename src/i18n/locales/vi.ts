@@ -407,6 +407,29 @@ export const vi: LanguageTranslation = {
                     no_messages: 'Chưa có tin nhắn',
                     last_activity: 'Hoạt động gần nhất',
                     open_aria: 'Mở cuộc trò chuyện cho {{target}}',
+                    author_tooltip: 'Tin nhắn cuối của {{name}}',
+                    author_missing_tooltip: 'Không có thông tin tác giả',
+                    actions: {
+                        menu_aria: 'Tùy chọn cuộc trò chuyện',
+                        open: 'Mở',
+                        delete: 'Xóa',
+                    },
+                    delete_dialog: {
+                        title: 'Xóa cuộc trò chuyện?',
+                        description:
+                            'Thao tác này sẽ xóa vĩnh viễn cuộc trò chuyện và tất cả tin nhắn của nó.',
+                        cancel: 'Hủy',
+                        confirm: 'Xóa',
+                        deleting: 'Đang xóa…',
+                        errors: {
+                            delete_failed:
+                                'Không thể xóa cuộc trò chuyện này. Vui lòng thử lại.',
+                            forbidden:
+                                'Bạn không có quyền xóa cuộc trò chuyện này.',
+                            not_found:
+                                'Cuộc trò chuyện này không còn khả dụng.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Quay lại',

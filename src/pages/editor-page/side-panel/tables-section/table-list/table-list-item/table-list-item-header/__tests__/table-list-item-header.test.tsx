@@ -360,6 +360,9 @@ describe('TableListItemHeader conversation indicator', () => {
         expect(indicator).toHaveAttribute('data-target-type', 'table');
         expect(indicator).toHaveAttribute('data-target-id', 'table-1');
         expect(indicator).toHaveAttribute('data-target-name', 'Clients');
+        const actions = indicator.closest('.md\\:group-hover\\:flex');
+        expect(actions).not.toBeNull();
+        expect(actions).toHaveClass('flex', 'items-center');
     });
 
     it('hides ConversationIndicator when conversations are unavailable', () => {

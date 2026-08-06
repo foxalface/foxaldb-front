@@ -400,6 +400,29 @@ export const en = {
                     no_messages: 'No messages yet',
                     last_activity: 'Last activity',
                     open_aria: 'Open conversation for {{target}}',
+                    author_tooltip: 'Last message by {{name}}',
+                    author_missing_tooltip: 'No author information',
+                    actions: {
+                        menu_aria: 'Conversation options',
+                        open: 'Open',
+                        delete: 'Delete',
+                    },
+                    delete_dialog: {
+                        title: 'Delete conversation?',
+                        description:
+                            'This will permanently delete this conversation and all of its messages.',
+                        cancel: 'Cancel',
+                        confirm: 'Delete',
+                        deleting: 'Deleting…',
+                        errors: {
+                            delete_failed:
+                                'Could not delete this conversation. Please try again.',
+                            forbidden:
+                                'You do not have permission to delete this conversation.',
+                            not_found:
+                                'This conversation is no longer available.',
+                        },
+                    },
                 },
                 detail: {
                     back: 'Back',
