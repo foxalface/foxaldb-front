@@ -44,13 +44,11 @@ export const subscribeToUserConversationReadEvents = (
         }
 
         dispatch({
-            type: 'CONVERSATION_UNREAD_SET',
+            type: 'READ_STATE_RECONCILED',
             conversationId: payload.conversationId,
             unreadCount: payload.unreadCount,
-        });
-        dispatch({
-            type: 'UNREAD_TOTAL_SET',
             totalUnreadCount: payload.totalUnreadCount,
+            lastReadMessageId: payload.lastReadMessageId,
         });
     };
 

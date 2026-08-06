@@ -152,10 +152,10 @@ export const subscribeToDiagramConversationEvents = (
 
         if (currentUserId === null || payload.userId !== currentUserId) {
             dispatch({
-                type: 'CONVERSATION_UNREAD_INCREMENT',
+                type: 'UNREAD_FROM_MESSAGE',
                 conversationId: payload.conversation.id,
+                messageId: payload.message.id,
             });
-            dispatch({ type: 'UNREAD_TOTAL_INCREMENT' });
         }
     };
 

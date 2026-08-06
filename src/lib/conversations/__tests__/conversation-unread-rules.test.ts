@@ -169,16 +169,14 @@ describe('conversation unread architecture rules', () => {
         });
 
         expect(dispatch).toHaveBeenCalledWith({
-            type: 'CONVERSATION_UNREAD_SET',
+            type: 'READ_STATE_RECONCILED',
             conversationId: 1,
             unreadCount: 0,
-        });
-        expect(dispatch).toHaveBeenCalledWith({
-            type: 'UNREAD_TOTAL_SET',
             totalUnreadCount: 1,
+            lastReadMessageId: 10,
         });
         expect(dispatch).not.toHaveBeenCalledWith(
-            expect.objectContaining({ type: 'UNREAD_TOTAL_INCREMENT' })
+            expect.objectContaining({ type: 'UNREAD_FROM_MESSAGE' })
         );
     });
 
@@ -223,11 +221,9 @@ describe('conversation unread architecture rules', () => {
         });
 
         expect(dispatch).toHaveBeenCalledWith({
-            type: 'CONVERSATION_UNREAD_INCREMENT',
+            type: 'UNREAD_FROM_MESSAGE',
             conversationId: 1,
-        });
-        expect(dispatch).toHaveBeenCalledWith({
-            type: 'UNREAD_TOTAL_INCREMENT',
+            messageId: 50,
         });
     });
 
@@ -271,7 +267,7 @@ describe('conversation unread architecture rules', () => {
         });
 
         expect(dispatch).not.toHaveBeenCalledWith(
-            expect.objectContaining({ type: 'CONVERSATION_UNREAD_INCREMENT' })
+            expect.objectContaining({ type: 'UNREAD_FROM_MESSAGE' })
         );
     });
 

@@ -86,10 +86,12 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     const getDiagramPrivateChannelRef = useRef(getDiagramPrivateChannel);
     const getUserPrivateChannelRef = useRef(getUserPrivateChannel);
     const realtimeCurrentDiagramIdRef = useRef(realtimeCurrentDiagramId);
+    const messagesByConversationIdRef = useRef(state.messagesByConversationId);
 
     getDiagramPrivateChannelRef.current = getDiagramPrivateChannel;
     getUserPrivateChannelRef.current = getUserPrivateChannel;
     realtimeCurrentDiagramIdRef.current = realtimeCurrentDiagramId;
+    messagesByConversationIdRef.current = state.messagesByConversationId;
 
     const diagramId =
         currentDiagram !== null &&
@@ -753,13 +755,21 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             );
 
             if (scopeDiagramIdRef.current === targetDiagramId) {
-                dispatch({
-                    type: 'MESSAGE_REACTIONS_UPDATED',
-                    conversationId,
-                    messageId: snapshot.messageId,
-                    reactions: snapshot.reactions,
-                    ownership: 'authoritative',
-                });
+                const messageSlice =
+                    messagesByConversationIdRef.current.get(conversationId);
+
+                if (
+                    messageSlice !== undefined &&
+                    messageSlice.byId.has(messageId)
+                ) {
+                    dispatch({
+                        type: 'MESSAGE_REACTIONS_UPDATED',
+                        conversationId,
+                        messageId: snapshot.messageId,
+                        reactions: snapshot.reactions,
+                        ownership: 'authoritative',
+                    });
+                }
             }
         },
         []
@@ -784,13 +794,21 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             );
 
             if (scopeDiagramIdRef.current === targetDiagramId) {
-                dispatch({
-                    type: 'MESSAGE_REACTIONS_UPDATED',
-                    conversationId,
-                    messageId: snapshot.messageId,
-                    reactions: snapshot.reactions,
-                    ownership: 'authoritative',
-                });
+                const messageSlice =
+                    messagesByConversationIdRef.current.get(conversationId);
+
+                if (
+                    messageSlice !== undefined &&
+                    messageSlice.byId.has(messageId)
+                ) {
+                    dispatch({
+                        type: 'MESSAGE_REACTIONS_UPDATED',
+                        conversationId,
+                        messageId: snapshot.messageId,
+                        reactions: snapshot.reactions,
+                        ownership: 'authoritative',
+                    });
+                }
             }
         },
         []
@@ -817,13 +835,11 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             }
 
             dispatch({
-                type: 'CONVERSATION_UNREAD_SET',
+                type: 'READ_STATE_RECONCILED',
                 conversationId: result.conversationId,
                 unreadCount: result.unreadCount,
-            });
-            dispatch({
-                type: 'UNREAD_TOTAL_SET',
                 totalUnreadCount: result.totalUnreadCount,
+                lastReadMessageId: result.lastReadMessageId,
             });
         },
         []

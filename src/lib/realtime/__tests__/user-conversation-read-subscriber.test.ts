@@ -85,13 +85,11 @@ describe('subscribeToUserConversationReadEvents', () => {
         });
 
         expect(dispatch).toHaveBeenCalledWith({
-            type: 'CONVERSATION_UNREAD_SET',
+            type: 'READ_STATE_RECONCILED',
             conversationId: 10,
             unreadCount: 0,
-        });
-        expect(dispatch).toHaveBeenCalledWith({
-            type: 'UNREAD_TOTAL_SET',
             totalUnreadCount: 2,
+            lastReadMessageId: 99,
         });
         expect(dispatch).not.toHaveBeenCalledWith(
             expect.objectContaining({ type: 'UNREAD_TOTAL_INCREMENT' })

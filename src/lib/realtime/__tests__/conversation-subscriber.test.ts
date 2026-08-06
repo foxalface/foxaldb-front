@@ -177,11 +177,9 @@ describe('subscribeToDiagramConversationEvents', () => {
             message,
         });
         expect(dispatch).toHaveBeenCalledWith({
-            type: 'CONVERSATION_UNREAD_INCREMENT',
+            type: 'UNREAD_FROM_MESSAGE',
             conversationId: 10,
-        });
-        expect(dispatch).toHaveBeenCalledWith({
-            type: 'UNREAD_TOTAL_INCREMENT',
+            messageId: 99,
         });
     });
 
@@ -213,10 +211,7 @@ describe('subscribeToDiagramConversationEvents', () => {
         });
 
         expect(dispatch).not.toHaveBeenCalledWith(
-            expect.objectContaining({ type: 'CONVERSATION_UNREAD_INCREMENT' })
-        );
-        expect(dispatch).not.toHaveBeenCalledWith(
-            expect.objectContaining({ type: 'UNREAD_TOTAL_INCREMENT' })
+            expect.objectContaining({ type: 'UNREAD_FROM_MESSAGE' })
         );
     });
 

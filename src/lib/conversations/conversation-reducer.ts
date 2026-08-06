@@ -4,6 +4,12 @@ import type {
     ConversationReactionAggregate,
 } from './conversation-types';
 import {
+    nextReadBoundary,
+    nextUnreadIncrementHighWaterMark,
+    shouldApplyReadReconciliation,
+    shouldIncrementUnreadForMessage,
+} from './conversation-read-sync';
+import {
     reconcileConversationReactionAggregates,
     type ConversationReactionAggregateWithoutOwnership,
 } from './conversation-reaction-reconcile';
@@ -29,6 +35,8 @@ export interface ConversationsState {
     activeSummariesNextCursor: string | null;
     archivedSummariesNextCursor: string | null;
     totalUnreadCount: number;
+    readBoundariesByConversationId: Map<number, number | null>;
+    unreadIncrementHighWaterMarkByConversationId: Map<number, number>;
     messagesByConversationId: Map<number, ConversationMessagesSlice>;
 }
 
@@ -72,6 +80,18 @@ export type ConversationsAction =
           type: 'CONVERSATION_UNREAD_INCREMENT';
           conversationId: number;
           amount?: number;
+      }
+    | {
+          type: 'UNREAD_FROM_MESSAGE';
+          conversationId: number;
+          messageId: number;
+      }
+    | {
+          type: 'READ_STATE_RECONCILED';
+          conversationId: number;
+          unreadCount: number;
+          totalUnreadCount: number;
+          lastReadMessageId: number | null;
       }
     | {
           type: 'MESSAGES_LOAD_STARTED';
@@ -129,6 +149,8 @@ export const initialConversationsState = (): ConversationsState => ({
     activeSummariesNextCursor: null,
     archivedSummariesNextCursor: null,
     totalUnreadCount: 0,
+    readBoundariesByConversationId: new Map(),
+    unreadIncrementHighWaterMarkByConversationId: new Map(),
     messagesByConversationId: new Map(),
 });
 
@@ -204,6 +226,8 @@ const isIdleEmptyState = (state: ConversationsState): boolean =>
     state.activeSummariesNextCursor === null &&
     state.archivedSummariesNextCursor === null &&
     state.totalUnreadCount === 0 &&
+    state.readBoundariesByConversationId.size === 0 &&
+    state.unreadIncrementHighWaterMarkByConversationId.size === 0 &&
     state.messagesByConversationId.size === 0;
 
 const getMessagesSlice = (
@@ -260,6 +284,14 @@ export const conversationsReducer = (
                     action.diagramId === state.diagramId
                         ? state.totalUnreadCount
                         : 0,
+                readBoundariesByConversationId:
+                    action.diagramId === state.diagramId
+                        ? state.readBoundariesByConversationId
+                        : new Map(),
+                unreadIncrementHighWaterMarkByConversationId:
+                    action.diagramId === state.diagramId
+                        ? state.unreadIncrementHighWaterMarkByConversationId
+                        : new Map(),
             };
 
         case 'SUMMARIES_LOAD_SUCCEEDED': {
@@ -290,12 +322,21 @@ export const conversationsReducer = (
                       return nextById;
                   })();
 
+            const syncMapsReset =
+                action.append === false && action.status === 'active';
+
             return {
                 ...state,
                 summariesById,
                 summariesStatus: 'ready',
                 summariesError: null,
                 totalUnreadCount: action.totalUnreadCount,
+                readBoundariesByConversationId: syncMapsReset
+                    ? new Map()
+                    : state.readBoundariesByConversationId,
+                unreadIncrementHighWaterMarkByConversationId: syncMapsReset
+                    ? new Map()
+                    : state.unreadIncrementHighWaterMarkByConversationId,
                 activeSummariesNextCursor:
                     action.status === 'active'
                         ? action.nextCursor
@@ -380,14 +421,139 @@ export const conversationsReducer = (
             );
             messagesByConversationId.delete(action.conversationId);
 
+            const readBoundariesByConversationId = new Map(
+                state.readBoundariesByConversationId
+            );
+            readBoundariesByConversationId.delete(action.conversationId);
+
+            const unreadIncrementHighWaterMarkByConversationId = new Map(
+                state.unreadIncrementHighWaterMarkByConversationId
+            );
+            unreadIncrementHighWaterMarkByConversationId.delete(
+                action.conversationId
+            );
+
             return {
                 ...state,
                 summariesById,
                 messagesByConversationId,
+                readBoundariesByConversationId,
+                unreadIncrementHighWaterMarkByConversationId,
                 totalUnreadCount: Math.max(
                     0,
                     state.totalUnreadCount - removedUnreadCount
                 ),
+            };
+        }
+
+        case 'READ_STATE_RECONCILED': {
+            const storedBoundary = state.readBoundariesByConversationId.get(
+                action.conversationId
+            );
+
+            if (
+                !shouldApplyReadReconciliation(
+                    storedBoundary,
+                    action.lastReadMessageId
+                )
+            ) {
+                return state;
+            }
+
+            const readBoundariesByConversationId = new Map(
+                state.readBoundariesByConversationId
+            );
+            const resolvedBoundary = nextReadBoundary(
+                storedBoundary,
+                action.lastReadMessageId
+            );
+            readBoundariesByConversationId.set(
+                action.conversationId,
+                resolvedBoundary
+            );
+
+            const unreadIncrementHighWaterMarkByConversationId = new Map(
+                state.unreadIncrementHighWaterMarkByConversationId
+            );
+            if (resolvedBoundary !== null) {
+                unreadIncrementHighWaterMarkByConversationId.set(
+                    action.conversationId,
+                    nextUnreadIncrementHighWaterMark(
+                        unreadIncrementHighWaterMarkByConversationId.get(
+                            action.conversationId
+                        ),
+                        resolvedBoundary
+                    )
+                );
+            }
+
+            const existing = state.summariesById.get(action.conversationId);
+            let summariesById = state.summariesById;
+
+            if (existing !== undefined) {
+                summariesById = new Map(state.summariesById);
+                summariesById.set(action.conversationId, {
+                    ...existing,
+                    unreadCount: action.unreadCount,
+                });
+            }
+
+            return {
+                ...state,
+                summariesById,
+                readBoundariesByConversationId,
+                unreadIncrementHighWaterMarkByConversationId,
+                totalUnreadCount: action.totalUnreadCount,
+            };
+        }
+
+        case 'UNREAD_FROM_MESSAGE': {
+            const readBoundary = state.readBoundariesByConversationId.get(
+                action.conversationId
+            );
+            const incrementHighWaterMark =
+                state.unreadIncrementHighWaterMarkByConversationId.get(
+                    action.conversationId
+                );
+
+            if (
+                !shouldIncrementUnreadForMessage(
+                    readBoundary,
+                    incrementHighWaterMark,
+                    action.messageId
+                )
+            ) {
+                return state;
+            }
+
+            const existing = state.summariesById.get(action.conversationId);
+
+            if (existing === undefined) {
+                return state;
+            }
+
+            const summariesById = new Map(state.summariesById);
+            summariesById.set(action.conversationId, {
+                ...existing,
+                unreadCount: existing.unreadCount + 1,
+            });
+
+            const unreadIncrementHighWaterMarkByConversationId = new Map(
+                state.unreadIncrementHighWaterMarkByConversationId
+            );
+            unreadIncrementHighWaterMarkByConversationId.set(
+                action.conversationId,
+                nextUnreadIncrementHighWaterMark(
+                    incrementHighWaterMark,
+                    action.messageId
+                )
+            );
+
+            return {
+                ...state,
+                summariesById,
+                unreadIncrementHighWaterMarkByConversationId,
+                totalUnreadCount: state.totalUnreadCount + 1,
             };
         }
 
