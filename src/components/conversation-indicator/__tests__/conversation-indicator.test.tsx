@@ -161,6 +161,7 @@ describe('ConversationIndicator', () => {
                 lastMessageAt: null,
                 lastMessageBody: null,
                 lastMessageAuthor: null,
+                unreadCount: 0,
                 createdAt: '2026-01-01T10:00:00.000Z',
                 updatedAt: '2026-01-01T10:00:00.000Z',
             },
@@ -192,6 +193,7 @@ describe('ConversationIndicator', () => {
             lastMessageAt: null,
             lastMessageBody: null,
             lastMessageAuthor: null,
+            unreadCount: 0,
             createdAt: '2026-01-01T10:00:00.000Z',
             updatedAt: '2026-01-01T10:00:00.000Z',
         });
@@ -260,6 +262,7 @@ describe('ConversationIndicator', () => {
                 lastMessageAt: null,
                 lastMessageBody: null,
                 lastMessageAuthor: null,
+                unreadCount: 0,
                 createdAt: '2026-01-01T10:00:00.000Z',
                 updatedAt: '2026-01-01T10:00:00.000Z',
             },

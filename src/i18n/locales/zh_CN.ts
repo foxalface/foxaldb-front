@@ -10,6 +10,7 @@ export const zh_CN: LanguageTranslation = {
             dependencies: '依赖关系',
             custom_types: '自定义类型',
             conversations: '对话',
+            conversations_unread_aria: '对话中有 {{count}} 条未读消息',
             visuals: '视觉效果',
         },
         menu: {
@@ -341,6 +342,9 @@ export const zh_CN: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: '只读',
                 deleted_user: '已删除用户',
+                unread: {
+                    badge_aria: '{{count}} 条未读消息',
+                },
                 inactive: {
                     title: '对话 unavailable',
                     description:

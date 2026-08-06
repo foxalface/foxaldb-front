@@ -13,6 +13,7 @@ const baseDto = (
     status: 'active',
     archived_at: null,
     message_count: 2,
+    unread_count: 0,
     last_message_at: '2026-07-19T10:00:00.000000Z',
     last_message_body: 'Latest full message body',
     last_message_author: {
@@ -41,6 +42,7 @@ describe('normalizeDiagramConversationFromApi', () => {
             lastMessageAt: '2026-07-19T10:00:00.000000Z',
             lastMessageBody: 'Latest full message body',
             lastMessageAuthor: buildUserIdentity(7, 'Alex', 'Renart'),
+            unreadCount: 0,
             createdAt: '2026-07-19T10:00:00.000000Z',
             updatedAt: '2026-07-19T11:00:00.000000Z',
         });
@@ -64,6 +66,12 @@ describe('normalizeDiagramConversationFromApi', () => {
                 baseDto({ last_message_author: null })
             ).lastMessageAuthor
         ).toBeNull();
+    });
+
+    it('throws on invalid unread_count', () => {
+        expect(() =>
+            normalizeDiagramConversationFromApi(baseDto({ unread_count: -1 }))
+        ).toThrow(/unread_count must be non-negative/);
     });
 
     it('throws on invalid target_type', () => {

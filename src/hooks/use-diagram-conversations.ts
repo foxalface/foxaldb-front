@@ -15,6 +15,7 @@ export interface UseDiagramConversationsResult {
     diagramId: string | null;
     activeSummariesNextCursor: string | null;
     archivedSummariesNextCursor: string | null;
+    totalUnreadCount: number;
     reload: () => Promise<void>;
     loadArchivedSummaries: (options?: { append?: boolean }) => Promise<void>;
     loadMoreActiveSummaries: () => Promise<void>;
@@ -34,6 +35,7 @@ export const useDiagramConversations = (): UseDiagramConversationsResult => {
         diagramId: value.diagramId,
         activeSummariesNextCursor: value.activeSummariesNextCursor,
         archivedSummariesNextCursor: value.archivedSummariesNextCursor,
+        totalUnreadCount: value.totalUnreadCount,
         reload: value.reload,
         loadArchivedSummaries: value.loadArchivedSummaries,
         loadMoreActiveSummaries: value.loadMoreActiveSummaries,

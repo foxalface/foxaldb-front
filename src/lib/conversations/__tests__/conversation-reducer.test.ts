@@ -24,6 +24,7 @@ const conversation = (
     lastMessageAt: null,
     lastMessageBody: null,
     lastMessageAuthor: null,
+    unreadCount: 0,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T11:00:00.000Z`,
     ...overrides,
@@ -49,6 +50,7 @@ const loadActiveSucceeded = (
             status: 'active',
             nextCursor: null,
             append: false,
+            totalUnreadCount: 0,
         }
     );
 
@@ -154,6 +156,7 @@ describe('conversationsReducer', () => {
                 status: 'archived',
                 nextCursor: null,
                 append: false,
+                totalUnreadCount: 0,
             }
         );
 
@@ -267,5 +270,138 @@ describe('conversationsReducer', () => {
         });
 
         expect(state).toEqual(initialConversationsState());
+    });
+});
+
+describe('conversationsReducer unread actions', () => {
+    it('SUMMARIES_LOAD_SUCCEEDED sets totalUnreadCount from backend', () => {
+        const state = conversationsReducer(
+            conversationsReducer(initialConversationsState(), {
+                type: 'SUMMARIES_LOAD_STARTED',
+                diagramId: '42',
+                generation: 1,
+            }),
+            {
+                type: 'SUMMARIES_LOAD_SUCCEEDED',
+                diagramId: '42',
+                generation: 1,
+                conversations: [conversation({ id: 1, unreadCount: 4 })],
+                status: 'active',
+                nextCursor: null,
+                append: false,
+                totalUnreadCount: 4,
+            }
+        );
+
+        expect(state.totalUnreadCount).toBe(4);
+        expect(state.summariesById.get(1)?.unreadCount).toBe(4);
+    });
+
+    it('UNREAD_TOTAL_SET replaces the total unread count', () => {
+        const loaded = loadActiveSucceeded(initialConversationsState(), [
+            conversation({ id: 1 }),
+        ]);
+
+        const state = conversationsReducer(loaded, {
+            type: 'UNREAD_TOTAL_SET',
+            totalUnreadCount: 9,
+        });
+
+        expect(state.totalUnreadCount).toBe(9);
+    });
+
+    it('UNREAD_TOTAL_INCREMENT increases the total unread count', () => {
+        const loaded = loadActiveSucceeded(initialConversationsState(), [
+            conversation({ id: 1 }),
+        ]);
+
+        const state = conversationsReducer(loaded, {
+            type: 'UNREAD_TOTAL_INCREMENT',
+            amount: 2,
+        });
+
+        expect(state.totalUnreadCount).toBe(2);
+    });
+
+    it('CONVERSATION_UNREAD_SET updates an existing summary only', () => {
+        const loaded = loadActiveSucceeded(initialConversationsState(), [
+            conversation({ id: 1, unreadCount: 3 }),
+        ]);
+
+        const updated = conversationsReducer(loaded, {
+            type: 'CONVERSATION_UNREAD_SET',
+            conversationId: 1,
+            unreadCount: 0,
+        });
+
+        expect(updated.summariesById.get(1)?.unreadCount).toBe(0);
+
+        const ignored = conversationsReducer(loaded, {
+            type: 'CONVERSATION_UNREAD_SET',
+            conversationId: 99,
+            unreadCount: 0,
+        });
+
+        expect(ignored).toBe(loaded);
+    });
+
+    it('CONVERSATION_UNREAD_INCREMENT updates an existing summary only', () => {
+        const loaded = loadActiveSucceeded(initialConversationsState(), [
+            conversation({ id: 1, unreadCount: 1 }),
+        ]);
+
+        const state = conversationsReducer(loaded, {
+            type: 'CONVERSATION_UNREAD_INCREMENT',
+            conversationId: 1,
+        });
+
+        expect(state.summariesById.get(1)?.unreadCount).toBe(2);
+    });
+
+    it('CONVERSATION_UPSERTED preserves unread when requested', () => {
+        const loaded = loadActiveSucceeded(initialConversationsState(), [
+            conversation({ id: 1, unreadCount: 5 }),
+        ]);
+
+        const state = conversationsReducer(loaded, {
+            type: 'CONVERSATION_UPSERTED',
+            conversation: conversation({
+                id: 1,
+                unreadCount: 0,
+                messageCount: 9,
+            }),
+            preserveUnreadCount: true,
+        });
+
+        expect(state.summariesById.get(1)?.unreadCount).toBe(5);
+        expect(state.summariesById.get(1)?.messageCount).toBe(9);
+    });
+
+    it('CONVERSATION_REMOVED subtracts unread from total', () => {
+        const loaded = conversationsReducer(
+            conversationsReducer(initialConversationsState(), {
+                type: 'SUMMARIES_LOAD_STARTED',
+                diagramId: '42',
+                generation: 1,
+            }),
+            {
+                type: 'SUMMARIES_LOAD_SUCCEEDED',
+                diagramId: '42',
+                generation: 1,
+                conversations: [conversation({ id: 1, unreadCount: 3 })],
+                status: 'active',
+                nextCursor: null,
+                append: false,
+                totalUnreadCount: 3,
+            }
+        );
+
+        const state = conversationsReducer(loaded, {
+            type: 'CONVERSATION_REMOVED',
+            conversationId: 1,
+        });
+
+        expect(state.totalUnreadCount).toBe(0);
+        expect(state.summariesById.has(1)).toBe(false);
     });
 });

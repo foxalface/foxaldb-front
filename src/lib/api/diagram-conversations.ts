@@ -7,7 +7,9 @@ import type {
     DiagramConversationMessage,
     FindOrCreateDiagramConversationInput,
     ListConversationMessagesOptions,
+    MarkConversationReadResult,
     PaginatedResult,
+    DiagramConversationsListResult,
     UpdateConversationMessageInput,
 } from '@/lib/conversations/conversation-types';
 import { apiRequest } from './client';
@@ -34,6 +36,7 @@ export interface DiagramConversationDto {
         last_name: string;
         full_name: string;
     } | null;
+    unread_count: number;
     created_at: string;
     updated_at: string;
 }
@@ -63,6 +66,17 @@ interface ConversationMessageReactionsMutationResponse {
 interface DiagramConversationsListResponse {
     data: DiagramConversationDto[];
     next_cursor: string | null;
+    total_unread_count: number;
+}
+
+interface MarkConversationReadResponse {
+    data: {
+        conversation_id: number;
+        last_read_message_id: number | null;
+        last_read_at: string;
+        unread_count: number;
+        total_unread_count: number;
+    };
 }
 
 interface DiagramConversationResponse {
@@ -119,10 +133,59 @@ const normalizeMessageReactionsMutationResponse = (
 
 const normalizePaginatedConversations = (
     response: DiagramConversationsListResponse
-): PaginatedResult<DiagramConversation> => ({
-    data: response.data.map(normalizeDiagramConversationFromApi),
-    nextCursor: response.next_cursor,
-});
+): DiagramConversationsListResult<DiagramConversation> => {
+    if (!Number.isInteger(response.total_unread_count)) {
+        throw new Error(
+            'Invalid conversations list response: total_unread_count'
+        );
+    }
+
+    return {
+        data: response.data.map(normalizeDiagramConversationFromApi),
+        nextCursor: response.next_cursor,
+        totalUnreadCount: response.total_unread_count,
+    };
+};
+
+const normalizeMarkConversationReadResponse = (
+    response: MarkConversationReadResponse
+): MarkConversationReadResult => {
+    const data = response.data;
+
+    if (!Number.isInteger(data.conversation_id)) {
+        throw new Error('Invalid mark-read response: conversation_id');
+    }
+
+    if (
+        data.last_read_message_id !== null &&
+        !Number.isInteger(data.last_read_message_id)
+    ) {
+        throw new Error('Invalid mark-read response: last_read_message_id');
+    }
+
+    if (
+        typeof data.last_read_at !== 'string' ||
+        data.last_read_at.length === 0
+    ) {
+        throw new Error('Invalid mark-read response: last_read_at');
+    }
+
+    if (!Number.isInteger(data.unread_count)) {
+        throw new Error('Invalid mark-read response: unread_count');
+    }
+
+    if (!Number.isInteger(data.total_unread_count)) {
+        throw new Error('Invalid mark-read response: total_unread_count');
+    }
+
+    return {
+        conversationId: data.conversation_id,
+        lastReadMessageId: data.last_read_message_id,
+        lastReadAt: data.last_read_at,
+        unreadCount: data.unread_count,
+        totalUnreadCount: data.total_unread_count,
+    };
+};
 
 const normalizePaginatedMessages = (
     response: DiagramConversationMessagesListResponse
@@ -188,12 +251,31 @@ export const listDiagramConversations = async (
         cursor?: string;
         limit?: number;
     }
-): Promise<PaginatedResult<DiagramConversation>> => {
+): Promise<DiagramConversationsListResult<DiagramConversation>> => {
     const response = await apiRequest<DiagramConversationsListResponse>(
         `${conversationsPath(diagramId)}${buildListSummariesQuery(options ?? {})}`
     );
 
     return normalizePaginatedConversations(response);
+};
+
+export const markDiagramConversationRead = async (
+    diagramId: string,
+    conversationId: number,
+    lastReadMessageId?: number
+): Promise<MarkConversationReadResult> => {
+    const response = await apiRequest<MarkConversationReadResponse>(
+        `${conversationPath(diagramId, conversationId)}/read`,
+        {
+            method: 'POST',
+            data:
+                lastReadMessageId !== undefined
+                    ? { last_read_message_id: lastReadMessageId }
+                    : undefined,
+        }
+    );
+
+    return normalizeMarkConversationReadResponse(response);
 };
 
 export const findOrCreateDiagramConversation = async (

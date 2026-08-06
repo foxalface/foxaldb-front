@@ -48,6 +48,16 @@ vi.mock('@/hooks/use-dialog', () => ({
     }),
 }));
 
+const { diagramConversationsState } = vi.hoisted(() => ({
+    diagramConversationsState: {
+        totalUnreadCount: 0,
+    },
+}));
+
+vi.mock('@/hooks/use-diagram-conversations', () => ({
+    useDiagramConversations: () => diagramConversationsState,
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string) => {
@@ -85,6 +95,7 @@ describe('EditorSidebar conversations entry', () => {
         layoutState.selectVisualsTab = vi.fn();
         layoutState.openConversationsPanel = vi.fn();
         conversationsAvailabilityState.isAvailable = false;
+        diagramConversationsState.totalUnreadCount = 0;
     });
 
     it('shows the Conversations item when conversations are available', () => {
@@ -134,6 +145,40 @@ describe('EditorSidebar conversations entry', () => {
         ).not.toBeInTheDocument();
         expect(
             screen.queryByRole('button', { name: 'Comments (legacy)' })
+        ).not.toBeInTheDocument();
+    });
+});
+
+describe('EditorSidebar conversations unread badge', () => {
+    beforeEach(() => {
+        conversationsAvailabilityState.isAvailable = true;
+        diagramConversationsState.totalUnreadCount = 0;
+    });
+
+    it('shows sidebar unread badge when totalUnreadCount is positive', () => {
+        diagramConversationsState.totalUnreadCount = 5;
+        renderSidebar();
+
+        expect(
+            screen.getByTestId('conversation-unread-badge')
+        ).toHaveTextContent('5');
+    });
+
+    it('hides sidebar unread badge when totalUnreadCount is zero', () => {
+        renderSidebar();
+
+        expect(
+            screen.queryByTestId('conversation-unread-badge')
+        ).not.toBeInTheDocument();
+    });
+
+    it('does not show unread badge when conversations are unavailable (guest)', () => {
+        diagramConversationsState.totalUnreadCount = 8;
+        conversationsAvailabilityState.isAvailable = false;
+        renderSidebar();
+
+        expect(
+            screen.queryByTestId('conversation-unread-badge')
         ).not.toBeInTheDocument();
     });
 });

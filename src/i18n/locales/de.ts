@@ -10,6 +10,8 @@ export const de: LanguageTranslation = {
             dependencies: 'Abhängigkeiten',
             custom_types: 'Benutzerdefinierte Typen',
             conversations: 'Unterhaltungen',
+            conversations_unread_aria:
+                '{{count}} ungelesene Nachrichten in Konversationen',
             visuals: 'Darstellungen',
         },
         menu: {
@@ -349,6 +351,9 @@ export const de: LanguageTranslation = {
                 dismiss: 'Schließen',
                 read_only: 'Nur Lesen',
                 deleted_user: 'Gelöschter Benutzer',
+                unread: {
+                    badge_aria: '{{count}} ungelesene Nachrichten',
+                },
                 inactive: {
                     title: 'Unterhaltungen nicht verfügbar',
                     description:

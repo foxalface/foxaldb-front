@@ -112,6 +112,14 @@ export const normalizeDiagramConversationFromApi = (
         throw invalidPayload('updated_at must be a non-empty string');
     }
 
+    if (!Number.isInteger(conversation.unread_count)) {
+        throw invalidPayload('unread_count must be a finite integer');
+    }
+
+    if (conversation.unread_count < 0) {
+        throw invalidPayload('unread_count must be non-negative');
+    }
+
     return {
         id: conversation.id,
         diagramId: conversation.diagram_id,
@@ -123,6 +131,7 @@ export const normalizeDiagramConversationFromApi = (
         lastMessageAt: conversation.last_message_at,
         lastMessageBody: conversation.last_message_body,
         lastMessageAuthor,
+        unreadCount: conversation.unread_count,
         createdAt: conversation.created_at,
         updatedAt: conversation.updated_at,
     };

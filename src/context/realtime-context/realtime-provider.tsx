@@ -436,6 +436,11 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const getUserPrivateChannel = useCallback(
+        () => channelManagerRef.current.getUserPrivateChannel() ?? null,
+        []
+    );
+
     const onReconnect = useCallback((listener: () => void): (() => void) => {
         reconnectConsumerListenersRef.current.add(listener);
 
@@ -452,6 +457,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             joinDiagram,
             leaveDiagram,
             getDiagramPrivateChannel,
+            getUserPrivateChannel,
             onReconnect,
             sendCursor,
             subscribeToCursorActions,
@@ -471,6 +477,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             joinDiagram,
             leaveDiagram,
             getDiagramPrivateChannel,
+            getUserPrivateChannel,
             onReconnect,
             sendCursor,
             subscribeToCursorActions,

@@ -10,6 +10,7 @@ export const hi: LanguageTranslation = {
             dependencies: 'निर्भरताएं',
             custom_types: 'कस्टम टाइप',
             conversations: 'वार्तालाप',
+            conversations_unread_aria: 'वार्तालापों में {{count}} अपठित संदेश',
             visuals: 'Visuals',
         },
         menu: {
@@ -349,6 +350,9 @@ export const hi: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'केवल पढ़ने योग्य',
                 deleted_user: 'हटाया गया उपयोगकर्ता',
+                unread: {
+                    badge_aria: '{{count}} अपठित संदेश',
+                },
                 inactive: {
                     title: 'वार्तालाप unavailable',
                     description:

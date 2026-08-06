@@ -44,11 +44,13 @@ const resolveActiveDiagramId = (diagramId: string): number | null => {
 
 const upsertConversation = (
     dispatch: (action: ConversationsAction) => void,
-    conversation: DiagramConversation
+    conversation: DiagramConversation,
+    preserveUnreadCount = false
 ): void => {
     dispatch({
         type: 'CONVERSATION_UPSERTED',
         conversation,
+        preserveUnreadCount,
     });
 };
 
@@ -140,11 +142,21 @@ export const subscribeToDiagramConversationEvents = (
             return;
         }
 
-        upsertConversation(dispatch, payload.conversation);
+        upsertConversation(dispatch, payload.conversation, true);
         dispatch({
             type: 'MESSAGE_UPSERTED',
             message: payload.message,
         });
+
+        const currentUserId = getCurrentUserId?.() ?? null;
+
+        if (currentUserId === null || payload.userId !== currentUserId) {
+            dispatch({
+                type: 'CONVERSATION_UNREAD_INCREMENT',
+                conversationId: payload.conversation.id,
+            });
+            dispatch({ type: 'UNREAD_TOTAL_INCREMENT' });
+        }
     };
 
     const onMessageUpdated = (raw: unknown): void => {
@@ -161,7 +173,7 @@ export const subscribeToDiagramConversationEvents = (
             return;
         }
 
-        upsertConversation(dispatch, payload.conversation);
+        upsertConversation(dispatch, payload.conversation, true);
         dispatch({
             type: 'MESSAGE_UPSERTED',
             message: payload.message,
@@ -182,7 +194,7 @@ export const subscribeToDiagramConversationEvents = (
             return;
         }
 
-        upsertConversation(dispatch, payload.conversation);
+        upsertConversation(dispatch, payload.conversation, true);
         dispatch({
             type: 'MESSAGE_REMOVED',
             conversationId: payload.conversationId,

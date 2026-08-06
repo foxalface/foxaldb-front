@@ -10,6 +10,7 @@ export const ne: LanguageTranslation = {
             dependencies: 'निर्भरताहरू',
             custom_types: 'कस्टम प्रकारहरू',
             conversations: 'कुराकानी',
+            conversations_unread_aria: 'कुराकानीमा {{count}} नपढिएका सन्देशहरू',
             visuals: 'Visuals',
         },
         menu: {
@@ -348,6 +349,9 @@ export const ne: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'पढ्न मात्र',
                 deleted_user: 'मेटाइएको प्रयोगकर्ता',
+                unread: {
+                    badge_aria: '{{count}} नपढिएका सन्देशहरू',
+                },
                 inactive: {
                     title: 'कुराकानी unavailable',
                     description:

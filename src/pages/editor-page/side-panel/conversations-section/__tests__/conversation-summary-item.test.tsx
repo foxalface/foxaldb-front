@@ -24,6 +24,7 @@ const buildConversation = (
     lastMessageAt: '2026-01-02T12:00:00.000Z',
     lastMessageBody: 'Latest update',
     lastMessageAuthor: aliceWonderAuthor,
+    unreadCount: 0,
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-02T12:00:00.000Z',
     ...overrides,
@@ -389,5 +390,33 @@ describe('ConversationSummaryItem', () => {
         await waitFor(() => {
             expect(onDelete).toHaveBeenCalledWith(10);
         });
+    });
+
+    it('shows an unread badge overlay when unreadCount is positive', () => {
+        renderItem({
+            conversation: buildConversation({ unreadCount: 4 }),
+        });
+
+        const badge = screen.getByTestId('conversation-unread-badge');
+        expect(badge).toHaveTextContent('4');
+        expect(badge).toHaveAttribute('aria-label');
+    });
+
+    it('hides the unread badge when unreadCount is zero', () => {
+        renderItem({ conversation: buildConversation({ unreadCount: 0 }) });
+
+        expect(
+            screen.queryByTestId('conversation-unread-badge')
+        ).not.toBeInTheDocument();
+    });
+
+    it('caps unread badge display at 99+', () => {
+        renderItem({
+            conversation: buildConversation({ unreadCount: 150 }),
+        });
+
+        expect(
+            screen.getByTestId('conversation-unread-badge')
+        ).toHaveTextContent('99+');
     });
 });

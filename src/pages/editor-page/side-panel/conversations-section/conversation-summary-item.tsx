@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import { getConversationSummaryCapabilities } from '@/lib/conversations/conversation-summary-capabilities';
 import { resolveConversationSummaryDisplayText } from '@/lib/conversations/conversation-summary-body';
+import { ConversationUnreadBadgeWithTranslation } from '@/components/conversations/conversation-unread-badge';
 import { ConversationSummaryTimestamp } from './conversation-summary-timestamp';
 import { ConversationSummaryActionsMenu } from './conversation-summary-actions-menu';
 import { ConversationSummaryDeleteDialog } from './conversation-summary-delete-dialog';
@@ -176,6 +177,10 @@ export const ConversationSummaryItem: React.FC<
             data-archived={isArchived ? 'true' : 'false'}
             data-testid={`conversation-summary-${conversation.id}`}
         >
+            <ConversationUnreadBadgeWithTranslation
+                count={conversation.unreadCount}
+                translationKey="side_panel.conversations_section.unread.badge_aria"
+            />
             <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2">
                 <div
                     role="button"

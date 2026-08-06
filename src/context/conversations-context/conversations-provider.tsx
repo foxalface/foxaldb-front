@@ -18,6 +18,7 @@ import {
     getDiagramConversation,
     listConversationMessages,
     listDiagramConversations,
+    markDiagramConversationRead,
     removeConversationMessageReaction,
     reopenDiagramConversation,
     updateConversationMessage,
@@ -43,6 +44,7 @@ import type {
     UpdateConversationMessageInput,
 } from '@/lib/conversations/conversation-types';
 import { subscribeToDiagramConversationEvents } from '@/lib/realtime/conversation-subscriber';
+import { subscribeToUserConversationReadEvents } from '@/lib/realtime/user-conversation-read-subscriber';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
     adoptConversationSubscription,
@@ -65,6 +67,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     const {
         currentDiagramId: realtimeCurrentDiagramId,
         getDiagramPrivateChannel,
+        getUserPrivateChannel,
         onReconnect,
     } = useRealtime();
     const [state, dispatch] = useReducer(
@@ -79,10 +82,13 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     const currentUserIdRef = useRef<number | null>(null);
     const activeConversationSubscriptionRef =
         useRef<ActiveConversationSubscription | null>(null);
+    const userReadSubscriptionCleanupRef = useRef<(() => void) | null>(null);
     const getDiagramPrivateChannelRef = useRef(getDiagramPrivateChannel);
+    const getUserPrivateChannelRef = useRef(getUserPrivateChannel);
     const realtimeCurrentDiagramIdRef = useRef(realtimeCurrentDiagramId);
 
     getDiagramPrivateChannelRef.current = getDiagramPrivateChannel;
+    getUserPrivateChannelRef.current = getUserPrivateChannel;
     realtimeCurrentDiagramIdRef.current = realtimeCurrentDiagramId;
 
     const diagramId =
@@ -115,9 +121,35 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
         [state]
     );
 
+    const clearUserReadSubscription = useCallback((): void => {
+        userReadSubscriptionCleanupRef.current?.();
+        userReadSubscriptionCleanupRef.current = null;
+    }, []);
+
     const clearConversationSubscription = useCallback((): void => {
         clearActiveConversationSubscription(activeConversationSubscriptionRef);
     }, []);
+
+    const replaceUserReadSubscription = useCallback((): void => {
+        clearUserReadSubscription();
+
+        const targetDiagramId = scopeDiagramIdRef.current;
+        if (targetDiagramId === null) {
+            return;
+        }
+
+        const channel = getUserPrivateChannelRef.current();
+        if (channel === null) {
+            return;
+        }
+
+        userReadSubscriptionCleanupRef.current =
+            subscribeToUserConversationReadEvents({
+                channel,
+                diagramId: targetDiagramId,
+                dispatch,
+            });
+    }, [clearUserReadSubscription]);
 
     const replaceConversationSubscription = useCallback(():
         | (() => void)
@@ -182,6 +214,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
                     status: 'active',
                     nextCursor: loaded.nextCursor,
                     append: options?.append === true,
+                    totalUnreadCount: loaded.totalUnreadCount,
                 });
             } catch (error) {
                 if (summariesLoadGenerationRef.current !== generation) {
@@ -236,6 +269,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
                     status: 'archived',
                     nextCursor: loaded.nextCursor,
                     append: options?.append === true,
+                    totalUnreadCount: loaded.totalUnreadCount,
                 });
             } catch (error) {
                 if (summariesLoadGenerationRef.current !== generation) {
@@ -405,27 +439,33 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     useEffect(() => {
         if (!isActive || diagramId === null) {
             clearConversationSubscription();
+            clearUserReadSubscription();
             return;
         }
 
         const releaseOwnedSubscription = replaceConversationSubscription();
+        replaceUserReadSubscription();
 
         return () => {
             releaseOwnedSubscription?.();
+            clearUserReadSubscription();
         };
     }, [
         isActive,
         diagramId,
         realtimeCurrentDiagramId,
         clearConversationSubscription,
+        clearUserReadSubscription,
         replaceConversationSubscription,
+        replaceUserReadSubscription,
     ]);
 
     useEffect(() => {
         return () => {
             clearConversationSubscription();
+            clearUserReadSubscription();
         };
-    }, [clearConversationSubscription]);
+    }, [clearConversationSubscription, clearUserReadSubscription]);
 
     const reload = useCallback(async (): Promise<void> => {
         const targetDiagramId = scopeDiagramIdRef.current;
@@ -445,6 +485,9 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     replaceConversationSubscriptionRef.current =
         replaceConversationSubscription;
 
+    const replaceUserReadSubscriptionRef = useRef(replaceUserReadSubscription);
+    replaceUserReadSubscriptionRef.current = replaceUserReadSubscription;
+
     useEffect(() => {
         if (!isActive) {
             return;
@@ -453,6 +496,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
         return onReconnect(() => {
             try {
                 replaceConversationSubscriptionRef.current();
+                replaceUserReadSubscriptionRef.current();
             } catch (error) {
                 console.warn(
                     '[Conversations] Failed to restore realtime conversation subscription after reconnect',
@@ -752,6 +796,39 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const markConversationRead = useCallback(
+        async (
+            conversationId: number,
+            lastReadMessageId?: number
+        ): Promise<void> => {
+            const targetDiagramId = scopeDiagramIdRef.current;
+            if (targetDiagramId === null) {
+                return Promise.reject(createConversationsInactiveError());
+            }
+
+            const result = await markDiagramConversationRead(
+                targetDiagramId,
+                conversationId,
+                lastReadMessageId
+            );
+
+            if (scopeDiagramIdRef.current !== targetDiagramId) {
+                return;
+            }
+
+            dispatch({
+                type: 'CONVERSATION_UNREAD_SET',
+                conversationId: result.conversationId,
+                unreadCount: result.unreadCount,
+            });
+            dispatch({
+                type: 'UNREAD_TOTAL_SET',
+                totalUnreadCount: result.totalUnreadCount,
+            });
+        },
+        []
+    );
+
     const getMessages = useCallback(
         (conversationId: number) =>
             selectMessagesForConversation(state, conversationId),
@@ -786,6 +863,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             diagramId: isActive ? diagramId : null,
             activeSummariesNextCursor: state.activeSummariesNextCursor,
             archivedSummariesNextCursor: state.archivedSummariesNextCursor,
+            totalUnreadCount: state.totalUnreadCount,
             reload,
             loadArchivedSummaries,
             loadMoreActiveSummaries,
@@ -805,6 +883,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             deleteMessage,
             addReaction,
             removeReaction,
+            markConversationRead,
         }),
         [
             activeConversations,
@@ -813,6 +892,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             state.summariesError,
             state.activeSummariesNextCursor,
             state.archivedSummariesNextCursor,
+            state.totalUnreadCount,
             isActive,
             diagramId,
             reload,
@@ -834,6 +914,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             deleteMessage,
             addReaction,
             removeReaction,
+            markConversationRead,
         ]
     );
 

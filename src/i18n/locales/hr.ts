@@ -10,6 +10,8 @@ export const hr: LanguageTranslation = {
             dependencies: 'Ovisnosti',
             custom_types: 'Prilagođeni Tipovi',
             conversations: 'Razgovori',
+            conversations_unread_aria:
+                '{{count}} nepročitanih poruka u razgovorima',
             visuals: 'Vizuali',
         },
         menu: {
@@ -344,6 +346,9 @@ export const hr: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'Samo za čitanje',
                 deleted_user: 'Izbrisani korisnik',
+                unread: {
+                    badge_aria: '{{count}} nepročitanih poruka',
+                },
                 inactive: {
                     title: 'Razgovori unavailable',
                     description:

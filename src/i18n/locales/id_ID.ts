@@ -10,6 +10,8 @@ export const id_ID: LanguageTranslation = {
             dependencies: 'Ketergantungan',
             custom_types: 'Tipe Kustom',
             conversations: 'Percakapan',
+            conversations_unread_aria:
+                '{{count}} pesan belum dibaca dalam percakapan',
             visuals: 'Visual',
         },
         menu: {
@@ -347,6 +349,9 @@ export const id_ID: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'Hanya baca',
                 deleted_user: 'Pengguna dihapus',
+                unread: {
+                    badge_aria: '{{count}} pesan belum dibaca',
+                },
                 inactive: {
                     title: 'Percakapan unavailable',
                     description:

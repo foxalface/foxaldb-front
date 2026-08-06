@@ -10,6 +10,8 @@ export const ru: LanguageTranslation = {
             dependencies: 'Зависимости',
             custom_types: 'Пользовательские типы',
             conversations: 'Беседы',
+            conversations_unread_aria:
+                '{{count}} непрочитанных сообщений в обсуждениях',
             visuals: 'Визуальные элементы',
         },
         menu: {
@@ -346,6 +348,9 @@ export const ru: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'Только чтение',
                 deleted_user: 'Удалённый пользователь',
+                unread: {
+                    badge_aria: '{{count}} непрочитанных сообщений',
+                },
                 inactive: {
                     title: 'Беседы unavailable',
                     description:

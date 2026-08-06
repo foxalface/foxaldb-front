@@ -10,6 +10,7 @@ export const te: LanguageTranslation = {
             dependencies: 'ఆధారతలు',
             custom_types: 'కస్టమ్ టైప్స్',
             conversations: 'సంభాషణలు',
+            conversations_unread_aria: 'సంభాషణలలో {{count}} చదవని సందేశాలు',
             visuals: 'Visuals',
         },
         menu: {
@@ -348,6 +349,9 @@ export const te: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'చదవడానికి మాత్రమే',
                 deleted_user: 'తొలగించిన వినియోగదారు',
+                unread: {
+                    badge_aria: '{{count}} చదవని సందేశాలు',
+                },
                 inactive: {
                     title: 'సంభాషణలు unavailable',
                     description:

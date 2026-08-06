@@ -10,6 +10,8 @@ export const gu: LanguageTranslation = {
             dependencies: 'નિર્ભરતાઓ',
             custom_types: 'કસ્ટમ ટાઇપ',
             conversations: 'વાતચીત',
+            conversations_unread_aria:
+                'વાતચીતમાં {{count}} વાંચ્યા વગરના સંદેશા',
             visuals: 'Visuals',
         },
         menu: {
@@ -348,6 +350,9 @@ export const gu: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'માત્ર વાંચવા યોગ્ય',
                 deleted_user: 'કાઢી નાખેલો વપરાશકર્તા',
+                unread: {
+                    badge_aria: '{{count}} વાંચ્યા વગરના સંદેશા',
+                },
                 inactive: {
                     title: 'વાતચીત unavailable',
                     description:

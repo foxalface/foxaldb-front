@@ -35,6 +35,17 @@ export const DIAGRAM_CONVERSATION_MESSAGE_DELETED_EVENT =
 export const DIAGRAM_CONVERSATION_MESSAGE_REACTIONS_UPDATED_EVENT =
     '.DiagramConversationMessageReactionsUpdated';
 
+export const DIAGRAM_CONVERSATION_READ_UPDATED_EVENT =
+    '.DiagramConversationReadUpdated';
+
+export interface DiagramConversationReadUpdatedPayload {
+    diagramId: number;
+    conversationId: number;
+    unreadCount: number;
+    totalUnreadCount: number;
+    lastReadMessageId: number | null;
+}
+
 export interface DiagramConversationMutationPayload {
     conversation: DiagramConversation;
     userId: number;
@@ -160,6 +171,7 @@ const parseDiagramConversation = (
         lastMessageAuthor,
         createdAt,
         updatedAt,
+        unreadCount,
     } = value;
 
     if (!isFiniteInteger(id) || !isFiniteInteger(diagramId)) {
@@ -204,6 +216,12 @@ const parseDiagramConversation = (
         return null;
     }
 
+    const parsedUnreadCount = isFiniteInteger(unreadCount) ? unreadCount : 0;
+
+    if (parsedUnreadCount < 0) {
+        return null;
+    }
+
     return {
         id,
         diagramId,
@@ -215,6 +233,7 @@ const parseDiagramConversation = (
         lastMessageAt,
         lastMessageBody,
         lastMessageAuthor: parsedLastMessageAuthor,
+        unreadCount: parsedUnreadCount,
         createdAt,
         updatedAt,
     };
@@ -448,4 +467,45 @@ export const parseDiagramConversationMessageReactionsUpdatedPayload = (
     } catch {
         return null;
     }
+};
+
+export const parseDiagramConversationReadUpdatedPayload = (
+    value: unknown
+): DiagramConversationReadUpdatedPayload | null => {
+    if (!isRecord(value)) {
+        return null;
+    }
+
+    const {
+        diagramId,
+        conversationId,
+        unreadCount,
+        totalUnreadCount,
+        lastReadMessageId,
+    } = value;
+
+    if (
+        !isFiniteInteger(diagramId) ||
+        !isFiniteInteger(conversationId) ||
+        !isFiniteInteger(unreadCount) ||
+        !isFiniteInteger(totalUnreadCount)
+    ) {
+        return null;
+    }
+
+    if (unreadCount < 0 || totalUnreadCount < 0) {
+        return null;
+    }
+
+    if (lastReadMessageId !== null && !isFiniteInteger(lastReadMessageId)) {
+        return null;
+    }
+
+    return {
+        diagramId,
+        conversationId,
+        unreadCount,
+        totalUnreadCount,
+        lastReadMessageId,
+    };
 };

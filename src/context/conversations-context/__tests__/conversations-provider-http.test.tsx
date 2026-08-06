@@ -51,6 +51,7 @@ describe('ConversationsProvider HTTP lifecycle', () => {
                 createConversationFixture({ id: 1 }),
             ],
             nextCursor: null,
+            totalUnreadCount: 3,
         });
 
         const { result } = renderHook(() => useDiagramConversations(), {
@@ -72,6 +73,7 @@ describe('ConversationsProvider HTTP lifecycle', () => {
         expect(result.current.activeConversations.map((c) => c.id)).toEqual([
             2, 1,
         ]);
+        expect(result.current.totalUnreadCount).toBe(3);
         expect(result.current.error).toBeNull();
     });
 
@@ -79,6 +81,7 @@ describe('ConversationsProvider HTTP lifecycle', () => {
         const pending = deferred<{
             data: DiagramConversation[];
             nextCursor: string | null;
+            totalUnreadCount: number;
         }>();
         listDiagramConversations.mockReturnValue(pending.promise);
 
@@ -93,6 +96,7 @@ describe('ConversationsProvider HTTP lifecycle', () => {
             pending.resolve({
                 data: [createConversationFixture({ id: 1 })],
                 nextCursor: null,
+                totalUnreadCount: 0,
             });
         });
 
@@ -105,6 +109,7 @@ describe('ConversationsProvider HTTP lifecycle', () => {
         listDiagramConversations.mockResolvedValue({
             data: [],
             nextCursor: null,
+            totalUnreadCount: 0,
         });
 
         const created = createConversationFixture({ id: 5 });
@@ -142,6 +147,7 @@ describe('ConversationsProvider HTTP lifecycle', () => {
         listDiagramConversations.mockResolvedValue({
             data: [createConversationFixture({ id: 1 })],
             nextCursor: null,
+            totalUnreadCount: 0,
         });
 
         const { result, rerender } = renderHook(

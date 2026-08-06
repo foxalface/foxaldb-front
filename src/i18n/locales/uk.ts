@@ -10,6 +10,8 @@ export const uk: LanguageTranslation = {
             dependencies: 'Залежності',
             custom_types: 'Користувацькі типи',
             conversations: 'Розмови',
+            conversations_unread_aria:
+                '{{count}} непрочитаних повідомлень у розмовах',
             visuals: 'Візуальні елементи',
         },
         menu: {
@@ -347,6 +349,9 @@ export const uk: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'Лише читання',
                 deleted_user: 'Видалений користувач',
+                unread: {
+                    badge_aria: '{{count}} непрочитаних повідомлень',
+                },
                 inactive: {
                     title: 'Розмови unavailable',
                     description:

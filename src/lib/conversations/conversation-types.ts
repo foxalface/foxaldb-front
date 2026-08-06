@@ -26,6 +26,7 @@ export interface DiagramConversation {
     lastMessageAt: string | null;
     lastMessageBody: string | null;
     lastMessageAuthor: ConversationAuthor | null;
+    unreadCount: number;
     createdAt: string;
     updatedAt: string;
 }
@@ -84,4 +85,16 @@ export interface ListConversationMessagesOptions {
 export interface PaginatedResult<T> {
     data: T[];
     nextCursor: string | null;
+}
+
+export interface DiagramConversationsListResult<T> extends PaginatedResult<T> {
+    totalUnreadCount: number;
+}
+
+export interface MarkConversationReadResult {
+    conversationId: number;
+    lastReadMessageId: number | null;
+    lastReadAt: string;
+    unreadCount: number;
+    totalUnreadCount: number;
 }

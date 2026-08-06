@@ -28,10 +28,13 @@ import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useTheme } from '@/hooks/use-theme';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
+import { cn } from '@/lib/utils';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
+import { useDiagramConversations } from '@/hooks/use-diagram-conversations';
+import { ConversationUnreadBadgeWithTranslation } from '@/components/conversations/conversation-unread-badge';
+import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 
 export interface SidebarItem {
     title: string;
@@ -39,6 +42,7 @@ export interface SidebarItem {
     onClick: () => void;
     active: boolean;
     badge?: string;
+    unreadCount?: number;
     secondary?: boolean;
     ariaLabel?: string;
 }
@@ -59,6 +63,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { databaseType } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const conversationsAvailable = useConversationsAvailability();
+    const { totalUnreadCount } = useDiagramConversations();
 
     const diagramItems: SidebarItem[] = useMemo(
         () => [
@@ -143,6 +148,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                               openConversationsPanel();
                           },
                           active: selectedSidebarSection === 'conversations',
+                          unreadCount: totalUnreadCount,
                       },
                   ]
                 : []),
@@ -156,6 +162,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             selectVisualsTab,
             conversationsAvailable,
             openConversationsPanel,
+            totalUnreadCount,
         ]
     );
 
@@ -258,12 +265,17 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                                 item.ariaLabel ?? item.title
                                             }
                                             title={item.ariaLabel ?? item.title}
-                                            className={
+                                            className={cn(
+                                                'relative',
                                                 item.secondary
                                                     ? 'text-muted-foreground'
                                                     : undefined
-                                            }
+                                            )}
                                         >
+                                            <ConversationUnreadBadgeWithTranslation
+                                                count={item.unreadCount ?? 0}
+                                                translationKey="editor_sidebar.conversations_unread_aria"
+                                            />
                                             <item.icon />
                                             <span>
                                                 {item.title

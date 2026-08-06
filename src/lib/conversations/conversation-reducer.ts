@@ -28,6 +28,7 @@ export interface ConversationsState {
     summariesLoadGeneration: number;
     activeSummariesNextCursor: string | null;
     archivedSummariesNextCursor: string | null;
+    totalUnreadCount: number;
     messagesByConversationId: Map<number, ConversationMessagesSlice>;
 }
 
@@ -46,6 +47,7 @@ export type ConversationsAction =
           status: 'active' | 'archived';
           nextCursor: string | null;
           append: boolean;
+          totalUnreadCount: number;
       }
     | {
           type: 'SUMMARIES_LOAD_FAILED';
@@ -53,8 +55,24 @@ export type ConversationsAction =
           generation: number;
           error: unknown;
       }
-    | { type: 'CONVERSATION_UPSERTED'; conversation: DiagramConversation }
+    | {
+          type: 'CONVERSATION_UPSERTED';
+          conversation: DiagramConversation;
+          preserveUnreadCount?: boolean;
+      }
     | { type: 'CONVERSATION_REMOVED'; conversationId: number }
+    | { type: 'UNREAD_TOTAL_SET'; totalUnreadCount: number }
+    | { type: 'UNREAD_TOTAL_INCREMENT'; amount?: number }
+    | {
+          type: 'CONVERSATION_UNREAD_SET';
+          conversationId: number;
+          unreadCount: number;
+      }
+    | {
+          type: 'CONVERSATION_UNREAD_INCREMENT';
+          conversationId: number;
+          amount?: number;
+      }
     | {
           type: 'MESSAGES_LOAD_STARTED';
           conversationId: number;
@@ -110,6 +128,7 @@ export const initialConversationsState = (): ConversationsState => ({
     summariesLoadGeneration: 0,
     activeSummariesNextCursor: null,
     archivedSummariesNextCursor: null,
+    totalUnreadCount: 0,
     messagesByConversationId: new Map(),
 });
 
@@ -184,6 +203,7 @@ const isIdleEmptyState = (state: ConversationsState): boolean =>
     state.summariesLoadGeneration === 0 &&
     state.activeSummariesNextCursor === null &&
     state.archivedSummariesNextCursor === null &&
+    state.totalUnreadCount === 0 &&
     state.messagesByConversationId.size === 0;
 
 const getMessagesSlice = (
@@ -236,6 +256,10 @@ export const conversationsReducer = (
                     action.diagramId === state.diagramId
                         ? state.messagesByConversationId
                         : new Map(),
+                totalUnreadCount:
+                    action.diagramId === state.diagramId
+                        ? state.totalUnreadCount
+                        : 0,
             };
 
         case 'SUMMARIES_LOAD_SUCCEEDED': {
@@ -271,6 +295,7 @@ export const conversationsReducer = (
                 summariesById,
                 summariesStatus: 'ready',
                 summariesError: null,
+                totalUnreadCount: action.totalUnreadCount,
                 activeSummariesNextCursor:
                     action.status === 'active'
                         ? action.nextCursor
@@ -305,7 +330,16 @@ export const conversationsReducer = (
             }
 
             const summariesById = new Map(state.summariesById);
-            summariesById.set(action.conversation.id, action.conversation);
+            const existing = summariesById.get(action.conversation.id);
+            const unreadCount =
+                action.preserveUnreadCount === true && existing !== undefined
+                    ? existing.unreadCount
+                    : action.conversation.unreadCount;
+
+            summariesById.set(action.conversation.id, {
+                ...action.conversation,
+                unreadCount,
+            });
 
             return {
                 ...state,
@@ -314,6 +348,11 @@ export const conversationsReducer = (
         }
 
         case 'CONVERSATION_REMOVED': {
+            const removedConversation = state.summariesById.get(
+                action.conversationId
+            );
+            const removedUnreadCount = removedConversation?.unreadCount ?? 0;
+
             if (!state.summariesById.has(action.conversationId)) {
                 const messagesByConversationId = new Map(
                     state.messagesByConversationId
@@ -345,6 +384,64 @@ export const conversationsReducer = (
                 ...state,
                 summariesById,
                 messagesByConversationId,
+                totalUnreadCount: Math.max(
+                    0,
+                    state.totalUnreadCount - removedUnreadCount
+                ),
+            };
+        }
+
+        case 'UNREAD_TOTAL_SET':
+            return {
+                ...state,
+                totalUnreadCount: action.totalUnreadCount,
+            };
+
+        case 'UNREAD_TOTAL_INCREMENT': {
+            const amount = action.amount ?? 1;
+
+            return {
+                ...state,
+                totalUnreadCount: state.totalUnreadCount + amount,
+            };
+        }
+
+        case 'CONVERSATION_UNREAD_SET': {
+            const existing = state.summariesById.get(action.conversationId);
+
+            if (existing === undefined) {
+                return state;
+            }
+
+            const summariesById = new Map(state.summariesById);
+            summariesById.set(action.conversationId, {
+                ...existing,
+                unreadCount: action.unreadCount,
+            });
+
+            return {
+                ...state,
+                summariesById,
+            };
+        }
+
+        case 'CONVERSATION_UNREAD_INCREMENT': {
+            const existing = state.summariesById.get(action.conversationId);
+
+            if (existing === undefined) {
+                return state;
+            }
+
+            const amount = action.amount ?? 1;
+            const summariesById = new Map(state.summariesById);
+            summariesById.set(action.conversationId, {
+                ...existing,
+                unreadCount: existing.unreadCount + amount,
+            });
+
+            return {
+                ...state,
+                summariesById,
             };
         }
 

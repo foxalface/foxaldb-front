@@ -10,6 +10,7 @@ export const bn: LanguageTranslation = {
             dependencies: 'নির্ভরতা',
             custom_types: 'কাস্টম টাইপ',
             conversations: 'কথোপকথন',
+            conversations_unread_aria: 'কথোপকথনে {{count}} অপঠিত বার্তা',
             visuals: 'ভিজ্যুয়াল',
         },
         menu: {
@@ -349,6 +350,9 @@ export const bn: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'শুধু পঠনযোগ্য',
                 deleted_user: 'মুছে ফেলা ব্যবহারকারী',
+                unread: {
+                    badge_aria: '{{count}} অপঠিত বার্তা',
+                },
                 inactive: {
                     title: 'কথোপকথন unavailable',
                     description:

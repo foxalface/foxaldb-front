@@ -10,6 +10,8 @@ export const en = {
             dependencies: 'Dependencies',
             custom_types: 'Custom Types',
             conversations: 'Conversations',
+            conversations_unread_aria:
+                '{{count}} unread messages in conversations',
             visuals: 'Visuals',
         },
         menu: {
@@ -340,6 +342,9 @@ export const en = {
                 dismiss: 'Dismiss',
                 read_only: 'Read-only',
                 deleted_user: 'Deleted user',
+                unread: {
+                    badge_aria: '{{count}} unread messages',
+                },
                 inactive: {
                     title: 'Conversations unavailable',
                     description:

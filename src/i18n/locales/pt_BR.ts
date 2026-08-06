@@ -10,6 +10,8 @@ export const pt_BR: LanguageTranslation = {
             dependencies: 'Dependências',
             custom_types: 'Tipos Personalizados',
             conversations: 'Conversas',
+            conversations_unread_aria:
+                '{{count}} mensagens não lidas em conversas',
             visuals: 'Visuais',
         },
         menu: {
@@ -349,6 +351,9 @@ export const pt_BR: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'Somente leitura',
                 deleted_user: 'Usuário excluído',
+                unread: {
+                    badge_aria: '{{count}} mensagens não lidas',
+                },
                 inactive: {
                     title: 'Conversas unavailable',
                     description:

@@ -10,6 +10,8 @@ export const vi: LanguageTranslation = {
             dependencies: 'Phụ thuộc',
             custom_types: 'Kiểu tùy chỉnh',
             conversations: 'Cuộc trò chuyện',
+            conversations_unread_aria:
+                '{{count}} tin nhắn chưa đọc trong hội thoại',
             visuals: 'Hình ảnh',
         },
         menu: {
@@ -347,6 +349,9 @@ export const vi: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'Chỉ đọc',
                 deleted_user: 'Người dùng đã xóa',
+                unread: {
+                    badge_aria: '{{count}} tin nhắn chưa đọc',
+                },
                 inactive: {
                     title: 'Cuộc trò chuyện unavailable',
                     description:

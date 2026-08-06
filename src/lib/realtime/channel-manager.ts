@@ -76,6 +76,10 @@ export class ChannelManager {
         return this.diagramPrivateChannel;
     }
 
+    getUserPrivateChannel(): PrivateChannel | null {
+        return this.userChannel;
+    }
+
     setPresenceHandlers(handlers: PresenceEventHandlers | null): void {
         this.presenceHandlers = handlers;
     }

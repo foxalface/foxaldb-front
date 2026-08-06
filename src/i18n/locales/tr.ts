@@ -10,6 +10,7 @@ export const tr: LanguageTranslation = {
             dependencies: 'Bağımlılıklar',
             custom_types: 'Özel Tipler',
             conversations: 'Konuşmalar',
+            conversations_unread_aria: 'Görüşmelerde {{count}} okunmamış mesaj',
             visuals: 'Görseller',
         },
         menu: {
@@ -346,6 +347,9 @@ export const tr: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'Salt okunur',
                 deleted_user: 'Silinmiş kullanıcı',
+                unread: {
+                    badge_aria: '{{count}} okunmamış mesaj',
+                },
                 inactive: {
                     title: 'Konuşmalar unavailable',
                     description:

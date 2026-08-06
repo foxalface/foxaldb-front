@@ -24,6 +24,7 @@ export interface ConversationsContextValue {
     diagramId: string | null;
     activeSummariesNextCursor: string | null;
     archivedSummariesNextCursor: string | null;
+    totalUnreadCount: number;
     reload: () => Promise<void>;
     loadArchivedSummaries: (options?: { append?: boolean }) => Promise<void>;
     loadMoreActiveSummaries: () => Promise<void>;
@@ -66,6 +67,10 @@ export interface ConversationsContextValue {
         messageId: number,
         emoji: string
     ) => Promise<void>;
+    markConversationRead: (
+        conversationId: number,
+        lastReadMessageId?: number
+    ) => Promise<void>;
 }
 
 /** Internal developer error — not user-facing copy. Fresh instance per call. */
@@ -107,6 +112,9 @@ const inactiveAddReaction: ConversationsContextValue['addReaction'] = () =>
 const inactiveRemoveReaction: ConversationsContextValue['removeReaction'] =
     () => Promise.reject(createConversationsInactiveError());
 
+const inactiveMarkConversationRead: ConversationsContextValue['markConversationRead'] =
+    () => Promise.reject(createConversationsInactiveError());
+
 export const INACTIVE_CONVERSATIONS_CONTEXT: ConversationsContextValue = {
     activeConversations: EMPTY_CONVERSATIONS,
     archivedConversations: EMPTY_CONVERSATIONS,
@@ -116,6 +124,7 @@ export const INACTIVE_CONVERSATIONS_CONTEXT: ConversationsContextValue = {
     diagramId: null,
     activeSummariesNextCursor: null,
     archivedSummariesNextCursor: null,
+    totalUnreadCount: 0,
     reload: inactiveReload,
     loadArchivedSummaries: inactiveLoadArchivedSummaries,
     loadMoreActiveSummaries: inactiveLoadMore,
@@ -135,6 +144,7 @@ export const INACTIVE_CONVERSATIONS_CONTEXT: ConversationsContextValue = {
     deleteMessage: inactiveDeleteMessage,
     addReaction: inactiveAddReaction,
     removeReaction: inactiveRemoveReaction,
+    markConversationRead: inactiveMarkConversationRead,
 };
 
 export const ConversationsContext =

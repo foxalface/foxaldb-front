@@ -27,6 +27,7 @@ export type FakeChannel = DiagramPrivateEventChannel & {
 export interface RealtimeMockValue {
     currentDiagramId: string | null;
     getDiagramPrivateChannel: () => DiagramPrivateEventChannel | null;
+    getUserPrivateChannel: () => DiagramPrivateEventChannel | null;
     onReconnect: (listener: () => void) => () => void;
 }
 
@@ -46,6 +47,7 @@ export const createAuthenticatedAuth = (): AuthValue => ({
 export const createInactiveRealtimeValue = (): RealtimeMockValue => ({
     currentDiagramId: null,
     getDiagramPrivateChannel: () => null,
+    getUserPrivateChannel: () => null,
     onReconnect: () => () => undefined,
 });
 
@@ -69,6 +71,7 @@ export const createConversationFixture = (
     lastMessageAt: null,
     lastMessageBody: null,
     lastMessageAuthor: aliceAuthor,
+    unreadCount: 0,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T11:00:00.000Z`,
     ...overrides,

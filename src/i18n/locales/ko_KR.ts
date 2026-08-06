@@ -10,6 +10,7 @@ export const ko_KR: LanguageTranslation = {
             dependencies: '종속성',
             custom_types: '사용자 지정 타입',
             conversations: '대화',
+            conversations_unread_aria: '대화의 읽지 않은 메시지 {{count}}개',
             visuals: '시각화',
         },
         menu: {
@@ -347,6 +348,9 @@ export const ko_KR: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: '읽기 전용',
                 deleted_user: '삭제된 사용자',
+                unread: {
+                    badge_aria: '읽지 않은 메시지 {{count}}개',
+                },
                 inactive: {
                     title: '대화 unavailable',
                     description:

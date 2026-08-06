@@ -47,6 +47,7 @@ describe('ConversationsProvider reaction mutations', () => {
         listDiagramConversations.mockResolvedValue({
             data: [],
             nextCursor: null,
+            totalUnreadCount: 0,
         });
         listConversationMessages.mockResolvedValue({
             data: [],

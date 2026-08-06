@@ -10,6 +10,8 @@ export const mr: LanguageTranslation = {
             dependencies: 'अवलंबने',
             custom_types: 'कस्टम प्रकार',
             conversations: 'संभाषणे',
+            conversations_unread_aria:
+                'संभाषणांमध्ये {{count}} वाचले नसलेले संदेश',
             visuals: 'Visuals',
         },
         menu: {
@@ -352,6 +354,9 @@ export const mr: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'फक्त वाचनीय',
                 deleted_user: 'हटवलेला वापरकर्ता',
+                unread: {
+                    badge_aria: '{{count}} वाचले नसलेले संदेश',
+                },
                 inactive: {
                     title: 'संभाषणे unavailable',
                     description:

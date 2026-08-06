@@ -25,6 +25,7 @@ const conversation = (
     lastMessageAt: null,
     lastMessageBody: null,
     lastMessageAuthor: aliceAuthor,
+    unreadCount: 0,
     createdAt: `2026-01-0${overrides.id}T10:00:00.000Z`,
     updatedAt: `2026-01-0${overrides.id}T11:00:00.000Z`,
     ...overrides,
@@ -50,6 +51,7 @@ const loadActiveSucceeded = (
             status: 'active',
             nextCursor: null,
             append: false,
+            totalUnreadCount: 0,
         }
     );
 

@@ -10,6 +10,7 @@ export const zh_TW: LanguageTranslation = {
             dependencies: '相依性',
             custom_types: '自定義類型',
             conversations: '對話',
+            conversations_unread_aria: '對話中有 {{count}} 則未讀訊息',
             visuals: '視覺效果',
         },
         menu: {
@@ -341,6 +342,9 @@ export const zh_TW: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: '唯讀',
                 deleted_user: '已刪除的使用者',
+                unread: {
+                    badge_aria: '{{count}} 則未讀訊息',
+                },
                 inactive: {
                     title: '對話 unavailable',
                     description:

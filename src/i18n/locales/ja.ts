@@ -10,6 +10,7 @@ export const ja: LanguageTranslation = {
             dependencies: '依存関係',
             custom_types: 'カスタムタイプ',
             conversations: '会話',
+            conversations_unread_aria: '会話の未読メッセージ {{count}} 件',
             visuals: 'ビジュアル',
         },
         menu: {
@@ -350,6 +351,9 @@ export const ja: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: '読み取り専用',
                 deleted_user: '削除されたユーザー',
+                unread: {
+                    badge_aria: '未読メッセージ {{count}} 件',
+                },
                 inactive: {
                     title: '会話 unavailable',
                     description:

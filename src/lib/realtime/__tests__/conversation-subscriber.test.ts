@@ -73,6 +73,7 @@ const baseConversation = (
     lastMessageAuthor: buildUserIdentity(7, 'Alice', 'Martin'),
     createdAt: '2026-07-19T10:00:00.000Z',
     updatedAt: '2026-07-19T10:05:00.000Z',
+    unreadCount: 0,
     ...overrides,
 });
 
@@ -114,6 +115,7 @@ describe('subscribeToDiagramConversationEvents', () => {
         expect(dispatch).toHaveBeenCalledWith({
             type: 'CONVERSATION_UPSERTED',
             conversation,
+            preserveUnreadCount: false,
         });
     });
 
@@ -168,11 +170,54 @@ describe('subscribeToDiagramConversationEvents', () => {
         expect(dispatch).toHaveBeenCalledWith({
             type: 'CONVERSATION_UPSERTED',
             conversation,
+            preserveUnreadCount: true,
         });
         expect(dispatch).toHaveBeenCalledWith({
             type: 'MESSAGE_UPSERTED',
             message,
         });
+        expect(dispatch).toHaveBeenCalledWith({
+            type: 'CONVERSATION_UNREAD_INCREMENT',
+            conversationId: 10,
+        });
+        expect(dispatch).toHaveBeenCalledWith({
+            type: 'UNREAD_TOTAL_INCREMENT',
+        });
+    });
+
+    it('does not increment unread for own message-created events', () => {
+        const channel = createFakeChannel();
+        const dispatch = vi.fn();
+        const conversation = baseConversation({ messageCount: 2 });
+        const message = {
+            id: 99,
+            conversationId: 10,
+            body: 'New message',
+            user: buildUserIdentity(7, 'Alice', 'Martin'),
+            createdAt: '2026-07-19T11:00:00.000Z',
+            updatedAt: '2026-07-19T11:00:00.000Z',
+            reactions: [],
+        };
+
+        subscribeToDiagramConversationEvents({
+            channel,
+            diagramId: '42',
+            dispatch,
+            getCurrentUserId: () => 7,
+        });
+
+        channel.emit(DIAGRAM_CONVERSATION_MESSAGE_CREATED_EVENT, {
+            message,
+            conversation,
+            userId: 7,
+        });
+
+        expect(dispatch).not.toHaveBeenCalledWith(
+            expect.objectContaining({ type: 'CONVERSATION_UNREAD_INCREMENT' })
+        );
+        expect(dispatch).not.toHaveBeenCalledWith(
+            expect.objectContaining({ type: 'UNREAD_TOTAL_INCREMENT' })
+        );
     });
 
     it('cleanup stops listening with the same callbacks', () => {

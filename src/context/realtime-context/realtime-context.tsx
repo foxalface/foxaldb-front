@@ -34,6 +34,7 @@ export interface RealtimeContextValue {
     joinDiagram: (diagramId: string) => void;
     leaveDiagram: () => void;
     getDiagramPrivateChannel: () => DiagramPrivateEventChannel | null;
+    getUserPrivateChannel: () => DiagramPrivateEventChannel | null;
     onReconnect: (listener: () => void) => () => void;
     sendCursor: (payload: CursorWhisperPayload) => void;
     subscribeToCursorActions: (listener: CursorActionListener) => () => void;
@@ -61,6 +62,7 @@ export const RealtimeContext = createContext<RealtimeContextValue>({
     joinDiagram: emptyFn,
     leaveDiagram: emptyFn,
     getDiagramPrivateChannel: () => null,
+    getUserPrivateChannel: () => null,
     onReconnect: () => emptyFn,
     sendCursor: emptyFn,
     subscribeToCursorActions: () => emptyFn,

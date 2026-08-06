@@ -39,6 +39,7 @@ describe('ConversationsProvider realtime lifecycle', () => {
         listDiagramConversations.mockResolvedValue({
             data: [],
             nextCursor: null,
+            totalUnreadCount: 0,
         });
     });
 
@@ -47,6 +48,7 @@ describe('ConversationsProvider realtime lifecycle', () => {
         env.realtimeValue = {
             currentDiagramId: '42',
             getDiagramPrivateChannel: () => channel,
+            getUserPrivateChannel: () => null,
             onReconnect: (listener) => {
                 env.reconnectListeners.add(listener);
                 return () => {
@@ -69,6 +71,7 @@ describe('ConversationsProvider realtime lifecycle', () => {
         env.realtimeValue = {
             currentDiagramId: '42',
             getDiagramPrivateChannel: () => channel,
+            getUserPrivateChannel: () => null,
             onReconnect: () => () => undefined,
         };
 

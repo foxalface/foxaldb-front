@@ -10,6 +10,8 @@ export const ar: LanguageTranslation = {
             dependencies: 'التبعيات',
             custom_types: 'الأنواع المخصصة',
             conversations: 'المحادثات',
+            conversations_unread_aria:
+                '{{count}} رسائل غير مقروءة في المحادثات',
             visuals: 'مرئيات',
         },
         menu: {
@@ -343,6 +345,9 @@ export const ar: LanguageTranslation = {
                 dismiss: 'Dismiss',
                 read_only: 'للقراءة فقط',
                 deleted_user: 'مستخدم محذوف',
+                unread: {
+                    badge_aria: '{{count}} رسائل غير مقروءة',
+                },
                 inactive: {
                     title: 'المحادثات unavailable',
                     description:

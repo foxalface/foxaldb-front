@@ -28,6 +28,7 @@ const buildActiveConversation = (
     lastMessageAt: '2026-01-02T12:00:00.000Z',
     lastMessageBody: 'Latest update',
     lastMessageAuthor: aliceWonderAuthor,
+    unreadCount: 0,
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-02T12:00:00.000Z',
     ...overrides,
@@ -73,6 +74,7 @@ const { conversationsState, mutationsState, messagesState, chartDbState } =
                 loadArchivedSummaries: vi.fn(async () => undefined),
                 loadMoreActiveSummaries: vi.fn(async () => undefined),
                 loadMoreArchivedSummaries: vi.fn(async () => undefined),
+                totalUnreadCount: 0,
             } satisfies UseDiagramConversationsResult,
         },
         mutationsState: {
@@ -201,6 +203,7 @@ const resetState = () => {
         loadArchivedSummaries: vi.fn(async () => undefined),
         loadMoreActiveSummaries: vi.fn(async () => undefined),
         loadMoreArchivedSummaries: vi.fn(async () => undefined),
+        totalUnreadCount: 0,
     };
     messagesState.current = {
         messages: [],
