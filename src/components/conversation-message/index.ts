@@ -1,5 +1,6 @@
 export {
     ConversationMessage,
+    ConversationMessageRow,
     ConversationMessageLayout,
     ConversationMessageAvatar,
     ConversationMessageContent,
@@ -16,3 +17,4 @@ export {
     type ConversationMessageContentProps,
     type ConversationMessageBodyProps,
 } from './conversation-message';
+export { ConversationMessageDaySeparator } from './conversation-message-day-separator';

@@ -458,6 +458,10 @@ export const tr: LanguageTranslation = {
                     message: {
                         edited: '(düzenlendi)',
                         edited_aria: 'Mesaj düzenlendi',
+                        day_separator: {
+                            today: 'Bugün',
+                            yesterday: 'Dün',
+                        },
                         actions: {
                             title: 'Mesaj işlemleri',
                             edit: 'Düzenle',

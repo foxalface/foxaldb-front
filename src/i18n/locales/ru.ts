@@ -461,6 +461,10 @@ export const ru: LanguageTranslation = {
                     message: {
                         edited: '(изменено)',
                         edited_aria: 'Сообщение было изменено',
+                        day_separator: {
+                            today: 'Сегодня',
+                            yesterday: 'Вчера',
+                        },
                         actions: {
                             title: 'Действия с сообщением',
                             edit: 'Редактировать',

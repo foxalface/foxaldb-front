@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from '@/components/spinner/spinner';
 import { Button } from '@/components/button/button';
+import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { ConversationsEmptyState } from './conversations-empty-state';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import { ConversationSummaryItem } from './conversation-summary-item';
@@ -73,52 +74,61 @@ export const ConversationsList: React.FC<ConversationsListProps> = ({
     }
 
     return (
-        <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto py-1">
-            <ul
-                className="flex flex-col gap-2"
-                aria-labelledby={listLabelId}
-                role="list"
-            >
-                {conversations.map((conversation) => (
-                    <li key={conversation.id}>
-                        <ConversationSummaryItem
-                            conversation={conversation}
-                            isArchived={isArchived}
-                            isMutationPending={isMutationPending(
-                                conversation.id
-                            )}
-                            onSelect={onSelect}
-                            onArchive={onArchive}
-                            onReopen={onReopen}
-                            onDelete={onDelete}
-                        />
-                    </li>
-                ))}
-            </ul>
-
-            {hasMore ? (
-                <div className="flex justify-center py-2">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={onLoadMore}
-                        disabled={isLoadingMore}
-                        aria-busy={isLoadingMore}
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+            <ScrollArea className="h-full">
+                <div className="px-1.5 pb-1 pt-1.5">
+                    <ul
+                        className="flex flex-col gap-2"
+                        aria-labelledby={listLabelId}
+                        role="list"
                     >
-                        {isLoadingMore ? (
-                            <>
-                                <Spinner size="small" className="mr-2 size-4" />
-                                {t(
-                                    'side_panel.conversations_section.loading_more'
+                        {conversations.map((conversation) => (
+                            <li key={conversation.id}>
+                                <ConversationSummaryItem
+                                    conversation={conversation}
+                                    isArchived={isArchived}
+                                    isMutationPending={isMutationPending(
+                                        conversation.id
+                                    )}
+                                    onSelect={onSelect}
+                                    onArchive={onArchive}
+                                    onReopen={onReopen}
+                                    onDelete={onDelete}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+
+                    {hasMore ? (
+                        <div className="flex justify-center py-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={onLoadMore}
+                                disabled={isLoadingMore}
+                                aria-busy={isLoadingMore}
+                            >
+                                {isLoadingMore ? (
+                                    <>
+                                        <Spinner
+                                            size="small"
+                                            className="mr-2 size-4"
+                                        />
+                                        {t(
+                                            'side_panel.conversations_section.loading_more'
+                                        )}
+                                    </>
+                                ) : (
+                                    t(
+                                        'side_panel.conversations_section.load_more'
+                                    )
                                 )}
-                            </>
-                        ) : (
-                            t('side_panel.conversations_section.load_more')
-                        )}
-                    </Button>
+                            </Button>
+                        </div>
+                    ) : null}
                 </div>
-            ) : null}
+            </ScrollArea>
         </div>
     );
 };

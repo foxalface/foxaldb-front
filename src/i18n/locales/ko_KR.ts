@@ -460,6 +460,10 @@ export const ko_KR: LanguageTranslation = {
                     message: {
                         edited: '(수정됨)',
                         edited_aria: '메시지가 수정되었습니다',
+                        day_separator: {
+                            today: '오늘',
+                            yesterday: '어제',
+                        },
                         actions: {
                             title: '메시지 작업',
                             edit: '편집',

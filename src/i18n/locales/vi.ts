@@ -467,6 +467,10 @@ export const vi: LanguageTranslation = {
                     message: {
                         edited: '(đã chỉnh sửa)',
                         edited_aria: 'Tin nhắn đã được chỉnh sửa',
+                        day_separator: {
+                            today: 'Hôm nay',
+                            yesterday: 'Hôm qua',
+                        },
                         actions: {
                             title: 'Thao tác tin nhắn',
                             edit: 'Chỉnh sửa',

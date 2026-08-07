@@ -464,6 +464,10 @@ export const ja: LanguageTranslation = {
                     message: {
                         edited: '（編集済み）',
                         edited_aria: 'メッセージは編集されました',
+                        day_separator: {
+                            today: '今日',
+                            yesterday: '昨日',
+                        },
                         actions: {
                             title: 'メッセージの操作',
                             edit: '編集',

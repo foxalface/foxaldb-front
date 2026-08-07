@@ -28,7 +28,6 @@ import ChartDBLogo from '@/assets/logo-light.png';
 import ChartDBDarkLogo from '@/assets/logo-dark.png';
 import { useTheme } from '@/hooks/use-theme';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { cn } from '@/lib/utils';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
@@ -221,7 +220,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                     </a>
                 </SidebarHeader>
             ) : null}
-            <SidebarContent>
+            <SidebarContent className="overflow-visible group-data-[collapsible=icon-extended]:overflow-visible">
                 <SidebarGroup>
                     {/* <SidebarGroupLabel /> */}
                     <SidebarGroupContent>
@@ -253,6 +252,14 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                         <SidebarMenu>
                             {baseItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>
+                                    {typeof item.unreadCount === 'number' &&
+                                    item.unreadCount > 0 ? (
+                                        <ConversationUnreadBadgeWithTranslation
+                                            count={item.unreadCount}
+                                            translationKey="editor_sidebar.conversations_unread_aria"
+                                            className="z-30"
+                                        />
+                                    ) : null}
                                     <SidebarMenuButton
                                         className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
                                         isActive={item.active}
@@ -265,17 +272,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                                                 item.ariaLabel ?? item.title
                                             }
                                             title={item.ariaLabel ?? item.title}
-                                            className={cn(
-                                                'relative',
-                                                item.secondary
-                                                    ? 'text-muted-foreground'
-                                                    : undefined
-                                            )}
                                         >
-                                            <ConversationUnreadBadgeWithTranslation
-                                                count={item.unreadCount ?? 0}
-                                                translationKey="editor_sidebar.conversations_unread_aria"
-                                            />
                                             <item.icon />
                                             <span>
                                                 {item.title

@@ -462,6 +462,10 @@ export const uk: LanguageTranslation = {
                     message: {
                         edited: '(змінено)',
                         edited_aria: 'Повідомлення було змінено',
+                        day_separator: {
+                            today: 'Сьогодні',
+                            yesterday: 'Вчора',
+                        },
                         actions: {
                             title: 'Дії з повідомленням',
                             edit: 'Редагувати',

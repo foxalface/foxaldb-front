@@ -467,6 +467,10 @@ export const mr: LanguageTranslation = {
                     message: {
                         edited: '(संपादित)',
                         edited_aria: 'संदेश संपादित केला गेला',
+                        day_separator: {
+                            today: 'आज',
+                            yesterday: 'काल',
+                        },
                         actions: {
                             title: 'संदेश क्रिया',
                             edit: 'संपादित करा',

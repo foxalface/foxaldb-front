@@ -35,6 +35,9 @@ export default defineConfig({
             host: hmrHost,
         },
     },
+    optimizeDeps: {
+        include: ['frimousse'],
+    },
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),

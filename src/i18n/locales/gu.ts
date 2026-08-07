@@ -461,6 +461,10 @@ export const gu: LanguageTranslation = {
                     message: {
                         edited: '(સંપાદિત)',
                         edited_aria: 'સંદેશ સંપાદિત કરવામાં આવ્યો',
+                        day_separator: {
+                            today: 'આજે',
+                            yesterday: 'ગઈકાલે',
+                        },
                         actions: {
                             title: 'સંદેશ ક્રિયાઓ',
                             edit: 'સંપાદિત કરો',

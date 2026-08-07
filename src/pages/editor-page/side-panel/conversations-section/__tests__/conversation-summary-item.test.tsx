@@ -142,7 +142,6 @@ describe('ConversationSummaryItem', () => {
         expect(card.className).toContain(
             CONVERSATION_SUMMARY_CARD_HEIGHT_CLASS
         );
-        expect(card.className).toContain('overflow-hidden');
 
         const preview = screen.getByTestId('conversation-summary-preview');
         expect(preview.className).toContain('conversation-summary-preview');
@@ -198,7 +197,7 @@ describe('ConversationSummaryItem', () => {
         );
     });
 
-    it('shows target type, truncated title, and square ellipsis menu', () => {
+    it('shows target type icon with tooltip, truncated title, and square ellipsis menu', () => {
         renderItem({
             conversation: buildConversation({
                 targetType: 'diagram',
@@ -206,7 +205,10 @@ describe('ConversationSummaryItem', () => {
             }),
         });
 
-        expect(screen.getByText('Diagram')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-target-type-icon-diagram')
+        ).toBeInTheDocument();
+        expect(screen.queryByText('Diagram')).not.toBeInTheDocument();
         expect(screen.getByText('Billing')).toBeInTheDocument();
         expect(
             screen.getByRole('button', { name: 'Conversation options' })

@@ -177,14 +177,20 @@ describe('M12.2 comments cutover architecture', () => {
         );
     });
 
-    it('preserves shared timeago locale helper for conversations UI', () => {
-        const helper = readSrcFile('lib/i18n/timeago-locale.ts');
+    it('uses shared datetime helpers for conversation message timestamps', () => {
+        const intlLocaleHelper = readSrcFile('lib/i18n/intl-locale.ts');
+        const datetimeHelper = readSrcFile(
+            'lib/conversations/conversation-message-datetime.ts'
+        );
         const messageItem = readSrcFile(
             'pages/editor-page/side-panel/conversations-section/conversation-message-item.tsx'
         );
 
-        expect(helper).toContain('resolveTimeAgoLocale');
-        expect(messageItem).toContain('@/lib/i18n/timeago-locale');
+        expect(intlLocaleHelper).toContain('resolveIntlLocale');
+        expect(datetimeHelper).toContain('formatConversationMessageTime');
+        expect(messageItem).toContain(
+            '@/lib/conversations/conversation-message-datetime'
+        );
     });
 
     it('documents SidebarSection excludes comments at type level', () => {

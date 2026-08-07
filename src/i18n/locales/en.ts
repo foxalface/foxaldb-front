@@ -460,6 +460,10 @@ export const en = {
                     message: {
                         edited: '(edited)',
                         edited_aria: 'Message was edited',
+                        day_separator: {
+                            today: 'Today',
+                            yesterday: 'Yesterday',
+                        },
                         actions: {
                             title: 'Message actions',
                             edit: 'Edit',

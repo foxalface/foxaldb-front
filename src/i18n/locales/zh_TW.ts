@@ -447,6 +447,10 @@ export const zh_TW: LanguageTranslation = {
                     message: {
                         edited: '（已編輯）',
                         edited_aria: '訊息已編輯',
+                        day_separator: {
+                            today: '今天',
+                            yesterday: '昨天',
+                        },
                         actions: {
                             title: '訊息操作',
                             edit: '編輯',

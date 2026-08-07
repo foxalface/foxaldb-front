@@ -6,9 +6,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import TimeAgo from 'timeago-react';
 import { useTranslation } from 'react-i18next';
-import { register as registerLocale } from 'timeago.js';
 import { Avatar, AvatarFallback } from '@/components/avatar/avatar';
 import {
     ConversationMessage,
@@ -22,9 +20,11 @@ import {
     ConversationMessageHeaderMeta,
     ConversationMessageHeaderTitleRow,
     ConversationMessageLayout,
+    ConversationMessageRow,
 } from '@/components/conversation-message';
 import { useAuth } from '@/hooks/use-auth';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import { useUserTimeZone } from '@/hooks/use-user-time-zone';
 import { ConversationMessageReactionsBar } from '@/components/conversation-message/conversation-message-reactions-bar';
 import { getConversationMessageCapabilities } from '@/lib/conversations/conversation-message-capabilities';
 import { canReactToConversationMessage } from '@/lib/conversations/conversation-reaction-capabilities';
@@ -33,7 +33,11 @@ import type {
     DiagramConversationMessage,
 } from '@/lib/conversations/conversation-types';
 import { getUserInitials } from '@/lib/user';
-import { resolveTimeAgoLocale } from '@/lib/i18n/timeago-locale';
+import { resolveIntlLocale } from '@/lib/i18n/intl-locale';
+import {
+    formatConversationMessageExactTooltip,
+    formatConversationMessageTime,
+} from '@/lib/conversations/conversation-message-datetime';
 import { ConversationMessageActionsMenu } from './conversation-message-actions-menu';
 import { ConversationMessageDeleteDialog } from './conversation-message-delete-dialog';
 import { ConversationMessageEditForm } from './conversation-message-edit-form';
@@ -48,26 +52,6 @@ export interface ConversationMessageItemProps {
     onCancelEdit: () => void;
     onEditSaved: () => void;
 }
-
-const parseTimestamp = (
-    timestamp: string
-): { date: Date; exactLabel: string } | null => {
-    const date = new Date(timestamp);
-    if (Number.isNaN(date.getTime())) {
-        return null;
-    }
-
-    return {
-        date,
-        exactLabel: date.toLocaleString(),
-    };
-};
-
-const registerTimeAgoLanguage = (language: string): string => {
-    const { locale, lang } = resolveTimeAgoLocale(language);
-    registerLocale(lang, locale);
-    return lang;
-};
 
 const isMessageEdited = (message: DiagramConversationMessage): boolean =>
     message.updatedAt !== message.createdAt;
@@ -87,9 +71,7 @@ export const ConversationMessageItem: React.FC<
     const { user } = useAuth();
     const { diagramAccess } = useDiagramAccess();
     const isConversationsActive = useConversationsAvailability();
-    const [timeAgoLocale, setTimeAgoLocale] = useState(() =>
-        registerTimeAgoLanguage(i18n.language)
-    );
+    const timeZone = useUserTimeZone();
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const actionsTriggerRef = useRef<HTMLButtonElement>(null);
     const shouldFocusActionsRef = useRef(false);
@@ -122,9 +104,30 @@ export const ConversationMessageItem: React.FC<
         [conversationStatus, diagramAccess, isConversationsActive]
     );
 
-    useLayoutEffect(() => {
-        setTimeAgoLocale(registerTimeAgoLanguage(i18n.language));
-    }, [i18n.language]);
+    const intlLocale = useMemo(
+        () => resolveIntlLocale(i18n.language),
+        [i18n.language]
+    );
+
+    const messageTimeLabel = useMemo(
+        () =>
+            formatConversationMessageTime(
+                message.createdAt,
+                intlLocale,
+                timeZone
+            ),
+        [intlLocale, message.createdAt, timeZone]
+    );
+
+    const messageTimeTooltip = useMemo(
+        () =>
+            formatConversationMessageExactTooltip(
+                message.createdAt,
+                intlLocale,
+                timeZone
+            ),
+        [intlLocale, message.createdAt, timeZone]
+    );
 
     useEffect(() => {
         if (isEditing && !capabilities.canEdit) {
@@ -159,11 +162,6 @@ export const ConversationMessageItem: React.FC<
 
         return getUserInitials(message.user.firstName, message.user.lastName);
     }, [message.user]);
-
-    const parsedCreatedAt = useMemo(
-        () => parseTimestamp(message.createdAt),
-        [message.createdAt]
-    );
 
     const edited = isMessageEdited(message);
 
@@ -211,83 +209,94 @@ export const ConversationMessageItem: React.FC<
             isCurrentUser={isCurrentUser}
             data-testid={`conversation-message-${message.id}`}
         >
-            <ConversationMessageLayout>
-                <ConversationMessageAvatar>
-                    <Avatar className="size-7" aria-hidden="true">
-                        <AvatarFallback className="text-[10px] font-medium">
-                            {initials}
-                        </AvatarFallback>
-                    </Avatar>
-                </ConversationMessageAvatar>
-                <ConversationMessageContent isCurrentUser={isCurrentUser}>
-                    <ConversationMessageHeader>
-                        <ConversationMessageHeaderMeta>
-                            <ConversationMessageHeaderTitleRow>
-                                <ConversationMessageAuthor>
-                                    {displayName}
-                                </ConversationMessageAuthor>
-                                {parsedCreatedAt ? (
-                                    <time
-                                        className="shrink-0 text-xs text-muted-foreground"
-                                        dateTime={message.createdAt}
-                                        title={parsedCreatedAt.exactLabel}
-                                    >
-                                        <TimeAgo
-                                            datetime={parsedCreatedAt.date}
-                                            locale={timeAgoLocale}
-                                        />
-                                    </time>
-                                ) : null}
-                                {edited && !isEditing ? (
-                                    <span
-                                        className="shrink-0 text-xs text-muted-foreground"
-                                        aria-label={t(
-                                            'side_panel.conversations_section.detail.message.edited_aria'
-                                        )}
-                                    >
-                                        {t(
-                                            'side_panel.conversations_section.detail.message.edited'
-                                        )}
-                                    </span>
-                                ) : null}
-                            </ConversationMessageHeaderTitleRow>
-                        </ConversationMessageHeaderMeta>
-                        {!isEditing ? (
-                            <ConversationMessageActionsMenu
-                                ref={actionsTriggerRef}
-                                canEdit={capabilities.canEdit}
-                                canDelete={capabilities.canDelete}
-                                onEdit={handleEdit}
-                                onDelete={handleDelete}
+            <ConversationMessageRow isCurrentUser={isCurrentUser}>
+                <ConversationMessageLayout isCurrentUser={false}>
+                    {!isCurrentUser ? (
+                        <ConversationMessageAvatar>
+                            <Avatar className="size-7" aria-hidden="true">
+                                <AvatarFallback className="text-[10px] font-medium">
+                                    {initials}
+                                </AvatarFallback>
+                            </Avatar>
+                        </ConversationMessageAvatar>
+                    ) : null}
+                    <ConversationMessageContent isCurrentUser={isCurrentUser}>
+                        <ConversationMessageHeader
+                            isCurrentUser={isCurrentUser}
+                        >
+                            <ConversationMessageHeaderMeta>
+                                <ConversationMessageHeaderTitleRow
+                                    isCurrentUser={isCurrentUser}
+                                >
+                                    <ConversationMessageAuthor>
+                                        {displayName}
+                                    </ConversationMessageAuthor>
+                                    {messageTimeLabel ? (
+                                        <time
+                                            className="shrink-0 text-xs text-muted-foreground"
+                                            dateTime={message.createdAt}
+                                            title={
+                                                messageTimeTooltip ?? undefined
+                                            }
+                                        >
+                                            {messageTimeLabel}
+                                        </time>
+                                    ) : null}
+                                    {edited && !isEditing ? (
+                                        <span
+                                            className="shrink-0 text-xs text-muted-foreground"
+                                            aria-label={t(
+                                                'side_panel.conversations_section.detail.message.edited_aria'
+                                            )}
+                                        >
+                                            {t(
+                                                'side_panel.conversations_section.detail.message.edited'
+                                            )}
+                                        </span>
+                                    ) : null}
+                                </ConversationMessageHeaderTitleRow>
+                            </ConversationMessageHeaderMeta>
+                            {!isEditing ? (
+                                <ConversationMessageActionsMenu
+                                    ref={actionsTriggerRef}
+                                    canEdit={capabilities.canEdit}
+                                    canDelete={capabilities.canDelete}
+                                    onEdit={handleEdit}
+                                    onDelete={handleDelete}
+                                />
+                            ) : null}
+                        </ConversationMessageHeader>
+                        {isEditing ? (
+                            <ConversationMessageEditForm
+                                message={message}
+                                conversationId={conversationId}
+                                conversationStatus={conversationStatus}
+                                onCancel={handleCancelEdit}
+                                onSaved={handleSavedEdit}
                             />
-                        ) : null}
-                    </ConversationMessageHeader>
-                    {isEditing ? (
-                        <ConversationMessageEditForm
-                            message={message}
-                            conversationId={conversationId}
-                            conversationStatus={conversationStatus}
-                            onCancel={handleCancelEdit}
-                            onSaved={handleSavedEdit}
-                        />
-                    ) : (
-                        <ConversationMessageBody isCurrentUser={isCurrentUser}>
-                            <ConversationMessageBodyText>
-                                {message.body}
-                            </ConversationMessageBodyText>
-                        </ConversationMessageBody>
-                    )}
-                    <ConversationMessageFooter>
-                        <ConversationMessageReactionsBar
-                            conversationId={conversationId}
-                            messageId={message.id}
-                            reactions={message.reactions}
-                            canReact={canReact}
-                            isEditing={isEditing}
-                        />
-                    </ConversationMessageFooter>
-                </ConversationMessageContent>
-            </ConversationMessageLayout>
+                        ) : (
+                            <ConversationMessageBody
+                                isCurrentUser={isCurrentUser}
+                            >
+                                <ConversationMessageBodyText>
+                                    {message.body}
+                                </ConversationMessageBodyText>
+                            </ConversationMessageBody>
+                        )}
+                        <ConversationMessageFooter
+                            isCurrentUser={isCurrentUser}
+                        >
+                            <ConversationMessageReactionsBar
+                                conversationId={conversationId}
+                                messageId={message.id}
+                                reactions={message.reactions}
+                                canReact={canReact}
+                                isEditing={isEditing}
+                            />
+                        </ConversationMessageFooter>
+                    </ConversationMessageContent>
+                </ConversationMessageLayout>
+            </ConversationMessageRow>
             {capabilities.canDelete ? (
                 <ConversationMessageDeleteDialog
                     conversationId={conversationId}

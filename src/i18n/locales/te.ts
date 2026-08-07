@@ -461,6 +461,10 @@ export const te: LanguageTranslation = {
                     message: {
                         edited: '(సవరించబడింది)',
                         edited_aria: 'సందేశం సవరించబడింది',
+                        day_separator: {
+                            today: 'ఈ రోజు',
+                            yesterday: 'నిన్న',
+                        },
                         actions: {
                             title: 'సందేశ చర్యలు',
                             edit: 'సవరించు',

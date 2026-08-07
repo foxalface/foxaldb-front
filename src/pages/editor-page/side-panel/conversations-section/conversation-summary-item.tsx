@@ -14,6 +14,7 @@ import type { DiagramConversation } from '@/lib/conversations/conversation-types
 import { getConversationSummaryCapabilities } from '@/lib/conversations/conversation-summary-capabilities';
 import { resolveConversationSummaryDisplayText } from '@/lib/conversations/conversation-summary-body';
 import { ConversationUnreadBadgeWithTranslation } from '@/components/conversations/conversation-unread-badge';
+import { ConversationTargetTypeIcon } from '@/components/conversations/conversation-target-type-icon';
 import { ConversationSummaryTimestamp } from './conversation-summary-timestamp';
 import { ConversationSummaryActionsMenu } from './conversation-summary-actions-menu';
 import { ConversationSummaryDeleteDialog } from './conversation-summary-delete-dialog';
@@ -167,7 +168,7 @@ export const ConversationSummaryItem: React.FC<
     return (
         <article
             className={cn(
-                'relative flex overflow-hidden rounded-md border px-3 py-2.5',
+                'relative flex rounded-md border px-3 py-2.5',
                 CONVERSATION_SUMMARY_CARD_HEIGHT_CLASS,
                 isArchived
                     ? 'border-muted bg-muted/30 opacity-90'
@@ -181,40 +182,52 @@ export const ConversationSummaryItem: React.FC<
                 count={conversation.unreadCount}
                 translationKey="side_panel.conversations_section.unread.badge_aria"
             />
-            <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2">
-                <div
-                    role="button"
-                    tabIndex={0}
-                    className="flex min-h-0 min-w-0 flex-1 cursor-pointer flex-col gap-2 text-left"
-                    onClick={handleOpen}
-                    onKeyDown={handleOpenKeyDown}
-                    aria-label={openAriaLabel}
-                >
-                    <div className="min-w-0 shrink-0 pr-7">
-                        <p className="truncate text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                            {targetLabel.typeLabel}
-                        </p>
-                        <h3
-                            className={cn(
-                                'truncate text-sm font-semibold',
-                                targetLabel.isMissing
-                                    ? 'italic text-muted-foreground'
-                                    : 'text-foreground'
-                            )}
-                        >
-                            {targetLabel.title}
-                        </h3>
-                    </div>
-
+            <TooltipProvider>
+                <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-2">
                     <div
-                        className={CONVERSATION_SUMMARY_PREVIEW_CLASS}
-                        data-testid="conversation-summary-preview"
+                        role="button"
+                        tabIndex={0}
+                        className="flex min-h-0 min-w-0 flex-1 cursor-pointer flex-col gap-2 text-left"
+                        onClick={handleOpen}
+                        onKeyDown={handleOpenKeyDown}
+                        aria-label={openAriaLabel}
                     >
-                        {visiblePreview}
-                    </div>
-                </div>
+                        <div className="flex min-w-0 shrink-0 items-center gap-1.5 pr-7">
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <span
+                                        className="inline-flex shrink-0 text-muted-foreground"
+                                        data-testid="conversation-summary-target-type"
+                                    >
+                                        <ConversationTargetTypeIcon
+                                            targetType={conversation.targetType}
+                                        />
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    {targetLabel.typeLabel}
+                                </TooltipContent>
+                            </Tooltip>
+                            <h3
+                                className={cn(
+                                    'min-w-0 truncate text-sm font-semibold',
+                                    targetLabel.isMissing
+                                        ? 'italic text-muted-foreground'
+                                        : 'text-foreground'
+                                )}
+                            >
+                                {targetLabel.title}
+                            </h3>
+                        </div>
 
-                <TooltipProvider>
+                        <div
+                            className={CONVERSATION_SUMMARY_PREVIEW_CLASS}
+                            data-testid="conversation-summary-preview"
+                        >
+                            {visiblePreview}
+                        </div>
+                    </div>
+
                     <div
                         className="mt-auto flex w-full min-w-0 shrink-0 items-center gap-3 overflow-hidden whitespace-nowrap text-xs text-muted-foreground"
                         data-testid="conversation-summary-metadata"
@@ -268,8 +281,8 @@ export const ConversationSummaryItem: React.FC<
                             />
                         </span>
                     </div>
-                </TooltipProvider>
-            </div>
+                </div>
+            </TooltipProvider>
 
             <div
                 className="absolute right-2 top-2.5 z-10"

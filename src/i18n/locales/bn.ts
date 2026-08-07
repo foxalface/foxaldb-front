@@ -461,6 +461,10 @@ export const bn: LanguageTranslation = {
                     message: {
                         edited: '(সম্পাদিত)',
                         edited_aria: 'বার্তা সম্পাদিত হয়েছে',
+                        day_separator: {
+                            today: 'আজ',
+                            yesterday: 'গতকাল',
+                        },
                         actions: {
                             title: 'বার্তার ক্রিয়া',
                             edit: 'সম্পাদনা',

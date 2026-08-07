@@ -135,7 +135,7 @@ describe('ConversationMessageItem shell integration', () => {
         expect(screen.getByText('?')).toBeInTheDocument();
     });
 
-    it('marks current-user messages and keeps avatar before content in DOM order', () => {
+    it('marks current-user messages with right-aligned layout and no avatar', () => {
         renderMessageItem({
             ...defaultProps,
             message: buildMessage({ user: aliceWonderAuthor }),
@@ -143,6 +143,10 @@ describe('ConversationMessageItem shell integration', () => {
 
         const message = screen.getByTestId('conversation-message-100');
         expect(message).toHaveAttribute('data-current-user', 'true');
+
+        const row = message.querySelector('[class*="justify-end"]');
+        expect(row).not.toBeNull();
+        expect(message.querySelector('.rounded-full')).toBeNull();
     });
 
     it('does not mark other-user messages as current user', () => {

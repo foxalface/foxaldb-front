@@ -2,7 +2,13 @@
 
 ## Status
 
-Accepted
+Superseded
+
+## Superseded by
+
+`ConversationIndicatorsContext` + `selectConversationIndicatorIndex` derived
+from `ConversationsProvider` summary state. See `AI_CONTEXT_V3.md` §17 and
+`frontend/src/lib/conversations/conversation-indicators.ts`.
 
 ## Date
 

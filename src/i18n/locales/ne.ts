@@ -463,6 +463,10 @@ export const ne: LanguageTranslation = {
                     message: {
                         edited: '(सम्पादित)',
                         edited_aria: 'सन्देश सम्पादन गरिएको छ',
+                        day_separator: {
+                            today: 'आज',
+                            yesterday: 'हिजो',
+                        },
                         actions: {
                             title: 'सन्देश कार्यहरू',
                             edit: 'सम्पादन गर्नुहोस्',

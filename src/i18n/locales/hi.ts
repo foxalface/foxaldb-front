@@ -465,6 +465,10 @@ export const hi: LanguageTranslation = {
                     message: {
                         edited: '(संपादित)',
                         edited_aria: 'संदेश संपादित किया गया',
+                        day_separator: {
+                            today: 'आज',
+                            yesterday: 'कल',
+                        },
                         actions: {
                             title: 'संदेश क्रियाएँ',
                             edit: 'संपादित करें',

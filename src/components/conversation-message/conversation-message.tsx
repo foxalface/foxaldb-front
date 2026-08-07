@@ -41,13 +41,37 @@ const ConversationMessage = React.forwardRef<
 ));
 ConversationMessage.displayName = 'ConversationMessage';
 
-const ConversationMessageLayout = React.forwardRef<
+const ConversationMessageRow = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+    React.HTMLAttributes<HTMLDivElement> & {
+        isCurrentUser?: boolean;
+    }
+>(({ className, isCurrentUser = false, ...props }, ref) => (
     <div
         ref={ref}
-        className={cn('flex min-w-0 items-start gap-2', className)}
+        className={cn(
+            'flex w-full min-w-0',
+            isCurrentUser ? 'justify-end' : 'justify-start',
+            className
+        )}
+        {...props}
+    />
+));
+ConversationMessageRow.displayName = 'ConversationMessageRow';
+
+const ConversationMessageLayout = React.forwardRef<
+    HTMLDivElement,
+    React.HTMLAttributes<HTMLDivElement> & {
+        isCurrentUser?: boolean;
+    }
+>(({ className, isCurrentUser = false, ...props }, ref) => (
+    <div
+        ref={ref}
+        className={cn(
+            'flex min-w-0 max-w-full items-start gap-2',
+            isCurrentUser ? 'flex-row-reverse' : undefined,
+            className
+        )}
         {...props}
     />
 ));
@@ -76,8 +100,8 @@ const ConversationMessageContent = React.forwardRef<
     <div
         ref={ref}
         className={cn(
-            'min-w-0 flex-1 max-w-[88%]',
-            isCurrentUser ? 'ml-auto' : undefined,
+            'min-w-0 max-w-[min(100%,28rem)]',
+            isCurrentUser ? 'text-right' : undefined,
             className
         )}
         {...props}
@@ -87,12 +111,15 @@ ConversationMessageContent.displayName = 'ConversationMessageContent';
 
 const ConversationMessageHeader = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+    React.HTMLAttributes<HTMLDivElement> & {
+        isCurrentUser?: boolean;
+    }
+>(({ className, isCurrentUser = false, ...props }, ref) => (
     <div
         ref={ref}
         className={cn(
-            'flex min-w-0 items-start justify-between gap-2',
+            'flex min-w-0 items-start gap-2',
+            isCurrentUser ? 'flex-row-reverse' : 'justify-between',
             className
         )}
         {...props}
@@ -110,12 +137,15 @@ ConversationMessageHeaderMeta.displayName = 'ConversationMessageHeaderMeta';
 
 const ConversationMessageHeaderTitleRow = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+    React.HTMLAttributes<HTMLDivElement> & {
+        isCurrentUser?: boolean;
+    }
+>(({ className, isCurrentUser = false, ...props }, ref) => (
     <div
         ref={ref}
         className={cn(
             'flex min-w-0 flex-wrap items-baseline gap-x-1.5 gap-y-0.5',
+            isCurrentUser ? 'justify-end' : undefined,
             className
         )}
         {...props}
@@ -178,8 +208,10 @@ ConversationMessageBodyText.displayName = 'ConversationMessageBodyText';
 
 const ConversationMessageFooter = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement>
->(({ className, children, ...props }, ref) => {
+    React.HTMLAttributes<HTMLDivElement> & {
+        isCurrentUser?: boolean;
+    }
+>(({ className, children, isCurrentUser = false, ...props }, ref) => {
     if (!hasVisibleChildren(children)) {
         return null;
     }
@@ -189,6 +221,7 @@ const ConversationMessageFooter = React.forwardRef<
             ref={ref}
             className={cn(
                 'mt-1 flex min-w-0 flex-wrap items-center gap-1',
+                isCurrentUser ? 'justify-end' : undefined,
                 className
             )}
             {...props}
@@ -247,6 +280,7 @@ ConversationMessageReactionTrigger.displayName =
 
 export {
     ConversationMessage,
+    ConversationMessageRow,
     ConversationMessageLayout,
     ConversationMessageAvatar,
     ConversationMessageContent,

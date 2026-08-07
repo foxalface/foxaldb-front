@@ -457,6 +457,10 @@ export const ar: LanguageTranslation = {
                     message: {
                         edited: '(معدّل)',
                         edited_aria: 'تم تعديل الرسالة',
+                        day_separator: {
+                            today: 'اليوم',
+                            yesterday: 'أمس',
+                        },
                         actions: {
                             title: 'إجراءات الرسالة',
                             edit: 'تعديل',

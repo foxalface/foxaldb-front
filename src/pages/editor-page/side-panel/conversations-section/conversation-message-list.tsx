@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from '@/components/spinner/spinner';
 import { Button } from '@/components/button/button';
+import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import type {
     ConversationStatus,
@@ -9,6 +10,9 @@ import type {
 } from '@/lib/conversations/conversation-types';
 import { ConversationMessageItem } from './conversation-message-item';
 import { ConversationsErrorState } from './conversations-error-state';
+import { ConversationMessageDaySeparator } from '@/components/conversation-message/conversation-message-day-separator';
+import { useConversationMessageDayGroups } from '@/hooks/use-conversation-message-day-groups';
+import { useConversationMessageListInitialScroll } from './use-conversation-message-list-initial-scroll';
 
 export interface ConversationMessageListProps {
     messages: ReadonlyArray<DiagramConversationMessage>;
@@ -48,6 +52,16 @@ export const ConversationMessageList: React.FC<
     onRetry,
 }) => {
     const { t } = useTranslation();
+    const dayGroups = useConversationMessageDayGroups(messages);
+    const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+    useConversationMessageListInitialScroll({
+        conversationId,
+        messagesLength: messages.length,
+        isInitialLoading,
+        isLoadError,
+        scrollAreaRef,
+    });
 
     if (isInitialLoading) {
         return (
@@ -89,55 +103,66 @@ export const ConversationMessageList: React.FC<
     }
 
     return (
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto py-1">
-            {hasMore ? (
-                <div className="flex justify-center py-2">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={onLoadOlder}
-                        disabled={isLoadingMore}
-                        aria-busy={isLoadingMore}
-                    >
-                        {isLoadingMore ? (
-                            <>
-                                <Spinner size="small" className="mr-2 size-4" />
-                                {t(
-                                    'side_panel.conversations_section.detail.loading_more'
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+            <ScrollArea ref={scrollAreaRef} className="h-full">
+                <div className="px-1.5 pb-2">
+                    {hasMore ? (
+                        <div className="flex justify-center py-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={onLoadOlder}
+                                disabled={isLoadingMore}
+                                aria-busy={isLoadingMore}
+                            >
+                                {isLoadingMore ? (
+                                    <>
+                                        <Spinner
+                                            size="small"
+                                            className="mr-2 size-4"
+                                        />
+                                        {t(
+                                            'side_panel.conversations_section.detail.loading_more'
+                                        )}
+                                    </>
+                                ) : (
+                                    t(
+                                        'side_panel.conversations_section.detail.load_older'
+                                    )
                                 )}
-                            </>
-                        ) : (
-                            t(
-                                'side_panel.conversations_section.detail.load_older'
-                            )
-                        )}
-                    </Button>
-                </div>
-            ) : null}
+                            </Button>
+                        </div>
+                    ) : null}
 
-            <ul
-                className="flex list-none flex-col px-1 pb-2"
-                aria-labelledby={listLabelId}
-                role="list"
-            >
-                {messages.map((message) => (
-                    <li
-                        key={message.id}
-                        className="border-b border-border/60 last:border-b-0"
+                    <ul
+                        className="flex list-none flex-col"
+                        aria-labelledby={listLabelId}
+                        role="list"
                     >
-                        <ConversationMessageItem
-                            message={message}
-                            conversationId={conversationId}
-                            conversationStatus={conversationStatus}
-                            editingMessageId={editingMessageId}
-                            onStartEdit={onStartEdit}
-                            onCancelEdit={onCancelEdit}
-                            onEditSaved={onEditSaved}
-                        />
-                    </li>
-                ))}
-            </ul>
+                        {dayGroups.flatMap((group) => [
+                            <li key={`day-${group.dayKey}`}>
+                                <ConversationMessageDaySeparator
+                                    label={group.label}
+                                />
+                            </li>,
+                            ...group.messages.map((message) => (
+                                <li key={message.id}>
+                                    <ConversationMessageItem
+                                        message={message}
+                                        conversationId={conversationId}
+                                        conversationStatus={conversationStatus}
+                                        editingMessageId={editingMessageId}
+                                        onStartEdit={onStartEdit}
+                                        onCancelEdit={onCancelEdit}
+                                        onEditSaved={onEditSaved}
+                                    />
+                                </li>
+                            )),
+                        ])}
+                    </ul>
+                </div>
+            </ScrollArea>
         </div>
     );
 };

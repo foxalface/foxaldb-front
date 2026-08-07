@@ -466,6 +466,10 @@ export const fr: LanguageTranslation = {
                     message: {
                         edited: '(modifié)',
                         edited_aria: 'Message modifié',
+                        day_separator: {
+                            today: "Aujourd'hui",
+                            yesterday: 'Hier',
+                        },
                         actions: {
                             title: 'Actions du message',
                             edit: 'Modifier',

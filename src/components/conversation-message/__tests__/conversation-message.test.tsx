@@ -16,6 +16,7 @@ import {
     ConversationMessageLayout,
     ConversationMessageReactionTrigger,
     ConversationMessageReactions,
+    ConversationMessageRow,
 } from '@/components/conversation-message';
 
 describe('ConversationMessage shell', () => {
@@ -102,61 +103,84 @@ describe('ConversationMessage shell', () => {
         expect(container.firstChild).toBeNull();
     });
 
-    it('applies current-user presentation variant without reversing DOM order', () => {
+    it('aligns other-user messages to the start with avatar adjacent to content', () => {
         render(
-            <ConversationMessage
-                isCurrentUser
-                data-testid="current-user-message"
-            >
-                <ConversationMessageLayout data-testid="layout">
-                    <ConversationMessageAvatar data-testid="avatar-slot">
-                        <span>Avatar</span>
-                    </ConversationMessageAvatar>
-                    <ConversationMessageContent
-                        isCurrentUser
-                        data-testid="content"
+            <ConversationMessage isCurrentUser={false} data-testid="other-user">
+                <ConversationMessageRow isCurrentUser={false} data-testid="row">
+                    <ConversationMessageLayout
+                        isCurrentUser={false}
+                        data-testid="layout"
                     >
-                        <ConversationMessageBody isCurrentUser>
-                            <ConversationMessageBodyText>
-                                My message
-                            </ConversationMessageBodyText>
-                        </ConversationMessageBody>
-                    </ConversationMessageContent>
-                </ConversationMessageLayout>
+                        <ConversationMessageAvatar data-testid="avatar-slot">
+                            <span>Avatar</span>
+                        </ConversationMessageAvatar>
+                        <ConversationMessageContent data-testid="content">
+                            <ConversationMessageBody>
+                                <ConversationMessageBodyText>
+                                    Their message
+                                </ConversationMessageBodyText>
+                            </ConversationMessageBody>
+                        </ConversationMessageContent>
+                    </ConversationMessageLayout>
+                </ConversationMessageRow>
             </ConversationMessage>
         );
 
-        const message = screen.getByTestId('current-user-message');
-        expect(message).toHaveAttribute('data-current-user', 'true');
-
+        const row = screen.getByTestId('row');
         const layout = screen.getByTestId('layout');
         const avatarSlot = screen.getByTestId('avatar-slot');
         const content = screen.getByTestId('content');
-
-        expect(layout.firstElementChild).toBe(avatarSlot);
-        expect(layout.lastElementChild).toBe(content);
-        expect(content).toHaveClass('ml-auto');
-        expect(content).toHaveClass('max-w-[88%]');
-    });
-
-    it('applies other-user presentation without end alignment', () => {
-        render(
-            <ConversationMessage isCurrentUser={false} data-testid="other-user">
-                <ConversationMessageContent data-testid="content">
-                    <ConversationMessageBody>
-                        <ConversationMessageBodyText>
-                            Their message
-                        </ConversationMessageBodyText>
-                    </ConversationMessageBody>
-                </ConversationMessageContent>
-            </ConversationMessage>
-        );
 
         expect(screen.getByTestId('other-user')).toHaveAttribute(
             'data-current-user',
             'false'
         );
-        expect(screen.getByTestId('content')).not.toHaveClass('ml-auto');
+        expect(row).toHaveClass('justify-start');
+        expect(layout).not.toHaveClass('flex-row-reverse');
+        expect(layout.firstElementChild).toBe(avatarSlot);
+        expect(layout.lastElementChild).toBe(content);
+        expect(layout).toHaveClass('gap-2');
+        expect(content).not.toHaveClass('ml-auto');
+        expect(content).not.toHaveClass('flex-1');
+        expect(content).toHaveClass('max-w-[min(100%,28rem)]');
+    });
+
+    it('aligns current-user messages to the end without an avatar', () => {
+        render(
+            <ConversationMessage
+                isCurrentUser
+                data-testid="current-user-message"
+            >
+                <ConversationMessageRow isCurrentUser data-testid="row">
+                    <ConversationMessageLayout data-testid="layout">
+                        <ConversationMessageContent
+                            isCurrentUser
+                            data-testid="content"
+                        >
+                            <ConversationMessageBody isCurrentUser>
+                                <ConversationMessageBodyText>
+                                    My message
+                                </ConversationMessageBodyText>
+                            </ConversationMessageBody>
+                        </ConversationMessageContent>
+                    </ConversationMessageLayout>
+                </ConversationMessageRow>
+            </ConversationMessage>
+        );
+
+        const message = screen.getByTestId('current-user-message');
+        const row = screen.getByTestId('row');
+        const layout = screen.getByTestId('layout');
+        const content = screen.getByTestId('content');
+
+        expect(message).toHaveAttribute('data-current-user', 'true');
+        expect(row).toHaveClass('justify-end');
+        expect(layout).not.toHaveClass('flex-row-reverse');
+        expect(layout.firstElementChild).toBe(content);
+        expect(content).not.toHaveClass('ml-auto');
+        expect(content).not.toHaveClass('flex-1');
+        expect(content).toHaveClass('max-w-[min(100%,28rem)]');
+        expect(content).toHaveClass('text-right');
     });
 
     it('wraps long multiline body without horizontal overflow classes on text', () => {

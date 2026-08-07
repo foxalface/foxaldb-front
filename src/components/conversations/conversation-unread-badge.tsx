@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { formatConversationUnreadCount } from './conversation-unread-count';
 
+const CORNER_OVERLAY_CLASS = 'left-0 top-0 -translate-x-1/3 -translate-y-1/3';
+
 export interface ConversationUnreadBadgeProps {
     count: number;
     ariaLabel: string;
@@ -22,7 +24,8 @@ export const ConversationUnreadBadge: React.FC<
     return (
         <span
             className={cn(
-                'pointer-events-none absolute left-0 top-0 z-20 inline-flex min-h-[1.125rem] min-w-[1.125rem] -translate-x-1/3 -translate-y-1/3 items-center justify-center rounded-full bg-pink-600 px-1 text-[10px] font-semibold leading-none text-white dark:bg-pink-500',
+                'pointer-events-none absolute z-20 inline-flex min-h-[1.125rem] min-w-[1.125rem] items-center justify-center rounded-full bg-pink-600 px-1 text-[10px] font-semibold leading-none text-white dark:bg-pink-500',
+                CORNER_OVERLAY_CLASS,
                 className
             )}
             data-testid={testId}

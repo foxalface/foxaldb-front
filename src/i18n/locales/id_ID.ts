@@ -464,6 +464,10 @@ export const id_ID: LanguageTranslation = {
                     message: {
                         edited: '(diedit)',
                         edited_aria: 'Pesan telah diedit',
+                        day_separator: {
+                            today: 'Hari ini',
+                            yesterday: 'Kemarin',
+                        },
                         actions: {
                             title: 'Tindakan pesan',
                             edit: 'Edit',

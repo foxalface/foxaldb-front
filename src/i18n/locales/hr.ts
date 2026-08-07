@@ -460,6 +460,10 @@ export const hr: LanguageTranslation = {
                     message: {
                         edited: '(uređeno)',
                         edited_aria: 'Poruka je uređena',
+                        day_separator: {
+                            today: 'Danas',
+                            yesterday: 'Jučer',
+                        },
                         actions: {
                             title: 'Radnje poruke',
                             edit: 'Uredi',

@@ -37,6 +37,10 @@ describe('ConversationUnreadBadge', () => {
         expect(badge).toHaveAttribute('role', 'status');
         expect(badge).toHaveTextContent('3');
         expect(badge.className).toContain('absolute');
+        expect(badge.className).toContain('left-0');
+        expect(badge.className).toContain('top-0');
+        expect(badge.className).toContain('-translate-x-1/3');
+        expect(badge.className).toContain('-translate-y-1/3');
     });
 
     it('shows 99+ for large counts', () => {

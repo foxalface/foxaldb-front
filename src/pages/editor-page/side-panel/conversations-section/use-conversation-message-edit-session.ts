@@ -60,6 +60,9 @@ export const useConversationMessageEditSession = ({
     const [validationError, setValidationError] = useState<string | null>(null);
     const [submitError, setSubmitError] = useState<string | null>(null);
 
+    const bodyRef = useRef(body);
+    bodyRef.current = body;
+
     const updateInFlightRef = useRef(false);
     const isMountedRef = useRef(true);
     const sessionRef = useRef<EditSession>({
@@ -88,12 +91,20 @@ export const useConversationMessageEditSession = ({
             conversationId,
             generation: sessionRef.current.generation + 1,
         };
-        setBody(message.body);
         updateInFlightRef.current = false;
         setIsSubmitting(false);
         setValidationError(null);
         setSubmitError(null);
-    }, [conversationId, message.body, message.id]);
+    }, [conversationId, message.id]);
+
+    useEffect(() => {
+        if (updateInFlightRef.current) {
+            return;
+        }
+
+        setBody(message.body);
+        bodyRef.current = message.body;
+    }, [message.body]);
 
     const trimmedBody = normalizeConversationMessageBody(body);
     const characterCount = countUnicodeCharacters(trimmedBody);
@@ -169,7 +180,9 @@ export const useConversationMessageEditSession = ({
             return;
         }
 
-        const nextTrimmedBody = normalizeConversationMessageBody(body);
+        const nextTrimmedBody = normalizeConversationMessageBody(
+            bodyRef.current
+        );
         const nextCount = countUnicodeCharacters(nextTrimmedBody);
 
         if (nextCount > CONVERSATION_MESSAGE_MAX_LENGTH) {
@@ -209,7 +222,10 @@ export const useConversationMessageEditSession = ({
                 body: nextTrimmedBody,
             });
 
-            if (!isCurrentSession()) {
+            if (
+                !isMountedRef.current ||
+                sessionRef.current.messageId !== messageId
+            ) {
                 return;
             }
 
@@ -229,7 +245,7 @@ export const useConversationMessageEditSession = ({
                 }
             }
         }
-    }, [body, conversationStatus, resolveSubmitErrorMessage, t, updateMessage]);
+    }, [conversationStatus, resolveSubmitErrorMessage, t, updateMessage]);
 
     const cancel = useCallback(() => {
         if (updateInFlightRef.current || isSubmitting) {

@@ -2,7 +2,14 @@
 
 ## Status
 
-Accepted
+Superseded
+
+## Superseded by
+
+Conversations architecture (`ConversationsProvider`, `conversation-reducer`,
+`subscribeToDiagramConversationEvents`). Legacy Comments runtime was removed
+during the Conversations cutover. See `AI_CONTEXT_V3.md` §17–§21 and
+`frontend/src/lib/conversations/__tests__/comments-cutover-architecture.test.ts`.
 
 ## Date
 

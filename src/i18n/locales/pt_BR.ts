@@ -467,6 +467,10 @@ export const pt_BR: LanguageTranslation = {
                     message: {
                         edited: '(editado)',
                         edited_aria: 'Mensagem editada',
+                        day_separator: {
+                            today: 'Hoje',
+                            yesterday: 'Ontem',
+                        },
                         actions: {
                             title: 'Ações da mensagem',
                             edit: 'Editar',
