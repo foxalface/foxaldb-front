@@ -18,6 +18,13 @@ const getDiagram = vi.fn();
 const loadDiagramFromData = vi.fn();
 const setDiagramAccess = vi.fn();
 const clearDiagramAccess = vi.fn();
+const diagramAccessState = vi.hoisted(() => ({
+    value: null as {
+        role: string;
+        can_edit: boolean;
+        can_manage_members: boolean;
+    } | null,
+}));
 const updateConfig = vi.fn();
 const navigate = vi.fn();
 const showLoader = vi.fn();
@@ -49,8 +56,15 @@ vi.mock('@/hooks/use-chartdb', () => ({
 
 vi.mock('@/hooks/use-diagram-access', () => ({
     useDiagramAccess: () => ({
-        setDiagramAccess,
-        clearDiagramAccess,
+        diagramAccess: diagramAccessState.value,
+        setDiagramAccess: (access: typeof diagramAccessState.value) => {
+            diagramAccessState.value = access;
+            setDiagramAccess(access);
+        },
+        clearDiagramAccess: () => {
+            diagramAccessState.value = null;
+            clearDiagramAccess();
+        },
     }),
 }));
 
@@ -110,6 +124,7 @@ describe('useEntryFlowAuthenticatedResolution', () => {
         authState.isAuthenticated = true;
         authState.isLoading = false;
         chartDbState.currentDiagram = null;
+        diagramAccessState.value = null;
         resolutionGeneration = 0;
         getDiagrams.mockReset();
         getDiagram.mockReset();
@@ -200,6 +215,56 @@ describe('useEntryFlowAuthenticatedResolution', () => {
         expect(getDiagrams).not.toHaveBeenCalled();
         expect(loadDiagramFromData).toHaveBeenCalled();
         expect(dispatchEvent).toHaveBeenCalledWith({ type: 'DIAGRAM_OPENED' });
+    });
+
+    it('refreshes diagram access when reopening an already loaded diagram', async () => {
+        chartDbState.currentDiagram = { id: '5' };
+        getDiagram.mockResolvedValue({
+            id: 5,
+            name: 'Remote',
+            access: { role: 'owner', can_edit: true, can_manage_members: true },
+        });
+
+        renderResolution(
+            {
+                kind: 'openingDiagram',
+                diagramId: '5',
+                diagramSource: 'remote',
+                entrySource: 'login',
+            },
+            '5'
+        );
+
+        await waitFor(() => {
+            expect(getDiagram).toHaveBeenCalledWith('5');
+        });
+
+        expect(loadDiagramFromData).not.toHaveBeenCalled();
+        expect(setDiagramAccess).toHaveBeenCalledWith(
+            expect.objectContaining({ can_edit: true })
+        );
+        expect(dispatchEvent).toHaveBeenCalledWith({ type: 'DIAGRAM_OPENED' });
+    });
+
+    it('restores diagram access on ready when the route diagram is already loaded', async () => {
+        chartDbState.currentDiagram = { id: '5' };
+        diagramAccessState.value = null;
+        getDiagram.mockResolvedValue({
+            id: 5,
+            name: 'Remote',
+            access: { role: 'owner', can_edit: true, can_manage_members: true },
+        });
+
+        renderResolution({ kind: 'ready' }, '5');
+
+        await waitFor(() => {
+            expect(getDiagram).toHaveBeenCalledWith('5');
+        });
+
+        expect(setDiagramAccess).toHaveBeenCalledWith(
+            expect.objectContaining({ can_edit: true })
+        );
+        expect(loadDiagramFromData).not.toHaveBeenCalled();
     });
 
     it('recovers from access denied via ACCESS_DENIED_RECOVERY', async () => {

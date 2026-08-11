@@ -18,7 +18,7 @@ export interface ConversationMessageCapabilities {
 }
 
 /**
- * Mirrors backend DiagramConversationMessagePolicy for UX only.
+ * Author-only message actions for the conversations UI.
  * The API remains authoritative.
  */
 export const getConversationMessageCapabilities = (
@@ -34,13 +34,12 @@ export const getConversationMessageCapabilities = (
         return { canEdit: false, canDelete: false, hasActions: false };
     }
 
-    const isOwner = diagramAccess.role === 'owner';
     const canEditDiagram = diagramAccess.can_edit === true;
     const authorId = message.user?.id ?? null;
     const isAuthor = authorId !== null && authorId === currentUserId;
 
     const canEdit = isAuthor && canEditDiagram;
-    const canDelete = isOwner || (isAuthor && canEditDiagram);
+    const canDelete = isAuthor && canEditDiagram;
 
     return {
         canEdit,

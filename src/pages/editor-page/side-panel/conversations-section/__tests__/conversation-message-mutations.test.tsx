@@ -678,17 +678,31 @@ describe('Conversation message mutations (M10)', () => {
     });
 
     describe('deletion', () => {
-        it('shows delete action only for permitted messages', async () => {
+        it('shows delete action only on the current user messages', async () => {
             const user = userEvent.setup();
             diagramAccessState.diagramAccess = {
                 role: 'owner',
                 can_edit: true,
                 can_manage_members: true,
             };
-            messagesState.current.messages = [
+            const messages = [
                 buildMessage({ id: 100, user: bobAuthor }),
+                buildMessage({
+                    id: 101,
+                    body: 'Mine',
+                    user: aliceWonderAuthor,
+                }),
             ];
-            await openActiveConversation(user);
+            await openActiveConversation(user, { messages });
+
+            expect(
+                within(
+                    screen.getByTestId('conversation-message-100')
+                ).queryByRole('button', { name: 'Message actions' })
+            ).not.toBeInTheDocument();
+            expect(
+                screen.getAllByRole('button', { name: 'Message actions' })
+            ).toHaveLength(1);
 
             await user.click(
                 screen.getByRole('button', { name: 'Message actions' })

@@ -9,18 +9,24 @@ import React, {
 import { useTranslation } from 'react-i18next';
 import { Avatar, AvatarFallback } from '@/components/avatar/avatar';
 import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
+import {
     ConversationMessage,
-    ConversationMessageAuthor,
+    ConversationMessageActions,
     ConversationMessageAvatar,
     ConversationMessageBody,
+    ConversationMessageBodyRow,
+    ConversationMessageBodyColumn,
     ConversationMessageBodyText,
     ConversationMessageContent,
     ConversationMessageFooter,
-    ConversationMessageHeader,
-    ConversationMessageHeaderMeta,
-    ConversationMessageHeaderTitleRow,
-    ConversationMessageLayout,
+    CONVERSATION_MESSAGE_META_TEXT_CLASS,
     ConversationMessageRow,
+    ConversationMessageTimestamp,
 } from '@/components/conversation-message';
 import { useAuth } from '@/hooks/use-auth';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
@@ -33,6 +39,7 @@ import type {
     DiagramConversationMessage,
 } from '@/lib/conversations/conversation-types';
 import { getUserInitials } from '@/lib/user';
+import { cn } from '@/lib/utils';
 import { resolveIntlLocale } from '@/lib/i18n/intl-locale';
 import {
     formatConversationMessageExactTooltip,
@@ -204,110 +211,143 @@ export const ConversationMessageItem: React.FC<
         shouldFocusActionsRef.current = true;
     }, [onEditSaved]);
 
-    return (
-        <ConversationMessage
-            isCurrentUser={isCurrentUser}
-            data-testid={`conversation-message-${message.id}`}
+    const showEditedMarker = edited && !isEditing;
+
+    const messageTimestamp = messageTimeLabel ? (
+        <ConversationMessageTimestamp
+            className={cn(
+                isCurrentUser ? 'mr-1.5 justify-end' : 'ml-1.5 justify-start'
+            )}
         >
-            <ConversationMessageRow isCurrentUser={isCurrentUser}>
-                <ConversationMessageLayout isCurrentUser={false}>
-                    {!isCurrentUser ? (
-                        <ConversationMessageAvatar>
-                            <Avatar className="size-7" aria-hidden="true">
-                                <AvatarFallback className="text-[10px] font-medium">
-                                    {initials}
-                                </AvatarFallback>
-                            </Avatar>
-                        </ConversationMessageAvatar>
-                    ) : null}
+            <span
+                className={cn(
+                    'relative block',
+                    isCurrentUser ? 'text-right' : 'text-left'
+                )}
+            >
+                <time
+                    className={CONVERSATION_MESSAGE_META_TEXT_CLASS}
+                    dateTime={message.createdAt}
+                    title={messageTimeTooltip ?? undefined}
+                >
+                    {messageTimeLabel}
+                </time>
+                {showEditedMarker ? (
+                    <span
+                        className={cn(
+                            CONVERSATION_MESSAGE_META_TEXT_CLASS,
+                            'absolute top-full mt-px whitespace-nowrap',
+                            isCurrentUser ? 'right-0' : 'left-0'
+                        )}
+                        data-testid="conversation-message-edited-marker"
+                        aria-label={t(
+                            'side_panel.conversations_section.detail.message.edited_aria'
+                        )}
+                    >
+                        {t(
+                            'side_panel.conversations_section.detail.message.edited'
+                        )}
+                    </span>
+                ) : null}
+            </span>
+        </ConversationMessageTimestamp>
+    ) : null;
+
+    return (
+        <TooltipProvider>
+            <ConversationMessage
+                isCurrentUser={isCurrentUser}
+                data-testid={`conversation-message-${message.id}`}
+            >
+                <ConversationMessageRow isCurrentUser={isCurrentUser}>
                     <ConversationMessageContent isCurrentUser={isCurrentUser}>
-                        <ConversationMessageHeader
-                            isCurrentUser={isCurrentUser}
-                        >
-                            <ConversationMessageHeaderMeta>
-                                <ConversationMessageHeaderTitleRow
-                                    isCurrentUser={isCurrentUser}
-                                >
-                                    <ConversationMessageAuthor>
-                                        {displayName}
-                                    </ConversationMessageAuthor>
-                                    {messageTimeLabel ? (
-                                        <time
-                                            className="shrink-0 text-xs text-muted-foreground"
-                                            dateTime={message.createdAt}
-                                            title={
-                                                messageTimeTooltip ?? undefined
-                                            }
-                                        >
-                                            {messageTimeLabel}
-                                        </time>
-                                    ) : null}
-                                    {edited && !isEditing ? (
-                                        <span
-                                            className="shrink-0 text-xs text-muted-foreground"
-                                            aria-label={t(
-                                                'side_panel.conversations_section.detail.message.edited_aria'
-                                            )}
-                                        >
-                                            {t(
-                                                'side_panel.conversations_section.detail.message.edited'
-                                            )}
-                                        </span>
-                                    ) : null}
-                                </ConversationMessageHeaderTitleRow>
-                            </ConversationMessageHeaderMeta>
-                            {!isEditing ? (
-                                <ConversationMessageActionsMenu
-                                    ref={actionsTriggerRef}
-                                    canEdit={capabilities.canEdit}
-                                    canDelete={capabilities.canDelete}
-                                    onEdit={handleEdit}
-                                    onDelete={handleDelete}
-                                />
+                        <ConversationMessageBodyRow>
+                            {!isCurrentUser ? (
+                                <ConversationMessageAvatar>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <span
+                                                className="inline-flex rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                                role="img"
+                                                aria-label={displayName}
+                                                data-testid="conversation-message-avatar-trigger"
+                                            >
+                                                <Avatar
+                                                    className="size-7"
+                                                    aria-hidden="true"
+                                                >
+                                                    <AvatarFallback className="text-[10px] font-medium">
+                                                        {initials}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                            </span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {displayName}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </ConversationMessageAvatar>
                             ) : null}
-                        </ConversationMessageHeader>
-                        {isEditing ? (
-                            <ConversationMessageEditForm
-                                message={message}
-                                conversationId={conversationId}
-                                conversationStatus={conversationStatus}
-                                onCancel={handleCancelEdit}
-                                onSaved={handleSavedEdit}
-                            />
-                        ) : (
-                            <ConversationMessageBody
+                            {isCurrentUser ? messageTimestamp : null}
+                            <ConversationMessageBodyColumn
                                 isCurrentUser={isCurrentUser}
                             >
-                                <ConversationMessageBodyText>
-                                    {message.body}
-                                </ConversationMessageBodyText>
-                            </ConversationMessageBody>
-                        )}
-                        <ConversationMessageFooter
-                            isCurrentUser={isCurrentUser}
-                        >
-                            <ConversationMessageReactionsBar
-                                conversationId={conversationId}
-                                messageId={message.id}
-                                reactions={message.reactions}
-                                canReact={canReact}
-                                isEditing={isEditing}
-                            />
-                        </ConversationMessageFooter>
+                                {isEditing ? (
+                                    <ConversationMessageEditForm
+                                        message={message}
+                                        conversationId={conversationId}
+                                        conversationStatus={conversationStatus}
+                                        onCancel={handleCancelEdit}
+                                        onSaved={handleSavedEdit}
+                                    />
+                                ) : (
+                                    <ConversationMessageBody
+                                        isCurrentUser={isCurrentUser}
+                                    >
+                                        <ConversationMessageBodyText>
+                                            {message.body}
+                                        </ConversationMessageBodyText>
+                                    </ConversationMessageBody>
+                                )}
+                                <ConversationMessageFooter
+                                    isCurrentUser={isCurrentUser}
+                                >
+                                    <ConversationMessageReactionsBar
+                                        conversationId={conversationId}
+                                        messageId={message.id}
+                                        reactions={message.reactions}
+                                        canReact={canReact}
+                                        isEditing={isEditing}
+                                    />
+                                </ConversationMessageFooter>
+                            </ConversationMessageBodyColumn>
+                            {!isCurrentUser ? messageTimestamp : null}
+                            {isCurrentUser && !isEditing ? (
+                                <ConversationMessageActions>
+                                    <ConversationMessageActionsMenu
+                                        ref={actionsTriggerRef}
+                                        canEdit={capabilities.canEdit}
+                                        canDelete={capabilities.canDelete}
+                                        onEdit={handleEdit}
+                                        onDelete={handleDelete}
+                                    />
+                                </ConversationMessageActions>
+                            ) : null}
+                        </ConversationMessageBodyRow>
                     </ConversationMessageContent>
-                </ConversationMessageLayout>
-            </ConversationMessageRow>
-            {capabilities.canDelete ? (
-                <ConversationMessageDeleteDialog
-                    conversationId={conversationId}
-                    messageId={message.id}
-                    conversationStatus={conversationStatus}
-                    open={isDeleteDialogOpen}
-                    onOpenChange={handleDeleteOpenChange}
-                    onDeleted={handleDeleted}
-                    onCloseAutoFocus={handleDeleteCloseAutoFocus}
-                />
-            ) : null}
-        </ConversationMessage>
+                </ConversationMessageRow>
+                {capabilities.canDelete ? (
+                    <ConversationMessageDeleteDialog
+                        conversationId={conversationId}
+                        messageId={message.id}
+                        conversationStatus={conversationStatus}
+                        open={isDeleteDialogOpen}
+                        onOpenChange={handleDeleteOpenChange}
+                        onDeleted={handleDeleted}
+                        onCloseAutoFocus={handleDeleteCloseAutoFocus}
+                    />
+                ) : null}
+            </ConversationMessage>
+        </TooltipProvider>
     );
 };

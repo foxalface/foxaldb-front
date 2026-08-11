@@ -7,7 +7,11 @@ import {
     ConversationMessageAuthor,
     ConversationMessageAvatar,
     ConversationMessageBody,
+    ConversationMessageBodyRow,
     ConversationMessageBodyText,
+    CONVERSATION_MESSAGE_CLUSTER_CLASS,
+    CONVERSATION_MESSAGE_GUTTER_CLASS,
+    CONVERSATION_MESSAGE_SIDE_ANCHOR_CLASS,
     ConversationMessageContent,
     ConversationMessageFooter,
     ConversationMessageHeader,
@@ -107,27 +111,24 @@ describe('ConversationMessage shell', () => {
         render(
             <ConversationMessage isCurrentUser={false} data-testid="other-user">
                 <ConversationMessageRow isCurrentUser={false} data-testid="row">
-                    <ConversationMessageLayout
-                        isCurrentUser={false}
-                        data-testid="layout"
-                    >
-                        <ConversationMessageAvatar data-testid="avatar-slot">
-                            <span>Avatar</span>
-                        </ConversationMessageAvatar>
-                        <ConversationMessageContent data-testid="content">
+                    <ConversationMessageContent data-testid="content">
+                        <ConversationMessageBodyRow data-testid="body-row">
+                            <ConversationMessageAvatar data-testid="avatar-slot">
+                                <span>Avatar</span>
+                            </ConversationMessageAvatar>
                             <ConversationMessageBody>
                                 <ConversationMessageBodyText>
                                     Their message
                                 </ConversationMessageBodyText>
                             </ConversationMessageBody>
-                        </ConversationMessageContent>
-                    </ConversationMessageLayout>
+                        </ConversationMessageBodyRow>
+                    </ConversationMessageContent>
                 </ConversationMessageRow>
             </ConversationMessage>
         );
 
-        const row = screen.getByTestId('row');
-        const layout = screen.getByTestId('layout');
+        const cluster = screen.getByTestId('conversation-message-cluster');
+        const bodyRow = screen.getByTestId('body-row');
         const avatarSlot = screen.getByTestId('avatar-slot');
         const content = screen.getByTestId('content');
 
@@ -135,52 +136,100 @@ describe('ConversationMessage shell', () => {
             'data-current-user',
             'false'
         );
-        expect(row).toHaveClass('justify-start');
-        expect(layout).not.toHaveClass('flex-row-reverse');
-        expect(layout.firstElementChild).toBe(avatarSlot);
-        expect(layout.lastElementChild).toBe(content);
-        expect(layout).toHaveClass('gap-2');
+        expect(cluster).toHaveClass(CONVERSATION_MESSAGE_CLUSTER_CLASS);
+        expect(
+            screen.getByTestId('conversation-message-gutter-end')
+        ).toHaveClass(CONVERSATION_MESSAGE_GUTTER_CLASS);
+        expect(
+            screen.queryByTestId('conversation-message-gutter-start')
+        ).not.toBeInTheDocument();
+        expect(bodyRow).not.toHaveClass('flex-row-reverse');
+        expect(bodyRow.firstElementChild).toBe(avatarSlot);
+        expect(bodyRow).toHaveClass('gap-2');
+        expect(avatarSlot).toHaveClass(CONVERSATION_MESSAGE_SIDE_ANCHOR_CLASS);
         expect(content).not.toHaveClass('ml-auto');
         expect(content).not.toHaveClass('flex-1');
-        expect(content).toHaveClass('max-w-[min(100%,28rem)]');
+        expect(content).toHaveClass('w-full');
     });
 
-    it('aligns current-user messages to the end without an avatar', () => {
+    it('aligns current-user messages to the end with timestamp and actions anchors', () => {
         render(
             <ConversationMessage
                 isCurrentUser
                 data-testid="current-user-message"
             >
                 <ConversationMessageRow isCurrentUser data-testid="row">
-                    <ConversationMessageLayout data-testid="layout">
-                        <ConversationMessageContent
-                            isCurrentUser
-                            data-testid="content"
-                        >
+                    <ConversationMessageContent
+                        isCurrentUser
+                        data-testid="content"
+                    >
+                        <ConversationMessageBodyRow data-testid="body-row">
+                            <div data-testid="timestamp-slot">Time</div>
                             <ConversationMessageBody isCurrentUser>
                                 <ConversationMessageBodyText>
                                     My message
                                 </ConversationMessageBodyText>
                             </ConversationMessageBody>
-                        </ConversationMessageContent>
-                    </ConversationMessageLayout>
+                            <div data-testid="actions-slot">Actions</div>
+                        </ConversationMessageBodyRow>
+                    </ConversationMessageContent>
                 </ConversationMessageRow>
             </ConversationMessage>
         );
 
         const message = screen.getByTestId('current-user-message');
-        const row = screen.getByTestId('row');
-        const layout = screen.getByTestId('layout');
+        const cluster = screen.getByTestId('conversation-message-cluster');
+        const bodyRow = screen.getByTestId('body-row');
+        const timestampSlot = screen.getByTestId('timestamp-slot');
         const content = screen.getByTestId('content');
+        const actionsSlot = screen.getByTestId('actions-slot');
 
         expect(message).toHaveAttribute('data-current-user', 'true');
-        expect(row).toHaveClass('justify-end');
-        expect(layout).not.toHaveClass('flex-row-reverse');
-        expect(layout.firstElementChild).toBe(content);
+        expect(cluster).toHaveClass(CONVERSATION_MESSAGE_CLUSTER_CLASS);
+        expect(
+            screen.getByTestId('conversation-message-gutter-start')
+        ).toHaveClass(CONVERSATION_MESSAGE_GUTTER_CLASS);
+        expect(
+            screen.queryByTestId('conversation-message-gutter-end')
+        ).not.toBeInTheDocument();
+        expect(bodyRow).not.toHaveClass('flex-row-reverse');
+        expect(bodyRow.firstElementChild).toBe(timestampSlot);
+        expect(bodyRow.children[1]?.textContent).toBe('My message');
+        expect(bodyRow.lastElementChild).toBe(actionsSlot);
         expect(content).not.toHaveClass('ml-auto');
         expect(content).not.toHaveClass('flex-1');
-        expect(content).toHaveClass('max-w-[min(100%,28rem)]');
-        expect(content).toHaveClass('text-right');
+        expect(content).toHaveClass('w-auto');
+        expect(
+            screen.getByText('My message').closest('div.text-start')
+        ).toHaveClass('text-start');
+        expect(screen.getByText('My message')).toHaveClass('select-text');
+    });
+
+    it('places header actions after metadata for current-user messages', () => {
+        render(
+            <ConversationMessageHeader isCurrentUser data-testid="header">
+                <ConversationMessageHeaderMeta data-testid="meta">
+                    <ConversationMessageHeaderTitleRow isCurrentUser>
+                        <ConversationMessageAuthor>
+                            Foxal Face
+                        </ConversationMessageAuthor>
+                    </ConversationMessageHeaderTitleRow>
+                </ConversationMessageHeaderMeta>
+                <button type="button" data-testid="actions">
+                    Actions
+                </button>
+            </ConversationMessageHeader>
+        );
+
+        const header = screen.getByTestId('header');
+        const meta = screen.getByTestId('meta');
+        const actions = screen.getByTestId('actions');
+
+        expect(header).toHaveClass('justify-end');
+        expect(header).not.toHaveClass('flex-row-reverse');
+        expect(meta.compareDocumentPosition(actions)).toBe(
+            Node.DOCUMENT_POSITION_FOLLOWING
+        );
     });
 
     it('wraps long multiline body without horizontal overflow classes on text', () => {
@@ -198,6 +247,7 @@ describe('ConversationMessage shell', () => {
         expect(bodyText).toHaveClass('whitespace-pre-wrap');
         expect(bodyText).toHaveClass('break-words');
         expect(bodyText).toHaveClass('[overflow-wrap:anywhere]');
+        expect(bodyText).toHaveClass('select-text');
     });
 
     it('preserves accessible author and timestamp markup', () => {

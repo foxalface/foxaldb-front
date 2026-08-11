@@ -38,7 +38,7 @@ describe('conversation message capabilities', () => {
         expect(capabilities.hasActions).toBe(true);
     });
 
-    it('allows owners to delete other authors messages', () => {
+    it('denies delete for diagram owners on other authors messages', () => {
         const capabilities = getConversationMessageCapabilities({
             message: { user: bobAuthor },
             currentUserId: aliceWonderAuthor.id,
@@ -47,8 +47,8 @@ describe('conversation message capabilities', () => {
         });
 
         expect(capabilities.canEdit).toBe(false);
-        expect(capabilities.canDelete).toBe(true);
-        expect(capabilities.hasActions).toBe(true);
+        expect(capabilities.canDelete).toBe(false);
+        expect(capabilities.hasActions).toBe(false);
     });
 
     it('denies edit and delete for non-authors who are not owners', () => {
@@ -86,7 +86,7 @@ describe('conversation message capabilities', () => {
         });
 
         expect(capabilities.canEdit).toBe(false);
-        expect(capabilities.canDelete).toBe(true);
+        expect(capabilities.canDelete).toBe(false);
     });
 });
 

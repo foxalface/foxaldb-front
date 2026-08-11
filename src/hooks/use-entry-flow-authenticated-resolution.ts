@@ -46,7 +46,8 @@ export const useEntryFlowAuthenticatedResolution = ({
 } => {
     const { config, updateConfig } = useConfig();
     const { currentDiagram, loadDiagramFromData } = useChartDB();
-    const { setDiagramAccess, clearDiagramAccess } = useDiagramAccess();
+    const { diagramAccess, setDiagramAccess, clearDiagramAccess } =
+        useDiagramAccess();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
     const { showLoader, hideLoader } = useFullScreenLoader();
     const navigate = useNavigate();
@@ -173,6 +174,75 @@ export const useEntryFlowAuthenticatedResolution = ({
             return;
         }
 
+        if (state.kind !== 'ready') {
+            return;
+        }
+
+        if (routeDiagramId === undefined) {
+            return;
+        }
+
+        if (currentDiagram?.id !== routeDiagramId) {
+            return;
+        }
+
+        if (diagramAccess !== null) {
+            return;
+        }
+
+        const token = beginResolution();
+
+        void (async () => {
+            try {
+                const diagram = await getDiagram(routeDiagramId);
+
+                if (!isResolutionCurrent(token)) {
+                    return;
+                }
+
+                setDiagramAccess(diagram.access ?? null);
+            } catch (error: unknown) {
+                if (!isResolutionCurrent(token)) {
+                    return;
+                }
+
+                if (isDiagramAccessDenied(error)) {
+                    kickOutOfDiagram({
+                        title: t('diagram_access.removed.title'),
+                        message: t('diagram_access.removed.description'),
+                        dedupeKey: `entry-flow:ready:${routeDiagramId}`,
+                        clearDiagramAccess,
+                        loadDiagramFromData,
+                        navigate,
+                        showAlert,
+                        skipOpenDiagramDialog: true,
+                    });
+                }
+            }
+        })();
+    }, [
+        state.kind,
+        routeDiagramId,
+        currentDiagram?.id,
+        diagramAccess,
+        isAuthenticated,
+        isAuthLoading,
+        config,
+        beginResolution,
+        isResolutionCurrent,
+        setDiagramAccess,
+        clearDiagramAccess,
+        loadDiagramFromData,
+        navigate,
+        showAlert,
+        t,
+    ]);
+
+    useEffect(() => {
+        if (isAuthLoading || !config || !isAuthenticated) {
+            return;
+        }
+
         if (openingEpisodeKey === undefined) {
             openingEpisodeRef.current = null;
             return;
@@ -205,10 +275,13 @@ export const useEntryFlowAuthenticatedResolution = ({
 
             try {
                 if (alreadyLoadedDiagram && diagramSource !== 'created') {
+                    const diagram = await getDiagram(diagramId);
+
                     if (!isResolutionCurrent(token)) {
                         return;
                     }
 
+                    setDiagramAccess(diagram.access ?? null);
                     setAuthenticatedInitialDiagram(alreadyLoadedDiagram);
                     hideLoader();
                     dispatchEvent({ type: 'DIAGRAM_OPENED' });

@@ -240,7 +240,10 @@ describe('ConversationsSection detail view (M9)', () => {
             screen.getByTestId('conversation-detail-10')
         ).toBeInTheDocument();
         expect(screen.getByText('Hello team')).toBeInTheDocument();
-        expect(screen.getByText('Alice Wonder')).toBeInTheDocument();
+        expect(screen.queryByText('Alice Wonder')).not.toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-message-timestamp')
+        ).toBeInTheDocument();
     });
 
     it('lazy-loads messages when a conversation is opened', async () => {
@@ -419,7 +422,10 @@ describe('ConversationsSection detail view (M9)', () => {
         rerender(<ConversationsSection />);
 
         expect(screen.getByText('Realtime reply')).toBeInTheDocument();
-        expect(screen.getByText('Bob Smith')).toBeInTheDocument();
+        expect(screen.queryByText('Bob Smith')).not.toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-message-avatar-trigger')
+        ).toHaveAttribute('aria-label', 'Bob Smith');
     });
 
     it('shows a read-only banner for archived conversations', async () => {

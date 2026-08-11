@@ -98,7 +98,7 @@ describe('ConversationMessageItem shell integration', () => {
         };
     });
 
-    it('renders author, timestamp, and body inside the message shell', () => {
+    it('renders timestamp and body inside the message shell', () => {
         renderMessageItem({
             ...defaultProps,
             message: buildMessage(),
@@ -106,15 +106,18 @@ describe('ConversationMessageItem shell integration', () => {
 
         const message = screen.getByTestId('conversation-message-100');
         expect(message.tagName).toBe('ARTICLE');
-        expect(screen.getByText('Alice Wonder')).toBeInTheDocument();
+        expect(screen.queryByText('Alice Wonder')).not.toBeInTheDocument();
         expect(screen.getByText('Hello team')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-message-timestamp')
+        ).toBeInTheDocument();
         expect(message.querySelector('time')).toHaveAttribute(
             'dateTime',
             '2026-01-02T10:00:00.000Z'
         );
     });
 
-    it('renders edited marker for updated messages', () => {
+    it('renders edited marker below the timestamp for updated messages', () => {
         renderMessageItem({
             ...defaultProps,
             message: buildMessage({
@@ -122,16 +125,68 @@ describe('ConversationMessageItem shell integration', () => {
             }),
         });
 
-        expect(screen.getByText('(edited)')).toBeInTheDocument();
+        const timestamp = screen.getByTestId('conversation-message-timestamp');
+        const editedMarker = screen.getByTestId(
+            'conversation-message-edited-marker'
+        );
+
+        expect(editedMarker).toHaveTextContent('(edited)');
+        expect(editedMarker).toHaveClass('text-[10px]');
+        expect(editedMarker).toHaveClass('absolute');
+        expect(editedMarker).toHaveClass('top-full');
+        expect(editedMarker).toHaveClass('mt-px');
+        expect(editedMarker).toHaveClass('right-0');
+        expect(timestamp).toHaveClass('mr-1.5');
+        expect(timestamp).toHaveClass('justify-end');
+        expect(timestamp.querySelector('time')).toBeInTheDocument();
     });
 
-    it('shows deleted-user fallback when author is missing', () => {
+    it('left-aligns timestamp metadata for other-user messages', () => {
+        renderMessageItem({
+            ...defaultProps,
+            message: buildMessage({
+                user: bobAuthor,
+                updatedAt: '2026-01-02T11:00:00.000Z',
+            }),
+        });
+
+        const timestamp = screen.getByTestId('conversation-message-timestamp');
+        const editedMarker = screen.getByTestId(
+            'conversation-message-edited-marker'
+        );
+
+        expect(timestamp).toHaveClass('ml-1.5');
+        expect(timestamp).toHaveClass('justify-start');
+        expect(editedMarker).toHaveClass('left-0');
+        expect(editedMarker).not.toHaveClass('right-0');
+    });
+
+    it('shows deleted-user fallback in avatar tooltip for missing authors', () => {
+        renderMessageItem({
+            ...defaultProps,
+            message: buildMessage({ user: bobAuthor }),
+        });
+
+        expect(screen.queryByText('Bob Smith')).not.toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-message-avatar-trigger')
+        ).toHaveAttribute('aria-label', 'Bob Smith');
+        expect(screen.getByText('BS')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-message-timestamp')
+        ).toBeInTheDocument();
+    });
+
+    it('shows deleted-user initials when author is missing', () => {
         renderMessageItem({
             ...defaultProps,
             message: buildMessage({ user: null }),
         });
 
-        expect(screen.getByText('Deleted user')).toBeInTheDocument();
+        expect(screen.queryByText('Deleted user')).not.toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-message-avatar-trigger')
+        ).toHaveAttribute('aria-label', 'Deleted user');
         expect(screen.getByText('?')).toBeInTheDocument();
     });
 
@@ -144,8 +199,15 @@ describe('ConversationMessageItem shell integration', () => {
         const message = screen.getByTestId('conversation-message-100');
         expect(message).toHaveAttribute('data-current-user', 'true');
 
-        const row = message.querySelector('[class*="justify-end"]');
-        expect(row).not.toBeNull();
+        expect(
+            screen.getByTestId('conversation-message-gutter-start')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('conversation-message-gutter-end')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByTestId('conversation-message-actions')
+        ).toBeInTheDocument();
         expect(message.querySelector('.rounded-full')).toBeNull();
     });
 
@@ -231,6 +293,23 @@ describe('ConversationMessageItem shell integration', () => {
         expect(
             screen.getByRole('button', { name: 'Add reaction' })
         ).toBeInTheDocument();
+    });
+
+    it('hides actions for other users messages even for diagram owners', () => {
+        diagramAccessState.diagramAccess = {
+            can_view: true,
+            can_edit: true,
+            role: 'owner',
+        };
+
+        renderMessageItem({
+            ...defaultProps,
+            message: buildMessage({ user: bobAuthor }),
+        });
+
+        expect(
+            screen.queryByRole('button', { name: 'Message actions' })
+        ).not.toBeInTheDocument();
     });
 
     it('shows actions for permitted messages and supports edit mode', async () => {
