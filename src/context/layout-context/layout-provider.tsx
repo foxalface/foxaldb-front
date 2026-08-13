@@ -97,6 +97,24 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
         setIsSidePanelShowed((prevIsSidePanelShowed) => !prevIsSidePanelShowed);
     }, []);
 
+    const toggleSidebarSection = useCallback(
+        (section: SidebarSection) => {
+            if (selectedSidebarSection === section && isSidePanelShowed) {
+                hideSidePanel();
+                return;
+            }
+
+            setSelectedSidebarSection(section);
+            showSidePanel();
+        },
+        [
+            selectedSidebarSection,
+            isSidePanelShowed,
+            hideSidePanel,
+            showSidePanel,
+        ]
+    );
+
     const openTableFromSidebar = useCallback((tableId: string) => {
         setIsSidePanelShowed(true);
         setSelectedSidebarSection('tables');
@@ -172,6 +190,7 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             hideSidePanel,
             showSidePanel,
             toggleSidePanel,
+            toggleSidebarSection,
             openDependencyFromSidebar,
             closeAllDependenciesInSidebar,
             openedRefInSidebar,
@@ -204,6 +223,7 @@ export const LayoutProvider: React.FC<React.PropsWithChildren> = ({
             hideSidePanel,
             showSidePanel,
             toggleSidePanel,
+            toggleSidebarSection,
             openDependencyFromSidebar,
             closeAllDependenciesInSidebar,
             openedRefInSidebar,

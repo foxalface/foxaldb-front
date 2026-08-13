@@ -50,11 +50,10 @@ export interface EditorSidebarProps {}
 
 export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const {
-        selectSidebarSection,
+        toggleSidebarSection,
         selectedSidebarSection,
-        showSidePanel,
+        isSidePanelShowed,
         selectVisualsTab,
-        openConversationsPanel,
     } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
@@ -92,28 +91,26 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 title: t('editor_sidebar.tables'),
                 icon: Table,
                 onClick: () => {
-                    showSidePanel();
-                    selectSidebarSection('tables');
+                    toggleSidebarSection('tables');
                 },
-                active: selectedSidebarSection === 'tables',
+                active:
+                    selectedSidebarSection === 'tables' && isSidePanelShowed,
             },
             {
                 title: 'DBML',
                 icon: CodeXml,
                 onClick: () => {
-                    showSidePanel();
-                    selectSidebarSection('dbml');
+                    toggleSidebarSection('dbml');
                 },
-                active: selectedSidebarSection === 'dbml',
+                active: selectedSidebarSection === 'dbml' && isSidePanelShowed,
             },
             {
                 title: t('editor_sidebar.refs'),
                 icon: Workflow,
                 onClick: () => {
-                    showSidePanel();
-                    selectSidebarSection('refs');
+                    toggleSidebarSection('refs');
                 },
-                active: selectedSidebarSection === 'refs',
+                active: selectedSidebarSection === 'refs' && isSidePanelShowed,
             },
             ...(supportsCustomTypes(databaseType)
                 ? [
@@ -121,10 +118,11 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                           title: t('editor_sidebar.custom_types'),
                           icon: FileType,
                           onClick: () => {
-                              showSidePanel();
-                              selectSidebarSection('customTypes');
+                              toggleSidebarSection('customTypes');
                           },
-                          active: selectedSidebarSection === 'customTypes',
+                          active:
+                              selectedSidebarSection === 'customTypes' &&
+                              isSidePanelShowed,
                       },
                   ]
                 : []),
@@ -132,11 +130,16 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 title: t('editor_sidebar.visuals'),
                 icon: Group,
                 onClick: () => {
-                    showSidePanel();
-                    selectSidebarSection('visuals');
-                    selectVisualsTab('areas');
+                    toggleSidebarSection('visuals');
+                    if (
+                        selectedSidebarSection !== 'visuals' ||
+                        !isSidePanelShowed
+                    ) {
+                        selectVisualsTab('areas');
+                    }
                 },
-                active: selectedSidebarSection === 'visuals',
+                active:
+                    selectedSidebarSection === 'visuals' && isSidePanelShowed,
             },
             ...(conversationsAvailable
                 ? [
@@ -144,23 +147,24 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                           title: t('editor_sidebar.conversations'),
                           icon: SlBubbles,
                           onClick: () => {
-                              openConversationsPanel();
+                              toggleSidebarSection('conversations');
                           },
-                          active: selectedSidebarSection === 'conversations',
+                          active:
+                              selectedSidebarSection === 'conversations' &&
+                              isSidePanelShowed,
                           unreadCount: totalUnreadCount,
                       },
                   ]
                 : []),
         ],
         [
-            selectSidebarSection,
+            toggleSidebarSection,
             selectedSidebarSection,
+            isSidePanelShowed,
             t,
-            showSidePanel,
             databaseType,
             selectVisualsTab,
             conversationsAvailable,
-            openConversationsPanel,
             totalUnreadCount,
         ]
     );

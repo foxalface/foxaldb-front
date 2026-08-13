@@ -52,6 +52,7 @@ export interface LayoutContext {
     hideSidePanel: () => void;
     showSidePanel: () => void;
     toggleSidePanel: () => void;
+    toggleSidebarSection: (section: SidebarSection) => void;
 
     openConversationsPanel: () => void;
     conversationNavigationIntent: ConversationNavigationIntent | null;
@@ -96,6 +97,7 @@ export const layoutContext = createContext<LayoutContext>({
     hideSidePanel: emptyFn,
     showSidePanel: emptyFn,
     toggleSidePanel: emptyFn,
+    toggleSidebarSection: emptyFn,
 
     openConversationsPanel: emptyFn,
     conversationNavigationIntent: null,

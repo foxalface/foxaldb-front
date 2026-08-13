@@ -1,9 +1,4 @@
 import React from 'react';
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from '@/components/resizable/resizable';
 import { SidePanel } from './side-panel/side-panel';
 import { Canvas } from './canvas/canvas';
 import { useLayout } from '@/hooks/use-layout';
@@ -33,25 +28,30 @@ export const EditorDesktopLayout: React.FC<EditorDesktopLayoutProps> = ({
                 className="h-full min-h-0"
             >
                 <EditorSidebar />
-                <ResizablePanelGroup direction="horizontal">
-                    <ResizablePanel
-                        defaultSize={25}
-                        minSize={25}
-                        maxSize={isSidePanelShowed ? 99 : 0}
-                        className={cn('transition-[flex-grow] duration-200', {
-                            'min-w-[350px]': isSidePanelShowed,
-                        })}
+                <div className="flex min-h-0 min-w-0 flex-1">
+                    <div
+                        className={cn(
+                            'shrink-0 overflow-hidden transition-[width]',
+                            isSidePanelShowed
+                                ? 'w-[max(350px,25%)] duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)]'
+                                : 'pointer-events-none w-0 duration-[380ms] ease-[cubic-bezier(0.4,0,0.2,1)]'
+                        )}
                     >
-                        <SidePanel />
-                    </ResizablePanel>
-                    <ResizableHandle
-                        disabled={!isSidePanelShowed}
-                        className={!isSidePanelShowed ? 'hidden' : ''}
+                        <div className="size-full min-w-[350px]">
+                            <SidePanel />
+                        </div>
+                    </div>
+                    <div
+                        aria-hidden
+                        className={cn(
+                            'w-px shrink-0 bg-border transition-opacity duration-[380ms]',
+                            !isSidePanelShowed && 'opacity-0'
+                        )}
                     />
-                    <ResizablePanel defaultSize={75}>
+                    <div className="min-h-0 min-w-0 flex-1">
                         <Canvas initialTables={initialDiagram?.tables ?? []} />
-                    </ResizablePanel>
-                </ResizablePanelGroup>
+                    </div>
+                </div>
             </SidebarProvider>
         </>
     );

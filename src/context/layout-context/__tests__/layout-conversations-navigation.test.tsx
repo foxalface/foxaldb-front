@@ -68,4 +68,40 @@ describe('Layout conversations navigation', () => {
 
         expect(result.current.conversationNavigationIntent).toBeNull();
     });
+
+    it('toggleSidebarSection closes the panel when the same section is active', () => {
+        const { result } = renderHook(() => useLayout(), { wrapper });
+
+        act(() => {
+            result.current.toggleSidebarSection('tables');
+        });
+
+        expect(result.current.isSidePanelShowed).toBe(false);
+        expect(result.current.selectedSidebarSection).toBe('tables');
+    });
+
+    it('toggleSidebarSection opens a different section', () => {
+        const { result } = renderHook(() => useLayout(), { wrapper });
+
+        act(() => {
+            result.current.toggleSidebarSection('dbml');
+        });
+
+        expect(result.current.isSidePanelShowed).toBe(true);
+        expect(result.current.selectedSidebarSection).toBe('dbml');
+    });
+
+    it('toggleSidebarSection reopens the panel when another section was active', () => {
+        const { result } = renderHook(() => useLayout(), { wrapper });
+
+        act(() => {
+            result.current.hideSidePanel();
+        });
+        act(() => {
+            result.current.toggleSidebarSection('tables');
+        });
+
+        expect(result.current.isSidePanelShowed).toBe(true);
+        expect(result.current.selectedSidebarSection).toBe('tables');
+    });
 });

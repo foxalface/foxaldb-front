@@ -10,10 +10,9 @@ import { SidebarProvider } from '@/components/sidebar/sidebar';
 const { layoutState, conversationsAvailabilityState } = vi.hoisted(() => ({
     layoutState: {
         selectedSidebarSection: 'tables' as SidebarSection,
-        selectSidebarSection: vi.fn(),
-        showSidePanel: vi.fn(),
+        isSidePanelShowed: true,
+        toggleSidebarSection: vi.fn(),
         selectVisualsTab: vi.fn(),
-        openConversationsPanel: vi.fn(),
     },
     conversationsAvailabilityState: {
         isAvailable: false,
@@ -90,10 +89,9 @@ const renderSidebar = () =>
 describe('EditorSidebar conversations entry', () => {
     beforeEach(() => {
         layoutState.selectedSidebarSection = 'tables';
-        layoutState.selectSidebarSection = vi.fn();
-        layoutState.showSidePanel = vi.fn();
+        layoutState.isSidePanelShowed = true;
+        layoutState.toggleSidebarSection = vi.fn();
         layoutState.selectVisualsTab = vi.fn();
-        layoutState.openConversationsPanel = vi.fn();
         conversationsAvailabilityState.isAvailable = false;
         diagramConversationsState.totalUnreadCount = 0;
     });
@@ -116,24 +114,38 @@ describe('EditorSidebar conversations entry', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('opens the conversations panel on click', async () => {
+    it('toggles the conversations panel on click', async () => {
         conversationsAvailabilityState.isAvailable = true;
         const user = userEvent.setup();
         renderSidebar();
 
         await user.click(screen.getByRole('button', { name: 'Conversations' }));
 
-        expect(layoutState.openConversationsPanel).toHaveBeenCalledTimes(1);
+        expect(layoutState.toggleSidebarSection).toHaveBeenCalledWith(
+            'conversations'
+        );
     });
 
-    it('marks the conversations control active when conversations is selected', () => {
+    it('marks the conversations control active when conversations is selected and open', () => {
         conversationsAvailabilityState.isAvailable = true;
         layoutState.selectedSidebarSection = 'conversations';
+        layoutState.isSidePanelShowed = true;
         renderSidebar();
 
         expect(
             screen.getByRole('button', { name: 'Conversations' })
         ).toHaveAttribute('data-active', 'true');
+    });
+
+    it('marks the conversations control inactive when conversations is selected but closed', () => {
+        conversationsAvailabilityState.isAvailable = true;
+        layoutState.selectedSidebarSection = 'conversations';
+        layoutState.isSidePanelShowed = false;
+        renderSidebar();
+
+        expect(
+            screen.getByRole('button', { name: 'Conversations' })
+        ).toHaveAttribute('data-active', 'false');
     });
 
     it('does not render legacy Comments entries', () => {
