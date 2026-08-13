@@ -1,8 +1,9 @@
-import React, { useId } from 'react';
+import React, { useCallback, useId, useMemo, useRef, useState } from 'react';
 import { Archive } from 'lucide-react';
 import { SlBubbles } from 'react-icons/sl';
 import { useTranslation } from 'react-i18next';
 import { EmptyState } from '@/components/empty-state/empty-state';
+import { Input } from '@/components/input/input';
 import { Tabs, TabsContent } from '@/components/tabs/tabs';
 import {
     SidePanelSectionTabsList,
@@ -12,13 +13,27 @@ import {
 import { ConversationsList } from './conversations-list';
 import { ConversationDetail } from './conversation-detail';
 import { useConversationsPanel } from './use-conversations-panel';
+import { useChartDB } from '@/hooks/use-chartdb';
+import type { ConversationTargetType } from '@/lib/conversations/conversation-types';
+import { ConversationTargetTypeFilter } from './conversation-target-type-filter';
+import {
+    DEFAULT_SELECTED_CONVERSATION_TARGET_TYPES,
+    filterConversations,
+    hasActiveConversationFilter,
+} from './filter-conversations';
 
 export interface ConversationsSectionProps {}
 
 export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
     const { t } = useTranslation();
+    const { tables, relationships, diagramName } = useChartDB();
     const activeTabLabelId = useId();
     const archivesTabLabelId = useId();
+    const [filterText, setFilterText] = useState('');
+    const [selectedTargetTypes, setSelectedTargetTypes] = useState<
+        ConversationTargetType[]
+    >(DEFAULT_SELECTED_CONVERSATION_TARGET_TYPES);
+    const filterInputRef = useRef<HTMLInputElement>(null);
     const {
         selectedTab,
         setSelectedTab,
@@ -47,6 +62,51 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
         handleRetry,
         detailRegionRef,
     } = useConversationsPanel();
+
+    const filterContext = useMemo(
+        () => ({
+            diagramName,
+            tables,
+            relationships,
+            t,
+        }),
+        [diagramName, tables, relationships, t]
+    );
+
+    const listFilterOptions = useMemo(
+        () => ({
+            filterText,
+            selectedTargetTypes,
+        }),
+        [filterText, selectedTargetTypes]
+    );
+
+    const hasActiveFilter = hasActiveConversationFilter(listFilterOptions);
+
+    const filteredActiveConversations = useMemo(
+        () =>
+            filterConversations(
+                activeConversations,
+                listFilterOptions,
+                filterContext
+            ),
+        [activeConversations, filterContext, listFilterOptions]
+    );
+
+    const filteredArchivedConversations = useMemo(
+        () =>
+            filterConversations(
+                archivedConversations,
+                listFilterOptions,
+                filterContext
+            ),
+        [archivedConversations, filterContext, listFilterOptions]
+    );
+
+    const handleClearFilter = useCallback(() => {
+        setFilterText('');
+        setSelectedTargetTypes(DEFAULT_SELECTED_CONVERSATION_TARGET_TYPES);
+    }, []);
 
     const hasActiveLoadError =
         status === 'error' && activeConversations.length === 0;
@@ -144,6 +204,27 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
                         </SidePanelSectionTabsList>
                     </SidePanelSectionTabsToolbar>
 
+                    <div className="flex items-center gap-2 px-2 pb-1">
+                        <div className="flex-1">
+                            <Input
+                                ref={filterInputRef}
+                                type="text"
+                                placeholder={t(
+                                    'side_panel.conversations_section.filter'
+                                )}
+                                className="h-8 w-full focus-visible:ring-0"
+                                value={filterText}
+                                onChange={(event) =>
+                                    setFilterText(event.target.value)
+                                }
+                            />
+                        </div>
+                        <ConversationTargetTypeFilter
+                            selectedTargetTypes={selectedTargetTypes}
+                            onSelectedTargetTypesChange={setSelectedTargetTypes}
+                        />
+                    </div>
+
                     <TabsContent
                         value="active"
                         className="mt-0 flex min-h-0 flex-1 flex-col overflow-hidden px-2 data-[state=inactive]:hidden"
@@ -152,7 +233,10 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
                             {t('side_panel.conversations_section.tabs.active')}
                         </h3>
                         <ConversationsList
-                            conversations={activeConversations}
+                            conversations={filteredActiveConversations}
+                            totalConversationCount={activeConversations.length}
+                            hasActiveFilter={hasActiveFilter}
+                            onClearFilter={handleClearFilter}
                             isArchived={false}
                             isInitialLoading={isInitialLoading}
                             isLoadError={hasActiveLoadError}
@@ -187,7 +271,12 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
                             )}
                         </h3>
                         <ConversationsList
-                            conversations={archivedConversations}
+                            conversations={filteredArchivedConversations}
+                            totalConversationCount={
+                                archivedConversations.length
+                            }
+                            hasActiveFilter={hasActiveFilter}
+                            onClearFilter={handleClearFilter}
                             isArchived
                             isInitialLoading={isArchivesInitialLoading}
                             isLoadError={hasArchivedLoadError}

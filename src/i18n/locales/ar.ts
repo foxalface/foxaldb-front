@@ -339,6 +339,17 @@ export const ar: LanguageTranslation = {
                     archives: 'مؤرشفة',
                 },
                 loading: 'جارٍ تحميل المحادثات…',
+                filter: 'تصفية',
+                clear: 'مسح التصفية',
+                no_results_title: 'لا توجد نتائج',
+                no_results_description:
+                    'لم يتم العثور على محادثات تطابق التصفية.',
+
+                type_filter: {
+                    trigger: 'النوع',
+                    label: 'تصفية حسب النوع',
+                    trigger_aria: 'تصفية حسب نوع المحادثة',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'إعادة المحاولة',

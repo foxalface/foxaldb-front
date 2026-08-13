@@ -345,6 +345,17 @@ export const ja: LanguageTranslation = {
                     archives: 'アーカイブ済み',
                 },
                 loading: '会話を読み込み中…',
+                filter: 'フィルター',
+                clear: 'フィルターをクリア',
+                no_results_title: '結果がありません',
+                no_results_description:
+                    'フィルターに一致する会話が見つかりません。',
+
+                type_filter: {
+                    trigger: 'タイプ',
+                    label: 'タイプで絞り込む',
+                    trigger_aria: '会話タイプで絞り込む',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: '再試行',

@@ -344,6 +344,17 @@ export const gu: LanguageTranslation = {
                     archives: 'આર્કાઇવ કરેલી',
                 },
                 loading: 'વાતચીત લોડ થઈ રહી છે…',
+                filter: 'ફિલ્ટર',
+                clear: 'ફિલ્ટર સાફ કરો',
+                no_results_title: 'કોઈ પરિણામ નથી',
+                no_results_description:
+                    'તમારા ફિલ્ટર સાથે મેળ ખાતી કોઈ વાતચીત મળી નથી.',
+
+                type_filter: {
+                    trigger: 'પ્રકાર',
+                    label: 'પ્રકાર દ્વારા ફિલ્ટર',
+                    trigger_aria: 'વાતચીત પ્રકાર દ્વારા ફિલ્ટર',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'ફરી પ્રયાસ કરો',

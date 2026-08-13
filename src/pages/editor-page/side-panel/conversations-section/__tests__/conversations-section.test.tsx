@@ -195,6 +195,95 @@ describe('ConversationsSection', () => {
         resetState();
     });
 
+    it('filters active conversations by selected target type', async () => {
+        const user = userEvent.setup();
+        conversationsState.current.activeConversations = [
+            buildActiveConversation({
+                id: 11,
+                targetType: 'table',
+            }),
+            buildActiveConversation({
+                id: 12,
+                targetType: 'diagram',
+                targetId: null,
+                lastMessageBody: 'Diagram thread',
+            }),
+        ];
+
+        renderSection();
+
+        await user.click(
+            screen.getByRole('button', { name: 'Filter by conversation type' })
+        );
+        await user.click(screen.getByRole('checkbox', { name: 'Table' }));
+        await user.click(screen.getByRole('checkbox', { name: 'Field' }));
+        await user.click(
+            screen.getByRole('checkbox', { name: 'Relationship' })
+        );
+
+        expect(screen.getByText('Diagram thread')).toBeInTheDocument();
+        expect(screen.queryByText('Latest update')).not.toBeInTheDocument();
+    });
+
+    it('filters active conversations by target, message, and author', async () => {
+        const user = userEvent.setup();
+        conversationsState.current.activeConversations = [
+            buildActiveConversation({
+                id: 11,
+                lastMessageBody: 'Deploy checklist',
+            }),
+            buildActiveConversation({
+                id: 12,
+                targetId: 'table-orders',
+                lastMessageBody: 'Other thread',
+            }),
+        ];
+        chartDbState.tables = [
+            ...chartDbState.tables,
+            {
+                id: 'table-orders',
+                name: 'Orders',
+                x: 0,
+                y: 0,
+                fields: [],
+                indexes: [],
+                color: '#fff',
+                isView: false,
+                createdAt: 0,
+            },
+        ];
+
+        renderSection();
+
+        await user.type(screen.getByPlaceholderText('Filter'), 'deploy');
+
+        expect(screen.getByText('Deploy checklist')).toBeInTheDocument();
+        expect(screen.queryByText('Other thread')).not.toBeInTheDocument();
+    });
+
+    it('shows a clear action when the filter has no matches', async () => {
+        const user = userEvent.setup();
+        conversationsState.current.activeConversations = [
+            buildActiveConversation(),
+        ];
+
+        renderSection();
+
+        await user.type(
+            screen.getByPlaceholderText('Filter'),
+            'missing-thread'
+        );
+
+        expect(
+            screen.getByText('No conversations found matching your filter.')
+        ).toBeInTheDocument();
+        expect(screen.getByText('No results')).toBeInTheDocument();
+
+        await user.click(screen.getByRole('button', { name: 'Clear Filter' }));
+
+        expect(screen.getByText('Latest update')).toBeInTheDocument();
+    });
+
     it('renders the active tab summaries by default', () => {
         conversationsState.current.activeConversations = [
             buildActiveConversation(),
@@ -366,7 +455,7 @@ describe('ConversationsSection', () => {
             )
         ).not.toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: /conversation/i })
+            screen.queryByRole('button', { name: 'Start conversation' })
         ).toBeNull();
         expect(
             document.querySelector('[data-slot="empty-icon"]')

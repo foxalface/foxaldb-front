@@ -344,6 +344,17 @@ export const bn: LanguageTranslation = {
                     archives: 'আর্কাইভ করা',
                 },
                 loading: 'কথোপকথন লোড হচ্ছে…',
+                filter: 'ফিল্টার',
+                clear: 'ফিল্টার সাফ করুন',
+                no_results_title: 'কোনো ফলাফল নেই',
+                no_results_description:
+                    'আপনার ফিল্টারের সাথে মিলে যাওয়া কোনো কথোপকথন পাওয়া যায়নি।',
+
+                type_filter: {
+                    trigger: 'প্রকার',
+                    label: 'প্রকার অনুযায়ী ফিল্টার',
+                    trigger_aria: 'কথোপকথনের প্রকার অনুযায়ী ফিল্টার',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'আবার চেষ্টা করুন',

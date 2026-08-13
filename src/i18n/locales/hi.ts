@@ -344,6 +344,17 @@ export const hi: LanguageTranslation = {
                     archives: 'संगृहीत',
                 },
                 loading: 'वार्तालाप लोड हो रहे हैं…',
+                filter: 'फ़िल्टर',
+                clear: 'फ़िल्टर साफ़ करें',
+                no_results_title: 'कोई परिणाम नहीं',
+                no_results_description:
+                    'आपके फ़िल्टर से मेल खाती कोई बातचीत नहीं मिली।',
+
+                type_filter: {
+                    trigger: 'प्रकार',
+                    label: 'प्रकार से फ़िल्टर करें',
+                    trigger_aria: 'बातचीत प्रकार से फ़िल्टर करें',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'पुनः प्रयास करें',

@@ -344,6 +344,17 @@ export const es: LanguageTranslation = {
                     archives: 'Archivadas',
                 },
                 loading: 'Cargando conversaciones…',
+                filter: 'Filtrar',
+                clear: 'Borrar filtro',
+                no_results_title: 'Sin resultados',
+                no_results_description:
+                    'No se encontraron conversaciones que coincidan con su filtro.',
+
+                type_filter: {
+                    trigger: 'Tipo',
+                    label: 'Filtrar por tipo',
+                    trigger_aria: 'Filtrar por tipo de conversación',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'Reintentar',

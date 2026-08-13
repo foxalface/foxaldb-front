@@ -343,6 +343,17 @@ export const vi: LanguageTranslation = {
                     archives: 'Đã lưu trữ',
                 },
                 loading: 'Đang tải cuộc trò chuyện…',
+                filter: 'Lọc',
+                clear: 'Xóa bộ lọc',
+                no_results_title: 'Không có kết quả',
+                no_results_description:
+                    'Không tìm thấy cuộc trò chuyện phù hợp với bộ lọc.',
+
+                type_filter: {
+                    trigger: 'Loại',
+                    label: 'Lọc theo loại',
+                    trigger_aria: 'Lọc theo loại cuộc trò chuyện',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'Thử lại',

@@ -348,6 +348,17 @@ export const mr: LanguageTranslation = {
                     archives: 'संग्रहित',
                 },
                 loading: 'संभाषणे लोड होत आहेत…',
+                filter: 'फिल्टर',
+                clear: 'फिल्टर साफ करा',
+                no_results_title: 'परिणाम नाहीत',
+                no_results_description:
+                    'तुमच्या फिल्टरशी जुळणारी कोणतीही संभाषण सापडली नाही.',
+
+                type_filter: {
+                    trigger: 'प्रकार',
+                    label: 'प्रकारानुसार फिल्टर',
+                    trigger_aria: 'संभाषण प्रकारानुसार फिल्टर',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'पुन्हा प्रयत्न करा',

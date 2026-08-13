@@ -343,6 +343,17 @@ export const id_ID: LanguageTranslation = {
                     archives: 'Diarsipkan',
                 },
                 loading: 'Memuat percakapan…',
+                filter: 'Filter',
+                clear: 'Hapus filter',
+                no_results_title: 'Tidak ada hasil',
+                no_results_description:
+                    'Tidak ada percakapan yang cocok dengan filter Anda.',
+
+                type_filter: {
+                    trigger: 'Tipe',
+                    label: 'Filter menurut tipe',
+                    trigger_aria: 'Filter menurut tipe percakapan',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'Coba lagi',

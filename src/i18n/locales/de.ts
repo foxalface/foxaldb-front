@@ -345,6 +345,17 @@ export const de: LanguageTranslation = {
                     archives: 'Archivierte',
                 },
                 loading: 'Unterhaltungen werden geladen…',
+                filter: 'Filtern',
+                clear: 'Filter löschen',
+                no_results_title: 'Keine Ergebnisse',
+                no_results_description:
+                    'Keine Unterhaltungen entsprechen Ihrem Filter.',
+
+                type_filter: {
+                    trigger: 'Typ',
+                    label: 'Nach Typ filtern',
+                    trigger_aria: 'Nach Unterhaltungstyp filtern',
+                },
                 loading_more: 'Weitere werden geladen…',
                 load_more: 'Mehr laden',
                 retry: 'Erneut versuchen',

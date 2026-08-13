@@ -341,6 +341,17 @@ export const tr: LanguageTranslation = {
                     archives: 'Arşivlenmiş',
                 },
                 loading: 'Konuşmalar yükleniyor…',
+                filter: 'Filtrele',
+                clear: 'Filtreyi temizle',
+                no_results_title: 'Sonuç yok',
+                no_results_description:
+                    'Filtrenizle eşleşen konuşma bulunamadı.',
+
+                type_filter: {
+                    trigger: 'Tür',
+                    label: 'Türe göre filtrele',
+                    trigger_aria: 'Konuşma türüne göre filtrele',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'Yeniden dene',

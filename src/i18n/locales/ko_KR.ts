@@ -342,6 +342,17 @@ export const ko_KR: LanguageTranslation = {
                     archives: '보관됨',
                 },
                 loading: '대화 불러오는 중…',
+                filter: '필터',
+                clear: '필터 지우기',
+                no_results_title: '결과 없음',
+                no_results_description:
+                    '필터와 일치하는 대화를 찾을 수 없습니다.',
+
+                type_filter: {
+                    trigger: '유형',
+                    label: '유형별 필터',
+                    trigger_aria: '대화 유형으로 필터',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: '다시 시도',

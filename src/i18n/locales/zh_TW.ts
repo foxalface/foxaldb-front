@@ -336,6 +336,16 @@ export const zh_TW: LanguageTranslation = {
                     archives: '已封存',
                 },
                 loading: '正在載入對話…',
+                filter: '篩選',
+                clear: '清除篩選',
+                no_results_title: '沒有結果',
+                no_results_description: '找不到符合篩選條件的對話。',
+
+                type_filter: {
+                    trigger: '類型',
+                    label: '依類型篩選',
+                    trigger_aria: '依對話類型篩選',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: '重試',

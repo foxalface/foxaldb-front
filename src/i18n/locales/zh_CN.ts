@@ -336,6 +336,16 @@ export const zh_CN: LanguageTranslation = {
                     archives: '已归档',
                 },
                 loading: '正在加载对话…',
+                filter: '筛选',
+                clear: '清除筛选',
+                no_results_title: '无结果',
+                no_results_description: '未找到符合筛选条件的对话。',
+
+                type_filter: {
+                    trigger: '类型',
+                    label: '按类型筛选',
+                    trigger_aria: '按对话类型筛选',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: '重试',

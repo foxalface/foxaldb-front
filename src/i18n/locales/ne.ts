@@ -343,6 +343,17 @@ export const ne: LanguageTranslation = {
                     archives: 'अभिलेख गरिएको',
                 },
                 loading: 'कुराकानी लोड हुँदैछ…',
+                filter: 'फिल्टर',
+                clear: 'फिल्टर खाली गर्नुहोस्',
+                no_results_title: 'कुनै परिणाम छैन',
+                no_results_description:
+                    'तपाईंको फिल्टरसँग मेल खाने कुनै कुराकानी फेला परेन।',
+
+                type_filter: {
+                    trigger: 'प्रकार',
+                    label: 'प्रकार अनुसार फिल्टर',
+                    trigger_aria: 'कुराकानी प्रकार अनुसार फिल्टर',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'पुन: प्रयास गर्नुहोस्',

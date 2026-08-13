@@ -342,6 +342,17 @@ export const ru: LanguageTranslation = {
                     archives: 'Архивные',
                 },
                 loading: 'Загрузка бесед…',
+                filter: 'Фильтр',
+                clear: 'Очистить фильтр',
+                no_results_title: 'Нет результатов',
+                no_results_description:
+                    'Не найдено бесед, соответствующих вашему фильтру.',
+
+                type_filter: {
+                    trigger: 'Тип',
+                    label: 'Фильтр по типу',
+                    trigger_aria: 'Фильтровать по типу беседы',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'Повторить',

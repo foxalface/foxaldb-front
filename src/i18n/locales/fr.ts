@@ -341,6 +341,17 @@ export const fr: LanguageTranslation = {
                     archives: 'Archivées',
                 },
                 loading: 'Chargement des conversations…',
+                filter: 'Filtrer',
+                clear: 'Effacer le filtre',
+                no_results_title: 'Aucun résultat',
+                no_results_description:
+                    'Aucune conversation correspondant à votre filtre.',
+
+                type_filter: {
+                    trigger: 'Type',
+                    label: 'Filtrer par type',
+                    trigger_aria: 'Filtrer par type de conversation',
+                },
                 loading_more: 'Chargement supplémentaire…',
                 load_more: 'Charger plus',
                 retry: 'Réessayer',

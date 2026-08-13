@@ -345,6 +345,17 @@ export const pt_BR: LanguageTranslation = {
                     archives: 'Arquivadas',
                 },
                 loading: 'Carregando conversas…',
+                filter: 'Filtrar',
+                clear: 'Limpar filtro',
+                no_results_title: 'Sem resultados',
+                no_results_description:
+                    'Nenhuma conversa encontrada correspondente ao seu filtro.',
+
+                type_filter: {
+                    trigger: 'Tipo',
+                    label: 'Filtrar por tipo',
+                    trigger_aria: 'Filtrar por tipo de conversa',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'Tentar novamente',

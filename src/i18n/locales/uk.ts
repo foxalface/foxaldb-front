@@ -343,6 +343,17 @@ export const uk: LanguageTranslation = {
                     archives: 'Архівовані',
                 },
                 loading: 'Завантаження розмов…',
+                filter: 'Фільтр',
+                clear: 'Очистити фільтр',
+                no_results_title: 'Немає результатів',
+                no_results_description:
+                    'Не знайдено розмов, що відповідають вашому фільтру.',
+
+                type_filter: {
+                    trigger: 'Тип',
+                    label: 'Фільтр за типом',
+                    trigger_aria: 'Фільтрувати за типом розмови',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'Повторити',

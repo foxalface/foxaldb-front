@@ -343,6 +343,17 @@ export const te: LanguageTranslation = {
                     archives: 'ఆర్కైవ్ చేసిన',
                 },
                 loading: 'సంభాషణలు లోడ్ అవుతున్నాయి…',
+                filter: 'ఫిల్టర్',
+                clear: 'ఫిల్టర్ క్లియర్ చేయండి',
+                no_results_title: 'ఫలితాలు లేవు',
+                no_results_description:
+                    'మీ ఫిల్టర్‌కు సరిపోలే సంభాషణలు కనుగొనబడలేదు.',
+
+                type_filter: {
+                    trigger: 'రకం',
+                    label: 'రకం ద్వారా ఫిల్టర్',
+                    trigger_aria: 'సంభాషణ రకం ద్వారా ఫిల్టర్',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'మళ్లీ ప్రయత్నించండి',

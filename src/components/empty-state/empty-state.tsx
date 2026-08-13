@@ -108,10 +108,10 @@ export const EmptyState = forwardRef<
                                     <Button
                                         onClick={primaryAction.onClick}
                                         disabled={primaryAction.disabled}
-                                        className="h-8 font-normal"
+                                        className="h-8 gap-1 font-normal"
                                     >
-                                        {primaryAction.label}
                                         {primaryAction.icon}
+                                        {primaryAction.label}
                                     </Button>
                                 )}
                                 {secondaryAction && (
@@ -119,10 +119,10 @@ export const EmptyState = forwardRef<
                                         variant="outline"
                                         onClick={secondaryAction.onClick}
                                         disabled={secondaryAction.disabled}
-                                        className="h-8 font-normal"
+                                        className="h-8 gap-1 font-normal"
                                     >
-                                        {secondaryAction.label}
                                         {secondaryAction.icon}
+                                        {secondaryAction.label}
                                     </Button>
                                 )}
                             </div>

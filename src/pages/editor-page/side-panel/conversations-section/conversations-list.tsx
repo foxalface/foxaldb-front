@@ -4,12 +4,16 @@ import { Spinner } from '@/components/spinner/spinner';
 import { Button } from '@/components/button/button';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { ConversationsEmptyState } from './conversations-empty-state';
+import { ConversationsFilterEmptyState } from './conversations-filter-empty-state';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import { ConversationSummaryItem } from './conversation-summary-item';
 import { ConversationsErrorState } from './conversations-error-state';
 
 export interface ConversationsListProps {
     conversations: ReadonlyArray<DiagramConversation>;
+    totalConversationCount: number;
+    hasActiveFilter: boolean;
+    onClearFilter: () => void;
     isArchived: boolean;
     isInitialLoading: boolean;
     isLoadError: boolean;
@@ -28,6 +32,9 @@ export interface ConversationsListProps {
 
 export const ConversationsList: React.FC<ConversationsListProps> = ({
     conversations,
+    totalConversationCount,
+    hasActiveFilter,
+    onClearFilter,
     isArchived,
     isInitialLoading,
     isLoadError,
@@ -69,8 +76,12 @@ export const ConversationsList: React.FC<ConversationsListProps> = ({
         );
     }
 
-    if (conversations.length === 0) {
+    if (totalConversationCount === 0) {
         return <ConversationsEmptyState isArchived={isArchived} />;
+    }
+
+    if (hasActiveFilter && conversations.length === 0) {
+        return <ConversationsFilterEmptyState onClearFilter={onClearFilter} />;
     }
 
     return (

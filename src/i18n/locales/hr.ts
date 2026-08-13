@@ -340,6 +340,17 @@ export const hr: LanguageTranslation = {
                     archives: 'Arhivirane',
                 },
                 loading: 'Učitavanje razgovora…',
+                filter: 'Filtriraj',
+                clear: 'Očisti filtar',
+                no_results_title: 'Nema rezultata',
+                no_results_description:
+                    'Nema razgovora koji odgovaraju vašem filtru.',
+
+                type_filter: {
+                    trigger: 'Vrsta',
+                    label: 'Filtriraj po vrsti',
+                    trigger_aria: 'Filtriraj po vrsti razgovora',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'Pokušaj ponovno',

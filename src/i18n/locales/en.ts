@@ -336,6 +336,16 @@ export const en = {
                     archives: 'Archived',
                 },
                 loading: 'Loading conversations…',
+                filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results_title: 'No results',
+                no_results_description:
+                    'No conversations found matching your filter.',
+                type_filter: {
+                    trigger: 'Type',
+                    label: 'Filter by type',
+                    trigger_aria: 'Filter by conversation type',
+                },
                 loading_more: 'Loading more…',
                 load_more: 'Load more',
                 retry: 'Retry',
