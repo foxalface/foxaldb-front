@@ -425,6 +425,12 @@ export const zh_CN: LanguageTranslation = {
                     loading: '正在加载消息…',
                     loading_more: '正在加载更早的消息…',
                     load_older: '加载更早的消息',
+                    new_messages_badge_one: '1 条新消息',
+                    new_messages_badge_other: '{{count}} 条新消息',
+                    new_messages_badge_label_one: '新消息',
+                    new_messages_badge_label_other: '新消息',
+                    new_messages_badge_aria_one: '滚动到新消息',
+                    new_messages_badge_aria_other: '滚动到 {{count}} 条新消息',
                     empty: {
                         title: '暂无消息',
                         description: '此对话没有任何消息。',

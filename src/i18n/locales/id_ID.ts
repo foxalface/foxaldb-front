@@ -440,6 +440,13 @@ export const id_ID: LanguageTranslation = {
                     loading: 'Memuat pesan…',
                     loading_more: 'Memuat pesan yang lebih lama…',
                     load_older: 'Muat pesan yang lebih lama',
+                    new_messages_badge_one: '1 pesan baru',
+                    new_messages_badge_other: '{{count}} pesan baru',
+                    new_messages_badge_label_one: 'pesan baru',
+                    new_messages_badge_label_other: 'pesan baru',
+                    new_messages_badge_aria_one: 'Gulir ke pesan baru',
+                    new_messages_badge_aria_other:
+                        'Gulir ke {{count}} pesan baru',
                     empty: {
                         title: 'Belum ada pesan',
                         description: 'Percakapan ini tidak memiliki pesan.',

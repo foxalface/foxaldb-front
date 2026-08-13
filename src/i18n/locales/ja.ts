@@ -440,6 +440,13 @@ export const ja: LanguageTranslation = {
                     loading: 'メッセージを読み込み中…',
                     loading_more: '古いメッセージを読み込み中…',
                     load_older: '古いメッセージを読み込む',
+                    new_messages_badge_one: '新しいメッセージ 1 件',
+                    new_messages_badge_other: '新しいメッセージ {{count}} 件',
+                    new_messages_badge_label_one: '新しいメッセージ',
+                    new_messages_badge_label_other: '新しいメッセージ',
+                    new_messages_badge_aria_one: '新しいメッセージへ移動',
+                    new_messages_badge_aria_other:
+                        '新しいメッセージ {{count}} 件へ移動',
                     empty: {
                         title: 'まだメッセージがありません',
                         description: 'この会話にはメッセージがありません。',

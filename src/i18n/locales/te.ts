@@ -437,6 +437,13 @@ export const te: LanguageTranslation = {
                     loading: 'సందేశాలు లోడ్ అవుతున్నాయి…',
                     loading_more: 'పాత సందేశాలు లోడ్ అవుతున్నాయి…',
                     load_older: 'పాత సందేశాలను లోడ్ చేయండి',
+                    new_messages_badge_one: '1 కొత్త సందేశం',
+                    new_messages_badge_other: '{{count}} కొత్త సందేశాలు',
+                    new_messages_badge_label_one: 'కొత్త సందేశం',
+                    new_messages_badge_label_other: 'కొత్త సందేశాలు',
+                    new_messages_badge_aria_one: 'కొత్త సందేశానికి వెళ్లండి',
+                    new_messages_badge_aria_other:
+                        '{{count}} కొత్త సందేశాలకు వెళ్లండి',
                     empty: {
                         title: 'ఇంకా సందేశాలు లేవు',
                         description: 'ఈ సంభాషణలో సందేశాలు లేవు.',

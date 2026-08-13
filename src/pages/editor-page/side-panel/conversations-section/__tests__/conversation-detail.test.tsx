@@ -517,7 +517,6 @@ describe('ConversationsSection detail view (M9)', () => {
             'conversation-message-list.tsx',
             'conversation-message-item.tsx',
             'conversation-message-composer.tsx',
-            'conversation-message-edit-form.tsx',
             'conversation-message-delete-dialog.tsx',
             'conversation-archive-banner.tsx',
             'use-conversation-detail.ts',

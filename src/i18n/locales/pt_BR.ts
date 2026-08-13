@@ -443,6 +443,13 @@ export const pt_BR: LanguageTranslation = {
                     loading: 'Carregando mensagens…',
                     loading_more: 'Carregando mensagens mais antigas…',
                     load_older: 'Carregar mensagens mais antigas',
+                    new_messages_badge_one: '1 nova mensagem',
+                    new_messages_badge_other: '{{count}} novas mensagens',
+                    new_messages_badge_label_one: 'nova mensagem',
+                    new_messages_badge_label_other: 'novas mensagens',
+                    new_messages_badge_aria_one: 'Ir para a nova mensagem',
+                    new_messages_badge_aria_other:
+                        'Ir para {{count}} novas mensagens',
                     empty: {
                         title: 'Ainda não há mensagens',
                         description: 'Esta conversa não possui mensagens.',

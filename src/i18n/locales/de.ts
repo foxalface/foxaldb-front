@@ -446,6 +446,13 @@ export const de: LanguageTranslation = {
                     loading: 'Nachrichten werden geladen…',
                     loading_more: 'Ältere Nachrichten werden geladen…',
                     load_older: 'Ältere Nachrichten laden',
+                    new_messages_badge_one: '1 neue Nachricht',
+                    new_messages_badge_other: '{{count}} neue Nachrichten',
+                    new_messages_badge_label_one: 'neue Nachricht',
+                    new_messages_badge_label_other: 'neue Nachrichten',
+                    new_messages_badge_aria_one: 'Zur neuen Nachricht springen',
+                    new_messages_badge_aria_other:
+                        'Zu {{count}} neuen Nachrichten springen',
                     empty: {
                         title: 'Noch keine Nachrichten',
                         description:

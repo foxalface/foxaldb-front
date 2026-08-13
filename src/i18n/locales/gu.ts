@@ -437,6 +437,13 @@ export const gu: LanguageTranslation = {
                     loading: 'સંદેશાઓ લોડ થઈ રહ્યા છે…',
                     loading_more: 'જૂના સંદેશાઓ લોડ થઈ રહ્યા છે…',
                     load_older: 'જૂના સંદેશાઓ લોડ કરો',
+                    new_messages_badge_one: '1 નવો સંદેશ',
+                    new_messages_badge_other: '{{count}} નવા સંદેશાઓ',
+                    new_messages_badge_label_one: 'નવો સંદેશ',
+                    new_messages_badge_label_other: 'નવા સંદેશાઓ',
+                    new_messages_badge_aria_one: 'નવા સંદેશ પર જાઓ',
+                    new_messages_badge_aria_other:
+                        '{{count}} નવા સંદેશાઓ પર જાઓ',
                     empty: {
                         title: 'હજી સુધી કોઈ સંદેશ નથી',
                         description: 'આ વાતચીતમાં કોઈ સંદેશ નથી.',

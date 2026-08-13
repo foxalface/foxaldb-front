@@ -437,6 +437,13 @@ export const ru: LanguageTranslation = {
                     loading: 'Загрузка сообщений…',
                     loading_more: 'Загрузка более старых сообщений…',
                     load_older: 'Загрузить более старые сообщения',
+                    new_messages_badge_one: '1 новое сообщение',
+                    new_messages_badge_other: '{{count}} новых сообщений',
+                    new_messages_badge_label_one: 'новое сообщение',
+                    new_messages_badge_label_other: 'новых сообщений',
+                    new_messages_badge_aria_one: 'Перейти к новому сообщению',
+                    new_messages_badge_aria_other:
+                        'Перейти к {{count}} новым сообщениям',
                     empty: {
                         title: 'Сообщений пока нет',
                         description: 'В этой беседе нет сообщений.',

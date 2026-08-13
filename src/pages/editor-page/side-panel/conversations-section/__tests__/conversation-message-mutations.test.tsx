@@ -310,11 +310,6 @@ describe('Conversation message mutations (M10)', () => {
             expect(
                 screen.getByRole('textbox', { name: 'Message' })
             ).toBeInTheDocument();
-            expect(
-                screen.getByText(
-                    'Press Enter to send. Shift+Enter adds a new line.'
-                )
-            ).toBeInTheDocument();
         });
 
         it('hides composer for archived conversations', async () => {
@@ -838,7 +833,6 @@ describe('Conversation message mutations (M10)', () => {
             const files = [
                 'conversation-detail.tsx',
                 'conversation-message-composer.tsx',
-                'conversation-message-edit-form.tsx',
                 'conversation-message-delete-dialog.tsx',
                 'conversation-message-item.tsx',
                 'use-conversation-message-composer-session.ts',

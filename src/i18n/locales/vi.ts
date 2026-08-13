@@ -442,6 +442,13 @@ export const vi: LanguageTranslation = {
                     loading: 'Đang tải tin nhắn…',
                     loading_more: 'Đang tải tin nhắn cũ hơn…',
                     load_older: 'Tải tin nhắn cũ hơn',
+                    new_messages_badge_one: '1 tin nhắn mới',
+                    new_messages_badge_other: '{{count}} tin nhắn mới',
+                    new_messages_badge_label_one: 'tin nhắn mới',
+                    new_messages_badge_label_other: 'tin nhắn mới',
+                    new_messages_badge_aria_one: 'Cuộn đến tin nhắn mới',
+                    new_messages_badge_aria_other:
+                        'Cuộn đến {{count}} tin nhắn mới',
                     empty: {
                         title: 'Chưa có tin nhắn',
                         description:

@@ -436,6 +436,13 @@ export const hr: LanguageTranslation = {
                     loading: 'Učitavanje poruka…',
                     loading_more: 'Učitavanje starijih poruka…',
                     load_older: 'Učitaj starije poruke',
+                    new_messages_badge_one: '1 nova poruka',
+                    new_messages_badge_other: '{{count}} nove poruke',
+                    new_messages_badge_label_one: 'nova poruka',
+                    new_messages_badge_label_other: 'nove poruke',
+                    new_messages_badge_aria_one: 'Idi na novu poruku',
+                    new_messages_badge_aria_other:
+                        'Idi na {{count}} nove poruke',
                     empty: {
                         title: 'Još nema poruka',
                         description: 'Ovaj razgovor nema poruka.',

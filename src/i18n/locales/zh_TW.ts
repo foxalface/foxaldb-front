@@ -425,6 +425,12 @@ export const zh_TW: LanguageTranslation = {
                     loading: '正在載入訊息…',
                     loading_more: '正在載入較早的訊息…',
                     load_older: '載入較早的訊息',
+                    new_messages_badge_one: '1 則新訊息',
+                    new_messages_badge_other: '{{count}} 則新訊息',
+                    new_messages_badge_label_one: '新訊息',
+                    new_messages_badge_label_other: '新訊息',
+                    new_messages_badge_aria_one: '捲動至新訊息',
+                    new_messages_badge_aria_other: '捲動至 {{count}} 則新訊息',
                     empty: {
                         title: '尚無訊息',
                         description: '此對話沒有任何訊息。',

@@ -46,7 +46,6 @@ const defaultProps = {
     editingMessageId: null,
     onStartEdit: vi.fn(),
     onCancelEdit: vi.fn(),
-    onEditSaved: vi.fn(),
 };
 
 vi.mock('@/hooks/use-auth', () => ({
@@ -330,7 +329,7 @@ describe('ConversationMessageItem shell integration', () => {
         expect(onStartEdit).toHaveBeenCalledWith(100);
     });
 
-    it('replaces read body with edit form in edit mode', () => {
+    it('highlights the message body in edit mode without replacing it', () => {
         const { container } = renderMessageItem({
             ...defaultProps,
             editingMessageId: 100,
@@ -338,13 +337,18 @@ describe('ConversationMessageItem shell integration', () => {
         });
 
         expect(
-            screen.getByTestId('conversation-message-edit-form-100')
-        ).toBeInTheDocument();
+            screen.queryByTestId('conversation-message-edit-form-100')
+        ).not.toBeInTheDocument();
+        expect(screen.getByText('Hello team')).toBeInTheDocument();
+        expect(screen.getByTestId('conversation-message-100')).toHaveAttribute(
+            'data-editing',
+            'true'
+        );
         expect(
             container.querySelector(
                 '[data-testid="conversation-message-100"] p.whitespace-pre-wrap'
             )
-        ).toBeNull();
+        ).not.toBeNull();
     });
 
     it('hides actions for archived conversations', () => {

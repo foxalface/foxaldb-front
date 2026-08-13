@@ -436,6 +436,13 @@ export const ko_KR: LanguageTranslation = {
                     loading: '메시지 불러오는 중…',
                     loading_more: '이전 메시지 불러오는 중…',
                     load_older: '이전 메시지 불러오기',
+                    new_messages_badge_one: '새 메시지 1개',
+                    new_messages_badge_other: '새 메시지 {{count}}개',
+                    new_messages_badge_label_one: '새 메시지',
+                    new_messages_badge_label_other: '새 메시지',
+                    new_messages_badge_aria_one: '새 메시지로 이동',
+                    new_messages_badge_aria_other:
+                        '새 메시지 {{count}}개로 이동',
                     empty: {
                         title: '아직 메시지가 없습니다',
                         description: '이 대화에는 메시지가 없습니다.',

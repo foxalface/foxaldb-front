@@ -439,6 +439,13 @@ export const ne: LanguageTranslation = {
                     loading: 'सन्देशहरू लोड हुँदैछ…',
                     loading_more: 'पुराना सन्देशहरू लोड हुँदैछ…',
                     load_older: 'पुराना सन्देशहरू लोड गर्नुहोस्',
+                    new_messages_badge_one: '१ नयाँ सन्देश',
+                    new_messages_badge_other: '{{count}} नयाँ सन्देशहरू',
+                    new_messages_badge_label_one: 'नयाँ सन्देश',
+                    new_messages_badge_label_other: 'नयाँ सन्देशहरू',
+                    new_messages_badge_aria_one: 'नयाँ सन्देशमा जानुहोस्',
+                    new_messages_badge_aria_other:
+                        '{{count}} नयाँ सन्देशहरूमा जानुहोस्',
                     empty: {
                         title: 'अहिलेसम्म कुनै सन्देश छैन',
                         description: 'यो कुराकानीमा कुनै सन्देश छैन।',

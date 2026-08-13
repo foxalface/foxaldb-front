@@ -35,7 +35,6 @@ const defaultProps = {
     editingMessageId: null,
     onStartEdit: vi.fn(),
     onCancelEdit: vi.fn(),
-    onEditSaved: vi.fn(),
     listLabelId: 'messages-heading',
     isInitialLoading: false,
     isLoadError: false,

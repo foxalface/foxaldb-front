@@ -4,6 +4,7 @@ import { Spinner } from '@/components/spinner/spinner';
 import { Button } from '@/components/button/button';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { EmptyState } from '@/components/empty-state/empty-state';
+import { useAuth } from '@/hooks/use-auth';
 import type {
     ConversationStatus,
     DiagramConversationMessage,
@@ -12,7 +13,11 @@ import { ConversationMessageItem } from './conversation-message-item';
 import { ConversationsErrorState } from './conversations-error-state';
 import { ConversationMessageDaySeparator } from '@/components/conversation-message/conversation-message-day-separator';
 import { useConversationMessageDayGroups } from '@/hooks/use-conversation-message-day-groups';
-import { useConversationMessageListInitialScroll } from './use-conversation-message-list-initial-scroll';
+import { ConversationNewMessagesBadge } from './conversation-new-messages-badge';
+import {
+    CONVERSATION_MESSAGE_ID_DATA_ATTRIBUTE,
+    useConversationMessageListScroll,
+} from './use-conversation-message-list-scroll';
 
 export interface ConversationMessageListProps {
     messages: ReadonlyArray<DiagramConversationMessage>;
@@ -21,7 +26,6 @@ export interface ConversationMessageListProps {
     editingMessageId: number | null;
     onStartEdit: (messageId: number) => void;
     onCancelEdit: () => void;
-    onEditSaved: () => void;
     listLabelId: string;
     isInitialLoading: boolean;
     isLoadError: boolean;
@@ -41,7 +45,6 @@ export const ConversationMessageList: React.FC<
     editingMessageId,
     onStartEdit,
     onCancelEdit,
-    onEditSaved,
     listLabelId,
     isInitialLoading,
     isLoadError,
@@ -52,16 +55,20 @@ export const ConversationMessageList: React.FC<
     onRetry,
 }) => {
     const { t } = useTranslation();
+    const { user } = useAuth();
     const dayGroups = useConversationMessageDayGroups(messages);
     const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-    useConversationMessageListInitialScroll({
-        conversationId,
-        messagesLength: messages.length,
-        isInitialLoading,
-        isLoadError,
-        scrollAreaRef,
-    });
+    const { pendingNewMessageCount, scrollToFirstPendingMessage } =
+        useConversationMessageListScroll({
+            conversationId,
+            messages,
+            currentUserId: user?.id ?? null,
+            isInitialLoading,
+            isLoadError,
+            isLoadingMore,
+            scrollAreaRef,
+        });
 
     if (isInitialLoading) {
         return (
@@ -103,7 +110,7 @@ export const ConversationMessageList: React.FC<
     }
 
     return (
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
             <ScrollArea ref={scrollAreaRef} className="h-full">
                 <div className="px-1.5 pb-2">
                     {hasMore ? (
@@ -147,7 +154,13 @@ export const ConversationMessageList: React.FC<
                                 />
                             </li>,
                             ...group.messages.map((message) => (
-                                <li key={message.id}>
+                                <li
+                                    key={message.id}
+                                    {...{
+                                        [CONVERSATION_MESSAGE_ID_DATA_ATTRIBUTE]:
+                                            message.id,
+                                    }}
+                                >
                                     <ConversationMessageItem
                                         message={message}
                                         conversationId={conversationId}
@@ -155,7 +168,6 @@ export const ConversationMessageList: React.FC<
                                         editingMessageId={editingMessageId}
                                         onStartEdit={onStartEdit}
                                         onCancelEdit={onCancelEdit}
-                                        onEditSaved={onEditSaved}
                                     />
                                 </li>
                             )),
@@ -163,6 +175,11 @@ export const ConversationMessageList: React.FC<
                     </ul>
                 </div>
             </ScrollArea>
+
+            <ConversationNewMessagesBadge
+                count={pendingNewMessageCount}
+                onClick={scrollToFirstPendingMessage}
+            />
         </div>
     );
 };

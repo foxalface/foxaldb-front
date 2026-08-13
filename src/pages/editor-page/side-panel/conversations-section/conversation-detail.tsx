@@ -1,4 +1,4 @@
-import React, { useCallback, useId, useState } from 'react';
+import React, { useCallback, useId, useMemo, useState } from 'react';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import { canCreateConversationMessage } from '@/lib/conversations/conversation-message-capabilities';
@@ -55,6 +55,16 @@ export const ConversationDetail: React.FC<ConversationDetailProps> = ({
         setEditingMessageId(null);
     }, []);
 
+    const editingMessage = useMemo(() => {
+        if (editingMessageId === null) {
+            return null;
+        }
+
+        return (
+            messages.find((message) => message.id === editingMessageId) ?? null
+        );
+    }, [editingMessageId, messages]);
+
     return (
         <div
             ref={regionRef}
@@ -77,7 +87,6 @@ export const ConversationDetail: React.FC<ConversationDetailProps> = ({
                 editingMessageId={editingMessageId}
                 onStartEdit={handleStartEdit}
                 onCancelEdit={handleCancelEdit}
-                onEditSaved={handleEditSaved}
                 listLabelId={messagesHeadingId}
                 isInitialLoading={isInitialLoading}
                 isLoadError={hasLoadError}
@@ -96,6 +105,9 @@ export const ConversationDetail: React.FC<ConversationDetailProps> = ({
                 conversationId={conversation.id}
                 conversationStatus={conversation.status}
                 canCreate={canCreate}
+                editingMessage={editingMessage}
+                onCancelEdit={handleCancelEdit}
+                onEditSaved={handleEditSaved}
             />
         </div>
     );

@@ -434,6 +434,12 @@ export const tr: LanguageTranslation = {
                     loading: 'Mesajlar yükleniyor…',
                     loading_more: 'Daha eski mesajlar yükleniyor…',
                     load_older: 'Daha eski mesajları yükle',
+                    new_messages_badge_one: '1 yeni mesaj',
+                    new_messages_badge_other: '{{count}} yeni mesaj',
+                    new_messages_badge_label_one: 'yeni mesaj',
+                    new_messages_badge_label_other: 'yeni mesaj',
+                    new_messages_badge_aria_one: 'Yeni mesaja git',
+                    new_messages_badge_aria_other: '{{count}} yeni mesaja git',
                     empty: {
                         title: 'Henüz mesaj yok',
                         description: 'Bu sohbette mesaj bulunmuyor.',

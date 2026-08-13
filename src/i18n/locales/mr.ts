@@ -443,6 +443,13 @@ export const mr: LanguageTranslation = {
                     loading: 'संदेश लोड होत आहेत…',
                     loading_more: 'जुने संदेश लोड होत आहेत…',
                     load_older: 'जुने संदेश लोड करा',
+                    new_messages_badge_one: '१ नवीन संदेश',
+                    new_messages_badge_other: '{{count}} नवीन संदेश',
+                    new_messages_badge_label_one: 'नवीन संदेश',
+                    new_messages_badge_label_other: 'नवीन संदेश',
+                    new_messages_badge_aria_one: 'नवीन संदेशाकडे जा',
+                    new_messages_badge_aria_other:
+                        '{{count}} नवीन संदेशांकडे जा',
                     empty: {
                         title: 'अद्याप कोणतेही संदेश नाहीत',
                         description: 'या संभाषणात कोणतेही संदेश नाहीत.',

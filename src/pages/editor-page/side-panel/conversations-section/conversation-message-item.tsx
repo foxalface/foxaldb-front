@@ -47,7 +47,6 @@ import {
 } from '@/lib/conversations/conversation-message-datetime';
 import { ConversationMessageActionsMenu } from './conversation-message-actions-menu';
 import { ConversationMessageDeleteDialog } from './conversation-message-delete-dialog';
-import { ConversationMessageEditForm } from './conversation-message-edit-form';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 
 export interface ConversationMessageItemProps {
@@ -57,7 +56,6 @@ export interface ConversationMessageItemProps {
     editingMessageId: number | null;
     onStartEdit: (messageId: number) => void;
     onCancelEdit: () => void;
-    onEditSaved: () => void;
 }
 
 const isMessageEdited = (message: DiagramConversationMessage): boolean =>
@@ -72,7 +70,6 @@ export const ConversationMessageItem: React.FC<
     editingMessageId,
     onStartEdit,
     onCancelEdit,
-    onEditSaved,
 }) => {
     const { t, i18n } = useTranslation();
     const { user } = useAuth();
@@ -201,16 +198,6 @@ export const ConversationMessageItem: React.FC<
         actionsTriggerRef.current?.focus();
     }, [capabilities.canDelete]);
 
-    const handleCancelEdit = useCallback(() => {
-        onCancelEdit();
-        shouldFocusActionsRef.current = true;
-    }, [onCancelEdit]);
-
-    const handleSavedEdit = useCallback(() => {
-        onEditSaved();
-        shouldFocusActionsRef.current = true;
-    }, [onEditSaved]);
-
     const showEditedMarker = edited && !isEditing;
 
     const messageTimestamp = messageTimeLabel ? (
@@ -258,6 +245,7 @@ export const ConversationMessageItem: React.FC<
             <ConversationMessage
                 isCurrentUser={isCurrentUser}
                 data-testid={`conversation-message-${message.id}`}
+                data-editing={isEditing ? 'true' : undefined}
             >
                 <ConversationMessageRow isCurrentUser={isCurrentUser}>
                     <ConversationMessageContent isCurrentUser={isCurrentUser}>
@@ -292,23 +280,18 @@ export const ConversationMessageItem: React.FC<
                             <ConversationMessageBodyColumn
                                 isCurrentUser={isCurrentUser}
                             >
-                                {isEditing ? (
-                                    <ConversationMessageEditForm
-                                        message={message}
-                                        conversationId={conversationId}
-                                        conversationStatus={conversationStatus}
-                                        onCancel={handleCancelEdit}
-                                        onSaved={handleSavedEdit}
-                                    />
-                                ) : (
-                                    <ConversationMessageBody
-                                        isCurrentUser={isCurrentUser}
-                                    >
-                                        <ConversationMessageBodyText>
-                                            {message.body}
-                                        </ConversationMessageBodyText>
-                                    </ConversationMessageBody>
-                                )}
+                                <ConversationMessageBody
+                                    isCurrentUser={isCurrentUser}
+                                    className={
+                                        isEditing
+                                            ? 'ring-2 ring-pink-600/60'
+                                            : undefined
+                                    }
+                                >
+                                    <ConversationMessageBodyText>
+                                        {message.body}
+                                    </ConversationMessageBodyText>
+                                </ConversationMessageBody>
                                 <ConversationMessageFooter
                                     isCurrentUser={isCurrentUser}
                                 >

@@ -433,6 +433,13 @@ export const ar: LanguageTranslation = {
                     loading: 'جارٍ تحميل الرسائل…',
                     loading_more: 'جارٍ تحميل الرسائل الأقدم…',
                     load_older: 'تحميل الرسائل الأقدم',
+                    new_messages_badge_one: 'رسالة جديدة واحدة',
+                    new_messages_badge_other: '{{count}} رسائل جديدة',
+                    new_messages_badge_label_one: 'رسالة جديدة',
+                    new_messages_badge_label_other: 'رسائل جديدة',
+                    new_messages_badge_aria_one: 'الانتقال إلى الرسالة الجديدة',
+                    new_messages_badge_aria_other:
+                        'الانتقال إلى {{count}} رسائل جديدة',
                     empty: {
                         title: 'لا توجد رسائل بعد',
                         description: 'لا تحتوي هذه المحادثة على أي رسائل.',

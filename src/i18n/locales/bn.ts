@@ -437,6 +437,13 @@ export const bn: LanguageTranslation = {
                     loading: 'বার্তা লোড হচ্ছে…',
                     loading_more: 'পুরনো বার্তা লোড হচ্ছে…',
                     load_older: 'পুরনো বার্তা লোড করুন',
+                    new_messages_badge_one: '১টি নতুন বার্তা',
+                    new_messages_badge_other: '{{count}}টি নতুন বার্তা',
+                    new_messages_badge_label_one: 'নতুন বার্তা',
+                    new_messages_badge_label_other: 'নতুন বার্তা',
+                    new_messages_badge_aria_one: 'নতুন বার্তায় যান',
+                    new_messages_badge_aria_other:
+                        '{{count}}টি নতুন বার্তায় যান',
                     empty: {
                         title: 'এখনও কোনো বার্তা নেই',
                         description: 'এই কথোপকথনে কোনো বার্তা নেই।',

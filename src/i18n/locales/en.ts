@@ -435,6 +435,13 @@ export const en = {
                     loading: 'Loading messages…',
                     loading_more: 'Loading older messages…',
                     load_older: 'Load older messages',
+                    new_messages_badge_one: '1 new message',
+                    new_messages_badge_other: '{{count}} new messages',
+                    new_messages_badge_label_one: 'new message',
+                    new_messages_badge_label_other: 'new messages',
+                    new_messages_badge_aria_one: 'Scroll to 1 new message',
+                    new_messages_badge_aria_other:
+                        'Scroll to {{count}} new messages',
                     empty: {
                         title: 'No messages yet',
                         description:

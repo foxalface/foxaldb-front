@@ -441,6 +441,13 @@ export const fr: LanguageTranslation = {
                     loading: 'Chargement des messages…',
                     loading_more: 'Chargement des messages plus anciens…',
                     load_older: 'Charger les messages plus anciens',
+                    new_messages_badge_one: '1 nouveau message',
+                    new_messages_badge_other: '{{count}} nouveaux messages',
+                    new_messages_badge_label_one: 'nouveau message',
+                    new_messages_badge_label_other: 'nouveaux messages',
+                    new_messages_badge_aria_one: 'Aller au nouveau message',
+                    new_messages_badge_aria_other:
+                        'Aller aux {{count}} nouveaux messages',
                     empty: {
                         title: 'Aucun message pour le moment',
                         description:

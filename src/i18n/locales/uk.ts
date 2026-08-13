@@ -438,6 +438,14 @@ export const uk: LanguageTranslation = {
                     loading: 'Завантаження повідомлень…',
                     loading_more: 'Завантаження старіших повідомлень…',
                     load_older: 'Завантажити старіші повідомлення',
+                    new_messages_badge_one: '1 нове повідомлення',
+                    new_messages_badge_other: '{{count}} нових повідомлень',
+                    new_messages_badge_label_one: 'нове повідомлення',
+                    new_messages_badge_label_other: 'нових повідомлень',
+                    new_messages_badge_aria_one:
+                        'Перейти до нового повідомлення',
+                    new_messages_badge_aria_other:
+                        'Перейти до {{count}} нових повідомлень',
                     empty: {
                         title: 'Повідомлень ще немає',
                         description: 'У цій бесіді немає повідомлень.',

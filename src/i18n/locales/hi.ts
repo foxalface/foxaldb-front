@@ -441,6 +441,13 @@ export const hi: LanguageTranslation = {
                     loading: 'संदेश लोड हो रहे हैं…',
                     loading_more: 'पुराने संदेश लोड हो रहे हैं…',
                     load_older: 'पुराने संदेश लोड करें',
+                    new_messages_badge_one: '1 नया संदेश',
+                    new_messages_badge_other: '{{count}} नए संदेश',
+                    new_messages_badge_label_one: 'नया संदेश',
+                    new_messages_badge_label_other: 'नए संदेश',
+                    new_messages_badge_aria_one: 'नए संदेश पर जाएँ',
+                    new_messages_badge_aria_other:
+                        '{{count}} नए संदेशों पर जाएँ',
                     empty: {
                         title: 'अभी कोई संदेश नहीं',
                         description: 'इस बातचीत में कोई संदेश नहीं है।',
