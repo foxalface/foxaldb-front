@@ -164,6 +164,7 @@ export const mr: LanguageTranslation = {
                     primary_key: 'प्राथमिक की',
                     indexes: 'सूचकांक',
                     check_constraints: 'तपासणी निर्बंध',
+                    comments: 'टिप्पण्या',
                     no_comments: 'कोणत्याही टिप्पणी नाहीत',
                     add_field: 'फील्ड जोडा',
                     add_index: 'सूचकांक जोडा',
@@ -177,6 +178,7 @@ export const mr: LanguageTranslation = {
                         open_discussion: 'संवाद उघडा',
                         unique: 'युनिक',
                         auto_increment: 'ऑटो इंक्रिमेंट',
+                        comments: 'टिप्पण्या',
                         no_comments: 'कोणत्याही टिप्पणी नाहीत',
                         delete_field: 'फील्ड हटवा',
                         // TODO: Translate
@@ -207,7 +209,7 @@ export const mr: LanguageTranslation = {
                         add_index: 'इंडेक्स जोडा',
                         delete_table: 'टेबल हटवा',
                         // TODO: Add translations
-                        duplicate_table: 'Duplicate Table',
+                        duplicate_table: 'टेबलची प्रतिलिपी तयार करा',
                     },
                 },
                 empty_state: {
@@ -218,6 +220,9 @@ export const mr: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'फिल्टर',
+                clear: 'फिल्टर साफ करा',
+                no_results:
+                    'तुमच्या फिल्टरशी जुळणारे कोणतेही संदर्भ सापडले नाहीत.',
                 collapse: 'सर्व संकुचित करा',
                 add_relationship: 'रिलेशनशिप जोडा',
                 relationships: 'रिलेशनशिप',
@@ -425,6 +430,7 @@ export const mr: LanguageTranslation = {
                     no_messages: 'अद्याप संदेश नाहीत',
                     last_activity: 'शेवटची क्रियाकलाप',
                     open_aria: '{{target}} साठी संभाषण उघडा',
+                    focus_target_aria: 'आकृतीवर {{target}} दाखवा',
                     author_tooltip: '{{name}} चा शेवटचा संदेश',
                     author_missing_tooltip: 'लेखकाची माहिती नाही',
                     actions: {
@@ -462,7 +468,7 @@ export const mr: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         '{{count}} नवीन संदेशांकडे जा',
                     empty: {
-                        title: 'अद्याप कोणतेही संदेश नाहीत',
+                        title: 'संदेश नाहीत',
                         description: 'या संभाषणात कोणतेही संदेश नाहीत.',
                     },
                     errors: {
@@ -1003,7 +1009,7 @@ export const mr: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: 'टेबल संपादित करा',
             delete_table: 'टेबल हटवा',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'टेबलची प्रतिलिपी तयार करा',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'क्षेत्रात हलवा',
             no_area: 'क्षेत्र नाही',

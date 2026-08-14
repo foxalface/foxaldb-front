@@ -258,7 +258,7 @@ describe('ConversationIndicator', () => {
                 targetId: 'f1',
                 status: 'active',
                 archivedAt: null,
-                messageCount: 0,
+                messageCount: 1,
                 lastMessageAt: null,
                 lastMessageBody: null,
                 lastMessageAuthor: null,

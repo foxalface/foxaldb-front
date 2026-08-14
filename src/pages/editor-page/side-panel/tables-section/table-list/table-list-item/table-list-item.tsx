@@ -24,21 +24,20 @@ export const TableListItem = React.forwardRef<
     const style = {
         transform: CSS.Translate.toString(transform),
         transition,
+        borderLeftWidth: '6px',
+        borderLeftColor: table.color,
     };
 
     return (
         <AccordionItem value={table.id} className="border-none" ref={ref}>
             <div
-                className="w-full rounded-md border-b"
+                className="w-full rounded-md border border-border"
                 ref={setNodeRef}
                 style={style}
                 {...attributes}
             >
                 <AccordionTrigger
-                    className="w-full rounded-md border-l-[6px] px-2 py-0 hover:bg-accent hover:no-underline data-[state=open]:rounded-b-none"
-                    style={{
-                        borderColor: table.color,
-                    }}
+                    className="w-full rounded-md px-2 py-0 hover:bg-accent hover:no-underline data-[state=open]:rounded-b-none"
                     asChild
                 >
                     <TableListItemHeader table={table} />

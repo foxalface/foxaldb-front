@@ -1,27 +1,11 @@
 import React, { useCallback } from 'react';
-import {
-    GripVertical,
-    Trash2,
-    EllipsisVertical,
-    CircleDotDashed,
-} from 'lucide-react';
+import { GripVertical, Trash2, CircleDotDashed } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { Note } from '@/lib/domain/note';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useTranslation } from 'react-i18next';
 import { ColorPicker } from '@/components/color-picker/color-picker';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/dropdown-menu/dropdown-menu';
-import {
-    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
-    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
-} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { mergeRefs } from '@/lib/utils';
@@ -41,7 +25,6 @@ export const NoteListItem = React.forwardRef<HTMLDivElement, NoteListItemProps>(
                 id: note.id,
             });
 
-        // Merge the forwarded ref with the sortable ref
         const combinedRef = mergeRefs<HTMLDivElement>(forwardedRef, setNodeRef);
 
         const style = {
@@ -49,9 +32,13 @@ export const NoteListItem = React.forwardRef<HTMLDivElement, NoteListItemProps>(
             transition,
         };
 
-        const handleDelete = useCallback(() => {
-            removeNote(note.id);
-        }, [note.id, removeNote]);
+        const handleDelete = useCallback(
+            (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                event.stopPropagation();
+                removeNote(note.id);
+            },
+            [note.id, removeNote]
+        );
 
         const handleColorChange = useCallback(
             (color: string) => {
@@ -68,39 +55,9 @@ export const NoteListItem = React.forwardRef<HTMLDivElement, NoteListItemProps>(
             [focusOnNote, note.id]
         );
 
-        const renderDropDownMenu = useCallback(
-            () => (
-                <DropdownMenu>
-                    <DropdownMenuTrigger>
-                        <ListItemHeaderButton>
-                            <EllipsisVertical />
-                        </ListItemHeaderButton>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-fit min-w-40">
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                onClick={handleDelete}
-                                className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} !text-red-700`}
-                            >
-                                <Trash2
-                                    className={
-                                        SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
-                                    }
-                                />
-                                {t(
-                                    'side_panel.notes_section.note.note_actions.delete_note'
-                                )}
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            ),
-            [handleDelete, t]
-        );
-
         return (
             <div
-                className="w-full rounded-md border border-border hover:bg-accent/5"
+                className="w-full rounded-md border border-border hover:bg-accent"
                 ref={combinedRef}
                 style={{
                     ...style,
@@ -131,21 +88,30 @@ export const NoteListItem = React.forwardRef<HTMLDivElement, NoteListItemProps>(
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-1">
-                        <div className="flex flex-row-reverse items-center gap-1">
-                            {!readonly ? renderDropDownMenu() : null}
+                    <div className="flex flex-row-reverse items-center">
+                        {!readonly ? (
+                            <ListItemHeaderButton
+                                onClick={handleDelete}
+                                aria-label={t(
+                                    'side_panel.notes_section.note.note_actions.delete_note'
+                                )}
+                                role="button"
+                                className="!text-red-700 hover:!text-red-700 dark:!text-red-700 dark:hover:!text-red-700"
+                            >
+                                <Trash2 />
+                            </ListItemHeaderButton>
+                        ) : null}
+                        {!readonly ? (
                             <ColorPicker
+                                appearance="list-item-header"
                                 color={note.color}
                                 onChange={handleColorChange}
-                                disabled={readonly}
                             />
-                            <div className="hidden md:group-hover:flex">
-                                <ListItemHeaderButton
-                                    onClick={handleFocusOnNote}
-                                >
-                                    <CircleDotDashed />
-                                </ListItemHeaderButton>
-                            </div>
+                        ) : null}
+                        <div className="flex items-center md:hidden md:group-focus-within:flex md:group-hover:flex">
+                            <ListItemHeaderButton onClick={handleFocusOnNote}>
+                                <CircleDotDashed />
+                            </ListItemHeaderButton>
                         </div>
                     </div>
                 </div>

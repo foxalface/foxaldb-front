@@ -27,16 +27,15 @@ import {
     toOnDeleteSelectValue,
     toOnUpdateSelectValue,
 } from '@/lib/domain/foreign-key-referential-action';
-import { useReactFlow } from '@xyflow/react';
 import {
     FileMinus2,
     FileOutput,
-    Trash2,
     ChevronsLeftRightEllipsis,
     ArrowLeftRight,
 } from 'lucide-react';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils';
 
 export interface RelationshipListItemContentProps {
     relationship: DBRelationship;
@@ -45,14 +44,7 @@ export interface RelationshipListItemContentProps {
 export const RelationshipListItemContent: React.FC<
     RelationshipListItemContentProps
 > = ({ relationship }) => {
-    const {
-        getTable,
-        getField,
-        updateRelationship,
-        removeRelationship,
-        readonly,
-    } = useChartDB();
-    const { deleteElements } = useReactFlow();
+    const { getTable, getField, updateRelationship, readonly } = useChartDB();
     const { t } = useTranslation();
     const relationshipType = useMemo(
         () =>
@@ -147,71 +139,72 @@ export const RelationshipListItemContent: React.FC<
         relationship.sourceFieldId
     );
 
-    const deleteRelationshipHandler = useCallback(() => {
-        removeRelationship(relationship.id);
-        deleteElements({
-            edges: [{ id: relationship.id }],
-        });
-    }, [relationship.id, removeRelationship, deleteElements]);
+    const interactiveRowClassName = cn(
+        'flex flex-col gap-2 rounded-md px-2 py-1.5 text-xs',
+        !readonly && 'group hover:bg-accent'
+    );
+    const selectTriggerClassName = cn('h-8', 'side-panel-group-hover-surface');
 
     return (
         <div className="my-1 flex flex-col rounded-b-md px-1 py-2">
-            <div className="flex flex-col gap-6">
-                <div className="flex items-center justify-between gap-1 text-xs">
-                    <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
-                        <div className="flex flex-row items-center gap-1">
-                            <FileOutput className="size-4 text-subtitle" />
-                            <div className="font-bold text-subtitle">
-                                {t(
-                                    'side_panel.refs_section.relationship.primary'
-                                )}
+            <div className="flex flex-col gap-1">
+                <div className="px-2 py-1.5 text-xs">
+                    <div className="flex items-center justify-between gap-1">
+                        <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
+                            <div className="flex flex-row items-center gap-1">
+                                <FileOutput className="size-4 text-subtitle" />
+                                <div className="font-bold text-subtitle">
+                                    {t(
+                                        'side_panel.refs_section.relationship.primary'
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <div className="truncate text-left text-sm">
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <div className="truncate text-left text-sm">
+                                        {sourceTable?.schema
+                                            ? `${sourceTable.schema}.`
+                                            : ''}
+                                        {sourceTable?.name}({sourceField?.name})
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
                                     {sourceTable?.schema
                                         ? `${sourceTable.schema}.`
                                         : ''}
                                     {sourceTable?.name}({sourceField?.name})
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                {sourceTable?.schema
-                                    ? `${sourceTable.schema}.`
-                                    : ''}
-                                {sourceTable?.name}({sourceField?.name})
-                            </TooltipContent>
-                        </Tooltip>
-                    </div>
-                    <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
-                        <div className="flex flex-row items-center gap-1">
-                            <FileMinus2 className="size-4 text-subtitle" />
-                            <div className="font-bold text-subtitle">
-                                {t(
-                                    'side_panel.refs_section.relationship.foreign'
-                                )}
-                            </div>
+                                </TooltipContent>
+                            </Tooltip>
                         </div>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <div className="truncate text-left text-sm">
+                        <div className="flex basis-1/2 flex-col gap-2 overflow-hidden text-xs">
+                            <div className="flex flex-row items-center gap-1">
+                                <FileMinus2 className="size-4 text-subtitle" />
+                                <div className="font-bold text-subtitle">
+                                    {t(
+                                        'side_panel.refs_section.relationship.foreign'
+                                    )}
+                                </div>
+                            </div>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <div className="truncate text-left text-sm">
+                                        {targetTable?.schema
+                                            ? `${targetTable.schema}.`
+                                            : ''}
+                                        {targetTable?.name}({targetField?.name})
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
                                     {targetTable?.schema
                                         ? `${targetTable.schema}.`
                                         : ''}
                                     {targetTable?.name}({targetField?.name})
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                {targetTable?.schema
-                                    ? `${targetTable.schema}.`
-                                    : ''}
-                                {targetTable?.name}({targetField?.name})
-                            </TooltipContent>
-                        </Tooltip>
+                                </TooltipContent>
+                            </Tooltip>
+                        </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 text-xs">
+                <div className={interactiveRowClassName}>
                     <div className="flex flex-row items-center justify-between">
                         <div className="flex flex-row items-center gap-1">
                             <ChevronsLeftRightEllipsis className="size-4 text-subtitle" />
@@ -247,7 +240,7 @@ export const RelationshipListItemContent: React.FC<
                         onValueChange={updateCardinalities}
                         disabled={readonly}
                     >
-                        <SelectTrigger className="h-8">
+                        <SelectTrigger className={selectTriggerClassName}>
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -262,7 +255,7 @@ export const RelationshipListItemContent: React.FC<
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="flex flex-col gap-2 text-xs">
+                <div className={interactiveRowClassName}>
                     <div className="font-bold text-subtitle">
                         {t('side_panel.refs_section.relationship.on_delete')}
                     </div>
@@ -271,7 +264,7 @@ export const RelationshipListItemContent: React.FC<
                         onValueChange={updateOnDelete}
                         disabled={readonly}
                     >
-                        <SelectTrigger className="h-8">
+                        <SelectTrigger className={selectTriggerClassName}>
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -292,7 +285,7 @@ export const RelationshipListItemContent: React.FC<
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="flex flex-col gap-2 text-xs">
+                <div className={interactiveRowClassName}>
                     <div className="font-bold text-subtitle">
                         {t('side_panel.refs_section.relationship.on_update')}
                     </div>
@@ -301,7 +294,7 @@ export const RelationshipListItemContent: React.FC<
                         onValueChange={updateOnUpdate}
                         disabled={readonly}
                     >
-                        <SelectTrigger className="h-8">
+                        <SelectTrigger className={selectTriggerClassName}>
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -323,22 +316,6 @@ export const RelationshipListItemContent: React.FC<
                     </Select>
                 </div>
             </div>
-            {!readonly ? (
-                <div className="flex flex-1 items-center justify-center pt-2">
-                    <Button
-                        variant="ghost"
-                        className="h-8 p-2 text-xs"
-                        onClick={deleteRelationshipHandler}
-                    >
-                        <Trash2 className="mr-1 size-3.5 text-red-700" />
-                        <div className="text-red-700">
-                            {t(
-                                'side_panel.refs_section.relationship.delete_relationship'
-                            )}
-                        </div>
-                    </Button>
-                </div>
-            ) : null}
         </div>
     );
 };

@@ -71,6 +71,9 @@ export interface ConversationsContextValue {
         conversationId: number,
         lastReadMessageId?: number
     ) => Promise<void>;
+    getConversationById: (
+        conversationId: number
+    ) => DiagramConversation | undefined;
 }
 
 /** Internal developer error — not user-facing copy. Fresh instance per call. */
@@ -115,6 +118,9 @@ const inactiveRemoveReaction: ConversationsContextValue['removeReaction'] =
 const inactiveMarkConversationRead: ConversationsContextValue['markConversationRead'] =
     () => Promise.reject(createConversationsInactiveError());
 
+const inactiveGetConversationById: ConversationsContextValue['getConversationById'] =
+    () => undefined;
+
 export const INACTIVE_CONVERSATIONS_CONTEXT: ConversationsContextValue = {
     activeConversations: EMPTY_CONVERSATIONS,
     archivedConversations: EMPTY_CONVERSATIONS,
@@ -145,6 +151,7 @@ export const INACTIVE_CONVERSATIONS_CONTEXT: ConversationsContextValue = {
     addReaction: inactiveAddReaction,
     removeReaction: inactiveRemoveReaction,
     markConversationRead: inactiveMarkConversationRead,
+    getConversationById: inactiveGetConversationById,
 };
 
 export const ConversationsContext =

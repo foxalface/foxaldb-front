@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
     SidePanelEmptyState,
     SidePanelEmptyStateViewport,
+    sidePanelEmptyStateIcon,
 } from '@/components/side-panel-empty-state/side-panel-empty-state';
 
 export interface ConversationsEmptyStateProps {
@@ -17,6 +18,7 @@ export const ConversationsEmptyState: React.FC<
     return (
         <SidePanelEmptyStateViewport>
             <SidePanelEmptyState
+                icon={sidePanelEmptyStateIcon}
                 title={t(
                     isArchived
                         ? 'side_panel.conversations_section.empty.archives_title'

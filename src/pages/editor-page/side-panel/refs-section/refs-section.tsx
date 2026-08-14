@@ -7,7 +7,11 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import { useLayout } from '@/hooks/use-layout';
-import { EmptyState } from '@/components/empty-state/empty-state';
+import {
+    SidePanelEmptyState,
+    sidePanelEmptyStateIcon,
+} from '@/components/side-panel-empty-state/side-panel-empty-state';
+import { SidePanelFilterEmptyState } from '@/components/side-panel-empty-state/side-panel-filter-empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
 import {
@@ -163,9 +167,13 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
         openCreateRelationshipDialog();
     }, [openCreateRelationshipDialog, setFilterText]);
 
+    const handleClearFilter = useCallback(() => {
+        setFilterText('');
+    }, []);
+
     return (
         <section className="flex flex-1 flex-col overflow-hidden px-2">
-            <div className="flex items-center justify-between gap-4 py-1">
+            <div className="flex items-center gap-2 py-1">
                 <div>
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -208,14 +216,14 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
             <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">
                     {allRefs.length === 0 ? (
-                        <EmptyState
+                        <SidePanelEmptyState
+                            icon={sidePanelEmptyStateIcon}
                             title={t(
                                 'side_panel.refs_section.empty_state.title'
                             )}
                             description={t(
                                 'side_panel.refs_section.empty_state.description'
                             )}
-                            className="mt-20"
                             secondaryAction={
                                 !readonly
                                     ? {
@@ -226,6 +234,12 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
                                       }
                                     : undefined
                             }
+                        />
+                    ) : filterText && filteredRefs.length === 0 ? (
+                        <SidePanelFilterEmptyState
+                            title={t('side_panel.refs_section.no_results')}
+                            clearLabel={t('side_panel.refs_section.clear')}
+                            onClearFilter={handleClearFilter}
                         />
                     ) : (
                         <RefsList refs={filteredRefs} />

@@ -127,9 +127,9 @@ export const DependencyListItemHeader: React.FC<
     );
 
     return (
-        <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-            <div className="flex min-w-0 flex-1">
-                <div className="truncate">{dependencyName}</div>
+        <div className="group flex h-11 w-full flex-1 items-center justify-between gap-1 overflow-hidden">
+            <div className="flex min-w-0 flex-1 px-1">
+                <div className="truncate px-2 py-0.5">{dependencyName}</div>
             </div>
             <div className="flex flex-row-reverse items-center">
                 <div>{renderDropDownMenu()}</div>

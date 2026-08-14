@@ -163,6 +163,7 @@ export const gu: LanguageTranslation = {
                     primary_key: 'પ્રાથમિક કી',
                     indexes: 'ઈન્ડેક્સ',
                     check_constraints: 'ચકાસણી નિયંત્રણો',
+                    comments: 'ટિપ્પણીઓ',
                     no_comments: 'કોઈ ટિપ્પણીઓ નથી',
                     add_field: 'ફીલ્ડ ઉમેરો',
                     add_index: 'ઈન્ડેક્સ ઉમેરો',
@@ -176,6 +177,7 @@ export const gu: LanguageTranslation = {
                         open_discussion: 'વાતચીત ખોલો',
                         unique: 'અદ્વિતીય',
                         auto_increment: 'ઑટો ઇન્ક્રિમેન્ટ',
+                        comments: 'ટિપ્પણીઓ',
                         no_comments: 'કોઈ ટિપ્પણીઓ નથી',
                         delete_field: 'ફીલ્ડ કાઢી નાખો',
                         // TODO: Translate
@@ -204,7 +206,7 @@ export const gu: LanguageTranslation = {
                         change_schema: 'સ્કીમા બદલો',
                         add_field: 'ફીલ્ડ ઉમેરો',
                         add_index: 'ઇન્ડેક્સ ઉમેરો',
-                        duplicate_table: 'ટેબલ ડુપ્લિકેટ કરો',
+                        duplicate_table: 'ટેબલની નકલ કરો',
                         delete_table: 'ટેબલ કાઢી નાખો',
                     },
                 },
@@ -216,6 +218,8 @@ export const gu: LanguageTranslation = {
             refs_section: {
                 refs: 'રેફ્સ',
                 filter: 'ફિલ્ટર',
+                clear: 'ફિલ્ટર સાફ કરો',
+                no_results: 'તમારા ફિલ્ટર સાથે મેળ ખાતા કોઈ સંદર્ભ મળ્યા નથી.',
                 collapse: 'બધાને સકુચિત કરો',
                 add_relationship: 'સંબંધ ઉમેરો',
                 relationships: 'સંબંધો',
@@ -420,6 +424,7 @@ export const gu: LanguageTranslation = {
                     no_messages: 'હજી સંદેશા નથી',
                     last_activity: 'છેલ્લી પ્રવૃત્તિ',
                     open_aria: '{{target}} માટે વાતચીત ખોલો',
+                    focus_target_aria: 'આલેખ પર {{target}} બતાવો',
                     author_tooltip: '{{name}} નો છેલ્લો સંદેશ',
                     author_missing_tooltip: 'લેખકની માહિતી નથી',
                     actions: {
@@ -456,7 +461,7 @@ export const gu: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         '{{count}} નવા સંદેશાઓ પર જાઓ',
                     empty: {
-                        title: 'હજી સુધી કોઈ સંદેશ નથી',
+                        title: 'કોઈ સંદેશ નથી',
                         description: 'આ વાતચીતમાં કોઈ સંદેશ નથી.',
                     },
                     errors: {
@@ -989,7 +994,7 @@ export const gu: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'ટેબલ સંપાદિત કરો',
-            duplicate_table: 'ટેબલ નકલ કરો',
+            duplicate_table: 'ટેબલની નકલ કરો',
             delete_table: 'ટેબલ કાઢી નાખો',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'વિસ્તારમાં ખસેડો',

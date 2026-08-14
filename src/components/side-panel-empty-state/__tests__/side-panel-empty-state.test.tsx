@@ -8,6 +8,7 @@ import {
     SidePanelEmptyState,
     SidePanelEmptyStateViewport,
     sidePanelEmptyStateClassName,
+    sidePanelEmptyStateIcon,
 } from '../side-panel-empty-state';
 
 describe('SidePanelEmptyState', () => {
@@ -47,6 +48,7 @@ describe('SidePanelEmptyState', () => {
     it('renders title and description without an action button by default', () => {
         render(
             <SidePanelEmptyState
+                icon={sidePanelEmptyStateIcon}
                 title="No areas"
                 description="Create an area to get started"
             />
@@ -66,5 +68,6 @@ describe('SidePanelEmptyState', () => {
         expect(
             document.querySelector('[data-slot="empty-icon"]')
         ).not.toBeNull();
+        expect(document.querySelector('img[alt="Empty state"]')).toBeNull();
     });
 });

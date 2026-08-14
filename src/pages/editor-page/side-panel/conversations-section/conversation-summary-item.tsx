@@ -1,8 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { History, MessageSquare, User } from 'lucide-react';
+import { CircleDotDashed, History, MessageSquare, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import { useFocusOnConversationTarget } from '@/hooks/use-focus-on-conversation-target';
+import { Button } from '@/components/button/button';
+import { LIST_ITEM_HEADER_BUTTON_CLASS } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import {
     Tooltip,
     TooltipContent,
@@ -70,6 +73,8 @@ export const ConversationSummaryItem: React.FC<
         () => getConversationSummaryCapabilities(diagramAccess),
         [diagramAccess]
     );
+    const { canFocusOnTarget, focusOnTarget } =
+        useFocusOnConversationTarget(conversation);
 
     const authorName = conversation.lastMessageAuthor?.fullName?.trim()
         ? conversation.lastMessageAuthor.fullName.trim()
@@ -125,6 +130,10 @@ export const ConversationSummaryItem: React.FC<
         'side_panel.conversations_section.summary.open_aria',
         { target: targetLabel.title }
     );
+    const focusTargetAriaLabel = t(
+        'side_panel.conversations_section.summary.focus_target_aria',
+        { target: targetLabel.title }
+    );
 
     const handleArchive = useCallback(() => {
         if (isMutationPending) {
@@ -168,7 +177,7 @@ export const ConversationSummaryItem: React.FC<
     return (
         <article
             className={cn(
-                'relative flex rounded-md border px-3 py-2.5',
+                'group relative flex rounded-md border px-3 py-2.5 hover:bg-accent',
                 CONVERSATION_SUMMARY_CARD_HEIGHT_CLASS,
                 isArchived
                     ? 'border-muted bg-muted/30 opacity-90'
@@ -285,7 +294,7 @@ export const ConversationSummaryItem: React.FC<
             </TooltipProvider>
 
             <div
-                className="absolute right-2 top-2.5 z-10"
+                className="absolute right-2 top-2.5 z-10 flex flex-row-reverse items-center"
                 onClick={(event) => event.stopPropagation()}
             >
                 <ConversationSummaryActionsMenu
@@ -299,6 +308,27 @@ export const ConversationSummaryItem: React.FC<
                     onDelete={handleDeleteRequest}
                     onCloseAutoFocus={restoreActionsFocus}
                 />
+                {canFocusOnTarget ? (
+                    <div className="flex items-center md:hidden md:group-focus-within:flex md:group-hover:flex">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            aria-label={focusTargetAriaLabel}
+                            data-testid="conversation-summary-focus-target"
+                            className={cn(
+                                LIST_ITEM_HEADER_BUTTON_CLASS,
+                                'size-7 shrink-0 p-0'
+                            )}
+                            onClick={focusOnTarget}
+                        >
+                            <CircleDotDashed
+                                className="size-4"
+                                aria-hidden="true"
+                            />
+                        </Button>
+                    </div>
+                ) : null}
             </div>
 
             {capabilities.canDelete ? (

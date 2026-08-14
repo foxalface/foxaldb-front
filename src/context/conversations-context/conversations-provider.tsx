@@ -30,6 +30,7 @@ import {
 import {
     selectActiveConversations,
     selectArchivedConversations,
+    selectConversationById,
     selectMessagesErrorForConversation,
     selectMessagesForConversation,
     selectMessagesNextCursorForConversation,
@@ -869,6 +870,12 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
         [state]
     );
 
+    const getConversationById = useCallback(
+        (conversationId: number) =>
+            selectConversationById(state, conversationId),
+        [state]
+    );
+
     const value = useMemo<ConversationsContextValue>(
         () => ({
             activeConversations,
@@ -900,6 +907,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             addReaction,
             removeReaction,
             markConversationRead,
+            getConversationById,
         }),
         [
             activeConversations,
@@ -931,6 +939,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
             addReaction,
             removeReaction,
             markConversationRead,
+            getConversationById,
         ]
     );
 

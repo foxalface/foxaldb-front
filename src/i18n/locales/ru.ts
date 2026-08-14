@@ -159,6 +159,7 @@ export const ru: LanguageTranslation = {
                     primary_key: 'Первичный ключ',
                     indexes: 'Индексы',
                     check_constraints: 'Проверочные ограничения',
+                    comments: 'Комментарии',
                     no_comments: 'Нет комментария',
                     add_field: 'Добавить поле',
                     add_index: 'Добавить индекс',
@@ -172,6 +173,7 @@ export const ru: LanguageTranslation = {
                         open_discussion: 'Открыть беседу',
                         unique: 'Уникальный',
                         auto_increment: 'Автоинкремент',
+                        comments: 'Комментарии',
                         no_comments: 'Нет комментария',
                         delete_field: 'Удалить поле',
                         // TODO: Translate
@@ -199,7 +201,7 @@ export const ru: LanguageTranslation = {
                         change_schema: 'Изменить схему',
                         add_field: 'Добавить поле',
                         add_index: 'Добавить индекс',
-                        duplicate_table: 'Создать копию',
+                        duplicate_table: 'Дублировать таблицу',
                         delete_table: 'Удалить таблицу',
                     },
                 },
@@ -211,6 +213,9 @@ export const ru: LanguageTranslation = {
             refs_section: {
                 refs: 'Ссылки',
                 filter: 'Фильтр',
+                clear: 'Сбросить фильтр',
+                no_results:
+                    'Не найдено ссылок, соответствующих вашему фильтру.',
                 collapse: 'Свернуть все',
                 add_relationship: 'Добавить отношение',
                 relationships: 'Отношения',
@@ -419,6 +424,7 @@ export const ru: LanguageTranslation = {
                     no_messages: 'Сообщений пока нет',
                     last_activity: 'Последняя активность',
                     open_aria: 'Открыть беседу для {{target}}',
+                    focus_target_aria: 'Показать {{target}} на диаграмме',
                     author_tooltip: 'Последнее сообщение от {{name}}',
                     author_missing_tooltip: 'Нет информации об авторе',
                     actions: {
@@ -456,7 +462,7 @@ export const ru: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         'Перейти к {{count}} новым сообщениям',
                     empty: {
-                        title: 'Сообщений пока нет',
+                        title: 'Нет сообщений',
                         description: 'В этой беседе нет сообщений.',
                     },
                     errors: {
@@ -995,7 +1001,7 @@ export const ru: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Изменить таблицу',
-            duplicate_table: 'Создать копию',
+            duplicate_table: 'Дублировать таблицу',
             delete_table: 'Удалить таблицу',
             add_relationship: 'Добавить связь',
             move_to_area: 'Переместить в область',

@@ -1,18 +1,17 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { RemoteEditingViewModel } from '@/lib/realtime/editing-utils';
 import { en } from '@/i18n/locales/en';
+import { TooltipProvider } from '@/components/tooltip/tooltip';
 import { RelationshipListItemHeader } from '../relationship-list-item-header';
 
 const {
     chartDBState,
     conversationsState,
-    conversationMenuState,
     remoteEditorsState,
-    useTargetConversationMenuAction,
     removeRelationship,
     deleteElements,
 } = vi.hoisted(() => ({
@@ -22,23 +21,9 @@ const {
     conversationsState: {
         isAvailable: true,
     },
-    conversationMenuState: {
-        showConversationAction: true,
-        conversationLabel: 'Open conversation',
-        isConversationPending: false,
-        openConversationAction: vi.fn(),
-    },
     remoteEditorsState: {
         editors: [] as RemoteEditingViewModel[],
     },
-    useTargetConversationMenuAction: vi.fn(() => ({
-        showConversationAction:
-            conversationsState.isAvailable &&
-            conversationMenuState.showConversationAction,
-        conversationLabel: conversationMenuState.conversationLabel,
-        isConversationPending: conversationMenuState.isConversationPending,
-        openConversationAction: conversationMenuState.openConversationAction,
-    })),
     removeRelationship: vi.fn(),
     deleteElements: vi.fn(),
 }));
@@ -53,10 +38,6 @@ vi.mock('@/hooks/use-chartdb', () => ({
 
 vi.mock('@/hooks/use-conversations-availability', () => ({
     useConversationsAvailability: () => conversationsState.isAvailable,
-}));
-
-vi.mock('@/hooks/use-target-conversation-menu-action', () => ({
-    useTargetConversationMenuAction,
 }));
 
 vi.mock('@/components/conversation-indicator/conversation-indicator', () => ({
@@ -159,98 +140,41 @@ const createRemoteEditor = (
     ...overrides,
 });
 
-const menuTrigger = () => screen.getByRole('button', { name: 'Actions' });
+const deleteButton = () => screen.getByRole('button', { name: 'Delete' });
 
 const renderHeader = (rel: DBRelationship = relationship) =>
-    render(<RelationshipListItemHeader relationship={rel} />);
+    render(
+        <TooltipProvider>
+            <RelationshipListItemHeader relationship={rel} />
+        </TooltipProvider>
+    );
 
-const openMenu = async (rel: DBRelationship = relationship) => {
-    const user = userEvent.setup();
-    renderHeader(rel);
-    await user.click(menuTrigger());
-    return user;
-};
-
-describe('RelationshipListItemHeader conversation entry', () => {
+describe('RelationshipListItemHeader actions', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
         conversationsState.isAvailable = true;
-        conversationMenuState.showConversationAction = true;
-        conversationMenuState.conversationLabel = 'Open conversation';
-        conversationMenuState.isConversationPending = false;
         remoteEditorsState.editors = [];
-        useTargetConversationMenuAction.mockClear();
-        conversationMenuState.openConversationAction.mockClear();
         removeRelationship.mockClear();
         deleteElements.mockClear();
     });
 
-    it('calls useTargetConversationMenuAction with the relationship target', () => {
+    it('shows a delete button when editable', () => {
         renderHeader();
 
-        expect(useTargetConversationMenuAction).toHaveBeenCalledWith({
-            targetType: 'relationship',
-            targetId: 'rel-1',
-        });
+        expect(deleteButton()).toBeInTheDocument();
+        expect(deleteButton()).toHaveClass('!text-red-700');
     });
 
-    it('exposes a translated accessible name on the dropdown trigger', async () => {
-        const user = userEvent.setup();
+    it('hides the delete button for readonly viewers', () => {
+        chartDBState.readonly = true;
         renderHeader();
-        const trigger = menuTrigger();
-        await user.click(trigger);
-        expect(trigger).toHaveAttribute('aria-expanded', 'true');
-        expect(
-            screen.getByRole('menuitem', { name: 'Open conversation' })
-        ).toBeInTheDocument();
-        await user.keyboard('{Escape}');
-    });
-
-    it('shows Open conversation when conversations are available and editable', async () => {
-        await openMenu();
 
         expect(
-            screen.getByRole('menuitem', { name: /Open conversation/i })
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole('menuitem', { name: /^Delete$/i })
-        ).toBeInTheDocument();
-    });
-
-    it('shows Open conversation for readonly viewers when conversations are available', async () => {
-        chartDBState.readonly = true;
-        await openMenu();
-
-        expect(
-            screen.getByRole('menuitem', { name: /Open conversation/i })
-        ).toBeInTheDocument();
-    });
-
-    it('hides destructive delete for readonly viewers', async () => {
-        chartDBState.readonly = true;
-        await openMenu();
-
-        expect(
-            screen.queryByRole('menuitem', { name: /^Delete$/i })
+            screen.queryByRole('button', { name: 'Delete' })
         ).not.toBeInTheDocument();
     });
 
-    it('hides Open conversation when the menu action is unavailable', async () => {
-        conversationMenuState.showConversationAction = false;
-        await openMenu();
-
-        expect(
-            screen.queryByRole('menuitem', { name: /Open conversation/i })
-        ).not.toBeInTheDocument();
-        expect(
-            screen.getByRole('menuitem', { name: /^Delete$/i })
-        ).toBeInTheDocument();
-    });
-
-    it('does not render an empty dropdown when no action is available', () => {
-        chartDBState.readonly = true;
-        conversationsState.isAvailable = false;
-        conversationMenuState.showConversationAction = false;
+    it('does not render an actions menu trigger', () => {
         renderHeader();
 
         expect(
@@ -259,22 +183,11 @@ describe('RelationshipListItemHeader conversation entry', () => {
         expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
 
-    it('calls openConversationAction once when the menu item is selected', async () => {
-        const user = await openMenu();
+    it('deletes the relationship when the delete button is clicked', async () => {
+        const user = userEvent.setup();
+        renderHeader();
 
-        await user.click(
-            screen.getByRole('menuitem', { name: /Open conversation/i })
-        );
-
-        expect(
-            conversationMenuState.openConversationAction
-        ).toHaveBeenCalledTimes(1);
-    });
-
-    it('keeps existing delete behavior unchanged', async () => {
-        const user = await openMenu();
-
-        await user.click(screen.getByRole('menuitem', { name: /^Delete$/i }));
+        await user.click(deleteButton());
 
         expect(removeRelationship).toHaveBeenCalledTimes(1);
         expect(removeRelationship).toHaveBeenCalledWith('rel-1');
@@ -283,61 +196,11 @@ describe('RelationshipListItemHeader conversation entry', () => {
         });
     });
 
-    it('does not render a badge or comment count', async () => {
-        await openMenu();
+    it('does not render a badge or comment count', () => {
+        renderHeader();
 
         expect(screen.queryByText(/\d+/)).not.toBeInTheDocument();
         expect(screen.queryByTestId(/badge|count/i)).not.toBeInTheDocument();
-    });
-
-    it('exposes an accessible translated menu-item name', async () => {
-        await openMenu();
-
-        expect(
-            screen.getByRole('menuitem', { name: 'Open conversation' })
-        ).toBeInTheDocument();
-    });
-
-    it('viewer menu contains only Open conversation without separators', async () => {
-        chartDBState.readonly = true;
-        await openMenu();
-
-        const menu = screen.getByRole('menu');
-        const items = within(menu).getAllByRole('menuitem');
-        expect(items).toHaveLength(1);
-        expect(items[0]).toHaveAccessibleName('Open conversation');
-        expect(within(menu).queryAllByRole('separator')).toHaveLength(0);
-        expect(
-            screen.queryByRole('menuitem', { name: /^Delete$/i })
-        ).not.toBeInTheDocument();
-    });
-
-    it('editable menu separates conversation from delete', async () => {
-        await openMenu();
-
-        const menu = screen.getByRole('menu');
-        const separators = within(menu).getAllByRole('separator');
-        expect(separators.length).toBeGreaterThanOrEqual(1);
-
-        const children = Array.from(menu.children);
-        const roles = children.map((child) => child.getAttribute('role'));
-        expect(roles[0]).not.toBe('separator');
-        expect(roles[roles.length - 1]).not.toBe('separator');
-
-        for (let i = 0; i < roles.length - 1; i += 1) {
-            if (roles[i] === 'separator') {
-                expect(roles[i + 1]).not.toBe('separator');
-            }
-        }
-
-        const conversation = screen.getByRole('menuitem', {
-            name: 'Open conversation',
-        });
-        const deleteItem = screen.getByRole('menuitem', { name: 'Delete' });
-        expect(
-            conversation.compareDocumentPosition(deleteItem) &
-                Node.DOCUMENT_POSITION_FOLLOWING
-        ).toBeTruthy();
     });
 });
 
@@ -345,9 +208,7 @@ describe('RelationshipListItemHeader conversation indicator', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
         conversationsState.isAvailable = true;
-        conversationMenuState.showConversationAction = true;
         remoteEditorsState.editors = [];
-        useTargetConversationMenuAction.mockClear();
     });
 
     it('renders ConversationIndicator when conversations are available', () => {
@@ -387,10 +248,12 @@ describe('RelationshipListItemHeader conversation indicator', () => {
         expect(
             screen.getByTestId('conversation-indicator')
         ).toBeInTheDocument();
-        expect(menuTrigger()).toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: 'Delete' })
+        ).not.toBeInTheDocument();
     });
 
-    it('hides the actions menu for readonly viewers when conversations are unavailable', () => {
+    it('hides conversation controls for readonly viewers when conversations are unavailable', () => {
         chartDBState.readonly = true;
         conversationsState.isAvailable = false;
         renderHeader();
@@ -399,17 +262,17 @@ describe('RelationshipListItemHeader conversation indicator', () => {
             screen.queryByTestId('conversation-indicator')
         ).not.toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: 'Actions' })
+            screen.queryByRole('button', { name: 'Delete' })
         ).not.toBeInTheDocument();
     });
 
-    it('coexists with the relationship actions trigger', () => {
+    it('coexists with the delete button when editable', () => {
         renderHeader();
 
         expect(
             screen.getByTestId('conversation-indicator')
         ).toBeInTheDocument();
-        expect(menuTrigger()).toBeInTheDocument();
+        expect(deleteButton()).toBeInTheDocument();
     });
 
     it('coexists with EntityEditingBadge without overlapping controls', () => {
@@ -421,30 +284,16 @@ describe('RelationshipListItemHeader conversation indicator', () => {
         const indicator = screen.getByTestId('conversation-indicator');
         expect(indicator).toBeInTheDocument();
         expect(screen.getByTitle('Alice is editing')).toBeInTheDocument();
-        expect(menuTrigger()).toBeInTheDocument();
+        expect(deleteButton()).toBeInTheDocument();
 
-        const actions = indicator.closest('.md\\:group-hover\\:flex');
-        expect(actions).not.toBeNull();
-        expect(actions).toHaveClass('flex', 'items-center');
+        const hoverActions = indicator.closest('.md\\:group-hover\\:flex');
+        expect(hoverActions).not.toBeNull();
+        expect(hoverActions).toHaveClass('flex', 'items-center');
+        expect(hoverActions?.contains(deleteButton())).toBe(false);
 
-        const row = actions?.closest('.overflow-hidden');
+        const row = hoverActions?.closest('.overflow-hidden');
         expect(row).not.toBeNull();
         expect(row).toHaveClass('overflow-hidden');
-    });
-
-    it('keeps Open conversation functional while the indicator is visible', async () => {
-        const user = await openMenu();
-
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
-        await user.click(
-            screen.getByRole('menuitem', { name: /Open conversation/i })
-        );
-
-        expect(
-            conversationMenuState.openConversationAction
-        ).toHaveBeenCalledTimes(1);
     });
 
     it('does not render raw relationship ids or badge count text', () => {
@@ -454,47 +303,16 @@ describe('RelationshipListItemHeader conversation indicator', () => {
         expect(screen.queryByTestId(/badge|count/i)).not.toBeInTheDocument();
     });
 
-    it('preserves readonly menu behavior while the indicator is visible', async () => {
-        chartDBState.readonly = true;
-        await openMenu();
+    it('keeps delete behavior while the indicator is visible', async () => {
+        const user = userEvent.setup();
+        renderHeader();
 
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole('menuitem', { name: 'Open conversation' })
-        ).toBeInTheDocument();
-        expect(
-            screen.queryByRole('menuitem', { name: /^Delete$/i })
-        ).not.toBeInTheDocument();
-    });
-
-    it('preserves delete behavior while the indicator is visible', async () => {
-        const user = await openMenu();
-
-        await user.click(screen.getByRole('menuitem', { name: /^Delete$/i }));
+        await user.click(deleteButton());
 
         expect(removeRelationship).toHaveBeenCalledWith('rel-1');
         expect(deleteElements).toHaveBeenCalledWith({
             edges: [{ id: 'rel-1' }],
         });
-    });
-
-    it('preserves separator structure while the indicator is visible', async () => {
-        await openMenu();
-
-        const menu = screen.getByRole('menu');
-        const separators = within(menu).getAllByRole('separator');
-        expect(separators.length).toBeGreaterThanOrEqual(1);
-
-        const conversation = screen.getByRole('menuitem', {
-            name: 'Open conversation',
-        });
-        const deleteItem = screen.getByRole('menuitem', { name: 'Delete' });
-        expect(
-            conversation.compareDocumentPosition(deleteItem) &
-                Node.DOCUMENT_POSITION_FOLLOWING
-        ).toBeTruthy();
     });
 });
 
@@ -502,7 +320,6 @@ describe('RelationshipListItemHeader legacy actions', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
         conversationsState.isAvailable = true;
-        conversationMenuState.showConversationAction = true;
         remoteEditorsState.editors = [];
         removeRelationship.mockClear();
         deleteElements.mockClear();
@@ -523,6 +340,17 @@ describe('RelationshipListItemHeader legacy actions', () => {
             'md:hidden',
             'md:group-hover:flex'
         );
+    });
+
+    it('enters edit mode when the title is double-clicked', async () => {
+        const user = userEvent.setup();
+        renderHeader();
+
+        await user.dblClick(screen.getByText('orders_clients_fk'));
+
+        expect(
+            screen.getByDisplayValue('orders_clients_fk')
+        ).toBeInTheDocument();
     });
 
     it('keeps mobile-safe overflow and hover action classes intact', () => {

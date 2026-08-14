@@ -64,7 +64,12 @@ describe('selectConversationIndicatorIndex', () => {
 
     it('indexes diagram conversations with null target id', () => {
         const state = loadActiveSucceeded(initialConversationsState(), [
-            conversation({ id: 1, targetType: 'diagram', targetId: null }),
+            conversation({
+                id: 1,
+                targetType: 'diagram',
+                targetId: null,
+                messageCount: 1,
+            }),
         ]);
 
         const index = selectConversationIndicatorIndex(state);
@@ -76,12 +81,23 @@ describe('selectConversationIndicatorIndex', () => {
 
     it('indexes table, field, and relationship targets', () => {
         const state = loadActiveSucceeded(initialConversationsState(), [
-            conversation({ id: 2, targetType: 'table', targetId: 't1' }),
-            conversation({ id: 3, targetType: 'field', targetId: 'f1' }),
+            conversation({
+                id: 2,
+                targetType: 'table',
+                targetId: 't1',
+                messageCount: 1,
+            }),
+            conversation({
+                id: 3,
+                targetType: 'field',
+                targetId: 'f1',
+                messageCount: 1,
+            }),
             conversation({
                 id: 4,
                 targetType: 'relationship',
                 targetId: 'r1',
+                messageCount: 1,
             }),
         ]);
 
@@ -108,19 +124,43 @@ describe('selectConversationIndicatorIndex', () => {
 
     it('does not cross-match unrelated targets', () => {
         const state = loadActiveSucceeded(initialConversationsState(), [
-            conversation({ id: 6, targetType: 'table', targetId: 't1' }),
+            conversation({
+                id: 6,
+                targetType: 'table',
+                targetId: 't1',
+                messageCount: 1,
+            }),
         ]);
 
         const index = selectConversationIndicatorIndex(state);
         expect(index.tables.get('other')).toBeUndefined();
         expect(index.fields.get('t1')).toBeUndefined();
     });
+
+    it('does not index conversations without messages', () => {
+        const state = loadActiveSucceeded(initialConversationsState(), [
+            conversation({
+                id: 9,
+                targetType: 'table',
+                targetId: 't1',
+                messageCount: 0,
+            }),
+        ]);
+
+        const index = selectConversationIndicatorIndex(state);
+        expect(index.tables.size).toBe(0);
+    });
 });
 
 describe('findActiveConversationForTarget', () => {
     it('matches diagram target with null target id', () => {
         const state = loadActiveSucceeded(initialConversationsState(), [
-            conversation({ id: 7, targetType: 'diagram', targetId: null }),
+            conversation({
+                id: 7,
+                targetType: 'diagram',
+                targetId: null,
+                messageCount: 1,
+            }),
         ]);
 
         const match = findActiveConversationForTarget(

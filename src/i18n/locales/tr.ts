@@ -160,6 +160,7 @@ export const tr: LanguageTranslation = {
                     primary_key: 'Birincil Anahtar',
                     indexes: 'İndeksler',
                     check_constraints: 'Kontrol Kısıtlamaları',
+                    comments: 'Yorumlar',
                     no_comments: 'Yorum yok',
                     add_field: 'Alan Ekle',
                     add_index: 'İndeks Ekle',
@@ -173,6 +174,7 @@ export const tr: LanguageTranslation = {
                         open_discussion: 'Konuşmayı aç',
                         unique: 'Tekil',
                         auto_increment: 'Otomatik Artış',
+                        comments: 'Yorumlar',
                         no_comments: 'Yorum yok',
                         delete_field: 'Alanı Sil',
                         // TODO: Translate
@@ -202,7 +204,7 @@ export const tr: LanguageTranslation = {
                         add_field: 'Alan Ekle',
                         add_index: 'İndeks Ekle',
                         // TODO: Translate
-                        duplicate_table: 'Duplicate Table',
+                        duplicate_table: 'Tabloyu çoğalt',
                         delete_table: 'Tabloyu Sil',
                     },
                 },
@@ -214,6 +216,8 @@ export const tr: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'Filtrele',
+                clear: 'Filtreyi temizle',
+                no_results: 'Filtrenizle eşleşen referans bulunamadı.',
                 collapse: 'Hepsini Daralt',
                 add_relationship: 'İlişki Ekle',
                 relationships: 'İlişkiler',
@@ -417,6 +421,7 @@ export const tr: LanguageTranslation = {
                     no_messages: 'Henüz mesaj yok',
                     last_activity: 'Son etkinlik',
                     open_aria: '{{target}} için sohbeti aç',
+                    focus_target_aria: '{{target}} öğesini diyagramda göster',
                     author_tooltip: '{{name}} adlı kullanıcının son mesajı',
                     author_missing_tooltip: 'Yazar bilgisi yok',
                     actions: {
@@ -452,7 +457,7 @@ export const tr: LanguageTranslation = {
                     new_messages_badge_aria_one: 'Yeni mesaja git',
                     new_messages_badge_aria_other: '{{count}} yeni mesaja git',
                     empty: {
-                        title: 'Henüz mesaj yok',
+                        title: 'Mesaj yok',
                         description: 'Bu sohbette mesaj bulunmuyor.',
                     },
                     errors: {
@@ -978,7 +983,7 @@ export const tr: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: 'Tabloyu Düzenle',
             delete_table: 'Tabloyu Sil',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'Tabloyu çoğalt',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'Alana Taşı',
             no_area: 'Alan Yok',

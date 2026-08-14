@@ -161,6 +161,7 @@ export const es: LanguageTranslation = {
                     primary_key: 'Clave Primaria',
                     indexes: 'Índices',
                     check_constraints: 'Restricciones de verificación',
+                    comments: 'Comentarios',
                     no_comments: 'Sin comentarios',
                     add_field: 'Agregar Campo',
                     add_index: 'Agregar Índice',
@@ -174,6 +175,7 @@ export const es: LanguageTranslation = {
                         open_discussion: 'Abrir conversación',
                         unique: 'Único',
                         auto_increment: 'Autoincremento',
+                        comments: 'Comentarios',
                         no_comments: 'Sin comentarios',
                         delete_field: 'Eliminar Campo',
                         // TODO: Translate
@@ -202,7 +204,7 @@ export const es: LanguageTranslation = {
                         change_schema: 'Cambiar Esquema',
                         add_field: 'Agregar Campo',
                         add_index: 'Agregar Índice',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: 'Duplicar tabla',
                         delete_table: 'Eliminar Tabla',
                     },
                 },
@@ -214,6 +216,9 @@ export const es: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'Filtrar',
+                clear: 'Borrar filtro',
+                no_results:
+                    'No se encontraron referencias que coincidan con tu filtro.',
                 collapse: 'Colapsar Todo',
                 add_relationship: 'Agregar Relación',
                 relationships: 'Relaciones',
@@ -424,6 +429,7 @@ export const es: LanguageTranslation = {
                     no_messages: 'Aún no hay mensajes',
                     last_activity: 'Última actividad',
                     open_aria: 'Abrir conversación de {{target}}',
+                    focus_target_aria: 'Mostrar {{target}} en el diagrama',
                     author_tooltip: 'Último mensaje de {{name}}',
                     author_missing_tooltip: 'Sin información del autor',
                     actions: {
@@ -462,7 +468,7 @@ export const es: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         'Ir a {{count}} mensajes nuevos',
                     empty: {
-                        title: 'Aún no hay mensajes',
+                        title: 'Ningún mensaje',
                         description: 'Esta conversación no tiene mensajes.',
                     },
                     errors: {
@@ -1004,7 +1010,7 @@ export const es: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Editar Tabla',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'Duplicar tabla',
             delete_table: 'Eliminar Tabla',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'Mover a Área',

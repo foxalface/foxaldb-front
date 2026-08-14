@@ -15,17 +15,15 @@ export const useTargetConversationMenuAction = (
 ): UseTargetConversationMenuActionResult => {
     const { t } = useTranslation();
     const conversationsAvailable = useConversationsAvailability();
-    const { hasActiveConversation, canCreate, isPending, openConversation } =
+    const { hasActiveConversation, isPending, openConversation } =
         useOpenTargetConversation(conversationTarget);
 
     const showConversationAction =
-        conversationsAvailable && (hasActiveConversation || canCreate);
+        conversationsAvailable && hasActiveConversation;
 
-    const conversationLabel = hasActiveConversation
-        ? t('side_panel.conversations_section.target_entry.open')
-        : isPending
-          ? t('side_panel.conversations_section.target_entry.pending')
-          : t('side_panel.conversations_section.target_entry.start');
+    const conversationLabel = isPending
+        ? t('side_panel.conversations_section.target_entry.pending')
+        : t('side_panel.conversations_section.target_entry.open');
 
     return {
         showConversationAction,

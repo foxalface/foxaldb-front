@@ -112,8 +112,12 @@
         @apply bg-background text-foreground;
     }
 
+    .side-panel-group-hover-surface {
+        @apply rounded-md group-hover:bg-slate-100 group-hover:ring-[0.5px] dark:group-hover:bg-slate-900;
+    }
+
     .text-editable {
-        @apply dark:group-hover:bg-slate-900 group-hover:bg-slate-100 group-hover:ring-[0.5px] rounded-md cursor-pointer;
+        @apply side-panel-group-hover-surface cursor-pointer;
     }
 }
 

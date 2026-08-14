@@ -162,6 +162,7 @@ export const de: LanguageTranslation = {
                     primary_key: 'Primärschlüssel',
                     indexes: 'Indizes',
                     check_constraints: 'Prüfbedingungen',
+                    comments: 'Kommentare',
                     no_comments: 'Keine Kommentare',
                     add_field: 'Feld hinzufügen',
                     add_index: 'Index hinzufügen',
@@ -175,6 +176,7 @@ export const de: LanguageTranslation = {
                         open_discussion: 'Unterhaltung öffnen',
                         unique: 'Eindeutig',
                         auto_increment: 'Automatisch hochzählen',
+                        comments: 'Kommentare',
                         no_comments: 'Keine Kommentare',
                         delete_field: 'Feld löschen',
                         // TODO: Translate
@@ -203,7 +205,7 @@ export const de: LanguageTranslation = {
                         change_schema: 'Schema ändern',
                         add_field: 'Feld hinzufügen',
                         add_index: 'Index hinzufügen',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: 'Tabelle duplizieren',
                         delete_table: 'Tabelle löschen',
                     },
                 },
@@ -215,6 +217,9 @@ export const de: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'Filter',
+                clear: 'Filter löschen',
+                no_results:
+                    'Keine Referenzen gefunden, die Ihrem Filter entsprechen.',
                 collapse: 'Alle einklappen',
                 add_relationship: 'Beziehung hinzufügen',
                 relationships: 'Beziehungen',
@@ -427,6 +432,7 @@ export const de: LanguageTranslation = {
                     no_messages: 'Noch keine Nachrichten',
                     last_activity: 'Letzte Aktivität',
                     open_aria: 'Unterhaltung für {{target}} öffnen',
+                    focus_target_aria: '{{target}} im Diagramm anzeigen',
                     author_tooltip: 'Letzte Nachricht von {{name}}',
                     author_missing_tooltip: 'Keine Autoreninformationen',
                     actions: {
@@ -465,7 +471,7 @@ export const de: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         'Zu {{count}} neuen Nachrichten springen',
                     empty: {
-                        title: 'Noch keine Nachrichten',
+                        title: 'Keine Nachrichten',
                         description:
                             'Diese Unterhaltung enthält keine Nachrichten.',
                     },
@@ -1007,7 +1013,7 @@ export const de: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'Tabelle bearbeiten',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'Tabelle duplizieren',
             delete_table: 'Tabelle löschen',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'In Bereich verschieben',

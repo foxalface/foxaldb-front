@@ -1,11 +1,13 @@
 import {
     useCallback,
+    useContext,
     useEffect,
     useMemo,
     useRef,
     useState,
     type RefObject,
 } from 'react';
+import { ConversationsContext } from '@/context/conversations-context/conversations-context';
 import { useDiagramConversations } from '@/hooks/use-diagram-conversations';
 import { useConversationMutations } from '@/hooks/use-conversation-mutations';
 import { useLayout } from '@/hooks/use-layout';
@@ -21,6 +23,7 @@ export interface UseConversationsPanelResult {
     selectedConversation: DiagramConversation | null;
     selectConversation: (conversationId: number) => void;
     clearSelectedConversation: () => void;
+    handleBackFromDetail: () => Promise<void>;
     detailRegionRef: RefObject<HTMLDivElement>;
     activeConversations: ReturnType<
         typeof useDiagramConversations
@@ -68,6 +71,12 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
     } = useDiagramConversations();
     const { archiveConversation, reopenConversation, deleteConversation } =
         useConversationMutations();
+    const conversationsContext = useContext(ConversationsContext);
+    const getConversationById = useCallback(
+        (conversationId: number) =>
+            conversationsContext?.getConversationById(conversationId),
+        [conversationsContext]
+    );
     const { conversationNavigationIntent, clearConversationNavigationIntent } =
         useLayout();
     const {
@@ -149,6 +158,11 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
             return null;
         }
 
+        const fromSummaries = getConversationById(selectedConversationId);
+        if (fromSummaries !== undefined) {
+            return fromSummaries;
+        }
+
         const fromActive = activeConversations.find(
             (conversation) => conversation.id === selectedConversationId
         );
@@ -160,7 +174,12 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
             (conversation) => conversation.id === selectedConversationId
         );
         return fromArchived ?? null;
-    }, [activeConversations, archivedConversations, selectedConversationId]);
+    }, [
+        activeConversations,
+        archivedConversations,
+        getConversationById,
+        selectedConversationId,
+    ]);
 
     useEffect(() => {
         if (
@@ -272,6 +291,26 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
         ]
     );
 
+    const handleBackFromDetail = useCallback(async (): Promise<void> => {
+        if (
+            selectedConversation !== null &&
+            selectedConversation.messageCount === 0
+        ) {
+            const conversationId = selectedConversation.id;
+            clearSelectedConversation();
+
+            try {
+                await deleteConversation(conversationId);
+            } catch {
+                // Best-effort cleanup for abandoned drafts.
+            }
+
+            return;
+        }
+
+        clearSelectedConversation();
+    }, [clearSelectedConversation, deleteConversation, selectedConversation]);
+
     const handleLoadMoreActive = useCallback(async (): Promise<void> => {
         if (isLoadingMoreActive || activeSummariesNextCursor === null) {
             return;
@@ -335,6 +374,7 @@ export const useConversationsPanel = (): UseConversationsPanelResult => {
         selectedConversation,
         selectConversation,
         clearSelectedConversation,
+        handleBackFromDetail,
         detailRegionRef,
         activeConversations,
         archivedConversations,

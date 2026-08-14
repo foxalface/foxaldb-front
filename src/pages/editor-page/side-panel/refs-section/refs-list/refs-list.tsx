@@ -43,19 +43,6 @@ export const RefsList: React.FC<RefsListProps> = ({ refs }) => {
         }
     }, [scrollToRef, openedRefInSidebar]);
 
-    const numberOfRelationships = useMemo(
-        () => refs.filter((ref) => ref.type === 'relationship').length,
-        [refs]
-    );
-
-    const relationshipsTitle = React.useMemo(
-        () =>
-            `${numberOfRelationships} ${t(
-                'side_panel.refs_section.relationships'
-            )}`,
-        [numberOfRelationships, t]
-    );
-
     const numberOfDependencies = useMemo(
         () => refs.filter((ref) => ref.type === 'dependency').length,
         [refs]
@@ -78,11 +65,6 @@ export const RefsList: React.FC<RefsListProps> = ({ refs }) => {
             onValueChange={openRefFromSidebar}
             onAnimationEnd={handleScrollToRef}
         >
-            {numberOfRelationships > 0 ? (
-                <Label className="mt-2 px-2 text-xs font-medium text-muted-foreground">
-                    {relationshipsTitle}
-                </Label>
-            ) : null}
             {refs
                 .filter((ref) => ref.type === 'relationship')
                 .map((ref) => (

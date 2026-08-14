@@ -227,7 +227,7 @@ describe('TableField conversations', () => {
         );
         expect(
             screen.getByTestId('conversation-indicator').parentElement
-        ).toHaveClass('hidden', 'group-hover:flex', 'group-focus-within:flex');
+        ).not.toHaveClass('hidden');
     });
 });
 

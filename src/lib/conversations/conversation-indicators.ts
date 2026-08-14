@@ -1,3 +1,4 @@
+import { conversationHasMessages } from './conversation-has-messages';
 import type { ConversationsState } from './conversation-reducer';
 import type { DiagramConversation } from './conversation-types';
 
@@ -54,7 +55,10 @@ export const selectConversationIndicatorIndex = (
     const relationshipIds = new Map<string, number>();
 
     for (const conversation of state.summariesById.values()) {
-        if (conversation.status !== 'active') {
+        if (
+            conversation.status !== 'active' ||
+            !conversationHasMessages(conversation)
+        ) {
             continue;
         }
 
@@ -140,6 +144,7 @@ export const findActiveConversationForTarget = (
     for (const conversation of summariesById.values()) {
         if (
             conversation.status === 'active' &&
+            conversationHasMessages(conversation) &&
             conversation.targetType === targetType &&
             conversation.targetId === targetId
         ) {

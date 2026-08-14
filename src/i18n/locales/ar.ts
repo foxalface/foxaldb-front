@@ -161,6 +161,7 @@ export const ar: LanguageTranslation = {
                     primary_key: 'المفتاح الأساسي',
                     indexes: 'الفهارس',
                     check_constraints: 'قيود التحقق',
+                    comments: 'تعليقات',
                     no_comments: 'لا توجد تعليقات',
                     add_field: 'إضافة حقل',
                     add_index: 'إضافة فهرس',
@@ -174,6 +175,7 @@ export const ar: LanguageTranslation = {
                         open_discussion: 'فتح المحادثة',
                         unique: 'فريد',
                         auto_increment: 'زيادة تلقائية',
+                        comments: 'تعليقات',
                         no_comments: 'لا يوجد تعليقات',
                         delete_field: 'حذف الحقل',
                         // TODO: Translate
@@ -213,6 +215,8 @@ export const ar: LanguageTranslation = {
             refs_section: {
                 refs: 'المراجع',
                 filter: 'تصفية',
+                clear: 'مسح التصفية',
+                no_results: 'لم يتم العثور على مراجع مطابقة للتصفية.',
                 collapse: 'طي الكل',
                 add_relationship: 'إضافة علاقة',
                 relationships: 'العلاقات',
@@ -416,6 +420,7 @@ export const ar: LanguageTranslation = {
                     no_messages: 'لا توجد رسائل بعد',
                     last_activity: 'آخر نشاط',
                     open_aria: 'فتح المحادثة لـ {{target}}',
+                    focus_target_aria: 'عرض {{target}} على المخطط',
                     author_tooltip: 'آخر رسالة من {{name}}',
                     author_missing_tooltip: 'لا توجد معلومات عن المؤلف',
                     actions: {
@@ -452,7 +457,7 @@ export const ar: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         'الانتقال إلى {{count}} رسائل جديدة',
                     empty: {
-                        title: 'لا توجد رسائل بعد',
+                        title: 'لا توجد رسائل',
                         description: 'لا تحتوي هذه المحادثة على أي رسائل.',
                     },
                     errors: {

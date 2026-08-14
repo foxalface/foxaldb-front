@@ -1,4 +1,6 @@
 import React, { forwardRef } from 'react';
+/* eslint-disable react-refresh/only-export-components -- shared side panel empty state assets */
+import { FiSlash } from 'react-icons/fi';
 import {
     EmptyState,
     type EmptyStateProps,
@@ -7,6 +9,10 @@ import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { cn } from '@/lib/utils';
 
 export const sidePanelEmptyStateClassName = 'mt-20';
+
+export const sidePanelEmptyStateIcon = (
+    <FiSlash className="size-12" strokeWidth={1.25} aria-hidden="true" />
+);
 
 export interface SidePanelEmptyStateViewportProps {
     children: React.ReactNode;

@@ -159,6 +159,7 @@ export const hr: LanguageTranslation = {
                     primary_key: 'Primarni ključ',
                     indexes: 'Indeksi',
                     check_constraints: 'Provjerna ograničenja',
+                    comments: 'Komentari',
                     no_comments: 'Nema komentara',
                     add_field: 'Dodaj polje',
                     add_index: 'Dodaj indeks',
@@ -175,6 +176,7 @@ export const hr: LanguageTranslation = {
                         character_length: 'Maksimalna dužina',
                         precision: 'Preciznost',
                         scale: 'Skala',
+                        comments: 'Komentari',
                         no_comments: 'Nema komentara',
                         default_value: 'Zadana vrijednost',
                         no_default: 'Nema zadane vrijednosti',
@@ -210,6 +212,9 @@ export const hr: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'Filtriraj',
+                clear: 'Očisti filtar',
+                no_results:
+                    'Nije pronađena nijedna referenca koja odgovara vašem filtru.',
                 collapse: 'Sažmi sve',
                 add_relationship: 'Dodaj vezu',
                 relationships: 'Veze',
@@ -418,6 +423,7 @@ export const hr: LanguageTranslation = {
                     no_messages: 'Još nema poruka',
                     last_activity: 'Zadnja aktivnost',
                     open_aria: 'Otvori razgovor za {{target}}',
+                    focus_target_aria: 'Prikaži {{target}} na dijagramu',
                     author_tooltip: 'Zadnja poruka od {{name}}',
                     author_missing_tooltip: 'Nema informacija o autoru',
                     actions: {
@@ -455,7 +461,7 @@ export const hr: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         'Idi na {{count}} nove poruke',
                     empty: {
-                        title: 'Još nema poruka',
+                        title: 'Nema poruka',
                         description: 'Ovaj razgovor nema poruka.',
                     },
                     errors: {

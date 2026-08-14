@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Spinner } from '@/components/spinner/spinner';
 import { Button } from '@/components/button/button';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
-import { EmptyState } from '@/components/empty-state/empty-state';
+import {
+    SidePanelEmptyState,
+    sidePanelEmptyStateIcon,
+} from '@/components/side-panel-empty-state/side-panel-empty-state';
 import { useAuth } from '@/hooks/use-auth';
 import type {
     ConversationStatus,
@@ -99,7 +102,8 @@ export const ConversationMessageList: React.FC<
 
     if (messages.length === 0) {
         return (
-            <EmptyState
+            <SidePanelEmptyState
+                icon={sidePanelEmptyStateIcon}
                 title={t('side_panel.conversations_section.detail.empty.title')}
                 description={t(
                     'side_panel.conversations_section.detail.empty.description'

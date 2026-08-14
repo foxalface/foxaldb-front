@@ -163,6 +163,7 @@ export const ja: LanguageTranslation = {
                     primary_key: '主キー',
                     indexes: 'インデックス',
                     check_constraints: 'チェック制約',
+                    comments: 'コメント',
                     no_comments: 'コメントがありません',
                     add_field: 'フィールドを追加',
                     add_index: 'インデックスを追加',
@@ -176,6 +177,7 @@ export const ja: LanguageTranslation = {
                         open_discussion: '会話を開く',
                         unique: 'ユニーク',
                         auto_increment: 'オートインクリメント',
+                        comments: 'コメント',
                         no_comments: 'コメントがありません',
                         delete_field: 'フィールドを削除',
                         // TODO: Translate
@@ -204,7 +206,7 @@ export const ja: LanguageTranslation = {
                         change_schema: 'スキーマを変更',
                         add_field: 'フィールドを追加',
                         add_index: 'インデックスを追加',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: 'テーブルを複製',
                         delete_table: 'テーブルを削除',
                     },
                 },
@@ -216,6 +218,8 @@ export const ja: LanguageTranslation = {
             refs_section: {
                 refs: '参照',
                 filter: 'フィルタ',
+                clear: 'フィルターをクリア',
+                no_results: 'フィルターに一致する参照が見つかりません。',
                 collapse: 'すべて折りたたむ',
                 add_relationship: 'リレーションシップを追加',
                 relationships: 'リレーションシップ',
@@ -423,6 +427,7 @@ export const ja: LanguageTranslation = {
                     no_messages: 'メッセージはまだありません',
                     last_activity: '最終アクティビティ',
                     open_aria: '{{target}} の会話を開く',
+                    focus_target_aria: 'ダイアグラムで {{target}} を表示',
                     author_tooltip: '{{name}} の最新メッセージ',
                     author_missing_tooltip: '作成者情報がありません',
                     actions: {
@@ -459,7 +464,7 @@ export const ja: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         '新しいメッセージ {{count}} 件へ移動',
                     empty: {
-                        title: 'まだメッセージがありません',
+                        title: 'メッセージなし',
                         description: 'この会話にはメッセージがありません。',
                     },
                     errors: {
@@ -994,7 +999,7 @@ export const ja: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'テーブルを編集',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'テーブルを複製',
             delete_table: 'テーブルを削除',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'エリアに移動',

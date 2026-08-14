@@ -156,6 +156,13 @@ vi.mock('@/hooks/use-diagram-access', () => ({
     }),
 }));
 
+vi.mock('@/hooks/use-focus-on-conversation-target', () => ({
+    useFocusOnConversationTarget: () => ({
+        canFocusOnTarget: true,
+        focusOnTarget: vi.fn(),
+    }),
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, options?: Record<string, unknown>) => {
@@ -362,7 +369,7 @@ describe('ConversationsSection detail view (M9)', () => {
             })
         );
 
-        expect(screen.getByText('No messages yet')).toBeInTheDocument();
+        expect(screen.getByText('No messages')).toBeInTheDocument();
     });
 
     it('shows an error state with retry for message loading failures', async () => {

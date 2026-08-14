@@ -157,6 +157,7 @@ export const zh_CN: LanguageTranslation = {
                     primary_key: '主键',
                     indexes: '索引',
                     check_constraints: '检查约束',
+                    comments: '注释',
                     no_comments: '空',
                     add_field: '添加字段',
                     add_index: '添加索引',
@@ -170,6 +171,7 @@ export const zh_CN: LanguageTranslation = {
                         open_discussion: '打开对话',
                         unique: '唯一',
                         auto_increment: '自动递增',
+                        comments: '注释',
                         no_comments: '空',
                         delete_field: '删除字段',
                         // TODO: Translate
@@ -198,7 +200,7 @@ export const zh_CN: LanguageTranslation = {
                         change_schema: '更改模式',
                         add_field: '添加字段',
                         add_index: '添加索引',
-                        duplicate_table: 'Duplicate Table', // TODO: Translate
+                        duplicate_table: '复制表',
                         delete_table: '删除表',
                     },
                 },
@@ -210,6 +212,8 @@ export const zh_CN: LanguageTranslation = {
             refs_section: {
                 refs: '引用',
                 filter: '筛选',
+                clear: '清除筛选',
+                no_results: '未找到符合筛选条件的引用。',
                 collapse: '全部折叠',
                 add_relationship: '添加关系',
                 relationships: '关系',
@@ -409,6 +413,7 @@ export const zh_CN: LanguageTranslation = {
                     no_messages: '暂无消息',
                     last_activity: '最近活动',
                     open_aria: '打开 {{target}} 的对话',
+                    focus_target_aria: '在图表中显示 {{target}}',
                     author_tooltip: '{{name}} 的最新消息',
                     author_missing_tooltip: '无作者信息',
                     actions: {
@@ -960,7 +965,7 @@ export const zh_CN: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: '编辑表',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: '复制表',
             delete_table: '删除表',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: '移动到区域',

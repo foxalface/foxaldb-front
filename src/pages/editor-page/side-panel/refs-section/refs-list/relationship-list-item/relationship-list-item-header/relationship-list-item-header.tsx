@@ -1,18 +1,10 @@
-import React, { useCallback } from 'react';
-import {
-    Pencil,
-    EllipsisVertical,
-    CircleDotDashed,
-    Trash2,
-    Check,
-} from 'lucide-react';
-import { SlBubbles } from 'react-icons/sl';
+import React, { useCallback, useEffect } from 'react';
+import { CircleDotDashed, Trash2, Check } from 'lucide-react';
 import { ListItemHeaderButton } from '../../../../list-item-header-button/list-item-header-button';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
-import { useTargetConversationMenuAction } from '@/hooks/use-target-conversation-menu-action';
 import { useFocusOn } from '@/hooks/use-focus-on';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { useEditingConflictWarning } from '@/hooks/use-editing-conflict-warning';
@@ -22,59 +14,71 @@ import { EntityEditingBadge } from '@/components/presence/entity-editing-badge';
 import { EntityConflictHint } from '@/components/presence/entity-conflict-hint';
 import { createRelationshipEditingItem } from '@/lib/realtime/editing-utils';
 import { useClickAway, useKeyPressEvent } from 'react-use';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/dropdown-menu/dropdown-menu';
-import {
-    SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
-    SIDE_PANEL_ACTION_MENU_ICON_CLASS,
-    SIDE_PANEL_ACTION_MENU_ITEM_CLASS,
-} from '@/pages/editor-page/side-panel/side-panel-action-menu';
 import { Input } from '@/components/input/input';
 import { useTranslation } from 'react-i18next';
 import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/tooltip/tooltip';
 
 export interface RelationshipListItemHeaderProps {
     relationship: DBRelationship;
+    onLocalEditingChange?: (isLocallyEditing: boolean) => void;
 }
+
+export interface RelationshipListItemEditingConflictProps {
+    relationshipId: string;
+    isLocallyEditing: boolean;
+}
+
+export const RelationshipListItemEditingConflict: React.FC<
+    RelationshipListItemEditingConflictProps
+> = ({ relationshipId, isLocallyEditing }) => {
+    const { message, editors, hasConflict } = useEditingConflictWarning(
+        'relationship',
+        relationshipId,
+        {
+            isLocallyEditing,
+        }
+    );
+    const description = useEditingConflictExplanation(hasConflict);
+
+    return (
+        <EntityConflictHint
+            message={message}
+            editors={editors}
+            description={description}
+        />
+    );
+};
 
 export const RelationshipListItemHeader: React.FC<
     RelationshipListItemHeaderProps
-> = ({ relationship }) => {
+> = ({ relationship, onLocalEditingChange }) => {
     const { updateRelationship, removeRelationship, readonly } = useChartDB();
     const { deleteElements } = useReactFlow();
     const { t } = useTranslation();
     const { focusOnRelationship } = useFocusOn();
     const { startEditing, stopEditing } = useEditingBroadcast();
     const conversationsAvailable = useConversationsAvailability();
-    const conversationMenu = useTargetConversationMenuAction({
-        targetType: 'relationship',
-        targetId: relationship.id,
-    });
     const remoteEditors = useEntityRemoteEditing(
         'relationship',
         relationship.id
     );
     const [editMode, setEditMode] = React.useState(false);
-    const [isLocallyEditing, setIsLocallyEditing] = React.useState(false);
-    const { message, editors, hasConflict } = useEditingConflictWarning(
-        'relationship',
-        relationship.id,
-        {
-            isLocallyEditing,
-        }
-    );
-    const description = useEditingConflictExplanation(hasConflict);
     const [relationshipName, setRelationshipName] = React.useState(
         relationship.name
     );
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const showDropDownMenu = !readonly || conversationsAvailable;
+
+    const setLocalEditing = useCallback(
+        (isEditing: boolean) => {
+            onLocalEditingChange?.(isEditing);
+        },
+        [onLocalEditingChange]
+    );
 
     const editRelationshipName = useCallback(() => {
         if (!editMode) return;
@@ -85,7 +89,7 @@ export const RelationshipListItemHeader: React.FC<
         }
 
         // The input may unmount before blur fires.
-        setIsLocallyEditing(false);
+        setLocalEditing(false);
         setEditMode(false);
     }, [
         relationshipName,
@@ -93,17 +97,30 @@ export const RelationshipListItemHeader: React.FC<
         updateRelationship,
         editMode,
         relationship.name,
+        setLocalEditing,
     ]);
 
     useClickAway(inputRef, editRelationshipName);
     useKeyPressEvent('Enter', editRelationshipName);
 
-    const enterEditMode = (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
+    const abortEdit = useCallback(() => {
+        setLocalEditing(false);
+        setEditMode(false);
+        setRelationshipName(relationship.name);
+    }, [relationship.name, setLocalEditing]);
+
+    useKeyPressEvent('Escape', abortEdit);
+
+    const enterEditMode = useCallback((event: React.MouseEvent) => {
         event.stopPropagation();
         setEditMode(true);
-    };
+    }, []);
+
+    useEffect(() => {
+        if (relationship.name.trim()) {
+            setRelationshipName(relationship.name.trim());
+        }
+    }, [relationship.name]);
 
     const handleFocusOnRelationship = useCallback(
         (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -122,168 +139,108 @@ export const RelationshipListItemHeader: React.FC<
         ]
     );
 
-    const deleteRelationshipHandler = useCallback(() => {
-        removeRelationship(relationship.id);
-        deleteElements({
-            edges: [{ id: relationship.id }],
-        });
-    }, [relationship.id, removeRelationship, deleteElements]);
-
-    const openRelationshipDiscussion = useCallback(
-        (e: React.MouseEvent) => {
-            e.stopPropagation();
-            conversationMenu.openConversationAction();
+    const deleteRelationshipHandler = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            event.stopPropagation();
+            removeRelationship(relationship.id);
+            deleteElements({
+                edges: [{ id: relationship.id }],
+            });
         },
-        [conversationMenu]
-    );
-
-    const renderDropDownMenu = useCallback(
-        () => (
-            <DropdownMenu>
-                <DropdownMenuTrigger
-                    aria-label={t(
-                        'side_panel.refs_section.relationship.relationship_actions.title'
-                    )}
-                >
-                    <ListItemHeaderButton>
-                        <EllipsisVertical aria-hidden="true" />
-                    </ListItemHeaderButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-40">
-                    {conversationMenu.showConversationAction ? (
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
-                                onClick={openRelationshipDiscussion}
-                                disabled={
-                                    conversationMenu.isConversationPending
-                                }
-                            >
-                                <SlBubbles
-                                    className={
-                                        SIDE_PANEL_ACTION_MENU_ICON_CLASS
-                                    }
-                                />
-                                {conversationMenu.conversationLabel}
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                    ) : null}
-                    {conversationMenu.showConversationAction && !readonly ? (
-                        <DropdownMenuSeparator />
-                    ) : null}
-                    {!readonly ? (
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                onClick={deleteRelationshipHandler}
-                                className={`${SIDE_PANEL_ACTION_MENU_ITEM_CLASS} !text-red-700`}
-                            >
-                                <Trash2
-                                    className={
-                                        SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
-                                    }
-                                />
-                                {t(
-                                    'side_panel.refs_section.relationship.relationship_actions.delete_relationship'
-                                )}
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                    ) : null}
-                </DropdownMenuContent>
-            </DropdownMenu>
-        ),
-        [
-            deleteRelationshipHandler,
-            t,
-            conversationMenu,
-            readonly,
-            openRelationshipDiscussion,
-        ]
+        [relationship.id, removeRelationship, deleteElements]
     );
 
     return (
-        <div className="flex min-w-0 flex-1 flex-col">
-            <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">
-                <div className="flex min-w-0 flex-1">
-                    {editMode ? (
-                        <Input
-                            ref={inputRef}
-                            autoFocus
-                            type="text"
-                            placeholder={relationship.name}
-                            value={relationshipName}
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) =>
-                                setRelationshipName(e.target.value)
-                            }
-                            onFocus={() => {
-                                setIsLocallyEditing(true);
-                                startEditing(
-                                    createRelationshipEditingItem(
-                                        relationship.id
-                                    )
-                                );
-                            }}
-                            onBlur={() => {
-                                setIsLocallyEditing(false);
-                                stopEditing();
-                            }}
-                            className="h-7 w-full focus-visible:ring-0"
-                        />
-                    ) : (
-                        <div className="truncate">{relationship.name}</div>
-                    )}
-                </div>
-                {remoteEditors.length > 0 ? (
-                    <EntityEditingBadge
-                        editors={remoteEditors}
-                        className="mr-1 shrink-0"
+        <div className="group flex h-11 w-full flex-1 items-center justify-between gap-1 overflow-hidden">
+            <div className="flex min-w-0 flex-1 px-1">
+                {editMode ? (
+                    <Input
+                        ref={inputRef}
+                        autoFocus
+                        type="text"
+                        placeholder={relationship.name}
+                        value={relationshipName}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => setRelationshipName(e.target.value)}
+                        onFocus={() => {
+                            setLocalEditing(true);
+                            startEditing(
+                                createRelationshipEditingItem(relationship.id)
+                            );
+                        }}
+                        onBlur={() => {
+                            setLocalEditing(false);
+                            stopEditing();
+                        }}
+                        className="side-panel-group-hover-surface h-7 w-full focus-visible:ring-0"
                     />
-                ) : null}
-                <div className="flex flex-row-reverse items-center">
-                    {!editMode ? (
-                        <>
-                            {showDropDownMenu ? (
-                                <div>{renderDropDownMenu()}</div>
-                            ) : null}
-                            <div className="flex items-center md:hidden md:group-focus-within:flex md:group-hover:flex">
-                                <ListItemHeaderButton
-                                    onClick={handleFocusOnRelationship}
-                                >
-                                    <CircleDotDashed />
-                                </ListItemHeaderButton>
-                                {conversationsAvailable ? (
-                                    <ConversationIndicator
-                                        appearance="list-item-header"
-                                        highlightWhenActive={false}
-                                        showTooltip={false}
-                                        target={{
-                                            targetType: 'relationship',
-                                            targetId: relationship.id,
-                                        }}
-                                        targetName={relationship.name}
-                                    />
-                                ) : null}
-                                {!readonly ? (
-                                    <ListItemHeaderButton
-                                        onClick={enterEditMode}
-                                    >
-                                        <Pencil />
-                                    </ListItemHeaderButton>
-                                ) : null}
+                ) : !readonly ? (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <div
+                                onDoubleClick={enterEditMode}
+                                className="text-editable truncate px-2 py-0.5"
+                            >
+                                {relationship.name}
                             </div>
-                        </>
-                    ) : (
-                        <ListItemHeaderButton onClick={editRelationshipName}>
-                            <Check />
-                        </ListItemHeaderButton>
-                    )}
-                </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {t('tool_tips.double_click_to_edit')}
+                        </TooltipContent>
+                    </Tooltip>
+                ) : (
+                    <div className="truncate px-2 py-0.5">
+                        {relationship.name}
+                    </div>
+                )}
             </div>
-            <EntityConflictHint
-                message={message}
-                editors={editors}
-                description={description}
-            />
+            {remoteEditors.length > 0 ? (
+                <EntityEditingBadge
+                    editors={remoteEditors}
+                    className="mr-1 shrink-0"
+                />
+            ) : null}
+            <div className="flex flex-row-reverse items-center">
+                {!editMode ? (
+                    <>
+                        {!readonly ? (
+                            <ListItemHeaderButton
+                                onClick={deleteRelationshipHandler}
+                                aria-label={t(
+                                    'side_panel.refs_section.relationship.relationship_actions.delete_relationship'
+                                )}
+                                role="button"
+                                className="!text-red-700 hover:!text-red-700 dark:!text-red-700 dark:hover:!text-red-700"
+                            >
+                                <Trash2 />
+                            </ListItemHeaderButton>
+                        ) : null}
+                        <div className="flex items-center md:hidden md:group-focus-within:flex md:group-hover:flex">
+                            <ListItemHeaderButton
+                                onClick={handleFocusOnRelationship}
+                            >
+                                <CircleDotDashed />
+                            </ListItemHeaderButton>
+                            {conversationsAvailable ? (
+                                <ConversationIndicator
+                                    appearance="list-item-header"
+                                    highlightWhenActive={false}
+                                    showTooltip={false}
+                                    target={{
+                                        targetType: 'relationship',
+                                        targetId: relationship.id,
+                                    }}
+                                    targetName={relationship.name}
+                                />
+                            ) : null}
+                        </div>
+                    </>
+                ) : (
+                    <ListItemHeaderButton onClick={editRelationshipName}>
+                        <Check />
+                    </ListItemHeaderButton>
+                )}
+            </div>
         </div>
     );
 };

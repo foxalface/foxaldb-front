@@ -20,6 +20,7 @@ import { TableFieldPopover } from './table-field-modal/table-field-modal';
 import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
 import type { DatabaseType, DBTable } from '@/lib/domain';
 import { requiresNotNull } from '@/lib/data/data-types/data-types';
+import { cn } from '@/lib/utils';
 
 export interface TableFieldProps {
     table: DBTable;
@@ -71,7 +72,10 @@ export const TableField: React.FC<TableFieldProps> = ({
 
     return (
         <div
-            className="group flex flex-1 touch-none flex-row justify-between gap-2 p-1"
+            className={cn(
+                'group flex flex-1 touch-none flex-row justify-between gap-2 rounded-md p-1',
+                !readonly && 'hover:bg-accent'
+            )}
             ref={setNodeRef}
             style={style}
             onFocus={
@@ -95,7 +99,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Input
-                                className="h-8 w-full !truncate focus-visible:ring-0"
+                                className="side-panel-group-hover-surface h-8 w-full !truncate focus-visible:ring-0"
                                 type="text"
                                 placeholder={t(
                                     'side_panel.tables_section.table.field_name'
@@ -136,7 +140,7 @@ export const TableField: React.FC<TableFieldProps> = ({
                     <TooltipTrigger className="flex h-8 min-w-0 flex-1" asChild>
                         <span>
                             <SelectBox
-                                className="flex h-8 min-h-8 w-full"
+                                className="side-panel-group-hover-surface flex h-8 min-h-8 w-full"
                                 popoverClassName="min-w-[350px]"
                                 options={dataFieldOptions}
                                 placeholder={t(
@@ -168,15 +172,14 @@ export const TableField: React.FC<TableFieldProps> = ({
             </div>
             <div className="flex shrink-0 items-center justify-end gap-1">
                 {conversationsAvailable ? (
-                    <div className="hidden shrink-0 group-focus-within:flex group-hover:flex">
-                        <ConversationIndicator
-                            target={{
-                                targetType: 'field',
-                                targetId: field.id,
-                            }}
-                            targetName={field.name}
-                        />
-                    </div>
+                    <ConversationIndicator
+                        className="shrink-0"
+                        target={{
+                            targetType: 'field',
+                            targetId: field.id,
+                        }}
+                        targetName={field.name}
+                    />
                 ) : null}
                 <Tooltip>
                     <TooltipTrigger asChild>

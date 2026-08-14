@@ -8,6 +8,8 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
+import { cn } from '@/lib/utils';
+import { LIST_ITEM_HEADER_BUTTON_CLASS } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -68,10 +70,16 @@ export const ConversationSummaryActionsMenu = React.forwardRef<
                         aria-label={t(
                             'side_panel.conversations_section.summary.actions.menu_aria'
                         )}
-                        className="size-7 shrink-0 text-muted-foreground opacity-100 focus-visible:opacity-100 md:opacity-70 md:hover:opacity-100"
+                        className={cn(
+                            LIST_ITEM_HEADER_BUTTON_CLASS,
+                            'size-7 shrink-0 p-0'
+                        )}
                         onClick={stopPropagation}
                     >
-                        <EllipsisVertical aria-hidden="true" />
+                        <EllipsisVertical
+                            className="size-4"
+                            aria-hidden="true"
+                        />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent

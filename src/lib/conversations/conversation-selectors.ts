@@ -2,6 +2,7 @@ import type {
     ConversationMessagesStatus,
     ConversationsState,
 } from './conversation-reducer';
+import { conversationHasMessages } from './conversation-has-messages';
 import type {
     ConversationStatus,
     DiagramConversation,
@@ -70,15 +71,41 @@ export const selectConversationsByStatus = (
     return sortConversations(matched);
 };
 
+export const selectListedConversationsByStatus = (
+    summariesById: Map<number, DiagramConversation>,
+    status: ConversationStatus
+): ReadonlyArray<DiagramConversation> => {
+    if (summariesById.size === 0) {
+        return EMPTY_CONVERSATIONS;
+    }
+
+    const matched: DiagramConversation[] = [];
+
+    for (const conversation of summariesById.values()) {
+        if (
+            conversation.status === status &&
+            conversationHasMessages(conversation)
+        ) {
+            matched.push(conversation);
+        }
+    }
+
+    if (matched.length === 0) {
+        return EMPTY_CONVERSATIONS;
+    }
+
+    return sortConversations(matched);
+};
+
 export const selectActiveConversations = (
     summariesById: Map<number, DiagramConversation>
 ): ReadonlyArray<DiagramConversation> =>
-    selectConversationsByStatus(summariesById, 'active');
+    selectListedConversationsByStatus(summariesById, 'active');
 
 export const selectArchivedConversations = (
     summariesById: Map<number, DiagramConversation>
 ): ReadonlyArray<DiagramConversation> =>
-    selectConversationsByStatus(summariesById, 'archived');
+    selectListedConversationsByStatus(summariesById, 'archived');
 
 export const selectConversationById = (
     state: ConversationsState,
@@ -111,7 +138,11 @@ export const selectActiveConversationForTarget = (
 ): DiagramConversation | undefined => {
     const conversation = selectConversationForTarget(state, target);
 
-    if (conversation === undefined || conversation.status !== 'active') {
+    if (
+        conversation === undefined ||
+        conversation.status !== 'active' ||
+        !conversationHasMessages(conversation)
+    ) {
         return undefined;
     }
 

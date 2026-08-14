@@ -161,6 +161,7 @@ export const bn: LanguageTranslation = {
                     primary_key: 'প্রাথমিক কী',
                     indexes: 'ইনডেক্স',
                     check_constraints: 'চেক সীমাবদ্ধতা',
+                    comments: 'মন্তব্য',
                     no_comments: 'কোনো মন্তব্য নেই',
                     add_field: 'ফিল্ড যোগ করুন',
                     add_index: 'ইনডেক্স যোগ করুন',
@@ -174,6 +175,7 @@ export const bn: LanguageTranslation = {
                         open_discussion: 'কথোপকথন খুলুন',
                         unique: 'অদ্বিতীয়',
                         auto_increment: 'স্বয়ংক্রিয় বৃদ্ধি',
+                        comments: 'মন্তব্য',
                         no_comments: 'কোনো মন্তব্য নেই',
                         delete_field: 'ফিল্ড মুছুন',
                         // TODO: Translate
@@ -214,6 +216,9 @@ export const bn: LanguageTranslation = {
             refs_section: {
                 refs: 'রেফস',
                 filter: 'ফিল্টার',
+                clear: 'ফিল্টার মুছুন',
+                no_results:
+                    'আপনার ফিল্টারের সাথে মিলে এমন কোনো রেফারেন্স পাওয়া যায়নি।',
                 collapse: 'সব ভাঁজ করুন',
                 add_relationship: 'সম্পর্ক যোগ করুন',
                 relationships: 'সম্পর্ক',
@@ -420,6 +425,7 @@ export const bn: LanguageTranslation = {
                     no_messages: 'এখনও কোনো বার্তা নেই',
                     last_activity: 'সর্বশেষ কার্যকলাপ',
                     open_aria: '{{target}}-এর জন্য কথোপকথন খুলুন',
+                    focus_target_aria: 'ডায়াগ্রামে {{target}} দেখান',
                     author_tooltip: '{{name}}-এর শেষ বার্তা',
                     author_missing_tooltip: 'লেখকের তথ্য নেই',
                     actions: {
@@ -456,7 +462,7 @@ export const bn: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         '{{count}}টি নতুন বার্তায় যান',
                     empty: {
-                        title: 'এখনও কোনো বার্তা নেই',
+                        title: 'কোনো বার্তা নেই',
                         description: 'এই কথোপকথনে কোনো বার্তা নেই।',
                     },
                     errors: {

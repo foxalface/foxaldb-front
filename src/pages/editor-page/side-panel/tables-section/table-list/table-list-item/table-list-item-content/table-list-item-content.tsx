@@ -13,7 +13,6 @@ import {
     AccordionTrigger,
     AccordionContent,
 } from '@/components/accordion/accordion';
-import { Separator } from '@/components/separator/separator';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DBField } from '@/lib/domain/db-field';
 import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
@@ -23,6 +22,7 @@ import { TableIndex } from './table-index/table-index';
 import { TableCheckConstraint } from './table-check-constraint/table-check-constraint';
 import type { DBIndex } from '@/lib/domain/db-index';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/textarea/textarea';
 import type { DragEndEvent } from '@dnd-kit/core';
 import {
@@ -37,7 +37,6 @@ import {
     SortableContext,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { ColorPicker } from '@/components/color-picker/color-picker';
 
 type AccordionItemValue = 'fields' | 'indexes' | 'checks';
 
@@ -63,7 +62,6 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
         databaseType,
     } = useChartDB();
     const { t } = useTranslation();
-    const { color } = table;
     const [selectedItems, setSelectedItems] = React.useState<
         AccordionItemValue[]
     >(['fields']);
@@ -145,12 +143,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
     );
 
     return (
-        <div
-            className="flex flex-col gap-1 rounded-b-md border-l-[6px] px-1"
-            style={{
-                borderColor: color,
-            }}
-        >
+        <div className="flex flex-col gap-1 rounded-b-md px-1">
             <Accordion
                 type="multiple"
                 className="w-full"
@@ -162,7 +155,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="fields" className="mb-2 border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-accent"
                         asChild
                     >
                         <div className="flex flex-1 items-center justify-between">
@@ -212,7 +205,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 ))}
                             </SortableContext>
                             {!readonly ? (
-                                <div className="flex justify-start p-1">
+                                <div className="flex justify-center p-1">
                                     <Button
                                         variant="ghost"
                                         className="flex h-7 items-center gap-1 px-2 text-xs"
@@ -233,7 +226,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                     <AccordionItem value="indexes" className="mb-2 border-y-0">
                         <AccordionTrigger
                             iconPosition="right"
-                            className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
+                            className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-accent"
                             asChild
                         >
                             <div className="flex flex-1 items-center justify-between">
@@ -289,7 +282,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                                 ))}
 
                             {!readonly ? (
-                                <div className="flex justify-start p-1">
+                                <div className="flex justify-center p-1">
                                     <Button
                                         variant="ghost"
                                         className="flex h-7 items-center gap-1 px-2 text-xs"
@@ -309,7 +302,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="checks" className="mb-2 border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-accent"
                         asChild
                     >
                         <div className="flex flex-1 items-center justify-between">
@@ -364,7 +357,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         </div>
 
                         {!readonly ? (
-                            <div className="flex justify-start p-1">
+                            <div className="flex justify-center p-1">
                                 <Button
                                     variant="ghost"
                                     className="flex h-7 items-center gap-1 px-2 text-xs"
@@ -383,7 +376,7 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                 <AccordionItem value="comments" className="border-y-0">
                     <AccordionTrigger
                         iconPosition="right"
-                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-secondary"
+                        className="group flex flex-1 p-0 px-2 py-1 text-xs text-subtitle hover:bg-accent"
                         asChild
                     >
                         <div className="flex flex-1 items-center justify-between">
@@ -394,57 +387,31 @@ export const TableListItemContent: React.FC<TableListItemContentProps> = ({
                         </div>
                     </AccordionTrigger>
                     <AccordionContent className="pb-0 pt-1">
-                        <Textarea
-                            value={table.comments ?? undefined}
-                            onChange={(e) =>
-                                updateTable(table.id, {
-                                    comments: e.target.value,
-                                })
-                            }
-                            placeholder={t(
-                                'side_panel.tables_section.table.no_comments'
+                        <div
+                            className={cn(
+                                'rounded-md px-2 py-1',
+                                !readonly && 'group hover:bg-accent'
                             )}
-                            className="w-full rounded-md bg-muted text-sm focus-visible:ring-0"
-                            readOnly={readonly}
-                        />
+                        >
+                            <Textarea
+                                value={table.comments ?? undefined}
+                                onChange={(e) =>
+                                    updateTable(table.id, {
+                                        comments: e.target.value,
+                                    })
+                                }
+                                placeholder={t(
+                                    'side_panel.tables_section.table.no_comments'
+                                )}
+                                className="side-panel-group-hover-surface w-full rounded-md bg-muted text-sm focus-visible:ring-0"
+                                readOnly={readonly}
+                            />
+                        </div>
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
-            {!readonly ? <Separator className="" /> : null}
-
-            <div className="flex flex-1 items-center justify-between">
-                {!table.isView && !readonly ? (
-                    <ColorPicker
-                        color={color}
-                        onChange={(color) => updateTable(table.id, { color })}
-                    />
-                ) : (
-                    <div />
-                )}
-
-                {!readonly ? (
-                    <div className="flex gap-1">
-                        {!table.isView ? (
-                            <Button
-                                variant="outline"
-                                className="h-8 p-2 text-xs"
-                                onClick={createIndexHandler}
-                            >
-                                <FileKey2 className="h-4" />
-                                {t('side_panel.tables_section.table.add_index')}
-                            </Button>
-                        ) : null}
-                        <Button
-                            variant="outline"
-                            className="h-8 p-2 text-xs"
-                            onClick={createFieldHandler}
-                        >
-                            <FileType2 className="h-4" />
-                            {t('side_panel.tables_section.table.add_field')}
-                        </Button>
-                    </div>
-                ) : null}
-            </div>
         </div>
     );
 };
+
+TableListItemContent.displayName = 'TableListItemContent';

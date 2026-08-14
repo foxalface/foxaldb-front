@@ -30,10 +30,11 @@ export interface EmptyStateFooterAction {
 
 export interface EmptyStateProps {
     title: string;
-    description: string;
+    description?: string;
     imageClassName?: string;
     titleClassName?: string;
     descriptionClassName?: string;
+    icon?: React.ReactNode;
     primaryAction?: EmptyStateActionButton;
     secondaryAction?: EmptyStateActionButton;
     footerAction?: EmptyStateFooterAction;
@@ -54,10 +55,12 @@ export const EmptyState = forwardRef<
             primaryAction,
             secondaryAction,
             footerAction,
+            icon,
         },
         ref
     ) => {
         const { effectiveTheme } = useTheme();
+        const hasDescription = Boolean(description?.trim());
 
         // Determine if we have any actions to show
         const hasActions = useMemo(
@@ -73,6 +76,13 @@ export const EmptyState = forwardRef<
                     : EmptyStateImage,
             [effectiveTheme]
         );
+        const media = icon ?? (
+            <img
+                src={emptyStateImage}
+                alt="Empty state"
+                className={cn('p-2', imageClassName)}
+            />
+        );
 
         return (
             <div
@@ -84,20 +94,17 @@ export const EmptyState = forwardRef<
             >
                 <Empty>
                     <EmptyHeader>
-                        <EmptyMedia variant="icon">
-                            {/* <Group /> */}
-                            <img
-                                src={emptyStateImage}
-                                alt="Empty state"
-                                className={cn('p-2', imageClassName)}
-                            />
+                        <EmptyMedia variant={icon ? 'default' : 'icon'}>
+                            {media}
                         </EmptyMedia>
                         <EmptyTitle className={titleClassName}>
                             {title}
                         </EmptyTitle>
-                        <EmptyDescription className={descriptionClassName}>
-                            {description}
-                        </EmptyDescription>
+                        {hasDescription ? (
+                            <EmptyDescription className={descriptionClassName}>
+                                {description}
+                            </EmptyDescription>
+                        ) : null}
                     </EmptyHeader>
 
                     {/* Action buttons section */}

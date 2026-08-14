@@ -29,6 +29,7 @@ import {
 } from '@/components/tooltip/tooltip';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { IndexTypeSelector } from './index-type-selector';
+import { cn } from '@/lib/utils';
 
 export interface TableIndexProps {
     index: DBIndex;
@@ -123,7 +124,12 @@ export const TableIndex: React.FC<TableIndexProps> = ({
         'Select type';
 
     return (
-        <div className="relative flex flex-1 flex-row justify-between gap-2 p-1">
+        <div
+            className={cn(
+                'group relative flex flex-1 flex-row justify-between gap-2 rounded-md p-1',
+                !readonly && 'hover:bg-accent'
+            )}
+        >
             {index.comments ? (
                 <Tooltip>
                     <TooltipTrigger asChild>
@@ -142,7 +148,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                 </Tooltip>
             ) : null}
             <SelectBox
-                className="flex h-8 min-h-8 min-w-0 flex-1"
+                className="side-panel-group-hover-surface flex h-8 min-h-8 min-w-0 flex-1"
                 multiple
                 oneLine
                 options={fieldOptions}

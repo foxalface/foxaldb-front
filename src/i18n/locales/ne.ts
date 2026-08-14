@@ -161,6 +161,7 @@ export const ne: LanguageTranslation = {
                     primary_key: 'प्राथमिक कुंजी',
                     indexes: 'सूचकहरू',
                     check_constraints: 'जाँच प्रतिबन्धहरू',
+                    comments: 'टिप्पणीहरू',
                     no_comments: 'कुनै टिप्पणीहरू छैनन्',
                     add_field: 'क्षेत्र थप्नुहोस्',
                     add_index: 'सूचक थप्नुहोस्',
@@ -174,6 +175,7 @@ export const ne: LanguageTranslation = {
                         open_discussion: 'कुराकानी खोल्नुहोस्',
                         unique: 'अनन्य',
                         auto_increment: 'स्वचालित वृद्धि',
+                        comments: 'टिप्पणीहरू',
                         no_comments: 'कुनै टिप्पणीहरू छैनन्',
                         delete_field: 'क्षेत्र हटाउनुहोस्',
                         // TODO: Translate
@@ -202,7 +204,7 @@ export const ne: LanguageTranslation = {
                         change_schema: 'स्कीम परिवर्तन गर्नुहोस्',
                         add_field: 'क्षेत्र थप्नुहोस्',
                         add_index: 'सूचक थप्नुहोस्',
-                        duplicate_table: 'तालिकाको नक्कली रुप बनाउनुहोस',
+                        duplicate_table: 'तालिका प्रतिलिपि गर्नुहोस्',
                         delete_table: 'तालिका हटाउनुहोस्',
                     },
                 },
@@ -214,6 +216,8 @@ export const ne: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'फिल्टर',
+                clear: 'फिल्टर हटाउनुहोस्',
+                no_results: 'तपाईंको फिल्टरसँग मिल्ने कुनै सन्दर्भ फेला परेन।',
                 collapse: 'सबै लुकाउनुहोस्',
                 add_relationship: 'सम्बन्ध थप्नुहोस्',
                 relationships: 'सम्बन्धहरू',
@@ -421,6 +425,7 @@ export const ne: LanguageTranslation = {
                     no_messages: 'अहिलेसम्म कुनै सन्देश छैन',
                     last_activity: 'अन्तिम गतिविधि',
                     open_aria: '{{target}} को लागि कुराकानी खोल्नुहोस्',
+                    focus_target_aria: 'आरेखमा {{target}} देखाउनुहोस्',
                     author_tooltip: '{{name}} को अन्तिम सन्देश',
                     author_missing_tooltip: 'लेखकको जानकारी छैन',
                     actions: {
@@ -458,7 +463,7 @@ export const ne: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         '{{count}} नयाँ सन्देशहरूमा जानुहोस्',
                     empty: {
-                        title: 'अहिलेसम्म कुनै सन्देश छैन',
+                        title: 'कुनै सन्देश छैन',
                         description: 'यो कुराकानीमा कुनै सन्देश छैन।',
                     },
                     errors: {
@@ -996,7 +1001,7 @@ export const ne: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'तालिका सम्पादन गर्नुहोस्',
-            duplicate_table: 'तालिका नक्कली गर्नुहोस्',
+            duplicate_table: 'तालिका प्रतिलिपि गर्नुहोस्',
             delete_table: 'तालिका हटाउनुहोस्',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'क्षेत्रमा सार्नुहोस्',

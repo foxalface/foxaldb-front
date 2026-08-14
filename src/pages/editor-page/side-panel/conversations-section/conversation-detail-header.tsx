@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, CircleDotDashed } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { ConversationTargetTypeIcon } from '@/components/conversations/conversation-target-type-icon';
 import {
@@ -10,7 +10,9 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useFocusOnConversationTarget } from '@/hooks/use-focus-on-conversation-target';
 import { cn } from '@/lib/utils';
+import { LIST_ITEM_HEADER_BUTTON_CLASS } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import { resolveConversationTargetLabel } from './resolve-conversation-target-label';
 
@@ -35,6 +37,12 @@ export const ConversationDetailHeader: React.FC<
                 t,
             }),
         [conversation, diagramName, tables, relationships, t]
+    );
+    const { canFocusOnTarget, focusOnTarget } =
+        useFocusOnConversationTarget(conversation);
+    const focusTargetAriaLabel = t(
+        'side_panel.conversations_section.summary.focus_target_aria',
+        { target: targetLabel.title }
     );
 
     return (
@@ -73,7 +81,7 @@ export const ConversationDetailHeader: React.FC<
                     <h3
                         id={messagesHeadingId}
                         className={cn(
-                            'min-w-0 truncate text-sm font-semibold',
+                            'min-w-0 flex-1 truncate text-sm font-semibold',
                             targetLabel.isMissing
                                 ? 'italic text-muted-foreground'
                                 : 'text-foreground'
@@ -81,6 +89,25 @@ export const ConversationDetailHeader: React.FC<
                     >
                         {targetLabel.title}
                     </h3>
+                    {canFocusOnTarget ? (
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            aria-label={focusTargetAriaLabel}
+                            data-testid="conversation-detail-focus-target"
+                            className={cn(
+                                LIST_ITEM_HEADER_BUTTON_CLASS,
+                                'size-7 shrink-0 p-0'
+                            )}
+                            onClick={focusOnTarget}
+                        >
+                            <CircleDotDashed
+                                className="size-4"
+                                aria-hidden="true"
+                            />
+                        </Button>
+                    ) : null}
                 </div>
             </TooltipProvider>
         </header>

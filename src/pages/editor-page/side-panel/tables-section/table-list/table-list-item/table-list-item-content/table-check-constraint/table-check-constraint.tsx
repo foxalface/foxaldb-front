@@ -13,6 +13,7 @@ import { Textarea } from '@/components/textarea/textarea';
 import { useTranslation } from 'react-i18next';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { validateCheckConstraintWithDetails } from '@/lib/check-constraints/check-constraints-validator';
+import { cn } from '@/lib/utils';
 
 export interface TableCheckConstraintProps {
     constraint: DBCheckConstraint;
@@ -40,13 +41,19 @@ export const TableCheckConstraint: React.FC<TableCheckConstraintProps> = ({
     const hasError = !validationResult.isValid;
 
     return (
-        <div className="flex flex-1 flex-row items-center justify-between gap-1 py-0.5">
+        <div
+            className={cn(
+                'group flex flex-1 flex-row items-center justify-between gap-1 rounded-md py-0.5',
+                !readonly && 'hover:bg-accent'
+            )}
+        >
             <div
-                className={`flex h-8 min-w-0 flex-1 items-center gap-1.5 rounded-md border bg-slate-50 px-2.5 dark:bg-slate-900 ${
+                className={cn(
+                    'side-panel-group-hover-surface flex h-8 min-w-0 flex-1 items-center gap-1.5 rounded-md border bg-slate-50 px-2.5 dark:bg-slate-900',
                     hasError
                         ? 'border-red-300 dark:border-red-700'
                         : 'border-input'
-                }`}
+                )}
             >
                 {hasError && (
                     <AlertCircle className="size-3 shrink-0 text-red-500" />

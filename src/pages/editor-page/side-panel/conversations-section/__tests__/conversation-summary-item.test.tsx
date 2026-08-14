@@ -63,6 +63,15 @@ vi.mock('@/hooks/use-diagram-access', () => ({
     useDiagramAccess: () => ({ diagramAccess: diagramAccessState }),
 }));
 
+const focusOnTargetMock = vi.fn();
+
+vi.mock('@/hooks/use-focus-on-conversation-target', () => ({
+    useFocusOnConversationTarget: () => ({
+        canFocusOnTarget: focusOnTargetMock.canFocusOnTarget ?? true,
+        focusOnTarget: focusOnTargetMock,
+    }),
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, options?: Record<string, unknown>) => {
@@ -99,6 +108,8 @@ describe('ConversationSummaryItem', () => {
         diagramAccessState.role = 'owner';
         diagramAccessState.can_edit = true;
         diagramAccessState.can_manage_members = true;
+        focusOnTargetMock.mockReset();
+        focusOnTargetMock.canFocusOnTarget = true;
     });
 
     const renderItem = (
@@ -198,6 +209,7 @@ describe('ConversationSummaryItem', () => {
     });
 
     it('shows target type icon with tooltip, truncated title, and square ellipsis menu', () => {
+        focusOnTargetMock.canFocusOnTarget = false;
         renderItem({
             conversation: buildConversation({
                 targetType: 'diagram',
@@ -216,6 +228,34 @@ describe('ConversationSummaryItem', () => {
         expect(
             screen.queryByRole('button', { name: /Archive conversation/i })
         ).toBeNull();
+        expect(
+            screen.queryByTestId('conversation-summary-focus-target')
+        ).not.toBeInTheDocument();
+    });
+
+    it('shows a hover-only focus button for non-diagram targets', () => {
+        renderItem();
+
+        const focusButton = screen.getByTestId(
+            'conversation-summary-focus-target'
+        );
+        expect(focusButton).toHaveAttribute(
+            'aria-label',
+            'Show Clients on diagram'
+        );
+        expect(focusButton.closest('.md\\:group-hover\\:flex')).not.toBeNull();
+    });
+
+    it('focuses the conversation target without opening the conversation', async () => {
+        const user = userEvent.setup();
+        const { onSelect } = renderItem();
+
+        await user.click(
+            screen.getByTestId('conversation-summary-focus-target')
+        );
+
+        expect(focusOnTargetMock).toHaveBeenCalledTimes(1);
+        expect(onSelect).not.toHaveBeenCalled();
     });
 
     it('shows active menu actions with icons and destructive delete styling', async () => {

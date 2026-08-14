@@ -158,6 +158,7 @@ export const en = {
                     primary_key: 'Primary Key',
                     indexes: 'Indexes',
                     check_constraints: 'Check Constraints',
+                    comments: 'Comments',
                     no_comments: 'No comments',
                     add_field: 'Add Field',
                     add_index: 'Add Index',
@@ -174,6 +175,7 @@ export const en = {
                         character_length: 'Max Length',
                         precision: 'Precision',
                         scale: 'Scale',
+                        comments: 'Comments',
                         no_comments: 'No comments',
                         default_value: 'Default Value',
                         no_default: 'No default',
@@ -209,6 +211,8 @@ export const en = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'Filter',
+                clear: 'Clear Filter',
+                no_results: 'No refs found matching your filter.',
                 collapse: 'Collapse All',
                 add_relationship: 'Add Relationship',
                 relationships: 'Relationships',
@@ -415,6 +419,7 @@ export const en = {
                     no_messages: 'No messages yet',
                     last_activity: 'Last activity',
                     open_aria: 'Open conversation for {{target}}',
+                    focus_target_aria: 'Show {{target}} on diagram',
                     author_tooltip: 'Last message by {{name}}',
                     author_missing_tooltip: 'No author information',
                     actions: {
@@ -453,7 +458,7 @@ export const en = {
                     new_messages_badge_aria_other:
                         'Scroll to {{count}} new messages',
                     empty: {
-                        title: 'No messages yet',
+                        title: 'No messages',
                         description:
                             'This conversation does not have any messages.',
                     },

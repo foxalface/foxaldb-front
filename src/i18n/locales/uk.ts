@@ -160,6 +160,7 @@ export const uk: LanguageTranslation = {
                     primary_key: 'Первинний ключ',
                     indexes: 'Індекси',
                     check_constraints: 'Перевірочні обмеження',
+                    comments: 'Коментарі',
                     no_comments: 'Немає коментарів',
                     add_field: 'Додати поле',
                     add_index: 'Додати індекс',
@@ -173,6 +174,7 @@ export const uk: LanguageTranslation = {
                         open_discussion: 'Відкрити розмову',
                         unique: 'Унікальне',
                         auto_increment: 'Автоінкремент',
+                        comments: 'Коментарі',
                         no_comments: 'Немає коментарів',
                         delete_field: 'Видалити поле',
                         // TODO: Translate
@@ -213,6 +215,9 @@ export const uk: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'Фільтр',
+                clear: 'Очистити фільтр',
+                no_results:
+                    'Не знайдено посилань, що відповідають вашому фільтру.',
                 collapse: 'Згорнути все',
                 add_relationship: 'Додати звʼязок',
                 relationships: 'Звʼязки',
@@ -420,6 +425,7 @@ export const uk: LanguageTranslation = {
                     no_messages: 'Ще немає повідомлень',
                     last_activity: 'Остання активність',
                     open_aria: 'Відкрити бесіду для {{target}}',
+                    focus_target_aria: 'Показати {{target}} на діаграмі',
                     author_tooltip: 'Останнє повідомлення від {{name}}',
                     author_missing_tooltip: 'Немає інформації про автора',
                     actions: {
@@ -458,7 +464,7 @@ export const uk: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         'Перейти до {{count}} нових повідомлень',
                     empty: {
-                        title: 'Повідомлень ще немає',
+                        title: 'Немає повідомлень',
                         description: 'У цій бесіді немає повідомлень.',
                     },
                     errors: {

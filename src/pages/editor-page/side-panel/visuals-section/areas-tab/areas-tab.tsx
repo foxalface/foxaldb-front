@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { Button } from '@/components/button/button';
-import { Group, X } from 'lucide-react';
+import { Group } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { Area } from '@/lib/domain/area';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -8,7 +8,9 @@ import { useLayout } from '@/hooks/use-layout';
 import {
     SidePanelEmptyState,
     SidePanelEmptyStateViewport,
+    sidePanelEmptyStateIcon,
 } from '@/components/side-panel-empty-state/side-panel-empty-state';
+import { SidePanelFilterEmptyState } from '@/components/side-panel-empty-state/side-panel-filter-empty-state';
 import { useTranslation } from 'react-i18next';
 import { useViewport } from '@xyflow/react';
 import { AreaList } from './areas-list/areas-list';
@@ -61,7 +63,7 @@ export const AreasTab: React.FC<AreasTabProps> = () => {
 
     return (
         <div className="flex flex-1 flex-col overflow-hidden px-2">
-            <div className="flex items-center justify-between gap-4 pb-1">
+            <div className="flex items-center gap-2 pb-1">
                 <div className="flex-1">
                     <Input
                         ref={filterInputRef}
@@ -86,6 +88,7 @@ export const AreasTab: React.FC<AreasTabProps> = () => {
             <SidePanelEmptyStateViewport>
                 {areas.length === 0 ? (
                     <SidePanelEmptyState
+                        icon={sidePanelEmptyStateIcon}
                         title={t('side_panel.areas_section.empty_state.title')}
                         description={t(
                             'side_panel.areas_section.empty_state.description'
@@ -102,20 +105,11 @@ export const AreasTab: React.FC<AreasTabProps> = () => {
                         }
                     />
                 ) : filterText && filteredAreas.length === 0 ? (
-                    <div className="mt-10 flex flex-col items-center gap-2">
-                        <div className="text-sm text-muted-foreground">
-                            {t('side_panel.areas_section.no_results')}
-                        </div>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleClearFilter}
-                            className="gap-1"
-                        >
-                            <X className="size-3.5" />
-                            {t('side_panel.areas_section.clear')}
-                        </Button>
-                    </div>
+                    <SidePanelFilterEmptyState
+                        title={t('side_panel.areas_section.no_results')}
+                        clearLabel={t('side_panel.areas_section.clear')}
+                        onClearFilter={handleClearFilter}
+                    />
                 ) : (
                     <AreaList areas={filteredAreas} />
                 )}

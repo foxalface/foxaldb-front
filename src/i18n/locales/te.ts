@@ -161,6 +161,7 @@ export const te: LanguageTranslation = {
                     primary_key: 'ప్రాథమిక కీ',
                     indexes: 'ఇండెక్సులు',
                     check_constraints: 'తనిఖీ పరిమితులు',
+                    comments: 'వ్యాఖ్యలు',
                     no_comments: 'వ్యాఖ్యలు లేవు',
                     add_field: 'ఫీల్డ్ జోడించు',
                     add_index: 'ఇండెక్స్ జోడించు',
@@ -174,6 +175,7 @@ export const te: LanguageTranslation = {
                         open_discussion: 'సంభాషణ తెరవండి',
                         unique: 'అద్వితీయ',
                         auto_increment: 'ఆటో ఇంక్రిమెంట్',
+                        comments: 'వ్యాఖ్యలు',
                         no_comments: 'వ్యాఖ్యలు లేవు',
                         delete_field: 'ఫీల్డ్ తొలగించు',
                         // TODO: Translate
@@ -203,7 +205,7 @@ export const te: LanguageTranslation = {
                         add_field: 'ఫీల్డ్ జోడించు',
                         add_index: 'ఇండెక్స్ జోడించు',
                         // TODO: Translate
-                        duplicate_table: 'Duplicate Table',
+                        duplicate_table: 'పట్టికను నకలు చేయండి',
                         delete_table: 'పట్టికను తొలగించు',
                     },
                 },
@@ -215,6 +217,8 @@ export const te: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'ఫిల్టర్',
+                clear: 'ఫిల్టర్‌ను క్లియర్ చేయండి',
+                no_results: 'మీ ఫిల్టర్‌కు సరిపోలే రెఫరెన్స్‌లు కనుగొనబడలేదు.',
                 collapse: 'అన్ని కూల్ చేయి',
                 add_relationship: 'సంబంధం జోడించు',
                 relationships: 'సంబంధాలు',
@@ -420,6 +424,7 @@ export const te: LanguageTranslation = {
                     no_messages: 'ఇంకా సందేశాలు లేవు',
                     last_activity: 'చివరి కార్యకలాపం',
                     open_aria: '{{target}} కోసం సంభాషణను తెరవండి',
+                    focus_target_aria: 'డయాగ్రామ్లో {{target}} చూపించు',
                     author_tooltip: '{{name}} యొక్క చివరి సందేశం',
                     author_missing_tooltip: 'రచయిత సమాచారం లేదు',
                     actions: {
@@ -456,7 +461,7 @@ export const te: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         '{{count}} కొత్త సందేశాలకు వెళ్లండి',
                     empty: {
-                        title: 'ఇంకా సందేశాలు లేవు',
+                        title: 'సందేశాలు లేవు',
                         description: 'ఈ సంభాషణలో సందేశాలు లేవు.',
                     },
                     errors: {
@@ -996,7 +1001,7 @@ export const te: LanguageTranslation = {
 
         table_node_context_menu: {
             edit_table: 'పట్టికను సవరించు',
-            duplicate_table: 'Duplicate Table', // TODO: Translate
+            duplicate_table: 'పట్టికను నకలు చేయండి',
             delete_table: 'పట్టికను తొలగించు',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'ప్రాంతానికి తరలించు',

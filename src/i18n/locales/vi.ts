@@ -161,6 +161,7 @@ export const vi: LanguageTranslation = {
                     primary_key: 'Khóa chính',
                     indexes: 'Chỉ mục',
                     check_constraints: 'Ràng buộc kiểm tra',
+                    comments: 'Bình luận',
                     no_comments: 'Không có bình luận',
                     add_field: 'Thêm trường',
                     add_index: 'Thêm chỉ mục',
@@ -174,6 +175,7 @@ export const vi: LanguageTranslation = {
                         open_discussion: 'Mở cuộc trò chuyện',
                         unique: 'Giá trị duy nhất',
                         auto_increment: 'Tự động tăng',
+                        comments: 'Bình luận',
                         no_comments: 'Không có bình luận',
                         delete_field: 'Xóa trường',
                         // TODO: Translate
@@ -214,6 +216,8 @@ export const vi: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'Lọc',
+                clear: 'Xóa bộ lọc',
+                no_results: 'Không tìm thấy tham chiếu nào phù hợp với bộ lọc.',
                 collapse: 'Thu gọn tất cả',
                 add_relationship: 'Thêm quan hệ',
                 relationships: 'Quan hệ',
@@ -423,6 +427,7 @@ export const vi: LanguageTranslation = {
                     no_messages: 'Chưa có tin nhắn',
                     last_activity: 'Hoạt động gần nhất',
                     open_aria: 'Mở cuộc trò chuyện cho {{target}}',
+                    focus_target_aria: 'Hiển thị {{target}} trên sơ đồ',
                     author_tooltip: 'Tin nhắn cuối của {{name}}',
                     author_missing_tooltip: 'Không có thông tin tác giả',
                     actions: {
@@ -461,7 +466,7 @@ export const vi: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         'Cuộn đến {{count}} tin nhắn mới',
                     empty: {
-                        title: 'Chưa có tin nhắn',
+                        title: 'Không có tin nhắn',
                         description:
                             'Cuộc trò chuyện này chưa có tin nhắn nào.',
                     },

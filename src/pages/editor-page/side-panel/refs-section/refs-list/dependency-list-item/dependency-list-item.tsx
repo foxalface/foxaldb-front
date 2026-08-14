@@ -17,16 +17,18 @@ export const DependencyListItem = React.forwardRef<
     DependencyListItemProps
 >(({ dependency }, ref) => {
     return (
-        <AccordionItem value={dependency.id} className="rounded-md" ref={ref}>
-            <AccordionTrigger
-                asChild
-                className="w-full rounded-md px-2 py-0 hover:bg-accent hover:no-underline data-[state=open]:rounded-b-none"
-            >
-                <DependencyListItemHeader dependency={dependency} />
-            </AccordionTrigger>
-            <AccordionContent className="p-1 pb-0">
-                <DependencyListItemContent dependency={dependency} />
-            </AccordionContent>
+        <AccordionItem value={dependency.id} className="border-none" ref={ref}>
+            <div className="w-full rounded-md border border-border">
+                <AccordionTrigger
+                    asChild
+                    className="w-full rounded-md px-2 py-0 hover:bg-accent hover:no-underline data-[state=open]:rounded-b-none"
+                >
+                    <DependencyListItemHeader dependency={dependency} />
+                </AccordionTrigger>
+                <AccordionContent className="p-1 pb-0">
+                    <DependencyListItemContent dependency={dependency} />
+                </AccordionContent>
+            </div>
         </AccordionItem>
     );
 });

@@ -161,6 +161,7 @@ export const id_ID: LanguageTranslation = {
                     primary_key: 'Kunci Utama',
                     indexes: 'Indeks',
                     check_constraints: 'Batasan Pemeriksaan',
+                    comments: 'Komentar',
                     no_comments: 'Tidak ada komentar',
                     add_field: 'Tambah Kolom',
                     add_index: 'Tambah Indeks',
@@ -174,6 +175,7 @@ export const id_ID: LanguageTranslation = {
                         open_discussion: 'Buka percakapan',
                         unique: 'Unik',
                         auto_increment: 'Kenaikan Otomatis',
+                        comments: 'Komentar',
                         no_comments: 'Tidak ada komentar',
                         delete_field: 'Hapus Kolom',
                         // TODO: Translate
@@ -202,7 +204,7 @@ export const id_ID: LanguageTranslation = {
                         change_schema: 'Ubah Skema',
                         add_field: 'Tambah Kolom',
                         add_index: 'Tambah Indeks',
-                        duplicate_table: 'Duplikat Tabel',
+                        duplicate_table: 'Duplikasi tabel',
                         delete_table: 'Hapus Tabel',
                     },
                 },
@@ -214,6 +216,9 @@ export const id_ID: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: 'Saring',
+                clear: 'Hapus filter',
+                no_results:
+                    'Tidak ada referensi yang cocok dengan filter Anda.',
                 collapse: 'Lipat Semua',
                 add_relationship: 'Tambah Hubungan',
                 relationships: 'Hubungan',
@@ -422,6 +427,7 @@ export const id_ID: LanguageTranslation = {
                     no_messages: 'Belum ada pesan',
                     last_activity: 'Aktivitas terakhir',
                     open_aria: 'Buka percakapan untuk {{target}}',
+                    focus_target_aria: 'Tampilkan {{target}} di diagram',
                     author_tooltip: 'Pesan terakhir dari {{name}}',
                     author_missing_tooltip: 'Tidak ada informasi penulis',
                     actions: {
@@ -459,7 +465,7 @@ export const id_ID: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         'Gulir ke {{count}} pesan baru',
                     empty: {
-                        title: 'Belum ada pesan',
+                        title: 'Tidak ada pesan',
                         description: 'Percakapan ini tidak memiliki pesan.',
                     },
                     errors: {
@@ -999,7 +1005,7 @@ export const id_ID: LanguageTranslation = {
         table_node_context_menu: {
             edit_table: 'Ubah Tabel',
             delete_table: 'Hapus Tabel',
-            duplicate_table: 'Duplikat Tabel',
+            duplicate_table: 'Duplikasi tabel',
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'Pindahkan ke Area',
             no_area: 'Tanpa Area',

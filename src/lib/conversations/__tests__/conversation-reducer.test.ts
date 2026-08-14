@@ -64,8 +64,8 @@ describe('conversationsReducer', () => {
 
     it('SUMMARIES_LOAD_SUCCEEDED stores active conversations', () => {
         const state = loadActiveSucceeded(initialConversationsState(), [
-            conversation({ id: 2 }),
-            conversation({ id: 1 }),
+            conversation({ id: 2, messageCount: 1 }),
+            conversation({ id: 1, messageCount: 1 }),
         ]);
 
         expect(state.summariesStatus).toBe('ready');
@@ -73,6 +73,18 @@ describe('conversationsReducer', () => {
         expect(
             selectActiveConversations(state.summariesById).map((c) => c.id)
         ).toEqual([2, 1]);
+    });
+
+    it('selectActiveConversations excludes conversations without messages', () => {
+        const state = loadActiveSucceeded(initialConversationsState(), [
+            conversation({ id: 1, messageCount: 0 }),
+            conversation({ id: 2, messageCount: 1 }),
+        ]);
+
+        expect(
+            selectActiveConversations(state.summariesById).map((c) => c.id)
+        ).toEqual([2]);
+        expect(state.summariesById.size).toBe(2);
     });
 
     it('CONVERSATION_UPSERTED updates an existing summary', () => {
@@ -99,7 +111,7 @@ describe('conversationsReducer', () => {
     it('CONVERSATION_REMOVED deletes summary and message slice', () => {
         const withMessages = conversationsReducer(
             loadActiveSucceeded(initialConversationsState(), [
-                conversation({ id: 1 }),
+                conversation({ id: 1, messageCount: 1 }),
             ]),
             {
                 type: 'MESSAGES_LOAD_SUCCEEDED',
@@ -132,7 +144,7 @@ describe('conversationsReducer', () => {
 
     it('archived summaries replace only archived entries', () => {
         const activeState = loadActiveSucceeded(initialConversationsState(), [
-            conversation({ id: 1, status: 'active' }),
+            conversation({ id: 1, status: 'active', messageCount: 1 }),
         ]);
 
         const state = conversationsReducer(
@@ -151,6 +163,7 @@ describe('conversationsReducer', () => {
                         id: 2,
                         status: 'archived',
                         archivedAt: '2026-02-01T00:00:00.000Z',
+                        messageCount: 1,
                     }),
                 ],
                 status: 'archived',
@@ -174,6 +187,7 @@ describe('conversationsReducer', () => {
                 id: 1,
                 targetType: 'table',
                 targetId: 'table-1',
+                messageCount: 1,
             }),
         ]);
 

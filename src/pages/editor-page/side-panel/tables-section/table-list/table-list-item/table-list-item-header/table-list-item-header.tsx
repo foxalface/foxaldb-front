@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import {
     CircleDotDashed,
     GripVertical,
-    Pencil,
     EllipsisVertical,
     Trash2,
     FileType2,
@@ -48,6 +47,7 @@ import type { DBSchema } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
+import { ColorPicker } from '@/components/color-picker/color-picker';
 
 export interface TableListItemHeaderProps {
     table: DBTable;
@@ -81,7 +81,9 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     const [tableName, setTableName] = React.useState(table.name);
     const inputRef = React.useRef<HTMLInputElement>(null);
     const { listeners } = useSortable({ id: table.id });
-    const showDropDownMenu = !readonly || conversationsAvailable;
+    const showDropDownMenu =
+        !readonly ||
+        (conversationsAvailable && conversationMenu.showConversationAction);
 
     const editTableName = useCallback(() => {
         if (!editMode) return;
@@ -358,7 +360,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                             startEditing(createTableEditingItem(table.id))
                         }
                         onBlur={stopEditing}
-                        className="h-7 w-full focus-visible:ring-0"
+                        className="side-panel-group-hover-surface h-7 w-full focus-visible:ring-0"
                     />
                 ) : !readonly ? (
                     <Tooltip>
@@ -399,6 +401,17 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                 View
                             </span>
                         ) : null}
+                        {!readonly && !table.isView ? (
+                            <ColorPicker
+                                appearance="list-item-header"
+                                color={table.color}
+                                onChange={(nextColor) =>
+                                    updateTable(table.id, {
+                                        color: nextColor,
+                                    })
+                                }
+                            />
+                        ) : null}
                         <div className="flex items-center md:hidden md:group-focus-within:flex md:group-hover:flex">
                             <ListItemHeaderButton onClick={handleFocusOnTable}>
                                 <CircleDotDashed />
@@ -414,11 +427,6 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                     }}
                                     targetName={table.name}
                                 />
-                            ) : null}
-                            {!readonly ? (
-                                <ListItemHeaderButton onClick={enterEditMode}>
-                                    <Pencil />
-                                </ListItemHeaderButton>
                             ) : null}
                         </div>
                     </>

@@ -160,6 +160,7 @@ export const ko_KR: LanguageTranslation = {
                     primary_key: '기본키',
                     indexes: '인덱스',
                     check_constraints: '체크 제약조건',
+                    comments: '주석',
                     no_comments: '주석 없음',
                     add_field: '필드 추가',
                     add_index: '인덱스 추가',
@@ -173,6 +174,7 @@ export const ko_KR: LanguageTranslation = {
                         open_discussion: '대화 열기',
                         unique: '유니크 여부',
                         auto_increment: '자동 증가',
+                        comments: '주석',
                         no_comments: '주석 없음',
                         delete_field: '필드 삭제',
                         // TODO: Translate
@@ -213,6 +215,8 @@ export const ko_KR: LanguageTranslation = {
             refs_section: {
                 refs: 'Refs',
                 filter: '필터',
+                clear: '필터 지우기',
+                no_results: '필터와 일치하는 참조를 찾을 수 없습니다.',
                 collapse: '모두 접기',
                 add_relationship: '연관 관계 추가',
                 relationships: '연관 관계',
@@ -419,6 +423,7 @@ export const ko_KR: LanguageTranslation = {
                     no_messages: '아직 메시지가 없습니다',
                     last_activity: '마지막 활동',
                     open_aria: '{{target}} 대화 열기',
+                    focus_target_aria: '다이어그램에서 {{target}} 표시',
                     author_tooltip: '{{name}}의 최근 메시지',
                     author_missing_tooltip: '작성자 정보 없음',
                     actions: {
@@ -455,7 +460,7 @@ export const ko_KR: LanguageTranslation = {
                     new_messages_badge_aria_other:
                         '새 메시지 {{count}}개로 이동',
                     empty: {
-                        title: '아직 메시지가 없습니다',
+                        title: '메시지 없음',
                         description: '이 대화에는 메시지가 없습니다.',
                     },
                     errors: {

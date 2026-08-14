@@ -39,7 +39,7 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
         setSelectedTab,
         selectedConversation,
         selectConversation,
-        clearSelectedConversation,
+        handleBackFromDetail,
         activeConversations,
         archivedConversations,
         status,
@@ -166,7 +166,7 @@ export const ConversationsSection: React.FC<ConversationsSectionProps> = () => {
             {selectedConversation !== null ? (
                 <ConversationDetail
                     conversation={selectedConversation}
-                    onBack={clearSelectedConversation}
+                    onBack={handleBackFromDetail}
                     regionRef={detailRegionRef}
                 />
             ) : (
