@@ -12,6 +12,7 @@ export const tr: LanguageTranslation = {
             conversations: 'Konuşmalar',
             conversations_unread_aria: 'Görüşmelerde {{count}} okunmamış mesaj',
             visuals: 'Görseller',
+            activities: 'Etkinlik',
         },
         menu: {
             actions: {
@@ -579,6 +580,55 @@ export const tr: LanguageTranslation = {
                     unknown: 'Konuşma',
                 },
             },
+            activities_section: {
+                title: 'Etkinlik',
+                filter: 'Filtrele',
+                clear: 'Filtreyi temizle',
+                no_results: 'Filtrenizle eşleşen etkinlik bulunamadı.',
+                loading: 'Etkinlik yükleniyor…',
+                retry: 'Yeniden dene',
+                type_filter: {
+                    trigger: 'Tür',
+                    label: 'Türe göre filtrele',
+                    trigger_aria: 'Etkinlik türüne göre filtrele',
+                },
+                types: {
+                    diagram: 'Diyagram',
+                    table: 'Tablo',
+                    field: 'Alan',
+                    relationship: 'İlişki',
+                    note: 'Not',
+                    area: 'Bölge',
+                    dependency: 'Bağımlılık',
+                },
+                you: 'Siz',
+                unknown_user: 'Birisi',
+                empty_state: {
+                    title: 'Henüz etkinlik yok',
+                    description:
+                        'Son değişiklikleri görmek için düzenlemeye başlayın.',
+                },
+                errors: {
+                    load_failed: 'Etkinlik yüklenemedi.',
+                },
+                actions: {
+                    add_tables: '{{user}} {{table}} tablosunu ekledi',
+                    remove_tables: '{{user}} bir tabloyu kaldırdı',
+                    add_field: '{{user}} {{field}} alanını ekledi',
+                    remove_field: '{{user}} bir alanı kaldırdı',
+                    update_field: '{{user}} {{field}} alanını güncelledi',
+                    add_relationships: '{{user}} bir ilişki ekledi',
+                    remove_relationships: '{{user}} bir ilişkiyi kaldırdı',
+                    update_relationship: '{{user}} bir ilişkiyi güncelledi',
+                    add_notes: '{{user}} bir not ekledi',
+                    remove_notes: '{{user}} bir notu kaldırdı',
+                    add_areas: '{{user}} bir bölge ekledi',
+                    remove_areas: '{{user}} bir bölgeyi kaldırdı',
+                    add_dependencies: '{{user}} bir bağımlılık ekledi',
+                    remove_dependencies: '{{user}} bir bağımlılığı kaldırdı',
+                    fallback: '{{user}} diyagramı güncelledi',
+                },
+            },
         },
         toolbar: {
             zoom_in: 'Yakınlaştır',
@@ -653,36 +703,6 @@ export const tr: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {

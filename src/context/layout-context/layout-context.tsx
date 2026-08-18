@@ -7,7 +7,8 @@ export type SidebarSection =
     | 'refs'
     | 'customTypes'
     | 'visuals'
-    | 'conversations';
+    | 'conversations'
+    | 'activities';
 
 export type VisualsTab = 'areas' | 'notes';
 

@@ -13,6 +13,7 @@ export const hr: LanguageTranslation = {
             conversations_unread_aria:
                 '{{count}} nepročitanih poruka u razgovorima',
             visuals: 'Vizuali',
+            activities: 'Aktivnost',
         },
         menu: {
             actions: {
@@ -585,6 +586,56 @@ export const hr: LanguageTranslation = {
                     unknown: 'Razgovor',
                 },
             },
+            activities_section: {
+                title: 'Aktivnost',
+                filter: 'Filtriraj',
+                clear: 'Očisti filtar',
+                no_results:
+                    'Nije pronađena aktivnost koja odgovara vašem filtru.',
+                loading: 'Učitavanje aktivnosti…',
+                retry: 'Pokušaj ponovno',
+                type_filter: {
+                    trigger: 'Vrsta',
+                    label: 'Filtriraj po vrsti',
+                    trigger_aria: 'Filtriraj po vrsti aktivnosti',
+                },
+                types: {
+                    diagram: 'Dijagram',
+                    table: 'Tablica',
+                    field: 'Polje',
+                    relationship: 'Veza',
+                    note: 'Bilješka',
+                    area: 'Područje',
+                    dependency: 'Ovisnost',
+                },
+                you: 'Vi',
+                unknown_user: 'Netko',
+                empty_state: {
+                    title: 'Još nema aktivnosti',
+                    description:
+                        'Započnite uređivanje da biste vidjeli nedavne promjene.',
+                },
+                errors: {
+                    load_failed: 'Nije moguće učitati aktivnost.',
+                },
+                actions: {
+                    add_tables: '{{user}} je dodao tablicu {{table}}',
+                    remove_tables: '{{user}} je uklonio tablicu',
+                    add_field: '{{user}} je dodao polje {{field}}',
+                    remove_field: '{{user}} je uklonio polje',
+                    update_field: '{{user}} je ažurirao polje {{field}}',
+                    add_relationships: '{{user}} je dodao odnos',
+                    remove_relationships: '{{user}} je uklonio odnos',
+                    update_relationship: '{{user}} je ažurirao odnos',
+                    add_notes: '{{user}} je dodao bilješku',
+                    remove_notes: '{{user}} je uklonio bilješku',
+                    add_areas: '{{user}} je dodao područje',
+                    remove_areas: '{{user}} je uklonio područje',
+                    add_dependencies: '{{user}} je dodao ovisnost',
+                    remove_dependencies: '{{user}} je uklonio ovisnost',
+                    fallback: '{{user}} je ažurirao dijagram',
+                },
+            },
         },
 
         toolbar: {
@@ -661,36 +712,6 @@ export const hr: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {

@@ -12,6 +12,7 @@ export const zh_CN: LanguageTranslation = {
             conversations: '对话',
             conversations_unread_aria: '对话中有 {{count}} 条未读消息',
             visuals: '视觉效果',
+            activities: '活动',
         },
         menu: {
             actions: {
@@ -557,6 +558,54 @@ export const zh_CN: LanguageTranslation = {
                     unknown: '对话',
                 },
             },
+            activities_section: {
+                title: '活动',
+                filter: '筛选',
+                clear: '清除筛选',
+                no_results: '没有与筛选条件匹配的活动。',
+                loading: '正在加载活动…',
+                retry: '重试',
+                type_filter: {
+                    trigger: '类型',
+                    label: '按类型筛选',
+                    trigger_aria: '按活动类型筛选',
+                },
+                types: {
+                    diagram: '图表',
+                    table: '表',
+                    field: '字段',
+                    relationship: '关系',
+                    note: '备注',
+                    area: '区域',
+                    dependency: '依赖',
+                },
+                you: '你',
+                unknown_user: '某人',
+                empty_state: {
+                    title: '暂无活动',
+                    description: '开始编辑以查看最近的更改。',
+                },
+                errors: {
+                    load_failed: '无法加载活动。',
+                },
+                actions: {
+                    add_tables: '{{user}} 添加了表 {{table}}',
+                    remove_tables: '{{user}} 删除了一个表',
+                    add_field: '{{user}} 添加了字段 {{field}}',
+                    remove_field: '{{user}} 删除了一个字段',
+                    update_field: '{{user}} 更新了字段 {{field}}',
+                    add_relationships: '{{user}} 添加了关系',
+                    remove_relationships: '{{user}} 删除了关系',
+                    update_relationship: '{{user}} 更新了关系',
+                    add_notes: '{{user}} 添加了备注',
+                    remove_notes: '{{user}} 删除了备注',
+                    add_areas: '{{user}} 添加了区域',
+                    remove_areas: '{{user}} 删除了区域',
+                    add_dependencies: '{{user}} 添加了依赖',
+                    remove_dependencies: '{{user}} 删除了依赖',
+                    fallback: '{{user}} 更新了图表',
+                },
+            },
         },
 
         toolbar: {
@@ -634,36 +683,6 @@ export const zh_CN: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {

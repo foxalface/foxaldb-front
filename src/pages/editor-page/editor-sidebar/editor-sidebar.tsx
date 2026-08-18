@@ -17,6 +17,7 @@ import {
     Plus,
     FolderOpen,
     CodeXml,
+    History,
 } from 'lucide-react';
 import { SlBubbles } from 'react-icons/sl';
 import { Table, Workflow } from 'lucide-react';
@@ -31,6 +32,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
+import { useActivitiesAvailability } from '@/hooks/use-activities-availability';
 import { useDiagramConversations } from '@/hooks/use-diagram-conversations';
 import { ConversationUnreadBadgeWithTranslation } from '@/components/conversations/conversation-unread-badge';
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
@@ -61,6 +63,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { databaseType } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const conversationsAvailable = useConversationsAvailability();
+    const activitiesAvailable = useActivitiesAvailability();
     const { totalUnreadCount } = useDiagramConversations();
 
     const diagramItems: SidebarItem[] = useMemo(
@@ -156,6 +159,20 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                       },
                   ]
                 : []),
+            ...(activitiesAvailable
+                ? [
+                      {
+                          title: t('editor_sidebar.activities'),
+                          icon: History,
+                          onClick: () => {
+                              toggleSidebarSection('activities');
+                          },
+                          active:
+                              selectedSidebarSection === 'activities' &&
+                              isSidePanelShowed,
+                      },
+                  ]
+                : []),
         ],
         [
             toggleSidebarSection,
@@ -165,6 +182,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             databaseType,
             selectVisualsTab,
             conversationsAvailable,
+            activitiesAvailable,
             totalUnreadCount,
         ]
     );

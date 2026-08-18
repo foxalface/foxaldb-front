@@ -18,8 +18,10 @@ import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
 import { RefsSection } from './refs-section/refs-section';
 import { VisualsSection } from './visuals-section/visuals-section';
 import { ConversationsSection } from './conversations-section/conversations-section';
+import { ActivitiesSection } from './activities-section/activities-section';
 import { Spinner } from '@/components/spinner/spinner';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
+import { useActivitiesAvailability } from '@/hooks/use-activities-availability';
 
 const DBMLSectionLazy = React.lazy(() =>
     import('./dbml-section/dbml-section').then((module) => ({
@@ -39,6 +41,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
     } = useLayout();
     const { isMd: isDesktop } = useBreakpoint('md');
     const conversationsAvailable = useConversationsAvailability();
+    const activitiesAvailable = useActivitiesAvailability();
 
     const handleMobileSectionChange = (value: string) => {
         if (value === 'conversations') {
@@ -92,6 +95,13 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                         )}
                                     </SelectItem>
                                 ) : null}
+                                {activitiesAvailable ? (
+                                    <SelectItem value="activities">
+                                        {t(
+                                            'side_panel.activities_section.title'
+                                        )}
+                                    </SelectItem>
+                                ) : null}
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -115,6 +125,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 <VisualsSection />
             ) : selectedSidebarSection === 'conversations' ? (
                 <ConversationsSection />
+            ) : selectedSidebarSection === 'activities' ? (
+                <ActivitiesSection />
             ) : (
                 <CustomTypesSection />
             )}

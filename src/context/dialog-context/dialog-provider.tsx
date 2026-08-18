@@ -20,8 +20,6 @@ import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diag
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
 import { ShareDiagramDialog } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
-import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
-import { ActivityFeedDialog } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
@@ -201,16 +199,6 @@ export const DialogProvider: React.FC<
             setOpenShareDiagramDialog(true);
         }, []);
 
-    const [openActivityFeedDialog, setOpenActivityFeedDialog] = useState(false);
-    const [activityFeedDialogParams, setActivityFeedDialogParams] =
-        useState<Omit<ActivityFeedDialogProps, 'dialog'>>();
-
-    const openActivityFeedDialogHandler: DialogContext['openActivityFeedDialog'] =
-        useCallback((params) => {
-            setActivityFeedDialogParams(params);
-            setOpenActivityFeedDialog(true);
-        }, []);
-
     const [
         openExportLaravelMigrationsDialog,
         setOpenExportLaravelMigrationsDialog,
@@ -277,8 +265,6 @@ export const DialogProvider: React.FC<
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
                 openShareDiagramDialog: openShareDiagramDialogHandler,
                 closeShareDiagramDialog: () => setOpenShareDiagramDialog(false),
-                openActivityFeedDialog: openActivityFeedDialogHandler,
-                closeActivityFeedDialog: () => setOpenActivityFeedDialog(false),
                 openExportLaravelMigrationsDialog:
                     openExportLaravelMigrationsDialogHandler,
                 closeExportLaravelMigrationsDialog: () =>
@@ -383,12 +369,6 @@ export const DialogProvider: React.FC<
                 <ShareDiagramDialog
                     dialog={{ open: openShareDiagramDialog }}
                     {...shareDiagramDialogParams}
-                />
-            ) : null}
-            {activityFeedDialogParams ? (
-                <ActivityFeedDialog
-                    dialog={{ open: openActivityFeedDialog }}
-                    {...activityFeedDialogParams}
                 />
             ) : null}
             {exportLaravelMigrationsDialogParams ? (

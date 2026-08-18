@@ -13,6 +13,7 @@ export const id_ID: LanguageTranslation = {
             conversations_unread_aria:
                 '{{count}} pesan belum dibaca dalam percakapan',
             visuals: 'Visual',
+            activities: 'Aktivitas',
         },
         menu: {
             actions: {
@@ -591,6 +592,56 @@ export const id_ID: LanguageTranslation = {
                     unknown: 'Percakapan',
                 },
             },
+            activities_section: {
+                title: 'Aktivitas',
+                filter: 'Filter',
+                clear: 'Hapus Filter',
+                no_results:
+                    'Tidak ada aktivitas yang cocok dengan filter Anda.',
+                loading: 'Memuat aktivitas…',
+                retry: 'Coba lagi',
+                type_filter: {
+                    trigger: 'Jenis',
+                    label: 'Filter menurut jenis',
+                    trigger_aria: 'Filter menurut jenis aktivitas',
+                },
+                types: {
+                    diagram: 'Diagram',
+                    table: 'Tabel',
+                    field: 'Kolom',
+                    relationship: 'Relasi',
+                    note: 'Catatan',
+                    area: 'Area',
+                    dependency: 'Dependensi',
+                },
+                you: 'Anda',
+                unknown_user: 'Seseorang',
+                empty_state: {
+                    title: 'Belum ada aktivitas',
+                    description:
+                        'Mulai mengedit untuk melihat perubahan terbaru.',
+                },
+                errors: {
+                    load_failed: 'Tidak dapat memuat aktivitas.',
+                },
+                actions: {
+                    add_tables: '{{user}} menambahkan tabel {{table}}',
+                    remove_tables: '{{user}} menghapus tabel',
+                    add_field: '{{user}} menambahkan kolom {{field}}',
+                    remove_field: '{{user}} menghapus kolom',
+                    update_field: '{{user}} memperbarui kolom {{field}}',
+                    add_relationships: '{{user}} menambahkan relasi',
+                    remove_relationships: '{{user}} menghapus relasi',
+                    update_relationship: '{{user}} memperbarui relasi',
+                    add_notes: '{{user}} menambahkan catatan',
+                    remove_notes: '{{user}} menghapus catatan',
+                    add_areas: '{{user}} menambahkan area',
+                    remove_areas: '{{user}} menghapus area',
+                    add_dependencies: '{{user}} menambahkan dependensi',
+                    remove_dependencies: '{{user}} menghapus dependensi',
+                    fallback: '{{user}} memperbarui diagram',
+                },
+            },
         },
 
         toolbar: {
@@ -668,36 +719,6 @@ export const id_ID: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {

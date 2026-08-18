@@ -9,7 +9,6 @@ import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/i
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
-import type { ActivityFeedDialogProps } from '@/dialogs/activity-feed-dialog/activity-feed-dialog';
 import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
@@ -33,12 +32,6 @@ export interface DialogContext {
         params: Omit<ShareDiagramDialogProps, 'dialog'>
     ) => void;
     closeShareDiagramDialog: () => void;
-
-    // Activity feed dialog
-    openActivityFeedDialog: (
-        params: Omit<ActivityFeedDialogProps, 'dialog'>
-    ) => void;
-    closeActivityFeedDialog: () => void;
 
     // Export Laravel migrations dialog
     openExportLaravelMigrationsDialog: (
@@ -118,8 +111,6 @@ export const dialogContext = createContext<DialogContext>({
     closeOpenDiagramDialog: emptyFn,
     openShareDiagramDialog: emptyFn,
     closeShareDiagramDialog: emptyFn,
-    openActivityFeedDialog: emptyFn,
-    closeActivityFeedDialog: emptyFn,
     openExportLaravelMigrationsDialog: emptyFn,
     closeExportLaravelMigrationsDialog: emptyFn,
     openLaravelMigrationImportDialog: emptyFn,

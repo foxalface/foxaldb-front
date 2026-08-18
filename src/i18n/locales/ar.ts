@@ -13,6 +13,7 @@ export const ar: LanguageTranslation = {
             conversations_unread_aria:
                 '{{count}} رسائل غير مقروءة في المحادثات',
             visuals: 'مرئيات',
+            activities: 'النشاط',
         },
         menu: {
             actions: {
@@ -580,6 +581,54 @@ export const ar: LanguageTranslation = {
                     unknown: 'محادثة',
                 },
             },
+            activities_section: {
+                title: 'النشاط',
+                filter: 'تصفية',
+                clear: 'مسح الفلتر',
+                no_results: 'لم يتم العثور على نشاط يطابق الفلتر.',
+                loading: 'جارٍ تحميل النشاط…',
+                retry: 'إعادة المحاولة',
+                type_filter: {
+                    trigger: 'النوع',
+                    label: 'تصفية حسب النوع',
+                    trigger_aria: 'تصفية حسب نوع النشاط',
+                },
+                types: {
+                    diagram: 'المخطط',
+                    table: 'جدول',
+                    field: 'حقل',
+                    relationship: 'علاقة',
+                    note: 'ملاحظة',
+                    area: 'منطقة',
+                    dependency: 'تبعية',
+                },
+                you: 'أنت',
+                unknown_user: 'شخص ما',
+                empty_state: {
+                    title: 'لا يوجد نشاط بعد',
+                    description: 'ابدأ التحرير لرؤية التغييرات الأخيرة.',
+                },
+                errors: {
+                    load_failed: 'تعذر تحميل النشاط.',
+                },
+                actions: {
+                    add_tables: 'أضاف {{user}} الجدول {{table}}',
+                    remove_tables: 'أزال {{user}} جدولاً',
+                    add_field: 'أضاف {{user}} الحقل {{field}}',
+                    remove_field: 'أزال {{user}} حقلاً',
+                    update_field: 'حدّث {{user}} الحقل {{field}}',
+                    add_relationships: 'أضاف {{user}} علاقة',
+                    remove_relationships: 'أزال {{user}} علاقة',
+                    update_relationship: 'حدّث {{user}} علاقة',
+                    add_notes: 'أضاف {{user}} ملاحظة',
+                    remove_notes: 'أزال {{user}} ملاحظة',
+                    add_areas: 'أضاف {{user}} منطقة',
+                    remove_areas: 'أزال {{user}} منطقة',
+                    add_dependencies: 'أضاف {{user}} تبعية',
+                    remove_dependencies: 'أزال {{user}} تبعية',
+                    fallback: 'حدّث {{user}} المخطط',
+                },
+            },
         },
 
         toolbar: {
@@ -656,36 +705,6 @@ export const ar: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {

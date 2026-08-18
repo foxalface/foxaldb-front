@@ -13,6 +13,7 @@ export const uk: LanguageTranslation = {
             conversations_unread_aria:
                 '{{count}} непрочитаних повідомлень у розмовах',
             visuals: 'Візуальні елементи',
+            activities: 'Активність',
         },
         menu: {
             actions: {
@@ -591,6 +592,55 @@ export const uk: LanguageTranslation = {
                     unknown: 'Розмова',
                 },
             },
+            activities_section: {
+                title: 'Активність',
+                filter: 'Фільтр',
+                clear: 'Очистити фільтр',
+                no_results: 'Активність, що відповідає фільтру, не знайдена.',
+                loading: 'Завантаження активності…',
+                retry: 'Повторити',
+                type_filter: {
+                    trigger: 'Тип',
+                    label: 'Фільтр за типом',
+                    trigger_aria: 'Фільтр за типом активності',
+                },
+                types: {
+                    diagram: 'Діаграма',
+                    table: 'Таблиця',
+                    field: 'Поле',
+                    relationship: 'Зв’язок',
+                    note: 'Нотатка',
+                    area: 'Область',
+                    dependency: 'Залежність',
+                },
+                you: 'Ви',
+                unknown_user: 'Хтось',
+                empty_state: {
+                    title: 'Поки що немає активності',
+                    description:
+                        'Почніть редагування, щоб побачити останні зміни.',
+                },
+                errors: {
+                    load_failed: 'Не вдалося завантажити активність.',
+                },
+                actions: {
+                    add_tables: '{{user}} додав(ла) таблицю {{table}}',
+                    remove_tables: '{{user}} видалив(ла) таблицю',
+                    add_field: '{{user}} додав(ла) поле {{field}}',
+                    remove_field: '{{user}} видалив(ла) поле',
+                    update_field: '{{user}} оновив(ла) поле {{field}}',
+                    add_relationships: '{{user}} додав(ла) зв’язок',
+                    remove_relationships: '{{user}} видалив(ла) зв’язок',
+                    update_relationship: '{{user}} оновив(ла) зв’язок',
+                    add_notes: '{{user}} додав(ла) нотатку',
+                    remove_notes: '{{user}} видалив(ла) нотатку',
+                    add_areas: '{{user}} додав(ла) область',
+                    remove_areas: '{{user}} видалив(ла) область',
+                    add_dependencies: '{{user}} додав(ла) залежність',
+                    remove_dependencies: '{{user}} видалив(ла) залежність',
+                    fallback: '{{user}} оновив(ла) діаграму',
+                },
+            },
         },
 
         toolbar: {
@@ -668,36 +718,6 @@ export const uk: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {

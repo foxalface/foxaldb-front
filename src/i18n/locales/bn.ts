@@ -12,6 +12,7 @@ export const bn: LanguageTranslation = {
             conversations: 'কথোপকথন',
             conversations_unread_aria: 'কথোপকথনে {{count}} অপঠিত বার্তা',
             visuals: 'ভিজ্যুয়াল',
+            activities: 'কার্যকলাপ',
         },
         menu: {
             actions: {
@@ -582,6 +583,56 @@ export const bn: LanguageTranslation = {
                     unknown: 'কথোপকথন',
                 },
             },
+            activities_section: {
+                title: 'কার্যকলাপ',
+                filter: 'ফিল্টার',
+                clear: 'ফিল্টার মুছুন',
+                no_results:
+                    'আপনার ফিল্টারের সাথে মিলে এমন কোনো কার্যকলাপ পাওয়া যায়নি।',
+                loading: 'কার্যকলাপ লোড হচ্ছে…',
+                retry: 'পুনরায় চেষ্টা করুন',
+                type_filter: {
+                    trigger: 'ধরন',
+                    label: 'ধরন অনুযায়ী ফিল্টার',
+                    trigger_aria: 'কার্যকলাপের ধরন অনুযায়ী ফিল্টার',
+                },
+                types: {
+                    diagram: 'ডায়াগ্রাম',
+                    table: 'টেবিল',
+                    field: 'ফিল্ড',
+                    relationship: 'সম্পর্ক',
+                    note: 'নোট',
+                    area: 'এলাকা',
+                    dependency: 'নির্ভরতা',
+                },
+                you: 'আপনি',
+                unknown_user: 'কেউ একজন',
+                empty_state: {
+                    title: 'এখনও কোনো কার্যকলাপ নেই',
+                    description:
+                        'সাম্প্রতিক পরিবর্তন দেখতে সম্পাদনা শুরু করুন।',
+                },
+                errors: {
+                    load_failed: 'কার্যকলাপ লোড করা যায়নি।',
+                },
+                actions: {
+                    add_tables: '{{user}} টেবিল {{table}} যোগ করেছেন',
+                    remove_tables: '{{user}} একটি টেবিল সরিয়েছেন',
+                    add_field: '{{user}} ফিল্ড {{field}} যোগ করেছেন',
+                    remove_field: '{{user}} একটি ফিল্ড সরিয়েছেন',
+                    update_field: '{{user}} ফিল্ড {{field}} আপডেট করেছেন',
+                    add_relationships: '{{user}} একটি সম্পর্ক যোগ করেছেন',
+                    remove_relationships: '{{user}} একটি সম্পর্ক সরিয়েছেন',
+                    update_relationship: '{{user}} একটি সম্পর্ক আপডেট করেছেন',
+                    add_notes: '{{user}} একটি নোট যোগ করেছেন',
+                    remove_notes: '{{user}} একটি নোট সরিয়েছেন',
+                    add_areas: '{{user}} একটি এলাকা যোগ করেছেন',
+                    remove_areas: '{{user}} একটি এলাকা সরিয়েছেন',
+                    add_dependencies: '{{user}} একটি নির্ভরতা যোগ করেছেন',
+                    remove_dependencies: '{{user}} একটি নির্ভরতা সরিয়েছেন',
+                    fallback: '{{user}} ডায়াগ্রাম আপডেট করেছেন',
+                },
+            },
         },
 
         toolbar: {
@@ -660,36 +711,6 @@ export const bn: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {

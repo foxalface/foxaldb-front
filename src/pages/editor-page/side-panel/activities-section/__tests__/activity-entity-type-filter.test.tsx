@@ -3,9 +3,9 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { en } from '@/i18n/locales/en';
-import type { ConversationTargetType } from '@/lib/conversations/conversation-types';
-import { ConversationTargetTypeFilter } from '../conversation-target-type-filter';
-import { DEFAULT_SELECTED_CONVERSATION_TARGET_TYPES } from '../filter-conversations';
+import type { ActivityEntityType } from '@/components/side-panel/side-panel-entity-type-icons';
+import { ActivityEntityTypeFilter } from '../activity-entity-type-filter';
+import { DEFAULT_SELECTED_ACTIVITY_ENTITY_TYPES } from '../filter-activities';
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
@@ -38,100 +38,106 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
-const StatefulConversationTargetTypeFilter: React.FC = () => {
-    const [selectedTargetTypes, setSelectedTargetTypes] = useState<
-        ConversationTargetType[]
-    >(DEFAULT_SELECTED_CONVERSATION_TARGET_TYPES);
+const StatefulActivityEntityTypeFilter: React.FC = () => {
+    const [selectedEntityTypes, setSelectedEntityTypes] = useState<
+        ActivityEntityType[]
+    >(DEFAULT_SELECTED_ACTIVITY_ENTITY_TYPES);
 
     return (
-        <ConversationTargetTypeFilter
-            selectedTargetTypes={selectedTargetTypes}
-            onSelectedTargetTypesChange={setSelectedTargetTypes}
+        <ActivityEntityTypeFilter
+            selectedEntityTypes={selectedEntityTypes}
+            onSelectedEntityTypesChange={setSelectedEntityTypes}
         />
     );
 };
 
-describe('ConversationTargetTypeFilter', () => {
-    it('toggles selected target types', async () => {
+describe('ActivityEntityTypeFilter', () => {
+    it('toggles selected entity types', async () => {
         const user = userEvent.setup();
 
-        render(<StatefulConversationTargetTypeFilter />);
+        render(<StatefulActivityEntityTypeFilter />);
 
         await user.click(
-            screen.getByRole('button', { name: 'Filter by conversation type' })
+            screen.getByRole('button', { name: 'Filter by activity type' })
         );
         await user.click(screen.getByRole('checkbox', { name: 'Diagram' }));
-        await user.click(screen.getByRole('checkbox', { name: 'Field' }));
-        await user.click(
-            screen.getByRole('checkbox', { name: 'Relationship' })
-        );
+        await user.click(screen.getByRole('checkbox', { name: 'Note' }));
 
         expect(screen.getByRole('checkbox', { name: 'Table' })).toBeChecked();
         expect(
             screen.getByRole('checkbox', { name: 'Diagram' })
         ).not.toBeChecked();
+        expect(
+            screen.getByRole('checkbox', { name: 'Note' })
+        ).not.toBeChecked();
     });
 
     it('uses a stable trigger label', () => {
         render(
-            <ConversationTargetTypeFilter
-                selectedTargetTypes={['table', 'field']}
-                onSelectedTargetTypesChange={vi.fn()}
+            <ActivityEntityTypeFilter
+                selectedEntityTypes={['table', 'field']}
+                onSelectedEntityTypesChange={vi.fn()}
             />
         );
 
         expect(
             screen.getByRole('button', {
-                name: 'Filter by conversation type',
+                name: 'Filter by activity type',
             })
         ).toHaveTextContent('Type');
     });
 
     it('selects all from the header checkbox when partially selected', async () => {
         const user = userEvent.setup();
-        const onSelectedTargetTypesChange = vi.fn();
+        const onSelectedEntityTypesChange = vi.fn();
 
         render(
-            <ConversationTargetTypeFilter
-                selectedTargetTypes={['table']}
-                onSelectedTargetTypesChange={onSelectedTargetTypesChange}
+            <ActivityEntityTypeFilter
+                selectedEntityTypes={['table']}
+                onSelectedEntityTypesChange={onSelectedEntityTypesChange}
             />
         );
 
         await user.click(
-            screen.getByRole('button', { name: 'Filter by conversation type' })
+            screen.getByRole('button', { name: 'Filter by activity type' })
         );
         await user.click(screen.getByRole('checkbox', { name: 'Select All' }));
 
-        expect(onSelectedTargetTypesChange).toHaveBeenCalledWith([
+        expect(onSelectedEntityTypesChange).toHaveBeenCalledWith([
             'diagram',
             'table',
             'field',
             'relationship',
+            'note',
+            'area',
+            'dependency',
         ]);
     });
 
     it('deselects all from the header checkbox when fully selected', async () => {
         const user = userEvent.setup();
-        const onSelectedTargetTypesChange = vi.fn();
+        const onSelectedEntityTypesChange = vi.fn();
 
         render(
-            <ConversationTargetTypeFilter
-                selectedTargetTypes={[
+            <ActivityEntityTypeFilter
+                selectedEntityTypes={[
                     'diagram',
                     'table',
                     'field',
                     'relationship',
+                    'note',
+                    'area',
+                    'dependency',
                 ]}
-                onSelectedTargetTypesChange={onSelectedTargetTypesChange}
+                onSelectedEntityTypesChange={onSelectedEntityTypesChange}
             />
         );
 
         await user.click(
-            screen.getByRole('button', { name: 'Filter by conversation type' })
+            screen.getByRole('button', { name: 'Filter by activity type' })
         );
         await user.click(screen.getByRole('checkbox', { name: 'Select All' }));
 
-        expect(onSelectedTargetTypesChange).toHaveBeenCalledWith([]);
+        expect(onSelectedEntityTypesChange).toHaveBeenCalledWith([]);
     });
 });

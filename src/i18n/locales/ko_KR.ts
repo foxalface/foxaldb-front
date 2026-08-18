@@ -12,6 +12,7 @@ export const ko_KR: LanguageTranslation = {
             conversations: '대화',
             conversations_unread_aria: '대화의 읽지 않은 메시지 {{count}}개',
             visuals: '시각화',
+            activities: '활동',
         },
         menu: {
             actions: {
@@ -582,6 +583,56 @@ export const ko_KR: LanguageTranslation = {
                     unknown: '대화',
                 },
             },
+            activities_section: {
+                title: '활동',
+                filter: '필터',
+                clear: '필터 지우기',
+                no_results: '필터와 일치하는 활동이 없습니다.',
+                loading: '활동을 불러오는 중…',
+                retry: '다시 시도',
+                type_filter: {
+                    trigger: '유형',
+                    label: '유형별 필터',
+                    trigger_aria: '활동 유형별로 필터',
+                },
+                types: {
+                    diagram: '다이어그램',
+                    table: '테이블',
+                    field: '필드',
+                    relationship: '관계',
+                    note: '메모',
+                    area: '영역',
+                    dependency: '종속성',
+                },
+                you: '나',
+                unknown_user: '누군가',
+                empty_state: {
+                    title: '아직 활동이 없습니다',
+                    description: '편집을 시작하면 최근 변경 사항이 표시됩니다.',
+                },
+                errors: {
+                    load_failed: '활동을 불러올 수 없습니다.',
+                },
+                actions: {
+                    add_tables:
+                        '{{user}}님이 테이블 {{table}}을(를) 추가했습니다',
+                    remove_tables: '{{user}}님이 테이블을 삭제했습니다',
+                    add_field: '{{user}}님이 필드 {{field}}을(를) 추가했습니다',
+                    remove_field: '{{user}}님이 필드를 삭제했습니다',
+                    update_field:
+                        '{{user}}님이 필드 {{field}}을(를) 업데이트했습니다',
+                    add_relationships: '{{user}}님이 관계를 추가했습니다',
+                    remove_relationships: '{{user}}님이 관계를 삭제했습니다',
+                    update_relationship: '{{user}}님이 관계를 업데이트했습니다',
+                    add_notes: '{{user}}님이 메모를 추가했습니다',
+                    remove_notes: '{{user}}님이 메모를 삭제했습니다',
+                    add_areas: '{{user}}님이 영역을 추가했습니다',
+                    remove_areas: '{{user}}님이 영역을 삭제했습니다',
+                    add_dependencies: '{{user}}님이 종속성을 추가했습니다',
+                    remove_dependencies: '{{user}}님이 종속성을 삭제했습니다',
+                    fallback: '{{user}}님이 다이어그램을 업데이트했습니다',
+                },
+            },
         },
 
         toolbar: {
@@ -659,36 +710,6 @@ export const ko_KR: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {

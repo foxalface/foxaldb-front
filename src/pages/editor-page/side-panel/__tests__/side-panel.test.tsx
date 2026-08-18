@@ -6,29 +6,36 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { SidebarSection } from '@/context/layout-context/layout-context';
 import { en } from '@/i18n/locales/en';
 
-const { layoutState, conversationsAvailabilityState, breakpointState } =
-    vi.hoisted(() => {
-        const state = {
-            selectedSidebarSection: 'tables' as SidebarSection,
-            selectSidebarSection: vi.fn(),
-            openConversationsPanel: vi.fn(),
-        };
-        state.selectSidebarSection = vi.fn((section: SidebarSection) => {
-            state.selectedSidebarSection = section;
-        });
-        state.openConversationsPanel = vi.fn(() => {
-            state.selectedSidebarSection = 'conversations';
-        });
-        return {
-            layoutState: state,
-            conversationsAvailabilityState: {
-                isAvailable: false,
-            },
-            breakpointState: {
-                isMd: false,
-            },
-        };
+const {
+    layoutState,
+    conversationsAvailabilityState,
+    activitiesAvailabilityState,
+    breakpointState,
+} = vi.hoisted(() => {
+    const state = {
+        selectedSidebarSection: 'tables' as SidebarSection,
+        selectSidebarSection: vi.fn(),
+        openConversationsPanel: vi.fn(),
+    };
+    state.selectSidebarSection = vi.fn((section: SidebarSection) => {
+        state.selectedSidebarSection = section;
     });
+    state.openConversationsPanel = vi.fn(() => {
+        state.selectedSidebarSection = 'conversations';
+    });
+    return {
+        layoutState: state,
+        conversationsAvailabilityState: {
+            isAvailable: false,
+        },
+        activitiesAvailabilityState: {
+            isAvailable: false,
+        },
+        breakpointState: {
+            isMd: false,
+        },
+    };
+});
 
 vi.mock('@/hooks/use-layout', () => ({
     useLayout: () => ({
@@ -47,6 +54,10 @@ vi.mock('@/hooks/use-layout', () => ({
 vi.mock('@/hooks/use-conversations-availability', () => ({
     useConversationsAvailability: () =>
         conversationsAvailabilityState.isAvailable,
+}));
+
+vi.mock('@/hooks/use-activities-availability', () => ({
+    useActivitiesAvailability: () => activitiesAvailabilityState.isAvailable,
 }));
 
 vi.mock('@/hooks/use-breakpoint', () => ({
@@ -194,6 +205,12 @@ vi.mock('../conversations-section/conversations-section', () => ({
     ),
 }));
 
+vi.mock('../activities-section/activities-section', () => ({
+    ActivitiesSection: () => (
+        <div data-testid="activities-section">ActivitiesSection</div>
+    ),
+}));
+
 vi.mock('../dbml-section/dbml-section', () => ({
     DBMLSection: () => <div data-testid="dbml-section">DBMLSection</div>,
 }));
@@ -210,6 +227,7 @@ describe('SidePanel conversations routing', () => {
             layoutState.selectedSidebarSection = 'conversations';
         });
         conversationsAvailabilityState.isAvailable = false;
+        activitiesAvailabilityState.isAvailable = false;
         breakpointState.isMd = false;
     });
 
@@ -301,5 +319,21 @@ describe('SidePanel conversations routing', () => {
             screen.queryByTestId('mobile-section-select')
         ).not.toBeInTheDocument();
         expect(screen.getByTestId('conversations-section')).toBeInTheDocument();
+    });
+
+    it('includes Activity in the mobile selector when activities are available', () => {
+        activitiesAvailabilityState.isAvailable = true;
+        render(<SidePanel />);
+
+        expect(
+            screen.getByRole('option', { name: 'Activity' })
+        ).toHaveAttribute('data-value', 'activities');
+    });
+
+    it('renders ActivitiesSection when selectedSidebarSection is activities', () => {
+        layoutState.selectedSidebarSection = 'activities';
+        render(<SidePanel />);
+
+        expect(screen.getByTestId('activities-section')).toBeInTheDocument();
     });
 });

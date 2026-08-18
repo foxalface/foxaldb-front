@@ -13,6 +13,7 @@ export const vi: LanguageTranslation = {
             conversations_unread_aria:
                 '{{count}} tin nhắn chưa đọc trong hội thoại',
             visuals: 'Hình ảnh',
+            activities: 'Hoạt động',
         },
         menu: {
             actions: {
@@ -590,6 +591,56 @@ export const vi: LanguageTranslation = {
                     unknown: 'Cuộc trò chuyện',
                 },
             },
+            activities_section: {
+                title: 'Hoạt động',
+                filter: 'Lọc',
+                clear: 'Xóa bộ lọc',
+                no_results:
+                    'Không tìm thấy hoạt động nào khớp với bộ lọc của bạn.',
+                loading: 'Đang tải hoạt động…',
+                retry: 'Thử lại',
+                type_filter: {
+                    trigger: 'Loại',
+                    label: 'Lọc theo loại',
+                    trigger_aria: 'Lọc theo loại hoạt động',
+                },
+                types: {
+                    diagram: 'Sơ đồ',
+                    table: 'Bảng',
+                    field: 'Trường',
+                    relationship: 'Quan hệ',
+                    note: 'Ghi chú',
+                    area: 'Vùng',
+                    dependency: 'Phụ thuộc',
+                },
+                you: 'Bạn',
+                unknown_user: 'Ai đó',
+                empty_state: {
+                    title: 'Chưa có hoạt động',
+                    description:
+                        'Bắt đầu chỉnh sửa để xem các thay đổi gần đây.',
+                },
+                errors: {
+                    load_failed: 'Không thể tải hoạt động.',
+                },
+                actions: {
+                    add_tables: '{{user}} đã thêm bảng {{table}}',
+                    remove_tables: '{{user}} đã xóa một bảng',
+                    add_field: '{{user}} đã thêm trường {{field}}',
+                    remove_field: '{{user}} đã xóa một trường',
+                    update_field: '{{user}} đã cập nhật trường {{field}}',
+                    add_relationships: '{{user}} đã thêm quan hệ',
+                    remove_relationships: '{{user}} đã xóa quan hệ',
+                    update_relationship: '{{user}} đã cập nhật quan hệ',
+                    add_notes: '{{user}} đã thêm ghi chú',
+                    remove_notes: '{{user}} đã xóa ghi chú',
+                    add_areas: '{{user}} đã thêm vùng',
+                    remove_areas: '{{user}} đã xóa vùng',
+                    add_dependencies: '{{user}} đã thêm phụ thuộc',
+                    remove_dependencies: '{{user}} đã xóa phụ thuộc',
+                    fallback: '{{user}} đã cập nhật sơ đồ',
+                },
+            },
         },
 
         toolbar: {
@@ -667,36 +718,6 @@ export const vi: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {

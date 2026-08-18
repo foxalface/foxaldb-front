@@ -8,68 +8,66 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/popover/popover';
-import { ConversationTargetTypeIcon } from '@/components/conversations/conversation-target-type-icon';
+import { SidePanelEntityTypeIcon } from '@/components/side-panel/side-panel-entity-type-icon';
 import {
-    CONVERSATION_TARGET_TYPES,
-    type ConversationTargetType,
-} from '@/lib/conversations/conversation-types';
+    ACTIVITY_ENTITY_TYPES,
+    type ActivityEntityType,
+} from '@/components/side-panel/side-panel-entity-type-icons';
 import { SidePanelTypeFilterHeader } from '@/components/side-panel/side-panel-type-filter-header';
 import {
     getTypeFilterCheckboxState,
     getTypeFilterSelectionAfterHeaderToggle,
 } from '@/components/side-panel/side-panel-type-filter-utils';
 
-const TARGETS_KEY = 'side_panel.conversations_section.targets';
+const TYPES_KEY = 'side_panel.activities_section.types';
 
-export interface ConversationTargetTypeFilterProps {
-    selectedTargetTypes: ReadonlyArray<ConversationTargetType>;
-    onSelectedTargetTypesChange: (
-        targetTypes: ConversationTargetType[]
-    ) => void;
+export interface ActivityEntityTypeFilterProps {
+    selectedEntityTypes: ReadonlyArray<ActivityEntityType>;
+    onSelectedEntityTypesChange: (entityTypes: ActivityEntityType[]) => void;
 }
 
-export const ConversationTargetTypeFilter: React.FC<
-    ConversationTargetTypeFilterProps
-> = ({ selectedTargetTypes, onSelectedTargetTypesChange }) => {
+export const ActivityEntityTypeFilter: React.FC<
+    ActivityEntityTypeFilterProps
+> = ({ selectedEntityTypes, onSelectedEntityTypesChange }) => {
     const { t } = useTranslation();
 
     const handleToggleType = useCallback(
-        (targetType: ConversationTargetType, checked: boolean) => {
+        (entityType: ActivityEntityType, checked: boolean) => {
             if (checked) {
-                onSelectedTargetTypesChange([
-                    ...selectedTargetTypes,
-                    targetType,
+                onSelectedEntityTypesChange([
+                    ...selectedEntityTypes,
+                    entityType,
                 ]);
                 return;
             }
 
-            onSelectedTargetTypesChange(
-                selectedTargetTypes.filter((type) => type !== targetType)
+            onSelectedEntityTypesChange(
+                selectedEntityTypes.filter((type) => type !== entityType)
             );
         },
-        [onSelectedTargetTypesChange, selectedTargetTypes]
+        [onSelectedEntityTypesChange, selectedEntityTypes]
     );
 
     const headerCheckedState = useMemo(
         () =>
             getTypeFilterCheckboxState(
-                selectedTargetTypes.length,
-                CONVERSATION_TARGET_TYPES.length
+                selectedEntityTypes.length,
+                ACTIVITY_ENTITY_TYPES.length
             ),
-        [selectedTargetTypes.length]
+        [selectedEntityTypes.length]
     );
 
     const handleToggleAll = useCallback(() => {
-        onSelectedTargetTypesChange(
+        onSelectedEntityTypesChange(
             getTypeFilterSelectionAfterHeaderToggle(
-                selectedTargetTypes,
-                CONVERSATION_TARGET_TYPES
+                selectedEntityTypes,
+                ACTIVITY_ENTITY_TYPES
             )
         );
-    }, [onSelectedTargetTypesChange, selectedTargetTypes]);
+    }, [onSelectedEntityTypesChange, selectedEntityTypes]);
 
     const triggerAriaLabel = t(
-        'side_panel.conversations_section.type_filter.trigger_aria'
+        'side_panel.activities_section.type_filter.trigger_aria'
     );
 
     return (
@@ -82,35 +80,35 @@ export const ConversationTargetTypeFilter: React.FC<
                     aria-label={triggerAriaLabel}
                 >
                     <ListFilter className="h-4" aria-hidden="true" />
-                    {t('side_panel.conversations_section.type_filter.trigger')}
+                    {t('side_panel.activities_section.type_filter.trigger')}
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-52 p-3">
                 <div className="flex flex-col gap-2">
                     <SidePanelTypeFilterHeader
                         label={t(
-                            'side_panel.conversations_section.type_filter.label'
+                            'side_panel.activities_section.type_filter.label'
                         )}
                         checkedState={headerCheckedState}
                         onCheckedChange={handleToggleAll}
                         checkboxAriaLabel={t('select_all')}
                     />
                     <ul className="flex flex-col gap-1" role="list">
-                        {CONVERSATION_TARGET_TYPES.map((targetType) => {
+                        {ACTIVITY_ENTITY_TYPES.map((entityType) => {
                             const isChecked =
-                                selectedTargetTypes.includes(targetType);
+                                selectedEntityTypes.includes(entityType);
 
                             return (
-                                <li key={targetType}>
+                                <li key={entityType}>
                                     <label className="flex cursor-pointer items-center justify-between gap-2 rounded-md px-1 py-1.5 hover:bg-muted/60">
                                         <span className="inline-flex min-w-0 items-center gap-2 text-sm">
-                                            <ConversationTargetTypeIcon
-                                                targetType={targetType}
+                                            <SidePanelEntityTypeIcon
+                                                entityType={entityType}
                                                 className="text-muted-foreground"
                                             />
                                             <span className="truncate">
                                                 {t(
-                                                    `${TARGETS_KEY}.${targetType}`
+                                                    `${TYPES_KEY}.${entityType}`
                                                 )}
                                             </span>
                                         </span>
@@ -118,12 +116,12 @@ export const ConversationTargetTypeFilter: React.FC<
                                             checked={isChecked}
                                             onCheckedChange={(value) =>
                                                 handleToggleType(
-                                                    targetType,
+                                                    entityType,
                                                     value === true
                                                 )
                                             }
                                             aria-label={t(
-                                                `${TARGETS_KEY}.${targetType}`
+                                                `${TYPES_KEY}.${entityType}`
                                             )}
                                         />
                                     </label>

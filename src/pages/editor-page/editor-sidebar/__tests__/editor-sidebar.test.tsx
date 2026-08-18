@@ -7,7 +7,11 @@ import type { SidebarSection } from '@/context/layout-context/layout-context';
 import { en } from '@/i18n/locales/en';
 import { SidebarProvider } from '@/components/sidebar/sidebar';
 
-const { layoutState, conversationsAvailabilityState } = vi.hoisted(() => ({
+const {
+    layoutState,
+    conversationsAvailabilityState,
+    activitiesAvailabilityState,
+} = vi.hoisted(() => ({
     layoutState: {
         selectedSidebarSection: 'tables' as SidebarSection,
         isSidePanelShowed: true,
@@ -15,6 +19,9 @@ const { layoutState, conversationsAvailabilityState } = vi.hoisted(() => ({
         selectVisualsTab: vi.fn(),
     },
     conversationsAvailabilityState: {
+        isAvailable: false,
+    },
+    activitiesAvailabilityState: {
         isAvailable: false,
     },
 }));
@@ -26,6 +33,10 @@ vi.mock('@/hooks/use-layout', () => ({
 vi.mock('@/hooks/use-conversations-availability', () => ({
     useConversationsAvailability: () =>
         conversationsAvailabilityState.isAvailable,
+}));
+
+vi.mock('@/hooks/use-activities-availability', () => ({
+    useActivitiesAvailability: () => activitiesAvailabilityState.isAvailable,
 }));
 
 vi.mock('@/hooks/use-breakpoint', () => ({
@@ -93,6 +104,7 @@ describe('EditorSidebar conversations entry', () => {
         layoutState.toggleSidebarSection = vi.fn();
         layoutState.selectVisualsTab = vi.fn();
         conversationsAvailabilityState.isAvailable = false;
+        activitiesAvailabilityState.isAvailable = false;
         diagramConversationsState.totalUnreadCount = 0;
     });
 
@@ -192,5 +204,44 @@ describe('EditorSidebar conversations unread badge', () => {
         expect(
             screen.queryByTestId('conversation-unread-badge')
         ).not.toBeInTheDocument();
+    });
+});
+
+describe('EditorSidebar activities entry', () => {
+    beforeEach(() => {
+        layoutState.selectedSidebarSection = 'tables';
+        layoutState.isSidePanelShowed = true;
+        layoutState.toggleSidebarSection = vi.fn();
+        activitiesAvailabilityState.isAvailable = false;
+    });
+
+    it('shows the Activity item when activities are available', () => {
+        activitiesAvailabilityState.isAvailable = true;
+        renderSidebar();
+
+        expect(
+            screen.getByRole('button', { name: 'Activity' })
+        ).toBeInTheDocument();
+    });
+
+    it('hides the Activity item when activities are unavailable', () => {
+        activitiesAvailabilityState.isAvailable = false;
+        renderSidebar();
+
+        expect(
+            screen.queryByRole('button', { name: 'Activity' })
+        ).not.toBeInTheDocument();
+    });
+
+    it('toggles the activities panel on click', async () => {
+        activitiesAvailabilityState.isAvailable = true;
+        const user = userEvent.setup();
+        renderSidebar();
+
+        await user.click(screen.getByRole('button', { name: 'Activity' }));
+
+        expect(layoutState.toggleSidebarSection).toHaveBeenCalledWith(
+            'activities'
+        );
     });
 });

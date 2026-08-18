@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { TFunction } from 'i18next';
 import type { DiagramActivityResource } from '@/lib/api/diagram-activities';
-import { resolveActivityActorName } from '@/dialogs/activity-feed-dialog/format-activity-message';
+import { resolveActivityActorName } from '../format-activity-message';
 import { buildUserIdentity } from '@/lib/user';
 
 const t = ((key: string) => key) as TFunction;
@@ -32,6 +32,6 @@ describe('format-activity-message identity', () => {
     it('preserves null-user fallback', () => {
         expect(
             resolveActivityActorName(activity({ user: null, userId: null }), t)
-        ).toBe('activity_feed_dialog.unknown_user');
+        ).toBe('side_panel.activities_section.unknown_user');
     });
 });

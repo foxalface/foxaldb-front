@@ -9,7 +9,6 @@ import { Menu } from './menu/menu';
 import { AuthNavAction } from './auth-nav-action';
 import { PresenceAvatarStack } from '@/components/presence/presence-avatar-stack';
 import { ShareDiagramAction } from './share-diagram-action';
-import { ActivityFeedAction } from './activity-feed-action';
 import { DiagramAccessRoleIndicator } from './diagram-access-role-indicator';
 
 import type { EntryFlowActiveDiagramDeletionActions } from '@/pages/editor-page/entry-flow-active-diagram-deletion-actions';
@@ -47,7 +46,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
                 <DiagramAccessRoleIndicator />
                 <LastSaved />
-                <ActivityFeedAction />
                 <ShareDiagramAction />
                 <PresenceAvatarStack />
                 <AuthNavAction />

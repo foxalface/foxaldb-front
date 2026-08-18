@@ -1,24 +1,7 @@
 import React from 'react';
-import {
-    FileType2,
-    HelpCircle,
-    Table,
-    Waypoints,
-    Workflow,
-    type LucideIcon,
-} from 'lucide-react';
 import type { ConversationTargetType } from '@/lib/conversations/conversation-types';
+import { getSidePanelEntityTypeIcon } from '@/components/side-panel/side-panel-entity-type-icons';
 import { cn } from '@/lib/utils';
-
-const CONVERSATION_TARGET_TYPE_ICONS: Record<
-    ConversationTargetType,
-    LucideIcon
-> = {
-    diagram: Waypoints,
-    table: Table,
-    field: FileType2,
-    relationship: Workflow,
-};
 
 export interface ConversationTargetTypeIconProps {
     targetType: ConversationTargetType;
@@ -28,7 +11,7 @@ export interface ConversationTargetTypeIconProps {
 export const ConversationTargetTypeIcon: React.FC<
     ConversationTargetTypeIconProps
 > = ({ targetType, className }) => {
-    const Icon = CONVERSATION_TARGET_TYPE_ICONS[targetType] ?? HelpCircle;
+    const Icon = getSidePanelEntityTypeIcon(targetType);
 
     return (
         <Icon

@@ -20,7 +20,7 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({
     return (
         <li className="flex gap-3 border-b py-3 last:border-b-0">
             <Icon
-                className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+                className="mt-0.5 size-3.5 shrink-0 text-muted-foreground"
                 aria-hidden
             />
             <div className="min-w-0 flex-1">

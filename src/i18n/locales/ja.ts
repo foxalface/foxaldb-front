@@ -12,6 +12,7 @@ export const ja: LanguageTranslation = {
             conversations: '会話',
             conversations_unread_aria: '会話の未読メッセージ {{count}} 件',
             visuals: 'ビジュアル',
+            activities: 'アクティビティ',
         },
         menu: {
             actions: {
@@ -586,6 +587,58 @@ export const ja: LanguageTranslation = {
                     unknown: '会話',
                 },
             },
+            activities_section: {
+                title: 'アクティビティ',
+                filter: 'フィルター',
+                clear: 'フィルターをクリア',
+                no_results: 'フィルターに一致するアクティビティはありません。',
+                loading: 'アクティビティを読み込み中…',
+                retry: '再試行',
+                type_filter: {
+                    trigger: 'タイプ',
+                    label: 'タイプで絞り込む',
+                    trigger_aria: 'アクティビティのタイプで絞り込む',
+                },
+                types: {
+                    diagram: 'ダイアグラム',
+                    table: 'テーブル',
+                    field: 'フィールド',
+                    relationship: 'リレーションシップ',
+                    note: 'ノート',
+                    area: 'エリア',
+                    dependency: '依存関係',
+                },
+                you: 'あなた',
+                unknown_user: '誰か',
+                empty_state: {
+                    title: 'まだアクティビティはありません',
+                    description: '編集を開始すると、最近の変更が表示されます。',
+                },
+                errors: {
+                    load_failed: 'アクティビティを読み込めませんでした。',
+                },
+                actions: {
+                    add_tables: '{{user}} がテーブル {{table}} を追加しました',
+                    remove_tables: '{{user}} がテーブルを削除しました',
+                    add_field: '{{user}} がフィールド {{field}} を追加しました',
+                    remove_field: '{{user}} がフィールドを削除しました',
+                    update_field:
+                        '{{user}} がフィールド {{field}} を更新しました',
+                    add_relationships:
+                        '{{user}} がリレーションシップを追加しました',
+                    remove_relationships:
+                        '{{user}} がリレーションシップを削除しました',
+                    update_relationship:
+                        '{{user}} がリレーションシップを更新しました',
+                    add_notes: '{{user}} がノートを追加しました',
+                    remove_notes: '{{user}} がノートを削除しました',
+                    add_areas: '{{user}} がエリアを追加しました',
+                    remove_areas: '{{user}} がエリアを削除しました',
+                    add_dependencies: '{{user}} が依存関係を追加しました',
+                    remove_dependencies: '{{user}} が依存関係を削除しました',
+                    fallback: '{{user}} がダイアグラムを更新しました',
+                },
+            },
         },
 
         toolbar: {
@@ -664,36 +717,6 @@ export const ja: LanguageTranslation = {
 
         editor_role: {
             view_only: 'View only',
-        },
-
-        activity_feed_dialog: {
-            title: 'Activity',
-            description: 'Recent changes to this diagram.',
-            activity_button: 'Activity',
-            empty: 'No activity yet.',
-            empty_hint: 'Start editing to see recent changes.',
-            you: 'You',
-            unknown_user: 'Someone',
-            errors: {
-                load_failed: 'Could not load activity.',
-            },
-            actions: {
-                add_tables: '{{user}} added table {{table}}',
-                remove_tables: '{{user}} removed a table',
-                add_field: '{{user}} added field {{field}}',
-                remove_field: '{{user}} removed a field',
-                update_field: '{{user}} updated field {{field}}',
-                add_relationships: '{{user}} added a relationship',
-                remove_relationships: '{{user}} removed a relationship',
-                update_relationship: '{{user}} updated a relationship',
-                add_notes: '{{user}} added a note',
-                remove_notes: '{{user}} removed a note',
-                add_areas: '{{user}} added an area',
-                remove_areas: '{{user}} removed an area',
-                add_dependencies: '{{user}} added a dependency',
-                remove_dependencies: '{{user}} removed a dependency',
-                fallback: '{{user}} updated the diagram',
-            },
         },
 
         open_diagram_dialog: {
