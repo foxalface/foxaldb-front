@@ -987,13 +987,6 @@ export const fr: LanguageTranslation = {
                 cancel: 'Annuler',
             },
         },
-        star_us_dialog: {
-            title: 'Aidez-nous à nous améliorer',
-            description:
-                "Souhaitez-vous nous donner une étoile sur GitHub ? Il ne suffit que d'un clic !",
-            close: 'Pas maintenant',
-            confirm: 'Bien sûr !',
-        },
         export_diagram_dialog: {
             title: 'Exporter le Diagramme',
             description: "Sélectionner le format d'exportation :",

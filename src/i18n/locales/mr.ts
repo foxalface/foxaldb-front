@@ -986,13 +986,6 @@ export const mr: LanguageTranslation = {
         },
 
         // TODO: Add translations
-        star_us_dialog: {
-            title: 'आम्हाला सुधारण्यास मदत करा!',
-            description:
-                'तुम्हाला GitHub वर आम्हाला स्टार करायचे आहे का? हे फक्त एक क्लिक दूर आहे!',
-            close: 'आता नाही',
-            confirm: 'नक्कीच!',
-        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

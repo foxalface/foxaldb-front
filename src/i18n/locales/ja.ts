@@ -983,13 +983,6 @@ export const ja: LanguageTranslation = {
             cancel: 'キャンセル',
         },
         // TODO: Translate
-        star_us_dialog: {
-            title: '改善をサポートしてください！',
-            description:
-                'GitHubでスターを付けていただけますか？ クリックするだけです！',
-            close: '今はしない',
-            confirm: 'もちろん！',
-        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

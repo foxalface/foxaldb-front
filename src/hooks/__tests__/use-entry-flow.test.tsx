@@ -42,22 +42,8 @@ vi.mock('@/hooks/use-chartdb', () => ({
     }),
 }));
 
-vi.mock('@/hooks/use-dialog', () => ({
-    useDialog: () => ({
-        openStarUsDialog: vi.fn(),
-    }),
-}));
-
 vi.mock('@/hooks/use-breakpoint', () => ({
     useBreakpoint: () => ({ isMd: true }),
-}));
-
-vi.mock('@/hooks/use-local-config', () => ({
-    useLocalConfig: () => ({
-        starUsDialogLastOpen: 0,
-        setStarUsDialogLastOpen: vi.fn(),
-        githubRepoOpened: false,
-    }),
 }));
 
 vi.mock('@/pages/editor-page/use-diagram-autosave', () => ({
@@ -86,10 +72,6 @@ vi.mock('@/pages/editor-page/use-diagram-reconnect-refresh', () => ({
 
 vi.mock('@/pages/editor-page/use-diagram-operation-sync', () => ({
     useDiagramOperationSync: () => undefined,
-}));
-
-vi.mock('@/lib/env', () => ({
-    HIDE_CHARTDB_CLOUD: true,
 }));
 
 vi.mock('@/hooks/use-entry-flow-guest-resolution', () => ({

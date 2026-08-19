@@ -64,10 +64,6 @@ export interface DialogContext {
     ) => void;
     closeTableSchemaDialog: () => void;
 
-    // Star us dialog
-    openStarUsDialog: () => void;
-    closeStarUsDialog: () => void;
-
     // Auth dialog
     openAuthDialog: () => void;
     closeAuthDialog: () => void;
@@ -116,8 +112,6 @@ export const dialogContext = createContext<DialogContext>({
     closeImportDatabaseDialog: emptyFn,
     openTableSchemaDialog: emptyFn,
     closeTableSchemaDialog: emptyFn,
-    openStarUsDialog: emptyFn,
-    closeStarUsDialog: emptyFn,
     openAuthDialog: emptyFn,
     closeAuthDialog: emptyFn,
     openGuestDiagramMigrationDialog: emptyFn,

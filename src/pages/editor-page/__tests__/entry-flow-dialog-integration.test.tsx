@@ -51,7 +51,6 @@ vi.mock('@/hooks/use-dialog', () => ({
         closeOpenDiagramDialog,
         openGuestDiagramMigrationDialog: vi.fn(),
         closeGuestDiagramMigrationDialog: vi.fn(),
-        openStarUsDialog: vi.fn(),
     }),
 }));
 

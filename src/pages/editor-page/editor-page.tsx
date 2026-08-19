@@ -1,9 +1,7 @@
-import React, { Suspense, useCallback, useEffect, useMemo } from 'react';
+import React, { Suspense, useCallback, useMemo } from 'react';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useDialog } from '@/hooks/use-dialog';
 import { Toaster } from '@/components/toast/toaster';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
-import { useLocalConfig } from '@/hooks/use-local-config';
 import { FullScreenLoaderProvider } from '@/context/full-screen-spinner-context/full-screen-spinner-provider';
 import { LayoutProvider } from '@/context/layout-context/layout-provider';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
@@ -21,7 +19,6 @@ import { Spinner } from '@/components/spinner/spinner';
 import { Helmet } from 'react-helmet-async';
 import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
-import { HIDE_CHARTDB_CLOUD } from '@/lib/env';
 import { useDiagramAccessListener } from './use-diagram-access-listener';
 import { useDiagramAutosave } from './use-diagram-autosave';
 import { useDiagramOperationSync } from './use-diagram-operation-sync';
@@ -43,9 +40,6 @@ import { EditingBroadcastProvider } from '@/context/editing-broadcast-context/ed
 import { RemoteEditingProvider } from '@/context/remote-editing-context/remote-editing-provider';
 import { ConversationsProvider } from '@/context/conversations-context/conversations-provider';
 
-const OPEN_STAR_US_AFTER_SECONDS = 30;
-const SHOW_STAR_US_AGAIN_AFTER_DAYS = 1;
-
 export const EditorDesktopLayoutLazy = React.lazy(
     () => import('./editor-desktop-layout')
 );
@@ -59,11 +53,8 @@ const EditorPageContent: React.FC<
         entryFlow: UseEntryFlowResult;
     } & EntryFlowActiveDiagramDeletionActions
 > = ({ entryFlow, onActiveDiagramDeleted }) => {
-    const { diagramName, currentDiagram } = useChartDB();
-    const { openStarUsDialog } = useDialog();
+    const { diagramName } = useChartDB();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const { starUsDialogLastOpen, setStarUsDialogLastOpen, githubRepoOpened } =
-        useLocalConfig();
     const initialDiagram = entryFlow.initialDiagram;
     useDiagramAutosave();
     useDiagramAccessListener();
@@ -72,31 +63,6 @@ const EditorPageContent: React.FC<
     useDiagramRealtime();
     useDiagramReconnectRefresh();
     useDiagramOperationSync();
-
-    useEffect(() => {
-        if (HIDE_CHARTDB_CLOUD) {
-            return;
-        }
-
-        if (!currentDiagram?.id || githubRepoOpened) {
-            return;
-        }
-
-        if (
-            new Date().getTime() - starUsDialogLastOpen >
-            1000 * 60 * 60 * 24 * SHOW_STAR_US_AGAIN_AFTER_DAYS
-        ) {
-            const lastOpen = new Date().getTime();
-            setStarUsDialogLastOpen(lastOpen);
-            setTimeout(openStarUsDialog, OPEN_STAR_US_AFTER_SECONDS * 1000);
-        }
-    }, [
-        currentDiagram?.id,
-        githubRepoOpened,
-        openStarUsDialog,
-        setStarUsDialogLastOpen,
-        starUsDialogLastOpen,
-    ]);
 
     // Only restoringSession blocks the editor shell until auth session is resolved.
     const isEntrySessionRestoring = entryFlow.state.kind === 'restoringSession';

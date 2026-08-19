@@ -1001,13 +1001,6 @@ export const de: LanguageTranslation = {
             cancel: 'Abbrechen',
         },
         // TODO: Translate
-        star_us_dialog: {
-            title: 'Hilf uns, uns zu verbessern!',
-            description:
-                'Gefällt Ihnen ChartDB? Lassen Sie es uns wissen und helfen Sie uns, ChartDB zu verbessern!',
-            close: 'Nicht jetzt',
-            confirm: 'Natürlich!',
-        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

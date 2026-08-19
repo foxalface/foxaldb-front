@@ -12,7 +12,6 @@ import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog
 import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { TableSchemaDialog } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { emptyFn } from '@/lib/utils';
-import { StarUsDialog } from '@/dialogs/star-us-dialog/star-us-dialog';
 import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
@@ -106,7 +105,6 @@ export const DialogProvider: React.FC<
             [setOpenCreateRelationshipDialog]
         );
 
-    const [openStarUsDialog, setOpenStarUsDialog] = useState(false);
     const [openAuthDialog, setOpenAuthDialog] = useState(false);
     const [
         openGuestDiagramMigrationDialog,
@@ -275,8 +273,6 @@ export const DialogProvider: React.FC<
                 },
                 openTableSchemaDialog: openTableSchemaDialogHandler,
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
-                openStarUsDialog: () => setOpenStarUsDialog(true),
-                closeStarUsDialog: () => setOpenStarUsDialog(false),
                 openAuthDialog: () => setOpenAuthDialog(true),
                 closeAuthDialog: () => setOpenAuthDialog(false),
                 openGuestDiagramMigrationDialog: (params) => {
@@ -334,7 +330,6 @@ export const DialogProvider: React.FC<
                 dialog={{ open: openTableSchemaDialog }}
                 {...tableSchemaDialogParams}
             />
-            <StarUsDialog dialog={{ open: openStarUsDialog }} />
             <AuthDialog
                 dialog={{ open: openAuthDialog }}
                 entryAuthActions={entryAuthActions}
