@@ -14,6 +14,7 @@ export const vi: LanguageTranslation = {
                 '{{count}} tin nhắn chưa đọc trong hội thoại',
             visuals: 'Hình ảnh',
             activities: 'Hoạt động',
+            share: 'Chia sẻ',
         },
         menu: {
             actions: {
@@ -641,6 +642,29 @@ export const vi: LanguageTranslation = {
                     fallback: '{{user}} đã cập nhật sơ đồ',
                 },
             },
+            share_section: {
+                title: 'Chia sẻ',
+                tabs_label: 'Tùy chọn chia sẻ',
+                tabs: {
+                    collaborators: 'Cộng tác viên',
+                    public_link: 'Liên kết công khai',
+                },
+                collaborators: {
+                    description:
+                        'Mời cộng tác viên với quyền chỉnh sửa hoặc xem. Họ phải đã có tài khoản FoxalDB.',
+                },
+                public_link: {
+                    title: 'Liên kết công khai',
+                    description:
+                        'Chia sẻ ảnh chụp chỉ đọc của sơ đồ với bất kỳ ai có liên kết.',
+                    coming_soon: 'Sắp ra mắt.',
+                },
+                loading: 'Đang tải cộng tác viên…',
+                retry: 'Thử lại',
+                errors: {
+                    load_failed: 'Không thể tải cộng tác viên.',
+                },
+            },
         },
 
         toolbar: {
@@ -958,7 +982,6 @@ export const vi: LanguageTranslation = {
             create: 'Tạo',
             cancel: 'Hủy',
         },
-
         star_us_dialog: {
             title: 'Hãy giúp chúng tôi cải thiện!',
             description:

@@ -14,6 +14,7 @@ export const ar: LanguageTranslation = {
                 '{{count}} رسائل غير مقروءة في المحادثات',
             visuals: 'مرئيات',
             activities: 'النشاط',
+            share: 'مشاركة',
         },
         menu: {
             actions: {
@@ -629,6 +630,29 @@ export const ar: LanguageTranslation = {
                     fallback: 'حدّث {{user}} المخطط',
                 },
             },
+            share_section: {
+                title: 'مشاركة',
+                tabs_label: 'خيارات المشاركة',
+                tabs: {
+                    collaborators: 'المتعاونون',
+                    public_link: 'رابط عام',
+                },
+                collaborators: {
+                    description:
+                        'ادعُ متعاونين بصلاحية محرر أو قارئ. يجب أن يكون لديهم حساب FoxalDB بالفعل.',
+                },
+                public_link: {
+                    title: 'رابط عام',
+                    description:
+                        'شارك لقطة للقراءة فقط من مخططك مع أي شخص لديه الرابط.',
+                    coming_soon: 'قريبًا.',
+                },
+                loading: 'جارٍ تحميل المتعاونين…',
+                retry: 'إعادة المحاولة',
+                errors: {
+                    load_failed: 'تعذر تحميل المتعاونين.',
+                },
+            },
         },
 
         toolbar: {
@@ -945,7 +969,6 @@ export const ar: LanguageTranslation = {
             create: 'إنشاء',
             cancel: 'إلغاء',
         },
-
         star_us_dialog: {
             title: '!ساعدنا على التحسن',
             description: '؟! إنها مجرد نقرة واحدةGITHUB هل ترغب في تقييمنا على',

@@ -14,6 +14,7 @@ export const id_ID: LanguageTranslation = {
                 '{{count}} pesan belum dibaca dalam percakapan',
             visuals: 'Visual',
             activities: 'Aktivitas',
+            share: 'Bagikan',
         },
         menu: {
             actions: {
@@ -642,6 +643,29 @@ export const id_ID: LanguageTranslation = {
                     fallback: '{{user}} memperbarui diagram',
                 },
             },
+            share_section: {
+                title: 'Bagikan',
+                tabs_label: 'Opsi berbagi',
+                tabs: {
+                    collaborators: 'Kolaborator',
+                    public_link: 'Tautan publik',
+                },
+                collaborators: {
+                    description:
+                        'Undang kolaborator dengan akses editor atau penampil. Mereka harus sudah memiliki akun FoxalDB.',
+                },
+                public_link: {
+                    title: 'Tautan publik',
+                    description:
+                        'Bagikan snapshot hanya-baca diagram Anda dengan siapa pun yang memiliki tautan.',
+                    coming_soon: 'Segera hadir.',
+                },
+                loading: 'Memuat kolaborator…',
+                retry: 'Coba lagi',
+                errors: {
+                    load_failed: 'Tidak dapat memuat kolaborator.',
+                },
+            },
         },
 
         toolbar: {
@@ -967,7 +991,6 @@ export const id_ID: LanguageTranslation = {
             close: 'Tidak sekarang',
             confirm: 'Tentu saja!',
         },
-
         export_diagram_dialog: {
             title: 'Ekspor Diagram',
             description: 'Pilih format untuk ekspor:',

@@ -13,6 +13,7 @@ export const bn: LanguageTranslation = {
             conversations_unread_aria: 'কথোপকথনে {{count}} অপঠিত বার্তা',
             visuals: 'ভিজ্যুয়াল',
             activities: 'কার্যকলাপ',
+            share: 'শেয়ার',
         },
         menu: {
             actions: {
@@ -633,6 +634,29 @@ export const bn: LanguageTranslation = {
                     fallback: '{{user}} ডায়াগ্রাম আপডেট করেছেন',
                 },
             },
+            share_section: {
+                title: 'শেয়ার',
+                tabs_label: 'শেয়ার বিকল্প',
+                tabs: {
+                    collaborators: 'সহযোগী',
+                    public_link: 'পাবলিক লিংক',
+                },
+                collaborators: {
+                    description:
+                        'সম্পাদক বা দর্শক অ্যাক্সেস সহ সহযোগীদের আমন্ত্রণ জানান। তাদের ইতিমধ্যে FoxalDB অ্যাকাউন্ট থাকতে হবে।',
+                },
+                public_link: {
+                    title: 'পাবলিক লিংক',
+                    description:
+                        'লিংক থাকা যে কারো সাথে আপনার ডায়াগ্রামের শুধুমাত্র-পঠনযোগ্য স্ন্যাপশট শেয়ার করুন।',
+                    coming_soon: 'শীঘ্রই আসছে।',
+                },
+                loading: 'সহযোগী লোড হচ্ছে…',
+                retry: 'আবার চেষ্টা করুন',
+                errors: {
+                    load_failed: 'সহযোগী লোড করা যায়নি।',
+                },
+            },
         },
 
         toolbar: {
@@ -959,7 +983,6 @@ export const bn: LanguageTranslation = {
             close: 'এখন নয়',
             confirm: 'অবশ্যই!',
         },
-
         export_diagram_dialog: {
             title: 'চিত্র রপ্তানি করুন',
             description: 'রপ্তানির জন্য ফরম্যাট নির্বাচন করুন:',

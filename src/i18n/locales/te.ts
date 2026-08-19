@@ -13,6 +13,7 @@ export const te: LanguageTranslation = {
             conversations_unread_aria: 'సంభాషణలలో {{count}} చదవని సందేశాలు',
             visuals: 'Visuals',
             activities: 'కార్యకలాపం',
+            share: 'షేర్ చేయండి',
         },
         menu: {
             actions: {
@@ -634,6 +635,29 @@ export const te: LanguageTranslation = {
                     fallback: '{{user}} డయాగ్రామ్‌ను నవీకరించారు',
                 },
             },
+            share_section: {
+                title: 'షేర్ చేయండి',
+                tabs_label: 'షేర్ ఎంపికలు',
+                tabs: {
+                    collaborators: 'సహకారులు',
+                    public_link: 'పబ్లిక్ లింక్',
+                },
+                collaborators: {
+                    description:
+                        'ఎడిటర్ లేదా వ్యూయర్ యాక్సెస్‌తో సహకారులను ఆహ్వానించండి. వారికి ఇప్పటికే FoxalDB ఖాతా ఉండాలి.',
+                },
+                public_link: {
+                    title: 'పబ్లిక్ లింక్',
+                    description:
+                        'లింక్ ఉన్న ఎవరితోనైనా మీ డయాగ్రామ్ యొక్క రీడ్-ఓన్లీ స్నాప్‌షాట్‌ను షేర్ చేయండి.',
+                    coming_soon: 'త్వరలో వస్తోంది.',
+                },
+                loading: 'సహకారులను లోడ్ చేస్తోంది…',
+                retry: 'మళ్లీ ప్రయత్నించండి',
+                errors: {
+                    load_failed: 'సహకారులను లోడ్ చేయలేకపోయాం.',
+                },
+            },
         },
 
         toolbar: {
@@ -954,6 +978,7 @@ export const te: LanguageTranslation = {
             cancel: 'రద్దు',
         },
 
+        // TODO: Translate
         star_us_dialog: {
             title: 'మా సహాయంతో మెరుగుపరచండి!',
             description:
@@ -961,8 +986,6 @@ export const te: LanguageTranslation = {
             close: 'ఇప్పుడు కాదు',
             confirm: 'ఖచ్చితంగా!',
         },
-
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

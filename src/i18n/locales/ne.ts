@@ -13,6 +13,7 @@ export const ne: LanguageTranslation = {
             conversations_unread_aria: 'कुराकानीमा {{count}} नपढिएका सन्देशहरू',
             visuals: 'Visuals',
             activities: 'गतिविधि',
+            share: 'साझा गर्नुहोस्',
         },
         menu: {
             actions: {
@@ -639,6 +640,29 @@ export const ne: LanguageTranslation = {
                     fallback: '{{user}} ले डायाग्राम अद्यावधिक गर्नुभयो',
                 },
             },
+            share_section: {
+                title: 'साझा गर्नुहोस्',
+                tabs_label: 'साझा विकल्पहरू',
+                tabs: {
+                    collaborators: 'सहयोगीहरू',
+                    public_link: 'सार्वजनिक लिङ्क',
+                },
+                collaborators: {
+                    description:
+                        'सम्पादक वा दर्शक पहुँचसह सहयोगीहरूलाई निमन्त्रणा गर्नुहोस्। उनीहरूसँग पहिले नै FoxalDB खाता हुनुपर्छ।',
+                },
+                public_link: {
+                    title: 'सार्वजनिक लिङ्क',
+                    description:
+                        'लिङ्क भएका जो कोसँग पनि तपाईंको डायाग्रामको पढ्न-मात्र स्न्यापसट साझा गर्नुहोस्।',
+                    coming_soon: 'चाँडै आउँदैछ।',
+                },
+                loading: 'सहयोगीहरू लोड हुँदैछ…',
+                retry: 'पुनः प्रयास गर्नुहोस्',
+                errors: {
+                    load_failed: 'सहयोगीहरू लोड गर्न सकिएन।',
+                },
+            },
         },
 
         toolbar: {
@@ -959,7 +983,6 @@ export const ne: LanguageTranslation = {
             create: 'सिर्जना गर्नुहोस्',
             cancel: 'रद्द गर्नुहोस्',
         },
-
         star_us_dialog: {
             title: 'हामीलाई अझ राम्रो हुन मदत गर्नुहोस!',
             description:

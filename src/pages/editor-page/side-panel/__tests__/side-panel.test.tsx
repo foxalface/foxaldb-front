@@ -10,6 +10,7 @@ const {
     layoutState,
     conversationsAvailabilityState,
     activitiesAvailabilityState,
+    shareAvailabilityState,
     breakpointState,
 } = vi.hoisted(() => {
     const state = {
@@ -29,6 +30,9 @@ const {
             isAvailable: false,
         },
         activitiesAvailabilityState: {
+            isAvailable: false,
+        },
+        shareAvailabilityState: {
             isAvailable: false,
         },
         breakpointState: {
@@ -58,6 +62,10 @@ vi.mock('@/hooks/use-conversations-availability', () => ({
 
 vi.mock('@/hooks/use-activities-availability', () => ({
     useActivitiesAvailability: () => activitiesAvailabilityState.isAvailable,
+}));
+
+vi.mock('@/hooks/use-share-availability', () => ({
+    useShareAvailability: () => shareAvailabilityState.isAvailable,
 }));
 
 vi.mock('@/hooks/use-breakpoint', () => ({
@@ -211,6 +219,10 @@ vi.mock('../activities-section/activities-section', () => ({
     ),
 }));
 
+vi.mock('../share-section/share-section', () => ({
+    ShareSection: () => <div data-testid="share-section">ShareSection</div>,
+}));
+
 vi.mock('../dbml-section/dbml-section', () => ({
     DBMLSection: () => <div data-testid="dbml-section">DBMLSection</div>,
 }));
@@ -228,6 +240,7 @@ describe('SidePanel conversations routing', () => {
         });
         conversationsAvailabilityState.isAvailable = false;
         activitiesAvailabilityState.isAvailable = false;
+        shareAvailabilityState.isAvailable = false;
         breakpointState.isMd = false;
     });
 
@@ -335,5 +348,22 @@ describe('SidePanel conversations routing', () => {
         render(<SidePanel />);
 
         expect(screen.getByTestId('activities-section')).toBeInTheDocument();
+    });
+
+    it('includes Share in the mobile selector when share is available', () => {
+        shareAvailabilityState.isAvailable = true;
+        render(<SidePanel />);
+
+        expect(screen.getByRole('option', { name: 'Share' })).toHaveAttribute(
+            'data-value',
+            'share'
+        );
+    });
+
+    it('renders ShareSection when selectedSidebarSection is share', () => {
+        layoutState.selectedSidebarSection = 'share';
+        render(<SidePanel />);
+
+        expect(screen.getByTestId('share-section')).toBeInTheDocument();
     });
 });

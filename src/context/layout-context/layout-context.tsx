@@ -8,7 +8,8 @@ export type SidebarSection =
     | 'customTypes'
     | 'visuals'
     | 'conversations'
-    | 'activities';
+    | 'activities'
+    | 'share';
 
 export type VisualsTab = 'areas' | 'notes';
 

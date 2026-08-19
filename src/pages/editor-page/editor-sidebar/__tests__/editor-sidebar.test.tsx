@@ -11,6 +11,7 @@ const {
     layoutState,
     conversationsAvailabilityState,
     activitiesAvailabilityState,
+    shareAvailabilityState,
 } = vi.hoisted(() => ({
     layoutState: {
         selectedSidebarSection: 'tables' as SidebarSection,
@@ -22,6 +23,9 @@ const {
         isAvailable: false,
     },
     activitiesAvailabilityState: {
+        isAvailable: false,
+    },
+    shareAvailabilityState: {
         isAvailable: false,
     },
 }));
@@ -37,6 +41,10 @@ vi.mock('@/hooks/use-conversations-availability', () => ({
 
 vi.mock('@/hooks/use-activities-availability', () => ({
     useActivitiesAvailability: () => activitiesAvailabilityState.isAvailable,
+}));
+
+vi.mock('@/hooks/use-share-availability', () => ({
+    useShareAvailability: () => shareAvailabilityState.isAvailable,
 }));
 
 vi.mock('@/hooks/use-breakpoint', () => ({
@@ -243,5 +251,42 @@ describe('EditorSidebar activities entry', () => {
         expect(layoutState.toggleSidebarSection).toHaveBeenCalledWith(
             'activities'
         );
+    });
+});
+
+describe('EditorSidebar share entry', () => {
+    beforeEach(() => {
+        layoutState.selectedSidebarSection = 'tables';
+        layoutState.isSidePanelShowed = true;
+        layoutState.toggleSidebarSection = vi.fn();
+        shareAvailabilityState.isAvailable = false;
+    });
+
+    it('shows the Share item when share is available', () => {
+        shareAvailabilityState.isAvailable = true;
+        renderSidebar();
+
+        expect(
+            screen.getByRole('button', { name: 'Share' })
+        ).toBeInTheDocument();
+    });
+
+    it('hides the Share item when share is unavailable', () => {
+        shareAvailabilityState.isAvailable = false;
+        renderSidebar();
+
+        expect(
+            screen.queryByRole('button', { name: 'Share' })
+        ).not.toBeInTheDocument();
+    });
+
+    it('toggles the share panel on click', async () => {
+        shareAvailabilityState.isAvailable = true;
+        const user = userEvent.setup();
+        renderSidebar();
+
+        await user.click(screen.getByRole('button', { name: 'Share' }));
+
+        expect(layoutState.toggleSidebarSection).toHaveBeenCalledWith('share');
     });
 });

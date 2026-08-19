@@ -14,6 +14,7 @@ export const mr: LanguageTranslation = {
                 'संभाषणांमध्ये {{count}} वाचले नसलेले संदेश',
             visuals: 'Visuals',
             activities: 'क्रियाकलाप',
+            share: 'शेअर करा',
         },
         menu: {
             actions: {
@@ -640,6 +641,29 @@ export const mr: LanguageTranslation = {
                     fallback: '{{user}} ने आकृती अद्यतनित केली',
                 },
             },
+            share_section: {
+                title: 'शेअर करा',
+                tabs_label: 'शेअर पर्याय',
+                tabs: {
+                    collaborators: 'सहकारी',
+                    public_link: 'सार्वजनिक दुवा',
+                },
+                collaborators: {
+                    description:
+                        'संपादक किंवा दर्शक प्रवेशासह सहकारींना आमंत्रित करा. त्यांच्याकडे आधीच FoxalDB खाते असले पाहिजे.',
+                },
+                public_link: {
+                    title: 'सार्वजनिक दुवा',
+                    description:
+                        'दुवा असलेल्या कोणासोबतही तुमच्या आकृतीचा फक्त-वाचनीय स्नॅपशॉट शेअर करा.',
+                    coming_soon: 'लवकरच येत आहे.',
+                },
+                loading: 'सहकारी लोड होत आहेत…',
+                retry: 'पुन्हा प्रयत्न करा',
+                errors: {
+                    load_failed: 'सहकारी लोड करता आले नाहीत.',
+                },
+            },
         },
 
         toolbar: {
@@ -961,6 +985,7 @@ export const mr: LanguageTranslation = {
             cancel: 'रद्द करा',
         },
 
+        // TODO: Add translations
         star_us_dialog: {
             title: 'आम्हाला सुधारण्यास मदत करा!',
             description:
@@ -968,8 +993,6 @@ export const mr: LanguageTranslation = {
             close: 'आता नाही',
             confirm: 'नक्कीच!',
         },
-
-        // TODO: Add translations
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

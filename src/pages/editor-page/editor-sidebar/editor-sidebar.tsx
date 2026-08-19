@@ -18,6 +18,7 @@ import {
     FolderOpen,
     CodeXml,
     History,
+    Share2,
 } from 'lucide-react';
 import { SlBubbles } from 'react-icons/sl';
 import { Table, Workflow } from 'lucide-react';
@@ -33,6 +34,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 import { useActivitiesAvailability } from '@/hooks/use-activities-availability';
+import { useShareAvailability } from '@/hooks/use-share-availability';
 import { useDiagramConversations } from '@/hooks/use-diagram-conversations';
 import { ConversationUnreadBadgeWithTranslation } from '@/components/conversations/conversation-unread-badge';
 import { supportsCustomTypes } from '@/lib/domain/database-capabilities';
@@ -64,6 +66,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const conversationsAvailable = useConversationsAvailability();
     const activitiesAvailable = useActivitiesAvailability();
+    const shareAvailable = useShareAvailability();
     const { totalUnreadCount } = useDiagramConversations();
 
     const diagramItems: SidebarItem[] = useMemo(
@@ -173,6 +176,20 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                       },
                   ]
                 : []),
+            ...(shareAvailable
+                ? [
+                      {
+                          title: t('editor_sidebar.share'),
+                          icon: Share2,
+                          onClick: () => {
+                              toggleSidebarSection('share');
+                          },
+                          active:
+                              selectedSidebarSection === 'share' &&
+                              isSidePanelShowed,
+                      },
+                  ]
+                : []),
         ],
         [
             toggleSidebarSection,
@@ -183,6 +200,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
             selectVisualsTab,
             conversationsAvailable,
             activitiesAvailable,
+            shareAvailable,
             totalUnreadCount,
         ]
     );

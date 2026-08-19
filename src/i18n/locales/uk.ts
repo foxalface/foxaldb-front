@@ -14,6 +14,7 @@ export const uk: LanguageTranslation = {
                 '{{count}} непрочитаних повідомлень у розмовах',
             visuals: 'Візуальні елементи',
             activities: 'Активність',
+            share: 'Поділитися',
         },
         menu: {
             actions: {
@@ -641,6 +642,29 @@ export const uk: LanguageTranslation = {
                     fallback: '{{user}} оновив(ла) діаграму',
                 },
             },
+            share_section: {
+                title: 'Поділитися',
+                tabs_label: 'Параметри доступу',
+                tabs: {
+                    collaborators: 'Учасники',
+                    public_link: 'Публічне посилання',
+                },
+                collaborators: {
+                    description:
+                        'Запросіть учасників із правами редактора або глядача. Вони вже повинні мати обліковий запис FoxalDB.',
+                },
+                public_link: {
+                    title: 'Публічне посилання',
+                    description:
+                        'Поділіться знімком діаграми лише для читання з усіма, хто має посилання.',
+                    coming_soon: 'Незабаром.',
+                },
+                loading: 'Завантаження учасників…',
+                retry: 'Повторити',
+                errors: {
+                    load_failed: 'Не вдалося завантажити учасників.',
+                },
+            },
         },
 
         toolbar: {
@@ -960,7 +984,6 @@ export const uk: LanguageTranslation = {
             create: 'Створити',
             cancel: 'Скасувати',
         },
-
         star_us_dialog: {
             title: 'Допоможіть нам покращитися!',
             description: 'Поставне на зірку на GitHub? Це лише один клік!',

@@ -14,6 +14,7 @@ export const ru: LanguageTranslation = {
                 '{{count}} непрочитанных сообщений в обсуждениях',
             visuals: 'Визуальные элементы',
             activities: 'Активность',
+            share: 'Поделиться',
         },
         menu: {
             actions: {
@@ -639,6 +640,29 @@ export const ru: LanguageTranslation = {
                     fallback: '{{user}} обновил(а) диаграмму',
                 },
             },
+            share_section: {
+                title: 'Поделиться',
+                tabs_label: 'Параметры доступа',
+                tabs: {
+                    collaborators: 'Участники',
+                    public_link: 'Публичная ссылка',
+                },
+                collaborators: {
+                    description:
+                        'Пригласите участников с правами редактора или зрителя. У них уже должен быть аккаунт FoxalDB.',
+                },
+                public_link: {
+                    title: 'Публичная ссылка',
+                    description:
+                        'Поделитесь снимком диаграммы только для чтения с любым, у кого есть ссылка.',
+                    coming_soon: 'Скоро.',
+                },
+                loading: 'Загрузка участников…',
+                retry: 'Повторить',
+                errors: {
+                    load_failed: 'Не удалось загрузить участников.',
+                },
+            },
         },
 
         toolbar: {
@@ -958,7 +982,6 @@ export const ru: LanguageTranslation = {
             create: 'Создать',
             cancel: 'Отменить',
         },
-
         star_us_dialog: {
             title: 'Помогите нам стать лучше!',
             description:

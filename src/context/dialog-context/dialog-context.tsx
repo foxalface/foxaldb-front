@@ -9,7 +9,6 @@ import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/i
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
-import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 import type { GuestDiagramMigrationDialogProps } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
@@ -26,12 +25,6 @@ export interface DialogContext {
         params?: Omit<OpenDiagramDialogProps, 'dialog'>
     ) => void;
     closeOpenDiagramDialog: () => void;
-
-    // Share diagram dialog
-    openShareDiagramDialog: (
-        params: Omit<ShareDiagramDialogProps, 'dialog'>
-    ) => void;
-    closeShareDiagramDialog: () => void;
 
     // Export Laravel migrations dialog
     openExportLaravelMigrationsDialog: (
@@ -109,8 +102,6 @@ export const dialogContext = createContext<DialogContext>({
     closeCreateDiagramDialog: emptyFn,
     openOpenDiagramDialog: emptyFn,
     closeOpenDiagramDialog: emptyFn,
-    openShareDiagramDialog: emptyFn,
-    closeShareDiagramDialog: emptyFn,
     openExportLaravelMigrationsDialog: emptyFn,
     closeExportLaravelMigrationsDialog: emptyFn,
     openLaravelMigrationImportDialog: emptyFn,

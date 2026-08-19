@@ -14,6 +14,7 @@ export const de: LanguageTranslation = {
                 '{{count}} ungelesene Nachrichten in Konversationen',
             visuals: 'Darstellungen',
             activities: 'Aktivität',
+            share: 'Teilen',
         },
         menu: {
             actions: {
@@ -657,6 +658,29 @@ export const de: LanguageTranslation = {
                     fallback: '{{user}} hat das Diagramm aktualisiert',
                 },
             },
+            share_section: {
+                title: 'Teilen',
+                tabs_label: 'Freigabeoptionen',
+                tabs: {
+                    collaborators: 'Mitarbeitende',
+                    public_link: 'Öffentlicher Link',
+                },
+                collaborators: {
+                    description:
+                        'Laden Sie Mitarbeitende mit Bearbeiter- oder Leserzugriff ein. Sie benötigen bereits ein FoxalDB-Konto.',
+                },
+                public_link: {
+                    title: 'Öffentlicher Link',
+                    description:
+                        'Teilen Sie eine schreibgeschützte Momentaufnahme Ihres Diagramms mit allen, die den Link haben.',
+                    coming_soon: 'Demnächst verfügbar.',
+                },
+                loading: 'Mitarbeitende werden geladen…',
+                retry: 'Erneut versuchen',
+                errors: {
+                    load_failed: 'Mitarbeitende konnten nicht geladen werden.',
+                },
+            },
         },
 
         toolbar: {
@@ -976,7 +1000,7 @@ export const de: LanguageTranslation = {
             create: 'Erstellen',
             cancel: 'Abbrechen',
         },
-
+        // TODO: Translate
         star_us_dialog: {
             title: 'Hilf uns, uns zu verbessern!',
             description:
@@ -984,7 +1008,6 @@ export const de: LanguageTranslation = {
             close: 'Nicht jetzt',
             confirm: 'Natürlich!',
         },
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

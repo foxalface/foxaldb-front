@@ -7,7 +7,6 @@ import { Button } from '@/components/button/button';
 import { useSidebar } from '@/components/sidebar/use-sidebar';
 import { MenuIcon } from 'lucide-react';
 import { AuthNavAction } from './auth-nav-action';
-import { ShareDiagramAction } from './share-diagram-action';
 import { DiagramAccessRoleIndicator } from './diagram-access-role-indicator';
 import { PresenceAvatarStack } from '@/components/presence/presence-avatar-stack';
 
@@ -50,7 +49,6 @@ export const TopNavbarMobile: React.FC<TopNavbarMobileProps> = ({
                         <div className="hidden min-[420px]:flex">
                             <DiagramAccessRoleIndicator compact />
                         </div>
-                        <ShareDiagramAction />
                         <AuthNavAction compact />
                         <LanguageNav />
                     </div>

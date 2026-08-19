@@ -14,6 +14,7 @@ export const hr: LanguageTranslation = {
                 '{{count}} nepročitanih poruka u razgovorima',
             visuals: 'Vizuali',
             activities: 'Aktivnost',
+            share: 'Dijeli',
         },
         menu: {
             actions: {
@@ -636,6 +637,29 @@ export const hr: LanguageTranslation = {
                     fallback: '{{user}} je ažurirao dijagram',
                 },
             },
+            share_section: {
+                title: 'Dijeli',
+                tabs_label: 'Opcije dijeljenja',
+                tabs: {
+                    collaborators: 'Suradnici',
+                    public_link: 'Javna poveznica',
+                },
+                collaborators: {
+                    description:
+                        'Pozovite suradnike s pristupom uređivača ili gledatelja. Već moraju imati FoxalDB račun.',
+                },
+                public_link: {
+                    title: 'Javna poveznica',
+                    description:
+                        'Podijelite snimku dijagrama samo za čitanje s bilo kim tko ima poveznicu.',
+                    coming_soon: 'Uskoro.',
+                },
+                loading: 'Učitavanje suradnika…',
+                retry: 'Pokušaj ponovno',
+                errors: {
+                    load_failed: 'Suradnici se nisu mogli učitati.',
+                },
+            },
         },
 
         toolbar: {
@@ -952,7 +976,6 @@ export const hr: LanguageTranslation = {
             create: 'Stvori',
             cancel: 'Odustani',
         },
-
         star_us_dialog: {
             title: 'Pomozite nam da se poboljšamo!',
             description:

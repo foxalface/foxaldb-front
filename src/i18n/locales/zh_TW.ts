@@ -13,6 +13,7 @@ export const zh_TW: LanguageTranslation = {
             conversations_unread_aria: '對話中有 {{count}} 則未讀訊息',
             visuals: '視覺效果',
             activities: '活動',
+            share: '分享',
         },
         menu: {
             actions: {
@@ -606,6 +607,28 @@ export const zh_TW: LanguageTranslation = {
                     fallback: '{{user}} 更新了圖表',
                 },
             },
+            share_section: {
+                title: '分享',
+                tabs_label: '分享選項',
+                tabs: {
+                    collaborators: '協作者',
+                    public_link: '公開連結',
+                },
+                collaborators: {
+                    description:
+                        '邀請具有編輯者或檢視者權限的協作者。他們必須已有 FoxalDB 帳戶。',
+                },
+                public_link: {
+                    title: '公開連結',
+                    description: '與擁有連結的任何人分享唯讀快照。',
+                    coming_soon: '即將推出。',
+                },
+                loading: '正在載入協作者…',
+                retry: '重試',
+                errors: {
+                    load_failed: '無法載入協作者。',
+                },
+            },
         },
 
         toolbar: {
@@ -921,7 +944,6 @@ export const zh_TW: LanguageTranslation = {
             create: '建立',
             cancel: '取消',
         },
-
         star_us_dialog: {
             title: '協助我們改善！',
             description: '請在 GitHub 上給我們一顆星，只需點擊一下！',

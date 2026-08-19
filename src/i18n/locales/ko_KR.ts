@@ -13,6 +13,7 @@ export const ko_KR: LanguageTranslation = {
             conversations_unread_aria: '대화의 읽지 않은 메시지 {{count}}개',
             visuals: '시각화',
             activities: '활동',
+            share: '공유',
         },
         menu: {
             actions: {
@@ -633,6 +634,29 @@ export const ko_KR: LanguageTranslation = {
                     fallback: '{{user}}님이 다이어그램을 업데이트했습니다',
                 },
             },
+            share_section: {
+                title: '공유',
+                tabs_label: '공유 옵션',
+                tabs: {
+                    collaborators: '협업자',
+                    public_link: '공개 링크',
+                },
+                collaborators: {
+                    description:
+                        '편집자 또는 뷰어 권한으로 협업자를 초대합니다. FoxalDB 계정이 있어야 합니다.',
+                },
+                public_link: {
+                    title: '공개 링크',
+                    description:
+                        '링크가 있는 누구나 읽기 전용 스냅샷을 공유할 수 있습니다.',
+                    coming_soon: '곧 제공됩니다.',
+                },
+                loading: '협업자 불러오는 중…',
+                retry: '다시 시도',
+                errors: {
+                    load_failed: '협업자를 불러올 수 없습니다.',
+                },
+            },
         },
 
         toolbar: {
@@ -950,7 +974,6 @@ export const ko_KR: LanguageTranslation = {
             create: '생성',
             cancel: '취소',
         },
-
         star_us_dialog: {
             title: '개선할 수 있도록 도와주세요!',
             description:

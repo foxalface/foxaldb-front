@@ -132,7 +132,6 @@ export const ShareAddMemberForm: React.FC<ShareAddMemberFormProps> = ({
                         : t('share_diagram_dialog.add_member.add')}
                 </Button>
             </div>
-            {/* Future: pending invitations */}
         </form>
     );
 };

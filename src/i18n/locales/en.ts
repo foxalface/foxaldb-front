@@ -14,6 +14,7 @@ export const en = {
                 '{{count}} unread messages in conversations',
             visuals: 'Visuals',
             activities: 'Activity',
+            share: 'Share',
         },
         menu: {
             actions: {
@@ -633,6 +634,29 @@ export const en = {
                     fallback: '{{user}} updated the diagram',
                 },
             },
+            share_section: {
+                title: 'Share',
+                tabs_label: 'Share options',
+                tabs: {
+                    collaborators: 'Collaborators',
+                    public_link: 'Public link',
+                },
+                collaborators: {
+                    description:
+                        'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
+                },
+                public_link: {
+                    title: 'Public link',
+                    description:
+                        'Share a read-only snapshot of your diagram with anyone who has the link.',
+                    coming_soon: 'Coming soon.',
+                },
+                loading: 'Loading collaborators…',
+                retry: 'Retry',
+                errors: {
+                    load_failed: 'Could not load collaborators.',
+                },
+            },
         },
 
         toolbar: {
@@ -950,7 +974,6 @@ export const en = {
             create: 'Create',
             cancel: 'Cancel',
         },
-
         star_us_dialog: {
             title: 'Help us improve!',
             description:

@@ -14,6 +14,7 @@ export const pt_BR: LanguageTranslation = {
                 '{{count}} mensagens não lidas em conversas',
             visuals: 'Visuais',
             activities: 'Atividade',
+            share: 'Compartilhar',
         },
         menu: {
             actions: {
@@ -646,6 +647,29 @@ export const pt_BR: LanguageTranslation = {
                     fallback: '{{user}} atualizou o diagrama',
                 },
             },
+            share_section: {
+                title: 'Compartilhar',
+                tabs_label: 'Opções de compartilhamento',
+                tabs: {
+                    collaborators: 'Colaboradores',
+                    public_link: 'Link público',
+                },
+                collaborators: {
+                    description:
+                        'Convide colaboradores com acesso de editor ou visualizador. Eles já devem ter uma conta FoxalDB.',
+                },
+                public_link: {
+                    title: 'Link público',
+                    description:
+                        'Compartilhe um instantâneo somente leitura do seu diagrama com qualquer pessoa que tenha o link.',
+                    coming_soon: 'Em breve.',
+                },
+                loading: 'Carregando colaboradores…',
+                retry: 'Tentar novamente',
+                errors: {
+                    load_failed: 'Não foi possível carregar os colaboradores.',
+                },
+            },
         },
 
         toolbar: {
@@ -965,7 +989,7 @@ export const pt_BR: LanguageTranslation = {
             create: 'Criar',
             cancel: 'Cancelar',
         },
-
+        // TODO: Translate
         star_us_dialog: {
             title: 'Ajude-nos a melhorar!',
             description:
@@ -973,7 +997,6 @@ export const pt_BR: LanguageTranslation = {
             close: 'Agora não',
             confirm: 'Claro!',
         },
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

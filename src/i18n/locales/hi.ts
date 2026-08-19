@@ -13,6 +13,7 @@ export const hi: LanguageTranslation = {
             conversations_unread_aria: 'वार्तालापों में {{count}} अपठित संदेश',
             visuals: 'Visuals',
             activities: 'गतिविधि',
+            share: 'साझा करें',
         },
         menu: {
             actions: {
@@ -639,6 +640,29 @@ export const hi: LanguageTranslation = {
                     fallback: '{{user}} ने आरेख अपडेट किया',
                 },
             },
+            share_section: {
+                title: 'साझा करें',
+                tabs_label: 'साझा करने के विकल्प',
+                tabs: {
+                    collaborators: 'सहयोगी',
+                    public_link: 'सार्वजनिक लिंक',
+                },
+                collaborators: {
+                    description:
+                        'संपादक या दर्शक पहुंच के साथ सहयोगियों को आमंत्रित करें। उनके पास पहले से FoxalDB खाता होना चाहिए।',
+                },
+                public_link: {
+                    title: 'सार्वजनिक लिंक',
+                    description:
+                        'अपने आरेख का केवल-पढ़ने योग्य स्नैपशॉट लिंक वाले किसी के साथ साझा करें।',
+                    coming_soon: 'जल्द आ रहा है।',
+                },
+                loading: 'सहयोगी लोड हो रहे हैं…',
+                retry: 'पुनः प्रयास करें',
+                errors: {
+                    load_failed: 'सहयोगी लोड नहीं हो सके।',
+                },
+            },
         },
 
         toolbar: {
@@ -959,7 +983,7 @@ export const hi: LanguageTranslation = {
             create: 'बनाएं',
             cancel: 'रद्द करें',
         },
-
+        // TODO: Translate
         star_us_dialog: {
             title: 'हमें सुधारने में मदद करें!',
             description:
@@ -967,7 +991,6 @@ export const hi: LanguageTranslation = {
             close: 'अभी नहीं',
             confirm: 'बिलकुल!',
         },
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

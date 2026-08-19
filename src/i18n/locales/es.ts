@@ -14,6 +14,7 @@ export const es: LanguageTranslation = {
                 '{{count}} mensajes no leídos en conversaciones',
             visuals: 'Visuales',
             activities: 'Actividad',
+            share: 'Compartir',
         },
         menu: {
             actions: {
@@ -647,6 +648,29 @@ export const es: LanguageTranslation = {
                     fallback: '{{user}} actualizó el diagrama',
                 },
             },
+            share_section: {
+                title: 'Compartir',
+                tabs_label: 'Opciones para compartir',
+                tabs: {
+                    collaborators: 'Colaboradores',
+                    public_link: 'Enlace público',
+                },
+                collaborators: {
+                    description:
+                        'Invita colaboradores con acceso de editor o lector. Ya deben tener una cuenta de FoxalDB.',
+                },
+                public_link: {
+                    title: 'Enlace público',
+                    description:
+                        'Comparte una instantánea de solo lectura de tu diagrama con cualquiera que tenga el enlace.',
+                    coming_soon: 'Próximamente.',
+                },
+                loading: 'Cargando colaboradores…',
+                retry: 'Reintentar',
+                errors: {
+                    load_failed: 'No se pudieron cargar los colaboradores.',
+                },
+            },
         },
 
         toolbar: {
@@ -967,6 +991,7 @@ export const es: LanguageTranslation = {
             cancel: 'Cancelar',
         },
 
+        // TODO: Translate
         star_us_dialog: {
             title: '¡Ayúdanos a mejorar!',
             description:
@@ -974,8 +999,6 @@ export const es: LanguageTranslation = {
             close: 'Ahora no',
             confirm: '¡Claro!',
         },
-
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

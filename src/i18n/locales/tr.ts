@@ -13,6 +13,7 @@ export const tr: LanguageTranslation = {
             conversations_unread_aria: 'Görüşmelerde {{count}} okunmamış mesaj',
             visuals: 'Görseller',
             activities: 'Etkinlik',
+            share: 'Paylaş',
         },
         menu: {
             actions: {
@@ -629,6 +630,29 @@ export const tr: LanguageTranslation = {
                     fallback: '{{user}} diyagramı güncelledi',
                 },
             },
+            share_section: {
+                title: 'Paylaş',
+                tabs_label: 'Paylaşım seçenekleri',
+                tabs: {
+                    collaborators: 'İşbirlikçiler',
+                    public_link: 'Herkese açık bağlantı',
+                },
+                collaborators: {
+                    description:
+                        'Düzenleyici veya görüntüleyici erişimiyle işbirlikçileri davet edin. Zaten bir FoxalDB hesabına sahip olmalıdırlar.',
+                },
+                public_link: {
+                    title: 'Herkese açık bağlantı',
+                    description:
+                        'Diyagramınızın salt okunur anlık görüntüsünü bağlantıya sahip herkesle paylaşın.',
+                    coming_soon: 'Yakında.',
+                },
+                loading: 'İşbirlikçiler yükleniyor…',
+                retry: 'Yeniden dene',
+                errors: {
+                    load_failed: 'İşbirlikçiler yüklenemedi.',
+                },
+            },
         },
         toolbar: {
             zoom_in: 'Yakınlaştır',
@@ -940,6 +964,7 @@ export const tr: LanguageTranslation = {
             create: 'Oluştur',
             cancel: 'İptal',
         },
+        // TODO: Translate
         star_us_dialog: {
             title: 'Bize yardım et!',
             description:
@@ -947,7 +972,6 @@ export const tr: LanguageTranslation = {
             close: 'Şimdi Değil',
             confirm: 'Tabii ki!',
         },
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

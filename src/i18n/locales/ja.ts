@@ -13,6 +13,7 @@ export const ja: LanguageTranslation = {
             conversations_unread_aria: '会話の未読メッセージ {{count}} 件',
             visuals: 'ビジュアル',
             activities: 'アクティビティ',
+            share: '共有',
         },
         menu: {
             actions: {
@@ -639,6 +640,29 @@ export const ja: LanguageTranslation = {
                     fallback: '{{user}} がダイアグラムを更新しました',
                 },
             },
+            share_section: {
+                title: '共有',
+                tabs_label: '共有オプション',
+                tabs: {
+                    collaborators: '共同編集者',
+                    public_link: '公開リンク',
+                },
+                collaborators: {
+                    description:
+                        '編集者または閲覧者として共同編集者を招待します。FoxalDB アカウントが必要です。',
+                },
+                public_link: {
+                    title: '公開リンク',
+                    description:
+                        'リンクを持つ誰でも読み取り専用のスナップショットを共有できます。',
+                    coming_soon: '近日公開。',
+                },
+                loading: '共同編集者を読み込み中…',
+                retry: '再試行',
+                errors: {
+                    load_failed: '共同編集者を読み込めませんでした。',
+                },
+            },
         },
 
         toolbar: {
@@ -958,7 +982,7 @@ export const ja: LanguageTranslation = {
             create: '作成',
             cancel: 'キャンセル',
         },
-
+        // TODO: Translate
         star_us_dialog: {
             title: '改善をサポートしてください！',
             description:
@@ -966,7 +990,6 @@ export const ja: LanguageTranslation = {
             close: '今はしない',
             confirm: 'もちろん！',
         },
-        // TODO: Translate
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

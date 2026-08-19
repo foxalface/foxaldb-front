@@ -19,9 +19,11 @@ import { RefsSection } from './refs-section/refs-section';
 import { VisualsSection } from './visuals-section/visuals-section';
 import { ConversationsSection } from './conversations-section/conversations-section';
 import { ActivitiesSection } from './activities-section/activities-section';
+import { ShareSection } from './share-section/share-section';
 import { Spinner } from '@/components/spinner/spinner';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 import { useActivitiesAvailability } from '@/hooks/use-activities-availability';
+import { useShareAvailability } from '@/hooks/use-share-availability';
 
 const DBMLSectionLazy = React.lazy(() =>
     import('./dbml-section/dbml-section').then((module) => ({
@@ -42,6 +44,7 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
     const { isMd: isDesktop } = useBreakpoint('md');
     const conversationsAvailable = useConversationsAvailability();
     const activitiesAvailable = useActivitiesAvailability();
+    const shareAvailable = useShareAvailability();
 
     const handleMobileSectionChange = (value: string) => {
         if (value === 'conversations') {
@@ -102,6 +105,11 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                         )}
                                     </SelectItem>
                                 ) : null}
+                                {shareAvailable ? (
+                                    <SelectItem value="share">
+                                        {t('side_panel.share_section.title')}
+                                    </SelectItem>
+                                ) : null}
                             </SelectGroup>
                         </SelectContent>
                     </Select>
@@ -127,6 +135,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                 <ConversationsSection />
             ) : selectedSidebarSection === 'activities' ? (
                 <ActivitiesSection />
+            ) : selectedSidebarSection === 'share' ? (
+                <ShareSection />
             ) : (
                 <CustomTypesSection />
             )}

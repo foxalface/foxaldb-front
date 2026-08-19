@@ -14,6 +14,7 @@ export const gu: LanguageTranslation = {
                 'વાતચીતમાં {{count}} વાંચ્યા વગરના સંદેશા',
             visuals: 'Visuals',
             activities: 'પ્રવૃત્તિ',
+            share: 'શેર કરો',
         },
         menu: {
             actions: {
@@ -631,6 +632,29 @@ export const gu: LanguageTranslation = {
                     fallback: '{{user}} એ ડાયાગ્રામ અપડેટ કર્યું',
                 },
             },
+            share_section: {
+                title: 'શેર કરો',
+                tabs_label: 'શેર વિકલ્પો',
+                tabs: {
+                    collaborators: 'સહયોગીઓ',
+                    public_link: 'જાહેર લિંક',
+                },
+                collaborators: {
+                    description:
+                        'સંપાદક અથવા દર્શક ઍક્સેસ સાથે સહયોગીઓને આમંત્રિત કરો. તેમની પાસે પહેલેથી FoxalDB એકાઉન્ટ હોવું જોઈએ.',
+                },
+                public_link: {
+                    title: 'જાહેર લિંક',
+                    description:
+                        'લિંક ધરાવતા કોઈપણ સાથે તમારા ડાયાગ્રામનો ફક્ત-વાંચવા યોગ્ય સ્નેપશોટ શેર કરો.',
+                    coming_soon: 'ટૂંક સમયમાં.',
+                },
+                loading: 'સહયોગીઓ લોડ થઈ રહ્યા છે…',
+                retry: 'ફરી પ્રયાસ કરો',
+                errors: {
+                    load_failed: 'સહયોગીઓ લોડ કરી શકાયા નહીં.',
+                },
+            },
         },
 
         toolbar: {
@@ -956,7 +980,6 @@ export const gu: LanguageTranslation = {
             close: 'હાલમાં નહીં',
             confirm: 'ખરેખર!',
         },
-
         export_diagram_dialog: {
             title: 'ડાયાગ્રામ નિકાસ કરો',
             description: 'નિકાસ માટે ફોર્મેટ પસંદ કરો:',

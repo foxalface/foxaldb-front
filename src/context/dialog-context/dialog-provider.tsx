@@ -18,8 +18,6 @@ import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-di
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
-import type { ShareDiagramDialogProps } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
-import { ShareDiagramDialog } from '@/dialogs/share-diagram-dialog/share-diagram-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
@@ -189,16 +187,6 @@ export const DialogProvider: React.FC<
     const [openImportDiagramDialog, setOpenImportDiagramDialog] =
         useState(false);
 
-    const [openShareDiagramDialog, setOpenShareDiagramDialog] = useState(false);
-    const [shareDiagramDialogParams, setShareDiagramDialogParams] =
-        useState<Omit<ShareDiagramDialogProps, 'dialog'>>();
-
-    const openShareDiagramDialogHandler: DialogContext['openShareDiagramDialog'] =
-        useCallback((params) => {
-            setShareDiagramDialogParams(params);
-            setOpenShareDiagramDialog(true);
-        }, []);
-
     const [
         openExportLaravelMigrationsDialog,
         setOpenExportLaravelMigrationsDialog,
@@ -263,8 +251,6 @@ export const DialogProvider: React.FC<
                 closeCreateDiagramDialog: () => setOpenNewDiagramDialog(false),
                 openOpenDiagramDialog: openOpenDiagramDialogHandler,
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
-                openShareDiagramDialog: openShareDiagramDialogHandler,
-                closeShareDiagramDialog: () => setOpenShareDiagramDialog(false),
                 openExportLaravelMigrationsDialog:
                     openExportLaravelMigrationsDialogHandler,
                 closeExportLaravelMigrationsDialog: () =>
@@ -365,12 +351,6 @@ export const DialogProvider: React.FC<
             />
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
-            {shareDiagramDialogParams ? (
-                <ShareDiagramDialog
-                    dialog={{ open: openShareDiagramDialog }}
-                    {...shareDiagramDialogParams}
-                />
-            ) : null}
             {exportLaravelMigrationsDialogParams ? (
                 <ExportLaravelMigrationsDialog
                     dialog={{ open: openExportLaravelMigrationsDialog }}

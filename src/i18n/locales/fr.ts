@@ -14,6 +14,7 @@ export const fr: LanguageTranslation = {
                 '{{count}} messages non lus dans les conversations',
             visuals: 'Visuels',
             activities: 'Activité',
+            share: 'Partage',
         },
         menu: {
             actions: {
@@ -644,6 +645,29 @@ export const fr: LanguageTranslation = {
                     fallback: '{{user}} a mis à jour le diagramme',
                 },
             },
+            share_section: {
+                title: 'Partage',
+                tabs_label: 'Options de partage',
+                tabs: {
+                    collaborators: 'Collaborateurs',
+                    public_link: 'Lien public',
+                },
+                collaborators: {
+                    description:
+                        'Invitez des collaborateurs avec un accès éditeur ou lecteur. Ils doivent déjà avoir un compte FoxalDB.',
+                },
+                public_link: {
+                    title: 'Lien public',
+                    description:
+                        'Partagez une copie en lecture seule de votre diagramme avec toute personne disposant du lien.',
+                    coming_soon: 'Bientôt disponible.',
+                },
+                loading: 'Chargement des collaborateurs…',
+                retry: 'Réessayer',
+                errors: {
+                    load_failed: 'Impossible de charger les collaborateurs.',
+                },
+            },
         },
 
         toolbar: {
@@ -784,14 +808,6 @@ export const fr: LanguageTranslation = {
                 'Plusieurs schémas sont actuellement affichés. Sélectionnez-en un pour la nouvelle table.',
             cancel: 'Annuler',
             confirm: 'Confirmer',
-        },
-
-        star_us_dialog: {
-            title: 'Aidez-nous à nous améliorer',
-            description:
-                "Souhaitez-vous nous donner une étoile sur GitHub ? Il ne suffit que d'un clic !",
-            close: 'Pas maintenant',
-            confirm: 'Bien sûr !',
         },
 
         update_table_schema_dialog: {
@@ -970,6 +986,13 @@ export const fr: LanguageTranslation = {
                 import: 'Importer',
                 cancel: 'Annuler',
             },
+        },
+        star_us_dialog: {
+            title: 'Aidez-nous à nous améliorer',
+            description:
+                "Souhaitez-vous nous donner une étoile sur GitHub ? Il ne suffit que d'un clic !",
+            close: 'Pas maintenant',
+            confirm: 'Bien sûr !',
         },
         export_diagram_dialog: {
             title: 'Exporter le Diagramme',
