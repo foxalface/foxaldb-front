@@ -134,6 +134,7 @@ export const ar: LanguageTranslation = {
         loading_diagram: '...جارِ تحميل الرسم البياني',
         deselect_all: 'إلغاء تحديد الكل',
         select_all: 'تحديد الكل',
+        delete: 'حذف',
         clear: 'مسح',
         show_more: 'عرض المزيد',
         show_less: 'عرض أقل',
@@ -640,6 +641,15 @@ export const ar: LanguageTranslation = {
                 collaborators: {
                     description:
                         'ادعُ متعاونين بصلاحية محرر أو قارئ. يجب أن يكون لديهم حساب FoxalDB بالفعل.',
+                    filter: 'تصفية',
+                    clear: 'مسح التصفية',
+                    no_results_title: 'لا توجد نتائج',
+                    no_results_description: 'لا يوجد متعاونون يطابقون التصفية.',
+                    role_filter: {
+                        trigger: 'الدور',
+                        label: 'تصفية حسب الدور',
+                        trigger_aria: 'تصفية حسب دور المتعاون',
+                    },
                 },
                 public_link: {
                     title: 'رابط عام',
@@ -651,6 +661,12 @@ export const ar: LanguageTranslation = {
                 retry: 'إعادة المحاولة',
                 errors: {
                     load_failed: 'تعذر تحميل المتعاونين.',
+                },
+                member_actions: {
+                    title: 'إجراءات المتعاون',
+                    trigger_aria: 'إجراءات المتعاون',
+                    role: 'الدور',
+                    remove: 'إزالة المتعاون',
                 },
             },
         },
@@ -704,27 +720,35 @@ export const ar: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'مشاركة المخطط',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'ادعُ المتعاونين بصلاحية محرر أو قارئ. يجب أن يكون لديهم حساب FoxalDB بالفعل.',
+            share_button: 'مشاركة',
+            empty_members: 'لا يوجد متعاونون بعد.',
+            remove: 'إزالة',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'المالك',
+                editor: 'محرر',
+                viewer: 'قارئ',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'إضافة متعاون',
+                email_label: 'البريد الإلكتروني',
+                email_placeholder: 'عنوان البريد الإلكتروني',
+                add: 'إضافة',
+                adding: 'جارٍ الإضافة…',
+                cancel: 'إلغاء',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'تعذر تحميل المتعاونين.',
+                add_failed: 'تعذر إضافة المتعاون.',
             },
+        },
+
+        diagram_role: {
+            owner: 'المالك',
+            editor: 'المحرر',
+            viewer: 'المشاهد',
         },
 
         editor_role: {

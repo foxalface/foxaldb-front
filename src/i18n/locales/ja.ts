@@ -135,6 +135,7 @@ export const ja: LanguageTranslation = {
         loading_diagram: 'ダイアグラムを読み込み中...',
         deselect_all: 'すべての選択を解除',
         select_all: 'すべてを選択',
+        delete: '削除',
         clear: 'クリア',
         show_more: 'さらに表示',
         show_less: '表示を減らす',
@@ -650,6 +651,16 @@ export const ja: LanguageTranslation = {
                 collaborators: {
                     description:
                         '編集者または閲覧者として共同編集者を招待します。FoxalDB アカウントが必要です。',
+                    filter: 'フィルター',
+                    clear: 'フィルターをクリア',
+                    no_results_title: '結果なし',
+                    no_results_description:
+                        'フィルターに一致する共同編集者がいません。',
+                    role_filter: {
+                        trigger: '役割',
+                        label: '役割でフィルター',
+                        trigger_aria: '共同編集者の役割でフィルター',
+                    },
                 },
                 public_link: {
                     title: '公開リンク',
@@ -661,6 +672,12 @@ export const ja: LanguageTranslation = {
                 retry: '再試行',
                 errors: {
                     load_failed: '共同編集者を読み込めませんでした。',
+                },
+                member_actions: {
+                    title: '共同編集者の操作',
+                    trigger_aria: '共同編集者の操作',
+                    role: 'ロール',
+                    remove: '共同編集者を削除',
                 },
             },
         },
@@ -716,27 +733,35 @@ export const ja: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'ダイアグラムを共有',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                '編集者または閲覧者アクセスで共同編集者を招待します。FoxalDBアカウントが必要です。',
+            share_button: '共有',
+            empty_members: '共同編集者はまだいません。',
+            remove: '削除',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'オーナー',
+                editor: '編集者',
+                viewer: '閲覧者',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: '共同編集者を追加',
+                email_label: 'メール',
+                email_placeholder: 'メールアドレス',
+                add: '追加',
+                adding: '追加中…',
+                cancel: 'キャンセル',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: '共同編集者を読み込めませんでした。',
+                add_failed: '共同編集者を追加できませんでした。',
             },
+        },
+
+        diagram_role: {
+            owner: '所有者',
+            editor: '編集者',
+            viewer: '閲覧者',
         },
 
         editor_role: {

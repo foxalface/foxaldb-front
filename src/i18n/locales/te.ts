@@ -134,6 +134,7 @@ export const te: LanguageTranslation = {
         loading_diagram: 'చిత్రం లోడ్ అవుతోంది...',
         deselect_all: 'అన్ని ఎంచుకోకుండా ఉంచు',
         select_all: 'అన్ని ఎంచుకోండి',
+        delete: 'తొలగించు',
         clear: 'తొలగించు',
         show_more: 'మరింత చూపించు',
         show_less: 'తక్కువ చూపించు',
@@ -645,6 +646,16 @@ export const te: LanguageTranslation = {
                 collaborators: {
                     description:
                         'ఎడిటర్ లేదా వ్యూయర్ యాక్సెస్‌తో సహకారులను ఆహ్వానించండి. వారికి ఇప్పటికే FoxalDB ఖాతా ఉండాలి.',
+                    filter: 'ఫిల్టర్',
+                    clear: 'ఫిల్టర్ క్లియర్ చేయి',
+                    no_results_title: 'ఫలితాలు లేవు',
+                    no_results_description:
+                        'మీ ఫిల్టర్‌కు సరిపోలే సహకారులు లేరు.',
+                    role_filter: {
+                        trigger: 'పాత్ర',
+                        label: 'పాత్ర ద్వారా ఫిల్టర్',
+                        trigger_aria: 'సహకారి పాత్ర ద్వారా ఫిల్టర్',
+                    },
                 },
                 public_link: {
                     title: 'పబ్లిక్ లింక్',
@@ -656,6 +667,12 @@ export const te: LanguageTranslation = {
                 retry: 'మళ్లీ ప్రయత్నించండి',
                 errors: {
                     load_failed: 'సహకారులను లోడ్ చేయలేకపోయాం.',
+                },
+                member_actions: {
+                    title: 'సహకారి చర్యలు',
+                    trigger_aria: 'సహకారి చర్యలు',
+                    role: 'పాత్ర',
+                    remove: 'సహకారిని తీసివేయండి',
                 },
             },
         },
@@ -711,27 +728,35 @@ export const te: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'డయాగ్రామ్‌ను షేర్ చేయండి',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'ఎడిటర్ లేదా వ్యూయర్ యాక్సెస్‌తో సహకారులను ఆహ్వానించండి. వారికి ఇప్పటికే FoxalDB ఖాతా ఉండాలి.',
+            share_button: 'షేర్ చేయండి',
+            empty_members: 'ఇంకా సహకారులు లేరు.',
+            remove: 'తొలగించు',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'యజమాని',
+                editor: 'ఎడిటర్',
+                viewer: 'వ్యూయర్',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'సహకారిని జోడించండి',
+                email_label: 'ఇమెయిల్',
+                email_placeholder: 'ఇమెయిల్ చిరునామా',
+                add: 'జోడించండి',
+                adding: 'జోడిస్తోంది…',
+                cancel: 'రద్దు చేయి',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'సహకారులను లోడ్ చేయలేకపోయాం.',
+                add_failed: 'సహకారిని జోడించలేకపోయాం.',
             },
+        },
+
+        diagram_role: {
+            owner: 'అధిపతి',
+            editor: 'సంపాదకుడు',
+            viewer: 'వీక్షకుడు',
         },
 
         editor_role: {

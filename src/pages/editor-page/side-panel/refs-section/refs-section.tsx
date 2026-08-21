@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { Button } from '@/components/button/button';
-import { ListCollapse, Workflow } from 'lucide-react';
+import { ListCollapse } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { RefsList } from './refs-list/refs-list';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -27,6 +27,7 @@ import {
 } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useLocalConfig } from '@/hooks/use-local-config';
+import { SidePanelAddButton } from '@/components/side-panel/side-panel-add-button';
 
 export type RefType = 'relationship' | 'dependency';
 
@@ -203,14 +204,10 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
                     />
                 </div>
                 {!readonly ? (
-                    <Button
-                        variant="secondary"
-                        className="h-8 p-2 text-xs"
+                    <SidePanelAddButton
+                        label={t('side_panel.refs_section.add_relationship')}
                         onClick={handleCreateRelationship}
-                    >
-                        <Workflow className="h-4" />
-                        {t('side_panel.refs_section.add_relationship')}
-                    </Button>
+                    />
                 ) : null}
             </div>
             <div className="flex flex-1 flex-col overflow-hidden">

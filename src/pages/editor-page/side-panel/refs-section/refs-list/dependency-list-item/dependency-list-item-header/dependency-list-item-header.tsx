@@ -115,9 +115,7 @@ export const DependencyListItemHeader: React.FC<
                                     SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
                                 }
                             />
-                            {t(
-                                'side_panel.refs_section.dependency.dependency_actions.delete_dependency'
-                            )}
+                            {t('delete')}
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>

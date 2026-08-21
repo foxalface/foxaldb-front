@@ -134,6 +134,7 @@ export const tr: LanguageTranslation = {
         loading_diagram: 'Diyagram yükleniyor...',
         deselect_all: 'Hepsini Seçme',
         select_all: 'Hepsini Seç',
+        delete: 'Sil',
         clear: 'Temizle',
         show_more: 'Daha Fazla Göster',
         show_less: 'Daha Az Göster',
@@ -640,6 +641,16 @@ export const tr: LanguageTranslation = {
                 collaborators: {
                     description:
                         'Düzenleyici veya görüntüleyici erişimiyle işbirlikçileri davet edin. Zaten bir FoxalDB hesabına sahip olmalıdırlar.',
+                    filter: 'Filtrele',
+                    clear: 'Filtreyi temizle',
+                    no_results_title: 'Sonuç yok',
+                    no_results_description:
+                        'Filtrenizle eşleşen işbirlikçi bulunamadı.',
+                    role_filter: {
+                        trigger: 'Rol',
+                        label: 'Role göre filtrele',
+                        trigger_aria: 'İşbirlikçi rolüne göre filtrele',
+                    },
                 },
                 public_link: {
                     title: 'Herkese açık bağlantı',
@@ -651,6 +662,12 @@ export const tr: LanguageTranslation = {
                 retry: 'Yeniden dene',
                 errors: {
                     load_failed: 'İşbirlikçiler yüklenemedi.',
+                },
+                member_actions: {
+                    title: 'İşbirlikçi işlemleri',
+                    trigger_aria: 'İşbirlikçi işlemleri',
+                    role: 'Rol',
+                    remove: 'İşbirlikçiyi kaldır',
                 },
             },
         },
@@ -702,27 +719,35 @@ export const tr: LanguageTranslation = {
             import: 'İçe Aktar',
         },
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'Diyagramı paylaş',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'Düzenleyici veya görüntüleyici erişimiyle işbirlikçileri davet edin. Zaten bir FoxalDB hesabına sahip olmalıdırlar.',
+            share_button: 'Paylaş',
+            empty_members: 'Henüz işbirlikçi yok.',
+            remove: 'Kaldır',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'Sahip',
+                editor: 'Düzenleyici',
+                viewer: 'Görüntüleyici',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'İşbirlikçi ekle',
+                email_label: 'E-posta',
+                email_placeholder: 'E-posta adresi',
+                add: 'Ekle',
+                adding: 'Ekleniyor…',
+                cancel: 'İptal',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'İşbirlikçiler yüklenemedi.',
+                add_failed: 'İşbirlikçi eklenemedi.',
             },
+        },
+
+        diagram_role: {
+            owner: 'Sahip',
+            editor: 'Düzenleyici',
+            viewer: 'Görüntüleyici',
         },
 
         editor_role: {

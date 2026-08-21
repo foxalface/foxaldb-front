@@ -133,6 +133,7 @@ export const hr: LanguageTranslation = {
         loading_diagram: 'Učitavanje dijagrama...',
         deselect_all: 'Odznači sve',
         select_all: 'Označi sve',
+        delete: 'Izbriši',
         clear: 'Očisti',
         show_more: 'Prikaži više',
         show_less: 'Prikaži manje',
@@ -647,6 +648,16 @@ export const hr: LanguageTranslation = {
                 collaborators: {
                     description:
                         'Pozovite suradnike s pristupom uređivača ili gledatelja. Već moraju imati FoxalDB račun.',
+                    filter: 'Filtriraj',
+                    clear: 'Očisti filtar',
+                    no_results_title: 'Nema rezultata',
+                    no_results_description:
+                        'Nema suradnika koji odgovaraju vašem filtru.',
+                    role_filter: {
+                        trigger: 'Uloga',
+                        label: 'Filtriraj po ulozi',
+                        trigger_aria: 'Filtriraj po ulozi suradnika',
+                    },
                 },
                 public_link: {
                     title: 'Javna poveznica',
@@ -658,6 +669,12 @@ export const hr: LanguageTranslation = {
                 retry: 'Pokušaj ponovno',
                 errors: {
                     load_failed: 'Suradnici se nisu mogli učitati.',
+                },
+                member_actions: {
+                    title: 'Radnje suradnika',
+                    trigger_aria: 'Radnje suradnika',
+                    role: 'Uloga',
+                    remove: 'Ukloni suradnika',
                 },
             },
         },
@@ -711,27 +728,35 @@ export const hr: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'Podijeli dijagram',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'Pozovite suradnike s pristupom uređivača ili gledatelja. Već moraju imati FoxalDB račun.',
+            share_button: 'Podijeli',
+            empty_members: 'Još nema suradnika.',
+            remove: 'Ukloni',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'Vlasnik',
+                editor: 'Uređivač',
+                viewer: 'Gledatelj',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'Dodaj suradnika',
+                email_label: 'E-pošta',
+                email_placeholder: 'Adresa e-pošte',
+                add: 'Dodaj',
+                adding: 'Dodavanje…',
+                cancel: 'Odustani',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'Suradnici se nisu mogli učitati.',
+                add_failed: 'Suradnik nije mogao biti dodan.',
             },
+        },
+
+        diagram_role: {
+            owner: 'Vlasnik',
+            editor: 'Uređivač',
+            viewer: 'Gledatelj',
         },
 
         editor_role: {

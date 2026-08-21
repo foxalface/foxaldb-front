@@ -134,6 +134,7 @@ export const ne: LanguageTranslation = {
         loading_diagram: 'डायाग्राम लोड हुँदैछ...',
         deselect_all: 'सबै चयन हटाउनुहोस्',
         select_all: 'सबै चयन गर्नुहोस्',
+        delete: 'मेटाउनुहोस्',
         clear: 'स्पष्ट',
         show_more: 'थप देखाउनुहोस्',
         show_less: 'कम देखाउनुहोस्',
@@ -650,6 +651,16 @@ export const ne: LanguageTranslation = {
                 collaborators: {
                     description:
                         'सम्पादक वा दर्शक पहुँचसह सहयोगीहरूलाई निमन्त्रणा गर्नुहोस्। उनीहरूसँग पहिले नै FoxalDB खाता हुनुपर्छ।',
+                    filter: 'फिल्टर',
+                    clear: 'फिल्टर हटाउनुहोस्',
+                    no_results_title: 'कुनै परिणाम छैन',
+                    no_results_description:
+                        'तपाईंको फिल्टरसँग मेल खाने कुनै सहकारी छैन।',
+                    role_filter: {
+                        trigger: 'भूमिका',
+                        label: 'भूमिका अनुसार फिल्टर',
+                        trigger_aria: 'सहकारी भूमिका अनुसार फिल्टर',
+                    },
                 },
                 public_link: {
                     title: 'सार्वजनिक लिङ्क',
@@ -661,6 +672,12 @@ export const ne: LanguageTranslation = {
                 retry: 'पुनः प्रयास गर्नुहोस्',
                 errors: {
                     load_failed: 'सहयोगीहरू लोड गर्न सकिएन।',
+                },
+                member_actions: {
+                    title: 'सहयोगी कार्यहरू',
+                    trigger_aria: 'सहयोगी कार्यहरू',
+                    role: 'भूमिका',
+                    remove: 'सहयोगी हटाउनुहोस्',
                 },
             },
         },
@@ -716,27 +733,35 @@ export const ne: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'डायाग्राम साझा गर्नुहोस्',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'सम्पादक वा दर्शक पहुँचसह सहकारीहरूलाई निमन्त्रणा गर्नुहोस्। उनीहरूसँग पहिले नै FoxalDB खाता हुनुपर्छ।',
+            share_button: 'साझा गर्नुहोस्',
+            empty_members: 'अहिलेसम्म कुनै सहकारी छैन।',
+            remove: 'हटाउनुहोस्',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'मालिक',
+                editor: 'सम्पादक',
+                viewer: 'दर्शक',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'सहकारी थप्नुहोस्',
+                email_label: 'इमेल',
+                email_placeholder: 'इमेल ठेगाना',
+                add: 'थप्नुहोस्',
+                adding: 'थपिँदै…',
+                cancel: 'रद्द गर्नुहोस्',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'सहकारीहरू लोड गर्न सकिएन।',
+                add_failed: 'सहकारी थप्न सकिएन।',
             },
+        },
+
+        diagram_role: {
+            owner: 'मालिक',
+            editor: 'सम्पादक',
+            viewer: 'दर्शक',
         },
 
         editor_role: {

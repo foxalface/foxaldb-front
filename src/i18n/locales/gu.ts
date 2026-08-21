@@ -135,6 +135,7 @@ export const gu: LanguageTranslation = {
         loading_diagram: 'ડાયાગ્રામ લોડ થઈ રહ્યું છે...',
         deselect_all: 'બધાને ડીસેલેક્ટ કરો',
         select_all: 'બધા પસંદ કરો',
+        delete: 'કાઢી નાખો',
         clear: 'સાફ કરો',
         show_more: 'વધુ બતાવો',
         show_less: 'ઓછું બતાવો',
@@ -642,6 +643,16 @@ export const gu: LanguageTranslation = {
                 collaborators: {
                     description:
                         'સંપાદક અથવા દર્શક ઍક્સેસ સાથે સહયોગીઓને આમંત્રિત કરો. તેમની પાસે પહેલેથી FoxalDB એકાઉન્ટ હોવું જોઈએ.',
+                    filter: 'ફિલ્ટર',
+                    clear: 'ફિલ્ટર સાફ કરો',
+                    no_results_title: 'કોઈ પરિણામ નથી',
+                    no_results_description:
+                        'તમારા ફિલ્ટર સાથે મેળ ખાતા કોઈ સહયોગી નથી.',
+                    role_filter: {
+                        trigger: 'ભૂમિકા',
+                        label: 'ભૂમિકા દ્વારા ફિલ્ટર',
+                        trigger_aria: 'સહયોગીની ભૂમિકા દ્વારા ફિલ્ટર',
+                    },
                 },
                 public_link: {
                     title: 'જાહેર લિંક',
@@ -653,6 +664,12 @@ export const gu: LanguageTranslation = {
                 retry: 'ફરી પ્રયાસ કરો',
                 errors: {
                     load_failed: 'સહયોગીઓ લોડ કરી શકાયા નહીં.',
+                },
+                member_actions: {
+                    title: 'સહયોગી ક્રિયાઓ',
+                    trigger_aria: 'સહયોગી ક્રિયાઓ',
+                    role: 'ભૂમિકા',
+                    remove: 'સહયોગી દૂર કરો',
                 },
             },
         },
@@ -706,27 +723,35 @@ export const gu: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'ડાયાગ્રામ શેર કરો',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'સંપાદક અથવા દર્શક ઍક્સેસ સાથે સહયોગીઓને આમંત્રિત કરો. તેમની પાસે પહેલેથી FoxalDB એકાઉન્ટ હોવું જોઈએ.',
+            share_button: 'શેર કરો',
+            empty_members: 'હજી સુધી કોઈ સહયોગી નથી.',
+            remove: 'દૂર કરો',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'માલિક',
+                editor: 'સંપાદક',
+                viewer: 'દર્શક',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'સહયોગી ઉમેરો',
+                email_label: 'ઈમેલ',
+                email_placeholder: 'ઈમેલ સરનામું',
+                add: 'ઉમેરો',
+                adding: 'ઉમેરાઈ રહ્યું છે…',
+                cancel: 'રદ કરો',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'સહયોગીઓ લોડ કરી શકાયા નહીં.',
+                add_failed: 'સહયોગી ઉમેરી શકાયો નહીં.',
             },
+        },
+
+        diagram_role: {
+            owner: 'માલિક',
+            editor: 'સંપાદક',
+            viewer: 'દર્શક',
         },
 
         editor_role: {

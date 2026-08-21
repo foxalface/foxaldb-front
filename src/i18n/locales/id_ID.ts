@@ -134,6 +134,7 @@ export const id_ID: LanguageTranslation = {
         loading_diagram: 'Memuat diagram...',
         deselect_all: 'Batalkan Semua',
         select_all: 'Pilih Semua',
+        delete: 'Hapus',
         clear: 'Bersihkan',
         show_more: 'Tampilkan Lebih Banyak',
         show_less: 'Tampilkan Lebih Sedikit',
@@ -653,6 +654,16 @@ export const id_ID: LanguageTranslation = {
                 collaborators: {
                     description:
                         'Undang kolaborator dengan akses editor atau penampil. Mereka harus sudah memiliki akun FoxalDB.',
+                    filter: 'Filter',
+                    clear: 'Hapus filter',
+                    no_results_title: 'Tidak ada hasil',
+                    no_results_description:
+                        'Tidak ada kolaborator yang cocok dengan filter Anda.',
+                    role_filter: {
+                        trigger: 'Peran',
+                        label: 'Filter menurut peran',
+                        trigger_aria: 'Filter menurut peran kolaborator',
+                    },
                 },
                 public_link: {
                     title: 'Tautan publik',
@@ -664,6 +675,12 @@ export const id_ID: LanguageTranslation = {
                 retry: 'Coba lagi',
                 errors: {
                     load_failed: 'Tidak dapat memuat kolaborator.',
+                },
+                member_actions: {
+                    title: 'Tindakan kolaborator',
+                    trigger_aria: 'Tindakan kolaborator',
+                    role: 'Peran',
+                    remove: 'Hapus kolaborator',
                 },
             },
         },
@@ -718,27 +735,35 @@ export const id_ID: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'Bagikan diagram',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'Undang kolaborator dengan akses editor atau penampil. Mereka harus sudah memiliki akun FoxalDB.',
+            share_button: 'Bagikan',
+            empty_members: 'Belum ada kolaborator.',
+            remove: 'Hapus',
             roles: {
-                owner: 'Owner',
+                owner: 'Pemilik',
                 editor: 'Editor',
-                viewer: 'Viewer',
+                viewer: 'Penampil',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'Tambah kolaborator',
+                email_label: 'Email',
+                email_placeholder: 'Alamat email',
+                add: 'Tambah',
+                adding: 'Menambahkan…',
+                cancel: 'Batal',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'Tidak dapat memuat kolaborator.',
+                add_failed: 'Tidak dapat menambahkan kolaborator.',
             },
+        },
+
+        diagram_role: {
+            owner: 'Pemilik',
+            editor: 'Editor',
+            viewer: 'Penampil',
         },
 
         editor_role: {

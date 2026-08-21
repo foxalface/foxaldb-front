@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
 import { Button } from '@/components/button/button';
-import { X, Plus } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { EmptyState } from '@/components/empty-state/empty-state';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { useTranslation } from 'react-i18next';
+import { SidePanelAddButton } from '@/components/side-panel/side-panel-add-button';
 import { CustomTypeList } from './custom-type-list/custom-type-list';
 
 export interface CustomTypesSectionProps {}
@@ -51,15 +52,10 @@ export const CustomTypesSection: React.FC<CustomTypesSectionProps> = () => {
                     />
                 </div>
                 {!readonly ? (
-                    <Button
-                        variant="secondary"
-                        size="sm"
-                        className="h-8 px-2"
+                    <SidePanelAddButton
+                        label={t('side_panel.custom_types_section.new_type')}
                         onClick={handleCreateCustomType}
-                    >
-                        <Plus className="mr-1 size-4" />
-                        {t('side_panel.custom_types_section.new_type')}
-                    </Button>
+                    />
                 ) : null}
             </div>
             <div className="flex flex-1 flex-col overflow-hidden">

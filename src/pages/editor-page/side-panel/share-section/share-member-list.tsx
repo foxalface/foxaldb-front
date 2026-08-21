@@ -1,39 +1,64 @@
-import React, { useCallback, useState } from 'react';
-import { Button } from '@/components/button/button';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/select/select';
-import {
-    DIAGRAM_MEMBER_ROLE_EDITOR,
-    DIAGRAM_MEMBER_ROLE_VIEWER,
     removeDiagramMember,
     updateDiagramMember,
     type DiagramMemberResource,
     type DiagramMemberRole,
 } from '@/lib/api/diagram-members';
-import type { AuthUser } from '@/lib/api/auth';
 import { useTranslation } from 'react-i18next';
-import { DiagramRoleBadge } from '@/components/diagram-role-badge/diagram-role-badge';
+import { Input } from '@/components/input/input';
+import { DiagramRoleIcon } from '@/components/diagram-role-icon/diagram-role-icon';
+import { SidePanelAddButton } from '@/components/side-panel/side-panel-add-button';
+import { ShareMemberActionsPopover } from './share-member-actions-popover';
+import { ShareMemberRoleFilter } from './share-member-role-filter';
+import { ShareMembersFilterEmptyState } from './share-members-filter-empty-state';
+import { ShareAddMemberDialog } from './share-add-member-dialog';
+import {
+    DEFAULT_SELECTED_MEMBER_ROLES,
+    filterShareMembers,
+    hasActiveShareMemberFilter,
+} from './filter-share-members';
 
 export interface ShareMemberListProps {
     diagramId: string;
-    owner: AuthUser;
     members: DiagramMemberResource[];
     onMembersChange: (members: DiagramMemberResource[]) => void;
+    onMemberAdded: (member: DiagramMemberResource) => void;
 }
 
 export const ShareMemberList: React.FC<ShareMemberListProps> = ({
     diagramId,
-    owner,
     members,
     onMembersChange,
+    onMemberAdded,
 }) => {
     const { t } = useTranslation();
     const [busyMemberId, setBusyMemberId] = useState<number | null>(null);
+    const [filterText, setFilterText] = useState('');
+    const [selectedRoles, setSelectedRoles] = useState<DiagramMemberRole[]>(
+        DEFAULT_SELECTED_MEMBER_ROLES
+    );
+    const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+
+    const filterOptions = useMemo(
+        () => ({
+            filterText,
+            selectedRoles,
+        }),
+        [filterText, selectedRoles]
+    );
+
+    const hasActiveFilter = hasActiveShareMemberFilter(filterOptions);
+
+    const filteredMembers = useMemo(
+        () => filterShareMembers(members, filterOptions),
+        [members, filterOptions]
+    );
+
+    const handleClearFilter = useCallback(() => {
+        setFilterText('');
+        setSelectedRoles(DEFAULT_SELECTED_MEMBER_ROLES);
+    }, []);
 
     const handleRoleChange = useCallback(
         async (member: DiagramMemberResource, role: DiagramMemberRole) => {
@@ -78,31 +103,46 @@ export const ShareMemberList: React.FC<ShareMemberListProps> = ({
     );
 
     return (
-        <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-2 rounded-md border p-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium">
-                            {owner.full_name}
-                        </p>
-                        <p className="truncate text-sm text-muted-foreground">
-                            {owner.email}
-                        </p>
-                    </div>
-                    <DiagramRoleBadge role="owner" />
+        <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 pb-1">
+                <div className="flex-1">
+                    <Input
+                        type="text"
+                        placeholder={t(
+                            'side_panel.share_section.collaborators.filter'
+                        )}
+                        className="h-8 w-full focus-visible:ring-0"
+                        value={filterText}
+                        onChange={(event) => setFilterText(event.target.value)}
+                    />
                 </div>
+                <ShareMemberRoleFilter
+                    selectedRoles={selectedRoles}
+                    onSelectedRolesChange={setSelectedRoles}
+                />
+                <SidePanelAddButton
+                    label={t('share_diagram_dialog.add_member.title')}
+                    onClick={() => setIsAddDialogOpen(true)}
+                />
             </div>
 
             {members.length === 0 ? (
-                <p className="text-sm text-muted-foreground">
+                <p className="px-2 text-sm text-muted-foreground">
                     {t('share_diagram_dialog.empty_members')}
                 </p>
+            ) : filteredMembers.length === 0 && hasActiveFilter ? (
+                <ShareMembersFilterEmptyState
+                    onClearFilter={handleClearFilter}
+                />
             ) : (
-                members.map((member) => (
+                filteredMembers.map((member) => (
                     <div
                         key={member.id}
-                        className="flex flex-col gap-2 rounded-md border p-3 sm:flex-row sm:items-center sm:justify-between"
+                        className="group flex items-center gap-3 rounded-md px-2 py-1.5 hover:bg-accent"
                     >
+                        <div className="flex w-6 shrink-0 items-center justify-center">
+                            <DiagramRoleIcon role={member.role} />
+                        </div>
                         <div className="min-w-0 flex-1">
                             <p className="truncate font-medium">
                                 {member.user.fullName}
@@ -111,47 +151,26 @@ export const ShareMemberList: React.FC<ShareMemberListProps> = ({
                                 {member.user.email}
                             </p>
                         </div>
-                        <div className="flex flex-wrap items-center gap-2">
-                            <Select
-                                value={member.role}
-                                onValueChange={(value) =>
-                                    void handleRoleChange(
-                                        member,
-                                        value as DiagramMemberRole
-                                    )
-                                }
-                                disabled={busyMemberId === member.id}
-                            >
-                                <SelectTrigger className="w-32">
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem
-                                        value={DIAGRAM_MEMBER_ROLE_EDITOR}
-                                    >
-                                        {t('share_diagram_dialog.roles.editor')}
-                                    </SelectItem>
-                                    <SelectItem
-                                        value={DIAGRAM_MEMBER_ROLE_VIEWER}
-                                    >
-                                        {t('share_diagram_dialog.roles.viewer')}
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <DiagramRoleBadge role={member.role} />
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                size="sm"
-                                disabled={busyMemberId === member.id}
-                                onClick={() => void handleRemove(member.id)}
-                            >
-                                {t('share_diagram_dialog.remove')}
-                            </Button>
-                        </div>
+                        <ShareMemberActionsPopover
+                            member={member}
+                            disabled={busyMemberId === member.id}
+                            onRoleChange={(role) => {
+                                void handleRoleChange(member, role);
+                            }}
+                            onRemove={() => {
+                                void handleRemove(member.id);
+                            }}
+                        />
                     </div>
                 ))
             )}
+
+            <ShareAddMemberDialog
+                diagramId={diagramId}
+                open={isAddDialogOpen}
+                onOpenChange={setIsAddDialogOpen}
+                onMemberAdded={onMemberAdded}
+            />
         </div>
     );
 };

@@ -6,6 +6,11 @@ export type DiagramMemberRole = 'editor' | 'viewer';
 export const DIAGRAM_MEMBER_ROLE_EDITOR: DiagramMemberRole = 'editor';
 export const DIAGRAM_MEMBER_ROLE_VIEWER: DiagramMemberRole = 'viewer';
 
+export const DIAGRAM_MEMBER_ROLES: DiagramMemberRole[] = [
+    DIAGRAM_MEMBER_ROLE_EDITOR,
+    DIAGRAM_MEMBER_ROLE_VIEWER,
+];
+
 export interface DiagramMemberUserDto {
     id: number;
     first_name: string;

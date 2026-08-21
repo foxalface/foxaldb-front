@@ -206,9 +206,7 @@ export const RelationshipListItemHeader: React.FC<
                         {!readonly ? (
                             <ListItemHeaderButton
                                 onClick={deleteRelationshipHandler}
-                                aria-label={t(
-                                    'side_panel.refs_section.relationship.relationship_actions.delete_relationship'
-                                )}
+                                aria-label={t('delete')}
                                 role="button"
                                 className="!text-red-700 hover:!text-red-700 dark:!text-red-700 dark:hover:!text-red-700"
                             >

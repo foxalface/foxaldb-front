@@ -159,9 +159,7 @@ export const ConversationSummaryActionsMenu = React.forwardRef<
                                     }
                                     aria-hidden="true"
                                 />
-                                {t(
-                                    'side_panel.conversations_section.summary.actions.delete'
-                                )}
+                                {t('delete')}
                             </DropdownMenuItem>
                         </>
                     ) : null}

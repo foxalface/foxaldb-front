@@ -298,9 +298,7 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                             SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
                                         }
                                     />
-                                    {t(
-                                        'side_panel.tables_section.table.table_actions.delete_table'
-                                    )}
+                                    {t('delete')}
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                         </>

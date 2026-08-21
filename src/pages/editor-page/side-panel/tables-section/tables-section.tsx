@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { Table, View, EyeOff, ListCollapse } from 'lucide-react';
+import { View, EyeOff, ListCollapse } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -24,7 +24,7 @@ import type { DBSchema } from '@/lib/domain';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
-import { ButtonWithAlternatives } from '@/components/button/button-with-alternatives';
+import { SidePanelAddButtonWithAlternatives } from '@/components/side-panel/side-panel-add-button';
 import { useLocalConfig } from '@/hooks/use-local-config';
 
 export interface TablesSectionProps {}
@@ -184,12 +184,9 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                     />
                 </div>
                 {!readonly ? (
-                    <ButtonWithAlternatives
-                        variant="secondary"
-                        className="h-8 p-2 text-xs"
+                    <SidePanelAddButtonWithAlternatives
+                        label={t('side_panel.tables_section.add_table')}
                         onClick={() => handleCreateTable({ view: false })}
-                        dropdownTriggerClassName="px-1"
-                        chevronDownIconClassName="!size-3.5"
                         alternatives={
                             showDBViews
                                 ? [
@@ -205,10 +202,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                                   ]
                                 : []
                         }
-                    >
-                        <Table className="h-4" />
-                        {t('side_panel.tables_section.add_table')}
-                    </ButtonWithAlternatives>
+                    />
                 ) : null}
             </div>
             {/* Indicator when all tables are hidden by diagram filter */}

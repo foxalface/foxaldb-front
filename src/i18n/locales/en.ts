@@ -133,6 +133,7 @@ export const en = {
         loading_diagram: 'Loading diagram...',
         deselect_all: 'Deselect All',
         select_all: 'Select All',
+        delete: 'Delete',
         clear: 'Clear',
         show_more: 'Show More',
         show_less: 'Show Less',
@@ -644,6 +645,16 @@ export const en = {
                 collaborators: {
                     description:
                         'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
+                    filter: 'Filter',
+                    clear: 'Clear filter',
+                    no_results_title: 'No results',
+                    no_results_description:
+                        'No collaborators found matching your filter.',
+                    role_filter: {
+                        trigger: 'Role',
+                        label: 'Filter by role',
+                        trigger_aria: 'Filter by collaborator role',
+                    },
                 },
                 public_link: {
                     title: 'Public link',
@@ -655,6 +666,12 @@ export const en = {
                 retry: 'Retry',
                 errors: {
                     load_failed: 'Could not load collaborators.',
+                },
+                member_actions: {
+                    title: 'Collaborator actions',
+                    trigger_aria: 'Collaborator actions',
+                    role: 'Role',
+                    remove: 'Remove collaborator',
                 },
             },
         },
@@ -721,14 +738,22 @@ export const en = {
             },
             add_member: {
                 title: 'Add collaborator',
+                email_label: 'Email',
                 email_placeholder: 'Email address',
                 add: 'Add',
                 adding: 'Adding...',
+                cancel: 'Cancel',
             },
             errors: {
                 load_failed: 'Could not load collaborators.',
                 add_failed: 'Could not add collaborator.',
             },
+        },
+
+        diagram_role: {
+            owner: 'Owner',
+            editor: 'Editor',
+            viewer: 'Viewer',
         },
 
         editor_role: {

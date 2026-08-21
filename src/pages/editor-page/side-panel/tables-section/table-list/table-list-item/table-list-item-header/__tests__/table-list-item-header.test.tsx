@@ -218,7 +218,7 @@ describe('TableListItemHeader conversation entry', () => {
             screen.getByRole('menuitem', { name: /Add Field/i })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('menuitem', { name: /Delete Table/i })
+            screen.getByRole('menuitem', { name: /Delete/i })
         ).toBeInTheDocument();
     });
 
@@ -245,7 +245,7 @@ describe('TableListItemHeader conversation entry', () => {
             screen.queryByRole('menuitem', { name: /Duplicate Table/i })
         ).not.toBeInTheDocument();
         expect(
-            screen.queryByRole('menuitem', { name: /Delete Table/i })
+            screen.queryByRole('menuitem', { name: /Delete/i })
         ).not.toBeInTheDocument();
         expect(
             screen.queryByRole('menuitem', { name: /Change Schema/i })
@@ -336,7 +336,7 @@ describe('TableListItemHeader conversation entry', () => {
             name: 'Open conversation',
         });
         const deleteItem = screen.getByRole('menuitem', {
-            name: 'Delete Table',
+            name: 'Delete',
         });
         expect(
             conversation.compareDocumentPosition(deleteItem) &
@@ -521,19 +521,17 @@ describe('TableListItemHeader legacy actions', () => {
     it('invokes removeTable with the table id', async () => {
         const user = await openMenu();
 
-        await user.click(
-            screen.getByRole('menuitem', { name: /Delete Table/i })
-        );
+        await user.click(screen.getByRole('menuitem', { name: /Delete/i }));
         expect(removeTable).toHaveBeenCalledTimes(1);
         expect(removeTable).toHaveBeenCalledWith('table-1');
     });
 
-    it('hides Delete Table for readonly users', async () => {
+    it('hides Delete for readonly users', async () => {
         chartDBState.readonly = true;
         await openMenu();
 
         expect(
-            screen.queryByRole('menuitem', { name: /Delete Table/i })
+            screen.queryByRole('menuitem', { name: /Delete/i })
         ).not.toBeInTheDocument();
     });
 });

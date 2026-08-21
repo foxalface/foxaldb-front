@@ -540,9 +540,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                                     className="size-3.5 text-red-700"
                                     aria-hidden="true"
                                 />
-                                {t(
-                                    'side_panel.tables_section.table.field_actions.delete_field'
-                                )}
+                                {t('delete')}
                             </Button>
                         </>
                     ) : null}

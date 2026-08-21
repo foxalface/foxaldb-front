@@ -81,11 +81,7 @@ export const DependencyListItemContent: React.FC<
                     onClick={deleteDependencyHandler}
                 >
                     <Trash2 className="mr-1 size-3.5 text-red-700" />
-                    <div className="text-red-700">
-                        {t(
-                            'side_panel.refs_section.dependency.delete_dependency'
-                        )}
-                    </div>
+                    <div className="text-red-700">{t('delete')}</div>
                 </Button>
             </div>
         </div>

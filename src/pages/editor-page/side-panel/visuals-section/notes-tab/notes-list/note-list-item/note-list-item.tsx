@@ -92,9 +92,7 @@ export const NoteListItem = React.forwardRef<HTMLDivElement, NoteListItemProps>(
                         {!readonly ? (
                             <ListItemHeaderButton
                                 onClick={handleDelete}
-                                aria-label={t(
-                                    'side_panel.notes_section.note.note_actions.delete_note'
-                                )}
+                                aria-label={t('delete')}
                                 role="button"
                                 className="!text-red-700 hover:!text-red-700 dark:!text-red-700 dark:hover:!text-red-700"
                             >

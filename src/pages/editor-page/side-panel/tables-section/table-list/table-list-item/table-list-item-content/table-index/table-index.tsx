@@ -298,9 +298,7 @@ export const TableIndex: React.FC<TableIndexProps> = ({
                                             onClick={removeIndex}
                                         >
                                             <Trash2 className="size-3.5 text-red-700" />
-                                            {t(
-                                                'side_panel.tables_section.table.index_actions.delete_index'
-                                            )}
+                                            {t('delete')}
                                         </Button>
                                     </>
                                 )}

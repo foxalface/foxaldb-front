@@ -147,9 +147,7 @@ export const AreaListItem = React.forwardRef<HTMLDivElement, AreaListItemProps>(
                                 {!readonly ? (
                                     <ListItemHeaderButton
                                         onClick={handleDelete}
-                                        aria-label={t(
-                                            'side_panel.areas_section.area.area_actions.delete_area'
-                                        )}
+                                        aria-label={t('delete')}
                                         role="button"
                                         className="!text-red-700 hover:!text-red-700 dark:!text-red-700 dark:hover:!text-red-700"
                                     >

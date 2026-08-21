@@ -160,7 +160,7 @@ describe('TableFieldPopover conversation entry', () => {
             screen.getByRole('button', { name: 'Open conversation' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('button', { name: 'Delete Field' })
+            screen.getByRole('button', { name: 'Delete' })
         ).toBeInTheDocument();
         expect(screen.getByText('Unique')).toBeInTheDocument();
         expect(screen.getByText('Default Value')).toBeInTheDocument();
@@ -180,7 +180,7 @@ describe('TableFieldPopover conversation entry', () => {
         await openPopover();
 
         expect(
-            screen.queryByRole('button', { name: 'Delete Field' })
+            screen.queryByRole('button', { name: 'Delete' })
         ).not.toBeInTheDocument();
 
         const uniqueCheckbox = screen.getByRole('checkbox');
@@ -198,7 +198,7 @@ describe('TableFieldPopover conversation entry', () => {
             screen.queryByRole('button', { name: 'Open conversation' })
         ).not.toBeInTheDocument();
         expect(
-            screen.getByRole('button', { name: 'Delete Field' })
+            screen.getByRole('button', { name: 'Delete' })
         ).toBeInTheDocument();
         expect(screen.getByText('Unique')).toBeInTheDocument();
     });
@@ -212,7 +212,7 @@ describe('TableFieldPopover conversation entry', () => {
             screen.queryByRole('button', { name: 'Open conversation' })
         ).not.toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: 'Delete Field' })
+            screen.queryByRole('button', { name: 'Delete' })
         ).not.toBeInTheDocument();
 
         const content = screen.getByText('Field Attributes', {
@@ -248,10 +248,10 @@ describe('TableFieldPopover conversation entry', () => {
         expect(popoverTrigger()).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('keeps Delete Field behavior unchanged', async () => {
+    it('keeps Delete behavior unchanged', async () => {
         const user = await openPopover();
 
-        await user.click(screen.getByRole('button', { name: 'Delete Field' }));
+        await user.click(screen.getByRole('button', { name: 'Delete' }));
 
         expect(removeField).toHaveBeenCalledTimes(1);
         expect(
@@ -276,7 +276,7 @@ describe('TableFieldPopover conversation entry', () => {
             name: 'Open conversation',
         });
         expect(
-            screen.queryByRole('button', { name: 'Delete Field' })
+            screen.queryByRole('button', { name: 'Delete' })
         ).not.toBeInTheDocument();
 
         const contentRoot = discussion.closest('.flex.flex-col.gap-2');
@@ -303,7 +303,7 @@ describe('TableFieldPopover conversation entry', () => {
             name: 'Open conversation',
         });
         const deleteButton = screen.getByRole('button', {
-            name: 'Delete Field',
+            name: 'Delete',
         });
         const contentRoot = discussion.closest('.flex.flex-col.gap-2');
         expect(contentRoot).not.toBeNull();

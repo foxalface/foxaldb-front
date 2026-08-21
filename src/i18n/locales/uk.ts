@@ -133,6 +133,7 @@ export const uk: LanguageTranslation = {
         loading_diagram: 'Завантаження діаграми…',
         deselect_all: 'Зняти виділення з усіх',
         select_all: 'Вибрати усі',
+        delete: 'Видалити',
         clear: 'Очистити',
         show_more: 'Показати більше',
         show_less: 'Показати менше',
@@ -652,6 +653,16 @@ export const uk: LanguageTranslation = {
                 collaborators: {
                     description:
                         'Запросіть учасників із правами редактора або глядача. Вони вже повинні мати обліковий запис FoxalDB.',
+                    filter: 'Фільтр',
+                    clear: 'Скинути фільтр',
+                    no_results_title: 'Немає результатів',
+                    no_results_description:
+                        'Немає учасників, що відповідають фільтру.',
+                    role_filter: {
+                        trigger: 'Роль',
+                        label: 'Фільтр за роллю',
+                        trigger_aria: 'Фільтр за роллю учасника',
+                    },
                 },
                 public_link: {
                     title: 'Публічне посилання',
@@ -663,6 +674,12 @@ export const uk: LanguageTranslation = {
                 retry: 'Повторити',
                 errors: {
                     load_failed: 'Не вдалося завантажити учасників.',
+                },
+                member_actions: {
+                    title: 'Дії з учасником',
+                    trigger_aria: 'Дії з учасником',
+                    role: 'Роль',
+                    remove: 'Видалити учасника',
                 },
             },
         },
@@ -717,27 +734,35 @@ export const uk: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'Поділитися діаграмою',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'Запросіть учасників із правами редактора або переглядача. У них уже має бути обліковий запис FoxalDB.',
+            share_button: 'Поділитися',
+            empty_members: 'Поки що немає учасників.',
+            remove: 'Видалити',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'Власник',
+                editor: 'Редактор',
+                viewer: 'Глядач',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'Додати учасника',
+                email_label: 'Ел. пошта',
+                email_placeholder: 'Адреса ел. пошти',
+                add: 'Додати',
+                adding: 'Додавання…',
+                cancel: 'Скасувати',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'Не вдалося завантажити учасників.',
+                add_failed: 'Не вдалося додати учасника.',
             },
+        },
+
+        diagram_role: {
+            owner: 'Власник',
+            editor: 'Редактор',
+            viewer: 'Глядач',
         },
 
         editor_role: {

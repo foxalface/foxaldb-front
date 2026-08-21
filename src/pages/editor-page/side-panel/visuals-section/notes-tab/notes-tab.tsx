@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Button } from '@/components/button/button';
-import { StickyNote } from 'lucide-react';
+import { SidePanelAddButton } from '@/components/side-panel/side-panel-add-button';
 import { Input } from '@/components/input/input';
 import type { Note } from '@/lib/domain/note';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -75,14 +74,10 @@ export const NotesTab: React.FC<NotesTabProps> = () => {
                     />
                 </div>
                 {!readonly ? (
-                    <Button
-                        variant="secondary"
-                        className="h-8 p-2 text-xs"
+                    <SidePanelAddButton
+                        label={t('side_panel.notes_section.add_note')}
                         onClick={handleCreateNote}
-                    >
-                        <StickyNote className="h-4" />
-                        {t('side_panel.notes_section.add_note')}
-                    </Button>
+                    />
                 ) : null}
             </div>
             <SidePanelEmptyStateViewport>

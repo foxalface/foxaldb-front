@@ -130,6 +130,7 @@ export const zh_CN: LanguageTranslation = {
         loading_diagram: '加载关系图...',
         deselect_all: '取消全选',
         select_all: '全选',
+        delete: '删除',
         clear: '清空',
         show_more: '展开',
         show_less: '收起',
@@ -617,6 +618,15 @@ export const zh_CN: LanguageTranslation = {
                 collaborators: {
                     description:
                         '邀请具有编辑者或查看者权限的协作者。他们必须已有 FoxalDB 账户。',
+                    filter: '筛选',
+                    clear: '清除筛选',
+                    no_results_title: '无结果',
+                    no_results_description: '没有符合筛选条件的协作者。',
+                    role_filter: {
+                        trigger: '角色',
+                        label: '按角色筛选',
+                        trigger_aria: '按协作者角色筛选',
+                    },
                 },
                 public_link: {
                     title: '公开链接',
@@ -627,6 +637,12 @@ export const zh_CN: LanguageTranslation = {
                 retry: '重试',
                 errors: {
                     load_failed: '无法加载协作者。',
+                },
+                member_actions: {
+                    title: '协作者操作',
+                    trigger_aria: '协作者操作',
+                    role: '角色',
+                    remove: '移除协作者',
                 },
             },
         },
@@ -681,27 +697,35 @@ export const zh_CN: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: '共享图表',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                '邀请具有编辑者或查看者权限的协作者。他们必须已有 FoxalDB 账户。',
+            share_button: '共享',
+            empty_members: '暂无协作者。',
+            remove: '移除',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: '所有者',
+                editor: '编辑者',
+                viewer: '查看者',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: '添加协作者',
+                email_label: '电子邮件',
+                email_placeholder: '电子邮件地址',
+                add: '添加',
+                adding: '正在添加…',
+                cancel: '取消',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: '无法加载协作者。',
+                add_failed: '无法添加协作者。',
             },
+        },
+
+        diagram_role: {
+            owner: '所有者',
+            editor: '编辑者',
+            viewer: '查看者',
         },
 
         editor_role: {

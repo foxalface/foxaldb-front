@@ -130,6 +130,7 @@ export const zh_TW: LanguageTranslation = {
         loading_diagram: '正在載入圖表...',
         deselect_all: '取消所有選取',
         select_all: '全選',
+        delete: '刪除',
         clear: '清除',
         show_more: '顯示更多',
         show_less: '顯示較少',
@@ -617,6 +618,15 @@ export const zh_TW: LanguageTranslation = {
                 collaborators: {
                     description:
                         '邀請具有編輯者或檢視者權限的協作者。他們必須已有 FoxalDB 帳戶。',
+                    filter: '篩選',
+                    clear: '清除篩選',
+                    no_results_title: '無結果',
+                    no_results_description: '沒有符合篩選條件的協作者。',
+                    role_filter: {
+                        trigger: '角色',
+                        label: '依角色篩選',
+                        trigger_aria: '依協作者角色篩選',
+                    },
                 },
                 public_link: {
                     title: '公開連結',
@@ -627,6 +637,12 @@ export const zh_TW: LanguageTranslation = {
                 retry: '重試',
                 errors: {
                     load_failed: '無法載入協作者。',
+                },
+                member_actions: {
+                    title: '協作者操作',
+                    trigger_aria: '協作者操作',
+                    role: '角色',
+                    remove: '移除協作者',
                 },
             },
         },
@@ -680,27 +696,35 @@ export const zh_TW: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: '分享圖表',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                '邀請具有編輯者或檢視者權限的協作者。他們必須已有 FoxalDB 帳戶。',
+            share_button: '分享',
+            empty_members: '尚無協作者。',
+            remove: '移除',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: '擁有者',
+                editor: '編輯者',
+                viewer: '檢視者',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: '新增協作者',
+                email_label: '電子郵件',
+                email_placeholder: '電子郵件地址',
+                add: '新增',
+                adding: '新增中…',
+                cancel: '取消',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: '無法載入協作者。',
+                add_failed: '無法新增協作者。',
             },
+        },
+
+        diagram_role: {
+            owner: '擁有者',
+            editor: '編輯者',
+            viewer: '檢視者',
         },
 
         editor_role: {

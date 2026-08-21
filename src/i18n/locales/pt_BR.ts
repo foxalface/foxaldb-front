@@ -135,6 +135,7 @@ export const pt_BR: LanguageTranslation = {
         loading_diagram: 'Carregando diagrama...',
         deselect_all: 'Desmarcar Todos',
         select_all: 'Selecionar Todos',
+        delete: 'Excluir',
         clear: 'Limpar',
         show_more: 'Mostrar Mais',
         show_less: 'Mostrar Menos',
@@ -657,6 +658,16 @@ export const pt_BR: LanguageTranslation = {
                 collaborators: {
                     description:
                         'Convide colaboradores com acesso de editor ou visualizador. Eles já devem ter uma conta FoxalDB.',
+                    filter: 'Filtrar',
+                    clear: 'Limpar filtro',
+                    no_results_title: 'Nenhum resultado',
+                    no_results_description:
+                        'Nenhum colaborador corresponde ao seu filtro.',
+                    role_filter: {
+                        trigger: 'Função',
+                        label: 'Filtrar por função',
+                        trigger_aria: 'Filtrar por função do colaborador',
+                    },
                 },
                 public_link: {
                     title: 'Link público',
@@ -668,6 +679,12 @@ export const pt_BR: LanguageTranslation = {
                 retry: 'Tentar novamente',
                 errors: {
                     load_failed: 'Não foi possível carregar os colaboradores.',
+                },
+                member_actions: {
+                    title: 'Ações do colaborador',
+                    trigger_aria: 'Ações do colaborador',
+                    role: 'Função',
+                    remove: 'Remover colaborador',
                 },
             },
         },
@@ -723,27 +740,35 @@ export const pt_BR: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'Compartilhar diagrama',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'Convide colaboradores com acesso de editor ou visualizador. Eles já devem ter uma conta FoxalDB.',
+            share_button: 'Compartilhar',
+            empty_members: 'Ainda não há colaboradores.',
+            remove: 'Remover',
             roles: {
-                owner: 'Owner',
+                owner: 'Proprietário',
                 editor: 'Editor',
-                viewer: 'Viewer',
+                viewer: 'Visualizador',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'Adicionar colaborador',
+                email_label: 'E-mail',
+                email_placeholder: 'Endereço de e-mail',
+                add: 'Adicionar',
+                adding: 'Adicionando…',
+                cancel: 'Cancelar',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'Não foi possível carregar os colaboradores.',
+                add_failed: 'Não foi possível adicionar o colaborador.',
             },
+        },
+
+        diagram_role: {
+            owner: 'Proprietário',
+            editor: 'Editor',
+            viewer: 'Visualizador',
         },
 
         editor_role: {

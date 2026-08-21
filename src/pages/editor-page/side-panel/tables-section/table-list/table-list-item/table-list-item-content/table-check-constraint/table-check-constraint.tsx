@@ -131,9 +131,7 @@ export const TableCheckConstraint: React.FC<TableCheckConstraintProps> = ({
                                         onClick={removeConstraint}
                                     >
                                         <Trash2 className="size-3.5 text-red-700" />
-                                        {t(
-                                            'side_panel.tables_section.table.check_constraint_actions.delete'
-                                        )}
+                                        {t('delete')}
                                     </Button>
                                 </>
                             ) : null}

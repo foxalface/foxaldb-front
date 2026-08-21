@@ -84,9 +84,7 @@ export const ConversationMessageActionsMenu = React.forwardRef<
                             }
                             aria-hidden="true"
                         />
-                        {t(
-                            'side_panel.conversations_section.detail.message.actions.delete'
-                        )}
+                        {t('delete')}
                     </DropdownMenuItem>
                 ) : null}
             </DropdownMenuContent>

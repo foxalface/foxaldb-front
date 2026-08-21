@@ -134,6 +134,7 @@ export const ru: LanguageTranslation = {
         loading_diagram: 'Загрузка диаграммы...',
         deselect_all: 'Отменить выбор всех',
         select_all: 'Выбрать все',
+        delete: 'Удалить',
         clear: 'Очистить',
         show_more: 'Показать больше',
         show_less: 'Показать меньше',
@@ -650,6 +651,16 @@ export const ru: LanguageTranslation = {
                 collaborators: {
                     description:
                         'Пригласите участников с правами редактора или зрителя. У них уже должен быть аккаунт FoxalDB.',
+                    filter: 'Фильтр',
+                    clear: 'Сбросить фильтр',
+                    no_results_title: 'Нет результатов',
+                    no_results_description:
+                        'Нет участников, соответствующих фильтру.',
+                    role_filter: {
+                        trigger: 'Роль',
+                        label: 'Фильтр по роли',
+                        trigger_aria: 'Фильтр по роли участника',
+                    },
                 },
                 public_link: {
                     title: 'Публичная ссылка',
@@ -661,6 +672,12 @@ export const ru: LanguageTranslation = {
                 retry: 'Повторить',
                 errors: {
                     load_failed: 'Не удалось загрузить участников.',
+                },
+                member_actions: {
+                    title: 'Действия с участником',
+                    trigger_aria: 'Действия с участником',
+                    role: 'Роль',
+                    remove: 'Удалить участника',
                 },
             },
         },
@@ -715,27 +732,35 @@ export const ru: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'Поделиться диаграммой',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'Пригласите участников с правами редактора или читателя. У них уже должна быть учётная запись FoxalDB.',
+            share_button: 'Поделиться',
+            empty_members: 'Пока нет участников.',
+            remove: 'Удалить',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'Владелец',
+                editor: 'Редактор',
+                viewer: 'Наблюдатель',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'Добавить участника',
+                email_label: 'Эл. почта',
+                email_placeholder: 'Адрес эл. почты',
+                add: 'Добавить',
+                adding: 'Добавление…',
+                cancel: 'Отмена',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'Не удалось загрузить участников.',
+                add_failed: 'Не удалось добавить участника.',
             },
+        },
+
+        diagram_role: {
+            owner: 'Владелец',
+            editor: 'Редактор',
+            viewer: 'Наблюдатель',
         },
 
         editor_role: {

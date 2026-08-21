@@ -221,11 +221,7 @@ export const CustomTypeListItemContent: React.FC<
                         onClick={deleteCustomTypeHandler}
                     >
                         <Trash2 className="mr-1 size-3.5 text-red-700" />
-                        <div className="text-red-700">
-                            {t(
-                                'side_panel.custom_types_section.custom_type.delete_custom_type'
-                            )}
-                        </div>
+                        <div className="text-red-700">{t('delete')}</div>
                     </Button>
                 ) : null}
             </div>

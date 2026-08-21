@@ -1,5 +1,5 @@
 import React from 'react';
-import { DiagramRoleBadge } from '@/components/diagram-role-badge/diagram-role-badge';
+import { DiagramRoleIcon } from '@/components/diagram-role-icon/diagram-role-icon';
 import { useAuth } from '@/hooks/use-auth';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
@@ -29,7 +29,7 @@ export const DiagramAccessRoleIndicator: React.FC<
 
     return (
         <div className="flex items-center gap-1.5">
-            <DiagramRoleBadge role={diagramAccess.role} />
+            <DiagramRoleIcon role={diagramAccess.role} />
             {diagramAccess.role === 'viewer' && !compact ? (
                 <span className="text-xs text-muted-foreground">
                     {t('editor_role.view_only')}

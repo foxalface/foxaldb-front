@@ -106,7 +106,6 @@ export const ShareSection: React.FC<ShareSectionProps> = () => {
                             <ScrollArea className="h-full">
                                 <ShareCollaboratorsTab
                                     diagramId={diagramId}
-                                    owner={user}
                                     members={members}
                                     onMembersChange={handleMembersChange}
                                     onMemberAdded={handleMemberAdded}

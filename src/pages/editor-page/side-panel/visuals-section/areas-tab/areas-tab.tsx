@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Button } from '@/components/button/button';
-import { Group } from 'lucide-react';
+import { SidePanelAddButton } from '@/components/side-panel/side-panel-add-button';
 import { Input } from '@/components/input/input';
 import type { Area } from '@/lib/domain/area';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -75,14 +74,10 @@ export const AreasTab: React.FC<AreasTabProps> = () => {
                     />
                 </div>
                 {!readonly ? (
-                    <Button
-                        variant="secondary"
-                        className="h-8 p-2 text-xs"
+                    <SidePanelAddButton
+                        label={t('side_panel.areas_section.add_area')}
                         onClick={handleCreateArea}
-                    >
-                        <Group className="h-4" />
-                        {t('side_panel.areas_section.add_area')}
-                    </Button>
+                    />
                 ) : null}
             </div>
             <SidePanelEmptyStateViewport>

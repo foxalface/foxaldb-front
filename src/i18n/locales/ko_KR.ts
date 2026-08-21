@@ -133,6 +133,7 @@ export const ko_KR: LanguageTranslation = {
         loading_diagram: '다이어그램 로딩중...',
         deselect_all: '모두 선택 해제',
         select_all: '모두 선택',
+        delete: '삭제',
         clear: '지우기',
         show_more: '더 보기',
         show_less: '간략히',
@@ -644,6 +645,16 @@ export const ko_KR: LanguageTranslation = {
                 collaborators: {
                     description:
                         '편집자 또는 뷰어 권한으로 협업자를 초대합니다. FoxalDB 계정이 있어야 합니다.',
+                    filter: '필터',
+                    clear: '필터 지우기',
+                    no_results_title: '결과 없음',
+                    no_results_description:
+                        '필터와 일치하는 협업자가 없습니다.',
+                    role_filter: {
+                        trigger: '역할',
+                        label: '역할별 필터',
+                        trigger_aria: '협업자 역할별 필터',
+                    },
                 },
                 public_link: {
                     title: '공개 링크',
@@ -655,6 +666,12 @@ export const ko_KR: LanguageTranslation = {
                 retry: '다시 시도',
                 errors: {
                     load_failed: '협업자를 불러올 수 없습니다.',
+                },
+                member_actions: {
+                    title: '협업자 작업',
+                    trigger_aria: '협업자 작업',
+                    role: '역할',
+                    remove: '협업자 제거',
                 },
             },
         },
@@ -709,27 +726,35 @@ export const ko_KR: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: '다이어그램 공유',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                '편집자 또는 뷰어 권한으로 협업자를 초대하세요. FoxalDB 계정이 있어야 합니다.',
+            share_button: '공유',
+            empty_members: '아직 협업자가 없습니다.',
+            remove: '제거',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: '소유자',
+                editor: '편집자',
+                viewer: '뷰어',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: '협업자 추가',
+                email_label: '이메일',
+                email_placeholder: '이메일 주소',
+                add: '추가',
+                adding: '추가 중…',
+                cancel: '취소',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: '협업자를 불러올 수 없습니다.',
+                add_failed: '협업자를 추가할 수 없습니다.',
             },
+        },
+
+        diagram_role: {
+            owner: '소유자',
+            editor: '편집자',
+            viewer: '뷰어',
         },
 
         editor_role: {

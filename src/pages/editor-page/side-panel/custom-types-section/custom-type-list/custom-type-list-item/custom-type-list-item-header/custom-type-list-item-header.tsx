@@ -152,9 +152,7 @@ export const CustomTypeListItemHeader: React.FC<
                                         SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS
                                     }
                                 />
-                                {t(
-                                    'side_panel.custom_types_section.custom_type.custom_type_actions.delete_custom_type'
-                                )}
+                                {t('delete')}
                             </DropdownMenuItem>
                         ) : null}
                     </DropdownMenuGroup>

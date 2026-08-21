@@ -134,6 +134,7 @@ export const vi: LanguageTranslation = {
         loading_diagram: 'Đang tải sơ đồ...',
         deselect_all: 'Bỏ chọn tất cả',
         select_all: 'Chọn tất cả',
+        delete: 'Xóa',
         clear: 'Xóa',
         show_more: 'Hiển thị thêm',
         show_less: 'Hiển thị ít hơn',
@@ -652,6 +653,16 @@ export const vi: LanguageTranslation = {
                 collaborators: {
                     description:
                         'Mời cộng tác viên với quyền chỉnh sửa hoặc xem. Họ phải đã có tài khoản FoxalDB.',
+                    filter: 'Lọc',
+                    clear: 'Xóa bộ lọc',
+                    no_results_title: 'Không có kết quả',
+                    no_results_description:
+                        'Không có cộng tác viên nào khớp với bộ lọc của bạn.',
+                    role_filter: {
+                        trigger: 'Vai trò',
+                        label: 'Lọc theo vai trò',
+                        trigger_aria: 'Lọc theo vai trò cộng tác viên',
+                    },
                 },
                 public_link: {
                     title: 'Liên kết công khai',
@@ -663,6 +674,12 @@ export const vi: LanguageTranslation = {
                 retry: 'Thử lại',
                 errors: {
                     load_failed: 'Không thể tải cộng tác viên.',
+                },
+                member_actions: {
+                    title: 'Thao tác cộng tác viên',
+                    trigger_aria: 'Thao tác cộng tác viên',
+                    role: 'Vai trò',
+                    remove: 'Xóa cộng tác viên',
                 },
             },
         },
@@ -717,27 +734,35 @@ export const vi: LanguageTranslation = {
         },
 
         share_diagram_dialog: {
-            title: 'Share diagram',
+            title: 'Chia sẻ sơ đồ',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
-            share_button: 'Share',
-            empty_members: 'No collaborators yet.',
-            remove: 'Remove',
+                'Mời cộng tác viên với quyền biên tập hoặc xem. Họ phải đã có tài khoản FoxalDB.',
+            share_button: 'Chia sẻ',
+            empty_members: 'Chưa có cộng tác viên.',
+            remove: 'Xóa',
             roles: {
-                owner: 'Owner',
-                editor: 'Editor',
-                viewer: 'Viewer',
+                owner: 'Chủ sở hữu',
+                editor: 'Biên tập viên',
+                viewer: 'Người xem',
             },
             add_member: {
-                title: 'Add collaborator',
-                email_placeholder: 'Email address',
-                add: 'Add',
-                adding: 'Adding...',
+                title: 'Thêm cộng tác viên',
+                email_label: 'Email',
+                email_placeholder: 'Địa chỉ email',
+                add: 'Thêm',
+                adding: 'Đang thêm…',
+                cancel: 'Hủy',
             },
             errors: {
-                load_failed: 'Could not load collaborators.',
-                add_failed: 'Could not add collaborator.',
+                load_failed: 'Không thể tải cộng tác viên.',
+                add_failed: 'Không thể thêm cộng tác viên.',
             },
+        },
+
+        diagram_role: {
+            owner: 'Chủ sở hữu',
+            editor: 'Biên tập viên',
+            viewer: 'Người xem',
         },
 
         editor_role: {
