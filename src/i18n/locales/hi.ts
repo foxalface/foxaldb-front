@@ -1144,10 +1144,28 @@ export const hi: LanguageTranslation = {
                 logout: 'लॉग आउट',
                 back_to_editor: 'संपादक पर वापस जाएं',
             },
+            settings: {
+                title: 'उपयोगकर्ता सेटिंग्स',
+                description: 'अपनी व्यक्तिगत जानकारी और पासवर्ड अपडेट करें।',
+                change_password_heading: 'पासवर्ड बदलें',
+                current_password_label: 'वर्तमान पासवर्ड',
+                new_password_label: 'नया पासवर्ड',
+                password_confirmation_label: 'नए पासवर्ड की पुष्टि करें',
+                first_name_label: 'पहला नाम',
+                last_name_label: 'उपनाम',
+                email_label: 'ईमेल पता',
+                submit: 'परिवर्तन सहेजें',
+                submitting: 'सहेजा जा रहा है...',
+                success_title: 'प्रोफ़ाइल अपडेट की गई',
+                success_description: 'आपकी प्रोफ़ाइल सहेज ली गई है।',
+            },
             nav: {
                 sign_in: 'साइन इन',
                 logout: 'लॉग आउट',
                 loading: '...',
+                user_menu: 'खाता',
+                settings: 'सेटिंग्स',
+                change_language: 'भाषा',
             },
             pages: {
                 login_title: 'FoxalDB — लॉग इन',
@@ -1189,7 +1207,8 @@ export const hi: LanguageTranslation = {
 };
 
 export const hiMetadata: LanguageMetadata = {
-    name: 'Hindi',
-    nativeName: 'हिन्दी',
+    name: 'Hindi (India)',
+    nativeName: 'हिन्दी (भारत)',
     code: 'hi',
+    countryCode: 'in',
 };

@@ -1133,10 +1133,28 @@ export const bn: LanguageTranslation = {
                 logout: 'লগ আউট',
                 back_to_editor: 'এডিটরে ফিরে যান',
             },
+            settings: {
+                title: 'ব্যবহারকারী সেটিংস',
+                description: 'আপনার ব্যক্তিগত তথ্য এবং পাসওয়ার্ড আপডেট করুন।',
+                change_password_heading: 'পাসওয়ার্ড পরিবর্তন করুন',
+                current_password_label: 'বর্তমান পাসওয়ার্ড',
+                new_password_label: 'নতুন পাসওয়ার্ড',
+                password_confirmation_label: 'নতুন পাসওয়ার্ড নিশ্চিত করুন',
+                first_name_label: 'নামের প্রথম অংশ',
+                last_name_label: 'পদবি',
+                email_label: 'ইমেল ঠিকানা',
+                submit: 'পরিবর্তন সংরক্ষণ করুন',
+                submitting: 'সংরক্ষণ করা হচ্ছে...',
+                success_title: 'প্রোফাইল আপডেট হয়েছে',
+                success_description: 'আপনার প্রোফাইল সংরক্ষিত হয়েছে।',
+            },
             nav: {
                 sign_in: 'সাইন ইন',
                 logout: 'লগ আউট',
                 loading: '...',
+                user_menu: 'অ্যাকাউন্ট',
+                settings: 'সেটিংস',
+                change_language: 'ভাষা',
             },
             pages: {
                 login_title: 'FoxalDB — লগ ইন',
@@ -1178,7 +1196,8 @@ export const bn: LanguageTranslation = {
 };
 
 export const bnMetadata: LanguageMetadata = {
-    name: 'Bengali',
-    nativeName: 'বাংলা',
+    name: 'Bengali (Bangladesh)',
+    nativeName: 'বাংলা (বাংলাদেশ)',
     code: 'bn',
+    countryCode: 'bd',
 };

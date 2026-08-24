@@ -17,6 +17,7 @@ import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-di
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
+import { UserSettingsDialog } from '@/dialogs/user-settings-dialog/user-settings-dialog';
 import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
@@ -106,6 +107,7 @@ export const DialogProvider: React.FC<
         );
 
     const [openAuthDialog, setOpenAuthDialog] = useState(false);
+    const [openUserSettingsDialog, setOpenUserSettingsDialog] = useState(false);
     const [
         openGuestDiagramMigrationDialog,
         setOpenGuestDiagramMigrationDialog,
@@ -275,6 +277,8 @@ export const DialogProvider: React.FC<
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
                 openAuthDialog: () => setOpenAuthDialog(true),
                 closeAuthDialog: () => setOpenAuthDialog(false),
+                openUserSettingsDialog: () => setOpenUserSettingsDialog(true),
+                closeUserSettingsDialog: () => setOpenUserSettingsDialog(false),
                 openGuestDiagramMigrationDialog: (params) => {
                     setGuestDiagramMigrationDialogParams(params);
                     setOpenGuestDiagramMigrationDialog(true);
@@ -334,6 +338,7 @@ export const DialogProvider: React.FC<
                 dialog={{ open: openAuthDialog }}
                 entryAuthActions={entryAuthActions}
             />
+            <UserSettingsDialog dialog={{ open: openUserSettingsDialog }} />
             <GuestDiagramMigrationDialog
                 dialog={{ open: openGuestDiagramMigrationDialog }}
                 entryGuestMigrationActions={entryGuestMigrationActions}

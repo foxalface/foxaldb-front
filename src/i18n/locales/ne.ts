@@ -1143,10 +1143,29 @@ export const ne: LanguageTranslation = {
                 logout: 'लग आउट',
                 back_to_editor: 'सम्पादकमा फर्कनुहोस्',
             },
+            settings: {
+                title: 'प्रयोगकर्ता सेटिङहरू',
+                description:
+                    'आफ्नो व्यक्तिगत जानकारी र पासवर्ड अद्यावधिक गर्नुहोस्।',
+                change_password_heading: 'पासवर्ड परिवर्तन गर्नुहोस्',
+                current_password_label: 'हालको पासवर्ड',
+                new_password_label: 'नयाँ पासवर्ड',
+                password_confirmation_label: 'नयाँ पासवर्ड पुष्टि गर्नुहोस्',
+                first_name_label: 'नाम',
+                last_name_label: 'थर',
+                email_label: 'इमेल ठेगाना',
+                submit: 'परिवर्तन सुरक्षित गर्नुहोस्',
+                submitting: 'सुरक्षित गर्दै...',
+                success_title: 'प्रोफाइल अद्यावधिक भयो',
+                success_description: 'तपाईंको प्रोफाइल सुरक्षित गरियो।',
+            },
             nav: {
                 sign_in: 'साइन इन',
                 logout: 'लग आउट',
                 loading: '...',
+                user_menu: 'खाता',
+                settings: 'सेटिङहरू',
+                change_language: 'भाषा',
             },
             pages: {
                 login_title: 'FoxalDB — लग इन',
@@ -1191,4 +1210,5 @@ export const neMetadata: LanguageMetadata = {
     name: 'Nepali',
     nativeName: 'नेपाली',
     code: 'ne',
+    countryCode: 'np',
 };

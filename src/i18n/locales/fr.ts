@@ -1146,10 +1146,30 @@ export const fr: LanguageTranslation = {
                 logout: 'Déconnexion',
                 back_to_editor: "Retour à l'éditeur",
             },
+            settings: {
+                title: 'Paramètres utilisateur',
+                description:
+                    'Modifiez vos informations personnelles et votre mot de passe.',
+                change_password_heading: 'Changer le mot de passe',
+                current_password_label: 'Mot de passe actuel',
+                new_password_label: 'Nouveau mot de passe',
+                password_confirmation_label:
+                    'Confirmer le nouveau mot de passe',
+                first_name_label: 'Prénom',
+                last_name_label: 'Nom',
+                email_label: 'Adresse e-mail',
+                submit: 'Enregistrer',
+                submitting: 'Enregistrement...',
+                success_title: 'Profil mis à jour',
+                success_description: 'Votre profil a été enregistré.',
+            },
             nav: {
                 sign_in: 'Se connecter',
                 logout: 'Déconnexion',
                 loading: '...',
+                user_menu: 'Compte',
+                settings: 'Paramètres',
+                change_language: 'Langue',
             },
             pages: {
                 login_title: 'FoxalDB — Connexion',
@@ -1191,7 +1211,8 @@ export const fr: LanguageTranslation = {
 };
 
 export const frMetadata: LanguageMetadata = {
-    name: 'French',
-    nativeName: 'Français',
+    name: 'French (France)',
+    nativeName: 'Français (France)',
     code: 'fr',
+    countryCode: 'fr',
 };

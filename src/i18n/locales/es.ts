@@ -1150,10 +1150,29 @@ export const es: LanguageTranslation = {
                 logout: 'Cerrar sesión',
                 back_to_editor: 'Volver al editor',
             },
+            settings: {
+                title: 'Configuración de usuario',
+                description:
+                    'Actualiza tu información personal y tu contraseña.',
+                change_password_heading: 'Cambiar contraseña',
+                current_password_label: 'Contraseña actual',
+                new_password_label: 'Nueva contraseña',
+                password_confirmation_label: 'Confirmar nueva contraseña',
+                first_name_label: 'Nombre',
+                last_name_label: 'Apellido',
+                email_label: 'Correo electrónico',
+                submit: 'Guardar cambios',
+                submitting: 'Guardando...',
+                success_title: 'Perfil actualizado',
+                success_description: 'Tu perfil se ha guardado.',
+            },
             nav: {
                 sign_in: 'Iniciar sesión',
                 logout: 'Cerrar sesión',
                 loading: '...',
+                user_menu: 'Cuenta',
+                settings: 'Configuración',
+                change_language: 'Idioma',
             },
             pages: {
                 login_title: 'FoxalDB — Iniciar sesión',
@@ -1195,7 +1214,8 @@ export const es: LanguageTranslation = {
 };
 
 export const esMetadata: LanguageMetadata = {
-    name: 'Spanish',
-    nativeName: 'Español',
+    name: 'Spanish (Spain)',
+    nativeName: 'Español (España)',
     code: 'es',
+    countryCode: 'es',
 };

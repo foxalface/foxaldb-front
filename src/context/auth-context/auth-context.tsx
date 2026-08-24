@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
-import type { AuthUser } from '@/lib/api/auth';
+import type { AuthUser, UpdateProfilePayload } from '@/lib/api/auth';
 
 export interface AuthContextValue {
     user: AuthUser | null;
@@ -16,6 +16,7 @@ export interface AuthContextValue {
     ) => Promise<void>;
     logout: () => Promise<void>;
     fetchUser: () => Promise<void>;
+    updateProfile: (payload: UpdateProfilePayload) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextValue>({
@@ -26,4 +27,5 @@ export const AuthContext = createContext<AuthContextValue>({
     register: emptyFn,
     logout: emptyFn,
     fetchUser: emptyFn,
+    updateProfile: emptyFn,
 });

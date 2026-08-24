@@ -1131,10 +1131,28 @@ export const gu: LanguageTranslation = {
                 logout: 'લૉગ આઉટ',
                 back_to_editor: 'એડિટર પર પાછા જાઓ',
             },
+            settings: {
+                title: 'વપરાશકર્તા સેટિંગ્સ',
+                description: 'તમારી વ્યક્તિગત માહિતી અને પાસવર્ડ અપડેટ કરો.',
+                change_password_heading: 'પાસવર્ડ બદલો',
+                current_password_label: 'વર્તમાન પાસવર્ડ',
+                new_password_label: 'નવો પાસવર્ડ',
+                password_confirmation_label: 'નવા પાસવર્ડની પુષ્ટિ કરો',
+                first_name_label: 'પ્રથમ નામ',
+                last_name_label: 'અટક',
+                email_label: 'ઇમેઇલ સરનામું',
+                submit: 'ફેરફારો સાચવો',
+                submitting: 'સાચવી રહ્યા છીએ...',
+                success_title: 'પ્રોફાઇલ અપડેટ થઈ',
+                success_description: 'તમારી પ્રોફાઇલ સાચવવામાં આવી.',
+            },
             nav: {
                 sign_in: 'સાઇન ઇન',
                 logout: 'લૉગ આઉટ',
                 loading: '...',
+                user_menu: 'એકાઉન્ટ',
+                settings: 'સેટિંગ્સ',
+                change_language: 'ભાષા',
             },
             pages: {
                 login_title: 'FoxalDB — લૉગ ઇન',
@@ -1176,7 +1194,8 @@ export const gu: LanguageTranslation = {
 };
 
 export const guMetadata: LanguageMetadata = {
-    name: 'Gujarati',
-    nativeName: 'ગુજરાતી',
+    name: 'Gujarati (India)',
+    nativeName: 'ગુજરાતી (ભારત)',
     code: 'gu',
+    countryCode: 'in',
 };

@@ -1142,10 +1142,28 @@ export const id_ID: LanguageTranslation = {
                 logout: 'Keluar',
                 back_to_editor: 'Kembali ke editor',
             },
+            settings: {
+                title: 'Pengaturan pengguna',
+                description: 'Perbarui informasi pribadi dan kata sandi Anda.',
+                change_password_heading: 'Ubah kata sandi',
+                current_password_label: 'Kata sandi saat ini',
+                new_password_label: 'Kata sandi baru',
+                password_confirmation_label: 'Konfirmasi kata sandi baru',
+                first_name_label: 'Nama depan',
+                last_name_label: 'Nama belakang',
+                email_label: 'Alamat email',
+                submit: 'Simpan perubahan',
+                submitting: 'Menyimpan...',
+                success_title: 'Profil diperbarui',
+                success_description: 'Profil Anda telah disimpan.',
+            },
             nav: {
                 sign_in: 'Masuk',
                 logout: 'Keluar',
                 loading: '...',
+                user_menu: 'Akun',
+                settings: 'Pengaturan',
+                change_language: 'Bahasa',
             },
             pages: {
                 login_title: 'FoxalDB — Masuk',
@@ -1187,7 +1205,8 @@ export const id_ID: LanguageTranslation = {
 };
 
 export const id_IDMetadata: LanguageMetadata = {
-    name: 'Indonesian',
-    nativeName: 'Indonesia',
+    name: 'Indonesian (Indonesia)',
+    nativeName: 'Bahasa Indonesia',
     code: 'id_ID',
+    countryCode: 'id',
 };

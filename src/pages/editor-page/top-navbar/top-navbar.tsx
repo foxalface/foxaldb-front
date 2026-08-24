@@ -1,14 +1,10 @@
 import React from 'react';
-import ChartDBLogo from '@/assets/logo-light.png';
-import ChartDBDarkLogo from '@/assets/logo-dark.png';
-import { useTheme } from '@/hooks/use-theme';
-import { DiagramName } from './diagram-name';
 import { LastSaved } from './last-saved';
-import { LanguageNav } from './language-nav/language-nav';
 import { Menu } from './menu/menu';
-import { AuthNavAction } from './auth-nav-action';
 import { PresenceAvatarStack } from '@/components/presence/presence-avatar-stack';
-import { DiagramAccessRoleIndicator } from './diagram-access-role-indicator';
+import { SiteBrand } from './site-brand';
+import { UserNavMenu } from './user-nav-menu';
+import { SIDEBAR_WIDTH_ICON_EXTENDED } from '@/components/sidebar/sidebar';
 
 import type { EntryFlowActiveDiagramDeletionActions } from '@/pages/editor-page/entry-flow-active-diagram-deletion-actions';
 
@@ -17,37 +13,32 @@ export interface TopNavbarProps extends EntryFlowActiveDiagramDeletionActions {}
 export const TopNavbar: React.FC<TopNavbarProps> = ({
     onActiveDiagramDeleted,
 }) => {
-    const { effectiveTheme } = useTheme();
-
     return (
-        <nav className="flex flex-col justify-between border-b px-3 md:h-12 md:flex-row md:items-center md:px-4">
-            <div className="flex flex-1 flex-col justify-between gap-x-1 md:flex-row md:justify-normal">
-                <div className="flex items-center justify-between pt-[8px] font-primary md:py-[10px]">
-                    <a
-                        href="https://chartdb.io"
-                        className="cursor-pointer"
-                        rel="noreferrer"
-                    >
-                        <img
-                            src={
-                                effectiveTheme === 'light'
-                                    ? ChartDBLogo
-                                    : ChartDBDarkLogo
-                            }
-                            alt="chartDB"
-                            className="h-4 max-w-fit"
-                        />
-                    </a>
-                </div>
-                <Menu onActiveDiagramDeleted={onActiveDiagramDeleted} />
+        <nav
+            className="flex h-10 items-center border-b bg-background"
+            style={
+                {
+                    '--sidebar-width-icon-extended':
+                        SIDEBAR_WIDTH_ICON_EXTENDED,
+                } as React.CSSProperties
+            }
+        >
+            <div
+                className="flex h-full shrink-0 items-center justify-center"
+                style={{ width: SIDEBAR_WIDTH_ICON_EXTENDED }}
+            >
+                <SiteBrand />
             </div>
-            <DiagramName />
-            <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
-                <DiagramAccessRoleIndicator />
-                <LastSaved />
-                <PresenceAvatarStack />
-                <AuthNavAction />
-                <LanguageNav />
+
+            <div className="flex min-w-0 flex-1 items-center gap-3 px-3">
+                <Menu onActiveDiagramDeleted={onActiveDiagramDeleted} />
+                <div className="ml-auto flex items-center gap-2">
+                    <div className="hidden items-center gap-2 sm:flex">
+                        <LastSaved />
+                        <PresenceAvatarStack />
+                    </div>
+                    <UserNavMenu />
+                </div>
             </div>
         </nav>
     );

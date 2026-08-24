@@ -1,6 +1,15 @@
 import { apiRequest, BACKEND_URL } from './client';
 import { parseAuthUser } from './parse-auth-user';
 
+export interface UpdateProfilePayload {
+    first_name: string;
+    last_name: string;
+    email: string;
+    current_password?: string;
+    password?: string;
+    password_confirmation?: string;
+}
+
 export interface AuthUser {
     id: number;
     first_name: string;
@@ -96,6 +105,22 @@ export const fetchCurrentUser = async (): Promise<AuthUser> => {
 
     if (user === null) {
         throw new Error('Invalid current user response');
+    }
+
+    return user;
+};
+
+export const updateProfile = async (
+    payload: UpdateProfilePayload
+): Promise<AuthUser> => {
+    const response = await apiRequest<AuthUserResponse>('/me', {
+        method: 'PATCH',
+        data: payload,
+    });
+
+    const user = parseAuthUser(response.user);
+    if (user === null) {
+        throw new Error('Invalid profile update response');
     }
 
     return user;

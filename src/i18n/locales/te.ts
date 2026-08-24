@@ -1142,10 +1142,29 @@ export const te: LanguageTranslation = {
                 logout: 'లాగ్ అవుట్',
                 back_to_editor: 'ఎడిటర్‌కు తిరిగి వెళ్ళండి',
             },
+            settings: {
+                title: 'వినియోగదారు సెట్టింగ్‌లు',
+                description:
+                    'మీ వ్యక్తిగత సమాచారం మరియు పాస్‌వర్డ్‌ను నవీకరించండి.',
+                change_password_heading: 'పాస్‌వర్డ్ మార్చండి',
+                current_password_label: 'ప్రస్తుత పాస్‌వర్డ్',
+                new_password_label: 'కొత్త పాస్‌వర్డ్',
+                password_confirmation_label: 'కొత్త పాస్‌వర్డ్ నిర్ధారించండి',
+                first_name_label: 'మొదటి పేరు',
+                last_name_label: 'చివరి పేరు',
+                email_label: 'ఇమెయిల్ చిరునామా',
+                submit: 'మార్పులను సేవ్ చేయండి',
+                submitting: 'సేవ్ చేస్తోంది...',
+                success_title: 'ప్రొఫైల్ నవీకరించబడింది',
+                success_description: 'మీ ప్రొఫైల్ సేవ్ చేయబడింది.',
+            },
             nav: {
                 sign_in: 'సైన్ ఇన్',
                 logout: 'లాగ్ అవుట్',
                 loading: '...',
+                user_menu: 'ఖాతా',
+                settings: 'సెట్టింగ్‌లు',
+                change_language: 'భాష',
             },
             pages: {
                 login_title: 'FoxalDB — లాగిన్',
@@ -1187,7 +1206,8 @@ export const te: LanguageTranslation = {
 };
 
 export const teMetadata: LanguageMetadata = {
-    name: 'Telugu',
-    nativeName: 'తెలుగు',
+    name: 'Telugu (India)',
+    nativeName: 'తెలుగు (భారతదేశం)',
     code: 'te',
+    countryCode: 'in',
 };

@@ -1124,10 +1124,28 @@ export const tr: LanguageTranslation = {
                 logout: 'Çıkış yap',
                 back_to_editor: 'Düzenleyiciye dön',
             },
+            settings: {
+                title: 'Kullanıcı ayarları',
+                description: 'Kişisel bilgilerinizi ve şifrenizi güncelleyin.',
+                change_password_heading: 'Şifreyi değiştir',
+                current_password_label: 'Mevcut şifre',
+                new_password_label: 'Yeni şifre',
+                password_confirmation_label: 'Yeni şifreyi onayla',
+                first_name_label: 'Ad',
+                last_name_label: 'Soyad',
+                email_label: 'E-posta adresi',
+                submit: 'Kaydet',
+                submitting: 'Kaydediliyor...',
+                success_title: 'Profil güncellendi',
+                success_description: 'Profiliniz kaydedildi.',
+            },
             nav: {
                 sign_in: 'Giriş yap',
                 logout: 'Çıkış yap',
                 loading: '...',
+                user_menu: 'Hesap',
+                settings: 'Ayarlar',
+                change_language: 'Dil',
             },
             pages: {
                 login_title: 'FoxalDB — Giriş yap',
@@ -1169,7 +1187,8 @@ export const tr: LanguageTranslation = {
 };
 
 export const trMetadata: LanguageMetadata = {
-    nativeName: 'Türkçe',
     name: 'Turkish',
+    nativeName: 'Türkçe',
     code: 'tr',
+    countryCode: 'tr',
 };

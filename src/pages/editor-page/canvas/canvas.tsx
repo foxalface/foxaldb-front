@@ -28,6 +28,7 @@ import {
     useKeyPress,
     SelectionMode,
     useUpdateNodeInternals,
+    Panel,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import equal from 'fast-deep-equal';
@@ -116,6 +117,7 @@ import {
 import { CanvasFilter } from './canvas-filter/canvas-filter';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { ShowAllButton } from './show-all-button';
+import { DiagramName } from '@/pages/editor-page/top-navbar/diagram-name';
 import { useIsLostInCanvas } from './hooks/use-is-lost-in-canvas';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
@@ -2020,6 +2022,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             gap={16}
                             size={1}
                         />
+                        <Panel
+                            position="top-center"
+                            className="!z-[1000] !mx-0 !mb-0 !mt-3"
+                        >
+                            <DiagramName />
+                        </Panel>
                         {/* Empty state when all tables are hidden by filter */}
                         {allTablesHiddenByFilter && (
                             <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">

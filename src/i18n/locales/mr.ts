@@ -1149,10 +1149,28 @@ export const mr: LanguageTranslation = {
                 logout: 'लॉग आउट',
                 back_to_editor: 'संपादकावर परत जा',
             },
+            settings: {
+                title: 'वापरकर्ता सेटिंग्ज',
+                description: 'तुमची वैयक्तिक माहिती आणि पासवर्ड अद्यतनित करा.',
+                change_password_heading: 'पासवर्ड बदला',
+                current_password_label: 'सध्याचा पासवर्ड',
+                new_password_label: 'नवीन पासवर्ड',
+                password_confirmation_label: 'नवीन पासवर्डची पुष्टी करा',
+                first_name_label: 'पहिले नाव',
+                last_name_label: 'आडनाव',
+                email_label: 'ईमेल पत्ता',
+                submit: 'बदल जतन करा',
+                submitting: 'जतन करत आहे...',
+                success_title: 'प्रोफाइल अद्यतनित केले',
+                success_description: 'तुमचे प्रोफाइल जतन केले.',
+            },
             nav: {
                 sign_in: 'साइन इन',
                 logout: 'लॉग आउट',
                 loading: '...',
+                user_menu: 'खाते',
+                settings: 'सेटिंग्ज',
+                change_language: 'भाषा',
             },
             pages: {
                 login_title: 'FoxalDB — लॉग इन',
@@ -1194,7 +1212,8 @@ export const mr: LanguageTranslation = {
 };
 
 export const mrMetadata: LanguageMetadata = {
-    name: 'Marathi',
-    nativeName: 'मराठी',
+    name: 'Marathi (India)',
+    nativeName: 'मराठी (भारत)',
     code: 'mr',
+    countryCode: 'in',
 };

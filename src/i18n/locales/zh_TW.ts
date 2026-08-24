@@ -1098,10 +1098,28 @@ export const zh_TW: LanguageTranslation = {
                 logout: '登出',
                 back_to_editor: '返回編輯器',
             },
+            settings: {
+                title: '使用者設定',
+                description: '更新您的個人資訊與密碼。',
+                change_password_heading: '變更密碼',
+                current_password_label: '目前密碼',
+                new_password_label: '新密碼',
+                password_confirmation_label: '確認新密碼',
+                first_name_label: '名字',
+                last_name_label: '姓氏',
+                email_label: '電子郵件地址',
+                submit: '儲存變更',
+                submitting: '儲存中...',
+                success_title: '個人資料已更新',
+                success_description: '您的個人資料已儲存。',
+            },
             nav: {
                 sign_in: '登入',
                 logout: '登出',
                 loading: '...',
+                user_menu: '帳戶',
+                settings: '設定',
+                change_language: '語言',
             },
             pages: {
                 login_title: 'FoxalDB — 登入',
@@ -1140,7 +1158,8 @@ export const zh_TW: LanguageTranslation = {
 };
 
 export const zh_TWMetadata: LanguageMetadata = {
-    nativeName: '繁體中文',
     name: 'Chinese (Traditional)',
+    nativeName: '繁體中文',
     code: 'zh_TW',
+    countryCode: 'tw',
 };

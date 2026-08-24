@@ -26,9 +26,7 @@ import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
 import { DiscordLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
-import ChartDBLogo from '@/assets/logo-light.png';
-import ChartDBDarkLogo from '@/assets/logo-dark.png';
-import { useTheme } from '@/hooks/use-theme';
+import { SiteBrand } from '@/pages/editor-page/top-navbar/site-brand';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { Separator } from '@/components/separator/separator';
@@ -61,7 +59,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     } = useLayout();
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
-    const { effectiveTheme } = useTheme();
     const { databaseType } = useChartDB();
     const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const conversationsAvailable = useConversationsAvailability();
@@ -243,21 +240,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
         >
             {!isDesktop ? (
                 <SidebarHeader>
-                    <a
-                        href="https://chartdb.io"
-                        className="cursor-pointer"
-                        rel="noreferrer"
-                    >
-                        <img
-                            src={
-                                effectiveTheme === 'light'
-                                    ? ChartDBLogo
-                                    : ChartDBDarkLogo
-                            }
-                            alt="chartDB"
-                            className="h-4 max-w-fit"
-                        />
-                    </a>
+                    <SiteBrand />
                 </SidebarHeader>
             ) : null}
             <SidebarContent className="overflow-visible group-data-[collapsible=icon-extended]:overflow-visible">

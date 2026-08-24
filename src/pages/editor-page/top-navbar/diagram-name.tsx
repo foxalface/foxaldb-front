@@ -1,19 +1,26 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button } from '@/components/button/button';
+import React, {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react';
 import { Check, Pencil } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useClickAway, useKeyPressEvent } from 'react-use';
+import { useKeyPressEvent } from 'react-use';
 import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { labelVariants } from '@/components/label/label-variants';
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useDialog } from '@/hooks/use-dialog';
+
+const MIN_TITLE_WIDTH_PX = 32;
+const MAX_TITLE_WIDTH_PX = 220;
 
 export interface DiagramNameProps {}
 
@@ -22,39 +29,98 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
 
     const { t } = useTranslation();
     const [editMode, setEditMode] = useState(false);
-    const [editedDiagramName, setEditedDiagramName] =
-        React.useState(diagramName);
-    const inputRef = React.useRef<HTMLInputElement>(null);
+    const [editedDiagramName, setEditedDiagramName] = useState(diagramName);
+    const [fieldWidth, setFieldWidth] = useState(MIN_TITLE_WIDTH_PX);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const measureRef = useRef<HTMLSpanElement>(null);
     const { openOpenDiagramDialog } = useDialog();
+
+    const textToMeasure = editMode ? editedDiagramName : diagramName;
 
     useEffect(() => {
         setEditedDiagramName(diagramName);
     }, [diagramName]);
 
-    const editDiagramName = useCallback(() => {
+    useLayoutEffect(() => {
+        const measuredWidth =
+            measureRef.current?.offsetWidth ?? MIN_TITLE_WIDTH_PX;
+
+        setFieldWidth(
+            Math.min(
+                Math.max(Math.ceil(measuredWidth), MIN_TITLE_WIDTH_PX),
+                MAX_TITLE_WIDTH_PX
+            )
+        );
+    }, [textToMeasure, editMode]);
+
+    const saveDiagramName = useCallback(() => {
+        if (!editMode) {
+            return;
+        }
+
         if (editedDiagramName.trim()) {
             updateDiagramName(editedDiagramName.trim());
         }
+
         setEditMode(false);
-    }, [editedDiagramName, updateDiagramName]);
+    }, [editMode, editedDiagramName, updateDiagramName]);
 
-    // Handle click outside to save and exit edit mode
-    useClickAway(inputRef, editDiagramName);
-
-    useKeyPressEvent('Enter', editDiagramName);
+    const abortEdit = useCallback(() => {
+        setEditedDiagramName(diagramName);
+        setEditMode(false);
+    }, [diagramName]);
 
     useEffect(() => {
-        if (editMode) {
-            // Small delay to ensure the input is rendered
-            const timeoutId = setTimeout(() => {
-                if (inputRef.current) {
-                    inputRef.current.focus();
-                    inputRef.current.select();
-                }
-            }, 50); // Slightly longer delay to ensure DOM is ready
-
-            return () => clearTimeout(timeoutId);
+        if (!editMode) {
+            return;
         }
+
+        const handlePointerDown = (event: MouseEvent | TouchEvent) => {
+            const target = event.target;
+            if (!(target instanceof Node)) {
+                return;
+            }
+
+            if (containerRef.current?.contains(target)) {
+                return;
+            }
+
+            saveDiagramName();
+        };
+
+        document.addEventListener('mousedown', handlePointerDown, true);
+        document.addEventListener('touchstart', handlePointerDown, true);
+
+        return () => {
+            document.removeEventListener('mousedown', handlePointerDown, true);
+            document.removeEventListener('touchstart', handlePointerDown, true);
+        };
+    }, [editMode, saveDiagramName]);
+
+    useKeyPressEvent('Enter', () => {
+        if (editMode) {
+            saveDiagramName();
+        }
+    });
+
+    useKeyPressEvent('Escape', () => {
+        if (editMode) {
+            abortEdit();
+        }
+    });
+
+    useEffect(() => {
+        if (!editMode) {
+            return;
+        }
+
+        const timeoutId = setTimeout(() => {
+            inputRef.current?.focus();
+            inputRef.current?.select();
+        }, 0);
+
+        return () => clearTimeout(timeoutId);
     }, [editMode]);
 
     const enterEditMode = useCallback(
@@ -67,84 +133,100 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
     );
 
     return (
-        <div className="group">
-            <div
+        <div
+            ref={containerRef}
+            className={cn(
+                'group flex max-w-[min(90vw,28rem)] items-center gap-2 rounded-full border bg-secondary px-3 py-1.5 text-sm text-foreground shadow-none transition-colors',
+                'hover:border-border',
+                editMode && 'border-border'
+            )}
+        >
+            <span
+                ref={measureRef}
+                aria-hidden
                 className={cn(
-                    'flex flex-1 flex-row items-center justify-center px-2 py-1 whitespace-nowrap',
-                    {
-                        'text-editable': !editMode,
-                    }
+                    'pointer-events-none invisible absolute whitespace-pre text-sm font-medium',
+                    editMode && 'px-2.5'
                 )}
             >
-                <DiagramIcon
-                    databaseType={currentDiagram.databaseType}
-                    databaseEdition={currentDiagram.databaseEdition}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        openOpenDiagramDialog({ canClose: true });
-                    }}
-                />
-                <div className="flex flex-row items-center gap-1">
+                {textToMeasure || '\u00A0'}
+            </span>
+
+            <DiagramIcon
+                databaseType={currentDiagram.databaseType}
+                databaseEdition={currentDiagram.databaseEdition}
+                tooltipSide="bottom"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    openOpenDiagramDialog({ canClose: true });
+                }}
+            />
+
+            <div className="flex min-w-0 items-center gap-1">
+                <div
+                    className="relative shrink-0"
+                    style={{ width: fieldWidth }}
+                >
                     {editMode ? (
-                        <>
-                            <Input
-                                ref={inputRef}
-                                autoFocus
-                                type="text"
-                                placeholder={diagramName}
-                                value={editedDiagramName}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) =>
-                                    setEditedDiagramName(e.target.value)
-                                }
-                                className="h-7 max-w-[300px] focus-visible:ring-0"
-                                style={{
-                                    width: `${
-                                        editedDiagramName.length * 8 + 30
-                                    }px`,
-                                }}
-                            />
-                            <Button
-                                variant="ghost"
-                                className="ml-1 flex size-7 p-2 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
-                                onClick={editDiagramName}
-                            >
-                                <Check />
-                            </Button>
-                        </>
+                        <Input
+                            ref={inputRef}
+                            autoFocus
+                            type="text"
+                            placeholder={diagramName}
+                            value={editedDiagramName}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) =>
+                                setEditedDiagramName(e.target.value)
+                            }
+                            onBlur={() => {
+                                saveDiagramName();
+                            }}
+                            className="h-6 w-full rounded-full border-border bg-secondary px-2.5 text-sm focus-visible:ring-0"
+                        />
                     ) : (
-                        <>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <h1
-                                        className={cn(
-                                            labelVariants(),
-                                            'group-hover:underline max-w-[300px] truncate'
-                                        )}
-                                        onDoubleClick={(e) => {
-                                            enterEditMode(e);
-                                        }}
-                                    >
-                                        {diagramName}
-                                    </h1>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    {t('tool_tips.double_click_to_edit')}
-                                </TooltipContent>
-                            </Tooltip>
-                            <Button
-                                variant="ghost"
-                                className="ml-1 hidden size-5 p-0 hover:bg-background/50 group-hover:flex"
-                                onClick={enterEditMode}
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <h1
+                                    className="w-full truncate text-sm font-medium"
+                                    onDoubleClick={(e) => {
+                                        enterEditMode(e);
+                                    }}
+                                >
+                                    {diagramName}
+                                </h1>
+                            </TooltipTrigger>
+                            <TooltipContent
+                                side="bottom"
+                                sideOffset={8}
+                                className="z-[1100]"
                             >
-                                <Pencil
-                                    strokeWidth="1.5"
-                                    className="!size-3.5 text-slate-600 dark:text-slate-400"
-                                />
-                            </Button>
-                        </>
+                                {t('tool_tips.double_click_to_edit')}
+                            </TooltipContent>
+                        </Tooltip>
                     )}
                 </div>
+
+                {editMode ? (
+                    <button
+                        type="button"
+                        className="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground"
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            saveDiagramName();
+                        }}
+                    >
+                        <Check className="size-3.5" />
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        className="inline-flex size-6 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
+                        onClick={enterEditMode}
+                    >
+                        <Pencil className="size-3.5" strokeWidth={1.5} />
+                    </button>
+                )}
             </div>
         </div>
     );

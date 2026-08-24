@@ -1130,10 +1130,28 @@ export const ko_KR: LanguageTranslation = {
                 logout: '로그아웃',
                 back_to_editor: '편집기로 돌아가기',
             },
+            settings: {
+                title: '사용자 설정',
+                description: '개인 정보와 비밀번호를 업데이트하세요.',
+                change_password_heading: '비밀번호 변경',
+                current_password_label: '현재 비밀번호',
+                new_password_label: '새 비밀번호',
+                password_confirmation_label: '새 비밀번호 확인',
+                first_name_label: '이름',
+                last_name_label: '성',
+                email_label: '이메일 주소',
+                submit: '변경 사항 저장',
+                submitting: '저장 중...',
+                success_title: '프로필이 업데이트되었습니다',
+                success_description: '프로필이 저장되었습니다.',
+            },
             nav: {
                 sign_in: '로그인',
                 logout: '로그아웃',
                 loading: '...',
+                user_menu: '계정',
+                settings: '설정',
+                change_language: '언어',
             },
             pages: {
                 login_title: 'FoxalDB — 로그인',
@@ -1175,7 +1193,8 @@ export const ko_KR: LanguageTranslation = {
 };
 
 export const ko_KRMetadata: LanguageMetadata = {
-    name: 'Korean',
-    nativeName: '한국어',
+    name: 'Korean (South Korea)',
+    nativeName: '한국어 (대한민국)',
     code: 'ko_KR',
+    countryCode: 'kr',
 };

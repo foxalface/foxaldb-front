@@ -26,7 +26,7 @@ export const PresenceAvatarStack: React.FC = () => {
             <PopoverTrigger asChild>
                 <button
                     type="button"
-                    className="flex shrink-0 items-center -space-x-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="flex shrink-0 items-center -space-x-2 outline-none focus-visible:outline-none"
                     aria-label="Diagram viewers"
                 >
                     {visibleMembers.map((member, index) => (
@@ -59,7 +59,13 @@ export const PresenceAvatarStack: React.FC = () => {
                     ) : null}
                 </button>
             </PopoverTrigger>
-            <PopoverContent align="end" className="w-56 p-3">
+            <PopoverContent
+                align="end"
+                className="w-56 p-3"
+                onCloseAutoFocus={(event) => {
+                    event.preventDefault();
+                }}
+            >
                 <PresencePopoverContent members={members} />
             </PopoverContent>
         </Popover>

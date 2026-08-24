@@ -1131,10 +1131,28 @@ export const en = {
                 logout: 'Logout',
                 back_to_editor: 'Back to editor',
             },
+            settings: {
+                title: 'User settings',
+                description: 'Update your personal information and password.',
+                change_password_heading: 'Change password',
+                current_password_label: 'Current password',
+                new_password_label: 'New password',
+                password_confirmation_label: 'Confirm new password',
+                first_name_label: 'First name',
+                last_name_label: 'Last name',
+                email_label: 'Email',
+                submit: 'Save changes',
+                submitting: 'Saving...',
+                success_title: 'Profile updated',
+                success_description: 'Your profile has been saved.',
+            },
             nav: {
                 sign_in: 'Sign in',
                 logout: 'Logout',
                 loading: '...',
+                user_menu: 'Account',
+                settings: 'Settings',
+                change_language: 'Language',
             },
             pages: {
                 login_title: 'FoxalDB — Log in',
@@ -1176,7 +1194,8 @@ export const en = {
 };
 
 export const enMetadata: LanguageMetadata = {
-    name: 'English',
-    nativeName: 'English',
+    name: 'English (US)',
+    nativeName: 'English (US)',
     code: 'en',
+    countryCode: 'us',
 };

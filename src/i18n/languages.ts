@@ -1,28 +1,108 @@
 import type { LanguageMetadata } from './types';
 
 export const languages: LanguageMetadata[] = [
-    { name: 'English', nativeName: 'English', code: 'en' },
-    { name: 'French', nativeName: 'Français', code: 'fr' },
-    { name: 'German', nativeName: 'Deutsch', code: 'de' },
-    { name: 'Spanish', nativeName: 'Español', code: 'es' },
-    { name: 'Ukrainian', nativeName: 'Українська', code: 'uk' },
-    { name: 'Russian', nativeName: 'Русский', code: 'ru' },
-    { name: 'Turkish', nativeName: 'Türkçe', code: 'tr' },
-    { name: 'Croatian', nativeName: 'Hrvatski', code: 'hr' },
-    { name: 'Portuguese', nativeName: 'Português', code: 'pt_BR' },
-    { name: 'Hindi', nativeName: 'हिन्दी', code: 'hi' },
-    { name: 'Japanese', nativeName: '日本語', code: 'ja' },
-    { name: 'Korean', nativeName: '한국어', code: 'ko_KR' },
-    { name: 'Chinese (Simplified)', nativeName: '简体中文', code: 'zh_CN' },
-    { name: 'Chinese (Traditional)', nativeName: '繁體中文', code: 'zh_TW' },
-    { name: 'Nepali', nativeName: 'नेपाली', code: 'ne' },
-    { name: 'Marathi', nativeName: 'मराठी', code: 'mr' },
-    { name: 'Indonesian', nativeName: 'Indonesia', code: 'id_ID' },
-    { name: 'Telugu', nativeName: 'తెలుగు', code: 'te' },
-    { name: 'Bengali', nativeName: 'বাংলা', code: 'bn' },
-    { name: 'Gujarati', nativeName: 'ગુજરાતી', code: 'gu' },
-    { name: 'Vietnamese', nativeName: 'Tiếng Việt', code: 'vi' },
-    { name: 'Arabic', nativeName: 'العربية', code: 'ar' },
+    {
+        name: 'English (US)',
+        nativeName: 'English (US)',
+        code: 'en',
+        countryCode: 'us',
+    },
+    {
+        name: 'French (France)',
+        nativeName: 'Français (France)',
+        code: 'fr',
+        countryCode: 'fr',
+    },
+    {
+        name: 'German (Germany)',
+        nativeName: 'Deutsch (Deutschland)',
+        code: 'de',
+        countryCode: 'de',
+    },
+    {
+        name: 'Spanish (Spain)',
+        nativeName: 'Español (España)',
+        code: 'es',
+        countryCode: 'es',
+    },
+    {
+        name: 'Ukrainian',
+        nativeName: 'Українська',
+        code: 'uk',
+        countryCode: 'ua',
+    },
+    { name: 'Russian', nativeName: 'Русский', code: 'ru', countryCode: 'ru' },
+    { name: 'Turkish', nativeName: 'Türkçe', code: 'tr', countryCode: 'tr' },
+    { name: 'Croatian', nativeName: 'Hrvatski', code: 'hr', countryCode: 'hr' },
+    {
+        name: 'Portuguese (Brazil)',
+        nativeName: 'Português (Brasil)',
+        code: 'pt_BR',
+        countryCode: 'br',
+    },
+    {
+        name: 'Hindi (India)',
+        nativeName: 'हिन्दी (भारत)',
+        code: 'hi',
+        countryCode: 'in',
+    },
+    { name: 'Japanese', nativeName: '日本語', code: 'ja', countryCode: 'jp' },
+    {
+        name: 'Korean (South Korea)',
+        nativeName: '한국어 (대한민국)',
+        code: 'ko_KR',
+        countryCode: 'kr',
+    },
+    {
+        name: 'Chinese (Simplified)',
+        nativeName: '简体中文',
+        code: 'zh_CN',
+        countryCode: 'cn',
+    },
+    {
+        name: 'Chinese (Traditional)',
+        nativeName: '繁體中文',
+        code: 'zh_TW',
+        countryCode: 'tw',
+    },
+    { name: 'Nepali', nativeName: 'नेपाली', code: 'ne', countryCode: 'np' },
+    {
+        name: 'Marathi (India)',
+        nativeName: 'मराठी (भारत)',
+        code: 'mr',
+        countryCode: 'in',
+    },
+    {
+        name: 'Indonesian (Indonesia)',
+        nativeName: 'Bahasa Indonesia',
+        code: 'id_ID',
+        countryCode: 'id',
+    },
+    {
+        name: 'Telugu (India)',
+        nativeName: 'తెలుగు (భారతదేశం)',
+        code: 'te',
+        countryCode: 'in',
+    },
+    {
+        name: 'Bengali (Bangladesh)',
+        nativeName: 'বাংলা (বাংলাদেশ)',
+        code: 'bn',
+        countryCode: 'bd',
+    },
+    {
+        name: 'Gujarati (India)',
+        nativeName: 'ગુજરાતી (ભારત)',
+        code: 'gu',
+        countryCode: 'in',
+    },
+    {
+        name: 'Vietnamese',
+        nativeName: 'Tiếng Việt',
+        code: 'vi',
+        countryCode: 'vn',
+    },
+    { name: 'Arabic', nativeName: 'العربية', code: 'ar', countryCode: 'sa' },
 ];
 
 export const SUPPORTED_LANGUAGE_CODES = languages.map(
@@ -53,3 +133,9 @@ export const SUPPORTED_LANGUAGE_CODES = languages.map(
 ];
 
 export type SupportedLanguageCode = (typeof SUPPORTED_LANGUAGE_CODES)[number];
+
+export const getLanguageByCode = (
+    code: string
+): LanguageMetadata | undefined => {
+    return languages.find((language) => language.code === code);
+};

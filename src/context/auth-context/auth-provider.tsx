@@ -6,7 +6,7 @@ import React, {
     useState,
 } from 'react';
 import { AuthContext } from './auth-context';
-import type { AuthUser } from '@/lib/api/auth';
+import type { AuthUser, UpdateProfilePayload } from '@/lib/api/auth';
 import {
     initCsrf,
     login as apiLogin,
@@ -14,6 +14,7 @@ import {
     logout as apiLogout,
     fetchSessionUser,
     fetchCurrentUser,
+    updateProfile as apiUpdateProfile,
 } from '@/lib/api/auth';
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({
@@ -92,6 +93,14 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
         }
     }, []);
 
+    const updateProfile = useCallback(
+        async (payload: UpdateProfilePayload): Promise<void> => {
+            const updatedUser = await apiUpdateProfile(payload);
+            setUser(updatedUser);
+        },
+        []
+    );
+
     const value = useMemo(
         () => ({
             user,
@@ -101,8 +110,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
             register,
             logout,
             fetchUser,
+            updateProfile,
         }),
-        [user, isLoading, login, register, logout, fetchUser]
+        [user, isLoading, login, register, logout, fetchUser, updateProfile]
     );
 
     return (

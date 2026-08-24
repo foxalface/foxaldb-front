@@ -68,6 +68,10 @@ export interface DialogContext {
     openAuthDialog: () => void;
     closeAuthDialog: () => void;
 
+    // User settings dialog
+    openUserSettingsDialog: () => void;
+    closeUserSettingsDialog: () => void;
+
     // Guest diagram migration dialog
     openGuestDiagramMigrationDialog: (
         params?: Omit<GuestDiagramMigrationDialogProps, 'dialog'>
@@ -114,6 +118,8 @@ export const dialogContext = createContext<DialogContext>({
     closeTableSchemaDialog: emptyFn,
     openAuthDialog: emptyFn,
     closeAuthDialog: emptyFn,
+    openUserSettingsDialog: emptyFn,
+    closeUserSettingsDialog: emptyFn,
     openGuestDiagramMigrationDialog: emptyFn,
     closeGuestDiagramMigrationDialog: emptyFn,
     openExportImageDialog: emptyFn,

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { TooltipContentProps } from '@radix-ui/react-tooltip';
 import { Crown, Eye, Pencil, type LucideIcon } from 'lucide-react';
 import type { DiagramAccessRole } from '@/lib/api/diagrams';
 import type { DiagramMemberRole } from '@/lib/api/diagram-members';
@@ -23,6 +24,7 @@ export interface DiagramRoleIconProps {
     className?: string;
     iconClassName?: string;
     withTooltip?: boolean;
+    tooltipSide?: TooltipContentProps['side'];
 }
 
 export const DiagramRoleIcon: React.FC<DiagramRoleIconProps> = ({
@@ -30,6 +32,7 @@ export const DiagramRoleIcon: React.FC<DiagramRoleIconProps> = ({
     className,
     iconClassName,
     withTooltip = true,
+    tooltipSide = 'top',
 }) => {
     const { t } = useTranslation();
     const Icon = ROLE_ICONS[role];
@@ -58,7 +61,13 @@ export const DiagramRoleIcon: React.FC<DiagramRoleIconProps> = ({
                     {iconMarkup}
                 </span>
             </TooltipTrigger>
-            <TooltipContent>{label}</TooltipContent>
+            <TooltipContent
+                side={tooltipSide}
+                sideOffset={8}
+                className="z-[1100]"
+            >
+                {label}
+            </TooltipContent>
         </Tooltip>
     );
 };
