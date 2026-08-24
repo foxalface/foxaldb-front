@@ -11,17 +11,15 @@ import {
 import {
     Select,
     SelectContent,
-    SelectItem,
     SelectTrigger,
     SelectValue,
 } from '@/components/select/select';
 import {
-    DIAGRAM_MEMBER_ROLE_EDITOR,
-    DIAGRAM_MEMBER_ROLE_VIEWER,
     type DiagramMemberResource,
     type DiagramMemberRole,
 } from '@/lib/api/diagram-members';
 import { useTranslation } from 'react-i18next';
+import { ShareMemberRoleSelectItems } from './share-member-role-select-items';
 
 export interface ShareMemberActionsPopoverProps {
     member: DiagramMemberResource;
@@ -72,12 +70,7 @@ export const ShareMemberActionsPopover: React.FC<
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value={DIAGRAM_MEMBER_ROLE_EDITOR}>
-                                    {t('diagram_role.editor')}
-                                </SelectItem>
-                                <SelectItem value={DIAGRAM_MEMBER_ROLE_VIEWER}>
-                                    {t('diagram_role.viewer')}
-                                </SelectItem>
+                                <ShareMemberRoleSelectItems />
                             </SelectContent>
                         </Select>
                     </div>

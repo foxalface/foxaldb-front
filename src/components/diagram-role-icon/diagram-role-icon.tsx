@@ -22,31 +22,40 @@ export interface DiagramRoleIconProps {
     role: DiagramRoleValue;
     className?: string;
     iconClassName?: string;
+    withTooltip?: boolean;
 }
 
 export const DiagramRoleIcon: React.FC<DiagramRoleIconProps> = ({
     role,
     className,
     iconClassName,
+    withTooltip = true,
 }) => {
     const { t } = useTranslation();
     const Icon = ROLE_ICONS[role];
     const label = t(`diagram_role.${role}`);
 
+    const iconMarkup = (
+        <Icon className={cn('size-3.5', iconClassName)} aria-hidden />
+    );
+    const wrapperClassName = cn(
+        'inline-flex shrink-0 items-center justify-center text-muted-foreground',
+        className
+    );
+
+    if (!withTooltip) {
+        return (
+            <span aria-hidden className={wrapperClassName}>
+                {iconMarkup}
+            </span>
+        );
+    }
+
     return (
         <Tooltip>
             <TooltipTrigger asChild>
-                <span
-                    aria-label={label}
-                    className={cn(
-                        'inline-flex shrink-0 items-center justify-center text-muted-foreground',
-                        className
-                    )}
-                >
-                    <Icon
-                        className={cn('size-3.5', iconClassName)}
-                        aria-hidden
-                    />
+                <span aria-label={label} className={wrapperClassName}>
+                    {iconMarkup}
                 </span>
             </TooltipTrigger>
             <TooltipContent>{label}</TooltipContent>
