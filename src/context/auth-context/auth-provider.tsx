@@ -16,6 +16,9 @@ import {
     fetchCurrentUser,
     updateProfile as apiUpdateProfile,
 } from '@/lib/api/auth';
+import { registerSessionExpiredHandler } from '@/lib/api/session-expired';
+
+const SESSION_REVALIDATION_THRESHOLD_MS = 30_000;
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -23,6 +26,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const didCheckSessionRef = useRef(false);
+    const userRef = useRef<AuthUser | null>(null);
+    const hiddenAtRef = useRef<number | null>(null);
 
     useEffect(() => {
         if (didCheckSessionRef.current) {
@@ -45,6 +50,64 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
 
         void checkSession();
     }, []);
+
+    useEffect(() => {
+        userRef.current = user;
+    }, [user]);
+
+    useEffect(() => {
+        return registerSessionExpiredHandler(() => {
+            if (userRef.current !== null) {
+                setUser(null);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        if (user === null) {
+            return;
+        }
+
+        const revalidateSession = async (): Promise<void> => {
+            try {
+                const currentUser = await fetchSessionUser();
+                if (currentUser === null) {
+                    setUser(null);
+                }
+            } catch {
+                setUser(null);
+            }
+        };
+
+        const handleVisibilityChange = (): void => {
+            if (document.visibilityState === 'hidden') {
+                hiddenAtRef.current = Date.now();
+                return;
+            }
+
+            const hiddenAt = hiddenAtRef.current;
+            hiddenAtRef.current = null;
+
+            if (hiddenAt === null) {
+                return;
+            }
+
+            if (Date.now() - hiddenAt < SESSION_REVALIDATION_THRESHOLD_MS) {
+                return;
+            }
+
+            void revalidateSession();
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange
+            );
+        };
+    }, [user]);
 
     const login = useCallback(
         async (email: string, password: string): Promise<void> => {

@@ -1,5 +1,21 @@
+import { notifySessionExpired } from './session-expired';
+
 const API_BASE_URL: string =
     import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api';
+
+const PUBLIC_AUTH_PATHS = new Set(['/login', '/register', '/session']);
+
+const shouldNotifySessionExpired = (path: string, status: number): boolean => {
+    if (status !== 401) {
+        return false;
+    }
+
+    const normalizedPath = path.startsWith('http')
+        ? new URL(path).pathname.replace(/^\/api/, '')
+        : path;
+
+    return !PUBLIC_AUTH_PATHS.has(normalizedPath);
+};
 
 export const BACKEND_URL: string =
     import.meta.env.VITE_BACKEND_URL ?? 'http://localhost:8000';
@@ -107,6 +123,10 @@ export const apiRequest = async <TResponse>(
             typeof payload.message === 'string'
                 ? payload.message
                 : `API request failed with status ${response.status}`;
+
+        if (shouldNotifySessionExpired(path, response.status)) {
+            notifySessionExpired();
+        }
 
         throw new ApiError(message, response.status, payload);
     }
