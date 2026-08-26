@@ -707,9 +707,16 @@ export const pt_BR: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Qual é o seu Banco de Dados?',
+                title: 'Qual é o seu sistema de gerenciamento de banco de dados?',
                 description:
-                    'Cada banco de dados possui recursos e capacidades únicas.',
+                    'Cada sistema de gerenciamento de banco de dados possui recursos e capacidades únicas.',
+                search_placeholder: 'Pesquisar sistemas de banco de dados…',
+                search_no_results:
+                    'Nenhum sistema de banco de dados corresponde à sua pesquisa.',
+                clear_search: 'Limpar pesquisa',
+                open_source_group: 'Código aberto',
+                enterprise_group: 'Empresarial',
+                specialized_group: 'Especializados',
                 check_examples_long: 'Ver Exemplos',
                 check_examples_short: 'Exemplos',
             },

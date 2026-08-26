@@ -18,7 +18,7 @@ export const DatabaseOption: React.FC<DatabaseOptionProps> = ({ type }) => {
     return (
         <ToggleGroupItem
             value={type}
-            aria-label="Toggle bold"
+            aria-label={databaseTypeToLabelMap[type]}
             className="flex size-20 md:size-32"
         >
             <img src={logo} alt={databaseTypeToLabelMap[type]} />

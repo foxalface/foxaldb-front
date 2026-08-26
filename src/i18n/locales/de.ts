@@ -719,9 +719,16 @@ export const de: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Welche Datenbank verwenden Sie?',
+                title: 'Welches Datenbankmanagementsystem verwenden Sie?',
                 description:
-                    'Jede Datenbank hat ihre eigenen Funktionen und Möglichkeiten.',
+                    'Jedes Datenbankmanagementsystem hat eigene Funktionen und Besonderheiten.',
+                search_placeholder: 'Datenbankmanagementsystem suchen…',
+                search_no_results:
+                    'Kein Datenbankmanagementsystem entspricht Ihrer Suche.',
+                clear_search: 'Suche löschen',
+                open_source_group: 'Open Source',
+                enterprise_group: 'Unternehmen',
+                specialized_group: 'Spezialisiert',
                 check_examples_long: 'Beispiele ansehen',
                 check_examples_short: 'Beispiele',
             },

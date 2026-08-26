@@ -700,8 +700,16 @@ export const ja: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'データベースは何ですか？',
-                description: '各データベースには独自の機能と能力があります。',
+                title: '使用するデータベース管理システムは何ですか？',
+                description:
+                    'データベース管理システムごとに独自の機能と特性があります。',
+                search_placeholder: 'データベース管理システムを検索…',
+                search_no_results:
+                    '検索に一致するデータベース管理システムはありません。',
+                clear_search: '検索をクリア',
+                open_source_group: 'オープンソース',
+                enterprise_group: 'エンタープライズ',
+                specialized_group: '特殊用途',
                 check_examples_long: '例を確認',
                 check_examples_short: '例',
             },

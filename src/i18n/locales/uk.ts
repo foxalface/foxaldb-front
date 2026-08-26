@@ -702,9 +702,16 @@ export const uk: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Яка у вас база даних?',
+                title: 'Яка у вас система управління базами даних?',
                 description:
-                    'Кожна база даних має свої унікальні особливості та можливості.',
+                    'Кожна система управління базами даних має свої унікальні особливості та можливості.',
+                search_placeholder: 'Пошук систем управління базами даних…',
+                search_no_results:
+                    'Ні одна система управління базами даних не відповідає вашому запиту.',
+                clear_search: 'Очистити пошук',
+                open_source_group: 'Відкритий код',
+                enterprise_group: 'Корпоративні',
+                specialized_group: 'Спеціалізовані',
                 check_examples_long: 'Подивіться приклади',
                 check_examples_short: 'Приклади',
             },

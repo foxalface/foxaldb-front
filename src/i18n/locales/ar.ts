@@ -688,9 +688,16 @@ export const ar: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'ما هو نوع قاعدة البيانات الخاصة بك؟',
+                title: 'ما هو نظام إدارة قواعد البيانات الخاص بك؟',
                 description:
-                    'تتمتع كل قاعدة بيانات بمميزاتها وقدراتها الفريدة.',
+                    'لكل نظام إدارة قواعد بيانات ميزاته وقدراته الفريدة.',
+                search_placeholder: 'البحث عن أنظمة إدارة قواعد البيانات…',
+                search_no_results:
+                    'لا يوجد نظام إدارة قواعد بيانات يطابق بحثك.',
+                clear_search: 'مسح البحث',
+                open_source_group: 'مفتوح المصدر',
+                enterprise_group: 'المؤسسات',
+                specialized_group: 'متخصص',
                 check_examples_long: 'ألقي نظرة على الأمثلة',
                 check_examples_short: 'أمثلة',
             },

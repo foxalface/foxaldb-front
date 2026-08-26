@@ -688,9 +688,16 @@ export const tr: LanguageTranslation = {
         },
         new_diagram_dialog: {
             database_selection: {
-                title: 'Veritabanınız nedir?',
+                title: 'Veritabanı yönetim sisteminiz nedir?',
                 description:
-                    'Her veritabanının kendine özgü özellikleri ve yetenekleri vardır.',
+                    'Her veritabanı yönetim sisteminin kendine özgü özellikleri ve yetenekleri vardır.',
+                search_placeholder: 'Veritabanı yönetim sistemlerinde ara…',
+                search_no_results:
+                    'Aramanızla eşleşen veritabanı yönetim sistemi bulunamadı.',
+                clear_search: 'Aramayı temizle',
+                open_source_group: 'Açık kaynak',
+                enterprise_group: 'Kurumsal',
+                specialized_group: 'Özel amaçlı',
                 check_examples_long: 'Örnekleri Kontrol Et',
                 check_examples_short: 'Örnekler',
             },

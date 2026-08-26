@@ -665,8 +665,14 @@ export const zh_TW: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '您使用的是哪種資料庫？',
-                description: '每種資料庫都有其獨特的功能和能力。',
+                title: '您使用的是哪種資料庫管理系統？',
+                description: '每種資料庫管理系統都有其獨特的功能與特性。',
+                search_placeholder: '搜尋資料庫管理系統…',
+                search_no_results: '沒有符合搜尋條件的資料庫管理系統。',
+                clear_search: '清除搜尋',
+                open_source_group: '開源',
+                enterprise_group: '企業級',
+                specialized_group: '專用',
                 check_examples_long: '查看範例',
                 check_examples_short: '範例',
             },

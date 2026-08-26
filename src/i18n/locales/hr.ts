@@ -696,9 +696,17 @@ export const hr: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Koja je vaša baza podataka?',
+                title: 'Koji je vaš sustav za upravljanje baze podataka?',
                 description:
-                    'Svaka baza podataka ima svoje jedinstvene značajke i mogućnosti.',
+                    'Svaki sustav za upravljanje baze podataka ima svoje jedinstvene značajke i mogućnosti.',
+                search_placeholder:
+                    'Pretraži sustave za upravljanje baze podataka…',
+                search_no_results:
+                    'Nijedan sustav za upravljanje baze podataka odgovara vašoj pretrazi.',
+                clear_search: 'Očisti pretragu',
+                open_source_group: 'Otvoreni kod',
+                enterprise_group: 'Poslovni',
+                specialized_group: 'Specijalizirani',
                 check_examples_long: 'Pogledaj primjere',
                 check_examples_short: 'Primjeri',
             },

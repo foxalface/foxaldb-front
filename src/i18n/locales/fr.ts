@@ -705,9 +705,15 @@ export const fr: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Quelle est votre Base de Données ?',
+                title: 'Quel est votre système de gestion de base de données ?',
                 description:
-                    'Chaque base de données a ses propres fonctionnalités et capacités uniques.',
+                    'Chaque SGBD possède ses propres fonctionnalités et particularités.',
+                search_placeholder: 'Rechercher un SGBD…',
+                search_no_results: 'Aucun SGBD correspond à votre recherche.',
+                clear_search: 'Effacer la recherche',
+                open_source_group: 'Open source',
+                enterprise_group: 'Entreprise',
+                specialized_group: 'Spécialisés',
                 check_examples_long: 'Voir les Exemples',
                 check_examples_short: 'Exemples',
             },

@@ -700,9 +700,16 @@ export const hi: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'आपका डेटाबेस क्या है?',
+                title: 'आपका डेटाबेस प्रबंधन प्रणाली क्या है?',
                 description:
-                    'प्रत्येक डेटाबेस की अपनी अनूठी विशेषताएँ और क्षमताएँ होती हैं।',
+                    'प्रत्येक डेटाबेस प्रबंधन प्रणाली की अपनी विशिष्ट सुविधाएँ और क्षमताएँ होती हैं।',
+                search_placeholder: 'डेटाबेस प्रबंधन प्रणाली खोजें…',
+                search_no_results:
+                    'आपकी खोज से कोई डेटाबेस प्रबंधन प्रणाली मेल नहीं खाती।',
+                clear_search: 'खोज साफ़ करें',
+                open_source_group: 'ओपन सोर्स',
+                enterprise_group: 'एंटरप्राइज़',
+                specialized_group: 'विशेष',
                 check_examples_long: 'उदाहरण देखें',
                 check_examples_short: 'उदाहरण',
             },

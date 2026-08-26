@@ -665,8 +665,14 @@ export const zh_CN: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '您是哪种数据库？',
-                description: '每种数据库都有其特性和功能。',
+                title: '您使用哪种数据库管理系统？',
+                description: '每种数据库管理系统都有其独特的功能和特性。',
+                search_placeholder: '搜索数据库管理系统…',
+                search_no_results: '没有与搜索匹配的数据库管理系统。',
+                clear_search: '清除搜索',
+                open_source_group: '开源',
+                enterprise_group: '企业级',
+                specialized_group: '专用',
                 check_examples_long: '查看样例',
                 check_examples_short: '样例',
             },

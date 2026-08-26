@@ -700,9 +700,16 @@ export const ru: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Какова ваша база данных?',
+                title: 'Какая у вас система управления базами данных?',
                 description:
-                    'Каждая база данных имеет свои уникальные функции и возможности.',
+                    'Каждая система управления базами данных имеет свои уникальные функции и возможности.',
+                search_placeholder: 'Поиск систем управления базами данных…',
+                search_no_results:
+                    'Ни одна система управления базами данных не соответствует вашему запросу.',
+                clear_search: 'Очистить поиск',
+                open_source_group: 'Открытый код',
+                enterprise_group: 'Корпоративные',
+                specialized_group: 'Специализированные',
                 check_examples_long: 'Открыть примеры',
                 check_examples_short: 'Примеры',
             },

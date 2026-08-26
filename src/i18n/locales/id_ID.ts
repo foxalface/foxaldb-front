@@ -703,9 +703,16 @@ export const id_ID: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Apakah Database Anda?',
+                title: 'Apa sistem manajemen basis data Anda?',
                 description:
-                    'Setiap database memiliki fitur dan kemampuan unik.',
+                    'Setiap sistem manajemen basis data memiliki fitur dan kemampuan unik.',
+                search_placeholder: 'Cari sistem manajemen basis data…',
+                search_no_results:
+                    'Tidak ada sistem manajemen basis data yang cocok dengan pencarian Anda.',
+                clear_search: 'Hapus pencarian',
+                open_source_group: 'Sumber terbuka',
+                enterprise_group: 'Perusahaan',
+                specialized_group: 'Spesialis',
                 check_examples_long: 'Lihat Contoh',
                 check_examples_short: 'Contoh',
             },

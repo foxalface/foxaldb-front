@@ -695,9 +695,16 @@ export const bn: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'আপনার ডাটাবেস কী?',
+                title: 'আপনার ডাটাবেস ম্যানেজমেন্ট সিস্টেম কী?',
                 description:
-                    'প্রত্যেক ডাটাবেসের নিজস্ব বৈশিষ্ট্য এবং ক্ষমতা রয়েছে।',
+                    'প্রতিটি ডাটাবেস ম্যানেজমেন্ট সিস্টেমের নিজস্ব বৈশিষ্ট্য ও ক্ষমতা রয়েছে।',
+                search_placeholder: 'ডাটাবেস ম্যানেজমেন্ট সিস্টেম খুঁজুন…',
+                search_no_results:
+                    'আপনার অনুসন্ধানের সাথে কোনো ডাটাবেস ম্যানেজমেন্ট সিস্টেম মেলেনি।',
+                clear_search: 'অনুসন্ধান মুছুন',
+                open_source_group: 'ওপেন সোর্স',
+                enterprise_group: 'এন্টারপ্রাইজ',
+                specialized_group: 'বিশেষজ্ঞ',
                 check_examples_long: 'উদাহরণ দেখুন',
                 check_examples_short: 'উদাহরণ',
             },

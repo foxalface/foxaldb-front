@@ -692,8 +692,16 @@ export const gu: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'તમારું ડેટાબેસ શું છે?',
-                description: 'દરેક ડેટાબેસની પોતાની ખાસિયતો અને ક્ષમતા હોય છે.',
+                title: 'તમારી ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમ શું છે?',
+                description:
+                    'દરેક ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમની પોતાની ખાસિયતો અને ક્ષમતા હોય છે.',
+                search_placeholder: 'ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમ શોધો…',
+                search_no_results:
+                    'તમારી શોધ સાથે કોઈ ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમ મેળ ખાતી નથી.',
+                clear_search: 'શોધ સાફ કરો',
+                open_source_group: 'ઓપન સોર્સ',
+                enterprise_group: 'એન્ટરપ્રાઇઝ',
+                specialized_group: 'વિશેષ',
                 check_examples_long: 'ઉદાહરણ જુઓ',
                 check_examples_short: 'ઉદાહરણ',
             },

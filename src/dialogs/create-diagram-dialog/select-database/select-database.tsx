@@ -1,35 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Search, X } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
-    DialogClose,
     DialogDescription,
     DialogFooter,
     DialogHeader,
-    DialogInternalContent,
     DialogTitle,
 } from '@/components/dialog/dialog';
-import { DatabaseType } from '@/lib/domain/database-type';
+import { Input } from '@/components/input/input';
 import { useTranslation } from 'react-i18next';
 import { SelectDatabaseContent } from './select-database-content';
+import { ExampleOption } from './example-option';
 import { useDialog } from '@/hooks/use-dialog';
+import type { DatabaseType } from '@/lib/domain/database-type';
 
 export interface SelectDatabaseProps {
-    onContinue: () => void;
+    onDatabaseSelected: () => void;
     databaseType: DatabaseType;
     setDatabaseType: React.Dispatch<React.SetStateAction<DatabaseType>>;
     hasExistingDiagram: boolean;
-    createNewDiagram: () => void;
 }
 
 export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
-    onContinue,
+    onDatabaseSelected,
     databaseType,
     setDatabaseType,
     hasExistingDiagram,
-    createNewDiagram,
 }) => {
     const { t } = useTranslation();
     const { openImportDiagramDialog } = useDialog();
+    const [searchTerm, setSearchTerm] = useState('');
 
     return (
         <>
@@ -41,21 +41,45 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                     {t('new_diagram_dialog.database_selection.description')}
                 </DialogDescription>
             </DialogHeader>
-            <DialogInternalContent>
+            <div className="mx-auto flex w-full max-w-[26rem] flex-col items-center gap-2">
+                <div className="relative w-full shrink-0">
+                    <Search
+                        className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+                        aria-hidden
+                    />
+                    <Input
+                        placeholder={t(
+                            'new_diagram_dialog.database_selection.search_placeholder'
+                        )}
+                        value={searchTerm}
+                        onChange={(event) => setSearchTerm(event.target.value)}
+                        className="px-9 focus-visible:ring-0"
+                    />
+                    {searchTerm ? (
+                        <button
+                            type="button"
+                            onClick={() => setSearchTerm('')}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                            aria-label={t(
+                                'new_diagram_dialog.database_selection.clear_search'
+                            )}
+                        >
+                            <X className="size-4" />
+                        </button>
+                    ) : null}
+                </div>
                 <SelectDatabaseContent
                     databaseType={databaseType}
-                    onContinue={onContinue}
+                    searchTerm={searchTerm}
+                    onDatabaseSelected={onDatabaseSelected}
                     setDatabaseType={setDatabaseType}
                 />
-            </DialogInternalContent>
-            <DialogFooter className="mt-4 flex !justify-between gap-2">
-                {hasExistingDiagram ? (
-                    <DialogClose asChild>
-                        <Button type="button" variant="secondary">
-                            {t('new_diagram_dialog.cancel')}
-                        </Button>
-                    </DialogClose>
-                ) : (
+                <div className="flex justify-center pt-2">
+                    <ExampleOption />
+                </div>
+            </div>
+            {!hasExistingDiagram ? (
+                <DialogFooter className="mt-4 flex !justify-start gap-2">
                     <Button
                         type="button"
                         variant="ghost"
@@ -63,26 +87,8 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                     >
                         {t('new_diagram_dialog.import_from_file')}
                     </Button>
-                )}
-                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:space-x-2">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={createNewDiagram}
-                        disabled={databaseType === DatabaseType.GENERIC}
-                    >
-                        {t('new_diagram_dialog.empty_diagram')}
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="default"
-                        disabled={databaseType === DatabaseType.GENERIC}
-                        onClick={onContinue}
-                    >
-                        {t('new_diagram_dialog.continue')}
-                    </Button>
-                </div>
-            </DialogFooter>
+                </DialogFooter>
+            ) : null}
         </>
     );
 };

@@ -81,3 +81,47 @@ export const databaseSecondaryLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.ORACLE]: OracleLogo2,
     [DatabaseType.GENERIC]: GeneralDBLogo2,
 };
+
+export const OPEN_SOURCE_DATABASE_TYPES: readonly DatabaseType[] = [
+    DatabaseType.POSTGRESQL,
+    DatabaseType.MYSQL,
+    DatabaseType.MARIADB,
+    DatabaseType.SQLITE,
+];
+
+export const ENTERPRISE_DATABASE_TYPES: readonly DatabaseType[] = [
+    DatabaseType.SQL_SERVER,
+    DatabaseType.ORACLE,
+];
+
+export const SPECIALIZED_DATABASE_TYPES: readonly DatabaseType[] = [
+    DatabaseType.COCKROACHDB,
+    DatabaseType.CLICKHOUSE,
+];
+
+export interface DatabaseTypeGroups {
+    openSource: DatabaseType[];
+    enterprise: DatabaseType[];
+    specialized: DatabaseType[];
+}
+
+export const getDatabaseTypeGroups = (): DatabaseTypeGroups => ({
+    openSource: [...OPEN_SOURCE_DATABASE_TYPES],
+    enterprise: [...ENTERPRISE_DATABASE_TYPES],
+    specialized: [...SPECIALIZED_DATABASE_TYPES],
+});
+
+export const filterDatabaseTypesBySearch = (
+    types: DatabaseType[],
+    searchTerm: string
+): DatabaseType[] => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+
+    if (!normalizedSearch) {
+        return types;
+    }
+
+    return types.filter((type) =>
+        databaseTypeToLabelMap[type].toLowerCase().includes(normalizedSearch)
+    );
+};

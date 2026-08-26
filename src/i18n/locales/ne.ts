@@ -701,9 +701,16 @@ export const ne: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'तपाईंको डाटाबेस के हो?',
+                title: 'तपाईंको डाटाबेस व्यवस्थापन प्रणाली के हो?',
                 description:
-                    'प्रत्येक डाटाबेसलाई आफ्नो विशेषता र क्षमताहरू छन्।',
+                    'प्रत्येक डाटाबेस व्यवस्थापन प्रणालीका आफ्नै विशेषता र क्षमताहरू छन्।',
+                search_placeholder: 'डाटाबेस व्यवस्थापन प्रणाली खोज्नुहोस्…',
+                search_no_results:
+                    'तपाईंको खोजसँग मेल खाने कुनै डाटाबेस व्यवस्थापन प्रणाली छैन।',
+                clear_search: 'खोज खाली गर्नुहोस्',
+                open_source_group: 'खुला स्रोत',
+                enterprise_group: 'इन्टरप्राइज',
+                specialized_group: 'विशेष',
                 check_examples_long: 'उदाहरणहरू हेर्नुहोस्',
                 check_examples_short: 'उदाहरणहरू',
             },

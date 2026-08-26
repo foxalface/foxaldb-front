@@ -694,9 +694,16 @@ export const ko_KR: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '당신의 데이터베이스 종류가 무엇인가요?',
+                title: '사용하는 데이터베이스 관리 시스템은 무엇인가요?',
                 description:
-                    '각 데이터베이스에는 고유한 기능과 특징이 있습니다.',
+                    '각 데이터베이스 관리 시스템은 고유한 기능과 특징을 가집니다.',
+                search_placeholder: '데이터베이스 관리 시스템 검색…',
+                search_no_results:
+                    '검색과 일치하는 데이터베이스 관리 시스템이 없습니다.',
+                clear_search: '검색 지우기',
+                open_source_group: '오픈 소스',
+                enterprise_group: '엔터프라이즈',
+                specialized_group: '특수 목적',
                 check_examples_long: '예제 확인',
                 check_examples_short: '예제들',
             },

@@ -702,9 +702,16 @@ export const vi: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Cơ sở dữ liệu của bạn là gì?',
+                title: 'Hệ quản trị cơ sở dữ liệu của bạn là gì?',
                 description:
-                    'Mỗi cơ sở dữ liệu có những tính năng và khả năng riêng biệt.',
+                    'Mỗi hệ quản trị cơ sở dữ liệu có những tính năng và khả năng riêng biệt.',
+                search_placeholder: 'Tìm hệ quản trị cơ sở dữ liệu…',
+                search_no_results:
+                    'Không có hệ quản trị cơ sở dữ liệu nào khớp với tìm kiếm của bạn.',
+                clear_search: 'Xóa tìm kiếm',
+                open_source_group: 'Mã nguồn mở',
+                enterprise_group: 'Doanh nghiệp',
+                specialized_group: 'Chuyên dụng',
                 check_examples_long: 'Xem ví dụ',
                 check_examples_short: 'Ví dụ',
             },

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { createDiagram } from '@/lib/api/diagrams';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -37,9 +37,18 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     entryCreateDiagramActions,
 }) => {
     const { isAuthenticated } = useAuth();
-    const { loadDiagramFromData } = useChartDB();
+    const { currentDiagram, loadDiagramFromData } = useChartDB();
     const { toast } = useToast();
     const { t } = useTranslation();
+
+    const isEntryFlowOwned = entryCreateDiagramActions !== undefined;
+    const canClose = useMemo(
+        () =>
+            !isEntryFlowOwned &&
+            currentDiagram?.id !== undefined &&
+            currentDiagram.id !== '',
+        [isEntryFlowOwned, currentDiagram?.id]
+    );
 
     const [importMethod, setImportMethod] = useState<ImportMethod>('query');
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
@@ -74,6 +83,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     }, [listDiagrams, dialog.open]);
 
     useEffect(() => {
+        if (!dialog.open) {
+            return;
+        }
+
         setStep(CreateDiagramDialogStep.SELECT_DATABASE);
         setDatabaseType(DatabaseType.GENERIC);
         setDatabaseEdition(undefined);
@@ -305,31 +318,36 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         <Dialog
             {...dialog}
             onOpenChange={(open) => {
-                if (!open && entryCreateDiagramActions) {
+                if (!open && isEntryFlowOwned) {
                     return;
+                }
+
+                if (!open) {
+                    closeCreateDiagramDialog();
                 }
             }}
         >
             <DialogContent
                 className="flex max-h-dvh w-full flex-col md:max-w-[900px]"
+                showClose={canClose}
                 onInteractOutside={(event) => {
-                    if (entryCreateDiagramActions) {
+                    if (isEntryFlowOwned) {
                         event.preventDefault();
                     }
                 }}
                 onEscapeKeyDown={(event) => {
-                    if (entryCreateDiagramActions) {
+                    if (isEntryFlowOwned) {
                         event.preventDefault();
                     }
                 }}
             >
                 {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
                     <SelectDatabase
-                        createNewDiagram={createEmptyDiagram}
+                        key={dialog.open ? 'open' : 'closed'}
                         databaseType={databaseType}
-                        hasExistingDiagram={false}
+                        hasExistingDiagram={canClose}
                         setDatabaseType={setDatabaseType}
-                        onContinue={() =>
+                        onDatabaseSelected={() =>
                             setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
                         }
                     />

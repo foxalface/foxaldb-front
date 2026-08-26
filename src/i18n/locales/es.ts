@@ -708,9 +708,16 @@ export const es: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '¿Cuál es tu Base de Datos?',
+                title: '¿Cuál es tu sistema de gestión de bases de datos?',
                 description:
-                    'Cada base de datos tiene sus propias características y capacidades únicas.',
+                    'Cada sistema de gestión de bases de datos tiene sus propias características y capacidades.',
+                search_placeholder: 'Buscar sistemas de bases de datos…',
+                search_no_results:
+                    'Ningún sistema de bases de datos coincide con tu búsqueda.',
+                clear_search: 'Borrar búsqueda',
+                open_source_group: 'Código abierto',
+                enterprise_group: 'Empresarial',
+                specialized_group: 'Especializados',
                 check_examples_long: 'Ver Ejemplos',
                 check_examples_short: 'Ejemplos',
             },

@@ -695,9 +695,17 @@ export const te: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'మీ డేటాబేస్ ఏమిటి?',
+                title: 'మీ డేటాబేస్ మేనేజ్‌మెంట్ సిస్టమ్ ఏమిటి?',
                 description:
-                    'ప్రతి డేటాబేస్‌కు ప్రత్యేక లక్షణాలు మరియు సామర్థ్యాలు ఉంటాయి.',
+                    'ప్రతి డేటాబేస్ మేనేజ్‌మెంట్ సిస్టమ్‌కు ప్రత్యేక లక్షణాలు మరియు సామర్థ్యాలు ఉంటాయి.',
+                search_placeholder:
+                    'డేటాబేస్ మేనేజ్‌మెంట్ సిస్టమ్‌లను శోధించండి…',
+                search_no_results:
+                    'మీ శోధనకు సరిపోలే డేటాబేస్ మేనేజ్‌మెంట్ సిస్టమ్ ఏదీ లేదు.',
+                clear_search: 'శోధన తొలగించండి',
+                open_source_group: 'ఓపెన్ సోర్స్',
+                enterprise_group: 'ఎంటర్‌ప్రైజ్',
+                specialized_group: 'ప్రత్యేక',
                 check_examples_long: 'ఉదాహరణలు చూడండి',
                 check_examples_short: 'ఉదాహరణలు',
             },

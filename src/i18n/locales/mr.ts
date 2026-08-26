@@ -701,9 +701,16 @@ export const mr: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'तुमचा डेटाबेस कोणता आहे?',
+                title: 'तुमची डेटाबेस व्यवस्थापन प्रणाली कोणती आहे?',
                 description:
-                    'प्रत्येक डेटाबेसचे स्वतःचे युनिक वैशिष्ट्ये आणि क्षमता आहेत.',
+                    'प्रत्येक डेटाबेस व्यवस्थापन प्रणालीचे स्वतःचे वैशिष्ट्ये आणि क्षमता आहेत.',
+                search_placeholder: 'डेटाबेस व्यवस्थापन प्रणाली शोधा…',
+                search_no_results:
+                    'तुमच्या शोधाशी जुळणारी डेटाबेस व्यवस्थापन प्रणाली नाही.',
+                clear_search: 'शोध साफ करा',
+                open_source_group: 'ओपन सोर्स',
+                enterprise_group: 'एंटरप्राइज',
+                specialized_group: 'विशेष',
                 check_examples_long: 'उदाहरणे तपासा',
                 check_examples_short: 'उदाहरणे',
             },
