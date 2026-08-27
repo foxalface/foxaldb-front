@@ -1022,6 +1022,21 @@ export const vi: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'Nhập vào sơ đồ hiện tại',
+            import_schema: {
+                title: 'Nhập lược đồ',
+                import: 'Nhập',
+                cancel: 'Hủy',
+                mismatch: {
+                    title: 'Lược đồ này trông giống {{detected}}, nhưng sơ đồ này là {{selected}}.',
+                    description:
+                        'Nhập giữa các cơ sở dữ liệu khác nhau chưa được hỗ trợ.',
+                    cancel: 'Hủy',
+                },
+                ambiguous: {
+                    description:
+                        'Không thể tự động xác định phương ngữ SQL. Xác nhận cách diễn giải lược đồ này cho sơ đồ {{selected}} hiện tại.',
+                },
+            },
             override_alert: {
                 title: 'Nhập cơ sở dữ liệu',
                 content: {

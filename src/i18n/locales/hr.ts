@@ -1014,6 +1014,21 @@ export const hr: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'Uvezi u trenutni dijagram',
+            import_schema: {
+                title: 'Uvezi shemu',
+                import: 'Uvezi',
+                cancel: 'Odustani',
+                mismatch: {
+                    title: 'Ova shema izgleda kao {{detected}}, ali ovaj dijagram je {{selected}}.',
+                    description:
+                        'Uvoz između različitih baza podataka još nije podržan.',
+                    cancel: 'Odustani',
+                },
+                ambiguous: {
+                    description:
+                        'SQL dijalekt nije mogao biti automatski prepoznat. Potvrdite kako interpretirati ovu shemu za trenutni {{selected}} dijagram.',
+                },
+            },
             override_alert: {
                 title: 'Uvezi bazu podataka',
                 content: {

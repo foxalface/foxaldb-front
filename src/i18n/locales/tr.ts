@@ -1005,6 +1005,21 @@ export const tr: LanguageTranslation = {
         },
         import_database_dialog: {
             title: 'Mevcut Diyagrama İçe Aktar',
+            import_schema: {
+                title: 'Şema içe aktar',
+                import: 'İçe aktar',
+                cancel: 'İptal',
+                mismatch: {
+                    title: 'Bu şema {{detected}} gibi görünüyor, ancak bu diyagram {{selected}}.',
+                    description:
+                        'Farklı veritabanları arası içe aktarma henüz desteklenmiyor.',
+                    cancel: 'İptal',
+                },
+                ambiguous: {
+                    description:
+                        'SQL lehçesi otomatik olarak tanımlanamadı. Mevcut {{selected}} diyagramı için bu şemanın nasıl yorumlanacağını onaylayın.',
+                },
+            },
             override_alert: {
                 title: 'Veritabanını İçe Aktar',
                 content: {

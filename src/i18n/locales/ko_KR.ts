@@ -1014,6 +1014,21 @@ export const ko_KR: LanguageTranslation = {
 
         import_database_dialog: {
             title: '현재 다이어그램 가져오기',
+            import_schema: {
+                title: '스키마 가져오기',
+                import: '가져오기',
+                cancel: '취소',
+                mismatch: {
+                    title: '이 스키마는 {{detected}}처럼 보이지만, 이 다이어그램은 {{selected}}입니다.',
+                    description:
+                        '서로 다른 데이터베이스 간 가져오기는 아직 지원되지 않습니다.',
+                    cancel: '취소',
+                },
+                ambiguous: {
+                    description:
+                        'SQL 방언을 자동으로 식별할 수 없습니다. 현재 {{selected}} 다이어그램에 이 스키마를 어떻게 해석할지 확인하세요.',
+                },
+            },
             override_alert: {
                 title: '데이터베이스 가져오기',
                 content: {

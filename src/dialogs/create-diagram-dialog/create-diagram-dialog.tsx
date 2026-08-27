@@ -16,11 +16,13 @@ import { useDialog } from '@/hooks/use-dialog';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import { SelectDatabase } from './select-database/select-database';
 import { ChooseIntent } from './choose-intent/choose-intent';
-import { ImportSchemaStep } from './import-schema/import-schema-step';
+import {
+    ImportSchemaStep,
+    type ImportSchemaContinueParams,
+} from '@/dialogs/common/import-schema/import-schema-step';
 import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
 import { SelectTables } from '../common/select-tables/select-tables';
 import { useTranslation } from 'react-i18next';
-import type { ImportSchemaContinueParams } from './import-schema/import-schema-step';
 import {
     ImportSchemaResolutionError,
     importSchema,

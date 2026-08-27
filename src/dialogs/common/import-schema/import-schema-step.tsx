@@ -28,27 +28,53 @@ export interface ImportSchemaContinueParams {
     resolvedSourceDialect?: DatabaseType;
 }
 
-export interface ImportSchemaStepProps {
+interface ImportSchemaStepBaseProps {
     databaseType: DatabaseType;
-    setDatabaseType: React.Dispatch<React.SetStateAction<DatabaseType>>;
     scriptResult: string;
     setScriptResult: React.Dispatch<React.SetStateAction<string>>;
     onContinue: (params: ImportSchemaContinueParams) => void | Promise<void>;
-    onBack: () => void;
     importError?: string | null;
     isImporting?: boolean;
+    title?: string;
+    continueLabel?: string;
+    backLabel?: string;
 }
 
-export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = ({
-    databaseType,
-    setDatabaseType,
-    scriptResult,
-    setScriptResult,
-    onContinue,
-    onBack,
-    importError = null,
-    isImporting = false,
-}) => {
+export interface ImportSchemaStepCreateProps extends ImportSchemaStepBaseProps {
+    mode?: 'create';
+    setDatabaseType: React.Dispatch<React.SetStateAction<DatabaseType>>;
+    onBack: () => void;
+}
+
+export interface ImportSchemaStepExistingProps extends ImportSchemaStepBaseProps {
+    mode: 'existing';
+    onBack: () => void;
+}
+
+export type ImportSchemaStepProps =
+    | ImportSchemaStepCreateProps
+    | ImportSchemaStepExistingProps;
+
+export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
+    const {
+        databaseType,
+        scriptResult,
+        setScriptResult,
+        onContinue,
+        onBack,
+        importError = null,
+        isImporting = false,
+        title,
+        continueLabel,
+        backLabel,
+    } = props;
+
+    const mode = props.mode ?? 'create';
+    const setDatabaseType =
+        mode === 'create' && 'setDatabaseType' in props
+            ? props.setDatabaseType
+            : undefined;
+
     const { t } = useTranslation();
     const textareaId = useId();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -96,6 +122,10 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = ({
         }
 
         if (baseAnalysis.resolutionState === 'mismatch') {
+            if (mode === 'existing') {
+                return false;
+            }
+
             return (
                 userResolvedSourceDialect !== null &&
                 userResolvedSourceDialect === baseAnalysis.detectedDatabaseType
@@ -110,6 +140,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = ({
     }, [
         baseAnalysis,
         effectiveResolvedSourceDialect,
+        mode,
         userResolvedSourceDialect,
     ]);
 
@@ -128,23 +159,31 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = ({
     }, [baseAnalysis, canContinue, effectiveResolvedSourceDialect, onContinue]);
 
     const handleSwitchDatabase = useCallback(() => {
+        if (mode !== 'create' || !setDatabaseType) {
+            return;
+        }
+
         if (!baseAnalysis.detectedDatabaseType) {
             return;
         }
 
         setDatabaseType(baseAnalysis.detectedDatabaseType);
         setUserResolvedSourceDialect(baseAnalysis.detectedDatabaseType);
-    }, [baseAnalysis.detectedDatabaseType, setDatabaseType]);
+    }, [baseAnalysis.detectedDatabaseType, mode, setDatabaseType]);
 
     const handleResolveAmbiguousDialect = useCallback(
         (resolvedDialect: DatabaseType) => {
             setUserResolvedSourceDialect(resolvedDialect);
 
-            if (resolvedDialect !== databaseType) {
+            if (
+                mode === 'create' &&
+                setDatabaseType &&
+                resolvedDialect !== databaseType
+            ) {
                 setDatabaseType(resolvedDialect);
             }
         },
-        [databaseType, setDatabaseType]
+        [databaseType, mode, setDatabaseType]
     );
 
     const handleFileChange = useCallback(
@@ -197,12 +236,28 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = ({
         [setScriptResult]
     );
 
+    const resolvedTitle =
+        title ??
+        (mode === 'existing'
+            ? t('import_database_dialog.import_schema.title')
+            : t('new_diagram_dialog.import_schema.title'));
+
+    const resolvedBackLabel =
+        backLabel ??
+        (mode === 'existing'
+            ? t('import_database_dialog.import_schema.cancel')
+            : t('new_diagram_dialog.import_schema.back'));
+
+    const resolvedContinueLabel =
+        continueLabel ??
+        (mode === 'existing'
+            ? t('import_database_dialog.import_schema.import')
+            : t('new_diagram_dialog.import_schema.continue'));
+
     return (
         <>
             <DialogHeader>
-                <DialogTitle>
-                    {t('new_diagram_dialog.import_schema.title')}
-                </DialogTitle>
+                <DialogTitle>{resolvedTitle}</DialogTitle>
             </DialogHeader>
 
             <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-4">
@@ -273,15 +328,19 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = ({
                 {baseAnalysis.displayKind === 'dialect_mismatch' &&
                 baseAnalysis.detectedDatabaseType ? (
                     <DialectMismatchPanel
+                        variant={mode}
                         selectedDatabaseType={databaseType}
                         detectedDatabaseType={baseAnalysis.detectedDatabaseType}
-                        onSwitchDatabase={handleSwitchDatabase}
+                        onSwitchDatabase={
+                            mode === 'create' ? handleSwitchDatabase : undefined
+                        }
                         onBack={onBack}
                     />
                 ) : null}
 
                 {baseAnalysis.resolutionState === 'ambiguous' ? (
                     <DialectResolutionPanel
+                        variant={mode}
                         selectedDatabaseType={databaseType}
                         candidates={baseAnalysis.dialectCandidates}
                         resolvedSourceDialect={
@@ -305,14 +364,14 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = ({
                     onClick={onBack}
                     disabled={isImporting}
                 >
-                    {t('new_diagram_dialog.import_schema.back')}
+                    {resolvedBackLabel}
                 </Button>
                 <Button
                     type="button"
                     onClick={handleContinue}
                     disabled={!canContinue || isImporting}
                 >
-                    {t('new_diagram_dialog.import_schema.continue')}
+                    {resolvedContinueLabel}
                 </Button>
             </DialogFooter>
         </>

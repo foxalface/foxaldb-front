@@ -1019,6 +1019,20 @@ export const id_ID: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'Impor ke Diagram Saat Ini',
+            import_schema: {
+                title: 'Impor skema',
+                import: 'Impor',
+                cancel: 'Batal',
+                mismatch: {
+                    title: 'Skema ini terlihat seperti {{detected}}, tetapi diagram ini adalah {{selected}}.',
+                    description: 'Impor lintas database belum didukung.',
+                    cancel: 'Batal',
+                },
+                ambiguous: {
+                    description:
+                        'Dialek SQL tidak dapat diidentifikasi secara otomatis. Konfirmasikan cara menafsirkan skema ini untuk diagram {{selected}} saat ini.',
+                },
+            },
             override_alert: {
                 title: 'Impor Database',
                 content: {

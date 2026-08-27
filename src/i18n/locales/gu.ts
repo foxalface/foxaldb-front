@@ -1008,6 +1008,20 @@ export const gu: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'વર્તમાન ડાયાગ્રામમાં આયાત કરો',
+            import_schema: {
+                title: 'સ્કીમા આયાત કરો',
+                import: 'આયાત',
+                cancel: 'રદ કરો',
+                mismatch: {
+                    title: 'આ સ્કીમા {{detected}} જેવી લાગે છે, પરંતુ આ ડાયાગ્રામ {{selected}} છે.',
+                    description: 'ક્રોસ-ડેટાબેઝ આયાત હજુ સપોર્ટેડ નથી.',
+                    cancel: 'રદ કરો',
+                },
+                ambiguous: {
+                    description:
+                        'SQL ડાયલેક્ટ આપમેળે ઓળખી શકાયો નહીં. વર્તમાન {{selected}} ડાયાગ્રામ માટે આ સ્કીમાની અર્થઘટન કેવી રીતે કરવી તેની પુષ્ટિ કરો.',
+                },
+            },
             override_alert: {
                 title: 'ડેટાબેસ આયાત કરો',
                 content: {

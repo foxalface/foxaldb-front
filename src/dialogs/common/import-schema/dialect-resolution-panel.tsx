@@ -1,11 +1,14 @@
 import React from 'react';
 import { ToggleGroup } from '@/components/toggle/toggle-group';
-import { DatabaseOption } from '../select-database/database-option';
+import { DatabaseOption } from '@/dialogs/create-diagram-dialog/select-database/database-option';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { useTranslation } from 'react-i18next';
 
+export type DialectResolutionVariant = 'create' | 'existing';
+
 export interface DialectResolutionPanelProps {
+    variant?: DialectResolutionVariant;
     selectedDatabaseType: DatabaseType;
     candidates: DatabaseType[];
     resolvedSourceDialect: DatabaseType | null;
@@ -13,6 +16,7 @@ export interface DialectResolutionPanelProps {
 }
 
 export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
+    variant = 'create',
     selectedDatabaseType,
     candidates,
     resolvedSourceDialect,
@@ -23,6 +27,11 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
     if (candidates.length === 0) {
         return null;
     }
+
+    const descriptionKey =
+        variant === 'existing'
+            ? 'import_database_dialog.import_schema.ambiguous.description'
+            : 'new_diagram_dialog.import_schema.ambiguous.description';
 
     return (
         <div
@@ -35,13 +44,9 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                     {t('new_diagram_dialog.import_schema.ambiguous.title')}
                 </p>
                 <p className="text-muted-foreground">
-                    {t(
-                        'new_diagram_dialog.import_schema.ambiguous.description',
-                        {
-                            selected:
-                                databaseTypeToLabelMap[selectedDatabaseType],
-                        }
-                    )}
+                    {t(descriptionKey, {
+                        selected: databaseTypeToLabelMap[selectedDatabaseType],
+                    })}
                 </p>
             </div>
             <ToggleGroup

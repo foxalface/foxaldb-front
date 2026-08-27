@@ -1030,6 +1030,21 @@ export const pt_BR: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'Importar para o Diagrama Atual',
+            import_schema: {
+                title: 'Importar esquema',
+                import: 'Importar',
+                cancel: 'Cancelar',
+                mismatch: {
+                    title: 'Este esquema parece {{detected}}, mas este diagrama é {{selected}}.',
+                    description:
+                        'A importação entre bancos de dados ainda não é suportada.',
+                    cancel: 'Cancelar',
+                },
+                ambiguous: {
+                    description:
+                        'Não foi possível identificar o dialeto SQL automaticamente. Confirme como interpretar este esquema para o diagrama {{selected}} atual.',
+                },
+            },
             override_alert: {
                 title: 'Importar Banco de Dados',
                 content: {

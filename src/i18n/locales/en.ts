@@ -1010,6 +1010,20 @@ export const en = {
 
         import_database_dialog: {
             title: 'Import to Current Diagram',
+            import_schema: {
+                title: 'Import schema',
+                import: 'Import',
+                cancel: 'Cancel',
+                mismatch: {
+                    title: 'This schema looks like {{detected}}, but this diagram is {{selected}}.',
+                    description: 'Cross-database import is not supported yet.',
+                    cancel: 'Cancel',
+                },
+                ambiguous: {
+                    description:
+                        'We could not identify the SQL dialect automatically. Confirm how to interpret this schema for the current {{selected}} diagram.',
+                },
+            },
             override_alert: {
                 title: 'Import Database',
                 content: {

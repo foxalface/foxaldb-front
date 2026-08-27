@@ -1045,6 +1045,21 @@ export const de: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'In aktuelles Diagramm importieren',
+            import_schema: {
+                title: 'Schema importieren',
+                import: 'Importieren',
+                cancel: 'Abbrechen',
+                mismatch: {
+                    title: 'Dieses Schema sieht wie {{detected}} aus, aber dieses Diagramm ist {{selected}}.',
+                    description:
+                        'Import über verschiedene Datenbanken wird noch nicht unterstützt.',
+                    cancel: 'Abbrechen',
+                },
+                ambiguous: {
+                    description:
+                        'Der SQL-Dialekt konnte nicht automatisch erkannt werden. Bestätigen Sie, wie dieses Schema für das aktuelle {{selected}}-Diagramm interpretiert werden soll.',
+                },
+            },
             override_alert: {
                 title: 'Datenbank importieren',
                 content: {

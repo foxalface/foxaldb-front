@@ -1002,6 +1002,21 @@ export const ar: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'استيراد إلى المخطط الحالي',
+            import_schema: {
+                title: 'استيراد المخطط',
+                import: 'استيراد',
+                cancel: 'إلغاء',
+                mismatch: {
+                    title: 'يبدو أن هذا المخطط من نوع {{detected}}، لكن هذا المخطط الحالي من نوع {{selected}}.',
+                    description:
+                        'استيراد عبر قواعد بيانات مختلفة غير مدعوم بعد.',
+                    cancel: 'إلغاء',
+                },
+                ambiguous: {
+                    description:
+                        'تعذر تحديد لغة SQL تلقائياً. أكد كيفية تفسير هذا المخطط لمخطط {{selected}} الحالي.',
+                },
+            },
             override_alert: {
                 title: 'استيراد قاعدة بيانات',
                 content: {

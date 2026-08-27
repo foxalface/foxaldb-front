@@ -1018,6 +1018,21 @@ export const ru: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'Импорт в текущую диаграмму',
+            import_schema: {
+                title: 'Импорт схемы',
+                import: 'Импорт',
+                cancel: 'Отмена',
+                mismatch: {
+                    title: 'Эта схема похожа на {{detected}}, но эта диаграмма — {{selected}}.',
+                    description:
+                        'Импорт между разными СУБД пока не поддерживается.',
+                    cancel: 'Отмена',
+                },
+                ambiguous: {
+                    description:
+                        'Не удалось автоматически определить диалект SQL. Подтвердите, как интерпретировать эту схему для текущей диаграммы {{selected}}.',
+                },
+            },
             override_alert: {
                 title: 'Импортировать базу данных',
                 content: {

@@ -1022,6 +1022,20 @@ export const ne: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'डाटाबेस आयात गर्नुहोस्',
+            import_schema: {
+                title: 'स्किमा आयात गर्नुहोस्',
+                import: 'आयात',
+                cancel: 'रद्द गर्नुहोस्',
+                mismatch: {
+                    title: 'यो स्किमा {{detected}} जस्तो देखिन्छ, तर यो डायाग्राम {{selected}} हो।',
+                    description: 'क्रस-डाटाबेस आयात अझै समर्थित छैन।',
+                    cancel: 'रद्द गर्नुहोस्',
+                },
+                ambiguous: {
+                    description:
+                        'SQL बोली स्वचालित रूपमा पहिचान गर्न सकिएन। हालको {{selected}} डायाग्रामका लागि यो स्किमालाई कसरी बुझ्ने भनेर पुष्टि गर्नुहोस्।',
+                },
+            },
             override_alert: {
                 title: 'डाटाबेस आयात गर्नुहोस्',
                 content: {

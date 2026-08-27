@@ -29,6 +29,10 @@ vi.mock('react-i18next', () => ({
                 return `Mismatch ${options?.detected} vs ${options?.selected}`;
             }
 
+            if (key === 'import_database_dialog.import_schema.mismatch.title') {
+                return `Mismatch ${options?.detected} vs ${options?.selected}`;
+            }
+
             if (key === 'new_diagram_dialog.import_schema.mismatch.switch') {
                 return `Switch to ${options?.database}`;
             }
@@ -247,5 +251,78 @@ describe('ImportSchemaStep', () => {
         );
 
         expect(onBack).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('ImportSchemaStep existing diagram mode', () => {
+    const renderExistingImportSchemaStep = (
+        props: Partial<
+            Extract<
+                React.ComponentProps<typeof ImportSchemaStep>,
+                { mode: 'existing' }
+            >
+        > = {}
+    ) => {
+        const setScriptResult = vi.fn();
+        const onContinue = vi.fn();
+        const onBack = vi.fn();
+
+        render(
+            <Dialog open>
+                <DialogContent>
+                    <ImportSchemaStep
+                        mode="existing"
+                        databaseType={DatabaseType.POSTGRESQL}
+                        scriptResult=""
+                        setScriptResult={setScriptResult}
+                        onContinue={onContinue}
+                        onBack={onBack}
+                        {...props}
+                    />
+                </DialogContent>
+            </Dialog>
+        );
+
+        return { setScriptResult, onContinue, onBack };
+    };
+
+    it('blocks mismatch import without offering database switch', () => {
+        renderExistingImportSchemaStep({
+            scriptResult: mysqlDistinctiveSql,
+        });
+
+        expect(
+            screen.getByText('Mismatch MySQL vs PostgreSQL')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: 'Switch to MySQL' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'import_database_dialog.import_schema.import',
+            })
+        ).toBeDisabled();
+    });
+
+    it('allows ambiguous SQL when current diagram DBMS is preselected', async () => {
+        const user = userEvent.setup();
+        const { onContinue } = renderExistingImportSchemaStep({
+            scriptResult: genericAmbiguousSql,
+        });
+
+        const importButton = screen.getByRole('button', {
+            name: 'import_database_dialog.import_schema.import',
+        });
+
+        await waitFor(() => {
+            expect(importButton).toBeEnabled();
+        });
+
+        await user.click(importButton);
+
+        expect(onContinue).toHaveBeenCalledWith({
+            importMethod: 'ddl',
+            resolvedSourceDialect: DatabaseType.POSTGRESQL,
+        });
     });
 });

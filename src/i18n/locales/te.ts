@@ -1017,6 +1017,20 @@ export const te: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'ప్రస్తుత చిత్రానికి దిగుమతి చేయండి',
+            import_schema: {
+                title: 'స్కీమాను దిగుమతి చేయండి',
+                import: 'దిగుమతి',
+                cancel: 'రద్దు',
+                mismatch: {
+                    title: 'ఈ స్కీమా {{detected}} లాగా కనిపిస్తోంది, కానీ ఈ డయాగ్రామ్ {{selected}}.',
+                    description: 'క్రాస్-డేటాబేస్ దిగుమతి ఇంకా మద్దతు లేదు.',
+                    cancel: 'రద్దు',
+                },
+                ambiguous: {
+                    description:
+                        'SQL డయలెక్ట్‌ను స్వయంచాలకంగా గుర్తించలేకపోయాం. ప్రస్తుత {{selected}} డయాగ్రామ్ కోసం ఈ స్కీమాను ఎలా అర్థం చేసుకోవాలో నిర్ధారించండి.',
+                },
+            },
             override_alert: {
                 title: 'డేటాబేస్ దిగుమతి',
                 content: {

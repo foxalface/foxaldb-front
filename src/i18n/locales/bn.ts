@@ -1015,6 +1015,20 @@ export const bn: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'বর্তমান চিত্রে আমদানি করুন',
+            import_schema: {
+                title: 'স্কিমা আমদানি করুন',
+                import: 'আমদানি',
+                cancel: 'বাতিল',
+                mismatch: {
+                    title: 'এই স্কিমাটি {{detected}}-এর মতো দেখাচ্ছে, কিন্তু এই ডায়াগ্রামটি {{selected}}।',
+                    description: 'ক্রস-ডাটাবেস আমদানি এখনও সমর্থিত নয়।',
+                    cancel: 'বাতিল',
+                },
+                ambiguous: {
+                    description:
+                        'SQL ডায়ালেক্ট স্বয়ংক্রিয়ভাবে চিহ্নিত করা যায়নি। বর্তমান {{selected}} ডায়াগ্রামের জন্য এই স্কিমা কীভাবে ব্যাখ্যা করবেন তা নিশ্চিত করুন।',
+                },
+            },
             override_alert: {
                 title: 'ডাটাবেস আমদানি করুন',
                 content: {

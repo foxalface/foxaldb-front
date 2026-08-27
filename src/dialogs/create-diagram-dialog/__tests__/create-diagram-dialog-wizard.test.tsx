@@ -83,7 +83,7 @@ vi.mock('react-i18next', () => ({
 
 const importSchemaPropsSpy = vi.fn();
 
-vi.mock('../import-schema/import-schema-step', () => ({
+vi.mock('@/dialogs/common/import-schema/import-schema-step', () => ({
     ImportSchemaStep: (props: Record<string, unknown>) => {
         importSchemaPropsSpy(props);
 

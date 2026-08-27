@@ -972,6 +972,20 @@ export const zh_TW: LanguageTranslation = {
 
         import_database_dialog: {
             title: '匯入至當前圖表',
+            import_schema: {
+                title: '匯入結構描述',
+                import: '匯入',
+                cancel: '取消',
+                mismatch: {
+                    title: '此結構描述看起來像 {{detected}}，但此圖表是 {{selected}}。',
+                    description: '尚不支援跨資料庫匯入。',
+                    cancel: '取消',
+                },
+                ambiguous: {
+                    description:
+                        '無法自動識別 SQL 方言。請確認如何為目前的 {{selected}} 圖表解讀此結構描述。',
+                },
+            },
             override_alert: {
                 title: '匯入資料庫',
                 content: {

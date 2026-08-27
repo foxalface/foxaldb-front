@@ -1018,6 +1018,20 @@ export const mr: LanguageTranslation = {
 
         import_database_dialog: {
             title: 'सध्याच्या आरेखात आयात करा',
+            import_schema: {
+                title: 'स्कीमा आयात करा',
+                import: 'आयात',
+                cancel: 'रद्द करा',
+                mismatch: {
+                    title: 'ही स्कीमा {{detected}} सारखी दिसते, पण हा आकृती {{selected}} आहे.',
+                    description: 'क्रॉस-डेटाबेस आयात अद्याप समर्थित नाही.',
+                    cancel: 'रद्द करा',
+                },
+                ambiguous: {
+                    description:
+                        'SQL बोली स्वयंचलितपणे ओळखता आली नाही. सध्याच्या {{selected}} आकृतीसाठी ही स्कीमा कशी समजावायची ते निश्चित करा.',
+                },
+            },
             override_alert: {
                 title: 'डेटाबेस आयात करा',
                 content: {

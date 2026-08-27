@@ -973,6 +973,20 @@ export const zh_CN: LanguageTranslation = {
 
         import_database_dialog: {
             title: '导入到当前关系图',
+            import_schema: {
+                title: '导入架构',
+                import: '导入',
+                cancel: '取消',
+                mismatch: {
+                    title: '此架构看起来像 {{detected}}，但此图表是 {{selected}}。',
+                    description: '尚不支持跨数据库导入。',
+                    cancel: '取消',
+                },
+                ambiguous: {
+                    description:
+                        '无法自动识别 SQL 方言。请确认如何为当前 {{selected}} 图表解释此架构。',
+                },
+            },
             override_alert: {
                 title: '导入数据库',
                 content: {

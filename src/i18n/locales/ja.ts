@@ -1023,6 +1023,21 @@ export const ja: LanguageTranslation = {
 
         import_database_dialog: {
             title: '現在のダイアグラムにインポート',
+            import_schema: {
+                title: 'スキーマをインポート',
+                import: 'インポート',
+                cancel: 'キャンセル',
+                mismatch: {
+                    title: 'このスキーマは {{detected}} のようですが、このダイアグラムは {{selected}} です。',
+                    description:
+                        '異なるデータベース間のインポートはまだサポートされていません。',
+                    cancel: 'キャンセル',
+                },
+                ambiguous: {
+                    description:
+                        'SQL 方言を自動識別できませんでした。現在の {{selected}} ダイアグラム向けにこのスキーマをどう解釈するか確認してください。',
+                },
+            },
             override_alert: {
                 title: 'データベースをインポート',
                 content: {
