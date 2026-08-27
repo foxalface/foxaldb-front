@@ -814,19 +814,12 @@ export const es: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'Importa tu Base de Datos',
-                database_edition: 'Edición de Base de Datos:',
-                step_1: 'Ejecuta este script en tu base de datos:',
-                step_2: 'Pega el resultado del script aquí →',
-                script_results_placeholder: 'Resultados del script aquí...',
                 ssms_instructions: {
                     button_text: 'Instrucciones SSMS',
                     title: 'Instrucciones',
                     step_1: 'Ve a Herramientas > Opciones > Resultados de Consulta > SQL Server.',
                     step_2: 'Si estás usando "Resultados en Cuadrícula", cambia el Máximo de Caracteres Recuperados para Datos No XML (configúralo en 9999999).',
                 },
-                instructions_link: '¿Necesitas ayuda? mira cómo',
-                check_script_result: 'Revisa el resultado del script',
             },
 
             cancel: 'Cancelar',

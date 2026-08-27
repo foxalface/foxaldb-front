@@ -798,19 +798,12 @@ export const bn: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'আপনার ডাটাবেস আমদানি করুন',
-                database_edition: 'ডাটাবেস সংস্করণ:',
-                step_1: 'আপনার ডাটাবেসে এই স্ক্রিপ্ট চালান:',
-                step_2: 'স্ক্রিপ্টের ফলাফল এখানে পেস্ট করুন →',
-                script_results_placeholder: 'স্ক্রিপ্টের ফলাফল এখানে...',
                 ssms_instructions: {
                     button_text: 'SSMS নির্দেশনা',
                     title: 'নির্দেশনা',
                     step_1: 'টুলস > অপশন > কোয়েরি ফলাফল > SQL সার্ভারে যান।',
                     step_2: 'যদি আপনি "গ্রিডে ফলাফল" ব্যবহার করেন, তাহলে নন-XML ডেটার জন্য সর্বাধিক চরিত্রগুলি 9999999-এ সেট করুন।',
                 },
-                instructions_link: 'সাহায্যের প্রয়োজন? এখানে দেখুন',
-                check_script_result: 'স্ক্রিপ্ট ফলাফল যাচাই করুন',
             },
 
             cancel: 'বাতিল করুন',

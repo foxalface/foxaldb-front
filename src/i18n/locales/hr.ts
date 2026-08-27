@@ -798,19 +798,12 @@ export const hr: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'Uvezite svoju bazu podataka',
-                database_edition: 'Verzija baze podataka:',
-                step_1: 'Pokrenite ovu skriptu u svojoj bazi podataka:',
-                step_2: 'Zalijepite rezultat skripte u ovaj dio →',
-                script_results_placeholder: 'Rezultati skripte ovdje...',
                 ssms_instructions: {
                     button_text: 'SSMS upute',
                     title: 'Upute',
                     step_1: 'Idite na Tools > Options > Query Results > SQL Server.',
                     step_2: 'Ako koristite "Results to Grid," promijenite Maximum Characters Retrieved za Non-XML podatke (postavite na 9999999).',
                 },
-                instructions_link: 'Trebate pomoć? Pogledajte kako',
-                check_script_result: 'Provjeri rezultat skripte',
             },
 
             cancel: 'Odustani',

@@ -813,19 +813,12 @@ export const pt_BR: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'Importe seu Banco de Dados',
-                database_edition: 'Edição do Banco de Dados:',
-                step_1: 'Execute este script no seu banco de dados:',
-                step_2: 'Cole o resultado do script aqui →',
-                script_results_placeholder: 'Resultados do script aqui...',
                 ssms_instructions: {
                     button_text: 'Instruções do SSMS',
                     title: 'Instruções',
                     step_1: 'Vá para Ferramentas > Opções > Resultados da Consulta > SQL Server.',
                     step_2: 'Se estiver usando "Resultados para Grade," altere o Máximo de Caracteres para Dados Não-XML (definido para 9999999).',
                 },
-                instructions_link: 'Precisa de ajuda? Veja como',
-                check_script_result: 'Verificar Resultado do Script',
             },
 
             cancel: 'Cancelar',

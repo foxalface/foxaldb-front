@@ -791,20 +791,12 @@ export const tr: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'Veritabanını İçe Aktar',
-                database_edition: 'Veritabanı Sürümü:',
-                step_1: 'Bu komut dosyasını veritabanınızda çalıştırın:',
-                step_2: 'Komut dosyası sonucunu buraya yapıştırın →',
-                script_results_placeholder: 'Komut dosyası sonuçları burada...',
                 ssms_instructions: {
                     button_text: 'SSMS Talimatları',
                     title: 'Talimatlar',
                     step_1: "Araçlar > Seçenekler > Sorgu Sonuçları > SQL Server'a gidin.",
                     step_2: 'Eğer "Sonuçlar Izgaraya" kullanıyorsanız, Maksimum Karakterlerin Alınması için XML olmayan veriler (9999999 olarak ayarlanmış) değiştirin.',
                 },
-                instructions_link:
-                    'Yardıma mı ihtiyacınız var? İzlemek için tıklayın',
-                check_script_result: 'Komut Dosyası Sonucunu Kontrol Et',
             },
             // TODO: Translate
             import_from_file: 'Import from File',

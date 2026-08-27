@@ -799,19 +799,12 @@ export const te: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'మీ డేటాబేస్‌ను దిగుమతి చేసుకోండి',
-                database_edition: 'డేటాబేస్ ఎడిషన్:',
-                step_1: 'ఈ స్క్రిప్ట్ను మీ డేటాబేస్‌లో అమలు చేయండి:',
-                step_2: 'స్క్రిప్ట్ ఫలితాన్ని ఇక్కడ పేస్ట్ చేయండి →',
-                script_results_placeholder: 'స్క్రిప్ట్ ఫలితాలు ఇక్కడ...',
                 ssms_instructions: {
                     button_text: 'SSMS సూచనల్ని చూపించు',
                     title: 'సూచనలు',
                     step_1: 'Tools > Options > Query Results > SQL Server కు వెళ్ళండి.',
                     step_2: 'మీరు "Results to Grid" ఉపయోగిస్తే, Maximum Characters Retrieved for Non-XML డేటా (9999999 కు సెట్ చేయండి) మార్చండి.',
                 },
-                instructions_link: 'సహాయం కావాలి? ఎలా చూడండి',
-                check_script_result: 'స్క్రిప్ట్ ఫలితం తనిఖీ చేయండి',
             },
 
             cancel: 'రద్దు',

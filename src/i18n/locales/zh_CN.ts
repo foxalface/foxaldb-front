@@ -755,11 +755,6 @@ export const zh_CN: LanguageTranslation = {
             },
 
             import_database: {
-                title: '导入您的数据库',
-                database_edition: '数据库类型：',
-                step_1: '在您的数据库中执行以下脚本：',
-                step_2: '将结果粘贴于此 →',
-                script_results_placeholder: '结果...',
                 ssms_instructions: {
                     button_text: 'SSMS 说明',
                     title: '说明',
@@ -767,8 +762,6 @@ export const zh_CN: LanguageTranslation = {
                     // TODO: Add translations
                     step_2: '如果您使用“Result to Grid”功能，请将非 XML 数据的最大提取字符数更改为 9999999。',
                 },
-                instructions_link: '需要帮助？看看如何操作',
-                check_script_result: '检查脚本结果',
             },
 
             cancel: '取消',

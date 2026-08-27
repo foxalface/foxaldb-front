@@ -97,6 +97,25 @@ vi.mock('@/dialogs/common/import-schema/import-schema-step', () => ({
     },
 }));
 
+const importFromDatabasePropsSpy = vi.fn();
+
+vi.mock(
+    '@/dialogs/create-diagram-dialog/import-from-database/import-from-database-step',
+    () => ({
+        ImportFromDatabaseStep: (props: Record<string, unknown>) => {
+            importFromDatabasePropsSpy(props);
+
+            return (
+                <div data-testid="import-from-database-step">
+                    <button type="button" onClick={props.onBack as () => void}>
+                        Metadata back
+                    </button>
+                </div>
+            );
+        },
+    })
+);
+
 describe('CreateDiagramDialog wizard flow', () => {
     beforeEach(() => {
         isAuthenticated = true;
@@ -108,6 +127,7 @@ describe('CreateDiagramDialog wizard flow', () => {
         updateConfig.mockClear();
         loadDiagramFromData.mockClear();
         importSchemaPropsSpy.mockClear();
+        importFromDatabasePropsSpy.mockClear();
     });
 
     it('advances to CHOOSE_INTENT when PostgreSQL is selected without persisting', async () => {
@@ -247,6 +267,46 @@ describe('CreateDiagramDialog wizard flow', () => {
         ).toBeInTheDocument();
     });
 
+    it('advances to IMPORT_FROM_DATABASE from the tertiary intent action', async () => {
+        const user = userEvent.setup();
+
+        render(<CreateDiagramDialog dialog={{ open: true }} />);
+
+        await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
+        await user.click(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.choose_intent.import_from_database',
+            })
+        );
+
+        expect(
+            screen.getByTestId('import-from-database-step')
+        ).toBeInTheDocument();
+        expect(importFromDatabasePropsSpy).toHaveBeenCalled();
+        expect(addDiagram).not.toHaveBeenCalled();
+        expect(createDiagram).not.toHaveBeenCalled();
+    });
+
+    it('returns from IMPORT_FROM_DATABASE to CHOOSE_INTENT', async () => {
+        const user = userEvent.setup();
+
+        render(<CreateDiagramDialog dialog={{ open: true }} />);
+
+        await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
+        await user.click(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.choose_intent.import_from_database',
+            })
+        );
+        await user.click(screen.getByRole('button', { name: 'Metadata back' }));
+
+        expect(
+            screen.getByRole('heading', {
+                name: 'new_diagram_dialog.choose_intent.title',
+            })
+        ).toBeInTheDocument();
+    });
+
     it('resets to SELECT_DATABASE when the dialog reopens', async () => {
         const user = userEvent.setup();
         const { rerender } = render(
@@ -275,7 +335,10 @@ describe('CreateDiagramDialog wizard flow', () => {
 });
 
 describe('CreateDiagramDialogStep', () => {
-    it('includes CHOOSE_INTENT in the wizard steps', () => {
+    it('includes wizard steps for the import redesign', () => {
         expect(CreateDiagramDialogStep.CHOOSE_INTENT).toBe('CHOOSE_INTENT');
+        expect(CreateDiagramDialogStep.IMPORT_FROM_DATABASE).toBe(
+            'IMPORT_FROM_DATABASE'
+        );
     });
 });

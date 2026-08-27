@@ -804,19 +804,12 @@ export const id_ID: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'Impor Database Anda',
-                database_edition: 'Edisi Database:',
-                step_1: 'Jalankan skrip ini di database Anda:',
-                step_2: 'Tempel hasil skrip di sini →',
-                script_results_placeholder: 'Hasil skrip di sini...',
                 ssms_instructions: {
                     button_text: 'Instruksi SSMS',
                     title: 'Instruksi',
                     step_1: 'Pergi ke Alat > Opsi > Hasil Kueri > SQL Server.',
                     step_2: 'Jika Anda menggunakan "Hasil ke Grid," ubah Jumlah Karakter yang Diterima untuk Data Non-XML (disetel ke 9999999).',
                 },
-                instructions_link: 'Butuh Bantuan? Tonton caranya',
-                check_script_result: 'Periksa Hasil Skrip',
             },
 
             cancel: 'Batal',

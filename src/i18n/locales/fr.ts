@@ -811,19 +811,12 @@ export const fr: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'Importer votre Base de Données',
-                database_edition: 'Édition de la Base de Données :',
-                step_1: 'Exécutez ce script dans votre base de données :',
-                step_2: 'Collez le résultat du script ici →',
-                script_results_placeholder: 'Résultats du script ici...',
                 ssms_instructions: {
                     button_text: 'Instructions SSMS',
                     title: 'Instructions',
                     step_1: 'Allez dans Outils > Options > Résultats des Requêtes > SQL Server.',
                     step_2: 'Si vous utilisez "Résultats en Grille", changez le nombre maximum de caractères récupérés pour les données non-XML (définir à 9999999).',
                 },
-                instructions_link: "Besoin d'aide ? Regardez comment",
-                check_script_result: 'Vérifier le résultat du Script',
             },
 
             cancel: 'Annuler',

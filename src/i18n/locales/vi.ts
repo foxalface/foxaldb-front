@@ -806,19 +806,12 @@ export const vi: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'Nhập cơ sở dữ liệu của bạn',
-                database_edition: 'Loại:',
-                step_1: 'Chạy lệnh này trong cơ sở dữ liệu của bạn:',
-                step_2: 'Dán kết quả vào đây →',
-                script_results_placeholder: 'Kết quả...',
                 ssms_instructions: {
                     button_text: 'Hướng dẫn SSMS',
                     title: 'Hướng dẫn',
                     step_1: 'Đi đến Tools > Options > Query Results > SQL Server.',
                     step_2: 'Nếu bạn đang sử dụng "Results to Grid," thay đổi Maximum Characters Retrieved cho Non-XML (đặt thành 9999999).',
                 },
-                instructions_link: 'Cần trợ giúp? Xem ngay',
-                check_script_result: 'Xem kết quả',
             },
 
             cancel: 'Hủy',

@@ -223,7 +223,8 @@ export async function sqlImportToDiagram({
     sourceDatabaseType: DatabaseType;
     targetDatabaseType: DatabaseType;
 }): Promise<Diagram> {
-    // If source database type is GENERIC, try to auto-detect the type
+    // Legacy compatibility for direct callers/tests only. User-facing importSchema()
+    // always supplies an explicit resolvedSourceDialect from detectSqlDialect().
     if (sourceDatabaseType === DatabaseType.GENERIC) {
         const detectedType = detectDatabaseType(sqlContent);
         if (detectedType) {

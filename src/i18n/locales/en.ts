@@ -793,19 +793,12 @@ export const en = {
             },
 
             import_database: {
-                title: 'Import your Database',
-                database_edition: 'Database Edition:',
-                step_1: 'Run this script in your database:',
-                step_2: 'Paste the script result into this modal →',
-                script_results_placeholder: 'Script results here...',
                 ssms_instructions: {
                     button_text: 'SSMS Instructions',
                     title: 'Instructions',
                     step_1: 'Go to Tools > Options > Query Results > SQL Server.',
                     step_2: 'If you\'re using "Results to Grid," change the Maximum Characters Retrieved for Non-XML data (set to 9999999).',
                 },
-                instructions_link: 'Need help? Watch how',
-                check_script_result: 'Check Script Result',
             },
 
             cancel: 'Cancel',

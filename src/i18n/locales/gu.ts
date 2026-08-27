@@ -792,19 +792,12 @@ export const gu: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'તમારું ડેટાબેસ આયાત કરો',
-                database_edition: 'ડેટાબેસ આવૃત્તિ:',
-                step_1: 'તમારા ડેટાબેસમાં આ સ્ક્રિપ્ટ ચલાવો:',
-                step_2: 'સ્ક્રિપ્ટનો પરિણામ અહીં પેસ્ટ કરો →',
-                script_results_placeholder: 'સ્ક્રિપ્ટના પરિણામ અહીં...',
                 ssms_instructions: {
                     button_text: 'SSMS સૂચનાઓ',
                     title: 'સૂચનાઓ',
                     step_1: 'ટૂલ્સ > વિકલ્પો > ક્વેરી પરિણામો > SQL સર્વર પર જાઓ.',
                     step_2: 'જો તમે "ગ્રિડમાં પરિણામો" નો ઉપયોગ કરી રહ્યા છો, તો નોન-XML ડેટા માટે મહત્તમ અક્ષરો મેળવવું (9999999 પર સેટ કરો).',
                 },
-                instructions_link: 'મદદ જોઈએ? અહીં જુઓ',
-                check_script_result: 'સ્ક્રિપ્ટ પરિણામ તપાસો',
             },
 
             cancel: 'રદ કરો',

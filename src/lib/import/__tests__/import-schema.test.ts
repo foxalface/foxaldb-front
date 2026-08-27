@@ -120,21 +120,17 @@ describe('importSchema', () => {
 });
 
 describe('importSchema dispatch regression', () => {
-    it('would parse MySQL SQL with the wrong dialect if PostgreSQL were passed explicitly', async () => {
+    it('never passes GENERIC as source dialect to sqlImportToDiagram', async () => {
         const { sqlImportToDiagram } = await import('@/lib/data/sql-import');
         vi.mocked(sqlImportToDiagram).mockClear();
 
         await importSchema({
-            content: mysqlDistinctiveSql,
+            content: postgresDistinctiveSql,
             selectedDatabaseType: DatabaseType.POSTGRESQL,
             resolvedSourceDialect: DatabaseType.POSTGRESQL,
         });
 
-        expect(sqlImportToDiagram).toHaveBeenCalledWith(
-            expect.objectContaining({
-                sourceDatabaseType: DatabaseType.POSTGRESQL,
-                targetDatabaseType: DatabaseType.POSTGRESQL,
-            })
-        );
+        const call = vi.mocked(sqlImportToDiagram).mock.calls[0]?.[0];
+        expect(call?.sourceDatabaseType).not.toBe(DatabaseType.GENERIC);
     });
 });

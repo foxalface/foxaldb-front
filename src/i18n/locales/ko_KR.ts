@@ -798,19 +798,12 @@ export const ko_KR: LanguageTranslation = {
             },
 
             import_database: {
-                title: '당신의 데이터베이스를 가져오세요',
-                database_edition: '데이터베이스 세부 종류:',
-                step_1: '데이터베이스에서 아래의 SQL을 실행해주세요:',
-                step_2: '이곳에 결과를 붙여넣어주세요 →',
-                script_results_placeholder: '이곳에 스크립트 결과를 입력...',
                 ssms_instructions: {
                     button_text: 'SSMS을 사용하시는 경우',
                     title: '지침',
                     step_1: '도구 > 옵션 > 쿼리 응답 > SQL Server',
                     step_2: '"결과를 그리드로 표시"를 사용하는 경우 비 XML 데이터에 대해 검색되는 최대 문자 수를 변경합니다. (9999999로 설정)',
                 },
-                instructions_link: '도움이 필요하신가요? 영상 가이드 보기',
-                check_script_result: '스크립트 결과 확인',
             },
 
             cancel: '취소',

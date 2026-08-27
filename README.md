@@ -1,3 +1,52 @@
+<h1 align="center">FoxalDB</h1>
+
+<p align="center">
+  <b>Collaborative database diagram editor</b><br />
+  Fork of <a href="https://github.com/chartdb/chartdb">ChartDB</a> (AGPL-3.0)
+</p>
+
+<p align="center">
+  FoxalDB is a SaaS database modeling tool. This repository contains the public frontend fork.
+  Schema import is fully deterministic and runs in the browser — no AI and no direct database connection required.
+</p>
+
+---
+
+## FoxalDB import workflow (v1)
+
+### Create a new diagram
+
+1. Choose a target database type (PostgreSQL, MySQL, MariaDB, SQLite, SQL Server, Oracle, CockroachDB, or ClickHouse).
+2. Choose an intent:
+   - **Create an empty diagram**
+   - **Import an existing schema** — paste or upload SQL or DBML; format and SQL dialect are detected automatically
+   - **Import from an existing database** (advanced) — copy a metadata extraction query, run it in your database client, paste the JSON result
+
+### Import into an open diagram
+
+Use **Import schema** from the editor menu. Imported tables and relationships are merged into the current diagram. The diagram database type cannot be changed by import.
+
+### Supported import by database
+
+| Database | SQL DDL | DBML | Metadata extraction |
+|----------|---------|------|---------------------|
+| PostgreSQL | ✓ | ✓ | ✓ (incl. Supabase, Timescale editions) |
+| MySQL | ✓ | ✓ | ✓ (incl. 5.7 edition) |
+| MariaDB | ✓ | ✓ | ✓ |
+| SQLite | ✓ | ✓ | ✓ (incl. Cloudflare D1 edition) |
+| SQL Server | ✓ | ✓ | ✓ (incl. 2016 edition) |
+| Oracle | ✓ | ✓ | ✓ |
+| CockroachDB | ✓ | ✓ | ✓ |
+| ClickHouse | ✗ | ✓ | ✓ |
+
+- No cross-dialect SQL conversion in v1.
+- File uploads are limited to 5 MB.
+- Full diagram JSON files use a separate import dialog.
+
+Developer documentation: [`docs/architecture/import.md`](docs/architecture/import.md).
+
+---
+
 <h1 align="center">
   <a href="https://chartdb.io#gh-light-mode-only">
     <img src="https://github.com/chartdb/chartdb/blob/main/src/assets/logo-light.png" width="400" height="70" alt="ChartDB">
@@ -11,6 +60,10 @@
 <p align="center">
   <b>Open-source database diagrams editor</b> <br />
   <b>No installations • No Database password required.</b> <br />
+</p>
+
+<p align="center">
+  <i>Upstream ChartDB README content below. FoxalDB extends this fork with SaaS features and a redesigned import workflow (see above).</i>
 </p>
 
 <h3 align="center">

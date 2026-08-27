@@ -801,20 +801,12 @@ export const hi: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'अपना डेटाबेस आयात करें',
-                database_edition: 'डेटाबेस संस्करण:',
-                step_1: 'अपने डेटाबेस में यह स्क्रिप्ट चलाएँ:',
-                step_2: 'यहाँ स्क्रिप्ट का परिणाम पेस्ट करें →',
-                script_results_placeholder: 'स्क्रिप्ट के परिणाम यहाँ...',
                 ssms_instructions: {
                     button_text: 'SSMS निर्देश',
                     title: 'निर्देश',
                     step_1: 'टूल्स > ऑप्शंस > क्वेरी परिणाम > SQL सर्वर पर जाएँ।',
                     step_2: 'यदि आप "ग्रिड में परिणाम" का उपयोग कर रहे हैं, तो Non-XML डेटा के लिए अधिकतम वर्ण प्राप्ति (9999999 पर सेट करें)।',
                 },
-                instructions_link: 'मदद चाहिए? देखें कैसे',
-                // TODO: Translate
-                check_script_result: 'Check Script Result',
             },
 
             cancel: 'रद्द करें',

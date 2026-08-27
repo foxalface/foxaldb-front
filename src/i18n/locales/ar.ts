@@ -786,19 +786,12 @@ export const ar: LanguageTranslation = {
             },
 
             import_database: {
-                title: 'إسترد قاعدة بياناتك',
-                database_edition: ':إصدار قاعدة البيانات',
-                step_1: ':قم بتشغيل هذا البرنامج النصي في قاعدة بياناتك',
-                step_2: ':إلصق نتيجة البرنامج النصي هنا →',
-                script_results_placeholder: '...نتيجة البرنامج النصي هنا',
                 ssms_instructions: {
                     button_text: 'SSMS تعليمات',
                     title: 'تعليمات',
                     step_1: 'SQL SERVER < انتقل إلى الأدوات > الخيارات > نتائح الاستعلام',
                     step_2: '(اضبطها على 9999999) XML اذا كنت تستخدم "نتائج إلى الشبكة"، قم بتغيير الحد الاقصى للاحرف المستردة للبيانات غير',
                 },
-                instructions_link: 'تحتاج مساعدة؟ شاهد الفيديو',
-                check_script_result: 'تحقق من نتيجة البرنامج النصي',
             },
 
             cancel: 'إلغاء',

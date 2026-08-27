@@ -755,19 +755,12 @@ export const zh_TW: LanguageTranslation = {
             },
 
             import_database: {
-                title: '匯入資料庫',
-                database_edition: '資料庫版本:',
-                step_1: '請在資料庫中執行以下腳本:',
-                step_2: '將腳本結果貼到此處 →',
-                script_results_placeholder: '在此處貼上腳本結果...',
                 ssms_instructions: {
                     button_text: 'SSMS 操作步驟',
                     title: '操作步驟',
                     step_1: '導航至 工具 > 選項 > 查詢結果 > SQL Server。',
                     step_2: '若使用「結果至網格」，請更改非 XML 資料的最大取得字元數（設定為 9999999）。',
                 },
-                instructions_link: '需要幫助？觀看教學影片',
-                check_script_result: '檢查腳本結果',
             },
 
             cancel: '取消',
