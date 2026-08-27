@@ -30,7 +30,12 @@ const buildConversation = (
     ...overrides,
 });
 
-const { diagramAccessState, chartDbState } = vi.hoisted(() => ({
+const {
+    diagramAccessState,
+    chartDbState,
+    focusOnTargetMock,
+    focusOnTargetState,
+} = vi.hoisted(() => ({
     diagramAccessState: {
         role: 'owner' as 'owner' | 'editor' | 'viewer',
         can_edit: true,
@@ -53,6 +58,10 @@ const { diagramAccessState, chartDbState } = vi.hoisted(() => ({
         ],
         relationships: [],
     },
+    focusOnTargetMock: vi.fn(),
+    focusOnTargetState: {
+        canFocusOnTarget: true,
+    },
 }));
 
 vi.mock('@/hooks/use-chartdb', () => ({
@@ -63,11 +72,9 @@ vi.mock('@/hooks/use-diagram-access', () => ({
     useDiagramAccess: () => ({ diagramAccess: diagramAccessState }),
 }));
 
-const focusOnTargetMock = vi.fn();
-
 vi.mock('@/hooks/use-focus-on-conversation-target', () => ({
     useFocusOnConversationTarget: () => ({
-        canFocusOnTarget: focusOnTargetMock.canFocusOnTarget ?? true,
+        canFocusOnTarget: focusOnTargetState.canFocusOnTarget,
         focusOnTarget: focusOnTargetMock,
     }),
 }));
@@ -109,7 +116,7 @@ describe('ConversationSummaryItem', () => {
         diagramAccessState.can_edit = true;
         diagramAccessState.can_manage_members = true;
         focusOnTargetMock.mockReset();
-        focusOnTargetMock.canFocusOnTarget = true;
+        focusOnTargetState.canFocusOnTarget = true;
     });
 
     const renderItem = (
@@ -209,7 +216,7 @@ describe('ConversationSummaryItem', () => {
     });
 
     it('shows target type icon with tooltip, truncated title, and square ellipsis menu', () => {
-        focusOnTargetMock.canFocusOnTarget = false;
+        focusOnTargetState.canFocusOnTarget = false;
         renderItem({
             conversation: buildConversation({
                 targetType: 'diagram',

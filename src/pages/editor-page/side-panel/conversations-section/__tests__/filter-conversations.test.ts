@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { TFunction } from 'i18next';
 import { en } from '@/i18n/locales/en';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import { aliceWonderAuthor } from '@/test/user-identity-fixtures';
@@ -10,7 +11,7 @@ import {
     matchesConversationTypeFilter,
 } from '../filter-conversations';
 
-const t = (key: string): string => {
+const t = ((key: string): string => {
     const parts = key.split('.');
     let current: unknown = en.translation;
     for (const part of parts) {
@@ -25,7 +26,7 @@ const t = (key: string): string => {
     }
 
     return typeof current === 'string' ? current : key;
-};
+}) as TFunction;
 
 const buildConversation = (
     overrides: Partial<DiagramConversation> = {}

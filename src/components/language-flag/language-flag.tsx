@@ -1,4 +1,5 @@
 import React from 'react';
+import type { SVGProps } from 'react';
 import {
     FlagBd,
     FlagBr,
@@ -19,12 +20,19 @@ import {
     FlagUa,
     FlagUs,
     FlagVn,
-    type FlagComponent,
 } from '@sankyu/react-circle-flags';
 import { cn } from '@/lib/utils';
 import type { LanguageCountryCode } from '@/i18n/types';
 
-const FLAG_COMPONENTS: Record<LanguageCountryCode, FlagComponent> = {
+type LanguageFlagComponent = React.ComponentType<
+    SVGProps<SVGSVGElement> & {
+        width?: number | string;
+        height?: number | string;
+        title?: string;
+    }
+>;
+
+const FLAG_COMPONENTS: Record<LanguageCountryCode, LanguageFlagComponent> = {
     bd: FlagBd,
     br: FlagBr,
     cn: FlagCn,

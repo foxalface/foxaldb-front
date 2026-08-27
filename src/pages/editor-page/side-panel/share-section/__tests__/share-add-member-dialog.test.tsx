@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { en } from '@/i18n/locales/en';
+import type * as DiagramMembersApi from '@/lib/api/diagram-members';
 import type { DiagramMemberResource } from '@/lib/api/diagram-members';
 
 const { addDiagramMemberMock } = vi.hoisted(() => ({
@@ -10,7 +11,7 @@ const { addDiagramMemberMock } = vi.hoisted(() => ({
 }));
 
 vi.mock('@/lib/api/diagram-members', async (importOriginal) => {
-    const actual = await importOriginal();
+    const actual = await importOriginal<typeof DiagramMembersApi>();
     return {
         ...actual,
         addDiagramMember: addDiagramMemberMock,

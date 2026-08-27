@@ -195,6 +195,13 @@ vi.mock('@/hooks/use-diagram-access', () => ({
     useDiagramAccess: () => diagramAccessState,
 }));
 
+vi.mock('@/hooks/use-focus-on-conversation-target', () => ({
+    useFocusOnConversationTarget: () => ({
+        canFocusOnTarget: true,
+        focusOnTarget: vi.fn(),
+    }),
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, options?: Record<string, unknown>) => {

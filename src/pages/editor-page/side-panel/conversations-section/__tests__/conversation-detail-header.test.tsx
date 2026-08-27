@@ -26,27 +26,31 @@ const buildConversation = (
     ...overrides,
 });
 
-const { chartDbState } = vi.hoisted(() => ({
-    chartDbState: {
-        diagramName: 'Billing',
-        tables: [
-            {
-                id: 'table-1',
-                name: 'Clients',
-                x: 0,
-                y: 0,
-                fields: [],
-                indexes: [],
-                color: '#fff',
-                isView: false,
-                createdAt: 0,
-            },
-        ],
-        relationships: [],
-    },
-}));
-
-const focusOnTargetMock = vi.fn();
+const { chartDbState, focusOnTargetMock, focusOnTargetState } = vi.hoisted(
+    () => ({
+        chartDbState: {
+            diagramName: 'Billing',
+            tables: [
+                {
+                    id: 'table-1',
+                    name: 'Clients',
+                    x: 0,
+                    y: 0,
+                    fields: [],
+                    indexes: [],
+                    color: '#fff',
+                    isView: false,
+                    createdAt: 0,
+                },
+            ],
+            relationships: [],
+        },
+        focusOnTargetMock: vi.fn(),
+        focusOnTargetState: {
+            canFocusOnTarget: true,
+        },
+    })
+);
 
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartDbState,
@@ -54,7 +58,7 @@ vi.mock('@/hooks/use-chartdb', () => ({
 
 vi.mock('@/hooks/use-focus-on-conversation-target', () => ({
     useFocusOnConversationTarget: () => ({
-        canFocusOnTarget: focusOnTargetMock.canFocusOnTarget ?? true,
+        canFocusOnTarget: focusOnTargetState.canFocusOnTarget,
         focusOnTarget: focusOnTargetMock,
     }),
 }));
@@ -93,7 +97,7 @@ vi.mock('react-i18next', () => ({
 describe('ConversationDetailHeader', () => {
     beforeEach(() => {
         focusOnTargetMock.mockReset();
-        focusOnTargetMock.canFocusOnTarget = true;
+        focusOnTargetState.canFocusOnTarget = true;
     });
 
     const renderHeader = (
@@ -127,7 +131,7 @@ describe('ConversationDetailHeader', () => {
     });
 
     it('hides the focus button for diagram conversations', () => {
-        focusOnTargetMock.canFocusOnTarget = false;
+        focusOnTargetState.canFocusOnTarget = false;
         renderHeader({
             conversation: buildConversation({
                 targetType: 'diagram',

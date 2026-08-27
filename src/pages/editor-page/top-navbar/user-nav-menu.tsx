@@ -132,7 +132,7 @@ export const UserNavMenu: React.FC<UserNavMenuProps> = ({ className }) => {
                                     )}
                                 </AvatarFallback>
                             </Avatar>
-                            {showRoleBadge ? (
+                            {showRoleBadge && diagramAccess?.role ? (
                                 <span className="absolute -bottom-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full border border-background bg-background text-muted-foreground shadow-sm">
                                     <DiagramRoleIcon
                                         role={diagramAccess.role}
