@@ -704,6 +704,18 @@ export const en = {
                 check_examples_short: 'Examples',
             },
 
+            choose_intent: {
+                title: 'What would you like to do?',
+                description: 'Create a new diagram for {{database}}.',
+                create_empty: 'Create an empty diagram',
+                create_empty_description:
+                    'Start from scratch with tables you add yourself.',
+                import_schema: 'Import an existing schema',
+                import_schema_description:
+                    'Import tables and relationships from SQL, DBML, or metadata.',
+                back: 'Back',
+            },
+
             import_database: {
                 title: 'Import your Database',
                 database_edition: 'Database Edition:',

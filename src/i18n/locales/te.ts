@@ -710,6 +710,19 @@ export const te: LanguageTranslation = {
                 check_examples_short: 'ఉదాహరణలు',
             },
 
+            choose_intent: {
+                title: 'మీరు ఏమి చేయాలనుకుంటున్నారు?',
+                description:
+                    '{{database}} కోసం కొత్త డయాగ్రామ్‌ను సృష్టించండి.',
+                create_empty: 'ఖాళీ డయాగ్రామ్ సృష్టించండి',
+                create_empty_description:
+                    'మీరే టేబుల్స్ జోడించి ప్రారంభం నుండి ప్రారంభించండి.',
+                import_schema: 'ఇప్పటికే ఉన్న స్కీమాను దిగుమతి చేయండి',
+                import_schema_description:
+                    'SQL, DBML లేదా మెటాడేటా నుండి టేబుల్స్ మరియు సంబంధాలను దిగుమతి చేయండి.',
+                back: 'వెనక్కి',
+            },
+
             import_database: {
                 title: 'మీ డేటాబేస్‌ను దిగుమతి చేసుకోండి',
                 database_edition: 'డేటాబేస్ ఎడిషన్:',

@@ -708,6 +708,18 @@ export const hr: LanguageTranslation = {
                 check_examples_short: 'Primjeri',
             },
 
+            choose_intent: {
+                title: 'Što želite učiniti?',
+                description: 'Stvorite novi dijagram za {{database}}.',
+                create_empty: 'Stvori prazan dijagram',
+                create_empty_description:
+                    'Krenite od nule dodavanjem vlastitih tablica.',
+                import_schema: 'Uvezi postojeću shemu',
+                import_schema_description:
+                    'Uvezite tablice i odnose iz SQL-a, DBML-a ili metapodataka.',
+                back: 'Natrag',
+            },
+
             import_database: {
                 title: 'Uvezite svoju bazu podataka',
                 database_edition: 'Verzija baze podataka:',

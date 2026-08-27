@@ -714,6 +714,18 @@ export const id_ID: LanguageTranslation = {
                 check_examples_short: 'Contoh',
             },
 
+            choose_intent: {
+                title: 'Apa yang ingin Anda lakukan?',
+                description: 'Buat diagram baru untuk {{database}}.',
+                create_empty: 'Buat diagram kosong',
+                create_empty_description:
+                    'Mulai dari awal dengan menambahkan tabel sendiri.',
+                import_schema: 'Impor skema yang ada',
+                import_schema_description:
+                    'Impor tabel dan relasi dari SQL, DBML, atau metadata.',
+                back: 'Kembali',
+            },
+
             import_database: {
                 title: 'Impor Database Anda',
                 database_edition: 'Edisi Database:',

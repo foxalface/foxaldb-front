@@ -733,6 +733,19 @@ export const de: LanguageTranslation = {
                 check_examples_short: 'Beispiele',
             },
 
+            choose_intent: {
+                title: 'Was möchten Sie tun?',
+                description:
+                    'Erstellen Sie ein neues Diagramm für {{database}}.',
+                create_empty: 'Leeres Diagramm erstellen',
+                create_empty_description:
+                    'Beginnen Sie von Grund auf mit selbst hinzugefügten Tabellen.',
+                import_schema: 'Vorhandenes Schema importieren',
+                import_schema_description:
+                    'Importieren Sie Tabellen und Beziehungen aus SQL, DBML oder Metadaten.',
+                back: 'Zurück',
+            },
+
             import_database: {
                 title: 'Datenbank importieren',
                 database_edition: 'Datenbank Edition:',

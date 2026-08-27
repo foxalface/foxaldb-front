@@ -713,6 +713,18 @@ export const uk: LanguageTranslation = {
                 check_examples_short: 'Приклади',
             },
 
+            choose_intent: {
+                title: 'Що ви хочете зробити?',
+                description: 'Створіть нову діаграму для {{database}}.',
+                create_empty: 'Створити порожню діаграму',
+                create_empty_description:
+                    'Почніть з нуля, додаючи власні таблиці.',
+                import_schema: 'Імпортувати наявну схему',
+                import_schema_description:
+                    'Імпортуйте таблиці та зв’язки з SQL, DBML або метаданих.',
+                back: 'Назад',
+            },
+
             import_database: {
                 title: 'Імпортуйте вашу базу даних',
                 database_edition: 'Варіант бази даних:',

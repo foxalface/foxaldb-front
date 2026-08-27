@@ -699,6 +699,17 @@ export const ar: LanguageTranslation = {
                 check_examples_short: 'أمثلة',
             },
 
+            choose_intent: {
+                title: 'ماذا تريد أن تفعل؟',
+                description: 'أنشئ مخططًا جديدًا لـ {{database}}.',
+                create_empty: 'إنشاء مخطط فارغ',
+                create_empty_description: 'ابدأ من الصفر بإضافة الجداول بنفسك.',
+                import_schema: 'استيراد مخطط موجود',
+                import_schema_description:
+                    'استورد الجداول والعلاقات من SQL أو DBML أو البيانات الوصفية.',
+                back: 'رجوع',
+            },
+
             import_database: {
                 title: 'إسترد قاعدة بياناتك',
                 database_edition: ':إصدار قاعدة البيانات',

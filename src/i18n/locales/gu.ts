@@ -705,6 +705,17 @@ export const gu: LanguageTranslation = {
                 check_examples_short: 'ઉદાહરણ',
             },
 
+            choose_intent: {
+                title: 'તમે શું કરવા માંગો છો?',
+                description: '{{database}} માટે નવું ડાયાગ્રામ બનાવો.',
+                create_empty: 'ખાલી ડાયાગ્રામ બનાવો',
+                create_empty_description: 'પોતે ટેબલ ઉમેરીને શૂન્યથી શરૂ કરો.',
+                import_schema: 'હાલનું સ્કીમા આયાત કરો',
+                import_schema_description:
+                    'SQL, DBML અથવા મેટાડેટામાંથી ટેબલ અને સંબંધો આયાત કરો.',
+                back: 'પાછા',
+            },
+
             import_database: {
                 title: 'તમારું ડેટાબેસ આયાત કરો',
                 database_edition: 'ડેટાબેસ આવૃત્તિ:',

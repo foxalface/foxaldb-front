@@ -716,6 +716,18 @@ export const vi: LanguageTranslation = {
                 check_examples_short: 'Ví dụ',
             },
 
+            choose_intent: {
+                title: 'Bạn muốn làm gì?',
+                description: 'Tạo sơ đồ mới cho {{database}}.',
+                create_empty: 'Tạo sơ đồ trống',
+                create_empty_description:
+                    'Bắt đầu từ đầu bằng cách tự thêm bảng.',
+                import_schema: 'Nhập lược đồ hiện có',
+                import_schema_description:
+                    'Nhập bảng và quan hệ từ SQL, DBML hoặc siêu dữ liệu.',
+                back: 'Quay lại',
+            },
+
             import_database: {
                 title: 'Nhập cơ sở dữ liệu của bạn',
                 database_edition: 'Loại:',

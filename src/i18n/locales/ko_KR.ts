@@ -708,6 +708,18 @@ export const ko_KR: LanguageTranslation = {
                 check_examples_short: '예제들',
             },
 
+            choose_intent: {
+                title: '무엇을 하시겠습니까?',
+                description: '{{database}}용 새 다이어그램을 만듭니다.',
+                create_empty: '빈 다이어그램 만들기',
+                create_empty_description:
+                    '직접 테이블을 추가하며 처음부터 시작합니다.',
+                import_schema: '기존 스키마 가져오기',
+                import_schema_description:
+                    'SQL, DBML 또는 메타데이터에서 테이블과 관계를 가져옵니다.',
+                back: '뒤로',
+            },
+
             import_database: {
                 title: '당신의 데이터베이스를 가져오세요',
                 database_edition: '데이터베이스 세부 종류:',

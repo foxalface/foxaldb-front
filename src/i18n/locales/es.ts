@@ -722,6 +722,18 @@ export const es: LanguageTranslation = {
                 check_examples_short: 'Ejemplos',
             },
 
+            choose_intent: {
+                title: '¿Qué le gustaría hacer?',
+                description: 'Cree un nuevo diagrama para {{database}}.',
+                create_empty: 'Crear un diagrama vacío',
+                create_empty_description:
+                    'Empiece desde cero añadiendo sus propias tablas.',
+                import_schema: 'Importar un esquema existente',
+                import_schema_description:
+                    'Importe tablas y relaciones desde SQL, DBML o metadatos.',
+                back: 'Atrás',
+            },
+
             import_database: {
                 title: 'Importa tu Base de Datos',
                 database_edition: 'Edición de Base de Datos:',

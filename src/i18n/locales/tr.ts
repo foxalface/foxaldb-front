@@ -700,6 +700,19 @@ export const tr: LanguageTranslation = {
                 check_examples_long: 'Örnekleri Kontrol Et',
                 check_examples_short: 'Örnekler',
             },
+
+            choose_intent: {
+                title: 'Ne yapmak istersiniz?',
+                description: '{{database}} için yeni bir diyagram oluşturun.',
+                create_empty: 'Boş diyagram oluştur',
+                create_empty_description:
+                    'Kendi tablolarınızı ekleyerek sıfırdan başlayın.',
+                import_schema: 'Mevcut şemayı içe aktar',
+                import_schema_description:
+                    'SQL, DBML veya meta verilerden tabloları ve ilişkileri içe aktarın.',
+                back: 'Geri',
+            },
+
             import_database: {
                 title: 'Veritabanını İçe Aktar',
                 database_edition: 'Veritabanı Sürümü:',

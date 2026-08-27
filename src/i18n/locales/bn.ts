@@ -709,6 +709,19 @@ export const bn: LanguageTranslation = {
                 check_examples_short: 'উদাহরণ',
             },
 
+            choose_intent: {
+                title: 'আপনি কী করতে চান?',
+                description:
+                    '{{database}}-এর জন্য একটি নতুন ডায়াগ্রাম তৈরি করুন।',
+                create_empty: 'খালি ডায়াগ্রাম তৈরি করুন',
+                create_empty_description:
+                    'নিজে টেবিল যোগ করে শূন্য থেকে শুরু করুন।',
+                import_schema: 'বিদ্যমান স্কিমা আমদানি করুন',
+                import_schema_description:
+                    'SQL, DBML বা মেটাডেটা থেকে টেবিল ও সম্পর্ক আমদানি করুন।',
+                back: 'পিছনে',
+            },
+
             import_database: {
                 title: 'আপনার ডাটাবেস আমদানি করুন',
                 database_edition: 'ডাটাবেস সংস্করণ:',

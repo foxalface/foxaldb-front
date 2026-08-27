@@ -711,6 +711,18 @@ export const ru: LanguageTranslation = {
                 check_examples_short: 'Примеры',
             },
 
+            choose_intent: {
+                title: 'Что вы хотите сделать?',
+                description: 'Создайте новую диаграмму для {{database}}.',
+                create_empty: 'Создать пустую диаграмму',
+                create_empty_description:
+                    'Начните с нуля, добавляя таблицы самостоятельно.',
+                import_schema: 'Импортировать существующую схему',
+                import_schema_description:
+                    'Импортируйте таблицы и связи из SQL, DBML или метаданных.',
+                back: 'Назад',
+            },
+
             import_database: {
                 title: 'Импортируйте свою базу данных',
                 database_edition: 'Версия базы данных:',

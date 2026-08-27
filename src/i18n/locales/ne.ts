@@ -715,6 +715,19 @@ export const ne: LanguageTranslation = {
                 check_examples_short: 'उदाहरणहरू',
             },
 
+            choose_intent: {
+                title: 'तपाईं के गर्न चाहनुहुन्छ?',
+                description:
+                    '{{database}} को लागि नयाँ डायग्राम सिर्जना गर्नुहोस्।',
+                create_empty: 'खाली डायग्राम सिर्जना गर्नुहोस्',
+                create_empty_description:
+                    'आफैं टेबल थपेर शून्यबाट सुरु गर्नुहोस्।',
+                import_schema: 'अवस्थित स्किमा आयात गर्नुहोस्',
+                import_schema_description:
+                    'SQL, DBML वा मेटाडेटाबाट टेबल र सम्बन्ध आयात गर्नुहोस्।',
+                back: 'पछाडि',
+            },
+
             import_database: {
                 title: 'तपाईंको डाटाबेस आयात गर्नुहोस्',
                 database_edition: 'डाटाबेस संस्करण:',

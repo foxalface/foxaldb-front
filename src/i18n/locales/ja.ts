@@ -714,6 +714,18 @@ export const ja: LanguageTranslation = {
                 check_examples_short: '例',
             },
 
+            choose_intent: {
+                title: '何をしますか？',
+                description: '{{database}} の新しいダイアグラムを作成します。',
+                create_empty: '空のダイアグラムを作成',
+                create_empty_description:
+                    '自分でテーブルを追加してゼロから始めます。',
+                import_schema: '既存のスキーマをインポート',
+                import_schema_description:
+                    'SQL、DBML、またはメタデータからテーブルとリレーションをインポートします。',
+                back: '戻る',
+            },
+
             import_database: {
                 title: 'データベースをインポート',
                 database_edition: 'データベースエディション:',

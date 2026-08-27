@@ -675,6 +675,17 @@ export const zh_CN: LanguageTranslation = {
                 check_examples_short: '样例',
             },
 
+            choose_intent: {
+                title: '您想做什么？',
+                description: '为 {{database}} 创建新图表。',
+                create_empty: '创建空白图表',
+                create_empty_description: '从零开始，自行添加表。',
+                import_schema: '导入现有架构',
+                import_schema_description:
+                    '从 SQL、DBML 或元数据导入表和关系。',
+                back: '返回',
+            },
+
             import_database: {
                 title: '导入您的数据库',
                 database_edition: '数据库类型：',

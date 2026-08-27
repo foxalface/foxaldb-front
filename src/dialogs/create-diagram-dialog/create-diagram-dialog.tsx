@@ -15,6 +15,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import { SelectDatabase } from './select-database/select-database';
+import { ChooseIntent } from './choose-intent/choose-intent';
 import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
 import { ImportDatabase } from '../common/import-database/import-database';
 import { SelectTables } from '../common/select-tables/select-tables';
@@ -348,19 +349,29 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         hasExistingDiagram={canClose}
                         setDatabaseType={setDatabaseType}
                         onDatabaseSelected={() =>
+                            setStep(CreateDiagramDialogStep.CHOOSE_INTENT)
+                        }
+                    />
+                ) : step === CreateDiagramDialogStep.CHOOSE_INTENT ? (
+                    <ChooseIntent
+                        databaseType={databaseType}
+                        onBack={() =>
+                            setStep(CreateDiagramDialogStep.SELECT_DATABASE)
+                        }
+                        onCreateEmpty={createEmptyDiagram}
+                        onImportSchema={() =>
                             setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
                         }
                     />
                 ) : step === CreateDiagramDialogStep.IMPORT_DATABASE ? (
                     <ImportDatabase
                         onImport={importNewDiagramOrFilterTables}
-                        onCreateEmptyDiagram={createEmptyDiagram}
                         databaseEdition={databaseEdition}
                         databaseType={databaseType}
                         scriptResult={scriptResult}
                         setDatabaseEdition={setDatabaseEdition}
                         goBack={() =>
-                            setStep(CreateDiagramDialogStep.SELECT_DATABASE)
+                            setStep(CreateDiagramDialogStep.CHOOSE_INTENT)
                         }
                         setScriptResult={setScriptResult}
                         title={t('new_diagram_dialog.import_database.title')}
