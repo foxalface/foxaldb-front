@@ -67,9 +67,8 @@ export const tr: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Diyagramı Sil',
-            description:
-                'Bu işlem geri alınamaz. Diyagram kalıcı olarak silinecektir.',
+            title: 'Veritabanınızı seçin',
+            description: 'Yeni diyagramınız için veritabanı sistemini seçin.',
             cancel: 'İptal',
             delete: 'Sil',
         },
@@ -84,8 +83,9 @@ export const tr: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Veritabanınızı seçin',
+                description:
+                    'Yeni diyagramınız için veritabanı sistemini seçin.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -688,16 +688,15 @@ export const tr: LanguageTranslation = {
         },
         new_diagram_dialog: {
             database_selection: {
-                title: 'Veritabanı yönetim sisteminiz nedir?',
+                title: 'Veritabanınızı seçin',
                 description:
-                    'Her veritabanı yönetim sisteminin kendine özgü özellikleri ve yetenekleri vardır.',
+                    'Yeni diyagramınız için veritabanı sistemini seçin.',
                 search_placeholder: 'Veritabanı yönetim sistemlerinde ara…',
                 search_no_results:
                     'Aramanızla eşleşen veritabanı yönetim sistemi bulunamadı.',
                 clear_search: 'Aramayı temizle',
-                open_source_group: 'Açık kaynak',
-                enterprise_group: 'Kurumsal',
-                specialized_group: 'Özel amaçlı',
+                primary_group: 'Birincil veritabanları',
+                other_group: 'Diğer veritabanları',
                 check_examples_long: 'Örnekleri Kontrol Et',
                 check_examples_short: 'Örnekler',
             },
@@ -763,7 +762,7 @@ export const tr: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'Veritabanı Aç',
-            description: 'Aşağıdaki listeden açmak için bir diyagram seçin.',
+            description: 'Yeni diyagramınız için veritabanı sistemini seçin.',
             table_columns: {
                 name: 'Ad',
                 created_at: 'Oluşturulma Tarihi',

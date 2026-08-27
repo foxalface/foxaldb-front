@@ -67,9 +67,8 @@ export const ar: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'حذف المخطط',
-            description:
-                '.لا يمكن التراجع عن هذا الإجراء. سيتم حذف الرسم البياني بشكل دائم',
+            title: 'اختر قاعدة البيانات',
+            description: 'حدد نظام قاعدة البيانات للمخطط الجديد.',
             cancel: 'إلغاء',
             delete: 'حذف',
         },
@@ -84,8 +83,8 @@ export const ar: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'اختر قاعدة البيانات',
+                description: 'حدد نظام قاعدة البيانات للمخطط الجديد.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -688,16 +687,14 @@ export const ar: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'ما هو نظام إدارة قواعد البيانات الخاص بك؟',
-                description:
-                    'لكل نظام إدارة قواعد بيانات ميزاته وقدراته الفريدة.',
+                title: 'اختر قاعدة البيانات',
+                description: 'حدد نظام قاعدة البيانات للمخطط الجديد.',
                 search_placeholder: 'البحث عن أنظمة إدارة قواعد البيانات…',
                 search_no_results:
                     'لا يوجد نظام إدارة قواعد بيانات يطابق بحثك.',
                 clear_search: 'مسح البحث',
-                open_source_group: 'مفتوح المصدر',
-                enterprise_group: 'المؤسسات',
-                specialized_group: 'متخصص',
+                primary_group: 'قواعد البيانات الرئيسية',
+                other_group: 'قواعد بيانات أخرى',
                 check_examples_long: 'ألقي نظرة على الأمثلة',
                 check_examples_short: 'أمثلة',
             },
@@ -764,7 +761,7 @@ export const ar: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'فتح قاعدة بيانات',
-            description: 'اختر مخططًا لفتحه من القائمة ادناه',
+            description: 'حدد نظام قاعدة البيانات للمخطط الجديد.',
             table_columns: {
                 name: 'الإسم',
                 created_at: 'تاريخ الإنشاء',

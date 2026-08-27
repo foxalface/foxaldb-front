@@ -66,9 +66,8 @@ export const hr: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Izbriši dijagram',
-            description:
-                'Ova radnja se ne može poništiti. Ovo će trajno izbrisati dijagram.',
+            title: 'Odaberite bazu podataka',
+            description: 'Odaberite sustav baze podataka za novi dijagram.',
             cancel: 'Odustani',
             delete: 'Izbriši',
         },
@@ -83,8 +82,8 @@ export const hr: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Odaberite bazu podataka',
+                description: 'Odaberite sustav baze podataka za novi dijagram.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -696,17 +695,15 @@ export const hr: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Koji je vaš sustav za upravljanje baze podataka?',
-                description:
-                    'Svaki sustav za upravljanje baze podataka ima svoje jedinstvene značajke i mogućnosti.',
+                title: 'Odaberite bazu podataka',
+                description: 'Odaberite sustav baze podataka za novi dijagram.',
                 search_placeholder:
                     'Pretraži sustave za upravljanje baze podataka…',
                 search_no_results:
                     'Nijedan sustav za upravljanje baze podataka odgovara vašoj pretrazi.',
                 clear_search: 'Očisti pretragu',
-                open_source_group: 'Otvoreni kod',
-                enterprise_group: 'Poslovni',
-                specialized_group: 'Specijalizirani',
+                primary_group: 'Primarne baze podataka',
+                other_group: 'Ostale baze podataka',
                 check_examples_long: 'Pogledaj primjere',
                 check_examples_short: 'Primjeri',
             },
@@ -773,7 +770,7 @@ export const hr: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'Otvori bazu podataka',
-            description: 'Odaberite dijagram za otvaranje iz popisa ispod.',
+            description: 'Odaberite sustav baze podataka za novi dijagram.',
             table_columns: {
                 name: 'Naziv',
                 created_at: 'Stvoreno',

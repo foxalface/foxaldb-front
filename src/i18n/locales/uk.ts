@@ -66,9 +66,8 @@ export const uk: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Видалити діаграму',
-            description:
-                'Цю дію не можна скасувати. Це призведе до остаточного видалення діаграми.',
+            title: 'Виберіть базу даних',
+            description: 'Виберіть систему баз даних для нової діаграми.',
             cancel: 'Скасувати',
             delete: 'Видалити',
         },
@@ -83,8 +82,8 @@ export const uk: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Виберіть базу даних',
+                description: 'Виберіть систему баз даних для нової діаграми.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -702,16 +701,14 @@ export const uk: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Яка у вас система управління базами даних?',
-                description:
-                    'Кожна система управління базами даних має свої унікальні особливості та можливості.',
+                title: 'Виберіть базу даних',
+                description: 'Виберіть систему баз даних для нової діаграми.',
                 search_placeholder: 'Пошук систем управління базами даних…',
                 search_no_results:
                     'Ні одна система управління базами даних не відповідає вашому запиту.',
                 clear_search: 'Очистити пошук',
-                open_source_group: 'Відкритий код',
-                enterprise_group: 'Корпоративні',
-                specialized_group: 'Спеціалізовані',
+                primary_group: 'Основні бази даних',
+                other_group: 'Інші бази даних',
                 check_examples_long: 'Подивіться приклади',
                 check_examples_short: 'Приклади',
             },
@@ -804,7 +801,7 @@ export const uk: LanguageTranslation = {
             close: 'Закрити',
             loading: {
                 text: 'ШІ створює SQL для {{databaseType}}…',
-                description: 'Це має зайняти до 30 секунд.',
+                description: 'Виберіть систему баз даних для нової діаграми.',
             },
             error: {
                 message:

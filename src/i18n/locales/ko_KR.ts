@@ -66,9 +66,9 @@ export const ko_KR: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: '다이어그램 삭제',
+            title: '데이터베이스를 선택하세요',
             description:
-                '이 작업은 되돌릴 수 없으며 다이어그램이 영구적으로 삭제됩니다.',
+                '새 다이어그램에 사용할 데이터베이스 시스템을 선택하세요.',
             cancel: '취소',
             delete: '삭제',
         },
@@ -83,8 +83,9 @@ export const ko_KR: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: '데이터베이스를 선택하세요',
+                description:
+                    '새 다이어그램에 사용할 데이터베이스 시스템을 선택하세요.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -694,16 +695,15 @@ export const ko_KR: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '사용하는 데이터베이스 관리 시스템은 무엇인가요?',
+                title: '데이터베이스를 선택하세요',
                 description:
-                    '각 데이터베이스 관리 시스템은 고유한 기능과 특징을 가집니다.',
+                    '새 다이어그램에 사용할 데이터베이스 시스템을 선택하세요.',
                 search_placeholder: '데이터베이스 관리 시스템 검색…',
                 search_no_results:
                     '검색과 일치하는 데이터베이스 관리 시스템이 없습니다.',
                 clear_search: '검색 지우기',
-                open_source_group: '오픈 소스',
-                enterprise_group: '엔터프라이즈',
-                specialized_group: '특수 목적',
+                primary_group: '주요 데이터베이스',
+                other_group: '기타 데이터베이스',
                 check_examples_long: '예제 확인',
                 check_examples_short: '예제들',
             },
@@ -770,7 +770,8 @@ export const ko_KR: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: '데이터베이스 열기',
-            description: '아래의 목록에서 다이어그램을 선택하세요.',
+            description:
+                '새 다이어그램에 사용할 데이터베이스 시스템을 선택하세요.',
             table_columns: {
                 name: '이름',
                 created_at: '생성일시',

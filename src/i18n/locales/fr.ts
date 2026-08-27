@@ -66,9 +66,9 @@ export const fr: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Supprimer le Diagramme',
+            title: 'Choisissez votre base de données',
             description:
-                'Cette action est irréversible. Cela supprimera définitivement le diagramme.',
+                'Sélectionnez le système de base de données pour votre nouveau diagramme.',
             cancel: 'Annuler',
             delete: 'Supprimer',
         },
@@ -83,8 +83,9 @@ export const fr: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Choisissez votre base de données',
+                description:
+                    'Sélectionnez le système de base de données pour votre nouveau diagramme.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -705,15 +706,14 @@ export const fr: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Quel est votre système de gestion de base de données ?',
+                title: 'Choisissez votre base de données',
                 description:
-                    'Chaque SGBD possède ses propres fonctionnalités et particularités.',
+                    'Sélectionnez le système de base de données pour votre nouveau diagramme.',
                 search_placeholder: 'Rechercher un SGBD…',
                 search_no_results: 'Aucun SGBD correspond à votre recherche.',
                 clear_search: 'Effacer la recherche',
-                open_source_group: 'Open source',
-                enterprise_group: 'Entreprise',
-                specialized_group: 'Spécialisés',
+                primary_group: 'Bases de données principales',
+                other_group: 'Autres bases de données',
                 check_examples_long: 'Voir les Exemples',
                 check_examples_short: 'Exemples',
             },
@@ -828,7 +828,8 @@ export const fr: LanguageTranslation = {
             // TODO: Translate
             advanced_options: 'Advanced Options',
             pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
+            pattern_description:
+                'Sélectionnez le système de base de données pour votre nouveau diagramme.',
             transparent: 'Transparent background',
             transparent_description: 'Remove background color from image.',
         },

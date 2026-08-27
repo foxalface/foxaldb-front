@@ -67,9 +67,9 @@ export const vi: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Xóa sơ đồ',
+            title: 'Chọn cơ sở dữ liệu của bạn',
             description:
-                'Không thể hoàn tác hành động này. Thao tác này sẽ xóa vĩnh viễn sơ đồ.',
+                'Chọn hệ quản trị cơ sở dữ liệu cho sơ đồ mới của bạn.',
             cancel: 'Hủy',
             delete: 'Xóa',
         },
@@ -84,8 +84,9 @@ export const vi: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Chọn cơ sở dữ liệu của bạn',
+                description:
+                    'Chọn hệ quản trị cơ sở dữ liệu cho sơ đồ mới của bạn.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -702,16 +703,15 @@ export const vi: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Hệ quản trị cơ sở dữ liệu của bạn là gì?',
+                title: 'Chọn cơ sở dữ liệu của bạn',
                 description:
-                    'Mỗi hệ quản trị cơ sở dữ liệu có những tính năng và khả năng riêng biệt.',
+                    'Chọn hệ quản trị cơ sở dữ liệu cho sơ đồ mới của bạn.',
                 search_placeholder: 'Tìm hệ quản trị cơ sở dữ liệu…',
                 search_no_results:
                     'Không có hệ quản trị cơ sở dữ liệu nào khớp với tìm kiếm của bạn.',
                 clear_search: 'Xóa tìm kiếm',
-                open_source_group: 'Mã nguồn mở',
-                enterprise_group: 'Doanh nghiệp',
-                specialized_group: 'Chuyên dụng',
+                primary_group: 'Cơ sở dữ liệu chính',
+                other_group: 'Cơ sở dữ liệu khác',
                 check_examples_long: 'Xem ví dụ',
                 check_examples_short: 'Ví dụ',
             },
@@ -778,7 +778,8 @@ export const vi: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'Mở cơ sở dữ liệu',
-            description: 'Chọn sơ đồ để mở từ danh sách bên dưới.',
+            description:
+                'Chọn hệ quản trị cơ sở dữ liệu cho sơ đồ mới của bạn.',
             table_columns: {
                 name: 'Tên',
                 created_at: 'Tạo vào lúc',

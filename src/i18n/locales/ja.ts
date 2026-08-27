@@ -67,9 +67,9 @@ export const ja: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'ダイアグラムを削除',
+            title: 'データベースを選択',
             description:
-                'この操作は元に戻せません。これによりダイアグラムが永久に削除されます。',
+                '新しいダイアグラムのデータベースシステムを選択してください。',
             cancel: 'キャンセル',
             delete: '削除',
         },
@@ -84,8 +84,9 @@ export const ja: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'データベースを選択',
+                description:
+                    '新しいダイアグラムのデータベースシステムを選択してください。',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -700,16 +701,15 @@ export const ja: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '使用するデータベース管理システムは何ですか？',
+                title: 'データベースを選択',
                 description:
-                    'データベース管理システムごとに独自の機能と特性があります。',
+                    '新しいダイアグラムのデータベースシステムを選択してください。',
                 search_placeholder: 'データベース管理システムを検索…',
                 search_no_results:
                     '検索に一致するデータベース管理システムはありません。',
                 clear_search: '検索をクリア',
-                open_source_group: 'オープンソース',
-                enterprise_group: 'エンタープライズ',
-                specialized_group: '特殊用途',
+                primary_group: '主要なデータベース',
+                other_group: 'その他のデータベース',
                 check_examples_long: '例を確認',
                 check_examples_short: '例',
             },
@@ -778,7 +778,8 @@ export const ja: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'データベースを開く',
-            description: '以下のリストからダイアグラムを選択してください。',
+            description:
+                '新しいダイアグラムのデータベースシステムを選択してください。',
             table_columns: {
                 name: '名前',
                 created_at: '作成日',

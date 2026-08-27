@@ -67,9 +67,9 @@ export const te: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'చిత్రం తొలగించండి',
+            title: 'మీ డేటాబేస్‌ను ఎంచుకోండి',
             description:
-                'ఈ చర్యను తిరిగి చేయలేరు. ఇది చిత్రాన్ని శాశ్వతంగా తొలగిస్తుంది.',
+                'మీ కొత్త డయాగ్రామ్ కోసం డేటాబేస్ సిస్టమ్‌ను ఎంచుకోండి.',
             cancel: 'రద్దు',
             delete: 'తొలగించు',
         },
@@ -84,8 +84,9 @@ export const te: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'మీ డేటాబేస్‌ను ఎంచుకోండి',
+                description:
+                    'మీ కొత్త డయాగ్రామ్ కోసం డేటాబేస్ సిస్టమ్‌ను ఎంచుకోండి.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -695,17 +696,16 @@ export const te: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'మీ డేటాబేస్ మేనేజ్‌మెంట్ సిస్టమ్ ఏమిటి?',
+                title: 'మీ డేటాబేస్‌ను ఎంచుకోండి',
                 description:
-                    'ప్రతి డేటాబేస్ మేనేజ్‌మెంట్ సిస్టమ్‌కు ప్రత్యేక లక్షణాలు మరియు సామర్థ్యాలు ఉంటాయి.',
+                    'మీ కొత్త డయాగ్రామ్ కోసం డేటాబేస్ సిస్టమ్‌ను ఎంచుకోండి.',
                 search_placeholder:
                     'డేటాబేస్ మేనేజ్‌మెంట్ సిస్టమ్‌లను శోధించండి…',
                 search_no_results:
                     'మీ శోధనకు సరిపోలే డేటాబేస్ మేనేజ్‌మెంట్ సిస్టమ్ ఏదీ లేదు.',
                 clear_search: 'శోధన తొలగించండి',
-                open_source_group: 'ఓపెన్ సోర్స్',
-                enterprise_group: 'ఎంటర్‌ప్రైజ్',
-                specialized_group: 'ప్రత్యేక',
+                primary_group: 'ప్రాథమిక డేటాబేస్‌లు',
+                other_group: 'ఇతర డేటాబేస్‌లు',
                 check_examples_long: 'ఉదాహరణలు చూడండి',
                 check_examples_short: 'ఉదాహరణలు',
             },
@@ -773,7 +773,8 @@ export const te: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'డేటాబేస్ తెరవండి',
-            description: 'కింద ఉన్న జాబితా నుండి చిత్రాన్ని ఎంచుకోండి.',
+            description:
+                'మీ కొత్త డయాగ్రామ్ కోసం డేటాబేస్ సిస్టమ్‌ను ఎంచుకోండి.',
             table_columns: {
                 name: 'పేరు',
                 created_at: 'రచించబడిన తేదీ',

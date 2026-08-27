@@ -68,9 +68,8 @@ export const gu: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'ડાયાગ્રામ કાઢી નાખો',
-            description:
-                'આ ક્રિયા પરત નહીં લઇ શકાય. આ ડાયાગ્રામ કાયમ માટે કાઢી નાખવામાં આવશે.',
+            title: 'તમારી ડેટાબેઝ પસંદ કરો',
+            description: 'તમારા નવા ડાયાગ્રામ માટે ડેટાબેઝ સિસ્ટમ પસંદ કરો.',
             cancel: 'રદ કરો',
             delete: 'કાઢી નાખો',
         },
@@ -85,8 +84,9 @@ export const gu: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'તમારી ડેટાબેઝ પસંદ કરો',
+                description:
+                    'તમારા નવા ડાયાગ્રામ માટે ડેટાબેઝ સિસ્ટમ પસંદ કરો.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -692,16 +692,15 @@ export const gu: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'તમારી ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમ શું છે?',
+                title: 'તમારી ડેટાબેઝ પસંદ કરો',
                 description:
-                    'દરેક ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમની પોતાની ખાસિયતો અને ક્ષમતા હોય છે.',
+                    'તમારા નવા ડાયાગ્રામ માટે ડેટાબેઝ સિસ્ટમ પસંદ કરો.',
                 search_placeholder: 'ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમ શોધો…',
                 search_no_results:
                     'તમારી શોધ સાથે કોઈ ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમ મેળ ખાતી નથી.',
                 clear_search: 'શોધ સાફ કરો',
-                open_source_group: 'ઓપન સોર્સ',
-                enterprise_group: 'એન્ટરપ્રાઇઝ',
-                specialized_group: 'વિશેષ',
+                primary_group: 'પ્રાથમિક ડેટાબેઝ',
+                other_group: 'અન્ય ડેટાબેઝ',
                 check_examples_long: 'ઉદાહરણ જુઓ',
                 check_examples_short: 'ઉદાહરણ',
             },
@@ -768,7 +767,7 @@ export const gu: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'ડેટાબેસ ખોલો',
-            description: 'નીચેની યાદીમાંથી એક ડાયાગ્રામ પસંદ કરો.',
+            description: 'તમારા નવા ડાયાગ્રામ માટે ડેટાબેઝ સિસ્ટમ પસંદ કરો.',
             table_columns: {
                 name: 'નામ',
                 created_at: 'બનાવાની તારીખ',

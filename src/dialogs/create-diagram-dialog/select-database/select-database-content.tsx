@@ -34,43 +34,33 @@ export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({
     onDatabaseSelected,
 }) => {
     const { t } = useTranslation();
-    const openSourceSectionRef = useRef<HTMLElement>(null);
+    const primarySectionRef = useRef<HTMLElement>(null);
     const [viewportHeight, setViewportHeight] = useState<number>();
-    const { openSource, enterprise, specialized } = useMemo(
-        () => getDatabaseTypeGroups(),
-        []
+    const { primary, other } = useMemo(() => getDatabaseTypeGroups(), []);
+
+    const filteredPrimaryTypes = useMemo(
+        () => filterDatabaseTypesBySearch(primary, searchTerm),
+        [primary, searchTerm]
     );
 
-    const filteredOpenSourceTypes = useMemo(
-        () => filterDatabaseTypesBySearch(openSource, searchTerm),
-        [openSource, searchTerm]
-    );
-
-    const filteredEnterpriseTypes = useMemo(
-        () => filterDatabaseTypesBySearch(enterprise, searchTerm),
-        [enterprise, searchTerm]
-    );
-
-    const filteredSpecializedTypes = useMemo(
-        () => filterDatabaseTypesBySearch(specialized, searchTerm),
-        [specialized, searchTerm]
+    const filteredOtherTypes = useMemo(
+        () => filterDatabaseTypesBySearch(other, searchTerm),
+        [other, searchTerm]
     );
 
     const hasVisibleDatabaseTypes =
-        filteredOpenSourceTypes.length > 0 ||
-        filteredEnterpriseTypes.length > 0 ||
-        filteredSpecializedTypes.length > 0;
+        filteredPrimaryTypes.length > 0 || filteredOtherTypes.length > 0;
 
     useLayoutEffect(() => {
         if (searchTerm.trim().length > 0 || viewportHeight !== undefined) {
             return;
         }
 
-        const height = openSourceSectionRef.current?.offsetHeight;
+        const height = primarySectionRef.current?.offsetHeight;
         if (height && height > 0) {
             setViewportHeight(height);
         }
-    }, [searchTerm, viewportHeight, filteredOpenSourceTypes.length]);
+    }, [searchTerm, viewportHeight, filteredPrimaryTypes.length]);
 
     const handleDatabaseChange = useCallback(
         (value: DatabaseType) => {
@@ -101,50 +91,35 @@ export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({
                     value={databaseType}
                     onValueChange={handleDatabaseChange}
                     type="single"
-                    className="flex w-full flex-col items-stretch gap-4"
+                    className="flex w-full flex-col items-stretch gap-6"
                 >
-                    {filteredOpenSourceTypes.length > 0 ? (
+                    {filteredPrimaryTypes.length > 0 ? (
                         <section
-                            ref={openSourceSectionRef}
+                            ref={primarySectionRef}
                             className="flex w-full flex-col gap-2"
                         >
                             <ConversationMessageDaySeparator
                                 label={t(
-                                    'new_diagram_dialog.database_selection.open_source_group'
+                                    'new_diagram_dialog.database_selection.primary_group'
                                 )}
                             />
                             <div className={DATABASE_GRID_CLASS}>
-                                {filteredOpenSourceTypes.map((type) => (
+                                {filteredPrimaryTypes.map((type) => (
                                     <DatabaseOption key={type} type={type} />
                                 ))}
                             </div>
                         </section>
                     ) : null}
 
-                    {filteredEnterpriseTypes.length > 0 ? (
+                    {filteredOtherTypes.length > 0 ? (
                         <section className="flex w-full flex-col gap-2">
                             <ConversationMessageDaySeparator
                                 label={t(
-                                    'new_diagram_dialog.database_selection.enterprise_group'
+                                    'new_diagram_dialog.database_selection.other_group'
                                 )}
                             />
                             <div className={DATABASE_GRID_CLASS}>
-                                {filteredEnterpriseTypes.map((type) => (
-                                    <DatabaseOption key={type} type={type} />
-                                ))}
-                            </div>
-                        </section>
-                    ) : null}
-
-                    {filteredSpecializedTypes.length > 0 ? (
-                        <section className="flex w-full flex-col gap-2">
-                            <ConversationMessageDaySeparator
-                                label={t(
-                                    'new_diagram_dialog.database_selection.specialized_group'
-                                )}
-                            />
-                            <div className={DATABASE_GRID_CLASS}>
-                                {filteredSpecializedTypes.map((type) => (
+                                {filteredOtherTypes.map((type) => (
                                     <DatabaseOption key={type} type={type} />
                                 ))}
                             </div>

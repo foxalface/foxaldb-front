@@ -66,8 +66,8 @@ export const zh_TW: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: '刪除圖表',
-            description: '此操作無法復原，圖表將被永久刪除。',
+            title: '選擇您的資料庫',
+            description: '為您的新圖表選擇資料庫系統。',
             cancel: '取消',
             delete: '刪除',
         },
@@ -85,9 +85,8 @@ export const zh_TW: LanguageTranslation = {
                 description: 'You no longer have access to this diagram.',
             },
             role_changed_viewer: {
-                title: 'View-only access',
-                description:
-                    'Your role on this diagram was changed to viewer. Editing is now disabled.',
+                title: '選擇您的資料庫',
+                description: '為您的新圖表選擇資料庫系統。',
             },
             role_changed_editor: {
                 title: 'Edit access granted',
@@ -665,14 +664,13 @@ export const zh_TW: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '您使用的是哪種資料庫管理系統？',
-                description: '每種資料庫管理系統都有其獨特的功能與特性。',
+                title: '選擇您的資料庫',
+                description: '為您的新圖表選擇資料庫系統。',
                 search_placeholder: '搜尋資料庫管理系統…',
                 search_no_results: '沒有符合搜尋條件的資料庫管理系統。',
                 clear_search: '清除搜尋',
-                open_source_group: '開源',
-                enterprise_group: '企業級',
-                specialized_group: '專用',
+                primary_group: '主要資料庫',
+                other_group: '其他資料庫',
                 check_examples_long: '查看範例',
                 check_examples_short: '範例',
             },
@@ -703,8 +701,7 @@ export const zh_TW: LanguageTranslation = {
 
         share_diagram_dialog: {
             title: '分享圖表',
-            description:
-                '邀請具有編輯者或檢視者權限的協作者。他們必須已有 FoxalDB 帳戶。',
+            description: '為您的新圖表選擇資料庫系統。',
             share_button: '分享',
             empty_members: '尚無協作者。',
             remove: '移除',

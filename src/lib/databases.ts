@@ -82,33 +82,28 @@ export const databaseSecondaryLogoMap: Record<DatabaseType, string> = {
     [DatabaseType.GENERIC]: GeneralDBLogo2,
 };
 
-export const OPEN_SOURCE_DATABASE_TYPES: readonly DatabaseType[] = [
+export const PRIMARY_DATABASE_TYPES: readonly DatabaseType[] = [
     DatabaseType.POSTGRESQL,
     DatabaseType.MYSQL,
     DatabaseType.MARIADB,
     DatabaseType.SQLITE,
-];
-
-export const ENTERPRISE_DATABASE_TYPES: readonly DatabaseType[] = [
     DatabaseType.SQL_SERVER,
     DatabaseType.ORACLE,
 ];
 
-export const SPECIALIZED_DATABASE_TYPES: readonly DatabaseType[] = [
+export const OTHER_DATABASE_TYPES: readonly DatabaseType[] = [
     DatabaseType.COCKROACHDB,
     DatabaseType.CLICKHOUSE,
 ];
 
 export interface DatabaseTypeGroups {
-    openSource: DatabaseType[];
-    enterprise: DatabaseType[];
-    specialized: DatabaseType[];
+    primary: DatabaseType[];
+    other: DatabaseType[];
 }
 
 export const getDatabaseTypeGroups = (): DatabaseTypeGroups => ({
-    openSource: [...OPEN_SOURCE_DATABASE_TYPES],
-    enterprise: [...ENTERPRISE_DATABASE_TYPES],
-    specialized: [...SPECIALIZED_DATABASE_TYPES],
+    primary: [...PRIMARY_DATABASE_TYPES],
+    other: [...OTHER_DATABASE_TYPES],
 });
 
 export const filterDatabaseTypesBySearch = (

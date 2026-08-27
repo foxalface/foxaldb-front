@@ -693,15 +693,13 @@ export const en = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'What is your database management system?',
-                description:
-                    'Each database system has its own unique features and capabilities.',
+                title: 'Choose your database',
+                description: 'Select the database system for your new diagram.',
                 search_placeholder: 'Search database systems...',
                 search_no_results: 'No database systems match your search.',
                 clear_search: 'Clear search',
-                open_source_group: 'Open source',
-                enterprise_group: 'Enterprise',
-                specialized_group: 'Specialized',
+                primary_group: 'Primary databases',
+                other_group: 'Other databases',
                 check_examples_long: 'Check Examples',
                 check_examples_short: 'Examples',
             },

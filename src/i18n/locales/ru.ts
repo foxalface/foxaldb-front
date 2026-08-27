@@ -66,9 +66,8 @@ export const ru: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Удалить диаграмму',
-            description:
-                'Это действие нельзя отменить. Это навсегда удалит диаграмму.',
+            title: 'Выберите базу данных',
+            description: 'Выберите систему баз данных для новой диаграммы.',
             cancel: 'Отменить',
             delete: 'Удалить',
         },
@@ -83,8 +82,8 @@ export const ru: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Выберите базу данных',
+                description: 'Выберите систему баз данных для новой диаграммы.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -700,16 +699,14 @@ export const ru: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Какая у вас система управления базами данных?',
-                description:
-                    'Каждая система управления базами данных имеет свои уникальные функции и возможности.',
+                title: 'Выберите базу данных',
+                description: 'Выберите систему баз данных для новой диаграммы.',
                 search_placeholder: 'Поиск систем управления базами данных…',
                 search_no_results:
                     'Ни одна система управления базами данных не соответствует вашему запросу.',
                 clear_search: 'Очистить поиск',
-                open_source_group: 'Открытый код',
-                enterprise_group: 'Корпоративные',
-                specialized_group: 'Специализированные',
+                primary_group: 'Основные базы данных',
+                other_group: 'Другие базы данных',
                 check_examples_long: 'Открыть примеры',
                 check_examples_short: 'Примеры',
             },
@@ -802,7 +799,7 @@ export const ru: LanguageTranslation = {
             close: 'Закрыть',
             loading: {
                 text: 'ИИ генерирует SQL для {{databaseType}}...',
-                description: 'Это должно занять до 30 секунд.',
+                description: 'Выберите систему баз данных для новой диаграммы.',
             },
             error: {
                 message:

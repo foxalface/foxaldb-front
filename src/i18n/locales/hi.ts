@@ -66,9 +66,8 @@ export const hi: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'आरेख हटाएँ',
-            description:
-                'यह क्रिया पूर्ववत नहीं की जा सकती। यह आरेख स्थायी रूप से हटा दिया जाएगा।',
+            title: 'अपना डेटाबेस चुनें',
+            description: 'अपने नए डायग्राम के लिए डेटाबेस सिस्टम चुनें।',
             cancel: 'रद्द करें',
             delete: 'हटाएँ',
         },
@@ -83,8 +82,8 @@ export const hi: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'अपना डेटाबेस चुनें',
+                description: 'अपने नए डायग्राम के लिए डेटाबेस सिस्टम चुनें।',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -700,16 +699,14 @@ export const hi: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'आपका डेटाबेस प्रबंधन प्रणाली क्या है?',
-                description:
-                    'प्रत्येक डेटाबेस प्रबंधन प्रणाली की अपनी विशिष्ट सुविधाएँ और क्षमताएँ होती हैं।',
+                title: 'अपना डेटाबेस चुनें',
+                description: 'अपने नए डायग्राम के लिए डेटाबेस सिस्टम चुनें।',
                 search_placeholder: 'डेटाबेस प्रबंधन प्रणाली खोजें…',
                 search_no_results:
                     'आपकी खोज से कोई डेटाबेस प्रबंधन प्रणाली मेल नहीं खाती।',
                 clear_search: 'खोज साफ़ करें',
-                open_source_group: 'ओपन सोर्स',
-                enterprise_group: 'एंटरप्राइज़',
-                specialized_group: 'विशेष',
+                primary_group: 'प्राथमिक डेटाबेस',
+                other_group: 'अन्य डेटाबेस',
                 check_examples_long: 'उदाहरण देखें',
                 check_examples_short: 'उदाहरण',
             },
@@ -778,7 +775,7 @@ export const hi: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'डेटाबेस खोलें',
-            description: 'नीचे दी गई सूची से एक आरेख चुनें।',
+            description: 'अपने नए डायग्राम के लिए डेटाबेस सिस्टम चुनें।',
             table_columns: {
                 name: 'नाम',
                 created_at: 'निर्माण तिथि',

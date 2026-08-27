@@ -68,9 +68,9 @@ export const pt_BR: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Excluir Diagrama',
+            title: 'Escolha seu banco de dados',
             description:
-                'Esta ação não pode ser desfeita. Isso excluirá permanentemente o diagrama.',
+                'Selecione o sistema de banco de dados para o seu novo diagrama.',
             cancel: 'Cancelar',
             delete: 'Excluir',
         },
@@ -85,8 +85,9 @@ export const pt_BR: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Escolha seu banco de dados',
+                description:
+                    'Selecione o sistema de banco de dados para o seu novo diagrama.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -707,16 +708,15 @@ export const pt_BR: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Qual é o seu sistema de gerenciamento de banco de dados?',
+                title: 'Escolha seu banco de dados',
                 description:
-                    'Cada sistema de gerenciamento de banco de dados possui recursos e capacidades únicas.',
+                    'Selecione o sistema de banco de dados para o seu novo diagrama.',
                 search_placeholder: 'Pesquisar sistemas de banco de dados…',
                 search_no_results:
                     'Nenhum sistema de banco de dados corresponde à sua pesquisa.',
                 clear_search: 'Limpar pesquisa',
-                open_source_group: 'Código aberto',
-                enterprise_group: 'Empresarial',
-                specialized_group: 'Especializados',
+                primary_group: 'Bancos de dados principais',
+                other_group: 'Outros bancos de dados',
                 check_examples_long: 'Ver Exemplos',
                 check_examples_short: 'Exemplos',
             },
@@ -784,7 +784,8 @@ export const pt_BR: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'Abrir Banco de Dados',
-            description: 'Selecione um diagrama para abrir da lista abaixo.',
+            description:
+                'Selecione o sistema de banco de dados para o seu novo diagrama.',
             table_columns: {
                 name: 'Nome',
                 created_at: 'Criado em',

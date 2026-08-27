@@ -66,8 +66,8 @@ export const zh_CN: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: '删除关系图',
-            description: '此操作无法撤销。这将永久删除关系图。',
+            title: '选择您的数据库',
+            description: '为您的新图表选择数据库系统。',
             cancel: '取消',
             delete: '删除',
         },
@@ -85,9 +85,8 @@ export const zh_CN: LanguageTranslation = {
                 description: 'You no longer have access to this diagram.',
             },
             role_changed_viewer: {
-                title: 'View-only access',
-                description:
-                    'Your role on this diagram was changed to viewer. Editing is now disabled.',
+                title: '选择您的数据库',
+                description: '为您的新图表选择数据库系统。',
             },
             role_changed_editor: {
                 title: 'Edit access granted',
@@ -665,14 +664,13 @@ export const zh_CN: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '您使用哪种数据库管理系统？',
-                description: '每种数据库管理系统都有其独特的功能和特性。',
+                title: '选择您的数据库',
+                description: '为您的新图表选择数据库系统。',
                 search_placeholder: '搜索数据库管理系统…',
                 search_no_results: '没有与搜索匹配的数据库管理系统。',
                 clear_search: '清除搜索',
-                open_source_group: '开源',
-                enterprise_group: '企业级',
-                specialized_group: '专用',
+                primary_group: '主要数据库',
+                other_group: '其他数据库',
                 check_examples_long: '查看样例',
                 check_examples_short: '样例',
             },
@@ -704,8 +702,7 @@ export const zh_CN: LanguageTranslation = {
 
         share_diagram_dialog: {
             title: '共享图表',
-            description:
-                '邀请具有编辑者或查看者权限的协作者。他们必须已有 FoxalDB 账户。',
+            description: '为您的新图表选择数据库系统。',
             share_button: '共享',
             empty_members: '暂无协作者。',
             remove: '移除',

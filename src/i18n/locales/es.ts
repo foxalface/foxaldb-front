@@ -67,9 +67,9 @@ export const es: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Eliminar Diagrama',
+            title: 'Elija su base de datos',
             description:
-                'Esta acción no se puede deshacer. Esto eliminará permanentemente el diagrama.',
+                'Seleccione el sistema de base de datos para su nuevo diagrama.',
             cancel: 'Cancelar',
             delete: 'Eliminar',
         },
@@ -84,8 +84,9 @@ export const es: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Elija su base de datos',
+                description:
+                    'Seleccione el sistema de base de datos para su nuevo diagrama.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -708,16 +709,15 @@ export const es: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '¿Cuál es tu sistema de gestión de bases de datos?',
+                title: 'Elija su base de datos',
                 description:
-                    'Cada sistema de gestión de bases de datos tiene sus propias características y capacidades.',
+                    'Seleccione el sistema de base de datos para su nuevo diagrama.',
                 search_placeholder: 'Buscar sistemas de bases de datos…',
                 search_no_results:
                     'Ningún sistema de bases de datos coincide con tu búsqueda.',
                 clear_search: 'Borrar búsqueda',
-                open_source_group: 'Código abierto',
-                enterprise_group: 'Empresarial',
-                specialized_group: 'Especializados',
+                primary_group: 'Bases de datos principales',
+                other_group: 'Otras bases de datos',
                 check_examples_long: 'Ver Ejemplos',
                 check_examples_short: 'Ejemplos',
             },
@@ -811,7 +811,8 @@ export const es: LanguageTranslation = {
             close: 'Cerrar',
             loading: {
                 text: 'La IA está generando SQL para {{databaseType}}...',
-                description: 'Esto debería tomar hasta 30 segundos.',
+                description:
+                    'Seleccione el sistema de base de datos para su nuevo diagrama.',
             },
             error: {
                 message:

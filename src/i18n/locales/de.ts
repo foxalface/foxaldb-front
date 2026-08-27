@@ -67,9 +67,9 @@ export const de: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Diagramm löschen',
+            title: 'Wählen Sie Ihre Datenbank',
             description:
-                'Diese Aktion kann nicht rückgängig gemacht werden. Das Diagramm wird dauerhaft gelöscht.',
+                'Wählen Sie das Datenbanksystem für Ihr neues Diagramm.',
             cancel: 'Abbrechen',
             delete: 'Löschen',
         },
@@ -84,8 +84,9 @@ export const de: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Wählen Sie Ihre Datenbank',
+                description:
+                    'Wählen Sie das Datenbanksystem für Ihr neues Diagramm.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -719,16 +720,15 @@ export const de: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Welches Datenbankmanagementsystem verwenden Sie?',
+                title: 'Wählen Sie Ihre Datenbank',
                 description:
-                    'Jedes Datenbankmanagementsystem hat eigene Funktionen und Besonderheiten.',
+                    'Wählen Sie das Datenbanksystem für Ihr neues Diagramm.',
                 search_placeholder: 'Datenbankmanagementsystem suchen…',
                 search_no_results:
                     'Kein Datenbankmanagementsystem entspricht Ihrer Suche.',
                 clear_search: 'Suche löschen',
-                open_source_group: 'Open Source',
-                enterprise_group: 'Unternehmen',
-                specialized_group: 'Spezialisiert',
+                primary_group: 'Primäre Datenbanken',
+                other_group: 'Weitere Datenbanken',
                 check_examples_long: 'Beispiele ansehen',
                 check_examples_short: 'Beispiele',
             },
@@ -796,7 +796,8 @@ export const de: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'Datenbank öffnen',
-            description: 'Wählen Sie ein Diagramm aus der Liste unten aus.',
+            description:
+                'Wählen Sie das Datenbanksystem für Ihr neues Diagramm.',
             table_columns: {
                 name: 'Name',
                 created_at: 'Erstellt am',

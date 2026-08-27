@@ -67,9 +67,8 @@ export const id_ID: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Hapus Diagram',
-            description:
-                'Tindakan ini tidak dapat dibatalkan. Diagram akan dihapus secara permanen.',
+            title: 'Pilih basis data Anda',
+            description: 'Pilih sistem basis data untuk diagram baru Anda.',
             cancel: 'Batal',
             delete: 'Hapus',
         },
@@ -84,8 +83,8 @@ export const id_ID: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'Pilih basis data Anda',
+                description: 'Pilih sistem basis data untuk diagram baru Anda.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -703,16 +702,14 @@ export const id_ID: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Apa sistem manajemen basis data Anda?',
-                description:
-                    'Setiap sistem manajemen basis data memiliki fitur dan kemampuan unik.',
+                title: 'Pilih basis data Anda',
+                description: 'Pilih sistem basis data untuk diagram baru Anda.',
                 search_placeholder: 'Cari sistem manajemen basis data…',
                 search_no_results:
                     'Tidak ada sistem manajemen basis data yang cocok dengan pencarian Anda.',
                 clear_search: 'Hapus pencarian',
-                open_source_group: 'Sumber terbuka',
-                enterprise_group: 'Perusahaan',
-                specialized_group: 'Spesialis',
+                primary_group: 'Basis data utama',
+                other_group: 'Basis data lainnya',
                 check_examples_long: 'Lihat Contoh',
                 check_examples_short: 'Contoh',
             },
@@ -779,7 +776,7 @@ export const id_ID: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'Buka Database',
-            description: 'Pilih diagram untuk dibuka dari daftar di bawah.',
+            description: 'Pilih sistem basis data untuk diagram baru Anda.',
             table_columns: {
                 name: 'Name',
                 created_at: 'Dibuat pada',

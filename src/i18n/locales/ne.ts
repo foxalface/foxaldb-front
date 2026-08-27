@@ -67,9 +67,9 @@ export const ne: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'डायाग्राम हटाउनुहोस्',
+            title: 'आफ्नो डाटाबेस छान्नुहोस्',
             description:
-                'यो कार्य पूर्ववत गर्न सकिँदैन। यो डायाग्राम स्थायी रूपमा हटाउनेछ।',
+                'आफ्नो नयाँ डायग्रामका लागि डाटाबेस प्रणाली छान्नुहोस्।',
             cancel: 'रद्द गर्नुहोस्',
             delete: 'हटाउनुहोस्',
         },
@@ -84,8 +84,9 @@ export const ne: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'आफ्नो डाटाबेस छान्नुहोस्',
+                description:
+                    'आफ्नो नयाँ डायग्रामका लागि डाटाबेस प्रणाली छान्नुहोस्।',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -701,16 +702,15 @@ export const ne: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'तपाईंको डाटाबेस व्यवस्थापन प्रणाली के हो?',
+                title: 'आफ्नो डाटाबेस छान्नुहोस्',
                 description:
-                    'प्रत्येक डाटाबेस व्यवस्थापन प्रणालीका आफ्नै विशेषता र क्षमताहरू छन्।',
+                    'आफ्नो नयाँ डायग्रामका लागि डाटाबेस प्रणाली छान्नुहोस्।',
                 search_placeholder: 'डाटाबेस व्यवस्थापन प्रणाली खोज्नुहोस्…',
                 search_no_results:
                     'तपाईंको खोजसँग मेल खाने कुनै डाटाबेस व्यवस्थापन प्रणाली छैन।',
                 clear_search: 'खोज खाली गर्नुहोस्',
-                open_source_group: 'खुला स्रोत',
-                enterprise_group: 'इन्टरप्राइज',
-                specialized_group: 'विशेष',
+                primary_group: 'प्राथमिक डाटाबेसहरू',
+                other_group: 'अन्य डाटाबेसहरू',
                 check_examples_long: 'उदाहरणहरू हेर्नुहोस्',
                 check_examples_short: 'उदाहरणहरू',
             },
@@ -803,7 +803,8 @@ export const ne: LanguageTranslation = {
             close: 'बन्द गर्नुहोस्',
             loading: {
                 text: 'AI ले {{databaseType}} को लागि SQL उत्पन्न गर्दैछ...',
-                description: 'यो ३० सेकेण्डसम्म समय लिन्छ।',
+                description:
+                    'आफ्नो नयाँ डायग्रामका लागि डाटाबेस प्रणाली छान्नुहोस्।',
             },
             error: {
                 message:

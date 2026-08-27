@@ -67,9 +67,9 @@ export const bn: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'ডায়াগ্রাম মুছুন',
+            title: 'আপনার ডাটাবেস বেছে নিন',
             description:
-                'এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না। এই ডায়াগ্রাম স্থায়ীভাবে মুছে ফেলা হবে।',
+                'আপনার নতুন ডায়াগ্রামের জন্য ডাটাবেস সিস্টেম নির্বাচন করুন।',
             cancel: 'বাতিল করুন',
             delete: 'মুছুন',
         },
@@ -84,8 +84,9 @@ export const bn: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: 'আপনার ডাটাবেস বেছে নিন',
+                description:
+                    'আপনার নতুন ডায়াগ্রামের জন্য ডাটাবেস সিস্টেম নির্বাচন করুন।',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -695,16 +696,15 @@ export const bn: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'আপনার ডাটাবেস ম্যানেজমেন্ট সিস্টেম কী?',
+                title: 'আপনার ডাটাবেস বেছে নিন',
                 description:
-                    'প্রতিটি ডাটাবেস ম্যানেজমেন্ট সিস্টেমের নিজস্ব বৈশিষ্ট্য ও ক্ষমতা রয়েছে।',
+                    'আপনার নতুন ডায়াগ্রামের জন্য ডাটাবেস সিস্টেম নির্বাচন করুন।',
                 search_placeholder: 'ডাটাবেস ম্যানেজমেন্ট সিস্টেম খুঁজুন…',
                 search_no_results:
                     'আপনার অনুসন্ধানের সাথে কোনো ডাটাবেস ম্যানেজমেন্ট সিস্টেম মেলেনি।',
                 clear_search: 'অনুসন্ধান মুছুন',
-                open_source_group: 'ওপেন সোর্স',
-                enterprise_group: 'এন্টারপ্রাইজ',
-                specialized_group: 'বিশেষজ্ঞ',
+                primary_group: 'প্রাথমিক ডাটাবেস',
+                other_group: 'অন্যান্য ডাটাবেস',
                 check_examples_long: 'উদাহরণ দেখুন',
                 check_examples_short: 'উদাহরণ',
             },
@@ -771,7 +771,8 @@ export const bn: LanguageTranslation = {
 
         open_diagram_dialog: {
             title: 'ডেটাবেস খুলুন',
-            description: 'নিচের তালিকা থেকে একটি চিত্র নির্বাচন করুন।',
+            description:
+                'আপনার নতুন ডায়াগ্রামের জন্য ডাটাবেস সিস্টেম নির্বাচন করুন।',
             table_columns: {
                 name: 'নাম',
                 created_at: 'তৈরির তারিখ',
