@@ -724,8 +724,35 @@ export const ne: LanguageTranslation = {
                     'आफैं टेबल थपेर शून्यबाट सुरु गर्नुहोस्।',
                 import_schema: 'अवस्थित स्किमा आयात गर्नुहोस्',
                 import_schema_description:
-                    'SQL, DBML वा मेटाडेटाबाट टेबल र सम्बन्ध आयात गर्नुहोस्।',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'अवस्थित डाटाबेसबाट आयात गर्नुहोस्',
+                no_schema_file: 'मसँग स्किमा फाइल छैन',
                 back: 'पछाडि',
+            },
+
+            import_from_database: {
+                title: 'अवस्थित डाटाबेसबाट आयात गर्नुहोस्',
+                description:
+                    'जब तपाईंसँग SQL वा DBML स्किमा फाइल छैन भने यो प्रयोग गर्नुहोस्। आफ्नो डाटाबेसमा क्वेरी चलाउनुहोस्, त्यसपछि तल नतिजा टाँस्नुहोस्।',
+                database_edition: 'डाटाबेस संस्करण',
+                edition_regular: 'नियमित',
+                run_query: 'आफ्नो डाटाबेसमा यो क्वेरी चलाउनुहोस्',
+                client_sql: 'SQL',
+                paste_result: 'नतिजा टाँस्नुहोस्',
+                paste_result_placeholder: 'क्वेरीको नतिजा यहाँ टाँस्नुहोस्…',
+                check_result: 'नतिजा जाँच गर्नुहोस्',
+                valid_result: 'नतिजा मान्य देखिन्छ।',
+                invalid_result:
+                    'नतिजा प्रमाणित गर्न सकिएन। सामग्री जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्।',
+                truncated_result:
+                    'नतिजा काटिएको हुन सक्छ। SQL क्लाइन्ट सेटिङ समायोजन गरी क्वेरी फेरि चलाउनुहोस्।',
+                waiting_for_result: 'जारी राख्न क्वेरीको नतिजा टाँस्नुहोस्।',
+                unsupported_database:
+                    'यो डाटाबेस प्रकारका लागि स्किमा निकाल्न उपलब्ध छैन।',
+                import_failed:
+                    'डाटाबेस स्किमा आयात गर्न सकिएन। नतिजा जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्।',
+                back: 'पछाडि',
+                continue: 'जारी राख्नुहोस्',
             },
 
             import_schema: {

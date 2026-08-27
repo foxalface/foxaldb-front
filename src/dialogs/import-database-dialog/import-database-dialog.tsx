@@ -9,7 +9,6 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
-import type { ImportMethod } from '@/lib/import-method/import-method';
 import {
     ImportSchemaStep,
     type ImportSchemaContinueParams,
@@ -22,8 +21,6 @@ import { mergeImportIntoDiagram } from '@/lib/import/merge-import-into-diagram';
 
 export interface ImportDatabaseDialogProps extends BaseDialogProps {
     databaseType: DatabaseType;
-    importMethods?: ImportMethod[];
-    initialImportMethod?: ImportMethod;
 }
 
 export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({

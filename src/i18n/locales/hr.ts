@@ -716,8 +716,35 @@ export const hr: LanguageTranslation = {
                     'Krenite od nule dodavanjem vlastitih tablica.',
                 import_schema: 'Uvezi postojeću shemu',
                 import_schema_description:
-                    'Uvezite tablice i odnose iz SQL-a, DBML-a ili metapodataka.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Uvezi iz postojeće baze',
+                no_schema_file: 'Nemam datoteku sheme',
                 back: 'Natrag',
+            },
+
+            import_from_database: {
+                title: 'Uvezi iz postojeće baze',
+                description:
+                    'Koristite ovo kada nemate SQL ili DBML datoteku sheme. Pokrenite upit u bazi, zatim zalijepite rezultat ispod.',
+                database_edition: 'Izdanje baze',
+                edition_regular: 'Standardno',
+                run_query: 'Pokrenite ovaj upit u bazi',
+                client_sql: 'SQL',
+                paste_result: 'Zalijepite rezultat',
+                paste_result_placeholder: 'Zalijepite rezultat upita ovdje…',
+                check_result: 'Provjeri rezultat',
+                valid_result: 'Rezultat izgleda valjano.',
+                invalid_result:
+                    'Rezultat nije mogao biti potvrđen. Provjerite sadržaj i pokušajte ponovno.',
+                truncated_result:
+                    'Rezultat je možda skraćen. Prilagodite postavke SQL klijenta i ponovno pokrenite upit.',
+                waiting_for_result: 'Zalijepite rezultat upita za nastavak.',
+                unsupported_database:
+                    'Ekstrakcija sheme nije dostupna za ovu vrstu baze.',
+                import_failed:
+                    'Shema baze nije mogla biti uvezena. Provjerite rezultat i pokušajte ponovno.',
+                back: 'Natrag',
+                continue: 'Nastavi',
             },
 
             import_schema: {

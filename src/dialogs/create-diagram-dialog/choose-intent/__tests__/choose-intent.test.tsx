@@ -34,6 +34,7 @@ describe('ChooseIntent', () => {
             onBack: vi.fn(),
             onCreateEmpty: vi.fn(),
             onImportSchema: vi.fn(),
+            onImportFromDatabase: vi.fn(),
         });
 
         expect(
@@ -56,17 +57,38 @@ describe('ChooseIntent', () => {
         ).toBeInTheDocument();
     });
 
-    it('invokes callbacks for create empty, import schema, and back', async () => {
+    it('shows the advanced import-from-database action as a secondary link', () => {
+        renderChooseIntent({
+            databaseType: DatabaseType.POSTGRESQL,
+            onBack: vi.fn(),
+            onCreateEmpty: vi.fn(),
+            onImportSchema: vi.fn(),
+            onImportFromDatabase: vi.fn(),
+        });
+
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.choose_intent.import_from_database',
+            })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText('new_diagram_dialog.choose_intent.no_schema_file')
+        ).toBeInTheDocument();
+    });
+
+    it('invokes callbacks for create empty, import schema, advanced import, and back', async () => {
         const user = userEvent.setup();
         const onBack = vi.fn();
         const onCreateEmpty = vi.fn();
         const onImportSchema = vi.fn();
+        const onImportFromDatabase = vi.fn();
 
         renderChooseIntent({
             databaseType: DatabaseType.MYSQL,
             onBack,
             onCreateEmpty,
             onImportSchema,
+            onImportFromDatabase,
         });
 
         await user.click(
@@ -81,12 +103,18 @@ describe('ChooseIntent', () => {
         );
         await user.click(
             screen.getByRole('button', {
+                name: 'new_diagram_dialog.choose_intent.import_from_database',
+            })
+        );
+        await user.click(
+            screen.getByRole('button', {
                 name: 'new_diagram_dialog.choose_intent.back',
             })
         );
 
         expect(onCreateEmpty).toHaveBeenCalledTimes(1);
         expect(onImportSchema).toHaveBeenCalledTimes(1);
+        expect(onImportFromDatabase).toHaveBeenCalledTimes(1);
         expect(onBack).toHaveBeenCalledTimes(1);
     });
 
@@ -99,6 +127,7 @@ describe('ChooseIntent', () => {
             onBack: vi.fn(),
             onCreateEmpty,
             onImportSchema: vi.fn(),
+            onImportFromDatabase: vi.fn(),
         });
 
         const createEmptyButton = screen.getByRole('button', {

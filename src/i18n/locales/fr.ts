@@ -726,8 +726,37 @@ export const fr: LanguageTranslation = {
                     'Partez de zéro en ajoutant vos propres tables.',
                 import_schema: 'Importer un schéma existant',
                 import_schema_description:
-                    'Importez tables et relations depuis SQL, DBML ou métadonnées.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Importer depuis une base existante',
+                no_schema_file: "Je n'ai pas de fichier de schéma",
                 back: 'Retour',
+            },
+
+            import_from_database: {
+                title: 'Importer depuis une base existante',
+                description:
+                    "Utilisez cette option lorsque vous n'avez pas de fichier SQL ou DBML. Exécutez la requête dans votre base, puis collez le résultat ci-dessous.",
+                database_edition: 'Édition de la base',
+                edition_regular: 'Standard',
+                run_query: 'Exécutez cette requête dans votre base',
+                client_sql: 'SQL',
+                paste_result: 'Collez le résultat',
+                paste_result_placeholder:
+                    'Collez le résultat de la requête ici…',
+                check_result: 'Vérifier le résultat',
+                valid_result: 'Le résultat semble valide.',
+                invalid_result:
+                    'Le résultat n’a pas pu être validé. Vérifiez le contenu et réessayez.',
+                truncated_result:
+                    'Le résultat semble tronqué. Ajustez les paramètres de votre client SQL et relancez la requête.',
+                waiting_for_result:
+                    'Collez le résultat de la requête pour continuer.',
+                unsupported_database:
+                    "L'extraction de schéma n'est pas disponible pour ce type de base.",
+                import_failed:
+                    "Le schéma n'a pas pu être importé. Vérifiez le résultat et réessayez.",
+                back: 'Retour',
+                continue: 'Continuer',
             },
 
             import_schema: {

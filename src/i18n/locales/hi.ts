@@ -719,8 +719,36 @@ export const hi: LanguageTranslation = {
                     'खुद टेबल जोड़कर शुरुआत से शुरू करें।',
                 import_schema: 'मौजूदा स्कीमा आयात करें',
                 import_schema_description:
-                    'SQL, DBML या मेटाडेटा से टेबल और संबंध आयात करें।',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'मौजूदा डेटाबेस से आयात करें',
+                no_schema_file: 'मेरे पास स्कीमा फ़ाइल नहीं है',
                 back: 'वापस',
+            },
+
+            import_from_database: {
+                title: 'मौजूदा डेटाबेस से आयात करें',
+                description:
+                    'जब आपके पास SQL या DBML स्कीमा फ़ाइल न हो तो इसका उपयोग करें। अपने डेटाबेस में क्वेरी चलाएँ, फिर नीचे परिणाम पेस्ट करें।',
+                database_edition: 'डेटाबेस संस्करण',
+                edition_regular: 'सामान्य',
+                run_query: 'अपने डेटाबेस में यह क्वेरी चलाएँ',
+                client_sql: 'SQL',
+                paste_result: 'परिणाम पेस्ट करें',
+                paste_result_placeholder: 'क्वेरी का परिणाम यहाँ पेस्ट करें…',
+                check_result: 'परिणाम जाँचें',
+                valid_result: 'परिणाम मान्य लगता है।',
+                invalid_result:
+                    'परिणाम सत्यापित नहीं हो सका। सामग्री जाँचें और पुनः प्रयास करें।',
+                truncated_result:
+                    'परिणाम कटा हुआ हो सकता है। SQL क्लाइंट सेटिंग समायोजित करें और क्वेरी फिर चलाएँ।',
+                waiting_for_result:
+                    'जारी रखने के लिए क्वेरी का परिणाम पेस्ट करें।',
+                unsupported_database:
+                    'इस डेटाबेस प्रकार के लिए स्कीमा निष्कर्षण उपलब्ध नहीं है।',
+                import_failed:
+                    'डेटाबेस स्कीमा आयात नहीं हो सका। परिणाम जाँचें और पुनः प्रयास करें।',
+                back: 'वापस',
+                continue: 'जारी रखें',
             },
 
             import_schema: {

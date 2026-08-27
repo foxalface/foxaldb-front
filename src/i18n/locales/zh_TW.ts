@@ -682,8 +682,32 @@ export const zh_TW: LanguageTranslation = {
                 create_empty_description: '從零開始，自行新增資料表。',
                 import_schema: '匯入現有結構描述',
                 import_schema_description:
-                    '從 SQL、DBML 或中繼資料匯入資料表與關聯。',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: '從現有資料庫匯入',
+                no_schema_file: '我沒有結構描述檔案',
                 back: '返回',
+            },
+
+            import_from_database: {
+                title: '從現有資料庫匯入',
+                description:
+                    '當您沒有 SQL 或 DBML 結構描述檔時使用此選項。在資料庫中執行查詢，然後將結果貼到下方。',
+                database_edition: '資料庫版本',
+                edition_regular: '標準',
+                run_query: '在資料庫中執行此查詢',
+                client_sql: 'SQL',
+                paste_result: '貼上結果',
+                paste_result_placeholder: '在此貼上查詢結果…',
+                check_result: '檢查結果',
+                valid_result: '結果看起來有效。',
+                invalid_result: '無法驗證結果。請檢查內容後再試一次。',
+                truncated_result:
+                    '結果可能已被截斷。請調整 SQL 用戶端設定後重新執行查詢。',
+                waiting_for_result: '貼上查詢結果以繼續。',
+                unsupported_database: '此資料庫類型不支援結構描述擷取。',
+                import_failed: '無法匯入資料庫結構描述。請檢查結果後再試一次。',
+                back: '返回',
+                continue: '繼續',
             },
 
             import_schema: {

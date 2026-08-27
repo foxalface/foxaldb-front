@@ -721,8 +721,35 @@ export const uk: LanguageTranslation = {
                     'Почніть з нуля, додаючи власні таблиці.',
                 import_schema: 'Імпортувати наявну схему',
                 import_schema_description:
-                    'Імпортуйте таблиці та зв’язки з SQL, DBML або метаданих.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Імпорт з наявної бази',
+                no_schema_file: 'У мене немає файлу схеми',
                 back: 'Назад',
+            },
+
+            import_from_database: {
+                title: 'Імпорт з наявної бази',
+                description:
+                    'Використовуйте, якщо у вас немає файлу схеми SQL або DBML. Виконайте запит у базі та вставте результат нижче.',
+                database_edition: 'Редакція СУБД',
+                edition_regular: 'Звичайна',
+                run_query: 'Виконайте цей запит у базі',
+                client_sql: 'SQL',
+                paste_result: 'Вставте результат',
+                paste_result_placeholder: 'Вставте результат запиту сюди…',
+                check_result: 'Перевірити результат',
+                valid_result: 'Результат виглядає коректним.',
+                invalid_result:
+                    'Не вдалося перевірити результат. Перевірте вміст і повторіть спробу.',
+                truncated_result:
+                    'Результат може бути обрізаним. Налаштуйте клієнт SQL і виконайте запит знову.',
+                waiting_for_result: 'Вставте результат запиту, щоб продовжити.',
+                unsupported_database:
+                    'Вилучення схеми недоступне для цього типу бази.',
+                import_failed:
+                    'Не вдалося імпортувати схему бази. Перевірте результат і повторіть спробу.',
+                back: 'Назад',
+                continue: 'Продовжити',
             },
 
             import_schema: {

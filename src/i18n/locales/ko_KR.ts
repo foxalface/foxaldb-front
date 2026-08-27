@@ -716,8 +716,35 @@ export const ko_KR: LanguageTranslation = {
                     '직접 테이블을 추가하며 처음부터 시작합니다.',
                 import_schema: '기존 스키마 가져오기',
                 import_schema_description:
-                    'SQL, DBML 또는 메타데이터에서 테이블과 관계를 가져옵니다.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: '기존 데이터베이스에서 가져오기',
+                no_schema_file: '스키마 파일이 없습니다',
                 back: '뒤로',
+            },
+
+            import_from_database: {
+                title: '기존 데이터베이스에서 가져오기',
+                description:
+                    'SQL 또는 DBML 스키마 파일이 없을 때 사용하세요. 데이터베이스에서 쿼리를 실행한 뒤 아래에 결과를 붙여넣으세요.',
+                database_edition: '데이터베이스 에디션',
+                edition_regular: '일반',
+                run_query: '데이터베이스에서 이 쿼리 실행',
+                client_sql: 'SQL',
+                paste_result: '결과 붙여넣기',
+                paste_result_placeholder: '쿼리 결과를 여기에 붙여넣으세요…',
+                check_result: '결과 확인',
+                valid_result: '결과가 유효해 보입니다.',
+                invalid_result:
+                    '결과를 검증할 수 없습니다. 내용을 확인하고 다시 시도하세요.',
+                truncated_result:
+                    '결과가 잘렸을 수 있습니다. SQL 클라이언트 설정을 조정하고 쿼리를 다시 실행하세요.',
+                waiting_for_result: '계속하려면 쿼리 결과를 붙여넣으세요.',
+                unsupported_database:
+                    '이 데이터베이스 유형에서는 스키마 추출을 사용할 수 없습니다.',
+                import_failed:
+                    '데이터베이스 스키마를 가져올 수 없습니다. 결과를 확인하고 다시 시도하세요.',
+                back: '뒤로',
+                continue: '계속',
             },
 
             import_schema: {

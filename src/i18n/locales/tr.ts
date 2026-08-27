@@ -709,8 +709,36 @@ export const tr: LanguageTranslation = {
                     'Kendi tablolarınızı ekleyerek sıfırdan başlayın.',
                 import_schema: 'Mevcut şemayı içe aktar',
                 import_schema_description:
-                    'SQL, DBML veya meta verilerden tabloları ve ilişkileri içe aktarın.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Mevcut veritabanından içe aktar',
+                no_schema_file: 'Şema dosyam yok',
                 back: 'Geri',
+            },
+
+            import_from_database: {
+                title: 'Mevcut veritabanından içe aktar',
+                description:
+                    'SQL veya DBML şema dosyanız yoksa bunu kullanın. Veritabanınızda sorguyu çalıştırın, ardından sonucu aşağıya yapıştırın.',
+                database_edition: 'Veritabanı sürümü',
+                edition_regular: 'Standart',
+                run_query: 'Bu sorguyu veritabanınızda çalıştırın',
+                client_sql: 'SQL',
+                paste_result: 'Sonucu yapıştırın',
+                paste_result_placeholder: 'Sorgu sonucunu buraya yapıştırın…',
+                check_result: 'Sonucu kontrol et',
+                valid_result: 'Sonuç geçerli görünüyor.',
+                invalid_result:
+                    'Sonuç doğrulanamadı. İçeriği kontrol edip tekrar deneyin.',
+                truncated_result:
+                    'Sonuç kesilmiş olabilir. SQL istemci ayarlarını düzenleyip sorguyu yeniden çalıştırın.',
+                waiting_for_result:
+                    'Devam etmek için sorgu sonucunu yapıştırın.',
+                unsupported_database:
+                    'Bu veritabanı türü için şema çıkarma kullanılamıyor.',
+                import_failed:
+                    'Veritabanı şeması içe aktarılamadı. Sonucu kontrol edip tekrar deneyin.',
+                back: 'Geri',
+                continue: 'Devam',
             },
 
             import_schema: {

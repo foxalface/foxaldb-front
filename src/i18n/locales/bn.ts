@@ -718,8 +718,35 @@ export const bn: LanguageTranslation = {
                     'নিজে টেবিল যোগ করে শূন্য থেকে শুরু করুন।',
                 import_schema: 'বিদ্যমান স্কিমা আমদানি করুন',
                 import_schema_description:
-                    'SQL, DBML বা মেটাডেটা থেকে টেবিল ও সম্পর্ক আমদানি করুন।',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'বিদ্যমান ডাটাবেস থেকে আমদানি করুন',
+                no_schema_file: 'আমার কাছে স্কিমা ফাইল নেই',
                 back: 'পিছনে',
+            },
+
+            import_from_database: {
+                title: 'বিদ্যমান ডাটাবেস থেকে আমদানি করুন',
+                description:
+                    'যখন আপনার কাছে SQL বা DBML স্কিমা ফাইল নেই তখন এটি ব্যবহার করুন। আপনার ডাটাবেসে কোয়েরি চালান, তারপর নিচে ফলাফল পেস্ট করুন।',
+                database_edition: 'ডাটাবেস সংস্করণ',
+                edition_regular: 'নিয়মিত',
+                run_query: 'আপনার ডাটাবেসে এই কোয়েরি চালান',
+                client_sql: 'SQL',
+                paste_result: 'ফলাফল পেস্ট করুন',
+                paste_result_placeholder: 'কোয়েরির ফলাফল এখানে পেস্ট করুন…',
+                check_result: 'ফলাফল পরীক্ষা করুন',
+                valid_result: 'ফলাফল বৈধ বলে মনে হচ্ছে।',
+                invalid_result:
+                    'ফলাফল যাচাই করা যায়নি। বিষয়বস্তু পরীক্ষা করে আবার চেষ্টা করুন।',
+                truncated_result:
+                    'ফলাফলটি কাটা হতে পারে। SQL ক্লায়েন্ট সেটিংস সামঞ্জস্য করে কোয়েরি আবার চালান।',
+                waiting_for_result: 'চালিয়ে যেতে কোয়েরির ফলাফল পেস্ট করুন।',
+                unsupported_database:
+                    'এই ডাটাবেস ধরনের জন্য স্কিমা এক্সট্রাকশন উপলব্ধ নয়।',
+                import_failed:
+                    'ডাটাবেস স্কিমা আমদানি করা যায়নি। ফলাফল পরীক্ষা করে আবার চেষ্টা করুন।',
+                back: 'পিছনে',
+                continue: 'চালিয়ে যান',
             },
 
             import_schema: {

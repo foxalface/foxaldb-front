@@ -17,6 +17,7 @@ export interface ChooseIntentProps {
     onBack: () => void;
     onCreateEmpty: () => void;
     onImportSchema: () => void;
+    onImportFromDatabase: () => void;
 }
 
 interface IntentOptionProps {
@@ -57,6 +58,7 @@ export const ChooseIntent: React.FC<ChooseIntentProps> = ({
     onBack,
     onCreateEmpty,
     onImportSchema,
+    onImportFromDatabase,
 }) => {
     const { t } = useTranslation();
     const databaseLabel = databaseTypeToLabelMap[databaseType];
@@ -90,6 +92,20 @@ export const ChooseIntent: React.FC<ChooseIntentProps> = ({
                     )}
                     onClick={onImportSchema}
                 />
+                <div className="flex flex-col items-center gap-1 pt-1">
+                    <button
+                        type="button"
+                        onClick={onImportFromDatabase}
+                        className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    >
+                        {t(
+                            'new_diagram_dialog.choose_intent.import_from_database'
+                        )}
+                    </button>
+                    <p className="text-xs text-muted-foreground">
+                        {t('new_diagram_dialog.choose_intent.no_schema_file')}
+                    </p>
+                </div>
             </div>
             <DialogFooter className="mt-4 flex !justify-start gap-2">
                 <Button type="button" variant="secondary" onClick={onBack}>

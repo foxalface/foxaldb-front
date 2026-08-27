@@ -730,8 +730,38 @@ export const es: LanguageTranslation = {
                     'Empiece desde cero añadiendo sus propias tablas.',
                 import_schema: 'Importar un esquema existente',
                 import_schema_description:
-                    'Importe tablas y relaciones desde SQL, DBML o metadatos.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database:
+                    'Importar desde una base de datos existente',
+                no_schema_file: 'No tengo un archivo de esquema',
                 back: 'Atrás',
+            },
+
+            import_from_database: {
+                title: 'Importar desde una base de datos existente',
+                description:
+                    'Úselo cuando no tenga un archivo de esquema SQL o DBML. Ejecute la consulta en su base de datos y pegue el resultado abajo.',
+                database_edition: 'Edición de la base de datos',
+                edition_regular: 'Estándar',
+                run_query: 'Ejecute esta consulta en su base de datos',
+                client_sql: 'SQL',
+                paste_result: 'Pegue el resultado',
+                paste_result_placeholder:
+                    'Pegue el resultado de la consulta aquí…',
+                check_result: 'Comprobar resultado',
+                valid_result: 'El resultado parece válido.',
+                invalid_result:
+                    'No se pudo validar el resultado. Compruebe el contenido e inténtelo de nuevo.',
+                truncated_result:
+                    'El resultado puede estar truncado. Ajuste la configuración de su cliente SQL y vuelva a ejecutar la consulta.',
+                waiting_for_result:
+                    'Pegue el resultado de la consulta para continuar.',
+                unsupported_database:
+                    'La extracción de esquema no está disponible para este tipo de base de datos.',
+                import_failed:
+                    'No se pudo importar el esquema de la base de datos. Compruebe el resultado e inténtelo de nuevo.',
+                back: 'Atrás',
+                continue: 'Continuar',
             },
 
             import_schema: {

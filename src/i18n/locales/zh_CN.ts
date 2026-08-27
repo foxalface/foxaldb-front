@@ -682,8 +682,32 @@ export const zh_CN: LanguageTranslation = {
                 create_empty_description: '从零开始，自行添加表。',
                 import_schema: '导入现有架构',
                 import_schema_description:
-                    '从 SQL、DBML 或元数据导入表和关系。',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: '从现有数据库导入',
+                no_schema_file: '我没有架构文件',
                 back: '返回',
+            },
+
+            import_from_database: {
+                title: '从现有数据库导入',
+                description:
+                    '当你没有 SQL 或 DBML 架构文件时使用此选项。在数据库中运行查询，然后将结果粘贴到下方。',
+                database_edition: '数据库版本',
+                edition_regular: '标准',
+                run_query: '在数据库中运行此查询',
+                client_sql: 'SQL',
+                paste_result: '粘贴结果',
+                paste_result_placeholder: '在此粘贴查询结果…',
+                check_result: '检查结果',
+                valid_result: '结果看起来有效。',
+                invalid_result: '无法验证结果。请检查内容后重试。',
+                truncated_result:
+                    '结果可能被截断。请调整 SQL 客户端设置后重新运行查询。',
+                waiting_for_result: '粘贴查询结果以继续。',
+                unsupported_database: '此数据库类型不支持架构提取。',
+                import_failed: '无法导入数据库架构。请检查结果后重试。',
+                back: '返回',
+                continue: '继续',
             },
 
             import_schema: {

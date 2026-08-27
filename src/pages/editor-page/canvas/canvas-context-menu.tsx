@@ -209,7 +209,6 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         queueMicrotask(() => {
             openImportDatabaseDialog({
                 databaseType,
-                importMethods: ['ddl', 'dbml'],
             });
         });
     }, [openImportDatabaseDialog, databaseType]);

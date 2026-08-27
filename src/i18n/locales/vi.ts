@@ -724,8 +724,35 @@ export const vi: LanguageTranslation = {
                     'Bắt đầu từ đầu bằng cách tự thêm bảng.',
                 import_schema: 'Nhập lược đồ hiện có',
                 import_schema_description:
-                    'Nhập bảng và quan hệ từ SQL, DBML hoặc siêu dữ liệu.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Nhập từ cơ sở dữ liệu hiện có',
+                no_schema_file: 'Tôi không có tệp lược đồ',
                 back: 'Quay lại',
+            },
+
+            import_from_database: {
+                title: 'Nhập từ cơ sở dữ liệu hiện có',
+                description:
+                    'Dùng khi bạn không có tệp lược đồ SQL hoặc DBML. Chạy truy vấn trong cơ sở dữ liệu, rồi dán kết quả bên dưới.',
+                database_edition: 'Phiên bản cơ sở dữ liệu',
+                edition_regular: 'Thường',
+                run_query: 'Chạy truy vấn này trong cơ sở dữ liệu',
+                client_sql: 'SQL',
+                paste_result: 'Dán kết quả',
+                paste_result_placeholder: 'Dán kết quả truy vấn tại đây…',
+                check_result: 'Kiểm tra kết quả',
+                valid_result: 'Kết quả có vẻ hợp lệ.',
+                invalid_result:
+                    'Không thể xác thực kết quả. Kiểm tra nội dung và thử lại.',
+                truncated_result:
+                    'Kết quả có thể bị cắt ngắn. Điều chỉnh cài đặt SQL client và chạy lại truy vấn.',
+                waiting_for_result: 'Dán kết quả truy vấn để tiếp tục.',
+                unsupported_database:
+                    'Không hỗ trợ trích xuất lược đồ cho loại cơ sở dữ liệu này.',
+                import_failed:
+                    'Không thể nhập lược đồ cơ sở dữ liệu. Kiểm tra kết quả và thử lại.',
+                back: 'Quay lại',
+                continue: 'Tiếp tục',
             },
 
             import_schema: {

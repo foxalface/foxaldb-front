@@ -742,8 +742,36 @@ export const de: LanguageTranslation = {
                     'Beginnen Sie von Grund auf mit selbst hinzugefügten Tabellen.',
                 import_schema: 'Vorhandenes Schema importieren',
                 import_schema_description:
-                    'Importieren Sie Tabellen und Beziehungen aus SQL, DBML oder Metadaten.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Aus vorhandener Datenbank importieren',
+                no_schema_file: 'Ich habe keine Schemadatei',
                 back: 'Zurück',
+            },
+
+            import_from_database: {
+                title: 'Aus vorhandener Datenbank importieren',
+                description:
+                    'Verwenden Sie dies, wenn Sie keine SQL- oder DBML-Schemadatei haben. Führen Sie die Abfrage in Ihrer Datenbank aus und fügen Sie das Ergebnis unten ein.',
+                database_edition: 'Datenbankedition',
+                edition_regular: 'Standard',
+                run_query: 'Führen Sie diese Abfrage in Ihrer Datenbank aus',
+                client_sql: 'SQL',
+                paste_result: 'Ergebnis einfügen',
+                paste_result_placeholder: 'Abfrageergebnis hier einfügen…',
+                check_result: 'Ergebnis prüfen',
+                valid_result: 'Das Ergebnis sieht gültig aus.',
+                invalid_result:
+                    'Das Ergebnis konnte nicht validiert werden. Prüfen Sie den Inhalt und versuchen Sie es erneut.',
+                truncated_result:
+                    'Das Ergebnis scheint abgeschnitten zu sein. Passen Sie die SQL-Client-Einstellungen an und führen Sie die Abfrage erneut aus.',
+                waiting_for_result:
+                    'Fügen Sie das Abfrageergebnis ein, um fortzufahren.',
+                unsupported_database:
+                    'Schemaextraktion ist für diesen Datenbanktyp nicht verfügbar.',
+                import_failed:
+                    'Das Datenbankschema konnte nicht importiert werden. Prüfen Sie das Ergebnis und versuchen Sie es erneut.',
+                back: 'Zurück',
+                continue: 'Weiter',
             },
 
             import_schema: {

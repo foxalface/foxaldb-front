@@ -287,8 +287,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                                 onClick={() =>
                                     openImportDatabaseDialog({
                                         databaseType,
-                                        importMethods: ['ddl', 'dbml'],
-                                        initialImportMethod: 'ddl',
                                     })
                                 }
                             >
@@ -298,8 +296,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                                 onClick={() =>
                                     openImportDatabaseDialog({
                                         databaseType,
-                                        importMethods: ['ddl', 'dbml'],
-                                        initialImportMethod: 'dbml',
                                     })
                                 }
                             >

@@ -712,8 +712,35 @@ export const en = {
                     'Start from scratch with tables you add yourself.',
                 import_schema: 'Import an existing schema',
                 import_schema_description:
-                    'Import tables and relationships from SQL, DBML, or metadata.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Import from an existing database',
+                no_schema_file: "I don't have a schema file",
                 back: 'Back',
+            },
+
+            import_from_database: {
+                title: 'Import from an existing database',
+                description:
+                    "Use this when you don't have a SQL or DBML schema file. Run the query in your database, then paste the result below.",
+                database_edition: 'Database edition',
+                edition_regular: 'Regular',
+                run_query: 'Run this query in your database',
+                client_sql: 'SQL',
+                paste_result: 'Paste the result',
+                paste_result_placeholder: 'Paste the query result here…',
+                check_result: 'Check result',
+                valid_result: 'Result looks valid.',
+                invalid_result:
+                    'The result could not be validated. Check the content and try again.',
+                truncated_result:
+                    'The result may be truncated. Adjust your SQL client settings and run the query again.',
+                waiting_for_result: 'Paste the query result to continue.',
+                unsupported_database:
+                    'Schema extraction is not available for this database type.',
+                import_failed:
+                    'The database schema could not be imported. Check the result and try again.',
+                back: 'Back',
+                continue: 'Continue',
             },
 
             import_schema: {

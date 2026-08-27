@@ -154,11 +154,9 @@ export const DialogProvider: React.FC<
         });
     const openImportDatabaseDialogHandler: DialogContext['openImportDatabaseDialog'] =
         useCallback(
-            ({ databaseType, importMethods, initialImportMethod }) => {
+            ({ databaseType }) => {
                 setImportDatabaseDialogParams({
                     databaseType,
-                    importMethods,
-                    initialImportMethod,
                 });
                 setOpenImportDatabaseDialog(true);
             },

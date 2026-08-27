@@ -722,8 +722,35 @@ export const id_ID: LanguageTranslation = {
                     'Mulai dari awal dengan menambahkan tabel sendiri.',
                 import_schema: 'Impor skema yang ada',
                 import_schema_description:
-                    'Impor tabel dan relasi dari SQL, DBML, atau metadata.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Impor dari database yang ada',
+                no_schema_file: 'Saya tidak punya file skema',
                 back: 'Kembali',
+            },
+
+            import_from_database: {
+                title: 'Impor dari database yang ada',
+                description:
+                    'Gunakan ini jika Anda tidak memiliki file skema SQL atau DBML. Jalankan kueri di database Anda, lalu tempel hasilnya di bawah.',
+                database_edition: 'Edisi database',
+                edition_regular: 'Reguler',
+                run_query: 'Jalankan kueri ini di database Anda',
+                client_sql: 'SQL',
+                paste_result: 'Tempel hasil',
+                paste_result_placeholder: 'Tempel hasil kueri di sini…',
+                check_result: 'Periksa hasil',
+                valid_result: 'Hasil terlihat valid.',
+                invalid_result:
+                    'Hasil tidak dapat divalidasi. Periksa konten dan coba lagi.',
+                truncated_result:
+                    'Hasil mungkin terpotong. Sesuaikan pengaturan klien SQL dan jalankan kueri lagi.',
+                waiting_for_result: 'Tempel hasil kueri untuk melanjutkan.',
+                unsupported_database:
+                    'Ekstraksi skema tidak tersedia untuk jenis database ini.',
+                import_failed:
+                    'Skema database tidak dapat diimpor. Periksa hasil dan coba lagi.',
+                back: 'Kembali',
+                continue: 'Lanjutkan',
             },
 
             import_schema: {

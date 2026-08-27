@@ -1,0 +1,2 @@
+export const SSMS_TRUNCATION_LENGTH = 65535;
+export const MAX_METADATA_REPAIR_ATTEMPTS = 2;

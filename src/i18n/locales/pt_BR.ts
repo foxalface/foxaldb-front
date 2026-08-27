@@ -729,8 +729,36 @@ export const pt_BR: LanguageTranslation = {
                     'Comece do zero adicionando suas próprias tabelas.',
                 import_schema: 'Importar um esquema existente',
                 import_schema_description:
-                    'Importe tabelas e relacionamentos de SQL, DBML ou metadados.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Importar de um banco existente',
+                no_schema_file: 'Não tenho um arquivo de esquema',
                 back: 'Voltar',
+            },
+
+            import_from_database: {
+                title: 'Importar de um banco existente',
+                description:
+                    'Use quando não tiver um arquivo de esquema SQL ou DBML. Execute a consulta no banco e cole o resultado abaixo.',
+                database_edition: 'Edição do banco',
+                edition_regular: 'Padrão',
+                run_query: 'Execute esta consulta no seu banco',
+                client_sql: 'SQL',
+                paste_result: 'Cole o resultado',
+                paste_result_placeholder: 'Cole o resultado da consulta aqui…',
+                check_result: 'Verificar resultado',
+                valid_result: 'O resultado parece válido.',
+                invalid_result:
+                    'Não foi possível validar o resultado. Verifique o conteúdo e tente novamente.',
+                truncated_result:
+                    'O resultado pode estar truncado. Ajuste as configurações do cliente SQL e execute a consulta novamente.',
+                waiting_for_result:
+                    'Cole o resultado da consulta para continuar.',
+                unsupported_database:
+                    'A extração de esquema não está disponível para este tipo de banco.',
+                import_failed:
+                    'Não foi possível importar o esquema do banco. Verifique o resultado e tente novamente.',
+                back: 'Voltar',
+                continue: 'Continuar',
             },
 
             import_schema: {

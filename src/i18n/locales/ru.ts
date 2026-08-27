@@ -719,8 +719,36 @@ export const ru: LanguageTranslation = {
                     'Начните с нуля, добавляя таблицы самостоятельно.',
                 import_schema: 'Импортировать существующую схему',
                 import_schema_description:
-                    'Импортируйте таблицы и связи из SQL, DBML или метаданных.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'Импорт из существующей базы',
+                no_schema_file: 'У меня нет файла схемы',
                 back: 'Назад',
+            },
+
+            import_from_database: {
+                title: 'Импорт из существующей базы',
+                description:
+                    'Используйте, если у вас нет файла схемы SQL или DBML. Выполните запрос в базе и вставьте результат ниже.',
+                database_edition: 'Редакция СУБД',
+                edition_regular: 'Обычная',
+                run_query: 'Выполните этот запрос в базе',
+                client_sql: 'SQL',
+                paste_result: 'Вставьте результат',
+                paste_result_placeholder: 'Вставьте результат запроса сюда…',
+                check_result: 'Проверить результат',
+                valid_result: 'Результат выглядит корректным.',
+                invalid_result:
+                    'Не удалось проверить результат. Проверьте содержимое и повторите попытку.',
+                truncated_result:
+                    'Результат может быть обрезан. Настройте клиент SQL и выполните запрос снова.',
+                waiting_for_result:
+                    'Вставьте результат запроса, чтобы продолжить.',
+                unsupported_database:
+                    'Извлечение схемы недоступно для этого типа базы.',
+                import_failed:
+                    'Не удалось импортировать схему базы. Проверьте результат и повторите попытку.',
+                back: 'Назад',
+                continue: 'Продолжить',
             },
 
             import_schema: {

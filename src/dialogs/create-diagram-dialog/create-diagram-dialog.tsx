@@ -21,6 +21,7 @@ import {
     type ImportSchemaContinueParams,
 } from '@/dialogs/common/import-schema/import-schema-step';
 import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
+import type { SelectTablesOrigin } from './create-diagram-dialog-step';
 import { SelectTables } from '../common/select-tables/select-tables';
 import { useTranslation } from 'react-i18next';
 import {
@@ -32,6 +33,7 @@ import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-fl
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
 import { useToast } from '@/components/toast/use-toast';
 import { ToastAction } from '@/components/toast/toast';
+import { ImportFromDatabaseStep } from './import-from-database/import-from-database-step';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {
     entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
@@ -61,12 +63,15 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const { closeCreateDiagramDialog, openAuthDialog } = useDialog();
     const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = useState('');
+    const [metadataResult, setMetadataResult] = useState('');
     const [databaseEdition, setDatabaseEdition] = useState<
         DatabaseEdition | undefined
     >();
     const [step, setStep] = useState<CreateDiagramDialogStep>(
         CreateDiagramDialogStep.SELECT_DATABASE
     );
+    const [selectTablesOrigin, setSelectTablesOrigin] =
+        useState<SelectTablesOrigin>('schema');
     const { listDiagrams, addDiagram } = useStorage();
     const [diagramNumber, setDiagramNumber] = useState<number>(1);
     const navigate = useNavigate();
@@ -98,9 +103,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setDatabaseType(DatabaseType.GENERIC);
         setDatabaseEdition(undefined);
         setScriptResult('');
+        setMetadataResult('');
         setParsedMetadata(undefined);
         setImportError(null);
         setResolvedSourceDialect(undefined);
+        setSelectTablesOrigin('schema');
     }, [dialog.open]);
 
     const handleGuestLimitSignIn = useCallback(() => {
@@ -181,12 +188,20 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         async ({
             selectedTables,
             databaseMetadata,
+            content,
         }: {
             selectedTables?: SelectedTable[];
             databaseMetadata?: DatabaseMetadata;
+            content?: string;
         } = {}) => {
+            const importContent =
+                content ??
+                (selectTablesOrigin === 'from_database'
+                    ? metadataResult
+                    : scriptResult);
+
             const { diagram } = await importSchema({
-                content: scriptResult,
+                content: importContent,
                 selectedDatabaseType: databaseType,
                 resolvedSourceDialect,
                 databaseEdition,
@@ -199,12 +214,59 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         },
         [
             scriptResult,
+            metadataResult,
+            selectTablesOrigin,
             databaseType,
             resolvedSourceDialect,
             databaseEdition,
             diagramNumber,
             finalizeImportedDiagram,
         ]
+    );
+
+    const proceedWithMetadataImport = useCallback(
+        async (normalizedContent: string) => {
+            const metadata = loadDatabaseMetadata(normalizedContent);
+            const totalTablesAndViews =
+                metadata.tables.length + (metadata.views?.length || 0);
+
+            setParsedMetadata(metadata);
+            setMetadataResult(normalizedContent);
+
+            if (totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER) {
+                setSelectTablesOrigin('from_database');
+                setStep(CreateDiagramDialogStep.SELECT_TABLES);
+                return;
+            }
+
+            await importNewDiagram({
+                databaseMetadata: metadata,
+                content: normalizedContent,
+            });
+        },
+        [importNewDiagram]
+    );
+
+    const handleImportFromDatabaseContinue = useCallback(
+        async (normalizedContent: string) => {
+            setImportError(null);
+            setIsImporting(true);
+
+            try {
+                await proceedWithMetadataImport(normalizedContent);
+            } catch (error: unknown) {
+                const message =
+                    error instanceof ImportSchemaResolutionError
+                        ? error.message
+                        : t(
+                              'new_diagram_dialog.import_from_database.import_failed'
+                          );
+                setImportError(message);
+            } finally {
+                setIsImporting(false);
+            }
+        },
+        [proceedWithMetadataImport, t]
     );
 
     const handleImportSchemaContinue = useCallback(
@@ -238,6 +300,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     if (
                         totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER
                     ) {
+                        setSelectTablesOrigin('schema');
                         setStep(CreateDiagramDialogStep.SELECT_TABLES);
                         return;
                     }
@@ -342,6 +405,20 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setStep(CreateDiagramDialogStep.CHOOSE_INTENT);
     }, []);
 
+    const handleImportFromDatabaseBack = useCallback(() => {
+        setMetadataResult('');
+        setImportError(null);
+        setStep(CreateDiagramDialogStep.CHOOSE_INTENT);
+    }, []);
+
+    const handleSelectTablesBack = useCallback(() => {
+        setStep(
+            selectTablesOrigin === 'from_database'
+                ? CreateDiagramDialogStep.IMPORT_FROM_DATABASE
+                : CreateDiagramDialogStep.IMPORT_DATABASE
+        );
+    }, [selectTablesOrigin]);
+
     return (
         <Dialog
             {...dialog}
@@ -389,6 +466,23 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         onImportSchema={() =>
                             setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
                         }
+                        onImportFromDatabase={() =>
+                            setStep(
+                                CreateDiagramDialogStep.IMPORT_FROM_DATABASE
+                            )
+                        }
+                    />
+                ) : step === CreateDiagramDialogStep.IMPORT_FROM_DATABASE ? (
+                    <ImportFromDatabaseStep
+                        databaseType={databaseType}
+                        databaseEdition={databaseEdition}
+                        setDatabaseEdition={setDatabaseEdition}
+                        metadataResult={metadataResult}
+                        setMetadataResult={setMetadataResult}
+                        onContinue={handleImportFromDatabaseContinue}
+                        onBack={handleImportFromDatabaseBack}
+                        importError={importError}
+                        isImporting={isImporting}
                     />
                 ) : step === CreateDiagramDialogStep.IMPORT_DATABASE ? (
                     <ImportSchemaStep
@@ -406,9 +500,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         isLoading={isImporting || !parsedMetadata}
                         databaseMetadata={parsedMetadata}
                         onImport={importNewDiagram}
-                        onBack={() =>
-                            setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
-                        }
+                        onBack={handleSelectTablesBack}
                     />
                 ) : null}
             </DialogContent>

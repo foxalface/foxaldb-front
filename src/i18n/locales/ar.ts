@@ -706,8 +706,35 @@ export const ar: LanguageTranslation = {
                 create_empty_description: 'ابدأ من الصفر بإضافة الجداول بنفسك.',
                 import_schema: 'استيراد مخطط موجود',
                 import_schema_description:
-                    'استورد الجداول والعلاقات من SQL أو DBML أو البيانات الوصفية.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'استيراد من قاعدة بيانات موجودة',
+                no_schema_file: 'ليس لدي ملف مخطط',
                 back: 'رجوع',
+            },
+
+            import_from_database: {
+                title: 'استيراد من قاعدة بيانات موجودة',
+                description:
+                    'استخدم هذا عندما لا يكون لديك ملف SQL أو DBML. شغّل الاستعلام في قاعدة البيانات ثم الصق النتيجة أدناه.',
+                database_edition: 'إصدار قاعدة البيانات',
+                edition_regular: 'عادي',
+                run_query: 'شغّل هذا الاستعلام في قاعدة البيانات',
+                client_sql: 'SQL',
+                paste_result: 'الصق النتيجة',
+                paste_result_placeholder: 'الصق نتيجة الاستعلام هنا…',
+                check_result: 'تحقق من النتيجة',
+                valid_result: 'تبدو النتيجة صالحة.',
+                invalid_result:
+                    'تعذر التحقق من النتيجة. تحقق من المحتوى وحاول مرة أخرى.',
+                truncated_result:
+                    'قد تكون النتيجة مقطوعة. عدّل إعدادات عميل SQL وأعد تشغيل الاستعلام.',
+                waiting_for_result: 'الصق نتيجة الاستعلام للمتابعة.',
+                unsupported_database:
+                    'استخراج المخطط غير متاح لهذا النوع من قواعد البيانات.',
+                import_failed:
+                    'تعذر استيراد مخطط قاعدة البيانات. تحقق من النتيجة وحاول مرة أخرى.',
+                back: 'رجوع',
+                continue: 'متابعة',
             },
 
             import_schema: {

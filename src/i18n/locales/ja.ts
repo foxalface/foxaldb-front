@@ -722,8 +722,36 @@ export const ja: LanguageTranslation = {
                     '自分でテーブルを追加してゼロから始めます。',
                 import_schema: '既存のスキーマをインポート',
                 import_schema_description:
-                    'SQL、DBML、またはメタデータからテーブルとリレーションをインポートします。',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: '既存のデータベースからインポート',
+                no_schema_file: 'スキーマファイルがありません',
                 back: '戻る',
+            },
+
+            import_from_database: {
+                title: '既存のデータベースからインポート',
+                description:
+                    'SQL または DBML のスキーマファイルがない場合に使用します。データベースでクエリを実行し、結果を下に貼り付けてください。',
+                database_edition: 'データベース版',
+                edition_regular: '標準',
+                run_query: 'データベースでこのクエリを実行',
+                client_sql: 'SQL',
+                paste_result: '結果を貼り付け',
+                paste_result_placeholder: 'クエリ結果をここに貼り付け…',
+                check_result: '結果を確認',
+                valid_result: '結果は有効です。',
+                invalid_result:
+                    '結果を検証できませんでした。内容を確認して再試行してください。',
+                truncated_result:
+                    '結果が切り詰められている可能性があります。SQL クライアントの設定を調整してクエリを再実行してください。',
+                waiting_for_result:
+                    '続行するにはクエリ結果を貼り付けてください。',
+                unsupported_database:
+                    'このデータベース種別ではスキーマ抽出は利用できません。',
+                import_failed:
+                    'データベーススキーマをインポートできませんでした。結果を確認して再試行してください。',
+                back: '戻る',
+                continue: '続行',
             },
 
             import_schema: {

@@ -712,8 +712,35 @@ export const gu: LanguageTranslation = {
                 create_empty_description: 'પોતે ટેબલ ઉમેરીને શૂન્યથી શરૂ કરો.',
                 import_schema: 'હાલનું સ્કીમા આયાત કરો',
                 import_schema_description:
-                    'SQL, DBML અથવા મેટાડેટામાંથી ટેબલ અને સંબંધો આયાત કરો.',
+                    'Import tables and relationships from SQL or DBML.',
+                import_from_database: 'હાલની ડેટાબેઝમાંથી આયાત કરો',
+                no_schema_file: 'મારી પાસે સ્કીમા ફાઇલ નથી',
                 back: 'પાછા',
+            },
+
+            import_from_database: {
+                title: 'હાલની ડેટાબેઝમાંથી આયાત કરો',
+                description:
+                    'જ્યારે તમારી પાસે SQL અથવા DBML સ્કીમા ફાઇલ ન હોય ત્યારે આનો ઉપયોગ કરો. તમારી ડેટાબેઝમાં ક્વેરી ચલાવો, પછી નીચે પરિણામ પેસ્ટ કરો.',
+                database_edition: 'ડેટાબેઝ આવૃત્તિ',
+                edition_regular: 'નિયમિત',
+                run_query: 'તમારી ડેટાબેઝમાં આ ક્વેરી ચલાવો',
+                client_sql: 'SQL',
+                paste_result: 'પરિણામ પેસ્ટ કરો',
+                paste_result_placeholder: 'ક્વેરીનું પરિણામ અહીં પેસ્ટ કરો…',
+                check_result: 'પરિણામ તપાસો',
+                valid_result: 'પરિણામ માન્ય લાગે છે.',
+                invalid_result:
+                    'પરિણામ માન્ય કરી શકાયું નથી. સામગ્રી તપાસો અને ફરી પ્રયાસ કરો.',
+                truncated_result:
+                    'પરિણામ કટાયેલું હોઈ શકે છે. SQL ક્લાયંટ સેટિંગ્સ સમાયોજિત કરી ક્વેરી ફરી ચલાવો.',
+                waiting_for_result: 'ચાલુ રાખવા ક્વેરીનું પરિણામ પેસ્ટ કરો.',
+                unsupported_database:
+                    'આ ડેટાબેઝ પ્રકાર માટે સ્કીમા એક્સટ્રેક્શન ઉપલબ્ધ નથી.',
+                import_failed:
+                    'ડેટાબેઝ સ્કીમા આયાત કરી શકાઈ નથી. પરિણામ તપાસો અને ફરી પ્રયાસ કરો.',
+                back: 'પાછા',
+                continue: 'ચાલુ રાખો',
             },
 
             import_schema: {
