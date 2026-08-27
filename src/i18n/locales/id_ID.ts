@@ -726,6 +726,56 @@ export const id_ID: LanguageTranslation = {
                 back: 'Kembali',
             },
 
+            import_schema: {
+                title: 'Tempel skema Anda',
+                textarea_label: 'Konten skema',
+                textarea_placeholder:
+                    'Tempel SQL, DBML, atau metadata JSON di sini…',
+                auto_detect_hint:
+                    'Kami akan mendeteksi format secara otomatis.',
+                or_divider: 'ATAU',
+                choose_file: 'Pilih file',
+                selected_file: 'File dipilih: {{name}}',
+                back: 'Kembali',
+                continue: 'Lanjutkan',
+                mismatch: {
+                    title: 'Skema ini terlihat seperti {{detected}}, tetapi Anda memilih {{selected}}.',
+                    description:
+                        'Beralih ke jenis basis data yang terdeteksi atau kembali untuk memilih yang lain.',
+                    switch: 'Beralih ke {{database}}',
+                    go_back: 'Kembali',
+                },
+                ambiguous: {
+                    title: 'Pilih basis data sumber',
+                    description:
+                        'Dialek SQL tidak dapat diidentifikasi secara otomatis. Konfirmasikan basis data asal skema ini.',
+                    choose_source: 'Pilih basis data sumber',
+                },
+                detection: {
+                    dialect: '{{database}} terdeteksi',
+                    dbml: 'DBML terdeteksi',
+                    metadata_json: 'Metadata JSON terdeteksi',
+                    diagram_json: 'JSON diagram terdeteksi',
+                    sql_ambiguous_title: 'SQL terdeteksi',
+                    sql_ambiguous_description:
+                        'Basis data tidak dapat diidentifikasi.',
+                    clickhouse_unsupported: 'SQL ClickHouse terdeteksi',
+                    unsupported: 'Format tidak didukung',
+                },
+                errors: {
+                    unreadable_file: 'File yang dipilih tidak dapat dibaca.',
+                    malformed_json: 'Konten JSON tidak dapat diurai.',
+                    unsupported: 'Format ini tidak didukung untuk impor skema.',
+                    diagram_json:
+                        'JSON diagram dapat diimpor dari opsi file diagram.',
+                    clickhouse_unsupported:
+                        'Impor DDL SQL tidak didukung untuk ClickHouse. Gunakan DBML atau impor dari basis data yang ada.',
+                    file_too_large: 'File yang dipilih lebih besar dari 5 MB.',
+                    import_failed:
+                        'Skema tidak dapat diimpor. Periksa konten dan coba lagi.',
+                },
+            },
+
             import_database: {
                 title: 'Impor Database Anda',
                 database_edition: 'Edisi Database:',

@@ -728,6 +728,54 @@ export const ne: LanguageTranslation = {
                 back: 'पछाडि',
             },
 
+            import_schema: {
+                title: 'आफ्नो स्किमा टाँस्नुहोस्',
+                textarea_label: 'स्किमा सामग्री',
+                textarea_placeholder:
+                    'यहाँ SQL, DBML वा JSON मेटाडेटा टाँस्नुहोस्…',
+                auto_detect_hint: 'हामी ढाँचा स्वचालित रूपमा पत्ता लगाउँछौं।',
+                or_divider: 'वा',
+                choose_file: 'फाइल छान्नुहोस्',
+                selected_file: 'छानिएको फाइल: {{name}}',
+                back: 'पछाडि',
+                continue: 'जारी राख्नुहोस्',
+                mismatch: {
+                    title: 'यो स्किमा {{detected}} जस्तो देखिन्छ, तर तपाईंले {{selected}} छान्नुभयो।',
+                    description:
+                        'पत्ता लागेको डाटाबेस प्रकारमा स्विच गर्नुहोस् वा अर्को छान्न फर्कनुहोस्।',
+                    switch: '{{database}} मा स्विच गर्नुहोस्',
+                    go_back: 'पछाडि',
+                },
+                ambiguous: {
+                    title: 'स्रोत डाटाबेस छान्नुहोस्',
+                    description:
+                        'SQL बोली स्वचालित रूपमा पहिचान गर्न सकिएन। यो स्किमा कुन डाटाबेसबाट आएको हो पुष्टि गर्नुहोस्।',
+                    choose_source: 'स्रोत डाटाबेस छान्नुहोस्',
+                },
+                detection: {
+                    dialect: '{{database}} पत्ता लाग्यो',
+                    dbml: 'DBML पत्ता लाग्यो',
+                    metadata_json: 'मेटाडेटा JSON पत्ता लाग्यो',
+                    diagram_json: 'डायग्राम JSON पत्ता लाग्यो',
+                    sql_ambiguous_title: 'SQL पत्ता लाग्यो',
+                    sql_ambiguous_description: 'डाटाबेस पहिचान गर्न सकिएन।',
+                    clickhouse_unsupported: 'ClickHouse SQL पत्ता लाग्यो',
+                    unsupported: 'असमर्थित ढाँचा',
+                },
+                errors: {
+                    unreadable_file: 'छानिएको फाइल पढ्न सकिएन।',
+                    malformed_json: 'JSON सामग्री पार्स गर्न सकिएन।',
+                    unsupported: 'स्किमा आयातका लागि यो ढाँचा समर्थित छैन।',
+                    diagram_json:
+                        'डायग्राम JSON डायग्राम फाइल विकल्पबाट आयात गर्न सकिन्छ।',
+                    clickhouse_unsupported:
+                        'ClickHouse का लागि SQL DDL आयात समर्थित छैन। DBML प्रयोग गर्नुहोस् वा अवस्थित डाटाबेसबाट आयात गर्नुहोस्।',
+                    file_too_large: 'छानिएको फाइल 5 MB भन्दा ठूलो छ।',
+                    import_failed:
+                        'स्किमा आयात गर्न सकिएन। सामग्री जाँच गरेर फेरि प्रयास गर्नुहोस्।',
+                },
+            },
+
             import_database: {
                 title: 'तपाईंको डाटाबेस आयात गर्नुहोस्',
                 database_edition: 'डाटाबेस संस्करण:',

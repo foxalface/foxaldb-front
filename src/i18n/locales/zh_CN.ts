@@ -686,6 +686,50 @@ export const zh_CN: LanguageTranslation = {
                 back: '返回',
             },
 
+            import_schema: {
+                title: '粘贴您的架构',
+                textarea_label: '架构内容',
+                textarea_placeholder: '在此粘贴 SQL、DBML 或 JSON 元数据…',
+                auto_detect_hint: '我们将自动检测格式。',
+                or_divider: '或',
+                choose_file: '选择文件',
+                selected_file: '已选文件：{{name}}',
+                back: '返回',
+                continue: '继续',
+                mismatch: {
+                    title: '此架构看起来像 {{detected}}，但您选择了 {{selected}}。',
+                    description: '切换到检测到的数据库类型，或返回重新选择。',
+                    switch: '切换到 {{database}}',
+                    go_back: '返回',
+                },
+                ambiguous: {
+                    title: '选择源数据库',
+                    description:
+                        '无法自动识别 SQL 方言。请确认此架构来自哪个数据库。',
+                    choose_source: '选择源数据库',
+                },
+                detection: {
+                    dialect: '已检测到 {{database}}',
+                    dbml: '已检测到 DBML',
+                    metadata_json: '已检测到元数据 JSON',
+                    diagram_json: '已检测到图表 JSON',
+                    sql_ambiguous_title: '已检测到 SQL',
+                    sql_ambiguous_description: '无法识别数据库。',
+                    clickhouse_unsupported: '检测到 ClickHouse SQL',
+                    unsupported: '不支持的格式',
+                },
+                errors: {
+                    unreadable_file: '无法读取所选文件。',
+                    malformed_json: '无法解析 JSON 内容。',
+                    unsupported: '此格式不支持架构导入。',
+                    diagram_json: '图表 JSON 可通过图表文件选项导入。',
+                    clickhouse_unsupported:
+                        'ClickHouse 不支持 SQL DDL 导入。请使用 DBML 或从现有数据库导入。',
+                    file_too_large: '所选文件大于 5 MB。',
+                    import_failed: '无法导入架构。请检查内容后重试。',
+                },
+            },
+
             import_database: {
                 title: '导入您的数据库',
                 database_edition: '数据库类型：',

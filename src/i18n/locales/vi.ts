@@ -728,6 +728,56 @@ export const vi: LanguageTranslation = {
                 back: 'Quay lại',
             },
 
+            import_schema: {
+                title: 'Dán lược đồ của bạn',
+                textarea_label: 'Nội dung lược đồ',
+                textarea_placeholder:
+                    'Dán SQL, DBML hoặc siêu dữ liệu JSON vào đây…',
+                auto_detect_hint: 'Chúng tôi sẽ tự động phát hiện định dạng.',
+                or_divider: 'HOẶC',
+                choose_file: 'Chọn tệp',
+                selected_file: 'Tệp đã chọn: {{name}}',
+                back: 'Quay lại',
+                continue: 'Tiếp tục',
+                mismatch: {
+                    title: 'Lược đồ này trông giống {{detected}}, nhưng bạn đã chọn {{selected}}.',
+                    description:
+                        'Chuyển sang loại cơ sở dữ liệu được phát hiện hoặc quay lại để chọn loại khác.',
+                    switch: 'Chuyển sang {{database}}',
+                    go_back: 'Quay lại',
+                },
+                ambiguous: {
+                    title: 'Chọn cơ sở dữ liệu nguồn',
+                    description:
+                        'Không thể tự động xác định phương ngữ SQL. Xác nhận lược đồ này đến từ cơ sở dữ liệu nào.',
+                    choose_source: 'Chọn cơ sở dữ liệu nguồn',
+                },
+                detection: {
+                    dialect: 'Đã phát hiện {{database}}',
+                    dbml: 'Đã phát hiện DBML',
+                    metadata_json: 'Đã phát hiện siêu dữ liệu JSON',
+                    diagram_json: 'Đã phát hiện JSON sơ đồ',
+                    sql_ambiguous_title: 'Đã phát hiện SQL',
+                    sql_ambiguous_description:
+                        'Không thể xác định cơ sở dữ liệu.',
+                    clickhouse_unsupported: 'Đã phát hiện SQL ClickHouse',
+                    unsupported: 'Định dạng không được hỗ trợ',
+                },
+                errors: {
+                    unreadable_file: 'Không thể đọc tệp đã chọn.',
+                    malformed_json: 'Không thể phân tích nội dung JSON.',
+                    unsupported:
+                        'Định dạng này không được hỗ trợ để nhập lược đồ.',
+                    diagram_json:
+                        'JSON sơ đồ có thể được nhập từ tùy chọn tệp sơ đồ.',
+                    clickhouse_unsupported:
+                        'Nhập DDL SQL không được hỗ trợ cho ClickHouse. Hãy dùng DBML hoặc nhập từ cơ sở dữ liệu hiện có.',
+                    file_too_large: 'Tệp đã chọn lớn hơn 5 MB.',
+                    import_failed:
+                        'Không thể nhập lược đồ. Kiểm tra nội dung và thử lại.',
+                },
+            },
+
             import_database: {
                 title: 'Nhập cơ sở dữ liệu của bạn',
                 database_edition: 'Loại:',

@@ -724,6 +724,54 @@ export const mr: LanguageTranslation = {
                 back: 'मागे',
             },
 
+            import_schema: {
+                title: 'तुमचे स्कीमा पेस्ट करा',
+                textarea_label: 'स्कीमा सामग्री',
+                textarea_placeholder:
+                    'येथे SQL, DBML किंवा JSON मेटाडेटा पेस्ट करा…',
+                auto_detect_hint: 'आम्ही फॉरमॅट आपोआप ओळखू.',
+                or_divider: 'किंवा',
+                choose_file: 'फाइल निवडा',
+                selected_file: 'निवडलेली फाइल: {{name}}',
+                back: 'मागे',
+                continue: 'सुरू ठेवा',
+                mismatch: {
+                    title: 'हे स्कीमा {{detected}} सारखे दिसते, पण तुम्ही {{selected}} निवडले आहे.',
+                    description:
+                        'शोधलेल्या डेटाबेस प्रकारावर स्विच करा किंवा दुसरे निवडण्यासाठी मागे जा.',
+                    switch: '{{database}} वर स्विच करा',
+                    go_back: 'मागे',
+                },
+                ambiguous: {
+                    title: 'स्रोत डेटाबेस निवडा',
+                    description:
+                        'SQL बोली आपोआप ओळखता आली नाही. हे स्कीमा कोणत्या डेटाबेसमधून आले ते निश्चित करा.',
+                    choose_source: 'स्रोत डेटाबेस निवडा',
+                },
+                detection: {
+                    dialect: '{{database}} आढळले',
+                    dbml: 'DBML आढळले',
+                    metadata_json: 'मेटाडेटा JSON आढळले',
+                    diagram_json: 'डायग्राम JSON आढळले',
+                    sql_ambiguous_title: 'SQL आढळले',
+                    sql_ambiguous_description: 'डेटाबेस ओळखता आला नाही.',
+                    clickhouse_unsupported: 'ClickHouse SQL आढळले',
+                    unsupported: 'असमर्थित फॉरमॅट',
+                },
+                errors: {
+                    unreadable_file: 'निवडलेली फाइल वाचता आली नाही.',
+                    malformed_json: 'JSON सामग्री पार्स करता आली नाही.',
+                    unsupported: 'स्कीमा आयातासाठी हा फॉरमॅट समर्थित नाही.',
+                    diagram_json:
+                        'डायग्राम JSON डायग्राम फाइल पर्यायाद्वारे आयात केले जाऊ शकते.',
+                    clickhouse_unsupported:
+                        'ClickHouse साठी SQL DDL आयात समर्थित नाही. DBML वापरा किंवा विद्यमान डेटाबेसमधून आयात करा.',
+                    file_too_large: 'निवडलेली फाइल 5 MB पेक्षा मोठी आहे.',
+                    import_failed:
+                        'स्कीमा आयात करता आले नाही. सामग्री तपासा आणि पुन्हा प्रयत्न करा.',
+                },
+            },
+
             import_database: {
                 title: 'तुमचा डेटाबेस आयात करा',
                 database_edition: 'डेटाबेस संस्करण:',

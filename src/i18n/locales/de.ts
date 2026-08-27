@@ -746,6 +746,59 @@ export const de: LanguageTranslation = {
                 back: 'Zurück',
             },
 
+            import_schema: {
+                title: 'Schema einfügen',
+                textarea_label: 'Schemainhalt',
+                textarea_placeholder:
+                    'SQL, DBML oder JSON-Metadaten hier einfügen…',
+                auto_detect_hint: 'Wir erkennen das Format automatisch.',
+                or_divider: 'ODER',
+                choose_file: 'Datei auswählen',
+                selected_file: 'Ausgewählte Datei: {{name}}',
+                back: 'Zurück',
+                continue: 'Weiter',
+                mismatch: {
+                    title: 'Dieses Schema sieht wie {{detected}} aus, aber Sie haben {{selected}} gewählt.',
+                    description:
+                        'Wechseln Sie zum erkannten Datenbanktyp oder gehen Sie zurück, um einen anderen zu wählen.',
+                    switch: 'Zu {{database}} wechseln',
+                    go_back: 'Zurück',
+                },
+                ambiguous: {
+                    title: 'Quelldatenbank wählen',
+                    description:
+                        'Der SQL-Dialekt konnte nicht automatisch erkannt werden. Bestätigen Sie, von welcher Datenbank dieses Schema stammt.',
+                    choose_source: 'Quelldatenbank wählen',
+                },
+                detection: {
+                    dialect: '{{database}} erkannt',
+                    dbml: 'DBML erkannt',
+                    metadata_json: 'Metadaten-JSON erkannt',
+                    diagram_json: 'Diagramm-JSON erkannt',
+                    sql_ambiguous_title: 'SQL erkannt',
+                    sql_ambiguous_description:
+                        'Datenbank konnte nicht identifiziert werden.',
+                    clickhouse_unsupported: 'ClickHouse-SQL erkannt',
+                    unsupported: 'Nicht unterstütztes Format',
+                },
+                errors: {
+                    unreadable_file:
+                        'Die ausgewählte Datei konnte nicht gelesen werden.',
+                    malformed_json:
+                        'Der JSON-Inhalt konnte nicht analysiert werden.',
+                    unsupported:
+                        'Dieses Format wird für den Schemaimport nicht unterstützt.',
+                    diagram_json:
+                        'Diagramm-JSON kann über die Diagrammdatei-Option importiert werden.',
+                    clickhouse_unsupported:
+                        'SQL-DDL-Import wird für ClickHouse nicht unterstützt. Verwenden Sie DBML oder importieren Sie aus einer bestehenden Datenbank.',
+                    file_too_large:
+                        'Die ausgewählte Datei ist größer als 5 MB.',
+                    import_failed:
+                        'Das Schema konnte nicht importiert werden. Prüfen Sie den Inhalt und versuchen Sie es erneut.',
+                },
+            },
+
             import_database: {
                 title: 'Datenbank importieren',
                 database_edition: 'Datenbank Edition:',

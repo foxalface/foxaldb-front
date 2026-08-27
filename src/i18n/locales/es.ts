@@ -734,6 +734,55 @@ export const es: LanguageTranslation = {
                 back: 'Atrás',
             },
 
+            import_schema: {
+                title: 'Pegue su esquema',
+                textarea_label: 'Contenido del esquema',
+                textarea_placeholder: 'Pegue SQL, DBML o metadatos JSON aquí…',
+                auto_detect_hint: 'Detectaremos el formato automáticamente.',
+                or_divider: 'O',
+                choose_file: 'Elegir un archivo',
+                selected_file: 'Archivo seleccionado: {{name}}',
+                back: 'Atrás',
+                continue: 'Continuar',
+                mismatch: {
+                    title: 'Este esquema parece {{detected}}, pero seleccionó {{selected}}.',
+                    description:
+                        'Cambie al tipo de base detectado o vuelva atrás para elegir otro.',
+                    switch: 'Cambiar a {{database}}',
+                    go_back: 'Atrás',
+                },
+                ambiguous: {
+                    title: 'Elija la base de datos de origen',
+                    description:
+                        'No pudimos identificar automáticamente el dialecto SQL. Confirme de qué base proviene este esquema.',
+                    choose_source: 'Elegir base de origen',
+                },
+                detection: {
+                    dialect: '{{database}} detectado',
+                    dbml: 'DBML detectado',
+                    metadata_json: 'Metadatos JSON detectados',
+                    diagram_json: 'JSON de diagrama detectado',
+                    sql_ambiguous_title: 'SQL detectado',
+                    sql_ambiguous_description:
+                        'No se pudo identificar la base de datos.',
+                    clickhouse_unsupported: 'SQL de ClickHouse detectado',
+                    unsupported: 'Formato no compatible',
+                },
+                errors: {
+                    unreadable_file: 'No se pudo leer el archivo seleccionado.',
+                    malformed_json: 'No se pudo analizar el contenido JSON.',
+                    unsupported:
+                        'Este formato no es compatible con la importación de esquemas.',
+                    diagram_json:
+                        'El JSON de diagrama se puede importar desde la opción de archivo de diagrama.',
+                    clickhouse_unsupported:
+                        'La importación DDL SQL no es compatible con ClickHouse. Use DBML o importe desde una base existente.',
+                    file_too_large: 'El archivo seleccionado supera los 5 MB.',
+                    import_failed:
+                        'No se pudo importar el esquema. Revise el contenido e inténtelo de nuevo.',
+                },
+            },
+
             import_database: {
                 title: 'Importa tu Base de Datos',
                 database_edition: 'Edición de Base de Datos:',

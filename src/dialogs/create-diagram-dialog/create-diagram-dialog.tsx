@@ -5,7 +5,7 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { useAuth } from '@/hooks/use-auth';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
-import { loadFromDatabaseMetadata } from '@/lib/data/import-metadata/import';
+import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
 import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import type { DatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
@@ -16,16 +16,18 @@ import { useDialog } from '@/hooks/use-dialog';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import { SelectDatabase } from './select-database/select-database';
 import { ChooseIntent } from './choose-intent/choose-intent';
+import { ImportSchemaStep } from './import-schema/import-schema-step';
 import { CreateDiagramDialogStep } from './create-diagram-dialog-step';
-import { ImportDatabase } from '../common/import-database/import-database';
 import { SelectTables } from '../common/select-tables/select-tables';
 import { useTranslation } from 'react-i18next';
+import type { ImportSchemaContinueParams } from './import-schema/import-schema-step';
+import {
+    ImportSchemaResolutionError,
+    importSchema,
+} from '@/lib/import/import-schema';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
-import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
-import { filterMetadataByTables } from '@/lib/data/import-metadata/filter-metadata';
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
-import type { ImportMethod } from '@/lib/import-method/import-method';
 import { useToast } from '@/components/toast/use-toast';
 import { ToastAction } from '@/components/toast/toast';
 
@@ -51,7 +53,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         [isEntryFlowOwned, currentDiagram?.id]
     );
 
-    const [importMethod, setImportMethod] = useState<ImportMethod>('query');
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
@@ -68,11 +69,14 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [diagramNumber, setDiagramNumber] = useState<number>(1);
     const navigate = useNavigate();
     const [parsedMetadata, setParsedMetadata] = useState<DatabaseMetadata>();
-    const [isParsingMetadata, setIsParsingMetadata] = useState(false);
+    const [isImporting, setIsImporting] = useState(false);
+    const [importError, setImportError] = useState<string | null>(null);
+    const [resolvedSourceDialect, setResolvedSourceDialect] = useState<
+        DatabaseType | undefined
+    >();
 
     useEffect(() => {
         setDatabaseEdition(undefined);
-        setImportMethod('query');
     }, [databaseType]);
 
     useEffect(() => {
@@ -92,8 +96,9 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setDatabaseType(DatabaseType.GENERIC);
         setDatabaseEdition(undefined);
         setScriptResult('');
-        setImportMethod('query');
         setParsedMetadata(undefined);
+        setImportError(null);
+        setResolvedSourceDialect(undefined);
     }, [dialog.open]);
 
     const handleGuestLimitSignIn = useCallback(() => {
@@ -132,65 +137,14 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         [isAuthenticated, addDiagram, loadDiagramFromData]
     );
 
-    const importNewDiagram = useCallback(
-        async ({
-            selectedTables,
-            databaseMetadata,
-        }: {
-            selectedTables?: SelectedTable[];
-            databaseMetadata?: DatabaseMetadata;
-        } = {}) => {
+    const finalizeImportedDiagram = useCallback(
+        async (diagram: Diagram) => {
             if (!isAuthenticated) {
                 const diagrams = await listDiagrams();
                 if (diagrams.length >= 1) {
                     showGuestLimitToast();
                     return;
                 }
-            }
-
-            let diagram: Diagram | undefined;
-
-            if (importMethod === 'ddl') {
-                const { sqlImportToDiagram } =
-                    await import('@/lib/data/sql-import');
-                diagram = await sqlImportToDiagram({
-                    sqlContent: scriptResult,
-                    sourceDatabaseType: databaseType,
-                    targetDatabaseType: databaseType,
-                });
-            } else if (importMethod === 'dbml') {
-                const { defaultDBMLDiagramName, importDBMLToDiagram } =
-                    await import('@/lib/dbml/dbml-import/dbml-import');
-                diagram = await importDBMLToDiagram(scriptResult, {
-                    databaseType,
-                });
-
-                if (diagram.name === defaultDBMLDiagramName) {
-                    diagram.name = `Diagram ${diagramNumber}`;
-                }
-            } else {
-                let metadata: DatabaseMetadata | undefined = databaseMetadata;
-
-                if (!metadata) {
-                    metadata = loadDatabaseMetadata(scriptResult);
-                }
-
-                if (selectedTables && selectedTables.length > 0) {
-                    metadata = filterMetadataByTables({
-                        metadata,
-                        selectedTables,
-                    });
-                }
-
-                diagram = await loadFromDatabaseMetadata({
-                    databaseType,
-                    databaseMetadata: metadata,
-                    diagramNumber,
-                    databaseEdition:
-                        databaseEdition?.trim().length === 0
-                            ? undefined
-                            : databaseEdition,
-                });
             }
 
             const id = await persistDiagram(diagram);
@@ -210,19 +164,122 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }
         },
         [
-            importMethod,
-            databaseType,
-            databaseEdition,
             closeCreateDiagramDialog,
             navigate,
             updateConfig,
-            scriptResult,
-            diagramNumber,
             persistDiagram,
             isAuthenticated,
             listDiagrams,
             showGuestLimitToast,
             entryCreateDiagramActions,
+        ]
+    );
+
+    const importNewDiagram = useCallback(
+        async ({
+            selectedTables,
+            databaseMetadata,
+        }: {
+            selectedTables?: SelectedTable[];
+            databaseMetadata?: DatabaseMetadata;
+        } = {}) => {
+            const { diagram } = await importSchema({
+                content: scriptResult,
+                selectedDatabaseType: databaseType,
+                resolvedSourceDialect,
+                databaseEdition,
+                diagramNumber,
+                databaseMetadata,
+                selectedTables,
+            });
+
+            await finalizeImportedDiagram(diagram);
+        },
+        [
+            scriptResult,
+            databaseType,
+            resolvedSourceDialect,
+            databaseEdition,
+            diagramNumber,
+            finalizeImportedDiagram,
+        ]
+    );
+
+    const handleImportSchemaContinue = useCallback(
+        async ({
+            importMethod: nextImportMethod,
+            resolvedSourceDialect: nextResolvedSourceDialect,
+        }: ImportSchemaContinueParams) => {
+            setImportError(null);
+            setIsImporting(true);
+            setResolvedSourceDialect(nextResolvedSourceDialect);
+
+            try {
+                if (nextImportMethod === 'query') {
+                    const metadata = await new Promise<DatabaseMetadata>(
+                        (resolve, reject) => {
+                            setTimeout(() => {
+                                try {
+                                    resolve(loadDatabaseMetadata(scriptResult));
+                                } catch (error) {
+                                    reject(error);
+                                }
+                            }, 0);
+                        }
+                    );
+
+                    const totalTablesAndViews =
+                        metadata.tables.length + (metadata.views?.length || 0);
+
+                    setParsedMetadata(metadata);
+
+                    if (
+                        totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER
+                    ) {
+                        setStep(CreateDiagramDialogStep.SELECT_TABLES);
+                        return;
+                    }
+
+                    const { diagram } = await importSchema({
+                        content: scriptResult,
+                        selectedDatabaseType: databaseType,
+                        databaseEdition,
+                        diagramNumber,
+                        databaseMetadata: metadata,
+                    });
+
+                    await finalizeImportedDiagram(diagram);
+                    return;
+                }
+
+                const { diagram } = await importSchema({
+                    content: scriptResult,
+                    selectedDatabaseType: databaseType,
+                    resolvedSourceDialect: nextResolvedSourceDialect,
+                    databaseEdition,
+                    diagramNumber,
+                });
+
+                await finalizeImportedDiagram(diagram);
+            } catch (error: unknown) {
+                const message =
+                    error instanceof ImportSchemaResolutionError
+                        ? error.message
+                        : t(
+                              'new_diagram_dialog.import_schema.errors.import_failed'
+                          );
+                setImportError(message);
+            } finally {
+                setIsImporting(false);
+            }
+        },
+        [
+            scriptResult,
+            databaseType,
+            databaseEdition,
+            diagramNumber,
+            finalizeImportedDiagram,
+            t,
         ]
     );
 
@@ -276,44 +333,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         entryCreateDiagramActions,
     ]);
 
-    const importNewDiagramOrFilterTables = useCallback(async () => {
-        try {
-            setIsParsingMetadata(true);
-
-            if (importMethod === 'ddl' || importMethod === 'dbml') {
-                await importNewDiagram();
-            } else {
-                const metadata = await new Promise<DatabaseMetadata>(
-                    (resolve, reject) => {
-                        setTimeout(() => {
-                            try {
-                                const result =
-                                    loadDatabaseMetadata(scriptResult);
-                                resolve(result);
-                            } catch (err) {
-                                reject(err);
-                            }
-                        }, 0);
-                    }
-                );
-
-                const totalTablesAndViews =
-                    metadata.tables.length + (metadata.views?.length || 0);
-
-                setParsedMetadata(metadata);
-
-                if (totalTablesAndViews > MAX_TABLES_WITHOUT_SHOWING_FILTER) {
-                    setStep(CreateDiagramDialogStep.SELECT_TABLES);
-                } else {
-                    await importNewDiagram({
-                        databaseMetadata: metadata,
-                    });
-                }
-            }
-        } finally {
-            setIsParsingMetadata(false);
-        }
-    }, [importMethod, scriptResult, importNewDiagram]);
+    const handleImportBack = useCallback(() => {
+        setScriptResult('');
+        setImportError(null);
+        setResolvedSourceDialect(undefined);
+        setStep(CreateDiagramDialogStep.CHOOSE_INTENT);
+    }, []);
 
     return (
         <Dialog
@@ -364,24 +389,19 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         }
                     />
                 ) : step === CreateDiagramDialogStep.IMPORT_DATABASE ? (
-                    <ImportDatabase
-                        onImport={importNewDiagramOrFilterTables}
-                        databaseEdition={databaseEdition}
+                    <ImportSchemaStep
                         databaseType={databaseType}
+                        setDatabaseType={setDatabaseType}
                         scriptResult={scriptResult}
-                        setDatabaseEdition={setDatabaseEdition}
-                        goBack={() =>
-                            setStep(CreateDiagramDialogStep.CHOOSE_INTENT)
-                        }
                         setScriptResult={setScriptResult}
-                        title={t('new_diagram_dialog.import_database.title')}
-                        importMethod={importMethod}
-                        setImportMethod={setImportMethod}
-                        keepDialogAfterImport={true}
+                        onContinue={handleImportSchemaContinue}
+                        onBack={handleImportBack}
+                        importError={importError}
+                        isImporting={isImporting}
                     />
                 ) : step === CreateDiagramDialogStep.SELECT_TABLES ? (
                     <SelectTables
-                        isLoading={isParsingMetadata || !parsedMetadata}
+                        isLoading={isImporting || !parsedMetadata}
                         databaseMetadata={parsedMetadata}
                         onImport={importNewDiagram}
                         onBack={() =>

@@ -716,6 +716,54 @@ export const gu: LanguageTranslation = {
                 back: 'પાછા',
             },
 
+            import_schema: {
+                title: 'તમારું સ્કીમા પેસ્ટ કરો',
+                textarea_label: 'સ્કીમા સામગ્રી',
+                textarea_placeholder:
+                    'અહીં SQL, DBML અથવા JSON મેટાડેટા પેસ્ટ કરો…',
+                auto_detect_hint: 'અમે ફોર્મેટ આપમેળે શોધીશું.',
+                or_divider: 'અથવા',
+                choose_file: 'ફાઇલ પસંદ કરો',
+                selected_file: 'પસંદ કરેલી ફાઇલ: {{name}}',
+                back: 'પાછા',
+                continue: 'ચાલુ રાખો',
+                mismatch: {
+                    title: 'આ સ્કીમા {{detected}} જેવું લાગે છે, પરંતુ તમે {{selected}} પસંદ કર્યું છે.',
+                    description:
+                        'શોધાયેલ ડેટાબેસ પ્રકાર પર સ્વિચ કરો અથવા બીજું પસંદ કરવા પાછા જાઓ.',
+                    switch: '{{database}} પર સ્વિચ કરો',
+                    go_back: 'પાછા',
+                },
+                ambiguous: {
+                    title: 'સ્ત્રોત ડેટાબેસ પસંદ કરો',
+                    description:
+                        'SQL બોલી આપમેળે ઓળખાઈ શકી નહીં. આ સ્કીમા કયા ડેટાબેસમાંથી આવ્યું છે તે પુષ્ટિ કરો.',
+                    choose_source: 'સ્ત્રોત ડેટાબેસ પસંદ કરો',
+                },
+                detection: {
+                    dialect: '{{database}} શોધાયું',
+                    dbml: 'DBML શોધાયું',
+                    metadata_json: 'મેટાડેટા JSON શોધાયું',
+                    diagram_json: 'ડાયાગ્રામ JSON શોધાયું',
+                    sql_ambiguous_title: 'SQL શોધાયું',
+                    sql_ambiguous_description: 'ડેટાબેઝ ઓળખી શકાયું નહીં.',
+                    clickhouse_unsupported: 'ClickHouse SQL શોધાયું',
+                    unsupported: 'અસમર્થિત ફોર્મેટ',
+                },
+                errors: {
+                    unreadable_file: 'પસંદ કરેલી ફાઇલ વાંચી શકાઈ નહીં.',
+                    malformed_json: 'JSON સામગ્રી પાર્સ કરી શકાઈ નહીં.',
+                    unsupported: 'સ્કીમા આયાત માટે આ ફોર્મેટ સમર્થિત નથી.',
+                    diagram_json:
+                        'ડાયાગ્રામ JSON ને ડાયાગ્રામ ફાઇલ વિકલ્પથી આયાત કરી શકાય છે.',
+                    clickhouse_unsupported:
+                        'ClickHouse માટે SQL DDL આયાત સમર્થિત નથી. DBML વાપરો અથવા હાલની ડેટાબેસમાંથી આયાત કરો.',
+                    file_too_large: 'પસંદ કરેલી ફાઇલ 5 MB કરતાં મોટી છે.',
+                    import_failed:
+                        'સ્કીમા આયાત થઈ શક્યું નહીં. સામગ્રી તપાસીને ફરી પ્રયાસ કરો.',
+                },
+            },
+
             import_database: {
                 title: 'તમારું ડેટાબેસ આયાત કરો',
                 database_edition: 'ડેટાબેસ આવૃત્તિ:',

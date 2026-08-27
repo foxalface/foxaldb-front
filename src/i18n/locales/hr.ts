@@ -720,6 +720,56 @@ export const hr: LanguageTranslation = {
                 back: 'Natrag',
             },
 
+            import_schema: {
+                title: 'Zalijepite svoju shemu',
+                textarea_label: 'Sadržaj sheme',
+                textarea_placeholder:
+                    'Ovdje zalijepite SQL, DBML ili JSON metapodatke…',
+                auto_detect_hint: 'Format ćemo automatski prepoznati.',
+                or_divider: 'ILI',
+                choose_file: 'Odaberi datoteku',
+                selected_file: 'Odabrana datoteka: {{name}}',
+                back: 'Natrag',
+                continue: 'Nastavi',
+                mismatch: {
+                    title: 'Ova shema izgleda kao {{detected}}, ali ste odabrali {{selected}}.',
+                    description:
+                        'Prebacite se na otkriveni tip baze ili se vratite da odaberete drugi.',
+                    switch: 'Prebaci na {{database}}',
+                    go_back: 'Natrag',
+                },
+                ambiguous: {
+                    title: 'Odaberite izvornu bazu',
+                    description:
+                        'SQL dijalekt nije mogao biti automatski prepoznat. Potvrdite iz koje baze dolazi ova shema.',
+                    choose_source: 'Odaberi izvornu bazu',
+                },
+                detection: {
+                    dialect: '{{database}} prepoznat',
+                    dbml: 'DBML prepoznat',
+                    metadata_json: 'JSON metapodataka prepoznat',
+                    diagram_json: 'JSON dijagrama prepoznat',
+                    sql_ambiguous_title: 'SQL prepoznat',
+                    sql_ambiguous_description:
+                        'Baza podataka nije mogla biti identificirana.',
+                    clickhouse_unsupported: 'Prepoznat je ClickHouse SQL',
+                    unsupported: 'Nepodržani format',
+                },
+                errors: {
+                    unreadable_file:
+                        'Odabrana datoteka nije mogla biti pročitana.',
+                    malformed_json: 'JSON sadržaj nije mogao biti parsiran.',
+                    unsupported: 'Ovaj format nije podržan za uvoz sheme.',
+                    diagram_json:
+                        'JSON dijagrama može se uvesti putem opcije datoteke dijagrama.',
+                    clickhouse_unsupported:
+                        'SQL DDL uvoz nije podržan za ClickHouse. Koristite DBML ili uvezite iz postojeće baze.',
+                    file_too_large: 'Odabrana datoteka je veća od 5 MB.',
+                    import_failed:
+                        'Shemu nije bilo moguće uvesti. Provjerite sadržaj i pokušajte ponovno.',
+                },
+            },
+
             import_database: {
                 title: 'Uvezite svoju bazu podataka',
                 database_edition: 'Verzija baze podataka:',

@@ -726,6 +726,56 @@ export const ja: LanguageTranslation = {
                 back: '戻る',
             },
 
+            import_schema: {
+                title: 'スキーマを貼り付け',
+                textarea_label: 'スキーマの内容',
+                textarea_placeholder:
+                    'ここに SQL、DBML、または JSON メタデータを貼り付け…',
+                auto_detect_hint: '形式は自動的に検出されます。',
+                or_divider: 'または',
+                choose_file: 'ファイルを選択',
+                selected_file: '選択したファイル: {{name}}',
+                back: '戻る',
+                continue: '続行',
+                mismatch: {
+                    title: 'このスキーマは {{detected}} のようですが、{{selected}} を選択しています。',
+                    description:
+                        '検出されたデータベース種別に切り替えるか、戻って別のものを選んでください。',
+                    switch: '{{database}} に切り替え',
+                    go_back: '戻る',
+                },
+                ambiguous: {
+                    title: 'ソースデータベースを選択',
+                    description:
+                        'SQL 方言を自動的に特定できませんでした。このスキーマの元データベースを確認してください。',
+                    choose_source: 'ソースデータベースを選択',
+                },
+                detection: {
+                    dialect: '{{database}} を検出',
+                    dbml: 'DBML を検出',
+                    metadata_json: 'メタデータ JSON を検出',
+                    diagram_json: 'ダイアグラム JSON を検出',
+                    sql_ambiguous_title: 'SQL を検出',
+                    sql_ambiguous_description:
+                        'データベースを特定できませんでした。',
+                    clickhouse_unsupported: 'ClickHouse SQL を検出',
+                    unsupported: 'サポートされていない形式',
+                },
+                errors: {
+                    unreadable_file: '選択したファイルを読み取れませんでした。',
+                    malformed_json: 'JSON コンテンツを解析できませんでした。',
+                    unsupported:
+                        'この形式はスキーマのインポートに対応していません。',
+                    diagram_json:
+                        'ダイアグラム JSON はダイアグラムファイルのオプションからインポートできます。',
+                    clickhouse_unsupported:
+                        'ClickHouse では SQL DDL のインポートはサポートされていません。DBML を使うか、既存のデータベースからインポートしてください。',
+                    file_too_large: '選択したファイルは 5 MB を超えています。',
+                    import_failed:
+                        'スキーマをインポートできませんでした。内容を確認して再試行してください。',
+                },
+            },
+
             import_database: {
                 title: 'データベースをインポート',
                 database_edition: 'データベースエディション:',

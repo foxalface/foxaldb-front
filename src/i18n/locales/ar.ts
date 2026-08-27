@@ -710,6 +710,54 @@ export const ar: LanguageTranslation = {
                 back: 'رجوع',
             },
 
+            import_schema: {
+                title: 'الصق المخطط الخاص بك',
+                textarea_label: 'محتوى المخطط',
+                textarea_placeholder:
+                    'الصق SQL أو DBML أو بيانات JSON الوصفية هنا…',
+                auto_detect_hint: 'سنكتشف التنسيق تلقائيًا.',
+                or_divider: 'أو',
+                choose_file: 'اختر ملفًا',
+                selected_file: 'الملف المحدد: {{name}}',
+                back: 'رجوع',
+                continue: 'متابعة',
+                mismatch: {
+                    title: 'يبدو أن هذا المخطط من نوع {{detected}}، لكنك اخترت {{selected}}.',
+                    description:
+                        'انتقل إلى نوع قاعدة البيانات المكتشف أو ارجع لاختيار نوع آخر.',
+                    switch: 'التبديل إلى {{database}}',
+                    go_back: 'رجوع',
+                },
+                ambiguous: {
+                    title: 'اختر قاعدة البيانات المصدر',
+                    description:
+                        'تعذر تحديد لهجة SQL تلقائيًا. أكد قاعدة البيانات التي جاء منها هذا المخطط.',
+                    choose_source: 'اختر قاعدة البيانات المصدر',
+                },
+                detection: {
+                    dialect: 'تم اكتشاف {{database}}',
+                    dbml: 'تم اكتشاف DBML',
+                    metadata_json: 'تم اكتشاف بيانات JSON الوصفية',
+                    diagram_json: 'تم اكتشاف JSON للمخطط',
+                    sql_ambiguous_title: 'تم اكتشاف SQL',
+                    sql_ambiguous_description: 'تعذر تحديد قاعدة البيانات.',
+                    clickhouse_unsupported: 'تم اكتشاف SQL لـ ClickHouse',
+                    unsupported: 'تنسيق غير مدعوم',
+                },
+                errors: {
+                    unreadable_file: 'تعذر قراءة الملف المحدد.',
+                    malformed_json: 'تعذر تحليل محتوى JSON.',
+                    unsupported: 'هذا التنسيق غير مدعوم لاستيراد المخطط.',
+                    diagram_json:
+                        'يمكن استيراد JSON للمخطط من خيار ملف المخطط بدلاً من ذلك.',
+                    clickhouse_unsupported:
+                        'استيراد DDL SQL غير مدعوم لـ ClickHouse. استخدم DBML أو استورد من قاعدة بيانات موجودة.',
+                    file_too_large: 'الملف المحدد أكبر من 5 ميغابايت.',
+                    import_failed:
+                        'تعذر استيراد المخطط. تحقق من المحتوى وحاول مرة أخرى.',
+                },
+            },
+
             import_database: {
                 title: 'إسترد قاعدة بياناتك',
                 database_edition: ':إصدار قاعدة البيانات',

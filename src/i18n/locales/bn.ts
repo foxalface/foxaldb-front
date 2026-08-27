@@ -722,6 +722,54 @@ export const bn: LanguageTranslation = {
                 back: 'পিছনে',
             },
 
+            import_schema: {
+                title: 'আপনার স্কিমা পেস্ট করুন',
+                textarea_label: 'স্কিমার বিষয়বস্তু',
+                textarea_placeholder:
+                    'এখানে SQL, DBML বা JSON মেটাডেটা পেস্ট করুন…',
+                auto_detect_hint: 'আমরা স্বয়ংক্রিয়ভাবে ফরম্যাট শনাক্ত করব।',
+                or_divider: 'অথবা',
+                choose_file: 'একটি ফাইল বেছে নিন',
+                selected_file: 'নির্বাচিত ফাইল: {{name}}',
+                back: 'পিছনে',
+                continue: 'চালিয়ে যান',
+                mismatch: {
+                    title: 'এই স্কিমা {{detected}}-এর মতো দেখাচ্ছে, কিন্তু আপনি {{selected}} নির্বাচন করেছেন।',
+                    description:
+                        'শনাক্ত করা ডাটাবেসে পরিবর্তন করুন অথবা অন্য একটি বেছে নিতে ফিরে যান।',
+                    switch: '{{database}}-এ পরিবর্তন করুন',
+                    go_back: 'পিছনে',
+                },
+                ambiguous: {
+                    title: 'উৎস ডাটাবেস বেছে নিন',
+                    description:
+                        'SQL ডায়ালেক্ট স্বয়ংক্রিয়ভাবে শনাক্ত করা যায়নি। এই স্কিমা কোন ডাটাবেস থেকে এসেছে তা নিশ্চিত করুন।',
+                    choose_source: 'উৎস ডাটাবেস বেছে নিন',
+                },
+                detection: {
+                    dialect: '{{database}} শনাক্ত হয়েছে',
+                    dbml: 'DBML শনাক্ত হয়েছে',
+                    metadata_json: 'মেটাডেটা JSON শনাক্ত হয়েছে',
+                    diagram_json: 'ডায়াগ্রাম JSON শনাক্ত হয়েছে',
+                    sql_ambiguous_title: 'SQL শনাক্ত হয়েছে',
+                    sql_ambiguous_description: 'ডাটাবেস শনাক্ত করা যায়নি।',
+                    clickhouse_unsupported: 'ClickHouse SQL শনাক্ত হয়েছে',
+                    unsupported: 'অসমর্থিত ফরম্যাট',
+                },
+                errors: {
+                    unreadable_file: 'নির্বাচিত ফাইল পড়া যায়নি।',
+                    malformed_json: 'JSON বিষয়বস্তু পার্স করা যায়নি।',
+                    unsupported: 'স্কিমা আমদানির জন্য এই ফরম্যাট সমর্থিত নয়।',
+                    diagram_json:
+                        'ডায়াগ্রাম JSON পরিবর্তে ডায়াগ্রাম ফাইল বিকল্প থেকে আমদানি করা যায়।',
+                    clickhouse_unsupported:
+                        'ClickHouse-এর জন্য SQL DDL আমদানি সমর্থিত নয়। DBML ব্যবহার করুন বা বিদ্যমান ডাটাবেস থেকে আমদানি করুন।',
+                    file_too_large: 'নির্বাচিত ফাইল ৫ MB-এর বেশি।',
+                    import_failed:
+                        'স্কিমা আমদানি করা যায়নি। বিষয়বস্তু পরীক্ষা করে আবার চেষ্টা করুন।',
+                },
+            },
+
             import_database: {
                 title: 'আপনার ডাটাবেস আমদানি করুন',
                 database_edition: 'ডাটাবেস সংস্করণ:',

@@ -686,6 +686,50 @@ export const zh_TW: LanguageTranslation = {
                 back: '返回',
             },
 
+            import_schema: {
+                title: '貼上您的結構描述',
+                textarea_label: '結構描述內容',
+                textarea_placeholder: '在此貼上 SQL、DBML 或 JSON 中繼資料…',
+                auto_detect_hint: '我們會自動偵測格式。',
+                or_divider: '或',
+                choose_file: '選擇檔案',
+                selected_file: '已選檔案：{{name}}',
+                back: '返回',
+                continue: '繼續',
+                mismatch: {
+                    title: '此結構描述看起來像 {{detected}}，但您選擇了 {{selected}}。',
+                    description: '切換到偵測到的資料庫類型，或返回重新選擇。',
+                    switch: '切換到 {{database}}',
+                    go_back: '返回',
+                },
+                ambiguous: {
+                    title: '選擇來源資料庫',
+                    description:
+                        '無法自動識別 SQL 方言。請確認此結構描述來自哪個資料庫。',
+                    choose_source: '選擇來源資料庫',
+                },
+                detection: {
+                    dialect: '已偵測到 {{database}}',
+                    dbml: '已偵測到 DBML',
+                    metadata_json: '已偵測到中繼資料 JSON',
+                    diagram_json: '已偵測到圖表 JSON',
+                    sql_ambiguous_title: '已偵測到 SQL',
+                    sql_ambiguous_description: '無法識別資料庫。',
+                    clickhouse_unsupported: '已偵測到 ClickHouse SQL',
+                    unsupported: '不支援的格式',
+                },
+                errors: {
+                    unreadable_file: '無法讀取所選檔案。',
+                    malformed_json: '無法解析 JSON 內容。',
+                    unsupported: '此格式不支援結構描述匯入。',
+                    diagram_json: '圖表 JSON 可透過圖表檔案選項匯入。',
+                    clickhouse_unsupported:
+                        'ClickHouse 不支援 SQL DDL 匯入。請使用 DBML 或從現有資料庫匯入。',
+                    file_too_large: '所選檔案大於 5 MB。',
+                    import_failed: '無法匯入結構描述。請檢查內容後再試一次。',
+                },
+            },
+
             import_database: {
                 title: '匯入資料庫',
                 database_edition: '資料庫版本:',

@@ -723,6 +723,55 @@ export const hi: LanguageTranslation = {
                 back: 'वापस',
             },
 
+            import_schema: {
+                title: 'अपना स्कीमा पेस्ट करें',
+                textarea_label: 'स्कीमा सामग्री',
+                textarea_placeholder:
+                    'यहाँ SQL, DBML या JSON मेटाडेटा पेस्ट करें…',
+                auto_detect_hint: 'हम प्रारूप को स्वचालित रूप से पहचानेंगे।',
+                or_divider: 'या',
+                choose_file: 'फ़ाइल चुनें',
+                selected_file: 'चयनित फ़ाइल: {{name}}',
+                back: 'वापस',
+                continue: 'जारी रखें',
+                mismatch: {
+                    title: 'यह स्कीमा {{detected}} जैसा लगता है, लेकिन आपने {{selected}} चुना है।',
+                    description:
+                        'पहचाने गए डेटाबेस प्रकार पर स्विच करें या दूसरा चुनने के लिए वापस जाएं।',
+                    switch: '{{database}} पर स्विच करें',
+                    go_back: 'वापस',
+                },
+                ambiguous: {
+                    title: 'स्रोत डेटाबेस चुनें',
+                    description:
+                        'SQL बोली स्वचालित रूप से पहचानी नहीं जा सकी। पुष्टि करें कि यह स्कीमा किस डेटाबेस से आया है।',
+                    choose_source: 'स्रोत डेटाबेस चुनें',
+                },
+                detection: {
+                    dialect: '{{database}} का पता चला',
+                    dbml: 'DBML का पता चला',
+                    metadata_json: 'मेटाडेटा JSON का पता चला',
+                    diagram_json: 'डायग्राम JSON का पता चला',
+                    sql_ambiguous_title: 'SQL का पता चला',
+                    sql_ambiguous_description: 'डेटाबेस की पहचान नहीं हो सकी।',
+                    clickhouse_unsupported: 'ClickHouse SQL का पता चला',
+                    unsupported: 'असमर्थित प्रारूप',
+                },
+                errors: {
+                    unreadable_file: 'चयनित फ़ाइल पढ़ी नहीं जा सकी।',
+                    malformed_json: 'JSON सामग्री पार्स नहीं की जा सकी।',
+                    unsupported:
+                        'स्कीमा आयात के लिए यह प्रारूप समर्थित नहीं है।',
+                    diagram_json:
+                        'डायग्राम JSON को डायग्राम फ़ाइल विकल्प से आयात किया जा सकता है।',
+                    clickhouse_unsupported:
+                        'ClickHouse के लिए SQL DDL आयात समर्थित नहीं है। DBML का उपयोग करें या मौजूदा डेटाबेस से आयात करें।',
+                    file_too_large: 'चयनित फ़ाइल 5 MB से बड़ी है।',
+                    import_failed:
+                        'स्कीमा आयात नहीं हो सका। सामग्री जांचें और पुनः प्रयास करें।',
+                },
+            },
+
             import_database: {
                 title: 'अपना डेटाबेस आयात करें',
                 database_edition: 'डेटाबेस संस्करण:',

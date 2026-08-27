@@ -723,6 +723,54 @@ export const te: LanguageTranslation = {
                 back: 'వెనక్కి',
             },
 
+            import_schema: {
+                title: 'మీ స్కీమాను అతికించండి',
+                textarea_label: 'స్కీమా కంటెంట్',
+                textarea_placeholder:
+                    'ఇక్కడ SQL, DBML లేదా JSON మెటాడేటాను అతికించండి…',
+                auto_detect_hint: 'మేము ఫార్మాట్‌ను స్వయంచాలకంగా గుర్తిస్తాము.',
+                or_divider: 'లేదా',
+                choose_file: 'ఫైల్ ఎంచుకోండి',
+                selected_file: 'ఎంచుకున్న ఫైల్: {{name}}',
+                back: 'వెనక్కి',
+                continue: 'కొనసాగించు',
+                mismatch: {
+                    title: 'ఈ స్కీమా {{detected}} లాగా కనిపిస్తోంది, కానీ మీరు {{selected}} ఎంచుకున్నారు.',
+                    description:
+                        'గుర్తించిన డేటాబేస్ రకానికి మారండి లేదా మరొకదాన్ని ఎంచుకోవడానికి వెనక్కి వెళ్లండి.',
+                    switch: '{{database}} కు మారండి',
+                    go_back: 'వెనక్కి',
+                },
+                ambiguous: {
+                    title: 'మూల డేటాబేస్ ఎంచుకోండి',
+                    description:
+                        'SQL భాషా విభాగాన్ని స్వయంచాలకంగా గుర్తించలేకపోయాము. ఈ స్కీమా ఏ డేటాబేస్ నుండి వచ్చిందో నిర్ధారించండి.',
+                    choose_source: 'మూల డేటాబేస్ ఎంచుకోండి',
+                },
+                detection: {
+                    dialect: '{{database}} గుర్తించబడింది',
+                    dbml: 'DBML గుర్తించబడింది',
+                    metadata_json: 'మెటాడేటా JSON గుర్తించబడింది',
+                    diagram_json: 'డయాగ్రామ్ JSON గుర్తించబడింది',
+                    sql_ambiguous_title: 'SQL గుర్తించబడింది',
+                    sql_ambiguous_description: 'డేటాబేస్ గుర్తించబడలేదు.',
+                    clickhouse_unsupported: 'ClickHouse SQL గుర్తించబడింది',
+                    unsupported: 'మద్దతు లేని ఫార్మాట్',
+                },
+                errors: {
+                    unreadable_file: 'ఎంచుకున్న ఫైల్ చదవలేకపోయాము.',
+                    malformed_json: 'JSON కంటెంట్‌ను పార్స్ చేయలేకపోయాము.',
+                    unsupported: 'స్కీమా దిగుమతికి ఈ ఫార్మాట్ మద్దతు లేదు.',
+                    diagram_json:
+                        'డయాగ్రామ్ JSONను డయాగ్రామ్ ఫైల్ ఎంపిక నుండి దిగుమతి చేయవచ్చు.',
+                    clickhouse_unsupported:
+                        'ClickHouse కోసం SQL DDL దిగుమతి మద్దతు లేదు. DBML ఉపయోగించండి లేదా ఇప్పటికే ఉన్న డేటాబేస్ నుండి దిగుమతి చేయండి.',
+                    file_too_large: 'ఎంచుకున్న ఫైల్ 5 MB కంటే పెద్దది.',
+                    import_failed:
+                        'స్కీమాను దిగుమతి చేయలేకపోయాము. కంటెంట్ తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+                },
+            },
+
             import_database: {
                 title: 'మీ డేటాబేస్‌ను దిగుమతి చేసుకోండి',
                 database_edition: 'డేటాబేస్ ఎడిషన్:',

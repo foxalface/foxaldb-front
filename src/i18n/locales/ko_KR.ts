@@ -720,6 +720,56 @@ export const ko_KR: LanguageTranslation = {
                 back: '뒤로',
             },
 
+            import_schema: {
+                title: '스키마 붙여넣기',
+                textarea_label: '스키마 내용',
+                textarea_placeholder:
+                    '여기에 SQL, DBML 또는 JSON 메타데이터를 붙여넣으세요…',
+                auto_detect_hint: '형식을 자동으로 감지합니다.',
+                or_divider: '또는',
+                choose_file: '파일 선택',
+                selected_file: '선택한 파일: {{name}}',
+                back: '뒤로',
+                continue: '계속',
+                mismatch: {
+                    title: '이 스키마는 {{detected}}처럼 보이지만 {{selected}}를 선택했습니다.',
+                    description:
+                        '감지된 데이터베이스 유형으로 전환하거나 돌아가 다른 유형을 선택하세요.',
+                    switch: '{{database}}(으)로 전환',
+                    go_back: '뒤로',
+                },
+                ambiguous: {
+                    title: '소스 데이터베이스 선택',
+                    description:
+                        'SQL 방언을 자동으로 식별할 수 없습니다. 이 스키마가 어떤 데이터베이스에서 왔는지 확인하세요.',
+                    choose_source: '소스 데이터베이스 선택',
+                },
+                detection: {
+                    dialect: '{{database}} 감지됨',
+                    dbml: 'DBML 감지됨',
+                    metadata_json: '메타데이터 JSON 감지됨',
+                    diagram_json: '다이어그램 JSON 감지됨',
+                    sql_ambiguous_title: 'SQL 감지됨',
+                    sql_ambiguous_description:
+                        '데이터베이스를 식별할 수 없습니다.',
+                    clickhouse_unsupported: 'ClickHouse SQL 감지됨',
+                    unsupported: '지원되지 않는 형식',
+                },
+                errors: {
+                    unreadable_file: '선택한 파일을 읽을 수 없습니다.',
+                    malformed_json: 'JSON 내용을 구문 분석할 수 없습니다.',
+                    unsupported:
+                        '이 형식은 스키마 가져오기를 지원하지 않습니다.',
+                    diagram_json:
+                        '다이어그램 JSON은 다이어그램 파일 옵션에서 가져올 수 있습니다.',
+                    clickhouse_unsupported:
+                        'ClickHouse에서는 SQL DDL 가져오기가 지원되지 않습니다. DBML을 사용하거나 기존 데이터베이스에서 가져오세요.',
+                    file_too_large: '선택한 파일이 5MB를 초과합니다.',
+                    import_failed:
+                        '스키마를 가져올 수 없습니다. 내용을 확인하고 다시 시도하세요.',
+                },
+            },
+
             import_database: {
                 title: '당신의 데이터베이스를 가져오세요',
                 database_edition: '데이터베이스 세부 종류:',

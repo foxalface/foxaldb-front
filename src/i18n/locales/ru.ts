@@ -723,6 +723,56 @@ export const ru: LanguageTranslation = {
                 back: 'Назад',
             },
 
+            import_schema: {
+                title: 'Вставьте схему',
+                textarea_label: 'Содержимое схемы',
+                textarea_placeholder:
+                    'Вставьте SQL, DBML или JSON-метаданные сюда…',
+                auto_detect_hint: 'Мы автоматически определим формат.',
+                or_divider: 'ИЛИ',
+                choose_file: 'Выбрать файл',
+                selected_file: 'Выбранный файл: {{name}}',
+                back: 'Назад',
+                continue: 'Продолжить',
+                mismatch: {
+                    title: 'Эта схема похожа на {{detected}}, но вы выбрали {{selected}}.',
+                    description:
+                        'Переключитесь на обнаруженный тип базы данных или вернитесь, чтобы выбрать другой.',
+                    switch: 'Переключиться на {{database}}',
+                    go_back: 'Назад',
+                },
+                ambiguous: {
+                    title: 'Выберите исходную базу данных',
+                    description:
+                        'Не удалось автоматически определить диалект SQL. Подтвердите, из какой базы данных пришла эта схема.',
+                    choose_source: 'Выбрать исходную базу данных',
+                },
+                detection: {
+                    dialect: 'Обнаружен {{database}}',
+                    dbml: 'Обнаружен DBML',
+                    metadata_json: 'Обнаружены метаданные JSON',
+                    diagram_json: 'Обнаружен JSON диаграммы',
+                    sql_ambiguous_title: 'Обнаружен SQL',
+                    sql_ambiguous_description:
+                        'Не удалось определить базу данных.',
+                    clickhouse_unsupported: 'Обнаружен SQL ClickHouse',
+                    unsupported: 'Неподдерживаемый формат',
+                },
+                errors: {
+                    unreadable_file: 'Не удалось прочитать выбранный файл.',
+                    malformed_json: 'Не удалось разобрать содержимое JSON.',
+                    unsupported:
+                        'Этот формат не поддерживается для импорта схемы.',
+                    diagram_json:
+                        'JSON диаграммы можно импортировать через опцию файла диаграммы.',
+                    clickhouse_unsupported:
+                        'Импорт SQL DDL не поддерживается для ClickHouse. Используйте DBML или импортируйте из существующей базы данных.',
+                    file_too_large: 'Выбранный файл больше 5 МБ.',
+                    import_failed:
+                        'Не удалось импортировать схему. Проверьте содержимое и попробуйте снова.',
+                },
+            },
+
             import_database: {
                 title: 'Импортируйте свою базу данных',
                 database_edition: 'Версия базы данных:',

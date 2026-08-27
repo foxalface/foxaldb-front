@@ -81,15 +81,15 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
-const importDatabasePropsSpy = vi.fn();
+const importSchemaPropsSpy = vi.fn();
 
-vi.mock('../../common/import-database/import-database', () => ({
-    ImportDatabase: (props: Record<string, unknown>) => {
-        importDatabasePropsSpy(props);
+vi.mock('../import-schema/import-schema-step', () => ({
+    ImportSchemaStep: (props: Record<string, unknown>) => {
+        importSchemaPropsSpy(props);
 
         return (
-            <div data-testid="import-database">
-                <button type="button" onClick={props.goBack as () => void}>
+            <div data-testid="import-schema-step">
+                <button type="button" onClick={props.onBack as () => void}>
                     Import back
                 </button>
             </div>
@@ -107,7 +107,7 @@ describe('CreateDiagramDialog wizard flow', () => {
         navigate.mockClear();
         updateConfig.mockClear();
         loadDiagramFromData.mockClear();
-        importDatabasePropsSpy.mockClear();
+        importSchemaPropsSpy.mockClear();
     });
 
     it('advances to CHOOSE_INTENT when PostgreSQL is selected without persisting', async () => {
@@ -124,7 +124,9 @@ describe('CreateDiagramDialog wizard flow', () => {
         ).toBeInTheDocument();
         expect(addDiagram).not.toHaveBeenCalled();
         expect(createDiagram).not.toHaveBeenCalled();
-        expect(screen.queryByTestId('import-database')).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('import-schema-step')
+        ).not.toBeInTheDocument();
     });
 
     it('advances to CHOOSE_INTENT when MySQL is selected', async () => {
@@ -221,13 +223,8 @@ describe('CreateDiagramDialog wizard flow', () => {
             })
         );
 
-        expect(screen.getByTestId('import-database')).toBeInTheDocument();
-        expect(importDatabasePropsSpy).toHaveBeenCalled();
-        const latestProps = importDatabasePropsSpy.mock.calls.at(-1)?.[0] as {
-            onCreateEmptyDiagram?: unknown;
-            goBack: () => void;
-        };
-        expect(latestProps.onCreateEmptyDiagram).toBeUndefined();
+        expect(screen.getByTestId('import-schema-step')).toBeInTheDocument();
+        expect(importSchemaPropsSpy).toHaveBeenCalled();
     });
 
     it('returns from IMPORT_DATABASE to CHOOSE_INTENT', async () => {

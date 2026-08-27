@@ -713,6 +713,55 @@ export const tr: LanguageTranslation = {
                 back: 'Geri',
             },
 
+            import_schema: {
+                title: 'Şemanızı yapıştırın',
+                textarea_label: 'Şema içeriği',
+                textarea_placeholder:
+                    'SQL, DBML veya JSON meta verilerini buraya yapıştırın…',
+                auto_detect_hint: 'Formatı otomatik olarak algılayacağız.',
+                or_divider: 'VEYA',
+                choose_file: 'Dosya seç',
+                selected_file: 'Seçilen dosya: {{name}}',
+                back: 'Geri',
+                continue: 'Devam',
+                mismatch: {
+                    title: 'Bu şema {{detected}} gibi görünüyor, ancak {{selected}} seçtiniz.',
+                    description:
+                        'Algılanan veritabanı türüne geçin veya başka bir tür seçmek için geri dönün.',
+                    switch: '{{database}} veritabanına geç',
+                    go_back: 'Geri',
+                },
+                ambiguous: {
+                    title: 'Kaynak veritabanını seçin',
+                    description:
+                        'SQL lehçesi otomatik olarak tanımlanamadı. Bu şemanın hangi veritabanından geldiğini onaylayın.',
+                    choose_source: 'Kaynak veritabanını seç',
+                },
+                detection: {
+                    dialect: '{{database}} algılandı',
+                    dbml: 'DBML algılandı',
+                    metadata_json: 'Meta veri JSON algılandı',
+                    diagram_json: 'Diyagram JSON algılandı',
+                    sql_ambiguous_title: 'SQL algılandı',
+                    sql_ambiguous_description: 'Veritabanı tanımlanamadı.',
+                    clickhouse_unsupported: 'ClickHouse SQL algılandı',
+                    unsupported: 'Desteklenmeyen format',
+                },
+                errors: {
+                    unreadable_file: 'Seçilen dosya okunamadı.',
+                    malformed_json: 'JSON içeriği ayrıştırılamadı.',
+                    unsupported:
+                        'Bu format şema içe aktarma için desteklenmiyor.',
+                    diagram_json:
+                        'Diyagram JSON, diyagram dosyası seçeneğinden içe aktarılabilir.',
+                    clickhouse_unsupported:
+                        'ClickHouse için SQL DDL içe aktarma desteklenmiyor. DBML kullanın veya mevcut bir veritabanından içe aktarın.',
+                    file_too_large: "Seçilen dosya 5 MB'tan büyük.",
+                    import_failed:
+                        'Şema içe aktarılamadı. İçeriği kontrol edip tekrar deneyin.',
+                },
+            },
+
             import_database: {
                 title: 'Veritabanını İçe Aktar',
                 database_edition: 'Veritabanı Sürümü:',

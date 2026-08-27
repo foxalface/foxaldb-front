@@ -716,6 +716,55 @@ export const en = {
                 back: 'Back',
             },
 
+            import_schema: {
+                title: 'Paste your schema',
+                textarea_label: 'Schema content',
+                textarea_placeholder: 'Paste SQL, DBML, or JSON metadata here…',
+                auto_detect_hint: "We'll detect the format automatically.",
+                or_divider: 'OR',
+                choose_file: 'Choose a file',
+                selected_file: 'Selected file: {{name}}',
+                back: 'Back',
+                continue: 'Continue',
+                mismatch: {
+                    title: 'This schema looks like {{detected}}, but you selected {{selected}}.',
+                    description:
+                        'Switch to the detected database type or go back to choose a different one.',
+                    switch: 'Switch to {{database}}',
+                    go_back: 'Go back',
+                },
+                ambiguous: {
+                    title: 'Choose the source database',
+                    description:
+                        'We could not identify the SQL dialect automatically. Confirm which database this schema came from.',
+                    choose_source: 'Choose source database',
+                },
+                detection: {
+                    dialect: '{{database}} detected',
+                    dbml: 'DBML detected',
+                    metadata_json: 'Metadata JSON detected',
+                    diagram_json: 'Diagram JSON detected',
+                    sql_ambiguous_title: 'SQL detected',
+                    sql_ambiguous_description:
+                        'Database could not be identified.',
+                    unsupported: 'Unsupported format',
+                    clickhouse_unsupported: 'ClickHouse SQL detected',
+                },
+                errors: {
+                    unreadable_file: 'Could not read the selected file.',
+                    malformed_json: 'The JSON content could not be parsed.',
+                    unsupported:
+                        'This format is not supported for schema import.',
+                    diagram_json:
+                        'Diagram JSON can be imported from the diagram file option instead.',
+                    clickhouse_unsupported:
+                        'SQL DDL import is not supported for ClickHouse. Use DBML or import from an existing database instead.',
+                    file_too_large: 'The selected file is larger than 5 MB.',
+                    import_failed:
+                        'The schema could not be imported. Check the content and try again.',
+                },
+            },
+
             import_database: {
                 title: 'Import your Database',
                 database_edition: 'Database Edition:',
