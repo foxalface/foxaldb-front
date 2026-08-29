@@ -774,6 +774,8 @@ export const gu: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'સ્ત્રોત DBMS પસંદ કરો',
+                    confidence_explanation:
+                        'ટકાવારી દરેક DBMS માટે શોધાયેલ SQL બોલી સાથે સંગતિ સૂચક દર્શાવે છે.',
                     description:
                         'SQL બોલી આપમેળે ઓળખાઈ શકી નહીં. આ સ્કીમા કયા DBMS માંથી આવ્યું છે તે પુષ્ટિ કરો.',
                     choose_source: 'સ્ત્રોત DBMS પસંદ કરો',

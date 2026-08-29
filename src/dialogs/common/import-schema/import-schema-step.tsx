@@ -282,7 +282,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                         <span className="h-px flex-1 bg-border" aria-hidden />
                     </div>
 
-                    <div className="flex w-full flex-col items-center gap-2">
+                    <div className="mb-4 flex w-full flex-col items-center gap-2">
                         <input
                             ref={fileInputRef}
                             id={fileInputId}

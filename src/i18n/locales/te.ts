@@ -781,6 +781,8 @@ export const te: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'మూల DBMS ఎంచుకోండి',
+                    confidence_explanation:
+                        'శాతాలు ప్రతి DBMS కోసం గుర్తించిన SQL భాషా విభాగంతో సరిపోలిక సూచికను సూచిస్తాయి.',
                     description:
                         'SQL భాషా విభాగాన్ని స్వయంచాలకంగా గుర్తించలేకపోయాము. ఈ స్కీమా ఏ DBMS నుండి వచ్చిందో నిర్ధారించండి.',
                     choose_source: 'మూల DBMS ఎంచుకోండి',

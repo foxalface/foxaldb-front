@@ -771,6 +771,8 @@ export const tr: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Kaynak DBMS seçin',
+                    confidence_explanation:
+                        'Yüzdeler, her DBMS için algılanan SQL lehçesiyle eşleşme endeksini gösterir.',
                     description:
                         "SQL lehçesi otomatik olarak tanımlanamadı. Bu şemanın hangi DBMS'den geldiğini onaylayın.",
                     choose_source: 'Kaynak DBMS seç',

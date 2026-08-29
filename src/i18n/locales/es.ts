@@ -793,6 +793,8 @@ export const es: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Elija el SGBD de origen',
+                    confidence_explanation:
+                        'Los porcentajes indican el índice de coincidencia del dialecto SQL para cada SGBD.',
                     description:
                         'No pudimos identificar automáticamente el dialecto SQL. Confirme de qué SGBD proviene este esquema.',
                     choose_source: 'Elegir SGBD de origen',

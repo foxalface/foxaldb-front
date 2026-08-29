@@ -785,6 +785,8 @@ export const ja: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'ソース DBMS を選択',
+                    confidence_explanation:
+                        'パーセンテージは、各 DBMS の検出された SQL 方言との一致度を示します。',
                     description:
                         'SQL 方言を自動的に特定できませんでした。このスキーマの元 DBMS を確認してください。',
                     choose_source: 'ソース DBMS を選択',

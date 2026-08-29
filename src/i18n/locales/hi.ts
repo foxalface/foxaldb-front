@@ -781,6 +781,8 @@ export const hi: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'स्रोत DBMS चुनें',
+                    confidence_explanation:
+                        'प्रतिशत प्रत्येक DBMS के लिए पाए गए SQL बोली के मिलान सूचकांक को दर्शाते हैं।',
                     description:
                         'SQL बोली स्वचालित रूप से पहचानी नहीं जा सकी। पुष्टि करें कि यह स्कीमा किस DBMS से आया है।',
                     choose_source: 'स्रोत DBMS चुनें',

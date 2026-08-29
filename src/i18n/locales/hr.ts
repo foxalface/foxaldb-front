@@ -777,6 +777,8 @@ export const hr: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Odaberite izvorni DBMS',
+                    confidence_explanation:
+                        'Postoci označavaju indeks podudarnosti SQL dijalekta za svaki DBMS.',
                     description:
                         'SQL dijalekt nije mogao biti automatski prepoznat. Potvrdite iz kojeg DBMS-a dolazi ova shema.',
                     choose_source: 'Odaberi izvorni DBMS',

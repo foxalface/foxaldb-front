@@ -805,6 +805,8 @@ export const de: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Quell-DBMS wählen',
+                    confidence_explanation:
+                        'Die Prozentsätze geben den Übereinstimmungsindex mit dem erkannten SQL-Dialekt für jedes DBMS an.',
                     description:
                         'Der SQL-Dialekt konnte nicht automatisch erkannt werden. Bestätigen Sie, von welchem DBMS dieses Schema stammt.',
                     choose_source: 'Quell-DBMS wählen',

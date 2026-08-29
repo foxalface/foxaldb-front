@@ -780,6 +780,8 @@ export const bn: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'উৎস DBMS নির্বাচন করুন',
+                    confidence_explanation:
+                        'শতাংশ প্রতিটি DBMS-এর জন্য সনাক্ত SQL উপভাষার সাথে মিলের সূচক নির্দেশ করে।',
                     description:
                         'SQL উপভাষা স্বয়ংক্রিয়ভাবে শনাক্ত করা যায়নি। নিশ্চিত করুন এই স্কিমা কোন DBMS থেকে এসেছে।',
                     choose_source: 'উৎস DBMS নির্বাচন করুন',

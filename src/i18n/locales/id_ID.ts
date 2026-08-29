@@ -784,6 +784,8 @@ export const id_ID: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Pilih DBMS sumber',
+                    confidence_explanation:
+                        'Persentase menunjukkan indeks kecocokan dialek SQL untuk setiap DBMS.',
                     description:
                         'Dialek SQL tidak dapat diidentifikasi secara otomatis. Konfirmasikan DBMS asal skema ini.',
                     choose_source: 'Pilih DBMS sumber',

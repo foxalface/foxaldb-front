@@ -781,6 +781,8 @@ export const mr: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'स्रोत DBMS निवडा',
+                    confidence_explanation:
+                        'टक्केवारी प्रत्येक DBMS साठी आढळलेल्या SQL बोलीच्या जुळणी निर्देशकाचे प्रतिनिधित्व करते.',
                     description:
                         'SQL बोली आपोआप ओळखता आली नाही. हे स्कीमा कोणत्या DBMS मधून आले ते निश्चित करा.',
                     choose_source: 'स्रोत DBMS निवडा',

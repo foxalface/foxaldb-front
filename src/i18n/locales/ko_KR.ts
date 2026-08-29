@@ -777,6 +777,8 @@ export const ko_KR: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: '소스 DBMS 선택',
+                    confidence_explanation:
+                        '백분율은 각 DBMS에 대한 SQL 방언 일치 지수를 나타냅니다.',
                     description:
                         'SQL 방언을 자동으로 식별할 수 없습니다. 이 스키마가 어떤 DBMS에서 왔는지 확인하세요.',
                     choose_source: '소스 DBMS 선택',

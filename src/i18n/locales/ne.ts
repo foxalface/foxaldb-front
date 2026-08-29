@@ -785,6 +785,8 @@ export const ne: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'स्रोत DBMS छान्नुहोस्',
+                    confidence_explanation:
+                        'प्रतिशतले प्रत्येक DBMS का लागि पत्ता लागेको SQL बोलीको मिलान सूचकाङ्क जनाउँछ।',
                     description:
                         'SQL बोली स्वचालित रूपमा पहिचान गर्न सकिएन। यो स्किमा कुन DBMS बाट आएको हो पुष्टि गर्नुहोस्।',
                     choose_source: 'स्रोत DBMS छान्नुहोस्',

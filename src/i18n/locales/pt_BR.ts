@@ -791,6 +791,8 @@ export const pt_BR: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Escolha o SGBD de origem',
+                    confidence_explanation:
+                        'As porcentagens indicam o índice de correspondência do dialeto SQL para cada SGBD.',
                     description:
                         'Não foi possível identificar automaticamente o dialeto SQL. Confirme de qual SGBD este esquema veio.',
                     choose_source: 'Escolher SGBD de origem',

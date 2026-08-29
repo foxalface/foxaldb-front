@@ -772,6 +772,8 @@ export const en = {
                 },
                 ambiguous: {
                     title: 'Choose the source DBMS',
+                    confidence_explanation:
+                        'Percentages indicate the dialect match score for each DBMS.',
                     description:
                         'We could not identify the SQL dialect automatically. Confirm which DBMS this schema came from.',
                     choose_source: 'Choose source DBMS',

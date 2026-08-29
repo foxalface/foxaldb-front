@@ -72,9 +72,16 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
             </div>
 
             <div className="flex flex-col items-start gap-3">
-                <p className="font-medium">
-                    {t('new_diagram_dialog.import_schema.ambiguous.title')}
-                </p>
+                <div className="flex flex-col gap-1">
+                    <p className="font-medium">
+                        {t('new_diagram_dialog.import_schema.ambiguous.title')}
+                    </p>
+                    <p className="text-muted-foreground">
+                        {t(
+                            'new_diagram_dialog.import_schema.ambiguous.confidence_explanation'
+                        )}
+                    </p>
+                </div>
                 <ToggleGroup
                     type="single"
                     value={resolvedSourceDialect ?? ''}
@@ -129,7 +136,7 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                                 {score ? (
                                     <Badge
                                         variant="outline"
-                                        className="absolute -left-1.5 -top-1.5 z-10 h-5 min-w-9 justify-center border-border bg-background px-1.5 text-[10px] font-medium text-muted-foreground shadow-sm"
+                                        className="absolute -left-1.5 -top-1.5 z-10 h-5 min-w-9 select-none justify-center border-border bg-background px-1.5 text-[10px] font-medium text-muted-foreground shadow-sm"
                                     >
                                         {t(
                                             'new_diagram_dialog.import_schema.ambiguous.confidence_badge',

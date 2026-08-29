@@ -736,6 +736,8 @@ export const zh_CN: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: '选择源 DBMS',
+                    confidence_explanation:
+                        '百分比表示各 DBMS 与检测到的 SQL 方言的匹配指数。',
                     description:
                         '无法自动识别 SQL 方言。请确认此架构来自哪个 DBMS。',
                     choose_source: '选择源 DBMS',

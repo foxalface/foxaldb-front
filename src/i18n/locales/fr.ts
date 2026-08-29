@@ -790,6 +790,8 @@ export const fr: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Choisissez le SGBD source',
+                    confidence_explanation:
+                        "Les pourcentages indiquent l'indice de correspondance du dialecte SQL pour chaque SGBD.",
                     description:
                         "Nous n'avons pas pu identifier automatiquement le dialecte SQL. Indiquez de quel SGBD provient ce schéma.",
                     choose_source: 'Choisir le SGBD source',

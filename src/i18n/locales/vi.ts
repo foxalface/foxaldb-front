@@ -785,6 +785,8 @@ export const vi: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Chọn DBMS nguồn',
+                    confidence_explanation:
+                        'Phần trăm cho biết chỉ số khớp với phương ngữ SQL được phát hiện cho từng DBMS.',
                     description:
                         'Không thể tự động xác định phương ngữ SQL. Xác nhận lược đồ này đến từ DBMS nào.',
                     choose_source: 'Chọn DBMS nguồn',
