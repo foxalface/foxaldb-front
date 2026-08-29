@@ -10,6 +10,7 @@ import { TooltipProvider } from '@/components/tooltip/tooltip';
 import { DatabaseType } from '@/lib/domain/database-type';
 import {
     dbmlSample,
+    diagramJsonSample,
     genericAmbiguousSql,
     metadataJsonSample,
     mysqlDistinctiveSql,
@@ -60,10 +61,22 @@ vi.mock('react-i18next', () => ({
                 return options?.database ?? key;
             }
 
+            if (key.endsWith('.candidate_with_confidence')) {
+                return options?.database ?? key;
+            }
+
             if (
                 key ===
                 'new_diagram_dialog.import_schema.ambiguous.candidate_recommended'
             ) {
+                return options?.database ?? key;
+            }
+
+            if (key.endsWith('.candidate_recommended')) {
+                return options?.database ?? key;
+            }
+
+            if (key.endsWith('.candidate')) {
                 return options?.database ?? key;
             }
 
@@ -78,6 +91,10 @@ vi.mock('react-i18next', () => ({
                 key ===
                 'new_diagram_dialog.import_schema.ambiguous.recommended_aria'
             ) {
+                return `${options?.database} recommended`;
+            }
+
+            if (key.endsWith('.recommended_aria')) {
                 return `${options?.database} recommended`;
             }
 
@@ -222,6 +239,65 @@ describe('ImportSchemaStep', () => {
         expect(
             screen.queryByLabelText('SQL Server recommended')
         ).not.toBeInTheDocument();
+    });
+
+    it('calls onContinue with diagram JSON when the DBMS matches', async () => {
+        const user = userEvent.setup();
+        const onContinue = vi.fn();
+
+        renderImportSchemaStep({
+            scriptResult: diagramJsonSample,
+            databaseType: DatabaseType.POSTGRESQL,
+            onContinue,
+        });
+
+        await user.click(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        );
+
+        expect(onContinue).toHaveBeenCalledWith({
+            importMethod: 'diagram',
+            resolvedSourceDialect: DatabaseType.POSTGRESQL,
+        });
+    });
+
+    it('blocks diagram JSON mismatch import until the DBMS is chosen explicitly', async () => {
+        const user = userEvent.setup();
+        const onContinue = vi.fn();
+
+        renderImportSchemaStep({
+            scriptResult: diagramJsonSample,
+            databaseType: DatabaseType.MYSQL,
+            onContinue,
+        });
+
+        expect(
+            screen.getByText(
+                'new_diagram_dialog.import_schema.diagram_json.ambiguous.title'
+            )
+        ).toBeInTheDocument();
+
+        const continueButton = screen.getByRole('button', {
+            name: 'new_diagram_dialog.import_schema.import',
+        });
+
+        expect(continueButton).toBeDisabled();
+        expect(
+            screen.getByLabelText('PostgreSQL recommended')
+        ).toBeInTheDocument();
+
+        await user.click(screen.getByRole('radio', { name: 'MySQL' }));
+
+        expect(continueButton).toBeEnabled();
+
+        await user.click(continueButton);
+
+        expect(onContinue).toHaveBeenCalledWith({
+            importMethod: 'diagram',
+            resolvedSourceDialect: DatabaseType.MYSQL,
+        });
     });
 
     it('calls onContinue with DBML import method without a SQL dialect', async () => {
@@ -391,6 +467,18 @@ describe('ImportSchemaStep existing diagram mode', () => {
         expect(
             screen.queryByRole('button', { name: 'Switch to MySQL' })
         ).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'import_database_dialog.import_schema.import',
+            })
+        ).toBeDisabled();
+    });
+
+    it('blocks diagram JSON import in existing diagram mode', () => {
+        renderExistingImportSchemaStep({
+            scriptResult: diagramJsonSample,
+        });
+
         expect(
             screen.getByRole('button', {
                 name: 'import_database_dialog.import_schema.import',

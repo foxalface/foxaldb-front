@@ -1,5 +1,8 @@
 import { DatabaseType } from '@/lib/domain/database-type';
-import { detectImportFormat } from '@/lib/import/detect-format';
+import {
+    detectImportFormat,
+    getDiagramJsonDatabaseType,
+} from '@/lib/import/detect-format';
 import { detectSqlDialect } from '@/lib/import/detect-sql-dialect';
 import {
     areDialectsCompatibleForMatch,
@@ -21,6 +24,8 @@ export type ImportDetectionDisplayKind =
     | 'dbml'
     | 'metadata_json'
     | 'diagram_json'
+    | 'diagram_json_mismatch'
+    | 'diagram_json_unsupported'
     | 'sql_ambiguous'
     | 'dialect_mismatch'
     | 'clickhouse_unsupported'
@@ -50,6 +55,109 @@ export interface ImportDetectionAnalysis {
     dialectCandidateScores: DialectCandidateScore[];
     requiresExplicitSourceDialect: boolean;
 }
+
+export type ImportAnalysisContext = 'create' | 'existing';
+
+export interface AnalyzeImportContentOptions {
+    resolvedSourceDialect?: DatabaseType | null;
+    importContext?: ImportAnalysisContext;
+}
+
+const buildDiagramJsonCandidates = (
+    selectedDatabaseType: DatabaseType,
+    diagramDatabaseType: DatabaseType
+): DatabaseType[] => {
+    if (selectedDatabaseType === diagramDatabaseType) {
+        return [selectedDatabaseType];
+    }
+
+    return [selectedDatabaseType, diagramDatabaseType];
+};
+
+const buildDiagramJsonAnalysis = ({
+    format,
+    selectedDatabaseType,
+    diagramDatabaseType,
+    resolvedSourceDialect,
+    importContext,
+}: {
+    format: FormatDetectionResult;
+    selectedDatabaseType: DatabaseType;
+    diagramDatabaseType: DatabaseType;
+    resolvedSourceDialect?: DatabaseType | null;
+    importContext: ImportAnalysisContext;
+}): ImportDetectionAnalysis => {
+    if (importContext === 'existing') {
+        return {
+            format,
+            dialect: null,
+            importMethod: null,
+            canContinue: false,
+            displayKind: 'diagram_json_unsupported',
+            severity: 'error',
+            detectedDatabaseType: diagramDatabaseType,
+            resolutionState: 'not_applicable',
+            resolvedSourceDialect: null,
+            dialectCandidates: [],
+            dialectCandidateScores: [],
+            requiresExplicitSourceDialect: false,
+        };
+    }
+
+    if (resolvedSourceDialect) {
+        return {
+            format,
+            dialect: null,
+            importMethod: 'diagram',
+            canContinue: true,
+            displayKind: 'diagram_json',
+            severity: 'success',
+            detectedDatabaseType: diagramDatabaseType,
+            resolutionState: 'resolved',
+            resolvedSourceDialect,
+            dialectCandidates: [],
+            dialectCandidateScores: [],
+            requiresExplicitSourceDialect: false,
+        };
+    }
+
+    const typesMatch = selectedDatabaseType === diagramDatabaseType;
+
+    if (typesMatch) {
+        return {
+            format,
+            dialect: null,
+            importMethod: 'diagram',
+            canContinue: true,
+            displayKind: 'diagram_json',
+            severity: 'success',
+            detectedDatabaseType: diagramDatabaseType,
+            resolutionState: 'matched',
+            resolvedSourceDialect: diagramDatabaseType,
+            dialectCandidates: [],
+            dialectCandidateScores: [],
+            requiresExplicitSourceDialect: false,
+        };
+    }
+
+    return {
+        format,
+        dialect: null,
+        importMethod: 'diagram',
+        canContinue: false,
+        displayKind: 'diagram_json_mismatch',
+        severity: 'warning',
+        detectedDatabaseType: diagramDatabaseType,
+        resolutionState: 'ambiguous',
+        resolvedSourceDialect: null,
+        dialectCandidates: buildDiagramJsonCandidates(
+            selectedDatabaseType,
+            diagramDatabaseType
+        ),
+        dialectCandidateScores: [],
+        requiresExplicitSourceDialect: true,
+    };
+};
 
 const formatToImportMethod = (format: ImportFormat): ImportMethod | null => {
     switch (format) {
@@ -235,8 +343,9 @@ const buildSqlAnalysis = ({
 export const analyzeImportContent = (
     content: string,
     selectedDatabaseType: DatabaseType,
-    resolvedSourceDialect?: DatabaseType | null
+    options: AnalyzeImportContentOptions = {}
 ): ImportDetectionAnalysis => {
+    const { resolvedSourceDialect = null, importContext = 'create' } = options;
     const trimmed = content.trim();
 
     if (!trimmed) {
@@ -278,20 +387,32 @@ export const analyzeImportContent = (
     }
 
     if (format.format === 'diagram_json') {
-        return {
+        const diagramDatabaseType = getDiagramJsonDatabaseType(trimmed);
+
+        if (!diagramDatabaseType) {
+            return {
+                format,
+                dialect: null,
+                importMethod: null,
+                canContinue: false,
+                displayKind: 'malformed_json',
+                severity: 'error',
+                detectedDatabaseType: null,
+                resolutionState: 'not_applicable',
+                resolvedSourceDialect: null,
+                dialectCandidates: [],
+                dialectCandidateScores: [],
+                requiresExplicitSourceDialect: false,
+            };
+        }
+
+        return buildDiagramJsonAnalysis({
             format,
-            dialect: null,
-            importMethod: null,
-            canContinue: false,
-            displayKind: 'diagram_json',
-            severity: 'success',
-            detectedDatabaseType: null,
-            resolutionState: 'not_applicable',
-            resolvedSourceDialect: null,
-            dialectCandidates: [],
-            dialectCandidateScores: [],
-            requiresExplicitSourceDialect: false,
-        };
+            selectedDatabaseType,
+            diagramDatabaseType,
+            resolvedSourceDialect,
+            importContext,
+        });
     }
 
     if (format.format === 'dbml') {

@@ -748,6 +748,31 @@ export const zh_CN: LanguageTranslation = {
                         '{{database}}（{{percent}}% 置信度，自动检测）',
                     recommended_tooltip: '自动检测的 DBMS',
                     recommended_aria: '{{database}}，自动检测的 DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'DBMS 不匹配',
+                        mismatch_description:
+                            '文件显示为 {{detected}}，但您选择的是 {{selected}}。',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description: '请选择要用于此导入的选项。',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '已检测到 {{database}}',

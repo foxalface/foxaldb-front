@@ -785,6 +785,32 @@ export const en = {
                     recommended_tooltip: 'Automatically detected DBMS',
                     recommended_aria:
                         '{{database}}, automatically detected DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'DBMS mismatch',
+                        mismatch_description:
+                            'The file indicates {{detected}}, but you selected {{selected}}.',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'Select which option to apply for this import.',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} detected',
@@ -809,6 +835,8 @@ export const en = {
                     file_too_large: 'The selected file is larger than 5 MB.',
                     import_failed:
                         'The schema could not be imported. Check the content and try again.',
+                    invalid_diagram_json:
+                        'The diagram JSON is invalid. Check the file and try again.',
                 },
             },
 

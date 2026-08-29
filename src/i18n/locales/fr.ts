@@ -803,6 +803,32 @@ export const fr: LanguageTranslation = {
                     recommended_tooltip: 'SGBD détecté automatiquement',
                     recommended_aria:
                         '{{database}}, SGBD détecté automatiquement',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Prêt à importer ce diagramme.',
+                        mismatch_title: 'Erreur de correspondance',
+                        mismatch_description:
+                            'Le fichier indique {{detected}}, mais vous aviez sélectionné {{selected}}.',
+                        unsupported_existing:
+                            'Le JSON de diagramme restaure un diagramme complet et ne peut pas être fusionné dans le diagramme actuel. Exportez ou créez un nouveau diagramme.',
+                    },
+                    ambiguous: {
+                        title: 'Choisissez le SGBD du diagramme',
+                        description:
+                            "Sélectionnez l'option à appliquer pour cet import.",
+                        choose_source: 'Choisir le SGBD du diagramme',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}} %)',
+                        candidate_recommended:
+                            '{{database}} (fichier, recommandé)',
+                        confidence_badge: '{{percent}} %',
+                        recommended_tooltip: 'SGBD indiqué dans le fichier',
+                        recommended_aria:
+                            '{{database}}, SGBD indiqué dans le fichier',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} détecté',
@@ -828,6 +854,8 @@ export const fr: LanguageTranslation = {
                     file_too_large: 'Le fichier sélectionné dépasse 5 Mo.',
                     import_failed:
                         "Le schéma n'a pas pu être importé. Vérifiez le contenu et réessayez.",
+                    invalid_diagram_json:
+                        "Le JSON de diagramme n'est pas valide. Vérifiez le fichier et réessayez.",
                 },
             },
 

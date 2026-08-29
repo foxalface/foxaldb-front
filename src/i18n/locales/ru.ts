@@ -756,6 +756,8 @@ export const ru: LanguageTranslation = {
                     'Извлечение схемы недоступно для этого типа базы.',
                 import_failed:
                     'Не удалось импортировать схему базы. Проверьте результат и повторите попытку.',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Назад',
                 import: 'Импорт',
             },
@@ -794,6 +796,32 @@ export const ru: LanguageTranslation = {
                     recommended_tooltip: 'Автоматически определённая СУБД',
                     recommended_aria:
                         '{{database}}, автоматически определённая СУБД',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'Несоответствие СУБД',
+                        mismatch_description:
+                            'Файл указывает на {{detected}}, но вы выбрали {{selected}}.',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'Выберите вариант, который будет применён для этого импорта.',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: 'Обнаружен {{database}}',

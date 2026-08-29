@@ -752,6 +752,8 @@ export const ko_KR: LanguageTranslation = {
                     '이 데이터베이스 유형에서는 스키마 추출을 사용할 수 없습니다.',
                 import_failed:
                     '데이터베이스 스키마를 가져올 수 없습니다. 결과를 확인하고 다시 시도하세요.',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: '뒤로',
                 import: '가져오기',
             },
@@ -789,6 +791,31 @@ export const ko_KR: LanguageTranslation = {
                         '{{database}} (신뢰도 {{percent}}%, 자동 감지)',
                     recommended_tooltip: '자동 감지된 DBMS',
                     recommended_aria: '{{database}}, 자동 감지된 DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'DBMS 불일치',
+                        mismatch_description:
+                            '파일은 {{detected}}를 나타내지만 {{selected}}를 선택했습니다.',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description: '이 가져오기에 적용할 옵션을 선택하세요.',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} 감지됨',

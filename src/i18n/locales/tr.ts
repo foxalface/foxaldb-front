@@ -746,6 +746,8 @@ export const tr: LanguageTranslation = {
                     'Bu veritabanı türü için şema çıkarma kullanılamıyor.',
                 import_failed:
                     'Veritabanı şeması içe aktarılamadı. Sonucu kontrol edip tekrar deneyin.',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Geri',
                 import: 'İçe aktar',
             },
@@ -783,6 +785,32 @@ export const tr: LanguageTranslation = {
                         '{{database}} (%{{percent}} güven, otomatik algılama)',
                     recommended_tooltip: 'Otomatik algılanan DBMS',
                     recommended_aria: '{{database}}, otomatik algılanan DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'DBMS uyumsuzluğu',
+                        mismatch_description:
+                            'Dosya {{detected}} gösteriyor, ancak {{selected}} seçmiştiniz.',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'Bu içe aktarma için uygulanacak seçeneği belirleyin.',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} algılandı',

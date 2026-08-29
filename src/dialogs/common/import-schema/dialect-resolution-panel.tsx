@@ -15,8 +15,75 @@ import { useTranslation } from 'react-i18next';
 
 export type DialectResolutionVariant = 'create' | 'existing';
 
+export type DialectResolutionCopyVariant = 'sql_ambiguous' | 'diagram_json';
+
+const COPY_KEYS: Record<
+    DialectResolutionCopyVariant,
+    {
+        alertTitle: string;
+        alertDescription: string;
+        chooseTitle: string;
+        chooseDescription?: string;
+        chooseSourceAria: string;
+        candidateRecommended: string;
+        candidateWithConfidence: string;
+        candidatePlain: string;
+        confidenceBadge: string;
+        recommendedTooltip: string;
+        recommendedAria: string;
+    }
+> = {
+    sql_ambiguous: {
+        alertTitle:
+            'new_diagram_dialog.import_schema.detection.sql_ambiguous_title',
+        alertDescription:
+            'new_diagram_dialog.import_schema.detection.sql_ambiguous_description',
+        chooseTitle: 'new_diagram_dialog.import_schema.ambiguous.title',
+        chooseDescription:
+            'new_diagram_dialog.import_schema.ambiguous.confidence_explanation',
+        chooseSourceAria:
+            'new_diagram_dialog.import_schema.ambiguous.choose_source',
+        candidateRecommended:
+            'new_diagram_dialog.import_schema.ambiguous.candidate_recommended',
+        candidateWithConfidence:
+            'new_diagram_dialog.import_schema.ambiguous.candidate_with_confidence',
+        candidatePlain: 'new_diagram_dialog.import_schema.ambiguous.candidate',
+        confidenceBadge:
+            'new_diagram_dialog.import_schema.ambiguous.confidence_badge',
+        recommendedTooltip:
+            'new_diagram_dialog.import_schema.ambiguous.recommended_tooltip',
+        recommendedAria:
+            'new_diagram_dialog.import_schema.ambiguous.recommended_aria',
+    },
+    diagram_json: {
+        alertTitle:
+            'new_diagram_dialog.import_schema.diagram_json.detection.mismatch_title',
+        alertDescription:
+            'new_diagram_dialog.import_schema.diagram_json.detection.mismatch_description',
+        chooseTitle:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.title',
+        chooseDescription:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.description',
+        chooseSourceAria:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.choose_source',
+        candidateRecommended:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.candidate_recommended',
+        candidateWithConfidence:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.candidate_with_confidence',
+        candidatePlain:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.candidate',
+        confidenceBadge:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.confidence_badge',
+        recommendedTooltip:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.recommended_tooltip',
+        recommendedAria:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.recommended_aria',
+    },
+};
+
 export interface DialectResolutionPanelProps {
     variant?: DialectResolutionVariant;
+    copyVariant?: DialectResolutionCopyVariant;
     selectedDatabaseType: DatabaseType;
     candidates: DatabaseType[];
     candidateScores: DialectCandidateScore[];
@@ -26,6 +93,8 @@ export interface DialectResolutionPanelProps {
 }
 
 export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
+    copyVariant = 'sql_ambiguous',
+    selectedDatabaseType,
     candidates,
     candidateScores,
     detectedDatabaseType,
@@ -33,6 +102,7 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
     onResolve,
 }) => {
     const { t } = useTranslation();
+    const copyKeys = COPY_KEYS[copyVariant];
 
     const scoresByDatabaseType = useMemo(
         () =>
@@ -59,28 +129,51 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                 />
                 <div className="flex flex-col gap-1">
                     <p id="dialect-resolution-title" className="font-medium">
-                        {t(
-                            'new_diagram_dialog.import_schema.detection.sql_ambiguous_title'
-                        )}
+                        {t(copyKeys.alertTitle, {
+                            detected:
+                                detectedDatabaseType !== null
+                                    ? databaseTypeToLabelMap[
+                                          detectedDatabaseType
+                                      ]
+                                    : undefined,
+                            selected:
+                                databaseTypeToLabelMap[selectedDatabaseType],
+                        })}
                     </p>
                     <p className="text-muted-foreground">
-                        {t(
-                            'new_diagram_dialog.import_schema.detection.sql_ambiguous_description'
-                        )}
+                        {t(copyKeys.alertDescription, {
+                            detected:
+                                detectedDatabaseType !== null
+                                    ? databaseTypeToLabelMap[
+                                          detectedDatabaseType
+                                      ]
+                                    : undefined,
+                            selected:
+                                databaseTypeToLabelMap[selectedDatabaseType],
+                        })}
                     </p>
                 </div>
             </div>
 
             <div className="flex flex-col items-start gap-3">
                 <div className="flex flex-col gap-1">
-                    <p className="font-medium">
-                        {t('new_diagram_dialog.import_schema.ambiguous.title')}
-                    </p>
-                    <p className="text-muted-foreground">
-                        {t(
-                            'new_diagram_dialog.import_schema.ambiguous.confidence_explanation'
-                        )}
-                    </p>
+                    <p className="font-medium">{t(copyKeys.chooseTitle)}</p>
+                    {copyKeys.chooseDescription ? (
+                        <p className="text-muted-foreground">
+                            {t(copyKeys.chooseDescription, {
+                                detected:
+                                    detectedDatabaseType !== null
+                                        ? databaseTypeToLabelMap[
+                                              detectedDatabaseType
+                                          ]
+                                        : undefined,
+                                selected:
+                                    databaseTypeToLabelMap[
+                                        selectedDatabaseType
+                                    ],
+                            })}
+                        </p>
+                    ) : null}
                 </div>
                 <ToggleGroup
                     type="single"
@@ -93,9 +186,7 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                         onResolve(value as DatabaseType);
                     }}
                     className="flex w-full flex-wrap justify-start gap-x-3 gap-y-5 pb-2 pl-1.5 pt-1.5"
-                    aria-label={t(
-                        'new_diagram_dialog.import_schema.ambiguous.choose_source'
-                    )}
+                    aria-label={t(copyKeys.chooseSourceAria)}
                 >
                     {candidates.map((candidate) => {
                         const score = scoresByDatabaseType.get(candidate);
@@ -113,7 +204,7 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                                         score
                                             ? isRecommended
                                                 ? t(
-                                                      'new_diagram_dialog.import_schema.ambiguous.candidate_recommended',
+                                                      copyKeys.candidateRecommended,
                                                       {
                                                           database:
                                                               databaseLabel,
@@ -122,7 +213,7 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                                                       }
                                                   )
                                                 : t(
-                                                      'new_diagram_dialog.import_schema.ambiguous.candidate_with_confidence',
+                                                      copyKeys.candidateWithConfidence,
                                                       {
                                                           database:
                                                               databaseLabel,
@@ -130,7 +221,16 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                                                               score.confidencePercent,
                                                       }
                                                   )
-                                            : databaseLabel
+                                            : isRecommended
+                                              ? t(
+                                                    copyKeys.candidateRecommended,
+                                                    {
+                                                        database: databaseLabel,
+                                                    }
+                                                )
+                                              : t(copyKeys.candidatePlain, {
+                                                    database: databaseLabel,
+                                                })
                                     }
                                 />
                                 {score ? (
@@ -138,13 +238,9 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                                         variant="outline"
                                         className="absolute -left-1.5 -top-1.5 z-10 h-5 min-w-9 select-none justify-center border-border bg-background px-1.5 text-[10px] font-medium text-muted-foreground shadow-sm"
                                     >
-                                        {t(
-                                            'new_diagram_dialog.import_schema.ambiguous.confidence_badge',
-                                            {
-                                                percent:
-                                                    score.confidencePercent,
-                                            }
-                                        )}
+                                        {t(copyKeys.confidenceBadge, {
+                                            percent: score.confidencePercent,
+                                        })}
                                     </Badge>
                                 ) : null}
                                 {isRecommended ? (
@@ -153,7 +249,7 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                                             <span
                                                 className="absolute -bottom-1.5 left-1/2 z-10 inline-flex size-5 -translate-x-1/2 items-center justify-center rounded-md border border-border bg-background shadow-sm"
                                                 aria-label={t(
-                                                    'new_diagram_dialog.import_schema.ambiguous.recommended_aria',
+                                                    copyKeys.recommendedAria,
                                                     {
                                                         database: databaseLabel,
                                                     }
@@ -170,9 +266,7 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
                                             sideOffset={8}
                                             className="z-[1100]"
                                         >
-                                            {t(
-                                                'new_diagram_dialog.import_schema.ambiguous.recommended_tooltip'
-                                            )}
+                                            {t(copyKeys.recommendedTooltip)}
                                         </TooltipContent>
                                     </Tooltip>
                                 ) : null}

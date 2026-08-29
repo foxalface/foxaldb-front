@@ -758,6 +758,8 @@ export const id_ID: LanguageTranslation = {
                     'Ekstraksi skema tidak tersedia untuk jenis database ini.',
                 import_failed:
                     'Skema database tidak dapat diimpor. Periksa hasil dan coba lagi.',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Kembali',
                 import: 'Impor',
             },
@@ -796,6 +798,32 @@ export const id_ID: LanguageTranslation = {
                         '{{database}} ({{percent}}% keyakinan, deteksi otomatis)',
                     recommended_tooltip: 'DBMS terdeteksi otomatis',
                     recommended_aria: '{{database}}, DBMS terdeteksi otomatis',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'Ketidakcocokan DBMS',
+                        mismatch_description:
+                            'File menunjukkan {{detected}}, tetapi Anda memilih {{selected}}.',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'Pilih opsi yang akan diterapkan untuk impor ini.',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} terdeteksi',

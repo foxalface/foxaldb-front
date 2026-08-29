@@ -92,8 +92,11 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
     }, [scriptResult, databaseType]);
 
     const baseAnalysis = useMemo(
-        () => analyzeImportContent(scriptResult, databaseType),
-        [scriptResult, databaseType]
+        () =>
+            analyzeImportContent(scriptResult, databaseType, {
+                importContext: mode,
+            }),
+        [scriptResult, databaseType, mode]
     );
 
     const effectiveResolvedSourceDialect = useMemo(() => {
@@ -135,6 +138,18 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
             return effectiveResolvedSourceDialect !== null;
         }
 
+        if (baseAnalysis.importMethod === 'diagram') {
+            if (mode === 'existing') {
+                return false;
+            }
+
+            if (baseAnalysis.resolutionState === 'ambiguous') {
+                return userResolvedSourceDialect !== null;
+            }
+
+            return baseAnalysis.canContinue;
+        }
+
         return baseAnalysis.canContinue;
     }, [
         baseAnalysis,
@@ -151,7 +166,8 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         onContinue({
             importMethod: baseAnalysis.importMethod,
             resolvedSourceDialect:
-                baseAnalysis.importMethod === 'ddl'
+                baseAnalysis.importMethod === 'ddl' ||
+                baseAnalysis.importMethod === 'diagram'
                     ? (effectiveResolvedSourceDialect ?? undefined)
                     : undefined,
         });
@@ -364,6 +380,12 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     {baseAnalysis.resolutionState === 'ambiguous' ? (
                         <DialectResolutionPanel
                             variant={mode}
+                            copyVariant={
+                                baseAnalysis.displayKind ===
+                                'diagram_json_mismatch'
+                                    ? 'diagram_json'
+                                    : 'sql_ambiguous'
+                            }
                             selectedDatabaseType={databaseType}
                             candidates={baseAnalysis.dialectCandidates}
                             candidateScores={

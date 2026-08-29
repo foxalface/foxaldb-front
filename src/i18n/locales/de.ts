@@ -780,6 +780,8 @@ export const de: LanguageTranslation = {
                     'Schemaextraktion ist für diesen Datenbanktyp nicht verfügbar.',
                 import_failed:
                     'Das Datenbankschema konnte nicht importiert werden. Prüfen Sie das Ergebnis und versuchen Sie es erneut.',
+                invalid_diagram_json:
+                    'Das Diagramm-JSON ist ungültig. Prüfen Sie die Datei und versuchen Sie es erneut.',
                 back: 'Zurück',
                 import: 'Importieren',
             },
@@ -818,6 +820,32 @@ export const de: LanguageTranslation = {
                     recommended_tooltip: 'Automatisch erkanntes DBMS',
                     recommended_aria:
                         '{{database}}, automatisch erkanntes DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Bereit, dieses Diagramm zu importieren.',
+                        mismatch_title: 'DBMS-Konflikt',
+                        mismatch_description:
+                            'Die Datei zeigt {{detected}}, aber Sie haben {{selected}} gewählt.',
+                        unsupported_existing:
+                            'Diagramm-JSON stellt ein vollständiges Diagramm wieder her und kann nicht in das aktuelle Diagramm zusammengeführt werden.',
+                    },
+                    ambiguous: {
+                        title: 'DBMS des Diagramms wählen',
+                        description:
+                            'Wählen Sie die Option, die für diesen Import angewendet werden soll.',
+                        choose_source: 'Diagramm-DBMS wählen',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (aus Datei, empfohlen)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS aus der Diagrammdatei',
+                        recommended_aria:
+                            '{{database}}, DBMS aus der Diagrammdatei',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} erkannt',

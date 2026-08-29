@@ -767,6 +767,8 @@ export const pt_BR: LanguageTranslation = {
                     'A extração de esquema não está disponível para este tipo de banco.',
                 import_failed:
                     'Não foi possível importar o esquema do banco. Verifique o resultado e tente novamente.',
+                invalid_diagram_json:
+                    'O JSON do diagrama é inválido. Verifique o arquivo e tente novamente.',
                 back: 'Voltar',
                 import: 'Importar',
             },
@@ -804,6 +806,32 @@ export const pt_BR: LanguageTranslation = {
                     recommended_tooltip: 'SGBD detectado automaticamente',
                     recommended_aria:
                         '{{database}}, SGBD detectado automaticamente',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Pronto para importar este diagrama.',
+                        mismatch_title: 'Incompatibilidade de SGBD',
+                        mismatch_description:
+                            'O arquivo indica {{detected}}, mas você selecionou {{selected}}.',
+                        unsupported_existing:
+                            'O JSON de diagrama restaura um diagrama completo e não pode ser mesclado no atual.',
+                    },
+                    ambiguous: {
+                        title: 'Escolha o SGBD do diagrama',
+                        description:
+                            'Selecione a opção a aplicar nesta importação.',
+                        choose_source: 'Escolher SGBD do diagrama',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (do arquivo, recomendado)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'SGBD do arquivo de diagrama',
+                        recommended_aria:
+                            '{{database}}, SGBD do arquivo de diagrama',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} detectado',

@@ -11,7 +11,7 @@ Developer reference for FoxalDB v1 schema and metadata import.
 | SQL DDL / pg_dump | `sqlImportToDiagram()` |
 | DBML | `importDBMLToDiagram()` |
 | Metadata JSON | `loadFromDatabaseMetadata()` |
-| Diagram JSON file | `diagramFromJSONInput()` (separate dialog) |
+| Diagram JSON file | `diagramFromJSONInput()` via create wizard `ImportSchemaStep` or standalone `ImportDiagramDialog` |
 
 `importSchema()` is a deterministic dispatch boundary only. It does not persist, navigate, or mutate the open editor.
 
@@ -50,6 +50,7 @@ No AI or network calls in import paths.
 SELECT_DATABASE → CHOOSE_INTENT
   ├─ Create empty → persist
   ├─ Import schema → IMPORT_DATABASE (ImportSchemaStep) → [SELECT_TABLES?] → persist
+  │    Supports SQL, DBML, metadata JSON, and diagram JSON (with DBMS mismatch resolution)
   └─ Import from existing database → IMPORT_FROM_DATABASE → [SELECT_TABLES?] → persist
 ```
 

@@ -760,6 +760,8 @@ export const ne: LanguageTranslation = {
                     'यो डाटाबेस प्रकारका लागि स्किमा निकाल्न उपलब्ध छैन।',
                 import_failed:
                     'डाटाबेस स्किमा आयात गर्न सकिएन। नतिजा जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्।',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'पछाडि',
                 import: 'आयात गर्नुहोस्',
             },
@@ -798,6 +800,32 @@ export const ne: LanguageTranslation = {
                     recommended_tooltip: 'स्वचालित रूपमा पहिचान गरिएको DBMS',
                     recommended_aria:
                         '{{database}}, स्वचालित रूपमा पहिचान गरिएको DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'DBMS मिलान नभएको',
+                        mismatch_description:
+                            'फाइलले {{detected}} देखाउँछ, तर तपाईंले {{selected}} छान्नुभएको थियो।',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'यो आयातका लागि लागू गर्ने विकल्प छान्नुहोस्।',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} पत्ता लाग्यो',

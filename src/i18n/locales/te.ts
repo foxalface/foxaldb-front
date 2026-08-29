@@ -756,6 +756,8 @@ export const te: LanguageTranslation = {
                     'ఈ డేటాబేస్ రకానికి స్కీమా ఎక్స్‌ట్రాక్షన్ అందుబాటులో లేదు.',
                 import_failed:
                     'డేటాబేస్ స్కీమాను దిగుమతి చేయలేకపోయాం. ఫలితాన్ని తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'వెనక్కి',
                 import: 'దిగుమతి చేయి',
             },
@@ -794,6 +796,32 @@ export const te: LanguageTranslation = {
                     recommended_tooltip: 'స్వయంచాలకంగా గుర్తించిన DBMS',
                     recommended_aria:
                         '{{database}}, స్వయంచాలకంగా గుర్తించిన DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'DBMS అసమానత',
+                        mismatch_description:
+                            'ఫైల్ {{detected}} ని సూచిస్తుంది, కానీ మీరు {{selected}} ని ఎంచుకున్నారు.',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'ఈ దిగుమతికి వర్తింపజేయడానికి ఎంపికను ఎంచుకోండి.',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} గుర్తించబడింది',

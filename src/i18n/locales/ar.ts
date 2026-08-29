@@ -741,6 +741,8 @@ export const ar: LanguageTranslation = {
                     'استخراج المخطط غير متاح لهذا النوع من قواعد البيانات.',
                 import_failed:
                     'تعذر استيراد مخطط قاعدة البيانات. تحقق من النتيجة وحاول مرة أخرى.',
+                invalid_diagram_json:
+                    'JSON المخطط غير صالح. تحقق من الملف وحاول مرة أخرى.',
                 back: 'رجوع',
                 import: 'استيراد',
             },
@@ -780,6 +782,33 @@ export const ar: LanguageTranslation = {
                         'نظام إدارة قواعد بيانات مكتشف تلقائيًا',
                     recommended_aria:
                         '{{database}}، نظام إدارة قواعد بيانات مكتشف تلقائيًا',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'جاهز لاستيراد هذا المخطط.',
+                        mismatch_title: 'عدم تطابق نظام إدارة قواعد البيانات',
+                        mismatch_description:
+                            'يشير الملف إلى {{detected}}، لكنك اخترت {{selected}}.',
+                        unsupported_existing:
+                            'يستعيد JSON المخطط مخططًا كاملاً ولا يمكن دمجه في المخطط الحالي. صدّر أو أنشئ مخططًا جديدًا.',
+                    },
+                    ambiguous: {
+                        title: 'اختر نظام إدارة قواعد البيانات للمخطط',
+                        description:
+                            'حدد الخيار الذي تريد تطبيقه لهذا الاستيراد.',
+                        choose_source: 'اختر نظام إدارة قواعد البيانات للمخطط',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (من الملف، موصى به)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip:
+                            'نظام إدارة قواعد البيانات من ملف المخطط',
+                        recommended_aria:
+                            '{{database}}، نظام إدارة قواعد البيانات من ملف المخطط',
+                    },
                 },
                 detection: {
                     dialect: 'تم اكتشاف {{database}}',

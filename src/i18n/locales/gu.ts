@@ -749,6 +749,8 @@ export const gu: LanguageTranslation = {
                     'આ ડેટાબેઝ પ્રકાર માટે સ્કીમા એક્સટ્રેક્શન ઉપલબ્ધ નથી.',
                 import_failed:
                     'ડેટાબેઝ સ્કીમા આયાત કરી શકાઈ નથી. પરિણામ તપાસો અને ફરી પ્રયાસ કરો.',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'પાછા',
                 import: 'આયાત કરો',
             },
@@ -786,6 +788,31 @@ export const gu: LanguageTranslation = {
                         '{{database}} ({{percent}}% વિશ્વાસ, આપમેળે શોધ)',
                     recommended_tooltip: 'આપમેળે શોધાયેલ DBMS',
                     recommended_aria: '{{database}}, આપમેળે શોધાયેલ DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'DBMS અસંગતિ',
+                        mismatch_description:
+                            'ફાઇલ {{detected}} દર્શાવે છે, પરંતુ તમે {{selected}} પસંદ કર્યું હતું.',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description: 'આ આયાત માટે લાગુ કરવાનો વિકલ્પ પસંદ કરો.',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} શોધાયું',

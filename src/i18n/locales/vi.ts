@@ -760,6 +760,8 @@ export const vi: LanguageTranslation = {
                     'Không hỗ trợ trích xuất lược đồ cho loại cơ sở dữ liệu này.',
                 import_failed:
                     'Không thể nhập lược đồ cơ sở dữ liệu. Kiểm tra kết quả và thử lại.',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Quay lại',
                 import: 'Nhập',
             },
@@ -798,6 +800,32 @@ export const vi: LanguageTranslation = {
                     recommended_tooltip: 'DBMS được phát hiện tự động',
                     recommended_aria:
                         '{{database}}, DBMS được phát hiện tự động',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'Không khớp DBMS',
+                        mismatch_description:
+                            'Tệp cho biết {{detected}}, nhưng bạn đã chọn {{selected}}.',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'Chọn tùy chọn sẽ được áp dụng cho lần nhập này.',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: 'Đã phát hiện {{database}}',

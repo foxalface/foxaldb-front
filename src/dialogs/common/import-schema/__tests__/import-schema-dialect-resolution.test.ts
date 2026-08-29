@@ -63,7 +63,7 @@ describe('analyzeImportContent dialect resolution', () => {
         const resolved = analyzeImportContent(
             genericAmbiguousSql,
             DatabaseType.POSTGRESQL,
-            DatabaseType.POSTGRESQL
+            { resolvedSourceDialect: DatabaseType.POSTGRESQL }
         );
 
         expect(unresolved.canContinue).toBe(false);

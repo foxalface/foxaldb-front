@@ -66,13 +66,60 @@ describe('analyzeImportContent', () => {
         expect(result.displayKind).toBe('metadata_json');
     });
 
-    it('detects diagram JSON without allowing continue', () => {
+    it('allows diagram JSON import when the DBMS matches the selection', () => {
         const result = analyzeImportContent(
             diagramJsonSample,
             DatabaseType.POSTGRESQL
         );
 
         expect(result.displayKind).toBe('diagram_json');
+        expect(result.importMethod).toBe('diagram');
+        expect(result.canContinue).toBe(true);
+        expect(result.detectedDatabaseType).toBe(DatabaseType.POSTGRESQL);
+        expect(result.resolvedSourceDialect).toBe(DatabaseType.POSTGRESQL);
+    });
+
+    it('requires explicit DBMS resolution for diagram JSON mismatch', () => {
+        const result = analyzeImportContent(
+            diagramJsonSample,
+            DatabaseType.MYSQL
+        );
+
+        expect(result.displayKind).toBe('diagram_json_mismatch');
+        expect(result.importMethod).toBe('diagram');
+        expect(result.canContinue).toBe(false);
+        expect(result.resolutionState).toBe('ambiguous');
+        expect(result.detectedDatabaseType).toBe(DatabaseType.POSTGRESQL);
+        expect(result.dialectCandidates).toEqual([
+            DatabaseType.MYSQL,
+            DatabaseType.POSTGRESQL,
+        ]);
+    });
+
+    it('allows diagram JSON import after explicit DBMS resolution', () => {
+        const result = analyzeImportContent(
+            diagramJsonSample,
+            DatabaseType.MYSQL,
+            {
+                resolvedSourceDialect: DatabaseType.MYSQL,
+            }
+        );
+
+        expect(result.canContinue).toBe(true);
+        expect(result.resolutionState).toBe('resolved');
+        expect(result.resolvedSourceDialect).toBe(DatabaseType.MYSQL);
+    });
+
+    it('blocks diagram JSON import into an existing diagram', () => {
+        const result = analyzeImportContent(
+            diagramJsonSample,
+            DatabaseType.POSTGRESQL,
+            {
+                importContext: 'existing',
+            }
+        );
+
+        expect(result.displayKind).toBe('diagram_json_unsupported');
         expect(result.canContinue).toBe(false);
         expect(result.importMethod).toBeNull();
     });

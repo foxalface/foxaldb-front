@@ -755,6 +755,8 @@ export const bn: LanguageTranslation = {
                     'এই ডাটাবেস ধরনের জন্য স্কিমা এক্সট্রাকশন উপলব্ধ নয়।',
                 import_failed:
                     'ডাটাবেস স্কিমা আমদানি করা যায়নি। ফলাফল পরীক্ষা করে আবার চেষ্টা করুন।',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'পিছনে',
                 import: 'আমদানি করুন',
             },
@@ -793,6 +795,32 @@ export const bn: LanguageTranslation = {
                     recommended_tooltip: 'স্বয়ংক্রিয়ভাবে শনাক্ত করা DBMS',
                     recommended_aria:
                         '{{database}}, স্বয়ংক্রিয়ভাবে শনাক্ত করা DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'DBMS অমিল',
+                        mismatch_description:
+                            'ফাইলটি {{detected}} নির্দেশ করে, কিন্তু আপনি {{selected}} নির্বাচন করেছিলেন।',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'এই আমদানির জন্য প্রয়োগ করতে বিকল্পটি নির্বাচন করুন।',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} শনাক্ত হয়েছে',

@@ -156,3 +156,17 @@ export const detectImportFormat = (content: string): FormatDetectionResult => {
 
     return { format: 'unsupported', confidence: 'unsupported' };
 };
+
+/**
+ * Returns the database type embedded in a diagram JSON export, if valid.
+ */
+export const getDiagramJsonDatabaseType = (
+    content: string
+): DatabaseType | null => {
+    const parsedJson = tryParseJsonObject(content);
+    if (parsedJson === null || !isDiagramJsonStructure(parsedJson)) {
+        return null;
+    }
+
+    return (parsedJson as { databaseType: DatabaseType }).databaseType;
+};

@@ -28,6 +28,10 @@ import {
     ImportSchemaResolutionError,
     importSchema,
 } from '@/lib/import/import-schema';
+import {
+    ImportDiagramJsonError,
+    importDiagramFromJson,
+} from '@/lib/import/import-diagram-from-json';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
@@ -280,6 +284,26 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             setResolvedSourceDialect(nextResolvedSourceDialect);
 
             try {
+                if (nextImportMethod === 'diagram') {
+                    if (!nextResolvedSourceDialect) {
+                        throw new ImportDiagramJsonError(
+                            'Diagram DBMS must be resolved before import'
+                        );
+                    }
+
+                    const diagram = importDiagramFromJson(
+                        scriptResult,
+                        nextResolvedSourceDialect
+                    );
+
+                    if (diagram.databaseType !== databaseType) {
+                        setDatabaseType(diagram.databaseType);
+                    }
+
+                    await finalizeImportedDiagram(diagram);
+                    return;
+                }
+
                 if (nextImportMethod === 'query') {
                     const metadata = await new Promise<DatabaseMetadata>(
                         (resolve, reject) => {
@@ -328,12 +352,18 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
                 await finalizeImportedDiagram(diagram);
             } catch (error: unknown) {
-                const message =
-                    error instanceof ImportSchemaResolutionError
-                        ? error.message
-                        : t(
-                              'new_diagram_dialog.import_schema.errors.import_failed'
-                          );
+                let message = t(
+                    'new_diagram_dialog.import_schema.errors.import_failed'
+                );
+
+                if (error instanceof ImportSchemaResolutionError) {
+                    message = error.message;
+                } else if (error instanceof ImportDiagramJsonError) {
+                    message = t(
+                        'new_diagram_dialog.import_schema.errors.invalid_diagram_json'
+                    );
+                }
+
                 setImportError(message);
             } finally {
                 setIsImporting(false);

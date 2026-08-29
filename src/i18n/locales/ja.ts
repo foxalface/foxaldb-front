@@ -760,6 +760,8 @@ export const ja: LanguageTranslation = {
                     'このデータベース種別ではスキーマ抽出は利用できません。',
                 import_failed:
                     'データベーススキーマをインポートできませんでした。結果を確認して再試行してください。',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: '戻る',
                 import: 'インポート',
             },
@@ -797,6 +799,32 @@ export const ja: LanguageTranslation = {
                         '{{database}}（信頼度 {{percent}}%、自動検出）',
                     recommended_tooltip: '自動検出された DBMS',
                     recommended_aria: '{{database}}、自動検出された DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'DBMS の不一致',
+                        mismatch_description:
+                            'ファイルは {{detected}} を示していますが、{{selected}} を選択していました。',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'このインポートに適用するオプションを選択してください。',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} を検出',

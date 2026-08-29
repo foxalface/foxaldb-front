@@ -752,6 +752,8 @@ export const hr: LanguageTranslation = {
                     'Ekstrakcija sheme nije dostupna za ovu vrstu baze.',
                 import_failed:
                     'Shema baze nije mogla biti uvezena. Provjerite rezultat i pokušajte ponovno.',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Natrag',
                 import: 'Uvezi',
             },
@@ -789,6 +791,32 @@ export const hr: LanguageTranslation = {
                         '{{database}} ({{percent}}% pouzdanosti, automatsko otkrivanje)',
                     recommended_tooltip: 'Automatski otkriveni DBMS',
                     recommended_aria: '{{database}}, automatski otkriveni DBMS',
+                    candidate: '{{database}}',
+                },
+                diagram_json: {
+                    detection: {
+                        success: 'Ready to import this diagram.',
+                        mismatch_title: 'Nepodudarnost DBMS-a',
+                        mismatch_description:
+                            'Datoteka pokazuje {{detected}}, ali ste odabrali {{selected}}.',
+                        unsupported_existing:
+                            'Diagram JSON restores a full diagram and cannot be merged into the current one. Export or create a new diagram instead.',
+                    },
+                    ambiguous: {
+                        title: 'Choose the diagram DBMS',
+                        description:
+                            'Odaberite opciju koja će se primijeniti za ovaj uvoz.',
+                        choose_source: 'Choose diagram DBMS',
+                        candidate: '{{database}}',
+                        candidate_with_confidence:
+                            '{{database}} ({{percent}}%)',
+                        candidate_recommended:
+                            '{{database}} (from file, recommended)',
+                        confidence_badge: '{{percent}}%',
+                        recommended_tooltip: 'DBMS from the diagram file',
+                        recommended_aria:
+                            '{{database}}, DBMS from the diagram file',
+                    },
                 },
                 detection: {
                     dialect: '{{database}} prepoznat',

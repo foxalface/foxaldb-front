@@ -57,10 +57,26 @@ export const DetectionSummary: React.FC<DetectionSummaryProps> = ({
                     'new_diagram_dialog.import_schema.detection.diagram_json'
                 ),
                 description: t(
-                    'new_diagram_dialog.import_schema.errors.diagram_json'
+                    'new_diagram_dialog.import_schema.diagram_json.detection.success'
                 ),
                 severity: analysis.severity,
             };
+        }
+
+        if (analysis.displayKind === 'diagram_json_unsupported') {
+            return {
+                title: t(
+                    'new_diagram_dialog.import_schema.detection.diagram_json'
+                ),
+                description: t(
+                    'new_diagram_dialog.import_schema.diagram_json.detection.unsupported_existing'
+                ),
+                severity: 'error' as const,
+            };
+        }
+
+        if (analysis.displayKind === 'diagram_json_mismatch') {
+            return null;
         }
 
         if (analysis.displayKind === 'sql_ambiguous') {
