@@ -728,13 +728,22 @@ export const es: LanguageTranslation = {
                 create_empty: 'Crear un diagrama vacío',
                 create_empty_description:
                     'Empiece desde cero añadiendo sus propias tablas.',
-                import_schema: 'Importar un esquema existente',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database:
-                    'Importar desde una base de datos existente',
-                no_schema_file: 'No tengo un archivo de esquema',
+                import: 'Importar',
+                import_description:
+                    'Desde un archivo, texto pegado o su base de datos.',
                 back: 'Atrás',
+            },
+
+            choose_import_method: {
+                title: '¿Cómo desea importar?',
+                description:
+                    'Elija una fuente para su diagrama de {{database}}.',
+                from_file: 'Archivo o texto pegado',
+                from_file_description: 'SQL, DBML o JSON de diagrama.',
+                from_database: 'Base de datos existente',
+                from_database_description:
+                    'Ejecute una consulta en su base de datos y pegue el resultado.',
+                back: 'Volver',
             },
 
             import_from_database: {
@@ -761,7 +770,7 @@ export const es: LanguageTranslation = {
                 import_failed:
                     'No se pudo importar el esquema de la base de datos. Compruebe el resultado e inténtelo de nuevo.',
                 back: 'Atrás',
-                continue: 'Continuar',
+                import: 'Importar',
             },
 
             import_schema: {
@@ -771,9 +780,10 @@ export const es: LanguageTranslation = {
                 auto_detect_hint: 'Detectaremos el formato automáticamente.',
                 or_divider: 'O',
                 choose_file: 'Elegir un archivo',
+                change_file_aria: 'Cambiar archivo, actualmente {{name}}',
                 selected_file: 'Archivo seleccionado: {{name}}',
                 back: 'Atrás',
-                continue: 'Continuar',
+                import: 'Importar',
                 mismatch: {
                     title: 'Este esquema parece {{detected}}, pero seleccionó {{selected}}.',
                     description:
@@ -782,10 +792,18 @@ export const es: LanguageTranslation = {
                     go_back: 'Atrás',
                 },
                 ambiguous: {
-                    title: 'Elija la base de datos de origen',
+                    title: 'Elija el SGBD de origen',
                     description:
-                        'No pudimos identificar automáticamente el dialecto SQL. Confirme de qué base proviene este esquema.',
-                    choose_source: 'Elegir base de origen',
+                        'No pudimos identificar automáticamente el dialecto SQL. Confirme de qué SGBD proviene este esquema.',
+                    choose_source: 'Elegir SGBD de origen',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% de confianza, detección automática)',
+                    recommended_tooltip: 'SGBD detectado automáticamente',
+                    recommended_aria:
+                        '{{database}}, SGBD detectado automáticamente',
                 },
                 detection: {
                     dialect: '{{database}} detectado',
@@ -794,7 +812,7 @@ export const es: LanguageTranslation = {
                     diagram_json: 'JSON de diagrama detectado',
                     sql_ambiguous_title: 'SQL detectado',
                     sql_ambiguous_description:
-                        'No se pudo identificar la base de datos.',
+                        'No se pudo identificar el SGBD automáticamente.',
                     clickhouse_unsupported: 'SQL de ClickHouse detectado',
                     unsupported: 'Formato no compatible',
                 },

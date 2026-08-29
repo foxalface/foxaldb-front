@@ -2,6 +2,12 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import { DDL_IMPORT_SUPPORTED_TYPES } from './sql-evidence';
 import type { DialectDetectionResult } from './types';
 
+export interface DialectCandidateScore {
+    databaseType: DatabaseType;
+    score: number;
+    confidencePercent: number;
+}
+
 export const areDialectsCompatibleForMatch = (
     selected: DatabaseType,
     detected: DatabaseType
@@ -43,22 +49,51 @@ export const getAmbiguousDialectCandidates = ({
         DDL_IMPORT_SUPPORTED_TYPES.has(candidate)
     );
 
-    const ordered = new Set<DatabaseType>();
+    if (supportedCandidates.length > 0) {
+        return supportedCandidates;
+    }
 
     if (DDL_IMPORT_SUPPORTED_TYPES.has(selectedDatabaseType)) {
-        ordered.add(selectedDatabaseType);
-    }
-
-    for (const candidate of supportedCandidates) {
-        ordered.add(candidate);
-    }
-
-    if (
-        ordered.size === 0 &&
-        DDL_IMPORT_SUPPORTED_TYPES.has(selectedDatabaseType)
-    ) {
         return [selectedDatabaseType];
     }
 
-    return Array.from(ordered);
+    return [];
+};
+
+export const getDialectCandidateScores = (
+    dialect: DialectDetectionResult,
+    candidates: DatabaseType[]
+): DialectCandidateScore[] => {
+    if (candidates.length === 0) {
+        return [];
+    }
+
+    const totalScore = candidates.reduce(
+        (sum, databaseType) => sum + (dialect.scores[databaseType] ?? 0),
+        0
+    );
+
+    return candidates.map((databaseType) => {
+        const score = dialect.scores[databaseType] ?? 0;
+        const confidencePercent =
+            totalScore > 0 ? Math.round((score / totalScore) * 100) : 0;
+
+        return {
+            databaseType,
+            score,
+            confidencePercent,
+        };
+    });
+};
+
+export const requiresAmbiguousDialectResolution = (
+    dialect: DialectDetectionResult,
+    selectedDatabaseType: DatabaseType
+): boolean => {
+    return (
+        getAmbiguousDialectCandidates({
+            selectedDatabaseType,
+            dialect,
+        }).length > 1
+    );
 };

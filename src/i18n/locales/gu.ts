@@ -710,11 +710,21 @@ export const gu: LanguageTranslation = {
                 description: '{{database}} માટે નવું ડાયાગ્રામ બનાવો.',
                 create_empty: 'ખાલી ડાયાગ્રામ બનાવો',
                 create_empty_description: 'પોતે ટેબલ ઉમેરીને શૂન્યથી શરૂ કરો.',
-                import_schema: 'હાલનું સ્કીમા આયાત કરો',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'હાલની ડેટાબેઝમાંથી આયાત કરો',
-                no_schema_file: 'મારી પાસે સ્કીમા ફાઇલ નથી',
+                import: 'આયાત કરો',
+                import_description:
+                    'ફાઇલ, પેસ્ટ કરેલ ટેક્સ્ટ અથવા તમારા ડેટાબેઝથી.',
+                back: 'પાછા',
+            },
+
+            choose_import_method: {
+                title: 'તમે કેવી રીતે આયાત કરવા માંગો છો?',
+                description:
+                    'તમારા {{database}} ડાયાગ્રામ માટે સ્રોત પસંદ કરો.',
+                from_file: 'ફાઇલ અથવા પેસ્ટ કરેલ ટેક્સ્ટ',
+                from_file_description: 'SQL, DBML અથવા ડાયાગ્રામ JSON.',
+                from_database: 'હાલની ડેટાબેઝ',
+                from_database_description:
+                    'તમારી ડેટાબેઝમાં ક્વેરી ચલાવો અને પરિણામ પેસ્ટ કરો.',
                 back: 'પાછા',
             },
 
@@ -740,7 +750,7 @@ export const gu: LanguageTranslation = {
                 import_failed:
                     'ડેટાબેઝ સ્કીમા આયાત કરી શકાઈ નથી. પરિણામ તપાસો અને ફરી પ્રયાસ કરો.',
                 back: 'પાછા',
-                continue: 'ચાલુ રાખો',
+                import: 'આયાત કરો',
             },
 
             import_schema: {
@@ -751,9 +761,10 @@ export const gu: LanguageTranslation = {
                 auto_detect_hint: 'અમે ફોર્મેટ આપમેળે શોધીશું.',
                 or_divider: 'અથવા',
                 choose_file: 'ફાઇલ પસંદ કરો',
+                change_file_aria: 'ફાઇલ બદલો, હાલમાં: {{name}}',
                 selected_file: 'પસંદ કરેલી ફાઇલ: {{name}}',
                 back: 'પાછા',
-                continue: 'ચાલુ રાખો',
+                import: 'આયાત કરો',
                 mismatch: {
                     title: 'આ સ્કીમા {{detected}} જેવું લાગે છે, પરંતુ તમે {{selected}} પસંદ કર્યું છે.',
                     description:
@@ -762,10 +773,17 @@ export const gu: LanguageTranslation = {
                     go_back: 'પાછા',
                 },
                 ambiguous: {
-                    title: 'સ્ત્રોત ડેટાબેસ પસંદ કરો',
+                    title: 'સ્ત્રોત DBMS પસંદ કરો',
                     description:
-                        'SQL બોલી આપમેળે ઓળખાઈ શકી નહીં. આ સ્કીમા કયા ડેટાબેસમાંથી આવ્યું છે તે પુષ્ટિ કરો.',
-                    choose_source: 'સ્ત્રોત ડેટાબેસ પસંદ કરો',
+                        'SQL બોલી આપમેળે ઓળખાઈ શકી નહીં. આ સ્કીમા કયા DBMS માંથી આવ્યું છે તે પુષ્ટિ કરો.',
+                    choose_source: 'સ્ત્રોત DBMS પસંદ કરો',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% વિશ્વાસ, આપમેળે શોધ)',
+                    recommended_tooltip: 'આપમેળે શોધાયેલ DBMS',
+                    recommended_aria: '{{database}}, આપમેળે શોધાયેલ DBMS',
                 },
                 detection: {
                     dialect: '{{database}} શોધાયું',

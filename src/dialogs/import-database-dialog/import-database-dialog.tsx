@@ -182,7 +182,7 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-screen w-full flex-col md:max-w-[900px]"
+                className="flex max-h-screen w-full flex-col overflow-hidden md:max-w-[900px]"
                 showClose
             >
                 <ImportSchemaStep

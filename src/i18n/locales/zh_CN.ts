@@ -680,11 +680,18 @@ export const zh_CN: LanguageTranslation = {
                 description: '为 {{database}} 创建新图表。',
                 create_empty: '创建空白图表',
                 create_empty_description: '从零开始，自行添加表。',
-                import_schema: '导入现有架构',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: '从现有数据库导入',
-                no_schema_file: '我没有架构文件',
+                import: '导入',
+                import_description: '从文件、粘贴文本或您的数据库。',
+                back: '返回',
+            },
+
+            choose_import_method: {
+                title: '您想如何导入？',
+                description: '为您的 {{database}} 图表选择来源。',
+                from_file: '文件或粘贴文本',
+                from_file_description: 'SQL、DBML 或图表 JSON。',
+                from_database: '现有数据库',
+                from_database_description: '在数据库中运行查询并粘贴结果。',
                 back: '返回',
             },
 
@@ -707,7 +714,7 @@ export const zh_CN: LanguageTranslation = {
                 unsupported_database: '此数据库类型不支持架构提取。',
                 import_failed: '无法导入数据库架构。请检查结果后重试。',
                 back: '返回',
-                continue: '继续',
+                import: '导入',
             },
 
             import_schema: {
@@ -717,9 +724,10 @@ export const zh_CN: LanguageTranslation = {
                 auto_detect_hint: '我们将自动检测格式。',
                 or_divider: '或',
                 choose_file: '选择文件',
+                change_file_aria: '更改文件，当前：{{name}}',
                 selected_file: '已选文件：{{name}}',
                 back: '返回',
-                continue: '继续',
+                import: '导入',
                 mismatch: {
                     title: '此架构看起来像 {{detected}}，但您选择了 {{selected}}。',
                     description: '切换到检测到的数据库类型，或返回重新选择。',
@@ -727,10 +735,17 @@ export const zh_CN: LanguageTranslation = {
                     go_back: '返回',
                 },
                 ambiguous: {
-                    title: '选择源数据库',
+                    title: '选择源 DBMS',
                     description:
-                        '无法自动识别 SQL 方言。请确认此架构来自哪个数据库。',
-                    choose_source: '选择源数据库',
+                        '无法自动识别 SQL 方言。请确认此架构来自哪个 DBMS。',
+                    choose_source: '选择源 DBMS',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}}（{{percent}}% 置信度，自动检测）',
+                    recommended_tooltip: '自动检测的 DBMS',
+                    recommended_aria: '{{database}}，自动检测的 DBMS',
                 },
                 detection: {
                     dialect: '已检测到 {{database}}',

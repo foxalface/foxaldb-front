@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import type { DatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { loadDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
-import { generateDiagramId } from '@/lib/utils';
+import { generateDiagramId, cn } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
@@ -34,6 +34,7 @@ import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/const
 import { useToast } from '@/components/toast/use-toast';
 import { ToastAction } from '@/components/toast/toast';
 import { ImportFromDatabaseStep } from './import-from-database/import-from-database-step';
+import { ChooseImportMethod } from './choose-import-method/choose-import-method';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {
     entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
@@ -402,13 +403,13 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setScriptResult('');
         setImportError(null);
         setResolvedSourceDialect(undefined);
-        setStep(CreateDiagramDialogStep.CHOOSE_INTENT);
+        setStep(CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD);
     }, []);
 
     const handleImportFromDatabaseBack = useCallback(() => {
         setMetadataResult('');
         setImportError(null);
-        setStep(CreateDiagramDialogStep.CHOOSE_INTENT);
+        setStep(CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD);
     }, []);
 
     const handleSelectTablesBack = useCallback(() => {
@@ -433,7 +434,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-dvh w-full flex-col md:max-w-[900px]"
+                className={cn(
+                    'flex max-h-dvh w-full flex-col overflow-hidden',
+                    step === CreateDiagramDialogStep.SELECT_TABLES
+                        ? 'max-w-2xl'
+                        : 'max-w-[30rem]'
+                )}
                 showClose={canClose}
                 onInteractOutside={(event) => {
                     if (isEntryFlowOwned) {
@@ -459,11 +465,24 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 ) : step === CreateDiagramDialogStep.CHOOSE_INTENT ? (
                     <ChooseIntent
                         databaseType={databaseType}
-                        onBack={() =>
-                            setStep(CreateDiagramDialogStep.SELECT_DATABASE)
-                        }
+                        onBack={() => {
+                            setDatabaseType(DatabaseType.GENERIC);
+                            setStep(CreateDiagramDialogStep.SELECT_DATABASE);
+                        }}
                         onCreateEmpty={createEmptyDiagram}
-                        onImportSchema={() =>
+                        onImport={() =>
+                            setStep(
+                                CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD
+                            )
+                        }
+                    />
+                ) : step === CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD ? (
+                    <ChooseImportMethod
+                        databaseType={databaseType}
+                        onBack={() =>
+                            setStep(CreateDiagramDialogStep.CHOOSE_INTENT)
+                        }
+                        onImportFromFile={() =>
                             setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
                         }
                         onImportFromDatabase={() =>

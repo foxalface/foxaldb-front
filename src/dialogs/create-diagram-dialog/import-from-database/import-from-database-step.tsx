@@ -177,7 +177,7 @@ export const ImportFromDatabaseStep: React.FC<ImportFromDatabaseStepProps> = ({
 
     return (
         <>
-            <DialogHeader>
+            <DialogHeader className="shrink-0">
                 <DialogTitle>
                     {t('new_diagram_dialog.import_from_database.title')}
                 </DialogTitle>
@@ -186,88 +186,100 @@ export const ImportFromDatabaseStep: React.FC<ImportFromDatabaseStepProps> = ({
                 </p>
             </DialogHeader>
 
-            <div className="mx-auto flex w-full max-w-lg flex-col gap-4">
-                <DatabaseEditionPicker
-                    databaseType={databaseType}
-                    databaseEdition={databaseEdition}
-                    setDatabaseEdition={setDatabaseEdition}
-                />
-
-                <MetadataQueryInstructions
-                    databaseType={databaseType}
-                    databaseEdition={databaseEdition}
-                    showSSMSInfoDialog={showSSMSInfoDialog}
-                    setShowSSMSInfoDialog={setShowSSMSInfoDialog}
-                />
-
-                <div className="flex flex-col gap-2">
-                    <label htmlFor={textareaId} className="text-sm font-medium">
-                        {t(
-                            'new_diagram_dialog.import_from_database.paste_result'
-                        )}
-                    </label>
-                    <Textarea
-                        id={textareaId}
-                        value={metadataResult}
-                        onChange={handleMetadataChange}
-                        placeholder={t(
-                            'new_diagram_dialog.import_from_database.paste_result_placeholder'
-                        )}
-                        className="min-h-40 resize-y font-mono text-xs"
-                        disabled={isImporting}
+            <div className="min-h-0 flex-1 overflow-y-auto">
+                <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-4">
+                    <DatabaseEditionPicker
+                        databaseType={databaseType}
+                        databaseEdition={databaseEdition}
+                        setDatabaseEdition={setDatabaseEdition}
                     />
-                </div>
 
-                {validationMessage ? (
-                    <div
-                        role="status"
-                        aria-live="polite"
-                        className={cn(
-                            'flex items-start gap-2 rounded-lg border px-3 py-2 text-sm',
-                            validationMessage.severity === 'success' &&
-                                'border-border bg-muted/50',
-                            validationMessage.severity === 'warning' &&
-                                'border-border bg-muted',
-                            validationMessage.severity === 'error' &&
-                                'border-destructive/30 bg-destructive/5 text-destructive'
-                        )}
-                    >
-                        {validationMessage.severity === 'success' ? (
-                            <CheckCircle2
-                                className="mt-0.5 size-4 shrink-0"
-                                aria-hidden
-                            />
-                        ) : (
-                            <AlertCircle
-                                className="mt-0.5 size-4 shrink-0"
-                                aria-hidden
-                            />
-                        )}
-                        <span>{validationMessage.text}</span>
+                    <MetadataQueryInstructions
+                        databaseType={databaseType}
+                        databaseEdition={databaseEdition}
+                        showSSMSInfoDialog={showSSMSInfoDialog}
+                        setShowSSMSInfoDialog={setShowSSMSInfoDialog}
+                    />
+
+                    <div className="flex flex-col gap-2">
+                        <label
+                            htmlFor={textareaId}
+                            className="text-sm font-medium"
+                        >
+                            {t(
+                                'new_diagram_dialog.import_from_database.paste_result'
+                            )}
+                        </label>
+                        <Textarea
+                            id={textareaId}
+                            value={metadataResult}
+                            onChange={handleMetadataChange}
+                            placeholder={t(
+                                'new_diagram_dialog.import_from_database.paste_result_placeholder'
+                            )}
+                            className="max-h-48 min-h-40 resize-none overflow-y-auto font-mono text-xs"
+                            disabled={isImporting}
+                        />
                     </div>
-                ) : null}
 
-                {validation.state === 'repairable' ? (
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={handleCheckResult}
-                        disabled={isRepairing || isImporting}
-                    >
-                        {t(
-                            'new_diagram_dialog.import_from_database.check_result'
-                        )}
-                    </Button>
-                ) : null}
+                    {validationMessage ? (
+                        <div
+                            role="status"
+                            aria-live="polite"
+                            className={cn(
+                                'flex items-start gap-2 rounded-lg border px-3 py-2 text-sm',
+                                validationMessage.severity === 'success' &&
+                                    'border-border bg-muted/50',
+                                validationMessage.severity === 'warning' &&
+                                    'border-amber-500 dark:border-amber-500/70',
+                                validationMessage.severity === 'error' &&
+                                    'border-destructive text-destructive'
+                            )}
+                        >
+                            {validationMessage.severity === 'success' ? (
+                                <CheckCircle2
+                                    className="mt-0.5 size-4 shrink-0"
+                                    aria-hidden
+                                />
+                            ) : (
+                                <AlertCircle
+                                    className={cn(
+                                        'mt-0.5 size-4 shrink-0',
+                                        validationMessage.severity ===
+                                            'warning' &&
+                                            'text-amber-600 dark:text-amber-500',
+                                        validationMessage.severity ===
+                                            'error' && 'text-destructive'
+                                    )}
+                                    aria-hidden
+                                />
+                            )}
+                            <span>{validationMessage.text}</span>
+                        </div>
+                    ) : null}
 
-                {importError ? (
-                    <p role="alert" className="text-sm text-destructive">
-                        {importError}
-                    </p>
-                ) : null}
+                    {validation.state === 'repairable' ? (
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleCheckResult}
+                            disabled={isRepairing || isImporting}
+                        >
+                            {t(
+                                'new_diagram_dialog.import_from_database.check_result'
+                            )}
+                        </Button>
+                    ) : null}
+
+                    {importError ? (
+                        <p role="alert" className="text-sm text-destructive">
+                            {importError}
+                        </p>
+                    ) : null}
+                </div>
             </div>
 
-            <DialogFooter className="mt-4 flex !justify-between gap-2">
+            <DialogFooter className="mt-4 flex shrink-0 !justify-between gap-2">
                 <Button
                     type="button"
                     variant="secondary"
@@ -281,7 +293,7 @@ export const ImportFromDatabaseStep: React.FC<ImportFromDatabaseStepProps> = ({
                     onClick={handleContinue}
                     disabled={!validation.canContinue || isImporting}
                 >
-                    {t('new_diagram_dialog.import_from_database.continue')}
+                    {t('new_diagram_dialog.import_from_database.import')}
                 </Button>
             </DialogFooter>
         </>

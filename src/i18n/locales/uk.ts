@@ -719,11 +719,20 @@ export const uk: LanguageTranslation = {
                 create_empty: 'Створити порожню діаграму',
                 create_empty_description:
                     'Почніть з нуля, додаючи власні таблиці.',
-                import_schema: 'Імпортувати наявну схему',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Імпорт з наявної бази',
-                no_schema_file: 'У мене немає файлу схеми',
+                import: 'Імпорт',
+                import_description:
+                    'З файлу, вставленого тексту або вашої бази даних.',
+                back: 'Назад',
+            },
+
+            choose_import_method: {
+                title: 'Як ви хочете імпортувати?',
+                description: 'Оберіть джерело для діаграми {{database}}.',
+                from_file: 'Файл або вставлений текст',
+                from_file_description: 'SQL, DBML або JSON діаграми.',
+                from_database: 'Наявна база даних',
+                from_database_description:
+                    'Виконайте запит у базі та вставте результат.',
                 back: 'Назад',
             },
 
@@ -749,7 +758,7 @@ export const uk: LanguageTranslation = {
                 import_failed:
                     'Не вдалося імпортувати схему бази. Перевірте результат і повторіть спробу.',
                 back: 'Назад',
-                continue: 'Продовжити',
+                import: 'Імпорт',
             },
 
             import_schema: {
@@ -760,9 +769,10 @@ export const uk: LanguageTranslation = {
                 auto_detect_hint: 'Ми автоматично визначимо формат.',
                 or_divider: 'АБО',
                 choose_file: 'Вибрати файл',
+                change_file_aria: 'Змінити файл, зараз: {{name}}',
                 selected_file: 'Вибраний файл: {{name}}',
                 back: 'Назад',
-                continue: 'Продолжити',
+                import: 'Імпорт',
                 mismatch: {
                     title: 'Ця схема схожа на {{detected}}, але ви вибрали {{selected}}.',
                     description:
@@ -771,10 +781,18 @@ export const uk: LanguageTranslation = {
                     go_back: 'Назад',
                 },
                 ambiguous: {
-                    title: 'Виберіть вихідну базу даних',
+                    title: 'Виберіть вихідну СУБД',
                     description:
-                        'Не вдалося автоматично визначити діалект SQL. Підтвердьте, з якої бази даних походить ця схема.',
-                    choose_source: 'Вибрати вихідну базу даних',
+                        'Не вдалося автоматично визначити діалект SQL. Підтвердьте, з якої СУБД походить ця схема.',
+                    choose_source: 'Вибрати вихідну СУБД',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% впевненості, автоматичне визначення)',
+                    recommended_tooltip: 'Автоматично визначена СУБД',
+                    recommended_aria:
+                        '{{database}}, автоматично визначена СУБД',
                 },
                 detection: {
                     dialect: 'Виявлено {{database}}',
@@ -783,7 +801,7 @@ export const uk: LanguageTranslation = {
                     diagram_json: 'Виявлено JSON діаграми',
                     sql_ambiguous_title: 'Виявлено SQL',
                     sql_ambiguous_description:
-                        'Не вдалося визначити базу даних.',
+                        'СУБД не вдалося визначити автоматично.',
                     clickhouse_unsupported: 'Виявлено SQL ClickHouse',
                     unsupported: 'Непідтримуваний формат',
                 },

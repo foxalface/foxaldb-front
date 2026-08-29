@@ -20,7 +20,6 @@ import {
 import { useDialog } from '@/hooks/use-dialog';
 
 const MIN_TITLE_WIDTH_PX = 32;
-const MAX_TITLE_WIDTH_PX = 220;
 
 export interface DiagramNameProps {}
 
@@ -46,12 +45,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
         const measuredWidth =
             measureRef.current?.offsetWidth ?? MIN_TITLE_WIDTH_PX;
 
-        setFieldWidth(
-            Math.min(
-                Math.max(Math.ceil(measuredWidth), MIN_TITLE_WIDTH_PX),
-                MAX_TITLE_WIDTH_PX
-            )
-        );
+        setFieldWidth(Math.max(Math.ceil(measuredWidth), MIN_TITLE_WIDTH_PX));
     }, [textToMeasure, editMode]);
 
     const saveDiagramName = useCallback(() => {
@@ -136,7 +130,7 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
         <div
             ref={containerRef}
             className={cn(
-                'group flex max-w-[min(90vw,28rem)] items-center gap-2 rounded-full border bg-secondary px-3 py-1.5 text-sm text-foreground shadow-none transition-colors',
+                'group flex max-w-[90vw] items-center gap-2 rounded-full border bg-secondary px-3 py-1.5 text-sm text-foreground shadow-none transition-colors',
                 'hover:border-border',
                 editMode && 'border-border'
             )}
@@ -162,12 +156,12 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                 }}
             />
 
-            <div className="flex min-w-0 items-center gap-1">
-                <div
-                    className="relative shrink-0"
-                    style={{ width: fieldWidth }}
-                >
-                    {editMode ? (
+            <div className="flex items-center gap-1">
+                {editMode ? (
+                    <div
+                        className="relative shrink-0"
+                        style={{ width: fieldWidth }}
+                    >
                         <Input
                             ref={inputRef}
                             autoFocus
@@ -183,28 +177,28 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                             }}
                             className="h-6 w-full rounded-full border-border bg-secondary px-2.5 text-sm focus-visible:ring-0"
                         />
-                    ) : (
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <h1
-                                    className="w-full truncate text-sm font-medium"
-                                    onDoubleClick={(e) => {
-                                        enterEditMode(e);
-                                    }}
-                                >
-                                    {diagramName}
-                                </h1>
-                            </TooltipTrigger>
-                            <TooltipContent
-                                side="bottom"
-                                sideOffset={8}
-                                className="z-[1100]"
+                    </div>
+                ) : (
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <h1
+                                className="whitespace-nowrap text-sm font-medium"
+                                onDoubleClick={(e) => {
+                                    enterEditMode(e);
+                                }}
                             >
-                                {t('tool_tips.double_click_to_edit')}
-                            </TooltipContent>
-                        </Tooltip>
-                    )}
-                </div>
+                                {diagramName}
+                            </h1>
+                        </TooltipTrigger>
+                        <TooltipContent
+                            side="bottom"
+                            sideOffset={8}
+                            className="z-[1100]"
+                        >
+                            {t('tool_tips.double_click_to_edit')}
+                        </TooltipContent>
+                    </Tooltip>
+                )}
 
                 {editMode ? (
                     <button

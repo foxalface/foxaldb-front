@@ -26,7 +26,7 @@ export const databaseEditionToLabelMap: Record<DatabaseEdition, string> = {
     [DatabaseEdition.POSTGRESQL_TIMESCALE]: 'Timescale',
 
     // MySQL
-    [DatabaseEdition.MYSQL_5_7]: 'V5.7',
+    [DatabaseEdition.MYSQL_5_7]: 'MySQL 5.7',
 
     // SQL Server
     [DatabaseEdition.SQL_SERVER_2016_AND_BELOW]: '2016 and below',

@@ -722,11 +722,20 @@ export const ne: LanguageTranslation = {
                 create_empty: 'खाली डायग्राम सिर्जना गर्नुहोस्',
                 create_empty_description:
                     'आफैं टेबल थपेर शून्यबाट सुरु गर्नुहोस्।',
-                import_schema: 'अवस्थित स्किमा आयात गर्नुहोस्',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'अवस्थित डाटाबेसबाट आयात गर्नुहोस्',
-                no_schema_file: 'मसँग स्किमा फाइल छैन',
+                import: 'आयात गर्नुहोस्',
+                import_description: 'फाइल, टाँसिएको पाठ वा तपाईंको डाटाबेसबाट।',
+                back: 'पछाडि',
+            },
+
+            choose_import_method: {
+                title: 'तपाईं कसरी आयात गर्न चाहनुहुन्छ?',
+                description:
+                    'तपाईंको {{database}} डायाग्रामको लागि स्रोत छान्नुहोस्।',
+                from_file: 'फाइल वा टाँसिएको पाठ',
+                from_file_description: 'SQL, DBML वा डायाग्राम JSON।',
+                from_database: 'अवस्थित डाटाबेस',
+                from_database_description:
+                    'आफ्नो डाटाबेसमा क्वेरी चलाउनुहोस् र नतिजा टाँस्नुहोस्।',
                 back: 'पछाडि',
             },
 
@@ -752,7 +761,7 @@ export const ne: LanguageTranslation = {
                 import_failed:
                     'डाटाबेस स्किमा आयात गर्न सकिएन। नतिजा जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्।',
                 back: 'पछाडि',
-                continue: 'जारी राख्नुहोस्',
+                import: 'आयात गर्नुहोस्',
             },
 
             import_schema: {
@@ -763,9 +772,10 @@ export const ne: LanguageTranslation = {
                 auto_detect_hint: 'हामी ढाँचा स्वचालित रूपमा पत्ता लगाउँछौं।',
                 or_divider: 'वा',
                 choose_file: 'फाइल छान्नुहोस्',
+                change_file_aria: 'फाइल परिवर्तन गर्नुहोस्, हाल: {{name}}',
                 selected_file: 'छानिएको फाइल: {{name}}',
                 back: 'पछाडि',
-                continue: 'जारी राख्नुहोस्',
+                import: 'आयात गर्नुहोस्',
                 mismatch: {
                     title: 'यो स्किमा {{detected}} जस्तो देखिन्छ, तर तपाईंले {{selected}} छान्नुभयो।',
                     description:
@@ -774,10 +784,18 @@ export const ne: LanguageTranslation = {
                     go_back: 'पछाडि',
                 },
                 ambiguous: {
-                    title: 'स्रोत डाटाबेस छान्नुहोस्',
+                    title: 'स्रोत DBMS छान्नुहोस्',
                     description:
-                        'SQL बोली स्वचालित रूपमा पहिचान गर्न सकिएन। यो स्किमा कुन डाटाबेसबाट आएको हो पुष्टि गर्नुहोस्।',
-                    choose_source: 'स्रोत डाटाबेस छान्नुहोस्',
+                        'SQL बोली स्वचालित रूपमा पहिचान गर्न सकिएन। यो स्किमा कुन DBMS बाट आएको हो पुष्टि गर्नुहोस्।',
+                    choose_source: 'स्रोत DBMS छान्नुहोस्',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% विश्वास, स्वचालित पहिचान)',
+                    recommended_tooltip: 'स्वचालित रूपमा पहिचान गरिएको DBMS',
+                    recommended_aria:
+                        '{{database}}, स्वचालित रूपमा पहिचान गरिएको DBMS',
                 },
                 detection: {
                     dialect: '{{database}} पत्ता लाग्यो',

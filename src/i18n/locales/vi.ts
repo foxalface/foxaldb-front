@@ -722,11 +722,20 @@ export const vi: LanguageTranslation = {
                 create_empty: 'Tạo sơ đồ trống',
                 create_empty_description:
                     'Bắt đầu từ đầu bằng cách tự thêm bảng.',
-                import_schema: 'Nhập lược đồ hiện có',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Nhập từ cơ sở dữ liệu hiện có',
-                no_schema_file: 'Tôi không có tệp lược đồ',
+                import: 'Nhập',
+                import_description:
+                    'Từ tệp, văn bản dán hoặc cơ sở dữ liệu của bạn.',
+                back: 'Quay lại',
+            },
+
+            choose_import_method: {
+                title: 'Bạn muốn nhập như thế nào?',
+                description: 'Chọn nguồn cho sơ đồ {{database}} của bạn.',
+                from_file: 'Tệp hoặc văn bản dán',
+                from_file_description: 'SQL, DBML hoặc JSON sơ đồ.',
+                from_database: 'Cơ sở dữ liệu hiện có',
+                from_database_description:
+                    'Chạy truy vấn trong cơ sở dữ liệu và dán kết quả.',
                 back: 'Quay lại',
             },
 
@@ -752,7 +761,7 @@ export const vi: LanguageTranslation = {
                 import_failed:
                     'Không thể nhập lược đồ cơ sở dữ liệu. Kiểm tra kết quả và thử lại.',
                 back: 'Quay lại',
-                continue: 'Tiếp tục',
+                import: 'Nhập',
             },
 
             import_schema: {
@@ -763,9 +772,10 @@ export const vi: LanguageTranslation = {
                 auto_detect_hint: 'Chúng tôi sẽ tự động phát hiện định dạng.',
                 or_divider: 'HOẶC',
                 choose_file: 'Chọn tệp',
+                change_file_aria: 'Đổi tệp, hiện tại: {{name}}',
                 selected_file: 'Tệp đã chọn: {{name}}',
                 back: 'Quay lại',
-                continue: 'Tiếp tục',
+                import: 'Nhập',
                 mismatch: {
                     title: 'Lược đồ này trông giống {{detected}}, nhưng bạn đã chọn {{selected}}.',
                     description:
@@ -774,10 +784,18 @@ export const vi: LanguageTranslation = {
                     go_back: 'Quay lại',
                 },
                 ambiguous: {
-                    title: 'Chọn cơ sở dữ liệu nguồn',
+                    title: 'Chọn DBMS nguồn',
                     description:
-                        'Không thể tự động xác định phương ngữ SQL. Xác nhận lược đồ này đến từ cơ sở dữ liệu nào.',
-                    choose_source: 'Chọn cơ sở dữ liệu nguồn',
+                        'Không thể tự động xác định phương ngữ SQL. Xác nhận lược đồ này đến từ DBMS nào.',
+                    choose_source: 'Chọn DBMS nguồn',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% tin cậy, tự động phát hiện)',
+                    recommended_tooltip: 'DBMS được phát hiện tự động',
+                    recommended_aria:
+                        '{{database}}, DBMS được phát hiện tự động',
                 },
                 detection: {
                     dialect: 'Đã phát hiện {{database}}',
@@ -786,7 +804,7 @@ export const vi: LanguageTranslation = {
                     diagram_json: 'Đã phát hiện JSON sơ đồ',
                     sql_ambiguous_title: 'Đã phát hiện SQL',
                     sql_ambiguous_description:
-                        'Không thể xác định cơ sở dữ liệu.',
+                        'Không thể tự động xác định DBMS.',
                     clickhouse_unsupported: 'Đã phát hiện SQL ClickHouse',
                     unsupported: 'Định dạng không được hỗ trợ',
                 },

@@ -161,7 +161,7 @@ describe('CreateDiagramDialog wizard flow', () => {
         ).toBeInTheDocument();
     });
 
-    it('returns to SELECT_DATABASE from CHOOSE_INTENT while preserving selection', async () => {
+    it('returns to SELECT_DATABASE from CHOOSE_INTENT and clears the selection', async () => {
         const user = userEvent.setup();
 
         render(<CreateDiagramDialog dialog={{ open: true }} />);
@@ -176,7 +176,9 @@ describe('CreateDiagramDialog wizard flow', () => {
         expect(
             screen.getByText('new_diagram_dialog.database_selection.title')
         ).toBeInTheDocument();
-        expect(screen.getByRole('radio', { name: 'PostgreSQL' })).toBeChecked();
+        expect(
+            screen.getByRole('radio', { name: 'PostgreSQL' })
+        ).not.toBeChecked();
         expect(addDiagram).not.toHaveBeenCalled();
         expect(createDiagram).not.toHaveBeenCalled();
     });
@@ -231,7 +233,7 @@ describe('CreateDiagramDialog wizard flow', () => {
         expect(loadDiagramFromData).toHaveBeenCalledTimes(1);
     });
 
-    it('advances to IMPORT_DATABASE when import schema is selected', async () => {
+    it('advances to import method selection when import is selected', async () => {
         const user = userEvent.setup();
 
         render(<CreateDiagramDialog dialog={{ open: true }} />);
@@ -239,7 +241,27 @@ describe('CreateDiagramDialog wizard flow', () => {
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
             screen.getByRole('button', {
-                name: /new_diagram_dialog\.choose_intent\.import_schema/,
+                name: /new_diagram_dialog\.choose_intent\.import/,
+            })
+        );
+
+        expect(screen.getByTestId('choose-import-method')).toBeInTheDocument();
+    });
+
+    it('advances to IMPORT_DATABASE from import method selection', async () => {
+        const user = userEvent.setup();
+
+        render(<CreateDiagramDialog dialog={{ open: true }} />);
+
+        await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
+        await user.click(
+            screen.getByRole('button', {
+                name: /new_diagram_dialog\.choose_intent\.import/,
+            })
+        );
+        await user.click(
+            screen.getByRole('button', {
+                name: /new_diagram_dialog\.choose_import_method\.from_file/,
             })
         );
 
@@ -247,7 +269,7 @@ describe('CreateDiagramDialog wizard flow', () => {
         expect(importSchemaPropsSpy).toHaveBeenCalled();
     });
 
-    it('returns from IMPORT_DATABASE to CHOOSE_INTENT', async () => {
+    it('returns from IMPORT_DATABASE to CHOOSE_IMPORT_METHOD', async () => {
         const user = userEvent.setup();
 
         render(<CreateDiagramDialog dialog={{ open: true }} />);
@@ -255,19 +277,20 @@ describe('CreateDiagramDialog wizard flow', () => {
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
             screen.getByRole('button', {
-                name: /new_diagram_dialog\.choose_intent\.import_schema/,
+                name: /new_diagram_dialog\.choose_intent\.import/,
+            })
+        );
+        await user.click(
+            screen.getByRole('button', {
+                name: /new_diagram_dialog\.choose_import_method\.from_file/,
             })
         );
         await user.click(screen.getByRole('button', { name: 'Import back' }));
 
-        expect(
-            screen.getByRole('heading', {
-                name: 'new_diagram_dialog.choose_intent.title',
-            })
-        ).toBeInTheDocument();
+        expect(screen.getByTestId('choose-import-method')).toBeInTheDocument();
     });
 
-    it('advances to IMPORT_FROM_DATABASE from the tertiary intent action', async () => {
+    it('advances to IMPORT_FROM_DATABASE from import method selection', async () => {
         const user = userEvent.setup();
 
         render(<CreateDiagramDialog dialog={{ open: true }} />);
@@ -275,7 +298,12 @@ describe('CreateDiagramDialog wizard flow', () => {
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
             screen.getByRole('button', {
-                name: 'new_diagram_dialog.choose_intent.import_from_database',
+                name: /new_diagram_dialog\.choose_intent\.import/,
+            })
+        );
+        await user.click(
+            screen.getByRole('button', {
+                name: /new_diagram_dialog\.choose_import_method\.from_database/,
             })
         );
 
@@ -287,7 +315,7 @@ describe('CreateDiagramDialog wizard flow', () => {
         expect(createDiagram).not.toHaveBeenCalled();
     });
 
-    it('returns from IMPORT_FROM_DATABASE to CHOOSE_INTENT', async () => {
+    it('returns from IMPORT_FROM_DATABASE to CHOOSE_IMPORT_METHOD', async () => {
         const user = userEvent.setup();
 
         render(<CreateDiagramDialog dialog={{ open: true }} />);
@@ -295,16 +323,17 @@ describe('CreateDiagramDialog wizard flow', () => {
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
             screen.getByRole('button', {
-                name: 'new_diagram_dialog.choose_intent.import_from_database',
+                name: /new_diagram_dialog\.choose_intent\.import/,
+            })
+        );
+        await user.click(
+            screen.getByRole('button', {
+                name: /new_diagram_dialog\.choose_import_method\.from_database/,
             })
         );
         await user.click(screen.getByRole('button', { name: 'Metadata back' }));
 
-        expect(
-            screen.getByRole('heading', {
-                name: 'new_diagram_dialog.choose_intent.title',
-            })
-        ).toBeInTheDocument();
+        expect(screen.getByTestId('choose-import-method')).toBeInTheDocument();
     });
 
     it('resets to SELECT_DATABASE when the dialog reopens', async () => {
@@ -337,8 +366,8 @@ describe('CreateDiagramDialog wizard flow', () => {
 describe('CreateDiagramDialogStep', () => {
     it('includes wizard steps for the import redesign', () => {
         expect(CreateDiagramDialogStep.CHOOSE_INTENT).toBe('CHOOSE_INTENT');
-        expect(CreateDiagramDialogStep.IMPORT_FROM_DATABASE).toBe(
-            'IMPORT_FROM_DATABASE'
+        expect(CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD).toBe(
+            'CHOOSE_IMPORT_METHOD'
         );
     });
 });

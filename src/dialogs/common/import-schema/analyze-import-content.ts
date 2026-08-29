@@ -4,6 +4,9 @@ import { detectSqlDialect } from '@/lib/import/detect-sql-dialect';
 import {
     areDialectsCompatibleForMatch,
     getAmbiguousDialectCandidates,
+    getDialectCandidateScores,
+    requiresAmbiguousDialectResolution,
+    type DialectCandidateScore,
 } from '@/lib/import/import-schema-resolution';
 import type {
     DialectDetectionResult,
@@ -44,6 +47,7 @@ export interface ImportDetectionAnalysis {
     resolutionState: ImportResolutionState;
     resolvedSourceDialect: DatabaseType | null;
     dialectCandidates: DatabaseType[];
+    dialectCandidateScores: DialectCandidateScore[];
     requiresExplicitSourceDialect: boolean;
 }
 
@@ -83,6 +87,15 @@ const buildSqlAnalysis = ({
     selectedDatabaseType: DatabaseType;
     resolvedSourceDialect?: DatabaseType | null;
 }): ImportDetectionAnalysis => {
+    const dialectCandidates = getAmbiguousDialectCandidates({
+        selectedDatabaseType,
+        dialect,
+    });
+    const dialectCandidateScores = getDialectCandidateScores(
+        dialect,
+        dialectCandidates
+    );
+
     if (resolvedSourceDialect) {
         return {
             format,
@@ -95,7 +108,28 @@ const buildSqlAnalysis = ({
             resolutionState: 'resolved',
             resolvedSourceDialect,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
+        };
+    }
+
+    if (requiresAmbiguousDialectResolution(dialect, selectedDatabaseType)) {
+        return {
+            format,
+            dialect,
+            importMethod: 'ddl',
+            canContinue: false,
+            displayKind: 'sql_ambiguous',
+            severity: 'warning',
+            detectedDatabaseType:
+                format.format === 'postgres_dump'
+                    ? DatabaseType.POSTGRESQL
+                    : dialect.top,
+            resolutionState: 'ambiguous',
+            resolvedSourceDialect: null,
+            dialectCandidates,
+            dialectCandidateScores,
+            requiresExplicitSourceDialect: true,
         };
     }
 
@@ -114,6 +148,7 @@ const buildSqlAnalysis = ({
             resolutionState: 'not_applicable',
             resolvedSourceDialect: null,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
         };
     }
@@ -130,6 +165,7 @@ const buildSqlAnalysis = ({
             resolutionState: 'not_applicable',
             resolvedSourceDialect: null,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
         };
     }
@@ -158,6 +194,7 @@ const buildSqlAnalysis = ({
             resolutionState: 'matched',
             resolvedSourceDialect: detectedDatabaseType,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
         };
     }
@@ -174,6 +211,7 @@ const buildSqlAnalysis = ({
             resolutionState: 'mismatch',
             resolvedSourceDialect: null,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: true,
         };
     }
@@ -188,10 +226,8 @@ const buildSqlAnalysis = ({
         detectedDatabaseType,
         resolutionState: 'ambiguous',
         resolvedSourceDialect: null,
-        dialectCandidates: getAmbiguousDialectCandidates({
-            selectedDatabaseType,
-            dialect,
-        }),
+        dialectCandidates,
+        dialectCandidateScores,
         requiresExplicitSourceDialect: true,
     };
 };
@@ -215,6 +251,7 @@ export const analyzeImportContent = (
             resolutionState: 'not_applicable',
             resolvedSourceDialect: null,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
         };
     }
@@ -235,6 +272,7 @@ export const analyzeImportContent = (
             resolutionState: 'not_applicable',
             resolvedSourceDialect: null,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
         };
     }
@@ -251,6 +289,7 @@ export const analyzeImportContent = (
             resolutionState: 'not_applicable',
             resolvedSourceDialect: null,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
         };
     }
@@ -267,6 +306,7 @@ export const analyzeImportContent = (
             resolutionState: 'not_applicable',
             resolvedSourceDialect: null,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
         };
     }
@@ -283,6 +323,7 @@ export const analyzeImportContent = (
             resolutionState: 'not_applicable',
             resolvedSourceDialect: null,
             dialectCandidates: [],
+            dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
         };
     }

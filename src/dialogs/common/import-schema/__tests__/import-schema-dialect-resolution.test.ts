@@ -1,4 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { DatabaseType } from '@/lib/domain/database-type';
 import {
     genericAmbiguousSql,
@@ -6,6 +9,14 @@ import {
     postgresDistinctiveSql,
 } from '@/lib/import/__tests__/fixtures/import-samples';
 import { analyzeImportContent } from '../analyze-import-content';
+
+const stressSql = readFileSync(
+    join(
+        dirname(fileURLToPath(import.meta.url)),
+        '../../../../lib/import/__tests__/fixtures/multi_dbms_ambiguity_stress_test.sql'
+    ),
+    'utf8'
+);
 
 describe('analyzeImportContent dialect resolution', () => {
     it('matches PostgreSQL SQL against a PostgreSQL selection', () => {
@@ -59,5 +70,32 @@ describe('analyzeImportContent dialect resolution', () => {
         expect(resolved.resolutionState).toBe('resolved');
         expect(resolved.canContinue).toBe(true);
         expect(resolved.resolvedSourceDialect).toBe(DatabaseType.POSTGRESQL);
+    });
+
+    it('shows all competing dialects with confidence scores for mixed SQL', () => {
+        const result = analyzeImportContent(stressSql, DatabaseType.MYSQL);
+
+        expect(result.displayKind).toBe('sql_ambiguous');
+        expect(result.resolutionState).toBe('ambiguous');
+        expect(result.dialectCandidates.length).toBeGreaterThan(1);
+        expect(result.dialectCandidateScores).toHaveLength(
+            result.dialectCandidates.length
+        );
+        expect(
+            result.dialectCandidateScores.every(
+                (entry) => entry.confidencePercent > 0
+            )
+        ).toBe(true);
+        expect(result.dialectCandidates).toContain(DatabaseType.POSTGRESQL);
+        expect(result.dialectCandidates).toContain(DatabaseType.MYSQL);
+    });
+
+    it('uses auto-detection for the recommended DBMS on mixed SQL', () => {
+        const result = analyzeImportContent(stressSql, DatabaseType.MYSQL);
+
+        expect(result.detectedDatabaseType).toBe(DatabaseType.POSTGRESQL);
+        expect(result.dialectCandidateScores[0]?.databaseType).not.toBe(
+            DatabaseType.POSTGRESQL
+        );
     });
 });

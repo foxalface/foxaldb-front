@@ -1,8 +1,12 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
+import { TooltipProvider } from '@/components/tooltip/tooltip';
 import { DatabaseType } from '@/lib/domain/database-type';
 import {
     dbmlSample,
@@ -13,6 +17,14 @@ import {
     randomText,
 } from '@/lib/import/__tests__/fixtures/import-samples';
 import { ImportSchemaStep } from '../import-schema-step';
+
+const stressSql = readFileSync(
+    join(
+        dirname(fileURLToPath(import.meta.url)),
+        '../../../../lib/import/__tests__/fixtures/multi_dbms_ambiguity_stress_test.sql'
+    ),
+    'utf8'
+);
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
@@ -25,6 +37,10 @@ vi.mock('react-i18next', () => ({
                 return `Selected file: ${options?.name ?? ''}`;
             }
 
+            if (key === 'new_diagram_dialog.import_schema.change_file_aria') {
+                return `Change file, currently ${options?.name ?? ''}`;
+            }
+
             if (key === 'new_diagram_dialog.import_schema.mismatch.title') {
                 return `Mismatch ${options?.detected} vs ${options?.selected}`;
             }
@@ -35,6 +51,41 @@ vi.mock('react-i18next', () => ({
 
             if (key === 'new_diagram_dialog.import_schema.mismatch.switch') {
                 return `Switch to ${options?.database}`;
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.ambiguous.candidate_with_confidence'
+            ) {
+                return options?.database ?? key;
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.ambiguous.candidate_recommended'
+            ) {
+                return options?.database ?? key;
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.ambiguous.confidence_badge'
+            ) {
+                return `${options?.percent}%`;
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.ambiguous.recommended_aria'
+            ) {
+                return `${options?.database} recommended`;
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.ambiguous.recommended_tooltip'
+            ) {
+                return 'Automatically detected DBMS';
             }
 
             return key;
@@ -50,23 +101,25 @@ const renderImportSchemaStep = (
     const onContinue = vi.fn();
     const onBack = vi.fn();
 
-    render(
-        <Dialog open>
-            <DialogContent>
-                <ImportSchemaStep
-                    databaseType={DatabaseType.POSTGRESQL}
-                    setDatabaseType={setDatabaseType}
-                    scriptResult=""
-                    setScriptResult={setScriptResult}
-                    onContinue={onContinue}
-                    onBack={onBack}
-                    {...props}
-                />
-            </DialogContent>
-        </Dialog>
+    const view = render(
+        <TooltipProvider>
+            <Dialog open>
+                <DialogContent>
+                    <ImportSchemaStep
+                        databaseType={DatabaseType.POSTGRESQL}
+                        setDatabaseType={setDatabaseType}
+                        scriptResult=""
+                        setScriptResult={setScriptResult}
+                        onContinue={onContinue}
+                        onBack={onBack}
+                        {...props}
+                    />
+                </DialogContent>
+            </Dialog>
+        </TooltipProvider>
     );
 
-    return { setScriptResult, setDatabaseType, onContinue, onBack };
+    return { setScriptResult, setDatabaseType, onContinue, onBack, ...view };
 };
 
 describe('ImportSchemaStep', () => {
@@ -106,7 +159,7 @@ describe('ImportSchemaStep', () => {
         ).toBeInTheDocument();
         expect(
             screen.getByRole('button', {
-                name: 'new_diagram_dialog.import_schema.continue',
+                name: 'new_diagram_dialog.import_schema.import',
             })
         ).toBeDisabled();
     });
@@ -141,12 +194,14 @@ describe('ImportSchemaStep', () => {
         ).toBeInTheDocument();
 
         const continueButton = screen.getByRole('button', {
-            name: 'new_diagram_dialog.import_schema.continue',
+            name: 'new_diagram_dialog.import_schema.import',
         });
 
-        await waitFor(() => {
-            expect(continueButton).toBeEnabled();
-        });
+        expect(continueButton).toBeDisabled();
+
+        await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
+
+        expect(continueButton).toBeEnabled();
 
         await user.click(continueButton);
 
@@ -154,6 +209,19 @@ describe('ImportSchemaStep', () => {
             importMethod: 'ddl',
             resolvedSourceDialect: DatabaseType.POSTGRESQL,
         });
+    });
+
+    it('marks the automatically detected DBMS with a recommended star', () => {
+        renderImportSchemaStep({
+            scriptResult: stressSql,
+        });
+
+        expect(
+            screen.getByLabelText('PostgreSQL recommended')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByLabelText('SQL Server recommended')
+        ).not.toBeInTheDocument();
     });
 
     it('calls onContinue with DBML import method without a SQL dialect', async () => {
@@ -167,7 +235,7 @@ describe('ImportSchemaStep', () => {
 
         await user.click(
             screen.getByRole('button', {
-                name: 'new_diagram_dialog.import_schema.continue',
+                name: 'new_diagram_dialog.import_schema.import',
             })
         );
 
@@ -184,9 +252,33 @@ describe('ImportSchemaStep', () => {
 
         expect(
             screen.getByRole('button', {
-                name: 'new_diagram_dialog.import_schema.continue',
+                name: 'new_diagram_dialog.import_schema.import',
             })
         ).toBeDisabled();
+    });
+
+    it('shows the selected file name on the upload button', async () => {
+        const user = userEvent.setup();
+        const setScriptResult = vi.fn();
+        const file = new File(['CREATE TABLE t (id INT);'], 'schema.sql', {
+            type: 'text/plain',
+        });
+
+        const { container } = renderImportSchemaStep({ setScriptResult });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        expect(fileInput).not.toBeNull();
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        expect(
+            screen.getByRole('button', {
+                name: 'Change file, currently schema.sql',
+            })
+        ).toHaveTextContent('schema.sql');
+        expect(setScriptResult).toHaveBeenCalled();
     });
 
     it('rejects files larger than 5 MB before reading them', async () => {
@@ -197,14 +289,14 @@ describe('ImportSchemaStep', () => {
             value: 5 * 1024 * 1024 + 1,
         });
 
-        renderImportSchemaStep({ setScriptResult });
+        const { container } = renderImportSchemaStep({ setScriptResult });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
 
-        await user.upload(
-            screen.getByLabelText(
-                'new_diagram_dialog.import_schema.choose_file'
-            ),
-            largeFile
-        );
+        expect(fileInput).not.toBeNull();
+
+        await user.upload(fileInput as HTMLInputElement, largeFile);
 
         expect(setScriptResult).not.toHaveBeenCalled();
         expect(
@@ -268,19 +360,21 @@ describe('ImportSchemaStep existing diagram mode', () => {
         const onBack = vi.fn();
 
         render(
-            <Dialog open>
-                <DialogContent>
-                    <ImportSchemaStep
-                        mode="existing"
-                        databaseType={DatabaseType.POSTGRESQL}
-                        scriptResult=""
-                        setScriptResult={setScriptResult}
-                        onContinue={onContinue}
-                        onBack={onBack}
-                        {...props}
-                    />
-                </DialogContent>
-            </Dialog>
+            <TooltipProvider>
+                <Dialog open>
+                    <DialogContent>
+                        <ImportSchemaStep
+                            mode="existing"
+                            databaseType={DatabaseType.POSTGRESQL}
+                            scriptResult=""
+                            setScriptResult={setScriptResult}
+                            onContinue={onContinue}
+                            onBack={onBack}
+                            {...props}
+                        />
+                    </DialogContent>
+                </Dialog>
+            </TooltipProvider>
         );
 
         return { setScriptResult, onContinue, onBack };
@@ -304,7 +398,7 @@ describe('ImportSchemaStep existing diagram mode', () => {
         ).toBeDisabled();
     });
 
-    it('allows ambiguous SQL when current diagram DBMS is preselected', async () => {
+    it('blocks ambiguous SQL import until the DBMS is chosen explicitly', async () => {
         const user = userEvent.setup();
         const { onContinue } = renderExistingImportSchemaStep({
             scriptResult: genericAmbiguousSql,
@@ -314,9 +408,11 @@ describe('ImportSchemaStep existing diagram mode', () => {
             name: 'import_database_dialog.import_schema.import',
         });
 
-        await waitFor(() => {
-            expect(importButton).toBeEnabled();
-        });
+        expect(importButton).toBeDisabled();
+
+        await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
+
+        expect(importButton).toBeEnabled();
 
         await user.click(importButton);
 

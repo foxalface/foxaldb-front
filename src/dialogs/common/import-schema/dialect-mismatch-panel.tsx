@@ -11,7 +11,6 @@ export interface DialectMismatchPanelProps {
     selectedDatabaseType: DatabaseType;
     detectedDatabaseType: DatabaseType;
     onSwitchDatabase?: () => void;
-    onBack: () => void;
 }
 
 export const DialectMismatchPanel: React.FC<DialectMismatchPanelProps> = ({
@@ -19,7 +18,6 @@ export const DialectMismatchPanel: React.FC<DialectMismatchPanelProps> = ({
     selectedDatabaseType,
     detectedDatabaseType,
     onSwitchDatabase,
-    onBack,
 }) => {
     const { t } = useTranslation();
 
@@ -31,10 +29,6 @@ export const DialectMismatchPanel: React.FC<DialectMismatchPanelProps> = ({
         variant === 'existing'
             ? 'import_database_dialog.import_schema.mismatch.description'
             : 'new_diagram_dialog.import_schema.mismatch.description';
-    const backKey =
-        variant === 'existing'
-            ? 'import_database_dialog.import_schema.mismatch.cancel'
-            : 'new_diagram_dialog.import_schema.mismatch.go_back';
 
     return (
         <div
@@ -49,19 +43,16 @@ export const DialectMismatchPanel: React.FC<DialectMismatchPanelProps> = ({
                 })}
             </p>
             <p className="text-muted-foreground">{t(descriptionKey)}</p>
-            <div className="flex flex-wrap gap-2">
-                {variant === 'create' && onSwitchDatabase ? (
+            {variant === 'create' && onSwitchDatabase ? (
+                <div className="flex justify-center">
                     <Button type="button" onClick={onSwitchDatabase}>
                         {t('new_diagram_dialog.import_schema.mismatch.switch', {
                             database:
                                 databaseTypeToLabelMap[detectedDatabaseType],
                         })}
                     </Button>
-                ) : null}
-                <Button type="button" variant="secondary" onClick={onBack}>
-                    {t(backKey)}
-                </Button>
-            </div>
+                </div>
+            ) : null}
         </div>
     );
 };

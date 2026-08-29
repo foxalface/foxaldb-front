@@ -6,7 +6,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { Upload } from 'lucide-react';
+import { Upload, FileText } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
     DialogFooter,
@@ -17,6 +17,7 @@ import { Textarea } from '@/components/textarea/textarea';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils';
 import { analyzeImportContent } from './analyze-import-content';
 import { MAX_IMPORT_FILE_SIZE_BYTES } from './constants';
 import { DetectionSummary } from './detection-summary';
@@ -77,6 +78,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
 
     const { t } = useTranslation();
     const textareaId = useId();
+    const fileInputId = useId();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(
         null
@@ -106,15 +108,8 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
             return baseAnalysis.resolvedSourceDialect;
         }
 
-        if (
-            baseAnalysis.resolutionState === 'ambiguous' &&
-            baseAnalysis.dialectCandidates.includes(databaseType)
-        ) {
-            return databaseType;
-        }
-
         return null;
-    }, [userResolvedSourceDialect, baseAnalysis, databaseType]);
+    }, [userResolvedSourceDialect, baseAnalysis]);
 
     const canContinue = useMemo(() => {
         if (!baseAnalysis.importMethod) {
@@ -133,6 +128,10 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         }
 
         if (baseAnalysis.importMethod === 'ddl') {
+            if (baseAnalysis.resolutionState === 'ambiguous') {
+                return userResolvedSourceDialect !== null;
+            }
+
             return effectiveResolvedSourceDialect !== null;
         }
 
@@ -174,16 +173,8 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
     const handleResolveAmbiguousDialect = useCallback(
         (resolvedDialect: DatabaseType) => {
             setUserResolvedSourceDialect(resolvedDialect);
-
-            if (
-                mode === 'create' &&
-                setDatabaseType &&
-                resolvedDialect !== databaseType
-            ) {
-                setDatabaseType(resolvedDialect);
-            }
         },
-        [databaseType, mode, setDatabaseType]
+        []
     );
 
     const handleFileChange = useCallback(
@@ -252,112 +243,149 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         continueLabel ??
         (mode === 'existing'
             ? t('import_database_dialog.import_schema.import')
-            : t('new_diagram_dialog.import_schema.continue'));
+            : t('new_diagram_dialog.import_schema.import'));
 
     return (
         <>
-            <DialogHeader>
+            <DialogHeader className="shrink-0">
                 <DialogTitle>{resolvedTitle}</DialogTitle>
             </DialogHeader>
 
-            <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-4">
-                <div className="flex flex-col gap-2">
-                    <label htmlFor={textareaId} className="text-sm font-medium">
-                        {t('new_diagram_dialog.import_schema.textarea_label')}
-                    </label>
-                    <Textarea
-                        id={textareaId}
-                        value={scriptResult}
-                        onChange={handleTextareaChange}
-                        placeholder={t(
-                            'new_diagram_dialog.import_schema.textarea_placeholder'
-                        )}
-                        className="min-h-40 resize-y"
-                        disabled={isImporting}
-                    />
-                    <p className="text-sm text-muted-foreground">
-                        {t('new_diagram_dialog.import_schema.auto_detect_hint')}
-                    </p>
-                </div>
-
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    <span className="h-px flex-1 bg-border" aria-hidden />
-                    <span>
-                        {t('new_diagram_dialog.import_schema.or_divider')}
-                    </span>
-                    <span className="h-px flex-1 bg-border" aria-hidden />
-                </div>
-
-                <div className="flex flex-col items-start gap-2">
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        className="sr-only"
-                        aria-label={t(
-                            'new_diagram_dialog.import_schema.choose_file'
-                        )}
-                        onChange={handleFileChange}
-                        disabled={isImporting}
-                    />
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={isImporting}
-                    >
-                        <Upload className="size-4" aria-hidden />
-                        {t('new_diagram_dialog.import_schema.choose_file')}
-                    </Button>
-                    {selectedFileName ? (
-                        <p className="text-sm text-muted-foreground">
+            <div className="min-h-0 flex-1 overflow-y-auto">
+                <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-4">
+                    <div className="flex flex-col gap-2">
+                        <label
+                            htmlFor={textareaId}
+                            className="text-sm font-medium"
+                        >
                             {t(
-                                'new_diagram_dialog.import_schema.selected_file',
-                                { name: selectedFileName }
+                                'new_diagram_dialog.import_schema.textarea_label'
                             )}
-                        </p>
+                        </label>
+                        <Textarea
+                            id={textareaId}
+                            value={scriptResult}
+                            onChange={handleTextareaChange}
+                            placeholder={t(
+                                'new_diagram_dialog.import_schema.textarea_placeholder'
+                            )}
+                            className="max-h-48 min-h-40 resize-none overflow-y-auto"
+                            disabled={isImporting}
+                        />
+                    </div>
+
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <span className="h-px flex-1 bg-border" aria-hidden />
+                        <span>
+                            {t('new_diagram_dialog.import_schema.or_divider')}
+                        </span>
+                        <span className="h-px flex-1 bg-border" aria-hidden />
+                    </div>
+
+                    <div className="flex w-full flex-col items-center gap-2">
+                        <input
+                            ref={fileInputRef}
+                            id={fileInputId}
+                            type="file"
+                            className="sr-only"
+                            tabIndex={-1}
+                            aria-hidden
+                            onChange={handleFileChange}
+                            disabled={isImporting}
+                        />
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full max-w-full gap-2"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={isImporting}
+                            aria-label={
+                                selectedFileName
+                                    ? t(
+                                          'new_diagram_dialog.import_schema.change_file_aria',
+                                          { name: selectedFileName }
+                                      )
+                                    : t(
+                                          'new_diagram_dialog.import_schema.choose_file'
+                                      )
+                            }
+                            title={selectedFileName ?? undefined}
+                        >
+                            {selectedFileName ? (
+                                <FileText
+                                    className="size-4 shrink-0"
+                                    aria-hidden
+                                />
+                            ) : (
+                                <Upload
+                                    className="size-4 shrink-0"
+                                    aria-hidden
+                                />
+                            )}
+                            <span
+                                className={cn(selectedFileName && 'truncate')}
+                            >
+                                {selectedFileName ??
+                                    t(
+                                        'new_diagram_dialog.import_schema.choose_file'
+                                    )}
+                            </span>
+                        </Button>
+                        {fileErrorKey ? (
+                            <p
+                                role="alert"
+                                className="text-sm text-destructive"
+                            >
+                                {t(fileErrorKey)}
+                            </p>
+                        ) : null}
+                    </div>
+
+                    {baseAnalysis.resolutionState !== 'ambiguous' ? (
+                        <DetectionSummary analysis={baseAnalysis} />
                     ) : null}
-                    {fileErrorKey ? (
+
+                    {baseAnalysis.displayKind === 'dialect_mismatch' &&
+                    baseAnalysis.detectedDatabaseType ? (
+                        <DialectMismatchPanel
+                            variant={mode}
+                            selectedDatabaseType={databaseType}
+                            detectedDatabaseType={
+                                baseAnalysis.detectedDatabaseType
+                            }
+                            onSwitchDatabase={
+                                mode === 'create'
+                                    ? handleSwitchDatabase
+                                    : undefined
+                            }
+                        />
+                    ) : null}
+
+                    {baseAnalysis.resolutionState === 'ambiguous' ? (
+                        <DialectResolutionPanel
+                            variant={mode}
+                            selectedDatabaseType={databaseType}
+                            candidates={baseAnalysis.dialectCandidates}
+                            candidateScores={
+                                baseAnalysis.dialectCandidateScores
+                            }
+                            detectedDatabaseType={
+                                baseAnalysis.detectedDatabaseType
+                            }
+                            resolvedSourceDialect={userResolvedSourceDialect}
+                            onResolve={handleResolveAmbiguousDialect}
+                        />
+                    ) : null}
+
+                    {importError ? (
                         <p role="alert" className="text-sm text-destructive">
-                            {t(fileErrorKey)}
+                            {importError}
                         </p>
                     ) : null}
                 </div>
-
-                <DetectionSummary analysis={baseAnalysis} />
-
-                {baseAnalysis.displayKind === 'dialect_mismatch' &&
-                baseAnalysis.detectedDatabaseType ? (
-                    <DialectMismatchPanel
-                        variant={mode}
-                        selectedDatabaseType={databaseType}
-                        detectedDatabaseType={baseAnalysis.detectedDatabaseType}
-                        onSwitchDatabase={
-                            mode === 'create' ? handleSwitchDatabase : undefined
-                        }
-                        onBack={onBack}
-                    />
-                ) : null}
-
-                {baseAnalysis.resolutionState === 'ambiguous' ? (
-                    <DialectResolutionPanel
-                        variant={mode}
-                        selectedDatabaseType={databaseType}
-                        candidates={baseAnalysis.dialectCandidates}
-                        resolvedSourceDialect={
-                            userResolvedSourceDialect ?? databaseType
-                        }
-                        onResolve={handleResolveAmbiguousDialect}
-                    />
-                ) : null}
-
-                {importError ? (
-                    <p role="alert" className="text-sm text-destructive">
-                        {importError}
-                    </p>
-                ) : null}
             </div>
 
-            <DialogFooter className="mt-4 flex !justify-between gap-2">
+            <DialogFooter className="mt-4 flex shrink-0 !justify-between gap-2">
                 <Button
                     type="button"
                     variant="secondary"

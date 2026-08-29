@@ -54,6 +54,25 @@ export const MetadataQueryInstructions: React.FC<
         [databaseType, databaseEdition, databaseClient]
     );
 
+    const querySnippet = (
+        <div className="h-20 w-full shrink-0 md:h-[100px]">
+            <CodeSnippet
+                className="size-full flex-none"
+                code={minimizeQuery(code)}
+                codeToCopy={code}
+                language={databaseClient ? 'shell' : 'sql'}
+                editorProps={{
+                    options: {
+                        scrollbar: {
+                            vertical: 'auto',
+                            horizontal: 'auto',
+                        },
+                    },
+                }}
+            />
+        </div>
+    );
+
     return (
         <div className="flex flex-col gap-2">
             <div className="flex flex-col gap-1">
@@ -94,20 +113,10 @@ export const MetadataQueryInstructions: React.FC<
                             </TabsTrigger>
                         ))}
                     </TabsList>
-                    <CodeSnippet
-                        className="h-40 w-full md:h-[200px]"
-                        code={minimizeQuery(code)}
-                        codeToCopy={code}
-                        language={databaseClient ? 'shell' : 'sql'}
-                    />
+                    {querySnippet}
                 </Tabs>
             ) : (
-                <CodeSnippet
-                    className="h-40 w-full md:h-[200px]"
-                    code={minimizeQuery(code)}
-                    codeToCopy={code}
-                    language="sql"
-                />
+                querySnippet
             )}
         </div>
     );

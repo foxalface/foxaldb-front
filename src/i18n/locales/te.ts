@@ -717,11 +717,21 @@ export const te: LanguageTranslation = {
                 create_empty: 'ఖాళీ డయాగ్రామ్ సృష్టించండి',
                 create_empty_description:
                     'మీరే టేబుల్స్ జోడించి ప్రారంభం నుండి ప్రారంభించండి.',
-                import_schema: 'ఇప్పటికే ఉన్న స్కీమాను దిగుమతి చేయండి',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'ఇప్పటికే ఉన్న డేటాబేస్ నుండి దిగుమతి',
-                no_schema_file: 'నా దగ్గర స్కీమా ఫైల్ లేదు',
+                import: 'దిగుమతి',
+                import_description:
+                    'ఫైల్, అతికించిన టెక్స్ట్ లేదా మీ డేటాబేస్ నుండి.',
+                back: 'వెనక్కి',
+            },
+
+            choose_import_method: {
+                title: 'మీరు ఎలా దిగుమతి చేయాలనుకుంటున్నారు?',
+                description:
+                    'మీ {{database}} డయాగ్రామ్ కోసం మూలాన్ని ఎంచుకోండి.',
+                from_file: 'ఫైల్ లేదా అతికించిన టెక్స్ట్',
+                from_file_description: 'SQL, DBML లేదా డయాగ్రామ్ JSON.',
+                from_database: 'ఇప్పటికే ఉన్న డేటాబేస్',
+                from_database_description:
+                    'మీ డేటాబేస్‌లో క్వెరీ నడపండి మరియు ఫలితాన్ని అతికించండి.',
                 back: 'వెనక్కి',
             },
 
@@ -747,7 +757,7 @@ export const te: LanguageTranslation = {
                 import_failed:
                     'డేటాబేస్ స్కీమాను దిగుమతి చేయలేకపోయాం. ఫలితాన్ని తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
                 back: 'వెనక్కి',
-                continue: 'కొనసాగించు',
+                import: 'దిగుమతి చేయి',
             },
 
             import_schema: {
@@ -758,9 +768,10 @@ export const te: LanguageTranslation = {
                 auto_detect_hint: 'మేము ఫార్మాట్‌ను స్వయంచాలకంగా గుర్తిస్తాము.',
                 or_divider: 'లేదా',
                 choose_file: 'ఫైల్ ఎంచుకోండి',
+                change_file_aria: 'ఫైల్ మార్చు, ప్రస్తుతం: {{name}}',
                 selected_file: 'ఎంచుకున్న ఫైల్: {{name}}',
                 back: 'వెనక్కి',
-                continue: 'కొనసాగించు',
+                import: 'దిగుమతి చేయి',
                 mismatch: {
                     title: 'ఈ స్కీమా {{detected}} లాగా కనిపిస్తోంది, కానీ మీరు {{selected}} ఎంచుకున్నారు.',
                     description:
@@ -769,10 +780,18 @@ export const te: LanguageTranslation = {
                     go_back: 'వెనక్కి',
                 },
                 ambiguous: {
-                    title: 'మూల డేటాబేస్ ఎంచుకోండి',
+                    title: 'మూల DBMS ఎంచుకోండి',
                     description:
-                        'SQL భాషా విభాగాన్ని స్వయంచాలకంగా గుర్తించలేకపోయాము. ఈ స్కీమా ఏ డేటాబేస్ నుండి వచ్చిందో నిర్ధారించండి.',
-                    choose_source: 'మూల డేటాబేస్ ఎంచుకోండి',
+                        'SQL భాషా విభాగాన్ని స్వయంచాలకంగా గుర్తించలేకపోయాము. ఈ స్కీమా ఏ DBMS నుండి వచ్చిందో నిర్ధారించండి.',
+                    choose_source: 'మూల DBMS ఎంచుకోండి',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% నమ్మకం, స్వయంచాలక గుర్తింపు)',
+                    recommended_tooltip: 'స్వయంచాలకంగా గుర్తించిన DBMS',
+                    recommended_aria:
+                        '{{database}}, స్వయంచాలకంగా గుర్తించిన DBMS',
                 },
                 detection: {
                     dialect: '{{database}} గుర్తించబడింది',

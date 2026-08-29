@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { DarkTheme } from './themes/dark';
 import { LightTheme } from './themes/light';
 import type { editor } from 'monaco-editor';
+import { copyTextToClipboard } from '@/lib/copy-text-to-clipboard';
 
 export const Editor = lazy(() =>
     import('./code-editor').then((module) => ({
@@ -67,6 +68,8 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         const { toast } = useToast();
         const [isCopied, setIsCopied] = React.useState(false);
         const [tooltipOpen, setTooltipOpen] = React.useState(false);
+        const hiddenCopyTextareaRef = React.useRef<HTMLTextAreaElement>(null);
+        const textToCopy = codeToCopy ?? code;
 
         const handleBeforeMount = useCallback(
             (monaco: Monaco) => {
@@ -108,31 +111,22 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         }, [isCopied]);
 
         const copyToClipboard = useCallback(async () => {
-            if (!navigator?.clipboard) {
-                toast({
-                    title: t('copy_to_clipboard_toast.unsupported.title'),
-                    variant: 'destructive',
-                    description: t(
-                        'copy_to_clipboard_toast.unsupported.description'
-                    ),
-                });
+            const copied = await copyTextToClipboard(textToCopy, {
+                fallbackElement: hiddenCopyTextareaRef.current,
+            });
+
+            if (copied) {
+                setIsCopied(true);
                 return;
             }
 
-            try {
-                await navigator.clipboard.writeText(codeToCopy ?? code);
-                setIsCopied(true);
-            } catch {
-                setIsCopied(false);
-                toast({
-                    title: t('copy_to_clipboard_toast.failed.title'),
-                    variant: 'destructive',
-                    description: t(
-                        'copy_to_clipboard_toast.failed.description'
-                    ),
-                });
-            }
-        }, [code, codeToCopy, t, toast]);
+            setIsCopied(false);
+            toast({
+                title: t('copy_to_clipboard_toast.failed.title'),
+                variant: 'destructive',
+                description: t('copy_to_clipboard_toast.failed.description'),
+            });
+        }, [textToCopy, t, toast]);
 
         return (
             <div
@@ -141,6 +135,14 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                     className
                 )}
             >
+                <textarea
+                    ref={hiddenCopyTextareaRef}
+                    readOnly
+                    tabIndex={-1}
+                    aria-hidden
+                    value={textToCopy}
+                    className="pointer-events-none fixed left-0 top-0 size-px opacity-0"
+                />
                 {loading ? (
                     <Spinner />
                 ) : (
@@ -157,6 +159,9 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                                 <Button
                                                     className="h-fit p-1.5"
                                                     variant="outline"
+                                                    onMouseDown={(event) => {
+                                                        event.preventDefault();
+                                                    }}
                                                     onClick={copyToClipboard}
                                                 >
                                                     {isCopied ? (

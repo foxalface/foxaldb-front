@@ -716,11 +716,21 @@ export const bn: LanguageTranslation = {
                 create_empty: 'খালি ডায়াগ্রাম তৈরি করুন',
                 create_empty_description:
                     'নিজে টেবিল যোগ করে শূন্য থেকে শুরু করুন।',
-                import_schema: 'বিদ্যমান স্কিমা আমদানি করুন',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'বিদ্যমান ডাটাবেস থেকে আমদানি করুন',
-                no_schema_file: 'আমার কাছে স্কিমা ফাইল নেই',
+                import: 'আমদানি',
+                import_description:
+                    'ফাইল, পেস্ট করা টেক্সট বা আপনার ডাটাবেস থেকে।',
+                back: 'পিছনে',
+            },
+
+            choose_import_method: {
+                title: 'আপনি কীভাবে আমদানি করতে চান?',
+                description:
+                    'আপনার {{database}} ডায়াগ্রামের জন্য উৎস বেছে নিন।',
+                from_file: 'ফাইল বা পেস্ট করা টেক্সট',
+                from_file_description: 'SQL, DBML বা ডায়াগ্রাম JSON।',
+                from_database: 'বিদ্যমান ডাটাবেস',
+                from_database_description:
+                    'আপনার ডাটাবেসে কোয়েরি চালান এবং ফলাফল পেস্ট করুন।',
                 back: 'পিছনে',
             },
 
@@ -746,7 +756,7 @@ export const bn: LanguageTranslation = {
                 import_failed:
                     'ডাটাবেস স্কিমা আমদানি করা যায়নি। ফলাফল পরীক্ষা করে আবার চেষ্টা করুন।',
                 back: 'পিছনে',
-                continue: 'চালিয়ে যান',
+                import: 'আমদানি করুন',
             },
 
             import_schema: {
@@ -757,9 +767,10 @@ export const bn: LanguageTranslation = {
                 auto_detect_hint: 'আমরা স্বয়ংক্রিয়ভাবে ফরম্যাট শনাক্ত করব।',
                 or_divider: 'অথবা',
                 choose_file: 'একটি ফাইল বেছে নিন',
+                change_file_aria: 'ফাইল পরিবর্তন করুন, বর্তমান: {{name}}',
                 selected_file: 'নির্বাচিত ফাইল: {{name}}',
                 back: 'পিছনে',
-                continue: 'চালিয়ে যান',
+                import: 'আমদানি করুন',
                 mismatch: {
                     title: 'এই স্কিমা {{detected}}-এর মতো দেখাচ্ছে, কিন্তু আপনি {{selected}} নির্বাচন করেছেন।',
                     description:
@@ -768,10 +779,18 @@ export const bn: LanguageTranslation = {
                     go_back: 'পিছনে',
                 },
                 ambiguous: {
-                    title: 'উৎস ডাটাবেস বেছে নিন',
+                    title: 'উৎস DBMS নির্বাচন করুন',
                     description:
-                        'SQL ডায়ালেক্ট স্বয়ংক্রিয়ভাবে শনাক্ত করা যায়নি। এই স্কিমা কোন ডাটাবেস থেকে এসেছে তা নিশ্চিত করুন।',
-                    choose_source: 'উৎস ডাটাবেস বেছে নিন',
+                        'SQL উপভাষা স্বয়ংক্রিয়ভাবে শনাক্ত করা যায়নি। নিশ্চিত করুন এই স্কিমা কোন DBMS থেকে এসেছে।',
+                    choose_source: 'উৎস DBMS নির্বাচন করুন',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% আস্থা, স্বয়ংক্রিয় সনাক্তকরণ)',
+                    recommended_tooltip: 'স্বয়ংক্রিয়ভাবে শনাক্ত করা DBMS',
+                    recommended_aria:
+                        '{{database}}, স্বয়ংক্রিয়ভাবে শনাক্ত করা DBMS',
                 },
                 detection: {
                     dialect: '{{database}} শনাক্ত হয়েছে',

@@ -704,11 +704,19 @@ export const ar: LanguageTranslation = {
                 description: 'أنشئ مخططًا جديدًا لـ {{database}}.',
                 create_empty: 'إنشاء مخطط فارغ',
                 create_empty_description: 'ابدأ من الصفر بإضافة الجداول بنفسك.',
-                import_schema: 'استيراد مخطط موجود',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'استيراد من قاعدة بيانات موجودة',
-                no_schema_file: 'ليس لدي ملف مخطط',
+                import: 'استيراد',
+                import_description: 'من ملف أو نص ملصق أو قاعدة بياناتك.',
+                back: 'رجوع',
+            },
+
+            choose_import_method: {
+                title: 'كيف تريد الاستيراد؟',
+                description: 'اختر مصدرًا لمخطط {{database}}.',
+                from_file: 'ملف أو نص ملصق',
+                from_file_description: 'SQL أو DBML أو JSON للمخطط.',
+                from_database: 'قاعدة بيانات موجودة',
+                from_database_description:
+                    'نفّذ استعلامًا في قاعدتك والصق النتيجة.',
                 back: 'رجوع',
             },
 
@@ -734,7 +742,7 @@ export const ar: LanguageTranslation = {
                 import_failed:
                     'تعذر استيراد مخطط قاعدة البيانات. تحقق من النتيجة وحاول مرة أخرى.',
                 back: 'رجوع',
-                continue: 'متابعة',
+                import: 'استيراد',
             },
 
             import_schema: {
@@ -745,9 +753,10 @@ export const ar: LanguageTranslation = {
                 auto_detect_hint: 'سنكتشف التنسيق تلقائيًا.',
                 or_divider: 'أو',
                 choose_file: 'اختر ملفًا',
+                change_file_aria: 'تغيير الملف، الحالي: {{name}}',
                 selected_file: 'الملف المحدد: {{name}}',
                 back: 'رجوع',
-                continue: 'متابعة',
+                import: 'استيراد',
                 mismatch: {
                     title: 'يبدو أن هذا المخطط من نوع {{detected}}، لكنك اخترت {{selected}}.',
                     description:
@@ -756,10 +765,19 @@ export const ar: LanguageTranslation = {
                     go_back: 'رجوع',
                 },
                 ambiguous: {
-                    title: 'اختر قاعدة البيانات المصدر',
+                    title: 'اختر نظام إدارة قواعد البيانات المصدر',
                     description:
-                        'تعذر تحديد لهجة SQL تلقائيًا. أكد قاعدة البيانات التي جاء منها هذا المخطط.',
-                    choose_source: 'اختر قاعدة البيانات المصدر',
+                        'تعذر تحديد لهجة SQL تلقائيًا. أكد نظام إدارة قواعد البيانات الذي جاء منه هذا المخطط.',
+                    choose_source: 'اختر نظام إدارة قواعد البيانات المصدر',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% ثقة، اكتشاف تلقائي)',
+                    recommended_tooltip:
+                        'نظام إدارة قواعد بيانات مكتشف تلقائيًا',
+                    recommended_aria:
+                        '{{database}}، نظام إدارة قواعد بيانات مكتشف تلقائيًا',
                 },
                 detection: {
                     dialect: 'تم اكتشاف {{database}}',

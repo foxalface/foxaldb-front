@@ -680,11 +680,18 @@ export const zh_TW: LanguageTranslation = {
                 description: '為 {{database}} 建立新圖表。',
                 create_empty: '建立空白圖表',
                 create_empty_description: '從零開始，自行新增資料表。',
-                import_schema: '匯入現有結構描述',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: '從現有資料庫匯入',
-                no_schema_file: '我沒有結構描述檔案',
+                import: '匯入',
+                import_description: '從檔案、貼上的文字或您的資料庫。',
+                back: '返回',
+            },
+
+            choose_import_method: {
+                title: '您想如何匯入？',
+                description: '為您的 {{database}} 圖表選擇來源。',
+                from_file: '檔案或貼上的文字',
+                from_file_description: 'SQL、DBML 或圖表 JSON。',
+                from_database: '現有資料庫',
+                from_database_description: '在資料庫中執行查詢並貼上結果。',
                 back: '返回',
             },
 
@@ -707,7 +714,7 @@ export const zh_TW: LanguageTranslation = {
                 unsupported_database: '此資料庫類型不支援結構描述擷取。',
                 import_failed: '無法匯入資料庫結構描述。請檢查結果後再試一次。',
                 back: '返回',
-                continue: '繼續',
+                import: '匯入',
             },
 
             import_schema: {
@@ -717,9 +724,10 @@ export const zh_TW: LanguageTranslation = {
                 auto_detect_hint: '我們會自動偵測格式。',
                 or_divider: '或',
                 choose_file: '選擇檔案',
+                change_file_aria: '變更檔案，目前：{{name}}',
                 selected_file: '已選檔案：{{name}}',
                 back: '返回',
-                continue: '繼續',
+                import: '匯入',
                 mismatch: {
                     title: '此結構描述看起來像 {{detected}}，但您選擇了 {{selected}}。',
                     description: '切換到偵測到的資料庫類型，或返回重新選擇。',
@@ -727,10 +735,17 @@ export const zh_TW: LanguageTranslation = {
                     go_back: '返回',
                 },
                 ambiguous: {
-                    title: '選擇來源資料庫',
+                    title: '選擇來源 DBMS',
                     description:
-                        '無法自動識別 SQL 方言。請確認此結構描述來自哪個資料庫。',
-                    choose_source: '選擇來源資料庫',
+                        '無法自動識別 SQL 方言。請確認此結構描述來自哪個 DBMS。',
+                    choose_source: '選擇來源 DBMS',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}}（{{percent}}% 置信度，自動偵測）',
+                    recommended_tooltip: '自動偵測的 DBMS',
+                    recommended_aria: '{{database}}，自動偵測的 DBMS',
                 },
                 detection: {
                     dialect: '已偵測到 {{database}}',

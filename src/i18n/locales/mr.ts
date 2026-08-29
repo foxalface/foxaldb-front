@@ -718,11 +718,20 @@ export const mr: LanguageTranslation = {
                 create_empty: 'रिक्त डायग्राम तयार करा',
                 create_empty_description:
                     'स्वतः टेबल जोडून सुरुवातीपासून सुरू करा.',
-                import_schema: 'विद्यमान स्कीमा आयात करा',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'विद्यमान डेटाबेसमधून आयात करा',
-                no_schema_file: 'माझ्याकडे स्कीमा फाइल नाही',
+                import: 'आयात करा',
+                import_description:
+                    'फाइल, पेस्ट केलेल्या मजकुरातून किंवा तुमच्या डेटाबेसमधून.',
+                back: 'मागे',
+            },
+
+            choose_import_method: {
+                title: 'तुम्ही कसे आयात करू इच्छिता?',
+                description: 'तुमच्या {{database}} आकृतीसाठी स्रोत निवडा.',
+                from_file: 'फाइल किंवा पेस्ट केलेला मजकूर',
+                from_file_description: 'SQL, DBML किंवा आकृती JSON.',
+                from_database: 'विद्यमान डेटाबेस',
+                from_database_description:
+                    'तुमच्या डेटाबेसमध्ये क्वेरी चालवा आणि निकाल पेस्ट करा.',
                 back: 'मागे',
             },
 
@@ -748,7 +757,7 @@ export const mr: LanguageTranslation = {
                 import_failed:
                     'डेटाबेस स्कीमा आयात करता आली नाही. निकाल तपासा आणि पुन्हा प्रयत्न करा.',
                 back: 'मागे',
-                continue: 'पुढे',
+                import: 'आयात करा',
             },
 
             import_schema: {
@@ -759,9 +768,10 @@ export const mr: LanguageTranslation = {
                 auto_detect_hint: 'आम्ही फॉरमॅट आपोआप ओळखू.',
                 or_divider: 'किंवा',
                 choose_file: 'फाइल निवडा',
+                change_file_aria: 'फाइल बदला, सध्या: {{name}}',
                 selected_file: 'निवडलेली फाइल: {{name}}',
                 back: 'मागे',
-                continue: 'सुरू ठेवा',
+                import: 'आयात करा',
                 mismatch: {
                     title: 'हे स्कीमा {{detected}} सारखे दिसते, पण तुम्ही {{selected}} निवडले आहे.',
                     description:
@@ -770,10 +780,17 @@ export const mr: LanguageTranslation = {
                     go_back: 'मागे',
                 },
                 ambiguous: {
-                    title: 'स्रोत डेटाबेस निवडा',
+                    title: 'स्रोत DBMS निवडा',
                     description:
-                        'SQL बोली आपोआप ओळखता आली नाही. हे स्कीमा कोणत्या डेटाबेसमधून आले ते निश्चित करा.',
-                    choose_source: 'स्रोत डेटाबेस निवडा',
+                        'SQL बोली आपोआप ओळखता आली नाही. हे स्कीमा कोणत्या DBMS मधून आले ते निश्चित करा.',
+                    choose_source: 'स्रोत DBMS निवडा',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% विश्वास, स्वयंचलित ओळख)',
+                    recommended_tooltip: 'स्वयंचलितपणे ओळखलेले DBMS',
+                    recommended_aria: '{{database}}, स्वयंचलितपणे ओळखलेले DBMS',
                 },
                 detection: {
                     dialect: '{{database}} आढळले',

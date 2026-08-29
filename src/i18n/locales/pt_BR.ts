@@ -727,11 +727,21 @@ export const pt_BR: LanguageTranslation = {
                 create_empty: 'Criar um diagrama vazio',
                 create_empty_description:
                     'Comece do zero adicionando suas próprias tabelas.',
-                import_schema: 'Importar um esquema existente',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Importar de um banco existente',
-                no_schema_file: 'Não tenho um arquivo de esquema',
+                import: 'Importar',
+                import_description:
+                    'De um arquivo, texto colado ou seu banco de dados.',
+                back: 'Voltar',
+            },
+
+            choose_import_method: {
+                title: 'Como você deseja importar?',
+                description:
+                    'Escolha uma fonte para o seu diagrama {{database}}.',
+                from_file: 'Arquivo ou texto colado',
+                from_file_description: 'SQL, DBML ou JSON de diagrama.',
+                from_database: 'Banco de dados existente',
+                from_database_description:
+                    'Execute uma consulta no seu banco e cole o resultado.',
                 back: 'Voltar',
             },
 
@@ -758,7 +768,7 @@ export const pt_BR: LanguageTranslation = {
                 import_failed:
                     'Não foi possível importar o esquema do banco. Verifique o resultado e tente novamente.',
                 back: 'Voltar',
-                continue: 'Continuar',
+                import: 'Importar',
             },
 
             import_schema: {
@@ -768,9 +778,10 @@ export const pt_BR: LanguageTranslation = {
                 auto_detect_hint: 'Detectaremos o formato automaticamente.',
                 or_divider: 'OU',
                 choose_file: 'Escolher um arquivo',
+                change_file_aria: 'Alterar arquivo, atualmente {{name}}',
                 selected_file: 'Arquivo selecionado: {{name}}',
                 back: 'Voltar',
-                continue: 'Continuar',
+                import: 'Importar',
                 mismatch: {
                     title: 'Este esquema parece {{detected}}, mas você selecionou {{selected}}.',
                     description:
@@ -779,10 +790,18 @@ export const pt_BR: LanguageTranslation = {
                     go_back: 'Voltar',
                 },
                 ambiguous: {
-                    title: 'Escolha o banco de origem',
+                    title: 'Escolha o SGBD de origem',
                     description:
-                        'Não foi possível identificar automaticamente o dialeto SQL. Confirme de qual banco este esquema veio.',
-                    choose_source: 'Escolher banco de origem',
+                        'Não foi possível identificar automaticamente o dialeto SQL. Confirme de qual SGBD este esquema veio.',
+                    choose_source: 'Escolher SGBD de origem',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% de confiança, detecção automática)',
+                    recommended_tooltip: 'SGBD detectado automaticamente',
+                    recommended_aria:
+                        '{{database}}, SGBD detectado automaticamente',
                 },
                 detection: {
                     dialect: '{{database}} detectado',
@@ -791,7 +810,7 @@ export const pt_BR: LanguageTranslation = {
                     diagram_json: 'JSON de diagrama detectado',
                     sql_ambiguous_title: 'SQL detectado',
                     sql_ambiguous_description:
-                        'Não foi possível identificar o banco de dados.',
+                        'O SGBD não pôde ser identificado automaticamente.',
                     clickhouse_unsupported: 'SQL ClickHouse detectado',
                     unsupported: 'Formato não suportado',
                 },

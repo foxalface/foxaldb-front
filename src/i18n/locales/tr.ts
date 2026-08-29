@@ -707,11 +707,20 @@ export const tr: LanguageTranslation = {
                 create_empty: 'Boş diyagram oluştur',
                 create_empty_description:
                     'Kendi tablolarınızı ekleyerek sıfırdan başlayın.',
-                import_schema: 'Mevcut şemayı içe aktar',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Mevcut veritabanından içe aktar',
-                no_schema_file: 'Şema dosyam yok',
+                import: 'İçe aktar',
+                import_description:
+                    'Dosyadan, yapıştırılan metinden veya veritabanınızdan.',
+                back: 'Geri',
+            },
+
+            choose_import_method: {
+                title: 'Nasıl içe aktarmak istersiniz?',
+                description: '{{database}} diyagramınız için bir kaynak seçin.',
+                from_file: 'Dosya veya yapıştırılan metin',
+                from_file_description: 'SQL, DBML veya diyagram JSON.',
+                from_database: 'Mevcut veritabanı',
+                from_database_description:
+                    'Veritabanınızda bir sorgu çalıştırın ve sonucu yapıştırın.',
                 back: 'Geri',
             },
 
@@ -738,7 +747,7 @@ export const tr: LanguageTranslation = {
                 import_failed:
                     'Veritabanı şeması içe aktarılamadı. Sonucu kontrol edip tekrar deneyin.',
                 back: 'Geri',
-                continue: 'Devam',
+                import: 'İçe aktar',
             },
 
             import_schema: {
@@ -749,9 +758,10 @@ export const tr: LanguageTranslation = {
                 auto_detect_hint: 'Formatı otomatik olarak algılayacağız.',
                 or_divider: 'VEYA',
                 choose_file: 'Dosya seç',
+                change_file_aria: 'Dosyayı değiştir, şu an: {{name}}',
                 selected_file: 'Seçilen dosya: {{name}}',
                 back: 'Geri',
-                continue: 'Devam',
+                import: 'İçe aktar',
                 mismatch: {
                     title: 'Bu şema {{detected}} gibi görünüyor, ancak {{selected}} seçtiniz.',
                     description:
@@ -760,10 +770,17 @@ export const tr: LanguageTranslation = {
                     go_back: 'Geri',
                 },
                 ambiguous: {
-                    title: 'Kaynak veritabanını seçin',
+                    title: 'Kaynak DBMS seçin',
                     description:
-                        'SQL lehçesi otomatik olarak tanımlanamadı. Bu şemanın hangi veritabanından geldiğini onaylayın.',
-                    choose_source: 'Kaynak veritabanını seç',
+                        "SQL lehçesi otomatik olarak tanımlanamadı. Bu şemanın hangi DBMS'den geldiğini onaylayın.",
+                    choose_source: 'Kaynak DBMS seç',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} (%{{percent}} güven, otomatik algılama)',
+                    recommended_tooltip: 'Otomatik algılanan DBMS',
+                    recommended_aria: '{{database}}, otomatik algılanan DBMS',
                 },
                 detection: {
                     dialect: '{{database}} algılandı',

@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { postgresDistinctiveSql } from '@/lib/import/__tests__/fixtures/import-samples';
 import { ImportDatabaseDialog } from '../import-database-dialog';
+import { TooltipProvider } from '@/components/tooltip/tooltip';
 
 const mockCloseImportDatabaseDialog = vi.fn();
 const mockAddTables = vi.fn().mockResolvedValue(undefined);
@@ -88,10 +89,12 @@ describe('ImportDatabaseDialog', () => {
         const user = userEvent.setup();
 
         render(
-            <ImportDatabaseDialog
-                dialog={{ open: true }}
-                databaseType={DatabaseType.POSTGRESQL}
-            />
+            <TooltipProvider>
+                <ImportDatabaseDialog
+                    dialog={{ open: true }}
+                    databaseType={DatabaseType.POSTGRESQL}
+                />
+            </TooltipProvider>
         );
 
         await user.type(
@@ -128,10 +131,12 @@ describe('ImportDatabaseDialog', () => {
         mockImportSchema.mockRejectedValueOnce(new Error('Parse failed'));
 
         render(
-            <ImportDatabaseDialog
-                dialog={{ open: true }}
-                databaseType={DatabaseType.POSTGRESQL}
-            />
+            <TooltipProvider>
+                <ImportDatabaseDialog
+                    dialog={{ open: true }}
+                    databaseType={DatabaseType.POSTGRESQL}
+                />
+            </TooltipProvider>
         );
 
         await user.type(

@@ -717,11 +717,20 @@ export const ru: LanguageTranslation = {
                 create_empty: 'Создать пустую диаграмму',
                 create_empty_description:
                     'Начните с нуля, добавляя таблицы самостоятельно.',
-                import_schema: 'Импортировать существующую схему',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Импорт из существующей базы',
-                no_schema_file: 'У меня нет файла схемы',
+                import: 'Импорт',
+                import_description:
+                    'Из файла, вставленного текста или вашей базы данных.',
+                back: 'Назад',
+            },
+
+            choose_import_method: {
+                title: 'Как вы хотите импортировать?',
+                description: 'Выберите источник для диаграммы {{database}}.',
+                from_file: 'Файл или вставленный текст',
+                from_file_description: 'SQL, DBML или JSON диаграммы.',
+                from_database: 'Существующая база данных',
+                from_database_description:
+                    'Выполните запрос в базе и вставьте результат.',
                 back: 'Назад',
             },
 
@@ -748,7 +757,7 @@ export const ru: LanguageTranslation = {
                 import_failed:
                     'Не удалось импортировать схему базы. Проверьте результат и повторите попытку.',
                 back: 'Назад',
-                continue: 'Продолжить',
+                import: 'Импорт',
             },
 
             import_schema: {
@@ -759,9 +768,10 @@ export const ru: LanguageTranslation = {
                 auto_detect_hint: 'Мы автоматически определим формат.',
                 or_divider: 'ИЛИ',
                 choose_file: 'Выбрать файл',
+                change_file_aria: 'Изменить файл, сейчас: {{name}}',
                 selected_file: 'Выбранный файл: {{name}}',
                 back: 'Назад',
-                continue: 'Продолжить',
+                import: 'Импорт',
                 mismatch: {
                     title: 'Эта схема похожа на {{detected}}, но вы выбрали {{selected}}.',
                     description:
@@ -770,10 +780,18 @@ export const ru: LanguageTranslation = {
                     go_back: 'Назад',
                 },
                 ambiguous: {
-                    title: 'Выберите исходную базу данных',
+                    title: 'Выберите исходную СУБД',
                     description:
-                        'Не удалось автоматически определить диалект SQL. Подтвердите, из какой базы данных пришла эта схема.',
-                    choose_source: 'Выбрать исходную базу данных',
+                        'Не удалось автоматически определить диалект SQL. Подтвердите, из какой СУБД пришла эта схема.',
+                    choose_source: 'Выбрать исходную СУБД',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% уверенности, автоматическое определение)',
+                    recommended_tooltip: 'Автоматически определённая СУБД',
+                    recommended_aria:
+                        '{{database}}, автоматически определённая СУБД',
                 },
                 detection: {
                     dialect: 'Обнаружен {{database}}',
@@ -782,7 +800,7 @@ export const ru: LanguageTranslation = {
                     diagram_json: 'Обнаружен JSON диаграммы',
                     sql_ambiguous_title: 'Обнаружен SQL',
                     sql_ambiguous_description:
-                        'Не удалось определить базу данных.',
+                        'СУБД не удалось определить автоматически.',
                     clickhouse_unsupported: 'Обнаружен SQL ClickHouse',
                     unsupported: 'Неподдерживаемый формат',
                 },

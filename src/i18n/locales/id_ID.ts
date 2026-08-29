@@ -720,11 +720,20 @@ export const id_ID: LanguageTranslation = {
                 create_empty: 'Buat diagram kosong',
                 create_empty_description:
                     'Mulai dari awal dengan menambahkan tabel sendiri.',
-                import_schema: 'Impor skema yang ada',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Impor dari database yang ada',
-                no_schema_file: 'Saya tidak punya file skema',
+                import: 'Impor',
+                import_description:
+                    'Dari file, teks yang ditempel, atau database Anda.',
+                back: 'Kembali',
+            },
+
+            choose_import_method: {
+                title: 'Bagaimana Anda ingin mengimpor?',
+                description: 'Pilih sumber untuk diagram {{database}} Anda.',
+                from_file: 'File atau teks yang ditempel',
+                from_file_description: 'SQL, DBML, atau JSON diagram.',
+                from_database: 'Database yang ada',
+                from_database_description:
+                    'Jalankan kueri di database Anda dan tempel hasilnya.',
                 back: 'Kembali',
             },
 
@@ -750,7 +759,7 @@ export const id_ID: LanguageTranslation = {
                 import_failed:
                     'Skema database tidak dapat diimpor. Periksa hasil dan coba lagi.',
                 back: 'Kembali',
-                continue: 'Lanjutkan',
+                import: 'Impor',
             },
 
             import_schema: {
@@ -762,9 +771,10 @@ export const id_ID: LanguageTranslation = {
                     'Kami akan mendeteksi format secara otomatis.',
                 or_divider: 'ATAU',
                 choose_file: 'Pilih file',
+                change_file_aria: 'Ubah file, saat ini: {{name}}',
                 selected_file: 'File dipilih: {{name}}',
                 back: 'Kembali',
-                continue: 'Lanjutkan',
+                import: 'Impor',
                 mismatch: {
                     title: 'Skema ini terlihat seperti {{detected}}, tetapi Anda memilih {{selected}}.',
                     description:
@@ -773,10 +783,17 @@ export const id_ID: LanguageTranslation = {
                     go_back: 'Kembali',
                 },
                 ambiguous: {
-                    title: 'Pilih basis data sumber',
+                    title: 'Pilih DBMS sumber',
                     description:
-                        'Dialek SQL tidak dapat diidentifikasi secara otomatis. Konfirmasikan basis data asal skema ini.',
-                    choose_source: 'Pilih basis data sumber',
+                        'Dialek SQL tidak dapat diidentifikasi secara otomatis. Konfirmasikan DBMS asal skema ini.',
+                    choose_source: 'Pilih DBMS sumber',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% keyakinan, deteksi otomatis)',
+                    recommended_tooltip: 'DBMS terdeteksi otomatis',
+                    recommended_aria: '{{database}}, DBMS terdeteksi otomatis',
                 },
                 detection: {
                     dialect: '{{database}} terdeteksi',
@@ -785,7 +802,7 @@ export const id_ID: LanguageTranslation = {
                     diagram_json: 'JSON diagram terdeteksi',
                     sql_ambiguous_title: 'SQL terdeteksi',
                     sql_ambiguous_description:
-                        'Basis data tidak dapat diidentifikasi.',
+                        'DBMS tidak dapat diidentifikasi secara otomatis.',
                     clickhouse_unsupported: 'SQL ClickHouse terdeteksi',
                     unsupported: 'Format tidak didukung',
                 },

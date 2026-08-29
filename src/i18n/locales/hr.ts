@@ -714,11 +714,20 @@ export const hr: LanguageTranslation = {
                 create_empty: 'Stvori prazan dijagram',
                 create_empty_description:
                     'Krenite od nule dodavanjem vlastitih tablica.',
-                import_schema: 'Uvezi postojeću shemu',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Uvezi iz postojeće baze',
-                no_schema_file: 'Nemam datoteku sheme',
+                import: 'Uvezi',
+                import_description:
+                    'Iz datoteke, zalijepljenog teksta ili vaše baze.',
+                back: 'Natrag',
+            },
+
+            choose_import_method: {
+                title: 'Kako želite uvesti?',
+                description: 'Odaberite izvor za svoj {{database}} dijagram.',
+                from_file: 'Datoteka ili zalijepljeni tekst',
+                from_file_description: 'SQL, DBML ili JSON dijagrama.',
+                from_database: 'Postojeća baza podataka',
+                from_database_description:
+                    'Pokrenite upit u bazi i zalijepite rezultat.',
                 back: 'Natrag',
             },
 
@@ -744,7 +753,7 @@ export const hr: LanguageTranslation = {
                 import_failed:
                     'Shema baze nije mogla biti uvezena. Provjerite rezultat i pokušajte ponovno.',
                 back: 'Natrag',
-                continue: 'Nastavi',
+                import: 'Uvezi',
             },
 
             import_schema: {
@@ -755,9 +764,10 @@ export const hr: LanguageTranslation = {
                 auto_detect_hint: 'Format ćemo automatski prepoznati.',
                 or_divider: 'ILI',
                 choose_file: 'Odaberi datoteku',
+                change_file_aria: 'Promijeni datoteku, trenutno: {{name}}',
                 selected_file: 'Odabrana datoteka: {{name}}',
                 back: 'Natrag',
-                continue: 'Nastavi',
+                import: 'Uvezi',
                 mismatch: {
                     title: 'Ova shema izgleda kao {{detected}}, ali ste odabrali {{selected}}.',
                     description:
@@ -766,10 +776,17 @@ export const hr: LanguageTranslation = {
                     go_back: 'Natrag',
                 },
                 ambiguous: {
-                    title: 'Odaberite izvornu bazu',
+                    title: 'Odaberite izvorni DBMS',
                     description:
-                        'SQL dijalekt nije mogao biti automatski prepoznat. Potvrdite iz koje baze dolazi ova shema.',
-                    choose_source: 'Odaberi izvornu bazu',
+                        'SQL dijalekt nije mogao biti automatski prepoznat. Potvrdite iz kojeg DBMS-a dolazi ova shema.',
+                    choose_source: 'Odaberi izvorni DBMS',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% pouzdanosti, automatsko otkrivanje)',
+                    recommended_tooltip: 'Automatski otkriveni DBMS',
+                    recommended_aria: '{{database}}, automatski otkriveni DBMS',
                 },
                 detection: {
                     dialect: '{{database}} prepoznat',
@@ -778,7 +795,7 @@ export const hr: LanguageTranslation = {
                     diagram_json: 'JSON dijagrama prepoznat',
                     sql_ambiguous_title: 'SQL prepoznat',
                     sql_ambiguous_description:
-                        'Baza podataka nije mogla biti identificirana.',
+                        'DBMS nije mogao biti automatski prepoznat.',
                     clickhouse_unsupported: 'Prepoznat je ClickHouse SQL',
                     unsupported: 'Nepodržani format',
                 },

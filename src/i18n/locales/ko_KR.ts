@@ -714,11 +714,20 @@ export const ko_KR: LanguageTranslation = {
                 create_empty: '빈 다이어그램 만들기',
                 create_empty_description:
                     '직접 테이블을 추가하며 처음부터 시작합니다.',
-                import_schema: '기존 스키마 가져오기',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: '기존 데이터베이스에서 가져오기',
-                no_schema_file: '스키마 파일이 없습니다',
+                import: '가져오기',
+                import_description:
+                    '파일, 붙여넣은 텍스트 또는 데이터베이스에서.',
+                back: '뒤로',
+            },
+
+            choose_import_method: {
+                title: '어떻게 가져오시겠습니까?',
+                description: '{{database}} 다이어그램의 소스를 선택하세요.',
+                from_file: '파일 또는 붙여넣은 텍스트',
+                from_file_description: 'SQL, DBML 또는 다이어그램 JSON.',
+                from_database: '기존 데이터베이스',
+                from_database_description:
+                    '데이터베이스에서 쿼리를 실행하고 결과를 붙여넣으세요.',
                 back: '뒤로',
             },
 
@@ -744,7 +753,7 @@ export const ko_KR: LanguageTranslation = {
                 import_failed:
                     '데이터베이스 스키마를 가져올 수 없습니다. 결과를 확인하고 다시 시도하세요.',
                 back: '뒤로',
-                continue: '계속',
+                import: '가져오기',
             },
 
             import_schema: {
@@ -755,9 +764,10 @@ export const ko_KR: LanguageTranslation = {
                 auto_detect_hint: '형식을 자동으로 감지합니다.',
                 or_divider: '또는',
                 choose_file: '파일 선택',
+                change_file_aria: '파일 변경, 현재: {{name}}',
                 selected_file: '선택한 파일: {{name}}',
                 back: '뒤로',
-                continue: '계속',
+                import: '가져오기',
                 mismatch: {
                     title: '이 스키마는 {{detected}}처럼 보이지만 {{selected}}를 선택했습니다.',
                     description:
@@ -766,10 +776,17 @@ export const ko_KR: LanguageTranslation = {
                     go_back: '뒤로',
                 },
                 ambiguous: {
-                    title: '소스 데이터베이스 선택',
+                    title: '소스 DBMS 선택',
                     description:
-                        'SQL 방언을 자동으로 식별할 수 없습니다. 이 스키마가 어떤 데이터베이스에서 왔는지 확인하세요.',
-                    choose_source: '소스 데이터베이스 선택',
+                        'SQL 방언을 자동으로 식별할 수 없습니다. 이 스키마가 어떤 DBMS에서 왔는지 확인하세요.',
+                    choose_source: '소스 DBMS 선택',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} (신뢰도 {{percent}}%, 자동 감지)',
+                    recommended_tooltip: '자동 감지된 DBMS',
+                    recommended_aria: '{{database}}, 자동 감지된 DBMS',
                 },
                 detection: {
                     dialect: '{{database}} 감지됨',
@@ -778,7 +795,7 @@ export const ko_KR: LanguageTranslation = {
                     diagram_json: '다이어그램 JSON 감지됨',
                     sql_ambiguous_title: 'SQL 감지됨',
                     sql_ambiguous_description:
-                        '데이터베이스를 식별할 수 없습니다.',
+                        'DBMS를 자동으로 식별할 수 없습니다.',
                     clickhouse_unsupported: 'ClickHouse SQL 감지됨',
                     unsupported: '지원되지 않는 형식',
                 },

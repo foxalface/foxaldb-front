@@ -740,11 +740,21 @@ export const de: LanguageTranslation = {
                 create_empty: 'Leeres Diagramm erstellen',
                 create_empty_description:
                     'Beginnen Sie von Grund auf mit selbst hinzugefügten Tabellen.',
-                import_schema: 'Vorhandenes Schema importieren',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Aus vorhandener Datenbank importieren',
-                no_schema_file: 'Ich habe keine Schemadatei',
+                import: 'Importieren',
+                import_description:
+                    'Aus einer Datei, eingefügtem Text oder Ihrer Datenbank.',
+                back: 'Zurück',
+            },
+
+            choose_import_method: {
+                title: 'Wie möchten Sie importieren?',
+                description:
+                    'Wählen Sie eine Quelle für Ihr {{database}}-Diagramm.',
+                from_file: 'Datei oder eingefügter Text',
+                from_file_description: 'SQL, DBML oder Diagramm-JSON.',
+                from_database: 'Bestehende Datenbank',
+                from_database_description:
+                    'Führen Sie eine Abfrage in Ihrer Datenbank aus und fügen Sie das Ergebnis ein.',
                 back: 'Zurück',
             },
 
@@ -771,7 +781,7 @@ export const de: LanguageTranslation = {
                 import_failed:
                     'Das Datenbankschema konnte nicht importiert werden. Prüfen Sie das Ergebnis und versuchen Sie es erneut.',
                 back: 'Zurück',
-                continue: 'Weiter',
+                import: 'Importieren',
             },
 
             import_schema: {
@@ -782,9 +792,10 @@ export const de: LanguageTranslation = {
                 auto_detect_hint: 'Wir erkennen das Format automatisch.',
                 or_divider: 'ODER',
                 choose_file: 'Datei auswählen',
+                change_file_aria: 'Datei ändern, aktuell {{name}}',
                 selected_file: 'Ausgewählte Datei: {{name}}',
                 back: 'Zurück',
-                continue: 'Weiter',
+                import: 'Importieren',
                 mismatch: {
                     title: 'Dieses Schema sieht wie {{detected}} aus, aber Sie haben {{selected}} gewählt.',
                     description:
@@ -793,10 +804,18 @@ export const de: LanguageTranslation = {
                     go_back: 'Zurück',
                 },
                 ambiguous: {
-                    title: 'Quelldatenbank wählen',
+                    title: 'Quell-DBMS wählen',
                     description:
-                        'Der SQL-Dialekt konnte nicht automatisch erkannt werden. Bestätigen Sie, von welcher Datenbank dieses Schema stammt.',
-                    choose_source: 'Quelldatenbank wählen',
+                        'Der SQL-Dialekt konnte nicht automatisch erkannt werden. Bestätigen Sie, von welchem DBMS dieses Schema stammt.',
+                    choose_source: 'Quell-DBMS wählen',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% Vertrauen, automatisch erkannt)',
+                    recommended_tooltip: 'Automatisch erkanntes DBMS',
+                    recommended_aria:
+                        '{{database}}, automatisch erkanntes DBMS',
                 },
                 detection: {
                     dialect: '{{database}} erkannt',
@@ -805,7 +824,7 @@ export const de: LanguageTranslation = {
                     diagram_json: 'Diagramm-JSON erkannt',
                     sql_ambiguous_title: 'SQL erkannt',
                     sql_ambiguous_description:
-                        'Datenbank konnte nicht identifiziert werden.',
+                        'Das DBMS konnte nicht automatisch erkannt werden.',
                     clickhouse_unsupported: 'ClickHouse-SQL erkannt',
                     unsupported: 'Nicht unterstütztes Format',
                 },

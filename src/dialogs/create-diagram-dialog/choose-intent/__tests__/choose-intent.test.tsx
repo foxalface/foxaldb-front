@@ -28,13 +28,12 @@ const renderChooseIntent = (props: React.ComponentProps<typeof ChooseIntent>) =>
     );
 
 describe('ChooseIntent', () => {
-    it('renders both intent actions with selected database context', () => {
+    it('renders create empty and import actions', () => {
         renderChooseIntent({
             databaseType: DatabaseType.POSTGRESQL,
             onBack: vi.fn(),
             onCreateEmpty: vi.fn(),
-            onImportSchema: vi.fn(),
-            onImportFromDatabase: vi.fn(),
+            onImport: vi.fn(),
         });
 
         expect(
@@ -52,43 +51,37 @@ describe('ChooseIntent', () => {
         ).toBeInTheDocument();
         expect(
             screen.getByRole('button', {
-                name: /new_diagram_dialog\.choose_intent\.import_schema/,
+                name: /new_diagram_dialog\.choose_intent\.import/,
             })
         ).toBeInTheDocument();
     });
 
-    it('shows the advanced import-from-database action as a secondary link', () => {
+    it('does not show a separate advanced import link', () => {
         renderChooseIntent({
             databaseType: DatabaseType.POSTGRESQL,
             onBack: vi.fn(),
             onCreateEmpty: vi.fn(),
-            onImportSchema: vi.fn(),
-            onImportFromDatabase: vi.fn(),
+            onImport: vi.fn(),
         });
 
         expect(
-            screen.getByRole('button', {
-                name: 'new_diagram_dialog.choose_intent.import_from_database',
-            })
-        ).toBeInTheDocument();
-        expect(
-            screen.getByText('new_diagram_dialog.choose_intent.no_schema_file')
-        ).toBeInTheDocument();
+            screen.queryByText(
+                'new_diagram_dialog.choose_intent.no_schema_file'
+            )
+        ).not.toBeInTheDocument();
     });
 
-    it('invokes callbacks for create empty, import schema, advanced import, and back', async () => {
+    it('invokes callbacks for create empty, import, and back', async () => {
         const user = userEvent.setup();
         const onBack = vi.fn();
         const onCreateEmpty = vi.fn();
-        const onImportSchema = vi.fn();
-        const onImportFromDatabase = vi.fn();
+        const onImport = vi.fn();
 
         renderChooseIntent({
             databaseType: DatabaseType.MYSQL,
             onBack,
             onCreateEmpty,
-            onImportSchema,
-            onImportFromDatabase,
+            onImport,
         });
 
         await user.click(
@@ -98,12 +91,7 @@ describe('ChooseIntent', () => {
         );
         await user.click(
             screen.getByRole('button', {
-                name: /new_diagram_dialog\.choose_intent\.import_schema/,
-            })
-        );
-        await user.click(
-            screen.getByRole('button', {
-                name: 'new_diagram_dialog.choose_intent.import_from_database',
+                name: /new_diagram_dialog\.choose_intent\.import/,
             })
         );
         await user.click(
@@ -113,30 +101,7 @@ describe('ChooseIntent', () => {
         );
 
         expect(onCreateEmpty).toHaveBeenCalledTimes(1);
-        expect(onImportSchema).toHaveBeenCalledTimes(1);
-        expect(onImportFromDatabase).toHaveBeenCalledTimes(1);
+        expect(onImport).toHaveBeenCalledTimes(1);
         expect(onBack).toHaveBeenCalledTimes(1);
-    });
-
-    it('supports keyboard activation for intent actions', async () => {
-        const user = userEvent.setup();
-        const onCreateEmpty = vi.fn();
-
-        renderChooseIntent({
-            databaseType: DatabaseType.POSTGRESQL,
-            onBack: vi.fn(),
-            onCreateEmpty,
-            onImportSchema: vi.fn(),
-            onImportFromDatabase: vi.fn(),
-        });
-
-        const createEmptyButton = screen.getByRole('button', {
-            name: /new_diagram_dialog\.choose_intent\.create_empty/,
-        });
-
-        createEmptyButton.focus();
-        await user.keyboard('{Enter}');
-
-        expect(onCreateEmpty).toHaveBeenCalledTimes(1);
     });
 });

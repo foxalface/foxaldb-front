@@ -710,11 +710,20 @@ export const en = {
                 create_empty: 'Create an empty diagram',
                 create_empty_description:
                     'Start from scratch with tables you add yourself.',
-                import_schema: 'Import an existing schema',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Import from an existing database',
-                no_schema_file: "I don't have a schema file",
+                import: 'Import',
+                import_description:
+                    'From a file, pasted text, or your database.',
+                back: 'Back',
+            },
+
+            choose_import_method: {
+                title: 'How do you want to import?',
+                description: 'Choose a source for your {{database}} diagram.',
+                from_file: 'File or pasted text',
+                from_file_description: 'SQL, DBML, or diagram JSON.',
+                from_database: 'Existing database',
+                from_database_description:
+                    'Run a query in your database and paste the result.',
                 back: 'Back',
             },
 
@@ -740,7 +749,7 @@ export const en = {
                 import_failed:
                     'The database schema could not be imported. Check the result and try again.',
                 back: 'Back',
-                continue: 'Continue',
+                import: 'Import',
             },
 
             import_schema: {
@@ -750,9 +759,10 @@ export const en = {
                 auto_detect_hint: "We'll detect the format automatically.",
                 or_divider: 'OR',
                 choose_file: 'Choose a file',
+                change_file_aria: 'Change file, currently {{name}}',
                 selected_file: 'Selected file: {{name}}',
                 back: 'Back',
-                continue: 'Continue',
+                import: 'Import',
                 mismatch: {
                     title: 'This schema looks like {{detected}}, but you selected {{selected}}.',
                     description:
@@ -761,10 +771,18 @@ export const en = {
                     go_back: 'Go back',
                 },
                 ambiguous: {
-                    title: 'Choose the source database',
+                    title: 'Choose the source DBMS',
                     description:
-                        'We could not identify the SQL dialect automatically. Confirm which database this schema came from.',
-                    choose_source: 'Choose source database',
+                        'We could not identify the SQL dialect automatically. Confirm which DBMS this schema came from.',
+                    choose_source: 'Choose source DBMS',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}}% confidence, automatically detected)',
+                    recommended_tooltip: 'Automatically detected DBMS',
+                    recommended_aria:
+                        '{{database}}, automatically detected DBMS',
                 },
                 detection: {
                     dialect: '{{database}} detected',
@@ -773,7 +791,7 @@ export const en = {
                     diagram_json: 'Diagram JSON detected',
                     sql_ambiguous_title: 'SQL detected',
                     sql_ambiguous_description:
-                        'Database could not be identified.',
+                        'The DBMS could not be identified automatically.',
                     unsupported: 'Unsupported format',
                     clickhouse_unsupported: 'ClickHouse SQL detected',
                 },

@@ -724,11 +724,21 @@ export const fr: LanguageTranslation = {
                 create_empty: 'Créer un diagramme vide',
                 create_empty_description:
                     'Partez de zéro en ajoutant vos propres tables.',
-                import_schema: 'Importer un schéma existant',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: 'Importer depuis une base existante',
-                no_schema_file: "Je n'ai pas de fichier de schéma",
+                import: 'Importer',
+                import_description:
+                    'Depuis un fichier, du texte collé ou votre base de données.',
+                back: 'Retour',
+            },
+
+            choose_import_method: {
+                title: 'Comment souhaitez-vous importer ?',
+                description:
+                    'Choisissez une source pour votre diagramme {{database}}.',
+                from_file: 'Fichier ou texte collé',
+                from_file_description: 'SQL, DBML ou JSON de diagramme.',
+                from_database: 'Base de données existante',
+                from_database_description:
+                    'Exécutez une requête dans votre base et collez le résultat.',
                 back: 'Retour',
             },
 
@@ -756,7 +766,7 @@ export const fr: LanguageTranslation = {
                 import_failed:
                     "Le schéma n'a pas pu être importé. Vérifiez le résultat et réessayez.",
                 back: 'Retour',
-                continue: 'Continuer',
+                import: 'Importer',
             },
 
             import_schema: {
@@ -767,9 +777,10 @@ export const fr: LanguageTranslation = {
                 auto_detect_hint: 'Nous détecterons le format automatiquement.',
                 or_divider: 'OU',
                 choose_file: 'Choisir un fichier',
+                change_file_aria: 'Changer de fichier, actuellement {{name}}',
                 selected_file: 'Fichier sélectionné : {{name}}',
                 back: 'Retour',
-                continue: 'Continuer',
+                import: 'Importer',
                 mismatch: {
                     title: 'Ce schéma ressemble à {{detected}}, mais vous avez sélectionné {{selected}}.',
                     description:
@@ -778,10 +789,18 @@ export const fr: LanguageTranslation = {
                     go_back: 'Retour',
                 },
                 ambiguous: {
-                    title: 'Choisissez la base source',
+                    title: 'Choisissez le SGBD source',
                     description:
-                        "Nous n'avons pas pu identifier automatiquement le dialecte SQL. Confirmez de quelle base provient ce schéma.",
-                    choose_source: 'Choisir la base source',
+                        "Nous n'avons pas pu identifier automatiquement le dialecte SQL. Indiquez de quel SGBD provient ce schéma.",
+                    choose_source: 'Choisir le SGBD source',
+                    confidence_badge: '{{percent}} %',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}} % de confiance)',
+                    candidate_recommended:
+                        '{{database}} ({{percent}} % de confiance, détection automatique)',
+                    recommended_tooltip: 'SGBD détecté automatiquement',
+                    recommended_aria:
+                        '{{database}}, SGBD détecté automatiquement',
                 },
                 detection: {
                     dialect: '{{database}} détecté',
@@ -790,7 +809,7 @@ export const fr: LanguageTranslation = {
                     diagram_json: 'JSON de diagramme détecté',
                     sql_ambiguous_title: 'SQL détecté',
                     sql_ambiguous_description:
-                        "La base de données n'a pas pu être identifiée.",
+                        "Le SGBD n'a pas pu être identifié automatiquement.",
                     clickhouse_unsupported: 'SQL ClickHouse détecté',
                     unsupported: 'Format non pris en charge',
                 },
@@ -1100,7 +1119,7 @@ export const fr: LanguageTranslation = {
                 },
                 ambiguous: {
                     description:
-                        "Nous n'avons pas pu identifier automatiquement le dialecte SQL. Confirmez comment interpréter ce schéma pour le diagramme {{selected}} actuel.",
+                        "Nous n'avons pas pu identifier automatiquement le dialecte SQL. Indiquez comment interpréter ce schéma pour le diagramme {{selected}} actuel.",
                 },
             },
             override_alert: {

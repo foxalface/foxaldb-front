@@ -65,7 +65,7 @@ describe('ImportFromDatabaseStep', () => {
         });
 
         const continueButton = screen.getByRole('button', {
-            name: 'new_diagram_dialog.import_from_database.continue',
+            name: 'new_diagram_dialog.import_from_database.import',
         });
 
         await waitFor(() => {

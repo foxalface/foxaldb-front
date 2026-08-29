@@ -128,12 +128,20 @@ export const DetectionSummary: React.FC<DetectionSummaryProps> = ({
             className={cn(
                 'flex items-start gap-3 rounded-lg border px-4 py-3 text-sm',
                 content.severity === 'success' && 'border-border bg-muted/50',
-                content.severity === 'warning' && 'border-border bg-muted',
-                content.severity === 'error' &&
-                    'border-destructive/30 bg-destructive/5 text-destructive'
+                content.severity === 'warning' &&
+                    'border-amber-500 dark:border-amber-500/70',
+                content.severity === 'error' && 'border-destructive'
             )}
         >
-            <Icon className="mt-0.5 size-4 shrink-0" aria-hidden />
+            <Icon
+                className={cn(
+                    'mt-0.5 size-4 shrink-0',
+                    content.severity === 'warning' &&
+                        'text-amber-600 dark:text-amber-500',
+                    content.severity === 'error' && 'text-destructive'
+                )}
+                aria-hidden
+            />
             <div className="flex flex-col gap-1">
                 <span className="font-medium">{content.title}</span>
                 {content.description ? (

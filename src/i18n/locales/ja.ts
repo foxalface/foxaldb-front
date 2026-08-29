@@ -720,11 +720,21 @@ export const ja: LanguageTranslation = {
                 create_empty: '空のダイアグラムを作成',
                 create_empty_description:
                     '自分でテーブルを追加してゼロから始めます。',
-                import_schema: '既存のスキーマをインポート',
-                import_schema_description:
-                    'Import tables and relationships from SQL or DBML.',
-                import_from_database: '既存のデータベースからインポート',
-                no_schema_file: 'スキーマファイルがありません',
+                import: 'インポート',
+                import_description:
+                    'ファイル、貼り付けたテキスト、またはデータベースから。',
+                back: '戻る',
+            },
+
+            choose_import_method: {
+                title: 'どのようにインポートしますか？',
+                description:
+                    '{{database}} ダイアグラムのソースを選択してください。',
+                from_file: 'ファイルまたは貼り付けたテキスト',
+                from_file_description: 'SQL、DBML、またはダイアグラム JSON。',
+                from_database: '既存のデータベース',
+                from_database_description:
+                    'データベースでクエリを実行し、結果を貼り付けます。',
                 back: '戻る',
             },
 
@@ -751,7 +761,7 @@ export const ja: LanguageTranslation = {
                 import_failed:
                     'データベーススキーマをインポートできませんでした。結果を確認して再試行してください。',
                 back: '戻る',
-                continue: '続行',
+                import: 'インポート',
             },
 
             import_schema: {
@@ -762,9 +772,10 @@ export const ja: LanguageTranslation = {
                 auto_detect_hint: '形式は自動的に検出されます。',
                 or_divider: 'または',
                 choose_file: 'ファイルを選択',
+                change_file_aria: 'ファイルを変更、現在: {{name}}',
                 selected_file: '選択したファイル: {{name}}',
                 back: '戻る',
-                continue: '続行',
+                import: 'インポート',
                 mismatch: {
                     title: 'このスキーマは {{detected}} のようですが、{{selected}} を選択しています。',
                     description:
@@ -773,10 +784,17 @@ export const ja: LanguageTranslation = {
                     go_back: '戻る',
                 },
                 ambiguous: {
-                    title: 'ソースデータベースを選択',
+                    title: 'ソース DBMS を選択',
                     description:
-                        'SQL 方言を自動的に特定できませんでした。このスキーマの元データベースを確認してください。',
-                    choose_source: 'ソースデータベースを選択',
+                        'SQL 方言を自動的に特定できませんでした。このスキーマの元 DBMS を確認してください。',
+                    choose_source: 'ソース DBMS を選択',
+                    confidence_badge: '{{percent}}%',
+                    candidate_with_confidence:
+                        '{{database}} ({{percent}}% confidence)',
+                    candidate_recommended:
+                        '{{database}}（信頼度 {{percent}}%、自動検出）',
+                    recommended_tooltip: '自動検出された DBMS',
+                    recommended_aria: '{{database}}、自動検出された DBMS',
                 },
                 detection: {
                     dialect: '{{database}} を検出',
@@ -785,7 +803,7 @@ export const ja: LanguageTranslation = {
                     diagram_json: 'ダイアグラム JSON を検出',
                     sql_ambiguous_title: 'SQL を検出',
                     sql_ambiguous_description:
-                        'データベースを特定できませんでした。',
+                        'DBMS を自動的に特定できませんでした。',
                     clickhouse_unsupported: 'ClickHouse SQL を検出',
                     unsupported: 'サポートされていない形式',
                 },
