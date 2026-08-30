@@ -4,6 +4,7 @@ import type {
 } from '../project-execution-types';
 import type { LocalProjectFramework } from '../project-execution-types';
 import { ProjectImportParserUnavailableError } from '../project-import-errors';
+import { parsePrismaProject } from './prisma/prisma-project-parser';
 
 export type LocalProjectParser = (
     input: ProjectImportInput
@@ -11,7 +12,9 @@ export type LocalProjectParser = (
 
 const LOCAL_PROJECT_PARSERS: Partial<
     Record<LocalProjectFramework, LocalProjectParser>
-> = {};
+> = {
+    prisma: parsePrismaProject,
+};
 
 export const getLocalProjectParser = (
     framework: LocalProjectFramework

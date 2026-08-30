@@ -15,56 +15,40 @@ const ALL_FRAMEWORKS: ProjectFramework[] = [
     'django',
 ];
 
-const EXECUTION_AVAILABLE_FRAMEWORKS: ProjectFramework[] = ['laravel'];
-
 describe('project import capabilities', () => {
-    it.each(ALL_FRAMEWORKS)(
-        'reports execution availability for %s in M5',
-        (framework) => {
-            const executionAvailable =
-                EXECUTION_AVAILABLE_FRAMEWORKS.includes(framework);
-
+    it.each([
+        ['laravel', true, 'remote'],
+        ['prisma', true, 'local'],
+        ['drizzle', false, 'local'],
+        ['rails', false, 'local'],
+        ['entity_framework_core', false, 'remote'],
+        ['django', false, 'remote'],
+    ] as const)(
+        'reports execution availability and location for %s',
+        (framework, executionAvailable, location) => {
             expect(isProjectImportParserAvailable(framework)).toBe(
                 executionAvailable
             );
-            expect(canExecuteProjectImport(framework, true)).toBe(
-                executionAvailable
-            );
-            expect(canExecuteProjectImport(framework, false)).toBe(false);
+            expect(getProjectParserCapability(framework)).toMatchObject({
+                location,
+                executionAvailable,
+            });
         }
     );
 
-    it('preserves parser locations for all frameworks', () => {
-        expect(getProjectParserCapability('prisma')).toMatchObject({
-            location: 'local',
-            executionAvailable: false,
-        });
-        expect(getProjectParserCapability('drizzle')).toMatchObject({
-            location: 'local',
-            executionAvailable: false,
-        });
-        expect(getProjectParserCapability('rails')).toMatchObject({
-            location: 'local',
-            executionAvailable: false,
-        });
-        expect(getProjectParserCapability('laravel')).toMatchObject({
-            location: 'remote',
-            executionAvailable: true,
-        });
-        expect(
-            getProjectParserCapability('entity_framework_core')
-        ).toMatchObject({
-            location: 'remote',
-            executionAvailable: false,
-        });
-        expect(getProjectParserCapability('django')).toMatchObject({
-            location: 'remote',
-            executionAvailable: false,
-        });
-    });
-
-    it('requires authentication for remote frameworks once execution is enabled', () => {
+    it('requires authentication only for remote executable frameworks', () => {
         expect(canExecuteProjectImport('laravel', false)).toBe(false);
         expect(canExecuteProjectImport('laravel', true)).toBe(true);
+        expect(canExecuteProjectImport('prisma', false)).toBe(true);
+        expect(canExecuteProjectImport('prisma', true)).toBe(true);
+    });
+
+    it('keeps non-executable frameworks disabled for all users', () => {
+        ALL_FRAMEWORKS.filter(
+            (framework) => !['laravel', 'prisma'].includes(framework)
+        ).forEach((framework) => {
+            expect(canExecuteProjectImport(framework, true)).toBe(false);
+            expect(canExecuteProjectImport(framework, false)).toBe(false);
+        });
     });
 });

@@ -3,7 +3,7 @@ import { getParserLocation, isRemoteParserFramework } from './parser-location';
 
 const PARSER_EXECUTION_AVAILABLE: Record<ProjectFramework, boolean> = {
     laravel: true,
-    prisma: false,
+    prisma: true,
     drizzle: false,
     rails: false,
     entity_framework_core: false,

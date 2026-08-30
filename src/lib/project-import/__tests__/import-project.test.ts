@@ -109,6 +109,35 @@ describe('importProject', () => {
         }
     );
 
+    it('dispatches prisma to local execution when enabled', async () => {
+        isProjectImportParserAvailableMock.mockReturnValue(true);
+        parseLocalProjectMock.mockResolvedValueOnce({
+            diagram: {
+                id: '',
+                name: 'Prisma Import',
+                databaseType: DatabaseType.POSTGRESQL,
+            },
+            framework: 'prisma',
+            diagnostics: [],
+        });
+
+        const file = createTestZipFile({
+            'prisma/schema.prisma': 'model User { id Int @id }',
+        });
+        const archive = await ArchiveReader.open(file);
+
+        await importProject({
+            archive,
+            candidate: baseCandidate('prisma'),
+            targetDatabaseType: DatabaseType.POSTGRESQL,
+        });
+
+        expect(parseLocalProjectMock).toHaveBeenCalledOnce();
+        expect(parseRemoteProjectMock).not.toHaveBeenCalled();
+
+        archive.close();
+    });
+
     it.each(['prisma', 'rails', 'drizzle'] as const)(
         'dispatches %s to local execution',
         async (framework) => {

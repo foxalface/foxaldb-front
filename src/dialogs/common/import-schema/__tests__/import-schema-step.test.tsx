@@ -571,12 +571,80 @@ describe('ImportSchemaStep project archives', () => {
         ).toBeEnabled();
     });
 
-    it('detects a valid Prisma ZIP', async () => {
+    it('detects a valid Prisma ZIP and enables Continue for guests', async () => {
+        isAuthenticated = false;
+
         await uploadZip({
             'prisma/schema.prisma': 'model User { id Int @id }',
         });
 
         expect(screen.getByText('Prisma project detected')).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeEnabled();
+        expect(
+            screen.queryByText(
+                'new_diagram_dialog.import_schema.project.sign_in_to_import_framework'
+            )
+        ).not.toBeInTheDocument();
+    });
+
+    it('imports Prisma locally without calling the remote parser API', async () => {
+        isAuthenticated = false;
+        importProjectMock.mockResolvedValueOnce({
+            diagram: {
+                id: 'diagram-1',
+                name: 'Prisma Import',
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            framework: 'prisma',
+            diagnostics: [],
+        });
+
+        const user = userEvent.setup();
+        const onContinue = vi.fn();
+        const file = createTestZipFile({
+            'prisma/schema.prisma': 'model User { id Int @id }',
+        });
+
+        const { container } = renderImportSchemaStep({ onContinue });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        await user.click(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        );
+
+        await waitFor(() => {
+            expect(importProjectMock).toHaveBeenCalledOnce();
+        });
+
+        expect(apiRequestMock).not.toHaveBeenCalled();
+        expect(onContinue).toHaveBeenCalledWith(
+            expect.objectContaining({
+                importMethod: 'project',
+            })
+        );
+    });
+
+    it('does not call importProject before Continue is clicked', async () => {
+        await uploadZip({
+            'prisma/schema.prisma': 'model User { id Int @id }',
+        });
+
+        expect(apiRequestMock).not.toHaveBeenCalled();
+        expect(importProjectMock).not.toHaveBeenCalled();
     });
 
     it('shows ambiguity UI for monorepo archives', async () => {
@@ -603,7 +671,7 @@ describe('ImportSchemaStep project archives', () => {
             screen.getByRole('button', {
                 name: 'new_diagram_dialog.import_schema.import',
             })
-        ).toBeDisabled();
+        ).toBeEnabled();
     });
 
     it('shows unsupported project state for unrecognized archives', async () => {
@@ -663,15 +731,6 @@ describe('ImportSchemaStep project archives', () => {
         expect(
             screen.queryByText('Prisma project detected')
         ).not.toBeInTheDocument();
-    });
-
-    it('does not call the project import API while parser execution is unavailable', async () => {
-        await uploadZip({
-            'prisma/schema.prisma': 'model User { id Int @id }',
-        });
-
-        expect(apiRequestMock).not.toHaveBeenCalled();
-        expect(importProjectMock).not.toHaveBeenCalled();
     });
 
     it('enables Continue for authenticated Laravel projects and imports via importProject', async () => {
