@@ -5,7 +5,7 @@ const PARSER_EXECUTION_AVAILABLE: Record<ProjectFramework, boolean> = {
     laravel: true,
     prisma: true,
     drizzle: false,
-    rails: false,
+    rails: true,
     entity_framework_core: true,
     django: false,
 };

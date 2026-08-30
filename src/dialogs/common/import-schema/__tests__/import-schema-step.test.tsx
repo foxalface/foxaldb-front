@@ -935,6 +935,80 @@ describe('ImportSchemaStep project archives', () => {
             expect(importProjectMock).toHaveBeenCalledOnce();
         });
     });
+
+    it('detects Rails and enables Continue for guests without sign-in', async () => {
+        isAuthenticated = false;
+
+        await uploadZip({
+            'db/schema.rb': `ActiveRecord::Schema.define(version: 1) do
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+  end
+end`,
+            Gemfile: "gem 'rails', '~> 7.1'",
+        });
+
+        expect(
+            screen.getByText(/rails.*project detected/i)
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeEnabled();
+        expect(
+            screen.queryByText(
+                'new_diagram_dialog.import_schema.project.sign_in_to_import_framework'
+            )
+        ).not.toBeInTheDocument();
+    });
+
+    it('imports Rails locally without calling the remote parser API', async () => {
+        isAuthenticated = true;
+        importProjectMock.mockResolvedValueOnce({
+            diagram: {
+                id: 'diagram-1',
+                name: 'Rails Import',
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            framework: 'rails',
+            diagnostics: [],
+        });
+
+        const user = userEvent.setup();
+        const onContinue = vi.fn();
+        const file = createTestZipFile({
+            'db/schema.rb': `ActiveRecord::Schema.define(version: 1) do
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+  end
+end`,
+            Gemfile: "gem 'rails', '~> 7.1'",
+        });
+
+        const { container } = renderImportSchemaStep({ onContinue });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        await user.click(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        );
+
+        await waitFor(() => {
+            expect(importProjectMock).toHaveBeenCalledOnce();
+        });
+
+        expect(apiRequestMock).not.toHaveBeenCalled();
+    });
 });
 
 describe('ImportSchemaStep existing diagram mode', () => {
