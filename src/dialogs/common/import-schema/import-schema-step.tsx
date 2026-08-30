@@ -18,11 +18,32 @@ import type { DatabaseType } from '@/lib/domain/database-type';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/use-auth';
+import {
+    ArchiveError,
+    ArchiveReader,
+    MAX_ARCHIVE_COMPRESSED_BYTES,
+    PROJECT_IMPORT_PARSER_ENABLED,
+    analyzeProjectArchive,
+    getProjectCandidateKey,
+    getSelectableCandidates,
+    isZipArchiveFile,
+} from '@/lib/project-import/types';
+import type {
+    ProjectArchiveAnalysis,
+    ProjectDetectionCandidate,
+} from '@/lib/project-import/project-types';
 import { analyzeImportContent } from './analyze-import-content';
-import { MAX_IMPORT_FILE_SIZE_BYTES } from './constants';
+import {
+    IMPORT_SCHEMA_FILE_ACCEPT,
+    MAX_IMPORT_FILE_SIZE_BYTES,
+    isImportSchemaFileNameAllowed,
+} from './constants';
 import { DetectionSummary } from './detection-summary';
 import { DialectMismatchPanel } from './dialect-mismatch-panel';
 import { DialectResolutionPanel } from './dialect-resolution-panel';
+import { ProjectAmbiguityPanel } from './project-ambiguity-panel';
+import { ProjectDetectionSummary } from './project-detection-summary';
 
 export interface ImportSchemaContinueParams {
     importMethod: ImportMethod;
@@ -56,6 +77,10 @@ export type ImportSchemaStepProps =
     | ImportSchemaStepCreateProps
     | ImportSchemaStepExistingProps;
 
+const releaseArchiveReader = (archive: ArchiveReader | null): void => {
+    archive?.close();
+};
+
 export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
     const {
         databaseType,
@@ -77,19 +102,53 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
             : undefined;
 
     const { t } = useTranslation();
+    const { isAuthenticated } = useAuth();
     const textareaId = useId();
     const fileInputId = useId();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const archiveReaderRef = useRef<ArchiveReader | null>(null);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(
         null
     );
     const [fileErrorKey, setFileErrorKey] = useState<string | null>(null);
     const [userResolvedSourceDialect, setUserResolvedSourceDialect] =
         useState<DatabaseType | null>(null);
+    const [projectAnalysis, setProjectAnalysis] =
+        useState<ProjectArchiveAnalysis | null>(null);
+    const [selectedProjectCandidate, setSelectedProjectCandidate] =
+        useState<ProjectDetectionCandidate | null>(null);
+    const [isAnalyzingProject, setIsAnalyzingProject] = useState(false);
+
+    const resetProjectArchiveState = useCallback(() => {
+        releaseArchiveReader(archiveReaderRef.current);
+        archiveReaderRef.current = null;
+        setProjectAnalysis(null);
+        setSelectedProjectCandidate(null);
+        setIsAnalyzingProject(false);
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            releaseArchiveReader(archiveReaderRef.current);
+            archiveReaderRef.current = null;
+        };
+    }, []);
 
     useEffect(() => {
         setUserResolvedSourceDialect(null);
     }, [scriptResult, databaseType]);
+
+    const activeProjectCandidate = useMemo(() => {
+        if (!projectAnalysis) {
+            return null;
+        }
+
+        if (projectAnalysis.status === 'ambiguous') {
+            return selectedProjectCandidate;
+        }
+
+        return projectAnalysis.recommendedCandidate;
+    }, [projectAnalysis, selectedProjectCandidate]);
 
     const baseAnalysis = useMemo(
         () =>
@@ -115,6 +174,22 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
     }, [userResolvedSourceDialect, baseAnalysis]);
 
     const canContinue = useMemo(() => {
+        if (projectAnalysis) {
+            if (!PROJECT_IMPORT_PARSER_ENABLED) {
+                return false;
+            }
+
+            if (projectAnalysis.status === 'unsupported') {
+                return false;
+            }
+
+            if (projectAnalysis.status === 'ambiguous') {
+                return selectedProjectCandidate !== null;
+            }
+
+            return projectAnalysis.recommendedCandidate !== null;
+        }
+
         if (!baseAnalysis.importMethod) {
             return false;
         }
@@ -155,11 +230,17 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         baseAnalysis,
         effectiveResolvedSourceDialect,
         mode,
+        projectAnalysis,
+        selectedProjectCandidate,
         userResolvedSourceDialect,
     ]);
 
     const handleContinue = useCallback(() => {
-        if (!baseAnalysis.importMethod || !canContinue) {
+        if (!canContinue || projectAnalysis) {
+            return;
+        }
+
+        if (!baseAnalysis.importMethod) {
             return;
         }
 
@@ -171,7 +252,13 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     ? (effectiveResolvedSourceDialect ?? undefined)
                     : undefined,
         });
-    }, [baseAnalysis, canContinue, effectiveResolvedSourceDialect, onContinue]);
+    }, [
+        baseAnalysis,
+        canContinue,
+        effectiveResolvedSourceDialect,
+        onContinue,
+        projectAnalysis,
+    ]);
 
     const handleSwitchDatabase = useCallback(() => {
         if (mode !== 'create' || !setDatabaseType) {
@@ -193,8 +280,65 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         []
     );
 
+    const handleSelectProjectCandidate = useCallback(
+        (candidate: ProjectDetectionCandidate) => {
+            setSelectedProjectCandidate(candidate);
+        },
+        []
+    );
+
+    const analyzeProjectFile = useCallback(
+        async (file: File) => {
+            resetProjectArchiveState();
+            setIsAnalyzingProject(true);
+            setSelectedFileName(file.name);
+            setFileErrorKey(null);
+
+            try {
+                const archive = await ArchiveReader.open(file);
+                archiveReaderRef.current = archive;
+                setScriptResult('');
+                const analysis = await analyzeProjectArchive(archive);
+                setProjectAnalysis(analysis);
+
+                if (
+                    analysis.status === 'detected' &&
+                    analysis.recommendedCandidate
+                ) {
+                    setSelectedProjectCandidate(analysis.recommendedCandidate);
+                }
+
+                if (analysis.status === 'ambiguous') {
+                    const selectable = getSelectableCandidates(
+                        analysis.candidates
+                    );
+                    if (selectable.length === 1) {
+                        setSelectedProjectCandidate(selectable[0]);
+                    }
+                }
+            } catch (error) {
+                resetProjectArchiveState();
+                setSelectedFileName(null);
+
+                if (error instanceof ArchiveError) {
+                    setFileErrorKey(
+                        'new_diagram_dialog.import_schema.errors.archive_invalid'
+                    );
+                    return;
+                }
+
+                setFileErrorKey(
+                    'new_diagram_dialog.import_schema.errors.unreadable_file'
+                );
+            } finally {
+                setIsAnalyzingProject(false);
+            }
+        },
+        [resetProjectArchiveState, setScriptResult]
+    );
+
     const handleFileChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
+        async (event: React.ChangeEvent<HTMLInputElement>) => {
             const file = event.target.files?.[0];
             event.target.value = '';
 
@@ -203,6 +347,29 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
             }
 
             setFileErrorKey(null);
+
+            const isZipArchive = await isZipArchiveFile(file);
+
+            if (isZipArchive) {
+                if (file.size > MAX_ARCHIVE_COMPRESSED_BYTES) {
+                    setFileErrorKey(
+                        'new_diagram_dialog.import_schema.errors.archive_too_large'
+                    );
+                    return;
+                }
+
+                await analyzeProjectFile(file);
+                return;
+            }
+
+            resetProjectArchiveState();
+
+            if (!isImportSchemaFileNameAllowed(file.name)) {
+                setFileErrorKey(
+                    'new_diagram_dialog.import_schema.errors.unsupported_file_extension'
+                );
+                return;
+            }
 
             if (file.size > MAX_IMPORT_FILE_SIZE_BYTES) {
                 setFileErrorKey(
@@ -231,16 +398,17 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
             };
             reader.readAsText(file);
         },
-        [setScriptResult]
+        [analyzeProjectFile, resetProjectArchiveState, setScriptResult]
     );
 
     const handleTextareaChange = useCallback(
         (event: React.ChangeEvent<HTMLTextAreaElement>) => {
             setFileErrorKey(null);
             setSelectedFileName(null);
+            resetProjectArchiveState();
             setScriptResult(event.target.value);
         },
-        [setScriptResult]
+        [resetProjectArchiveState, setScriptResult]
     );
 
     const resolvedTitle =
@@ -260,6 +428,9 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         (mode === 'existing'
             ? t('import_database_dialog.import_schema.import')
             : t('new_diagram_dialog.import_schema.import'));
+
+    const showTextImportPanels =
+        !projectAnalysis && !isAnalyzingProject && scriptResult.length > 0;
 
     return (
         <>
@@ -286,7 +457,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                                 'new_diagram_dialog.import_schema.textarea_placeholder'
                             )}
                             className="max-h-48 min-h-40 resize-none overflow-y-auto"
-                            disabled={isImporting}
+                            disabled={isImporting || isAnalyzingProject}
                         />
                     </div>
 
@@ -303,18 +474,19 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                             ref={fileInputRef}
                             id={fileInputId}
                             type="file"
+                            accept={IMPORT_SCHEMA_FILE_ACCEPT}
                             className="sr-only"
                             tabIndex={-1}
                             aria-hidden
                             onChange={handleFileChange}
-                            disabled={isImporting}
+                            disabled={isImporting || isAnalyzingProject}
                         />
                         <Button
                             type="button"
                             variant="outline"
                             className="w-full max-w-full gap-2"
                             onClick={() => fileInputRef.current?.click()}
-                            disabled={isImporting}
+                            disabled={isImporting || isAnalyzingProject}
                             aria-label={
                                 selectedFileName
                                     ? t(
@@ -322,7 +494,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                                           { name: selectedFileName }
                                       )
                                     : t(
-                                          'new_diagram_dialog.import_schema.choose_file'
+                                          'new_diagram_dialog.import_schema.choose_file_or_project'
                                       )
                             }
                             title={selectedFileName ?? undefined}
@@ -343,10 +515,15 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                             >
                                 {selectedFileName ??
                                     t(
-                                        'new_diagram_dialog.import_schema.choose_file'
+                                        'new_diagram_dialog.import_schema.choose_file_or_project'
                                     )}
                             </span>
                         </Button>
+                        <p className="text-center text-xs text-muted-foreground">
+                            {t(
+                                'new_diagram_dialog.import_schema.supported_formats_hint'
+                            )}
+                        </p>
                         {fileErrorKey ? (
                             <p
                                 role="alert"
@@ -357,11 +534,67 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                         ) : null}
                     </div>
 
-                    {baseAnalysis.resolutionState !== 'ambiguous' ? (
+                    {isAnalyzingProject ? (
+                        <p className="text-sm text-muted-foreground">
+                            {t(
+                                'new_diagram_dialog.import_schema.project.analyzing_project'
+                            )}
+                        </p>
+                    ) : null}
+
+                    {projectAnalysis?.status === 'unsupported' ? (
+                        <div className="rounded-md border border-border bg-muted/30 p-3 text-sm">
+                            <p className="font-medium">
+                                {t(
+                                    'new_diagram_dialog.import_schema.project.unsupported_project'
+                                )}
+                            </p>
+                            <p className="mt-1 text-muted-foreground">
+                                {t(
+                                    'new_diagram_dialog.import_schema.project.unsupported_project_description'
+                                )}
+                            </p>
+                        </div>
+                    ) : null}
+
+                    {projectAnalysis?.status === 'ambiguous' ? (
+                        <ProjectAmbiguityPanel
+                            candidates={projectAnalysis.candidates}
+                            selectedCandidateKey={
+                                selectedProjectCandidate
+                                    ? getProjectCandidateKey(
+                                          selectedProjectCandidate
+                                      )
+                                    : null
+                            }
+                            onSelect={handleSelectProjectCandidate}
+                        />
+                    ) : null}
+
+                    {projectAnalysis &&
+                    projectAnalysis.status === 'detected' &&
+                    activeProjectCandidate ? (
+                        <ProjectDetectionSummary
+                            candidate={activeProjectCandidate}
+                            isAuthenticated={isAuthenticated}
+                        />
+                    ) : null}
+
+                    {projectAnalysis?.status === 'ambiguous' &&
+                    activeProjectCandidate ? (
+                        <ProjectDetectionSummary
+                            candidate={activeProjectCandidate}
+                            isAuthenticated={isAuthenticated}
+                        />
+                    ) : null}
+
+                    {showTextImportPanels &&
+                    baseAnalysis.resolutionState !== 'ambiguous' ? (
                         <DetectionSummary analysis={baseAnalysis} />
                     ) : null}
 
-                    {baseAnalysis.displayKind === 'dialect_mismatch' &&
+                    {showTextImportPanels &&
+                    baseAnalysis.displayKind === 'dialect_mismatch' &&
                     baseAnalysis.detectedDatabaseType ? (
                         <DialectMismatchPanel
                             variant={mode}
@@ -377,7 +610,8 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                         />
                     ) : null}
 
-                    {baseAnalysis.resolutionState === 'ambiguous' ? (
+                    {showTextImportPanels &&
+                    baseAnalysis.resolutionState === 'ambiguous' ? (
                         <DialectResolutionPanel
                             variant={mode}
                             copyVariant={
@@ -419,7 +653,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                 <Button
                     type="button"
                     onClick={handleContinue}
-                    disabled={!canContinue || isImporting}
+                    disabled={!canContinue || isImporting || isAnalyzingProject}
                 >
                     {resolvedContinueLabel}
                 </Button>

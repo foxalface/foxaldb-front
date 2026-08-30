@@ -780,6 +780,9 @@ export const es: LanguageTranslation = {
                 auto_detect_hint: 'Detectaremos el formato automáticamente.',
                 or_divider: 'O',
                 choose_file: 'Elegir un archivo',
+                choose_file_or_project: 'Elegir un archivo o proyecto',
+                supported_formats_hint:
+                    'Compatible: SQL, DBML, JSON, archivo de proyecto (.zip)',
                 change_file_aria: 'Cambiar archivo, actualmente {{name}}',
                 selected_file: 'Archivo seleccionado: {{name}}',
                 back: 'Atrás',
@@ -844,6 +847,41 @@ export const es: LanguageTranslation = {
                     clickhouse_unsupported: 'SQL de ClickHouse detectado',
                     unsupported: 'Formato no compatible',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'Analizando el archivo del proyecto…',
+                    detected: 'Proyecto {{framework}} detectado',
+                    migrations_found_one: '{{count}} migración encontrada',
+                    migrations_found_other: '{{count}} migraciones encontradas',
+                    schema_files_found_one:
+                        '{{count}} archivo de esquema encontrado',
+                    schema_files_found_other:
+                        '{{count}} archivos de esquema encontrados',
+                    multiple_projects_title:
+                        'Se detectaron varios esquemas de base de datos',
+                    multiple_projects_description:
+                        'Este archivo contiene más de un proyecto de base de datos compatible. Elija cuál importar.',
+                    choose_project: 'Elegir proyecto',
+                    unsupported_project: 'Archivo de proyecto no compatible',
+                    unsupported_project_description:
+                        'No se encontró un proyecto de base de datos compatible (Laravel, Prisma, Drizzle, Rails, Entity Framework Core o Django) en este archivo.',
+                    project_root: 'Raíz del proyecto: {{path}}',
+                    sign_in_to_import_framework:
+                        'Inicie sesión para importar proyectos {{framework}} cuando la importación esté disponible.',
+                    remote_processing_notice:
+                        'Cuando la importación esté disponible, solo se procesarán los archivos relevantes del esquema.',
+                    remote_processing_scope:
+                        'Nunca se sube el archivo completo ni el código fuente no relacionado.',
+                    remote_processing_security:
+                        'El análisis es estático y no ejecuta el código subido.',
+                },
                 errors: {
                     unreadable_file: 'No se pudo leer el archivo seleccionado.',
                     malformed_json: 'No se pudo analizar el contenido JSON.',
@@ -854,8 +892,12 @@ export const es: LanguageTranslation = {
                     clickhouse_unsupported:
                         'La importación DDL SQL no es compatible con ClickHouse. Use DBML o importe desde una base existente.',
                     file_too_large: 'El archivo seleccionado supera los 5 MB.',
+                    archive_too_large:
+                        'El archivo del proyecto seleccionado supera los 50 MB.',
+                    archive_invalid:
+                        'El archivo seleccionado no es un archivo de proyecto válido.',
                     unsupported_file_extension:
-                        'Solo se admiten archivos .sql, .dbml y .json.',
+                        'Solo se admiten archivos .sql, .dbml, .json y archivos de proyecto .zip.',
                     import_failed:
                         'No se pudo importar el esquema. Revise el contenido e inténtelo de nuevo.',
                     invalid_diagram_json:

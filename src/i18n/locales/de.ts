@@ -792,6 +792,9 @@ export const de: LanguageTranslation = {
                 auto_detect_hint: 'Wir erkennen das Format automatisch.',
                 or_divider: 'ODER',
                 choose_file: 'Datei auswählen',
+                choose_file_or_project: 'Datei oder Projekt auswählen',
+                supported_formats_hint:
+                    'Unterstützt: SQL, DBML, JSON, Projektarchiv (.zip)',
                 change_file_aria: 'Datei ändern, aktuell {{name}}',
                 selected_file: 'Ausgewählte Datei: {{name}}',
                 back: 'Zurück',
@@ -856,6 +859,40 @@ export const de: LanguageTranslation = {
                     clickhouse_unsupported: 'ClickHouse-SQL erkannt',
                     unsupported: 'Nicht unterstütztes Format',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'Projektarchiv wird analysiert…',
+                    detected: '{{framework}}-Projekt erkannt',
+                    migrations_found_one: '{{count}} Migration gefunden',
+                    migrations_found_other: '{{count}} Migrationen gefunden',
+                    schema_files_found_one: '{{count}} Schemadatei gefunden',
+                    schema_files_found_other:
+                        '{{count}} Schemadateien gefunden',
+                    multiple_projects_title:
+                        'Mehrere Datenbankschemata erkannt',
+                    multiple_projects_description:
+                        'Dieses Archiv enthält mehr als ein unterstütztes Datenbankprojekt. Wählen Sie aus, welches importiert werden soll.',
+                    choose_project: 'Projekt auswählen',
+                    unsupported_project: 'Nicht unterstütztes Projektarchiv',
+                    unsupported_project_description:
+                        'In diesem Archiv wurde kein unterstütztes Laravel-, Prisma-, Drizzle-, Rails-, Entity Framework Core- oder Django-Datenbankprojekt gefunden.',
+                    project_root: 'Projektstamm: {{path}}',
+                    sign_in_to_import_framework:
+                        'Melden Sie sich an, um {{framework}}-Projekte zu importieren, sobald der Import verfügbar ist.',
+                    remote_processing_notice:
+                        'Sobald der Import verfügbar ist, werden nur schemarelevante Dateien verarbeitet.',
+                    remote_processing_scope:
+                        'Das vollständige Archiv und nicht relevante Quelldateien werden nie hochgeladen.',
+                    remote_processing_security:
+                        'Die Analyse ist statisch und führt hochgeladenen Code nicht aus.',
+                },
                 errors: {
                     unreadable_file:
                         'Die ausgewählte Datei konnte nicht gelesen werden.',
@@ -869,8 +906,12 @@ export const de: LanguageTranslation = {
                         'SQL-DDL-Import wird für ClickHouse nicht unterstützt. Verwenden Sie DBML oder importieren Sie aus einer bestehenden Datenbank.',
                     file_too_large:
                         'Die ausgewählte Datei ist größer als 5 MB.',
+                    archive_too_large:
+                        'Das ausgewählte Projektarchiv ist größer als 50 MB.',
+                    archive_invalid:
+                        'Die ausgewählte Datei ist kein gültiges Projektarchiv.',
                     unsupported_file_extension:
-                        'Nur .sql-, .dbml- und .json-Dateien werden unterstützt.',
+                        'Nur .sql-, .dbml-, .json- und .zip-Projektarchive werden unterstützt.',
                     import_failed:
                         'Das Schema konnte nicht importiert werden. Prüfen Sie den Inhalt und versuchen Sie es erneut.',
                     invalid_diagram_json:

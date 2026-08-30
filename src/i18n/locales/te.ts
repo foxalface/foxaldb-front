@@ -768,6 +768,9 @@ export const te: LanguageTranslation = {
                 auto_detect_hint: 'మేము ఫార్మాట్‌ను స్వయంచాలకంగా గుర్తిస్తాము.',
                 or_divider: 'లేదా',
                 choose_file: 'ఫైల్ ఎంచుకోండి',
+                choose_file_or_project: 'ఫైల్ లేదా ప్రాజెక్ట్ ఎంచుకోండి',
+                supported_formats_hint:
+                    'మద్దతు: SQL, DBML, JSON, ప్రాజెక్ట్ ఆర్కైవ్ (.zip)',
                 change_file_aria: 'ఫైల్ మార్చు, ప్రస్తుతం: {{name}}',
                 selected_file: 'ఎంచుకున్న ఫైల్: {{name}}',
                 back: 'వెనక్కి',
@@ -831,6 +834,42 @@ export const te: LanguageTranslation = {
                     clickhouse_unsupported: 'ClickHouse SQL గుర్తించబడింది',
                     unsupported: 'మద్దతు లేని ఫార్మాట్',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'ప్రాజెక్ట్ ఆర్కైవ్ విశ్లేషిస్తోంది…',
+                    detected: '{{framework}} ప్రాజెక్ట్ కనుగొనబడింది',
+                    migrations_found_one: '{{count}} మైగ్రేషన్ కనుగొనబడింది',
+                    migrations_found_other:
+                        '{{count}} మైగ్రేషన్లు కనుగొనబడ్డాయి',
+                    schema_files_found_one:
+                        '{{count}} స్కీమా ఫైల్ కనుగొనబడింది',
+                    schema_files_found_other:
+                        '{{count}} స్కీమా ఫైల్లు కనుగొనబడ్డాయి',
+                    multiple_projects_title:
+                        'అనేక డేటాబేస్ స్కీమాలు కనుగొనబడ్డాయి',
+                    multiple_projects_description:
+                        'ఈ ఆర్కైవ్‌లో ఒకటికంటే ఎక్కువ మద్దతు ఉన్న డేటాబేస్ ప్రాజెక్ట్‌లు ఉన్నాయి. ఏది దిగుమతి చేయాలో ఎంచుకోండి.',
+                    choose_project: 'ప్రాజెక్ట్ ఎంచుకోండి',
+                    unsupported_project: 'మద్దతు లేని ప్రాజెక్ట్ ఆర్కైవ్',
+                    unsupported_project_description:
+                        'ఈ ఆర్కైవ్‌లో Laravel, Prisma, Drizzle, Rails, Entity Framework Core లేదా Django డేటాబేస్ ప్రాజెక్ట్ కనుగొనబడలేదు.',
+                    project_root: 'ప్రాజెక్ట్ రూట్: {{path}}',
+                    sign_in_to_import_framework:
+                        'దిగుమతి అందుబాటులో ఉన్నప్పుడు {{framework}} ప్రాజెక్ట్‌లను దిగుమతి చేయడానికి సైన్ ఇన్ చేయండి.',
+                    remote_processing_notice:
+                        'దిగుమతి అందుబాటులో ఉన్నప్పుడు స్కీమాకు సంబంధించిన ఫైల్‌లు మాత్రమే ప్రాసెస్ చేయబడతాయి.',
+                    remote_processing_scope:
+                        'పూర్తి ఆర్కైవ్ లేదా సంబంధం లేని సోర్స్ ఫైల్‌లు ఎప్పుడూ అప్‌లోడ్ చేయబడవు.',
+                    remote_processing_security:
+                        'విశ్లేషణ స్థిరమైనది మరియు అప్‌లోడ్ చేసిన కోడ్‌ను అమలు చేయదు.',
+                },
                 errors: {
                     unreadable_file: 'ఎంచుకున్న ఫైల్ చదవలేకపోయాము.',
                     malformed_json: 'JSON కంటెంట్‌ను పార్స్ చేయలేకపోయాము.',
@@ -840,8 +879,12 @@ export const te: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse కోసం SQL DDL దిగుమతి మద్దతు లేదు. DBML ఉపయోగించండి లేదా ఇప్పటికే ఉన్న డేటాబేస్ నుండి దిగుమతి చేయండి.',
                     file_too_large: 'ఎంచుకున్న ఫైల్ 5 MB కంటే పెద్దది.',
+                    archive_too_large:
+                        'ఎంచుకున్న ప్రాజెక్ట్ ఆర్కైవ్ 50 MB కంటే పెద్దది.',
+                    archive_invalid:
+                        'ఎంచుకున్న ఫైల్ చెల్లుబాటు అయ్యే ప్రాజెక్ట్ ఆర్కైవ్ కాదు.',
                     unsupported_file_extension:
-                        '.sql, .dbml మరియు .json ఫైళ్లు మాత్రమే మద్దతు ఇవ్వబడతాయి.',
+                        '.sql, .dbml, .json మరియు .zip ప్రాజెక్ట్ ఆర్కైవ్‌లు మాత్రమే మద్దతు ఉంటాయి.',
                     import_failed:
                         'స్కీమాను దిగుమతి చేయలేకపోయాము. కంటెంట్ తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
                     invalid_diagram_json:

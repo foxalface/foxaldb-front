@@ -759,6 +759,9 @@ export const en = {
                 auto_detect_hint: "We'll detect the format automatically.",
                 or_divider: 'OR',
                 choose_file: 'Choose a file',
+                choose_file_or_project: 'Choose a file or project',
+                supported_formats_hint:
+                    'Supported: SQL, DBML, JSON, project archive (.zip)',
                 change_file_aria: 'Change file, currently {{name}}',
                 selected_file: 'Selected file: {{name}}',
                 back: 'Back',
@@ -823,6 +826,39 @@ export const en = {
                     unsupported: 'Unsupported format',
                     clickhouse_unsupported: 'ClickHouse SQL detected',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'Analyzing project archive…',
+                    detected: '{{framework}} project detected',
+                    migrations_found_one: '{{count}} migration found',
+                    migrations_found_other: '{{count}} migrations found',
+                    schema_files_found_one: '{{count}} schema file found',
+                    schema_files_found_other: '{{count}} schema files found',
+                    multiple_projects_title:
+                        'Multiple database schemas detected',
+                    multiple_projects_description:
+                        'This archive contains more than one supported database project. Choose which one to import.',
+                    choose_project: 'Choose project',
+                    unsupported_project: 'Unsupported project archive',
+                    unsupported_project_description:
+                        'We could not find a supported Laravel, Prisma, Drizzle, Rails, Entity Framework Core, or Django database project in this archive.',
+                    project_root: 'Project root: {{path}}',
+                    sign_in_to_import_framework:
+                        'Sign in to import {{framework}} projects when import becomes available.',
+                    remote_processing_notice:
+                        'When import is available, only schema-relevant files from this project will be processed.',
+                    remote_processing_scope:
+                        'The full archive and unrelated source files are never uploaded.',
+                    remote_processing_security:
+                        'Analysis is static and does not execute uploaded code.',
+                },
                 errors: {
                     unreadable_file: 'Could not read the selected file.',
                     malformed_json: 'The JSON content could not be parsed.',
@@ -833,8 +869,12 @@ export const en = {
                     clickhouse_unsupported:
                         'SQL DDL import is not supported for ClickHouse. Use DBML or import from an existing database instead.',
                     file_too_large: 'The selected file is larger than 5 MB.',
+                    archive_too_large:
+                        'The selected project archive is larger than 50 MB.',
+                    archive_invalid:
+                        'The selected file is not a valid project archive.',
                     unsupported_file_extension:
-                        'Only .sql, .dbml, and .json files are supported.',
+                        'Only .sql, .dbml, .json, and .zip project archives are supported.',
                     import_failed:
                         'The schema could not be imported. Check the content and try again.',
                     invalid_diagram_json:

@@ -724,6 +724,9 @@ export const zh_TW: LanguageTranslation = {
                 auto_detect_hint: '我們會自動偵測格式。',
                 or_divider: '或',
                 choose_file: '選擇檔案',
+                choose_file_or_project: '選擇檔案或專案',
+                supported_formats_hint:
+                    '支援：SQL、DBML、JSON、專案壓縮檔（.zip）',
                 change_file_aria: '變更檔案，目前：{{name}}',
                 selected_file: '已選檔案：{{name}}',
                 back: '返回',
@@ -784,6 +787,38 @@ export const zh_TW: LanguageTranslation = {
                     clickhouse_unsupported: '已偵測到 ClickHouse SQL',
                     unsupported: '不支援的格式',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: '正在分析專案壓縮檔…',
+                    detected: '已偵測到 {{framework}} 專案',
+                    migrations_found_one: '找到 {{count}} 個遷移',
+                    migrations_found_other: '找到 {{count}} 個遷移',
+                    schema_files_found_one: '找到 {{count}} 個結構描述檔',
+                    schema_files_found_other: '找到 {{count}} 個結構描述檔',
+                    multiple_projects_title: '偵測到多個資料庫結構描述',
+                    multiple_projects_description:
+                        '此壓縮檔包含多個支援的資料庫專案。請選擇要匯入的專案。',
+                    choose_project: '選擇專案',
+                    unsupported_project: '不支援的專案壓縮檔',
+                    unsupported_project_description:
+                        '在此壓縮檔中找不到支援的 Laravel、Prisma、Drizzle、Rails、Entity Framework Core 或 Django 資料庫專案。',
+                    project_root: '專案根目錄：{{path}}',
+                    sign_in_to_import_framework:
+                        '匯入功能可用後，請登入以匯入 {{framework}} 專案。',
+                    remote_processing_notice:
+                        '匯入功能可用後，將僅處理與結構描述相關的檔案。',
+                    remote_processing_scope:
+                        '絕不會上傳完整壓縮檔或無關的原始碼。',
+                    remote_processing_security:
+                        '分析為靜態，不會執行上傳的程式碼。',
+                },
                 errors: {
                     unreadable_file: '無法讀取所選檔案。',
                     malformed_json: '無法解析 JSON 內容。',
@@ -792,8 +827,10 @@ export const zh_TW: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse 不支援 SQL DDL 匯入。請使用 DBML 或從現有資料庫匯入。',
                     file_too_large: '所選檔案大於 5 MB。',
+                    archive_too_large: '所選專案壓縮檔大於 50 MB。',
+                    archive_invalid: '所選檔案不是有效的專案壓縮檔。',
                     unsupported_file_extension:
-                        '僅支援 .sql、.dbml 和 .json 檔案。',
+                        '僅支援 .sql、.dbml、.json 和 .zip 專案壓縮檔。',
                     import_failed: '無法匯入結構描述。請檢查內容後再試一次。',
                     invalid_diagram_json: '圖表 JSON 無效。請檢查檔案後重試。',
                 },

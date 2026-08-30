@@ -758,6 +758,9 @@ export const tr: LanguageTranslation = {
                 auto_detect_hint: 'Formatı otomatik olarak algılayacağız.',
                 or_divider: 'VEYA',
                 choose_file: 'Dosya seç',
+                choose_file_or_project: 'Dosya veya proje seçin',
+                supported_formats_hint:
+                    'Desteklenen: SQL, DBML, JSON, proje arşivi (.zip)',
                 change_file_aria: 'Dosyayı değiştir, şu an: {{name}}',
                 selected_file: 'Seçilen dosya: {{name}}',
                 back: 'Geri',
@@ -820,6 +823,39 @@ export const tr: LanguageTranslation = {
                     clickhouse_unsupported: 'ClickHouse SQL algılandı',
                     unsupported: 'Desteklenmeyen format',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'Proje arşivi analiz ediliyor…',
+                    detected: '{{framework}} projesi algılandı',
+                    migrations_found_one: '{{count}} göç bulundu',
+                    migrations_found_other: '{{count}} göç bulundu',
+                    schema_files_found_one: '{{count}} şema dosyası bulundu',
+                    schema_files_found_other: '{{count}} şema dosyası bulundu',
+                    multiple_projects_title:
+                        'Birden fazla veritabanı şeması algılandı',
+                    multiple_projects_description:
+                        'Bu arşivde birden fazla desteklenen veritabanı projesi var. Hangisini içe aktaracağınızı seçin.',
+                    choose_project: 'Proje seçin',
+                    unsupported_project: 'Desteklenmeyen proje arşivi',
+                    unsupported_project_description:
+                        'Bu arşivde desteklenen bir Laravel, Prisma, Drizzle, Rails, Entity Framework Core veya Django veritabanı projesi bulunamadı.',
+                    project_root: 'Proje kökü: {{path}}',
+                    sign_in_to_import_framework:
+                        'İçe aktarma kullanılabilir olduğunda {{framework}} projelerini içe aktarmak için oturum açın.',
+                    remote_processing_notice:
+                        'İçe aktarma kullanılabilir olduğunda yalnızca şemayla ilgili dosyalar işlenecek.',
+                    remote_processing_scope:
+                        'Tam arşiv ve ilgisiz kaynak dosyaları asla yüklenmez.',
+                    remote_processing_security:
+                        'Analiz statiktir ve yüklenen kodu çalıştırmaz.',
+                },
                 errors: {
                     unreadable_file: 'Seçilen dosya okunamadı.',
                     malformed_json: 'JSON içeriği ayrıştırılamadı.',
@@ -830,8 +866,11 @@ export const tr: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse için SQL DDL içe aktarma desteklenmiyor. DBML kullanın veya mevcut bir veritabanından içe aktarın.',
                     file_too_large: "Seçilen dosya 5 MB'tan büyük.",
+                    archive_too_large: 'Seçilen proje arşivi 50 MB’dan büyük.',
+                    archive_invalid:
+                        'Seçilen dosya geçerli bir proje arşivi değil.',
                     unsupported_file_extension:
-                        'Yalnızca .sql, .dbml ve .json dosyaları desteklenir.',
+                        'Yalnızca .sql, .dbml, .json ve .zip proje arşivleri desteklenir.',
                     import_failed:
                         'Şema içe aktarılamadı. İçeriği kontrol edip tekrar deneyin.',
                     invalid_diagram_json:

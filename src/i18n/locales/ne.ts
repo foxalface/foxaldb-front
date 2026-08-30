@@ -772,6 +772,9 @@ export const ne: LanguageTranslation = {
                 auto_detect_hint: 'हामी ढाँचा स्वचालित रूपमा पत्ता लगाउँछौं।',
                 or_divider: 'वा',
                 choose_file: 'फाइल छान्नुहोस्',
+                choose_file_or_project: 'फाइल वा परियोजना छान्नुहोस्',
+                supported_formats_hint:
+                    'समर्थित: SQL, DBML, JSON, परियोजना अभिलेख (.zip)',
                 change_file_aria: 'फाइल परिवर्तन गर्नुहोस्, हाल: {{name}}',
                 selected_file: 'छानिएको फाइल: {{name}}',
                 back: 'पछाडि',
@@ -835,6 +838,38 @@ export const ne: LanguageTranslation = {
                     clickhouse_unsupported: 'ClickHouse SQL पत्ता लाग्यो',
                     unsupported: 'असमर्थित ढाँचा',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'परियोजना अभिलेख विश्लेषण गरिँदैछ…',
+                    detected: '{{framework}} परियोजना पत्ता लाग्यो',
+                    migrations_found_one: '{{count}} माइग्रेसन भेटियो',
+                    migrations_found_other: '{{count}} माइग्रेसन भेटिए',
+                    schema_files_found_one: '{{count}} स्किमा फाइल भेटियो',
+                    schema_files_found_other: '{{count}} स्किमा फाइल भेटिए',
+                    multiple_projects_title: 'धेरै डाटाबेस स्किमा पत्ता लाग्यो',
+                    multiple_projects_description:
+                        'यो अभिलेखमा एकभन्दा बढी समर्थित डाटाबेस परियोजना छन्। कुन आयात गर्ने छान्नुहोस्।',
+                    choose_project: 'परियोजना छान्नुहोस्',
+                    unsupported_project: 'असमर्थित परियोजना अभिलेख',
+                    unsupported_project_description:
+                        'यो अभिलेखमा Laravel, Prisma, Drizzle, Rails, Entity Framework Core वा Django डाटाबेस परियोजना फेला परेन।',
+                    project_root: 'परियोजना रूट: {{path}}',
+                    sign_in_to_import_framework:
+                        'आयात उपलब्ध भएपछि {{framework}} परियोजना आयात गर्न साइन इन गर्नुहोस्।',
+                    remote_processing_notice:
+                        'आयात उपलब्ध भएपछि स्किमा-सम्बन्धित फाइल मात्र प्रशोधन हुनेछ।',
+                    remote_processing_scope:
+                        'पूरा अभिलेख वा असम्बन्धित स्रोत फाइल कहिल्यै अपलोड हुँदैन।',
+                    remote_processing_security:
+                        'विश्लेषण स्थिर छ र अपलोड गरिएको कोड चलाउँदैन।',
+                },
                 errors: {
                     unreadable_file: 'छानिएको फाइल पढ्न सकिएन।',
                     malformed_json: 'JSON सामग्री पार्स गर्न सकिएन।',
@@ -844,8 +879,11 @@ export const ne: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse का लागि SQL DDL आयात समर्थित छैन। DBML प्रयोग गर्नुहोस् वा अवस्थित डाटाबेसबाट आयात गर्नुहोस्।',
                     file_too_large: 'छानिएको फाइल 5 MB भन्दा ठूलो छ।',
+                    archive_too_large:
+                        'छानिएको परियोजना अभिलेख 50 MB भन्दा ठूलो छ।',
+                    archive_invalid: 'छानिएको फाइल मान्य परियोजना अभिलेख होइन।',
                     unsupported_file_extension:
-                        'केवल .sql, .dbml र .json फाइलहरू मात्र समर्थित छन्।',
+                        'मात्र .sql, .dbml, .json र .zip परियोजना अभिलेख समर्थित छ।',
                     import_failed:
                         'स्किमा आयात गर्न सकिएन। सामग्री जाँच गरेर फेरि प्रयास गर्नुहोस्।',
                     invalid_diagram_json:

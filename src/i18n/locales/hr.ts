@@ -764,6 +764,9 @@ export const hr: LanguageTranslation = {
                 auto_detect_hint: 'Format ćemo automatski prepoznati.',
                 or_divider: 'ILI',
                 choose_file: 'Odaberi datoteku',
+                choose_file_or_project: 'Odaberite datoteku ili projekt',
+                supported_formats_hint:
+                    'Podržano: SQL, DBML, JSON, arhiva projekta (.zip)',
                 change_file_aria: 'Promijeni datoteku, trenutno: {{name}}',
                 selected_file: 'Odabrana datoteka: {{name}}',
                 back: 'Natrag',
@@ -827,6 +830,41 @@ export const hr: LanguageTranslation = {
                     clickhouse_unsupported: 'Prepoznat je ClickHouse SQL',
                     unsupported: 'Nepodržani format',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'Analiza arhive projekta…',
+                    detected: 'Otkriven je projekt {{framework}}',
+                    migrations_found_one: 'Pronađena je {{count}} migracija',
+                    migrations_found_other: 'Pronađeno je {{count}} migracija',
+                    schema_files_found_one:
+                        'Pronađena je {{count}} datoteka sheme',
+                    schema_files_found_other:
+                        'Pronađeno je {{count}} datoteka sheme',
+                    multiple_projects_title:
+                        'Otkriveno je više shema baza podataka',
+                    multiple_projects_description:
+                        'Ova arhiva sadrži više od jednog podržanog projekta baze podataka. Odaberite koji želite uvesti.',
+                    choose_project: 'Odaberite projekt',
+                    unsupported_project: 'Nepodržana arhiva projekta',
+                    unsupported_project_description:
+                        'U ovoj arhivi nije pronađen podržani Laravel, Prisma, Drizzle, Rails, Entity Framework Core ili Django projekt.',
+                    project_root: 'Korijen projekta: {{path}}',
+                    sign_in_to_import_framework:
+                        'Prijavite se za uvoz {{framework}} projekata kada uvoz bude dostupan.',
+                    remote_processing_notice:
+                        'Kada uvoz bude dostupan, obrađivat će se samo datoteke relevantne za shemu.',
+                    remote_processing_scope:
+                        'Cijela arhiva i nevezani izvorni kod nikada se ne učitavaju.',
+                    remote_processing_security:
+                        'Analiza je statična i ne izvršava učitani kod.',
+                },
                 errors: {
                     unreadable_file:
                         'Odabrana datoteka nije mogla biti pročitana.',
@@ -837,8 +875,12 @@ export const hr: LanguageTranslation = {
                     clickhouse_unsupported:
                         'SQL DDL uvoz nije podržan za ClickHouse. Koristite DBML ili uvezite iz postojeće baze.',
                     file_too_large: 'Odabrana datoteka je veća od 5 MB.',
+                    archive_too_large:
+                        'Odabrana arhiva projekta veća je od 50 MB.',
+                    archive_invalid:
+                        'Odabrana datoteka nije valjana arhiva projekta.',
                     unsupported_file_extension:
-                        'Podržane su samo .sql, .dbml i .json datoteke.',
+                        'Podržane su samo .sql, .dbml, .json i .zip arhive projekata.',
                     import_failed:
                         'Shemu nije bilo moguće uvesti. Provjerite sadržaj i pokušajte ponovno.',
                     invalid_diagram_json:

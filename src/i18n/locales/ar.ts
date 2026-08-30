@@ -753,6 +753,9 @@ export const ar: LanguageTranslation = {
                 auto_detect_hint: 'سنكتشف التنسيق تلقائيًا.',
                 or_divider: 'أو',
                 choose_file: 'اختر ملفًا',
+                choose_file_or_project: 'اختر ملفًا أو مشروعًا',
+                supported_formats_hint:
+                    'المدعوم: SQL وDBML وJSON وأرشيف مشروع (.zip)',
                 change_file_aria: 'تغيير الملف، الحالي: {{name}}',
                 selected_file: 'الملف المحدد: {{name}}',
                 back: 'رجوع',
@@ -818,6 +821,40 @@ export const ar: LanguageTranslation = {
                     clickhouse_unsupported: 'تم اكتشاف SQL لـ ClickHouse',
                     unsupported: 'تنسيق غير مدعوم',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'جارٍ تحليل أرشيف المشروع…',
+                    detected: 'تم اكتشاف مشروع {{framework}}',
+                    migrations_found_one: 'تم العثور على {{count}} ترحيل',
+                    migrations_found_other: 'تم العثور على {{count}} ترحيلات',
+                    schema_files_found_one: 'تم العثور على {{count}} ملف مخطط',
+                    schema_files_found_other:
+                        'تم العثور على {{count}} ملفات مخطط',
+                    multiple_projects_title:
+                        'تم اكتشاف مخططات قواعد بيانات متعددة',
+                    multiple_projects_description:
+                        'يحتوي هذا الأرشيف على أكثر من مشروع قاعدة بيانات مدعوم. اختر المشروع الذي تريد استيراده.',
+                    choose_project: 'اختر المشروع',
+                    unsupported_project: 'أرشيف مشروع غير مدعوم',
+                    unsupported_project_description:
+                        'لم نتمكن من العثور على مشروع قاعدة بيانات مدعوم (Laravel أو Prisma أو Drizzle أو Rails أو Entity Framework Core أو Django) في هذا الأرشيف.',
+                    project_root: 'جذر المشروع: {{path}}',
+                    sign_in_to_import_framework:
+                        'سجّل الدخول لاستيراد مشاريع {{framework}} عندما يصبح الاستيراد متاحًا.',
+                    remote_processing_notice:
+                        'عندما يصبح الاستيراد متاحًا، ستتم معالجة ملفات المخطط ذات الصلة فقط من هذا المشروع.',
+                    remote_processing_scope:
+                        'لا يتم رفع الأرشيف الكامل أو ملفات المصدر غير ذات الصلة أبدًا.',
+                    remote_processing_security:
+                        'التحليل ثابت ولا ينفّذ الكود المرفوع.',
+                },
                 errors: {
                     unreadable_file: 'تعذر قراءة الملف المحدد.',
                     malformed_json: 'تعذر تحليل محتوى JSON.',
@@ -827,8 +864,11 @@ export const ar: LanguageTranslation = {
                     clickhouse_unsupported:
                         'استيراد DDL SQL غير مدعوم لـ ClickHouse. استخدم DBML أو استورد من قاعدة بيانات موجودة.',
                     file_too_large: 'الملف المحدد أكبر من 5 ميغابايت.',
+                    archive_too_large:
+                        'أرشيف المشروع المحدد أكبر من 50 ميجابايت.',
+                    archive_invalid: 'الملف المحدد ليس أرشيف مشروع صالحًا.',
                     unsupported_file_extension:
-                        'يُسمح فقط بملفات .sql و .dbml و .json.',
+                        'يُدعم فقط ملفات .sql و.dbml و.json وأرشيفات المشاريع .zip.',
                     import_failed:
                         'تعذر استيراد المخطط. تحقق من المحتوى وحاول مرة أخرى.',
                     invalid_diagram_json:

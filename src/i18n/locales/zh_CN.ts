@@ -724,6 +724,9 @@ export const zh_CN: LanguageTranslation = {
                 auto_detect_hint: '我们将自动检测格式。',
                 or_divider: '或',
                 choose_file: '选择文件',
+                choose_file_or_project: '选择文件或项目',
+                supported_formats_hint:
+                    '支持：SQL、DBML、JSON、项目压缩包（.zip）',
                 change_file_aria: '更改文件，当前：{{name}}',
                 selected_file: '已选文件：{{name}}',
                 back: '返回',
@@ -784,6 +787,38 @@ export const zh_CN: LanguageTranslation = {
                     clickhouse_unsupported: '检测到 ClickHouse SQL',
                     unsupported: '不支持的格式',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: '正在分析项目压缩包…',
+                    detected: '已检测到 {{framework}} 项目',
+                    migrations_found_one: '找到 {{count}} 个迁移',
+                    migrations_found_other: '找到 {{count}} 个迁移',
+                    schema_files_found_one: '找到 {{count}} 个架构文件',
+                    schema_files_found_other: '找到 {{count}} 个架构文件',
+                    multiple_projects_title: '检测到多个数据库架构',
+                    multiple_projects_description:
+                        '此压缩包包含多个受支持的数据库项目。请选择要导入的项目。',
+                    choose_project: '选择项目',
+                    unsupported_project: '不支持的项目压缩包',
+                    unsupported_project_description:
+                        '在此压缩包中未找到受支持的 Laravel、Prisma、Drizzle、Rails、Entity Framework Core 或 Django 数据库项目。',
+                    project_root: '项目根目录：{{path}}',
+                    sign_in_to_import_framework:
+                        '导入功能可用后，请登录以导入 {{framework}} 项目。',
+                    remote_processing_notice:
+                        '导入功能可用后，将仅处理与架构相关的文件。',
+                    remote_processing_scope:
+                        '绝不会上传完整压缩包或无关源代码。',
+                    remote_processing_security:
+                        '分析是静态的，不会执行上传的代码。',
+                },
                 errors: {
                     unreadable_file: '无法读取所选文件。',
                     malformed_json: '无法解析 JSON 内容。',
@@ -792,8 +827,10 @@ export const zh_CN: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse 不支持 SQL DDL 导入。请使用 DBML 或从现有数据库导入。',
                     file_too_large: '所选文件大于 5 MB。',
+                    archive_too_large: '所选项目压缩包大于 50 MB。',
+                    archive_invalid: '所选文件不是有效的项目压缩包。',
                     unsupported_file_extension:
-                        '仅支持 .sql、.dbml 和 .json 文件。',
+                        '仅支持 .sql、.dbml、.json 和 .zip 项目压缩包。',
                     import_failed: '无法导入架构。请检查内容后重试。',
                     invalid_diagram_json: '图表 JSON 无效。请检查文件后重试。',
                 },

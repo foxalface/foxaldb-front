@@ -768,6 +768,9 @@ export const ru: LanguageTranslation = {
                 auto_detect_hint: 'Мы автоматически определим формат.',
                 or_divider: 'ИЛИ',
                 choose_file: 'Выбрать файл',
+                choose_file_or_project: 'Выберите файл или проект',
+                supported_formats_hint:
+                    'Поддерживается: SQL, DBML, JSON, архив проекта (.zip)',
                 change_file_aria: 'Изменить файл, сейчас: {{name}}',
                 selected_file: 'Выбранный файл: {{name}}',
                 back: 'Назад',
@@ -832,6 +835,39 @@ export const ru: LanguageTranslation = {
                     clickhouse_unsupported: 'Обнаружен SQL ClickHouse',
                     unsupported: 'Неподдерживаемый формат',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'Анализ архива проекта…',
+                    detected: 'Обнаружен проект {{framework}}',
+                    migrations_found_one: 'Найдена {{count}} миграция',
+                    migrations_found_other: 'Найдено {{count}} миграций',
+                    schema_files_found_one: 'Найден {{count}} файл схемы',
+                    schema_files_found_other: 'Найдено {{count}} файлов схемы',
+                    multiple_projects_title:
+                        'Обнаружено несколько схем баз данных',
+                    multiple_projects_description:
+                        'Этот архив содержит более одного поддерживаемого проекта базы данных. Выберите, какой импортировать.',
+                    choose_project: 'Выберите проект',
+                    unsupported_project: 'Неподдерживаемый архив проекта',
+                    unsupported_project_description:
+                        'В этом архиве не найден поддерживаемый проект Laravel, Prisma, Drizzle, Rails, Entity Framework Core или Django.',
+                    project_root: 'Корень проекта: {{path}}',
+                    sign_in_to_import_framework:
+                        'Войдите, чтобы импортировать проекты {{framework}}, когда импорт станет доступен.',
+                    remote_processing_notice:
+                        'Когда импорт станет доступен, будут обрабатываться только файлы, относящиеся к схеме.',
+                    remote_processing_scope:
+                        'Полный архив и несвязанный исходный код никогда не загружаются.',
+                    remote_processing_security:
+                        'Анализ статический и не выполняет загруженный код.',
+                },
                 errors: {
                     unreadable_file: 'Не удалось прочитать выбранный файл.',
                     malformed_json: 'Не удалось разобрать содержимое JSON.',
@@ -842,8 +878,11 @@ export const ru: LanguageTranslation = {
                     clickhouse_unsupported:
                         'Импорт SQL DDL не поддерживается для ClickHouse. Используйте DBML или импортируйте из существующей базы данных.',
                     file_too_large: 'Выбранный файл больше 5 МБ.',
+                    archive_too_large: 'Выбранный архив проекта больше 50 МБ.',
+                    archive_invalid:
+                        'Выбранный файл не является допустимым архивом проекта.',
                     unsupported_file_extension:
-                        'Поддерживаются только файлы .sql, .dbml и .json.',
+                        'Поддерживаются только файлы .sql, .dbml, .json и архивы проектов .zip.',
                     import_failed:
                         'Не удалось импортировать схему. Проверьте содержимое и попробуйте снова.',
                     invalid_diagram_json:

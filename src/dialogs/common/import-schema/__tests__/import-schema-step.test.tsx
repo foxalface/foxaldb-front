@@ -2,9 +2,9 @@ import React from 'react';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -26,6 +26,19 @@ const stressSql = readFileSync(
     ),
     'utf8'
 );
+
+import {
+    createTestZipFile,
+    createRawZipFile,
+} from '@/lib/project-import/__tests__/fixtures/build-test-zip';
+
+let isAuthenticated = true;
+
+vi.mock('@/hooks/use-auth', () => ({
+    useAuth: () => ({
+        isAuthenticated,
+    }),
+}));
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
@@ -98,6 +111,38 @@ vi.mock('react-i18next', () => ({
                 return `${options?.database} recommended`;
             }
 
+            if (key === 'new_diagram_dialog.import_schema.project.detected') {
+                return `${options?.framework} project detected`;
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.project.migrations_found'
+            ) {
+                return `${options?.count} migrations`;
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.project.schema_files_found'
+            ) {
+                return `${options?.count} schemas`;
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.project.frameworks.laravel'
+            ) {
+                return 'Laravel';
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.project.frameworks.prisma'
+            ) {
+                return 'Prisma';
+            }
+
             if (
                 key ===
                 'new_diagram_dialog.import_schema.ambiguous.recommended_tooltip'
@@ -150,7 +195,7 @@ describe('ImportSchemaStep', () => {
         ).toBeInTheDocument();
         expect(
             screen.getByRole('button', {
-                name: 'new_diagram_dialog.import_schema.choose_file',
+                name: 'new_diagram_dialog.import_schema.choose_file_or_project',
             })
         ).toBeInTheDocument();
     });
@@ -357,6 +402,40 @@ describe('ImportSchemaStep', () => {
         expect(setScriptResult).toHaveBeenCalled();
     });
 
+    it('restricts file selection to supported schema and project extensions', () => {
+        renderImportSchemaStep();
+        const fileInput = document.body.querySelector(
+            'input[type="file"]'
+        ) as HTMLInputElement;
+
+        expect(fileInput).toHaveAttribute('accept', '.sql,.dbml,.json,.zip');
+    });
+
+    it('rejects unsupported file extensions before reading them', async () => {
+        const setScriptResult = vi.fn();
+        const file = new File(['hello'], 'notes.txt', { type: 'text/plain' });
+
+        const { container } = renderImportSchemaStep({ setScriptResult });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            (document.body.querySelector(
+                'input[type="file"]'
+            ) as HTMLInputElement);
+
+        fireEvent.change(fileInput as HTMLInputElement, {
+            target: { files: [file] },
+        });
+
+        expect(setScriptResult).not.toHaveBeenCalled();
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'new_diagram_dialog.import_schema.errors.unsupported_file_extension'
+                )
+            ).toBeInTheDocument();
+        });
+    });
+
     it('rejects files larger than 5 MB before reading them', async () => {
         const user = userEvent.setup();
         const setScriptResult = vi.fn();
@@ -419,6 +498,166 @@ describe('ImportSchemaStep', () => {
         );
 
         expect(onBack).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('ImportSchemaStep project archives', () => {
+    beforeEach(() => {
+        isAuthenticated = true;
+    });
+
+    const uploadZip = async (
+        files: Record<string, string>,
+        fileName = 'project.zip'
+    ) => {
+        const user = userEvent.setup();
+        const setScriptResult = vi.fn();
+        const onContinue = vi.fn();
+        const file = createTestZipFile(files, fileName);
+
+        const { container } = renderImportSchemaStep({
+            setScriptResult,
+            onContinue,
+        });
+
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        return { setScriptResult, onContinue, user };
+    };
+
+    it('detects a valid Laravel ZIP without populating the textarea', async () => {
+        const { setScriptResult, onContinue } = await uploadZip({
+            artisan: '#!/usr/bin/env php',
+            'composer.json': '{"require":{"laravel/framework":"^11.0"}}',
+            'database/migrations/2024_01_01_000000_create_users_table.php':
+                '<?php',
+        });
+
+        expect(setScriptResult).toHaveBeenCalledWith('');
+        expect(
+            screen.getByText('Laravel project detected')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeDisabled();
+        expect(onContinue).not.toHaveBeenCalled();
+    });
+
+    it('detects a valid Prisma ZIP', async () => {
+        await uploadZip({
+            'prisma/schema.prisma': 'model User { id Int @id }',
+        });
+
+        expect(screen.getByText('Prisma project detected')).toBeInTheDocument();
+    });
+
+    it('shows ambiguity UI for monorepo archives', async () => {
+        const { user } = await uploadZip({
+            'repo/apps/api/artisan': '#!/usr/bin/env php',
+            'repo/apps/api/composer.json':
+                '{"require":{"laravel/framework":"^11.0"}}',
+            'repo/apps/api/database/migrations/2024_01_01_000000_create_users_table.php':
+                '<?php',
+            'repo/packages/db/prisma/schema.prisma':
+                'model User { id Int @id }',
+        });
+
+        expect(
+            screen.getByText(
+                'new_diagram_dialog.import_schema.project.multiple_projects_title'
+            )
+        ).toBeInTheDocument();
+
+        await user.click(screen.getByRole('radio', { name: /Prisma/i }));
+
+        expect(screen.getByText('Prisma project detected')).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeDisabled();
+    });
+
+    it('shows unsupported project state for unrecognized archives', async () => {
+        await uploadZip({
+            'readme.md': '# hello',
+            'src/index.ts': 'export {}',
+        });
+
+        expect(
+            screen.getByText(
+                'new_diagram_dialog.import_schema.project.unsupported_project'
+            )
+        ).toBeInTheDocument();
+    });
+
+    it('handles corrupted ZIP files', async () => {
+        const user = userEvent.setup();
+        const setScriptResult = vi.fn();
+        const file = createRawZipFile(
+            new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x00]),
+            'broken.zip'
+        );
+
+        const { container } = renderImportSchemaStep({ setScriptResult });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            (document.body.querySelector(
+                'input[type="file"]'
+            ) as HTMLInputElement);
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'new_diagram_dialog.import_schema.errors.archive_invalid'
+                )
+            ).toBeInTheDocument();
+        });
+        expect(setScriptResult).not.toHaveBeenCalled();
+    });
+
+    it('clears project analysis when textarea content changes', async () => {
+        const { user } = await uploadZip({
+            'prisma/schema.prisma': 'model User { id Int @id }',
+        });
+
+        expect(screen.getByText('Prisma project detected')).toBeInTheDocument();
+
+        await user.type(
+            screen.getByRole('textbox', {
+                name: 'new_diagram_dialog.import_schema.textarea_label',
+            }),
+            'CREATE TABLE t (id INT);'
+        );
+
+        expect(
+            screen.queryByText('Prisma project detected')
+        ).not.toBeInTheDocument();
+    });
+
+    it('shows guest sign-in notice for remote frameworks', async () => {
+        isAuthenticated = false;
+
+        await uploadZip({
+            artisan: '#!/usr/bin/env php',
+            'composer.json': '{"require":{"laravel/framework":"^11.0"}}',
+            'database/migrations/2024_01_01_000000_create_users_table.php':
+                '<?php',
+        });
+
+        expect(
+            screen.getByText(
+                'new_diagram_dialog.import_schema.project.sign_in_to_import_framework'
+            )
+        ).toBeInTheDocument();
     });
 });
 

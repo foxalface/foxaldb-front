@@ -772,6 +772,9 @@ export const ja: LanguageTranslation = {
                 auto_detect_hint: '形式は自動的に検出されます。',
                 or_divider: 'または',
                 choose_file: 'ファイルを選択',
+                choose_file_or_project: 'ファイルまたはプロジェクトを選択',
+                supported_formats_hint:
+                    '対応形式: SQL、DBML、JSON、プロジェクトアーカイブ（.zip）',
                 change_file_aria: 'ファイルを変更、現在: {{name}}',
                 selected_file: '選択したファイル: {{name}}',
                 back: '戻る',
@@ -835,6 +838,45 @@ export const ja: LanguageTranslation = {
                     clickhouse_unsupported: 'ClickHouse SQL を検出',
                     unsupported: 'サポートされていない形式',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project:
+                        'プロジェクトアーカイブを解析しています…',
+                    detected: '{{framework}} プロジェクトを検出しました',
+                    migrations_found_one:
+                        'マイグレーションを {{count}} 件見つけました',
+                    migrations_found_other:
+                        'マイグレーションを {{count}} 件見つけました',
+                    schema_files_found_one:
+                        'スキーマファイルを {{count}} 件見つけました',
+                    schema_files_found_other:
+                        'スキーマファイルを {{count}} 件見つけました',
+                    multiple_projects_title:
+                        '複数のデータベーススキーマを検出しました',
+                    multiple_projects_description:
+                        'このアーカイブには複数の対応データベースプロジェクトが含まれています。インポートするものを選択してください。',
+                    choose_project: 'プロジェクトを選択',
+                    unsupported_project:
+                        'サポートされていないプロジェクトアーカイブ',
+                    unsupported_project_description:
+                        'このアーカイブ内に Laravel、Prisma、Drizzle、Rails、Entity Framework Core、Django の対応データベースプロジェクトが見つかりませんでした。',
+                    project_root: 'プロジェクトルート: {{path}}',
+                    sign_in_to_import_framework:
+                        'インポートが利用可能になったら {{framework}} プロジェクトをインポートするにはサインインしてください。',
+                    remote_processing_notice:
+                        'インポートが利用可能になったら、スキーマ関連ファイルのみが処理されます。',
+                    remote_processing_scope:
+                        'アーカイブ全体や無関係なソースファイルはアップロードされません。',
+                    remote_processing_security:
+                        '解析は静的で、アップロードされたコードは実行しません。',
+                },
                 errors: {
                     unreadable_file: '選択したファイルを読み取れませんでした。',
                     malformed_json: 'JSON コンテンツを解析できませんでした。',
@@ -845,8 +887,12 @@ export const ja: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse では SQL DDL のインポートはサポートされていません。DBML を使うか、既存のデータベースからインポートしてください。',
                     file_too_large: '選択したファイルは 5 MB を超えています。',
+                    archive_too_large:
+                        '選択したプロジェクトアーカイブは 50 MB を超えています。',
+                    archive_invalid:
+                        '選択したファイルは有効なプロジェクトアーカイブではありません。',
                     unsupported_file_extension:
-                        '.sql、.dbml、.json ファイルのみ対応しています。',
+                        '.sql、.dbml、.json、および .zip プロジェクトアーカイブのみサポートされています。',
                     import_failed:
                         'スキーマをインポートできませんでした。内容を確認して再試行してください。',
                     invalid_diagram_json:

@@ -772,6 +772,9 @@ export const vi: LanguageTranslation = {
                 auto_detect_hint: 'Chúng tôi sẽ tự động phát hiện định dạng.',
                 or_divider: 'HOẶC',
                 choose_file: 'Chọn tệp',
+                choose_file_or_project: 'Chọn tệp hoặc dự án',
+                supported_formats_hint:
+                    'Hỗ trợ: SQL, DBML, JSON, kho lưu trữ dự án (.zip)',
                 change_file_aria: 'Đổi tệp, hiện tại: {{name}}',
                 selected_file: 'Tệp đã chọn: {{name}}',
                 back: 'Quay lại',
@@ -836,6 +839,39 @@ export const vi: LanguageTranslation = {
                     clickhouse_unsupported: 'Đã phát hiện SQL ClickHouse',
                     unsupported: 'Định dạng không được hỗ trợ',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'Đang phân tích kho lưu trữ dự án…',
+                    detected: 'Đã phát hiện dự án {{framework}}',
+                    migrations_found_one: 'Tìm thấy {{count}} migration',
+                    migrations_found_other: 'Tìm thấy {{count}} migration',
+                    schema_files_found_one: 'Tìm thấy {{count}} tệp schema',
+                    schema_files_found_other: 'Tìm thấy {{count}} tệp schema',
+                    multiple_projects_title:
+                        'Phát hiện nhiều schema cơ sở dữ liệu',
+                    multiple_projects_description:
+                        'Kho lưu trữ này chứa nhiều dự án cơ sở dữ liệu được hỗ trợ. Chọn dự án cần nhập.',
+                    choose_project: 'Chọn dự án',
+                    unsupported_project: 'Kho lưu trữ dự án không được hỗ trợ',
+                    unsupported_project_description:
+                        'Không tìm thấy dự án cơ sở dữ liệu Laravel, Prisma, Drizzle, Rails, Entity Framework Core hoặc Django được hỗ trợ trong kho lưu trữ này.',
+                    project_root: 'Gốc dự án: {{path}}',
+                    sign_in_to_import_framework:
+                        'Đăng nhập để nhập dự án {{framework}} khi tính năng nhập khả dụng.',
+                    remote_processing_notice:
+                        'Khi tính năng nhập khả dụng, chỉ các tệp liên quan đến schema sẽ được xử lý.',
+                    remote_processing_scope:
+                        'Toàn bộ kho lưu trữ và mã nguồn không liên quan không bao giờ được tải lên.',
+                    remote_processing_security:
+                        'Phân tích là tĩnh và không thực thi mã đã tải lên.',
+                },
                 errors: {
                     unreadable_file: 'Không thể đọc tệp đã chọn.',
                     malformed_json: 'Không thể phân tích nội dung JSON.',
@@ -846,8 +882,12 @@ export const vi: LanguageTranslation = {
                     clickhouse_unsupported:
                         'Nhập DDL SQL không được hỗ trợ cho ClickHouse. Hãy dùng DBML hoặc nhập từ cơ sở dữ liệu hiện có.',
                     file_too_large: 'Tệp đã chọn lớn hơn 5 MB.',
+                    archive_too_large:
+                        'Kho lưu trữ dự án đã chọn lớn hơn 50 MB.',
+                    archive_invalid:
+                        'Tệp đã chọn không phải là kho lưu trữ dự án hợp lệ.',
                     unsupported_file_extension:
-                        'Chỉ hỗ trợ các tệp .sql, .dbml và .json.',
+                        'Chỉ hỗ trợ tệp .sql, .dbml, .json và kho lưu trữ dự án .zip.',
                     import_failed:
                         'Không thể nhập lược đồ. Kiểm tra nội dung và thử lại.',
                     invalid_diagram_json:

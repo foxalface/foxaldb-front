@@ -764,6 +764,9 @@ export const ko_KR: LanguageTranslation = {
                 auto_detect_hint: '형식을 자동으로 감지합니다.',
                 or_divider: '또는',
                 choose_file: '파일 선택',
+                choose_file_or_project: '파일 또는 프로젝트 선택',
+                supported_formats_hint:
+                    '지원: SQL, DBML, JSON, 프로젝트 아카이브(.zip)',
                 change_file_aria: '파일 변경, 현재: {{name}}',
                 selected_file: '선택한 파일: {{name}}',
                 back: '뒤로',
@@ -826,6 +829,43 @@ export const ko_KR: LanguageTranslation = {
                     clickhouse_unsupported: 'ClickHouse SQL 감지됨',
                     unsupported: '지원되지 않는 형식',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: '프로젝트 아카이브를 분석하는 중…',
+                    detected: '{{framework}} 프로젝트가 감지되었습니다',
+                    migrations_found_one:
+                        '마이그레이션 {{count}}개를 찾았습니다',
+                    migrations_found_other:
+                        '마이그레이션 {{count}}개를 찾았습니다',
+                    schema_files_found_one:
+                        '스키마 파일 {{count}}개를 찾았습니다',
+                    schema_files_found_other:
+                        '스키마 파일 {{count}}개를 찾았습니다',
+                    multiple_projects_title:
+                        '여러 데이터베이스 스키마가 감지되었습니다',
+                    multiple_projects_description:
+                        '이 아카이브에는 지원되는 데이터베이스 프로젝트가 여러 개 있습니다. 가져올 항목을 선택하세요.',
+                    choose_project: '프로젝트 선택',
+                    unsupported_project: '지원되지 않는 프로젝트 아카이브',
+                    unsupported_project_description:
+                        '이 아카이브에서 Laravel, Prisma, Drizzle, Rails, Entity Framework Core 또는 Django 데이터베이스 프로젝트를 찾을 수 없습니다.',
+                    project_root: '프로젝트 루트: {{path}}',
+                    sign_in_to_import_framework:
+                        '가져오기가 가능해지면 {{framework}} 프로젝트를 가져오려면 로그인하세요.',
+                    remote_processing_notice:
+                        '가져오기가 가능해지면 스키마 관련 파일만 처리됩니다.',
+                    remote_processing_scope:
+                        '전체 아카이브나 관련 없는 소스 파일은 업로드되지 않습니다.',
+                    remote_processing_security:
+                        '분석은 정적이며 업로드된 코드를 실행하지 않습니다.',
+                },
                 errors: {
                     unreadable_file: '선택한 파일을 읽을 수 없습니다.',
                     malformed_json: 'JSON 내용을 구문 분석할 수 없습니다.',
@@ -836,8 +876,12 @@ export const ko_KR: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse에서는 SQL DDL 가져오기가 지원되지 않습니다. DBML을 사용하거나 기존 데이터베이스에서 가져오세요.',
                     file_too_large: '선택한 파일이 5MB를 초과합니다.',
+                    archive_too_large:
+                        '선택한 프로젝트 아카이브가 50MB를 초과합니다.',
+                    archive_invalid:
+                        '선택한 파일은 유효한 프로젝트 아카이브가 아닙니다.',
                     unsupported_file_extension:
-                        '.sql, .dbml, .json 파일만 지원됩니다.',
+                        '.sql, .dbml, .json 및 .zip 프로젝트 아카이브만 지원됩니다.',
                     import_failed:
                         '스키마를 가져올 수 없습니다. 내용을 확인하고 다시 시도하세요.',
                     invalid_diagram_json:

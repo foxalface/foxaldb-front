@@ -777,6 +777,9 @@ export const fr: LanguageTranslation = {
                 auto_detect_hint: 'Nous détecterons le format automatiquement.',
                 or_divider: 'OU',
                 choose_file: 'Choisir un fichier',
+                choose_file_or_project: 'Choisir un fichier ou un projet',
+                supported_formats_hint:
+                    'Pris en charge : SQL, DBML, JSON, archive de projet (.zip)',
                 change_file_aria: 'Changer de fichier, actuellement {{name}}',
                 selected_file: 'Fichier sélectionné : {{name}}',
                 back: 'Retour',
@@ -841,6 +844,42 @@ export const fr: LanguageTranslation = {
                     clickhouse_unsupported: 'SQL ClickHouse détecté',
                     unsupported: 'Format non pris en charge',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: "Analyse de l'archive du projet…",
+                    detected: 'Projet {{framework}} détecté',
+                    migrations_found_one: '{{count}} migration trouvée',
+                    migrations_found_other: '{{count}} migrations trouvées',
+                    schema_files_found_one:
+                        '{{count}} fichier de schéma trouvé',
+                    schema_files_found_other:
+                        '{{count}} fichiers de schéma trouvés',
+                    multiple_projects_title:
+                        'Plusieurs schémas de base de données détectés',
+                    multiple_projects_description:
+                        'Cette archive contient plusieurs projets de base de données pris en charge. Choisissez celui à importer.',
+                    choose_project: 'Choisir le projet',
+                    unsupported_project:
+                        'Archive de projet non prise en charge',
+                    unsupported_project_description:
+                        'Aucun projet de base de données pris en charge (Laravel, Prisma, Drizzle, Rails, Entity Framework Core ou Django) n’a été trouvé dans cette archive.',
+                    project_root: 'Racine du projet : {{path}}',
+                    sign_in_to_import_framework:
+                        'Connectez-vous pour importer des projets {{framework}} lorsque l’import sera disponible.',
+                    remote_processing_notice:
+                        'Lorsque l’import sera disponible, seuls les fichiers pertinents du schéma seront traités.',
+                    remote_processing_scope:
+                        'L’archive complète et le code source non pertinent ne sont jamais envoyés.',
+                    remote_processing_security:
+                        'L’analyse est statique et n’exécute pas le code importé.',
+                },
                 errors: {
                     unreadable_file:
                         'Impossible de lire le fichier sélectionné.',
@@ -852,8 +891,12 @@ export const fr: LanguageTranslation = {
                     clickhouse_unsupported:
                         "L'import DDL SQL n'est pas pris en charge pour ClickHouse. Utilisez DBML ou importez depuis une base existante.",
                     file_too_large: 'Le fichier sélectionné dépasse 5 Mo.',
+                    archive_too_large:
+                        'L’archive de projet sélectionnée dépasse 50 Mo.',
+                    archive_invalid:
+                        'Le fichier sélectionné n’est pas une archive de projet valide.',
                     unsupported_file_extension:
-                        'Seuls les fichiers .sql, .dbml et .json sont pris en charge.',
+                        'Seuls les fichiers .sql, .dbml, .json et les archives de projet .zip sont pris en charge.',
                     import_failed:
                         "Le schéma n'a pas pu être importé. Vérifiez le contenu et réessayez.",
                     invalid_diagram_json:

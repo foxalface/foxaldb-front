@@ -771,6 +771,9 @@ export const id_ID: LanguageTranslation = {
                     'Kami akan mendeteksi format secara otomatis.',
                 or_divider: 'ATAU',
                 choose_file: 'Pilih file',
+                choose_file_or_project: 'Pilih file atau proyek',
+                supported_formats_hint:
+                    'Didukung: SQL, DBML, JSON, arsip proyek (.zip)',
                 change_file_aria: 'Ubah file, saat ini: {{name}}',
                 selected_file: 'File dipilih: {{name}}',
                 back: 'Kembali',
@@ -834,6 +837,39 @@ export const id_ID: LanguageTranslation = {
                     clickhouse_unsupported: 'SQL ClickHouse terdeteksi',
                     unsupported: 'Format tidak didukung',
                 },
+                project: {
+                    frameworks: {
+                        laravel: 'Laravel',
+                        prisma: 'Prisma',
+                        drizzle: 'Drizzle',
+                        rails: 'Rails',
+                        entity_framework_core: 'Entity Framework Core',
+                        django: 'Django',
+                    },
+                    analyzing_project: 'Menganalisis arsip proyek…',
+                    detected: 'Proyek {{framework}} terdeteksi',
+                    migrations_found_one: '{{count}} migrasi ditemukan',
+                    migrations_found_other: '{{count}} migrasi ditemukan',
+                    schema_files_found_one: '{{count}} file skema ditemukan',
+                    schema_files_found_other: '{{count}} file skema ditemukan',
+                    multiple_projects_title:
+                        'Beberapa skema database terdeteksi',
+                    multiple_projects_description:
+                        'Arsip ini berisi lebih dari satu proyek database yang didukung. Pilih yang akan diimpor.',
+                    choose_project: 'Pilih proyek',
+                    unsupported_project: 'Arsip proyek tidak didukung',
+                    unsupported_project_description:
+                        'Tidak ditemukan proyek database Laravel, Prisma, Drizzle, Rails, Entity Framework Core, atau Django yang didukung di arsip ini.',
+                    project_root: 'Akar proyek: {{path}}',
+                    sign_in_to_import_framework:
+                        'Masuk untuk mengimpor proyek {{framework}} saat impor tersedia.',
+                    remote_processing_notice:
+                        'Saat impor tersedia, hanya file yang relevan dengan skema yang akan diproses.',
+                    remote_processing_scope:
+                        'Arsip lengkap dan kode sumber yang tidak relevan tidak pernah diunggah.',
+                    remote_processing_security:
+                        'Analisis bersifat statis dan tidak menjalankan kode yang diunggah.',
+                },
                 errors: {
                     unreadable_file: 'File yang dipilih tidak dapat dibaca.',
                     malformed_json: 'Konten JSON tidak dapat diurai.',
@@ -843,8 +879,12 @@ export const id_ID: LanguageTranslation = {
                     clickhouse_unsupported:
                         'Impor DDL SQL tidak didukung untuk ClickHouse. Gunakan DBML atau impor dari basis data yang ada.',
                     file_too_large: 'File yang dipilih lebih besar dari 5 MB.',
+                    archive_too_large:
+                        'Arsip proyek yang dipilih lebih besar dari 50 MB.',
+                    archive_invalid:
+                        'File yang dipilih bukan arsip proyek yang valid.',
                     unsupported_file_extension:
-                        'Hanya file .sql, .dbml, dan .json yang didukung.',
+                        'Hanya file .sql, .dbml, .json, dan arsip proyek .zip yang didukung.',
                     import_failed:
                         'Skema tidak dapat diimpor. Periksa konten dan coba lagi.',
                     invalid_diagram_json:
