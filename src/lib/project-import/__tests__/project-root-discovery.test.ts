@@ -97,4 +97,15 @@ describe('discoverProjectRootCandidates', () => {
 
         expect(roots).toEqual([]);
     });
+
+    it('resolves EF ModelSnapshot in Migrations to the project root', async () => {
+        const roots = await rootsFromZip({
+            'foxaldb-efcore-qa-basic/App.csproj':
+                '<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />',
+            'foxaldb-efcore-qa-basic/Migrations/AppDbContextModelSnapshot.cs':
+                'partial class AppDbContextModelSnapshot { }',
+        });
+
+        expect(roots).toEqual(['foxaldb-efcore-qa-basic']);
+    });
 });

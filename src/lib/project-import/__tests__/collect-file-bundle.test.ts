@@ -161,7 +161,7 @@ describe('collectFileBundle', () => {
         expect(paths).toEqual(['config/database.yml', 'db/schema.rb']);
     });
 
-    it('collects EF Core snapshots, migrations, and csproj only', async () => {
+    it('collects EF Core snapshots and csproj only', async () => {
         const bundle = await collectForFramework(
             {
                 'AppDbContextModelSnapshot.cs': 'partial class Snapshot {}',
@@ -185,11 +185,7 @@ describe('collectFileBundle', () => {
 
         const paths = bundle.files.map((entry) => entry.relativePath).sort();
 
-        expect(paths).toEqual([
-            'App.csproj',
-            'AppDbContextModelSnapshot.cs',
-            'Migrations/20240101000000_InitialMigration.cs',
-        ]);
+        expect(paths).toEqual(['App.csproj', 'AppDbContextModelSnapshot.cs']);
     });
 
     it('collects Django migrations and optional dependency files', async () => {

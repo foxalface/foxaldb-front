@@ -19,9 +19,9 @@ describe('project import capabilities', () => {
     it.each([
         ['laravel', true, 'remote'],
         ['prisma', true, 'local'],
+        ['entity_framework_core', true, 'remote'],
         ['drizzle', false, 'local'],
         ['rails', false, 'local'],
-        ['entity_framework_core', false, 'remote'],
         ['django', false, 'remote'],
     ] as const)(
         'reports execution availability and location for %s',
@@ -39,13 +39,22 @@ describe('project import capabilities', () => {
     it('requires authentication only for remote executable frameworks', () => {
         expect(canExecuteProjectImport('laravel', false)).toBe(false);
         expect(canExecuteProjectImport('laravel', true)).toBe(true);
+        expect(canExecuteProjectImport('entity_framework_core', false)).toBe(
+            false
+        );
+        expect(canExecuteProjectImport('entity_framework_core', true)).toBe(
+            true
+        );
         expect(canExecuteProjectImport('prisma', false)).toBe(true);
         expect(canExecuteProjectImport('prisma', true)).toBe(true);
     });
 
     it('keeps non-executable frameworks disabled for all users', () => {
         ALL_FRAMEWORKS.filter(
-            (framework) => !['laravel', 'prisma'].includes(framework)
+            (framework) =>
+                !['laravel', 'prisma', 'entity_framework_core'].includes(
+                    framework
+                )
         ).forEach((framework) => {
             expect(canExecuteProjectImport(framework, true)).toBe(false);
             expect(canExecuteProjectImport(framework, false)).toBe(false);

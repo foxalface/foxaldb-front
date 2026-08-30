@@ -105,13 +105,6 @@ const efSnapshotSpec: FrameworkFileSpec = {
     include: (relativePath) => relativePath.endsWith('ModelSnapshot.cs'),
 };
 
-const efMigrationSpec: FrameworkFileSpec = {
-    include: (relativePath) =>
-        (relativePath.includes('Migrations/') ||
-            relativePath.startsWith('Migrations/')) &&
-        relativePath.endsWith('Migration.cs'),
-};
-
 const efCsprojSpec: FrameworkFileSpec = {
     include: (relativePath) => relativePath.endsWith('.csproj'),
 };
@@ -139,7 +132,7 @@ export const FRAMEWORK_FILE_SPECS: Record<
     prisma: [prismaSchemaSpec, prismaMigrationSpec, prismaOptionalSpec],
     drizzle: [drizzleSqlSpec, drizzleJournalSpec, drizzleConfigSpec],
     rails: [railsSchemaSpec, railsOptionalSpec],
-    entity_framework_core: [efSnapshotSpec, efMigrationSpec, efCsprojSpec],
+    entity_framework_core: [efSnapshotSpec, efCsprojSpec],
     django: [djangoMigrationSpec, djangoOptionalSpec],
 };
 

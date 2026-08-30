@@ -74,13 +74,79 @@ const collectRootFromBasename = (filePath: string): string | null => {
     return normalizeRootPath(getRootPathFromFile(filePath));
 };
 
-const collectRootFromModelSnapshot = (filePath: string): string | null => {
+const isMigrationsDirectoryPath = (directoryPath: string): boolean => {
+    const normalized = normalizeRootPath(directoryPath);
+    if (normalized.length === 0) {
+        return false;
+    }
+
+    const directoryName = normalized.slice(normalized.lastIndexOf('/') + 1);
+    return directoryName.toLowerCase() === 'migrations';
+};
+
+const getParentDirectoryPath = (directoryPath: string): string => {
+    const normalized = normalizeRootPath(directoryPath);
+    if (normalized.length === 0) {
+        return '';
+    }
+
+    const lastSlashIndex = normalized.lastIndexOf('/');
+    return lastSlashIndex === -1 ? '' : normalized.slice(0, lastSlashIndex);
+};
+
+const findNearestCsprojRoot = (
+    fromDirectory: string,
+    index: ArchivePathIndex
+): string | null => {
+    let current = normalizeRootPath(fromDirectory);
+
+    while (true) {
+        const hasCsproj = index.filePaths.some((candidatePath) => {
+            if (!candidatePath.endsWith('.csproj')) {
+                return false;
+            }
+
+            return (
+                normalizeRootPath(getRootPathFromFile(candidatePath)) ===
+                current
+            );
+        });
+
+        if (hasCsproj) {
+            return current;
+        }
+
+        if (current.length === 0) {
+            break;
+        }
+
+        current = getParentDirectoryPath(current);
+    }
+
+    return null;
+};
+
+const collectRootFromModelSnapshot = (
+    filePath: string,
+    index: ArchivePathIndex
+): string | null => {
     const fileName = filePath.slice(filePath.lastIndexOf('/') + 1);
     if (!fileName.endsWith('ModelSnapshot.cs')) {
         return null;
     }
 
-    return normalizeRootPath(getRootPathFromFile(filePath));
+    const immediateParent = normalizeRootPath(getRootPathFromFile(filePath));
+
+    if (isMigrationsDirectoryPath(immediateParent)) {
+        return getParentDirectoryPath(immediateParent);
+    }
+
+    const csprojRoot = findNearestCsprojRoot(immediateParent, index);
+    if (csprojRoot !== null) {
+        return csprojRoot;
+    }
+
+    return immediateParent;
 };
 
 export const discoverProjectRootCandidates = (
@@ -108,7 +174,7 @@ export const discoverProjectRootCandidates = (
             roots.add(basenameRoot);
         }
 
-        const snapshotRoot = collectRootFromModelSnapshot(filePath);
+        const snapshotRoot = collectRootFromModelSnapshot(filePath, index);
         if (snapshotRoot !== null) {
             roots.add(snapshotRoot);
         }

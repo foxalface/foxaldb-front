@@ -24,18 +24,18 @@ export const detectEntityFrameworkCoreProject: ProjectDetector = async (
     if (snapshotPaths.length > 0) {
         evidence.push(evidenceFromCode('ef_model_snapshot', snapshotPaths[0]));
         relevantFiles.push(...snapshotPaths);
-    }
-
-    const migrationPaths = listPathsMatching(
-        index,
-        rootPath,
-        (filePath) =>
-            filePath.includes('/Migrations/') &&
-            filePath.endsWith('Migration.cs')
-    );
-    if (migrationPaths.length > 0) {
-        evidence.push(evidenceFromCode('ef_migrations', migrationPaths[0]));
-        relevantFiles.push(...migrationPaths);
+    } else {
+        const migrationPaths = listPathsMatching(
+            index,
+            rootPath,
+            (filePath) =>
+                filePath.includes('/Migrations/') &&
+                filePath.endsWith('Migration.cs')
+        );
+        if (migrationPaths.length > 0) {
+            evidence.push(evidenceFromCode('ef_migrations', migrationPaths[0]));
+            relevantFiles.push(...migrationPaths);
+        }
     }
 
     const csprojPaths = listPathsMatching(index, rootPath, (filePath) =>

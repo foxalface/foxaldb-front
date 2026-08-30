@@ -166,6 +166,13 @@ vi.mock('react-i18next', () => ({
 
             if (
                 key ===
+                'new_diagram_dialog.import_schema.project.frameworks.entity_framework_core'
+            ) {
+                return 'Entity Framework Core';
+            }
+
+            if (
+                key ===
                 'new_diagram_dialog.import_schema.ambiguous.recommended_tooltip'
             ) {
                 return 'Automatically detected DBMS';
@@ -802,6 +809,131 @@ describe('ImportSchemaStep project archives', () => {
                 'new_diagram_dialog.import_schema.project.sign_in_to_import_framework'
             )
         ).toBeInTheDocument();
+    });
+
+    it('detects EF Core and requires sign-in for guests', async () => {
+        isAuthenticated = false;
+
+        await uploadZip({
+            'AppDbContextModelSnapshot.cs':
+                'partial class AppDbContextModelSnapshot : ModelSnapshot { protected override void BuildModel(ModelBuilder modelBuilder) { modelBuilder.Entity("App.User", b => { b.Property<int>("Id"); b.HasKey("Id"); b.ToTable("users"); }); } }',
+            'App.csproj':
+                '<Project><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" /></ItemGroup></Project>',
+        });
+
+        expect(
+            screen.getByText('Entity Framework Core project detected')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeDisabled();
+        expect(
+            screen.getByText(
+                'new_diagram_dialog.import_schema.project.sign_in_to_import_framework'
+            )
+        ).toBeInTheDocument();
+        expect(importProjectMock).not.toHaveBeenCalled();
+    });
+
+    it('enables Continue for authenticated EF Core projects', async () => {
+        isAuthenticated = true;
+        importProjectMock.mockResolvedValueOnce({
+            diagram: {
+                id: 'diagram-1',
+                name: 'Imported',
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            framework: 'entity_framework_core',
+            diagnostics: [],
+        });
+
+        const user = userEvent.setup();
+        const onContinue = vi.fn();
+        const file = createTestZipFile({
+            'AppDbContextModelSnapshot.cs':
+                'partial class AppDbContextModelSnapshot : ModelSnapshot { protected override void BuildModel(ModelBuilder modelBuilder) { modelBuilder.Entity("App.User", b => { b.Property<int>("Id"); b.HasKey("Id"); b.ToTable("users"); }); } }',
+            'App.csproj':
+                '<Project><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" /></ItemGroup></Project>',
+        });
+
+        const { container } = renderImportSchemaStep({ onContinue });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        const importButton = screen.getByRole('button', {
+            name: 'new_diagram_dialog.import_schema.import',
+        });
+
+        expect(importButton).toBeEnabled();
+
+        await user.click(importButton);
+
+        await waitFor(() => {
+            expect(importProjectMock).toHaveBeenCalledOnce();
+        });
+    });
+
+    it('detects standard EF Core Migrations layout without ambiguity UI', async () => {
+        isAuthenticated = true;
+        importProjectMock.mockResolvedValueOnce({
+            diagram: {
+                id: 'diagram-1',
+                name: 'Imported',
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            framework: 'entity_framework_core',
+            diagnostics: [],
+        });
+
+        const user = userEvent.setup();
+        const onContinue = vi.fn();
+        const file = createTestZipFile({
+            'foxaldb-efcore-qa-basic/App.csproj':
+                '<Project><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" /></ItemGroup></Project>',
+            'foxaldb-efcore-qa-basic/Migrations/AppDbContextModelSnapshot.cs':
+                'partial class AppDbContextModelSnapshot : ModelSnapshot { protected override void BuildModel(ModelBuilder modelBuilder) { modelBuilder.Entity("App.User", b => { b.Property<int>("Id"); b.HasKey("Id"); b.ToTable("users"); }); } }',
+        });
+
+        const { container } = renderImportSchemaStep({ onContinue });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        expect(
+            screen.getByText('Entity Framework Core project detected')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText(
+                'new_diagram_dialog.import_schema.project.multiple_projects_title'
+            )
+        ).not.toBeInTheDocument();
+        expect(screen.queryAllByRole('radio')).toHaveLength(0);
+
+        const importButton = screen.getByRole('button', {
+            name: 'new_diagram_dialog.import_schema.import',
+        });
+        expect(importButton).toBeEnabled();
+
+        await user.click(importButton);
+
+        await waitFor(() => {
+            expect(importProjectMock).toHaveBeenCalledOnce();
+        });
     });
 });
 
