@@ -2,7 +2,7 @@ import type { ProjectFramework } from './project-types';
 import { getParserLocation, isRemoteParserFramework } from './parser-location';
 
 const PARSER_EXECUTION_AVAILABLE: Record<ProjectFramework, boolean> = {
-    laravel: false,
+    laravel: true,
     prisma: false,
     drizzle: false,
     rails: false,

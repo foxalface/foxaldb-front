@@ -15,12 +15,21 @@ const ALL_FRAMEWORKS: ProjectFramework[] = [
     'django',
 ];
 
+const EXECUTION_AVAILABLE_FRAMEWORKS: ProjectFramework[] = ['laravel'];
+
 describe('project import capabilities', () => {
     it.each(ALL_FRAMEWORKS)(
-        'keeps %s execution unavailable in M4',
+        'reports execution availability for %s in M5',
         (framework) => {
-            expect(isProjectImportParserAvailable(framework)).toBe(false);
-            expect(canExecuteProjectImport(framework, true)).toBe(false);
+            const executionAvailable =
+                EXECUTION_AVAILABLE_FRAMEWORKS.includes(framework);
+
+            expect(isProjectImportParserAvailable(framework)).toBe(
+                executionAvailable
+            );
+            expect(canExecuteProjectImport(framework, true)).toBe(
+                executionAvailable
+            );
             expect(canExecuteProjectImport(framework, false)).toBe(false);
         }
     );
@@ -40,7 +49,7 @@ describe('project import capabilities', () => {
         });
         expect(getProjectParserCapability('laravel')).toMatchObject({
             location: 'remote',
-            executionAvailable: false,
+            executionAvailable: true,
         });
         expect(
             getProjectParserCapability('entity_framework_core')
@@ -55,14 +64,7 @@ describe('project import capabilities', () => {
     });
 
     it('requires authentication for remote frameworks once execution is enabled', () => {
-        const remoteFrameworks: ProjectFramework[] = [
-            'laravel',
-            'entity_framework_core',
-            'django',
-        ];
-
-        for (const framework of remoteFrameworks) {
-            expect(canExecuteProjectImport(framework, false)).toBe(false);
-        }
+        expect(canExecuteProjectImport('laravel', false)).toBe(false);
+        expect(canExecuteProjectImport('laravel', true)).toBe(true);
     });
 });

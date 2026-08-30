@@ -71,10 +71,64 @@ const normalizeDiagnostic = (value: unknown): ProjectImportDiagnostic => {
     };
 };
 
-const normalizeDiagramPayload = (value: unknown): Diagram => {
+const validateProjectImportDiagramStructure = (value: unknown): void => {
     if (!isRecord(value)) {
         throw new MalformedProjectImportPayloadError();
     }
+
+    if (typeof value.name !== 'string' || value.name.length === 0) {
+        throw new MalformedProjectImportPayloadError();
+    }
+
+    if (
+        typeof value.databaseType !== 'string' ||
+        value.databaseType.length === 0
+    ) {
+        throw new MalformedProjectImportPayloadError();
+    }
+
+    if (!Array.isArray(value.tables)) {
+        throw new MalformedProjectImportPayloadError();
+    }
+
+    if (!Array.isArray(value.relationships)) {
+        throw new MalformedProjectImportPayloadError();
+    }
+
+    for (const table of value.tables) {
+        if (!isRecord(table)) {
+            throw new MalformedProjectImportPayloadError();
+        }
+
+        if (typeof table.id !== 'string' || typeof table.name !== 'string') {
+            throw new MalformedProjectImportPayloadError();
+        }
+
+        if (!Array.isArray(table.fields)) {
+            throw new MalformedProjectImportPayloadError();
+        }
+
+        for (const field of table.fields) {
+            if (!isRecord(field)) {
+                throw new MalformedProjectImportPayloadError();
+            }
+
+            if (
+                typeof field.id !== 'string' ||
+                typeof field.name !== 'string'
+            ) {
+                throw new MalformedProjectImportPayloadError();
+            }
+
+            if (!isRecord(field.type) || typeof field.type.id !== 'string') {
+                throw new MalformedProjectImportPayloadError();
+            }
+        }
+    }
+};
+
+const normalizeDiagramPayload = (value: unknown): Diagram => {
+    validateProjectImportDiagramStructure(value);
 
     return normalizeDiagramFromApi({ content: value });
 };

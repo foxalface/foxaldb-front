@@ -1,1 +1,1 @@
-export type ImportMethod = 'query' | 'ddl' | 'dbml' | 'diagram';
+export type ImportMethod = 'query' | 'ddl' | 'dbml' | 'diagram' | 'project';

@@ -132,6 +132,19 @@ describe('normalizeProjectImportPayload', () => {
         ).toThrow(MalformedProjectImportPayloadError);
     });
 
+    it('rejects diagram payloads missing tables', () => {
+        const payload = createValidProjectImportApiResponse('laravel');
+        payload.data.diagram = {
+            name: 'Broken',
+            databaseType: 'mysql',
+            relationships: [],
+        } as typeof payload.data.diagram;
+
+        expect(() => normalizeProjectImportPayload(payload, 'laravel')).toThrow(
+            MalformedProjectImportPayloadError
+        );
+    });
+
     it('never exposes project source content in normalization errors', () => {
         const payload = {
             data: {

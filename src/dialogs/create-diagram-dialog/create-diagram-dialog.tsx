@@ -278,12 +278,28 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         async ({
             importMethod: nextImportMethod,
             resolvedSourceDialect: nextResolvedSourceDialect,
+            importedDiagram,
         }: ImportSchemaContinueParams) => {
             setImportError(null);
             setIsImporting(true);
             setResolvedSourceDialect(nextResolvedSourceDialect);
 
             try {
+                if (nextImportMethod === 'project') {
+                    if (!importedDiagram) {
+                        throw new ImportSchemaResolutionError(
+                            'Project import did not return a diagram.'
+                        );
+                    }
+
+                    if (importedDiagram.databaseType !== databaseType) {
+                        setDatabaseType(importedDiagram.databaseType);
+                    }
+
+                    await finalizeImportedDiagram(importedDiagram);
+                    return;
+                }
+
                 if (nextImportMethod === 'diagram') {
                     if (!nextResolvedSourceDialect) {
                         throw new ImportDiagramJsonError(

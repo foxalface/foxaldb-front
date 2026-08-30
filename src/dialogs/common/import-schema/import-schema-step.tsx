@@ -19,6 +19,7 @@ import type { ImportMethod } from '@/lib/import-method/import-method';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
+import type { Diagram } from '@/lib/domain/diagram';
 import {
     ArchiveError,
     ArchiveReader,
@@ -26,6 +27,7 @@ import {
     analyzeProjectArchive,
     getProjectCandidateKey,
     getSelectableCandidates,
+    importProject,
     isZipArchiveFile,
 } from '@/lib/project-import/types';
 import { canExecuteProjectImport } from '@/lib/project-import/project-import-capability';
@@ -48,6 +50,7 @@ import { ProjectDetectionSummary } from './project-detection-summary';
 export interface ImportSchemaContinueParams {
     importMethod: ImportMethod;
     resolvedSourceDialect?: DatabaseType;
+    importedDiagram?: Diagram;
 }
 
 interface ImportSchemaStepBaseProps {
@@ -118,6 +121,10 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
     const [selectedProjectCandidate, setSelectedProjectCandidate] =
         useState<ProjectDetectionCandidate | null>(null);
     const [isAnalyzingProject, setIsAnalyzingProject] = useState(false);
+    const [isProjectImporting, setIsProjectImporting] = useState(false);
+    const [projectImportErrorKey, setProjectImportErrorKey] = useState<
+        string | null
+    >(null);
 
     const resetProjectArchiveState = useCallback(() => {
         releaseArchiveReader(archiveReaderRef.current);
@@ -235,8 +242,40 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         userResolvedSourceDialect,
     ]);
 
-    const handleContinue = useCallback(() => {
-        if (!canContinue || projectAnalysis) {
+    const handleContinue = useCallback(async () => {
+        if (!canContinue) {
+            return;
+        }
+
+        if (
+            projectAnalysis &&
+            activeProjectCandidate &&
+            archiveReaderRef.current
+        ) {
+            setIsProjectImporting(true);
+            setProjectImportErrorKey(null);
+
+            try {
+                const result = await importProject({
+                    archive: archiveReaderRef.current,
+                    candidate: activeProjectCandidate,
+                    targetDatabaseType: databaseType,
+                });
+
+                resetProjectArchiveState();
+
+                await onContinue({
+                    importMethod: 'project',
+                    importedDiagram: result.diagram,
+                });
+            } catch {
+                setProjectImportErrorKey(
+                    'new_diagram_dialog.import_schema.errors.import_failed'
+                );
+            } finally {
+                setIsProjectImporting(false);
+            }
+
             return;
         }
 
@@ -253,11 +292,14 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     : undefined,
         });
     }, [
+        activeProjectCandidate,
         baseAnalysis,
         canContinue,
+        databaseType,
         effectiveResolvedSourceDialect,
         onContinue,
         projectAnalysis,
+        resetProjectArchiveState,
     ]);
 
     const handleSwitchDatabase = useCallback(() => {
@@ -633,9 +675,12 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                         />
                     ) : null}
 
-                    {importError ? (
+                    {importError || projectImportErrorKey ? (
                         <p role="alert" className="text-sm text-destructive">
-                            {importError}
+                            {importError ??
+                                (projectImportErrorKey
+                                    ? t(projectImportErrorKey)
+                                    : null)}
                         </p>
                     ) : null}
                 </div>
@@ -646,14 +691,19 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     type="button"
                     variant="secondary"
                     onClick={onBack}
-                    disabled={isImporting}
+                    disabled={isImporting || isProjectImporting}
                 >
                     {resolvedBackLabel}
                 </Button>
                 <Button
                     type="button"
                     onClick={handleContinue}
-                    disabled={!canContinue || isImporting || isAnalyzingProject}
+                    disabled={
+                        !canContinue ||
+                        isImporting ||
+                        isAnalyzingProject ||
+                        isProjectImporting
+                    }
                 >
                     {resolvedContinueLabel}
                 </Button>

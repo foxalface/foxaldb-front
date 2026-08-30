@@ -35,8 +35,9 @@ import {
 
 let isAuthenticated = true;
 
-const { apiRequestMock } = vi.hoisted(() => ({
+const { apiRequestMock, importProjectMock } = vi.hoisted(() => ({
     apiRequestMock: vi.fn(),
+    importProjectMock: vi.fn(),
 }));
 
 vi.mock('@/lib/api/client', async () => {
@@ -49,6 +50,10 @@ vi.mock('@/lib/api/client', async () => {
         apiRequest: apiRequestMock,
     };
 });
+
+vi.mock('@/lib/project-import/import-project', () => ({
+    importProject: importProjectMock,
+}));
 
 vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => ({
@@ -521,6 +526,7 @@ describe('ImportSchemaStep project archives', () => {
     beforeEach(() => {
         isAuthenticated = true;
         apiRequestMock.mockReset();
+        importProjectMock.mockReset();
     });
 
     const uploadZip = async (
@@ -547,7 +553,7 @@ describe('ImportSchemaStep project archives', () => {
     };
 
     it('detects a valid Laravel ZIP without populating the textarea', async () => {
-        const { setScriptResult, onContinue } = await uploadZip({
+        const { setScriptResult } = await uploadZip({
             artisan: '#!/usr/bin/env php',
             'composer.json': '{"require":{"laravel/framework":"^11.0"}}',
             'database/migrations/2024_01_01_000000_create_users_table.php':
@@ -562,8 +568,7 @@ describe('ImportSchemaStep project archives', () => {
             screen.getByRole('button', {
                 name: 'new_diagram_dialog.import_schema.import',
             })
-        ).toBeDisabled();
-        expect(onContinue).not.toHaveBeenCalled();
+        ).toBeEnabled();
     });
 
     it('detects a valid Prisma ZIP', async () => {
@@ -662,13 +667,65 @@ describe('ImportSchemaStep project archives', () => {
 
     it('does not call the project import API while parser execution is unavailable', async () => {
         await uploadZip({
+            'prisma/schema.prisma': 'model User { id Int @id }',
+        });
+
+        expect(apiRequestMock).not.toHaveBeenCalled();
+        expect(importProjectMock).not.toHaveBeenCalled();
+    });
+
+    it('enables Continue for authenticated Laravel projects and imports via importProject', async () => {
+        isAuthenticated = true;
+        importProjectMock.mockResolvedValueOnce({
+            diagram: {
+                id: 'diagram-1',
+                name: 'Imported',
+                databaseType: DatabaseType.MYSQL,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            framework: 'laravel',
+            diagnostics: [],
+        });
+
+        const user = userEvent.setup();
+        const onContinue = vi.fn();
+        const file = createTestZipFile({
             artisan: '#!/usr/bin/env php',
             'composer.json': '{"require":{"laravel/framework":"^11.0"}}',
             'database/migrations/2024_01_01_000000_create_users_table.php':
                 '<?php',
         });
 
-        expect(apiRequestMock).not.toHaveBeenCalled();
+        const { container } = renderImportSchemaStep({ onContinue });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        const importButton = screen.getByRole('button', {
+            name: 'new_diagram_dialog.import_schema.import',
+        });
+
+        expect(importButton).toBeEnabled();
+
+        await user.click(importButton);
+
+        await waitFor(() => {
+            expect(importProjectMock).toHaveBeenCalledOnce();
+        });
+
+        expect(onContinue).toHaveBeenCalledWith(
+            expect.objectContaining({
+                importMethod: 'project',
+                importedDiagram: expect.objectContaining({
+                    name: 'Imported',
+                }),
+            })
+        );
     });
 
     it('shows guest sign-in notice for remote frameworks', async () => {
