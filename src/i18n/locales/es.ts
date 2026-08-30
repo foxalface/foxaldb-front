@@ -769,8 +769,6 @@ export const es: LanguageTranslation = {
                     'La extracción de esquema no está disponible para este tipo de base de datos.',
                 import_failed:
                     'No se pudo importar el esquema de la base de datos. Compruebe el resultado e inténtelo de nuevo.',
-                invalid_diagram_json:
-                    'El JSON del diagrama no es válido. Compruebe el archivo e inténtelo de nuevo.',
                 back: 'Atrás',
                 import: 'Importar',
             },
@@ -856,8 +854,12 @@ export const es: LanguageTranslation = {
                     clickhouse_unsupported:
                         'La importación DDL SQL no es compatible con ClickHouse. Use DBML o importe desde una base existente.',
                     file_too_large: 'El archivo seleccionado supera los 5 MB.',
+                    unsupported_file_extension:
+                        'Solo se admiten archivos .sql, .dbml y .json.',
                     import_failed:
                         'No se pudo importar el esquema. Revise el contenido e inténtelo de nuevo.',
+                    invalid_diagram_json:
+                        'El JSON del diagrama no es válido. Compruebe el archivo e inténtelo de nuevo.',
                 },
             },
 

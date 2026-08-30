@@ -792,7 +792,10 @@ export const zh_CN: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse 不支持 SQL DDL 导入。请使用 DBML 或从现有数据库导入。',
                     file_too_large: '所选文件大于 5 MB。',
+                    unsupported_file_extension:
+                        '仅支持 .sql、.dbml 和 .json 文件。',
                     import_failed: '无法导入架构。请检查内容后重试。',
+                    invalid_diagram_json: '图表 JSON 无效。请检查文件后重试。',
                 },
             },
 

@@ -852,6 +852,8 @@ export const fr: LanguageTranslation = {
                     clickhouse_unsupported:
                         "L'import DDL SQL n'est pas pris en charge pour ClickHouse. Utilisez DBML ou importez depuis une base existante.",
                     file_too_large: 'Le fichier sélectionné dépasse 5 Mo.',
+                    unsupported_file_extension:
+                        'Seuls les fichiers .sql, .dbml et .json sont pris en charge.',
                     import_failed:
                         "Le schéma n'a pas pu être importé. Vérifiez le contenu et réessayez.",
                     invalid_diagram_json:

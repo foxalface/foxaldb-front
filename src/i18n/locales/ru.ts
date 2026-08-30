@@ -756,8 +756,6 @@ export const ru: LanguageTranslation = {
                     'Извлечение схемы недоступно для этого типа базы.',
                 import_failed:
                     'Не удалось импортировать схему базы. Проверьте результат и повторите попытку.',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Назад',
                 import: 'Импорт',
             },
@@ -844,8 +842,12 @@ export const ru: LanguageTranslation = {
                     clickhouse_unsupported:
                         'Импорт SQL DDL не поддерживается для ClickHouse. Используйте DBML или импортируйте из существующей базы данных.',
                     file_too_large: 'Выбранный файл больше 5 МБ.',
+                    unsupported_file_extension:
+                        'Поддерживаются только файлы .sql, .dbml и .json.',
                     import_failed:
                         'Не удалось импортировать схему. Проверьте содержимое и попробуйте снова.',
+                    invalid_diagram_json:
+                        'JSON диаграммы недействителен. Проверьте файл и повторите попытку.',
                 },
             },
 

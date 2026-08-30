@@ -741,8 +741,6 @@ export const ar: LanguageTranslation = {
                     'استخراج المخطط غير متاح لهذا النوع من قواعد البيانات.',
                 import_failed:
                     'تعذر استيراد مخطط قاعدة البيانات. تحقق من النتيجة وحاول مرة أخرى.',
-                invalid_diagram_json:
-                    'JSON المخطط غير صالح. تحقق من الملف وحاول مرة أخرى.',
                 back: 'رجوع',
                 import: 'استيراد',
             },
@@ -829,8 +827,12 @@ export const ar: LanguageTranslation = {
                     clickhouse_unsupported:
                         'استيراد DDL SQL غير مدعوم لـ ClickHouse. استخدم DBML أو استورد من قاعدة بيانات موجودة.',
                     file_too_large: 'الملف المحدد أكبر من 5 ميغابايت.',
+                    unsupported_file_extension:
+                        'يُسمح فقط بملفات .sql و .dbml و .json.',
                     import_failed:
                         'تعذر استيراد المخطط. تحقق من المحتوى وحاول مرة أخرى.',
+                    invalid_diagram_json:
+                        'JSON المخطط غير صالح. تحقق من الملف وحاول مرة أخرى.',
                 },
             },
 

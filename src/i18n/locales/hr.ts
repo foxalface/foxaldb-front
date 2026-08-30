@@ -752,8 +752,6 @@ export const hr: LanguageTranslation = {
                     'Ekstrakcija sheme nije dostupna za ovu vrstu baze.',
                 import_failed:
                     'Shema baze nije mogla biti uvezena. Provjerite rezultat i pokušajte ponovno.',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Natrag',
                 import: 'Uvezi',
             },
@@ -839,8 +837,12 @@ export const hr: LanguageTranslation = {
                     clickhouse_unsupported:
                         'SQL DDL uvoz nije podržan za ClickHouse. Koristite DBML ili uvezite iz postojeće baze.',
                     file_too_large: 'Odabrana datoteka je veća od 5 MB.',
+                    unsupported_file_extension:
+                        'Podržane su samo .sql, .dbml i .json datoteke.',
                     import_failed:
                         'Shemu nije bilo moguće uvesti. Provjerite sadržaj i pokušajte ponovno.',
+                    invalid_diagram_json:
+                        'JSON dijagrama nije valjan. Provjerite datoteku i pokušajte ponovno.',
                 },
             },
 

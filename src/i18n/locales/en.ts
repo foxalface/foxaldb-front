@@ -833,6 +833,8 @@ export const en = {
                     clickhouse_unsupported:
                         'SQL DDL import is not supported for ClickHouse. Use DBML or import from an existing database instead.',
                     file_too_large: 'The selected file is larger than 5 MB.',
+                    unsupported_file_extension:
+                        'Only .sql, .dbml, and .json files are supported.',
                     import_failed:
                         'The schema could not be imported. Check the content and try again.',
                     invalid_diagram_json:

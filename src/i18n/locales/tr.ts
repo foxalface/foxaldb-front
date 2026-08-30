@@ -746,8 +746,6 @@ export const tr: LanguageTranslation = {
                     'Bu veritabanı türü için şema çıkarma kullanılamıyor.',
                 import_failed:
                     'Veritabanı şeması içe aktarılamadı. Sonucu kontrol edip tekrar deneyin.',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Geri',
                 import: 'İçe aktar',
             },
@@ -832,8 +830,12 @@ export const tr: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse için SQL DDL içe aktarma desteklenmiyor. DBML kullanın veya mevcut bir veritabanından içe aktarın.',
                     file_too_large: "Seçilen dosya 5 MB'tan büyük.",
+                    unsupported_file_extension:
+                        'Yalnızca .sql, .dbml ve .json dosyaları desteklenir.',
                     import_failed:
                         'Şema içe aktarılamadı. İçeriği kontrol edip tekrar deneyin.',
+                    invalid_diagram_json:
+                        'Diyagram JSON geçersiz. Dosyayı kontrol edip tekrar deneyin.',
                 },
             },
 

@@ -749,8 +749,6 @@ export const gu: LanguageTranslation = {
                     'આ ડેટાબેઝ પ્રકાર માટે સ્કીમા એક્સટ્રેક્શન ઉપલબ્ધ નથી.',
                 import_failed:
                     'ડેટાબેઝ સ્કીમા આયાત કરી શકાઈ નથી. પરિણામ તપાસો અને ફરી પ્રયાસ કરો.',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'પાછા',
                 import: 'આયાત કરો',
             },
@@ -833,8 +831,12 @@ export const gu: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse માટે SQL DDL આયાત સમર્થિત નથી. DBML વાપરો અથવા હાલની ડેટાબેસમાંથી આયાત કરો.',
                     file_too_large: 'પસંદ કરેલી ફાઇલ 5 MB કરતાં મોટી છે.',
+                    unsupported_file_extension:
+                        'ફક્ત .sql, .dbml અને .json ફાઇલો સમર્થિત છે.',
                     import_failed:
                         'સ્કીમા આયાત થઈ શક્યું નહીં. સામગ્રી તપાસીને ફરી પ્રયાસ કરો.',
+                    invalid_diagram_json:
+                        'ડાયાગ્રામ JSON અમાન્ય છે. ફાઇલ તપાસીને ફરી પ્રયાસ કરો.',
                 },
             },
 

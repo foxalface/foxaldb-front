@@ -755,8 +755,6 @@ export const bn: LanguageTranslation = {
                     'এই ডাটাবেস ধরনের জন্য স্কিমা এক্সট্রাকশন উপলব্ধ নয়।',
                 import_failed:
                     'ডাটাবেস স্কিমা আমদানি করা যায়নি। ফলাফল পরীক্ষা করে আবার চেষ্টা করুন।',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'পিছনে',
                 import: 'আমদানি করুন',
             },
@@ -841,8 +839,12 @@ export const bn: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse-এর জন্য SQL DDL আমদানি সমর্থিত নয়। DBML ব্যবহার করুন বা বিদ্যমান ডাটাবেস থেকে আমদানি করুন।',
                     file_too_large: 'নির্বাচিত ফাইল ৫ MB-এর বেশি।',
+                    unsupported_file_extension:
+                        'শুধুমাত্র .sql, .dbml এবং .json ফাইল সমর্থিত।',
                     import_failed:
                         'স্কিমা আমদানি করা যায়নি। বিষয়বস্তু পরীক্ষা করে আবার চেষ্টা করুন।',
+                    invalid_diagram_json:
+                        'ডায়াগ্রাম JSON অবৈধ। ফাইলটি পরীক্ষা করে আবার চেষ্টা করুন।',
                 },
             },
 

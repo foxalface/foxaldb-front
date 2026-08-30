@@ -756,8 +756,6 @@ export const hi: LanguageTranslation = {
                     'इस डेटाबेस प्रकार के लिए स्कीमा निष्कर्षण उपलब्ध नहीं है।',
                 import_failed:
                     'डेटाबेस स्कीमा आयात नहीं हो सका। परिणाम जाँचें और पुनः प्रयास करें।',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'वापस',
                 import: 'आयात करें',
             },
@@ -843,8 +841,12 @@ export const hi: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse के लिए SQL DDL आयात समर्थित नहीं है। DBML का उपयोग करें या मौजूदा डेटाबेस से आयात करें।',
                     file_too_large: 'चयनित फ़ाइल 5 MB से बड़ी है।',
+                    unsupported_file_extension:
+                        'केवल .sql, .dbml और .json फ़ाइलें समर्थित हैं।',
                     import_failed:
                         'स्कीमा आयात नहीं हो सका। सामग्री जांचें और पुनः प्रयास करें।',
+                    invalid_diagram_json:
+                        'डायाग्राम JSON अमान्य है। फ़ाइल जाँचें और पुनः प्रयास करें।',
                 },
             },
 

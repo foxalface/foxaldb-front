@@ -780,8 +780,6 @@ export const de: LanguageTranslation = {
                     'Schemaextraktion ist für diesen Datenbanktyp nicht verfügbar.',
                 import_failed:
                     'Das Datenbankschema konnte nicht importiert werden. Prüfen Sie das Ergebnis und versuchen Sie es erneut.',
-                invalid_diagram_json:
-                    'Das Diagramm-JSON ist ungültig. Prüfen Sie die Datei und versuchen Sie es erneut.',
                 back: 'Zurück',
                 import: 'Importieren',
             },
@@ -871,8 +869,12 @@ export const de: LanguageTranslation = {
                         'SQL-DDL-Import wird für ClickHouse nicht unterstützt. Verwenden Sie DBML oder importieren Sie aus einer bestehenden Datenbank.',
                     file_too_large:
                         'Die ausgewählte Datei ist größer als 5 MB.',
+                    unsupported_file_extension:
+                        'Nur .sql-, .dbml- und .json-Dateien werden unterstützt.',
                     import_failed:
                         'Das Schema konnte nicht importiert werden. Prüfen Sie den Inhalt und versuchen Sie es erneut.',
+                    invalid_diagram_json:
+                        'Das Diagramm-JSON ist ungültig. Prüfen Sie die Datei und versuchen Sie es erneut.',
                 },
             },
 

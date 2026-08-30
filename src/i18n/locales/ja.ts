@@ -760,8 +760,6 @@ export const ja: LanguageTranslation = {
                     'このデータベース種別ではスキーマ抽出は利用できません。',
                 import_failed:
                     'データベーススキーマをインポートできませんでした。結果を確認して再試行してください。',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: '戻る',
                 import: 'インポート',
             },
@@ -847,8 +845,12 @@ export const ja: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse では SQL DDL のインポートはサポートされていません。DBML を使うか、既存のデータベースからインポートしてください。',
                     file_too_large: '選択したファイルは 5 MB を超えています。',
+                    unsupported_file_extension:
+                        '.sql、.dbml、.json ファイルのみ対応しています。',
                     import_failed:
                         'スキーマをインポートできませんでした。内容を確認して再試行してください。',
+                    invalid_diagram_json:
+                        'ダイアグラム JSON が無効です。ファイルを確認して再度お試しください。',
                 },
             },
 

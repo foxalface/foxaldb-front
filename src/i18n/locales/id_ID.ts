@@ -758,8 +758,6 @@ export const id_ID: LanguageTranslation = {
                     'Ekstraksi skema tidak tersedia untuk jenis database ini.',
                 import_failed:
                     'Skema database tidak dapat diimpor. Periksa hasil dan coba lagi.',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Kembali',
                 import: 'Impor',
             },
@@ -845,8 +843,12 @@ export const id_ID: LanguageTranslation = {
                     clickhouse_unsupported:
                         'Impor DDL SQL tidak didukung untuk ClickHouse. Gunakan DBML atau impor dari basis data yang ada.',
                     file_too_large: 'File yang dipilih lebih besar dari 5 MB.',
+                    unsupported_file_extension:
+                        'Hanya file .sql, .dbml, dan .json yang didukung.',
                     import_failed:
                         'Skema tidak dapat diimpor. Periksa konten dan coba lagi.',
+                    invalid_diagram_json:
+                        'JSON diagram tidak valid. Periksa file dan coba lagi.',
                 },
             },
 

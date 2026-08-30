@@ -752,8 +752,6 @@ export const ko_KR: LanguageTranslation = {
                     '이 데이터베이스 유형에서는 스키마 추출을 사용할 수 없습니다.',
                 import_failed:
                     '데이터베이스 스키마를 가져올 수 없습니다. 결과를 확인하고 다시 시도하세요.',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: '뒤로',
                 import: '가져오기',
             },
@@ -838,8 +836,12 @@ export const ko_KR: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse에서는 SQL DDL 가져오기가 지원되지 않습니다. DBML을 사용하거나 기존 데이터베이스에서 가져오세요.',
                     file_too_large: '선택한 파일이 5MB를 초과합니다.',
+                    unsupported_file_extension:
+                        '.sql, .dbml, .json 파일만 지원됩니다.',
                     import_failed:
                         '스키마를 가져올 수 없습니다. 내용을 확인하고 다시 시도하세요.',
+                    invalid_diagram_json:
+                        '다이어그램 JSON이 유효하지 않습니다. 파일을 확인한 후 다시 시도하세요.',
                 },
             },
 

@@ -756,8 +756,6 @@ export const te: LanguageTranslation = {
                     'ఈ డేటాబేస్ రకానికి స్కీమా ఎక్స్‌ట్రాక్షన్ అందుబాటులో లేదు.',
                 import_failed:
                     'డేటాబేస్ స్కీమాను దిగుమతి చేయలేకపోయాం. ఫలితాన్ని తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'వెనక్కి',
                 import: 'దిగుమతి చేయి',
             },
@@ -842,8 +840,12 @@ export const te: LanguageTranslation = {
                     clickhouse_unsupported:
                         'ClickHouse కోసం SQL DDL దిగుమతి మద్దతు లేదు. DBML ఉపయోగించండి లేదా ఇప్పటికే ఉన్న డేటాబేస్ నుండి దిగుమతి చేయండి.',
                     file_too_large: 'ఎంచుకున్న ఫైల్ 5 MB కంటే పెద్దది.',
+                    unsupported_file_extension:
+                        '.sql, .dbml మరియు .json ఫైళ్లు మాత్రమే మద్దతు ఇవ్వబడతాయి.',
                     import_failed:
                         'స్కీమాను దిగుమతి చేయలేకపోయాము. కంటెంట్ తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+                    invalid_diagram_json:
+                        'డయాగ్రామ్ JSON చెల్లదు. ఫైల్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
                 },
             },
 

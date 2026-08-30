@@ -760,8 +760,6 @@ export const vi: LanguageTranslation = {
                     'Không hỗ trợ trích xuất lược đồ cho loại cơ sở dữ liệu này.',
                 import_failed:
                     'Không thể nhập lược đồ cơ sở dữ liệu. Kiểm tra kết quả và thử lại.',
-                invalid_diagram_json:
-                    'The diagram JSON is invalid. Check the file and try again.',
                 back: 'Quay lại',
                 import: 'Nhập',
             },
@@ -848,8 +846,12 @@ export const vi: LanguageTranslation = {
                     clickhouse_unsupported:
                         'Nhập DDL SQL không được hỗ trợ cho ClickHouse. Hãy dùng DBML hoặc nhập từ cơ sở dữ liệu hiện có.',
                     file_too_large: 'Tệp đã chọn lớn hơn 5 MB.',
+                    unsupported_file_extension:
+                        'Chỉ hỗ trợ các tệp .sql, .dbml và .json.',
                     import_failed:
                         'Không thể nhập lược đồ. Kiểm tra nội dung và thử lại.',
+                    invalid_diagram_json:
+                        'JSON sơ đồ không hợp lệ. Kiểm tra tệp và thử lại.',
                 },
             },
 
