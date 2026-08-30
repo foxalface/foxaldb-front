@@ -46,7 +46,39 @@ export {
 } from './framework-labels';
 export { isZipArchiveFile, readFileHeaderBytes } from './is-zip-archive-file';
 export { getParserLocation, isRemoteParserFramework } from './parser-location';
-export { PROJECT_IMPORT_PARSER_ENABLED } from './project-import-capability';
+export {
+    PROJECT_IMPORT_PARSER_ENABLED,
+    canExecuteProjectImport,
+    getProjectParserCapability,
+    isProjectImportParserAvailable,
+} from './project-import-capability';
+export { importProject } from './import-project';
+export type { ImportProjectParams } from './import-project';
+export type {
+    LocalProjectFramework,
+    ProjectImportDiagnostic,
+    ProjectImportDiagnosticSeverity,
+    ProjectImportInput,
+    ProjectImportResult,
+    RemoteProjectFramework,
+} from './project-execution-types';
+export {
+    LOCAL_PROJECT_FRAMEWORKS,
+    PROJECT_IMPORT_API_VERSION,
+    REMOTE_PROJECT_FRAMEWORKS,
+} from './project-execution-types';
+export {
+    InconsistentProjectImportFrameworkError,
+    InvalidRemoteProjectFrameworkError,
+    MalformedProjectImportPayloadError,
+    ProjectImportError,
+    ProjectImportNetworkError,
+    ProjectImportParserUnavailableError,
+    ProjectImportRemoteFailureError,
+    ProjectImportUnauthenticatedError,
+    ProjectImportValidationRejectedError,
+    UnsupportedProjectImportApiVersionError,
+} from './project-import-errors';
 export { getProjectSummaryMetrics } from './project-summary-metrics';
 export type {
     ParserLocation,

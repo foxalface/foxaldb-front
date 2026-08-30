@@ -18,6 +18,7 @@ import {
     randomText,
 } from '@/lib/import/__tests__/fixtures/import-samples';
 import { ImportSchemaStep } from '../import-schema-step';
+import type * as ClientModule from '@/lib/api/client';
 
 const stressSql = readFileSync(
     join(
@@ -33,6 +34,21 @@ import {
 } from '@/lib/project-import/__tests__/fixtures/build-test-zip';
 
 let isAuthenticated = true;
+
+const { apiRequestMock } = vi.hoisted(() => ({
+    apiRequestMock: vi.fn(),
+}));
+
+vi.mock('@/lib/api/client', async () => {
+    const actual = (await vi.importActual(
+        '@/lib/api/client'
+    )) as typeof ClientModule;
+
+    return {
+        ...actual,
+        apiRequest: apiRequestMock,
+    };
+});
 
 vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => ({
@@ -504,6 +520,7 @@ describe('ImportSchemaStep', () => {
 describe('ImportSchemaStep project archives', () => {
     beforeEach(() => {
         isAuthenticated = true;
+        apiRequestMock.mockReset();
     });
 
     const uploadZip = async (
@@ -641,6 +658,17 @@ describe('ImportSchemaStep project archives', () => {
         expect(
             screen.queryByText('Prisma project detected')
         ).not.toBeInTheDocument();
+    });
+
+    it('does not call the project import API while parser execution is unavailable', async () => {
+        await uploadZip({
+            artisan: '#!/usr/bin/env php',
+            'composer.json': '{"require":{"laravel/framework":"^11.0"}}',
+            'database/migrations/2024_01_01_000000_create_users_table.php':
+                '<?php',
+        });
+
+        expect(apiRequestMock).not.toHaveBeenCalled();
     });
 
     it('shows guest sign-in notice for remote frameworks', async () => {

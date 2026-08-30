@@ -23,12 +23,12 @@ import {
     ArchiveError,
     ArchiveReader,
     MAX_ARCHIVE_COMPRESSED_BYTES,
-    PROJECT_IMPORT_PARSER_ENABLED,
     analyzeProjectArchive,
     getProjectCandidateKey,
     getSelectableCandidates,
     isZipArchiveFile,
 } from '@/lib/project-import/types';
+import { canExecuteProjectImport } from '@/lib/project-import/project-import-capability';
 import type {
     ProjectArchiveAnalysis,
     ProjectDetectionCandidate,
@@ -175,19 +175,18 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
 
     const canContinue = useMemo(() => {
         if (projectAnalysis) {
-            if (!PROJECT_IMPORT_PARSER_ENABLED) {
-                return false;
-            }
-
             if (projectAnalysis.status === 'unsupported') {
                 return false;
             }
 
-            if (projectAnalysis.status === 'ambiguous') {
-                return selectedProjectCandidate !== null;
+            if (!activeProjectCandidate) {
+                return false;
             }
 
-            return projectAnalysis.recommendedCandidate !== null;
+            return canExecuteProjectImport(
+                activeProjectCandidate.framework,
+                isAuthenticated
+            );
         }
 
         if (!baseAnalysis.importMethod) {
@@ -227,11 +226,12 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
 
         return baseAnalysis.canContinue;
     }, [
+        activeProjectCandidate,
         baseAnalysis,
         effectiveResolvedSourceDialect,
+        isAuthenticated,
         mode,
         projectAnalysis,
-        selectedProjectCandidate,
         userResolvedSourceDialect,
     ]);
 
