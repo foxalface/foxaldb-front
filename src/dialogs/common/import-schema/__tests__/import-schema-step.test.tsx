@@ -1009,6 +1009,156 @@ end`,
 
         expect(apiRequestMock).not.toHaveBeenCalled();
     });
+
+    it('detects Django and requires sign-in for guests', async () => {
+        isAuthenticated = false;
+
+        await uploadZip({
+            'manage.py': '#!/usr/bin/env python',
+            'users/migrations/0001_initial.py':
+                'from django.db import migrations, models\nclass Migration(migrations.Migration):\n    operations = []',
+            'requirements.txt': 'Django>=4.2',
+        });
+
+        expect(
+            screen.getByText(/django.*project detected/i)
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeDisabled();
+        expect(
+            screen.getByText(
+                'new_diagram_dialog.import_schema.project.sign_in_to_import_framework'
+            )
+        ).toBeInTheDocument();
+        expect(importProjectMock).not.toHaveBeenCalled();
+        expect(apiRequestMock).not.toHaveBeenCalled();
+    });
+
+    it('enables Continue for authenticated Django projects', async () => {
+        isAuthenticated = true;
+        importProjectMock.mockResolvedValueOnce({
+            diagram: {
+                id: 'diagram-1',
+                name: 'Django Import',
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            framework: 'django',
+            diagnostics: [],
+        });
+
+        const user = userEvent.setup();
+        const onContinue = vi.fn();
+        const file = createTestZipFile({
+            'manage.py': '#!/usr/bin/env python',
+            'users/migrations/0001_initial.py':
+                'from django.db import migrations, models\nclass Migration(migrations.Migration):\n    operations = []',
+            'requirements.txt': 'Django>=4.2',
+        });
+
+        const { container } = renderImportSchemaStep({ onContinue });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeEnabled();
+
+        await user.click(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        );
+
+        await waitFor(() => {
+            expect(importProjectMock).toHaveBeenCalledOnce();
+        });
+    });
+
+    it('detects Drizzle and enables Continue for guests without sign-in', async () => {
+        isAuthenticated = false;
+
+        await uploadZip({
+            'drizzle.config.ts': "export default { dialect: 'postgresql' };",
+            'drizzle/meta/_journal.json':
+                '{"version":"7","dialect":"postgresql","entries":[]}',
+            'drizzle/0000_init.sql':
+                'CREATE TABLE "users" ("id" serial PRIMARY KEY NOT NULL);',
+            'package.json': '{"dependencies":{"drizzle-orm":"^0.30.0"}}',
+        });
+
+        expect(
+            screen.getByText(/drizzle.*project detected/i)
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeEnabled();
+        expect(
+            screen.queryByText(
+                'new_diagram_dialog.import_schema.project.sign_in_to_import_framework'
+            )
+        ).not.toBeInTheDocument();
+    });
+
+    it('imports Drizzle locally for authenticated users without remote API calls', async () => {
+        isAuthenticated = true;
+        importProjectMock.mockResolvedValueOnce({
+            diagram: {
+                id: 'diagram-1',
+                name: 'Drizzle Import',
+                databaseType: DatabaseType.POSTGRESQL,
+                tables: [],
+                relationships: [],
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            framework: 'drizzle',
+            diagnostics: [],
+        });
+
+        const user = userEvent.setup();
+        const onContinue = vi.fn();
+        const file = createTestZipFile({
+            'drizzle.config.ts': "export default { dialect: 'postgresql' };",
+            'drizzle/meta/_journal.json':
+                '{"version":"7","dialect":"postgresql","entries":[]}',
+            'drizzle/0000_init.sql':
+                'CREATE TABLE "users" ("id" serial PRIMARY KEY NOT NULL);',
+            'package.json': '{"dependencies":{"drizzle-orm":"^0.30.0"}}',
+        });
+
+        const { container } = renderImportSchemaStep({ onContinue });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        await user.upload(fileInput as HTMLInputElement, file);
+
+        await user.click(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        );
+
+        await waitFor(() => {
+            expect(importProjectMock).toHaveBeenCalledOnce();
+        });
+
+        expect(apiRequestMock).not.toHaveBeenCalled();
+    });
 });
 
 describe('ImportSchemaStep existing diagram mode', () => {

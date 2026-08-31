@@ -182,6 +182,41 @@ export function getTypeArgs(
     return typeArgs;
 }
 
+export function parseTypeArgsFromRawType(
+    typeName: string,
+    parameters: string | undefined
+): TypeArgs {
+    const typeArgs: TypeArgs = {};
+
+    if (!parameters?.trim()) {
+        return typeArgs;
+    }
+
+    const normalizedType = typeName.toLowerCase();
+    const numericParts = parameters
+        .split(',')
+        .map((part) => Number.parseInt(part.trim(), 10))
+        .filter((value) => !Number.isNaN(value));
+
+    if (numericParts.length === 0) {
+        return typeArgs;
+    }
+
+    if (
+        (normalizedType === 'decimal' || normalizedType === 'numeric') &&
+        numericParts.length >= 2
+    ) {
+        typeArgs.precision = numericParts[0];
+        typeArgs.scale = numericParts[1];
+
+        return typeArgs;
+    }
+
+    typeArgs.length = numericParts[0];
+
+    return typeArgs;
+}
+
 // Helper function to find a table with consistent schema handling
 export function findTableWithSchemaSupport(
     tables: TableLike[],

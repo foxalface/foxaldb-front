@@ -4,6 +4,7 @@ import type {
 } from '../project-execution-types';
 import type { LocalProjectFramework } from '../project-execution-types';
 import { ProjectImportParserUnavailableError } from '../project-import-errors';
+import { parseDrizzleProject } from './drizzle/drizzle-project-parser';
 import { parsePrismaProject } from './prisma/prisma-project-parser';
 import { parseRailsProject } from './rails/rails-project-parser';
 
@@ -14,6 +15,7 @@ export type LocalProjectParser = (
 const LOCAL_PROJECT_PARSERS: Partial<
     Record<LocalProjectFramework, LocalProjectParser>
 > = {
+    drizzle: parseDrizzleProject,
     prisma: parsePrismaProject,
     rails: parseRailsProject,
 };

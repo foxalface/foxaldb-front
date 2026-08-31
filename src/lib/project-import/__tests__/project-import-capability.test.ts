@@ -20,9 +20,9 @@ describe('project import capabilities', () => {
         ['laravel', true, 'remote'],
         ['prisma', true, 'local'],
         ['entity_framework_core', true, 'remote'],
-        ['drizzle', false, 'local'],
+        ['drizzle', true, 'local'],
         ['rails', true, 'local'],
-        ['django', false, 'remote'],
+        ['django', true, 'remote'],
     ] as const)(
         'reports execution availability and location for %s',
         (framework, executionAvailable, location) => {
@@ -45,24 +45,28 @@ describe('project import capabilities', () => {
         expect(canExecuteProjectImport('entity_framework_core', true)).toBe(
             true
         );
+        expect(canExecuteProjectImport('django', false)).toBe(false);
+        expect(canExecuteProjectImport('django', true)).toBe(true);
         expect(canExecuteProjectImport('prisma', false)).toBe(true);
         expect(canExecuteProjectImport('prisma', true)).toBe(true);
         expect(canExecuteProjectImport('rails', false)).toBe(true);
         expect(canExecuteProjectImport('rails', true)).toBe(true);
+        expect(canExecuteProjectImport('drizzle', false)).toBe(true);
+        expect(canExecuteProjectImport('drizzle', true)).toBe(true);
     });
 
-    it('keeps non-executable frameworks disabled for all users', () => {
-        ALL_FRAMEWORKS.filter(
-            (framework) =>
-                ![
-                    'laravel',
-                    'prisma',
-                    'entity_framework_core',
-                    'rails',
-                ].includes(framework)
-        ).forEach((framework) => {
-            expect(canExecuteProjectImport(framework, true)).toBe(false);
-            expect(canExecuteProjectImport(framework, false)).toBe(false);
+    it('keeps all six frameworks executable', () => {
+        ALL_FRAMEWORKS.forEach((framework) => {
+            const requiresAuth = [
+                'laravel',
+                'entity_framework_core',
+                'django',
+            ].includes(framework);
+
+            expect(canExecuteProjectImport(framework, true)).toBe(true);
+            expect(canExecuteProjectImport(framework, false)).toBe(
+                !requiresAuth
+            );
         });
     });
 });

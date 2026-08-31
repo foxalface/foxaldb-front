@@ -4,10 +4,10 @@ import { getParserLocation, isRemoteParserFramework } from './parser-location';
 const PARSER_EXECUTION_AVAILABLE: Record<ProjectFramework, boolean> = {
     laravel: true,
     prisma: true,
-    drizzle: false,
+    drizzle: true,
     rails: true,
     entity_framework_core: true,
-    django: false,
+    django: true,
 };
 
 export interface ProjectParserCapability {

@@ -56,7 +56,12 @@ import type {
     CreateTableStatement,
     TableReference,
 } from './mysql-common';
-import { parserOpts, extractColumnName, getTypeArgs } from './mysql-common';
+import {
+    parserOpts,
+    extractColumnName,
+    getTypeArgs,
+    parseTypeArgsFromRawType,
+} from './mysql-common';
 
 // Interface for pending foreign keys that need to be processed later
 interface PendingForeignKey {
@@ -226,9 +231,9 @@ function extractColumnsFromCreateTable(statement: string): SQLColumn[] {
         }
 
         // Extract column name and definition
-        const columnNameMatch = line.match(/^"?([^"\s]+)"?\s+(.+)$/);
+        const columnNameMatch = line.match(/^`?([^`\s]+)`?\s+(.+)$/);
         if (columnNameMatch) {
-            const columnName = columnNameMatch[1];
+            const columnName = columnNameMatch[1].replace(/`/g, '');
             const definition = columnNameMatch[2];
 
             // Determine if column is nullable
@@ -240,6 +245,7 @@ function extractColumnsFromCreateTable(statement: string): SQLColumn[] {
             // Extract data type
             const typeMatch = definition.match(/^([^\s(]+)(?:\(([^)]+)\))?/);
             const dataType = typeMatch ? typeMatch[1] : '';
+            const typeArgs = parseTypeArgsFromRawType(dataType, typeMatch?.[2]);
 
             // Extract default value
             let defaultValue: string | undefined;
@@ -263,11 +269,81 @@ function extractColumnsFromCreateTable(statement: string): SQLColumn[] {
                 unique: definition.toUpperCase().includes('UNIQUE'),
                 default: defaultValue,
                 increment,
+                typeArgs:
+                    Object.keys(typeArgs).length > 0 ? typeArgs : undefined,
             });
         }
     }
 
     return columns;
+}
+
+function processAlterTableAddColumn(
+    statement: string,
+    tableMap: Record<string, string>,
+    tables: SQLTable[]
+): void {
+    const upperStatement = statement.toUpperCase();
+
+    if (
+        !upperStatement.startsWith('ALTER TABLE') ||
+        !upperStatement.includes('ADD COLUMN')
+    ) {
+        return;
+    }
+
+    const tableMatch = statement.match(
+        /ALTER TABLE\s+(?:`?([^`\s.]+)`?\.)?`?([^`\s]+)`?\s+/i
+    );
+
+    if (!tableMatch) {
+        return;
+    }
+
+    const databaseName = tableMatch[1] || '';
+    const tableName = tableMatch[2].replace(/`/g, '');
+    const tableId =
+        tableMap[tableName] ??
+        (databaseName ? tableMap[`${databaseName}.${tableName}`] : undefined);
+
+    if (!tableId) {
+        return;
+    }
+
+    const table = tables.find((candidate) => candidate.id === tableId);
+
+    if (!table) {
+        return;
+    }
+
+    const addColumnMatch = statement.match(
+        /ADD COLUMN\s+`?([^`\s]+)`?\s+([\s\S]+?)(?:;|$)/i
+    );
+
+    if (!addColumnMatch) {
+        return;
+    }
+
+    const columnName = addColumnMatch[1].replace(/`/g, '');
+    const definition = addColumnMatch[2].trim().replace(/;+\s*$/, '');
+    const parsedColumns = extractColumnsFromCreateTable(
+        `CREATE TABLE t (\`${columnName}\` ${definition});`
+    );
+    const column = parsedColumns[0];
+
+    if (!column) {
+        return;
+    }
+
+    const existingIndex = table.columns.findIndex(
+        (candidate) => candidate.name === columnName
+    );
+
+    if (existingIndex >= 0) {
+        table.columns[existingIndex] = column;
+    } else {
+        table.columns.push(column);
+    }
 }
 
 // Process PostgreSQL pg_dump CREATE INDEX statements
@@ -276,36 +352,37 @@ function processCreateIndexStatement(
     tableMap: Record<string, string>,
     tables: SQLTable[]
 ): void {
-    if (
-        !statement.startsWith('CREATE INDEX') &&
-        !statement.startsWith('CREATE UNIQUE INDEX')
-    ) {
+    const normalizedStatement = statement.trim();
+
+    if (!/^CREATE\s+(?:UNIQUE\s+)?INDEX/i.test(normalizedStatement)) {
         return;
     }
 
     try {
         // Determine if the index is unique
-        const isUnique = statement.startsWith('CREATE UNIQUE INDEX');
+        const isUnique = /^CREATE\s+UNIQUE\s+INDEX/i.test(normalizedStatement);
 
         // Extract index name
-        const indexNameRegex = /CREATE (?:UNIQUE )?INDEX\s+"?([^"\s]+)"?/i;
-        const indexNameMatch = statement.match(indexNameRegex);
-        const indexName = indexNameMatch ? indexNameMatch[1] : '';
+        const indexNameRegex = /CREATE\s+(?:UNIQUE\s+)?INDEX\s+`?([^`\s]+)`?/i;
+        const indexNameMatch = normalizedStatement.match(indexNameRegex);
+        const indexName = indexNameMatch
+            ? indexNameMatch[1].replace(/`/g, '')
+            : '';
 
         if (!indexName) {
             return;
         }
 
         // Extract table name and schema
-        const tableRegex = /ON\s+(?:"?([^"\s.]+)"?\.)?(?:"?([^"\s.(]+)"?)/i;
-        const tableMatch = statement.match(tableRegex);
+        const tableRegex = /ON\s+(?:`?([^`\s.]+)`?\.)?`?([^`\s(]+)`?/i;
+        const tableMatch = normalizedStatement.match(tableRegex);
 
         if (!tableMatch) {
             return;
         }
 
         const tableSchema = tableMatch[1] || '';
-        const tableName = tableMatch[2];
+        const tableName = tableMatch[2].replace(/`/g, '');
 
         // Extract index columns
         const columnsRegex = /\(\s*([^)]+)\)/i;
@@ -319,11 +396,12 @@ function processCreateIndexStatement(
         const columnsStr = columnsMatch[1];
         // This is a simplified approach - advanced indexes may need more complex parsing
         const indexColumns = columnsStr.split(',').map((col) => {
-            // Extract basic column name, handling possible expressions
             const colName = col
                 .trim()
+                .replace(/`/g, '')
                 .replace(/^"(.*)"$/, '$1')
-                .replace(/^\s*"?([^"\s(]+)"?\s*.*$/, '$1'); // Get just the column name part
+                .replace(/^\s*([^(\s]+)\s*.*$/, '$1');
+
             return colName;
         });
 
@@ -402,11 +480,12 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
         // Extract SQL statements from the dump
         const statements = extractStatements(sqlContent);
 
-        // First pass: process CREATE TABLE statements
+        // Process SQL statements sequentially in document order.
         for (const statement of statements) {
             const trimmedStmt = statement.trim();
+            const upperStmt = trimmedStmt.toUpperCase();
             // Process only CREATE TABLE statements
-            if (trimmedStmt.toUpperCase().startsWith('CREATE TABLE')) {
+            if (upperStmt.startsWith('CREATE TABLE')) {
                 try {
                     const { Parser } = await import('node-sql-parser');
                     const parser = new Parser();
@@ -934,21 +1013,17 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         }
                     }
                 }
-            }
-        }
-
-        // Second pass: process CREATE VIEW statements
-        for (const statement of statements) {
-            const trimmedStmt = statement.trim();
-            const upperStmt = trimmedStmt.toUpperCase();
-
-            if (
+            } else if (
+                trimmedStmt.toUpperCase().startsWith('ALTER TABLE') &&
+                trimmedStmt.toUpperCase().includes('ADD COLUMN')
+            ) {
+                processAlterTableAddColumn(trimmedStmt, tableMap, tables);
+            } else if (
                 upperStmt.startsWith('CREATE VIEW') ||
                 upperStmt.startsWith('CREATE OR REPLACE VIEW') ||
                 upperStmt.includes('CREATE VIEW') ||
                 upperStmt.includes('CREATE OR REPLACE VIEW')
             ) {
-                // Extract view name - handle MySQL syntax with ALGORITHM, DEFINER, etc.
                 const viewMatch = trimmedStmt.match(
                     /CREATE\s+(?:OR\s+REPLACE\s+)?(?:ALGORITHM\s*=\s*\w+\s+)?(?:DEFINER\s*=\s*[^\s]+\s+)?(?:SQL\s+SECURITY\s+\w+\s+)?VIEW\s+(?:`?([^`\s.]+)`?\.)?`?([^`\s.(]+)`?/i
                 );
@@ -964,54 +1039,40 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                             tableMap[`${database}.${viewName}`] = viewId;
                         }
 
-                        // Extract columns from the view definition
                         const columns = extractColumnsFromView(trimmedStmt);
 
-                        // Create view object (as a table with isView: true)
                         tables.push({
                             id: viewId,
                             name: viewName,
                             schema: database || undefined,
                             columns,
-                            indexes: [], // Views don't have indexes
+                            indexes: [],
                             order: tables.length,
                             isView: true,
                         });
                     }
                 }
-            }
-        }
-
-        // Third pass: process CREATE INDEX statements
-        for (const statement of statements) {
-            const trimmedStmt = statement.trim();
-            if (
-                trimmedStmt.toUpperCase().startsWith('CREATE INDEX') ||
-                trimmedStmt.toUpperCase().startsWith('CREATE UNIQUE INDEX')
+            } else if (
+                upperStmt.startsWith('CREATE INDEX') ||
+                upperStmt.startsWith('CREATE UNIQUE INDEX')
             ) {
                 processCreateIndexStatement(trimmedStmt, tableMap, tables);
-            }
-        }
-
-        // Fourth pass: process ALTER TABLE statements for foreign keys
-        for (const statement of statements) {
-            const trimmedStmt = statement.trim();
-            if (
+            } else if (
                 trimmedStmt.toUpperCase().startsWith('ALTER TABLE') &&
                 trimmedStmt.toUpperCase().includes('FOREIGN KEY')
             ) {
                 try {
-                    // Extract table name and schema
                     const tableRegex =
                         /ALTER TABLE\s+(?:`?([^`\s.]+)`?\.)?`?([^`\s.(]+)`?\s+/i;
                     const tableMatch = statement.match(tableRegex);
 
-                    if (!tableMatch) continue;
+                    if (!tableMatch) {
+                        continue;
+                    }
 
                     const databaseName = tableMatch[1] || '';
                     const sourceTable = tableMatch[2];
 
-                    // Look for source table in tableMap - try with and without database prefix
                     let sourceTableId = tableMap[sourceTable];
                     if (!sourceTableId && databaseName) {
                         sourceTableId =
@@ -1021,7 +1082,6 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         continue;
                     }
 
-                    // Extract constraint name if it exists
                     let constraintName = '';
                     const constraintMatch = statement.match(
                         /ADD CONSTRAINT\s+`?([^`\s(]+)`?\s+/i
@@ -1030,21 +1090,23 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         constraintName = constraintMatch[1].replace(/`/g, '');
                     }
 
-                    // Extract source columns
                     const sourceColMatch = statement.match(
                         /FOREIGN KEY\s*\(([^)]+)\)/i
                     );
-                    if (!sourceColMatch) continue;
+                    if (!sourceColMatch) {
+                        continue;
+                    }
 
                     const sourceColumns = sourceColMatch[1]
                         .split(',')
                         .map((col) => col.trim().replace(/`/g, ''));
 
-                    // Extract target table and columns
                     const targetMatch = statement.match(
                         /REFERENCES\s+(?:`?([^`\s.]+)`?\.)?`?([^`\s(]+)`?\s*\(([^)]+)\)/i
                     );
-                    if (!targetMatch) continue;
+                    if (!targetMatch) {
+                        continue;
+                    }
 
                     const targetDatabase = targetMatch[1] || '';
                     const targetTable = targetMatch[2];
@@ -1052,7 +1114,6 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         .split(',')
                         .map((col) => col.trim().replace(/`/g, ''));
 
-                    // Try to find target table with and without database prefix
                     let targetTableId = tableMap[targetTable];
                     if (!targetTableId && targetDatabase) {
                         targetTableId =
@@ -1063,7 +1124,6 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         continue;
                     }
 
-                    // Extract ON DELETE and ON UPDATE actions
                     let updateAction: string | undefined;
                     let deleteAction: string | undefined;
 
@@ -1081,7 +1141,6 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         updateAction = onUpdateMatch[1].trim();
                     }
 
-                    // Create the foreign key relationships
                     for (
                         let i = 0;
                         i <
@@ -1104,7 +1163,6 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         };
 
                         relationships.push(fk);
-                        // Track this relationship to avoid duplicates from regex fallback
                         addedRelationships.add(
                             `${fk.sourceTable}.${fk.sourceColumn}-${fk.targetTable}.${fk.targetColumn}`
                         );
@@ -1114,13 +1172,11 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                         'Error processing foreign key in ALTER TABLE:',
                         fkError
                     );
-
-                    // Error handling without logging
                 }
             }
         }
 
-        // After processing all tables, process pending foreign keys:
+        // Pending foreign keys and regex fallback remain after sequential processing.
         if (pendingForeignKeys.length > 0) {
             for (const pendingFk of pendingForeignKeys) {
                 // Try with and without database prefix
