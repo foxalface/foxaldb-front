@@ -92,6 +92,56 @@ No diagram is created until:
 
 Guest: Dexie `addDiagram`. Authenticated: `createDiagram` API after successful parse.
 
+## Project ZIP import (M10)
+
+Six frameworks supported via the create-diagram wizard (`ImportSchemaStep` → project ZIP path). Always produces a **new diagram** — never merges into an existing diagram.
+
+| Framework | Parser location | Auth required | Authoritative source |
+|-----------|-----------------|---------------|----------------------|
+| Laravel | Remote (private backend) | Yes | `database/migrations/*.php` (+ optional `composer.json`) |
+| Prisma | Local (browser) | No | `prisma/schema.prisma` |
+| Entity Framework Core | Remote (private backend) | Yes | `*ModelSnapshot.cs` (+ optional `.csproj`) |
+| Rails | Local (browser) | No | `db/schema.rb` (+ optional `config/database.yml`) |
+| Django | Remote (private backend) | Yes | `*/migrations/*.py` (+ optional metadata) |
+| Drizzle | Local (browser) | No | `drizzle/**/*.sql` (+ journal/config) |
+
+### Security model
+
+- **No AI** and **no code execution** in any import path.
+- **Local parsers** (Prisma, Rails, Drizzle): ZIP stays in the browser; source never uploaded.
+- **Remote parsers** (Laravel, EF Core, Django): only minimum selected text files sent via authenticated `POST /api/project-import/parse`; full archive never uploaded.
+- User-selected **target DBMS** is authoritative (`diagram.databaseType`); source dialect does not override it.
+
+### Detection and dispatch
+
+1. `ArchiveReader` opens ZIP with M1 security limits.
+2. `detectProjectCandidates()` scores framework evidence; ambiguity UI when needed.
+3. `collectFileBundle()` retains only framework-specific allowed files.
+4. `importProject()` dispatches to `parseLocalProject()` or `parseRemoteProject()` based on per-framework capability — no UI framework conditionals for parsing.
+5. Result shape: `{ framework, diagram, diagnostics }` only — no raw source, archive, or auth objects.
+
+Merge / Fusionner is **not** part of project import; deferred to a future milestone.
+
+### Known limitations (summary)
+
+- **Laravel**: static migration subset; no arbitrary PHP execution.
+- **Prisma**: implicit M2M join tables not synthesized.
+- **EF Core**: ModelSnapshot required; owned entities limited; multiple snapshots ambiguous.
+- **Rails**: `schema.rb` only; no migration replay; no check constraints/enums.
+- **Django**: implicit M2M join tables not synthesized; `RunPython`/`RunSQL` ignored.
+- **Drizzle**: SQL migration source only; no `schema.ts` parser; ALTER/drop/rename limitations apply.
+
+### Legacy Laravel endpoints (separate from project import)
+
+These remain for Compare/Sync and the editor Laravel migration import dialog:
+
+- `POST /api/laravel-migrations/import` — legacy ZIP snapshot import (editor menu)
+- `POST /api/laravel-migrations/diff` — migration diff without diagram context
+- `POST /api/diagrams/{diagram}/laravel-migrations/diff` — diagram-aware diff
+- `POST /api/diagrams/{diagram}/export/laravel-migrations` — export
+
+Generic project import uses `POST /api/project-import/parse` only.
+
 ## Related files
 
 - `lib/import/import-schema.ts` — dispatcher
@@ -100,3 +150,5 @@ Guest: Dexie `addDiagram`. Authenticated: `createDiagram` API after successful p
 - `dialogs/create-diagram-dialog/import-from-database/` — metadata extraction step
 - `lib/data/sql-import/` — dialect parsers
 - `lib/data/import-metadata/` — metadata scripts and loader
+- `lib/project-import/` — project ZIP detection, bundle collection, local/remote parsers
+- `lib/project-import/import-project.ts` — generic project import dispatcher

@@ -76,7 +76,8 @@ const measureDelimiterDepth = (value: string): number => {
 };
 
 const splitStatements = (body: string): string[] => {
-    const lines = body
+    const normalizedBody = body.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    const lines = normalizedBody
         .split('\n')
         .map((line) => line.trim())
         .filter((line) => line.length > 0 && !line.startsWith('#'));
@@ -570,14 +571,16 @@ const parseVersion = (source: string): string | undefined => {
 };
 
 export const parseRailsSchema = (source: string): RailsSchemaDocument => {
-    if (!source.includes('ActiveRecord::Schema')) {
+    const normalizedSource = source.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+    if (!normalizedSource.includes('ActiveRecord::Schema')) {
         throw new RailsSchemaParseError(
             'The submitted file does not appear to be a Rails schema.rb dump.'
         );
     }
 
-    const scanner = new RailsRubyScanner(source);
-    const body = extractSchemaBody(source, scanner);
+    const scanner = new RailsRubyScanner(normalizedSource);
+    const body = extractSchemaBody(normalizedSource, scanner);
 
     if (!body) {
         throw new RailsSchemaParseError(
@@ -588,7 +591,7 @@ export const parseRailsSchema = (source: string): RailsSchemaDocument => {
     const bodyScanner = new RailsRubyScanner(body);
 
     const document: RailsSchemaDocument = {
-        version: parseVersion(source),
+        version: parseVersion(normalizedSource),
         tables: [],
         indexes: [],
         foreignKeys: [],

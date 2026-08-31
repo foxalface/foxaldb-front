@@ -47,7 +47,6 @@ export {
 export { isZipArchiveFile, readFileHeaderBytes } from './is-zip-archive-file';
 export { getParserLocation, isRemoteParserFramework } from './parser-location';
 export {
-    PROJECT_IMPORT_PARSER_ENABLED,
     canExecuteProjectImport,
     getProjectParserCapability,
     isProjectImportParserAvailable,

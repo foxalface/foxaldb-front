@@ -220,6 +220,110 @@ describe('collectFileBundle', () => {
         ]);
     });
 
+    it.each([
+        [
+            'laravel',
+            {
+                'database/migrations/2024_01_01_000000_create_users_table.php':
+                    '<?php',
+                'composer.json': '{"require":{"laravel/framework":"^11.0"}}',
+                '.env': 'FOXALDB_DO_NOT_EXPOSE_LARAVEL_SOURCE=secret',
+                'README.md': 'FOXALDB_DO_NOT_EXPOSE_LARAVEL_SOURCE',
+                'tests/Feature/ExampleTest.php':
+                    'FOXALDB_DO_NOT_EXPOSE_LARAVEL_SOURCE',
+                'app/Http/Controllers/UserController.php':
+                    'FOXALDB_DO_NOT_EXPOSE_LARAVEL_SOURCE',
+            },
+            {
+                framework: 'laravel',
+                rootPath: '',
+                relevantFiles: [
+                    'database/migrations/2024_01_01_000000_create_users_table.php',
+                    'composer.json',
+                    '.env',
+                    'README.md',
+                ],
+            },
+            [
+                'composer.json',
+                'database/migrations/2024_01_01_000000_create_users_table.php',
+            ],
+        ],
+        [
+            'entity_framework_core',
+            {
+                'AppDbContextModelSnapshot.cs': 'partial class Snapshot {}',
+                'App.csproj':
+                    '<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />',
+                'Program.cs': 'FOXALDB_DO_NOT_EXPOSE_EF_SOURCE',
+                'Controllers/UsersController.cs':
+                    'FOXALDB_DO_NOT_EXPOSE_EF_SOURCE',
+                '.env': 'FOXALDB_DO_NOT_EXPOSE_EF_SOURCE',
+            },
+            {
+                framework: 'entity_framework_core',
+                rootPath: '',
+                relevantFiles: [
+                    'AppDbContextModelSnapshot.cs',
+                    'App.csproj',
+                    'Program.cs',
+                ],
+            },
+            ['App.csproj', 'AppDbContextModelSnapshot.cs'],
+        ],
+        [
+            'django',
+            {
+                'app/migrations/0001_initial.py':
+                    'from django.db import migrations',
+                'pyproject.toml': 'Django>=5.0',
+                'settings.py': 'SECRET_KEY = "x"',
+                'app/views.py': 'FOXALDB_DO_NOT_EXPOSE_DJANGO_SOURCE',
+                'app/admin.py': 'FOXALDB_DO_NOT_EXPOSE_DJANGO_SOURCE',
+                'tests/test_views.py': 'FOXALDB_DO_NOT_EXPOSE_DJANGO_SOURCE',
+            },
+            {
+                framework: 'django',
+                rootPath: '',
+                relevantFiles: [
+                    'app/migrations/0001_initial.py',
+                    'pyproject.toml',
+                    'settings.py',
+                    'app/views.py',
+                ],
+            },
+            ['app/migrations/0001_initial.py', 'pyproject.toml', 'settings.py'],
+        ],
+    ] satisfies Array<
+        [
+            string,
+            Record<string, string>,
+            Omit<
+                ProjectDetectionCandidate,
+                'score' | 'confidence' | 'evidence' | 'parserLocation'
+            >,
+            string[],
+        ]
+    >)(
+        'excludes sensitive unrelated files from %s remote bundle',
+        async (_label, files, candidate, expectedPaths) => {
+            const bundle = await collectForFramework(files, candidate);
+            const paths = bundle.files
+                .map((entry) => entry.relativePath)
+                .sort();
+            const serialized = JSON.stringify(bundle);
+
+            expect(paths).toEqual([...expectedPaths].sort());
+            expect(serialized).not.toContain(
+                'FOXALDB_DO_NOT_EXPOSE_LARAVEL_SOURCE'
+            );
+            expect(serialized).not.toContain('FOXALDB_DO_NOT_EXPOSE_EF_SOURCE');
+            expect(serialized).not.toContain(
+                'FOXALDB_DO_NOT_EXPOSE_DJANGO_SOURCE'
+            );
+        }
+    );
+
     it('rejects duplicate relative paths deterministically', async () => {
         const bundle = await collectForFramework(
             {

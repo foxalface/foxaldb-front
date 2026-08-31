@@ -42,8 +42,3 @@ export const canExecuteProjectImport = (
 
     return true;
 };
-
-/**
- * @deprecated Use isProjectImportParserAvailable() or canExecuteProjectImport() instead.
- */
-export const PROJECT_IMPORT_PARSER_ENABLED = false;

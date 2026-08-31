@@ -15,7 +15,32 @@ const ALL_FRAMEWORKS: ProjectFramework[] = [
     'django',
 ];
 
+/** Hardcoded M10 capability matrix — not derived from implementation under test. */
+const EXPECTED_CAPABILITY_MATRIX: Record<
+    ProjectFramework,
+    { location: 'local' | 'remote'; executionAvailable: boolean }
+> = {
+    laravel: { location: 'remote', executionAvailable: true },
+    prisma: { location: 'local', executionAvailable: true },
+    entity_framework_core: { location: 'remote', executionAvailable: true },
+    rails: { location: 'local', executionAvailable: true },
+    django: { location: 'remote', executionAvailable: true },
+    drizzle: { location: 'local', executionAvailable: true },
+};
+
 describe('project import capabilities', () => {
+    it('matches the hardcoded six-framework capability matrix', () => {
+        ALL_FRAMEWORKS.forEach((framework) => {
+            const expected = EXPECTED_CAPABILITY_MATRIX[framework];
+            const capability = getProjectParserCapability(framework);
+
+            expect(capability).toEqual({
+                framework,
+                location: expected.location,
+                executionAvailable: expected.executionAvailable,
+            });
+        });
+    });
     it.each([
         ['laravel', true, 'remote'],
         ['prisma', true, 'local'],

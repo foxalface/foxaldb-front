@@ -425,18 +425,19 @@ const readSingleStringArg = (
 };
 
 const splitBlockStatements = (body: string): string[] => {
+    const normalizedBody = body.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
     const statements: string[] = [];
     let current = '';
     let depth = 0;
     let inString: string | null = null;
 
-    for (let index = 0; index < body.length; index += 1) {
-        const char = body[index];
+    for (let index = 0; index < normalizedBody.length; index += 1) {
+        const char = normalizedBody[index];
 
         if (inString) {
             current += char;
             if (char === '\\') {
-                current += body[index + 1] ?? '';
+                current += normalizedBody[index + 1] ?? '';
                 index += 1;
                 continue;
             }
@@ -452,18 +453,18 @@ const splitBlockStatements = (body: string): string[] => {
             continue;
         }
 
-        if (char === '/' && body[index + 1] === '/') {
-            const lineEnd = body.indexOf('\n', index);
-            const commentEnd = lineEnd === -1 ? body.length : lineEnd;
-            current += body.slice(index, commentEnd);
+        if (char === '/' && normalizedBody[index + 1] === '/') {
+            const lineEnd = normalizedBody.indexOf('\n', index);
+            const commentEnd = lineEnd === -1 ? normalizedBody.length : lineEnd;
+            current += normalizedBody.slice(index, commentEnd);
             index = commentEnd - 1;
             continue;
         }
 
-        if (char === '/' && body[index + 1] === '*') {
-            const end = body.indexOf('*/', index + 2);
-            const commentEnd = end === -1 ? body.length : end + 2;
-            current += body.slice(index, commentEnd);
+        if (char === '/' && normalizedBody[index + 1] === '*') {
+            const end = normalizedBody.indexOf('*/', index + 2);
+            const commentEnd = end === -1 ? normalizedBody.length : end + 2;
+            current += normalizedBody.slice(index, commentEnd);
             index = commentEnd - 1;
             continue;
         }

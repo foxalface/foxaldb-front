@@ -78,9 +78,12 @@ interface PendingForeignKey {
 
 // Helper to extract statements from PostgreSQL dump
 function extractStatements(sqlContent: string): string[] {
+    const normalizedContent = sqlContent
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n');
     const statements: string[] = [];
     let currentStatement = '';
-    const lines = sqlContent.split('\n');
+    const lines = normalizedContent.split('\n');
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
