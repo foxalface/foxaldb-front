@@ -57,31 +57,15 @@ export const ProjectDetectionSummary: React.FC<
                 </div>
             </div>
 
-            {isRemoteParserFramework(candidate.framework) ? (
-                <div className="flex flex-col gap-1 border-t border-border pt-2 text-xs text-muted-foreground">
-                    <p>
+            {isRemoteParserFramework(candidate.framework) &&
+            !isAuthenticated ? (
+                <div className="border-t border-border pt-2 text-xs text-muted-foreground">
+                    <p className="text-foreground">
                         {t(
-                            'new_diagram_dialog.import_schema.project.remote_processing_notice'
+                            'new_diagram_dialog.import_schema.project.sign_in_to_import_framework',
+                            { framework: frameworkLabel }
                         )}
                     </p>
-                    <p>
-                        {t(
-                            'new_diagram_dialog.import_schema.project.remote_processing_scope'
-                        )}
-                    </p>
-                    <p>
-                        {t(
-                            'new_diagram_dialog.import_schema.project.remote_processing_security'
-                        )}
-                    </p>
-                    {!isAuthenticated ? (
-                        <p className="text-foreground">
-                            {t(
-                                'new_diagram_dialog.import_schema.project.sign_in_to_import_framework',
-                                { framework: frameworkLabel }
-                            )}
-                        </p>
-                    ) : null}
                 </div>
             ) : null}
         </div>

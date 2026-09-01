@@ -721,7 +721,8 @@ export const gu: LanguageTranslation = {
                 description:
                     'તમારા {{database}} ડાયાગ્રામ માટે સ્રોત પસંદ કરો.',
                 from_file: 'ફાઇલ અથવા પેસ્ટ કરેલ ટેક્સ્ટ',
-                from_file_description: 'SQL, DBML અથવા ડાયાગ્રામ JSON.',
+                from_file_description:
+                    'SQL, DBML, JSON, પ્રોજેક્ટ આર્કાઇવ (.zip).',
                 from_database: 'હાલની ડેટાબેઝ',
                 from_database_description:
                     'તમારી ડેટાબેઝમાં ક્વેરી ચલાવો અને પરિણામ પેસ્ટ કરો.',
@@ -764,6 +765,43 @@ export const gu: LanguageTranslation = {
                 choose_file_or_project: 'ફાઇલ અથવા પ્રોજેક્ટ પસંદ કરો',
                 supported_formats_hint:
                     'સમર્થિત: SQL, DBML, JSON, પ્રોજેક્ટ આર્કાઇવ (.zip)',
+                privacy_info: {
+                    link_label: 'વધુ માહિતી…',
+                    title: 'ગોપનીયતા અને સમર્થિત ફોર્મેટ',
+                    intro: 'ફાઇલ પસંદ કરતા પહેલાં, આયાત દરમિયાન FoxalDB તમારા ડેટાને કેવી રીતે હેન્ડલ કરે છે તે જાણો.',
+                    highlights: {
+                        no_execution:
+                            'આયાત માત્ર સ્થિર વિશ્લેષણનો ઉપયોગ કરે છે — તમારો કોડ ક્યારેય ચલાવવામાં આવતો નથી.',
+                        no_full_upload:
+                            'સંપૂર્ણ પ્રોજેક્ટ આર્કાઇવ ક્યારેય સર્વર પર અપલોડ થતા નથી.',
+                        filtered_files:
+                            'માત્ર સ્કીમા-સંબંધિત ફાઇલો રાખવામાં આવે છે; .env, vendor/, node_modules/ અને tests/ બાકાત રાખવામાં આવે છે.',
+                    },
+                    simple_formats_title: 'SQL, DBML અને JSON',
+                    simple_formats_description:
+                        'સંપૂર્ણપણે તમારા બ્રાઉઝરમાં પ્રોસેસ થાય છે. મહત્તમ ફાઇલ સાઇઝ: {{sizeMb}} MB.',
+                    project_archives_title: 'પ્રોજેક્ટ આર્કાઇવ (.zip)',
+                    project_archives_description:
+                        'આર્કાઇવ સ્થાનિક રીતે ખોલવામાં આવે છે અને માત્ર સ્કીમા-સંબંધિત ફાઇલો કાઢવામાં આવે છે. મહત્તમ આર્કાઇવ સાઇઝ: {{sizeMb}} MB.',
+                    excluded_paths:
+                        'ક્યારેય સામેલ નથી: .env, vendor/, node_modules/, tests/ અને અન્ય ગેર-સ્કીમા સોર્સ ફાઇલો.',
+                    table: {
+                        framework: 'ફ્રેમવર્ક',
+                        files: 'વિશ્લેષિત ફાઇલો',
+                        processing: 'પ્રોસેસિંગ',
+                        processing_local: 'માત્ર બ્રાઉઝર',
+                        processing_remote: 'સર્વર (સાઇન-ઇન જરૂરી)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'પાછા',
+                },
                 change_file_aria: 'ફાઇલ બદલો, હાલમાં: {{name}}',
                 selected_file: 'પસંદ કરેલી ફાઇલ: {{name}}',
                 back: 'પાછા',

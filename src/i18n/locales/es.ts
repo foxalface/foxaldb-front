@@ -739,7 +739,8 @@ export const es: LanguageTranslation = {
                 description:
                     'Elija una fuente para su diagrama de {{database}}.',
                 from_file: 'Archivo o texto pegado',
-                from_file_description: 'SQL, DBML o JSON de diagrama.',
+                from_file_description:
+                    'SQL, DBML, JSON o archivo de proyecto (.zip).',
                 from_database: 'Base de datos existente',
                 from_database_description:
                     'Ejecute una consulta en su base de datos y pegue el resultado.',
@@ -783,6 +784,44 @@ export const es: LanguageTranslation = {
                 choose_file_or_project: 'Elegir un archivo o proyecto',
                 supported_formats_hint:
                     'Compatible: SQL, DBML, JSON, archivo de proyecto (.zip)',
+                privacy_info: {
+                    link_label: 'Más información…',
+                    title: 'Privacidad y formatos compatibles',
+                    intro: 'Antes de elegir un archivo, así es como FoxalDB trata sus datos durante la importación.',
+                    highlights: {
+                        no_execution:
+                            'Las importaciones usan solo análisis estático: su código nunca se ejecuta.',
+                        no_full_upload:
+                            'Los archivos completos del proyecto nunca se suben al servidor.',
+                        filtered_files:
+                            'Solo se conservan los archivos relevantes para el esquema; se excluyen .env, vendor/, node_modules/ y tests/.',
+                    },
+                    simple_formats_title: 'SQL, DBML y JSON',
+                    simple_formats_description:
+                        'Procesados íntegramente en su navegador. Tamaño máximo del archivo: {{sizeMb}} MB.',
+                    project_archives_title: 'Archivos de proyecto (.zip)',
+                    project_archives_description:
+                        'El archivo se abre localmente y solo se extraen los archivos relevantes para el esquema. Tamaño máximo del archivo: {{sizeMb}} MB.',
+                    excluded_paths:
+                        'Nunca incluidos: .env, vendor/, node_modules/, tests/ y otros archivos fuente no relacionados con el esquema.',
+                    table: {
+                        framework: 'Framework',
+                        files: 'Archivos analizados',
+                        processing: 'Procesamiento',
+                        processing_local: 'Solo en el navegador',
+                        processing_remote:
+                            'Servidor (inicio de sesión requerido)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'Volver',
+                },
                 change_file_aria: 'Cambiar archivo, actualmente {{name}}',
                 selected_file: 'Archivo seleccionado: {{name}}',
                 back: 'Atrás',

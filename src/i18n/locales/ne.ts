@@ -732,7 +732,8 @@ export const ne: LanguageTranslation = {
                 description:
                     'तपाईंको {{database}} डायाग्रामको लागि स्रोत छान्नुहोस्।',
                 from_file: 'फाइल वा टाँसिएको पाठ',
-                from_file_description: 'SQL, DBML वा डायाग्राम JSON।',
+                from_file_description:
+                    'SQL, DBML, JSON, परियोजना अभिलेख (.zip).',
                 from_database: 'अवस्थित डाटाबेस',
                 from_database_description:
                     'आफ्नो डाटाबेसमा क्वेरी चलाउनुहोस् र नतिजा टाँस्नुहोस्।',
@@ -775,6 +776,43 @@ export const ne: LanguageTranslation = {
                 choose_file_or_project: 'फाइल वा परियोजना छान्नुहोस्',
                 supported_formats_hint:
                     'समर्थित: SQL, DBML, JSON, परियोजना अभिलेख (.zip)',
+                privacy_info: {
+                    link_label: 'थप जानकारी…',
+                    title: 'गोपनीयता र समर्थित ढाँचाहरू',
+                    intro: 'फाइल छान्नु अघि, आयात गर्दा FoxalDB ले तपाईंको डाटा कसरी ह्यान्डल गर्छ भन्ने जान्नुहोस्।',
+                    highlights: {
+                        no_execution:
+                            'आयातले मात्र स्थिर विश्लेषण प्रयोग गर्छ — तपाईंको कोड कहिल्यै चलाइँदैन।',
+                        no_full_upload:
+                            'पूरा परियोजना अभिलेख कहिल्यै सर्भरमा अपलोड हुँदैन।',
+                        filtered_files:
+                            'केवल स्किमा-सम्बन्धित फाइलहरू राखिन्छ; .env, vendor/, node_modules/ र tests/ बाहिर राखिन्छ।',
+                    },
+                    simple_formats_title: 'SQL, DBML र JSON',
+                    simple_formats_description:
+                        'पूर्ण रूपमा तपाईंको ब्राउजरमा प्रशोधन। अधिकतम फाइल साइज: {{sizeMb}} MB।',
+                    project_archives_title: 'परियोजना अभिलेख (.zip)',
+                    project_archives_description:
+                        'अभिलेख स्थानीय रूपमा खोलिन्छ र केवल स्किमा-सम्बन्धित फाइलहरू निकालिन्छ। अधिकतम अभिलेख साइज: {{sizeMb}} MB।',
+                    excluded_paths:
+                        'कहिल्यै समावेश हुँदैन: .env, vendor/, node_modules/, tests/ र अन्य गैर-स्किमा स्रोत फाइलहरू।',
+                    table: {
+                        framework: 'फ्रेमवर्क',
+                        files: 'विश्लेषण गरिएका फाइलहरू',
+                        processing: 'प्रशोधन',
+                        processing_local: 'ब्राउजर मात्र',
+                        processing_remote: 'सर्भर (साइन-इन आवश्यक)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'पछाडि',
+                },
                 change_file_aria: 'फाइल परिवर्तन गर्नुहोस्, हाल: {{name}}',
                 selected_file: 'छानिएको फाइल: {{name}}',
                 back: 'पछाडि',

@@ -717,7 +717,7 @@ export const tr: LanguageTranslation = {
                 title: 'Nasıl içe aktarmak istersiniz?',
                 description: '{{database}} diyagramınız için bir kaynak seçin.',
                 from_file: 'Dosya veya yapıştırılan metin',
-                from_file_description: 'SQL, DBML veya diyagram JSON.',
+                from_file_description: 'SQL, DBML, JSON, proje arşivi (.zip).',
                 from_database: 'Mevcut veritabanı',
                 from_database_description:
                     'Veritabanınızda bir sorgu çalıştırın ve sonucu yapıştırın.',
@@ -761,6 +761,43 @@ export const tr: LanguageTranslation = {
                 choose_file_or_project: 'Dosya veya proje seçin',
                 supported_formats_hint:
                     'Desteklenen: SQL, DBML, JSON, proje arşivi (.zip)',
+                privacy_info: {
+                    link_label: 'Daha fazla bilgi…',
+                    title: 'Gizlilik ve desteklenen formatlar',
+                    intro: 'Bir dosya seçmeden önce FoxalDB’nin içe aktarma sırasında verilerinizi nasıl işlediğini öğrenin.',
+                    highlights: {
+                        no_execution:
+                            'İçe aktarmalar yalnızca statik analiz kullanır — kodunuz asla çalıştırılmaz.',
+                        no_full_upload:
+                            'Tam proje arşivleri asla sunucuya yüklenmez.',
+                        filtered_files:
+                            'Yalnızca şemayla ilgili dosyalar tutulur; .env, vendor/, node_modules/ ve tests/ hariç tutulur.',
+                    },
+                    simple_formats_title: 'SQL, DBML ve JSON',
+                    simple_formats_description:
+                        'Tamamen tarayıcınızda işlenir. Maksimum dosya boyutu: {{sizeMb}} MB.',
+                    project_archives_title: 'Proje arşivleri (.zip)',
+                    project_archives_description:
+                        'Arşiv yerel olarak açılır ve yalnızca şemayla ilgili dosyalar çıkarılır. Maksimum arşiv boyutu: {{sizeMb}} MB.',
+                    excluded_paths:
+                        'Asla dahil edilmez: .env, vendor/, node_modules/, tests/ ve şemayla ilgisi olmayan diğer kaynak dosyaları.',
+                    table: {
+                        framework: 'Framework',
+                        files: 'Analiz edilen dosyalar',
+                        processing: 'İşleme',
+                        processing_local: 'Yalnızca tarayıcı',
+                        processing_remote: 'Sunucu (oturum açma gerekli)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'Geri',
+                },
                 change_file_aria: 'Dosyayı değiştir, şu an: {{name}}',
                 selected_file: 'Seçilen dosya: {{name}}',
                 back: 'Geri',

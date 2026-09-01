@@ -46,6 +46,10 @@ import { DialectMismatchPanel } from './dialect-mismatch-panel';
 import { DialectResolutionPanel } from './dialect-resolution-panel';
 import { ProjectAmbiguityPanel } from './project-ambiguity-panel';
 import { ProjectDetectionSummary } from './project-detection-summary';
+import {
+    ImportPrivacyInfoDialog,
+    ImportPrivacyInfoLink,
+} from './import-privacy-info-dialog';
 
 export interface ImportSchemaContinueParams {
     importMethod: ImportMethod;
@@ -122,6 +126,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         useState<ProjectDetectionCandidate | null>(null);
     const [isAnalyzingProject, setIsAnalyzingProject] = useState(false);
     const [isProjectImporting, setIsProjectImporting] = useState(false);
+    const [isPrivacyInfoOpen, setIsPrivacyInfoOpen] = useState(false);
     const [projectImportErrorKey, setProjectImportErrorKey] = useState<
         string | null
     >(null);
@@ -561,11 +566,9 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                                     )}
                             </span>
                         </Button>
-                        <p className="text-center text-xs text-muted-foreground">
-                            {t(
-                                'new_diagram_dialog.import_schema.supported_formats_hint'
-                            )}
-                        </p>
+                        <ImportPrivacyInfoLink
+                            onClick={() => setIsPrivacyInfoOpen(true)}
+                        />
                         {fileErrorKey ? (
                             <p
                                 role="alert"
@@ -708,6 +711,11 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     {resolvedContinueLabel}
                 </Button>
             </DialogFooter>
+
+            <ImportPrivacyInfoDialog
+                open={isPrivacyInfoOpen}
+                onOpenChange={setIsPrivacyInfoOpen}
+            />
         </>
     );
 };

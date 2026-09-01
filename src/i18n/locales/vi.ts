@@ -732,7 +732,8 @@ export const vi: LanguageTranslation = {
                 title: 'Bạn muốn nhập như thế nào?',
                 description: 'Chọn nguồn cho sơ đồ {{database}} của bạn.',
                 from_file: 'Tệp hoặc văn bản dán',
-                from_file_description: 'SQL, DBML hoặc JSON sơ đồ.',
+                from_file_description:
+                    'SQL, DBML, JSON, kho lưu trữ dự án (.zip).',
                 from_database: 'Cơ sở dữ liệu hiện có',
                 from_database_description:
                     'Chạy truy vấn trong cơ sở dữ liệu và dán kết quả.',
@@ -775,6 +776,43 @@ export const vi: LanguageTranslation = {
                 choose_file_or_project: 'Chọn tệp hoặc dự án',
                 supported_formats_hint:
                     'Hỗ trợ: SQL, DBML, JSON, kho lưu trữ dự án (.zip)',
+                privacy_info: {
+                    link_label: 'Thêm thông tin…',
+                    title: 'Quyền riêng tư và định dạng được hỗ trợ',
+                    intro: 'Trước khi chọn tệp, đây là cách FoxalDB xử lý dữ liệu của bạn trong quá trình nhập.',
+                    highlights: {
+                        no_execution:
+                            'Nhập chỉ sử dụng phân tích tĩnh — mã của bạn không bao giờ được thực thi.',
+                        no_full_upload:
+                            'Toàn bộ kho lưu trữ dự án không bao giờ được tải lên máy chủ.',
+                        filtered_files:
+                            'Chỉ giữ lại các tệp liên quan đến lược đồ; .env, vendor/, node_modules/ và tests/ bị loại trừ.',
+                    },
+                    simple_formats_title: 'SQL, DBML và JSON',
+                    simple_formats_description:
+                        'Được xử lý hoàn toàn trong trình duyệt của bạn. Kích thước tệp tối đa: {{sizeMb}} MB.',
+                    project_archives_title: 'Kho lưu trữ dự án (.zip)',
+                    project_archives_description:
+                        'Kho lưu trữ được mở cục bộ và chỉ các tệp liên quan đến lược đồ được trích xuất. Kích thước kho lưu trữ tối đa: {{sizeMb}} MB.',
+                    excluded_paths:
+                        'Không bao giờ bao gồm: .env, vendor/, node_modules/, tests/ và các tệp nguồn không liên quan đến lược đồ khác.',
+                    table: {
+                        framework: 'Framework',
+                        files: 'Tệp được phân tích',
+                        processing: 'Xử lý',
+                        processing_local: 'Chỉ trình duyệt',
+                        processing_remote: 'Máy chủ (cần đăng nhập)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'Quay lại',
+                },
                 change_file_aria: 'Đổi tệp, hiện tại: {{name}}',
                 selected_file: 'Tệp đã chọn: {{name}}',
                 back: 'Quay lại',

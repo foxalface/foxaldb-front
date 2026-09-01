@@ -724,7 +724,8 @@ export const hr: LanguageTranslation = {
                 title: 'Kako želite uvesti?',
                 description: 'Odaberite izvor za svoj {{database}} dijagram.',
                 from_file: 'Datoteka ili zalijepljeni tekst',
-                from_file_description: 'SQL, DBML ili JSON dijagrama.',
+                from_file_description:
+                    'SQL, DBML, JSON, arhiva projekta (.zip).',
                 from_database: 'Postojeća baza podataka',
                 from_database_description:
                     'Pokrenite upit u bazi i zalijepite rezultat.',
@@ -767,6 +768,43 @@ export const hr: LanguageTranslation = {
                 choose_file_or_project: 'Odaberite datoteku ili projekt',
                 supported_formats_hint:
                     'Podržano: SQL, DBML, JSON, arhiva projekta (.zip)',
+                privacy_info: {
+                    link_label: 'Više informacija…',
+                    title: 'Privatnost i podržani formati',
+                    intro: 'Prije odabira datoteke, saznajte kako FoxalDB obrađuje vaše podatke tijekom uvoza.',
+                    highlights: {
+                        no_execution:
+                            'Uvoz koristi samo statičku analizu — vaš se kod nikada ne izvršava.',
+                        no_full_upload:
+                            'Potpune arhive projekta nikada se ne učitavaju na poslužitelj.',
+                        filtered_files:
+                            'Zadržavaju se samo datoteke relevantne za shemu; .env, vendor/, node_modules/ i tests/ su isključeni.',
+                    },
+                    simple_formats_title: 'SQL, DBML i JSON',
+                    simple_formats_description:
+                        'Obrađuje se u potpunosti u vašem pregledniku. Maksimalna veličina datoteke: {{sizeMb}} MB.',
+                    project_archives_title: 'Arhive projekta (.zip)',
+                    project_archives_description:
+                        'Arhiva se otvara lokalno i izvlače se samo datoteke relevantne za shemu. Maksimalna veličina arhive: {{sizeMb}} MB.',
+                    excluded_paths:
+                        'Nikada nije uključeno: .env, vendor/, node_modules/, tests/ i druge izvorne datoteke koje nisu povezane sa shemom.',
+                    table: {
+                        framework: 'Framework',
+                        files: 'Analizirane datoteke',
+                        processing: 'Obrada',
+                        processing_local: 'Samo preglednik',
+                        processing_remote: 'Poslužitelj (potrebna prijava)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'Natrag',
+                },
                 change_file_aria: 'Promijeni datoteku, trenutno: {{name}}',
                 selected_file: 'Odabrana datoteka: {{name}}',
                 back: 'Natrag',

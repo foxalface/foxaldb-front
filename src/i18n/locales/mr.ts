@@ -728,7 +728,8 @@ export const mr: LanguageTranslation = {
                 title: 'तुम्ही कसे आयात करू इच्छिता?',
                 description: 'तुमच्या {{database}} आकृतीसाठी स्रोत निवडा.',
                 from_file: 'फाइल किंवा पेस्ट केलेला मजकूर',
-                from_file_description: 'SQL, DBML किंवा आकृती JSON.',
+                from_file_description:
+                    'SQL, DBML, JSON, प्रकल्प आर्काइव (.zip).',
                 from_database: 'विद्यमान डेटाबेस',
                 from_database_description:
                     'तुमच्या डेटाबेसमध्ये क्वेरी चालवा आणि निकाल पेस्ट करा.',
@@ -771,6 +772,43 @@ export const mr: LanguageTranslation = {
                 choose_file_or_project: 'फाइल किंवा प्रकल्प निवडा',
                 supported_formats_hint:
                     'समर्थित: SQL, DBML, JSON, प्रकल्प आर्काइव (.zip)',
+                privacy_info: {
+                    link_label: 'अधिक माहिती…',
+                    title: 'गोपनीयता आणि समर्थित स्वरूपे',
+                    intro: 'फाइल निवडण्यापूर्वी, आयात दरम्यान FoxalDB तुमचा डेटा कसा हाताळतो ते जाणून घ्या.',
+                    highlights: {
+                        no_execution:
+                            'आयात फक्त स्थिर विश्लेषण वापरतो — तुमचा कोड कधीही चालवला जात नाही.',
+                        no_full_upload:
+                            'संपूर्ण प्रकल्प आर्काइव्ह कधीही सर्व्हरवर अपलोड केले जात नाहीत.',
+                        filtered_files:
+                            'फक्त स्कीमा-संबंधित फाइल्स ठेवल्या जातात; .env, vendor/, node_modules/ आणि tests/ वगळले जातात.',
+                    },
+                    simple_formats_title: 'SQL, DBML आणि JSON',
+                    simple_formats_description:
+                        'पूर्णपणे तुमच्या ब्राउझरमध्ये प्रक्रिया. कमाल फाइल आकार: {{sizeMb}} MB.',
+                    project_archives_title: 'प्रकल्प आर्काइव्ह (.zip)',
+                    project_archives_description:
+                        'आर्काइव्ह स्थानिकरित्या उघडला जातो आणि फक्त स्कीमा-संबंधित फाइल्स काढल्या जातात. कमाल आर्काइव्ह आकार: {{sizeMb}} MB.',
+                    excluded_paths:
+                        'कधीही समाविष्ट नाही: .env, vendor/, node_modules/, tests/ आणि इतर गैर-स्कीमा स्रोत फाइल्स.',
+                    table: {
+                        framework: 'फ्रेमवर्क',
+                        files: 'विश्लेषण केलेल्या फाइल्स',
+                        processing: 'प्रक्रिया',
+                        processing_local: 'फक्त ब्राउझर',
+                        processing_remote: 'सर्व्हर (साइन-इन आवश्यक)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'मागे',
+                },
                 change_file_aria: 'फाइल बदला, सध्या: {{name}}',
                 selected_file: 'निवडलेली फाइल: {{name}}',
                 back: 'मागे',

@@ -713,7 +713,7 @@ export const ar: LanguageTranslation = {
                 title: 'كيف تريد الاستيراد؟',
                 description: 'اختر مصدرًا لمخطط {{database}}.',
                 from_file: 'ملف أو نص ملصق',
-                from_file_description: 'SQL أو DBML أو JSON للمخطط.',
+                from_file_description: 'SQL وDBML وJSON وأرشيف مشروع (.zip).',
                 from_database: 'قاعدة بيانات موجودة',
                 from_database_description:
                     'نفّذ استعلامًا في قاعدتك والصق النتيجة.',
@@ -756,6 +756,43 @@ export const ar: LanguageTranslation = {
                 choose_file_or_project: 'اختر ملفًا أو مشروعًا',
                 supported_formats_hint:
                     'المدعوم: SQL وDBML وJSON وأرشيف مشروع (.zip)',
+                privacy_info: {
+                    link_label: 'مزيد من المعلومات…',
+                    title: 'الخصوصية والصيغ المدعومة',
+                    intro: 'قبل اختيار ملف، إليك كيفية تعامل FoxalDB مع بياناتك أثناء الاستيراد.',
+                    highlights: {
+                        no_execution:
+                            'يستخدم الاستيراد التحليل الثابت فقط — لا يتم تنفيذ الكود أبدًا.',
+                        no_full_upload:
+                            'لا يتم تحميل أرشيفات المشروع الكاملة إلى الخادم أبدًا.',
+                        filtered_files:
+                            'يتم الاحتفاظ بالملفات ذات الصلة بالمخطط فقط؛ يتم استبعاد .env وvendor/ وnode_modules/ وtests/.',
+                    },
+                    simple_formats_title: 'SQL وDBML وJSON',
+                    simple_formats_description:
+                        'تتم المعالجة بالكامل في متصفحك. الحد الأقصى لحجم الملف: {{sizeMb}} ميغابايت.',
+                    project_archives_title: 'أرشيفات المشروع (.zip)',
+                    project_archives_description:
+                        'يُفتح الأرشيف محليًا ويتم استخراج الملفات ذات الصلة بالمخطط فقط. الحد الأقصى لحجم الأرشيف: {{sizeMb}} ميغابايت.',
+                    excluded_paths:
+                        'لا يتم تضمينها أبدًا: .env وvendor/ وnode_modules/ وtests/ وملفات المصدر الأخرى غير المرتبطة بالمخطط.',
+                    table: {
+                        framework: 'الإطار',
+                        files: 'الملفات المحللة',
+                        processing: 'المعالجة',
+                        processing_local: 'المتصفح فقط',
+                        processing_remote: 'الخادم (يتطلب تسجيل الدخول)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'رجوع',
+                },
                 change_file_aria: 'تغيير الملف، الحالي: {{name}}',
                 selected_file: 'الملف المحدد: {{name}}',
                 back: 'رجوع',

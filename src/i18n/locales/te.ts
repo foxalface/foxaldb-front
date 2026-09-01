@@ -728,7 +728,8 @@ export const te: LanguageTranslation = {
                 description:
                     'మీ {{database}} డయాగ్రామ్ కోసం మూలాన్ని ఎంచుకోండి.',
                 from_file: 'ఫైల్ లేదా అతికించిన టెక్స్ట్',
-                from_file_description: 'SQL, DBML లేదా డయాగ్రామ్ JSON.',
+                from_file_description:
+                    'SQL, DBML, JSON, ప్రాజెక్ట్ ఆర్కైవ్ (.zip).',
                 from_database: 'ఇప్పటికే ఉన్న డేటాబేస్',
                 from_database_description:
                     'మీ డేటాబేస్‌లో క్వెరీ నడపండి మరియు ఫలితాన్ని అతికించండి.',
@@ -771,6 +772,43 @@ export const te: LanguageTranslation = {
                 choose_file_or_project: 'ఫైల్ లేదా ప్రాజెక్ట్ ఎంచుకోండి',
                 supported_formats_hint:
                     'మద్దతు: SQL, DBML, JSON, ప్రాజెక్ట్ ఆర్కైవ్ (.zip)',
+                privacy_info: {
+                    link_label: 'మరింత సమాచారం…',
+                    title: 'గోప్యత మరియు మద్దతు ఇచ్చే ఫార్మాట్‌లు',
+                    intro: 'ఫైల్ ఎంచుకోవడానికి ముందు, దిగుమతి సమయంలో FoxalDB మీ డేటాను ఎలా నిర్వహిస్తుందో తెలుసుకోండి.',
+                    highlights: {
+                        no_execution:
+                            'దిగుమతి స్థిర విశ్లేషణను మాత్రమే ఉపయోగిస్తుంది — మీ కోడ్ ఎప్పుడూ అమలు కాదు.',
+                        no_full_upload:
+                            'పూర్తి ప్రాజెక్ట్ ఆర్కైవ్‌లు ఎప్పుడూ సర్వర్‌కు అప్‌లోడ్ కావు.',
+                        filtered_files:
+                            'స్కీమాకు సంబంధించిన ఫైల్‌లు మాత్రమే ఉంచబడతాయి; .env, vendor/, node_modules/ మరియు tests/ మినహాయించబడతాయి.',
+                    },
+                    simple_formats_title: 'SQL, DBML మరియు JSON',
+                    simple_formats_description:
+                        'మీ బ్రౌజర్‌లో పూర్తిగా ప్రాసెస్ అవుతుంది. గరిష్ట ఫైల్ పరిమాణం: {{sizeMb}} MB.',
+                    project_archives_title: 'ప్రాజెక్ట్ ఆర్కైవ్‌లు (.zip)',
+                    project_archives_description:
+                        'ఆర్కైవ్ స్థానికంగా తెరవబడుతుంది మరియు స్కీమాకు సంబంధించిన ఫైల్‌లు మాత్రమే తీసివేయబడతాయి. గరిష్ట ఆర్కైవ్ పరిమాణం: {{sizeMb}} MB.',
+                    excluded_paths:
+                        'ఎప్పుడూ చేర్చబడవు: .env, vendor/, node_modules/, tests/ మరియు ఇతర నాన్-స్కీమా సోర్స్ ఫైల్‌లు.',
+                    table: {
+                        framework: 'ఫ్రేమ్‌వర్క్',
+                        files: 'విశ్లేషించిన ఫైల్‌లు',
+                        processing: 'ప్రాసెసింగ్',
+                        processing_local: 'బ్రౌజర్ మాత్రమే',
+                        processing_remote: 'సర్వర్ (సైన్-ఇన్ అవసరం)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'వెనక్కి',
+                },
                 change_file_aria: 'ఫైల్ మార్చు, ప్రస్తుతం: {{name}}',
                 selected_file: 'ఎంచుకున్న ఫైల్: {{name}}',
                 back: 'వెనక్కి',

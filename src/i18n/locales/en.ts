@@ -720,7 +720,8 @@ export const en = {
                 title: 'How do you want to import?',
                 description: 'Choose a source for your {{database}} diagram.',
                 from_file: 'File or pasted text',
-                from_file_description: 'SQL, DBML, or diagram JSON.',
+                from_file_description:
+                    'SQL, DBML, JSON, or project archive (.zip).',
                 from_database: 'Existing database',
                 from_database_description:
                     'Run a query in your database and paste the result.',
@@ -762,6 +763,55 @@ export const en = {
                 choose_file_or_project: 'Choose a file or project',
                 supported_formats_hint:
                     'Supported: SQL, DBML, JSON, project archive (.zip)',
+                privacy_info: {
+                    link_label: 'More information…',
+                    title: 'Privacy and supported formats',
+                    intro: 'Before you choose a file, here is how FoxalDB handles your data during import.',
+                    highlights: {
+                        no_execution:
+                            'Imports use static analysis only — your code is never executed.',
+                        no_full_upload:
+                            'Full project archives are never uploaded to the server.',
+                        filtered_files:
+                            'Only schema-relevant files are kept; .env, vendor/, node_modules/, and tests/ are excluded.',
+                    },
+                    simple_formats_title: 'SQL, DBML, and JSON',
+                    simple_formats_description:
+                        'Processed entirely in your browser. Maximum file size: {{sizeMb}} MB.',
+                    project_archives_title: 'Project archives (.zip)',
+                    project_archives_description:
+                        'The archive is opened locally and only schema-relevant files are extracted. Maximum archive size: {{sizeMb}} MB.',
+                    excluded_paths:
+                        'Never included: .env, vendor/, node_modules/, tests/, and other unrelated source files.',
+                    table: {
+                        framework: 'Framework',
+                        files: 'Files analyzed',
+                        processing: 'Processing',
+                        processing_local: 'Browser only',
+                        processing_remote: 'Server (sign-in required)',
+                    },
+                    frameworks: {
+                        laravel: {
+                            files: 'database/migrations/*.php',
+                        },
+                        prisma: {
+                            files: 'prisma/schema.prisma',
+                        },
+                        rails: {
+                            files: 'db/schema.rb',
+                        },
+                        drizzle: {
+                            files: 'drizzle/**/*.sql',
+                        },
+                        entity_framework_core: {
+                            files: '*ModelSnapshot.cs',
+                        },
+                        django: {
+                            files: '*/migrations/*.py',
+                        },
+                    },
+                    back: 'Back',
+                },
                 change_file_aria: 'Change file, currently {{name}}',
                 selected_file: 'Selected file: {{name}}',
                 back: 'Back',

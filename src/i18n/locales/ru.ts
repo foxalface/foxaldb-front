@@ -727,7 +727,7 @@ export const ru: LanguageTranslation = {
                 title: 'Как вы хотите импортировать?',
                 description: 'Выберите источник для диаграммы {{database}}.',
                 from_file: 'Файл или вставленный текст',
-                from_file_description: 'SQL, DBML или JSON диаграммы.',
+                from_file_description: 'SQL, DBML, JSON, архив проекта (.zip).',
                 from_database: 'Существующая база данных',
                 from_database_description:
                     'Выполните запрос в базе и вставьте результат.',
@@ -771,6 +771,43 @@ export const ru: LanguageTranslation = {
                 choose_file_or_project: 'Выберите файл или проект',
                 supported_formats_hint:
                     'Поддерживается: SQL, DBML, JSON, архив проекта (.zip)',
+                privacy_info: {
+                    link_label: 'Подробнее…',
+                    title: 'Конфиденциальность и поддерживаемые форматы',
+                    intro: 'Перед выбором файла узнайте, как FoxalDB обрабатывает ваши данные при импорте.',
+                    highlights: {
+                        no_execution:
+                            'Импорт использует только статический анализ — ваш код никогда не выполняется.',
+                        no_full_upload:
+                            'Полные архивы проекта никогда не загружаются на сервер.',
+                        filtered_files:
+                            'Сохраняются только файлы, относящиеся к схеме; .env, vendor/, node_modules/ и tests/ исключаются.',
+                    },
+                    simple_formats_title: 'SQL, DBML и JSON',
+                    simple_formats_description:
+                        'Обрабатываются полностью в вашем браузере. Максимальный размер файла: {{sizeMb}} МБ.',
+                    project_archives_title: 'Архивы проекта (.zip)',
+                    project_archives_description:
+                        'Архив открывается локально, извлекаются только файлы, относящиеся к схеме. Максимальный размер архива: {{sizeMb}} МБ.',
+                    excluded_paths:
+                        'Никогда не включаются: .env, vendor/, node_modules/, tests/ и другие исходные файлы, не связанные со схемой.',
+                    table: {
+                        framework: 'Фреймворк',
+                        files: 'Анализируемые файлы',
+                        processing: 'Обработка',
+                        processing_local: 'Только браузер',
+                        processing_remote: 'Сервер (требуется вход)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'Назад',
+                },
                 change_file_aria: 'Изменить файл, сейчас: {{name}}',
                 selected_file: 'Выбранный файл: {{name}}',
                 back: 'Назад',

@@ -689,7 +689,7 @@ export const zh_CN: LanguageTranslation = {
                 title: '您想如何导入？',
                 description: '为您的 {{database}} 图表选择来源。',
                 from_file: '文件或粘贴文本',
-                from_file_description: 'SQL、DBML 或图表 JSON。',
+                from_file_description: 'SQL、DBML、JSON、项目压缩包（.zip）。',
                 from_database: '现有数据库',
                 from_database_description: '在数据库中运行查询并粘贴结果。',
                 back: '返回',
@@ -727,6 +727,42 @@ export const zh_CN: LanguageTranslation = {
                 choose_file_or_project: '选择文件或项目',
                 supported_formats_hint:
                     '支持：SQL、DBML、JSON、项目压缩包（.zip）',
+                privacy_info: {
+                    link_label: '更多信息…',
+                    title: '隐私与支持格式',
+                    intro: '在选择文件之前，请先了解 FoxalDB 在导入时如何处理您的数据。',
+                    highlights: {
+                        no_execution:
+                            '导入仅使用静态分析，绝不会执行您的代码。',
+                        no_full_upload: '完整的项目压缩包绝不会上传到服务器。',
+                        filtered_files:
+                            '仅保留与架构相关的文件；.env、vendor/、node_modules/ 和 tests/ 会被排除。',
+                    },
+                    simple_formats_title: 'SQL、DBML 和 JSON',
+                    simple_formats_description:
+                        '完全在浏览器中处理。最大文件大小：{{sizeMb}} MB。',
+                    project_archives_title: '项目压缩包（.zip）',
+                    project_archives_description:
+                        '压缩包在本地打开，仅提取与架构相关的文件。最大压缩包大小：{{sizeMb}} MB。',
+                    excluded_paths:
+                        '永不包含：.env、vendor/、node_modules/、tests/ 及其他与架构无关的源文件。',
+                    table: {
+                        framework: '框架',
+                        files: '分析的文件',
+                        processing: '处理方式',
+                        processing_local: '仅浏览器',
+                        processing_remote: '服务器（需登录）',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: '返回',
+                },
                 change_file_aria: '更改文件，当前：{{name}}',
                 selected_file: '已选文件：{{name}}',
                 back: '返回',

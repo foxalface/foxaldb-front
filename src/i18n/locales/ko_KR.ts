@@ -724,7 +724,8 @@ export const ko_KR: LanguageTranslation = {
                 title: '어떻게 가져오시겠습니까?',
                 description: '{{database}} 다이어그램의 소스를 선택하세요.',
                 from_file: '파일 또는 붙여넣은 텍스트',
-                from_file_description: 'SQL, DBML 또는 다이어그램 JSON.',
+                from_file_description:
+                    'SQL, DBML, JSON, 프로젝트 아카이브(.zip).',
                 from_database: '기존 데이터베이스',
                 from_database_description:
                     '데이터베이스에서 쿼리를 실행하고 결과를 붙여넣으세요.',
@@ -767,6 +768,43 @@ export const ko_KR: LanguageTranslation = {
                 choose_file_or_project: '파일 또는 프로젝트 선택',
                 supported_formats_hint:
                     '지원: SQL, DBML, JSON, 프로젝트 아카이브(.zip)',
+                privacy_info: {
+                    link_label: '자세히 보기…',
+                    title: '개인정보 보호 및 지원 형식',
+                    intro: '파일을 선택하기 전에 가져오기 중 FoxalDB가 데이터를 처리하는 방식을 확인하세요.',
+                    highlights: {
+                        no_execution:
+                            '가져오기는 정적 분석만 사용합니다 — 코드는 절대 실행되지 않습니다.',
+                        no_full_upload:
+                            '전체 프로젝트 아카이브는 서버에 업로드되지 않습니다.',
+                        filtered_files:
+                            '스키마 관련 파일만 유지됩니다. .env, vendor/, node_modules/, tests/는 제외됩니다.',
+                    },
+                    simple_formats_title: 'SQL, DBML, JSON',
+                    simple_formats_description:
+                        '브라우저에서 완전히 처리됩니다. 최대 파일 크기: {{sizeMb}}MB.',
+                    project_archives_title: '프로젝트 아카이브(.zip)',
+                    project_archives_description:
+                        '아카이브는 로컬에서 열리며 스키마 관련 파일만 추출됩니다. 최대 아카이브 크기: {{sizeMb}}MB.',
+                    excluded_paths:
+                        '포함되지 않음: .env, vendor/, node_modules/, tests/ 및 스키마와 관련 없는 기타 소스 파일.',
+                    table: {
+                        framework: '프레임워크',
+                        files: '분석 파일',
+                        processing: '처리',
+                        processing_local: '브라우저만',
+                        processing_remote: '서버(로그인 필요)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: '뒤로',
+                },
                 change_file_aria: '파일 변경, 현재: {{name}}',
                 selected_file: '선택한 파일: {{name}}',
                 back: '뒤로',

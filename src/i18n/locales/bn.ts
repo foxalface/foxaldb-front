@@ -727,7 +727,8 @@ export const bn: LanguageTranslation = {
                 description:
                     'আপনার {{database}} ডায়াগ্রামের জন্য উৎস বেছে নিন।',
                 from_file: 'ফাইল বা পেস্ট করা টেক্সট',
-                from_file_description: 'SQL, DBML বা ডায়াগ্রাম JSON।',
+                from_file_description:
+                    'SQL, DBML, JSON, প্রকল্প আর্কাইভ (.zip).',
                 from_database: 'বিদ্যমান ডাটাবেস',
                 from_database_description:
                     'আপনার ডাটাবেসে কোয়েরি চালান এবং ফলাফল পেস্ট করুন।',
@@ -770,6 +771,43 @@ export const bn: LanguageTranslation = {
                 choose_file_or_project: 'একটি ফাইল বা প্রকল্প বেছে নিন',
                 supported_formats_hint:
                     'সমর্থিত: SQL, DBML, JSON, প্রকল্প আর্কাইভ (.zip)',
+                privacy_info: {
+                    link_label: 'আরও তথ্য…',
+                    title: 'গোপনীয়তা এবং সমর্থিত ফরম্যাট',
+                    intro: 'ফাইল বেছে নেওয়ার আগে, আমদানির সময় FoxalDB কীভাবে আপনার ডেটা পরিচালনা করে তা জানুন।',
+                    highlights: {
+                        no_execution:
+                            'আমদানি শুধুমাত্র স্ট্যাটিক বিশ্লেষণ ব্যবহার করে — আপনার কোড কখনো চালানো হয় না।',
+                        no_full_upload:
+                            'সম্পূর্ণ প্রকল্প আর্কাইভ কখনো সার্ভারে আপলোড হয় না।',
+                        filtered_files:
+                            'শুধুমাত্র স্কিমা-সংশ্লিষ্ট ফাইল রাখা হয়; .env, vendor/, node_modules/ এবং tests/ বাদ দেওয়া হয়।',
+                    },
+                    simple_formats_title: 'SQL, DBML এবং JSON',
+                    simple_formats_description:
+                        'সম্পূর্ণ আপনার ব্রাউজারে প্রক্রিয়া করা হয়। সর্বোচ্চ ফাইলের আকার: {{sizeMb}} MB।',
+                    project_archives_title: 'প্রকল্প আর্কাইভ (.zip)',
+                    project_archives_description:
+                        'আর্কাইভ স্থানীয়ভাবে খোলা হয় এবং শুধুমাত্র স্কিমা-সংশ্লিষ্ট ফাইল বের করা হয়। সর্বোচ্চ আর্কাইভের আকার: {{sizeMb}} MB।',
+                    excluded_paths:
+                        'কখনো অন্তর্ভুক্ত হয় না: .env, vendor/, node_modules/, tests/ এবং অন্যান্য অ-স্কিমা সোর্স ফাইল।',
+                    table: {
+                        framework: 'ফ্রেমওয়ার্ক',
+                        files: 'বিশ্লেষিত ফাইল',
+                        processing: 'প্রক্রিয়াকরণ',
+                        processing_local: 'শুধু ব্রাউজার',
+                        processing_remote: 'সার্ভার (সাইন-ইন প্রয়োজন)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'ফিরে যান',
+                },
                 change_file_aria: 'ফাইল পরিবর্তন করুন, বর্তমান: {{name}}',
                 selected_file: 'নির্বাচিত ফাইল: {{name}}',
                 back: 'পিছনে',

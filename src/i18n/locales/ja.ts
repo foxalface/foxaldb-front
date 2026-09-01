@@ -731,7 +731,8 @@ export const ja: LanguageTranslation = {
                 description:
                     '{{database}} ダイアグラムのソースを選択してください。',
                 from_file: 'ファイルまたは貼り付けたテキスト',
-                from_file_description: 'SQL、DBML、またはダイアグラム JSON。',
+                from_file_description:
+                    'SQL、DBML、JSON、プロジェクトアーカイブ（.zip）。',
                 from_database: '既存のデータベース',
                 from_database_description:
                     'データベースでクエリを実行し、結果を貼り付けます。',
@@ -775,6 +776,43 @@ export const ja: LanguageTranslation = {
                 choose_file_or_project: 'ファイルまたはプロジェクトを選択',
                 supported_formats_hint:
                     '対応形式: SQL、DBML、JSON、プロジェクトアーカイブ（.zip）',
+                privacy_info: {
+                    link_label: '詳細情報…',
+                    title: 'プライバシーと対応形式',
+                    intro: 'ファイルを選択する前に、インポート時に FoxalDB がデータをどのように扱うかをご確認ください。',
+                    highlights: {
+                        no_execution:
+                            'インポートは静的解析のみを使用します。コードは実行されません。',
+                        no_full_upload:
+                            'プロジェクトアーカイブ全体がサーバーにアップロードされることはありません。',
+                        filtered_files:
+                            'スキーマに関連するファイルのみが保持されます。.env、vendor/、node_modules/、tests/ は除外されます。',
+                    },
+                    simple_formats_title: 'SQL、DBML、JSON',
+                    simple_formats_description:
+                        'ブラウザ内で完全に処理されます。最大ファイルサイズ: {{sizeMb}} MB。',
+                    project_archives_title: 'プロジェクトアーカイブ（.zip）',
+                    project_archives_description:
+                        'アーカイブはローカルで開かれ、スキーマに関連するファイルのみが抽出されます。最大アーカイブサイズ: {{sizeMb}} MB。',
+                    excluded_paths:
+                        '含まれないもの: .env、vendor/、node_modules/、tests/ およびスキーマに関係のないその他のソースファイル。',
+                    table: {
+                        framework: 'フレームワーク',
+                        files: '分析対象ファイル',
+                        processing: '処理',
+                        processing_local: 'ブラウザのみ',
+                        processing_remote: 'サーバー（サインインが必要）',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: '戻る',
+                },
                 change_file_aria: 'ファイルを変更、現在: {{name}}',
                 selected_file: '選択したファイル: {{name}}',
                 back: '戻る',

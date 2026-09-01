@@ -730,7 +730,7 @@ export const id_ID: LanguageTranslation = {
                 title: 'Bagaimana Anda ingin mengimpor?',
                 description: 'Pilih sumber untuk diagram {{database}} Anda.',
                 from_file: 'File atau teks yang ditempel',
-                from_file_description: 'SQL, DBML, atau JSON diagram.',
+                from_file_description: 'SQL, DBML, JSON, arsip proyek (.zip).',
                 from_database: 'Database yang ada',
                 from_database_description:
                     'Jalankan kueri di database Anda dan tempel hasilnya.',
@@ -774,6 +774,43 @@ export const id_ID: LanguageTranslation = {
                 choose_file_or_project: 'Pilih file atau proyek',
                 supported_formats_hint:
                     'Didukung: SQL, DBML, JSON, arsip proyek (.zip)',
+                privacy_info: {
+                    link_label: 'Informasi selengkapnya…',
+                    title: 'Privasi dan format yang didukung',
+                    intro: 'Sebelum memilih file, pelajari bagaimana FoxalDB menangani data Anda selama impor.',
+                    highlights: {
+                        no_execution:
+                            'Impor hanya menggunakan analisis statis — kode Anda tidak pernah dijalankan.',
+                        no_full_upload:
+                            'Arsip proyek lengkap tidak pernah diunggah ke server.',
+                        filtered_files:
+                            'Hanya file yang relevan dengan skema yang disimpan; .env, vendor/, node_modules/, dan tests/ dikecualikan.',
+                    },
+                    simple_formats_title: 'SQL, DBML, dan JSON',
+                    simple_formats_description:
+                        'Diproses sepenuhnya di browser Anda. Ukuran file maksimum: {{sizeMb}} MB.',
+                    project_archives_title: 'Arsip proyek (.zip)',
+                    project_archives_description:
+                        'Arsip dibuka secara lokal dan hanya file yang relevan dengan skema yang diekstrak. Ukuran arsip maksimum: {{sizeMb}} MB.',
+                    excluded_paths:
+                        'Tidak pernah disertakan: .env, vendor/, node_modules/, tests/, dan file sumber lain yang tidak terkait skema.',
+                    table: {
+                        framework: 'Framework',
+                        files: 'File yang dianalisis',
+                        processing: 'Pemrosesan',
+                        processing_local: 'Hanya browser',
+                        processing_remote: 'Server (perlu masuk)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'Kembali',
+                },
                 change_file_aria: 'Ubah file, saat ini: {{name}}',
                 selected_file: 'File dipilih: {{name}}',
                 back: 'Kembali',

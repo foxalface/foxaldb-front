@@ -729,7 +729,7 @@ export const uk: LanguageTranslation = {
                 title: 'Як ви хочете імпортувати?',
                 description: 'Оберіть джерело для діаграми {{database}}.',
                 from_file: 'Файл або вставлений текст',
-                from_file_description: 'SQL, DBML або JSON діаграми.',
+                from_file_description: 'SQL, DBML, JSON, архів проєкту (.zip).',
                 from_database: 'Наявна база даних',
                 from_database_description:
                     'Виконайте запит у базі та вставте результат.',
@@ -772,6 +772,43 @@ export const uk: LanguageTranslation = {
                 choose_file_or_project: 'Виберіть файл або проєкт',
                 supported_formats_hint:
                     'Підтримується: SQL, DBML, JSON, архів проєкту (.zip)',
+                privacy_info: {
+                    link_label: 'Докладніше…',
+                    title: 'Конфіденційність і підтримувані формати',
+                    intro: 'Перш ніж обрати файл, дізнайтеся, як FoxalDB обробляє ваші дані під час імпорту.',
+                    highlights: {
+                        no_execution:
+                            'Імпорт використовує лише статичний аналіз — ваш код ніколи не виконується.',
+                        no_full_upload:
+                            'Повні архіви проєкту ніколи не завантажуються на сервер.',
+                        filtered_files:
+                            'Зберігаються лише файли, пов’язані зі схемою; .env, vendor/, node_modules/ і tests/ виключаються.',
+                    },
+                    simple_formats_title: 'SQL, DBML і JSON',
+                    simple_formats_description:
+                        'Обробляються повністю у вашому браузері. Максимальний розмір файлу: {{sizeMb}} МБ.',
+                    project_archives_title: 'Архіви проєкту (.zip)',
+                    project_archives_description:
+                        'Архів відкривається локально, витягуються лише файли, пов’язані зі схемою. Максимальний розмір архіву: {{sizeMb}} МБ.',
+                    excluded_paths:
+                        'Ніколи не включаються: .env, vendor/, node_modules/, tests/ та інші вихідні файли, не пов’язані зі схемою.',
+                    table: {
+                        framework: 'Фреймворк',
+                        files: 'Аналізовані файли',
+                        processing: 'Обробка',
+                        processing_local: 'Лише браузер',
+                        processing_remote: 'Сервер (потрібен вхід)',
+                    },
+                    frameworks: {
+                        laravel: { files: 'database/migrations/*.php' },
+                        prisma: { files: 'prisma/schema.prisma' },
+                        rails: { files: 'db/schema.rb' },
+                        drizzle: { files: 'drizzle/**/*.sql' },
+                        entity_framework_core: { files: '*ModelSnapshot.cs' },
+                        django: { files: '*/migrations/*.py' },
+                    },
+                    back: 'Назад',
+                },
                 change_file_aria: 'Змінити файл, зараз: {{name}}',
                 selected_file: 'Вибраний файл: {{name}}',
                 back: 'Назад',
