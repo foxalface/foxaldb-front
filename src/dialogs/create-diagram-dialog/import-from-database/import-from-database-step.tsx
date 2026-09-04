@@ -186,7 +186,7 @@ export const ImportFromDatabaseStep: React.FC<ImportFromDatabaseStepProps> = ({
                 </p>
             </DialogHeader>
 
-            <div className="min-h-0 flex-1 overflow-y-auto">
+            <div className="min-h-0 flex-1 overflow-y-auto p-0.5">
                 <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-4">
                     <DatabaseEditionPicker
                         databaseType={databaseType}
