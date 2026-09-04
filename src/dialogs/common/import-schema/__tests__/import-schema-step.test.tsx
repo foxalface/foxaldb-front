@@ -152,6 +152,20 @@ vi.mock('react-i18next', () => ({
 
             if (
                 key ===
+                'new_diagram_dialog.import_schema.project.model_snapshots_found'
+            ) {
+                return `${options?.count} model snapshots`;
+            }
+
+            if (
+                key ===
+                'new_diagram_dialog.import_schema.project.sql_migrations_found'
+            ) {
+                return `${options?.count} sql migrations`;
+            }
+
+            if (
+                key ===
                 'new_diagram_dialog.import_schema.project.frameworks.laravel'
             ) {
                 return 'Laravel';
@@ -175,7 +189,7 @@ vi.mock('react-i18next', () => ({
                 key ===
                 'new_diagram_dialog.import_schema.ambiguous.recommended_tooltip'
             ) {
-                return 'Automatically detected DBMS';
+                return 'Recommended DBMS';
             }
 
             return key;
@@ -673,7 +687,12 @@ describe('ImportSchemaStep project archives', () => {
 
         await user.click(screen.getByRole('radio', { name: /Prisma/i }));
 
-        expect(screen.getByText('Prisma project detected')).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'new_diagram_dialog.import_schema.project.multiple_projects_title'
+            )
+        ).toBeInTheDocument();
+        expect(screen.getByRole('radio', { name: /Prisma/i })).toBeChecked();
         expect(
             screen.getByRole('button', {
                 name: 'new_diagram_dialog.import_schema.import',
@@ -1158,6 +1177,189 @@ end`,
         });
 
         expect(apiRequestMock).not.toHaveBeenCalled();
+    });
+
+    it('shows database group selection when Laravel archive has multiple schemas', async () => {
+        const { user } = await uploadZip({
+            artisan: '#!/usr/bin/env php',
+            'composer.json': '{"require":{"laravel/framework":"^11.0"}}',
+            'database/migrations/0001_create_admin_users.php': '<?php',
+            'database/migrations/catalog/0001_create_products.php': '<?php',
+            'database/migrations/tenant/0001_create_orders.php': '<?php',
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'new_diagram_dialog.import_schema.project.multiple_database_groups_title'
+                )
+            ).toBeInTheDocument();
+        });
+
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeDisabled();
+
+        await user.click(screen.getByRole('radio', { name: /Catalog/i }));
+
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeEnabled();
+    });
+
+    it('passes selected database group to importProject', async () => {
+        importProjectMock.mockResolvedValueOnce({
+            diagram: {
+                id: 'diagram-1',
+                name: 'Imported',
+                databaseType: DatabaseType.MYSQL,
+                tables: [],
+                relationships: [],
+            },
+            framework: 'laravel',
+            diagnostics: [],
+        });
+
+        const { user } = await uploadZip({
+            artisan: '#!/usr/bin/env php',
+            'composer.json': '{"require":{"laravel/framework":"^11.0"}}',
+            'database/migrations/catalog/0001_create_products.php': '<?php',
+            'database/migrations/tenant/0001_create_orders.php': '<?php',
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'new_diagram_dialog.import_schema.project.multiple_database_groups_title'
+                )
+            ).toBeInTheDocument();
+        });
+
+        await user.click(screen.getByRole('radio', { name: /Tenant/i }));
+        await user.click(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        );
+
+        await waitFor(() => {
+            expect(importProjectMock).toHaveBeenCalledOnce();
+        });
+
+        expect(importProjectMock.mock.calls[0][0]).toEqual(
+            expect.objectContaining({
+                databaseGroup: expect.objectContaining({
+                    label: 'Tenant',
+                }),
+            })
+        );
+    });
+
+    it('CASE B: EF two-DbContext archive shows only group panel, not project ambiguity', async () => {
+        const EF_CSPROJ =
+            '<Project><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" /></ItemGroup></Project>';
+        const APP_SNAPSHOT =
+            'partial class AppDbContextModelSnapshot : ModelSnapshot { protected override void BuildModel(ModelBuilder modelBuilder) {} }';
+        const CATALOG_SNAPSHOT =
+            'partial class CatalogDbContextModelSnapshot : ModelSnapshot { protected override void BuildModel(ModelBuilder modelBuilder) {} }';
+
+        await uploadZip({
+            'App.csproj': EF_CSPROJ,
+            'Migrations/AppDbContextModelSnapshot.cs': APP_SNAPSHOT,
+            'CatalogMigrations/CatalogDbContextModelSnapshot.cs':
+                CATALOG_SNAPSHOT,
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'new_diagram_dialog.import_schema.project.multiple_database_groups_title'
+                )
+            ).toBeInTheDocument();
+        });
+
+        expect(
+            screen.queryByText(
+                'new_diagram_dialog.import_schema.project.multiple_projects_title'
+            )
+        ).not.toBeInTheDocument();
+    });
+
+    it('CASE C: true EF multi-project archive shows only project ambiguity panel', async () => {
+        const EF_CSPROJ =
+            '<Project><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" /></ItemGroup></Project>';
+        const APP_SNAPSHOT =
+            'partial class AppDbContextModelSnapshot : ModelSnapshot { protected override void BuildModel(ModelBuilder modelBuilder) {} }';
+
+        await uploadZip({
+            'api/Api.csproj': EF_CSPROJ,
+            'api/Migrations/ApiDbContextModelSnapshot.cs': APP_SNAPSHOT,
+            'admin/Admin.csproj': EF_CSPROJ,
+            'admin/Migrations/AdminDbContextModelSnapshot.cs': APP_SNAPSHOT,
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'new_diagram_dialog.import_schema.project.multiple_projects_title'
+                )
+            ).toBeInTheDocument();
+        });
+
+        expect(
+            screen.queryByText(
+                'new_diagram_dialog.import_schema.project.multiple_database_groups_title'
+            )
+        ).not.toBeInTheDocument();
+    });
+
+    it('CASE D: after project selection, ambiguity panel stays visible with selection', async () => {
+        const EF_CSPROJ =
+            '<Project><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" /></ItemGroup></Project>';
+        const APP_SNAPSHOT =
+            'partial class AppDbContextModelSnapshot : ModelSnapshot { protected override void BuildModel(ModelBuilder modelBuilder) {} }';
+
+        const { user } = await uploadZip({
+            'api/Api.csproj': EF_CSPROJ,
+            'api/Migrations/ApiDbContextModelSnapshot.cs': APP_SNAPSHOT,
+            'admin/Admin.csproj': EF_CSPROJ,
+            'admin/Migrations/AdminDbContextModelSnapshot.cs': APP_SNAPSHOT,
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'new_diagram_dialog.import_schema.project.multiple_projects_title'
+                )
+            ).toBeInTheDocument();
+        });
+
+        await user.click(
+            screen.getByRole('radio', { name: /Entity Framework Core api/i })
+        );
+
+        await waitFor(() => {
+            expect(
+                screen.getByText(
+                    'new_diagram_dialog.import_schema.project.multiple_projects_title'
+                )
+            ).toBeInTheDocument();
+        });
+
+        expect(
+            screen.getByRole('radio', {
+                name: /Entity Framework Core api/i,
+            })
+        ).toBeChecked();
+        expect(
+            screen.getByRole('button', {
+                name: 'new_diagram_dialog.import_schema.import',
+            })
+        ).toBeEnabled();
     });
 });
 

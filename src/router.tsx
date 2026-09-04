@@ -26,16 +26,6 @@ const routes: RouteObject[] = [
         },
     })),
     {
-        path: 'examples',
-        async lazy() {
-            const { ExamplesPage } =
-                await import('./pages/examples-page/examples-page');
-            return {
-                element: <ExamplesPage />,
-            };
-        },
-    },
-    {
         path: 'login',
         async lazy() {
             const { LoginPage } = await import('./pages/auth/login-page');

@@ -8,6 +8,7 @@ import {
     containsDependency,
     type ProjectDetector,
 } from '../detector-utils';
+import { isLaravelMigrationContent } from '../content-signatures';
 
 const LARAVEL_COMPOSER_PATTERN = /"laravel\/framework"/i;
 
@@ -43,10 +44,24 @@ export const detectLaravelProject: ProjectDetector = async (
                 filePath.startsWith('database/migrations/'))
     );
     if (migrationPaths.length > 0) {
+        const firstMigrationContent = await readTextIfExists(
+            archive,
+            migrationPaths[0]
+        );
+
         evidence.push(
             evidenceFromCode('laravel_migrations', migrationPaths[0])
         );
         relevantFiles.push(...migrationPaths);
+
+        if (
+            firstMigrationContent &&
+            isLaravelMigrationContent(firstMigrationContent)
+        ) {
+            evidence.push(
+                evidenceFromCode('laravel_source_signature', migrationPaths[0])
+            );
+        }
     }
 
     const bootstrapPath = joinArchivePath(rootPath, 'bootstrap/app.php');

@@ -143,7 +143,7 @@ describe('framework detectors', () => {
 
     it('detects Entity Framework Core with high confidence', async () => {
         const { candidates, archive } = await detectFromZip({
-            'AppDbContextModelSnapshot.cs':
+            'Migrations/AppDbContextModelSnapshot.cs':
                 'partial class AppDbContextModelSnapshot { }',
             'Migrations/20240101000000_InitialMigration.cs':
                 'partial class InitialMigration { }',

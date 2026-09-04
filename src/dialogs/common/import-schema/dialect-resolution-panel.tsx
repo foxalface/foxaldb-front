@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { AlertTriangle, Star } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Info, Star } from 'lucide-react';
 import { Badge } from '@/components/badge/badge';
 import { ToggleGroup } from '@/components/toggle/toggle-group';
 import {
@@ -20,10 +20,12 @@ export type DialectResolutionCopyVariant = 'sql_ambiguous' | 'diagram_json';
 const COPY_KEYS: Record<
     DialectResolutionCopyVariant,
     {
+        detectionTitle: string;
         alertTitle: string;
-        alertDescription: string;
         chooseTitle: string;
-        chooseDescription?: string;
+        selectionHelpPercentages: string;
+        selectionHelpRecommended: string;
+        selectionHelpAria: string;
         chooseSourceAria: string;
         candidateRecommended: string;
         candidateWithConfidence: string;
@@ -34,13 +36,17 @@ const COPY_KEYS: Record<
     }
 > = {
     sql_ambiguous: {
-        alertTitle:
+        detectionTitle:
             'new_diagram_dialog.import_schema.detection.sql_ambiguous_title',
-        alertDescription:
-            'new_diagram_dialog.import_schema.detection.sql_ambiguous_description',
+        alertTitle:
+            'new_diagram_dialog.import_schema.ambiguous.multiple_dbms_title',
         chooseTitle: 'new_diagram_dialog.import_schema.ambiguous.title',
-        chooseDescription:
-            'new_diagram_dialog.import_schema.ambiguous.confidence_explanation',
+        selectionHelpPercentages:
+            'new_diagram_dialog.import_schema.ambiguous.selection_help_percentages',
+        selectionHelpRecommended:
+            'new_diagram_dialog.import_schema.ambiguous.selection_help_recommended',
+        selectionHelpAria:
+            'new_diagram_dialog.import_schema.ambiguous.selection_help_aria',
         chooseSourceAria:
             'new_diagram_dialog.import_schema.ambiguous.choose_source',
         candidateRecommended:
@@ -56,14 +62,18 @@ const COPY_KEYS: Record<
             'new_diagram_dialog.import_schema.ambiguous.recommended_aria',
     },
     diagram_json: {
+        detectionTitle:
+            'new_diagram_dialog.import_schema.detection.diagram_json',
         alertTitle:
-            'new_diagram_dialog.import_schema.diagram_json.detection.mismatch_title',
-        alertDescription:
-            'new_diagram_dialog.import_schema.diagram_json.detection.mismatch_description',
+            'new_diagram_dialog.import_schema.ambiguous.multiple_dbms_title',
         chooseTitle:
             'new_diagram_dialog.import_schema.diagram_json.ambiguous.title',
-        chooseDescription:
-            'new_diagram_dialog.import_schema.diagram_json.ambiguous.description',
+        selectionHelpPercentages:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.selection_help_percentages',
+        selectionHelpRecommended:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.selection_help_recommended',
+        selectionHelpAria:
+            'new_diagram_dialog.import_schema.diagram_json.ambiguous.selection_help_aria',
         chooseSourceAria:
             'new_diagram_dialog.import_schema.diagram_json.ambiguous.choose_source',
         candidateRecommended:
@@ -94,7 +104,6 @@ export interface DialectResolutionPanelProps {
 
 export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
     copyVariant = 'sql_ambiguous',
-    selectedDatabaseType,
     candidates,
     candidateScores,
     detectedDatabaseType,
@@ -119,64 +128,57 @@ export const DialectResolutionPanel: React.FC<DialectResolutionPanelProps> = ({
     return (
         <div
             role="region"
-            aria-labelledby="dialect-resolution-title"
+            aria-labelledby="dialect-resolution-alert-title"
             className="flex flex-col gap-5 text-sm"
         >
+            <div className="flex flex-col gap-2 rounded-md border border-border bg-muted/30 p-3 text-sm">
+                <div className="flex items-start gap-2">
+                    <CheckCircle2
+                        className="mt-0.5 size-4 shrink-0 text-green-600"
+                        aria-hidden
+                    />
+                    <p className="font-medium">{t(copyKeys.detectionTitle)}</p>
+                </div>
+            </div>
+
             <div className="flex items-start gap-3 rounded-lg border border-amber-500 bg-amber-500/10 px-4 py-3 dark:border-amber-500/70 dark:bg-amber-500/15">
                 <AlertTriangle
                     className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-500"
                     aria-hidden
                 />
-                <div className="flex flex-col gap-1">
-                    <p id="dialect-resolution-title" className="font-medium">
-                        {t(copyKeys.alertTitle, {
-                            detected:
-                                detectedDatabaseType !== null
-                                    ? databaseTypeToLabelMap[
-                                          detectedDatabaseType
-                                      ]
-                                    : undefined,
-                            selected:
-                                databaseTypeToLabelMap[selectedDatabaseType],
-                        })}
-                    </p>
-                    <p className="text-muted-foreground">
-                        {t(copyKeys.alertDescription, {
-                            detected:
-                                detectedDatabaseType !== null
-                                    ? databaseTypeToLabelMap[
-                                          detectedDatabaseType
-                                      ]
-                                    : undefined,
-                            selected:
-                                databaseTypeToLabelMap[selectedDatabaseType],
-                        })}
-                    </p>
-                </div>
+                <p id="dialect-resolution-alert-title" className="font-medium">
+                    {t(copyKeys.alertTitle)}
+                </p>
             </div>
 
             <div className="flex flex-col items-start gap-3">
-                <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-1.5">
                     <p className="font-medium">{t(copyKeys.chooseTitle)}</p>
-                    {copyKeys.chooseDescription ? (
-                        <p className="text-muted-foreground">
-                            {t(copyKeys.chooseDescription, {
-                                detected:
-                                    detectedDatabaseType !== null
-                                        ? databaseTypeToLabelMap[
-                                              detectedDatabaseType
-                                          ]
-                                        : undefined,
-                                selected:
-                                    databaseTypeToLabelMap[
-                                        selectedDatabaseType
-                                    ],
-                            })}
-                        </p>
-                    ) : null}
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <button
+                                type="button"
+                                className="inline-flex size-5 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:text-foreground"
+                                aria-label={t(copyKeys.selectionHelpAria)}
+                            >
+                                <Info className="size-3.5" aria-hidden />
+                            </button>
+                        </TooltipTrigger>
+                        <TooltipContent
+                            side="top"
+                            sideOffset={8}
+                            className="z-[1100] max-w-xs"
+                        >
+                            <ul className="list-disc space-y-1 pl-4 text-left">
+                                <li>{t(copyKeys.selectionHelpPercentages)}</li>
+                                <li>{t(copyKeys.selectionHelpRecommended)}</li>
+                            </ul>
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
                 <ToggleGroup
                     type="single"
+                    variant="outline"
                     value={resolvedSourceDialect ?? ''}
                     onValueChange={(value) => {
                         if (!value) {

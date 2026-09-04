@@ -25,6 +25,7 @@ import {
     ArchiveReader,
     MAX_ARCHIVE_COMPRESSED_BYTES,
     analyzeProjectArchive,
+    detectDatabaseGroups,
     getProjectCandidateKey,
     getSelectableCandidates,
     importProject,
@@ -33,6 +34,8 @@ import {
 import { canExecuteProjectImport } from '@/lib/project-import/project-import-capability';
 import type {
     ProjectArchiveAnalysis,
+    ProjectDatabaseGroup,
+    ProjectDatabaseGroupAnalysis,
     ProjectDetectionCandidate,
 } from '@/lib/project-import/project-types';
 import { analyzeImportContent } from './analyze-import-content';
@@ -45,6 +48,7 @@ import { DetectionSummary } from './detection-summary';
 import { DialectMismatchPanel } from './dialect-mismatch-panel';
 import { DialectResolutionPanel } from './dialect-resolution-panel';
 import { ProjectAmbiguityPanel } from './project-ambiguity-panel';
+import { ProjectDatabaseGroupPanel } from './project-database-group-panel';
 import { ProjectDetectionSummary } from './project-detection-summary';
 import {
     ImportPrivacyInfoDialog,
@@ -124,6 +128,12 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         useState<ProjectArchiveAnalysis | null>(null);
     const [selectedProjectCandidate, setSelectedProjectCandidate] =
         useState<ProjectDetectionCandidate | null>(null);
+    const [databaseGroupAnalysis, setDatabaseGroupAnalysis] =
+        useState<ProjectDatabaseGroupAnalysis | null>(null);
+    const [selectedDatabaseGroup, setSelectedDatabaseGroup] =
+        useState<ProjectDatabaseGroup | null>(null);
+    const [isAnalyzingDatabaseGroups, setIsAnalyzingDatabaseGroups] =
+        useState(false);
     const [isAnalyzingProject, setIsAnalyzingProject] = useState(false);
     const [isProjectImporting, setIsProjectImporting] = useState(false);
     const [isPrivacyInfoOpen, setIsPrivacyInfoOpen] = useState(false);
@@ -136,7 +146,10 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         archiveReaderRef.current = null;
         setProjectAnalysis(null);
         setSelectedProjectCandidate(null);
+        setDatabaseGroupAnalysis(null);
+        setSelectedDatabaseGroup(null);
         setIsAnalyzingProject(false);
+        setIsAnalyzingDatabaseGroups(false);
     }, []);
 
     useEffect(() => {
@@ -161,6 +174,107 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
 
         return projectAnalysis.recommendedCandidate;
     }, [projectAnalysis, selectedProjectCandidate]);
+
+    const activeDatabaseGroup = useMemo(() => {
+        if (!databaseGroupAnalysis) {
+            return null;
+        }
+
+        if (databaseGroupAnalysis.status === 'multiple') {
+            return selectedDatabaseGroup;
+        }
+
+        return databaseGroupAnalysis.recommendedGroup;
+    }, [databaseGroupAnalysis, selectedDatabaseGroup]);
+
+    const hasMultipleDatabaseGroups =
+        databaseGroupAnalysis?.status === 'multiple';
+
+    const showProjectAmbiguityPanel = useMemo(
+        () =>
+            projectAnalysis?.status === 'ambiguous' &&
+            !(activeProjectCandidate && hasMultipleDatabaseGroups),
+        [
+            activeProjectCandidate,
+            hasMultipleDatabaseGroups,
+            projectAnalysis?.status,
+        ]
+    );
+
+    const showDatabaseGroupPanel = useMemo(
+        () => Boolean(activeProjectCandidate) && hasMultipleDatabaseGroups,
+        [activeProjectCandidate, hasMultipleDatabaseGroups]
+    );
+
+    const projectAmbiguityDetectionCandidate = useMemo(() => {
+        if (!projectAnalysis || projectAnalysis.status !== 'ambiguous') {
+            return null;
+        }
+
+        return (
+            projectAnalysis.recommendedCandidate ??
+            getSelectableCandidates(projectAnalysis.candidates)[0] ??
+            null
+        );
+    }, [projectAnalysis]);
+
+    const showFullProjectDetectionSummary = useMemo(
+        () =>
+            Boolean(projectAnalysis) &&
+            Boolean(activeProjectCandidate) &&
+            !showProjectAmbiguityPanel &&
+            !showDatabaseGroupPanel &&
+            projectAnalysis?.status !== 'ambiguous',
+        [
+            activeProjectCandidate,
+            projectAnalysis,
+            showDatabaseGroupPanel,
+            showProjectAmbiguityPanel,
+        ]
+    );
+
+    useEffect(() => {
+        if (!activeProjectCandidate || !archiveReaderRef.current) {
+            setDatabaseGroupAnalysis(null);
+            setSelectedDatabaseGroup(null);
+            return;
+        }
+
+        let cancelled = false;
+
+        const analyzeGroups = async () => {
+            setIsAnalyzingDatabaseGroups(true);
+            setDatabaseGroupAnalysis(null);
+            setSelectedDatabaseGroup(null);
+
+            try {
+                const analysis = await detectDatabaseGroups(
+                    archiveReaderRef.current as ArchiveReader,
+                    activeProjectCandidate
+                );
+
+                if (cancelled) {
+                    return;
+                }
+
+                setDatabaseGroupAnalysis(analysis);
+
+                if (analysis.status === 'single' && analysis.recommendedGroup) {
+                    setSelectedDatabaseGroup(analysis.recommendedGroup);
+                }
+            } finally {
+                if (!cancelled) {
+                    setIsAnalyzingDatabaseGroups(false);
+                }
+            }
+        };
+
+        void analyzeGroups();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [activeProjectCandidate]);
 
     const baseAnalysis = useMemo(
         () =>
@@ -192,6 +306,17 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
             }
 
             if (!activeProjectCandidate) {
+                return false;
+            }
+
+            if (isAnalyzingDatabaseGroups) {
+                return false;
+            }
+
+            if (
+                databaseGroupAnalysis?.status === 'multiple' &&
+                !activeDatabaseGroup
+            ) {
                 return false;
             }
 
@@ -238,9 +363,12 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
 
         return baseAnalysis.canContinue;
     }, [
+        activeDatabaseGroup,
         activeProjectCandidate,
         baseAnalysis,
+        databaseGroupAnalysis,
         effectiveResolvedSourceDialect,
+        isAnalyzingDatabaseGroups,
         isAuthenticated,
         mode,
         projectAnalysis,
@@ -265,6 +393,8 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     archive: archiveReaderRef.current,
                     candidate: activeProjectCandidate,
                     targetDatabaseType: databaseType,
+                    archiveFileName: selectedFileName ?? undefined,
+                    databaseGroup: activeDatabaseGroup ?? undefined,
                 });
 
                 resetProjectArchiveState();
@@ -297,6 +427,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     : undefined,
         });
     }, [
+        activeDatabaseGroup,
         activeProjectCandidate,
         baseAnalysis,
         canContinue,
@@ -305,6 +436,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         onContinue,
         projectAnalysis,
         resetProjectArchiveState,
+        selectedFileName,
     ]);
 
     const handleSwitchDatabase = useCallback(() => {
@@ -327,9 +459,18 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         []
     );
 
+    const handleSelectDatabaseGroup = useCallback(
+        (group: ProjectDatabaseGroup) => {
+            setSelectedDatabaseGroup(group);
+        },
+        []
+    );
+
     const handleSelectProjectCandidate = useCallback(
         (candidate: ProjectDetectionCandidate) => {
             setSelectedProjectCandidate(candidate);
+            setDatabaseGroupAnalysis(null);
+            setSelectedDatabaseGroup(null);
         },
         []
     );
@@ -579,7 +720,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                         ) : null}
                     </div>
 
-                    {isAnalyzingProject ? (
+                    {isAnalyzingProject || isAnalyzingDatabaseGroups ? (
                         <p className="text-sm text-muted-foreground">
                             {t(
                                 'new_diagram_dialog.import_schema.project.analyzing_project'
@@ -602,9 +743,10 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                         </div>
                     ) : null}
 
-                    {projectAnalysis?.status === 'ambiguous' ? (
+                    {showProjectAmbiguityPanel &&
+                    projectAmbiguityDetectionCandidate ? (
                         <ProjectAmbiguityPanel
-                            candidates={projectAnalysis.candidates}
+                            candidates={projectAnalysis!.candidates}
                             selectedCandidateKey={
                                 selectedProjectCandidate
                                     ? getProjectCandidateKey(
@@ -612,20 +754,27 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                                       )
                                     : null
                             }
+                            detectionCandidate={
+                                projectAmbiguityDetectionCandidate
+                            }
+                            isAuthenticated={isAuthenticated}
                             onSelect={handleSelectProjectCandidate}
                         />
                     ) : null}
 
-                    {projectAnalysis &&
-                    projectAnalysis.status === 'detected' &&
+                    {showDatabaseGroupPanel &&
+                    databaseGroupAnalysis &&
                     activeProjectCandidate ? (
-                        <ProjectDetectionSummary
-                            candidate={activeProjectCandidate}
+                        <ProjectDatabaseGroupPanel
+                            groups={databaseGroupAnalysis.groups}
+                            selectedGroupKey={selectedDatabaseGroup?.id ?? null}
+                            detectedCandidate={activeProjectCandidate}
                             isAuthenticated={isAuthenticated}
+                            onSelect={handleSelectDatabaseGroup}
                         />
                     ) : null}
 
-                    {projectAnalysis?.status === 'ambiguous' &&
+                    {showFullProjectDetectionSummary &&
                     activeProjectCandidate ? (
                         <ProjectDetectionSummary
                             candidate={activeProjectCandidate}
@@ -705,6 +854,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                         !canContinue ||
                         isImporting ||
                         isAnalyzingProject ||
+                        isAnalyzingDatabaseGroups ||
                         isProjectImporting
                     }
                 >

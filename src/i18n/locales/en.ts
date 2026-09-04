@@ -700,8 +700,6 @@ export const en = {
                 clear_search: 'Clear search',
                 primary_group: 'Primary databases',
                 other_group: 'Other databases',
-                check_examples_long: 'Check Examples',
-                check_examples_short: 'Examples',
             },
 
             choose_intent: {
@@ -825,8 +823,15 @@ export const en = {
                 },
                 ambiguous: {
                     title: 'Choose the source DBMS',
+                    multiple_dbms_title: 'Multiple DBMS detected',
                     confidence_explanation:
                         'Percentages indicate the dialect match score for each DBMS.',
+                    selection_help_percentages:
+                        'Percentages indicate the SQL dialect match score for each DBMS.',
+                    selection_help_recommended:
+                        'The star marks the recommended DBMS.',
+                    selection_help_aria:
+                        'Help about percentages and recommendation',
                     description:
                         'We could not identify the SQL dialect automatically. Confirm which DBMS this schema came from.',
                     choose_source: 'Choose source DBMS',
@@ -835,9 +840,8 @@ export const en = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% confidence, automatically detected)',
-                    recommended_tooltip: 'Automatically detected DBMS',
-                    recommended_aria:
-                        '{{database}}, automatically detected DBMS',
+                    recommended_tooltip: 'Recommended DBMS',
+                    recommended_aria: '{{database}}, recommended DBMS',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -853,6 +857,12 @@ export const en = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'Select which option to apply for this import.',
+                        selection_help_percentages:
+                            'Percentages indicate the match score for each DBMS.',
+                        selection_help_recommended:
+                            'The star marks the DBMS from the diagram file.',
+                        selection_help_aria:
+                            'Help about percentages and recommendation',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -891,10 +901,31 @@ export const en = {
                     migrations_found_other: '{{count}} migrations found',
                     schema_files_found_one: '{{count}} schema file found',
                     schema_files_found_other: '{{count}} schema files found',
+                    model_snapshots_found_one: '{{count}} model snapshot found',
+                    model_snapshots_found_other:
+                        '{{count}} model snapshots found',
+                    sql_migrations_found_one: '{{count}} SQL migration found',
+                    sql_migrations_found_other:
+                        '{{count}} SQL migrations found',
+                    migrations_button_one: '{{count}} migration',
+                    migrations_button_other: '{{count}} migrations',
+                    schema_files_button_one: '{{count}} schema file',
+                    schema_files_button_other: '{{count}} schema files',
+                    model_snapshots_button_one: '{{count}} model snapshot',
+                    model_snapshots_button_other: '{{count}} model snapshots',
+                    sql_migrations_button_one: '{{count}} migration',
+                    sql_migrations_button_other: '{{count}} migrations',
                     multiple_projects_title:
                         'Multiple database schemas detected',
                     multiple_projects_description:
                         'This archive contains more than one supported database project. Choose which one to import.',
+                    multiple_database_groups_title:
+                        'Several database schemas detected',
+                    multiple_database_groups_description:
+                        'This project contains multiple database schemas. Choose which one to import.',
+                    choose_database_group: 'Choose database schema',
+                    group_recommended_aria: '{{label}} recommended',
+                    group_recommended_tooltip: 'Recommended schema',
                     choose_project: 'Choose project',
                     unsupported_project: 'Unsupported project archive',
                     unsupported_project_description:

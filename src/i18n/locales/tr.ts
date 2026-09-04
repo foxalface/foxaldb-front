@@ -697,8 +697,6 @@ export const tr: LanguageTranslation = {
                 clear_search: 'Aramayı temizle',
                 primary_group: 'Birincil veritabanları',
                 other_group: 'Diğer veritabanları',
-                check_examples_long: 'Örnekleri Kontrol Et',
-                check_examples_short: 'Örnekler',
             },
 
             choose_intent: {
@@ -811,6 +809,12 @@ export const tr: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Kaynak DBMS seçin',
+                    multiple_dbms_title: 'Birden fazla DBMS algılandı',
+                    selection_help_percentages:
+                        'Yüzdeler, her DBMS için SQL lehçesi eşleşme indeksini gösterir.',
+                    selection_help_recommended:
+                        "Yıldız, otomatik olarak algılanan DBMS'yi işaretler.",
+                    selection_help_aria: 'Yüzdeler ve öneri hakkında yardım',
                     confidence_explanation:
                         'Yüzdeler, her DBMS için algılanan SQL lehçesiyle eşleşme endeksini gösterir.',
                     description:
@@ -821,8 +825,8 @@ export const tr: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} (%{{percent}} güven, otomatik algılama)',
-                    recommended_tooltip: 'Otomatik algılanan DBMS',
-                    recommended_aria: '{{database}}, otomatik algılanan DBMS',
+                    recommended_tooltip: 'Önerilen DBMS',
+                    recommended_aria: '{{database}}, önerilen DBMS',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -838,6 +842,12 @@ export const tr: LanguageTranslation = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'Bu içe aktarma için uygulanacak seçeneği belirleyin.',
+                        selection_help_percentages:
+                            'Yüzdeler, her DBMS için eşleşme indeksini gösterir.',
+                        selection_help_recommended:
+                            "Yıldız, dosyada belirtilen DBMS'yi işaretler.",
+                        selection_help_aria:
+                            'Yüzdeler ve öneri hakkında yardım',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -875,10 +885,33 @@ export const tr: LanguageTranslation = {
                     migrations_found_other: '{{count}} göç bulundu',
                     schema_files_found_one: '{{count}} şema dosyası bulundu',
                     schema_files_found_other: '{{count}} şema dosyası bulundu',
+                    model_snapshots_found_one:
+                        '{{count}} model anlık görüntüsü bulundu',
+                    model_snapshots_found_other:
+                        '{{count}} model anlık görüntüsü bulundu',
+                    sql_migrations_found_one: '{{count}} SQL göçü bulundu',
+                    sql_migrations_found_other: '{{count}} SQL göçü bulundu',
+                    migrations_button_one: '{{count}} göç',
+                    migrations_button_other: '{{count}} göç',
+                    schema_files_button_one: '{{count}} şema dosyası',
+                    schema_files_button_other: '{{count}} şema dosyası',
+                    model_snapshots_button_one:
+                        '{{count}} model anlık görüntüsü',
+                    model_snapshots_button_other:
+                        '{{count}} model anlık görüntüsü',
+                    sql_migrations_button_one: '{{count}} SQL göçü',
+                    sql_migrations_button_other: '{{count}} SQL göçü',
                     multiple_projects_title:
                         'Birden fazla veritabanı şeması algılandı',
                     multiple_projects_description:
                         'Bu arşivde birden fazla desteklenen veritabanı projesi var. Hangisini içe aktaracağınızı seçin.',
+                    multiple_database_groups_title:
+                        'Birden fazla veritabanı şeması algılandı',
+                    multiple_database_groups_description:
+                        'Bu proje birden fazla veritabanı şeması içeriyor. Hangisini içe aktaracağınızı seçin.',
+                    choose_database_group: 'Veritabanı şeması seçin',
+                    group_recommended_aria: '{{label}} önerilir',
+                    group_recommended_tooltip: 'Önerilen şema',
                     choose_project: 'Proje seçin',
                     unsupported_project: 'Desteklenmeyen proje arşivi',
                     unsupported_project_description:

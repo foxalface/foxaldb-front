@@ -714,8 +714,6 @@ export const fr: LanguageTranslation = {
                 clear_search: 'Effacer la recherche',
                 primary_group: 'Bases de données principales',
                 other_group: 'Autres bases de données',
-                check_examples_long: 'Voir les Exemples',
-                check_examples_short: 'Exemples',
             },
 
             choose_intent: {
@@ -843,8 +841,15 @@ export const fr: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Choisissez le SGBD source',
+                    multiple_dbms_title: 'Plusieurs SGBD détectés',
                     confidence_explanation:
                         "Les pourcentages indiquent l'indice de correspondance du dialecte SQL pour chaque SGBD.",
+                    selection_help_percentages:
+                        "Les pourcentages indiquent l'indice de correspondance du dialecte SQL pour chaque SGBD.",
+                    selection_help_recommended:
+                        "L'étoile marque le SGBD recommandé.",
+                    selection_help_aria:
+                        'Aide sur les pourcentages et la recommandation',
                     description:
                         "Nous n'avons pas pu identifier automatiquement le dialecte SQL. Indiquez de quel SGBD provient ce schéma.",
                     choose_source: 'Choisir le SGBD source',
@@ -853,9 +858,8 @@ export const fr: LanguageTranslation = {
                         '{{database}} ({{percent}} % de confiance)',
                     candidate_recommended:
                         '{{database}} ({{percent}} % de confiance, détection automatique)',
-                    recommended_tooltip: 'SGBD détecté automatiquement',
-                    recommended_aria:
-                        '{{database}}, SGBD détecté automatiquement',
+                    recommended_tooltip: 'SGBD recommandé',
+                    recommended_aria: '{{database}}, SGBD recommandé',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -871,6 +875,12 @@ export const fr: LanguageTranslation = {
                         title: 'Choisissez le SGBD du diagramme',
                         description:
                             "Sélectionnez l'option à appliquer pour cet import.",
+                        selection_help_percentages:
+                            "Les pourcentages indiquent l'indice de correspondance pour chaque SGBD.",
+                        selection_help_recommended:
+                            "L'étoile marque le SGBD indiqué dans le fichier.",
+                        selection_help_aria:
+                            'Aide sur les pourcentages et la recommandation',
                         choose_source: 'Choisir le SGBD du diagramme',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -911,10 +921,34 @@ export const fr: LanguageTranslation = {
                         '{{count}} fichier de schéma trouvé',
                     schema_files_found_other:
                         '{{count}} fichiers de schéma trouvés',
+                    model_snapshots_found_one:
+                        '{{count}} snapshot de modèle trouvé',
+                    model_snapshots_found_other:
+                        '{{count}} snapshots de modèle trouvés',
+                    sql_migrations_found_one: '{{count}} migration SQL trouvée',
+                    sql_migrations_found_other:
+                        '{{count}} migrations SQL trouvées',
+                    migrations_button_one: '{{count}} migration',
+                    migrations_button_other: '{{count}} migrations',
+                    schema_files_button_one: '{{count}} fichier de schéma',
+                    schema_files_button_other: '{{count}} fichiers de schéma',
+                    model_snapshots_button_one: '{{count}} snapshot de modèle',
+                    model_snapshots_button_other:
+                        '{{count}} snapshots de modèle',
+                    sql_migrations_button_one: '{{count}} migration',
+                    sql_migrations_button_other: '{{count}} migrations',
                     multiple_projects_title:
                         'Plusieurs schémas de base de données détectés',
                     multiple_projects_description:
                         'Cette archive contient plusieurs projets de base de données pris en charge. Choisissez celui à importer.',
+                    multiple_database_groups_title:
+                        'Plusieurs schémas de base de données détectés',
+                    multiple_database_groups_description:
+                        'Ce projet contient plusieurs schémas de base de données. Choisissez celui à importer.',
+                    choose_database_group:
+                        'Choisir le schéma de base de données',
+                    group_recommended_aria: '{{label}} recommandé',
+                    group_recommended_tooltip: 'Schéma recommandé',
                     choose_project: 'Choisir le projet',
                     unsupported_project:
                         'Archive de projet non prise en charge',

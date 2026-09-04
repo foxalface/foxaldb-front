@@ -25,7 +25,9 @@ export interface SelectDatabaseContentProps {
 }
 
 const DATABASE_GRID_CLASS =
-    'grid grid-flow-row grid-cols-3 content-start gap-4';
+    'grid w-full grid-flow-row grid-cols-3 content-start gap-4';
+
+const DATABASE_OPTION_CLASS = '!size-auto aspect-square h-auto w-full';
 
 export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({
     databaseType,
@@ -77,7 +79,12 @@ export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({
     return (
         <DialogInternalContent
             className={cn(
-                'w-full !flex-none max-h-none',
+                '-mr-2.5 w-[calc(100%+0.625rem)] min-w-0 self-stretch !flex-none max-h-none overflow-hidden',
+                '[&_[data-radix-scroll-area-viewport]>div]:!box-border',
+                '[&_[data-radix-scroll-area-viewport]>div]:!block',
+                '[&_[data-radix-scroll-area-viewport]>div]:!w-[calc(100%-0.625rem)]',
+                '[&_[data-radix-scroll-area-viewport]>div]:!min-w-0',
+                '[&_[data-radix-scroll-area-viewport]>div]:!pr-0',
                 viewportHeight === undefined && 'h-[12.5rem] md:h-[18.5rem]'
             )}
             style={
@@ -91,7 +98,7 @@ export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({
                     value={databaseType}
                     onValueChange={handleDatabaseChange}
                     type="single"
-                    className="flex w-full flex-col items-stretch gap-6"
+                    className="flex w-full flex-col !items-stretch !justify-start gap-6"
                 >
                     {filteredPrimaryTypes.length > 0 ? (
                         <section
@@ -105,7 +112,11 @@ export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({
                             />
                             <div className={DATABASE_GRID_CLASS}>
                                 {filteredPrimaryTypes.map((type) => (
-                                    <DatabaseOption key={type} type={type} />
+                                    <DatabaseOption
+                                        key={type}
+                                        type={type}
+                                        className={DATABASE_OPTION_CLASS}
+                                    />
                                 ))}
                             </div>
                         </section>
@@ -120,7 +131,11 @@ export const SelectDatabaseContent: React.FC<SelectDatabaseContentProps> = ({
                             />
                             <div className={DATABASE_GRID_CLASS}>
                                 {filteredOtherTypes.map((type) => (
-                                    <DatabaseOption key={type} type={type} />
+                                    <DatabaseOption
+                                        key={type}
+                                        type={type}
+                                        className={DATABASE_OPTION_CLASS}
+                                    />
                                 ))}
                             </div>
                         </section>

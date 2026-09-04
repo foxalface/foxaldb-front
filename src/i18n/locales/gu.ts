@@ -701,8 +701,6 @@ export const gu: LanguageTranslation = {
                 clear_search: 'શોધ સાફ કરો',
                 primary_group: 'પ્રાથમિક ડેટાબેઝ',
                 other_group: 'અન્ય ડેટાબેઝ',
-                check_examples_long: 'ઉદાહરણ જુઓ',
-                check_examples_short: 'ઉદાહરણ',
             },
 
             choose_intent: {
@@ -815,6 +813,12 @@ export const gu: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'સ્ત્રોત DBMS પસંદ કરો',
+                    multiple_dbms_title: 'બહુવિધ DBMS શોધાયા',
+                    selection_help_percentages:
+                        'ટકાવારી દરેક DBMS માટે SQL બોલી મેળ ઇન્ડેક્સ દર્શાવે છે.',
+                    selection_help_recommended:
+                        'તારો ભલામણ કરેલ DBMS દર્શાવે છે.',
+                    selection_help_aria: 'ટકાવારી અને ભલામણ વિશે મદદ',
                     confidence_explanation:
                         'ટકાવારી દરેક DBMS માટે શોધાયેલ SQL બોલી સાથે સંગતિ સૂચક દર્શાવે છે.',
                     description:
@@ -825,8 +829,8 @@ export const gu: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% વિશ્વાસ, આપમેળે શોધ)',
-                    recommended_tooltip: 'આપમેળે શોધાયેલ DBMS',
-                    recommended_aria: '{{database}}, આપમેળે શોધાયેલ DBMS',
+                    recommended_tooltip: 'ભલામણ કરેલ DBMS',
+                    recommended_aria: '{{database}}, ભલામણ કરેલ DBMS',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -841,6 +845,11 @@ export const gu: LanguageTranslation = {
                     ambiguous: {
                         title: 'Choose the diagram DBMS',
                         description: 'આ આયાત માટે લાગુ કરવાનો વિકલ્પ પસંદ કરો.',
+                        selection_help_percentages:
+                            'ટકાવારી દરેક DBMS માટે મેળ ઇન્ડેક્સ દર્શાવે છે.',
+                        selection_help_recommended:
+                            'તારો ફાઇલમાં દર્શાવેલ DBMS દર્શાવે છે.',
+                        selection_help_aria: 'ટકાવારી અને ભલામણ વિશે મદદ',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -879,9 +888,30 @@ export const gu: LanguageTranslation = {
                     migrations_found_other: '{{count}} માઇગ્રેશન મળ્યા',
                     schema_files_found_one: '{{count}} સ્કીમા ફાઇલ મળી',
                     schema_files_found_other: '{{count}} સ્કીમા ફાઇલો મળી',
+                    model_snapshots_found_one:
+                        '{{count}} મોડેલ સ્નેપશોટ મળ્યું',
+                    model_snapshots_found_other:
+                        '{{count}} મોડેલ સ્નેપશોટ મળ્યા',
+                    sql_migrations_found_one: '{{count}} SQL માઇગ્રેશન મળ્યું',
+                    sql_migrations_found_other: '{{count}} SQL માઇગ્રેશન મળ્યા',
+                    migrations_button_one: '{{count}} માઇગ્રેશન',
+                    migrations_button_other: '{{count}} માઇગ્રેશન',
+                    schema_files_button_one: '{{count}} સ્કીમા ફાઇલ મળી',
+                    schema_files_button_other: '{{count}} સ્કીમા ફાઇલો મળી',
+                    model_snapshots_button_one: '{{count}} મોડેલ સ્નેપશોટ',
+                    model_snapshots_button_other: '{{count}} મોડેલ સ્નેપશોટ',
+                    sql_migrations_button_one: '{{count}} માઇગ્રેશન',
+                    sql_migrations_button_other: '{{count}} માઇગ્રેશન',
                     multiple_projects_title: 'બહુવિધ ડેટાબેસ સ્કીમા શોધાયા',
                     multiple_projects_description:
                         'આ આર્કાઇવમાં એકથી વધુ સમર્થિત ડેટાબેસ પ્રોજેક્ટ છે. કયું આયાત કરવું તે પસંદ કરો.',
+                    multiple_database_groups_title:
+                        'બહુવિધ ડેટાબેઝ સ્કીમા મળ્યા',
+                    multiple_database_groups_description:
+                        'આ પ્રોજેક્ટમાં બહુવિધ ડેટાબેઝ સ્કીમા છે. આયાત કરવા માટે એક પસંદ કરો.',
+                    choose_database_group: 'ડેટાબેઝ સ્કીમા પસંદ કરો',
+                    group_recommended_aria: '{{label}} ભલામણ કરેલ',
+                    group_recommended_tooltip: 'ભલામણ કરેલ સ્કીમા',
                     choose_project: 'પ્રોજેક્ટ પસંદ કરો',
                     unsupported_project: 'અસમર્થિત પ્રોજેક્ટ આર્કાઇવ',
                     unsupported_project_description:

@@ -30,11 +30,16 @@ export {
 export { isZipArchiveBytes } from './archive/archive-utils';
 export { analyzeProjectArchive } from './analyze-project-archive';
 export { collectFileBundle } from './bundle/collect-file-bundle';
+export { collectGroupBundle } from './bundle/collect-group-bundle';
 export {
     FRAMEWORK_FILE_SPECS,
     isAllowedFrameworkRelativePath,
     isExcludedBundlePath,
 } from './bundle/framework-file-specs';
+export {
+    detectDatabaseGroups,
+    getDatabaseGroupKey,
+} from './detection/database-groups/detect-database-groups';
 export {
     detectProjectCandidates,
     getSelectableCandidates,
@@ -79,10 +84,14 @@ export {
     UnsupportedProjectImportApiVersionError,
 } from './project-import-errors';
 export { getProjectSummaryMetrics } from './project-summary-metrics';
+export { getDatabaseGroupSummaryMetrics } from './database-group-summary-metrics';
 export type {
     ParserLocation,
     ProjectArchiveAnalysis,
     ProjectArchiveAnalysisStatus,
+    ProjectDatabaseGroup,
+    ProjectDatabaseGroupAnalysis,
+    ProjectDatabaseGroupAnalysisStatus,
     ProjectDetectionCandidate,
     ProjectDetectionConfidence,
     ProjectEvidence,

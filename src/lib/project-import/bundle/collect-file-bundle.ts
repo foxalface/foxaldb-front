@@ -50,10 +50,56 @@ const isRelevantCandidatePath = (
     return isAllowedFrameworkRelativePath(candidate.framework, relativePath);
 };
 
-export const collectFileBundle = async (
+const collectVirtualLayoutBundle = async (
     archive: ArchiveReader,
     candidate: ProjectDetectionCandidate
+): Promise<ProjectFileBundleEntry[]> => {
+    const mappings = candidate.pathMappings ?? [];
+    const filesByRelativePath = new Map<string, ProjectFileBundleEntry>();
+
+    for (const mapping of mappings) {
+        if (filesByRelativePath.has(mapping.logicalPath)) {
+            throw new Error('Virtual layout logical path collision detected.');
+        }
+
+        if (
+            !isAllowedFrameworkRelativePath(
+                candidate.framework,
+                mapping.logicalPath
+            ) ||
+            isExcludedBundlePath(mapping.logicalPath)
+        ) {
+            continue;
+        }
+
+        const content = await archive.readText(mapping.physicalPath);
+        filesByRelativePath.set(mapping.logicalPath, {
+            relativePath: mapping.logicalPath,
+            content,
+        });
+    }
+
+    return Array.from(filesByRelativePath.values()).sort((left, right) =>
+        left.relativePath.localeCompare(right.relativePath)
+    );
+};
+
+export const collectFileBundle = async (
+    archive: ArchiveReader,
+    candidate: ProjectDetectionCandidate,
+    options?: { diagramNameHint?: string }
 ): Promise<ProjectFileBundle> => {
+    if (candidate.usesVirtualLayout && candidate.pathMappings) {
+        const files = await collectVirtualLayoutBundle(archive, candidate);
+
+        return {
+            framework: candidate.framework,
+            rootPath: normalizeRootPath(candidate.rootPath),
+            files,
+            diagramNameHint: options?.diagramNameHint,
+        };
+    }
+
     const index = buildArchivePathIndex(archive);
     const candidatePaths = getPathsUnderRoot(
         index.filePaths,
@@ -121,6 +167,7 @@ export const collectFileBundle = async (
         framework: candidate.framework,
         rootPath: normalizeRootPath(candidate.rootPath),
         files,
+        diagramNameHint: options?.diagramNameHint,
     };
 };
 

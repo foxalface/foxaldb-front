@@ -671,8 +671,6 @@ export const zh_TW: LanguageTranslation = {
                 clear_search: '清除搜尋',
                 primary_group: '主要資料庫',
                 other_group: '其他資料庫',
-                check_examples_long: '查看範例',
-                check_examples_short: '範例',
             },
 
             choose_intent: {
@@ -775,6 +773,12 @@ export const zh_TW: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: '選擇來源 DBMS',
+                    multiple_dbms_title: '偵測到多個資料庫管理系統',
+                    selection_help_percentages:
+                        '百分比表示每個資料庫管理系統的 SQL 方言比對指數。',
+                    selection_help_recommended:
+                        '星號標示建議的資料庫管理系統。',
+                    selection_help_aria: '百分比與建議說明',
                     confidence_explanation:
                         '百分比表示各 DBMS 與偵測到的 SQL 方言的匹配指數。',
                     description:
@@ -785,7 +789,7 @@ export const zh_TW: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}}（{{percent}}% 置信度，自動偵測）',
-                    recommended_tooltip: '自動偵測的 DBMS',
+                    recommended_tooltip: '建議的資料庫管理系統',
                     recommended_aria: '{{database}}，自動偵測的 DBMS',
                     candidate: '{{database}}',
                 },
@@ -801,6 +805,11 @@ export const zh_TW: LanguageTranslation = {
                     ambiguous: {
                         title: 'Choose the diagram DBMS',
                         description: '請選擇要用於此匯入的選項。',
+                        selection_help_percentages:
+                            '百分比表示每個資料庫管理系統的比對指數。',
+                        selection_help_recommended:
+                            '星號標示檔案中指明的資料庫管理系統。',
+                        selection_help_aria: '百分比與建議說明',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -838,9 +847,27 @@ export const zh_TW: LanguageTranslation = {
                     migrations_found_other: '找到 {{count}} 個遷移',
                     schema_files_found_one: '找到 {{count}} 個結構描述檔',
                     schema_files_found_other: '找到 {{count}} 個結構描述檔',
+                    model_snapshots_found_one: '找到 {{count}} 個模型快照',
+                    model_snapshots_found_other: '找到 {{count}} 個模型快照',
+                    sql_migrations_found_one: '找到 {{count}} 個 SQL 遷移',
+                    sql_migrations_found_other: '找到 {{count}} 個 SQL 遷移',
+                    migrations_button_one: '找到 {{count}} 個遷移',
+                    migrations_button_other: '找到 {{count}} 個遷移',
+                    schema_files_button_one: '找到 {{count}} 個結構描述檔',
+                    schema_files_button_other: '找到 {{count}} 個結構描述檔',
+                    model_snapshots_button_one: '找到 {{count}} 個模型快照',
+                    model_snapshots_button_other: '找到 {{count}} 個模型快照',
+                    sql_migrations_button_one: '找到 {{count}} 個 SQL 遷移',
+                    sql_migrations_button_other: '找到 {{count}} 個 SQL 遷移',
                     multiple_projects_title: '偵測到多個資料庫結構描述',
                     multiple_projects_description:
                         '此壓縮檔包含多個支援的資料庫專案。請選擇要匯入的專案。',
+                    multiple_database_groups_title: '偵測到多個資料庫結構',
+                    multiple_database_groups_description:
+                        '此專案包含多個資料庫結構。請選擇要匯入的結構。',
+                    choose_database_group: '選擇資料庫結構',
+                    group_recommended_aria: '推薦 {{label}}',
+                    group_recommended_tooltip: '推薦結構',
                     choose_project: '選擇專案',
                     unsupported_project: '不支援的專案壓縮檔',
                     unsupported_project_description:

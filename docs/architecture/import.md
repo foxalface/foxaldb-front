@@ -115,10 +115,14 @@ Six frameworks supported via the create-diagram wizard (`ImportSchemaStep` → p
 ### Detection and dispatch
 
 1. `ArchiveReader` opens ZIP with M1 security limits.
-2. `detectProjectCandidates()` scores framework evidence; ambiguity UI when needed.
-3. `collectFileBundle()` retains only framework-specific allowed files.
+2. `detectProjectCandidates()` scores framework evidence from canonical paths first, then applies conservative **virtual layout** inference when canonical structure is missing but file content signatures are strong (physical paths are mapped to logical framework paths in bundle metadata only).
+3. `collectFileBundle()` retains only framework-specific allowed files (reads physical paths, exposes logical paths to parsers).
 4. `importProject()` dispatches to `parseLocalProject()` or `parseRemoteProject()` based on per-framework capability — no UI framework conditionals for parsing.
 5. Result shape: `{ framework, diagram, diagnostics }` only — no raw source, archive, or auth objects.
+
+Users may upload a full project ZIP, a project subfolder ZIP, or a minimal relevant-files ZIP. Canonical framework directory structure is **not** required when FoxalDB can identify the framework unambiguously from file content and companion artifacts.
+
+When a single archive contains **multiple logical database schemas** (for example Laravel `database/migrations/catalog/` and `database/migrations/tenant/`, or multiple EF Core `DbContext` snapshots), FoxalDB detects the groups and asks which schema to import. One selected group produces one new diagram. Shared root migrations may be included as supporting files when framework semantics require them.
 
 Merge / Fusionner is **not** part of project import; deferred to a future milestone.
 

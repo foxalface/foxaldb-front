@@ -8,6 +8,7 @@ import {
     containsDependency,
     type ProjectDetector,
 } from '../detector-utils';
+import { isCanonicalDrizzleSqlPath } from '../virtual-layout/virtual-layout-utils';
 
 const DRIZZLE_PACKAGE_PATTERNS = [/"drizzle-orm"/i, /"drizzle-kit"/i];
 
@@ -37,11 +38,8 @@ export const detectDrizzleProject: ProjectDetector = async (
         relevantFiles.push(journalPath);
     }
 
-    const sqlPaths = listPathsMatching(
-        index,
-        rootPath,
-        (filePath) =>
-            filePath.includes('/drizzle/') && filePath.endsWith('.sql')
+    const sqlPaths = listPathsMatching(index, rootPath, (filePath) =>
+        isCanonicalDrizzleSqlPath(filePath)
     );
     if (sqlPaths.length > 0) {
         evidence.push(evidenceFromCode('drizzle_sql', sqlPaths[0]));

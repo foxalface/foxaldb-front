@@ -729,8 +729,6 @@ export const de: LanguageTranslation = {
                 clear_search: 'Suche löschen',
                 primary_group: 'Primäre Datenbanken',
                 other_group: 'Weitere Datenbanken',
-                check_examples_long: 'Beispiele ansehen',
-                check_examples_short: 'Beispiele',
             },
 
             choose_intent: {
@@ -846,6 +844,13 @@ export const de: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Quell-DBMS wählen',
+                    multiple_dbms_title: 'Mehrere DBMS erkannt',
+                    selection_help_percentages:
+                        'Die Prozentsätze geben den Übereinstimmungsindex des SQL-Dialekts für jedes DBMS an.',
+                    selection_help_recommended:
+                        'Der Stern markiert das empfohlene DBMS.',
+                    selection_help_aria:
+                        'Hilfe zu Prozentsätzen und Empfehlung',
                     confidence_explanation:
                         'Die Prozentsätze geben den Übereinstimmungsindex mit dem erkannten SQL-Dialekt für jedes DBMS an.',
                     description:
@@ -856,9 +861,8 @@ export const de: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% Vertrauen, automatisch erkannt)',
-                    recommended_tooltip: 'Automatisch erkanntes DBMS',
-                    recommended_aria:
-                        '{{database}}, automatisch erkanntes DBMS',
+                    recommended_tooltip: 'Empfohlenes DBMS',
+                    recommended_aria: '{{database}}, empfohlenes DBMS',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -874,6 +878,12 @@ export const de: LanguageTranslation = {
                         title: 'DBMS des Diagramms wählen',
                         description:
                             'Wählen Sie die Option, die für diesen Import angewendet werden soll.',
+                        selection_help_percentages:
+                            'Die Prozentsätze geben den Übereinstimmungsindex für jedes DBMS an.',
+                        selection_help_recommended:
+                            'Der Stern markiert das im Diagramm angegebene DBMS.',
+                        selection_help_aria:
+                            'Hilfe zu Prozentsätzen und Empfehlung',
                         choose_source: 'Diagramm-DBMS wählen',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -913,10 +923,33 @@ export const de: LanguageTranslation = {
                     schema_files_found_one: '{{count}} Schemadatei gefunden',
                     schema_files_found_other:
                         '{{count}} Schemadateien gefunden',
+                    model_snapshots_found_one:
+                        '{{count}} Modell-Snapshot gefunden',
+                    model_snapshots_found_other:
+                        '{{count}} Modell-Snapshots gefunden',
+                    sql_migrations_found_one:
+                        '{{count}} SQL-Migration gefunden',
+                    sql_migrations_found_other:
+                        '{{count}} SQL-Migrationen gefunden',
+                    migrations_button_one: '{{count}} Migration',
+                    migrations_button_other: '{{count}} Migrationen',
+                    schema_files_button_one: '{{count}} Schemadatei',
+                    schema_files_button_other: '{{count}} Schemadateien',
+                    model_snapshots_button_one: '{{count}} Modell-Snapshot',
+                    model_snapshots_button_other: '{{count}} Modell-Snapshots',
+                    sql_migrations_button_one: '{{count}} Migration',
+                    sql_migrations_button_other: '{{count}} Migrationen',
                     multiple_projects_title:
                         'Mehrere Datenbankschemata erkannt',
                     multiple_projects_description:
                         'Dieses Archiv enthält mehr als ein unterstütztes Datenbankprojekt. Wählen Sie aus, welches importiert werden soll.',
+                    multiple_database_groups_title:
+                        'Mehrere Datenbankschemata erkannt',
+                    multiple_database_groups_description:
+                        'Dieses Projekt enthält mehrere Datenbankschemata. Wählen Sie aus, welches importiert werden soll.',
+                    choose_database_group: 'Datenbankschema auswählen',
+                    group_recommended_aria: '{{label}} empfohlen',
+                    group_recommended_tooltip: 'Empfohlenes Schema',
                     choose_project: 'Projekt auswählen',
                     unsupported_project: 'Nicht unterstütztes Projektarchiv',
                     unsupported_project_description:

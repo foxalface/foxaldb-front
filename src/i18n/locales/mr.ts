@@ -708,8 +708,6 @@ export const mr: LanguageTranslation = {
                 clear_search: 'शोध साफ करा',
                 primary_group: 'प्राथमिक डेटाबेस',
                 other_group: 'इतर डेटाबेस',
-                check_examples_long: 'उदाहरणे तपासा',
-                check_examples_short: 'उदाहरणे',
             },
 
             choose_intent: {
@@ -822,6 +820,12 @@ export const mr: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'स्रोत DBMS निवडा',
+                    multiple_dbms_title: 'अनेक DBMS आढळले',
+                    selection_help_percentages:
+                        'टक्केवारी प्रत्येक DBMS साठी SQL बोली जुळणी निर्देशक दर्शवते.',
+                    selection_help_recommended:
+                        'तारा शिफारस केलेला DBMS दर्शवतो.',
+                    selection_help_aria: 'टक्केवारी आणि शिफारसीबद्दल मदत',
                     confidence_explanation:
                         'टक्केवारी प्रत्येक DBMS साठी आढळलेल्या SQL बोलीच्या जुळणी निर्देशकाचे प्रतिनिधित्व करते.',
                     description:
@@ -832,8 +836,8 @@ export const mr: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% विश्वास, स्वयंचलित ओळख)',
-                    recommended_tooltip: 'स्वयंचलितपणे ओळखलेले DBMS',
-                    recommended_aria: '{{database}}, स्वयंचलितपणे ओळखलेले DBMS',
+                    recommended_tooltip: 'शिफारस केलेला DBMS',
+                    recommended_aria: '{{database}}, शिफारस केलेला DBMS',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -849,6 +853,11 @@ export const mr: LanguageTranslation = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'या आयातासाठी लागू करण्यासाठी पर्याय निवडा.',
+                        selection_help_percentages:
+                            'टक्केवारी प्रत्येक DBMS साठी जुळणी निर्देशक दर्शवते.',
+                        selection_help_recommended:
+                            'तारा फाइलमध्ये नमूद केलेला DBMS दर्शवतो.',
+                        selection_help_aria: 'टक्केवारी आणि शिफारसीबद्दल मदत',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -886,9 +895,33 @@ export const mr: LanguageTranslation = {
                     migrations_found_other: '{{count}} मायग्रेशन सापडले',
                     schema_files_found_one: '{{count}} स्कीमा फाइल सापडली',
                     schema_files_found_other: '{{count}} स्कीमा फाइल सापडल्या',
+                    model_snapshots_found_one:
+                        '{{count}} मॉडेल स्नॅपशॉट सापडले',
+                    model_snapshots_found_other:
+                        '{{count}} मॉडेल स्नॅपशॉट सापडले',
+                    sql_migrations_found_one: '{{count}} SQL मायग्रेशन सापडले',
+                    sql_migrations_found_other:
+                        '{{count}} SQL मायग्रेशन सापडले',
+                    migrations_button_one: '{{count}} मायग्रेशन सापडले',
+                    migrations_button_other: '{{count}} मायग्रेशन सापडले',
+                    schema_files_button_one: '{{count}} स्कीमा फाइल सापडली',
+                    schema_files_button_other: '{{count}} स्कीमा फाइल सापडल्या',
+                    model_snapshots_button_one:
+                        '{{count}} मॉडेल स्नॅपशॉट सापडले',
+                    model_snapshots_button_other:
+                        '{{count}} मॉडेल स्नॅपशॉट सापडले',
+                    sql_migrations_button_one: '{{count}} SQL मायग्रेशन सापडले',
+                    sql_migrations_button_other:
+                        '{{count}} SQL मायग्रेशन सापडले',
                     multiple_projects_title: 'अनेक डेटाबेस स्कीमा सापडले',
                     multiple_projects_description:
                         'या आर्काइवमध्ये एकापेक्षा जास्त समर्थित डेटाबेस प्रकल्प आहेत. कोणता आयात करायचा ते निवडा.',
+                    multiple_database_groups_title: 'अनेक डेटाबेस स्कीमा आढळले',
+                    multiple_database_groups_description:
+                        'या प्रकल्पात अनेक डेटाबेस स्कीमा आहेत. आयात करण्यासाठी एक निवडा.',
+                    choose_database_group: 'डेटाबेस स्कीमा निवडा',
+                    group_recommended_aria: '{{label}} शिफारस केलेले',
+                    group_recommended_tooltip: 'शिफारस केलेली स्कीमा',
                     choose_project: 'प्रकल्प निवडा',
                     unsupported_project: 'असमर्थित प्रकल्प आर्काइव',
                     unsupported_project_description:

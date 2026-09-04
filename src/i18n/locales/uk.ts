@@ -709,8 +709,6 @@ export const uk: LanguageTranslation = {
                 clear_search: 'Очистити пошук',
                 primary_group: 'Основні бази даних',
                 other_group: 'Інші бази даних',
-                check_examples_long: 'Подивіться приклади',
-                check_examples_short: 'Приклади',
             },
 
             choose_intent: {
@@ -822,6 +820,12 @@ export const uk: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Виберіть вихідну СУБД',
+                    multiple_dbms_title: 'Виявлено кілька СУБД',
+                    selection_help_percentages:
+                        'Відсотки показують індекс відповідності SQL-діалекту для кожної СУБД.',
+                    selection_help_recommended:
+                        'Зірка позначає рекомендовану СУБД.',
+                    selection_help_aria: 'Довідка про відсотки та рекомендацію',
                     confidence_explanation:
                         'Відсотки вказують на індекс відповідності виявленому діалекту SQL для кожної СУБД.',
                     description:
@@ -832,9 +836,8 @@ export const uk: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% впевненості, автоматичне визначення)',
-                    recommended_tooltip: 'Автоматично визначена СУБД',
-                    recommended_aria:
-                        '{{database}}, автоматично визначена СУБД',
+                    recommended_tooltip: 'Рекомендована СУБД',
+                    recommended_aria: '{{database}}, рекомендована СУБД',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -850,6 +853,12 @@ export const uk: LanguageTranslation = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'Виберіть варіант, який буде застосовано для цього імпорту.',
+                        selection_help_percentages:
+                            'Відсотки показують індекс відповідності для кожної СУБД.',
+                        selection_help_recommended:
+                            'Зірка позначає СУБД, зазначену у файлі.',
+                        selection_help_aria:
+                            'Довідка про відсотки та рекомендацію',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -888,9 +897,36 @@ export const uk: LanguageTranslation = {
                     migrations_found_other: 'Знайдено {{count}} міграцій',
                     schema_files_found_one: 'Знайдено {{count}} файл схеми',
                     schema_files_found_other: 'Знайдено {{count}} файлів схеми',
+                    model_snapshots_found_one:
+                        'Знайдено {{count}} знімок моделі',
+                    model_snapshots_found_other:
+                        'Знайдено {{count}} знімків моделі',
+                    sql_migrations_found_one: 'Знайдено {{count}} SQL-міграцію',
+                    sql_migrations_found_other:
+                        'Знайдено {{count}} SQL-міграцій',
+                    migrations_button_one: 'Знайдено {{count}} міграцію',
+                    migrations_button_other: 'Знайдено {{count}} міграцій',
+                    schema_files_button_one: 'Знайдено {{count}} файл схеми',
+                    schema_files_button_other:
+                        'Знайдено {{count}} файлів схеми',
+                    model_snapshots_button_one:
+                        'Знайдено {{count}} знімок моделі',
+                    model_snapshots_button_other:
+                        'Знайдено {{count}} знімків моделі',
+                    sql_migrations_button_one:
+                        'Знайдено {{count}} SQL-міграцію',
+                    sql_migrations_button_other:
+                        'Знайдено {{count}} SQL-міграцій',
                     multiple_projects_title: 'Виявлено кілька схем баз даних',
                     multiple_projects_description:
                         'Цей архів містить більше одного підтримуваного проєкту бази даних. Виберіть, який імпортувати.',
+                    multiple_database_groups_title:
+                        'Виявлено кілька схем бази даних',
+                    multiple_database_groups_description:
+                        'Цей проєкт містить кілька схем бази даних. Виберіть, яку імпортувати.',
+                    choose_database_group: 'Виберіть схему бази даних',
+                    group_recommended_aria: 'Рекомендовано {{label}}',
+                    group_recommended_tooltip: 'Рекомендована схема',
                     choose_project: 'Виберіть проєкт',
                     unsupported_project: 'Непідтримуваний архів проєкту',
                     unsupported_project_description:

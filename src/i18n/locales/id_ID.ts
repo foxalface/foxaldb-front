@@ -710,8 +710,6 @@ export const id_ID: LanguageTranslation = {
                 clear_search: 'Hapus pencarian',
                 primary_group: 'Basis data utama',
                 other_group: 'Basis data lainnya',
-                check_examples_long: 'Lihat Contoh',
-                check_examples_short: 'Contoh',
             },
 
             choose_intent: {
@@ -824,6 +822,13 @@ export const id_ID: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Pilih DBMS sumber',
+                    multiple_dbms_title: 'Beberapa DBMS terdeteksi',
+                    selection_help_percentages:
+                        'Persentase menunjukkan indeks kecocokan dialek SQL untuk setiap DBMS.',
+                    selection_help_recommended:
+                        'Bintang menandai DBMS yang direkomendasikan.',
+                    selection_help_aria:
+                        'Bantuan tentang persentase dan rekomendasi',
                     confidence_explanation:
                         'Persentase menunjukkan indeks kecocokan dialek SQL untuk setiap DBMS.',
                     description:
@@ -834,8 +839,9 @@ export const id_ID: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% keyakinan, deteksi otomatis)',
-                    recommended_tooltip: 'DBMS terdeteksi otomatis',
-                    recommended_aria: '{{database}}, DBMS terdeteksi otomatis',
+                    recommended_tooltip: 'DBMS yang direkomendasikan',
+                    recommended_aria:
+                        '{{database}}, DBMS yang direkomendasikan',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -851,6 +857,12 @@ export const id_ID: LanguageTranslation = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'Pilih opsi yang akan diterapkan untuk impor ini.',
+                        selection_help_percentages:
+                            'Persentase menunjukkan indeks kecocokan untuk setiap DBMS.',
+                        selection_help_recommended:
+                            'Bintang menandai DBMS yang disebutkan dalam file.',
+                        selection_help_aria:
+                            'Bantuan tentang persentase dan rekomendasi',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -889,10 +901,36 @@ export const id_ID: LanguageTranslation = {
                     migrations_found_other: '{{count}} migrasi ditemukan',
                     schema_files_found_one: '{{count}} file skema ditemukan',
                     schema_files_found_other: '{{count}} file skema ditemukan',
+                    model_snapshots_found_one:
+                        '{{count}} snapshot model ditemukan',
+                    model_snapshots_found_other:
+                        '{{count}} snapshot model ditemukan',
+                    sql_migrations_found_one: '{{count}} migrasi SQL ditemukan',
+                    sql_migrations_found_other:
+                        '{{count}} migrasi SQL ditemukan',
+                    migrations_button_one: '{{count}} migrasi ditemukan',
+                    migrations_button_other: '{{count}} migrasi ditemukan',
+                    schema_files_button_one: '{{count}} file skema ditemukan',
+                    schema_files_button_other: '{{count}} file skema ditemukan',
+                    model_snapshots_button_one:
+                        '{{count}} snapshot model ditemukan',
+                    model_snapshots_button_other:
+                        '{{count}} snapshot model ditemukan',
+                    sql_migrations_button_one:
+                        '{{count}} migrasi SQL ditemukan',
+                    sql_migrations_button_other:
+                        '{{count}} migrasi SQL ditemukan',
                     multiple_projects_title:
                         'Beberapa skema database terdeteksi',
                     multiple_projects_description:
                         'Arsip ini berisi lebih dari satu proyek database yang didukung. Pilih yang akan diimpor.',
+                    multiple_database_groups_title:
+                        'Beberapa skema basis data terdeteksi',
+                    multiple_database_groups_description:
+                        'Proyek ini berisi beberapa skema basis data. Pilih yang akan diimpor.',
+                    choose_database_group: 'Pilih skema basis data',
+                    group_recommended_aria: '{{label}} direkomendasikan',
+                    group_recommended_tooltip: 'Skema yang direkomendasikan',
                     choose_project: 'Pilih proyek',
                     unsupported_project: 'Arsip proyek tidak didukung',
                     unsupported_project_description:

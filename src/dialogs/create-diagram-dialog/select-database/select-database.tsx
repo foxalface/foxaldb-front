@@ -10,7 +10,6 @@ import {
 import { Input } from '@/components/input/input';
 import { useTranslation } from 'react-i18next';
 import { SelectDatabaseContent } from './select-database-content';
-import { ExampleOption } from './example-option';
 import { useDialog } from '@/hooks/use-dialog';
 import type { DatabaseType } from '@/lib/domain/database-type';
 
@@ -33,15 +32,15 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
 
     return (
         <>
-            <DialogHeader>
-                <DialogTitle>
-                    {t('new_diagram_dialog.database_selection.title')}
-                </DialogTitle>
-                <DialogDescription>
-                    {t('new_diagram_dialog.database_selection.description')}
-                </DialogDescription>
-            </DialogHeader>
-            <div className="mx-auto flex w-full max-w-[26rem] flex-col items-center gap-2">
+            <div className="mx-auto flex w-full max-w-[26rem] flex-col items-stretch gap-4 overflow-visible">
+                <DialogHeader>
+                    <DialogTitle>
+                        {t('new_diagram_dialog.database_selection.title')}
+                    </DialogTitle>
+                    <DialogDescription>
+                        {t('new_diagram_dialog.database_selection.description')}
+                    </DialogDescription>
+                </DialogHeader>
                 <div className="relative w-full shrink-0">
                     <Search
                         className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -74,9 +73,6 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                     onDatabaseSelected={onDatabaseSelected}
                     setDatabaseType={setDatabaseType}
                 />
-                <div className="flex justify-center pt-2">
-                    <ExampleOption />
-                </div>
             </div>
             {!hasExistingDiagram ? (
                 <DialogFooter className="mt-4 flex !justify-start gap-2">

@@ -62,7 +62,9 @@ const laravelOptionalSpec: FrameworkFileSpec = {
 
 const prismaSchemaSpec: FrameworkFileSpec = {
     include: (relativePath) =>
-        relativePath.startsWith('prisma/') && relativePath.endsWith('.prisma'),
+        (relativePath.startsWith('prisma/') ||
+            relativePath.includes('/prisma/')) &&
+        relativePath.endsWith('.prisma'),
 };
 
 const prismaMigrationSpec: FrameworkFileSpec = {
@@ -78,16 +80,20 @@ const prismaOptionalSpec: FrameworkFileSpec = {
 
 const drizzleSqlSpec: FrameworkFileSpec = {
     include: (relativePath) =>
-        relativePath.startsWith('drizzle/') && relativePath.endsWith('.sql'),
+        (relativePath.startsWith('drizzle/') ||
+            relativePath.includes('/drizzle/')) &&
+        relativePath.endsWith('.sql'),
 };
 
 const drizzleJournalSpec: FrameworkFileSpec = {
-    include: (relativePath) => relativePath === 'drizzle/meta/_journal.json',
+    include: (relativePath) =>
+        relativePath === 'drizzle/meta/_journal.json' ||
+        relativePath.endsWith('/drizzle/meta/_journal.json'),
 };
 
 const drizzleConfigSpec: FrameworkFileSpec = {
     include: (relativePath) =>
-        /^drizzle\.config\.(ts|js|mjs|cjs)$/.test(relativePath),
+        /(^|\/)drizzle\.config\.(ts|js|mjs|cjs)$/.test(relativePath),
 };
 
 const railsSchemaSpec: FrameworkFileSpec = {

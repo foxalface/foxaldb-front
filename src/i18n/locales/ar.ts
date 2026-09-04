@@ -695,8 +695,6 @@ export const ar: LanguageTranslation = {
                 clear_search: 'مسح البحث',
                 primary_group: 'قواعد البيانات الرئيسية',
                 other_group: 'قواعد بيانات أخرى',
-                check_examples_long: 'ألقي نظرة على الأمثلة',
-                check_examples_short: 'أمثلة',
             },
 
             choose_intent: {
@@ -806,6 +804,13 @@ export const ar: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'اختر نظام إدارة قواعد البيانات المصدر',
+                    multiple_dbms_title:
+                        'تم اكتشاف عدة أنظمة إدارة قواعد بيانات',
+                    selection_help_percentages:
+                        'تشير النسب المئوية إلى مؤشر تطابق لهجة SQL لكل نظام إدارة قواعد بيانات.',
+                    selection_help_recommended:
+                        'تشير النجمة إلى نظام إدارة قواعد البيانات الموصى به.',
+                    selection_help_aria: 'مساعدة حول النسب المئوية والتوصية',
                     confidence_explanation:
                         'تُشير النسب المئوية إلى مؤشر التطابق مع لهجة SQL المكتشفة لكل نظام إدارة قواعد بيانات.',
                     description:
@@ -819,7 +824,7 @@ export const ar: LanguageTranslation = {
                     recommended_tooltip:
                         'نظام إدارة قواعد بيانات مكتشف تلقائيًا',
                     recommended_aria:
-                        '{{database}}، نظام إدارة قواعد بيانات مكتشف تلقائيًا',
+                        '{{database}}، نظام إدارة قواعد بيانات موصى به',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -835,6 +840,12 @@ export const ar: LanguageTranslation = {
                         title: 'اختر نظام إدارة قواعد البيانات للمخطط',
                         description:
                             'حدد الخيار الذي تريد تطبيقه لهذا الاستيراد.',
+                        selection_help_percentages:
+                            'تشير النسب المئوية إلى مؤشر التطابق لكل نظام إدارة قواعد بيانات.',
+                        selection_help_recommended:
+                            'تشير النجمة إلى النظام المحدد في الملف.',
+                        selection_help_aria:
+                            'مساعدة حول النسب المئوية والتوصية',
                         choose_source: 'اختر نظام إدارة قواعد البيانات للمخطط',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -874,10 +885,38 @@ export const ar: LanguageTranslation = {
                     schema_files_found_one: 'تم العثور على {{count}} ملف مخطط',
                     schema_files_found_other:
                         'تم العثور على {{count}} ملفات مخطط',
+                    model_snapshots_found_one:
+                        'تم العثور على {{count}} لقطة نموذج',
+                    model_snapshots_found_other:
+                        'تم العثور على {{count}} لقطات نموذج',
+                    sql_migrations_found_one:
+                        'تم العثور على {{count}} ترحيل SQL',
+                    sql_migrations_found_other:
+                        'تم العثور على {{count}} ترحيلات SQL',
+                    migrations_button_one: 'تم العثور على {{count}} ترحيل',
+                    migrations_button_other: 'تم العثور على {{count}} ترحيلات',
+                    schema_files_button_one: 'تم العثور على {{count}} ملف مخطط',
+                    schema_files_button_other:
+                        'تم العثور على {{count}} ملفات مخطط',
+                    model_snapshots_button_one:
+                        'تم العثور على {{count}} لقطة نموذج',
+                    model_snapshots_button_other:
+                        'تم العثور على {{count}} لقطات نموذج',
+                    sql_migrations_button_one:
+                        'تم العثور على {{count}} ترحيل SQL',
+                    sql_migrations_button_other:
+                        'تم العثور على {{count}} ترحيلات SQL',
                     multiple_projects_title:
                         'تم اكتشاف مخططات قواعد بيانات متعددة',
                     multiple_projects_description:
                         'يحتوي هذا الأرشيف على أكثر من مشروع قاعدة بيانات مدعوم. اختر المشروع الذي تريد استيراده.',
+                    multiple_database_groups_title:
+                        'تم اكتشاف عدة مخططات قاعدة بيانات',
+                    multiple_database_groups_description:
+                        'يحتوي هذا المشروع على عدة مخططات قاعدة بيانات. اختر المخطط الذي تريد استيراده.',
+                    choose_database_group: 'اختر مخطط قاعدة البيانات',
+                    group_recommended_aria: '{{label}} موصى به',
+                    group_recommended_tooltip: 'المخطط الموصى به',
                     choose_project: 'اختر المشروع',
                     unsupported_project: 'أرشيف مشروع غير مدعوم',
                     unsupported_project_description:

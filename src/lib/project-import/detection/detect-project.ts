@@ -1,7 +1,7 @@
 import type { ArchiveReader } from '../archive/archive-reader';
 import type { ProjectDetectionCandidate } from '../project-types';
 import {
-    isSelectableConfidence,
+    isSelectableCandidate,
     resolveDetectionConfidence,
     sumEvidenceScore,
 } from './evidence';
@@ -14,6 +14,7 @@ import { detectPrismaProject } from './detectors/prisma-detector';
 import { detectRailsProject } from './detectors/rails-detector';
 import { buildArchivePathIndex } from './archive-paths';
 import { discoverProjectRootCandidates } from './project-root-discovery';
+import { detectFlexibleLayoutCandidates } from './virtual-layout/detect-flexible-layout';
 
 const DETECTORS = [
     detectLaravelProject,
@@ -54,16 +55,29 @@ const mergeCandidates = (
 
         const evidence = Array.from(evidenceByCode.values());
         const score = sumEvidenceScore(evidence);
-        const relevantFiles = Array.from(
+        const mergedRelevantFiles = Array.from(
             new Set([...existing.relevantFiles, ...candidate.relevantFiles])
         ).sort();
+        const virtualCandidate = candidate.usesVirtualLayout
+            ? candidate
+            : existing.usesVirtualLayout
+              ? existing
+              : null;
 
         merged.set(key, {
             ...existing,
             evidence,
             score,
             confidence: resolveDetectionConfidence(score, evidence),
-            relevantFiles,
+            relevantFiles: virtualCandidate
+                ? virtualCandidate.relevantFiles
+                : mergedRelevantFiles,
+            ...(virtualCandidate
+                ? {
+                      usesVirtualLayout: true,
+                      pathMappings: virtualCandidate.pathMappings,
+                  }
+                : {}),
         });
     }
 
@@ -104,9 +118,15 @@ export const detectProjectCandidates = async (
     }
 
     const merged = mergeCandidates(detected);
+    const flexible = await detectFlexibleLayoutCandidates(
+        archive,
+        index,
+        merged
+    );
+    const combined = mergeCandidates([...merged, ...flexible]);
 
     return sortCandidates(
-        merged.map((candidate) => ({
+        combined.map((candidate) => ({
             ...candidate,
             parserLocation: getParserLocation(candidate.framework),
         }))
@@ -116,6 +136,4 @@ export const detectProjectCandidates = async (
 export const getSelectableCandidates = (
     candidates: ProjectDetectionCandidate[]
 ): ProjectDetectionCandidate[] =>
-    candidates.filter((candidate) =>
-        isSelectableConfidence(candidate.confidence)
-    );
+    candidates.filter((candidate) => isSelectableCandidate(candidate));

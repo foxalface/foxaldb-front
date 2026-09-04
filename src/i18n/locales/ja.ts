@@ -710,8 +710,6 @@ export const ja: LanguageTranslation = {
                 clear_search: '検索をクリア',
                 primary_group: '主要なデータベース',
                 other_group: 'その他のデータベース',
-                check_examples_long: '例を確認',
-                check_examples_short: '例',
             },
 
             choose_intent: {
@@ -826,6 +824,12 @@ export const ja: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'ソース DBMS を選択',
+                    multiple_dbms_title: '複数のDBMSが検出されました',
+                    selection_help_percentages:
+                        'パーセンテージは各DBMSのSQL方言の一致度を示します。',
+                    selection_help_recommended:
+                        '星印は推奨されるDBMSを示します。',
+                    selection_help_aria: 'パーセンテージと推奨に関するヘルプ',
                     confidence_explanation:
                         'パーセンテージは、各 DBMS の検出された SQL 方言との一致度を示します。',
                     description:
@@ -836,7 +840,7 @@ export const ja: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}}（信頼度 {{percent}}%、自動検出）',
-                    recommended_tooltip: '自動検出された DBMS',
+                    recommended_tooltip: '推奨DBMS',
                     recommended_aria: '{{database}}、自動検出された DBMS',
                     candidate: '{{database}}',
                 },
@@ -853,6 +857,12 @@ export const ja: LanguageTranslation = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'このインポートに適用するオプションを選択してください。',
+                        selection_help_percentages:
+                            'パーセンテージは各DBMSの一致度を示します。',
+                        selection_help_recommended:
+                            '星印はファイルに記載されたDBMSを示します。',
+                        selection_help_aria:
+                            'パーセンテージと推奨に関するヘルプ',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -896,10 +906,41 @@ export const ja: LanguageTranslation = {
                         'スキーマファイルを {{count}} 件見つけました',
                     schema_files_found_other:
                         'スキーマファイルを {{count}} 件見つけました',
+                    model_snapshots_found_one:
+                        'モデルスナップショットを {{count}} 件見つけました',
+                    model_snapshots_found_other:
+                        'モデルスナップショットを {{count}} 件見つけました',
+                    sql_migrations_found_one:
+                        'SQL マイグレーションを {{count}} 件見つけました',
+                    sql_migrations_found_other:
+                        'SQL マイグレーションを {{count}} 件見つけました',
+                    migrations_button_one:
+                        'マイグレーションを {{count}} 件見つけました',
+                    migrations_button_other:
+                        'マイグレーションを {{count}} 件見つけました',
+                    schema_files_button_one:
+                        'スキーマファイルを {{count}} 件見つけました',
+                    schema_files_button_other:
+                        'スキーマファイルを {{count}} 件見つけました',
+                    model_snapshots_button_one:
+                        'モデルスナップショットを {{count}} 件見つけました',
+                    model_snapshots_button_other:
+                        'モデルスナップショットを {{count}} 件見つけました',
+                    sql_migrations_button_one:
+                        'SQL マイグレーションを {{count}} 件見つけました',
+                    sql_migrations_button_other:
+                        'SQL マイグレーションを {{count}} 件見つけました',
                     multiple_projects_title:
                         '複数のデータベーススキーマを検出しました',
                     multiple_projects_description:
                         'このアーカイブには複数の対応データベースプロジェクトが含まれています。インポートするものを選択してください。',
+                    multiple_database_groups_title:
+                        '複数のデータベーススキーマが検出されました',
+                    multiple_database_groups_description:
+                        'このプロジェクトには複数のデータベーススキーマが含まれています。インポートするスキーマを選択してください。',
+                    choose_database_group: 'データベーススキーマを選択',
+                    group_recommended_aria: '{{label}} を推奨',
+                    group_recommended_tooltip: '推奨スキーマ',
                     choose_project: 'プロジェクトを選択',
                     unsupported_project:
                         'サポートされていないプロジェクトアーカイブ',

@@ -671,8 +671,6 @@ export const zh_CN: LanguageTranslation = {
                 clear_search: '清除搜索',
                 primary_group: '主要数据库',
                 other_group: '其他数据库',
-                check_examples_long: '查看样例',
-                check_examples_short: '样例',
             },
 
             choose_intent: {
@@ -775,6 +773,12 @@ export const zh_CN: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: '选择源 DBMS',
+                    multiple_dbms_title: '检测到多个数据库管理系统',
+                    selection_help_percentages:
+                        '百分比表示每个数据库管理系统的 SQL 方言匹配指数。',
+                    selection_help_recommended:
+                        '星标表示推荐的数据库管理系统。',
+                    selection_help_aria: '有关百分比和推荐的帮助',
                     confidence_explanation:
                         '百分比表示各 DBMS 与检测到的 SQL 方言的匹配指数。',
                     description:
@@ -785,7 +789,7 @@ export const zh_CN: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}}（{{percent}}% 置信度，自动检测）',
-                    recommended_tooltip: '自动检测的 DBMS',
+                    recommended_tooltip: '推荐的数据库管理系统',
                     recommended_aria: '{{database}}，自动检测的 DBMS',
                     candidate: '{{database}}',
                 },
@@ -801,6 +805,11 @@ export const zh_CN: LanguageTranslation = {
                     ambiguous: {
                         title: 'Choose the diagram DBMS',
                         description: '请选择要用于此导入的选项。',
+                        selection_help_percentages:
+                            '百分比表示每个数据库管理系统的匹配指数。',
+                        selection_help_recommended:
+                            '星标表示文件中指示的数据库管理系统。',
+                        selection_help_aria: '有关百分比和推荐的帮助',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -838,9 +847,27 @@ export const zh_CN: LanguageTranslation = {
                     migrations_found_other: '找到 {{count}} 个迁移',
                     schema_files_found_one: '找到 {{count}} 个架构文件',
                     schema_files_found_other: '找到 {{count}} 个架构文件',
+                    model_snapshots_found_one: '找到 {{count}} 个模型快照',
+                    model_snapshots_found_other: '找到 {{count}} 个模型快照',
+                    sql_migrations_found_one: '找到 {{count}} 个 SQL 迁移',
+                    sql_migrations_found_other: '找到 {{count}} 个 SQL 迁移',
+                    migrations_button_one: '找到 {{count}} 个迁移',
+                    migrations_button_other: '找到 {{count}} 个迁移',
+                    schema_files_button_one: '找到 {{count}} 个架构文件',
+                    schema_files_button_other: '找到 {{count}} 个架构文件',
+                    model_snapshots_button_one: '找到 {{count}} 个模型快照',
+                    model_snapshots_button_other: '找到 {{count}} 个模型快照',
+                    sql_migrations_button_one: '找到 {{count}} 个 SQL 迁移',
+                    sql_migrations_button_other: '找到 {{count}} 个 SQL 迁移',
                     multiple_projects_title: '检测到多个数据库架构',
                     multiple_projects_description:
                         '此压缩包包含多个受支持的数据库项目。请选择要导入的项目。',
+                    multiple_database_groups_title: '检测到多个数据库架构',
+                    multiple_database_groups_description:
+                        '此项目包含多个数据库架构。请选择要导入的架构。',
+                    choose_database_group: '选择数据库架构',
+                    group_recommended_aria: '推荐 {{label}}',
+                    group_recommended_tooltip: '推荐架构',
                     choose_project: '选择项目',
                     unsupported_project: '不支持的项目压缩包',
                     unsupported_project_description:

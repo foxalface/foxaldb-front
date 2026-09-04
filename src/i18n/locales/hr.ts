@@ -704,8 +704,6 @@ export const hr: LanguageTranslation = {
                 clear_search: 'Očisti pretragu',
                 primary_group: 'Primarne baze podataka',
                 other_group: 'Ostale baze podataka',
-                check_examples_long: 'Pogledaj primjere',
-                check_examples_short: 'Primjeri',
             },
 
             choose_intent: {
@@ -818,6 +816,12 @@ export const hr: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Odaberite izvorni DBMS',
+                    multiple_dbms_title: 'Otkriveno je više SGBD-ova',
+                    selection_help_percentages:
+                        'Postoci pokazuju indeks podudarnosti SQL dijalekta za svaki SGBD.',
+                    selection_help_recommended:
+                        'Zvjezdica označava preporučeni SGBD.',
+                    selection_help_aria: 'Pomoć o postocima i preporuci',
                     confidence_explanation:
                         'Postoci označavaju indeks podudarnosti SQL dijalekta za svaki DBMS.',
                     description:
@@ -828,8 +832,8 @@ export const hr: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% pouzdanosti, automatsko otkrivanje)',
-                    recommended_tooltip: 'Automatski otkriveni DBMS',
-                    recommended_aria: '{{database}}, automatski otkriveni DBMS',
+                    recommended_tooltip: 'Preporučeni SGBD',
+                    recommended_aria: '{{database}}, preporučeni SGBD',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -845,6 +849,11 @@ export const hr: LanguageTranslation = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'Odaberite opciju koja će se primijeniti za ovaj uvoz.',
+                        selection_help_percentages:
+                            'Postoci pokazuju indeks podudarnosti za svaki SGBD.',
+                        selection_help_recommended:
+                            'Zvjezdica označava SGBD naveden u datoteci.',
+                        selection_help_aria: 'Pomoć o postocima i preporuci',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -885,10 +894,39 @@ export const hr: LanguageTranslation = {
                         'Pronađena je {{count}} datoteka sheme',
                     schema_files_found_other:
                         'Pronađeno je {{count}} datoteka sheme',
+                    model_snapshots_found_one:
+                        'Pronađen je {{count}} snimak modela',
+                    model_snapshots_found_other:
+                        'Pronađeno je {{count}} snimaka modela',
+                    sql_migrations_found_one:
+                        'Pronađena je {{count}} SQL migracija',
+                    sql_migrations_found_other:
+                        'Pronađeno je {{count}} SQL migracija',
+                    migrations_button_one: 'Pronađena je {{count}} migracija',
+                    migrations_button_other: 'Pronađeno je {{count}} migracija',
+                    schema_files_button_one:
+                        'Pronađena je {{count}} datoteka sheme',
+                    schema_files_button_other:
+                        'Pronađeno je {{count}} datoteka sheme',
+                    model_snapshots_button_one:
+                        'Pronađen je {{count}} snimak modela',
+                    model_snapshots_button_other:
+                        'Pronađeno je {{count}} snimaka modela',
+                    sql_migrations_button_one:
+                        'Pronađena je {{count}} SQL migracija',
+                    sql_migrations_button_other:
+                        'Pronađeno je {{count}} SQL migracija',
                     multiple_projects_title:
                         'Otkriveno je više shema baza podataka',
                     multiple_projects_description:
                         'Ova arhiva sadrži više od jednog podržanog projekta baze podataka. Odaberite koji želite uvesti.',
+                    multiple_database_groups_title:
+                        'Otkriveno je više shema baze podataka',
+                    multiple_database_groups_description:
+                        'Ovaj projekt sadrži više shema baze podataka. Odaberite koju želite uvesti.',
+                    choose_database_group: 'Odaberite shemu baze podataka',
+                    group_recommended_aria: '{{label}} preporučeno',
+                    group_recommended_tooltip: 'Preporučena shema',
                     choose_project: 'Odaberite projekt',
                     unsupported_project: 'Nepodržana arhiva projekta',
                     unsupported_project_description:

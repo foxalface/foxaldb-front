@@ -705,8 +705,6 @@ export const bn: LanguageTranslation = {
                 clear_search: 'অনুসন্ধান মুছুন',
                 primary_group: 'প্রাথমিক ডাটাবেস',
                 other_group: 'অন্যান্য ডাটাবেস',
-                check_examples_long: 'উদাহরণ দেখুন',
-                check_examples_short: 'উদাহরণ',
             },
 
             choose_intent: {
@@ -821,6 +819,12 @@ export const bn: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'উৎস DBMS নির্বাচন করুন',
+                    multiple_dbms_title: 'একাধিক DBMS শনাক্ত হয়েছে',
+                    selection_help_percentages:
+                        'শতাংশ প্রতিটি DBMS-এর জন্য SQL উপভাষার মিল সূচক নির্দেশ করে।',
+                    selection_help_recommended:
+                        'তারকা প্রস্তাবিত DBMS চিহ্নিত করে।',
+                    selection_help_aria: 'শতাংশ এবং সুপারিশ সম্পর্কে সহায়তা',
                     confidence_explanation:
                         'শতাংশ প্রতিটি DBMS-এর জন্য সনাক্ত SQL উপভাষার সাথে মিলের সূচক নির্দেশ করে।',
                     description:
@@ -831,9 +835,8 @@ export const bn: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% আস্থা, স্বয়ংক্রিয় সনাক্তকরণ)',
-                    recommended_tooltip: 'স্বয়ংক্রিয়ভাবে শনাক্ত করা DBMS',
-                    recommended_aria:
-                        '{{database}}, স্বয়ংক্রিয়ভাবে শনাক্ত করা DBMS',
+                    recommended_tooltip: 'প্রস্তাবিত DBMS',
+                    recommended_aria: '{{database}}, প্রস্তাবিত DBMS',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -849,6 +852,12 @@ export const bn: LanguageTranslation = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'এই আমদানির জন্য প্রয়োগ করতে বিকল্পটি নির্বাচন করুন।',
+                        selection_help_percentages:
+                            'শতাংশ প্রতিটি DBMS-এর জন্য মিল সূচক নির্দেশ করে।',
+                        selection_help_recommended:
+                            'তারকা ফাইলে উল্লিখিত DBMS চিহ্নিত করে।',
+                        selection_help_aria:
+                            'শতাংশ এবং সুপারিশ সম্পর্কে সহায়তা',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -888,10 +897,33 @@ export const bn: LanguageTranslation = {
                         '{{count}}টি স্কিমা ফাইল পাওয়া গেছে',
                     schema_files_found_other:
                         '{{count}}টি স্কিমা ফাইল পাওয়া গেছে',
+                    model_snapshots_found_one:
+                        '{{count}}টি মডেল স্ন্যাপশট পাওয়া গেছে',
+                    model_snapshots_found_other:
+                        '{{count}}টি মডেল স্ন্যাপশট পাওয়া গেছে',
+                    sql_migrations_found_one:
+                        '{{count}}টি SQL মাইগ্রেশন পাওয়া গেছে',
+                    sql_migrations_found_other:
+                        '{{count}}টি SQL মাইগ্রেশন পাওয়া গেছে',
+                    migrations_button_one: '{{count}}টি মাইগ্রেশন',
+                    migrations_button_other: '{{count}}টি মাইগ্রেশন',
+                    schema_files_button_one: '{{count}}টি স্কিমা ফাইল',
+                    schema_files_button_other: '{{count}}টি স্কিমা ফাইল',
+                    model_snapshots_button_one: '{{count}}টি মডেল স্ন্যাপশট',
+                    model_snapshots_button_other: '{{count}}টি মডেল স্ন্যাপশট',
+                    sql_migrations_button_one: '{{count}}টি SQL মাইগ্রেশন',
+                    sql_migrations_button_other: '{{count}}টি SQL মাইগ্রেশন',
                     multiple_projects_title:
                         'একাধিক ডাটাবেস স্কিমা শনাক্ত হয়েছে',
                     multiple_projects_description:
                         'এই আর্কাইভে একাধিক সমর্থিত ডাটাবেস প্রকল্প রয়েছে। কোনটি আমদানি করবেন তা বেছে নিন।',
+                    multiple_database_groups_title:
+                        'একাধিক ডাটাবেস স্কিমা শনাক্ত হয়েছে',
+                    multiple_database_groups_description:
+                        'এই প্রকল্পে একাধিক ডাটাবেস স্কিমা রয়েছে। কোনটি আমদানি করবেন তা বেছে নিন।',
+                    choose_database_group: 'ডাটাবেস স্কিমা বেছে নিন',
+                    group_recommended_aria: '{{label}} সুপারিশকৃত',
+                    group_recommended_tooltip: 'সুপারিশকৃত স্কিমা',
                     choose_project: 'প্রকল্প বেছে নিন',
                     unsupported_project: 'অসমর্থিত প্রকল্প আর্কাইভ',
                     unsupported_project_description:

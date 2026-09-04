@@ -704,8 +704,6 @@ export const ko_KR: LanguageTranslation = {
                 clear_search: '검색 지우기',
                 primary_group: '주요 데이터베이스',
                 other_group: '기타 데이터베이스',
-                check_examples_long: '예제 확인',
-                check_examples_short: '예제들',
             },
 
             choose_intent: {
@@ -818,6 +816,12 @@ export const ko_KR: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: '소스 DBMS 선택',
+                    multiple_dbms_title: '여러 DBMS가 감지되었습니다',
+                    selection_help_percentages:
+                        '백분율은 각 DBMS의 SQL 방언 일치 지수를 나타냅니다.',
+                    selection_help_recommended:
+                        '별표는 권장 DBMS를 표시합니다.',
+                    selection_help_aria: '백분율 및 추천 도움말',
                     confidence_explanation:
                         '백분율은 각 DBMS에 대한 SQL 방언 일치 지수를 나타냅니다.',
                     description:
@@ -828,8 +832,8 @@ export const ko_KR: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} (신뢰도 {{percent}}%, 자동 감지)',
-                    recommended_tooltip: '자동 감지된 DBMS',
-                    recommended_aria: '{{database}}, 자동 감지된 DBMS',
+                    recommended_tooltip: '권장 DBMS',
+                    recommended_aria: '{{database}}, 권장 DBMS',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -844,6 +848,11 @@ export const ko_KR: LanguageTranslation = {
                     ambiguous: {
                         title: 'Choose the diagram DBMS',
                         description: '이 가져오기에 적용할 옵션을 선택하세요.',
+                        selection_help_percentages:
+                            '백분율은 각 DBMS의 일치 지수를 나타냅니다.',
+                        selection_help_recommended:
+                            '별표는 파일에 표시된 DBMS를 나타냅니다.',
+                        selection_help_aria: '백분율 및 추천 도움말',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -886,10 +895,41 @@ export const ko_KR: LanguageTranslation = {
                         '스키마 파일 {{count}}개를 찾았습니다',
                     schema_files_found_other:
                         '스키마 파일 {{count}}개를 찾았습니다',
+                    model_snapshots_found_one:
+                        '모델 스냅샷 {{count}}개를 찾았습니다',
+                    model_snapshots_found_other:
+                        '모델 스냅샷 {{count}}개를 찾았습니다',
+                    sql_migrations_found_one:
+                        'SQL 마이그레이션 {{count}}개를 찾았습니다',
+                    sql_migrations_found_other:
+                        'SQL 마이그레이션 {{count}}개를 찾았습니다',
+                    migrations_button_one:
+                        '마이그레이션 {{count}}개를 찾았습니다',
+                    migrations_button_other:
+                        '마이그레이션 {{count}}개를 찾았습니다',
+                    schema_files_button_one:
+                        '스키마 파일 {{count}}개를 찾았습니다',
+                    schema_files_button_other:
+                        '스키마 파일 {{count}}개를 찾았습니다',
+                    model_snapshots_button_one:
+                        '모델 스냅샷 {{count}}개를 찾았습니다',
+                    model_snapshots_button_other:
+                        '모델 스냅샷 {{count}}개를 찾았습니다',
+                    sql_migrations_button_one:
+                        'SQL 마이그레이션 {{count}}개를 찾았습니다',
+                    sql_migrations_button_other:
+                        'SQL 마이그레이션 {{count}}개를 찾았습니다',
                     multiple_projects_title:
                         '여러 데이터베이스 스키마가 감지되었습니다',
                     multiple_projects_description:
                         '이 아카이브에는 지원되는 데이터베이스 프로젝트가 여러 개 있습니다. 가져올 항목을 선택하세요.',
+                    multiple_database_groups_title:
+                        '여러 데이터베이스 스키마가 감지되었습니다',
+                    multiple_database_groups_description:
+                        '이 프로젝트에는 여러 데이터베이스 스키마가 포함되어 있습니다. 가져올 스키마를 선택하세요.',
+                    choose_database_group: '데이터베이스 스키마 선택',
+                    group_recommended_aria: '{{label}} 권장',
+                    group_recommended_tooltip: '권장 스키마',
                     choose_project: '프로젝트 선택',
                     unsupported_project: '지원되지 않는 프로젝트 아카이브',
                     unsupported_project_description:

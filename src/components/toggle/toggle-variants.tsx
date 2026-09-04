@@ -23,3 +23,6 @@ const toggleVariants = cva(
 );
 
 export { toggleVariants };
+
+export const TOGGLE_OUTLINE_SELECTION_CLASS =
+    'shadow-none data-[state=on]:bg-slate-200 dark:data-[state=on]:bg-slate-700';

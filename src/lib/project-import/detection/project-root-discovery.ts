@@ -94,7 +94,7 @@ const getParentDirectoryPath = (directoryPath: string): string => {
     return lastSlashIndex === -1 ? '' : normalized.slice(0, lastSlashIndex);
 };
 
-const findNearestCsprojRoot = (
+export const findNearestCsprojRoot = (
     fromDirectory: string,
     index: ArchivePathIndex
 ): string | null => {
@@ -148,6 +148,11 @@ const collectRootFromModelSnapshot = (
 
     return immediateParent;
 };
+
+export const resolveEfSnapshotProjectRoot = (
+    filePath: string,
+    index: ArchivePathIndex
+): string | null => collectRootFromModelSnapshot(filePath, index);
 
 export const discoverProjectRootCandidates = (
     index: ArchivePathIndex

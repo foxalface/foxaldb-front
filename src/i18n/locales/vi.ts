@@ -712,8 +712,6 @@ export const vi: LanguageTranslation = {
                 clear_search: 'Xóa tìm kiếm',
                 primary_group: 'Cơ sở dữ liệu chính',
                 other_group: 'Cơ sở dữ liệu khác',
-                check_examples_long: 'Xem ví dụ',
-                check_examples_short: 'Ví dụ',
             },
 
             choose_intent: {
@@ -826,6 +824,12 @@ export const vi: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'Chọn DBMS nguồn',
+                    multiple_dbms_title: 'Phát hiện nhiều DBMS',
+                    selection_help_percentages:
+                        'Phần trăm cho biết chỉ số khớp phương ngữ SQL cho từng DBMS.',
+                    selection_help_recommended:
+                        'Ngôi sao đánh dấu DBMS được đề xuất.',
+                    selection_help_aria: 'Trợ giúp về phần trăm và đề xuất',
                     confidence_explanation:
                         'Phần trăm cho biết chỉ số khớp với phương ngữ SQL được phát hiện cho từng DBMS.',
                     description:
@@ -836,9 +840,8 @@ export const vi: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% tin cậy, tự động phát hiện)',
-                    recommended_tooltip: 'DBMS được phát hiện tự động',
-                    recommended_aria:
-                        '{{database}}, DBMS được phát hiện tự động',
+                    recommended_tooltip: 'DBMS được đề xuất',
+                    recommended_aria: '{{database}}, DBMS được đề xuất',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -854,6 +857,11 @@ export const vi: LanguageTranslation = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'Chọn tùy chọn sẽ được áp dụng cho lần nhập này.',
+                        selection_help_percentages:
+                            'Phần trăm cho biết chỉ số khớp cho từng DBMS.',
+                        selection_help_recommended:
+                            'Ngôi sao đánh dấu DBMS được chỉ định trong tệp.',
+                        selection_help_aria: 'Trợ giúp về phần trăm và đề xuất',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -892,10 +900,35 @@ export const vi: LanguageTranslation = {
                     migrations_found_other: 'Tìm thấy {{count}} migration',
                     schema_files_found_one: 'Tìm thấy {{count}} tệp schema',
                     schema_files_found_other: 'Tìm thấy {{count}} tệp schema',
+                    model_snapshots_found_one:
+                        'Tìm thấy {{count}} snapshot mô hình',
+                    model_snapshots_found_other:
+                        'Tìm thấy {{count}} snapshot mô hình',
+                    sql_migrations_found_one:
+                        'Tìm thấy {{count}} migration SQL',
+                    sql_migrations_found_other:
+                        'Tìm thấy {{count}} migration SQL',
+                    migrations_button_one: 'Tìm thấy {{count}} migration',
+                    migrations_button_other: 'Tìm thấy {{count}} migration',
+                    schema_files_button_one: 'Tìm thấy {{count}} tệp schema',
+                    schema_files_button_other: 'Tìm thấy {{count}} tệp schema',
+                    model_snapshots_button_one:
+                        'Tìm thấy {{count}} snapshot mô hình',
+                    model_snapshots_button_other:
+                        'Tìm thấy {{count}} snapshot mô hình',
+                    sql_migrations_button_one: 'Tìm thấy {{count}} migration',
+                    sql_migrations_button_other: 'Tìm thấy {{count}} migration',
                     multiple_projects_title:
                         'Phát hiện nhiều schema cơ sở dữ liệu',
                     multiple_projects_description:
                         'Kho lưu trữ này chứa nhiều dự án cơ sở dữ liệu được hỗ trợ. Chọn dự án cần nhập.',
+                    multiple_database_groups_title:
+                        'Phát hiện nhiều lược đồ cơ sở dữ liệu',
+                    multiple_database_groups_description:
+                        'Dự án này chứa nhiều lược đồ cơ sở dữ liệu. Chọn lược đồ để nhập.',
+                    choose_database_group: 'Chọn lược đồ cơ sở dữ liệu',
+                    group_recommended_aria: '{{label}} được đề xuất',
+                    group_recommended_tooltip: 'Lược đồ được đề xuất',
                     choose_project: 'Chọn dự án',
                     unsupported_project: 'Kho lưu trữ dự án không được hỗ trợ',
                     unsupported_project_description:

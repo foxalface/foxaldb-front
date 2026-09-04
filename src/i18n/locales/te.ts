@@ -706,8 +706,6 @@ export const te: LanguageTranslation = {
                 clear_search: 'శోధన తొలగించండి',
                 primary_group: 'ప్రాథమిక డేటాబేస్‌లు',
                 other_group: 'ఇతర డేటాబేస్‌లు',
-                check_examples_long: 'ఉదాహరణలు చూడండి',
-                check_examples_short: 'ఉదాహరణలు',
             },
 
             choose_intent: {
@@ -822,6 +820,12 @@ export const te: LanguageTranslation = {
                 },
                 ambiguous: {
                     title: 'మూల DBMS ఎంచుకోండి',
+                    multiple_dbms_title: 'అనేక DBMS లు గుర్తించబడ్డాయి',
+                    selection_help_percentages:
+                        'శాతాలు ప్రతి DBMS కోసం SQL మాండలిక సరిపోలిక సూచికను సూచిస్తాయి.',
+                    selection_help_recommended:
+                        'నక్షత్రం సిఫార్సు చేసిన DBMS ను సూచిస్తుంది.',
+                    selection_help_aria: 'శాతాలు మరియు సిఫార్సు గురించి సహాయం',
                     confidence_explanation:
                         'శాతాలు ప్రతి DBMS కోసం గుర్తించిన SQL భాషా విభాగంతో సరిపోలిక సూచికను సూచిస్తాయి.',
                     description:
@@ -832,9 +836,8 @@ export const te: LanguageTranslation = {
                         '{{database}} ({{percent}}% confidence)',
                     candidate_recommended:
                         '{{database}} ({{percent}}% నమ్మకం, స్వయంచాలక గుర్తింపు)',
-                    recommended_tooltip: 'స్వయంచాలకంగా గుర్తించిన DBMS',
-                    recommended_aria:
-                        '{{database}}, స్వయంచాలకంగా గుర్తించిన DBMS',
+                    recommended_tooltip: 'సిఫార్సు చేసిన DBMS',
+                    recommended_aria: '{{database}}, సిఫార్సు చేసిన DBMS',
                     candidate: '{{database}}',
                 },
                 diagram_json: {
@@ -850,6 +853,12 @@ export const te: LanguageTranslation = {
                         title: 'Choose the diagram DBMS',
                         description:
                             'ఈ దిగుమతికి వర్తింపజేయడానికి ఎంపికను ఎంచుకోండి.',
+                        selection_help_percentages:
+                            'శాతాలు ప్రతి DBMS కోసం సరిపోలిక సూచికను సూచిస్తాయి.',
+                        selection_help_recommended:
+                            'నక్షత్రం ఫైల్‌లో పేర్కొన్న DBMS ను సూచిస్తుంది.',
+                        selection_help_aria:
+                            'శాతాలు మరియు సిఫార్సు గురించి సహాయం',
                         choose_source: 'Choose diagram DBMS',
                         candidate: '{{database}}',
                         candidate_with_confidence:
@@ -890,10 +899,37 @@ export const te: LanguageTranslation = {
                         '{{count}} స్కీమా ఫైల్ కనుగొనబడింది',
                     schema_files_found_other:
                         '{{count}} స్కీమా ఫైల్లు కనుగొనబడ్డాయి',
+                    model_snapshots_found_one:
+                        '{{count}} మోడల్ స్నాప్‌షాట్ కనుగొనబడింది',
+                    model_snapshots_found_other:
+                        '{{count}} మోడల్ స్నాప్‌షాట్‌లు కనుగొనబడ్డాయి',
+                    sql_migrations_found_one:
+                        '{{count}} SQL మైగ్రేషన్ కనుగొనబడింది',
+                    sql_migrations_found_other:
+                        '{{count}} SQL మైగ్రేషన్‌లు కనుగొనబడ్డాయి',
+                    migrations_button_one: '{{count}} మైగ్రేషన్',
+                    migrations_button_other:
+                        '{{count}} మైగ్రేషన్లు కనుగొనబడ్డాయి',
+                    schema_files_button_one: '{{count}} స్కీమా ఫైల్',
+                    schema_files_button_other:
+                        '{{count}} స్కీమా ఫైల్లు కనుగొనబడ్డాయి',
+                    model_snapshots_button_one: '{{count}} మోడల్ స్నాప్‌షాట్',
+                    model_snapshots_button_other:
+                        '{{count}} మోడల్ స్నాప్‌షాట్‌లు కనుగొనబడ్డాయి',
+                    sql_migrations_button_one: '{{count}} SQL మైగ్రేషన్',
+                    sql_migrations_button_other:
+                        '{{count}} SQL మైగ్రేషన్‌లు కనుగొనబడ్డాయి',
                     multiple_projects_title:
                         'అనేక డేటాబేస్ స్కీమాలు కనుగొనబడ్డాయి',
                     multiple_projects_description:
                         'ఈ ఆర్కైవ్‌లో ఒకటికంటే ఎక్కువ మద్దతు ఉన్న డేటాబేస్ ప్రాజెక్ట్‌లు ఉన్నాయి. ఏది దిగుమతి చేయాలో ఎంచుకోండి.',
+                    multiple_database_groups_title:
+                        'అనేక డేటాబేస్ స్కీమాలు కనుగొనబడ్డాయి',
+                    multiple_database_groups_description:
+                        'ఈ ప్రాజెక్ట్‌లో అనేక డేటాబేస్ స్కీమాలు ఉన్నాయి. దిగుమతి చేయడానికి ఒకదాన్ని ఎంచుకోండి.',
+                    choose_database_group: 'డేటాబేస్ స్కీమాను ఎంచుకోండి',
+                    group_recommended_aria: '{{label}} సిఫార్సు చేయబడింది',
+                    group_recommended_tooltip: 'సిఫార్సు చేయబడిన స్కీమా',
                     choose_project: 'ప్రాజెక్ట్ ఎంచుకోండి',
                     unsupported_project: 'మద్దతు లేని ప్రాజెక్ట్ ఆర్కైవ్',
                     unsupported_project_description:
