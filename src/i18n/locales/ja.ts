@@ -1057,6 +1057,34 @@ export const ja: LanguageTranslation = {
         export_wizard: {
             title: 'エクスポート',
             description: 'ダイアグラムのエクスポート形式を選択してください。',
+            back: '戻る',
+            sql: {
+                target_step: {
+                    title: 'SQLをエクスポート',
+                    description:
+                        '{{database}} ダイアグラムのターゲットデータベースを選択してください。',
+                    source_label: 'ソースデータベース: {{database}}',
+                    same_dialect_description:
+                        '{{database}} DDLとしてエクスポート',
+                    cross_dialect_description:
+                        '{{source}} から {{target}} に変換',
+                },
+                unsupported_source: {
+                    title: '{{database}} のSQLエクスポートは利用できません',
+                    description:
+                        'FoxalDBではこのデータベースタイプの決定論的SQLエクスポートはサポートされていません。',
+                },
+                preview_step: {
+                    title: 'SQLプレビュー',
+                    description:
+                        '生成された {{database}} スクリプトを確認してください。',
+                    target_label: 'ターゲット: {{database}}',
+                    generating: '{{database}} SQLを生成中...',
+                    download: 'SQLをダウンロード',
+                    error: 'SQLを生成できませんでした。もう一度お試しください。',
+                    empty: '現在のダイアグラム用のSQLは生成されませんでした。',
+                },
+            },
             sections: {
                 database: 'データベース',
                 framework: 'フレームワーク',

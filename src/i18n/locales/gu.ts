@@ -1025,6 +1025,33 @@ export const gu: LanguageTranslation = {
             title: 'નિકાસ',
             description:
                 'તમારું ડાયાગ્રામ નિકાસ કરવા માટે એક ફોર્મેટ પસંદ કરો.',
+            back: 'પાછા',
+            sql: {
+                target_step: {
+                    title: 'SQL એક્સપોર્ટ',
+                    description:
+                        'તમારા {{database}} ડાયાગ્રામ માટે ટાર્ગેટ ડેટાબેસ પસંદ કરો.',
+                    source_label: 'સોર્સ ડેટાબેસ: {{database}}',
+                    same_dialect_description:
+                        '{{database}} DDL તરીકે એક્સપોર્ટ',
+                    cross_dialect_description:
+                        '{{source}} થી {{target}} માં રૂપાંતર',
+                },
+                unsupported_source: {
+                    title: '{{database}} માટે SQL એક્સપોર્ટ ઉપલબ્ધ નથી',
+                    description:
+                        'FoxalDB માં આ ડેટાબેસ પ્રકાર માટે નિશ્ચિત SQL એક્સપોર્ટ સપોર્ટેડ નથી.',
+                },
+                preview_step: {
+                    title: 'SQL પ્રિવ્યૂ',
+                    description: 'જનરેટ થયેલ {{database}} સ્ક્રિપ્ટ તપાસો.',
+                    target_label: 'ટાર્ગેટ: {{database}}',
+                    generating: '{{database}} SQL જનરેટ થઈ રહ્યું છે...',
+                    download: 'SQL ડાઉનલોડ',
+                    error: 'SQL જનરેટ કરી શકાયું નહીં. ફરી પ્રયાસ કરો.',
+                    empty: 'વર્તમાન ડાયાગ્રામ માટે કોઈ SQL જનરેટ થયું નથી.',
+                },
+            },
             sections: {
                 database: 'ડેટાબેસ',
                 framework: 'ફ્રેમવર્ક',

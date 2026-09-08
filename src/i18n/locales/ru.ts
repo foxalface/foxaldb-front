@@ -1037,6 +1037,33 @@ export const ru: LanguageTranslation = {
         export_wizard: {
             title: 'Экспорт',
             description: 'Выберите формат для экспорта диаграммы.',
+            back: 'Назад',
+            sql: {
+                target_step: {
+                    title: 'Экспорт SQL',
+                    description:
+                        'Выберите целевую СУБД для вашей диаграммы {{database}}.',
+                    source_label: 'Исходная СУБД: {{database}}',
+                    same_dialect_description: 'Экспорт как DDL {{database}}',
+                    cross_dialect_description:
+                        'Преобразовать из {{source}} в {{target}}',
+                },
+                unsupported_source: {
+                    title: 'Экспорт SQL недоступен для {{database}}',
+                    description:
+                        'Детерминированный экспорт SQL не поддерживается для этого типа СУБД в FoxalDB.',
+                },
+                preview_step: {
+                    title: 'Предпросмотр SQL',
+                    description:
+                        'Проверьте сгенерированный скрипт {{database}}.',
+                    target_label: 'Цель: {{database}}',
+                    generating: 'Генерация SQL {{database}}...',
+                    download: 'Скачать SQL',
+                    error: 'Не удалось сгенерировать SQL. Попробуйте снова.',
+                    empty: 'Для текущей диаграммы SQL не был сгенерирован.',
+                },
+            },
             sections: {
                 database: 'База данных',
                 framework: 'Фреймворк',

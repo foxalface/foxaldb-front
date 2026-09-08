@@ -1039,6 +1039,7 @@ export const en = {
         export_wizard: {
             title: 'Export',
             description: 'Choose a format to export your diagram.',
+            back: 'Back',
             sections: {
                 database: 'Database',
                 framework: 'Framework',
@@ -1099,6 +1100,31 @@ export const en = {
                 svg: {
                     title: 'SVG',
                     description: 'Vector image',
+                },
+            },
+            sql: {
+                target_step: {
+                    title: 'Export SQL',
+                    description:
+                        'Choose a target database for your {{database}} diagram.',
+                    source_label: 'Source database: {{database}}',
+                    same_dialect_description: 'Export as {{database}} DDL',
+                    cross_dialect_description:
+                        'Convert from {{source}} to {{target}}',
+                },
+                unsupported_source: {
+                    title: 'SQL export is not available for {{database}}',
+                    description:
+                        'Deterministic SQL export is not supported for this database type in FoxalDB.',
+                },
+                preview_step: {
+                    title: 'SQL preview',
+                    description: 'Review the generated {{database}} script.',
+                    target_label: 'Target: {{database}}',
+                    generating: 'Generating {{database}} SQL...',
+                    download: 'Download SQL',
+                    error: 'Could not generate SQL. Please try again.',
+                    empty: 'No SQL was generated for the current diagram.',
                 },
             },
         },

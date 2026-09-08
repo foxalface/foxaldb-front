@@ -1044,6 +1044,32 @@ export const ko_KR: LanguageTranslation = {
         export_wizard: {
             title: '보내기',
             description: '다이어그램을보낼 형식을 선택하세요.',
+            back: '뒤로',
+            sql: {
+                target_step: {
+                    title: 'SQL보내기',
+                    description:
+                        '{{database}} 다이어그램의 대상 데이터베이스를 선택하세요.',
+                    source_label: '소스 데이터베이스: {{database}}',
+                    same_dialect_description: '{{database}} DDL로보내기',
+                    cross_dialect_description:
+                        '{{source}}에서 {{target}}로 변환',
+                },
+                unsupported_source: {
+                    title: '{{database}}에 대한 SQL보내기를 사용할 수 없습니다',
+                    description:
+                        'FoxalDB에서는 이 데이터베이스 유형에 대한 결정론적 SQL보내기를 지원하지 않습니다.',
+                },
+                preview_step: {
+                    title: 'SQL 미리보기',
+                    description: '생성된 {{database}} 스크립트를 검토하세요.',
+                    target_label: '대상: {{database}}',
+                    generating: '{{database}} SQL 생성 중...',
+                    download: 'SQL 다운로드',
+                    error: 'SQL을 생성할 수 없습니다. 다시 시도하세요.',
+                    empty: '현재 다이어그램에 대해 생성된 SQL이 없습니다.',
+                },
+            },
             sections: {
                 database: '데이터베이스',
                 framework: '프레임워크',

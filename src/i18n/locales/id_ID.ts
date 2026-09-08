@@ -1043,6 +1043,32 @@ export const id_ID: LanguageTranslation = {
         export_wizard: {
             title: 'Ekspor',
             description: 'Pilih format untuk mengekspor diagram Anda.',
+            back: 'Kembali',
+            sql: {
+                target_step: {
+                    title: 'Ekspor SQL',
+                    description:
+                        'Pilih database target untuk diagram {{database}} Anda.',
+                    source_label: 'Database sumber: {{database}}',
+                    same_dialect_description: 'Ekspor sebagai DDL {{database}}',
+                    cross_dialect_description:
+                        'Konversi dari {{source}} ke {{target}}',
+                },
+                unsupported_source: {
+                    title: 'Ekspor SQL tidak tersedia untuk {{database}}',
+                    description:
+                        'Ekspor SQL deterministik tidak didukung untuk jenis database ini di FoxalDB.',
+                },
+                preview_step: {
+                    title: 'Pratinjau SQL',
+                    description: 'Tinjau skrip {{database}} yang dihasilkan.',
+                    target_label: 'Target: {{database}}',
+                    generating: 'Membuat SQL {{database}}...',
+                    download: 'Unduh SQL',
+                    error: 'Tidak dapat membuat SQL. Silakan coba lagi.',
+                    empty: 'Tidak ada SQL yang dibuat untuk diagram saat ini.',
+                },
+            },
             sections: {
                 database: 'Basis data',
                 framework: 'Framework',

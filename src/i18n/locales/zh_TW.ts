@@ -974,6 +974,31 @@ export const zh_TW: LanguageTranslation = {
         export_wizard: {
             title: '匯出',
             description: '選擇要匯出圖表的格式。',
+            back: '返回',
+            sql: {
+                target_step: {
+                    title: '匯出 SQL',
+                    description: '為您的 {{database}} 圖表選擇目標資料庫。',
+                    source_label: '來源資料庫：{{database}}',
+                    same_dialect_description: '匯出為 {{database}} DDL',
+                    cross_dialect_description:
+                        '從 {{source}} 轉換為 {{target}}',
+                },
+                unsupported_source: {
+                    title: '{{database}} 不支援 SQL 匯出',
+                    description:
+                        'FoxalDB 不支援此資料庫類型的確定性 SQL 匯出。',
+                },
+                preview_step: {
+                    title: 'SQL 預覽',
+                    description: '檢視產生的 {{database}} 腳本。',
+                    target_label: '目標：{{database}}',
+                    generating: '正在產生 {{database}} SQL...',
+                    download: '下載 SQL',
+                    error: '無法產生 SQL。請再試一次。',
+                    empty: '目前圖表未產生 SQL。',
+                },
+            },
             sections: {
                 database: '資料庫',
                 framework: '框架',

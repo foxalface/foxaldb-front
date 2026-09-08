@@ -1037,6 +1037,34 @@ export const bn: LanguageTranslation = {
         export_wizard: {
             title: 'রপ্তানি',
             description: 'আপনার ডায়াগ্রাম রপ্তানি করতে একটি ফরম্যাট বেছে নিন।',
+            back: 'পিছনে',
+            sql: {
+                target_step: {
+                    title: 'SQL এক্সপোর্ট',
+                    description:
+                        'আপনার {{database}} ডায়াগ্রামের জন্য একটি টার্গেট ডাটাবেস বেছে নিন।',
+                    source_label: 'সোর্স ডাটাবেস: {{database}}',
+                    same_dialect_description:
+                        '{{database}} DDL হিসেবে এক্সপোর্ট',
+                    cross_dialect_description:
+                        '{{source}} থেকে {{target}}-এ রূপান্তর',
+                },
+                unsupported_source: {
+                    title: '{{database}}-এর জন্য SQL এক্সপোর্ট উপলব্ধ নয়',
+                    description:
+                        'FoxalDB-তে এই ডাটাবেস টাইপের জন্য নির্ধারক SQL এক্সপোর্ট সমর্থিত নয়।',
+                },
+                preview_step: {
+                    title: 'SQL প্রিভিউ',
+                    description:
+                        'তৈরি করা {{database}} স্ক্রিপ্ট পর্যালোচনা করুন।',
+                    target_label: 'টার্গেট: {{database}}',
+                    generating: '{{database}} SQL তৈরি হচ্ছে...',
+                    download: 'SQL ডাউনলোড',
+                    error: 'SQL তৈরি করা যায়নি। আবার চেষ্টা করুন।',
+                    empty: 'বর্তমান ডায়াগ্রামের জন্য কোনো SQL তৈরি হয়নি।',
+                },
+            },
             sections: {
                 database: 'ডেটাবেস',
                 framework: 'ফ্রেমওয়ার্ক',

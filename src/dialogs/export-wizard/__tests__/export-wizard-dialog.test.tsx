@@ -115,17 +115,21 @@ describe('ExportWizardDialog', () => {
         }
     });
 
-    it('routes SQL to the existing SQL export dialog', async () => {
+    it('opens the SQL target step from the target picker', async () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         await userEvent.click(
             screen.getByText('export_wizard.targets.sql.title')
         );
 
-        expect(dialogMocks.closeExportWizardDialog).toHaveBeenCalledTimes(1);
-        expect(dialogMocks.openExportSQLDialog).toHaveBeenCalledWith({
-            targetDatabaseType: DatabaseType.POSTGRESQL,
-        });
+        expect(dialogMocks.openExportSQLDialog).not.toHaveBeenCalled();
+        expect(screen.getByText('export_wizard.title')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('export-sql-branch-context')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText('export_wizard.sql.target_step.description')
+        ).toBeInTheDocument();
     });
 
     it('routes diagram JSON to the existing export dialog', async () => {

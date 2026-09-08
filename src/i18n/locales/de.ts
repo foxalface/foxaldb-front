@@ -1069,6 +1069,34 @@ export const de: LanguageTranslation = {
             title: 'Exportieren',
             description:
                 'Wählen Sie ein Format zum Exportieren Ihres Diagramms.',
+            back: 'Zurück',
+            sql: {
+                target_step: {
+                    title: 'SQL exportieren',
+                    description:
+                        'Wählen Sie eine Zieldatenbank für Ihr {{database}}-Diagramm.',
+                    source_label: 'Quelldatenbank: {{database}}',
+                    same_dialect_description:
+                        'Als {{database}}-DDL exportieren',
+                    cross_dialect_description:
+                        'Von {{source}} nach {{target}} konvertieren',
+                },
+                unsupported_source: {
+                    title: 'SQL-Export ist für {{database}} nicht verfügbar',
+                    description:
+                        'Deterministischer SQL-Export wird für diesen Datenbanktyp in FoxalDB nicht unterstützt.',
+                },
+                preview_step: {
+                    title: 'SQL-Vorschau',
+                    description:
+                        'Überprüfen Sie das generierte {{database}}-Skript.',
+                    target_label: 'Ziel: {{database}}',
+                    generating: '{{database}}-SQL wird generiert...',
+                    download: 'SQL herunterladen',
+                    error: 'SQL konnte nicht generiert werden. Bitte versuchen Sie es erneut.',
+                    empty: 'Für das aktuelle Diagramm wurde kein SQL generiert.',
+                },
+            },
             sections: {
                 database: 'Datenbank',
                 framework: 'Framework',

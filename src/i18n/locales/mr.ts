@@ -1034,6 +1034,33 @@ export const mr: LanguageTranslation = {
         export_wizard: {
             title: 'निर्यात',
             description: 'तुमचा डायग्राम निर्यात करण्यासाठी एक फॉरमॅट निवडा.',
+            back: 'मागे',
+            sql: {
+                target_step: {
+                    title: 'SQL एक्सपोर्ट',
+                    description:
+                        'तुमच्या {{database}} डायग्रामसाठी लक्ष्य डेटाबेस निवडा.',
+                    source_label: 'स्रोत डेटाबेस: {{database}}',
+                    same_dialect_description:
+                        '{{database}} DDL म्हणून एक्सपोर्ट',
+                    cross_dialect_description:
+                        '{{source}} वरून {{target}} मध्ये रूपांतर',
+                },
+                unsupported_source: {
+                    title: '{{database}} साठी SQL एक्सपोर्ट उपलब्ध नाही',
+                    description:
+                        'FoxalDB मध्ये या डेटाबेस प्रकारासाठी निश्चित SQL एक्सपोर्ट समर्थित नाही.',
+                },
+                preview_step: {
+                    title: 'SQL पूर्वावलोकन',
+                    description: 'तयार केलेली {{database}} स्क्रिप्ट तपासा.',
+                    target_label: 'लक्ष्य: {{database}}',
+                    generating: '{{database}} SQL तयार होत आहे...',
+                    download: 'SQL डाउनलोड',
+                    error: 'SQL तयार करू शकलो नाही. पुन्हा प्रयत्न करा.',
+                    empty: 'सध्याच्या डायग्रामसाठी कोणतेही SQL तयार झाले नाही.',
+                },
+            },
             sections: {
                 database: 'डेटाबेस',
                 framework: 'फ्रेमवर्क',

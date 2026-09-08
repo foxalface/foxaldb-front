@@ -1041,6 +1041,33 @@ export const uk: LanguageTranslation = {
         export_wizard: {
             title: 'Експорт',
             description: 'Виберіть формат для експорту діаграми.',
+            back: 'Назад',
+            sql: {
+                target_step: {
+                    title: 'Експорт SQL',
+                    description:
+                        'Оберіть цільову СУБД для вашої діаграми {{database}}.',
+                    source_label: 'Вихідна СУБД: {{database}}',
+                    same_dialect_description: 'Експорт як DDL {{database}}',
+                    cross_dialect_description:
+                        'Перетворити з {{source}} на {{target}}',
+                },
+                unsupported_source: {
+                    title: 'Експорт SQL недоступний для {{database}}',
+                    description:
+                        'Детермінований експорт SQL не підтримується для цього типу СУБД у FoxalDB.',
+                },
+                preview_step: {
+                    title: 'Попередній перегляд SQL',
+                    description:
+                        'Перегляньте згенерований скрипт {{database}}.',
+                    target_label: 'Ціль: {{database}}',
+                    generating: 'Генерація SQL {{database}}...',
+                    download: 'Завантажити SQL',
+                    error: 'Не вдалося згенерувати SQL. Спробуйте ще раз.',
+                    empty: 'Для поточної діаграми SQL не було згенеровано.',
+                },
+            },
             sections: {
                 database: 'База даних',
                 framework: 'Фреймворк',

@@ -975,6 +975,31 @@ export const zh_CN: LanguageTranslation = {
         export_wizard: {
             title: '导出',
             description: '选择要导出图表的格式。',
+            back: '返回',
+            sql: {
+                target_step: {
+                    title: '导出 SQL',
+                    description: '为您的 {{database}} 图表选择目标数据库。',
+                    source_label: '源数据库：{{database}}',
+                    same_dialect_description: '导出为 {{database}} DDL',
+                    cross_dialect_description:
+                        '从 {{source}} 转换为 {{target}}',
+                },
+                unsupported_source: {
+                    title: '{{database}} 不支持 SQL 导出',
+                    description:
+                        'FoxalDB 不支持对此数据库类型进行确定性 SQL 导出。',
+                },
+                preview_step: {
+                    title: 'SQL 预览',
+                    description: '查看生成的 {{database}} 脚本。',
+                    target_label: '目标：{{database}}',
+                    generating: '正在生成 {{database}} SQL...',
+                    download: '下载 SQL',
+                    error: '无法生成 SQL。请重试。',
+                    empty: '当前图表未生成 SQL。',
+                },
+            },
             sections: {
                 database: '数据库',
                 framework: '框架',

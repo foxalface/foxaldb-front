@@ -1040,6 +1040,32 @@ export const hr: LanguageTranslation = {
         export_wizard: {
             title: 'Izvoz',
             description: 'Odaberite format za izvoz dijagrama.',
+            back: 'Natrag',
+            sql: {
+                target_step: {
+                    title: 'Izvezi SQL',
+                    description:
+                        'Odaberite ciljnu bazu podataka za svoj {{database}} dijagram.',
+                    source_label: 'Izvorna baza: {{database}}',
+                    same_dialect_description: 'Izvezi kao {{database}} DDL',
+                    cross_dialect_description:
+                        'Pretvori iz {{source}} u {{target}}',
+                },
+                unsupported_source: {
+                    title: 'SQL izvoz nije dostupan za {{database}}',
+                    description:
+                        'Deterministički SQL izvoz nije podržan za ovu vrstu baze podataka u FoxalDB-u.',
+                },
+                preview_step: {
+                    title: 'SQL pregled',
+                    description: 'Pregledajte generirani {{database}} skript.',
+                    target_label: 'Cilj: {{database}}',
+                    generating: 'Generiranje {{database}} SQL-a...',
+                    download: 'Preuzmi SQL',
+                    error: 'SQL nije mogao biti generiran. Pokušajte ponovno.',
+                    empty: 'Za trenutni dijagram nije generiran SQL.',
+                },
+            },
             sections: {
                 database: 'Baza podataka',
                 framework: 'Framework',

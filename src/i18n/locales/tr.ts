@@ -1023,6 +1023,33 @@ export const tr: LanguageTranslation = {
         export_wizard: {
             title: 'Dışa aktar',
             description: 'Diyagramınızı dışa aktarmak için bir format seçin.',
+            back: 'Geri',
+            sql: {
+                target_step: {
+                    title: 'SQL dışa aktar',
+                    description:
+                        '{{database}} diyagramınız için bir hedef veritabanı seçin.',
+                    source_label: 'Kaynak veritabanı: {{database}}',
+                    same_dialect_description:
+                        '{{database}} DDL olarak dışa aktar',
+                    cross_dialect_description:
+                        '{{source}} kaynağından {{target}} hedefine dönüştür',
+                },
+                unsupported_source: {
+                    title: '{{database}} için SQL dışa aktarma kullanılamıyor',
+                    description:
+                        "FoxalDB'de bu veritabanı türü için deterministik SQL dışa aktarma desteklenmiyor.",
+                },
+                preview_step: {
+                    title: 'SQL önizleme',
+                    description: 'Oluşturulan {{database}} betiğini inceleyin.',
+                    target_label: 'Hedef: {{database}}',
+                    generating: '{{database}} SQL oluşturuluyor...',
+                    download: 'SQL indir',
+                    error: 'SQL oluşturulamadı. Lütfen tekrar deneyin.',
+                    empty: 'Mevcut diyagram için SQL oluşturulmadı.',
+                },
+            },
             sections: {
                 database: 'Veritabanı',
                 framework: 'Framework',

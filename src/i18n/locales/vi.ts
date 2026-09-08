@@ -1043,6 +1043,32 @@ export const vi: LanguageTranslation = {
         export_wizard: {
             title: 'Xuất',
             description: 'Chọn định dạng để xuất sơ đồ của bạn.',
+            back: 'Quay lại',
+            sql: {
+                target_step: {
+                    title: 'Xuất SQL',
+                    description:
+                        'Chọn cơ sở dữ liệu đích cho sơ đồ {{database}} của bạn.',
+                    source_label: 'Cơ sở dữ liệu nguồn: {{database}}',
+                    same_dialect_description: 'Xuất dưới dạng DDL {{database}}',
+                    cross_dialect_description:
+                        'Chuyển đổi từ {{source}} sang {{target}}',
+                },
+                unsupported_source: {
+                    title: 'Xuất SQL không khả dụng cho {{database}}',
+                    description:
+                        'Xuất SQL xác định không được hỗ trợ cho loại cơ sở dữ liệu này trong FoxalDB.',
+                },
+                preview_step: {
+                    title: 'Xem trước SQL',
+                    description: 'Xem lại script {{database}} đã tạo.',
+                    target_label: 'Đích: {{database}}',
+                    generating: 'Đang tạo SQL {{database}}...',
+                    download: 'Tải SQL',
+                    error: 'Không thể tạo SQL. Vui lòng thử lại.',
+                    empty: 'Không có SQL được tạo cho sơ đồ hiện tại.',
+                },
+            },
             sections: {
                 database: 'Cơ sở dữ liệu',
                 framework: 'Framework',

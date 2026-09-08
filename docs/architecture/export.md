@@ -96,7 +96,9 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 **Target groups:** Database, Framework, Portable / Schema, Visual.
 
-**Current routing:** Available targets temporarily delegate to existing child dialogs (`ExportSQLDialog`, `ExportDiagramDialog`, `ExportImageDialog`, `ExportLaravelMigrationsDialog`) via close-and-reopen. Future milestones migrate target-specific UX into wizard-native branch steps.
+**Current routing:** SQL is wizard-native (`SQL_TARGET` → `SQL_PREVIEW` with copy/download). Other targets still delegate to existing child dialogs (`ExportDiagramDialog`, `ExportImageDialog`, `ExportLaravelMigrationsDialog`) via close-and-reopen until their milestones land.
+
+**SQL wizard steps:** `TARGET_PICKER` → `SQL_TARGET` → `SQL_PREVIEW`. Back navigation and reopen reset branch-local SQL state. Capability helper: `deterministic-sql-export-capability.ts`.
 
 **Planned framework targets** (Prisma, EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones.
 
@@ -112,9 +114,9 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 | **Execution** | Browser only |
 | **Auth** | None (guest OK) |
 | **Generators** | `frontend/src/lib/data/sql-export/export-sql-script.ts` (`exportBaseSQL`, `exportSQL`), `export-per-type/*`, `cross-dialect/*` |
-| **Output** | SQL DDL string; displayed in `ExportSQLDialog` via `CodeSnippet` (copy only, no file download) |
-| **Entry points** | Actions → Export wizard → SQL; `frontend/src/dialogs/export-sql-dialog/export-sql-dialog.tsx` |
-| **Tests** | 5 files under `frontend/src/lib/data/sql-export/__tests__/` |
+| **Output** | SQL DDL string; wizard preview via `CodeSnippet` (copy + `.sql` download) |
+| **Entry points** | Actions → Export wizard → SQL (`export-wizard-dialog.tsx`, `export-wizard/sql/*`); legacy `export-sql-dialog.tsx` (no user-facing entry; retained in dialog provider) |
+| **Tests** | `frontend/src/lib/data/sql-export/__tests__/`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-sql.test.tsx` |
 
 **Routing (`exportBaseSQL`):**
 
@@ -193,7 +195,7 @@ Derived from current code (`export-sql-script.ts`, `cross-dialect-support.ts`, `
 
 **FoxalDB Export V1 core must not require AI.** The ChartDB/OpenAI cross-dialect path is **legacy audit input**, not a FoxalDB core lifecycle dependency. V1 should advertise only **deterministic** SQL paths as supported core capabilities. Legacy AI code remains in the repository but is not part of Export architecture.
 
-**Menu exposure:** Export wizard SQL route uses the diagram's current dialect only until the SQL deterministic wizard milestone restores dialect target selection. Oracle, CockroachDB, and ClickHouse are **not** export targets.
+**Menu exposure:** Export wizard SQL branch exposes only deterministic targets from `getDeterministicSqlExportTargets()`. GENERIC is not offered. Oracle, CockroachDB, and ClickHouse sources show an unsupported step (no fake same-dialect target).
 
 ### Same-dialect export
 
@@ -213,13 +215,13 @@ PostgreSQL fallback for Oracle/CockroachDB/ClickHouse produces PG-flavored DDL. 
 
 ### Cross-dialect export
 
-| Source → Target | Deterministic | Legacy AI | Menu |
-|-----------------|---------------|-----------|------|
-| PostgreSQL → MySQL | Yes (`cross-dialect/postgresql/to-mysql.ts`) | Optional toggle in dialog | Yes |
-| PostgreSQL → MariaDB | Yes (same converter as MySQL) | Optional toggle | Yes |
-| PostgreSQL → SQL Server | Yes (`cross-dialect/postgresql/to-mssql.ts`) | Optional toggle | Yes |
-| Any → GENERIC (target) | Yes (generic builder when `targetDatabaseType === GENERIC`) | No | Conditional |
-| All other cross-dialect pairs | No | **Required** (`exportSQL` + LLM config) | Partially (menu shows targets with ✨) |
+| Source → Target | Deterministic | Legacy AI | Export wizard |
+|-----------------|---------------|-----------|---------------|
+| PostgreSQL → MySQL | Yes (`cross-dialect/postgresql/to-mysql.ts`) | Optional toggle in legacy dialog | Yes |
+| PostgreSQL → MariaDB | Yes (same converter as MySQL) | Optional toggle in legacy dialog | Yes |
+| PostgreSQL → SQL Server | Yes (`cross-dialect/postgresql/to-mssql.ts`) | Optional toggle in legacy dialog | Yes |
+| Any → GENERIC (target) | Yes (generic builder when `targetDatabaseType === GENERIC`) | No | **Not exposed** |
+| All other cross-dialect pairs | No | **Required** (`exportSQL` + LLM config) | **Not exposed** |
 
 Verified deterministic cross-dialect paths (`frontend/src/lib/data/sql-export/cross-dialect/cross-dialect-support.ts`):
 
@@ -229,7 +231,17 @@ Verified deterministic cross-dialect paths (`frontend/src/lib/data/sql-export/cr
 
 No other deterministic cross-dialect paths exist in code. Do not infer additional paths.
 
-### Dialog routing (`ExportSQLDialog`)
+### Wizard SQL routing (`export-wizard-dialog.tsx`)
+
+FoxalDB Export Wizard calls **`exportBaseSQL` only** (never `exportSQL`). Targets come from `getDeterministicSqlExportTargets(source)`:
+
+- Same-dialect for PostgreSQL, MySQL, MariaDB, SQL Server, SQLite
+- Cross-dialect for PostgreSQL → MySQL, MariaDB, SQL Server only
+- Unsupported sources (Oracle, CockroachDB, ClickHouse, GENERIC) → empty target list + unsupported step
+
+Preview: filtered diagram via `getFilteredDiagramForSqlExport()` (same filter semantics as legacy `ExportSQLDialog`). Download: `buildSqlExportFilename()` + `downloadBlob` (`application/sql`).
+
+### Legacy dialog routing (`ExportSQLDialog`)
 
 `hasDeterministicPath` is true when:
 
@@ -250,7 +262,7 @@ Cross-dialect PG targets show a Deterministic/AI toggle. Other cross-dialect pai
 | Aspect | Detail |
 |--------|--------|
 | **Location** | `exportSQL()` in `frontend/src/lib/data/sql-export/export-sql-script.ts` |
-| **Trigger** | `ExportSQLDialog` when `hasDeterministicPath` is false, or user selects AI on PG cross-dialect exports |
+| **Trigger** | Legacy `ExportSQLDialog` only (no wizard/menu entry); when `hasDeterministicPath` is false, or user selects AI on PG cross-dialect exports |
 | **Execution** | Client-side; `@ai-sdk/openai` + `ai` package (`streamText` / `generateText`) |
 | **Config** | `VITE_OPENAI_API_KEY`, `VITE_OPENAI_API_ENDPOINT`, `VITE_LLM_MODEL_NAME` (or `window.env.*`) |
 | **Cache** | `localStorage` via `export-sql-cache.ts` |
@@ -418,7 +430,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 | Laravel export | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite | Covered |
 | Diagram JSON export | — | **Missing** |
 | Image export | — | **Missing** |
-| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation) |
+| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL branch) |
 
 ### Expected Export V1 regression strategy
 
@@ -437,14 +449,13 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 
 Verified in current code:
 
-- **Fragmented Export UX** — resolved by Export Wizard foundation; target-native branch migration in progress
-- **SQL dialect selection** — wizard currently routes same-dialect only; SQL deterministic milestone follows
-- **Legacy AI SQL path** — active in `exportSQL`; client-side OpenAI dependency for unsupported cross-dialect pairs
-- **Misleading UI labels** — ✨ on cross-dialect menu items; Sparkles loader for deterministic paths; hardcoded English "Deterministic"/"AI" toggle
-- **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback; not menu-exposed; not true dialect support
+- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL branch migrated; other targets pending
+- **Legacy AI SQL path** — active in `exportSQL` and legacy `ExportSQLDialog`; unreachable from Export Wizard
+- **Misleading UI labels** — legacy `ExportSQLDialog` still has ✨ targets, Sparkles loader, hardcoded English "Deterministic"/"AI" toggle
+- **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback in generator; wizard shows unsupported UX, not fake targets
 - **DBML** — no first-class export entry or file download
 - **Diagram JSON** — `ChartDB({name}).json` filename; 1s artificial delay in `use-export-diagram.tsx`; no format version; ID renumbering
-- **Inconsistent delivery** — SQL/DBML copy-only; images/JSON/Laravel file download
+- **Inconsistent delivery** — DBML copy-only; SQL wizard has copy + download; images/JSON/Laravel file download
 - **Laravel export** — requires persisted backend diagram ID
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML/images unfiltered
 - **Missing tests** — JSON export, image export, export UX routing
@@ -474,7 +485,11 @@ This document and implementation milestones do **not**:
 - `frontend/src/lib/data/sql-export/export-sql-script.ts`
 - `frontend/src/lib/data/sql-export/export-per-type/`
 - `frontend/src/lib/data/sql-export/cross-dialect/`
-- `frontend/src/dialogs/export-sql-dialog/export-sql-dialog.tsx`
+- `frontend/src/lib/data/sql-export/deterministic-sql-export-capability.ts`
+- `frontend/src/lib/data/sql-export/get-filtered-diagram-for-sql-export.ts`
+- `frontend/src/lib/data/sql-export/build-sql-export-filename.ts`
+- `frontend/src/dialogs/export-wizard/sql/`
+- `frontend/src/dialogs/export-sql-dialog/export-sql-dialog.tsx` (legacy)
 
 ### Frontend — DBML
 

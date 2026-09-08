@@ -1045,6 +1045,33 @@ export const te: LanguageTranslation = {
             title: 'ఎగుమతి',
             description:
                 'మీ డయాగ్రామ్‌ను ఎగుమతి చేయడానికి ఫార్మాట్‌ను ఎంచుకోండి.',
+            back: 'వెనక్కి',
+            sql: {
+                target_step: {
+                    title: 'SQL ఎగుమతి',
+                    description:
+                        'మీ {{database}} డయాగ్రామ్ కోసం లక్ష్య డేటాబేస్‌ను ఎంచుకోండి.',
+                    source_label: 'మూల డేటాబేస్: {{database}}',
+                    same_dialect_description: '{{database}} DDL గా ఎగుమతి',
+                    cross_dialect_description:
+                        '{{source}} నుండి {{target}} కు మార్చండి',
+                },
+                unsupported_source: {
+                    title: '{{database}} కోసం SQL ఎగుమతి అందుబాటులో లేదు',
+                    description:
+                        'FoxalDBలో ఈ డేటాబేస్ రకానికి నిర్ణీత SQL ఎగుమతి మద్దతు లేదు.',
+                },
+                preview_step: {
+                    title: 'SQL ప్రివ్యూ',
+                    description:
+                        'సృష్టించిన {{database}} స్క్రిప్ట్‌ను సమీక్షించండి.',
+                    target_label: 'లక్ష్యం: {{database}}',
+                    generating: '{{database}} SQL సృష్టిస్తోంది...',
+                    download: 'SQL డౌన్‌లోడ్',
+                    error: 'SQL సృష్టించలేకపోయాం. మళ్లీ ప్రయత్నించండి.',
+                    empty: 'ప్రస్తుత డయాగ్రామ్ కోసం SQL సృష్టించబడలేదు.',
+                },
+            },
             sections: {
                 database: 'డేటాబేస్',
                 framework: 'ఫ్రేమ్‌వర్క్',

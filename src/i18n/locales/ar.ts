@@ -1028,6 +1028,32 @@ export const ar: LanguageTranslation = {
         export_wizard: {
             title: 'تصدير',
             description: 'اختر تنسيقًا لتصدير مخططك.',
+            back: 'رجوع',
+            sql: {
+                target_step: {
+                    title: 'تصدير SQL',
+                    description:
+                        'اختر قاعدة بيانات مستهدفة لمخطط {{database}}.',
+                    source_label: 'قاعدة البيانات المصدر: {{database}}',
+                    same_dialect_description: 'تصدير كـ DDL لـ {{database}}',
+                    cross_dialect_description:
+                        'تحويل من {{source}} إلى {{target}}',
+                },
+                unsupported_source: {
+                    title: 'تصدير SQL غير متاح لـ {{database}}',
+                    description:
+                        'تصدير SQL الحتمي غير مدعوم لهذا نوع قاعدة البيانات في FoxalDB.',
+                },
+                preview_step: {
+                    title: 'معاينة SQL',
+                    description: 'راجع السكربت المُنشأ لـ {{database}}.',
+                    target_label: 'الهدف: {{database}}',
+                    generating: 'جارٍ إنشاء SQL لـ {{database}}...',
+                    download: 'تنزيل SQL',
+                    error: 'تعذر إنشاء SQL. يرجى المحاولة مرة أخرى.',
+                    empty: 'لم يتم إنشاء SQL للمخطط الحالي.',
+                },
+            },
             sections: {
                 database: 'قاعدة البيانات',
                 framework: 'إطار العمل',

@@ -1038,6 +1038,34 @@ export const ne: LanguageTranslation = {
         export_wizard: {
             title: 'निर्यात',
             description: 'आफ्नो डायाग्राम निर्यात गर्न ढाँचा छान्नुहोस्।',
+            back: 'पछाडि',
+            sql: {
+                target_step: {
+                    title: 'SQL निर्यात',
+                    description:
+                        'तपाईंको {{database}} डायग्रामका लागि लक्ष्य डाटाबेस छान्नुहोस्।',
+                    source_label: 'स्रोत डाटाबेस: {{database}}',
+                    same_dialect_description:
+                        '{{database}} DDL को रूपमा निर्यात',
+                    cross_dialect_description:
+                        '{{source}} बाट {{target}} मा रूपान्तरण',
+                },
+                unsupported_source: {
+                    title: '{{database}} को लागि SQL निर्यात उपलब्ध छैन',
+                    description:
+                        'FoxalDB मा यो डाटाबेस प्रकारका लागि निश्चित SQL निर्यात समर्थित छैन।',
+                },
+                preview_step: {
+                    title: 'SQL पूर्वावलोकन',
+                    description:
+                        'उत्पन्न गरिएको {{database}} स्क्रिप्ट समीक्षा गर्नुहोस्।',
+                    target_label: 'लक्ष्य: {{database}}',
+                    generating: '{{database}} SQL उत्पन्न हुँदैछ...',
+                    download: 'SQL डाउनलोड',
+                    error: 'SQL उत्पन्न गर्न सकिएन। कृपया पुनः प्रयास गर्नुहोस्।',
+                    empty: 'हालको डायग्रामका लागि कुनै SQL उत्पन्न भएन।',
+                },
+            },
             sections: {
                 database: 'डाटाबेस',
                 framework: 'फ्रेमवर्क',
