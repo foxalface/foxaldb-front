@@ -1054,6 +1054,75 @@ export const ja: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'エクスポート',
+            description: 'ダイアグラムのエクスポート形式を選択してください。',
+            sections: {
+                database: 'データベース',
+                framework: 'フレームワーク',
+                portable: 'ポータブル / スキーマ',
+                visual: 'ビジュアル',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description:
+                        '現在のダイアグラムのデータベース DDL スクリプト',
+                    description_generic: 'データベース DDL スクリプト',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'ポータブル DBML スキーマファイル',
+                    coming_soon:
+                        'ファイルエクスポートは近日公開予定。サイドパネルで DBML を表示・コピーできます。',
+                },
+                framework: {
+                    coming_soon:
+                        '将来のエクスポートマイルストーンで提供予定です。',
+                },
+                diagram_json: {
+                    title: 'ダイアグラム JSON',
+                    description: 'ポータブル FoxalDB ダイアグラムファイル',
+                },
+                laravel: {
+                    title: 'Laravel マイグレーション',
+                    description: 'Laravel マイグレーション ZIP アーカイブ',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma スキーマのエクスポート',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core のエクスポート',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails スキーマのエクスポート',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django マイグレーションのエクスポート',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle スキーマのエクスポート',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'ラスター画像',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'ラスター画像',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'ベクター画像',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'エクスポート',
             description: 'ダイアグラムのエクスポート形式を選択してください。',

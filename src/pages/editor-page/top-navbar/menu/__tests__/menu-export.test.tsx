@@ -9,7 +9,7 @@ const dialogMocks = {
     openOpenDiagramDialog: vi.fn(),
     openImportDatabaseDialog: vi.fn(),
     openImportDiagramDialog: vi.fn(),
-    openExportDialog: vi.fn(),
+    openExportWizardDialog: vi.fn(),
     openExportDiagramDialog: vi.fn(),
     openLaravelMigrationImportDialog: vi.fn(),
     openLaravelMigrationDiffDialog: vi.fn(),
@@ -121,14 +121,14 @@ describe('Menu export navigation', () => {
         );
     };
 
-    it('opens the unified export dialog from Actions', async () => {
+    it('opens the export wizard from Actions', async () => {
         await openActionsMenu();
 
         await userEvent.click(
             screen.getByRole('menuitem', { name: 'menu.actions.export' })
         );
 
-        expect(dialogMocks.openExportDialog).toHaveBeenCalledTimes(1);
+        expect(dialogMocks.openExportWizardDialog).toHaveBeenCalledTimes(1);
     });
 
     it('does not expose fragmented export SQL or export-as submenus', async () => {

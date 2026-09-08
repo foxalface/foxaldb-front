@@ -52,7 +52,7 @@ vi.mock('@/hooks/use-dialog', () => ({
         openImportDatabaseDialog: vi.fn(),
         openExportImageDialog: vi.fn(),
         openExportDiagramDialog: vi.fn(),
-        openExportDialog: vi.fn(),
+        openExportWizardDialog: vi.fn(),
         openImportDiagramDialog: vi.fn(),
         openExportLaravelMigrationsDialog: vi.fn(),
         openLaravelMigrationImportDialog: vi.fn(),

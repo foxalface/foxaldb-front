@@ -1037,6 +1037,74 @@ export const hr: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'Izvoz',
+            description: 'Odaberite format za izvoz dijagrama.',
+            sections: {
+                database: 'Baza podataka',
+                framework: 'Framework',
+                portable: 'Prijenosno / Shema',
+                visual: 'Vizualno',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description:
+                        'DDL skripta baze podataka za trenutni dijagram',
+                    description_generic: 'DDL skripta baze podataka',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'Prijenosna DBML datoteka sheme',
+                    coming_soon:
+                        'Izvoz datoteke uskoro. Pregledajte i kopirajte DBML na bočnoj ploči.',
+                },
+                framework: {
+                    coming_soon: 'Planirano za buduću fazu izvoza.',
+                },
+                diagram_json: {
+                    title: 'Dijagram JSON',
+                    description: 'Prijenosna FoxalDB datoteka dijagrama',
+                },
+                laravel: {
+                    title: 'Laravel migracije',
+                    description: 'ZIP arhiva Laravel migracija',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Izvoz Prisma sheme',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Izvoz Entity Framework Core',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Izvoz Ruby on Rails sheme',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Izvoz Django migracija',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Izvoz Drizzle sheme',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'Raster slika',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'Raster slika',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'Vektorska slika',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'Izvezi',
             description: 'Odaberite format za izvoz dijagrama.',

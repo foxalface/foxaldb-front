@@ -40,18 +40,35 @@ Export V1 is a **multi-target product capability**. That does **not** require al
 
 ## Export families
 
-Two conceptual families. This is primarily a **product/UX grouping**, not a shared technical pipeline.
+Four conceptual families. This is primarily a **product/UX grouping**, not a shared technical pipeline.
 
-### A. Schema / Code
+### A. Database
 
-Transforms the canonical `Diagram` (or persisted diagram JSON) into portable schema/code artifacts:
+Transforms the canonical `Diagram` into database DDL:
 
 - SQL
+
+### B. Framework
+
+Transforms the canonical `Diagram` into framework-native schema/code artifacts:
+
+- Laravel migrations (ZIP) — **implemented**
+- Prisma — **planned** (separate milestone)
+- EF Core — **planned** (separate milestone)
+- Rails — **planned** (separate milestone)
+- Django — **planned** (separate milestone)
+- Drizzle — **planned** (separate milestone)
+
+Framework import parsers are **not** inverted into exporters. Each framework export receives its own implementation milestone with independent tests and QA.
+
+### C. Portable / Schema
+
+Portable interchange formats:
+
 - DBML
 - Diagram JSON
-- Laravel migrations (ZIP)
 
-### B. Visual
+### D. Visual
 
 Captures the **rendered** diagram canvas:
 
@@ -59,7 +76,29 @@ Captures the **rendered** diagram canvas:
 - JPG/JPEG
 - SVG
 
-Visual export is technically independent. It uses DOM/React Flow capture (`html-to-image`) on the live canvas, not diagram-to-text transformation. **Do not route image export through schema/code generator abstractions**, even if future UX groups both families under one Export entry.
+Visual export is technically independent. It uses DOM/React Flow capture (`html-to-image`) on the live canvas, not diagram-to-text transformation. **Do not route image export through schema/code generator abstractions.**
+
+---
+
+## Export Wizard (UX entry)
+
+**Implemented:** `frontend/src/dialogs/export-wizard/` — single user-facing Export entry (Actions → Export).
+
+The wizard is **product/orchestration UX only**. It does not imply a universal exporter implementation, generic `Exporter` interface, or shared backend export router.
+
+| Layer | Location |
+|-------|----------|
+| Orchestrator | `export-wizard-dialog.tsx` |
+| Target registry | `export-target-registry.ts` |
+| Availability | `export-target-availability.ts` |
+| Target picker step | `export-target-picker-step.tsx` |
+| Dialog API | `openExportWizardDialog` / `closeExportWizardDialog` in `dialog-context` |
+
+**Target groups:** Database, Framework, Portable / Schema, Visual.
+
+**Current routing:** Available targets temporarily delegate to existing child dialogs (`ExportSQLDialog`, `ExportDiagramDialog`, `ExportImageDialog`, `ExportLaravelMigrationsDialog`) via close-and-reopen. Future milestones migrate target-specific UX into wizard-native branch steps.
+
+**Planned framework targets** (Prisma, EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones.
 
 ---
 
@@ -74,7 +113,7 @@ Visual export is technically independent. It uses DOM/React Flow capture (`html-
 | **Auth** | None (guest OK) |
 | **Generators** | `frontend/src/lib/data/sql-export/export-sql-script.ts` (`exportBaseSQL`, `exportSQL`), `export-per-type/*`, `cross-dialect/*` |
 | **Output** | SQL DDL string; displayed in `ExportSQLDialog` via `CodeSnippet` (copy only, no file download) |
-| **Entry points** | `frontend/src/pages/editor-page/top-navbar/menu/menu.tsx` → Actions → Export SQL; `frontend/src/dialogs/export-sql-dialog/export-sql-dialog.tsx` |
+| **Entry points** | Actions → Export wizard → SQL; `frontend/src/dialogs/export-sql-dialog/export-sql-dialog.tsx` |
 | **Tests** | 5 files under `frontend/src/lib/data/sql-export/__tests__/` |
 
 **Routing (`exportBaseSQL`):**
@@ -93,7 +132,7 @@ Visual export is technically independent. It uses DOM/React Flow capture (`html-
 | **Auth** | None |
 | **Generator** | `generateDBMLFromDiagram()` in `frontend/src/lib/dbml/dbml-export/dbml-export.ts` |
 | **Output** | `standardDbml`, `inlineDbml`, `relationshipsDbml`; side-panel `CodeSnippet` (copy/edit, no file download) |
-| **Entry points** | Side panel → DBML section (`frontend/src/pages/editor-page/side-panel/dbml-section/table-dbml/table-dbml.tsx`) — **not** in Actions menu |
+| **Entry points** | Export wizard (disabled, coming soon); side panel → DBML section (`frontend/src/pages/editor-page/side-panel/dbml-section/table-dbml/table-dbml.tsx`) |
 | **Tests** | 9 files under `frontend/src/lib/dbml/dbml-export/__tests__/` |
 
 **Pipeline:** Diagram → `exportBaseSQL({ isDBMLFlow: true, skipFKGeneration: true })` → SQL sanitization → `@dbml/core` importer → post-processing (schemas, composite PKs, enums, refs, etc.).
@@ -109,7 +148,7 @@ Visual export is technically independent. It uses DOM/React Flow capture (`html-
 | **Auth** | None |
 | **Generator** | `diagramToJSONOutput()` in `frontend/src/lib/export-import-utils.ts` |
 | **Output** | Pretty-printed JSON file (`ChartDB({name}).json`) |
-| **Entry points** | Actions → Export As → JSON; Backup → Export diagram; `frontend/src/dialogs/export-diagram-dialog/export-diagram-dialog.tsx` |
+| **Entry points** | Export wizard → Diagram JSON; Backup → Export diagram; `frontend/src/dialogs/export-diagram-dialog/export-diagram-dialog.tsx` |
 | **Tests** | None dedicated to export |
 
 ### PNG / JPG / SVG
@@ -121,7 +160,7 @@ Visual export is technically independent. It uses DOM/React Flow capture (`html-
 | **Auth** | None |
 | **Provider** | `frontend/src/context/export-image-context/export-image-provider.tsx` |
 | **Output** | File download (`{diagramName}.{png\|jpeg\|svg}`); PNG/JPG include FoxalDB watermark |
-| **Entry points** | Actions → Export As → PNG/JPG/SVG; PNG/JPG via `export-image-dialog`; SVG direct call (no options dialog) |
+| **Entry points** | Export wizard → PNG/JPG/SVG; PNG/JPG via `export-image-dialog`; SVG direct call |
 | **Tests** | None |
 
 **Limitations:** current viewport only (not full diagram bounds); `skipFonts: true`; edge/marker styling relies on inline SVG preprocessing.
@@ -137,7 +176,7 @@ Visual export is technically independent. It uses DOM/React Flow capture (`html-
 | **Backend** | `backend/app/Http/Controllers/LaravelMigrationExportController.php` → `LaravelMigrationExportService` → `LaravelMigrationGenerator` → `MigrationArchiveBuilder` |
 | **Frontend client** | `frontend/src/lib/api/diagram-laravel-export.ts` |
 | **Output** | ZIP (`{slug}-laravel-migrations.zip`) with `database/migrations/*.php` |
-| **Entry points** | Actions → Export → Laravel migrations (auth + backend ID); `frontend/src/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog.tsx` |
+| **Entry points** | Export wizard → Laravel migrations (auth + backend ID); `frontend/src/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog.tsx` |
 | **Tests** | `backend/tests/Feature/LaravelMigrationExportTest.php` + 11 Unit files under `backend/tests/Unit/Services/LaravelMigrationExport/`; round-trip test in `LaravelMigrationImportExportRoundTripTest.php` |
 
 **Options:** `laravelVersion` (`10`–`13`, default `13`), `includeIndexes`, `includeForeignKeys`.
@@ -154,7 +193,7 @@ Derived from current code (`export-sql-script.ts`, `cross-dialect-support.ts`, `
 
 **FoxalDB Export V1 core must not require AI.** The ChartDB/OpenAI cross-dialect path is **legacy audit input**, not a FoxalDB core lifecycle dependency. V1 should advertise only **deterministic** SQL paths as supported core capabilities. Legacy AI code remains in the repository but is not part of Export architecture.
 
-**Menu exposure:** Export SQL submenu offers GENERIC, PostgreSQL, MySQL, SQL Server, MariaDB, SQLite only. Oracle, CockroachDB, and ClickHouse are **not** in the export menu despite being selectable diagram DBMS elsewhere.
+**Menu exposure:** Export wizard SQL route uses the diagram's current dialect only until the SQL deterministic wizard milestone restores dialect target selection. Oracle, CockroachDB, and ClickHouse are **not** export targets.
 
 ### Same-dialect export
 
@@ -301,23 +340,33 @@ These are **not** the future generic Schema Diff/Sync/Merge design.
 
 ### Core / must support
 
+- Export Wizard as unified user-facing entry
 - Deterministic SQL export for genuinely supported dialect paths (PostgreSQL, MySQL, MariaDB, SQL Server, SQLite; plus deterministic PG cross-dialect to MySQL/MariaDB/SQL Server)
 - DBML first-class export (using existing generator)
 - Diagram JSON export
 - PNG / JPG / SVG
 - Existing Laravel migration ZIP export (auth-gated)
 
+### Strategic framework targets (separate milestones each)
+
+Each receives its own implementation, automated tests, manual QA, commit, and push:
+
+- Prisma export
+- EF Core export
+- Rails export
+- Django export
+- Drizzle export
+
+Import support for these frameworks does **not** imply export is implemented. Framework import parsers are **not** inverted into exporters.
+
 ### Defer
 
-- Prisma, EF Core, Rails, Django, Drizzle **framework exporters**
 - Dedicated Oracle, CockroachDB, ClickHouse SQL exporters
-- Broad deterministic cross-dialect conversion matrix
+- Broad deterministic cross-dialect conversion matrix beyond verified PG paths
 - Generic backend export API
 - `ChangeSet` abstraction
 - Sync / Diff / Merge implementation
 - AI as a required lifecycle capability
-
-**Defer ≠ rejected forever.** Framework import parsers and legacy AI remain audit inputs for later phases.
 
 ---
 
@@ -329,11 +378,11 @@ FoxalDB imports more DBMS and framework formats than it exports in V1. Examples:
 
 | Capability | Import | Export V1 |
 |------------|--------|-----------|
-| SQL DDL (8 DBMS) | Yes (varies by DBMS) | Deterministic for 5 menu dialects + PG cross-dialect |
-| DBML | Yes | Generator exists; first-class export planned |
-| Diagram JSON | Yes | Yes |
+| SQL DDL (8 DBMS) | Yes (varies by DBMS) | Deterministic for 5 dialects + PG cross-dialect (wizard SQL milestone) |
+| DBML | Yes | Generator exists; wizard entry disabled until DBML milestone |
+| Diagram JSON | Yes | Yes (via wizard) |
 | Metadata JSON | Yes | No |
-| Project ZIP (6 frameworks) | Yes | No framework export |
+| Project ZIP (6 frameworks) | Yes | Laravel export yes; Prisma/EF/Rails/Django/Drizzle planned (wizard shows disabled) |
 | Laravel migrations ZIP | Import (legacy + project) | Export (backend, auth) |
 
 Do not force artificial feature symmetry.
@@ -369,7 +418,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 | Laravel export | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite | Covered |
 | Diagram JSON export | — | **Missing** |
 | Image export | — | **Missing** |
-| Export UX / menu routing | — | **Missing** (partial menu mocks only) |
+| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation) |
 
 ### Expected Export V1 regression strategy
 
@@ -379,6 +428,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 - Diagram JSON round-trip tests (with explicit ID policy once decided)
 - Laravel backend Feature/Unit tests (unchanged contract)
 - Export UX routing tests when unified Export UI is implemented
+- Per-framework export tests in isolation (one milestone per framework)
 - Browser/manual QA for downloads, watermarks, theme, viewport capture
 
 ---
@@ -387,7 +437,8 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 
 Verified in current code:
 
-- **Fragmented Export UX** — SQL, JSON, images, Laravel, and DBML spread across Actions menu, Backup menu, and side panel
+- **Fragmented Export UX** — resolved by Export Wizard foundation; target-native branch migration in progress
+- **SQL dialect selection** — wizard currently routes same-dialect only; SQL deterministic milestone follows
 - **Legacy AI SQL path** — active in `exportSQL`; client-side OpenAI dependency for unsupported cross-dialect pairs
 - **Misleading UI labels** — ✨ on cross-dialect menu items; Sparkles loader for deterministic paths; hardcoded English "Deterministic"/"AI" toggle
 - **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback; not menu-exposed; not true dialect support
@@ -402,14 +453,12 @@ Verified in current code:
 
 ## Non-goals (this architecture phase)
 
-This document and the first implementation milestones do **not**:
+This document and implementation milestones do **not**:
 
-- implement a unified Export UI
-- implement `exportDiagramTarget()` or a generic dispatcher
 - implement a generic `Exporter` interface
 - remove legacy AI SQL code
 - add Oracle/CockroachDB/ClickHouse dedicated SQL exporters
-- add Prisma/EF/Rails/Django/Drizzle framework exporters
+- implement Prisma/EF/Rails/Django/Drizzle framework exporters (each is a separate milestone)
 - modify Import
 - implement Sync/Diff/Merge
 - introduce `ChangeSet`
@@ -450,6 +499,7 @@ This document and the first implementation milestones do **not**:
 
 ### Frontend — UX entry
 
+- `frontend/src/dialogs/export-wizard/`
 - `frontend/src/pages/editor-page/top-navbar/menu/menu.tsx`
 
 ### Backend — Laravel export

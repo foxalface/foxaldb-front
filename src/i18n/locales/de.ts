@@ -1065,6 +1065,76 @@ export const de: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'Exportieren',
+            description:
+                'Wählen Sie ein Format zum Exportieren Ihres Diagramms.',
+            sections: {
+                database: 'Datenbank',
+                framework: 'Framework',
+                portable: 'Portabel / Schema',
+                visual: 'Visuell',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description:
+                        'DDL-Skript der Datenbank für das aktuelle Diagramm',
+                    description_generic: 'Datenbank-DDL-Skript',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'Portable DBML-Schemadatei',
+                    coming_soon:
+                        'Dateiexport demnächst verfügbar. DBML in der Seitenleiste anzeigen und kopieren.',
+                },
+                framework: {
+                    coming_soon:
+                        'Für einen zukünftigen Export-Meilenstein geplant.',
+                },
+                diagram_json: {
+                    title: 'Diagramm-JSON',
+                    description: 'Portable FoxalDB-Diagrammdatei',
+                },
+                laravel: {
+                    title: 'Laravel-Migrationen',
+                    description: 'ZIP-Archiv mit Laravel-Migrationen',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma-Schema-Export',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core-Export',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby-on-Rails-Schema-Export',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django-Migrations-Export',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle-Schema-Export',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'Rasterbild',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'Rasterbild',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'Vektorbild',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'Exportieren',
             description:

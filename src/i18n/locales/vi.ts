@@ -1040,6 +1040,73 @@ export const vi: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'Xuất',
+            description: 'Chọn định dạng để xuất sơ đồ của bạn.',
+            sections: {
+                database: 'Cơ sở dữ liệu',
+                framework: 'Framework',
+                portable: 'Di động / Lược đồ',
+                visual: 'Hình ảnh',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: 'Script DDL cơ sở dữ liệu cho sơ đồ hiện tại',
+                    description_generic: 'Script DDL cơ sở dữ liệu',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'Tệp lược đồ DBML di động',
+                    coming_soon:
+                        'Xuất tệp sắp có. Xem và sao chép DBML trong bảng điều khiển bên.',
+                },
+                framework: {
+                    coming_soon: 'Dự kiến cho giai đoạn xuất trong tương lai.',
+                },
+                diagram_json: {
+                    title: 'Sơ đồ JSON',
+                    description: 'Tệp sơ đồ FoxalDB di động',
+                },
+                laravel: {
+                    title: 'Migration Laravel',
+                    description: 'Tệp ZIP migration Laravel',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Xuất lược đồ Prisma',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Xuất Entity Framework Core',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Xuất lược đồ Ruby on Rails',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Xuất migration Django',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Xuất lược đồ Drizzle',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'Ảnh raster',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'Ảnh raster',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'Ảnh vector',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'Xuất',
             description: 'Chọn định dạng để xuất sơ đồ của bạn.',

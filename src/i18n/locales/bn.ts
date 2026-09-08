@@ -1034,6 +1034,75 @@ export const bn: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'রপ্তানি',
+            description: 'আপনার ডায়াগ্রাম রপ্তানি করতে একটি ফরম্যাট বেছে নিন।',
+            sections: {
+                database: 'ডেটাবেস',
+                framework: 'ফ্রেমওয়ার্ক',
+                portable: 'পোর্টেবল / স্কিমা',
+                visual: 'ভিজ্যুয়াল',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description:
+                        'বর্তমান ডায়াগ্রামের জন্য ডেটাবেস DDL স্ক্রিপ্ট',
+                    description_generic: 'ডেটাবেস DDL স্ক্রিপ্ট',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'পোর্টেবল DBML স্কিমা ফাইল',
+                    coming_soon:
+                        'ফাইল রপ্তানি শীঘ্রই আসছে। সাইড প্যানেলে DBML দেখুন এবং কপি করুন।',
+                },
+                framework: {
+                    coming_soon:
+                        'ভবিষ্যতের রপ্তানি মাইলস্টোনের জন্য পরিকল্পিত।',
+                },
+                diagram_json: {
+                    title: 'ডায়াগ্রাম JSON',
+                    description: 'পোর্টেবল FoxalDB ডায়াগ্রাম ফাইল',
+                },
+                laravel: {
+                    title: 'Laravel মাইগ্রেশন',
+                    description: 'Laravel মাইগ্রেশন ZIP আর্কাইভ',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma স্কিমা রপ্তানি',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core রপ্তানি',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails স্কিমা রপ্তানি',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django মাইগ্রেশন রপ্তানি',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle স্কিমা রপ্তানি',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'রাস্টার ছবি',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'রাস্টার ছবি',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'ভেক্টর ছবি',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'রপ্তানি',
             description: 'আপনার ডায়াগ্রাম রপ্তানি করতে একটি ফরম্যাট বেছে নিন।',

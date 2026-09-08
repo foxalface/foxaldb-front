@@ -1041,6 +1041,76 @@ export const te: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'ఎగుమతి',
+            description:
+                'మీ డయాగ్రామ్‌ను ఎగుమతి చేయడానికి ఫార్మాట్‌ను ఎంచుకోండి.',
+            sections: {
+                database: 'డేటాబేస్',
+                framework: 'ఫ్రేమ్‌వర్క్',
+                portable: 'పోర్టబుల్ / స్కీమా',
+                visual: 'విజువల్',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description:
+                        'ప్రస్తుత డయాగ్రామ్ కోసం డేటాబేస్ DDL స్క్రిప్ట్',
+                    description_generic: 'డేటాబేస్ DDL స్క్రిప్ట్',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'పోర్టబుల్ DBML స్కీమా ఫైల్',
+                    coming_soon:
+                        'ఫైల్ ఎగుమతి త్వరలో. సైడ్ ప్యానెల్‌లో DBML చూడండి మరియు కాపీ చేయండి.',
+                },
+                framework: {
+                    coming_soon:
+                        'భవిష్యత్ ఎగుమతి మైల్‌స్టోన్ కోసం ప్రణాళిక చేయబడింది.',
+                },
+                diagram_json: {
+                    title: 'డయాగ్రామ్ JSON',
+                    description: 'పోర్టబుల్ FoxalDB డయాగ్రామ్ ఫైల్',
+                },
+                laravel: {
+                    title: 'Laravel మైగ్రేషన్‌లు',
+                    description: 'Laravel మైగ్రేషన్ ZIP ఆర్కైవ్',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma స్కీమా ఎగుమతి',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core ఎగుమతి',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails స్కీమా ఎగుమతి',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django మైగ్రేషన్ ఎగుమతి',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle స్కీమా ఎగుమతి',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'రాస్టర్ చిత్రం',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'రాస్టర్ చిత్రం',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'వెక్టర్ చిత్రం',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'ఎగుమతి',
             description:

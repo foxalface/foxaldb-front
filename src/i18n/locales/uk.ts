@@ -1038,6 +1038,73 @@ export const uk: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'Експорт',
+            description: 'Виберіть формат для експорту діаграми.',
+            sections: {
+                database: 'База даних',
+                framework: 'Фреймворк',
+                portable: 'Портативний / Схема',
+                visual: 'Візуальний',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: 'DDL-скрипт бази даних для поточної діаграми',
+                    description_generic: 'DDL-скрипт бази даних',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'Портативний файл схеми DBML',
+                    coming_soon:
+                        'Експорт файлу незабаром. Переглядайте та копіюйте DBML на бічній панелі.',
+                },
+                framework: {
+                    coming_soon: 'Заплановано для майбутнього етапу експорту.',
+                },
+                diagram_json: {
+                    title: 'Діаграма JSON',
+                    description: 'Портативний файл діаграми FoxalDB',
+                },
+                laravel: {
+                    title: 'Міграції Laravel',
+                    description: 'ZIP-архів міграцій Laravel',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Експорт схеми Prisma',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Експорт Entity Framework Core',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Експорт схеми Ruby on Rails',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Експорт міграцій Django',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Експорт схеми Drizzle',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'Растрове зображення',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'Растрове зображення',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'Векторне зображення',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'Експорт',
             description: 'Оберіть формат для експорту діаграми.',

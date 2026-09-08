@@ -1035,6 +1035,74 @@ export const ne: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'निर्यात',
+            description: 'आफ्नो डायाग्राम निर्यात गर्न ढाँचा छान्नुहोस्।',
+            sections: {
+                database: 'डाटाबेस',
+                framework: 'फ्रेमवर्क',
+                portable: 'पोर्टेबल / स्किमा',
+                visual: 'भिजुअल',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: 'हालको डायाग्रामको लागि डाटाबेस DDL स्क्रिप्ट',
+                    description_generic: 'डाटाबेस DDL स्क्रिप्ट',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'पोर्टेबल DBML स्किमा फाइल',
+                    coming_soon:
+                        'फाइल निर्यात चाँडै आउँदैछ। साइड प्यानलमा DBML हेर्नुहोस् र कपी गर्नुहोस्।',
+                },
+                framework: {
+                    coming_soon:
+                        'भविष्यको निर्यात माइलस्टोनका लागि योजना गरिएको।',
+                },
+                diagram_json: {
+                    title: 'डायाग्राम JSON',
+                    description: 'पोर्टेबल FoxalDB डायाग्राम फाइल',
+                },
+                laravel: {
+                    title: 'Laravel माइग्रेसन',
+                    description: 'Laravel माइग्रेसन ZIP अभिलेख',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma स्किमा निर्यात',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core निर्यात',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails स्किमा निर्यात',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django माइग्रेसन निर्यात',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle स्किमा निर्यात',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'रास्टर छवि',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'रास्टर छवि',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'भेक्टर छवि',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'निर्यात',
             description: 'आफ्नो डायग्राम निर्यात गर्न ढाँचा छान्नुहोस्।',

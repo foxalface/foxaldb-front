@@ -15,7 +15,7 @@ import { emptyFn } from '@/lib/utils';
 import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
-import { ExportDialog } from '@/dialogs/export-dialog/export-dialog';
+import { ExportWizardDialog } from '@/dialogs/export-wizard/export-wizard-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 import { UserSettingsDialog } from '@/dialogs/user-settings-dialog/user-settings-dialog';
@@ -182,8 +182,8 @@ export const DialogProvider: React.FC<
     const [openExportDiagramDialog, setOpenExportDiagramDialog] =
         useState(false);
 
-    // Unified export dialog
-    const [openExportDialog, setOpenExportDialog] = useState(false);
+    // Export wizard
+    const [openExportWizardDialog, setOpenExportWizardDialog] = useState(false);
 
     // Import diagram dialog
     const [openImportDiagramDialog, setOpenImportDiagramDialog] =
@@ -253,8 +253,8 @@ export const DialogProvider: React.FC<
                 closeCreateDiagramDialog: () => setOpenNewDiagramDialog(false),
                 openOpenDiagramDialog: openOpenDiagramDialogHandler,
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
-                openExportDialog: () => setOpenExportDialog(true),
-                closeExportDialog: () => setOpenExportDialog(false),
+                openExportWizardDialog: () => setOpenExportWizardDialog(true),
+                closeExportWizardDialog: () => setOpenExportWizardDialog(false),
                 openExportLaravelMigrationsDialog:
                     openExportLaravelMigrationsDialogHandler,
                 closeExportLaravelMigrationsDialog: () =>
@@ -353,7 +353,7 @@ export const DialogProvider: React.FC<
                 dialog={{ open: openExportImageDialog }}
                 {...exportImageDialogParams}
             />
-            <ExportDialog dialog={{ open: openExportDialog }} />
+            <ExportWizardDialog dialog={{ open: openExportWizardDialog }} />
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
             {exportLaravelMigrationsDialogParams ? (

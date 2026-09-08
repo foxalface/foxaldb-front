@@ -1041,6 +1041,73 @@ export const ko_KR: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: '보내기',
+            description: '다이어그램을보낼 형식을 선택하세요.',
+            sections: {
+                database: '데이터베이스',
+                framework: '프레임워크',
+                portable: '이식 가능 / 스키마',
+                visual: '시각',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: '현재 다이어그램의 데이터베이스 DDL 스크립트',
+                    description_generic: '데이터베이스 DDL 스크립트',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: '이식 가능한 DBML 스키마 파일',
+                    coming_soon:
+                        '파일보내기가 곧 제공됩니다. 사이드 패널에서 DBML을 보고 복사할 수 있습니다.',
+                },
+                framework: {
+                    coming_soon: '향후보내기 마일스톤에서 제공될 예정입니다.',
+                },
+                diagram_json: {
+                    title: '다이어그램 JSON',
+                    description: '이식 가능한 FoxalDB 다이어그램 파일',
+                },
+                laravel: {
+                    title: 'Laravel 마이그레이션',
+                    description: 'Laravel 마이그레이션 ZIP 아카이브',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma 스키마보내기',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core보내기',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails 스키마보내기',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django 마이그레이션보내기',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle 스키마보내기',
+                },
+                png: {
+                    title: 'PNG',
+                    description: '래스터 이미지',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: '래스터 이미지',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: '벡터 이미지',
+                },
+            },
+        },
+
         export_dialog: {
             title: '보내기',
             description: '다이어그램을보낼 형식을 선택하세요.',

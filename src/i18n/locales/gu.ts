@@ -1021,6 +1021,74 @@ export const gu: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'નિકાસ',
+            description:
+                'તમારું ડાયાગ્રામ નિકાસ કરવા માટે એક ફોર્મેટ પસંદ કરો.',
+            sections: {
+                database: 'ડેટાબેસ',
+                framework: 'ફ્રેમવર્ક',
+                portable: 'પોર્ટેબલ / સ્કીમા',
+                visual: 'વિઝ્યુઅલ',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: 'વર્તમાન ડાયાગ્રામ માટે ડેટાબેસ DDL સ્ક્રિપ્ટ',
+                    description_generic: 'ડેટાબેસ DDL સ્ક્રિપ્ટ',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'પોર્ટેબલ DBML સ્કીમા ફાઇલ',
+                    coming_soon:
+                        'ફાઇલ નિકાસ ટૂંક સમયમાં. સાઇડ પેનલમાં DBML જુઓ અને કૉપી કરો.',
+                },
+                framework: {
+                    coming_soon: 'ભવિષ્યના નિકાસ માઇલસ્ટોન માટે યોજના બનાવેલી.',
+                },
+                diagram_json: {
+                    title: 'ડાયાગ્રામ JSON',
+                    description: 'પોર્ટેબલ FoxalDB ડાયાગ્રામ ફાઇલ',
+                },
+                laravel: {
+                    title: 'Laravel માઇગ્રેશન',
+                    description: 'Laravel માઇગ્રેશન ZIP આર્કાઇવ',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma સ્કીમા નિકાસ',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core નિકાસ',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails સ્કીમા નિકાસ',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django માઇગ્રેશન નિકાસ',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle સ્કીમા નિકાસ',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'રાસ્ટર છબી',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'રાસ્ટર છબી',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'વેક્ટર છબી',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'નિકાસ',
             description: 'તમારું ડાયાગ્રામ નિકાસ કરવા માટે ફોર્મેટ પસંદ કરો.',

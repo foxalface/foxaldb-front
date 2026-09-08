@@ -1062,6 +1062,74 @@ export const fr: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'Exporter',
+            description: 'Choisissez un format pour exporter votre diagramme.',
+            sections: {
+                database: 'Base de données',
+                framework: 'Framework',
+                portable: 'Portable / Schéma',
+                visual: 'Visuel',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description:
+                        'Script DDL de la base pour le diagramme actuel',
+                    description_generic: 'Script DDL de base de données',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'Fichier de schéma DBML portable',
+                    coming_soon:
+                        'Export de fichier bientôt disponible. Consultez et copiez le DBML dans le panneau latéral.',
+                },
+                framework: {
+                    coming_soon: 'Prévu pour une future étape d’export.',
+                },
+                diagram_json: {
+                    title: 'Diagramme JSON',
+                    description: 'Fichier de diagramme FoxalDB portable',
+                },
+                laravel: {
+                    title: 'Migrations Laravel',
+                    description: 'Archive ZIP de migrations Laravel',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Export de schéma Prisma',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Export Entity Framework Core',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Export de schéma Ruby on Rails',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Export de migrations Django',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Export de schéma Drizzle',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'Image raster',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'Image raster',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'Image vectorielle',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'Exporter',
             description: 'Choisissez un format pour exporter votre diagramme.',

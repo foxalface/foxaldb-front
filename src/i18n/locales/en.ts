@@ -1036,6 +1036,73 @@ export const en = {
             },
         },
 
+        export_wizard: {
+            title: 'Export',
+            description: 'Choose a format to export your diagram.',
+            sections: {
+                database: 'Database',
+                framework: 'Framework',
+                portable: 'Portable / Schema',
+                visual: 'Visual',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: 'Database DDL script for the current diagram',
+                    description_generic: 'Database DDL script',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'Portable DBML schema file',
+                    coming_soon:
+                        'File export coming soon. View and copy DBML in the sidebar.',
+                },
+                framework: {
+                    coming_soon: 'Planned for a future Export milestone.',
+                },
+                diagram_json: {
+                    title: 'Diagram JSON',
+                    description: 'Portable FoxalDB diagram file',
+                },
+                laravel: {
+                    title: 'Laravel migrations',
+                    description: 'Laravel migration ZIP archive',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma schema export',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core export',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails schema export',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django migrations export',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle schema export',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'Raster image',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'Raster image',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'Vector image',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'Export',
             description: 'Choose a format to export your diagram.',

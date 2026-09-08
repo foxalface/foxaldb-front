@@ -971,6 +971,73 @@ export const zh_TW: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: '匯出',
+            description: '選擇要匯出圖表的格式。',
+            sections: {
+                database: '資料庫',
+                framework: '框架',
+                portable: '可攜 / 架構',
+                visual: '視覺',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: '目前圖表的資料庫 DDL 腳本',
+                    description_generic: '資料庫 DDL 腳本',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: '可攜式 DBML 架構檔案',
+                    coming_soon:
+                        '檔案匯出即將推出。可在側邊面板查看並複製 DBML。',
+                },
+                framework: {
+                    coming_soon: '計劃在未來的匯出里程碑中提供。',
+                },
+                diagram_json: {
+                    title: '圖表 JSON',
+                    description: '可攜式 FoxalDB 圖表檔案',
+                },
+                laravel: {
+                    title: 'Laravel 遷移',
+                    description: 'Laravel 遷移 ZIP 壓縮檔',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma 架構匯出',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core 匯出',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails 架構匯出',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django 遷移匯出',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle 架構匯出',
+                },
+                png: {
+                    title: 'PNG',
+                    description: '光柵影像',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: '光柵影像',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: '向量影像',
+                },
+            },
+        },
+
         export_dialog: {
             title: '匯出',
             description: '選擇匯出圖表的格式。',

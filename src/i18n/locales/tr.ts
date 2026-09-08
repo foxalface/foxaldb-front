@@ -1020,6 +1020,74 @@ export const tr: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'Dışa aktar',
+            description: 'Diyagramınızı dışa aktarmak için bir format seçin.',
+            sections: {
+                database: 'Veritabanı',
+                framework: 'Framework',
+                portable: 'Taşınabilir / Şema',
+                visual: 'Görsel',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: 'Geçerli diyagram için veritabanı DDL betiği',
+                    description_generic: 'Veritabanı DDL betiği',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'Taşınabilir DBML şema dosyası',
+                    coming_soon:
+                        "Dosya dışa aktarma yakında. DBML'yi kenar panelinde görüntüleyin ve kopyalayın.",
+                },
+                framework: {
+                    coming_soon:
+                        'Gelecekteki bir dışa aktarma aşaması için planlandı.',
+                },
+                diagram_json: {
+                    title: 'Diyagram JSON',
+                    description: 'Taşınabilir FoxalDB diyagram dosyası',
+                },
+                laravel: {
+                    title: 'Laravel migrasyonları',
+                    description: 'Laravel migrasyon ZIP arşivi',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma şema dışa aktarma',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core dışa aktarma',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails şema dışa aktarma',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django migrasyon dışa aktarma',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle şema dışa aktarma',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'Raster görüntü',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'Raster görüntü',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'Vektör görüntü',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'Dışa Aktar',
             description: 'Diyagramınızı dışa aktarmak için bir format seçin.',

@@ -30,22 +30,11 @@ import { useLocalConfig } from '@/hooks/use-local-config';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useAuth } from '@/hooks/use-auth';
+import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 
 export interface MenuProps {
     onActiveDiagramDeleted?: () => void;
 }
-
-const isValidBackendDiagramId = (id: unknown): id is string | number => {
-    if (typeof id === 'number') {
-        return Number.isInteger(id) && id > 0;
-    }
-
-    if (typeof id === 'string') {
-        return /^\d+$/.test(id);
-    }
-
-    return false;
-};
 
 export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
     const {
@@ -60,7 +49,7 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
         openOpenDiagramDialog,
         openImportDatabaseDialog,
         openImportDiagramDialog,
-        openExportDialog,
+        openExportWizardDialog,
         openExportDiagramDialog,
         openLaravelMigrationImportDialog,
         openLaravelMigrationDiffDialog,
@@ -266,7 +255,7 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                         </MenubarSubContent>
                     </MenubarSub>
                     <MenubarSeparator />
-                    <MenubarItem onClick={openExportDialog}>
+                    <MenubarItem onClick={openExportWizardDialog}>
                         {t('menu.actions.export')}
                     </MenubarItem>
                     <MenubarSeparator />

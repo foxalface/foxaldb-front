@@ -972,6 +972,73 @@ export const zh_CN: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: '导出',
+            description: '选择要导出图表的格式。',
+            sections: {
+                database: '数据库',
+                framework: '框架',
+                portable: '便携 / 架构',
+                visual: '视觉',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: '当前图表的数据库 DDL 脚本',
+                    description_generic: '数据库 DDL 脚本',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: '便携式 DBML 架构文件',
+                    coming_soon:
+                        '文件导出即将推出。可在侧边栏查看并复制 DBML。',
+                },
+                framework: {
+                    coming_soon: '计划在未来的导出里程碑中提供。',
+                },
+                diagram_json: {
+                    title: '图表 JSON',
+                    description: '便携式 FoxalDB 图表文件',
+                },
+                laravel: {
+                    title: 'Laravel 迁移',
+                    description: 'Laravel 迁移 ZIP 压缩包',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Prisma 架构导出',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Entity Framework Core 导出',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ruby on Rails 架构导出',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Django 迁移导出',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Drizzle 架构导出',
+                },
+                png: {
+                    title: 'PNG',
+                    description: '光栅图像',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: '光栅图像',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: '矢量图像',
+                },
+            },
+        },
+
         export_dialog: {
             title: '导出',
             description: '选择导出图表的格式。',

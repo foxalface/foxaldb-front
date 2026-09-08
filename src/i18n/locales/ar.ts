@@ -1025,6 +1025,73 @@ export const ar: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'تصدير',
+            description: 'اختر تنسيقًا لتصدير مخططك.',
+            sections: {
+                database: 'قاعدة البيانات',
+                framework: 'إطار العمل',
+                portable: 'محمول / مخطط',
+                visual: 'مرئي',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: 'سكربت DDL لقاعدة البيانات للمخطط الحالي',
+                    description_generic: 'سكربت DDL لقاعدة البيانات',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'ملف مخطط DBML محمول',
+                    coming_soon:
+                        'تصدير الملف قريبًا. اعرض وانسخ DBML من اللوحة الجانبية.',
+                },
+                framework: {
+                    coming_soon: 'مخطط لمرحلة تصدير مستقبلية.',
+                },
+                diagram_json: {
+                    title: 'مخطط JSON',
+                    description: 'ملف مخطط FoxalDB محمول',
+                },
+                laravel: {
+                    title: 'ترحيلات Laravel',
+                    description: 'أرشيف ZIP لترحيلات Laravel',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'تصدير مخطط Prisma',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'تصدير Entity Framework Core',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'تصدير مخطط Ruby on Rails',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'تصدير ترحيلات Django',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'تصدير مخطط Drizzle',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'صورة نقطية',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'صورة نقطية',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'صورة متجهة',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'تصدير',
             description: 'اختر تنسيقًا لتصدير مخططك.',

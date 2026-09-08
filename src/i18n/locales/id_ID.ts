@@ -1040,6 +1040,73 @@ export const id_ID: LanguageTranslation = {
             },
         },
 
+        export_wizard: {
+            title: 'Ekspor',
+            description: 'Pilih format untuk mengekspor diagram Anda.',
+            sections: {
+                database: 'Basis data',
+                framework: 'Framework',
+                portable: 'Portabel / Skema',
+                visual: 'Visual',
+            },
+            targets: {
+                sql: {
+                    title: 'SQL',
+                    description: 'Skrip DDL basis data untuk diagram saat ini',
+                    description_generic: 'Skrip DDL basis data',
+                },
+                dbml: {
+                    title: 'DBML',
+                    description: 'File skema DBML portabel',
+                    coming_soon:
+                        'Ekspor file segera hadir. Lihat dan salin DBML di panel samping.',
+                },
+                framework: {
+                    coming_soon: 'Direncanakan untuk tonggak ekspor mendatang.',
+                },
+                diagram_json: {
+                    title: 'Diagram JSON',
+                    description: 'File diagram FoxalDB portabel',
+                },
+                laravel: {
+                    title: 'Migrasi Laravel',
+                    description: 'Arsip ZIP migrasi Laravel',
+                },
+                prisma: {
+                    title: 'Prisma',
+                    description: 'Ekspor skema Prisma',
+                },
+                ef_core: {
+                    title: 'EF Core',
+                    description: 'Ekspor Entity Framework Core',
+                },
+                rails: {
+                    title: 'Rails',
+                    description: 'Ekspor skema Ruby on Rails',
+                },
+                django: {
+                    title: 'Django',
+                    description: 'Ekspor migrasi Django',
+                },
+                drizzle: {
+                    title: 'Drizzle',
+                    description: 'Ekspor skema Drizzle',
+                },
+                png: {
+                    title: 'PNG',
+                    description: 'Gambar raster',
+                },
+                jpg: {
+                    title: 'JPG',
+                    description: 'Gambar raster',
+                },
+                svg: {
+                    title: 'SVG',
+                    description: 'Gambar vektor',
+                },
+            },
+        },
+
         export_dialog: {
             title: 'Ekspor',
             description: 'Pilih format untuk mengekspor diagram Anda.',
