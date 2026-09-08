@@ -1036,6 +1036,43 @@ export const en = {
             },
         },
 
+        export_dialog: {
+            title: 'Export',
+            description: 'Choose a format to export your diagram.',
+            schema_code_section: 'Schema / Code',
+            visual_section: 'Visual',
+            sql: {
+                title: 'SQL',
+                description: 'Database DDL script for the current diagram',
+                description_generic: 'Database DDL script',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'File export coming soon. View and copy DBML in the sidebar.',
+            },
+            diagram_json: {
+                title: 'Diagram JSON',
+                description: 'Portable FoxalDB diagram file',
+            },
+            laravel_migrations: {
+                title: 'Laravel migrations',
+                description: 'Laravel migration ZIP archive',
+            },
+            png: {
+                title: 'PNG',
+                description: 'Raster image',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'Raster image',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'Vector image',
+            },
+        },
+
         export_sql_dialog: {
             title: 'Export SQL',
             description:

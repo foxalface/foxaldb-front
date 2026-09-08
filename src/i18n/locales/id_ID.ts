@@ -1040,6 +1040,43 @@ export const id_ID: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'Ekspor',
+            description: 'Pilih format untuk mengekspor diagram Anda.',
+            schema_code_section: 'Skema / Kode',
+            visual_section: 'Visual',
+            sql: {
+                title: 'SQL',
+                description: 'Skrip DDL database untuk diagram saat ini',
+                description_generic: 'Skrip DDL database',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'Ekspor file segera hadir. Lihat dan salin DBML di panel samping.',
+            },
+            diagram_json: {
+                title: 'Diagram JSON',
+                description: 'File diagram FoxalDB portabel',
+            },
+            laravel_migrations: {
+                title: 'Migrasi Laravel',
+                description: 'Arsip ZIP migrasi Laravel',
+            },
+            png: {
+                title: 'PNG',
+                description: 'Gambar raster',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'Gambar raster',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'Gambar vektor',
+            },
+        },
+
         export_sql_dialog: {
             title: 'Ekspor SQL',
             description: 'Ekspor skema diagram Anda ke skrip {{databaseType}}',

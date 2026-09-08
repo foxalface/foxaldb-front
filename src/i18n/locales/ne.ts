@@ -1035,6 +1035,43 @@ export const ne: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'निर्यात',
+            description: 'आफ्नो डायग्राम निर्यात गर्न ढाँचा छान्नुहोस्।',
+            schema_code_section: 'स्किमा / कोड',
+            visual_section: 'दृश्य',
+            sql: {
+                title: 'SQL',
+                description: 'हालको डायग्रामका लागि डाटाबेस DDL स्क्रिप्ट',
+                description_generic: 'डाटाबेस DDL स्क्रिप्ट',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'फाइल निर्यात चाँडै आउँदैछ। साइडबारमा DBML हेर्नुहोस् र प्रतिलिपि गर्नुहोस्।',
+            },
+            diagram_json: {
+                title: 'डायग्राम JSON',
+                description: 'पोर्टेबल FoxalDB डायग्राम फाइल',
+            },
+            laravel_migrations: {
+                title: 'Laravel माइग्रेसन',
+                description: 'Laravel माइग्रेसन ZIP अभिलेख',
+            },
+            png: {
+                title: 'PNG',
+                description: 'रास्टर छवि',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'रास्टर छवि',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'भेक्टर छवि',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQL निर्यात गर्नुहोस्',
             description:

@@ -1037,6 +1037,43 @@ export const hr: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'Izvezi',
+            description: 'Odaberite format za izvoz dijagrama.',
+            schema_code_section: 'Shema / Kod',
+            visual_section: 'Vizualno',
+            sql: {
+                title: 'SQL',
+                description: 'DDL skripta baze podataka za trenutni dijagram',
+                description_generic: 'DDL skripta baze podataka',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'Izvoz datoteke uskoro. Pregledajte i kopirajte DBML na bočnoj ploči.',
+            },
+            diagram_json: {
+                title: 'Dijagram JSON',
+                description: 'Prijenosna FoxalDB datoteka dijagrama',
+            },
+            laravel_migrations: {
+                title: 'Laravel migracije',
+                description: 'ZIP arhiva Laravel migracija',
+            },
+            png: {
+                title: 'PNG',
+                description: 'Raster slika',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'Raster slika',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'Vektorska slika',
+            },
+        },
+
         export_sql_dialog: {
             title: 'Izvezi SQL',
             description:

@@ -1065,6 +1065,45 @@ export const de: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'Exportieren',
+            description:
+                'Wählen Sie ein Format zum Exportieren Ihres Diagramms.',
+            schema_code_section: 'Schema / Code',
+            visual_section: 'Visuell',
+            sql: {
+                title: 'SQL',
+                description:
+                    'DDL-Skript der Datenbank für das aktuelle Diagramm',
+                description_generic: 'Datenbank-DDL-Skript',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'Dateiexport folgt bald. DBML in der Seitenleiste anzeigen und kopieren.',
+            },
+            diagram_json: {
+                title: 'Diagramm-JSON',
+                description: 'Portable FoxalDB-Diagrammdatei',
+            },
+            laravel_migrations: {
+                title: 'Laravel-Migrationen',
+                description: 'ZIP-Archiv mit Laravel-Migrationen',
+            },
+            png: {
+                title: 'PNG',
+                description: 'Rasterbild',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'Rasterbild',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'Vektorbild',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQL exportieren',
             description:

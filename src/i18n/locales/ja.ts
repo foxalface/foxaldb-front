@@ -1054,6 +1054,44 @@ export const ja: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'エクスポート',
+            description: 'ダイアグラムのエクスポート形式を選択してください。',
+            schema_code_section: 'スキーマ / コード',
+            visual_section: 'ビジュアル',
+            sql: {
+                title: 'SQL',
+                description:
+                    '現在のダイアグラム用のデータベース DDL スクリプト',
+                description_generic: 'データベース DDL スクリプト',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'ファイルエクスポートは近日対応予定です。サイドパネルで DBML を表示・コピーできます。',
+            },
+            diagram_json: {
+                title: 'ダイアグラム JSON',
+                description: 'ポータブルな FoxalDB ダイアグラムファイル',
+            },
+            laravel_migrations: {
+                title: 'Laravel マイグレーション',
+                description: 'Laravel マイグレーション ZIP ファイル',
+            },
+            png: {
+                title: 'PNG',
+                description: 'ラスター画像',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'ラスター画像',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'ベクター画像',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQLをエクスポート',
             description:

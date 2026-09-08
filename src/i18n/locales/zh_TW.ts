@@ -971,6 +971,42 @@ export const zh_TW: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: '匯出',
+            description: '選擇匯出圖表的格式。',
+            schema_code_section: '架構 / 程式碼',
+            visual_section: '視覺',
+            sql: {
+                title: 'SQL',
+                description: '目前圖表的資料庫 DDL 腳本',
+                description_generic: '資料庫 DDL 腳本',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon: '檔案匯出即將推出。請在側邊面板查看並複製 DBML。',
+            },
+            diagram_json: {
+                title: '圖表 JSON',
+                description: '可移植的 FoxalDB 圖表檔案',
+            },
+            laravel_migrations: {
+                title: 'Laravel 遷移',
+                description: 'Laravel 遷移 ZIP 壓縮檔',
+            },
+            png: {
+                title: 'PNG',
+                description: '點陣圖像',
+            },
+            jpg: {
+                title: 'JPG',
+                description: '點陣圖像',
+            },
+            svg: {
+                title: 'SVG',
+                description: '向量圖像',
+            },
+        },
+
         export_sql_dialog: {
             title: '匯出 SQL',
             description: '將圖表 Schema 匯出為 {{databaseType}} 格式的腳本',

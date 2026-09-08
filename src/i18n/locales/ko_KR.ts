@@ -1041,6 +1041,43 @@ export const ko_KR: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: '보내기',
+            description: '다이어그램을보낼 형식을 선택하세요.',
+            schema_code_section: '스키마 / 코드',
+            visual_section: '시각',
+            sql: {
+                title: 'SQL',
+                description: '현재 다이어그램용 데이터베이스 DDL 스크립트',
+                description_generic: '데이터베이스 DDL 스크립트',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    '파일보내기는 곧 제공됩니다. 사이드 패널에서 DBML을 보고 복사할 수 있습니다.',
+            },
+            diagram_json: {
+                title: '다이어그램 JSON',
+                description: '이식 가능한 FoxalDB 다이어그램 파일',
+            },
+            laravel_migrations: {
+                title: 'Laravel 마이그레이션',
+                description: 'Laravel 마이그레이션 ZIP 파일',
+            },
+            png: {
+                title: 'PNG',
+                description: '래스터 이미지',
+            },
+            jpg: {
+                title: 'JPG',
+                description: '래스터 이미지',
+            },
+            svg: {
+                title: 'SVG',
+                description: '벡터 이미지',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQL로 내보내기',
             description: '다이어그램 스키마를 {{databaseType}} SQL로 내보내기',

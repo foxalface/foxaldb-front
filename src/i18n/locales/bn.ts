@@ -1034,6 +1034,43 @@ export const bn: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'রপ্তানি',
+            description: 'আপনার ডায়াগ্রাম রপ্তানি করতে একটি ফরম্যাট বেছে নিন।',
+            schema_code_section: 'স্কিমা / কোড',
+            visual_section: 'ভিজ্যুয়াল',
+            sql: {
+                title: 'SQL',
+                description: 'বর্তমান ডায়াগ্রামের জন্য ডাটাবেস DDL স্ক্রিপ্ট',
+                description_generic: 'ডাটাবেস DDL স্ক্রিপ্ট',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'ফাইল রপ্তানি শীঘ্রই আসছে। সাইডবারে DBML দেখুন এবং কপি করুন।',
+            },
+            diagram_json: {
+                title: 'ডায়াগ্রাম JSON',
+                description: 'পোর্টেবল FoxalDB ডায়াগ্রাম ফাইল',
+            },
+            laravel_migrations: {
+                title: 'Laravel মাইগ্রেশন',
+                description: 'Laravel মাইগ্রেশন ZIP আর্কাইভ',
+            },
+            png: {
+                title: 'PNG',
+                description: 'রাস্টার ছবি',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'রাস্টার ছবি',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'ভেক্টর ছবি',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQL রপ্তানি করুন',
             description:

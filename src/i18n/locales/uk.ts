@@ -1038,6 +1038,43 @@ export const uk: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'Експорт',
+            description: 'Оберіть формат для експорту діаграми.',
+            schema_code_section: 'Схема / Код',
+            visual_section: 'Візуал',
+            sql: {
+                title: 'SQL',
+                description: 'DDL-скрипт бази даних для поточної діаграми',
+                description_generic: 'DDL-скрипт бази даних',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'Експорт файлу незабаром. Переглядайте та копіюйте DBML на бічній панелі.',
+            },
+            diagram_json: {
+                title: 'Діаграма JSON',
+                description: 'Портативний файл діаграми FoxalDB',
+            },
+            laravel_migrations: {
+                title: 'Міграції Laravel',
+                description: 'ZIP-архів міграцій Laravel',
+            },
+            png: {
+                title: 'PNG',
+                description: 'Растрове зображення',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'Растрове зображення',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'Векторне зображення',
+            },
+        },
+
         export_sql_dialog: {
             title: 'Експорт SQL',
             description:

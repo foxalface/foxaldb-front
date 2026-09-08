@@ -1021,6 +1021,43 @@ export const gu: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'નિકાસ',
+            description: 'તમારું ડાયાગ્રામ નિકાસ કરવા માટે ફોર્મેટ પસંદ કરો.',
+            schema_code_section: 'સ્કીમા / કોડ',
+            visual_section: 'વિઝ્યુઅલ',
+            sql: {
+                title: 'SQL',
+                description: 'વર્તમાન ડાયાગ્રામ માટે ડેટાબેસ DDL સ્ક્રિપ્ટ',
+                description_generic: 'ડેટાબેસ DDL સ્ક્રિપ્ટ',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'ફાઇલ નિકાસ ટૂંક સમયમાં. સાઇડબારમાં DBML જુઓ અને કોપી કરો.',
+            },
+            diagram_json: {
+                title: 'ડાયાગ્રામ JSON',
+                description: 'પોર્ટેબલ FoxalDB ડાયાગ્રામ ફાઇલ',
+            },
+            laravel_migrations: {
+                title: 'Laravel માઇગ્રેશન',
+                description: 'Laravel માઇગ્રેશન ZIP આર્કાઇવ',
+            },
+            png: {
+                title: 'PNG',
+                description: 'રાસ્ટર છબી',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'રાસ્ટર છબી',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'વેક્ટર છબી',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQL નિકાસ કરો',
             description:

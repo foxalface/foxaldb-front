@@ -1025,6 +1025,43 @@ export const ar: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'تصدير',
+            description: 'اختر تنسيقًا لتصدير مخططك.',
+            schema_code_section: 'المخطط / الكود',
+            visual_section: 'مرئي',
+            sql: {
+                title: 'SQL',
+                description: 'سكربت DDL لقاعدة البيانات للمخطط الحالي',
+                description_generic: 'سكربت DDL لقاعدة البيانات',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'تصدير الملف قريبًا. اعرض وانسخ DBML من اللوحة الجانبية.',
+            },
+            diagram_json: {
+                title: 'مخطط JSON',
+                description: 'ملف مخطط FoxalDB قابل للنقل',
+            },
+            laravel_migrations: {
+                title: 'ترحيلات Laravel',
+                description: 'أرشيف ZIP لترحيلات Laravel',
+            },
+            png: {
+                title: 'PNG',
+                description: 'صورة نقطية',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'صورة نقطية',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'صورة متجهة',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQL تصدير',
             description:

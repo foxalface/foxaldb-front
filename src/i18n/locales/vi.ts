@@ -1040,6 +1040,43 @@ export const vi: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'Xuất',
+            description: 'Chọn định dạng để xuất sơ đồ của bạn.',
+            schema_code_section: 'Lược đồ / Mã',
+            visual_section: 'Hình ảnh',
+            sql: {
+                title: 'SQL',
+                description: 'Script DDL cơ sở dữ liệu cho sơ đồ hiện tại',
+                description_generic: 'Script DDL cơ sở dữ liệu',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'Xuất tệp sẽ có sớm. Xem và sao chép DBML trong bảng điều khiển bên.',
+            },
+            diagram_json: {
+                title: 'Sơ đồ JSON',
+                description: 'Tệp sơ đồ FoxalDB có thể di chuyển',
+            },
+            laravel_migrations: {
+                title: 'Migration Laravel',
+                description: 'Tệp ZIP migration Laravel',
+            },
+            png: {
+                title: 'PNG',
+                description: 'Ảnh raster',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'Ảnh raster',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'Ảnh vector',
+            },
+        },
+
         export_sql_dialog: {
             title: 'Xuất SQL',
             description: 'Xuất sơ đồ của bạn sang {{databaseType}}',

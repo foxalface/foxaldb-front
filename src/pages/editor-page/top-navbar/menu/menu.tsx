@@ -14,9 +14,6 @@ import {
 } from '@/components/menubar/menubar';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
-import { useExportImage } from '@/hooks/use-export-image';
-import { databaseTypeToLabelMap } from '@/lib/databases';
-import { DatabaseType } from '@/lib/domain/database-type';
 import {
     KeyboardShortcutAction,
     keyboardShortcutsForOS,
@@ -61,12 +58,10 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
     const {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
-        openExportSQLDialog,
         openImportDatabaseDialog,
-        openExportImageDialog,
-        openExportDiagramDialog,
         openImportDiagramDialog,
-        openExportLaravelMigrationsDialog,
+        openExportDialog,
+        openExportDiagramDialog,
         openLaravelMigrationImportDialog,
         openLaravelMigrationDiffDialog,
     } = useDialog();
@@ -88,7 +83,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
     } = useLocalConfig();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
-    const { exportImage } = useExportImage();
     const navigate = useNavigate();
 
     const handleDeleteDiagramAction = useCallback(async () => {
@@ -128,26 +122,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
         openOpenDiagramDialog();
     };
 
-    const exportSVG = useCallback(() => {
-        exportImage('svg', {
-            scale: 1,
-            transparent: true,
-            includePatternBG: false,
-        });
-    }, [exportImage]);
-
-    const exportPNG = useCallback(() => {
-        openExportImageDialog({
-            format: 'png',
-        });
-    }, [openExportImageDialog]);
-
-    const exportJPG = useCallback(() => {
-        openExportImageDialog({
-            format: 'jpeg',
-        });
-    }, [openExportImageDialog]);
-
     const openChartDBDocs = useCallback(() => {
         window.open('https://docs.chartdb.io', '_blank');
     }, []);
@@ -155,23 +129,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
     const openJoinDiscord = useCallback(() => {
         window.open('https://discord.gg/QeFwyWSKwC', '_blank');
     }, []);
-
-    const exportSQL = useCallback(
-        (databaseType: DatabaseType) => {
-            if (databaseType === DatabaseType.GENERIC) {
-                openExportSQLDialog({
-                    targetDatabaseType: DatabaseType.GENERIC,
-                });
-
-                return;
-            }
-
-            openExportSQLDialog({
-                targetDatabaseType: databaseType,
-            });
-        },
-        [openExportSQLDialog]
-    );
 
     const showOrHideSidePanel = useCallback(() => {
         if (isSidePanelShowed) {
@@ -193,8 +150,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
         setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
     }, [showMiniMapOnCanvas, setShowMiniMapOnCanvas]);
 
-    const emojiAI = '✨';
-
     const handleSaveDiagram = useCallback(async () => {
         updateDiagramUpdatedAt();
 
@@ -212,22 +167,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
         isAuthenticated &&
         currentDiagram?.id &&
         isValidBackendDiagramId(currentDiagram.id);
-
-    const openLaravelMigrationsExport = useCallback(() => {
-        if (!canExportLaravelMigrations || !currentDiagram?.id) {
-            return;
-        }
-
-        openExportLaravelMigrationsDialog({
-            diagramId: String(currentDiagram.id),
-            diagramName: currentDiagram.name ?? 'diagram',
-        });
-    }, [
-        canExportLaravelMigrations,
-        currentDiagram?.id,
-        currentDiagram?.name,
-        openExportLaravelMigrationsDialog,
-    ]);
 
     const openLaravelMigrationsDiff = useCallback(() => {
         if (!canExportLaravelMigrations || !currentDiagram?.id) {
@@ -327,122 +266,9 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                         </MenubarSubContent>
                     </MenubarSub>
                     <MenubarSeparator />
-                    {canExportLaravelMigrations ? (
-                        <>
-                            <MenubarSub>
-                                <MenubarSubTrigger>
-                                    {t('menu.actions.export')}
-                                </MenubarSubTrigger>
-                                <MenubarSubContent>
-                                    <MenubarItem
-                                        onClick={openLaravelMigrationsExport}
-                                    >
-                                        {t(
-                                            'menu.actions.export_laravel_migrations'
-                                        )}
-                                    </MenubarItem>
-                                </MenubarSubContent>
-                            </MenubarSub>
-                            <MenubarSeparator />
-                        </>
-                    ) : null}
-                    <MenubarSub>
-                        <MenubarSubTrigger>
-                            {t('menu.actions.export_sql')}
-                        </MenubarSubTrigger>
-                        <MenubarSubContent>
-                            {databaseType === DatabaseType.GENERIC ? (
-                                <MenubarItem
-                                    onClick={() =>
-                                        exportSQL(DatabaseType.GENERIC)
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['generic']}
-                                </MenubarItem>
-                            ) : null}
-                            {databaseType !== DatabaseType.GENERIC ? (
-                                <MenubarItem
-                                    onClick={() => exportSQL(databaseType)}
-                                >
-                                    {databaseTypeToLabelMap[databaseType]}
-                                </MenubarItem>
-                            ) : null}
-                            {databaseType !== DatabaseType.POSTGRESQL ? (
-                                <MenubarItem
-                                    onClick={() =>
-                                        exportSQL(DatabaseType.POSTGRESQL)
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['postgresql']}
-                                    <MenubarShortcut className="text-base">
-                                        {emojiAI}
-                                    </MenubarShortcut>
-                                </MenubarItem>
-                            ) : null}
-                            {databaseType !== DatabaseType.MYSQL ? (
-                                <MenubarItem
-                                    onClick={() =>
-                                        exportSQL(DatabaseType.MYSQL)
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['mysql']}
-                                    <MenubarShortcut className="text-base">
-                                        {emojiAI}
-                                    </MenubarShortcut>
-                                </MenubarItem>
-                            ) : null}
-                            {databaseType !== DatabaseType.SQL_SERVER ? (
-                                <MenubarItem
-                                    onClick={() =>
-                                        exportSQL(DatabaseType.SQL_SERVER)
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['sql_server']}
-                                    <MenubarShortcut className="text-base">
-                                        {emojiAI}
-                                    </MenubarShortcut>
-                                </MenubarItem>
-                            ) : null}
-                            {databaseType !== DatabaseType.MARIADB ? (
-                                <MenubarItem
-                                    onClick={() =>
-                                        exportSQL(DatabaseType.MARIADB)
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['mariadb']}
-                                    <MenubarShortcut className="text-base">
-                                        {emojiAI}
-                                    </MenubarShortcut>
-                                </MenubarItem>
-                            ) : null}
-                            {databaseType !== DatabaseType.SQLITE ? (
-                                <MenubarItem
-                                    onClick={() =>
-                                        exportSQL(DatabaseType.SQLITE)
-                                    }
-                                >
-                                    {databaseTypeToLabelMap['sqlite']}
-                                    <MenubarShortcut className="text-base">
-                                        {emojiAI}
-                                    </MenubarShortcut>
-                                </MenubarItem>
-                            ) : null}
-                        </MenubarSubContent>
-                    </MenubarSub>
-                    <MenubarSub>
-                        <MenubarSubTrigger>
-                            {t('menu.actions.export_as')}
-                        </MenubarSubTrigger>
-                        <MenubarSubContent>
-                            <MenubarItem onClick={exportPNG}>PNG</MenubarItem>
-                            <MenubarItem onClick={exportJPG}>JPG</MenubarItem>
-                            <MenubarItem onClick={exportSVG}>SVG</MenubarItem>
-                            <MenubarSeparator />
-                            <MenubarItem onClick={openExportDiagramDialog}>
-                                JSON
-                            </MenubarItem>
-                        </MenubarSubContent>
-                    </MenubarSub>
+                    <MenubarItem onClick={openExportDialog}>
+                        {t('menu.actions.export')}
+                    </MenubarItem>
                     <MenubarSeparator />
                     <MenubarItem
                         onClick={() =>

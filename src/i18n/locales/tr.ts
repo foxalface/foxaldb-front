@@ -1020,6 +1020,43 @@ export const tr: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'Dışa Aktar',
+            description: 'Diyagramınızı dışa aktarmak için bir format seçin.',
+            schema_code_section: 'Şema / Kod',
+            visual_section: 'Görsel',
+            sql: {
+                title: 'SQL',
+                description: 'Geçerli diyagram için veritabanı DDL betiği',
+                description_generic: 'Veritabanı DDL betiği',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    "Dosya dışa aktarma yakında. DBML'i kenar çubuğunda görüntüleyin ve kopyalayın.",
+            },
+            diagram_json: {
+                title: 'Diyagram JSON',
+                description: 'Taşınabilir FoxalDB diyagram dosyası',
+            },
+            laravel_migrations: {
+                title: 'Laravel migrasyonları',
+                description: 'Laravel migrasyon ZIP arşivi',
+            },
+            png: {
+                title: 'PNG',
+                description: 'Raster görüntü',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'Raster görüntü',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'Vektör görüntü',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQL Olarak Dışa Aktar',
             description:

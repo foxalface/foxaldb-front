@@ -1030,6 +1030,43 @@ export const hi: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'निर्यात',
+            description: 'अपना डायग्राम निर्यात करने के लिए एक प्रारूप चुनें।',
+            schema_code_section: 'स्कीमा / कोड',
+            visual_section: 'दृश्य',
+            sql: {
+                title: 'SQL',
+                description: 'वर्तमान डायग्राम के लिए डेटाबेस DDL स्क्रिप्ट',
+                description_generic: 'डेटाबेस DDL स्क्रिप्ट',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'फ़ाइल निर्यात जल्द आ रहा है। साइडबार में DBML देखें और कॉपी करें।',
+            },
+            diagram_json: {
+                title: 'डायग्राम JSON',
+                description: 'पोर्टेबल FoxalDB डायग्राम फ़ाइल',
+            },
+            laravel_migrations: {
+                title: 'Laravel माइग्रेशन',
+                description: 'Laravel माइग्रेशन ZIP संग्रह',
+            },
+            png: {
+                title: 'PNG',
+                description: 'रास्टर छवि',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'रास्टर छवि',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'वेक्टर छवि',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQL निर्यात करें',
             description:

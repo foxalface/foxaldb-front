@@ -15,6 +15,7 @@ import { emptyFn } from '@/lib/utils';
 import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
+import { ExportDialog } from '@/dialogs/export-dialog/export-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 import { UserSettingsDialog } from '@/dialogs/user-settings-dialog/user-settings-dialog';
@@ -181,6 +182,9 @@ export const DialogProvider: React.FC<
     const [openExportDiagramDialog, setOpenExportDiagramDialog] =
         useState(false);
 
+    // Unified export dialog
+    const [openExportDialog, setOpenExportDialog] = useState(false);
+
     // Import diagram dialog
     const [openImportDiagramDialog, setOpenImportDiagramDialog] =
         useState(false);
@@ -249,6 +253,8 @@ export const DialogProvider: React.FC<
                 closeCreateDiagramDialog: () => setOpenNewDiagramDialog(false),
                 openOpenDiagramDialog: openOpenDiagramDialogHandler,
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
+                openExportDialog: () => setOpenExportDialog(true),
+                closeExportDialog: () => setOpenExportDialog(false),
                 openExportLaravelMigrationsDialog:
                     openExportLaravelMigrationsDialogHandler,
                 closeExportLaravelMigrationsDialog: () =>
@@ -347,6 +353,7 @@ export const DialogProvider: React.FC<
                 dialog={{ open: openExportImageDialog }}
                 {...exportImageDialogParams}
             />
+            <ExportDialog dialog={{ open: openExportDialog }} />
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
             {exportLaravelMigrationsDialogParams ? (

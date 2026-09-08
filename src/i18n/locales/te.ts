@@ -1041,6 +1041,44 @@ export const te: LanguageTranslation = {
             },
         },
 
+        export_dialog: {
+            title: 'ఎగుమతి',
+            description:
+                'మీ డయాగ్రామ్‌ను ఎగుమతి చేయడానికి ఫార్మాట్‌ను ఎంచుకోండి.',
+            schema_code_section: 'స్కీమా / కోడ్',
+            visual_section: 'విజువల్',
+            sql: {
+                title: 'SQL',
+                description: 'ప్రస్తుత డయాగ్రామ్ కోసం డేటాబేస్ DDL స్క్రిప్ట్',
+                description_generic: 'డేటాబేస్ DDL స్క్రిప్ట్',
+            },
+            dbml: {
+                title: 'DBML',
+                coming_soon:
+                    'ఫైల్ ఎగుమతి త్వరలో వస్తుంది. సైడ్‌బార్‌లో DBML చూడండి మరియు కాపీ చేయండి.',
+            },
+            diagram_json: {
+                title: 'డయాగ్రామ్ JSON',
+                description: 'పోర్టబుల్ FoxalDB డయాగ్రామ్ ఫైల్',
+            },
+            laravel_migrations: {
+                title: 'Laravel మైగ్రేషన్‌లు',
+                description: 'Laravel మైగ్రేషన్ ZIP ఆర్కైవ్',
+            },
+            png: {
+                title: 'PNG',
+                description: 'రాస్టర్ చిత్రం',
+            },
+            jpg: {
+                title: 'JPG',
+                description: 'రాస్టర్ చిత్రం',
+            },
+            svg: {
+                title: 'SVG',
+                description: 'వెక్టర్ చిత్రం',
+            },
+        },
+
         export_sql_dialog: {
             title: 'SQL ఎగుమతి',
             description:
