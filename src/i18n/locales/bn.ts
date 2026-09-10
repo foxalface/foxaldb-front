@@ -1138,6 +1138,16 @@ export const bn: LanguageTranslation = {
                     empty: 'বর্তমান ডায়াগ্রামের জন্য কোনো DBML তৈরি হয়নি।',
                 },
             },
+            json: {
+                download_step: {
+                    description:
+                        'এই ডায়াগ্রামের একটি পোর্টেবল অনুলিপি রপ্তানি করুন।',
+                    explanation:
+                        'সম্পূর্ণ ডায়াগ্রাম রপ্তানি হয়। এই ফাইল আমদানি করলে একটি নতুন ডায়াগ্রাম তৈরি হয়; বর্তমান ডায়াগ্রাম ওভাররাইট হয় না।',
+                    filename_label: 'ফাইলের নাম: {{filename}}',
+                    download: 'JSON ডাউনলোড',
+                },
+            },
         },
 
         export_dialog: {
@@ -1417,8 +1427,7 @@ export const bn: LanguageTranslation = {
             export: 'রপ্তানি করুন',
             error: {
                 title: 'চিত্র রপ্তানিতে ত্রুটি',
-                description:
-                    'কিছু ভুল হয়েছে। সাহায্যের প্রয়োজন? support@chartdb.io-এ যোগাযোগ করুন।',
+                description: 'কিছু ভুল হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
             },
         },
 

@@ -1122,6 +1122,16 @@ export const tr: LanguageTranslation = {
                     empty: 'Mevcut diyagram için DBML oluşturulmadı.',
                 },
             },
+            json: {
+                download_step: {
+                    description:
+                        'Bu diyagramın taşınabilir bir kopyasını dışa aktarın.',
+                    explanation:
+                        'Diyagramın tamamı dışa aktarılır. Bu dosyayı içe aktarmak yeni bir diyagram oluşturur; mevcut diyagramın üzerine yazılmaz.',
+                    filename_label: 'Dosya adı: {{filename}}',
+                    download: 'JSON indir',
+                },
+            },
         },
 
         export_dialog: {
@@ -1400,8 +1410,7 @@ export const tr: LanguageTranslation = {
             export: 'Export',
             error: {
                 title: 'Error exporting diagram',
-                description:
-                    'Something went wrong. Need help? support@chartdb.io',
+                description: 'Bir şeyler ters gitti. Lütfen tekrar deneyin.',
             },
         },
         // TODO: Translate

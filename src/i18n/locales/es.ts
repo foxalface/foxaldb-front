@@ -1157,6 +1157,15 @@ export const es: LanguageTranslation = {
                     empty: 'No se generó DBML para el diagrama actual.',
                 },
             },
+            json: {
+                download_step: {
+                    description: 'Exporte una copia portable de este diagrama.',
+                    explanation:
+                        'Se exporta el diagrama completo. Importar este archivo crea un diagrama nuevo; no sobrescribe el diagrama actual.',
+                    filename_label: 'Nombre de archivo: {{filename}}',
+                    download: 'Descargar JSON',
+                },
+            },
         },
 
         export_dialog: {
@@ -1441,8 +1450,7 @@ export const es: LanguageTranslation = {
             export: 'Export',
             error: {
                 title: 'Error exporting diagram',
-                description:
-                    'Something went wrong. Need help? support@chartdb.io',
+                description: 'Ha ocurrido un error. Inténtalo de nuevo.',
             },
         },
         // TODO: Translate

@@ -1140,6 +1140,15 @@ export const vi: LanguageTranslation = {
                     empty: 'Không có DBML được tạo cho sơ đồ hiện tại.',
                 },
             },
+            json: {
+                download_step: {
+                    description: 'Xuất bản sao di động của sơ đồ này.',
+                    explanation:
+                        'Toàn bộ sơ đồ được xuất. Nhập tệp này sẽ tạo một sơ đồ mới; sơ đồ hiện tại không bị ghi đè.',
+                    filename_label: 'Tên tệp: {{filename}}',
+                    download: 'Tải JSON',
+                },
+            },
         },
 
         export_dialog: {
@@ -1420,8 +1429,7 @@ export const vi: LanguageTranslation = {
             export: 'Xuất',
             error: {
                 title: 'Lỗi khi xuất sơ đồ',
-                description:
-                    'Có gì đó không ổn. Cần trợ giúp? support@chartdb.io',
+                description: 'Có gì đó không ổn. Vui lòng thử lại.',
             },
         },
 

@@ -1135,6 +1135,16 @@ export const ru: LanguageTranslation = {
                     empty: 'Для текущей диаграммы DBML не был сгенерирован.',
                 },
             },
+            json: {
+                download_step: {
+                    description:
+                        'Экспортируйте переносимую копию этой диаграммы.',
+                    explanation:
+                        'Экспортируется вся диаграмма. Импорт этого файла создаёт новую диаграмму и не перезаписывает текущую.',
+                    filename_label: 'Имя файла: {{filename}}',
+                    download: 'Скачать JSON',
+                },
+            },
         },
 
         export_dialog: {
@@ -1416,8 +1426,7 @@ export const ru: LanguageTranslation = {
             export: 'Экспортировать',
             error: {
                 title: 'Ошибка экспортирования диаграммы',
-                description:
-                    'Что-то пошло не так. Если вам нужна помощь, напишите нам: support@chartdb.io',
+                description: 'Что-то пошло не так. Попробуйте снова.',
             },
         },
         import_diagram_dialog: {

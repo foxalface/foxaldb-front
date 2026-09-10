@@ -1125,6 +1125,15 @@ export const ar: LanguageTranslation = {
                     empty: 'لم يتم إنشاء DBML للمخطط الحالي.',
                 },
             },
+            json: {
+                download_step: {
+                    description: 'صدّر نسخة قابلة للنقل من هذا المخطط.',
+                    explanation:
+                        'يتم تصدير المخطط بالكامل. استيراد هذا الملف ينشئ مخططًا جديدًا ولا يستبدل المخطط الحالي.',
+                    filename_label: 'اسم الملف: {{filename}}',
+                    download: 'تنزيل JSON',
+                },
+            },
         },
 
         export_dialog: {
@@ -1405,8 +1414,7 @@ export const ar: LanguageTranslation = {
             export: 'تصدير',
             error: {
                 title: 'حدث خطأ أثناء التصدير',
-                description:
-                    'support@chartdb.io حدث خطأ ما. هل تحتاج إلى مساعدة؟',
+                description: 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
             },
         },
         import_diagram_dialog: {

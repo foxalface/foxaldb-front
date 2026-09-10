@@ -1141,6 +1141,15 @@ export const ko_KR: LanguageTranslation = {
                     empty: '현재 다이어그램에 대해 생성된 DBML이 없습니다.',
                 },
             },
+            json: {
+                download_step: {
+                    description: '이 다이어그램의 휴대용 복사본을 내보냅니다.',
+                    explanation:
+                        '전체 다이어그램이 내보내집니다. 이 파일을 가져오면 새 다이어그램이 만들어지며 현재 다이어그램은 덮어쓰지 않습니다.',
+                    filename_label: '파일 이름: {{filename}}',
+                    download: 'JSON 다운로드',
+                },
+            },
         },
 
         export_dialog: {
@@ -1421,8 +1430,7 @@ export const ko_KR: LanguageTranslation = {
             export: '내보내기',
             error: {
                 title: '다이어그램 내보내기 오류',
-                description:
-                    '무언가 문제가 발생하였습니다. 도움이 필요하신 경우 support@chartdb.io으로 연락해주세요.',
+                description: '문제가 발생했습니다. 다시 시도해 주세요.',
             },
         },
         import_diagram_dialog: {

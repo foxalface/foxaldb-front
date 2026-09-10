@@ -1140,6 +1140,15 @@ export const id_ID: LanguageTranslation = {
                     empty: 'Tidak ada DBML yang dibuat untuk diagram saat ini.',
                 },
             },
+            json: {
+                download_step: {
+                    description: 'Ekspor salinan portabel diagram ini.',
+                    explanation:
+                        'Seluruh diagram diekspor. Mengimpor file ini membuat diagram baru; diagram saat ini tidak ditimpa.',
+                    filename_label: 'Nama file: {{filename}}',
+                    download: 'Unduh JSON',
+                },
+            },
         },
 
         export_dialog: {
@@ -1419,8 +1428,7 @@ export const id_ID: LanguageTranslation = {
             export: 'Ekspor',
             error: {
                 title: 'Error ekspor diagram',
-                description:
-                    'Sesuatu yang salah. Butuh bantuan? support@chartdb.io',
+                description: 'Terjadi kesalahan. Silakan coba lagi.',
             },
         },
 

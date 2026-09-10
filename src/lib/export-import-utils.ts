@@ -2,6 +2,10 @@ import { cloneDiagram } from './clone';
 import { diagramSchema, type Diagram } from './domain/diagram';
 import { generateDiagramId } from './utils';
 
+export const DIAGRAM_JSON_SCHEMA_VERSION = 1 as const;
+
+export type DiagramJsonSchemaVersion = typeof DIAGRAM_JSON_SCHEMA_VERSION;
+
 export const runningIdGenerator = (): (() => string) => {
     let id = 0;
     return () => (id++).toString();
@@ -24,7 +28,14 @@ const cloneDiagramWithIds = (diagram: Diagram): Diagram => ({
 
 export const diagramToJSONOutput = (diagram: Diagram): string => {
     const clonedDiagram = cloneDiagramWithRunningIds(diagram).diagram;
-    return JSON.stringify(clonedDiagram, null, 2);
+    return JSON.stringify(
+        {
+            ...clonedDiagram,
+            schemaVersion: DIAGRAM_JSON_SCHEMA_VERSION,
+        },
+        null,
+        2
+    );
 };
 
 export const diagramFromJSONInput = (json: string): Diagram => {

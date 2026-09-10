@@ -1070,6 +1070,15 @@ export const zh_TW: LanguageTranslation = {
                     empty: '目前圖表未產生 DBML。',
                 },
             },
+            json: {
+                download_step: {
+                    description: '匯出此圖表的可攜式複本。',
+                    explanation:
+                        '將匯出完整圖表。匯入此檔案會建立新圖表，不會覆寫目前的圖表。',
+                    filename_label: '檔案名稱：{{filename}}',
+                    download: '下載 JSON',
+                },
+            },
         },
 
         export_dialog: {
@@ -1348,8 +1357,7 @@ export const zh_TW: LanguageTranslation = {
             // TODO: Translate
             error: {
                 title: 'Error exporting diagram',
-                description:
-                    'Something went wrong. Need help? support@chartdb.io',
+                description: '匯出時發生錯誤。請再試一次。',
             },
         },
 

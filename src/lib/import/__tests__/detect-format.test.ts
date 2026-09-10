@@ -60,6 +60,22 @@ describe('detectImportFormat', () => {
         });
     });
 
+    it('detects Diagram JSON with a schemaVersion sibling as diagram JSON', () => {
+        const versioned = JSON.stringify({
+            id: 'diagram-1',
+            name: 'Imported Diagram',
+            databaseType: 'postgresql',
+            schemaVersion: 1,
+            tables: [],
+            relationships: [],
+        });
+
+        expect(detectImportFormat(versioned)).toEqual({
+            format: 'diagram_json',
+            confidence: 'high',
+        });
+    });
+
     it('classifies random text as unsupported', () => {
         const result = detectImportFormat(randomText);
         expect(result).toEqual({

@@ -1145,6 +1145,16 @@ export const te: LanguageTranslation = {
                     empty: 'ప్రస్తుత డయాగ్రామ్ కోసం DBML సృష్టించబడలేదు.',
                 },
             },
+            json: {
+                download_step: {
+                    description:
+                        'ఈ డయాగ్రామ్ యొక్క పోర్టబుల్ కాపీని ఎగుమతి చేయండి.',
+                    explanation:
+                        'పూర్తి డయాగ్రామ్ ఎగుమతి అవుతుంది. ఈ ఫైల్‌ను దిగుమతి చేస్తే కొత్త డయాగ్రామ్ ఏర్పడుతుంది; ప్రస్తుత డయాగ్రామ్ ఓవర్‌రైట్ కాదు.',
+                    filename_label: 'ఫైల్ పేరు: {{filename}}',
+                    download: 'JSON డౌన్‌లోడ్',
+                },
+            },
         },
 
         export_dialog: {
@@ -1428,8 +1438,7 @@ export const te: LanguageTranslation = {
             export: 'Export',
             error: {
                 title: 'Error exporting diagram',
-                description:
-                    'Something went wrong. Need help? support@chartdb.io',
+                description: 'ఏదో తప్పు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి.',
             },
         },
 

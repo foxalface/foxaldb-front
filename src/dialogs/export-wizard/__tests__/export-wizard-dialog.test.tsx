@@ -172,15 +172,21 @@ describe('ExportWizardDialog', () => {
         ).toBeInTheDocument();
     });
 
-    it('routes diagram JSON to the existing export dialog', async () => {
+    it('opens the Diagram JSON download step from the target picker', async () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         await userEvent.click(
             screen.getByText('export_wizard.targets.diagram_json.title')
         );
 
-        expect(dialogMocks.closeExportWizardDialog).toHaveBeenCalledTimes(1);
-        expect(dialogMocks.openExportDiagramDialog).toHaveBeenCalledTimes(1);
+        expect(dialogMocks.openExportDiagramDialog).not.toHaveBeenCalled();
+        expect(dialogMocks.closeExportWizardDialog).not.toHaveBeenCalled();
+        expect(
+            screen.getByText('export_wizard.json.download_step.description')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByTestId('export-json-branch-context')
+        ).toBeInTheDocument();
     });
 
     it('routes PNG and JPG to the existing image export dialog', async () => {

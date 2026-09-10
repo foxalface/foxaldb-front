@@ -1132,6 +1132,15 @@ export const mr: LanguageTranslation = {
                     empty: 'सध्याच्या डायग्रामसाठी कोणतेही DBML तयार झाले नाही.',
                 },
             },
+            json: {
+                download_step: {
+                    description: 'या डायग्रामची पोर्टेबल प्रत निर्यात करा.',
+                    explanation:
+                        'संपूर्ण डायग्राम निर्यात होतो. ही फाइल आयात केल्याने नवीन डायग्राम तयार होतो; सध्याचा डायग्राम ओव्हरराइट होत नाही.',
+                    filename_label: 'फाइलनाव: {{filename}}',
+                    download: 'JSON डाउनलोड',
+                },
+            },
         },
 
         export_dialog: {
@@ -1414,8 +1423,7 @@ export const mr: LanguageTranslation = {
             export: 'Export',
             error: {
                 title: 'Error exporting diagram',
-                description:
-                    'Something went wrong. Need help? support@chartdb.io',
+                description: 'काहीतरी चुकले. कृपया पुन्हा प्रयत्न करा.',
             },
         },
 

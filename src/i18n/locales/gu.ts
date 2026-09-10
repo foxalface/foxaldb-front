@@ -1123,6 +1123,15 @@ export const gu: LanguageTranslation = {
                     empty: 'વર્તમાન ડાયાગ્રામ માટે કોઈ DBML જનરેટ થયું નથી.',
                 },
             },
+            json: {
+                download_step: {
+                    description: 'આ ડાયાગ્રામની પોર્ટેબલ નકલ નિકાસ કરો.',
+                    explanation:
+                        'સંપૂર્ણ ડાયાગ્રામ નિકાસ થાય છે. આ ફાઇલ આયાત કરવાથી નવું ડાયાગ્રામ બને છે; વર્તમાન ડાયાગ્રામ ઓવરરાઇટ થતું નથી.',
+                    filename_label: 'ફાઇલનું નામ: {{filename}}',
+                    download: 'JSON ડાઉનલોડ',
+                },
+            },
         },
 
         export_dialog: {
@@ -1403,8 +1412,7 @@ export const gu: LanguageTranslation = {
             export: 'નિકાસ કરો',
             error: {
                 title: 'ડાયાગ્રામ નિકાસમાં ભૂલ',
-                description:
-                    'કશુક તો ખોટું થયું. મદદ જોઈએ? support@chartdb.io પર સંપર્ક કરો.',
+                description: 'કશુક તો ખોટું થયું. કૃપા કરીને ફરી પ્રયાસ કરો.',
             },
         },
 

@@ -25,6 +25,8 @@ import { ExportSqlPreviewStep } from './sql/export-sql-preview-step';
 import { ExportSqlBranchContext } from './sql/export-sql-branch-context';
 import { ExportDbmlPreviewStep } from './dbml/export-dbml-preview-step';
 import { ExportDbmlBranchContext } from './dbml/export-dbml-branch-context';
+import { ExportJsonDownloadStep } from './json/export-json-download-step';
+import { ExportJsonBranchContext } from './json/export-json-branch-context';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import {
@@ -48,7 +50,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const { exportImage } = useExportImage();
     const {
         closeExportWizardDialog,
-        openExportDiagramDialog,
         openExportImageDialog,
         openExportLaravelMigrationsDialog,
     } = useDialog();
@@ -132,10 +133,14 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 return;
             }
 
+            if (targetId === 'diagram_json') {
+                resetSqlBranchState();
+                resetDbmlBranchState();
+                setStep(ExportWizardStep.JSON_DOWNLOAD);
+                return;
+            }
+
             switch (targetId) {
-                case 'diagram_json':
-                    closeAndRun(() => openExportDiagramDialog({}));
-                    return;
                 case 'png':
                     closeAndRun(() => openExportImageDialog({ format: 'png' }));
                     return;
@@ -174,7 +179,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             currentDiagram?.id,
             currentDiagram?.name,
             exportImage,
-            openExportDiagramDialog,
             openExportImageDialog,
             openExportLaravelMigrationsDialog,
             resetSqlBranchState,
@@ -193,6 +197,11 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     );
 
     const handleBack = useCallback(() => {
+        if (step === ExportWizardStep.JSON_DOWNLOAD) {
+            setStep(ExportWizardStep.TARGET_PICKER);
+            return;
+        }
+
         if (step === ExportWizardStep.DBML_PREVIEW) {
             resetDbmlBranchState();
             setStep(ExportWizardStep.TARGET_PICKER);
@@ -326,13 +335,15 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const showBackButton =
         step === ExportWizardStep.SQL_TARGET ||
         step === ExportWizardStep.SQL_PREVIEW ||
-        step === ExportWizardStep.DBML_PREVIEW;
+        step === ExportWizardStep.DBML_PREVIEW ||
+        step === ExportWizardStep.JSON_DOWNLOAD;
 
     const isSqlBranch =
         step === ExportWizardStep.SQL_TARGET ||
         step === ExportWizardStep.SQL_PREVIEW;
 
     const isDbmlBranch = step === ExportWizardStep.DBML_PREVIEW;
+    const isJsonBranch = step === ExportWizardStep.JSON_DOWNLOAD;
 
     const dialogTitle = t('export_wizard.title');
 
@@ -351,6 +362,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     : undefined;
             case ExportWizardStep.DBML_PREVIEW:
                 return t('export_wizard.dbml.preview_step.description');
+            case ExportWizardStep.JSON_DOWNLOAD:
+                return t('export_wizard.json.download_step.description');
             default:
                 return t('export_wizard.description');
         }
@@ -382,6 +395,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                         />
                     ) : null}
                     {isDbmlBranch ? <ExportDbmlBranchContext /> : null}
+                    {isJsonBranch ? <ExportJsonBranchContext /> : null}
                     <DialogTitle>{dialogTitle}</DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
@@ -440,6 +454,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             isLoading={isDbmlGenerating}
                             hasError={dbmlHasError}
                         />
+                    ) : null}
+
+                    {step === ExportWizardStep.JSON_DOWNLOAD ? (
+                        <ExportJsonDownloadStep diagram={currentDiagram} />
                     ) : null}
                 </div>
 

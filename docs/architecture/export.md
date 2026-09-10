@@ -96,7 +96,7 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 **Target groups:** Database, Framework, Portable / Schema, Visual.
 
-**Current routing:** SQL and DBML are wizard-native. Other targets still delegate to existing child dialogs (`ExportDiagramDialog`, `ExportImageDialog`, `ExportLaravelMigrationsDialog`) via close-and-reopen until their milestones land.
+**Current routing:** SQL, DBML, and Diagram JSON are wizard-native. Image and Laravel targets still delegate to existing child dialogs (`ExportImageDialog`, `ExportLaravelMigrationsDialog`) via close-and-reopen until their milestones land. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
 
 **Planned framework targets** (Prisma, EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones.
 
@@ -147,9 +147,12 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 | **Execution** | Browser only |
 | **Auth** | None |
 | **Generator** | `diagramToJSONOutput()` in `frontend/src/lib/export-import-utils.ts` |
-| **Output** | Pretty-printed JSON file (`ChartDB({name}).json`) |
-| **Entry points** | Export wizard → Diagram JSON; Backup → Export diagram; `frontend/src/dialogs/export-diagram-dialog/export-diagram-dialog.tsx` |
-| **Tests** | None dedicated to export |
+| **Output** | Pretty-printed Diagram-shaped JSON with sibling `schemaVersion: 1`; filename `{diagram-slug}.json` |
+| **Semantics** | Portable clone snapshot. Import creates a **new** diagram identity. Not restore-in-place. |
+| **Entry points** | Export wizard → Diagram JSON (`JSON_DOWNLOAD`); Backup → Export diagram (`ExportDiagramDialog`) |
+| **Tests** | `frontend/src/lib/__tests__/diagram-json-export.test.ts`; `build-diagram-json-export-filename.test.ts`; wizard JSON branch tests |
+
+Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate stringify logic.
 
 ### PNG / JPG / SVG
 
@@ -287,17 +290,21 @@ DBML generation is **substantially implemented and tested** but not yet a first-
 
 ## Diagram JSON
 
-Current export behavior (`diagramToJSONOutput`):
+JSON-A contract (`diagramToJSONOutput`):
 
-- Serializes a **portable Diagram-oriented** JSON object (full `Diagram` shape: tables, relationships, dependencies, areas, notes, customTypes, `databaseType`, `databaseEdition`, timestamps).
-- **Entity IDs are renumbered** to running `"0"`, `"1"`, … via `cloneDiagramWithRunningIds`.
+- Serializes a **portable clone snapshot** of the canonical `Diagram` (tables, relationships, dependencies, areas, notes, customTypes, `databaseType`, `databaseEdition`, timestamps).
+- Full unfiltered diagram. Do not apply schema filters.
+- Sibling root property **`schemaVersion: 1`**. No `{ diagram: ... }` wrapper.
+- **Entity IDs are still renumbered** to running `"0"`, `"1"`, … via `cloneDiagramWithRunningIds` (JSON-A preserves this on purpose).
 - **Diagram ID** is included but **not stable** through import (`diagramFromJSONInput` assigns a new `generateDiagramId()`).
 - **Timestamps** reset to `new Date()` on import.
-- **No export format version** or schema-version field.
-- **Import compatibility:** structural round-trip via Create Diagram wizard (`detect-format.ts` → `diagram_json`) and `importDiagramFromJson()`; wizard may override `databaseType` with user-selected target.
-- **Tests:** no dedicated export tests.
+- **Import:** legacy unversioned Diagram-shaped JSON and `schemaVersion: 1` files both remain importable via `detect-format.ts` → `diagram_json` and `importDiagramFromJson()`. Wizard may override `databaseType`. Import is never restore-in-place.
+- **Filename:** `{diagram-slug}.json`.
+- **Wizard:** `TARGET_PICKER` → `JSON_DOWNLOAD` (download-oriented; no full JSON preview).
+- **Backup:** still uses `ExportDiagramDialog` and the same serializer/filename helper.
+- **JSON-B deferred:** entity-ID fidelity, `parentAreaId` remapping, PK index-name clearing, check-constraint ID behavior, Dexie PK collisions.
 
-**Open decisions (block hardening, not this doc):** ID preservation policy, format versioning — both are future Sync compatibility concerns. Do not decide here.
+**Tests:** serializer, filename, import compatibility, wizard JSON branch.
 
 ---
 
@@ -426,16 +433,16 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 | SQL DBML flow flag | `export-sql-dbml.test.ts` | Covered |
 | DBML generator | `frontend/src/lib/dbml/dbml-export/__tests__/` (9 files) | Covered |
 | Laravel export | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite | Covered |
-| Diagram JSON export | — | **Missing** |
+| Diagram JSON export | `frontend/src/lib/__tests__/diagram-json-export.test.ts`, filename + wizard JSON tests | Covered (JSON-A) |
 | Image export | — | **Missing** |
-| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL branch) |
+| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON branches) |
 
 ### Expected Export V1 regression strategy
 
 - Deterministic SQL generator unit tests (extend fixtures as dialect support grows)
 - Deterministic cross-dialect fixtures (PG → MySQL/MariaDB/SQL Server)
 - DBML generator smoke/regression tests
-- Diagram JSON round-trip tests (with explicit ID policy once decided)
+- Diagram JSON serializer, filename, import compatibility, and wizard JSON branch tests
 - Laravel backend Feature/Unit tests (unchanged contract)
 - Export UX routing tests when unified Export UI is implemented
 - Per-framework export tests in isolation (one milestone per framework)
@@ -447,16 +454,16 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 
 Verified in current code:
 
-- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL branch migrated; other targets pending
+- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, and Diagram JSON branches migrated; image/Laravel still child dialogs
 - **Legacy AI SQL path** — active in `exportSQL` and legacy `ExportSQLDialog`; unreachable from Export Wizard
 - **Misleading UI labels** — legacy `ExportSQLDialog` still has ✨ targets, Sparkles loader, hardcoded English "Deterministic"/"AI" toggle
 - **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback in generator; wizard shows unsupported UX, not fake targets
 - **DBML** — wizard-native export implemented; side panel remains live developer view (inline/relationships variants not exposed in wizard)
-- **Diagram JSON** — `ChartDB({name}).json` filename; 1s artificial delay in `use-export-diagram.tsx`; no format version; ID renumbering
-- **Inconsistent delivery** — DBML copy-only; SQL wizard has copy + download; images/JSON/Laravel file download
+- **Diagram JSON-B** — running-ID remumbering, `parentAreaId` mismatch after clone, PK index-name clearing; identity/fidelity hardening deferred
+- **Inconsistent delivery** — SQL/DBML wizard have copy + download; JSON is download-only; images/Laravel file download
 - **Laravel export** — requires persisted backend diagram ID
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML/images unfiltered
-- **Missing tests** — JSON export, image export, export UX routing
+- **Missing tests** — image export
 
 ---
 
@@ -499,8 +506,10 @@ This document and implementation milestones do **not**:
 ### Frontend — JSON
 
 - `frontend/src/lib/export-import-utils.ts`
+- `frontend/src/lib/build-diagram-json-export-filename.ts`
 - `frontend/src/hooks/use-export-diagram.tsx`
 - `frontend/src/dialogs/export-diagram-dialog/export-diagram-dialog.tsx`
+- `frontend/src/dialogs/export-wizard/json/`
 
 ### Frontend — Image
 

@@ -1138,6 +1138,15 @@ export const hr: LanguageTranslation = {
                     empty: 'Za trenutni dijagram nije generiran DBML.',
                 },
             },
+            json: {
+                download_step: {
+                    description: 'Izvezite prenosivu kopiju ovog dijagrama.',
+                    explanation:
+                        'Izvozi se cijeli dijagram. Uvoz ove datoteke stvara novi dijagram; trenutni dijagram se ne prepisuje.',
+                    filename_label: 'Naziv datoteke: {{filename}}',
+                    download: 'Preuzmi JSON',
+                },
+            },
         },
 
         export_dialog: {
@@ -1418,8 +1427,7 @@ export const hr: LanguageTranslation = {
             export: 'Izvezi',
             error: {
                 title: 'Greška pri izvozu dijagrama',
-                description:
-                    'Nešto je pošlo po zlu. Trebate pomoć? support@chartdb.io',
+                description: 'Nešto je pošlo po zlu. Pokušajte ponovno.',
             },
         },
 

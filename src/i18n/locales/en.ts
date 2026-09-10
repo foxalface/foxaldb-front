@@ -1136,6 +1136,15 @@ export const en = {
                     empty: 'No DBML was generated for the current diagram.',
                 },
             },
+            json: {
+                download_step: {
+                    description: 'Export a portable copy of this diagram.',
+                    explanation:
+                        'The full diagram is exported. Importing this file creates a new diagram; it does not overwrite the current one.',
+                    filename_label: 'Filename: {{filename}}',
+                    download: 'Download JSON',
+                },
+            },
         },
 
         export_dialog: {
@@ -1416,8 +1425,7 @@ export const en = {
             export: 'Export',
             error: {
                 title: 'Error exporting diagram',
-                description:
-                    'Something went wrong. Need help? support@chartdb.io',
+                description: 'Something went wrong. Please try again.',
             },
         },
 
