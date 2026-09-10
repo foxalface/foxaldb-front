@@ -1129,6 +1129,15 @@ export const bn: LanguageTranslation = {
                     description: 'ভেক্টর ছবি',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'তৈরি করা DBML স্কিমা পর্যালোচনা করুন।',
+                    generating: 'DBML তৈরি হচ্ছে...',
+                    download: 'DBML ডাউনলোড',
+                    error: 'DBML তৈরি করা যায়নি। আবার চেষ্টা করুন।',
+                    empty: 'বর্তমান ডায়াগ্রামের জন্য কোনো DBML তৈরি হয়নি।',
+                },
+            },
         },
 
         export_dialog: {

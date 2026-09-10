@@ -1062,6 +1062,15 @@ export const zh_CN: LanguageTranslation = {
                     description: '矢量图像',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: '查看生成的 DBML 架构。',
+                    generating: '正在生成 DBML...',
+                    download: '下载 DBML',
+                    error: '无法生成 DBML。请重试。',
+                    empty: '当前图表未生成 DBML。',
+                },
+            },
         },
 
         export_dialog: {

@@ -1130,6 +1130,15 @@ export const uk: LanguageTranslation = {
                     description: 'Векторне зображення',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'Перегляньте згенеровану схему DBML.',
+                    generating: 'Генерація DBML...',
+                    download: 'Завантажити DBML',
+                    error: 'Не вдалося згенерувати DBML. Спробуйте ще раз.',
+                    empty: 'Для поточної діаграми DBML не було згенеровано.',
+                },
+            },
         },
 
         export_dialog: {

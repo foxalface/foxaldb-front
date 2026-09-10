@@ -1114,6 +1114,15 @@ export const gu: LanguageTranslation = {
                     description: 'વેક્ટર છબી',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'જનરેટ થયેલ DBML સ્કીમા તપાસો.',
+                    generating: 'DBML જનરેટ થઈ રહ્યું છે...',
+                    download: 'DBML ડાઉનલોડ',
+                    error: 'DBML જનરેટ કરી શકાયું નહીં. ફરી પ્રયાસ કરો.',
+                    empty: 'વર્તમાન ડાયાગ્રામ માટે કોઈ DBML જનરેટ થયું નથી.',
+                },
+            },
         },
 
         export_dialog: {

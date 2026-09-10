@@ -1136,6 +1136,15 @@ export const te: LanguageTranslation = {
                     description: 'వెక్టర్ చిత్రం',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'సృష్టించిన DBML స్కీమాను సమీక్షించండి.',
+                    generating: 'DBML సృష్టిస్తోంది...',
+                    download: 'DBML డౌన్‌లోడ్',
+                    error: 'DBML సృష్టించలేకపోయాం. మళ్లీ ప్రయత్నించండి.',
+                    empty: 'ప్రస్తుత డయాగ్రామ్ కోసం DBML సృష్టించబడలేదు.',
+                },
+            },
         },
 
         export_dialog: {

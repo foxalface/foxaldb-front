@@ -96,9 +96,7 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 **Target groups:** Database, Framework, Portable / Schema, Visual.
 
-**Current routing:** SQL is wizard-native (`SQL_TARGET` → `SQL_PREVIEW` with copy/download). Other targets still delegate to existing child dialogs (`ExportDiagramDialog`, `ExportImageDialog`, `ExportLaravelMigrationsDialog`) via close-and-reopen until their milestones land.
-
-**SQL wizard steps:** `TARGET_PICKER` → `SQL_TARGET` → `SQL_PREVIEW`. Back navigation and reopen reset branch-local SQL state. Capability helper: `deterministic-sql-export-capability.ts`.
+**Current routing:** SQL and DBML are wizard-native. Other targets still delegate to existing child dialogs (`ExportDiagramDialog`, `ExportImageDialog`, `ExportLaravelMigrationsDialog`) via close-and-reopen until their milestones land.
 
 **Planned framework targets** (Prisma, EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones.
 
@@ -133,13 +131,13 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 | **Execution** | Browser only |
 | **Auth** | None |
 | **Generator** | `generateDBMLFromDiagram()` in `frontend/src/lib/dbml/dbml-export/dbml-export.ts` |
-| **Output** | `standardDbml`, `inlineDbml`, `relationshipsDbml`; side-panel `CodeSnippet` (copy/edit, no file download) |
-| **Entry points** | Export wizard (disabled, coming soon); side panel → DBML section (`frontend/src/pages/editor-page/side-panel/dbml-section/table-dbml/table-dbml.tsx`) |
-| **Tests** | 9 files under `frontend/src/lib/dbml/dbml-export/__tests__/` |
+| **Output** | `standardDbml` (wizard export); side panel also exposes `inlineDbml` / `relationshipsDbml` for live editing |
+| **Entry points** | Export wizard → DBML (`DBML_PREVIEW` with copy + `.dbml` download); side panel → DBML section (unchanged) |
+| **Tests** | `frontend/src/lib/dbml/dbml-export/__tests__/`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-dbml.test.tsx` |
 
 **Pipeline:** Diagram → `exportBaseSQL({ isDBMLFlow: true, skipFKGeneration: true })` → SQL sanitization → `@dbml/core` importer → post-processing (schemas, composite PKs, enums, refs, etc.).
 
-**Planned V1:** first-class DBML file export using this existing generator (UI not designed in this doc).
+**Wizard export:** Uses `standardDbml` only. Full unfiltered diagram (no schema filter). Filename: `{diagram-slug}.dbml`.
 
 ### Diagram JSON
 
@@ -391,7 +389,7 @@ FoxalDB imports more DBMS and framework formats than it exports in V1. Examples:
 | Capability | Import | Export V1 |
 |------------|--------|-----------|
 | SQL DDL (8 DBMS) | Yes (varies by DBMS) | Deterministic for 5 dialects + PG cross-dialect (wizard SQL milestone) |
-| DBML | Yes | Generator exists; wizard entry disabled until DBML milestone |
+| DBML | Yes | Wizard-native (standard DBML only); side panel unchanged |
 | Diagram JSON | Yes | Yes (via wizard) |
 | Metadata JSON | Yes | No |
 | Project ZIP (6 frameworks) | Yes | Laravel export yes; Prisma/EF/Rails/Django/Drizzle planned (wizard shows disabled) |
@@ -453,7 +451,7 @@ Verified in current code:
 - **Legacy AI SQL path** — active in `exportSQL` and legacy `ExportSQLDialog`; unreachable from Export Wizard
 - **Misleading UI labels** — legacy `ExportSQLDialog` still has ✨ targets, Sparkles loader, hardcoded English "Deterministic"/"AI" toggle
 - **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback in generator; wizard shows unsupported UX, not fake targets
-- **DBML** — no first-class export entry or file download
+- **DBML** — wizard-native export implemented; side panel remains live developer view (inline/relationships variants not exposed in wizard)
 - **Diagram JSON** — `ChartDB({name}).json` filename; 1s artificial delay in `use-export-diagram.tsx`; no format version; ID renumbering
 - **Inconsistent delivery** — DBML copy-only; SQL wizard has copy + download; images/JSON/Laravel file download
 - **Laravel export** — requires persisted backend diagram ID
@@ -494,6 +492,8 @@ This document and implementation milestones do **not**:
 ### Frontend — DBML
 
 - `frontend/src/lib/dbml/dbml-export/dbml-export.ts`
+- `frontend/src/dialogs/export-wizard/dbml/`
+- `frontend/src/lib/dbml/dbml-export/build-dbml-export-filename.ts`
 - `frontend/src/pages/editor-page/side-panel/dbml-section/`
 
 ### Frontend — JSON

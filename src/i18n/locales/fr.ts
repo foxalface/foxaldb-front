@@ -1154,6 +1154,15 @@ export const fr: LanguageTranslation = {
                     description: 'Image vectorielle',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'Vérifiez le schéma DBML généré.',
+                    generating: 'Génération du DBML...',
+                    download: 'Télécharger le DBML',
+                    error: 'Impossible de générer le DBML. Veuillez réessayer.',
+                    empty: "Aucun DBML n'a été généré pour le diagramme actuel.",
+                },
+            },
         },
 
         export_dialog: {

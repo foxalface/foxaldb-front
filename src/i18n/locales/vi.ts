@@ -1131,6 +1131,15 @@ export const vi: LanguageTranslation = {
                     description: 'Ảnh vector',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'Xem lại schema DBML đã tạo.',
+                    generating: 'Đang tạo DBML...',
+                    download: 'Tải DBML',
+                    error: 'Không thể tạo DBML. Vui lòng thử lại.',
+                    empty: 'Không có DBML được tạo cho sơ đồ hiện tại.',
+                },
+            },
         },
 
         export_dialog: {

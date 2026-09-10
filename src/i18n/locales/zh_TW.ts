@@ -1061,6 +1061,15 @@ export const zh_TW: LanguageTranslation = {
                     description: '向量影像',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: '檢視產生的 DBML 架構。',
+                    generating: '正在產生 DBML...',
+                    download: '下載 DBML',
+                    error: '無法產生 DBML。請再試一次。',
+                    empty: '目前圖表未產生 DBML。',
+                },
+            },
         },
 
         export_dialog: {

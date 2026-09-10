@@ -1126,6 +1126,15 @@ export const ru: LanguageTranslation = {
                     description: 'Векторное изображение',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'Проверьте сгенерированную схему DBML.',
+                    generating: 'Генерация DBML...',
+                    download: 'Скачать DBML',
+                    error: 'Не удалось сгенерировать DBML. Попробуйте снова.',
+                    empty: 'Для текущей диаграммы DBML не был сгенерирован.',
+                },
+            },
         },
 
         export_dialog: {

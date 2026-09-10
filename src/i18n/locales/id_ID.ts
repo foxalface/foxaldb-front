@@ -1131,6 +1131,15 @@ export const id_ID: LanguageTranslation = {
                     description: 'Gambar vektor',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'Tinjau skema DBML yang dihasilkan.',
+                    generating: 'Membuat DBML...',
+                    download: 'Unduh DBML',
+                    error: 'Tidak dapat membuat DBML. Silakan coba lagi.',
+                    empty: 'Tidak ada DBML yang dibuat untuk diagram saat ini.',
+                },
+            },
         },
 
         export_dialog: {

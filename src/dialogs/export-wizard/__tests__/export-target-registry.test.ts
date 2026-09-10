@@ -22,10 +22,9 @@ describe('export target availability', () => {
         });
     });
 
-    it('marks DBML as disabled with reason', () => {
+    it('marks DBML as available for guests', () => {
         expect(getExportTargetAvailability('dbml', guestContext)).toEqual({
-            status: 'disabled',
-            reasonKey: 'export_wizard.targets.dbml.coming_soon',
+            status: 'available',
         });
     });
 

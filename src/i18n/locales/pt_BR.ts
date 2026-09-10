@@ -1145,6 +1145,15 @@ export const pt_BR: LanguageTranslation = {
                     description: 'Imagem vetorial',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'Revise o esquema DBML gerado.',
+                    generating: 'Gerando DBML...',
+                    download: 'Baixar DBML',
+                    error: 'Não foi possível gerar o DBML. Tente novamente.',
+                    empty: 'Nenhum DBML foi gerado para o diagrama atual.',
+                },
+            },
         },
 
         export_dialog: {

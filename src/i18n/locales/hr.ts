@@ -1129,6 +1129,15 @@ export const hr: LanguageTranslation = {
                     description: 'Vektorska slika',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'Pregledajte generirani DBML shemu.',
+                    generating: 'Generiranje DBML-a...',
+                    download: 'Preuzmi DBML',
+                    error: 'DBML nije mogao biti generiran. Pokušajte ponovno.',
+                    empty: 'Za trenutni dijagram nije generiran DBML.',
+                },
+            },
         },
 
         export_dialog: {

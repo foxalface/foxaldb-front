@@ -1116,6 +1116,15 @@ export const ar: LanguageTranslation = {
                     description: 'صورة متجهة',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'راجع مخطط DBML المُنشأ.',
+                    generating: 'جارٍ إنشاء DBML...',
+                    download: 'تنزيل DBML',
+                    error: 'تعذر إنشاء DBML. يرجى المحاولة مرة أخرى.',
+                    empty: 'لم يتم إنشاء DBML للمخطط الحالي.',
+                },
+            },
         },
 
         export_dialog: {

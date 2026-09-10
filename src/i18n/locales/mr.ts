@@ -1123,6 +1123,15 @@ export const mr: LanguageTranslation = {
                     description: 'वेक्टर प्रतिमा',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'तयार केलेली DBML स्कीमा तपासा.',
+                    generating: 'DBML तयार होत आहे...',
+                    download: 'DBML डाउनलोड',
+                    error: 'DBML तयार करू शकलो नाही. पुन्हा प्रयत्न करा.',
+                    empty: 'सध्याच्या डायग्रामसाठी कोणतेही DBML तयार झाले नाही.',
+                },
+            },
         },
 
         export_dialog: {

@@ -45,6 +45,46 @@ vi.mock('@/hooks/use-export-image', () => ({
     }),
 }));
 
+vi.mock('@/context/diagram-filter-context/use-diagram-filter', () => ({
+    useDiagramFilter: () => ({
+        filter: {},
+    }),
+}));
+
+vi.mock('@/lib/dbml/dbml-export/dbml-export', () => ({
+    generateDBMLFromDiagram: vi.fn().mockResolvedValue({
+        standardDbml: 'Table users {}',
+        inlineDbml: '',
+        relationshipsDbml: '',
+    }),
+}));
+
+vi.mock('@/components/code-snippet/code-snippet', () => ({
+    CodeSnippet: ({
+        code,
+        actions,
+    }: {
+        code: string;
+        actions?: Array<{ label: string; onClick: () => void }>;
+    }) => (
+        <div data-testid="code-snippet">
+            <pre>{code}</pre>
+            <button type="button" data-testid="code-snippet-copy">
+                copy
+            </button>
+            {actions?.map((action) => (
+                <button
+                    key={action.label}
+                    type="button"
+                    onClick={action.onClick}
+                >
+                    {action.label}
+                </button>
+            ))}
+        </div>
+    ),
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string) => key,
@@ -176,16 +216,23 @@ describe('ExportWizardDialog', () => {
         });
     });
 
-    it('shows DBML as disabled coming soon', () => {
+    it('opens the DBML preview from the target picker', async () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         const dbmlButton = screen
             .getByText('export_wizard.targets.dbml.title')
             .closest('button');
 
-        expect(dbmlButton).toBeDisabled();
+        expect(dbmlButton).not.toBeDisabled();
+        await userEvent.click(
+            screen.getByText('export_wizard.targets.dbml.title')
+        );
+
         expect(
-            screen.getByText('export_wizard.targets.dbml.coming_soon')
+            screen.getByText('export_wizard.dbml.preview_step.description')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByTestId('export-dbml-branch-context')
         ).toBeInTheDocument();
     });
 

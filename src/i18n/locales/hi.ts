@@ -1124,6 +1124,15 @@ export const hi: LanguageTranslation = {
                     description: 'वेक्टर छवि',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'जनरेट किए गए DBML स्कीमा की समीक्षा करें।',
+                    generating: 'DBML जनरेट हो रहा है...',
+                    download: 'DBML डाउनलोड',
+                    error: 'DBML जनरेट नहीं हो सका। कृपया पुनः प्रयास करें।',
+                    empty: 'वर्तमान डायग्राम के लिए कोई DBML जनरेट नहीं हुआ।',
+                },
+            },
         },
 
         export_dialog: {

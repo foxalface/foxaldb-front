@@ -1132,6 +1132,15 @@ export const ko_KR: LanguageTranslation = {
                     description: '벡터 이미지',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: '생성된 DBML 스키마를 검토하세요.',
+                    generating: 'DBML 생성 중...',
+                    download: 'DBML 다운로드',
+                    error: 'DBML을 생성할 수 없습니다. 다시 시도하세요.',
+                    empty: '현재 다이어그램에 대해 생성된 DBML이 없습니다.',
+                },
+            },
         },
 
         export_dialog: {

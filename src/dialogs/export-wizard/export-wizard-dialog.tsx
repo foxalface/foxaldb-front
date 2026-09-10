@@ -23,6 +23,8 @@ import { ExportSqlTargetStep } from './sql/export-sql-target-step';
 import { ExportSqlUnsupportedStep } from './sql/export-sql-unsupported-step';
 import { ExportSqlPreviewStep } from './sql/export-sql-preview-step';
 import { ExportSqlBranchContext } from './sql/export-sql-branch-context';
+import { ExportDbmlPreviewStep } from './dbml/export-dbml-preview-step';
+import { ExportDbmlBranchContext } from './dbml/export-dbml-branch-context';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import {
@@ -31,6 +33,7 @@ import {
 } from '@/lib/data/sql-export/deterministic-sql-export-capability';
 import { exportBaseSQL } from '@/lib/data/sql-export/export-sql-script';
 import { getFilteredDiagramForSqlExport } from '@/lib/data/sql-export/get-filtered-diagram-for-sql-export';
+import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
 import { cn } from '@/lib/utils';
 
 export interface ExportWizardDialogProps extends BaseDialogProps {}
@@ -58,6 +61,11 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const [sqlScript, setSqlScript] = useState<string | undefined>(undefined);
     const [sqlHasError, setSqlHasError] = useState(false);
     const [isSqlGenerating, setIsSqlGenerating] = useState(false);
+    const [dbmlContent, setDbmlContent] = useState<string | undefined>(
+        undefined
+    );
+    const [dbmlHasError, setDbmlHasError] = useState(false);
+    const [isDbmlGenerating, setIsDbmlGenerating] = useState(false);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -66,10 +74,17 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         setIsSqlGenerating(false);
     }, []);
 
+    const resetDbmlBranchState = useCallback(() => {
+        setDbmlContent(undefined);
+        setDbmlHasError(false);
+        setIsDbmlGenerating(false);
+    }, []);
+
     const resetWizardState = useCallback(() => {
         setStep(ExportWizardStep.TARGET_PICKER);
         resetSqlBranchState();
-    }, [resetSqlBranchState]);
+        resetDbmlBranchState();
+    }, [resetSqlBranchState, resetDbmlBranchState]);
 
     useEffect(() => {
         if (dialog.open) {
@@ -105,7 +120,15 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         (targetId: ExportTargetId) => {
             if (targetId === 'sql') {
                 resetSqlBranchState();
+                resetDbmlBranchState();
                 setStep(ExportWizardStep.SQL_TARGET);
+                return;
+            }
+
+            if (targetId === 'dbml') {
+                resetDbmlBranchState();
+                resetSqlBranchState();
+                setStep(ExportWizardStep.DBML_PREVIEW);
                 return;
             }
 
@@ -155,6 +178,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             openExportImageDialog,
             openExportLaravelMigrationsDialog,
             resetSqlBranchState,
+            resetDbmlBranchState,
         ]
     );
 
@@ -169,6 +193,12 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     );
 
     const handleBack = useCallback(() => {
+        if (step === ExportWizardStep.DBML_PREVIEW) {
+            resetDbmlBranchState();
+            setStep(ExportWizardStep.TARGET_PICKER);
+            return;
+        }
+
         if (step === ExportWizardStep.SQL_PREVIEW) {
             setSqlScript(undefined);
             setSqlHasError(false);
@@ -181,7 +211,53 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             resetSqlBranchState();
             setStep(ExportWizardStep.TARGET_PICKER);
         }
-    }, [resetSqlBranchState, step]);
+    }, [resetDbmlBranchState, resetSqlBranchState, step]);
+
+    useEffect(() => {
+        if (
+            step !== ExportWizardStep.DBML_PREVIEW ||
+            dbmlContent !== undefined ||
+            dbmlHasError
+        ) {
+            return;
+        }
+
+        let cancelled = false;
+
+        const generateDbml = async () => {
+            setIsDbmlGenerating(true);
+            setDbmlHasError(false);
+
+            try {
+                const result = await generateDBMLFromDiagram(currentDiagram);
+
+                if (cancelled) {
+                    return;
+                }
+
+                if (result.error && !result.standardDbml) {
+                    setDbmlHasError(true);
+                    return;
+                }
+
+                setDbmlContent(result.standardDbml);
+            } catch {
+                if (!cancelled) {
+                    setDbmlHasError(true);
+                }
+            } finally {
+                if (!cancelled) {
+                    setIsDbmlGenerating(false);
+                }
+            }
+        };
+
+        void generateDbml();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [currentDiagram, dbmlContent, dbmlHasError, step]);
 
     useEffect(() => {
         if (
@@ -249,11 +325,14 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
     const showBackButton =
         step === ExportWizardStep.SQL_TARGET ||
-        step === ExportWizardStep.SQL_PREVIEW;
+        step === ExportWizardStep.SQL_PREVIEW ||
+        step === ExportWizardStep.DBML_PREVIEW;
 
     const isSqlBranch =
         step === ExportWizardStep.SQL_TARGET ||
         step === ExportWizardStep.SQL_PREVIEW;
+
+    const isDbmlBranch = step === ExportWizardStep.DBML_PREVIEW;
 
     const dialogTitle = t('export_wizard.title');
 
@@ -270,14 +349,20 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                               databaseTypeToLabelMap[sqlTargetDatabaseType],
                       })
                     : undefined;
+            case ExportWizardStep.DBML_PREVIEW:
+                return t('export_wizard.dbml.preview_step.description');
             default:
                 return t('export_wizard.description');
         }
     }, [databaseType, sqlTargetDatabaseType, step, t]);
 
-    const isWideDialog = step === ExportWizardStep.SQL_PREVIEW;
+    const isWideDialog =
+        step === ExportWizardStep.SQL_PREVIEW ||
+        step === ExportWizardStep.DBML_PREVIEW;
 
     const isSqlPreview = step === ExportWizardStep.SQL_PREVIEW;
+    const isDbmlPreview = step === ExportWizardStep.DBML_PREVIEW;
+    const isPreviewStep = isSqlPreview || isDbmlPreview;
 
     return (
         <Dialog {...dialog} onOpenChange={handleOpenChange}>
@@ -296,6 +381,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             }
                         />
                     ) : null}
+                    {isDbmlBranch ? <ExportDbmlBranchContext /> : null}
                     <DialogTitle>{dialogTitle}</DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
@@ -307,7 +393,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 <div
                     className={cn(
                         'min-h-0 flex-1',
-                        isSqlPreview
+                        isPreviewStep
                             ? 'flex flex-col overflow-hidden'
                             : 'overflow-y-auto'
                     )}
@@ -344,6 +430,15 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             script={sqlScript}
                             isLoading={isSqlGenerating}
                             hasError={sqlHasError}
+                        />
+                    ) : null}
+
+                    {step === ExportWizardStep.DBML_PREVIEW ? (
+                        <ExportDbmlPreviewStep
+                            diagramName={currentDiagram.name ?? 'diagram'}
+                            dbml={dbmlContent}
+                            isLoading={isDbmlGenerating}
+                            hasError={dbmlHasError}
                         />
                     ) : null}
                 </div>

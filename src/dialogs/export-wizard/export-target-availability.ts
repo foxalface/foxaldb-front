@@ -26,17 +26,12 @@ export const getExportTargetAvailability = (
 ): ExportTargetAvailability => {
     switch (targetId) {
         case 'sql':
+        case 'dbml':
         case 'diagram_json':
         case 'png':
         case 'jpg':
         case 'svg':
             return { status: 'available' };
-
-        case 'dbml':
-            return {
-                status: 'disabled',
-                reasonKey: 'export_wizard.targets.dbml.coming_soon',
-            };
 
         case 'laravel':
             return isLaravelExportAvailable(ctx)

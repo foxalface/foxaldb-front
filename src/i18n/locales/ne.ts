@@ -1129,6 +1129,16 @@ export const ne: LanguageTranslation = {
                     description: 'भेक्टर छवि',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description:
+                        'उत्पन्न गरिएको DBML स्किमा समीक्षा गर्नुहोस्।',
+                    generating: 'DBML उत्पन्न हुँदैछ...',
+                    download: 'DBML डाउनलोड',
+                    error: 'DBML उत्पन्न गर्न सकिएन। कृपया पुनः प्रयास गर्नुहोस्।',
+                    empty: 'हालको डायग्रामका लागि कुनै DBML उत्पन्न भएन।',
+                },
+            },
         },
 
         export_dialog: {

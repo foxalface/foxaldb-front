@@ -1113,6 +1113,15 @@ export const tr: LanguageTranslation = {
                     description: 'Vektör görüntü',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'Oluşturulan DBML şemasını inceleyin.',
+                    generating: 'DBML oluşturuluyor...',
+                    download: 'DBML indir',
+                    error: 'DBML oluşturulamadı. Lütfen tekrar deneyin.',
+                    empty: 'Mevcut diyagram için DBML oluşturulmadı.',
+                },
+            },
         },
 
         export_dialog: {

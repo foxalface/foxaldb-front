@@ -1149,6 +1149,15 @@ export const ja: LanguageTranslation = {
                     description: 'ベクター画像',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: '生成された DBML スキーマを確認してください。',
+                    generating: 'DBMLを生成中...',
+                    download: 'DBMLをダウンロード',
+                    error: 'DBMLを生成できませんでした。もう一度お試しください。',
+                    empty: '現在のダイアグラム用のDBMLは生成されませんでした。',
+                },
+            },
         },
 
         export_dialog: {

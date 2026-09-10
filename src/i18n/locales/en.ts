@@ -1127,6 +1127,15 @@ export const en = {
                     empty: 'No SQL was generated for the current diagram.',
                 },
             },
+            dbml: {
+                preview_step: {
+                    description: 'Review the generated DBML schema.',
+                    generating: 'Generating DBML...',
+                    download: 'Download DBML',
+                    error: 'Could not generate DBML. Please try again.',
+                    empty: 'No DBML was generated for the current diagram.',
+                },
+            },
         },
 
         export_dialog: {
