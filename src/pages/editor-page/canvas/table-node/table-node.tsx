@@ -111,6 +111,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             setHoveringTableId,
             showCreateRelationshipNode,
             tempFloatingEdge,
+            visualExportCaptureActive,
         } = useCanvas();
         const remoteCollaborators = useEntityRemoteSelections(
             'table',
@@ -124,8 +125,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 
         // Get edit mode state directly from context
         const editTableMode = useMemo(
-            () => editTableModeTable?.tableId === table.id,
-            [editTableModeTable, table.id]
+            () =>
+                !visualExportCaptureActive &&
+                editTableModeTable?.tableId === table.id,
+            [editTableModeTable, table.id, visualExportCaptureActive]
         );
         const editTableModeFieldId = useMemo(
             () => (editTableMode ? editTableModeTable?.fieldId : null),
@@ -264,8 +267,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         }, [selectedRelEdges]);
 
         const focused = useMemo(
-            () => (!!selected && !dragging) || isHovering,
-            [selected, dragging, isHovering]
+            () =>
+                !visualExportCaptureActive &&
+                ((!!selected && !dragging) || isHovering),
+            [dragging, isHovering, selected, visualExportCaptureActive]
         );
 
         const openTableInEditor = useCallback(() => {
@@ -361,11 +366,18 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 
         const isPartOfCreatingRelationship = useMemo(
             () =>
-                tempFloatingEdge?.sourceNodeId === id ||
-                (isRelationshipCreatingTarget &&
-                    tempFloatingEdge?.targetNodeId === id) ||
+                !visualExportCaptureActive &&
+                (tempFloatingEdge?.sourceNodeId === id ||
+                    (isRelationshipCreatingTarget &&
+                        tempFloatingEdge?.targetNodeId === id) ||
+                    isHovering),
+            [
+                id,
                 isHovering,
-            [tempFloatingEdge, id, isRelationshipCreatingTarget, isHovering]
+                isRelationshipCreatingTarget,
+                tempFloatingEdge,
+                visualExportCaptureActive,
+            ]
         );
 
         const tableClassName = useMemo(
@@ -405,7 +417,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         : editTableMode
                           ? 'invisible'
                           : '',
-                    hasRemoteSelection
+                    hasRemoteSelection && !visualExportCaptureActive
                         ? cn(
                               'ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900',
                               primaryRemoteRingClass
@@ -428,6 +440,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 table.isView,
                 hasRemoteSelection,
                 primaryRemoteRingClass,
+                visualExportCaptureActive,
             ]
         );
 
@@ -493,13 +506,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         setHoveringTableId(null);
                     }}
                 >
-                    {hasRemoteSelection ? (
+                    {hasRemoteSelection && !visualExportCaptureActive ? (
                         <EntityCollaboratorsBadge
                             collaborators={remoteCollaborators}
                             className="absolute -right-2 -top-2 z-20"
                         />
                     ) : null}
-                    {hasRemoteEditing ? (
+                    {hasRemoteEditing && !visualExportCaptureActive ? (
                         <EntityEditingBadge
                             editors={remoteEditors}
                             showLabel
@@ -624,7 +637,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 </Label>
                             )}
                         </div>
-                        <div className="hidden shrink-0 flex-row group-focus-within:flex group-hover:flex">
+                        <div
+                            className={cn(
+                                'hidden shrink-0 flex-row',
+                                !visualExportCaptureActive &&
+                                    'group-focus-within:flex group-hover:flex'
+                            )}
+                        >
                             {readonly ? null : (
                                 <Button
                                     variant="ghost"
@@ -634,7 +653,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     <CircleDotDashed className="size-4" />
                                 </Button>
                             )}
-                            {conversationsAvailable ? (
+                            {conversationsAvailable &&
+                            !visualExportCaptureActive ? (
                                 <ConversationIndicator
                                     target={{
                                         targetType: 'table',

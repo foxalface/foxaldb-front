@@ -50,7 +50,6 @@ vi.mock('@/hooks/use-dialog', () => ({
         openOpenDiagramDialog: vi.fn(),
         openExportSQLDialog: vi.fn(),
         openImportDatabaseDialog: vi.fn(),
-        openExportImageDialog: vi.fn(),
         openExportDiagramDialog: vi.fn(),
         openExportWizardDialog: vi.fn(),
         openImportDiagramDialog: vi.fn(),

@@ -1126,7 +1126,7 @@ export const bn: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'ভেক্টর ছবি',
+                    description: 'ডায়াগ্রামের SVG স্ন্যাপশট',
                 },
             },
             dbml: {
@@ -1146,6 +1146,42 @@ export const bn: LanguageTranslation = {
                         'সম্পূর্ণ ডায়াগ্রাম রপ্তানি হয়। এই ফাইল আমদানি করলে একটি নতুন ডায়াগ্রাম তৈরি হয়; বর্তমান ডায়াগ্রাম ওভাররাইট হয় না।',
                     filename_label: 'ফাইলের নাম: {{filename}}',
                     download: 'JSON ডাউনলোড',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'এই {{format}} ছবি কীভাবে রপ্তানি করবেন তা বেছে নিন।',
+                    explanation:
+                        'বর্তমানে রেন্ডার করা ডায়াগ্রামের একটি ছবি রপ্তানি করুন।',
+                    filename_label: 'ফাইলের নাম: {{filename}}',
+                    extent_label: 'রপ্তানির এলাকা',
+                    extent_diagram: 'সম্পূর্ণ ডায়াগ্রাম',
+                    extent_diagram_description:
+                        'বর্তমান ভিউয়ের বাইরের টেবিলসহ বর্তমানে রেন্ডার করা পুরো ডায়াগ্রাম অন্তর্ভুক্ত করুন।',
+                    extent_viewport: 'বর্তমান ভিউ',
+                    extent_viewport_description:
+                        'কেবল ক্যানভাসে এখন যা দেখা যাচ্ছে তা রপ্তানি করুন।',
+                    scale_label: 'স্কেল',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'পটভূমির প্যাটার্ন অন্তর্ভুক্ত করুন',
+                    pattern_description:
+                        'পটভূমিতে হালকা গ্রিড প্যাটার্ন যোগ করুন।',
+                    transparent: 'স্বচ্ছ পটভূমি',
+                    transparent_description:
+                        'কঠিন পটভূমির রং ছাড়া PNG রপ্তানি করুন।',
+                    svg_limitation:
+                        'এই SVG ব্রাউজারের জন্য ডায়াগ্রামের একটি স্ন্যাপশট, সম্পূর্ণ সম্পাদনাযোগ্য ভেক্টর ফাইল নয়।',
+                    export: 'রপ্তানি',
+                    generating: 'ছবি তৈরি করা হচ্ছে...',
+                    error: 'ছবি রপ্তানি করা যায়নি। আবার চেষ্টা করুন।',
+                    error_canvas:
+                        'রপ্তানি করার জন্য ডায়াগ্রাম ক্যানভাস পাওয়া যায়নি।',
+                    error_too_large:
+                        'এই ডায়াগ্রাম {{scale}} এ রপ্তানি করার জন্য খুব বড়। স্কেল কমান বা বর্তমান ভিউ রপ্তানি করুন।',
+                    error_empty: 'ক্যানভাসে রপ্তানি করার মতো কিছু নেই।',
                 },
             },
         },
@@ -1380,22 +1416,6 @@ export const bn: LanguageTranslation = {
                 import: 'আমদানি করুন',
                 cancel: 'বাতিল করুন',
             },
-        },
-
-        export_image_dialog: {
-            title: 'চিত্র রপ্তানি করুন',
-            description: 'রপ্তানির জন্য স্কেল ফ্যাক্টর নির্বাচন করুন:',
-            scale_1x: '1x (নিম্ন মান)',
-            scale_2x: '2x (সাধারণ মান)',
-            scale_4x: '4x (সেরা মান)',
-            cancel: 'বাতিল করুন',
-            export: 'রপ্তানি করুন',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

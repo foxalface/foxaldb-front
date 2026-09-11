@@ -12,6 +12,7 @@ const { stableCanvasApi } = vi.hoisted(() => ({
         },
         openRelationshipPopover: vi.fn(),
         closeRelationshipPopover: vi.fn(),
+        visualExportCaptureActive: false,
     },
 }));
 

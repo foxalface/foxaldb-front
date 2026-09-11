@@ -1127,7 +1127,7 @@ export const uk: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Векторне зображення',
+                    description: 'SVG-знімок діаграми',
                 },
             },
             dbml: {
@@ -1146,6 +1146,42 @@ export const uk: LanguageTranslation = {
                         'Експортується повна діаграма. Імпорт цього файлу створює нову діаграму і не перезаписує поточну.',
                     filename_label: 'Ім’я файлу: {{filename}}',
                     download: 'Завантажити JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'Виберіть, як експортувати це зображення {{format}}.',
+                    explanation:
+                        'Експортуйте зображення поточної відображеної діаграми.',
+                    filename_label: 'Ім’я файлу: {{filename}}',
+                    extent_label: 'Область експорту',
+                    extent_diagram: 'Повна діаграма',
+                    extent_diagram_description:
+                        'Включити всю поточно відображену діаграму, зокрема таблиці поза поточним виглядом.',
+                    extent_viewport: 'Поточний вигляд',
+                    extent_viewport_description:
+                        'Експортувати лише те, що зараз видно на полотні.',
+                    scale_label: 'Масштаб',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Додати фоновий візерунок',
+                    pattern_description:
+                        'Додати легкий сітковий візерунок на фон.',
+                    transparent: 'Прозорий фон',
+                    transparent_description:
+                        'Експортувати PNG без суцільного кольору тла.',
+                    svg_limitation:
+                        'Цей SVG — знімок діаграми для браузера, а не повністю редагований векторний файл.',
+                    export: 'Експортувати',
+                    generating: 'Створення зображення...',
+                    error: 'Не вдалося експортувати зображення. Спробуйте ще раз.',
+                    error_canvas:
+                        'Не вдалося знайти полотно діаграми для експорту.',
+                    error_too_large:
+                        'Ця діаграма завелика для експорту в {{scale}}. Зменште масштаб або експортуйте поточний вигляд.',
+                    error_empty: 'На полотні немає що експортувати.',
                 },
             },
         },
@@ -1380,22 +1416,6 @@ export const uk: LanguageTranslation = {
                 import: 'Імпортувати',
                 cancel: 'Скасувати',
             },
-        },
-
-        export_image_dialog: {
-            title: 'Експорт зображення',
-            description: 'Виберіть коефіцієнт масштабування для експорту:',
-            scale_1x: '1x (Низька якість)',
-            scale_2x: '2x (Звичайна якість)',
-            scale_4x: '4x (Найкраща якість)',
-            cancel: 'Скасувати',
-            export: 'Експортувати',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

@@ -82,6 +82,7 @@ const {
             setHoveringTableId,
             showCreateRelationshipNode,
             tempFloatingEdge: null as null,
+            visualExportCaptureActive: false,
         },
     };
 });

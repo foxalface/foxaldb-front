@@ -63,6 +63,8 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
         useState<CanvasContext['tempFloatingEdge']>(null);
 
     const [hoveringTableId, setHoveringTableId] = useState<string | null>(null);
+    const [visualExportCaptureActive, setVisualExportCaptureActive] =
+        useState(false);
 
     const diagramIdActiveFilterRef = useRef<string>();
 
@@ -245,6 +247,8 @@ export const CanvasProvider = ({ children }: CanvasProviderProps) => {
                 showCreateRelationshipNode,
                 hideCreateRelationshipNode,
                 events,
+                visualExportCaptureActive,
+                setVisualExportCaptureActive,
             }}
         >
             {children}

@@ -1133,7 +1133,7 @@ export const te: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'వెక్టర్ చిత్రం',
+                    description: 'రేఖాచిత్రం యొక్క SVG స్నాప్‌షాట్',
                 },
             },
             dbml: {
@@ -1153,6 +1153,42 @@ export const te: LanguageTranslation = {
                         'పూర్తి డయాగ్రామ్ ఎగుమతి అవుతుంది. ఈ ఫైల్‌ను దిగుమతి చేస్తే కొత్త డయాగ్రామ్ ఏర్పడుతుంది; ప్రస్తుత డయాగ్రామ్ ఓవర్‌రైట్ కాదు.',
                     filename_label: 'ఫైల్ పేరు: {{filename}}',
                     download: 'JSON డౌన్‌లోడ్',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'ఈ {{format}} చిత్రాన్ని ఎలా ఎగుమతి చేయాలో ఎంచుకోండి.',
+                    explanation:
+                        'ప్రస్తుతం రెండర్ అవుతున్న రేఖాచిత్రం యొక్క చిత్రాన్ని ఎగుమతి చేయండి.',
+                    filename_label: 'ఫైల్ పేరు: {{filename}}',
+                    extent_label: 'ఎగుమతి ప్రాంతం',
+                    extent_diagram: 'పూర్తి రేఖాచిత్రం',
+                    extent_diagram_description:
+                        'ప్రస్తుత వీక్షణ వెలుపలి పట్టికలతో సహా ప్రస్తుతం రెండర్ అవుతున్న మొత్తం రేఖాచిత్రాన్ని చేర్చండి.',
+                    extent_viewport: 'ప్రస్తుత వీక్షణ',
+                    extent_viewport_description:
+                        'కాన్వాస్‌పై ప్రస్తుతం కనిపించేదాన్ని మాత్రమే ఎగుమతి చేయండి.',
+                    scale_label: 'స్కేల్',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'నేపథ్య నమూనాను చేర్చండి',
+                    pattern_description:
+                        'నేపథ్యానికి సున్నితమైన గ్రిడ్ నమూనాను జోడించండి.',
+                    transparent: 'పారదర్శక నేపథ్యం',
+                    transparent_description:
+                        'ఘన నేపథ్య రంగు లేకుండా PNGని ఎగుమతి చేయండి.',
+                    svg_limitation:
+                        'ఈ SVG బ్రౌజర్ కోసం రేఖాచిత్రం యొక్క స్నాప్‌షాట్, పూర్తిగా సవరించదగిన వెక్టర్ ఫైల్ కాదు.',
+                    export: 'ఎగుమతి',
+                    generating: 'చిత్రం సృష్టిస్తోంది...',
+                    error: 'చిత్రాన్ని ఎగుమతి చేయలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                    error_canvas:
+                        'ఎగుమతి చేయడానికి రేఖాచిత్ర కాన్వాస్ కనబడలేదు.',
+                    error_too_large:
+                        'ఈ రేఖాచిత్రం {{scale}} వద్ద ఎగుమతి చేయడానికి చాలా పెద్దది. స్కేల్ తగ్గించండి లేదా ప్రస్తుత వీక్షణను ఎగుమతి చేయండి.',
+                    error_empty: 'కాన్వాస్‌పై ఎగుమతి చేయడానికి ఏమీ లేదు.',
                 },
             },
         },
@@ -1388,22 +1424,6 @@ export const te: LanguageTranslation = {
                 import: 'డిగుమతి',
                 cancel: 'రద్దు',
             },
-        },
-
-        export_image_dialog: {
-            title: 'చిత్రం ఎగుమతి',
-            description: 'ఎగుమతి కోసం స్కేల్ ఫ్యాక్టర్ ఎంచుకోండి:',
-            scale_1x: '1x (తక్కువ నాణ్యత)',
-            scale_2x: '2x (సాధారణ నాణ్యత)',
-            scale_4x: '4x (అత్యుత్తమ నాణ్యత)',
-            cancel: 'రద్దు',
-            export: 'ఎగుమతి',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

@@ -1145,7 +1145,7 @@ export const es: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Imagen vectorial',
+                    description: 'Instantánea SVG del diagrama',
                 },
             },
             dbml: {
@@ -1164,6 +1164,41 @@ export const es: LanguageTranslation = {
                         'Se exporta el diagrama completo. Importar este archivo crea un diagrama nuevo; no sobrescribe el diagrama actual.',
                     filename_label: 'Nombre de archivo: {{filename}}',
                     download: 'Descargar JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description: 'Elija cómo exportar esta imagen {{format}}.',
+                    explanation:
+                        'Exporte una imagen del diagrama renderizado actualmente.',
+                    filename_label: 'Nombre de archivo: {{filename}}',
+                    extent_label: 'Área de exportación',
+                    extent_diagram: 'Diagrama completo',
+                    extent_diagram_description:
+                        'Incluir todo el diagrama renderizado actualmente, incluidas las tablas fuera de la vista actual.',
+                    extent_viewport: 'Vista actual',
+                    extent_viewport_description:
+                        'Exportar solo lo que se muestra ahora en el lienzo.',
+                    scale_label: 'Escala',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Incluir patrón de fondo',
+                    pattern_description:
+                        'Añadir un sutil patrón de cuadrícula al fondo.',
+                    transparent: 'Fondo transparente',
+                    transparent_description:
+                        'Exportar el PNG sin un color de fondo sólido.',
+                    svg_limitation:
+                        'Este SVG es una instantánea del diagrama para el navegador. No es un archivo vectorial totalmente editable.',
+                    export: 'Exportar',
+                    generating: 'Generando imagen...',
+                    error: 'No se pudo exportar la imagen. Inténtelo de nuevo.',
+                    error_canvas:
+                        'No se encontró el lienzo del diagrama para exportar.',
+                    error_too_large:
+                        'Este diagrama es demasiado grande para exportarlo a {{scale}}. Baje la escala o exporte la vista actual.',
+                    error_empty: 'No hay nada que exportar en el lienzo.',
                 },
             },
         },
@@ -1401,22 +1436,6 @@ export const es: LanguageTranslation = {
                 import: 'Importar',
                 cancel: 'Cancelar',
             },
-        },
-
-        export_image_dialog: {
-            title: 'Exportar imagen',
-            description: 'Escoge el factor de escalamiento para exportar:',
-            scale_1x: '1x (Baja calidad)',
-            scale_2x: '2x (Calidad normal)',
-            scale_4x: '4x (Mejor calidad)',
-            cancel: 'Cancelar',
-            export: 'Exportar',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

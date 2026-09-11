@@ -1058,7 +1058,7 @@ export const zh_TW: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: '向量影像',
+                    description: '圖表的 SVG 快照',
                 },
             },
             dbml: {
@@ -1077,6 +1077,36 @@ export const zh_TW: LanguageTranslation = {
                         '將匯出完整圖表。匯入此檔案會建立新圖表，不會覆寫目前的圖表。',
                     filename_label: '檔案名稱：{{filename}}',
                     download: '下載 JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description: '選擇如何匯出此 {{format}} 圖片。',
+                    explanation: '匯出目前繪製圖表的圖片。',
+                    filename_label: '檔案名稱：{{filename}}',
+                    extent_label: '匯出範圍',
+                    extent_diagram: '完整圖表',
+                    extent_diagram_description:
+                        '包含目前繪製的完整圖表，包括目前檢視以外的資料表。',
+                    extent_viewport: '目前檢視',
+                    extent_viewport_description: '僅匯出畫布上目前可見的內容。',
+                    scale_label: '縮放',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: '包含背景圖案',
+                    pattern_description: '在背景中加入細微的網格圖案。',
+                    transparent: '透明背景',
+                    transparent_description: '匯出不含純色背景的 PNG。',
+                    svg_limitation:
+                        '此 SVG 是供瀏覽器使用的圖表快照，不是可完全編輯的向量檔。',
+                    export: '匯出',
+                    generating: '正在產生圖片...',
+                    error: '無法匯出圖片，請再試一次。',
+                    error_canvas: '找不到可匯出的圖表畫布。',
+                    error_too_large:
+                        '此圖表過大，無法以 {{scale}} 匯出。請降低縮放或改為匯出目前檢視。',
+                    error_empty: '畫布上沒有可匯出的內容。',
                 },
             },
         },
@@ -1309,22 +1339,6 @@ export const zh_TW: LanguageTranslation = {
                 import: '匯入',
                 cancel: '取消',
             },
-        },
-
-        export_image_dialog: {
-            title: '匯出圖片',
-            description: '請選擇匯出的倍率:',
-            scale_1x: '1x (低品質)',
-            scale_2x: '2x (普通品質)',
-            scale_4x: '4x (最佳品質)',
-            cancel: '取消',
-            export: '匯出',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

@@ -9,7 +9,6 @@ const dialogMocks = {
     closeExportWizardDialog: vi.fn(),
     openExportSQLDialog: vi.fn(),
     openExportDiagramDialog: vi.fn(),
-    openExportImageDialog: vi.fn(),
     openExportLaravelMigrationsDialog: vi.fn(),
 };
 
@@ -189,37 +188,20 @@ describe('ExportWizardDialog', () => {
         ).toBeInTheDocument();
     });
 
-    it('routes PNG and JPG to the existing image export dialog', async () => {
+    it('opens the visual options step from PNG, JPG and SVG without auto-download', async () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         await userEvent.click(
             screen.getByText('export_wizard.targets.png.title')
         );
-        expect(dialogMocks.openExportImageDialog).toHaveBeenCalledWith({
-            format: 'png',
-        });
-
-        await userEvent.click(
-            screen.getByText('export_wizard.targets.jpg.title')
-        );
-        expect(dialogMocks.openExportImageDialog).toHaveBeenCalledWith({
-            format: 'jpeg',
-        });
-    });
-
-    it('routes SVG to the existing image export behavior', async () => {
-        render(<ExportWizardDialog dialog={{ open: true }} />);
-
-        await userEvent.click(
-            screen.getByText('export_wizard.targets.svg.title')
-        );
-
-        expect(dialogMocks.closeExportWizardDialog).toHaveBeenCalledTimes(1);
-        expect(exportImageMock).toHaveBeenCalledWith('svg', {
-            scale: 1,
-            transparent: true,
-            includePatternBG: false,
-        });
+        expect(dialogMocks.closeExportWizardDialog).not.toHaveBeenCalled();
+        expect(exportImageMock).not.toHaveBeenCalled();
+        expect(
+            screen.getByTestId('export-visual-options-step')
+        ).toHaveAttribute('data-format', 'png');
+        expect(
+            screen.getByTestId('export-visual-branch-context')
+        ).toBeInTheDocument();
     });
 
     it('opens the DBML preview from the target picker', async () => {

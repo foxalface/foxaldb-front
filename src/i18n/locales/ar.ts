@@ -1113,7 +1113,7 @@ export const ar: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'صورة متجهة',
+                    description: 'لقطة SVG للمخطط',
                 },
             },
             dbml: {
@@ -1132,6 +1132,37 @@ export const ar: LanguageTranslation = {
                         'يتم تصدير المخطط بالكامل. استيراد هذا الملف ينشئ مخططًا جديدًا ولا يستبدل المخطط الحالي.',
                     filename_label: 'اسم الملف: {{filename}}',
                     download: 'تنزيل JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description: 'اختر كيفية تصدير صورة {{format}} هذه.',
+                    explanation: 'صدّر صورة للمخطط المعروض حالياً.',
+                    filename_label: 'اسم الملف: {{filename}}',
+                    extent_label: 'منطقة التصدير',
+                    extent_diagram: 'المخطط الكامل',
+                    extent_diagram_description:
+                        'تضمين المخطط المعروض بالكامل، بما في ذلك الجداول خارج العرض الحالي.',
+                    extent_viewport: 'العرض الحالي',
+                    extent_viewport_description:
+                        'تصدير ما يظهر حالياً على اللوحة فقط.',
+                    scale_label: 'المقياس',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'تضمين نقش الخلفية',
+                    pattern_description: 'إضافة نقش شبكة خفيف إلى الخلفية.',
+                    transparent: 'خلفية شفافة',
+                    transparent_description: 'تصدير PNG بدون لون خلفية ثابت.',
+                    svg_limitation:
+                        'ملف SVG هذا لقطة للمخطط مخصصة للمتصفح وليس ملفاً متجهاً قابلاً للتحرير بالكامل.',
+                    export: 'تصدير',
+                    generating: 'جارٍ إنشاء الصورة...',
+                    error: 'تعذر تصدير الصورة. يرجى المحاولة مرة أخرى.',
+                    error_canvas: 'تعذر العثور على لوحة المخطط للتصدير.',
+                    error_too_large:
+                        'هذا المخطط كبير جداً للتصدير بمقياس {{scale}}. خفّض المقياس أو صدّر العرض الحالي.',
+                    error_empty: 'لا يوجد شيء للتصدير على اللوحة.',
                 },
             },
         },
@@ -1367,22 +1398,6 @@ export const ar: LanguageTranslation = {
                 import: 'استيراد',
                 cancel: 'إلغاء',
             },
-        },
-
-        export_image_dialog: {
-            title: 'تصدير الصورة',
-            description: ':اختر عامل المقياس للتصدير',
-            scale_1x: '1x (جودة منخفضة)',
-            scale_2x: '2x (جودة عادية)',
-            scale_4x: '4x (أفضل جودة)',
-            cancel: 'إلغاء',
-            export: 'تصدير',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

@@ -339,6 +339,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         hideCreateRelationshipNode,
         closeRelationshipPopover,
         events: canvasEvents,
+        visualExportCaptureActive,
     } = useCanvas();
     const {
         filter,
@@ -1716,8 +1717,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
     // Add temporary invisible node at cursor position and edge
     const nodesWithCursor = useMemo(() => {
-        if (!tempFloatingEdge || !cursorPosition) {
-            return nodesWithRemoteMovement;
+        if (visualExportCaptureActive || !tempFloatingEdge || !cursorPosition) {
+            return visualExportCaptureActive
+                ? nodesWithRemoteMovement.filter(
+                      (node) => node.type !== 'create-relationship'
+                  )
+                : nodesWithRemoteMovement;
         }
 
         const tempNode: TempCursorNodeType = {
@@ -1730,10 +1735,17 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         };
 
         return [...nodesWithRemoteMovement, tempNode];
-    }, [nodesWithRemoteMovement, tempFloatingEdge, cursorPosition]);
+    }, [
+        cursorPosition,
+        nodesWithRemoteMovement,
+        tempFloatingEdge,
+        visualExportCaptureActive,
+    ]);
 
     const edgesWithFloating = useMemo(() => {
-        if (!tempFloatingEdge || !cursorPosition) return edges;
+        if (visualExportCaptureActive || !tempFloatingEdge || !cursorPosition) {
+            return edges;
+        }
 
         let target = TEMP_CURSOR_NODE_ID;
         let targetHandle: string | undefined = TEMP_CURSOR_HANDLE_ID;
@@ -1759,7 +1771,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         };
 
         return [...edges, tempEdge];
-    }, [edges, tempFloatingEdge, cursorPosition, hoveringTableId]);
+    }, [
+        cursorPosition,
+        edges,
+        hoveringTableId,
+        tempFloatingEdge,
+        visualExportCaptureActive,
+    ]);
 
     const onPaneClickHandler = useCallback(
         (event: React.MouseEvent<Element, MouseEvent>) => {
@@ -1806,7 +1824,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     onMouseMove={handleMouseMove}
                 >
                     <ReactFlow
-                        onlyRenderVisibleElements
+                        onlyRenderVisibleElements={!visualExportCaptureActive}
                         colorMode={effectiveTheme}
                         className={cn('nodes-animated', {
                             'canvas-cursor-multi-select': shiftPressed,

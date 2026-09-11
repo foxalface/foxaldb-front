@@ -1126,7 +1126,7 @@ export const ne: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'भेक्टर छवि',
+                    description: 'रेखाचित्रको SVG स्न्यापसट',
                 },
             },
             dbml: {
@@ -1147,6 +1147,41 @@ export const ne: LanguageTranslation = {
                         'पूरा डायग्राम निर्यात हुन्छ। यो फाइल आयात गर्दा नयाँ डायग्राम बन्छ; हालको डायग्राम अधिलेखन हुँदैन।',
                     filename_label: 'फाइलनाम: {{filename}}',
                     download: 'JSON डाउनलोड',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'यो {{format}} तस्बिर कसरी निर्यात गर्ने छान्नुहोस्।',
+                    explanation:
+                        'अहिले रेंडर भएको रेखाचित्रको तस्बिर निर्यात गर्नुहोस्।',
+                    filename_label: 'फाइलनाम: {{filename}}',
+                    extent_label: 'निर्यात क्षेत्र',
+                    extent_diagram: 'पूरा रेखाचित्र',
+                    extent_diagram_description:
+                        'हालको दृश्य बाहिरका तालिका सहित अहिले रेंडर भएको पूरा रेखाचित्र समावेश गर्नुहोस्।',
+                    extent_viewport: 'हालको दृश्य',
+                    extent_viewport_description:
+                        'क्यानभासमा अहिले देखिएको मात्र निर्यात गर्नुहोस्।',
+                    scale_label: 'स्केल',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'पृष्ठभूमि ढाँचा समावेश गर्नुहोस्',
+                    pattern_description:
+                        'पृष्ठभूमिमा हल्का ग्रिड ढाँचा थप्नुहोस्।',
+                    transparent: 'पारदर्शी पृष्ठभूमि',
+                    transparent_description:
+                        'ठोस पृष्ठभूमि रङ बिना PNG निर्यात गर्नुहोस्।',
+                    svg_limitation:
+                        'यो SVG ब्राउजरका लागि रेखाचित्रको स्न्यापसट हो, पूर्ण रूपमा सम्पादन गर्न मिल्ने भेक्टर फाइल होइन।',
+                    export: 'निर्यात',
+                    generating: 'तस्बिर बनाइँदैछ...',
+                    error: 'तस्बिर निर्यात गर्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
+                    error_canvas: 'निर्यात गर्न रेखाचित्र क्यानभास फेला परेन।',
+                    error_too_large:
+                        'यो रेखाचित्र {{scale}} मा निर्यात गर्न धेरै ठूलो छ। स्केल घटाउनुहोस् वा हालको दृश्य निर्यात गर्नुहोस्।',
+                    error_empty: 'क्यानभासमा निर्यात गर्ने केही छैन।',
                 },
             },
         },
@@ -1382,22 +1417,6 @@ export const ne: LanguageTranslation = {
                 import: 'आयात गर्नुहोस्',
                 cancel: 'रद्द गर्नुहोस्',
             },
-        },
-
-        export_image_dialog: {
-            title: 'इमेज निर्यात गर्नुहोस्',
-            description: 'निर्यात गर्नका लागि गणना कारक छान्नुहोस्:',
-            scale_1x: '१x (कम गुणस्तर)',
-            scale_2x: '२x (सामान्य गुणस्तर)',
-            scale_4x: '४x (उत्तम गुणस्तर)',
-            cancel: 'रद्द गर्नुहोस्',
-            export: 'निर्यात गर्नुहोस्',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

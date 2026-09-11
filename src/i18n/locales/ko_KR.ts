@@ -1129,7 +1129,7 @@ export const ko_KR: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: '벡터 이미지',
+                    description: '다이어그램의 SVG 스냅샷',
                 },
             },
             dbml: {
@@ -1148,6 +1148,41 @@ export const ko_KR: LanguageTranslation = {
                         '전체 다이어그램이 내보내집니다. 이 파일을 가져오면 새 다이어그램이 만들어지며 현재 다이어그램은 덮어쓰지 않습니다.',
                     filename_label: '파일 이름: {{filename}}',
                     download: 'JSON 다운로드',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        '이 {{format}} 이미지를 내보내는 방법을 선택하세요.',
+                    explanation:
+                        '현재 렌더링된 다이어그램의 이미지를 내보냅니다.',
+                    filename_label: '파일 이름: {{filename}}',
+                    extent_label: '내보내기 영역',
+                    extent_diagram: '전체 다이어그램',
+                    extent_diagram_description:
+                        '현재 화면 밖의 테이블을 포함해 렌더링된 다이어그램 전체를 포함합니다.',
+                    extent_viewport: '현재 보기',
+                    extent_viewport_description:
+                        '캔버스에 현재 보이는 내용만 내보냅니다.',
+                    scale_label: '배율',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: '배경 패턴 포함',
+                    pattern_description:
+                        '배경에 은은한 격자 패턴을 추가합니다.',
+                    transparent: '투명 배경',
+                    transparent_description: '단색 배경 없이 PNG를 내보냅니다.',
+                    svg_limitation:
+                        '이 SVG는 브라우저용 다이어그램 스냅샷이며 완전히 편집 가능한 벡터 파일이 아닙니다.',
+                    export: '내보내기',
+                    generating: '이미지를 생성하는 중...',
+                    error: '이미지를 내보낼 수 없습니다. 다시 시도하세요.',
+                    error_canvas:
+                        '내보낼 다이어그램 캔버스를 찾을 수 없습니다.',
+                    error_too_large:
+                        '이 다이어그램은 {{scale}}로 내보내기에는 너무 큽니다. 배율을 낮추거나 현재 보기를 내보내세요.',
+                    error_empty: '캔버스에 내보낼 내용이 없습니다.',
                 },
             },
         },
@@ -1382,22 +1417,6 @@ export const ko_KR: LanguageTranslation = {
                 import: '가져오기',
                 cancel: '취소',
             },
-        },
-
-        export_image_dialog: {
-            title: '이미지로 내보내기',
-            description: '내보낼 배율을 선택해주세요:',
-            scale_1x: '1x (저화질)',
-            scale_2x: '2x (일반 화질)',
-            scale_4x: '4x (최고 화질)',
-            cancel: '취소',
-            export: '내보내기',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

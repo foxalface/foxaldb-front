@@ -1126,7 +1126,7 @@ export const hr: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Vektorska slika',
+                    description: 'SVG snimka dijagrama',
                 },
             },
             dbml: {
@@ -1145,6 +1145,40 @@ export const hr: LanguageTranslation = {
                         'Izvozi se cijeli dijagram. Uvoz ove datoteke stvara novi dijagram; trenutni dijagram se ne prepisuje.',
                     filename_label: 'Naziv datoteke: {{filename}}',
                     download: 'Preuzmi JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description: 'Odaberite kako izvesti ovu {{format}} sliku.',
+                    explanation:
+                        'Izvezite sliku trenutačno prikazanog dijagrama.',
+                    filename_label: 'Naziv datoteke: {{filename}}',
+                    extent_label: 'Područje izvoza',
+                    extent_diagram: 'Cijeli dijagram',
+                    extent_diagram_description:
+                        'Uključite cijeli trenutačno prikazani dijagram, uključujući tablice izvan trenutačnog prikaza.',
+                    extent_viewport: 'Trenutačni prikaz',
+                    extent_viewport_description:
+                        'Izvezite samo ono što je trenutačno vidljivo na platnu.',
+                    scale_label: 'Skala',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Uključi uzorak pozadine',
+                    pattern_description:
+                        'Dodajte blagi uzorak mreže na pozadinu.',
+                    transparent: 'Prozirna pozadina',
+                    transparent_description:
+                        'Izvezite PNG bez jednobojne pozadine.',
+                    svg_limitation:
+                        'Ovaj SVG je snimka dijagrama za preglednik, a ne potpuno urediva vektorska datoteka.',
+                    export: 'Izvezi',
+                    generating: 'Generiranje slike...',
+                    error: 'Sliku nije moguće izvesti. Pokušajte ponovno.',
+                    error_canvas: 'Nije pronađeno platno dijagrama za izvoz.',
+                    error_too_large:
+                        'Ovaj je dijagram prevelik za izvoz u {{scale}}. Smanjite skalu ili izvezite trenutačni prikaz.',
+                    error_empty: 'Na platnu nema ničega za izvoz.',
                 },
             },
         },
@@ -1380,21 +1414,6 @@ export const hr: LanguageTranslation = {
                 import: 'Uvezi',
                 cancel: 'Odustani',
             },
-        },
-
-        export_image_dialog: {
-            title: 'Izvezi sliku',
-            description: 'Odaberite faktor veličine za izvoz:',
-            scale_1x: '1x (Niska kvaliteta)',
-            scale_2x: '2x (Normalna kvaliteta)',
-            scale_4x: '4x (Najbolja kvaliteta)',
-            cancel: 'Odustani',
-            export: 'Izvezi',
-            advanced_options: 'Napredne opcije',
-            pattern: 'Uključi pozadinski uzorak',
-            pattern_description: 'Dodaj suptilni mrežni uzorak u pozadinu.',
-            transparent: 'Prozirna pozadina',
-            transparent_description: 'Ukloni boju pozadine iz slike.',
         },
 
         new_table_schema_dialog: {

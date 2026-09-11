@@ -12,8 +12,6 @@ import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog
 import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { TableSchemaDialog } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { emptyFn } from '@/lib/utils';
-import type { ExportImageDialogProps } from '@/dialogs/export-image-dialog/export-image-dialog';
-import { ExportImageDialog } from '@/dialogs/export-image-dialog/export-image-dialog';
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ExportWizardDialog } from '@/dialogs/export-wizard/export-wizard-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
@@ -117,20 +115,6 @@ export const DialogProvider: React.FC<
         guestDiagramMigrationDialogParams,
         setGuestDiagramMigrationDialogParams,
     ] = useState<Omit<GuestDiagramMigrationDialogProps, 'dialog'>>();
-
-    // Export image dialog
-    const [openExportImageDialog, setOpenExportImageDialog] = useState(false);
-    const [exportImageDialogParams, setExportImageDialogParams] = useState<
-        Omit<ExportImageDialogProps, 'dialog'>
-    >({ format: 'png' });
-    const openExportImageDialogHandler: DialogContext['openExportImageDialog'] =
-        useCallback(
-            (params) => {
-                setExportImageDialogParams(params);
-                setOpenExportImageDialog(true);
-            },
-            [setOpenExportImageDialog]
-        );
 
     // Export SQL dialog
     const [openExportSQLDialog, setOpenExportSQLDialog] = useState(false);
@@ -289,8 +273,6 @@ export const DialogProvider: React.FC<
                 },
                 closeGuestDiagramMigrationDialog: () =>
                     setOpenGuestDiagramMigrationDialog(false),
-                closeExportImageDialog: () => setOpenExportImageDialog(false),
-                openExportImageDialog: openExportImageDialogHandler,
                 openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
                 closeExportDiagramDialog: () =>
                     setOpenExportDiagramDialog(false),
@@ -348,10 +330,6 @@ export const DialogProvider: React.FC<
                 entryGuestMigrationActions={entryGuestMigrationActions}
                 isMigrating={isGuestMigrationInProgress}
                 {...guestDiagramMigrationDialogParams}
-            />
-            <ExportImageDialog
-                dialog={{ open: openExportImageDialog }}
-                {...exportImageDialogParams}
             />
             <ExportWizardDialog dialog={{ open: openExportWizardDialog }} />
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />

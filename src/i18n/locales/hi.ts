@@ -1121,7 +1121,7 @@ export const hi: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'वेक्टर छवि',
+                    description: 'आरेख का SVG स्नैपशॉट',
                 },
             },
             dbml: {
@@ -1140,6 +1140,41 @@ export const hi: LanguageTranslation = {
                         'पूरा डायग्राम निर्यात होता है। इस फ़ाइल को आयात करने से एक नया डायग्राम बनता है; वर्तमान डायग्राम ओवरराइट नहीं होता।',
                     filename_label: 'फ़ाइल नाम: {{filename}}',
                     download: 'JSON डाउनलोड',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'यह {{format}} छवि कैसे निर्यात करनी है, चुनें।',
+                    explanation:
+                        'वर्तमान में रेंडर किए गए आरेख की छवि निर्यात करें।',
+                    filename_label: 'फ़ाइल नाम: {{filename}}',
+                    extent_label: 'निर्यात क्षेत्र',
+                    extent_diagram: 'पूरा आरेख',
+                    extent_diagram_description:
+                        'वर्तमान दृश्य के बाहर की तालिकाओं सहित पूरा रेंडर किया गया आरेख शामिल करें।',
+                    extent_viewport: 'वर्तमान दृश्य',
+                    extent_viewport_description:
+                        'केवल वही निर्यात करें जो कैनवास पर अभी दिख रहा है।',
+                    scale_label: 'स्केल',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'पृष्ठभूमि पैटर्न शामिल करें',
+                    pattern_description:
+                        'पृष्ठभूमि में हल्का ग्रिड पैटर्न जोड़ें।',
+                    transparent: 'पारदर्शी पृष्ठभूमि',
+                    transparent_description:
+                        'ठोस पृष्ठभूमि रंग के बिना PNG निर्यात करें।',
+                    svg_limitation:
+                        'यह SVG ब्राउज़र के लिए आरेख का स्नैपशॉट है, पूरी तरह संपादन योग्य वेक्टर फ़ाइल नहीं।',
+                    export: 'निर्यात',
+                    generating: 'छवि बनाई जा रही है...',
+                    error: 'छवि निर्यात नहीं हो सकी। कृपया फिर से कोशिश करें।',
+                    error_canvas: 'निर्यात करने के लिए आरेख कैनवास नहीं मिला।',
+                    error_too_large:
+                        'यह आरेख {{scale}} पर निर्यात करने के लिए बहुत बड़ा है। स्केल घटाएँ या वर्तमान दृश्य निर्यात करें।',
+                    error_empty: 'कैनवास पर निर्यात करने के लिए कुछ नहीं है।',
                 },
             },
         },
@@ -1374,22 +1409,6 @@ export const hi: LanguageTranslation = {
                 import: 'आयात करें',
                 cancel: 'रद्द करें',
             },
-        },
-
-        export_image_dialog: {
-            title: 'छवि निर्यात करें',
-            description: 'निर्यात के लिए स्केल फ़ैक्टर चुनें:',
-            scale_1x: '1x (निम्न गुणवत्ता)',
-            scale_2x: '2x (सामान्य गुणवत्ता)',
-            scale_4x: '4x (सर्वोत्तम गुणवत्ता)',
-            cancel: 'रद्द करें',
-            export: 'निर्यात करें',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

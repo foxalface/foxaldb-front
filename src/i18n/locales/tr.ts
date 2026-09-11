@@ -1110,7 +1110,7 @@ export const tr: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Vektör görüntü',
+                    description: 'Diyagramın SVG anlık görüntüsü',
                 },
             },
             dbml: {
@@ -1130,6 +1130,42 @@ export const tr: LanguageTranslation = {
                         'Diyagramın tamamı dışa aktarılır. Bu dosyayı içe aktarmak yeni bir diyagram oluşturur; mevcut diyagramın üzerine yazılmaz.',
                     filename_label: 'Dosya adı: {{filename}}',
                     download: 'JSON indir',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'Bu {{format}} görselinin nasıl dışa aktarılacağını seçin.',
+                    explanation:
+                        'Şu anda çizilen diyagramın bir görselini dışa aktarın.',
+                    filename_label: 'Dosya adı: {{filename}}',
+                    extent_label: 'Dışa aktarma alanı',
+                    extent_diagram: 'Tam diyagram',
+                    extent_diagram_description:
+                        'Geçerli görünümün dışındaki tablolar dahil, şu anda çizilen diyagramın tamamını ekleyin.',
+                    extent_viewport: 'Geçerli görünüm',
+                    extent_viewport_description:
+                        'Yalnızca tuvalde şu anda görüneni dışa aktarın.',
+                    scale_label: 'Ölçek',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Arka plan desenini ekle',
+                    pattern_description:
+                        'Arka plana hafif bir ızgara deseni ekleyin.',
+                    transparent: 'Şeffaf arka plan',
+                    transparent_description:
+                        'PNG dosyasını düz bir arka plan rengi olmadan dışa aktarın.',
+                    svg_limitation:
+                        'Bu SVG, tarayıcı için bir diyagram anlık görüntüsüdür; tam düzenlenebilir bir vektör dosyası değildir.',
+                    export: 'Dışa aktar',
+                    generating: 'Görsel oluşturuluyor...',
+                    error: 'Görsel dışa aktarılamadı. Lütfen tekrar deneyin.',
+                    error_canvas:
+                        'Dışa aktarılacak diyagram tuvali bulunamadı.',
+                    error_too_large:
+                        'Bu diyagram {{scale}} ölçeğinde dışa aktarılamayacak kadar büyük. Ölçeği düşürün veya geçerli görünümü dışa aktarın.',
+                    error_empty: 'Tuvalde dışa aktarılacak bir şey yok.',
                 },
             },
         },
@@ -1364,21 +1400,6 @@ export const tr: LanguageTranslation = {
                 import: 'İçe Aktar',
                 cancel: 'İptal',
             },
-        },
-        export_image_dialog: {
-            title: 'Resmi Dışa Aktar',
-            description: 'Dışa aktarım için ölçek faktörünü seçin:',
-            scale_1x: '1x (Düşük Kalite)',
-            scale_2x: '2x (Normal Kalite)',
-            scale_4x: '4x (En İyi Kalite)',
-            cancel: 'İptal',
-            export: 'Dışa Aktar',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
         new_table_schema_dialog: {
             title: 'Şema Seç',

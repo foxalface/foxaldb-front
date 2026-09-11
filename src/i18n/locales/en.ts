@@ -1099,7 +1099,7 @@ export const en = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Vector image',
+                    description: 'SVG snapshot of the diagram',
                 },
             },
             sql: {
@@ -1143,6 +1143,41 @@ export const en = {
                         'The full diagram is exported. Importing this file creates a new diagram; it does not overwrite the current one.',
                     filename_label: 'Filename: {{filename}}',
                     download: 'Download JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description: 'Choose how to export this {{format}} image.',
+                    explanation:
+                        'Export a picture of the currently rendered diagram.',
+                    filename_label: 'Filename: {{filename}}',
+                    extent_label: 'Export area',
+                    extent_diagram: 'Complete diagram',
+                    extent_diagram_description:
+                        'Include the whole currently rendered diagram, including tables outside the current view.',
+                    extent_viewport: 'Current view',
+                    extent_viewport_description:
+                        'Export only what is currently shown on the canvas.',
+                    scale_label: 'Scale',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Include background pattern',
+                    pattern_description:
+                        'Add a subtle grid pattern to the background.',
+                    transparent: 'Transparent background',
+                    transparent_description:
+                        'Export PNG without a solid background color.',
+                    svg_limitation:
+                        'This SVG is a snapshot of the diagram for use in a browser. It is not a fully editable vector file.',
+                    export: 'Export',
+                    generating: 'Generating image...',
+                    error: 'Could not export the image. Please try again.',
+                    error_canvas:
+                        'Could not find the diagram canvas to export.',
+                    error_too_large:
+                        'This diagram is too large to export at {{scale}}. Lower the scale or export the current view.',
+                    error_empty: 'There is nothing to export on the canvas.',
                 },
             },
         },
@@ -1378,21 +1413,6 @@ export const en = {
                 import: 'Import',
                 cancel: 'Cancel',
             },
-        },
-
-        export_image_dialog: {
-            title: 'Export Image',
-            description: 'Choose the scale factor for export:',
-            scale_1x: '1x (Low Quality)',
-            scale_2x: '2x (Normal Quality)',
-            scale_4x: '4x (Best Quality)',
-            cancel: 'Cancel',
-            export: 'Export',
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

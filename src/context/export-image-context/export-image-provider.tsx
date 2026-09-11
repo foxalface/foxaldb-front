@@ -1,53 +1,44 @@
-import React, { useCallback, useMemo, useEffect, useState } from 'react';
-import type { ExportImageContext, ImageType } from './export-image-context';
+import React, { useCallback, useMemo } from 'react';
+import type { ExportImageContext } from './export-image-context';
 import { exportImageContext } from './export-image-context';
 import { toJpeg, toPng, toSvg } from 'html-to-image';
-import { useReactFlow } from '@xyflow/react';
+import { getNodesBounds, useReactFlow } from '@xyflow/react';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useTheme } from '@/hooks/use-theme';
-import logoDark from '@/assets/logo-dark.png';
-import logoLight from '@/assets/logo-light.png';
-import type { EffectiveTheme } from '../theme-context/theme-context';
+import { useCanvas } from '@/hooks/use-canvas';
+import { downloadBlob } from '@/lib/download-blob';
+import { buildVisualExportFilename } from '@/lib/visual-export/build-visual-export-filename';
+import {
+    getCompleteDiagramCaptureLayout,
+    getViewportCaptureLayout,
+    isVisualExportDiagramNode,
+} from '@/lib/visual-export/visual-export-capture-layout';
+import {
+    VISUAL_EXPORT_DIAGRAM_PADDING_PX,
+    VisualExportError,
+    dataUrlToBlob,
+    getExpectedRasterDimensions,
+    getVisualExportBackgroundColor,
+    getVisualExportMimeType,
+    isUnsafeRasterDimension,
+    toHtmlToImageType,
+    waitForExportRender,
+} from '@/lib/visual-export/visual-export-options';
+import type { HtmlToImageType } from '@/lib/visual-export/visual-export-options';
 
 export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { hideLoader, showLoader } = useFullScreenLoader();
-    const { setNodes, getViewport } = useReactFlow();
+    const { setNodes, setEdges, getNodes, getEdges, getViewport } =
+        useReactFlow();
+    const { setVisualExportCaptureActive } = useCanvas();
     const { effectiveTheme } = useTheme();
     const { diagramName } = useChartDB();
-    const [logoBase64, setLogoBase64] = useState<string>('');
-
-    useEffect(() => {
-        // Convert logo to base64 on component mount
-        const img = new Image();
-        img.src = effectiveTheme === 'light' ? logoLight : logoDark;
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            if (ctx) {
-                ctx.drawImage(img, 0, 0);
-                const base64 = canvas.toDataURL('image/png');
-                setLogoBase64(base64);
-            }
-        };
-    }, [effectiveTheme]);
-
-    const downloadImage = useCallback(
-        (dataUrl: string, type: ImageType) => {
-            const a = document.createElement('a');
-            a.setAttribute('download', `${diagramName}.${type}`);
-            a.setAttribute('href', dataUrl);
-            a.click();
-        },
-        [diagramName]
-    );
 
     const imageCreatorMap: Record<
-        ImageType,
+        HtmlToImageType,
         typeof toJpeg | typeof toPng | typeof toSvg
     > = useMemo(
         () => ({
@@ -58,47 +49,104 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
-    const getBackgroundColor = useCallback(
-        (theme: EffectiveTheme, transparent: boolean): string => {
-            if (transparent) return 'transparent';
-            return theme === 'light' ? '#ffffff' : '#141414';
-        },
-        []
-    );
-
     const exportImage: ExportImageContext['exportImage'] = useCallback(
-        async (type, { includePatternBG, transparent, scale }) => {
+        async (format, { includePatternBG, transparent, scale, extent }) => {
             showLoader({
                 animated: false,
             });
+            setVisualExportCaptureActive(true);
 
-            setNodes((nodes) =>
-                nodes.map((node) => ({ ...node, selected: false }))
-            );
+            const previousNodeSelection = getNodes().map((node) => ({
+                id: node.id,
+                selected: Boolean(node.selected),
+            }));
+            const previousEdgeSelection = getEdges().map((edge) => ({
+                id: edge.id,
+                selected: Boolean(edge.selected),
+                animated: Boolean(edge.animated),
+            }));
 
-            const viewport = getViewport();
-            const reactFlowBounds = document
-                .querySelector('.react-flow')
-                ?.getBoundingClientRect();
+            let viewportElement: HTMLElement | null = null;
+            let tempSvg: SVGSVGElement | null = null;
+            const originalEdgeStyles: {
+                element: SVGPathElement;
+                stroke: string;
+                strokeWidth: string;
+            }[] = [];
+            const originalMarkerStyles: {
+                element: SVGElement;
+                fill: string;
+                stroke: string;
+            }[] = [];
 
-            if (!reactFlowBounds) {
-                console.error('Could not find React Flow container');
-                hideLoader();
-                return;
-            }
+            try {
+                setNodes((nodes) =>
+                    nodes.map((node) => ({ ...node, selected: false }))
+                );
+                setEdges((edges) =>
+                    edges.map((edge) => ({
+                        ...edge,
+                        selected: false,
+                        animated: false,
+                    }))
+                );
 
-            const imageCreateFn = imageCreatorMap[type];
+                await waitForExportRender();
 
-            setTimeout(async () => {
-                const viewportElement = window.document.querySelector(
+                const reactFlowBounds = document
+                    .querySelector('.react-flow')
+                    ?.getBoundingClientRect();
+                viewportElement = window.document.querySelector(
                     '.react-flow__viewport'
-                ) as HTMLElement;
+                ) as HTMLElement | null;
+
+                if (!reactFlowBounds || !viewportElement) {
+                    throw new VisualExportError('canvas_unavailable');
+                }
+
+                const viewport = getViewport();
+                const captureNodes = getNodes().filter(
+                    isVisualExportDiagramNode
+                );
+
+                if (extent === 'diagram' && captureNodes.length === 0) {
+                    throw new VisualExportError('empty_diagram');
+                }
+
+                const layout =
+                    extent === 'diagram'
+                        ? getCompleteDiagramCaptureLayout(
+                              getNodesBounds(captureNodes),
+                              VISUAL_EXPORT_DIAGRAM_PADDING_PX
+                          )
+                        : getViewportCaptureLayout(viewport, {
+                              width: reactFlowBounds.width,
+                              height: reactFlowBounds.height,
+                          });
+
+                if (format !== 'svg') {
+                    const raster = getExpectedRasterDimensions(
+                        layout.width,
+                        layout.height,
+                        scale
+                    );
+
+                    if (isUnsafeRasterDimension(raster.width, raster.height)) {
+                        throw new VisualExportError('raster_too_large');
+                    }
+                }
+
+                const htmlType = toHtmlToImageType(format);
+                const imageCreateFn = imageCreatorMap[htmlType];
+                const patternZoom = extent === 'diagram' ? 1 : viewport.zoom;
+                const patternX = extent === 'diagram' ? 0 : viewport.x;
+                const patternY = extent === 'diagram' ? 0 : viewport.y;
 
                 const markerDefs = document.querySelector(
                     '.marker-definitions defs'
                 );
 
-                const tempSvg = document.createElementNS(
+                tempSvg = document.createElementNS(
                     'http://www.w3.org/2000/svg',
                     'svg'
                 );
@@ -111,7 +159,7 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                 tempSvg.style.zIndex = '-50';
                 tempSvg.setAttribute(
                     'viewBox',
-                    `0 0 ${reactFlowBounds.width} ${reactFlowBounds.height}`
+                    `0 0 ${layout.width} ${layout.height}`
                 );
 
                 const defs = document.createElementNS(
@@ -119,19 +167,12 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     'defs'
                 );
 
-                // Inline styles for marker elements before copying since skipFonts: true prevents CSS processing
                 const markerCircles = document.querySelectorAll(
                     '.marker-definitions marker circle'
                 ) as NodeListOf<SVGCircleElement>;
                 const markerTexts = document.querySelectorAll(
                     '.marker-definitions marker text'
                 ) as NodeListOf<SVGTextElement>;
-
-                const originalMarkerStyles: {
-                    element: SVGElement;
-                    fill: string;
-                    stroke: string;
-                }[] = [];
 
                 markerCircles.forEach((circle) => {
                     const computedStyle = window.getComputedStyle(circle);
@@ -158,11 +199,11 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     defs.innerHTML = markerDefs.innerHTML;
                 }
 
-                // Restore original marker styles
                 originalMarkerStyles.forEach(({ element, fill, stroke }) => {
                     element.style.fill = fill;
                     element.style.stroke = stroke;
                 });
+                originalMarkerStyles.length = 0;
 
                 if (includePatternBG) {
                     const pattern = document.createElementNS(
@@ -170,22 +211,21 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                         'pattern'
                     );
                     pattern.setAttribute('id', 'background-pattern');
-                    pattern.setAttribute('width', String(16 * viewport.zoom));
-                    pattern.setAttribute('height', String(16 * viewport.zoom));
+                    pattern.setAttribute('width', String(16 * patternZoom));
+                    pattern.setAttribute('height', String(16 * patternZoom));
                     pattern.setAttribute('patternUnits', 'userSpaceOnUse');
                     pattern.setAttribute(
                         'patternTransform',
-                        `translate(${viewport.x % (16 * viewport.zoom)} ${viewport.y % (16 * viewport.zoom)})`
+                        `translate(${patternX % (16 * patternZoom)} ${patternY % (16 * patternZoom)})`
                     );
 
                     const dot = document.createElementNS(
                         'http://www.w3.org/2000/svg',
                         'circle'
                     );
-
-                    const dotSize = viewport.zoom * 0.5;
-                    dot.setAttribute('cx', String(viewport.zoom));
-                    dot.setAttribute('cy', String(viewport.zoom));
+                    const dotSize = patternZoom * 0.5;
+                    dot.setAttribute('cx', String(patternZoom));
+                    dot.setAttribute('cy', String(patternZoom));
                     dot.setAttribute('r', String(dotSize));
                     const dotColor =
                         effectiveTheme === 'light' ? '#92939C' : '#777777';
@@ -202,23 +242,20 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     'rect'
                 );
                 const bgPadding = 2000;
-                backgroundRect.setAttribute(
-                    'x',
-                    String(-viewport.x - bgPadding)
-                );
-                backgroundRect.setAttribute(
-                    'y',
-                    String(-viewport.y - bgPadding)
-                );
+                backgroundRect.setAttribute('x', String(-patternX - bgPadding));
+                backgroundRect.setAttribute('y', String(-patternY - bgPadding));
                 backgroundRect.setAttribute(
                     'width',
-                    String(reactFlowBounds.width + 2 * bgPadding)
+                    String(layout.width + 2 * bgPadding)
                 );
                 backgroundRect.setAttribute(
                     'height',
-                    String(reactFlowBounds.height + 2 * bgPadding)
+                    String(layout.height + 2 * bgPadding)
                 );
-                backgroundRect.setAttribute('fill', 'url(#background-pattern)');
+                backgroundRect.setAttribute(
+                    'fill',
+                    includePatternBG ? 'url(#background-pattern)' : 'none'
+                );
                 tempSvg.appendChild(backgroundRect);
 
                 viewportElement.insertBefore(
@@ -226,19 +263,13 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     viewportElement.firstChild
                 );
 
-                // Inline stroke styles for edge paths since skipFonts: true prevents CSS processing
                 const edgePaths = viewportElement.querySelectorAll(
                     '.react-flow__edge-path'
                 ) as NodeListOf<SVGPathElement>;
-                const originalStyles: {
-                    element: SVGPathElement;
-                    stroke: string;
-                    strokeWidth: string;
-                }[] = [];
 
                 edgePaths.forEach((path) => {
                     const computedStyle = window.getComputedStyle(path);
-                    originalStyles.push({
+                    originalEdgeStyles.push({
                         element: path,
                         stroke: path.style.stroke,
                         strokeWidth: path.style.strokeWidth,
@@ -247,134 +278,107 @@ export const ExportImageProvider: React.FC<React.PropsWithChildren> = ({
                     path.style.strokeWidth = computedStyle.strokeWidth;
                 });
 
+                const backgroundColor = getVisualExportBackgroundColor(
+                    format,
+                    effectiveTheme,
+                    transparent
+                );
+
+                let dataUrl: string;
+
                 try {
-                    // Handle SVG export differently
-                    if (type === 'svg') {
-                        const dataUrl = await imageCreateFn(viewportElement, {
-                            width: reactFlowBounds.width,
-                            height: reactFlowBounds.height,
-                            style: {
-                                width: `${reactFlowBounds.width}px`,
-                                height: `${reactFlowBounds.height}px`,
-                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
-                            },
-                            quality: 1,
-                            pixelRatio: scale,
-                            skipFonts: true,
-                        });
-                        downloadImage(dataUrl, type);
-                        return;
-                    }
-
-                    // For PNG and JPEG, continue with the watermark process
-                    const initialDataUrl = await imageCreateFn(
-                        viewportElement,
-                        {
-                            backgroundColor: getBackgroundColor(
-                                effectiveTheme,
-                                transparent
-                            ),
-                            width: reactFlowBounds.width,
-                            height: reactFlowBounds.height,
-                            style: {
-                                width: `${reactFlowBounds.width}px`,
-                                height: `${reactFlowBounds.height}px`,
-                                transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.zoom})`,
-                            },
-                            quality: 1,
-                            pixelRatio: scale,
-                            skipFonts: true,
-                        }
-                    );
-
-                    // Create a canvas to combine the diagram and watermark
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-
-                    if (!ctx) {
-                        downloadImage(initialDataUrl, type);
-                        return;
-                    }
-
-                    // Set canvas size to match the export size
-                    canvas.width = reactFlowBounds.width * scale;
-                    canvas.height = reactFlowBounds.height * scale;
-
-                    // Load the exported diagram
-                    const diagramImage = new Image();
-                    diagramImage.src = initialDataUrl;
-
-                    await new Promise((resolve) => {
-                        diagramImage.onload = async () => {
-                            // Draw the diagram
-                            ctx.drawImage(diagramImage, 0, 0);
-
-                            // Calculate logo size
-                            const logoHeight = Math.max(
-                                24,
-                                Math.floor(canvas.width * 0.024)
-                            );
-                            const padding = Math.max(
-                                12,
-                                Math.floor(logoHeight * 0.5)
-                            );
-
-                            // Load and draw the logo
-                            const logoImage = new Image();
-                            logoImage.src = logoBase64;
-
-                            await new Promise((resolve) => {
-                                logoImage.onload = () => {
-                                    // Calculate logo width while maintaining aspect ratio
-                                    const logoWidth =
-                                        (logoImage.width / logoImage.height) *
-                                        logoHeight;
-
-                                    // Draw logo in bottom-left corner
-                                    ctx.globalAlpha = 0.9;
-                                    ctx.drawImage(
-                                        logoImage,
-                                        padding,
-                                        canvas.height - logoHeight - padding,
-                                        logoWidth,
-                                        logoHeight
-                                    );
-                                    ctx.globalAlpha = 1;
-                                    resolve(null);
-                                };
-                            });
-
-                            // Convert canvas to data URL
-                            const finalDataUrl = canvas.toDataURL(
-                                type === 'png' ? 'image/png' : 'image/jpeg'
-                            );
-                            downloadImage(finalDataUrl, type);
-                            resolve(null);
-                        };
+                    dataUrl = await imageCreateFn(viewportElement, {
+                        ...(backgroundColor !== undefined
+                            ? { backgroundColor }
+                            : {}),
+                        width: layout.width,
+                        height: layout.height,
+                        style: {
+                            width: `${layout.width}px`,
+                            height: `${layout.height}px`,
+                            transform: layout.transform,
+                        },
+                        quality: 1,
+                        pixelRatio: format === 'svg' ? 1 : scale,
+                        skipFonts: true,
                     });
-                } finally {
-                    // Restore original styles
-                    originalStyles.forEach(
-                        ({ element, stroke, strokeWidth }) => {
-                            element.style.stroke = stroke;
-                            element.style.strokeWidth = strokeWidth;
-                        }
-                    );
-                    viewportElement.removeChild(tempSvg);
-                    hideLoader();
+                } catch (error) {
+                    console.error('Visual export generation failed', error);
+                    throw new VisualExportError('generation_failed');
                 }
-            }, 0);
+
+                try {
+                    const mimeType = getVisualExportMimeType(format);
+                    const blob = dataUrlToBlob(dataUrl, mimeType);
+                    downloadBlob(
+                        blob,
+                        buildVisualExportFilename(
+                            diagramName ?? 'diagram',
+                            format
+                        )
+                    );
+                } catch (error) {
+                    if (error instanceof VisualExportError) {
+                        throw error;
+                    }
+
+                    console.error('Visual export download failed', error);
+                    throw new VisualExportError('download_failed');
+                }
+            } finally {
+                originalEdgeStyles.forEach(
+                    ({ element, stroke, strokeWidth }) => {
+                        element.style.stroke = stroke;
+                        element.style.strokeWidth = strokeWidth;
+                    }
+                );
+                originalMarkerStyles.forEach(({ element, fill, stroke }) => {
+                    element.style.fill = fill;
+                    element.style.stroke = stroke;
+                });
+
+                if (tempSvg && viewportElement?.contains(tempSvg)) {
+                    viewportElement.removeChild(tempSvg);
+                }
+
+                setNodes((nodes) =>
+                    nodes.map((node) => ({
+                        ...node,
+                        selected:
+                            previousNodeSelection.find(
+                                (item) => item.id === node.id
+                            )?.selected ?? false,
+                    }))
+                );
+                setEdges((edges) =>
+                    edges.map((edge) => {
+                        const previous = previousEdgeSelection.find(
+                            (item) => item.id === edge.id
+                        );
+
+                        return {
+                            ...edge,
+                            selected: previous?.selected ?? false,
+                            animated: previous?.animated ?? false,
+                        };
+                    })
+                );
+                setVisualExportCaptureActive(false);
+                hideLoader();
+            }
         },
         [
-            getBackgroundColor,
-            downloadImage,
+            diagramName,
+            effectiveTheme,
+            getEdges,
+            getNodes,
             getViewport,
             hideLoader,
             imageCreatorMap,
+            setEdges,
             setNodes,
+            setVisualExportCaptureActive,
             showLoader,
-            effectiveTheme,
-            logoBase64,
         ]
     );
 

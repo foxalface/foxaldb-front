@@ -1128,7 +1128,7 @@ export const id_ID: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Gambar vektor',
+                    description: 'Snapshot SVG diagram',
                 },
             },
             dbml: {
@@ -1147,6 +1147,41 @@ export const id_ID: LanguageTranslation = {
                         'Seluruh diagram diekspor. Mengimpor file ini membuat diagram baru; diagram saat ini tidak ditimpa.',
                     filename_label: 'Nama file: {{filename}}',
                     download: 'Unduh JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description: 'Pilih cara mengekspor gambar {{format}} ini.',
+                    explanation:
+                        'Ekspor gambar dari diagram yang sedang ditampilkan.',
+                    filename_label: 'Nama file: {{filename}}',
+                    extent_label: 'Area ekspor',
+                    extent_diagram: 'Diagram lengkap',
+                    extent_diagram_description:
+                        'Sertakan seluruh diagram yang sedang ditampilkan, termasuk tabel di luar tampilan saat ini.',
+                    extent_viewport: 'Tampilan saat ini',
+                    extent_viewport_description:
+                        'Hanya ekspor apa yang sedang terlihat di kanvas.',
+                    scale_label: 'Skala',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Sertakan pola latar belakang',
+                    pattern_description:
+                        'Tambahkan pola kisi halus ke latar belakang.',
+                    transparent: 'Latar belakang transparan',
+                    transparent_description:
+                        'Ekspor PNG tanpa warna latar belakang solid.',
+                    svg_limitation:
+                        'SVG ini adalah snapshot diagram untuk peramban, bukan file vektor yang sepenuhnya dapat diedit.',
+                    export: 'Ekspor',
+                    generating: 'Membuat gambar...',
+                    error: 'Tidak dapat mengekspor gambar. Silakan coba lagi.',
+                    error_canvas:
+                        'Kanvas diagram untuk diekspor tidak ditemukan.',
+                    error_too_large:
+                        'Diagram ini terlalu besar untuk diekspor pada {{scale}}. Turunkan skalanya atau ekspor tampilan saat ini.',
+                    error_empty: 'Tidak ada yang bisa diekspor di kanvas.',
                 },
             },
         },
@@ -1380,22 +1415,6 @@ export const id_ID: LanguageTranslation = {
                 import: 'Impor',
                 cancel: 'Batal',
             },
-        },
-
-        export_image_dialog: {
-            title: 'Ekspor Gambar',
-            description: 'Pilih faktor skala untuk ekspor:',
-            scale_1x: '1x (Kualitas Rendah)',
-            scale_2x: '2x (Kualitas Normal)',
-            scale_4x: '4x (Kualitas Terbaik)',
-            cancel: 'Batal',
-            export: 'Ekspor',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

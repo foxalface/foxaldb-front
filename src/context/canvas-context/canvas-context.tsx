@@ -77,6 +77,8 @@ export interface CanvasContext {
     }) => void;
     hideCreateRelationshipNode: () => void;
     events: EventEmitter<CanvasEvent>;
+    visualExportCaptureActive: boolean;
+    setVisualExportCaptureActive: (active: boolean) => void;
 }
 
 export const canvasContext = createContext<CanvasContext>({
@@ -100,4 +102,6 @@ export const canvasContext = createContext<CanvasContext>({
     showCreateRelationshipNode: emptyFn,
     hideCreateRelationshipNode: emptyFn,
     events: new EventEmitter(),
+    visualExportCaptureActive: false,
+    setVisualExportCaptureActive: emptyFn,
 });

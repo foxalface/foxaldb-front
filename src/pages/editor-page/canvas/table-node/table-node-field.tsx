@@ -328,7 +328,8 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         const { showFieldAttributes } = useLocalConfig();
 
         const { closeAllTablesInSidebar } = useLayout();
-        const { setEditTableModeTable } = useCanvas();
+        const { setEditTableModeTable, visualExportCaptureActive } =
+            useCanvas();
         const openEditTableOnField = useCallback(() => {
             if (readonly) {
                 return;
@@ -619,8 +620,15 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     </div>
                 </div>
                 {conversationsAvailable || !readonly ? (
-                    <div className="ml-2 hidden shrink-0 flex-row group-focus-within:flex group-hover:flex">
-                        {conversationsAvailable ? (
+                    <div
+                        className={cn(
+                            'ml-2 hidden shrink-0 flex-row',
+                            !visualExportCaptureActive &&
+                                'group-focus-within:flex group-hover:flex'
+                        )}
+                    >
+                        {conversationsAvailable &&
+                        !visualExportCaptureActive ? (
                             <ConversationIndicator
                                 target={{
                                     targetType: 'field',
@@ -646,7 +654,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         )}
                     </div>
                 ) : null}
-                {remoteEditors.length > 0 ? (
+                {remoteEditors.length > 0 && !visualExportCaptureActive ? (
                     <EntityEditingBadge
                         editors={remoteEditors}
                         className="absolute right-1 top-1/2 z-10 -translate-y-1/2"

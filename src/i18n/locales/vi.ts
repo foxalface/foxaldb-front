@@ -1128,7 +1128,7 @@ export const vi: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Ảnh vector',
+                    description: 'Ảnh chụp SVG của sơ đồ',
                 },
             },
             dbml: {
@@ -1147,6 +1147,37 @@ export const vi: LanguageTranslation = {
                         'Toàn bộ sơ đồ được xuất. Nhập tệp này sẽ tạo một sơ đồ mới; sơ đồ hiện tại không bị ghi đè.',
                     filename_label: 'Tên tệp: {{filename}}',
                     download: 'Tải JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description: 'Chọn cách xuất ảnh {{format}} này.',
+                    explanation: 'Xuất ảnh của sơ đồ đang được hiển thị.',
+                    filename_label: 'Tên tệp: {{filename}}',
+                    extent_label: 'Vùng xuất',
+                    extent_diagram: 'Toàn bộ sơ đồ',
+                    extent_diagram_description:
+                        'Bao gồm toàn bộ sơ đồ đang hiển thị, kể cả các bảng ngoài tầm nhìn hiện tại.',
+                    extent_viewport: 'Chế độ xem hiện tại',
+                    extent_viewport_description:
+                        'Chỉ xuất những gì đang hiển thị trên canvas.',
+                    scale_label: 'Tỷ lệ',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Bao gồm họa tiết nền',
+                    pattern_description: 'Thêm họa tiết lưới nhẹ vào nền.',
+                    transparent: 'Nền trong suốt',
+                    transparent_description: 'Xuất PNG không có màu nền đặc.',
+                    svg_limitation:
+                        'SVG này là ảnh chụp sơ đồ dành cho trình duyệt, không phải tệp vector chỉnh sửa đầy đủ.',
+                    export: 'Xuất',
+                    generating: 'Đang tạo ảnh...',
+                    error: 'Không thể xuất ảnh. Vui lòng thử lại.',
+                    error_canvas: 'Không tìm thấy canvas sơ đồ để xuất.',
+                    error_too_large:
+                        'Sơ đồ này quá lớn để xuất ở {{scale}}. Hãy giảm tỷ lệ hoặc xuất chế độ xem hiện tại.',
+                    error_empty: 'Không có gì để xuất trên canvas.',
                 },
             },
         },
@@ -1381,22 +1412,6 @@ export const vi: LanguageTranslation = {
                 import: 'Nhập',
                 cancel: 'Hủy',
             },
-        },
-
-        export_image_dialog: {
-            title: 'Xuất ảnh',
-            description: 'Chọn tỉ lệ để xuất:',
-            scale_1x: '1x (Chất lượng thấp)',
-            scale_2x: '2x (Chất lượng bình thường)',
-            scale_4x: '4x (Chất lượng tốt nhất)',
-            cancel: 'Hủy',
-            export: 'Xuất',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

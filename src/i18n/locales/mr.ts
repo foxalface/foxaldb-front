@@ -1120,7 +1120,7 @@ export const mr: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'वेक्टर प्रतिमा',
+                    description: 'आकृतीचा SVG स्नॅपशॉट',
                 },
             },
             dbml: {
@@ -1139,6 +1139,41 @@ export const mr: LanguageTranslation = {
                         'संपूर्ण डायग्राम निर्यात होतो. ही फाइल आयात केल्याने नवीन डायग्राम तयार होतो; सध्याचा डायग्राम ओव्हरराइट होत नाही.',
                     filename_label: 'फाइलनाव: {{filename}}',
                     download: 'JSON डाउनलोड',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'ही {{format}} प्रतिमा कशी निर्यात करायची ते निवडा.',
+                    explanation:
+                        'सध्या रेंडर केलेल्या आकृतीची प्रतिमा निर्यात करा.',
+                    filename_label: 'फाइलनाव: {{filename}}',
+                    extent_label: 'निर्यात क्षेत्र',
+                    extent_diagram: 'संपूर्ण आकृती',
+                    extent_diagram_description:
+                        'सध्याच्या दृश्याबाहेरील सारण्यांसह सध्या रेंडर केलेली संपूर्ण आकृती समाविष्ट करा.',
+                    extent_viewport: 'सध्याचे दृश्य',
+                    extent_viewport_description:
+                        'कॅनव्हासवर सध्या दिसत असलेलेच निर्यात करा.',
+                    scale_label: 'स्केल',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'पार्श्वभूमी नमुना समाविष्ट करा',
+                    pattern_description: 'पार्श्वभूमीवर हलका ग्रीड नमुना जोडा.',
+                    transparent: 'पारदर्शक पार्श्वभूमी',
+                    transparent_description:
+                        'घन पार्श्वभूमी रंग नसलेली PNG निर्यात करा.',
+                    svg_limitation:
+                        'हे SVG ब्राउझरसाठी आकृतीचा स्नॅपशॉट आहे, पूर्णपणे संपादनयोग्य व्हेक्टर फाइल नाही.',
+                    export: 'निर्यात',
+                    generating: 'प्रतिमा तयार होत आहे...',
+                    error: 'प्रतिमा निर्यात करता आली नाही. कृपया पुन्हा प्रयत्न करा.',
+                    error_canvas:
+                        'निर्यात करण्यासाठी आकृतीचा कॅनव्हास सापडला नाही.',
+                    error_too_large:
+                        'ही आकृती {{scale}} वर निर्यात करण्यासाठी खूप मोठी आहे. स्केल कमी करा किंवा सध्याचे दृश्य निर्यात करा.',
+                    error_empty: 'कॅनव्हासवर निर्यात करण्यासाठी काहीही नाही.',
                 },
             },
         },
@@ -1373,22 +1408,6 @@ export const mr: LanguageTranslation = {
                 import: 'आयात करा',
                 cancel: 'रद्द करा',
             },
-        },
-
-        export_image_dialog: {
-            title: 'इमेज निर्यात करा',
-            description: 'एक्स्पोर्ट करण्यासाठी स्केल फॅक्टर निवडा:',
-            scale_1x: '1x (कमी गुणवत्ता)',
-            scale_2x: '2x (सामान्य गुणवत्ता)',
-            scale_4x: '4x (सर्वोत्तम गुणवत्ता)',
-            cancel: 'रद्द करा',
-            export: 'निर्यात करा',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

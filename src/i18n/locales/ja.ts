@@ -1146,7 +1146,7 @@ export const ja: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'ベクター画像',
+                    description: 'ダイアグラムの SVG スナップショット',
                 },
             },
             dbml: {
@@ -1166,6 +1166,42 @@ export const ja: LanguageTranslation = {
                         'ダイアグラム全体がエクスポートされます。このファイルをインポートすると新しいダイアグラムが作成され、現在のダイアグラムは上書きされません。',
                     filename_label: 'ファイル名: {{filename}}',
                     download: 'JSONをダウンロード',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'この {{format}} 画像の書き出し方法を選択してください。',
+                    explanation:
+                        '現在描画されているダイアグラムの画像を書き出します。',
+                    filename_label: 'ファイル名: {{filename}}',
+                    extent_label: '書き出し範囲',
+                    extent_diagram: 'ダイアグラム全体',
+                    extent_diagram_description:
+                        '現在の表示外のテーブルを含め、描画中のダイアグラム全体を含めます。',
+                    extent_viewport: '現在の表示',
+                    extent_viewport_description:
+                        'キャンバスに現在表示されている内容だけを書き出します。',
+                    scale_label: '倍率',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: '背景パターンを含める',
+                    pattern_description:
+                        '背景に控えめなグリッドパターンを追加します。',
+                    transparent: '透明な背景',
+                    transparent_description:
+                        '単色の背景なしで PNG を書き出します。',
+                    svg_limitation:
+                        'この SVG はブラウザ向けのダイアグラムのスナップショットであり、完全に編集可能なベクターファイルではありません。',
+                    export: '書き出す',
+                    generating: '画像を生成しています...',
+                    error: '画像を書き出せませんでした。もう一度お試しください。',
+                    error_canvas:
+                        '書き出すダイアグラムのキャンバスが見つかりません。',
+                    error_too_large:
+                        'このダイアグラムは {{scale}} では大きすぎて書き出せません。倍率を下げるか、現在の表示を書き出してください。',
+                    error_empty: 'キャンバスに書き出すものがありません。',
                 },
             },
         },
@@ -1402,22 +1438,6 @@ export const ja: LanguageTranslation = {
                 import: 'インポート',
                 cancel: 'キャンセル',
             },
-        },
-
-        export_image_dialog: {
-            title: '画像をエクスポート',
-            description: 'エクスポートの倍率を選択してください:',
-            scale_1x: '1x (低画質)',
-            scale_2x: '2x (通常画質)',
-            scale_4x: '4x (最高画質)',
-            cancel: 'キャンセル',
-            export: 'エクスポート',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

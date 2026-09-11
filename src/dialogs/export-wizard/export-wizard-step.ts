@@ -4,4 +4,5 @@ export enum ExportWizardStep {
     SQL_PREVIEW = 'SQL_PREVIEW',
     DBML_PREVIEW = 'DBML_PREVIEW',
     JSON_DOWNLOAD = 'JSON_DOWNLOAD',
+    VISUAL_OPTIONS = 'VISUAL_OPTIONS',
 }

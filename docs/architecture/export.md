@@ -96,7 +96,7 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 **Target groups:** Database, Framework, Portable / Schema, Visual.
 
-**Current routing:** SQL, DBML, and Diagram JSON are wizard-native. Image and Laravel targets still delegate to existing child dialogs (`ExportImageDialog`, `ExportLaravelMigrationsDialog`) via close-and-reopen until their milestones land. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
+**Current routing:** SQL, DBML, Diagram JSON, and PNG/JPG/SVG are wizard-native. Laravel still delegates to `ExportLaravelMigrationsDialog` via close-and-reopen until its wizard milestone. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
 
 **Planned framework targets** (Prisma, EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones.
 
@@ -158,17 +158,29 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 | Attribute | Detail |
 |-----------|--------|
-| **Input** | Live React Flow DOM (`.react-flow__viewport`), not `Diagram` JSON |
-| **Execution** | Browser only (`html-to-image`) |
+| **Input** | Live React Flow DOM (`.react-flow__viewport`) of the **currently rendered** editor state, not `Diagram` JSON |
+| **Execution** | Browser only (`html-to-image`); no backend; no AI |
 | **Auth** | None |
 | **Provider** | `frontend/src/context/export-image-context/export-image-provider.tsx` |
-| **Output** | File download (`{diagramName}.{png\|jpeg\|svg}`); PNG/JPG include FoxalDB watermark |
-| **Entry points** | Export wizard → PNG/JPG/SVG; PNG/JPG via `export-image-dialog`; SVG direct call |
-| **Tests** | None |
+| **Helpers** | `frontend/src/lib/visual-export/` (filename, MIME, background, raster safety, capture layout) |
+| **Output** | `{diagram-slug}.png` / `{diagram-slug}.jpg` / `{diagram-slug}.svg` via `downloadBlob` |
+| **Entry points** | Export wizard → PNG / JPG / SVG (`VISUAL_OPTIONS`) |
+| **Tests** | `frontend/src/lib/visual-export/__tests__/`; `export-wizard-visual.test.tsx`; `export-image-provider.test.tsx` |
 
-**Limitations:** current viewport only (not full diagram bounds); `skipFonts: true`; edge/marker styling relies on inline SVG preprocessing.
+**Rendered-state semantics:** visual export follows the live canvas, not the full unfiltered canonical `Diagram`. Schema-filter-hidden tables, `node.hidden`, and `showDBViews` remain respected. Areas follow current canvas visibility. Notes follow current canvas behavior. This intentionally differs from DBML/JSON.
+
+**Extent:** Complete diagram (default) or current viewport. Complete export temporarily disables `onlyRenderVisibleElements` via ephemeral `visualExportCaptureActive`, waits for render, then captures with `getNodesBounds` + padded 1:1 transform on the html-to-image clone. It does not mutate Diagram positions, persisted viewport, or call `fitView`.
+
+**Options:** PNG — scale 1/2/4 (default 2), pattern (default on), transparent (optional). JPG — same extent/scale/pattern, always opaque theme background, no transparent option. SVG — extent + pattern (default off), no scale, no transparent.
+
+**Clean capture:** while `visualExportCaptureActive`, node/edge selection is cleared and restored; remote cursors, temp relationship UI, table edit mode, conversation indicators, and presence badges are hidden. No watermark.
+
+**SVG limitation:** `html-to-image` `toSvg` wraps cloned HTML in a `foreignObject`. It is a browser snapshot, not a portable editable vector.
+
+**Raster safety:** PNG/JPG reject before capture when `width * scale` or `height * scale` exceeds 16384px (html-to-image canvas limit).
 
 ### Laravel migrations (ZIP)
+
 
 | Attribute | Detail |
 |-----------|--------|
@@ -311,12 +323,12 @@ JSON-B contract (`diagramToJSONOutput`):
 
 ## Image export
 
-- **Mechanism:** `html-to-image` (`toPng`, `toJpeg`, `toSvg`) on React Flow viewport.
-- **Browser-only;** requires `ExportImageProvider` mounted in editor.
-- **Independent** from canonical schema/code transformation.
-- **Viewport limitation:** captures current view, not necessarily entire diagram.
-- **Test gap:** no automated tests.
-- **UX note:** may be grouped under Export in future UX; technically remains separate.
+- **Mechanism:** `html-to-image` (`toPng`, `toJpeg`, `toSvg`) on `.react-flow__viewport`.
+- **Browser-only;** requires `ExportImageProvider` mounted in the editor.
+- **Independent** from canonical schema/code transformation. Do not route through SQL/DBML/JSON generators.
+- **Wizard-native:** `TARGET_PICKER` → `VISUAL_OPTIONS` → explicit Export. Default extent is complete rendered diagram; current viewport remains available.
+- **No watermark.** No backend. No AI.
+- **SVG** is a `foreignObject` HTML snapshot (`skipFonts: true`); do not advertise it as a fully editable vector.
 
 ---
 
@@ -435,7 +447,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 | DBML generator | `frontend/src/lib/dbml/dbml-export/__tests__/` (9 files) | Covered |
 | Laravel export | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite | Covered |
 | Diagram JSON export | `frontend/src/lib/__tests__/diagram-json-export.test.ts`, filename + wizard JSON tests | Covered (JSON-B) |
-| Image export | — | **Missing** |
+| Image export | `frontend/src/lib/visual-export/__tests__/`; wizard visual + provider tests | Covered |
 | Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON branches) |
 
 ### Expected Export V1 regression strategy
@@ -447,7 +459,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 - Laravel backend Feature/Unit tests (unchanged contract)
 - Export UX routing tests when unified Export UI is implemented
 - Per-framework export tests in isolation (one milestone per framework)
-- Browser/manual QA for downloads, watermarks, theme, viewport capture
+- Browser/manual QA for downloads, theme, complete vs viewport capture, PNG transparency
 
 ---
 
@@ -455,7 +467,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 
 Verified in current code:
 
-- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, and Diagram JSON branches migrated; image/Laravel still child dialogs
+- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, Diagram JSON, and visual branches migrated; Laravel still a child dialog
 - **Legacy AI SQL path** — active in `exportSQL` and legacy `ExportSQLDialog`; unreachable from Export Wizard
 - **Misleading UI labels** — legacy `ExportSQLDialog` still has ✨ targets, Sparkles loader, hardcoded English "Deterministic"/"AI" toggle
 - **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback in generator; wizard shows unsupported UX, not fake targets
@@ -463,8 +475,8 @@ Verified in current code:
 - **Diagram JSON import PK names** — `cloneTable` still clears primary-key index names on import/duplicate; JSON-B files preserve the names, imported diagrams do not
 - **Inconsistent delivery** — SQL/DBML wizard have copy + download; JSON is download-only; images/Laravel file download
 - **Laravel export** — requires persisted backend diagram ID
-- **Schema filter asymmetry** — SQL export filtered; JSON/DBML/images unfiltered
-- **Missing tests** — image export
+- **Schema filter asymmetry** — SQL export filtered; JSON/DBML full diagram; images follow rendered canvas (filters/hidden nodes respected)
+- **SVG portability** — visual SVG remains html-to-image `foreignObject` HTML, not a native vector engine
 
 ---
 
@@ -515,7 +527,8 @@ This document and implementation milestones do **not**:
 ### Frontend — Image
 
 - `frontend/src/context/export-image-context/export-image-provider.tsx`
-- `frontend/src/dialogs/export-image-dialog/export-image-dialog.tsx`
+- `frontend/src/lib/visual-export/`
+- `frontend/src/dialogs/export-wizard/visual/`
 
 ### Frontend — Laravel client
 

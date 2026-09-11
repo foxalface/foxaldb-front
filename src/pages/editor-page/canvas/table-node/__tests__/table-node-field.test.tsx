@@ -127,6 +127,7 @@ vi.mock('@/hooks/use-layout', () => ({
 vi.mock('@/hooks/use-canvas', () => ({
     useCanvas: () => ({
         setEditTableModeTable,
+        visualExportCaptureActive: false,
     }),
 }));
 

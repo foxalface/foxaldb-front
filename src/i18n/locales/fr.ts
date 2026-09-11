@@ -1151,7 +1151,7 @@ export const fr: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Image vectorielle',
+                    description: 'Instantané SVG du diagramme',
                 },
             },
             dbml: {
@@ -1170,6 +1170,42 @@ export const fr: LanguageTranslation = {
                         'Le diagramme complet est exporté. Importer ce fichier crée un nouveau diagramme ; il n’écrase pas le diagramme actuel.',
                     filename_label: 'Nom du fichier : {{filename}}',
                     download: 'Télécharger le JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'Choisissez comment exporter cette image {{format}}.',
+                    explanation:
+                        'Exportez une image du diagramme actuellement affiché.',
+                    filename_label: 'Nom du fichier : {{filename}}',
+                    extent_label: 'Zone d’export',
+                    extent_diagram: 'Diagramme complet',
+                    extent_diagram_description:
+                        'Inclure tout le diagramme actuellement affiché, y compris les tables hors de la vue actuelle.',
+                    extent_viewport: 'Vue actuelle',
+                    extent_viewport_description:
+                        'Exporter uniquement ce qui est actuellement visible sur le canevas.',
+                    scale_label: 'Échelle',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Inclure le motif d’arrière-plan',
+                    pattern_description:
+                        'Ajouter un léger motif de grille à l’arrière-plan.',
+                    transparent: 'Arrière-plan transparent',
+                    transparent_description:
+                        'Exporter le PNG sans couleur d’arrière-plan unie.',
+                    svg_limitation:
+                        'Ce SVG est un instantané du diagramme destiné au navigateur. Ce n’est pas un fichier vectoriel pleinement éditable.',
+                    export: 'Exporter',
+                    generating: 'Génération de l’image...',
+                    error: 'Impossible d’exporter l’image. Veuillez réessayer.',
+                    error_canvas:
+                        'Impossible de trouver le canevas du diagramme à exporter.',
+                    error_too_large:
+                        'Ce diagramme est trop grand pour être exporté en {{scale}}. Réduisez l’échelle ou exportez la vue actuelle.',
+                    error_empty: 'Il n’y a rien à exporter sur le canevas.',
                 },
             },
         },
@@ -1226,24 +1262,6 @@ export const fr: LanguageTranslation = {
                 description:
                     "N'hésitez pas à utiliser votre OPENAI_TOKEN, voir le manuel <0>ici</0>.",
             },
-        },
-
-        export_image_dialog: {
-            title: "Exporter l'image",
-            description:
-                "Choisissez le facteur d'échelle pour l'image exportée.",
-            scale_1x: '1x (Basse qualité)',
-            scale_2x: '2x (Qualité normale)',
-            scale_4x: '4x (Meilleure qualité)',
-            cancel: 'Annuler',
-            export: 'Exporter',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description:
-                'Sélectionnez le système de base de données pour votre nouveau diagramme.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

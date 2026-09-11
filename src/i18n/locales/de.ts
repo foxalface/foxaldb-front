@@ -1158,7 +1158,7 @@ export const de: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Vektorbild',
+                    description: 'SVG-Momentaufnahme des Diagramms',
                 },
             },
             dbml: {
@@ -1178,6 +1178,43 @@ export const de: LanguageTranslation = {
                         'Das vollständige Diagramm wird exportiert. Das Importieren dieser Datei erstellt ein neues Diagramm; das aktuelle Diagramm wird nicht überschrieben.',
                     filename_label: 'Dateiname: {{filename}}',
                     download: 'JSON herunterladen',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'Wählen Sie, wie dieses {{format}}-Bild exportiert werden soll.',
+                    explanation:
+                        'Exportieren Sie ein Bild des aktuell dargestellten Diagramms.',
+                    filename_label: 'Dateiname: {{filename}}',
+                    extent_label: 'Exportbereich',
+                    extent_diagram: 'Vollständiges Diagramm',
+                    extent_diagram_description:
+                        'Das gesamte aktuell dargestellte Diagramm einschließen, auch Tabellen außerhalb der aktuellen Ansicht.',
+                    extent_viewport: 'Aktuelle Ansicht',
+                    extent_viewport_description:
+                        'Nur das exportieren, was derzeit auf der Zeichenfläche sichtbar ist.',
+                    scale_label: 'Skalierung',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Hintergrundmuster einschließen',
+                    pattern_description:
+                        'Ein dezentes Gittermuster zum Hintergrund hinzufügen.',
+                    transparent: 'Transparenter Hintergrund',
+                    transparent_description:
+                        'PNG ohne einfarbigen Hintergrund exportieren.',
+                    svg_limitation:
+                        'Dieses SVG ist eine Browser-Momentaufnahme des Diagramms, keine vollständig bearbeitbare Vektordatei.',
+                    export: 'Exportieren',
+                    generating: 'Bild wird erzeugt...',
+                    error: 'Das Bild konnte nicht exportiert werden. Bitte erneut versuchen.',
+                    error_canvas:
+                        'Die Diagramm-Zeichenfläche zum Exportieren wurde nicht gefunden.',
+                    error_too_large:
+                        'Dieses Diagramm ist zu groß für den Export mit {{scale}}. Verringern Sie die Skalierung oder exportieren Sie die aktuelle Ansicht.',
+                    error_empty:
+                        'Auf der Zeichenfläche gibt es nichts zu exportieren.',
                 },
             },
         },
@@ -1415,22 +1452,6 @@ export const de: LanguageTranslation = {
                 import: 'Importieren',
                 cancel: 'Abbrechen',
             },
-        },
-
-        export_image_dialog: {
-            title: 'Bild exportieren',
-            description: 'Wählen Sie den Skalierungsfaktor für den Export:',
-            scale_1x: '1x (Niedrige Qualität)',
-            scale_2x: '2x (Normale Qualität)',
-            scale_4x: '4x (Beste Qualität)',
-            cancel: 'Abbrechen',
-            export: 'Exportieren',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

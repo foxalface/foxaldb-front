@@ -1123,7 +1123,7 @@ export const ru: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'Векторное изображение',
+                    description: 'SVG-снимок диаграммы',
                 },
             },
             dbml: {
@@ -1143,6 +1143,42 @@ export const ru: LanguageTranslation = {
                         'Экспортируется вся диаграмма. Импорт этого файла создаёт новую диаграмму и не перезаписывает текущую.',
                     filename_label: 'Имя файла: {{filename}}',
                     download: 'Скачать JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'Выберите, как экспортировать это изображение {{format}}.',
+                    explanation:
+                        'Экспортируйте изображение текущей отрисованной диаграммы.',
+                    filename_label: 'Имя файла: {{filename}}',
+                    extent_label: 'Область экспорта',
+                    extent_diagram: 'Вся диаграмма',
+                    extent_diagram_description:
+                        'Включить всю текущую отрисованную диаграмму, включая таблицы вне текущего вида.',
+                    extent_viewport: 'Текущий вид',
+                    extent_viewport_description:
+                        'Экспортировать только то, что сейчас видно на холсте.',
+                    scale_label: 'Масштаб',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'Включить фоновый узор',
+                    pattern_description:
+                        'Добавить лёгкий сеточный узор на фон.',
+                    transparent: 'Прозрачный фон',
+                    transparent_description:
+                        'Экспортировать PNG без сплошного цвета фона.',
+                    svg_limitation:
+                        'Этот SVG — снимок диаграммы для браузера, а не полностью редактируемый векторный файл.',
+                    export: 'Экспортировать',
+                    generating: 'Создание изображения...',
+                    error: 'Не удалось экспортировать изображение. Попробуйте ещё раз.',
+                    error_canvas:
+                        'Не удалось найти холст диаграммы для экспорта.',
+                    error_too_large:
+                        'Эта диаграмма слишком велика для экспорта в {{scale}}. Уменьшите масштаб или экспортируйте текущий вид.',
+                    error_empty: 'На холсте нечего экспортировать.',
                 },
             },
         },
@@ -1378,22 +1414,6 @@ export const ru: LanguageTranslation = {
                 import: 'Импорт',
                 cancel: 'Отмена',
             },
-        },
-
-        export_image_dialog: {
-            title: 'Экспортировать изображение',
-            description: 'Выберите детализацию изображения при экспорте:',
-            scale_1x: '1x (Низкое качество)',
-            scale_2x: '2x (Обычное качество)',
-            scale_4x: '4x (Лучшее качество)',
-            cancel: 'Отменить',
-            export: 'Экспортировать',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

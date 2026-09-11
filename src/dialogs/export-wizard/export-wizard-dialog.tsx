@@ -27,6 +27,8 @@ import { ExportDbmlPreviewStep } from './dbml/export-dbml-preview-step';
 import { ExportDbmlBranchContext } from './dbml/export-dbml-branch-context';
 import { ExportJsonDownloadStep } from './json/export-json-download-step';
 import { ExportJsonBranchContext } from './json/export-json-branch-context';
+import { ExportVisualOptionsStep } from './visual/export-visual-options-step';
+import { ExportVisualBranchContext } from './visual/export-visual-branch-context';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import {
@@ -37,6 +39,16 @@ import { exportBaseSQL } from '@/lib/data/sql-export/export-sql-script';
 import { getFilteredDiagramForSqlExport } from '@/lib/data/sql-export/get-filtered-diagram-for-sql-export';
 import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
 import { cn } from '@/lib/utils';
+import type {
+    VisualExportExtent,
+    VisualExportFormat,
+} from '@/lib/visual-export/visual-export-options';
+import {
+    DEFAULT_VISUAL_EXPORT_EXTENT,
+    DEFAULT_VISUAL_EXPORT_SCALE,
+    VisualExportError,
+    getDefaultIncludePattern,
+} from '@/lib/visual-export/visual-export-options';
 
 export interface ExportWizardDialogProps extends BaseDialogProps {}
 
@@ -48,11 +60,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const { filter } = useDiagramFilter();
     const { isAuthenticated } = useAuth();
     const { exportImage } = useExportImage();
-    const {
-        closeExportWizardDialog,
-        openExportImageDialog,
-        openExportLaravelMigrationsDialog,
-    } = useDialog();
+    const { closeExportWizardDialog, openExportLaravelMigrationsDialog } =
+        useDialog();
 
     const [step, setStep] = useState<ExportWizardStep>(
         ExportWizardStep.TARGET_PICKER
@@ -67,6 +76,17 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     );
     const [dbmlHasError, setDbmlHasError] = useState(false);
     const [isDbmlGenerating, setIsDbmlGenerating] = useState(false);
+    const [visualFormat, setVisualFormat] = useState<VisualExportFormat | null>(
+        null
+    );
+    const [visualExtent, setVisualExtent] = useState<VisualExportExtent>(
+        DEFAULT_VISUAL_EXPORT_EXTENT
+    );
+    const [visualScale, setVisualScale] = useState(DEFAULT_VISUAL_EXPORT_SCALE);
+    const [visualIncludePatternBG, setVisualIncludePatternBG] = useState(true);
+    const [visualTransparent, setVisualTransparent] = useState(false);
+    const [isVisualExporting, setIsVisualExporting] = useState(false);
+    const [visualErrorCode, setVisualErrorCode] = useState<string | null>(null);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -81,11 +101,35 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         setIsDbmlGenerating(false);
     }, []);
 
+    const resetVisualBranchState = useCallback(() => {
+        setVisualFormat(null);
+        setVisualExtent(DEFAULT_VISUAL_EXPORT_EXTENT);
+        setVisualScale(DEFAULT_VISUAL_EXPORT_SCALE);
+        setVisualIncludePatternBG(true);
+        setVisualTransparent(false);
+        setIsVisualExporting(false);
+        setVisualErrorCode(null);
+    }, []);
+
+    const applyVisualFormatDefaults = useCallback(
+        (format: VisualExportFormat) => {
+            setVisualFormat(format);
+            setVisualExtent(DEFAULT_VISUAL_EXPORT_EXTENT);
+            setVisualScale(DEFAULT_VISUAL_EXPORT_SCALE);
+            setVisualIncludePatternBG(getDefaultIncludePattern(format));
+            setVisualTransparent(false);
+            setIsVisualExporting(false);
+            setVisualErrorCode(null);
+        },
+        []
+    );
+
     const resetWizardState = useCallback(() => {
         setStep(ExportWizardStep.TARGET_PICKER);
         resetSqlBranchState();
         resetDbmlBranchState();
-    }, [resetSqlBranchState, resetDbmlBranchState]);
+        resetVisualBranchState();
+    }, [resetDbmlBranchState, resetSqlBranchState, resetVisualBranchState]);
 
     useEffect(() => {
         if (dialog.open) {
@@ -122,6 +166,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             if (targetId === 'sql') {
                 resetSqlBranchState();
                 resetDbmlBranchState();
+                resetVisualBranchState();
                 setStep(ExportWizardStep.SQL_TARGET);
                 return;
             }
@@ -129,6 +174,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             if (targetId === 'dbml') {
                 resetDbmlBranchState();
                 resetSqlBranchState();
+                resetVisualBranchState();
                 setStep(ExportWizardStep.DBML_PREVIEW);
                 return;
             }
@@ -136,28 +182,24 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             if (targetId === 'diagram_json') {
                 resetSqlBranchState();
                 resetDbmlBranchState();
+                resetVisualBranchState();
                 setStep(ExportWizardStep.JSON_DOWNLOAD);
                 return;
             }
 
+            if (
+                targetId === 'png' ||
+                targetId === 'jpg' ||
+                targetId === 'svg'
+            ) {
+                resetSqlBranchState();
+                resetDbmlBranchState();
+                applyVisualFormatDefaults(targetId);
+                setStep(ExportWizardStep.VISUAL_OPTIONS);
+                return;
+            }
+
             switch (targetId) {
-                case 'png':
-                    closeAndRun(() => openExportImageDialog({ format: 'png' }));
-                    return;
-                case 'jpg':
-                    closeAndRun(() =>
-                        openExportImageDialog({ format: 'jpeg' })
-                    );
-                    return;
-                case 'svg':
-                    closeAndRun(() =>
-                        exportImage('svg', {
-                            scale: 1,
-                            transparent: true,
-                            includePatternBG: false,
-                        })
-                    );
-                    return;
                 case 'laravel':
                     if (!currentDiagram?.id) {
                         return;
@@ -175,14 +217,14 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             }
         },
         [
+            applyVisualFormatDefaults,
             closeAndRun,
             currentDiagram?.id,
             currentDiagram?.name,
-            exportImage,
-            openExportImageDialog,
             openExportLaravelMigrationsDialog,
             resetSqlBranchState,
             resetDbmlBranchState,
+            resetVisualBranchState,
         ]
     );
 
@@ -197,7 +239,17 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     );
 
     const handleBack = useCallback(() => {
+        if (isVisualExporting) {
+            return;
+        }
+
         if (step === ExportWizardStep.JSON_DOWNLOAD) {
+            setStep(ExportWizardStep.TARGET_PICKER);
+            return;
+        }
+
+        if (step === ExportWizardStep.VISUAL_OPTIONS) {
+            resetVisualBranchState();
             setStep(ExportWizardStep.TARGET_PICKER);
             return;
         }
@@ -220,7 +272,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             resetSqlBranchState();
             setStep(ExportWizardStep.TARGET_PICKER);
         }
-    }, [resetDbmlBranchState, resetSqlBranchState, step]);
+    }, [
+        isVisualExporting,
+        resetDbmlBranchState,
+        resetSqlBranchState,
+        resetVisualBranchState,
+        step,
+    ]);
 
     useEffect(() => {
         if (
@@ -323,6 +381,40 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step,
     ]);
 
+    const handleVisualExport = useCallback(async () => {
+        if (!visualFormat || isVisualExporting) {
+            return;
+        }
+
+        setIsVisualExporting(true);
+        setVisualErrorCode(null);
+
+        try {
+            await exportImage(visualFormat, {
+                extent: visualExtent,
+                scale: visualFormat === 'svg' ? 1 : visualScale,
+                includePatternBG: visualIncludePatternBG,
+                transparent: visualFormat === 'png' ? visualTransparent : false,
+            });
+        } catch (error) {
+            if (error instanceof VisualExportError) {
+                setVisualErrorCode(error.code);
+            } else {
+                setVisualErrorCode('generation_failed');
+            }
+        } finally {
+            setIsVisualExporting(false);
+        }
+    }, [
+        exportImage,
+        isVisualExporting,
+        visualExtent,
+        visualFormat,
+        visualIncludePatternBG,
+        visualScale,
+        visualTransparent,
+    ]);
+
     const handleOpenChange = useCallback(
         (open: boolean) => {
             if (!open) {
@@ -336,7 +428,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.SQL_TARGET ||
         step === ExportWizardStep.SQL_PREVIEW ||
         step === ExportWizardStep.DBML_PREVIEW ||
-        step === ExportWizardStep.JSON_DOWNLOAD;
+        step === ExportWizardStep.JSON_DOWNLOAD ||
+        step === ExportWizardStep.VISUAL_OPTIONS;
 
     const isSqlBranch =
         step === ExportWizardStep.SQL_TARGET ||
@@ -344,6 +437,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
     const isDbmlBranch = step === ExportWizardStep.DBML_PREVIEW;
     const isJsonBranch = step === ExportWizardStep.JSON_DOWNLOAD;
+    const isVisualBranch = step === ExportWizardStep.VISUAL_OPTIONS;
 
     const dialogTitle = t('export_wizard.title');
 
@@ -364,10 +458,18 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 return t('export_wizard.dbml.preview_step.description');
             case ExportWizardStep.JSON_DOWNLOAD:
                 return t('export_wizard.json.download_step.description');
+            case ExportWizardStep.VISUAL_OPTIONS:
+                return visualFormat
+                    ? t('export_wizard.visual.options_step.description', {
+                          format: t(
+                              `export_wizard.targets.${visualFormat}.title`
+                          ),
+                      })
+                    : undefined;
             default:
                 return t('export_wizard.description');
         }
-    }, [databaseType, sqlTargetDatabaseType, step, t]);
+    }, [databaseType, sqlTargetDatabaseType, step, t, visualFormat]);
 
     const isWideDialog =
         step === ExportWizardStep.SQL_PREVIEW ||
@@ -396,6 +498,9 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     ) : null}
                     {isDbmlBranch ? <ExportDbmlBranchContext /> : null}
                     {isJsonBranch ? <ExportJsonBranchContext /> : null}
+                    {isVisualBranch && visualFormat ? (
+                        <ExportVisualBranchContext format={visualFormat} />
+                    ) : null}
                     <DialogTitle>{dialogTitle}</DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
@@ -459,6 +564,27 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     {step === ExportWizardStep.JSON_DOWNLOAD ? (
                         <ExportJsonDownloadStep diagram={currentDiagram} />
                     ) : null}
+
+                    {step === ExportWizardStep.VISUAL_OPTIONS &&
+                    visualFormat ? (
+                        <ExportVisualOptionsStep
+                            format={visualFormat}
+                            diagramName={currentDiagram.name ?? 'diagram'}
+                            extent={visualExtent}
+                            scale={visualScale}
+                            includePatternBG={visualIncludePatternBG}
+                            transparent={visualTransparent}
+                            isExporting={isVisualExporting}
+                            errorCode={visualErrorCode}
+                            onExtentChange={setVisualExtent}
+                            onScaleChange={setVisualScale}
+                            onIncludePatternBGChange={setVisualIncludePatternBG}
+                            onTransparentChange={setVisualTransparent}
+                            onExport={() => {
+                                void handleVisualExport();
+                            }}
+                        />
+                    ) : null}
                 </div>
 
                 {showBackButton ? (
@@ -467,6 +593,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             type="button"
                             variant="secondary"
                             onClick={handleBack}
+                            disabled={isVisualExporting}
                         >
                             {t('export_wizard.back')}
                         </Button>

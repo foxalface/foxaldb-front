@@ -1059,7 +1059,7 @@ export const zh_CN: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: '矢量图像',
+                    description: '图表的 SVG 快照',
                 },
             },
             dbml: {
@@ -1078,6 +1078,36 @@ export const zh_CN: LanguageTranslation = {
                         '将导出完整图表。导入此文件会创建新图表，不会覆盖当前图表。',
                     filename_label: '文件名：{{filename}}',
                     download: '下载 JSON',
+                },
+            },
+            visual: {
+                options_step: {
+                    description: '选择如何导出此 {{format}} 图片。',
+                    explanation: '导出当前渲染图表的图片。',
+                    filename_label: '文件名：{{filename}}',
+                    extent_label: '导出范围',
+                    extent_diagram: '完整图表',
+                    extent_diagram_description:
+                        '包含当前渲染的完整图表，包括当前视图之外的表。',
+                    extent_viewport: '当前视图',
+                    extent_viewport_description: '仅导出画布上当前可见的内容。',
+                    scale_label: '缩放',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: '包含背景图案',
+                    pattern_description: '在背景中添加细微的网格图案。',
+                    transparent: '透明背景',
+                    transparent_description: '导出不带纯色背景的 PNG。',
+                    svg_limitation:
+                        '此 SVG 是供浏览器使用的图表快照，不是可完全编辑的矢量文件。',
+                    export: '导出',
+                    generating: '正在生成图片...',
+                    error: '无法导出图片，请重试。',
+                    error_canvas: '找不到可导出的图表画布。',
+                    error_too_large:
+                        '此图表过大，无法以 {{scale}} 导出。请降低缩放或改为导出当前视图。',
+                    error_empty: '画布上没有可导出的内容。',
                 },
             },
         },
@@ -1310,22 +1340,6 @@ export const zh_CN: LanguageTranslation = {
                 import: '导入',
                 cancel: '取消',
             },
-        },
-
-        export_image_dialog: {
-            title: '导出图片',
-            description: '选择导出的缩放比例：',
-            scale_1x: '1x (低质量)',
-            scale_2x: '2x (普通质量)',
-            scale_4x: '4x (最佳质量)',
-            cancel: '取消',
-            export: '导出',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {

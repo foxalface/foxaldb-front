@@ -45,6 +45,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 editRelationshipPopover,
                 openRelationshipPopover,
                 closeRelationshipPopover,
+                visualExportCaptureActive,
             } = useCanvas();
 
             // TODO(M17.4): Remote relationship selection rendering is deferred.
@@ -55,8 +56,10 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             const relationship = data?.relationship;
 
             const isPopoverOpen = useMemo(
-                () => editRelationshipPopover?.relationshipId === id,
-                [editRelationshipPopover, id]
+                () =>
+                    !visualExportCaptureActive &&
+                    editRelationshipPopover?.relationshipId === id,
+                [editRelationshipPopover, id, visualExportCaptureActive]
             );
 
             const handleEdgeClick = useCallback(

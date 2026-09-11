@@ -1,12 +1,18 @@
 import React from 'react';
 import { ViewportPortal } from '@xyflow/react';
 import { useRemoteCursors } from '@/hooks/use-remote-cursors';
+import { useCanvas } from '@/hooks/use-canvas';
 import { RemoteCursor } from './remote-cursor';
 
 export const CursorOverlay: React.FC = () => {
+    const { visualExportCaptureActive } = useCanvas();
     const { isOverlayActive, remoteCursors } = useRemoteCursors();
 
-    if (!isOverlayActive || remoteCursors.length === 0) {
+    if (
+        visualExportCaptureActive ||
+        !isOverlayActive ||
+        remoteCursors.length === 0
+    ) {
         return null;
     }
 

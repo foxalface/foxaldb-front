@@ -1111,7 +1111,7 @@ export const gu: LanguageTranslation = {
                 },
                 svg: {
                     title: 'SVG',
-                    description: 'વેક્ટર છબી',
+                    description: 'ડાયાગ્રામનો SVG સ્નેપશોટ',
                 },
             },
             dbml: {
@@ -1130,6 +1130,41 @@ export const gu: LanguageTranslation = {
                         'સંપૂર્ણ ડાયાગ્રામ નિકાસ થાય છે. આ ફાઇલ આયાત કરવાથી નવું ડાયાગ્રામ બને છે; વર્તમાન ડાયાગ્રામ ઓવરરાઇટ થતું નથી.',
                     filename_label: 'ફાઇલનું નામ: {{filename}}',
                     download: 'JSON ડાઉનલોડ',
+                },
+            },
+            visual: {
+                options_step: {
+                    description:
+                        'આ {{format}} છબી કેવી રીતે નિકાસ કરવી તે પસંદ કરો.',
+                    explanation:
+                        'હાલમાં રેન્ડર થયેલ ડાયાગ્રામની છબી નિકાસ કરો.',
+                    filename_label: 'ફાઇલનું નામ: {{filename}}',
+                    extent_label: 'નિકાસ વિસ્તાર',
+                    extent_diagram: 'સંપૂર્ણ ડાયાગ્રામ',
+                    extent_diagram_description:
+                        'વર્તમાન વ્યૂની બહારના ટેબલ સહિત હાલમાં રેન્ડર થયેલ આખો ડાયાગ્રામ સમાવો.',
+                    extent_viewport: 'વર્તમાન વ્યૂ',
+                    extent_viewport_description:
+                        'કેનવાસ પર હાલમાં દેખાતું હોય તે જ નિકાસ કરો.',
+                    scale_label: 'સ્કેલ',
+                    scale_1x: '1x',
+                    scale_2x: '2x',
+                    scale_4x: '4x',
+                    pattern: 'પૃષ્ઠભૂમિ પેટર્ન સમાવો',
+                    pattern_description:
+                        'પૃષ્ઠભૂમિમાં હળવી ગ્રિડ પેટર્ન ઉમેરો.',
+                    transparent: 'પારદર્શક પૃષ્ઠભૂમિ',
+                    transparent_description:
+                        'ઘન પૃષ્ઠભૂમિ રંગ વગર PNG નિકાસ કરો.',
+                    svg_limitation:
+                        'આ SVG બ્રાઉઝર માટે ડાયાગ્રામનો સ્નેપશોટ છે, સંપૂર્ણ રીતે સંપાદનયોગ્ય વેક્ટર ફાઇલ નથી.',
+                    export: 'નિકાસ',
+                    generating: 'છબી બનાવી રહ્યા છીએ...',
+                    error: 'છબી નિકાસ થઈ શકી નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                    error_canvas: 'નિકાસ કરવા માટે ડાયાગ્રામ કેનવાસ મળ્યો નથી.',
+                    error_too_large:
+                        'આ ડાયાગ્રામ {{scale}} પર નિકાસ કરવા માટે ખૂબ મોટો છે. સ્કેલ ઘટાડો અથવા વર્તમાન વ્યૂ નિકાસ કરો.',
+                    error_empty: 'કેનવાસ પર નિકાસ કરવા માટે કંઈ નથી.',
                 },
             },
         },
@@ -1364,22 +1399,6 @@ export const gu: LanguageTranslation = {
                 import: 'આયાત કરો',
                 cancel: 'રદ કરો',
             },
-        },
-
-        export_image_dialog: {
-            title: 'છબી નિકાસ કરો',
-            description: 'નિકાસ માટે સ્કેલ ફેક્ટર પસંદ કરો:',
-            scale_1x: '1x (નીચી ગુણવત્તા)',
-            scale_2x: '2x (સામાન્ય ગુણવત્તા)',
-            scale_4x: '4x (શ્રેષ્ઠ ગુણવત્તા)',
-            cancel: 'રદ કરો',
-            export: 'નિકાસ કરો',
-            // TODO: Translate
-            advanced_options: 'Advanced Options',
-            pattern: 'Include background pattern',
-            pattern_description: 'Add subtle grid pattern to background.',
-            transparent: 'Transparent background',
-            transparent_description: 'Remove background color from image.',
         },
 
         new_table_schema_dialog: {
