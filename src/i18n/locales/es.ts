@@ -1201,6 +1201,35 @@ export const es: LanguageTranslation = {
                     error_empty: 'No hay nada que exportar en el lienzo.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Elija cómo exportar las migraciones de Laravel.',
+                    explanation:
+                        'Genere un ZIP de archivos de migración de Laravel a partir del diagrama actual.',
+                    filename_label: 'Nombre de archivo: {{filename}}',
+                    laravel_version: 'Versión de Laravel',
+                    include_indexes: 'Incluir índices de tabla',
+                    include_indexes_description:
+                        'Exportar las definiciones explícitas de índices. Las restricciones unique a nivel de campo siempre se incluyen.',
+                    include_foreign_keys: 'Incluir claves foráneas',
+                    include_foreign_keys_description:
+                        'Exportar archivos de migración separados para las claves foráneas.',
+                    export: 'Exportar',
+                    generating: 'Generando migraciones de Laravel...',
+                    error: 'No se pudieron exportar las migraciones de Laravel. Inténtelo de nuevo.',
+                    error_unauthenticated:
+                        'Debe iniciar sesión para exportar migraciones de Laravel.',
+                    error_forbidden:
+                        'No tiene permiso para exportar este diagrama.',
+                    error_not_found: 'No se encontró este diagrama.',
+                    error_empty: 'Este diagrama no tiene tablas exportables.',
+                    error_invalid:
+                        'No se pudo exportar el diagrama. Revise el esquema e inténtelo de nuevo.',
+                    error_network:
+                        'No se pudo contactar el servidor. Compruebe su conexión e inténtelo de nuevo.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1256,23 +1285,6 @@ export const es: LanguageTranslation = {
                     'Error al generar el script SQL. Por favor, intenta nuevamente más tarde o <0>contáctanos</0>.',
                 description:
                     'Siéntete libre de usar tu OPENAI_TOKEN, consulta el manual <0>aquí</0>.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

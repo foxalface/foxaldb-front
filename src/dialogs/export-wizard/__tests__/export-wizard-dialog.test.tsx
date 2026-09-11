@@ -9,7 +9,6 @@ const dialogMocks = {
     closeExportWizardDialog: vi.fn(),
     openExportSQLDialog: vi.fn(),
     openExportDiagramDialog: vi.fn(),
-    openExportLaravelMigrationsDialog: vi.fn(),
 };
 
 const authState = {
@@ -271,12 +270,10 @@ describe('ExportWizardDialog', () => {
             screen.getByText('export_wizard.targets.laravel.title')
         );
 
+        expect(dialogMocks.closeExportWizardDialog).not.toHaveBeenCalled();
         expect(
-            dialogMocks.openExportLaravelMigrationsDialog
-        ).toHaveBeenCalledWith({
-            diagramId: '42',
-            diagramName: 'Remote diagram',
-        });
+            screen.getByTestId('export-laravel-options-step')
+        ).toBeInTheDocument();
     });
 
     it('resets wizard state when reopened', async () => {

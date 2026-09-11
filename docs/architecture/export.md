@@ -34,7 +34,7 @@ Export V1 is a **multi-target product capability**. That does **not** require al
 | Input | `Diagram` (tables, relationships, dependencies, customTypes, areas, notes, `databaseType`, optional `databaseEdition`) |
 | Mutation | Exporters must **not** mutate the source `Diagram` |
 | Dialect | `diagram.databaseType` is the diagram's DBMS; SQL export may target a different dialect via `targetDatabaseType` |
-| Persistence | Most frontend exports use `currentDiagram` from editor state; Laravel export reads **persisted** backend content |
+| Persistence | Frontend exports use `currentDiagram` from editor state. Laravel generation is backend-owned: the wizard sends that current Diagram as ephemeral request `content`. Persisted `diagrams.content` is used only when `content` is omitted. |
 
 ---
 
@@ -96,7 +96,7 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 **Target groups:** Database, Framework, Portable / Schema, Visual.
 
-**Current routing:** SQL, DBML, Diagram JSON, and PNG/JPG/SVG are wizard-native. Laravel still delegates to `ExportLaravelMigrationsDialog` via close-and-reopen until its wizard milestone. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
+**Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, and Laravel migrations are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
 
 **Planned framework targets** (Prisma, EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones.
 
@@ -181,22 +181,23 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 ### Laravel migrations (ZIP)
 
-
 | Attribute | Detail |
 |-----------|--------|
-| **Input** | Persisted `Diagram.content` JSON on backend (diagram ID only from frontend) |
+| **Input** | Full unfiltered `currentDiagram` sent as optional request `content`. If omitted, persisted `diagrams.content`. Generation does **not** persist the override. |
 | **Execution** | Private Laravel backend |
-| **Auth** | Sanctum + `DiagramPolicy::view` (owner/editor/viewer); valid backend diagram ID required |
+| **Auth** | Sanctum + `DiagramPolicy::view` (owner/editor/viewer); valid backend diagram ID required. Guest/local IDs **hide** the target. Availability is independent of `databaseType`. |
 | **API** | `POST /api/diagrams/{diagram}/export/laravel-migrations` |
-| **Backend** | `backend/app/Http/Controllers/LaravelMigrationExportController.php` → `LaravelMigrationExportService` → `LaravelMigrationGenerator` → `MigrationArchiveBuilder` |
+| **Backend** | `backend/app/Http/Controllers/LaravelMigrationExportController.php` → `LaravelMigrationExportService` → `DiagramContentReader::fromArray` or `fromDiagram` → `LaravelMigrationGenerator` → `MigrationArchiveBuilder` |
 | **Frontend client** | `frontend/src/lib/api/diagram-laravel-export.ts` |
 | **Output** | ZIP (`{slug}-laravel-migrations.zip`) with `database/migrations/*.php` |
-| **Entry points** | Export wizard → Laravel migrations (auth + backend ID); `frontend/src/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog.tsx` |
-| **Tests** | `backend/tests/Feature/LaravelMigrationExportTest.php` + 11 Unit files under `backend/tests/Unit/Services/LaravelMigrationExport/`; round-trip test in `LaravelMigrationImportExportRoundTripTest.php` |
+| **Entry points** | Export wizard → Laravel migrations (`LARAVEL_OPTIONS`) |
+| **Tests** | `frontend/src/dialogs/export-wizard/__tests__/export-wizard-laravel.test.tsx`; `backend/tests/Feature/LaravelMigrationExportTest.php`, `LaravelMigrationExportSqliteExecutionTest.php`, opt-in `LaravelMigrationExportMysqlExecutionTest.php`; Unit files under `backend/tests/Unit/Services/LaravelMigrationExport/`; round-trip test in `LaravelMigrationImportExportRoundTripTest.php` |
 
-**Options:** `laravelVersion` (`10`–`13`, default `13`), `includeIndexes`, `includeForeignKeys`.
+**Options:** `laravelVersion` (`10`–`13`, default `13`), `includeIndexes` (default true), `includeForeignKeys` (default true). Versions 10–13 currently share the same generator; only the `Generated for Laravel {n}.` comment differs.
 
-**Limitation:** frontend sends diagram ID only — unsaved local edits are not exported until persisted.
+**Generator hardening:** backend output is intended to be executable (`migrate` / `migrate:rollback`) for supported schema semantics. Integer PK/FK signedness is matched from relationship-referenced columns (not from `_id` names). Schema Builder calls preserve canonical table/column names; ZIP filenames are sanitized separately. Laravel’s own `migrations` table is not exported. See [`backend/docs/laravel-migration-export.md`](../../../backend/docs/laravel-migration-export.md).
+
+**Current-state override:** the wizard always sends `content: currentDiagram`. That payload is ephemeral generation input. It must not update `diagrams.content`, Dexie, operations, or realtime.
 
 **Boundary:** Laravel export is a **specialized Export V1 target**. Its controller/service/DTOs must **not** define generic Export architecture. See [`backend/docs/laravel-migration-export.md`](../../../backend/docs/laravel-migration-export.md).
 
@@ -337,8 +338,10 @@ JSON-B contract (`diagramToJSONOutput`):
 ### Flow
 
 ```
-Persisted Diagram.content (JSON)
-  → DiagramContentReader
+TARGET_PICKER → LARAVEL_OPTIONS → POST export
+  → authorize view
+  → optional request content? DiagramContentReader::fromArray
+    : DiagramContentReader::fromDiagram (persisted content)
   → LaravelMigrationGenerator
   → MigrationArchiveBuilder
   → ZIP download
@@ -348,10 +351,12 @@ Persisted Diagram.content (JSON)
 POST /api/diagrams/{diagram}/export/laravel-migrations
 ```
 
-- **Auth:** `auth:sanctum` + `authorize('view', $diagram)`.
-- **Input:** backend `Diagram` model; reads `content` JSON (`name`, `tables`, `relationships`). Dialect-agnostic normalized model.
-- **Skips:** views, materialized views.
-- **Mature test coverage** on backend (Feature + Unit).
+- **Auth:** `auth:sanctum` + `authorize('view', $diagram)` (owner / editor / viewer). Export is read-only.
+- **Input:** optional JSON `content` object (canonical Diagram). If present, used only for generation and **not persisted**. If omitted, backend reads persisted `content` JSON (`name`, `tables`, `relationships`).
+- **Availability:** hidden unless authenticated with a numeric backend diagram ID. Not gated by source `databaseType`.
+- **Skips:** views, materialized views, and Laravel’s own `migrations` table.
+- **Wizard filename:** `{slug}-laravel-migrations.zip` via `buildLaravelExportFilename` + `downloadBlob` (`application/zip`). Backend `Content-Disposition` remains for raw API clients.
+- **Mature test coverage** on backend (Feature + Unit + SQLite executable migrations; opt-in MySQL unsigned PK/FK group) and wizard routing.
 
 Participates in Export V1 as a **specialized target**. Do not generalize `LaravelMigrationExportController` into a generic export router.
 
@@ -448,7 +453,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 | Laravel export | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite | Covered |
 | Diagram JSON export | `frontend/src/lib/__tests__/diagram-json-export.test.ts`, filename + wizard JSON tests | Covered (JSON-B) |
 | Image export | `frontend/src/lib/visual-export/__tests__/`; wizard visual + provider tests | Covered |
-| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON branches) |
+| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON + visual + Laravel branches) |
 
 ### Expected Export V1 regression strategy
 
@@ -456,7 +461,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 - Deterministic cross-dialect fixtures (PG → MySQL/MariaDB/SQL Server)
 - DBML generator smoke/regression tests
 - Diagram JSON serializer, filename, import compatibility, and wizard JSON branch tests
-- Laravel backend Feature/Unit tests (unchanged contract)
+- Laravel backend Feature/Unit tests (including optional `content` override and non-persistence)
 - Export UX routing tests when unified Export UI is implemented
 - Per-framework export tests in isolation (one milestone per framework)
 - Browser/manual QA for downloads, theme, complete vs viewport capture, PNG transparency
@@ -467,14 +472,14 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 
 Verified in current code:
 
-- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, Diagram JSON, and visual branches migrated; Laravel still a child dialog
+- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, Diagram JSON, visual, and Laravel branches are wizard-native
 - **Legacy AI SQL path** — active in `exportSQL` and legacy `ExportSQLDialog`; unreachable from Export Wizard
 - **Misleading UI labels** — legacy `ExportSQLDialog` still has ✨ targets, Sparkles loader, hardcoded English "Deterministic"/"AI" toggle
 - **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback in generator; wizard shows unsupported UX, not fake targets
 - **DBML** — wizard-native export implemented; side panel remains live developer view (inline/relationships variants not exposed in wizard)
 - **Diagram JSON import PK names** — `cloneTable` still clears primary-key index names on import/duplicate; JSON-B files preserve the names, imported diagrams do not
 - **Inconsistent delivery** — SQL/DBML wizard have copy + download; JSON is download-only; images/Laravel file download
-- **Laravel export** — requires persisted backend diagram ID
+- **Laravel export** — requires an authenticated backend diagram ID; generation remains backend-owned
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML full diagram; images follow rendered canvas (filters/hidden nodes respected)
 - **SVG portability** — visual SVG remains html-to-image `foreignObject` HTML, not a native vector engine
 
@@ -533,7 +538,8 @@ This document and implementation milestones do **not**:
 ### Frontend — Laravel client
 
 - `frontend/src/lib/api/diagram-laravel-export.ts`
-- `frontend/src/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog.tsx`
+- `frontend/src/lib/laravel-export/`
+- `frontend/src/dialogs/export-wizard/laravel/`
 
 ### Frontend — UX entry
 

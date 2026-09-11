@@ -1204,6 +1204,36 @@ export const ja: LanguageTranslation = {
                     error_empty: 'キャンバスに書き出すものがありません。',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Laravelマイグレーションの書き出し方法を選択します。',
+                    explanation:
+                        '現在のダイアグラムからLaravelマイグレーションファイルのZIPを生成します。',
+                    filename_label: 'ファイル名: {{filename}}',
+                    laravel_version: 'Laravelバージョン',
+                    include_indexes: 'テーブルインデックスを含める',
+                    include_indexes_description:
+                        '明示的なテーブルインデックス定義を書き出します。フィールドレベルのユニーク制約は常に含まれます。',
+                    include_foreign_keys: '外部キーを含める',
+                    include_foreign_keys_description:
+                        '外部キー用のマイグレーションファイルを別に書き出します。',
+                    export: '書き出す',
+                    generating: 'Laravelマイグレーションを生成しています...',
+                    error: 'Laravelマイグレーションを書き出せませんでした。もう一度お試しください。',
+                    error_unauthenticated:
+                        'Laravelマイグレーションを書き出すにはサインインが必要です。',
+                    error_forbidden:
+                        'このダイアグラムを書き出す権限がありません。',
+                    error_not_found: 'このダイアグラムが見つかりませんでした。',
+                    error_empty:
+                        'このダイアグラムには書き出せるテーブルがありません。',
+                    error_invalid:
+                        'ダイアグラムを書き出せませんでした。スキーマを確認してもう一度お試しください。',
+                    error_network:
+                        'サーバーに接続できませんでした。接続を確認してもう一度お試しください。',
+                },
+            },
         },
 
         export_dialog: {
@@ -1258,23 +1288,6 @@ export const ja: LanguageTranslation = {
                     'SQLスクリプトの生成中にエラーが発生しました。後でもう一度試すか、<0>お問い合わせください</0>。',
                 description:
                     'OPENAI_TOKENを自由に使用して、マニュアルを<0>こちら</0>で確認してください。',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

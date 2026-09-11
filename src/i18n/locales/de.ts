@@ -1217,6 +1217,36 @@ export const de: LanguageTranslation = {
                         'Auf der Zeichenfläche gibt es nichts zu exportieren.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Wählen Sie, wie Laravel-Migrationen exportiert werden sollen.',
+                    explanation:
+                        'Erzeugen Sie ein ZIP mit Laravel-Migrationsdateien aus dem aktuellen Diagramm.',
+                    filename_label: 'Dateiname: {{filename}}',
+                    laravel_version: 'Laravel-Version',
+                    include_indexes: 'Tabellenindizes einschließen',
+                    include_indexes_description:
+                        'Explizite Tabellenindex-Definitionen exportieren. Eindeutige Einschränkungen auf Feldebene werden immer einbezogen.',
+                    include_foreign_keys: 'Fremdschlüssel einschließen',
+                    include_foreign_keys_description:
+                        'Separate Migrationsdateien für Fremdschlüssel exportieren.',
+                    export: 'Exportieren',
+                    generating: 'Laravel-Migrationen werden erzeugt...',
+                    error: 'Laravel-Migrationen konnten nicht exportiert werden. Bitte erneut versuchen.',
+                    error_unauthenticated:
+                        'Sie müssen angemeldet sein, um Laravel-Migrationen zu exportieren.',
+                    error_forbidden:
+                        'Sie haben keine Berechtigung, dieses Diagramm zu exportieren.',
+                    error_not_found: 'Dieses Diagramm wurde nicht gefunden.',
+                    error_empty:
+                        'Dieses Diagramm hat keine exportierbaren Tabellen.',
+                    error_invalid:
+                        'Das Diagramm konnte nicht exportiert werden. Prüfen Sie das Schema und versuchen Sie es erneut.',
+                    error_network:
+                        'Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1272,23 +1302,6 @@ export const de: LanguageTranslation = {
                     'Fehler beim Generieren des SQL-Skripts. Bitte versuchen Sie es später erneut oder <0>kontaktieren Sie uns</0>.',
                 description:
                     'Verwenden Sie Ihren OPENAI_TOKEN, siehe Anleitung <0>hier</0>.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

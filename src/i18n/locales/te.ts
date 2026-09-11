@@ -1191,6 +1191,35 @@ export const te: LanguageTranslation = {
                     error_empty: 'కాన్వాస్‌పై ఎగుమతి చేయడానికి ఏమీ లేదు.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Laravel మైగ్రేషన్‌లను ఎలా ఎగుమతి చేయాలో ఎంచుకోండి.',
+                    explanation:
+                        'ప్రస్తుత రేఖాచిత్రం నుండి Laravel మైగ్రేషన్ ఫైళ్ల ZIPను రూపొందించండి.',
+                    filename_label: 'ఫైల్ పేరు: {{filename}}',
+                    laravel_version: 'Laravel వెర్షన్',
+                    include_indexes: 'టేబుల్ ఇండెక్స్‌లను చేర్చండి',
+                    include_indexes_description:
+                        'స్పష్టమైన టేబుల్ ఇండెక్స్ నిర్వచనాలను ఎగుమతి చేయండి. ఫీల్డ్-స్థాయి యూనిక్ నిబంధనలు ఎల్లప్పుడూ చేరి ఉంటాయి.',
+                    include_foreign_keys: 'విదేశీ కీలను చేర్చండి',
+                    include_foreign_keys_description:
+                        'విదేశీ కీల కోసం వేరు మైగ్రేషన్ ఫైళ్లను ఎగుమతి చేయండి.',
+                    export: 'ఎగుమతి',
+                    generating: 'Laravel మైగ్రేషన్‌లు రూపొందుతున్నాయి...',
+                    error: 'Laravel మైగ్రేషన్‌లను ఎగుమతి చేయలేకపోయాం. మళ్లీ ప్రయత్నించండి.',
+                    error_unauthenticated:
+                        'Laravel మైగ్రేషన్‌లను ఎగుమతి చేయడానికి సైన్ ఇన్ కావాలి.',
+                    error_forbidden:
+                        'ఈ రేఖాచిత్రాన్ని ఎగుమతి చేయడానికి అనుమతి లేదు.',
+                    error_not_found: 'ఈ రేఖాచిత్రం కనబడలేదు.',
+                    error_empty: 'ఈ రేఖాచిత్రంలో ఎగుమతి చేయదగిన పట్టికలు లేవు.',
+                    error_invalid:
+                        'రేఖాచిత్రాన్ని ఎగుమతి చేయలేకపోయాం. స్కీమాను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+                    error_network:
+                        'సర్వర్‌ను చేరుకోలేకపోయాం. కనెక్షన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1245,23 +1274,6 @@ export const te: LanguageTranslation = {
                     'SQL స్క్రిప్ట్ ఉత్పత్తి చేయడంలో తప్పు. దయచేసి తర్వాతి సమయంలో ప్రయత్నించండి లేదా <0>మాతో సంప్రదించండి</0>.',
                 description:
                     'మీ OPENAI_TOKEN ఉపయోగించి ప్రయత్నించండి, మాన్యువల్‌ను <0>ఇక్కడ</0> చూడండి.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

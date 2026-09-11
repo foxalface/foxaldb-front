@@ -1180,6 +1180,33 @@ export const vi: LanguageTranslation = {
                     error_empty: 'Không có gì để xuất trên canvas.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description: 'Chọn cách xuất các migration Laravel.',
+                    explanation:
+                        'Tạo file ZIP các migration Laravel từ sơ đồ hiện tại.',
+                    filename_label: 'Tên tệp: {{filename}}',
+                    laravel_version: 'Phiên bản Laravel',
+                    include_indexes: 'Bao gồm chỉ mục bảng',
+                    include_indexes_description:
+                        'Xuất các định nghĩa chỉ mục tường minh. Ràng buộc unique cấp trường luôn được bao gồm.',
+                    include_foreign_keys: 'Bao gồm khóa ngoại',
+                    include_foreign_keys_description:
+                        'Xuất các file migration riêng cho khóa ngoại.',
+                    export: 'Xuất',
+                    generating: 'Đang tạo migration Laravel...',
+                    error: 'Không thể xuất migration Laravel. Vui lòng thử lại.',
+                    error_unauthenticated:
+                        'Bạn cần đăng nhập để xuất migration Laravel.',
+                    error_forbidden: 'Bạn không có quyền xuất sơ đồ này.',
+                    error_not_found: 'Không tìm thấy sơ đồ này.',
+                    error_empty: 'Sơ đồ này không có bảng nào có thể xuất.',
+                    error_invalid:
+                        'Không thể xuất sơ đồ. Hãy kiểm tra schema rồi thử lại.',
+                    error_network:
+                        'Không thể kết nối máy chủ. Hãy kiểm tra mạng rồi thử lại.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1232,23 +1259,6 @@ export const vi: LanguageTranslation = {
                     'Lỗi khi tạo SQL. Vui lòng thử lại sau hoặc <0>liên hệ với chúng tôi</0>.',
                 description:
                     'Bạn có thể sử dụng OPENAI_TOKEN, xem hướng dẫn <0>tại đây</0>.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

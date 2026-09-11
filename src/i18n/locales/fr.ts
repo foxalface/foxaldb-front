@@ -1208,6 +1208,35 @@ export const fr: LanguageTranslation = {
                     error_empty: 'Il n’y a rien à exporter sur le canevas.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Choisissez comment exporter les migrations Laravel.',
+                    explanation:
+                        'Générez une archive ZIP de fichiers de migration Laravel à partir du diagramme actuel.',
+                    filename_label: 'Nom du fichier : {{filename}}',
+                    laravel_version: 'Version de Laravel',
+                    include_indexes: 'Inclure les index de table',
+                    include_indexes_description:
+                        'Exporter les définitions d’index explicites. Les contraintes d’unicité au niveau des champs sont toujours incluses.',
+                    include_foreign_keys: 'Inclure les clés étrangères',
+                    include_foreign_keys_description:
+                        'Exporter des fichiers de migration distincts pour les clés étrangères.',
+                    export: 'Exporter',
+                    generating: 'Génération des migrations Laravel...',
+                    error: 'Impossible d’exporter les migrations Laravel. Veuillez réessayer.',
+                    error_unauthenticated:
+                        'Vous devez être connecté pour exporter les migrations Laravel.',
+                    error_forbidden:
+                        'Vous n’avez pas l’autorisation d’exporter ce diagramme.',
+                    error_not_found: 'Ce diagramme est introuvable.',
+                    error_empty: 'Ce diagramme n’a aucune table exportable.',
+                    error_invalid:
+                        'Le diagramme n’a pas pu être exporté. Vérifiez le schéma et réessayez.',
+                    error_network:
+                        'Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1284,23 +1313,6 @@ export const fr: LanguageTranslation = {
                 "Aucun schéma n'existe encore. Créez votre premier schéma pour organiser vos tables.",
             create: 'Créer',
             cancel: 'Annuler',
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
-            },
         },
 
         import_laravel_migrations_dialog: {

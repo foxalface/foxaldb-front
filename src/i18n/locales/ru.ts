@@ -1181,6 +1181,35 @@ export const ru: LanguageTranslation = {
                     error_empty: 'На холсте нечего экспортировать.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Выберите, как экспортировать миграции Laravel.',
+                    explanation:
+                        'Создайте ZIP-архив файлов миграций Laravel из текущей диаграммы.',
+                    filename_label: 'Имя файла: {{filename}}',
+                    laravel_version: 'Версия Laravel',
+                    include_indexes: 'Включить индексы таблиц',
+                    include_indexes_description:
+                        'Экспортировать явные определения индексов. Уникальные ограничения на уровне полей включаются всегда.',
+                    include_foreign_keys: 'Включить внешние ключи',
+                    include_foreign_keys_description:
+                        'Экспортировать отдельные файлы миграций для внешних ключей.',
+                    export: 'Экспортировать',
+                    generating: 'Создание миграций Laravel...',
+                    error: 'Не удалось экспортировать миграции Laravel. Попробуйте ещё раз.',
+                    error_unauthenticated:
+                        'Чтобы экспортировать миграции Laravel, нужно войти в систему.',
+                    error_forbidden:
+                        'У вас нет прав на экспорт этой диаграммы.',
+                    error_not_found: 'Эта диаграмма не найдена.',
+                    error_empty: 'В этой диаграмме нет таблиц для экспорта.',
+                    error_invalid:
+                        'Не удалось экспортировать диаграмму. Проверьте схему и попробуйте снова.',
+                    error_network:
+                        'Не удалось связаться с сервером. Проверьте подключение и попробуйте снова.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1234,23 +1263,6 @@ export const ru: LanguageTranslation = {
                     'Ошибка создания скрипта SQL. Попробуйте еще раз позже или <0>свяжитесь с нами</0>.',
                 description:
                     'Не стесняйтесь использовать ваш OPENAI_TOKEN, см. руководство <0>здесь</0>.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

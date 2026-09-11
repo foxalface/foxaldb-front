@@ -1180,6 +1180,34 @@ export const en = {
                     error_empty: 'There is nothing to export on the canvas.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description: 'Choose how to export Laravel migrations.',
+                    explanation:
+                        'Generate a ZIP of Laravel migration files from the current diagram.',
+                    filename_label: 'Filename: {{filename}}',
+                    laravel_version: 'Laravel version',
+                    include_indexes: 'Include table indexes',
+                    include_indexes_description:
+                        'Export explicit table index definitions. Field-level unique constraints are always included.',
+                    include_foreign_keys: 'Include foreign keys',
+                    include_foreign_keys_description:
+                        'Export separate foreign key migration files.',
+                    export: 'Export',
+                    generating: 'Generating Laravel migrations...',
+                    error: 'Could not export Laravel migrations. Please try again.',
+                    error_unauthenticated:
+                        'You need to be signed in to export Laravel migrations.',
+                    error_forbidden:
+                        'You do not have permission to export this diagram.',
+                    error_not_found: 'This diagram could not be found.',
+                    error_empty: 'This diagram has no exportable tables.',
+                    error_invalid:
+                        'The diagram could not be exported. Check the schema and try again.',
+                    error_network:
+                        'Could not reach the server. Check your connection and try again.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1233,23 +1261,6 @@ export const en = {
                     'Error generating SQL script. Please try again later or <0>contact us</0>.',
                 description:
                     'Feel free to use your OPENAI_TOKEN, see the manual <0>here</0>.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

@@ -1167,6 +1167,34 @@ export const gu: LanguageTranslation = {
                     error_empty: 'કેનવાસ પર નિકાસ કરવા માટે કંઈ નથી.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Laravel માઇગ્રેશન કેવી રીતે નિકાસ કરવી તે પસંદ કરો.',
+                    explanation:
+                        'વર્તમાન ડાયાગ્રામમાંથી Laravel માઇગ્રેશન ફાઇલોની ZIP બનાવો.',
+                    filename_label: 'ફાઇલનું નામ: {{filename}}',
+                    laravel_version: 'Laravel સંસ્કરણ',
+                    include_indexes: 'ટેબલ ઇન્ડેક્સ શામેલ કરો',
+                    include_indexes_description:
+                        'સ્પષ્ટ ટેબલ ઇન્ડેક્સ વ્યાખ્યાઓ નિકાસ કરો. ફીલ્ડ-સ્તરની યુનિક અવરોધો હંમેશાં શામેલ રહે છે.',
+                    include_foreign_keys: 'વિદેશી કીઓ શામેલ કરો',
+                    include_foreign_keys_description:
+                        'વિદેશી કીઓ માટે અલગ માઇગ્રેશન ફાઇલો નિકાસ કરો.',
+                    export: 'નિકાસ કરો',
+                    generating: 'Laravel માઇગ્રેશન બની રહ્યાં છે...',
+                    error: 'Laravel માઇગ્રેશન નિકાસ થઈ શક્યાં નહીં. ફરી પ્રયાસ કરો.',
+                    error_unauthenticated:
+                        'Laravel માઇગ્રેશન નિકાસ કરવા સાઇન ઇન જરૂરી છે.',
+                    error_forbidden: 'આ ડાયાગ્રામ નિકાસ કરવાની પરવાનગી નથી.',
+                    error_not_found: 'આ ડાયાગ્રામ મળ્યો નથી.',
+                    error_empty: 'આ ડાયાગ્રામમાં નિકાસયોગ્ય ટેબલ નથી.',
+                    error_invalid:
+                        'ડાયાગ્રામ નિકાસ થઈ શક્યો નહીં. સ્કીમા તપાસીને ફરી પ્રયાસ કરો.',
+                    error_network:
+                        'સર્વર સુધી પહોંચી શકાયું નહીં. કનેક્શન તપાસીને ફરી પ્રયાસ કરો.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1220,23 +1248,6 @@ export const gu: LanguageTranslation = {
                     'SQL સ્ક્રિપ્ટ જનરેટ કરવા દરમિયાન ભૂલ થઈ. કૃપા કરીને પછીથી ફરી પ્રયત્ન કરો અથવા <0>અમારો સંપર્ક કરો</0>.',
                 description:
                     'તમારા OPENAI_TOKEN નો ઉપયોગ કરવા માટે મફત અનુભવો, મેન્યુઅલ <0>અહીં જુઓ</0>.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

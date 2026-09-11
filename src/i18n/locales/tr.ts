@@ -1168,6 +1168,34 @@ export const tr: LanguageTranslation = {
                     error_empty: 'Tuvalde dışa aktarılacak bir şey yok.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Laravel migrasyonlarının nasıl dışa aktarılacağını seçin.',
+                    explanation:
+                        'Geçerli diyagramdan Laravel migrasyon dosyalarını içeren bir ZIP oluşturun.',
+                    filename_label: 'Dosya adı: {{filename}}',
+                    laravel_version: 'Laravel sürümü',
+                    include_indexes: 'Tablo dizinlerini dahil et',
+                    include_indexes_description:
+                        'Açık tablo dizin tanımlarını dışa aktarın. Alan düzeyindeki benzersiz kısıtlamalar her zaman dahildir.',
+                    include_foreign_keys: 'Yabancı anahtarları dahil et',
+                    include_foreign_keys_description:
+                        'Yabancı anahtarlar için ayrı migrasyon dosyaları dışa aktarın.',
+                    export: 'Dışa aktar',
+                    generating: 'Laravel migrasyonları oluşturuluyor...',
+                    error: 'Laravel migrasyonları dışa aktarılamadı. Lütfen tekrar deneyin.',
+                    error_unauthenticated:
+                        'Laravel migrasyonlarını dışa aktarmak için oturum açmalısınız.',
+                    error_forbidden: 'Bu diyagramı dışa aktarma izniniz yok.',
+                    error_not_found: 'Bu diyagram bulunamadı.',
+                    error_empty: 'Bu diyagramda dışa aktarılabilir tablo yok.',
+                    error_invalid:
+                        'Diyagram dışa aktarılamadı. Şemayı kontrol edip tekrar deneyin.',
+                    error_network:
+                        'Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1221,23 +1249,6 @@ export const tr: LanguageTranslation = {
                     'SQL betiği oluşturulurken hata oluştu. Lütfen daha sonra tekrar deneyin veya <0>bize ulaşın</0>.',
                 description:
                     "OPENAI_TOKEN'ınızı kullanabilirsiniz, kılavuzu <0>buradan</0> görebilirsiniz.",
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

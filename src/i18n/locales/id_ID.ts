@@ -1184,6 +1184,35 @@ export const id_ID: LanguageTranslation = {
                     error_empty: 'Tidak ada yang bisa diekspor di kanvas.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description: 'Pilih cara mengekspor migrasi Laravel.',
+                    explanation:
+                        'Buat ZIP file migrasi Laravel dari diagram saat ini.',
+                    filename_label: 'Nama file: {{filename}}',
+                    laravel_version: 'Versi Laravel',
+                    include_indexes: 'Sertakan indeks tabel',
+                    include_indexes_description:
+                        'Ekspor definisi indeks tabel eksplisit. Batasan unique tingkat field selalu disertakan.',
+                    include_foreign_keys: 'Sertakan kunci asing',
+                    include_foreign_keys_description:
+                        'Ekspor file migrasi terpisah untuk kunci asing.',
+                    export: 'Ekspor',
+                    generating: 'Membuat migrasi Laravel...',
+                    error: 'Tidak dapat mengekspor migrasi Laravel. Silakan coba lagi.',
+                    error_unauthenticated:
+                        'Anda harus masuk untuk mengekspor migrasi Laravel.',
+                    error_forbidden:
+                        'Anda tidak memiliki izin untuk mengekspor diagram ini.',
+                    error_not_found: 'Diagram ini tidak ditemukan.',
+                    error_empty:
+                        'Diagram ini tidak memiliki tabel yang dapat diekspor.',
+                    error_invalid:
+                        'Diagram tidak dapat diekspor. Periksa skema lalu coba lagi.',
+                    error_network:
+                        'Tidak dapat menghubungi server. Periksa koneksi lalu coba lagi.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1236,23 +1265,6 @@ export const id_ID: LanguageTranslation = {
                     'Kesalahan saat menghasilkan skrip SQL. Silakan coba lagi nanti atau <0>hubungi kami</0>.',
                 description:
                     'Silakan gunakan OPENAI_TOKEN Anda, lihat petunjuk <0>di sini</0>.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

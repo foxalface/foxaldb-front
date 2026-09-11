@@ -13,6 +13,7 @@ export interface LaravelMigrationExportRequest {
     laravelVersion: LaravelVersion;
     includeIndexes?: boolean;
     includeForeignKeys?: boolean;
+    content?: unknown;
 }
 
 const getXsrfToken = (): string | undefined => {

@@ -1110,6 +1110,30 @@ export const zh_CN: LanguageTranslation = {
                     error_empty: '画布上没有可导出的内容。',
                 },
             },
+            laravel: {
+                options_step: {
+                    description: '选择如何导出 Laravel 迁移。',
+                    explanation:
+                        '根据当前图表生成包含 Laravel 迁移文件的 ZIP。',
+                    filename_label: '文件名：{{filename}}',
+                    laravel_version: 'Laravel 版本',
+                    include_indexes: '包含表索引',
+                    include_indexes_description:
+                        '导出显式表索引定义。字段级唯一约束始终包含。',
+                    include_foreign_keys: '包含外键',
+                    include_foreign_keys_description:
+                        '导出单独的外键迁移文件。',
+                    export: '导出',
+                    generating: '正在生成 Laravel 迁移...',
+                    error: '无法导出 Laravel 迁移。请重试。',
+                    error_unauthenticated: '需要登录才能导出 Laravel 迁移。',
+                    error_forbidden: '您没有权限导出此图表。',
+                    error_not_found: '找不到此图表。',
+                    error_empty: '此图表没有可导出的表。',
+                    error_invalid: '无法导出图表。请检查架构后重试。',
+                    error_network: '无法连接到服务器。请检查网络后重试。',
+                },
+            },
         },
 
         export_dialog: {
@@ -1161,23 +1185,6 @@ export const zh_CN: LanguageTranslation = {
                     '生成 SQL 脚本时出错。请稍后再试，或者 <0>联系我们</0>。',
                 description:
                     '随时使用您的 OPENAI_TOKEN，在<0>这里</0>查看手册。',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

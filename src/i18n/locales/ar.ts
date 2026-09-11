@@ -1165,6 +1165,33 @@ export const ar: LanguageTranslation = {
                     error_empty: 'لا يوجد شيء للتصدير على اللوحة.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description: 'اختر كيفية تصدير ترحيلات Laravel.',
+                    explanation:
+                        'أنشئ أرشيف ZIP لملفات ترحيل Laravel من المخطط الحالي.',
+                    filename_label: 'اسم الملف: {{filename}}',
+                    laravel_version: 'إصدار Laravel',
+                    include_indexes: 'تضمين فهارس الجدول',
+                    include_indexes_description:
+                        'تصدير تعريفات الفهارس الصريحة. قيود التفرّد على مستوى الحقل تُضمَّن دائماً.',
+                    include_foreign_keys: 'تضمين المفاتيح الأجنبية',
+                    include_foreign_keys_description:
+                        'تصدير ملفات ترحيل منفصلة للمفاتيح الأجنبية.',
+                    export: 'تصدير',
+                    generating: 'جارٍ إنشاء ترحيلات Laravel...',
+                    error: 'تعذر تصدير ترحيلات Laravel. يرجى المحاولة مرة أخرى.',
+                    error_unauthenticated:
+                        'يجب تسجيل الدخول لتصدير ترحيلات Laravel.',
+                    error_forbidden: 'ليست لديك صلاحية تصدير هذا المخطط.',
+                    error_not_found: 'تعذر العثور على هذا المخطط.',
+                    error_empty: 'هذا المخطط لا يحتوي على جداول قابلة للتصدير.',
+                    error_invalid:
+                        'تعذر تصدير المخطط. تحقق من المخطط ثم حاول مرة أخرى.',
+                    error_network:
+                        'تعذر الوصول إلى الخادم. تحقق من اتصالك ثم حاول مرة أخرى.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1218,23 +1245,6 @@ export const ar: LanguageTranslation = {
                     'النصي. يرجى المحاولة مرة اخرى لاحقاً او <0>اتصل بنا</0> SQL خطأ في إنشاء برنامج',
                 description:
                     ' الخاصة بك. راجع الدليل <0>هنا</0> OPENAI_TOKEN لا تتردد في استخدام',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

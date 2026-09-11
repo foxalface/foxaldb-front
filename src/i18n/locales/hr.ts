@@ -1181,6 +1181,34 @@ export const hr: LanguageTranslation = {
                     error_empty: 'Na platnu nema ničega za izvoz.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description: 'Odaberite kako izvesti Laravel migracije.',
+                    explanation:
+                        'Generirajte ZIP datoteka Laravel migracija iz trenutačnog dijagrama.',
+                    filename_label: 'Naziv datoteke: {{filename}}',
+                    laravel_version: 'Laravel verzija',
+                    include_indexes: 'Uključi indekse tablica',
+                    include_indexes_description:
+                        'Izvezi eksplicitne definicije indeksa. Jedinstvena ograničenja na razini polja uvijek su uključena.',
+                    include_foreign_keys: 'Uključi vanjske ključeve',
+                    include_foreign_keys_description:
+                        'Izvezi zasebne migracijske datoteke za vanjske ključeve.',
+                    export: 'Izvezi',
+                    generating: 'Generiranje Laravel migracija...',
+                    error: 'Laravel migracije nisu se mogle izvesti. Pokušajte ponovno.',
+                    error_unauthenticated:
+                        'Morate biti prijavljeni da biste izvezli Laravel migracije.',
+                    error_forbidden:
+                        'Nemate dopuštenje za izvoz ovog dijagrama.',
+                    error_not_found: 'Ovaj dijagram nije pronađen.',
+                    error_empty: 'Ovaj dijagram nema tablica za izvoz.',
+                    error_invalid:
+                        'Dijagram se nije mogao izvesti. Provjerite shemu i pokušajte ponovno.',
+                    error_network:
+                        'Nije moguće dohvatiti poslužitelj. Provjerite vezu i pokušajte ponovno.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1234,23 +1262,6 @@ export const hr: LanguageTranslation = {
                     'Greška pri generiranju SQL skripte. Molimo pokušajte ponovno kasnije ili <0>kontaktirajte nas</0>.',
                 description:
                     'Slobodno koristite svoj OPENAI_TOKEN, pogledajte priručnik <0>ovdje</0>.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

@@ -14,6 +14,17 @@ import { useDialog } from '@/hooks/use-dialog';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useAuth } from '@/hooks/use-auth';
 import { useExportImage } from '@/hooks/use-export-image';
+import {
+    DEFAULT_LARAVEL_VERSION,
+    exportLaravelMigrations,
+    type LaravelVersion,
+} from '@/lib/api/diagram-laravel-export';
+import { downloadBlob } from '@/lib/download-blob';
+import { buildLaravelExportFilename } from '@/lib/laravel-export/build-laravel-export-filename';
+import {
+    resolveLaravelExportErrorCode,
+    type LaravelExportErrorCode,
+} from '@/lib/laravel-export/resolve-laravel-export-error-code';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { ExportWizardStep } from './export-wizard-step';
 import type { ExportTargetId } from './export-target-id';
@@ -29,6 +40,8 @@ import { ExportJsonDownloadStep } from './json/export-json-download-step';
 import { ExportJsonBranchContext } from './json/export-json-branch-context';
 import { ExportVisualOptionsStep } from './visual/export-visual-options-step';
 import { ExportVisualBranchContext } from './visual/export-visual-branch-context';
+import { ExportLaravelOptionsStep } from './laravel/export-laravel-options-step';
+import { ExportLaravelBranchContext } from './laravel/export-laravel-branch-context';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import {
@@ -60,8 +73,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const { filter } = useDiagramFilter();
     const { isAuthenticated } = useAuth();
     const { exportImage } = useExportImage();
-    const { closeExportWizardDialog, openExportLaravelMigrationsDialog } =
-        useDialog();
+    const { closeExportWizardDialog } = useDialog();
 
     const [step, setStep] = useState<ExportWizardStep>(
         ExportWizardStep.TARGET_PICKER
@@ -87,6 +99,15 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const [visualTransparent, setVisualTransparent] = useState(false);
     const [isVisualExporting, setIsVisualExporting] = useState(false);
     const [visualErrorCode, setVisualErrorCode] = useState<string | null>(null);
+    const [laravelVersion, setLaravelVersion] = useState<LaravelVersion>(
+        DEFAULT_LARAVEL_VERSION
+    );
+    const [laravelIncludeIndexes, setLaravelIncludeIndexes] = useState(true);
+    const [laravelIncludeForeignKeys, setLaravelIncludeForeignKeys] =
+        useState(true);
+    const [isLaravelExporting, setIsLaravelExporting] = useState(false);
+    const [laravelErrorCode, setLaravelErrorCode] =
+        useState<LaravelExportErrorCode | null>(null);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -111,6 +132,14 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         setVisualErrorCode(null);
     }, []);
 
+    const resetLaravelBranchState = useCallback(() => {
+        setLaravelVersion(DEFAULT_LARAVEL_VERSION);
+        setLaravelIncludeIndexes(true);
+        setLaravelIncludeForeignKeys(true);
+        setIsLaravelExporting(false);
+        setLaravelErrorCode(null);
+    }, []);
+
     const applyVisualFormatDefaults = useCallback(
         (format: VisualExportFormat) => {
             setVisualFormat(format);
@@ -129,7 +158,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetSqlBranchState();
         resetDbmlBranchState();
         resetVisualBranchState();
-    }, [resetDbmlBranchState, resetSqlBranchState, resetVisualBranchState]);
+        resetLaravelBranchState();
+    }, [
+        resetDbmlBranchState,
+        resetLaravelBranchState,
+        resetSqlBranchState,
+        resetVisualBranchState,
+    ]);
 
     useEffect(() => {
         if (dialog.open) {
@@ -153,20 +188,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const isSqlSourceSupported =
         isDeterministicSqlExportSourceSupported(databaseType);
 
-    const closeAndRun = useCallback(
-        (action: () => void) => {
-            closeExportWizardDialog();
-            action();
-        },
-        [closeExportWizardDialog]
-    );
-
     const handleSelectTarget = useCallback(
         (targetId: ExportTargetId) => {
             if (targetId === 'sql') {
                 resetSqlBranchState();
                 resetDbmlBranchState();
                 resetVisualBranchState();
+                resetLaravelBranchState();
                 setStep(ExportWizardStep.SQL_TARGET);
                 return;
             }
@@ -175,6 +203,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetDbmlBranchState();
                 resetSqlBranchState();
                 resetVisualBranchState();
+                resetLaravelBranchState();
                 setStep(ExportWizardStep.DBML_PREVIEW);
                 return;
             }
@@ -183,6 +212,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetSqlBranchState();
                 resetDbmlBranchState();
                 resetVisualBranchState();
+                resetLaravelBranchState();
                 setStep(ExportWizardStep.JSON_DOWNLOAD);
                 return;
             }
@@ -194,36 +224,25 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             ) {
                 resetSqlBranchState();
                 resetDbmlBranchState();
+                resetLaravelBranchState();
                 applyVisualFormatDefaults(targetId);
                 setStep(ExportWizardStep.VISUAL_OPTIONS);
                 return;
             }
 
-            switch (targetId) {
-                case 'laravel':
-                    if (!currentDiagram?.id) {
-                        return;
-                    }
-
-                    closeAndRun(() =>
-                        openExportLaravelMigrationsDialog({
-                            diagramId: String(currentDiagram.id),
-                            diagramName: currentDiagram.name ?? 'diagram',
-                        })
-                    );
-                    return;
-                default:
-                    return;
+            if (targetId === 'laravel') {
+                resetSqlBranchState();
+                resetDbmlBranchState();
+                resetVisualBranchState();
+                resetLaravelBranchState();
+                setStep(ExportWizardStep.LARAVEL_OPTIONS);
             }
         },
         [
             applyVisualFormatDefaults,
-            closeAndRun,
-            currentDiagram?.id,
-            currentDiagram?.name,
-            openExportLaravelMigrationsDialog,
-            resetSqlBranchState,
             resetDbmlBranchState,
+            resetLaravelBranchState,
+            resetSqlBranchState,
             resetVisualBranchState,
         ]
     );
@@ -239,7 +258,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     );
 
     const handleBack = useCallback(() => {
-        if (isVisualExporting) {
+        if (isVisualExporting || isLaravelExporting) {
             return;
         }
 
@@ -250,6 +269,12 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
         if (step === ExportWizardStep.VISUAL_OPTIONS) {
             resetVisualBranchState();
+            setStep(ExportWizardStep.TARGET_PICKER);
+            return;
+        }
+
+        if (step === ExportWizardStep.LARAVEL_OPTIONS) {
+            resetLaravelBranchState();
             setStep(ExportWizardStep.TARGET_PICKER);
             return;
         }
@@ -273,8 +298,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             setStep(ExportWizardStep.TARGET_PICKER);
         }
     }, [
+        isLaravelExporting,
         isVisualExporting,
         resetDbmlBranchState,
+        resetLaravelBranchState,
         resetSqlBranchState,
         resetVisualBranchState,
         step,
@@ -415,6 +442,39 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         visualTransparent,
     ]);
 
+    const handleLaravelExport = useCallback(async () => {
+        if (isLaravelExporting || !currentDiagram?.id) {
+            return;
+        }
+
+        setIsLaravelExporting(true);
+        setLaravelErrorCode(null);
+
+        try {
+            const blob = await exportLaravelMigrations(currentDiagram.id, {
+                laravelVersion,
+                includeIndexes: laravelIncludeIndexes,
+                includeForeignKeys: laravelIncludeForeignKeys,
+                content: currentDiagram,
+            });
+
+            downloadBlob(
+                blob,
+                buildLaravelExportFilename(currentDiagram.name ?? 'diagram')
+            );
+        } catch (error) {
+            setLaravelErrorCode(resolveLaravelExportErrorCode(error));
+        } finally {
+            setIsLaravelExporting(false);
+        }
+    }, [
+        currentDiagram,
+        isLaravelExporting,
+        laravelIncludeForeignKeys,
+        laravelIncludeIndexes,
+        laravelVersion,
+    ]);
+
     const handleOpenChange = useCallback(
         (open: boolean) => {
             if (!open) {
@@ -429,7 +489,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.SQL_PREVIEW ||
         step === ExportWizardStep.DBML_PREVIEW ||
         step === ExportWizardStep.JSON_DOWNLOAD ||
-        step === ExportWizardStep.VISUAL_OPTIONS;
+        step === ExportWizardStep.VISUAL_OPTIONS ||
+        step === ExportWizardStep.LARAVEL_OPTIONS;
 
     const isSqlBranch =
         step === ExportWizardStep.SQL_TARGET ||
@@ -438,6 +499,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const isDbmlBranch = step === ExportWizardStep.DBML_PREVIEW;
     const isJsonBranch = step === ExportWizardStep.JSON_DOWNLOAD;
     const isVisualBranch = step === ExportWizardStep.VISUAL_OPTIONS;
+    const isLaravelBranch = step === ExportWizardStep.LARAVEL_OPTIONS;
 
     const dialogTitle = t('export_wizard.title');
 
@@ -466,6 +528,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                           ),
                       })
                     : undefined;
+            case ExportWizardStep.LARAVEL_OPTIONS:
+                return t('export_wizard.laravel.options_step.description');
             default:
                 return t('export_wizard.description');
         }
@@ -501,6 +565,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     {isVisualBranch && visualFormat ? (
                         <ExportVisualBranchContext format={visualFormat} />
                     ) : null}
+                    {isLaravelBranch ? <ExportLaravelBranchContext /> : null}
                     <DialogTitle>{dialogTitle}</DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
@@ -585,6 +650,25 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             }}
                         />
                     ) : null}
+
+                    {step === ExportWizardStep.LARAVEL_OPTIONS ? (
+                        <ExportLaravelOptionsStep
+                            diagramName={currentDiagram.name ?? 'diagram'}
+                            laravelVersion={laravelVersion}
+                            includeIndexes={laravelIncludeIndexes}
+                            includeForeignKeys={laravelIncludeForeignKeys}
+                            isExporting={isLaravelExporting}
+                            errorCode={laravelErrorCode}
+                            onLaravelVersionChange={setLaravelVersion}
+                            onIncludeIndexesChange={setLaravelIncludeIndexes}
+                            onIncludeForeignKeysChange={
+                                setLaravelIncludeForeignKeys
+                            }
+                            onExport={() => {
+                                void handleLaravelExport();
+                            }}
+                        />
+                    ) : null}
                 </div>
 
                 {showBackButton ? (
@@ -593,7 +677,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             type="button"
                             variant="secondary"
                             onClick={handleBack}
-                            disabled={isVisualExporting}
+                            disabled={isVisualExporting || isLaravelExporting}
                         >
                             {t('export_wizard.back')}
                         </Button>

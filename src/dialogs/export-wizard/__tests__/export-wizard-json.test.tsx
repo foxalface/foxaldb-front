@@ -12,7 +12,6 @@ const dialogMocks = {
     closeExportWizardDialog: vi.fn(),
     openExportSQLDialog: vi.fn(),
     openExportDiagramDialog: vi.fn(),
-    openExportLaravelMigrationsDialog: vi.fn(),
 };
 
 const authState = {

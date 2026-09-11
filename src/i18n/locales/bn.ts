@@ -1184,6 +1184,34 @@ export const bn: LanguageTranslation = {
                     error_empty: 'ক্যানভাসে রপ্তানি করার মতো কিছু নেই।',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Laravel মাইগ্রেশন কীভাবে রপ্তানি করবেন তা বেছে নিন।',
+                    explanation:
+                        'বর্তমান ডায়াগ্রাম থেকে Laravel মাইগ্রেশন ফাইলের একটি ZIP তৈরি করুন।',
+                    filename_label: 'ফাইলের নাম: {{filename}}',
+                    laravel_version: 'Laravel সংস্করণ',
+                    include_indexes: 'টেবিল ইনডেক্স অন্তর্ভুক্ত করুন',
+                    include_indexes_description:
+                        'স্পষ্ট টেবিল ইনডেক্স সংজ্ঞা রপ্তানি করুন। ফিল্ড-স্তরের ইউনিক সীমাবদ্ধতা সবসময় অন্তর্ভুক্ত থাকে।',
+                    include_foreign_keys: 'ফরেন কী অন্তর্ভুক্ত করুন',
+                    include_foreign_keys_description:
+                        'ফরেন কির জন্য আলাদা মাইগ্রেশন ফাইল রপ্তানি করুন।',
+                    export: 'রপ্তানি',
+                    generating: 'Laravel মাইগ্রেশন তৈরি হচ্ছে...',
+                    error: 'Laravel মাইগ্রেশন রপ্তানি করা যায়নি। আবার চেষ্টা করুন।',
+                    error_unauthenticated:
+                        'Laravel মাইগ্রেশন রপ্তানি করতে সাইন ইন করতে হবে।',
+                    error_forbidden: 'এই ডায়াগ্রাম রপ্তানি করার অনুমতি নেই।',
+                    error_not_found: 'এই ডায়াগ্রাম খুঁজে পাওয়া যায়নি।',
+                    error_empty: 'এই ডায়াগ্রামে রপ্তানিযোগ্য টেবিল নেই।',
+                    error_invalid:
+                        'ডায়াগ্রাম রপ্তানি করা যায়নি। স্কিমা পরীক্ষা করে আবার চেষ্টা করুন।',
+                    error_network:
+                        'সার্ভারে পৌঁছানো যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।',
+                },
+            },
         },
 
         export_dialog: {
@@ -1237,23 +1265,6 @@ export const bn: LanguageTranslation = {
                     'SQL স্ক্রিপ্ট তৈরি করার সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন বা <0>আমাদের সাথে যোগাযোগ করুন</0>।',
                 description:
                     'আপনার OPENAI_TOKEN ব্যবহার করার জন্য বিনামূল্যে অভিজ্ঞতা নিন, ম্যানুয়াল <0>এখানে দেখুন</0>।',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

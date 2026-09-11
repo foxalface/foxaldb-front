@@ -1185,6 +1185,34 @@ export const ko_KR: LanguageTranslation = {
                     error_empty: '캔버스에 내보낼 내용이 없습니다.',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Laravel 마이그레이션을 내보내는 방법을 선택하세요.',
+                    explanation:
+                        '현재 다이어그램에서 Laravel 마이그레이션 파일 ZIP을 생성합니다.',
+                    filename_label: '파일 이름: {{filename}}',
+                    laravel_version: 'Laravel 버전',
+                    include_indexes: '테이블 인덱스 포함',
+                    include_indexes_description:
+                        '명시적 테이블 인덱스 정의를 내보냅니다. 필드 수준 고유 제약은 항상 포함됩니다.',
+                    include_foreign_keys: '외래 키 포함',
+                    include_foreign_keys_description:
+                        '외래 키 마이그레이션 파일을 별도로 내보냅니다.',
+                    export: '내보내기',
+                    generating: 'Laravel 마이그레이션 생성 중...',
+                    error: 'Laravel 마이그레이션을 내보낼 수 없습니다. 다시 시도하세요.',
+                    error_unauthenticated:
+                        'Laravel 마이그레이션을 내보내려면 로그인해야 합니다.',
+                    error_forbidden: '이 다이어그램을 내보낼 권한이 없습니다.',
+                    error_not_found: '이 다이어그램을 찾을 수 없습니다.',
+                    error_empty: '이 다이어그램에는 내보낼 테이블이 없습니다.',
+                    error_invalid:
+                        '다이어그램을 내보낼 수 없습니다. 스키마를 확인한 뒤 다시 시도하세요.',
+                    error_network:
+                        '서버에 연결할 수 없습니다. 네트워크를 확인한 뒤 다시 시도하세요.',
+                },
+            },
         },
 
         export_dialog: {
@@ -1237,23 +1265,6 @@ export const ko_KR: LanguageTranslation = {
                     'SQL 생성에 실패하였습니다. 잠시후 다시 시도해주세요 계속해서 증상이 발생하는 경우 <0>우리에게 연락해주세요</0>.',
                 description:
                     '당신의 OPENAI_TOKEN가 있는 경우, <0>여기에서</0> 메뉴얼을 참고하여 사용하실 수 있습니다.',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

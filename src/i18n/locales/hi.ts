@@ -1177,6 +1177,36 @@ export const hi: LanguageTranslation = {
                     error_empty: 'कैनवास पर निर्यात करने के लिए कुछ नहीं है।',
                 },
             },
+            laravel: {
+                options_step: {
+                    description:
+                        'Laravel माइग्रेशन निर्यात करने का तरीका चुनें।',
+                    explanation:
+                        'वर्तमान आरेख से Laravel माइग्रेशन फ़ाइलों का ZIP बनाएँ।',
+                    filename_label: 'फ़ाइल नाम: {{filename}}',
+                    laravel_version: 'Laravel संस्करण',
+                    include_indexes: 'तालिका अनुक्रमणिका शामिल करें',
+                    include_indexes_description:
+                        'स्पष्ट तालिका अनुक्रमणिका परिभाषाएँ निर्यात करें। फ़ील्ड-स्तरीय यूनिक बाधाएँ हमेशा शामिल रहती हैं।',
+                    include_foreign_keys: 'विदेशी कुंजियाँ शामिल करें',
+                    include_foreign_keys_description:
+                        'विदेशी कुंजियों के लिए अलग माइग्रेशन फ़ाइलें निर्यात करें।',
+                    export: 'निर्यात करें',
+                    generating: 'Laravel माइग्रेशन बन रहे हैं...',
+                    error: 'Laravel माइग्रेशन निर्यात नहीं हो सके। कृपया फिर कोशिश करें।',
+                    error_unauthenticated:
+                        'Laravel माइग्रेशन निर्यात करने के लिए साइन इन करना आवश्यक है।',
+                    error_forbidden:
+                        'इस आरेख को निर्यात करने की अनुमति नहीं है।',
+                    error_not_found: 'यह आरेख नहीं मिला।',
+                    error_empty:
+                        'इस आरेख में निर्यात करने योग्य तालिकाएँ नहीं हैं।',
+                    error_invalid:
+                        'आरेख निर्यात नहीं हो सका। स्कीमा जाँचें और फिर कोशिश करें।',
+                    error_network:
+                        'सर्वर से संपर्क नहीं हो सका। कनेक्शन जाँचें और फिर कोशिश करें।',
+                },
+            },
         },
 
         export_dialog: {
@@ -1230,23 +1260,6 @@ export const hi: LanguageTranslation = {
                     'SQL स्क्रिप्ट उत्पन्न करने में त्रुटि। कृपया बाद में पुनः प्रयास करें या <0>हमसे संपर्क करें</0>।',
                 description:
                     'अपने OPENAI_TOKEN का उपयोग करने के लिए स्वतंत्र महसूस करें, मैनुअल <0>यहाँ देखें</0>।',
-            },
-        },
-
-        export_laravel_migrations_dialog: {
-            title: 'Export Laravel migrations',
-            laravel_version: 'Laravel version',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Export explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Export separate foreign key migration files.',
-            export: 'Export',
-            exporting: 'Exporting...',
-            cancel: 'Cancel',
-            errors: {
-                export_failed: 'Could not export Laravel migrations.',
             },
         },
 

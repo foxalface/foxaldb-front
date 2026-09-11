@@ -17,8 +17,6 @@ import { ExportWizardDialog } from '@/dialogs/export-wizard/export-wizard-dialog
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 import { UserSettingsDialog } from '@/dialogs/user-settings-dialog/user-settings-dialog';
-import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
-import { ExportLaravelMigrationsDialog } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 import { LaravelMigrationImportDialog } from '@/dialogs/laravel-migration-import-dialog/laravel-migration-import-dialog';
 import { LaravelMigrationDiffDialog } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
@@ -173,15 +171,6 @@ export const DialogProvider: React.FC<
     const [openImportDiagramDialog, setOpenImportDiagramDialog] =
         useState(false);
 
-    const [
-        openExportLaravelMigrationsDialog,
-        setOpenExportLaravelMigrationsDialog,
-    ] = useState(false);
-    const [
-        exportLaravelMigrationsDialogParams,
-        setExportLaravelMigrationsDialogParams,
-    ] = useState<Omit<ExportLaravelMigrationsDialogProps, 'dialog'>>();
-
     const [createDiagramDialogMounted, setCreateDiagramDialogMounted] =
         useState(false);
     const [exportSQLDialogMounted, setExportSQLDialogMounted] = useState(false);
@@ -205,12 +194,6 @@ export const DialogProvider: React.FC<
             setImportDatabaseDialogMounted(true);
         }
     }, [openImportDatabaseDialog]);
-
-    const openExportLaravelMigrationsDialogHandler: DialogContext['openExportLaravelMigrationsDialog'] =
-        useCallback((params) => {
-            setExportLaravelMigrationsDialogParams(params);
-            setOpenExportLaravelMigrationsDialog(true);
-        }, []);
 
     const [
         openLaravelMigrationImportDialog,
@@ -239,10 +222,6 @@ export const DialogProvider: React.FC<
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
                 openExportWizardDialog: () => setOpenExportWizardDialog(true),
                 closeExportWizardDialog: () => setOpenExportWizardDialog(false),
-                openExportLaravelMigrationsDialog:
-                    openExportLaravelMigrationsDialogHandler,
-                closeExportLaravelMigrationsDialog: () =>
-                    setOpenExportLaravelMigrationsDialog(false),
                 openLaravelMigrationImportDialog: () =>
                     setOpenLaravelMigrationImportDialog(true),
                 closeLaravelMigrationImportDialog: () =>
@@ -334,12 +313,6 @@ export const DialogProvider: React.FC<
             <ExportWizardDialog dialog={{ open: openExportWizardDialog }} />
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
-            {exportLaravelMigrationsDialogParams ? (
-                <ExportLaravelMigrationsDialog
-                    dialog={{ open: openExportLaravelMigrationsDialog }}
-                    {...exportLaravelMigrationsDialogParams}
-                />
-            ) : null}
             <LaravelMigrationImportDialog
                 dialog={{ open: openLaravelMigrationImportDialog }}
             />

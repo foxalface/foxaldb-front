@@ -9,7 +9,6 @@ import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationshi
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 import type { ExportWizardDialogProps } from '@/dialogs/export-wizard/export-wizard-dialog';
-import type { ExportLaravelMigrationsDialogProps } from '@/dialogs/export-laravel-migrations-dialog/export-laravel-migrations-dialog';
 import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 import type { GuestDiagramMigrationDialogProps } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
 
@@ -31,12 +30,6 @@ export interface DialogContext {
         params?: Omit<ExportWizardDialogProps, 'dialog'>
     ) => void;
     closeExportWizardDialog: () => void;
-
-    // Export Laravel migrations dialog
-    openExportLaravelMigrationsDialog: (
-        params: Omit<ExportLaravelMigrationsDialogProps, 'dialog'>
-    ) => void;
-    closeExportLaravelMigrationsDialog: () => void;
 
     // Import Laravel migrations dialog
     openLaravelMigrationImportDialog: () => void;
@@ -104,8 +97,6 @@ export const dialogContext = createContext<DialogContext>({
     closeOpenDiagramDialog: emptyFn,
     openExportWizardDialog: emptyFn,
     closeExportWizardDialog: emptyFn,
-    openExportLaravelMigrationsDialog: emptyFn,
-    closeExportLaravelMigrationsDialog: emptyFn,
     openLaravelMigrationImportDialog: emptyFn,
     closeLaravelMigrationImportDialog: emptyFn,
     openLaravelMigrationDiffDialog: emptyFn,
