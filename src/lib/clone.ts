@@ -152,9 +152,19 @@ export const cloneDiagram = (
     };
 
     const tables: DBTable[] =
-        diagram.tables?.map((table) =>
-            cloneTable(table, { generateId, idsMap })
-        ) ?? [];
+        diagram.tables?.map((table) => {
+            const clonedTable = cloneTable(table, { generateId, idsMap });
+            const parentAreaId = clonedTable.parentAreaId;
+
+            if (parentAreaId === undefined || parentAreaId === null) {
+                return clonedTable;
+            }
+
+            return {
+                ...clonedTable,
+                parentAreaId: getNewId(parentAreaId),
+            };
+        }) ?? [];
 
     const relationships: DBRelationship[] =
         diagram.relationships

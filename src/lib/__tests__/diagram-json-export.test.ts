@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { DBCustomTypeKind } from '@/lib/domain/db-custom-type';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DBTable } from '@/lib/domain/db-table';
 import {
+    DIAGRAM_JSON_ROOT_ID,
     DIAGRAM_JSON_SCHEMA_VERSION,
     diagramToJSONOutput,
 } from '../export-import-utils';
@@ -45,6 +47,13 @@ const createSampleDiagram = (): Diagram => {
                 isPrimaryKey: true,
             },
         ],
+        checkConstraints: [
+            {
+                id: 'check-users-email',
+                expression: "email <> ''",
+                createdAt: 9,
+            },
+        ],
         color: '#ffe374',
         isView: false,
         createdAt: 4,
@@ -82,11 +91,33 @@ const createSampleDiagram = (): Diagram => {
         createdAt: 7,
     };
 
+    const postStatsTable: DBTable = {
+        id: 'table-post-stats',
+        name: 'post_stats',
+        x: 700,
+        y: 200,
+        fields: [
+            {
+                id: 'field-post-stats-post-id',
+                name: 'post_id',
+                type: { id: 'bigint', name: 'bigint' },
+                primaryKey: true,
+                unique: true,
+                nullable: false,
+                createdAt: 10,
+            },
+        ],
+        indexes: [],
+        color: '#9bef8a',
+        isView: true,
+        createdAt: 11,
+    };
+
     return {
         id: 'diagram-original',
         name: 'My Diagram',
         databaseType: DatabaseType.POSTGRESQL,
-        tables: [usersTable, postsTable],
+        tables: [usersTable, postsTable, postStatsTable],
         relationships: [
             {
                 id: 'rel-posts-users',
@@ -100,7 +131,14 @@ const createSampleDiagram = (): Diagram => {
                 createdAt: 8,
             },
         ],
-        dependencies: [],
+        dependencies: [
+            {
+                id: 'dep-post-stats-posts',
+                tableId: 'table-posts',
+                dependentTableId: 'table-post-stats',
+                createdAt: 12,
+            },
+        ],
         areas: [
             {
                 id: 'area-main',
@@ -112,7 +150,14 @@ const createSampleDiagram = (): Diagram => {
                 color: '#aabbcc',
             },
         ],
-        customTypes: [],
+        customTypes: [
+            {
+                id: 'type-user-status',
+                name: 'user_status',
+                kind: DBCustomTypeKind.enum,
+                values: ['active', 'disabled'],
+            },
+        ],
         notes: [
             {
                 id: 'note-1',
@@ -130,34 +175,50 @@ const createSampleDiagram = (): Diagram => {
 };
 
 describe('diagramToJSONOutput', () => {
-    it('emits pretty-printed Diagram-shaped JSON with schemaVersion 1', () => {
+    it('emits pretty-printed Diagram-shaped JSON with schemaVersion 1 and placeholder root id', () => {
         const json = diagramToJSONOutput(createSampleDiagram());
         const parsed = JSON.parse(json) as Record<string, unknown>;
 
         expect(json).toContain('\n');
         expect(parsed.diagram).toBeUndefined();
-        expect(parsed.id).toBeDefined();
+        expect(parsed.id).toBe(DIAGRAM_JSON_ROOT_ID);
+        expect(parsed.id).toBe('diagram');
         expect(parsed.name).toBe('My Diagram');
         expect(parsed.databaseType).toBe(DatabaseType.POSTGRESQL);
         expect(parsed.schemaVersion).toBe(DIAGRAM_JSON_SCHEMA_VERSION);
         expect(parsed.schemaVersion).toBe(1);
         expect(Array.isArray(parsed.tables)).toBe(true);
         expect(Array.isArray(parsed.relationships)).toBe(true);
-        expect((parsed.tables as unknown[]).length).toBe(2);
+        expect((parsed.tables as unknown[]).length).toBe(3);
         expect((parsed.relationships as unknown[]).length).toBe(1);
         expect((parsed.areas as unknown[]).length).toBe(1);
         expect((parsed.notes as unknown[]).length).toBe(1);
+        expect((parsed.customTypes as unknown[]).length).toBe(1);
+        expect((parsed.dependencies as unknown[]).length).toBe(1);
+        expect(parsed.createdAt).toBe('2024-01-01T00:00:00.000Z');
+        expect(parsed.updatedAt).toBe('2024-01-01T00:00:00.000Z');
     });
 
-    it('keeps current running-id remumbering and coherent relationship references', () => {
-        const parsed = JSON.parse(
-            diagramToJSONOutput(createSampleDiagram())
-        ) as {
+    it('preserves source internal IDs and nested references in the file', () => {
+        const source = createSampleDiagram();
+        const parsed = JSON.parse(diagramToJSONOutput(source)) as {
             id: string;
             tables: Array<{
                 id: string;
                 name: string;
+                parentAreaId?: string | null;
                 fields: Array<{ id: string; name: string }>;
+                indexes: Array<{
+                    id: string;
+                    name: string;
+                    fieldIds: string[];
+                    isPrimaryKey?: boolean;
+                }>;
+                checkConstraints?: Array<{
+                    id: string;
+                    expression: string;
+                    createdAt: number;
+                }>;
             }>;
             relationships: Array<{
                 id: string;
@@ -166,25 +227,61 @@ describe('diagramToJSONOutput', () => {
                 sourceFieldId: string;
                 targetFieldId: string;
             }>;
+            dependencies: Array<{
+                id: string;
+                tableId: string;
+                dependentTableId: string;
+            }>;
+            areas: Array<{ id: string; name: string }>;
+            notes: Array<{ id: string }>;
+            customTypes: Array<{ id: string }>;
         };
 
-        expect(parsed.id).toBe('0');
+        expect(parsed.id).toBe('diagram');
+        expect(parsed.id).not.toBe(source.id);
 
         const users = parsed.tables.find((table) => table.name === 'users');
         const posts = parsed.tables.find((table) => table.name === 'posts');
-        expect(users?.id).toBe('1');
-        expect(posts?.id).toBe('5');
-
-        const usersId = users?.fields.find((field) => field.name === 'id');
-        const postsUserId = posts?.fields.find(
-            (field) => field.name === 'user_id'
+        const postStats = parsed.tables.find(
+            (table) => table.name === 'post_stats'
         );
-        const relationship = parsed.relationships[0];
+        const mainArea = parsed.areas.find((area) => area.name === 'Main');
 
-        expect(relationship.sourceTableId).toBe(posts?.id);
-        expect(relationship.targetTableId).toBe(users?.id);
-        expect(relationship.sourceFieldId).toBe(postsUserId?.id);
-        expect(relationship.targetFieldId).toBe(usersId?.id);
+        expect(users?.id).toBe('table-users');
+        expect(posts?.id).toBe('table-posts');
+        expect(postStats?.id).toBe('table-post-stats');
+        expect(users?.fields[0]?.id).toBe('field-users-id');
+        expect(users?.fields[1]?.id).toBe('field-users-email');
+        expect(posts?.fields[0]?.id).toBe('field-posts-id');
+        expect(posts?.fields[1]?.id).toBe('field-posts-user-id');
+        expect(users?.indexes[0]?.id).toBe('index-users-pk');
+        expect(users?.indexes[0]?.fieldIds).toEqual(['field-users-id']);
+        expect(users?.indexes[0]?.name).toBe('users_pkey');
+        expect(users?.checkConstraints?.[0]).toEqual({
+            id: 'check-users-email',
+            expression: "email <> ''",
+            createdAt: 9,
+        });
+
+        expect(mainArea?.id).toBe('area-main');
+        expect(users?.parentAreaId).toBe('area-main');
+        expect(users?.parentAreaId).toBe(mainArea?.id);
+        expect(parsed.notes[0]?.id).toBe('note-1');
+        expect(parsed.customTypes[0]?.id).toBe('type-user-status');
+
+        const relationship = parsed.relationships[0];
+        expect(relationship.id).toBe('rel-posts-users');
+        expect(relationship.sourceTableId).toBe('table-posts');
+        expect(relationship.targetTableId).toBe('table-users');
+        expect(relationship.sourceFieldId).toBe('field-posts-user-id');
+        expect(relationship.targetFieldId).toBe('field-users-id');
+
+        expect(parsed.dependencies[0]).toEqual({
+            id: 'dep-post-stats-posts',
+            tableId: 'table-posts',
+            dependentTableId: 'table-post-stats',
+            createdAt: 12,
+        });
     });
 
     it('is deterministic for the same Diagram input', () => {
@@ -199,6 +296,7 @@ describe('diagramToJSONOutput', () => {
         const originalTableId = diagram.tables?.[0]?.id;
         const originalParentAreaId = diagram.tables?.[0]?.parentAreaId;
         const originalPkName = diagram.tables?.[0]?.indexes[0]?.name;
+        const originalCheckId = diagram.tables?.[0]?.checkConstraints?.[0]?.id;
 
         diagramToJSONOutput(diagram);
 
@@ -206,26 +304,8 @@ describe('diagramToJSONOutput', () => {
         expect(diagram.tables?.[0]?.id).toBe(originalTableId);
         expect(diagram.tables?.[0]?.parentAreaId).toBe(originalParentAreaId);
         expect(diagram.tables?.[0]?.indexes[0]?.name).toBe(originalPkName);
-    });
-
-    it('characterizes deferred JSON-B clone behavior for parentAreaId and PK index names', () => {
-        const parsed = JSON.parse(
-            diagramToJSONOutput(createSampleDiagram())
-        ) as {
-            tables: Array<{
-                name: string;
-                parentAreaId?: string | null;
-                indexes: Array<{ name: string; isPrimaryKey?: boolean }>;
-            }>;
-            areas: Array<{ id: string; name: string }>;
-        };
-
-        const users = parsed.tables.find((table) => table.name === 'users');
-        const mainArea = parsed.areas.find((area) => area.name === 'Main');
-
-        expect(mainArea?.id).not.toBe('area-main');
-        expect(users?.parentAreaId).toBe('area-main');
-        expect(users?.parentAreaId).not.toBe(mainArea?.id);
-        expect(users?.indexes[0]?.name).toBe('');
+        expect(diagram.tables?.[0]?.checkConstraints?.[0]?.id).toBe(
+            originalCheckId
+        );
     });
 });

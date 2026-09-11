@@ -6,6 +6,8 @@ export const DIAGRAM_JSON_SCHEMA_VERSION = 1 as const;
 
 export type DiagramJsonSchemaVersion = typeof DIAGRAM_JSON_SCHEMA_VERSION;
 
+export const DIAGRAM_JSON_ROOT_ID = 'diagram' as const;
+
 export const runningIdGenerator = (): (() => string) => {
     let id = 0;
     return () => (id++).toString();
@@ -27,10 +29,10 @@ const cloneDiagramWithIds = (diagram: Diagram): Diagram => ({
 });
 
 export const diagramToJSONOutput = (diagram: Diagram): string => {
-    const clonedDiagram = cloneDiagramWithRunningIds(diagram).diagram;
     return JSON.stringify(
         {
-            ...clonedDiagram,
+            ...diagram,
+            id: DIAGRAM_JSON_ROOT_ID,
             schemaVersion: DIAGRAM_JSON_SCHEMA_VERSION,
         },
         null,

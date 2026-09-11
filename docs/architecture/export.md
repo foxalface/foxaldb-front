@@ -148,7 +148,7 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 | **Auth** | None |
 | **Generator** | `diagramToJSONOutput()` in `frontend/src/lib/export-import-utils.ts` |
 | **Output** | Pretty-printed Diagram-shaped JSON with sibling `schemaVersion: 1`; filename `{diagram-slug}.json` |
-| **Semantics** | Portable clone snapshot. Import creates a **new** diagram identity. Not restore-in-place. |
+| **Semantics** | Portable clone snapshot. FILE preserves internal entity IDs; root file id is `"diagram"`. Import creates a **new** diagram identity. Not restore-in-place. |
 | **Entry points** | Export wizard → Diagram JSON (`JSON_DOWNLOAD`); Backup → Export diagram (`ExportDiagramDialog`) |
 | **Tests** | `frontend/src/lib/__tests__/diagram-json-export.test.ts`; `build-diagram-json-export-filename.test.ts`; wizard JSON branch tests |
 
@@ -290,21 +290,22 @@ DBML generation is **substantially implemented and tested** but not yet a first-
 
 ## Diagram JSON
 
-JSON-A contract (`diagramToJSONOutput`):
+JSON-B contract (`diagramToJSONOutput`):
 
 - Serializes a **portable clone snapshot** of the canonical `Diagram` (tables, relationships, dependencies, areas, notes, customTypes, `databaseType`, `databaseEdition`, timestamps).
 - Full unfiltered diagram. Do not apply schema filters.
-- Sibling root property **`schemaVersion: 1`**. No `{ diagram: ... }` wrapper.
-- **Entity IDs are still renumbered** to running `"0"`, `"1"`, … via `cloneDiagramWithRunningIds` (JSON-A preserves this on purpose).
-- **Diagram ID** is included but **not stable** through import (`diagramFromJSONInput` assigns a new `generateDiagramId()`).
-- **Timestamps** reset to `new Date()` on import.
-- **Import:** legacy unversioned Diagram-shaped JSON and `schemaVersion: 1` files both remain importable via `detect-format.ts` → `diagram_json` and `importDiagramFromJson()`. Wizard may override `databaseType`. Import is never restore-in-place.
+- Sibling root property **`schemaVersion: 1`**. No `{ diagram: ... }` wrapper. `schemaVersion` describes the Diagram-shaped document contract, not ID allocation.
+- **Root file `id`** is the deterministic placeholder `"diagram"`. It is **not** the source diagram’s Dexie or Laravel persistence identity.
+- **Internal entity IDs are preserved in the FILE** (tables, fields, indexes, relationships, dependencies, areas, notes, customTypes, check constraints) together with nested references (`index.fieldIds`, relationship table/field ids, dependency table ids, `table.parentAreaId`).
+- **PK index names are preserved in the FILE.** Table→area membership is preserved in the FILE.
+- **Import** creates a **new root identity** (`diagramFromJSONInput` assigns `generateDiagramId()`). Internal entity IDs are remapped for Dexie global primary-key safety. `cloneDiagram` remaps `parentAreaId` so imported area membership stays coherent. Imported PK index names are still cleared by generic `cloneTable` behavior.
+- **Timestamps** in the FILE keep the source root `createdAt` / `updatedAt`; import resets them to `new Date()`.
+- **Compatibility:** legacy unversioned Diagram-shaped JSON, JSON-A `schemaVersion: 1` running-ID files, and JSON-B `schemaVersion: 1` stable-ID files all remain importable via `detect-format.ts` → `diagram_json` and `importDiagramFromJson()`. Wizard may override `databaseType`. Import is never restore-in-place. Diagram JSON is **not** the Sync/Diff protocol.
 - **Filename:** `{diagram-slug}.json`.
 - **Wizard:** `TARGET_PICKER` → `JSON_DOWNLOAD` (download-oriented; no full JSON preview).
 - **Backup:** still uses `ExportDiagramDialog` and the same serializer/filename helper.
-- **JSON-B deferred:** entity-ID fidelity, `parentAreaId` remapping, PK index-name clearing, check-constraint ID behavior, Dexie PK collisions.
 
-**Tests:** serializer, filename, import compatibility, wizard JSON branch.
+**Tests:** serializer, filename, import compatibility (legacy / JSON-A / JSON-B), clone `parentAreaId`, wizard JSON branch.
 
 ---
 
@@ -415,7 +416,7 @@ Sync/Diff/Merge is **after Export**. No `ChangeSet` abstraction is implemented o
 3. Dialect conversion during export must **not mutate** canonical diagram state.
 4. Laravel-specific DTOs and assumptions stay in `backend/app/Services/LaravelMigrationExport/`.
 5. **Schema-filtered** SQL export (via `useDiagramFilter`) is not equivalent to the full canonical diagram.
-6. **JSON ID/version semantics** must be revisited before relying on portable exports for diff/merge (`cloneDiagramWithRunningIds` destroys stable entity IDs).
+6. **JSON files preserve internal entity IDs** of the source Diagram, but import remaps them. Sync/Diff/Merge must not treat Diagram JSON as a restore-in-place or identity-preserving import protocol. Matching successive **files** from the same live diagram can use those file IDs; matching an imported clone requires structural comparison.
 7. Realtime editing conflict handling (LWW, editing awareness) is **completely separate** from schema Sync/Diff/Merge.
 
 ---
@@ -433,7 +434,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 | SQL DBML flow flag | `export-sql-dbml.test.ts` | Covered |
 | DBML generator | `frontend/src/lib/dbml/dbml-export/__tests__/` (9 files) | Covered |
 | Laravel export | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite | Covered |
-| Diagram JSON export | `frontend/src/lib/__tests__/diagram-json-export.test.ts`, filename + wizard JSON tests | Covered (JSON-A) |
+| Diagram JSON export | `frontend/src/lib/__tests__/diagram-json-export.test.ts`, filename + wizard JSON tests | Covered (JSON-B) |
 | Image export | — | **Missing** |
 | Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON branches) |
 
@@ -459,7 +460,7 @@ Verified in current code:
 - **Misleading UI labels** — legacy `ExportSQLDialog` still has ✨ targets, Sparkles loader, hardcoded English "Deterministic"/"AI" toggle
 - **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback in generator; wizard shows unsupported UX, not fake targets
 - **DBML** — wizard-native export implemented; side panel remains live developer view (inline/relationships variants not exposed in wizard)
-- **Diagram JSON-B** — running-ID remumbering, `parentAreaId` mismatch after clone, PK index-name clearing; identity/fidelity hardening deferred
+- **Diagram JSON import PK names** — `cloneTable` still clears primary-key index names on import/duplicate; JSON-B files preserve the names, imported diagrams do not
 - **Inconsistent delivery** — SQL/DBML wizard have copy + download; JSON is download-only; images/Laravel file download
 - **Laravel export** — requires persisted backend diagram ID
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML/images unfiltered
