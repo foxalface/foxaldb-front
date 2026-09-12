@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     Dialog,
     DialogContent,
@@ -65,12 +71,13 @@ import {
     VisualExportError,
     getDefaultIncludePattern,
 } from '@/lib/visual-export/visual-export-options';
-import {
-    generatePrismaSchemaFromDiagram,
-    type PrismaExportError,
-    type PrismaExportNote,
-    type PrismaExportVersion,
-} from '@/lib/prisma-export';
+import { ApiError } from '@/lib/api/client';
+import { exportPrismaSchema } from '@/lib/api/prisma-export';
+import type {
+    PrismaExportError,
+    PrismaExportNote,
+    PrismaExportVersion,
+} from '@/lib/api/prisma-export-types';
 
 export interface ExportWizardDialogProps extends BaseDialogProps {}
 
@@ -128,6 +135,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const [prismaHasUnexpectedError, setPrismaHasUnexpectedError] =
         useState(false);
     const [isPrismaGenerating, setIsPrismaGenerating] = useState(false);
+    const prismaExportRequestIdRef = useRef(0);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -161,6 +169,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     }, []);
 
     const resetPrismaBranchState = useCallback(() => {
+        prismaExportRequestIdRef.current += 1;
         setPrismaVersion('7');
         setPrismaSchema(undefined);
         setPrismaNotes([]);
@@ -296,6 +305,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     );
 
     const handleContinuePrismaVersion = useCallback(() => {
+        prismaExportRequestIdRef.current += 1;
         setPrismaSchema(undefined);
         setPrismaNotes([]);
         setPrismaGenerationError(null);
@@ -343,6 +353,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         }
 
         if (step === ExportWizardStep.PRISMA_PREVIEW) {
+            prismaExportRequestIdRef.current += 1;
             setPrismaSchema(undefined);
             setPrismaNotes([]);
             setPrismaGenerationError(null);
@@ -391,26 +402,59 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             return;
         }
 
+        const requestId = prismaExportRequestIdRef.current;
+        let cancelled = false;
+
         setIsPrismaGenerating(true);
 
-        try {
-            const result = generatePrismaSchemaFromDiagram({
-                diagram: currentDiagram,
-                version: prismaVersion,
-            });
+        void (async () => {
+            try {
+                const result = await exportPrismaSchema({
+                    diagram: currentDiagram,
+                    version: prismaVersion,
+                });
 
-            if (!result.success) {
-                setPrismaGenerationError(result.error);
-                return;
+                if (
+                    cancelled ||
+                    requestId !== prismaExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (!result.success) {
+                    setPrismaGenerationError(result.error);
+                    return;
+                }
+
+                setPrismaSchema(result.schema);
+                setPrismaNotes(result.notes);
+            } catch (error) {
+                if (
+                    cancelled ||
+                    requestId !== prismaExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (error instanceof ApiError) {
+                    setPrismaHasUnexpectedError(true);
+                    return;
+                }
+
+                setPrismaHasUnexpectedError(true);
+            } finally {
+                if (
+                    !cancelled &&
+                    requestId === prismaExportRequestIdRef.current
+                ) {
+                    setIsPrismaGenerating(false);
+                }
             }
+        })();
 
-            setPrismaSchema(result.schema);
-            setPrismaNotes(result.notes);
-        } catch {
-            setPrismaHasUnexpectedError(true);
-        } finally {
-            setIsPrismaGenerating(false);
-        }
+        return () => {
+            cancelled = true;
+        };
     }, [
         currentDiagram,
         prismaGenerationError,

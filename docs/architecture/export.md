@@ -61,6 +61,8 @@ Transforms the canonical `Diagram` into framework-native schema/code artifacts:
 
 Framework import parsers are **not** inverted into exporters. Each framework export receives its own implementation milestone with independent tests and QA.
 
+**Framework export authentication:** framework-native exports require an authenticated user (Sanctum). This applies to Laravel and Prisma today, and to EF Core, Rails, Django, and Drizzle when implemented. Authentication is **not** paid-plan gating — registered free users may use framework exports unless another product rule applies. Portable/local exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain guest-accessible.
+
 ### C. Portable / Schema
 
 Portable interchange formats:
@@ -98,7 +100,7 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 **Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, Laravel migrations, and Prisma are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
 
-**Planned framework targets** (EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones. Prisma is available when `diagram.databaseType` is supported; unsupported DB types show a localized disabled reason.
+**Planned framework targets** (EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones. **Prisma** and **Laravel** require authentication; Prisma is additionally gated by supported `diagram.databaseType` (unsupported DB types show a localized disabled reason for authenticated users; guests do not see Prisma in the target picker).
 
 ---
 
@@ -206,13 +208,15 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | Attribute | Detail |
 |-----------|--------|
 | **Input** | Full unfiltered `currentDiagram` (live editor state; no schema/table filter) |
-| **Execution** | Browser only (`frontend/src/lib/prisma-export/`) |
-| **Auth** | None (guest OK) |
-| **Backend** | None — no API route, controller, or persistence |
-| **Generator** | `generatePrismaSchemaFromDiagram({ diagram, version })` |
+| **Execution** | Private Laravel backend (`backend/app/Services/PrismaSchemaExport/`) |
+| **Auth** | Sanctum (`auth:sanctum`); unauthenticated callers receive `401`. Guests **hide** the target in the wizard (same framework pattern as Laravel). Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. Stateless — diagram payload is not persisted. |
+| **Endpoint** | `POST /api/exports/prisma` with `{ version: "6" \| "7", diagram: Diagram }` |
+| **Frontend client** | `frontend/src/lib/api/prisma-export.ts` |
+| **Frontend types** | `frontend/src/lib/api/prisma-export-types.ts` |
+| **Target availability** | `frontend/src/lib/export/prisma-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type) |
 | **Output** | Fixed filename `schema.prisma` (`text/plain`); copy + download in wizard preview |
 | **Entry points** | Export wizard → Prisma (`PRISMA_VERSION` → `PRISMA_PREVIEW`) |
-| **Tests** | `frontend/src/lib/prisma-export/__tests__/`; `export-wizard-prisma.test.tsx`; semantic round-trip tests use the existing Prisma importer in tests only |
+| **Tests** | `frontend/src/lib/api/__tests__/prisma-export.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-prisma.test.tsx`; backend PHPUnit under `backend/tests/Feature/PrismaSchemaExportTest.php` and `backend/tests/Unit/Services/PrismaSchemaExport/` |
 
 **Version selector:** Prisma 7 (default, recommended) and Prisma 6. Wizard-local state only; resets to `7` on dialog close/reopen.
 
@@ -221,7 +225,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | Prisma 6 | `provider = "prisma-client-js"` | `provider` + `url = env("DATABASE_URL")` |
 | Prisma 7 | `provider = "prisma-client"` + `output = "../generated/prisma"` | `provider` only (no URL) |
 
-**Provider inference:** `diagram.databaseType` maps to Prisma datasource provider via `resolvePrismaDatasourceProvider()`. No provider override in V1.
+**Provider inference:** `diagram.databaseType` maps to Prisma datasource provider on the backend. No provider override in V1.
 
 **Supported database types:** PostgreSQL, MySQL, MariaDB, SQLite, SQL Server, CockroachDB.
 
@@ -235,7 +239,9 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 **Mapping strategy:** deterministic `@map` / `@@map`, FK scalar fields preserved with synthesized relation fields, conservative unsupported policy. Views and schema namespaces are deferred (noted, not emitted).
 
-**No generic framework exporter abstraction.** Prisma export is a dedicated frontend module; production code does not call the Prisma importer.
+**No generic framework exporter abstraction.** Prisma generation is private backend application logic. The public frontend exposes wizard UX, version selection, API transport, preview, copy/download, and availability presentation only. Production code does not call the Prisma importer.
+
+**Architectural rule:** Framework-native export generators (Laravel, Prisma, future EF Core/Rails/Django/Drizzle) are private backend-owned application logic and require authentication. Generic/portable/visual exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain frontend-side where appropriate and may remain guest-accessible.
 
 ---
 
@@ -516,6 +522,7 @@ Verified in current code:
 - **Diagram JSON import PK names** — `cloneTable` still clears primary-key index names on import/duplicate; JSON-B files preserve the names, imported diagrams do not
 - **Inconsistent delivery** — SQL/DBML wizard have copy + download; JSON is download-only; images/Laravel file download
 - **Laravel export** — requires an authenticated backend diagram ID; generation remains backend-owned
+- **Prisma export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required)
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML full diagram; images follow rendered canvas (filters/hidden nodes respected)
 - **SVG portability** — visual SVG remains html-to-image `foreignObject` HTML, not a native vector engine
 

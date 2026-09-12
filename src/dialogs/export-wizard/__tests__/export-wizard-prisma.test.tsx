@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ExportWizardDialog } from '../export-wizard-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { ApiError } from '@/lib/api/client';
+import type { PrismaExportResult } from '@/lib/api/prisma-export-types';
 import { downloadBlob } from '@/lib/download-blob';
 import { getExportTargetAvailability } from '../export-target-availability';
 import {
@@ -12,8 +14,16 @@ import {
     makeTable,
     resetIdCounter,
     typeRef,
-} from '@/lib/prisma-export/__tests__/test-helpers';
+} from './prisma-test-helpers';
 import type { Diagram } from '@/lib/domain/diagram';
+
+const { exportPrismaSchemaMock } = vi.hoisted(() => ({
+    exportPrismaSchemaMock: vi.fn(),
+}));
+
+vi.mock('@/lib/api/prisma-export', () => ({
+    exportPrismaSchema: exportPrismaSchemaMock,
+}));
 
 const dialogMocks = {
     closeExportWizardDialog: vi.fn(),
@@ -134,6 +144,115 @@ vi.mock('react-i18next', () => ({
 
 const mockedDownloadBlob = vi.mocked(downloadBlob);
 
+const resolveDatasourceProvider = (databaseType: DatabaseType): string => {
+    switch (databaseType) {
+        case DatabaseType.MYSQL:
+        case DatabaseType.MARIADB:
+            return 'mysql';
+        case DatabaseType.SQLITE:
+            return 'sqlite';
+        case DatabaseType.SQL_SERVER:
+            return 'sqlserver';
+        case DatabaseType.COCKROACHDB:
+            return 'cockroachdb';
+        default:
+            return 'postgresql';
+    }
+};
+
+const buildMockPrismaSchema = (
+    version: '6' | '7',
+    databaseType: DatabaseType
+): string => {
+    const provider = version === '7' ? 'prisma-client' : 'prisma-client-js';
+    const outputLine =
+        version === '7' ? '\n  output   = "../generated/prisma"' : '';
+    const urlLine = version === '6' ? '\n  url      = env("DATABASE_URL")' : '';
+
+    return `generator client {
+  provider = "${provider}"${outputLine}
+}
+
+datasource db {
+  provider = "${resolveDatasourceProvider(databaseType)}"${urlLine}
+}
+
+model users {
+  id Int @id @default(autoincrement())
+}
+`;
+};
+
+const hasBlockingGeometryPrimaryKey = (diagram: Diagram): boolean =>
+    (diagram.tables ?? []).some((table) =>
+        table.fields.some(
+            (field) => field.primaryKey && field.type.id === 'geometry'
+        )
+    );
+
+const mockExportPrismaSchema = async ({
+    version,
+    diagram,
+}: {
+    version: '6' | '7';
+    diagram: Diagram;
+}): Promise<PrismaExportResult> => {
+    if (hasBlockingGeometryPrimaryKey(diagram)) {
+        return {
+            success: false,
+            error: {
+                code: 'unsupported_structural_field',
+                message: 'Unsupported structural field type',
+                path: 'shapes.geom',
+            },
+        };
+    }
+
+    const tables = diagram.tables ?? [];
+    const foxaldbTables = tables.filter((table) => table.schema === 'foxaldb');
+    if (foxaldbTables.length === 3) {
+        return {
+            success: true,
+            schema: buildMockPrismaSchema(version, diagram.databaseType),
+            notes: [
+                {
+                    code: 'schema_namespace_unsupported',
+                    message: 'Schema namespace unsupported',
+                    path: 'foxaldb',
+                    metadata: {
+                        count: 3,
+                        affectedPaths: foxaldbTables.map((table) => table.name),
+                    },
+                },
+            ],
+        };
+    }
+
+    if (tables.some((table) => table.schema === 'auth')) {
+        return {
+            success: true,
+            schema: buildMockPrismaSchema(version, diagram.databaseType),
+            notes: [
+                {
+                    code: 'schema_namespace_unsupported',
+                    message: 'Schema namespace unsupported',
+                    path: 'auth',
+                    metadata: {
+                        count: 1,
+                        affectedPaths: ['users'],
+                    },
+                },
+            ],
+        };
+    }
+
+    return {
+        success: true,
+        schema: buildMockPrismaSchema(version, diagram.databaseType),
+        notes: [],
+    };
+};
+
 const openPrismaBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
     await userEvent.click(
@@ -152,6 +271,12 @@ describe('Prisma export target availability', () => {
         databaseType,
     });
 
+    const authenticatedContext = (databaseType: DatabaseType) => ({
+        isAuthenticated: true,
+        diagramId: 'guest-diagram-1',
+        databaseType,
+    });
+
     const supportedTypes = [
         DatabaseType.POSTGRESQL,
         DatabaseType.MYSQL,
@@ -162,11 +287,22 @@ describe('Prisma export target availability', () => {
     ] as const;
 
     for (const databaseType of supportedTypes) {
-        it(`marks Prisma as available for ${databaseType}`, () => {
+        it(`hides Prisma for guests on ${databaseType}`, () => {
             expect(
                 getExportTargetAvailability(
                     'prisma',
                     guestContext(databaseType)
+                )
+            ).toEqual({
+                status: 'hidden',
+            });
+        });
+
+        it(`marks Prisma as available for authenticated users on ${databaseType}`, () => {
+            expect(
+                getExportTargetAvailability(
+                    'prisma',
+                    authenticatedContext(databaseType)
                 )
             ).toEqual({
                 status: 'available',
@@ -181,11 +317,22 @@ describe('Prisma export target availability', () => {
     ] as const;
 
     for (const databaseType of unsupportedTypes) {
-        it(`disables Prisma for ${databaseType}`, () => {
+        it(`hides Prisma for guests on unsupported ${databaseType}`, () => {
             expect(
                 getExportTargetAvailability(
                     'prisma',
                     guestContext(databaseType)
+                )
+            ).toEqual({
+                status: 'hidden',
+            });
+        });
+
+        it(`disables Prisma for authenticated users on unsupported ${databaseType}`, () => {
+            expect(
+                getExportTargetAvailability(
+                    'prisma',
+                    authenticatedContext(databaseType)
                 )
             ).toEqual({
                 status: 'disabled',
@@ -194,12 +341,13 @@ describe('Prisma export target availability', () => {
         });
     }
 
-    it('allows guests to use Prisma without backend diagram ID', () => {
+    it('does not require a backend diagram ID for authenticated Prisma availability', () => {
         expect(
-            getExportTargetAvailability(
-                'prisma',
-                guestContext(DatabaseType.POSTGRESQL)
-            )
+            getExportTargetAvailability('prisma', {
+                isAuthenticated: true,
+                diagramId: 'guest-diagram-1',
+                databaseType: DatabaseType.POSTGRESQL,
+            })
         ).toEqual({ status: 'available' });
     });
 
@@ -227,11 +375,12 @@ describe('ExportWizardDialog Prisma branch', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         resetIdCounter();
-        authState.isAuthenticated = false;
+        authState.isAuthenticated = true;
         chartDbState.databaseType = DatabaseType.POSTGRESQL;
         chartDbState.currentDiagram = buildSimpleDiagram(
             DatabaseType.POSTGRESQL
         );
+        exportPrismaSchemaMock.mockImplementation(mockExportPrismaSchema);
     });
 
     it('enters the Prisma version step when Prisma is selected', async () => {
@@ -582,6 +731,105 @@ describe('ExportWizardDialog Prisma branch', () => {
         expect(limitationItems).toHaveLength(1);
         expect(limitationItems[0]?.textContent).toContain('(3');
     });
+
+    it('calls the backend export API with the selected version and diagram', async () => {
+        await openPrismaBranch();
+        await continueToPreview();
+
+        await waitFor(() => {
+            expect(exportPrismaSchemaMock).toHaveBeenCalledWith({
+                version: '7',
+                diagram: chartDbState.currentDiagram,
+            });
+        });
+    });
+
+    it('shows a loading state while the backend request is in flight', async () => {
+        let resolveExport: ((value: PrismaExportResult) => void) | undefined;
+        exportPrismaSchemaMock.mockImplementationOnce(
+            () =>
+                new Promise<PrismaExportResult>((resolve) => {
+                    resolveExport = resolve;
+                })
+        );
+
+        await openPrismaBranch();
+        await continueToPreview();
+
+        expect(
+            screen.getByTestId('export-prisma-generating')
+        ).toBeInTheDocument();
+
+        resolveExport?.({
+            success: true,
+            schema: buildMockPrismaSchema('7', DatabaseType.POSTGRESQL),
+            notes: [],
+        });
+
+        await waitFor(() => {
+            expect(
+                screen.queryByTestId('export-prisma-generating')
+            ).not.toBeInTheDocument();
+        });
+    });
+
+    it('shows unexpected error state for HTTP failures', async () => {
+        exportPrismaSchemaMock.mockRejectedValueOnce(
+            new ApiError('Too Many Requests', 429, {
+                message: 'Too Many Requests',
+            })
+        );
+
+        await openPrismaBranch();
+        await continueToPreview();
+
+        await waitFor(() => {
+            expect(
+                screen.getByTestId('export-prisma-generation-error')
+            ).toBeInTheDocument();
+        });
+    });
+
+    it('does not trigger duplicate generation requests on preview entry', async () => {
+        await openPrismaBranch();
+        await continueToPreview();
+
+        await waitFor(() => {
+            expect(
+                screen.getByTestId('export-prisma-preview-container')
+            ).toBeInTheDocument();
+        });
+
+        expect(exportPrismaSchemaMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('ignores stale backend responses after navigating back', async () => {
+        let resolveExport: ((value: PrismaExportResult) => void) | undefined;
+        exportPrismaSchemaMock.mockImplementationOnce(
+            () =>
+                new Promise<PrismaExportResult>((resolve) => {
+                    resolveExport = resolve;
+                })
+        );
+
+        await openPrismaBranch();
+        await continueToPreview();
+
+        await userEvent.click(screen.getByText('export_wizard.back'));
+
+        resolveExport?.({
+            success: true,
+            schema: buildMockPrismaSchema('7', DatabaseType.POSTGRESQL),
+            notes: [],
+        });
+
+        expect(
+            screen.getByTestId('export-prisma-version-step')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-prisma-preview-container')
+        ).not.toBeInTheDocument();
+    });
 });
 
 describe('ExportWizardDialog Prisma picker availability', () => {
@@ -595,7 +843,32 @@ describe('ExportWizardDialog Prisma picker availability', () => {
         );
     });
 
-    it('enables Prisma for guests on supported databases', async () => {
+    it('hides Prisma for guests on supported databases', async () => {
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        expect(
+            screen.queryByText('export_wizard.targets.prisma.title')
+        ).not.toBeInTheDocument();
+    });
+
+    it('hides Prisma for guests on unsupported databases', async () => {
+        chartDbState.databaseType = DatabaseType.ORACLE;
+        chartDbState.currentDiagram = buildSimpleDiagram(DatabaseType.ORACLE);
+
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        expect(
+            screen.queryByText('export_wizard.targets.prisma.title')
+        ).not.toBeInTheDocument();
+    });
+
+    it('enables Prisma for authenticated users on supported databases', async () => {
+        authState.isAuthenticated = true;
+        chartDbState.currentDiagram = buildSimpleDiagram(
+            DatabaseType.POSTGRESQL,
+            { id: 'guest-diagram-1' }
+        );
+
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         const prismaButton = screen
@@ -605,7 +878,8 @@ describe('ExportWizardDialog Prisma picker availability', () => {
         expect(prismaButton).not.toBeDisabled();
     });
 
-    it('disables Prisma for unsupported databases with a localized reason', async () => {
+    it('disables Prisma for authenticated users on unsupported databases with a localized reason', async () => {
+        authState.isAuthenticated = true;
         chartDbState.databaseType = DatabaseType.ORACLE;
         chartDbState.currentDiagram = buildSimpleDiagram(DatabaseType.ORACLE);
 

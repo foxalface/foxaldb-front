@@ -1,5 +1,5 @@
 import type { DatabaseType } from '@/lib/domain/database-type';
-import { isPrismaExportSupported } from '@/lib/prisma-export';
+import { isPrismaExportSupported } from '@/lib/export/prisma-export-capability';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { ExportTargetId } from './export-target-id';
 
@@ -42,6 +42,10 @@ export const getExportTargetAvailability = (
                 : { status: 'hidden' };
 
         case 'prisma':
+            if (!ctx.isAuthenticated) {
+                return { status: 'hidden' };
+            }
+
             return isPrismaExportSupported(ctx.databaseType)
                 ? { status: 'available' }
                 : {

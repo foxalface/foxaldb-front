@@ -1,7 +1,7 @@
 import type {
     PrismaExportNote,
     PrismaExportNoteCode,
-} from '@/lib/prisma-export';
+} from '@/lib/api/prisma-export-types';
 
 export interface GroupedPrismaExportNote {
     code: PrismaExportNoteCode;

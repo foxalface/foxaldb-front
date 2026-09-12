@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { PrismaExportNote } from '@/lib/prisma-export';
+import type { PrismaExportNote } from '@/lib/api/prisma-export-types';
 import {
     countGroupedPrismaExportNote,
     groupPrismaExportNotes,

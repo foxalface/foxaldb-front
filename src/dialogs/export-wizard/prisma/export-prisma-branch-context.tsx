@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { PrismaExportVersion } from '@/lib/prisma-export';
+import type { PrismaExportVersion } from '@/lib/api/prisma-export-types';
 
 interface ExportPrismaBranchContextProps {
     version: PrismaExportVersion | null;

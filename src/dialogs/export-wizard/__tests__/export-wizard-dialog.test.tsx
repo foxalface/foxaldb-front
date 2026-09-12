@@ -136,7 +136,6 @@ describe('ExportWizardDialog', () => {
 
         const expectedTargets = [
             'export_wizard.targets.sql.title',
-            'export_wizard.targets.prisma.title',
             'export_wizard.targets.ef_core.title',
             'export_wizard.targets.rails.title',
             'export_wizard.targets.django.title',
@@ -223,7 +222,17 @@ describe('ExportWizardDialog', () => {
         ).toBeInTheDocument();
     });
 
-    it('enables Prisma for supported databases', () => {
+    it('hides Prisma for guests', () => {
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        expect(
+            screen.queryByText('export_wizard.targets.prisma.title')
+        ).not.toBeInTheDocument();
+    });
+
+    it('enables Prisma for authenticated users on supported databases', () => {
+        authState.isAuthenticated = true;
+
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         const prismaButton = screen

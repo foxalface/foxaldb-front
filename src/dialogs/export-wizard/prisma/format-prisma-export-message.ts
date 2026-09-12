@@ -1,5 +1,8 @@
 import type { TFunction } from 'i18next';
-import type { PrismaExportError, PrismaExportNote } from '@/lib/prisma-export';
+import type {
+    PrismaExportError,
+    PrismaExportNote,
+} from '@/lib/api/prisma-export-types';
 import type { GroupedPrismaExportNote } from './group-prisma-export-notes';
 import { countGroupedPrismaExportNote } from './group-prisma-export-notes';
 

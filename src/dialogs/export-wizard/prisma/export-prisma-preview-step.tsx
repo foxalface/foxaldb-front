@@ -5,11 +5,11 @@ import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Spinner } from '@/components/spinner/spinner';
 import { Label } from '@/components/label/label';
 import { downloadBlob } from '@/lib/download-blob';
-import {
-    PRISMA_EXPORT_FILENAME,
-    type PrismaExportError,
-    type PrismaExportNote,
-} from '@/lib/prisma-export';
+import type {
+    PrismaExportError,
+    PrismaExportNote,
+} from '@/lib/api/prisma-export-types';
+import { PRISMA_EXPORT_FILENAME } from '@/lib/export/prisma-export-constants';
 import {
     formatPrismaExportError,
     formatGroupedPrismaExportNote,

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
 import { cn } from '@/lib/utils';
-import type { PrismaExportVersion } from '@/lib/prisma-export';
+import type { PrismaExportVersion } from '@/lib/api/prisma-export-types';
 
 interface ExportPrismaVersionStepProps {
     selectedVersion: PrismaExportVersion;

@@ -45,16 +45,24 @@ describe('export target availability', () => {
         });
     });
 
-    it('marks Prisma as available for supported database types', () => {
+    it('hides Prisma for guests', () => {
         expect(getExportTargetAvailability('prisma', guestContext)).toEqual({
+            status: 'hidden',
+        });
+    });
+
+    it('marks Prisma as available for authenticated users on supported database types', () => {
+        expect(
+            getExportTargetAvailability('prisma', authenticatedBackendContext)
+        ).toEqual({
             status: 'available',
         });
     });
 
-    it('disables Prisma for unsupported database types', () => {
+    it('disables Prisma for unsupported database types when authenticated', () => {
         expect(
             getExportTargetAvailability('prisma', {
-                ...guestContext,
+                ...authenticatedBackendContext,
                 databaseType: DatabaseType.ORACLE,
             })
         ).toEqual({
@@ -120,7 +128,6 @@ describe('export target registry', () => {
 
         expect(database.map((target) => target.id)).toEqual(['sql']);
         expect(framework.map((target) => target.id)).toEqual([
-            'prisma',
             'ef_core',
             'rails',
             'django',
