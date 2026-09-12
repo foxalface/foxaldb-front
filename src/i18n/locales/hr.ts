@@ -1181,6 +1181,90 @@ export const hr: LanguageTranslation = {
                     error_empty: 'Na platnu nema ničega za izvoz.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    'Prisma izvoz nije dostupan za trenutnu vrstu baze podataka.',
+                version_step: {
+                    title: 'Prisma verzija',
+                    description:
+                        'Odaberite glavnu Prisma verziju za izvoz schema.prisma.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'Preporučeno',
+                    prisma_6: 'Prisma 6',
+                    continue: 'Nastavi',
+                },
+                preview_step: {
+                    description: 'Pregledajte generiranu Prisma shemu.',
+                    generating: 'Generiranje Prisma sheme...',
+                    download: 'Preuzmi schema.prisma',
+                    generation_error:
+                        'Nije moguće generirati Prisma shemu. Pokušajte ponovno.',
+                    empty: 'Za trenutni dijagram nije generirana Prisma shema.',
+                    limitations: 'Ograničenja',
+                    errors: {
+                        unsupported_database:
+                            'Prisma izvoz nije podržan za ovu vrstu baze podataka.',
+                        empty_diagram: 'Dijagram nema tablice za izvoz.',
+                        invalid_primary_key:
+                            'Tablica ima nevažeću konfiguraciju primarnog ključa.',
+                        unsupported_structural_field:
+                            'Primarni ili strani ključ koristi nepodržani tip polja.',
+                        invalid_enum:
+                            'Definicija enuma nije mogla biti izvezena.',
+                    },
+                    notes: {
+                        view_skipped:
+                            'Pogledi baze podataka ne izvode se u Prisma sheme.',
+                        schema_namespace_unsupported:
+                            'Sheme/imena prostora tablica nisu mapirani u ovom izvozu.',
+                        unsupported_field_omitted:
+                            'Neka nepodržana polja su izostavljena.',
+                        unsupported_default_omitted:
+                            'Neke nepodržane zadane vrijednosti su izostavljene.',
+                        unsupported_index_omitted:
+                            'Neki indeksi su izostavljeni.',
+                        relation_skipped: 'Odnos nije mogao biti izvezen.',
+                        relation_degraded:
+                            'Odnos je izvezen s smanjenom vjernosti.',
+                        composite_fk_unsupported:
+                            'Složeni strani ključevi nisu podržani.',
+                        many_to_many_label_only:
+                            'Odnosi više-prema-više bez spojne tablice izvode se samo kao oznaka.',
+                        set_null_omitted:
+                            'ON DELETE SET NULL je izostavljen gdje nije podržan.',
+                        enum_skipped: 'Enum nije mogao biti izvezen.',
+                        composite_type_skipped:
+                            'Složeni tip nije mogao biti izvezen.',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'Odaberite kako izvesti Laravel migracije.',

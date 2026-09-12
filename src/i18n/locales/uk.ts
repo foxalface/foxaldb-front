@@ -1184,6 +1184,91 @@ export const uk: LanguageTranslation = {
                     error_empty: 'На полотні немає що експортувати.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    'Експорт Prisma недоступний для поточного типу бази даних.',
+                version_step: {
+                    title: 'Версія Prisma',
+                    description:
+                        'Виберіть основну версію Prisma для експорту schema.prisma.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'Рекомендовано',
+                    prisma_6: 'Prisma 6',
+                    continue: 'Продовжити',
+                },
+                preview_step: {
+                    description: 'Перегляньте згенеровану схему Prisma.',
+                    generating: 'Генерація схеми Prisma...',
+                    download: 'Завантажити schema.prisma',
+                    generation_error:
+                        'Не вдалося згенерувати схему Prisma. Спробуйте ще раз.',
+                    empty: 'Для поточної діаграми не згенеровано схему Prisma.',
+                    limitations: 'Обмеження',
+                    errors: {
+                        unsupported_database:
+                            'Експорт Prisma не підтримується для цього типу бази даних.',
+                        empty_diagram:
+                            'Діаграма не містить таблиць для експорту.',
+                        invalid_primary_key:
+                            'Таблиця має недійсну конфігурацію первинного ключа.',
+                        unsupported_structural_field:
+                            'Первинний або зовнішній ключ використовує непідтримуваний тип поля.',
+                        invalid_enum:
+                            'Не вдалося експортувати визначення enum.',
+                    },
+                    notes: {
+                        view_skipped:
+                            'Представлення бази даних не експортуються до схем Prisma.',
+                        schema_namespace_unsupported:
+                            'Схеми/простори імен таблиць не зіставляються в цьому експорті.',
+                        unsupported_field_omitted:
+                            'Деякі непідтримувані поля було пропущено.',
+                        unsupported_default_omitted:
+                            'Деякі непідтримувані значення за замовчуванням було пропущено.',
+                        unsupported_index_omitted:
+                            'Деякі індекси було пропущено.',
+                        relation_skipped: 'Не вдалося експортувати зв’язок.',
+                        relation_degraded:
+                            'Зв’язок експортовано зі зниженою точністю.',
+                        composite_fk_unsupported:
+                            'Складні зовнішні ключі не підтримуються.',
+                        many_to_many_label_only:
+                            'Зв’язки багато-до-багатьох без з’єднувальної таблиці експортуються лише як мітка.',
+                        set_null_omitted:
+                            'ON DELETE SET NULL пропущено, де не підтримується.',
+                        enum_skipped: 'Не вдалося експортувати enum.',
+                        composite_type_skipped:
+                            'Не вдалося експортувати складний тип.',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'Виберіть, як експортувати міграції Laravel.',

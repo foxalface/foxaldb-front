@@ -1204,6 +1204,91 @@ export const ja: LanguageTranslation = {
                     error_empty: 'キャンバスに書き出すものがありません。',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    '現在のデータベース種別では Prisma の書き出しは利用できません。',
+                version_step: {
+                    title: 'Prisma バージョン',
+                    description:
+                        'schema.prisma 書き出し用の Prisma メジャーバージョンを選択してください。',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: '推奨',
+                    prisma_6: 'Prisma 6',
+                    continue: '続行',
+                },
+                preview_step: {
+                    description:
+                        '生成された Prisma スキーマを確認してください。',
+                    generating: 'Prisma スキーマを生成しています...',
+                    download: 'schema.prisma をダウンロード',
+                    generation_error:
+                        'Prisma スキーマを生成できませんでした。もう一度お試しください。',
+                    empty: '現在のダイアグラム用の Prisma スキーマは生成されませんでした。',
+                    limitations: '制限',
+                    errors: {
+                        unsupported_database:
+                            'このデータベース種別では Prisma の書き出しはサポートされていません。',
+                        empty_diagram:
+                            'ダイアグラムに書き出し可能なテーブルがありません。',
+                        invalid_primary_key: 'テーブルの主キー設定が無効です。',
+                        unsupported_structural_field:
+                            '主キーまたは外部キーにサポートされていないフィールド型が使用されています。',
+                        invalid_enum: '列挙型定義を書き出せませんでした。',
+                    },
+                    notes: {
+                        view_skipped:
+                            'データベースビューは Prisma スキーマに書き出されません。',
+                        schema_namespace_unsupported:
+                            'この書き出しではテーブルスキーマ/名前空間はマッピングされません。',
+                        unsupported_field_omitted:
+                            'サポートされていない一部のフィールドは省略されました。',
+                        unsupported_default_omitted:
+                            'サポートされていない一部のデフォルト値は省略されました。',
+                        unsupported_index_omitted:
+                            '一部のインデックスは省略されました。',
+                        relation_skipped:
+                            'リレーションを書き出せませんでした。',
+                        relation_degraded:
+                            'リレーションは精度を下げて書き出されました。',
+                        composite_fk_unsupported:
+                            '複合外部キーはサポートされていません。',
+                        many_to_many_label_only:
+                            '結合テーブルのない多対多リレーションはラベルのみで書き出されます。',
+                        set_null_omitted:
+                            'サポートされない箇所では ON DELETE SET NULL は省略されました。',
+                        enum_skipped: '列挙型を書き出せませんでした。',
+                        composite_type_skipped:
+                            '複合型を書き出せませんでした。',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description:

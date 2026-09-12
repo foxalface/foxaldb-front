@@ -12,10 +12,16 @@ export type PrismaExportNoteCode =
     | 'enum_skipped'
     | 'composite_type_skipped';
 
+export interface PrismaExportNoteMetadata {
+    count?: number;
+    affectedPaths?: string[];
+}
+
 export interface PrismaExportNote {
     code: PrismaExportNoteCode;
     message: string;
     path?: string;
+    metadata?: PrismaExportNoteMetadata;
 }
 
 export type PrismaExportErrorCode =

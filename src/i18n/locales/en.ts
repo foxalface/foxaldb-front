@@ -1180,6 +1180,90 @@ export const en = {
                     error_empty: 'There is nothing to export on the canvas.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    'Prisma export is not available for the current database type.',
+                version_step: {
+                    title: 'Prisma version',
+                    description:
+                        'Choose the Prisma major version for your schema.prisma export.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'Recommended',
+                    prisma_6: 'Prisma 6',
+                    continue: 'Continue',
+                },
+                preview_step: {
+                    description: 'Review the generated Prisma schema.',
+                    generating: 'Generating Prisma schema...',
+                    download: 'Download schema.prisma',
+                    generation_error:
+                        'Could not generate Prisma schema. Please try again.',
+                    empty: 'No Prisma schema was generated for the current diagram.',
+                    limitations: 'Limitations',
+                    errors: {
+                        unsupported_database:
+                            'Prisma export is not supported for this database type.',
+                        empty_diagram: 'The diagram has no exportable tables.',
+                        invalid_primary_key:
+                            'A table has an invalid primary key configuration.',
+                        unsupported_structural_field:
+                            'A primary key or foreign key uses an unsupported field type.',
+                        invalid_enum:
+                            'An enum definition could not be exported.',
+                    },
+                    notes: {
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas.',
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export.',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted.',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted.',
+                        unsupported_index_omitted: 'Some indexes were omitted.',
+                        relation_skipped:
+                            'A relationship could not be exported.',
+                        relation_degraded:
+                            'A relationship was exported with reduced fidelity.',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported.',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only.',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported.',
+                        enum_skipped: 'An enum could not be exported.',
+                        composite_type_skipped:
+                            'A composite type could not be exported.',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'Choose how to export Laravel migrations.',

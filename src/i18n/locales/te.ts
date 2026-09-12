@@ -1191,6 +1191,90 @@ export const te: LanguageTranslation = {
                     error_empty: 'కాన్వాస్‌పై ఎగుమతి చేయడానికి ఏమీ లేదు.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    'ప్రస్తుత డేటాబేస్ రకానికి Prisma ఎగుమతి అందుబాటులో లేదు.',
+                version_step: {
+                    title: 'Prisma వెర్షన్',
+                    description:
+                        'మీ schema.prisma ఎగుమతి కోసం Prisma ప్రధాన వెర్షన్‌ను ఎంచుకోండి.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'సిఫార్సు చేయబడింది',
+                    prisma_6: 'Prisma 6',
+                    continue: 'కొనసాగించు',
+                },
+                preview_step: {
+                    description: 'రూపొందించిన Prisma స్కీమాను సమీక్షించండి.',
+                    generating: 'Prisma స్కీమా రూపొందించబడుతోంది...',
+                    download: 'schema.prisma డౌన్‌లోడ్ చేయండి',
+                    generation_error:
+                        'Prisma స్కీమాను రూపొందించలేకపోయాం. మళ్లీ ప్రయత్నించండి.',
+                    empty: 'ప్రస్తుత డయాగ్రామ్ కోసం Prisma స్కీమా రూపొందించబడలేదు.',
+                    limitations: 'పరిమితులు',
+                    errors: {
+                        unsupported_database:
+                            'ఈ డేటాబేస్ రకానికి Prisma ఎగుమతి మద్దతు లేదు.',
+                        empty_diagram:
+                            'డయాగ్రామ్‌లో ఎగుమతి చేయదగిన పట్టికలు లేవు.',
+                        invalid_primary_key:
+                            'ఒక పట్టికలో చెల్లని ప్రాథమిక కీ కాన్ఫిగరేషన్ ఉంది.',
+                        unsupported_structural_field:
+                            'ప్రాథమిక లేదా విదేశీ కీ మద్దతు లేని ఫీల్డ్ రకాన్ని ఉపయోగిస్తుంది.',
+                        invalid_enum: 'enum నిర్వచనాన్ని ఎగుమతి చేయలేకపోయాం.',
+                    },
+                    notes: {
+                        view_skipped:
+                            'డేటాబేస్ వ్యూలు Prisma స్కీమాలకు ఎగుమతి చేయబడవు.',
+                        schema_namespace_unsupported:
+                            'ఈ ఎగుమతిలో పట్టిక స్కీమాలు/నేమ్‌స్పేస్‌లు మ్యాప్ చేయబడవు.',
+                        unsupported_field_omitted:
+                            'మద్దతు లేని కొన్ని ఫీల్డ్‌లు వదిలివేయబడ్డాయి.',
+                        unsupported_default_omitted:
+                            'మద్దతు లేని కొన్ని డిఫాల్ట్ విలువలు వదిలివేయబడ్డాయి.',
+                        unsupported_index_omitted:
+                            'కొన్ని ఇండెక్స్‌లు వదిలివేయబడ్డాయి.',
+                        relation_skipped: 'ఒక సంబంధాన్ని ఎగుమతి చేయలేకపోయాం.',
+                        relation_degraded:
+                            'ఒక సంబంధం తక్కువ నిఖరతతో ఎగుమతి చేయబడింది.',
+                        composite_fk_unsupported:
+                            'కంపోజిట్ విదేశీ కీలకు మద్దతు లేదు.',
+                        many_to_many_label_only:
+                            'జాయింట్ పట్టిక లేని అనేకం-కు-అనేకం సంబంధాలు లేబుల్ మాత్రమేగా ఎగుమతి చేయబడతాయి.',
+                        set_null_omitted:
+                            'మద్దతు లేని చోట్ల ON DELETE SET NULL వదిలివేయబడింది.',
+                        enum_skipped: 'enum ఎగుమతి చేయలేకపోయాం.',
+                        composite_type_skipped:
+                            'కంపోజిట్ రకాన్ని ఎగుమతి చేయలేకపోయాం.',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description:

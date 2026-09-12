@@ -1110,6 +1110,79 @@ export const zh_CN: LanguageTranslation = {
                     error_empty: '画布上没有可导出的内容。',
                 },
             },
+            prisma: {
+                unsupported_database: '当前数据库类型不支持 Prisma 导出。',
+                version_step: {
+                    title: 'Prisma 版本',
+                    description: '选择 schema.prisma 导出的 Prisma 主版本。',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: '推荐',
+                    prisma_6: 'Prisma 6',
+                    continue: '继续',
+                },
+                preview_step: {
+                    description: '查看生成的 Prisma 架构。',
+                    generating: '正在生成 Prisma 架构...',
+                    download: '下载 schema.prisma',
+                    generation_error: '无法生成 Prisma 架构。请重试。',
+                    empty: '当前图表未生成 Prisma 架构。',
+                    limitations: '限制',
+                    errors: {
+                        unsupported_database:
+                            '此数据库类型不支持 Prisma 导出。',
+                        empty_diagram: '图表没有可导出的表。',
+                        invalid_primary_key: '某表的主键配置无效。',
+                        unsupported_structural_field:
+                            '主键或外键使用了不支持的字段类型。',
+                        invalid_enum: '无法导出枚举定义。',
+                    },
+                    notes: {
+                        view_skipped: '数据库视图不会导出到 Prisma 架构。',
+                        schema_namespace_unsupported:
+                            '此导出不会映射表架构/命名空间。',
+                        unsupported_field_omitted: '已省略部分不支持的字段。',
+                        unsupported_default_omitted:
+                            '已省略部分不支持的默认值。',
+                        unsupported_index_omitted: '已省略部分索引。',
+                        relation_skipped: '无法导出某个关系。',
+                        relation_degraded: '某个关系以降低保真度导出。',
+                        composite_fk_unsupported: '不支持复合外键。',
+                        many_to_many_label_only:
+                            '没有联结表的多对多关系仅作为标签导出。',
+                        set_null_omitted:
+                            '在不支持的情况下省略了 ON DELETE SET NULL。',
+                        enum_skipped: '无法导出枚举。',
+                        composite_type_skipped: '无法导出复合类型。',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description: '选择如何导出 Laravel 迁移。',

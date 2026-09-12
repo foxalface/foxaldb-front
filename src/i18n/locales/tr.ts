@@ -1168,6 +1168,89 @@ export const tr: LanguageTranslation = {
                     error_empty: 'Tuvalde dışa aktarılacak bir şey yok.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    'Prisma dışa aktarımı mevcut veritabanı türü için kullanılamaz.',
+                version_step: {
+                    title: 'Prisma sürümü',
+                    description:
+                        'schema.prisma dışa aktarımı için Prisma ana sürümünü seçin.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'Önerilen',
+                    prisma_6: 'Prisma 6',
+                    continue: 'Devam',
+                },
+                preview_step: {
+                    description: 'Oluşturulan Prisma şemasını inceleyin.',
+                    generating: 'Prisma şeması oluşturuluyor...',
+                    download: 'schema.prisma indir',
+                    generation_error:
+                        'Prisma şeması oluşturulamadı. Lütfen tekrar deneyin.',
+                    empty: 'Mevcut diyagram için Prisma şeması oluşturulmadı.',
+                    limitations: 'Sınırlamalar',
+                    errors: {
+                        unsupported_database:
+                            'Bu veritabanı türü için Prisma dışa aktarımı desteklenmiyor.',
+                        empty_diagram:
+                            'Diyagramda dışa aktarılabilir tablo yok.',
+                        invalid_primary_key:
+                            'Bir tablonun birincil anahtar yapılandırması geçersiz.',
+                        unsupported_structural_field:
+                            'Birincil veya yabancı anahtar desteklenmeyen bir alan türü kullanıyor.',
+                        invalid_enum: 'Bir enum tanımı dışa aktarılamadı.',
+                    },
+                    notes: {
+                        view_skipped:
+                            'Veritabanı görünümleri Prisma şemalarına dışa aktarılmaz.',
+                        schema_namespace_unsupported:
+                            'Tablo şemaları/ad alanları bu dışa aktarımda eşlenmez.',
+                        unsupported_field_omitted:
+                            'Desteklenmeyen bazı alanlar atlandı.',
+                        unsupported_default_omitted:
+                            'Desteklenmeyen bazı varsayılan değerler atlandı.',
+                        unsupported_index_omitted: 'Bazı dizinler atlandı.',
+                        relation_skipped: 'Bir ilişki dışa aktarılamadı.',
+                        relation_degraded:
+                            'Bir ilişki düşük doğrulukla dışa aktarıldı.',
+                        composite_fk_unsupported:
+                            'Bileşik yabancı anahtarlar desteklenmiyor.',
+                        many_to_many_label_only:
+                            'Birleştirme tablosu olmayan çoktan çoğa ilişkiler yalnızca etiket olarak dışa aktarılır.',
+                        set_null_omitted:
+                            'Desteklenmeyen yerlerde ON DELETE SET NULL atlandı.',
+                        enum_skipped: 'Bir enum dışa aktarılamadı.',
+                        composite_type_skipped:
+                            'Bileşik bir tür dışa aktarılamadı.',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description:

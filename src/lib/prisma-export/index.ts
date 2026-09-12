@@ -15,6 +15,8 @@ export type {
     PrismaExportSuccess,
     PrismaExportFailure,
     PrismaExportNote,
+    PrismaExportNoteCode,
+    PrismaExportNoteMetadata,
     PrismaExportError,
 } from './prisma-export-types';
 export { stripVersionSpecificHeader } from './prisma-schema-writer';

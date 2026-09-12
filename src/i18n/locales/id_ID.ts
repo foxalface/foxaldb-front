@@ -1184,6 +1184,90 @@ export const id_ID: LanguageTranslation = {
                     error_empty: 'Tidak ada yang bisa diekspor di kanvas.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    'Ekspor Prisma tidak tersedia untuk jenis database saat ini.',
+                version_step: {
+                    title: 'Versi Prisma',
+                    description:
+                        'Pilih versi utama Prisma untuk ekspor schema.prisma Anda.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'Disarankan',
+                    prisma_6: 'Prisma 6',
+                    continue: 'Lanjutkan',
+                },
+                preview_step: {
+                    description: 'Tinjau skema Prisma yang dihasilkan.',
+                    generating: 'Menghasilkan skema Prisma...',
+                    download: 'Unduh schema.prisma',
+                    generation_error:
+                        'Tidak dapat menghasilkan skema Prisma. Silakan coba lagi.',
+                    empty: 'Tidak ada skema Prisma yang dihasilkan untuk diagram saat ini.',
+                    limitations: 'Keterbatasan',
+                    errors: {
+                        unsupported_database:
+                            'Ekspor Prisma tidak didukung untuk jenis database ini.',
+                        empty_diagram:
+                            'Diagram tidak memiliki tabel yang dapat diekspor.',
+                        invalid_primary_key:
+                            'Sebuah tabel memiliki konfigurasi kunci utama yang tidak valid.',
+                        unsupported_structural_field:
+                            'Kunci utama atau asing menggunakan jenis bidang yang tidak didukung.',
+                        invalid_enum: 'Definisi enum tidak dapat diekspor.',
+                    },
+                    notes: {
+                        view_skipped:
+                            'Tampilan database tidak diekspor ke skema Prisma.',
+                        schema_namespace_unsupported:
+                            'Skema/namespace tabel tidak dipetakan dalam ekspor ini.',
+                        unsupported_field_omitted:
+                            'Beberapa bidang yang tidak didukung dihilangkan.',
+                        unsupported_default_omitted:
+                            'Beberapa nilai default yang tidak didukung dihilangkan.',
+                        unsupported_index_omitted:
+                            'Beberapa indeks dihilangkan.',
+                        relation_skipped: 'Sebuah relasi tidak dapat diekspor.',
+                        relation_degraded:
+                            'Sebuah relasi diekspor dengan fidelitas lebih rendah.',
+                        composite_fk_unsupported:
+                            'Kunci asing komposit tidak didukung.',
+                        many_to_many_label_only:
+                            'Relasi banyak-ke-banyak tanpa tabel penghubung diekspor hanya sebagai label.',
+                        set_null_omitted:
+                            'ON DELETE SET NULL dihilangkan jika tidak didukung.',
+                        enum_skipped: 'Enum tidak dapat diekspor.',
+                        composite_type_skipped:
+                            'Jenis komposit tidak dapat diekspor.',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'Pilih cara mengekspor migrasi Laravel.',

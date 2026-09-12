@@ -799,11 +799,12 @@ describe('Prisma export generator', () => {
         expect(result.success).toBe(true);
         if (!result.success) return;
 
-        expect(
-            result.notes.some(
-                (note) => note.code === 'schema_namespace_unsupported'
-            )
-        ).toBe(true);
+        const schemaNotes = result.notes.filter(
+            (note) => note.code === 'schema_namespace_unsupported'
+        );
+        expect(schemaNotes).toHaveLength(1);
+        expect(schemaNotes[0]?.path).toBe('auth');
+        expect(schemaNotes[0]?.metadata?.count).toBe(1);
         expect(result.schema).not.toMatch(/@@schema\s*\(/);
     });
 
@@ -945,10 +946,10 @@ describe('Prisma export relationships', () => {
                 ],
                 relationships: [
                     makeRelationship({
-                        sourceTableId: profileTableId,
-                        targetTableId: userTableId,
-                        sourceFieldId: userFkId,
-                        targetFieldId: userPkId,
+                        sourceTableId: userTableId,
+                        targetTableId: profileTableId,
+                        sourceFieldId: userPkId,
+                        targetFieldId: userFkId,
                         sourceCardinality: 'one',
                         targetCardinality: 'one',
                     }),
@@ -997,10 +998,10 @@ describe('Prisma export relationships', () => {
                 ],
                 relationships: [
                     makeRelationship({
-                        sourceTableId: 'table-profile',
-                        targetTableId: 'table-user',
-                        sourceFieldId: 'field-user-fk',
-                        targetFieldId: 'field-user-id',
+                        sourceTableId: 'table-user',
+                        targetTableId: 'table-profile',
+                        sourceFieldId: 'field-user-id',
+                        targetFieldId: 'field-user-fk',
                         sourceCardinality: 'one',
                         targetCardinality: 'one',
                     }),

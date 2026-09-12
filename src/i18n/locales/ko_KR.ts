@@ -1185,6 +1185,88 @@ export const ko_KR: LanguageTranslation = {
                     error_empty: '캔버스에 내보낼 내용이 없습니다.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    '현재 데이터베이스 유형에서는 Prisma보내기를 사용할 수 없습니다.',
+                version_step: {
+                    title: 'Prisma 버전',
+                    description:
+                        'schema.prisma보내기용 Prisma 주 버전을 선택하세요.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: '권장',
+                    prisma_6: 'Prisma 6',
+                    continue: '계속',
+                },
+                preview_step: {
+                    description: '생성된 Prisma 스키마를 검토하세요.',
+                    generating: 'Prisma 스키마를 생성하는 중...',
+                    download: 'schema.prisma 다운로드',
+                    generation_error:
+                        'Prisma 스키마를 생성할 수 없습니다. 다시 시도하세요.',
+                    empty: '현재 다이어그램에 대해 Prisma 스키마가 생성되지 않았습니다.',
+                    limitations: '제한 사항',
+                    errors: {
+                        unsupported_database:
+                            '이 데이터베이스 유형에서는 Prisma보내기가 지원되지 않습니다.',
+                        empty_diagram:
+                            '다이어그램에보낼 수 있는 테이블이 없습니다.',
+                        invalid_primary_key:
+                            '테이블의 기본 키 설정이 유효하지 않습니다.',
+                        unsupported_structural_field:
+                            '기본 키 또는 외래 키에 지원되지 않는 필드 유형이 사용되었습니다.',
+                        invalid_enum: '열거형 정의를보낼 수 없습니다.',
+                    },
+                    notes: {
+                        view_skipped:
+                            '데이터베이스 뷰는 Prisma 스키마로보내지지 않습니다.',
+                        schema_namespace_unsupported:
+                            '이보내기에서는 테이블 스키마/네임스페이스가 매핑되지 않습니다.',
+                        unsupported_field_omitted:
+                            '지원되지 않는 일부 필드가 생략되었습니다.',
+                        unsupported_default_omitted:
+                            '지원되지 않는 일부 기본값이 생략되었습니다.',
+                        unsupported_index_omitted:
+                            '일부 인덱스가 생략되었습니다.',
+                        relation_skipped: '관계를보낼 수 없습니다.',
+                        relation_degraded: '관계가 낮은 정확도로보내졌습니다.',
+                        composite_fk_unsupported:
+                            '복합 외래 키는 지원되지 않습니다.',
+                        many_to_many_label_only:
+                            '조인 테이블 없는 다대다 관계는 라벨만으로보내집니다.',
+                        set_null_omitted:
+                            '지원되지 않는 경우 ON DELETE SET NULL이 생략되었습니다.',
+                        enum_skipped: '열거형을보낼 수 없습니다.',
+                        composite_type_skipped: '복합 유형을보낼 수 없습니다.',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description:

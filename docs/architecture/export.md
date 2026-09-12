@@ -53,7 +53,7 @@ Transforms the canonical `Diagram` into database DDL:
 Transforms the canonical `Diagram` into framework-native schema/code artifacts:
 
 - Laravel migrations (ZIP) — **implemented**
-- Prisma — **planned** (separate milestone)
+- Prisma (`schema.prisma`) — **implemented**
 - EF Core — **planned** (separate milestone)
 - Rails — **planned** (separate milestone)
 - Django — **planned** (separate milestone)
@@ -96,9 +96,9 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 **Target groups:** Database, Framework, Portable / Schema, Visual.
 
-**Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, and Laravel migrations are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
+**Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, Laravel migrations, and Prisma are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
 
-**Planned framework targets** (Prisma, EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones.
+**Planned framework targets** (EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones. Prisma is available when `diagram.databaseType` is supported; unsupported DB types show a localized disabled reason.
 
 ---
 
@@ -200,6 +200,42 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 **Current-state override:** the wizard always sends `content: currentDiagram`. That payload is ephemeral generation input. It must not update `diagrams.content`, Dexie, operations, or realtime.
 
 **Boundary:** Laravel export is a **specialized Export V1 target**. Its controller/service/DTOs must **not** define generic Export architecture. See [`backend/docs/laravel-migration-export.md`](../../../backend/docs/laravel-migration-export.md).
+
+### Prisma (`schema.prisma`)
+
+| Attribute | Detail |
+|-----------|--------|
+| **Input** | Full unfiltered `currentDiagram` (live editor state; no schema/table filter) |
+| **Execution** | Browser only (`frontend/src/lib/prisma-export/`) |
+| **Auth** | None (guest OK) |
+| **Backend** | None — no API route, controller, or persistence |
+| **Generator** | `generatePrismaSchemaFromDiagram({ diagram, version })` |
+| **Output** | Fixed filename `schema.prisma` (`text/plain`); copy + download in wizard preview |
+| **Entry points** | Export wizard → Prisma (`PRISMA_VERSION` → `PRISMA_PREVIEW`) |
+| **Tests** | `frontend/src/lib/prisma-export/__tests__/`; `export-wizard-prisma.test.tsx`; semantic round-trip tests use the existing Prisma importer in tests only |
+
+**Version selector:** Prisma 7 (default, recommended) and Prisma 6. Wizard-local state only; resets to `7` on dialog close/reopen.
+
+| Version | Generator block | Datasource |
+|---------|-----------------|------------|
+| Prisma 6 | `provider = "prisma-client-js"` | `provider` + `url = env("DATABASE_URL")` |
+| Prisma 7 | `provider = "prisma-client"` + `output = "../generated/prisma"` | `provider` only (no URL) |
+
+**Provider inference:** `diagram.databaseType` maps to Prisma datasource provider via `resolvePrismaDatasourceProvider()`. No provider override in V1.
+
+**Supported database types:** PostgreSQL, MySQL, MariaDB, SQLite, SQL Server, CockroachDB.
+
+**Unsupported (target disabled):** Oracle, ClickHouse, GENERIC, and any type not mapped by the capability helper.
+
+**Structural validation:** coarse availability uses database type only. Blocking generator errors (invalid PK, unsupported structural field types, etc.) surface in preview; they do not disable the target.
+
+**Non-blocking notes:** `PrismaExportNote[]` (views skipped, schema namespaces, composite FK limitation, label-only M:N, etc.) render in a compact grouped limitations section without preventing copy/download. Schema namespace notes are aggregated per distinct `table.schema` value (with affected table count/paths in note metadata). Repeated note codes (e.g. `relation_skipped`) are grouped in the wizard with counts.
+
+**Relationship resolution:** FK holder and referenced PK/unique sides are resolved from FoxalDB relationship cardinality/orientation, matching SQL export and editor semantics (`many:one` → FK on source; `one:many` / `one:one` → FK on target). Both canonical shapes produced by SQL/editor import and Prisma/Laravel import export to equivalent Prisma relations. Referenced-side uniqueness and FK nullability/referential actions use the resolved sides. FK scalar nullability drives FK-side relation navigation optionality: nullable FK scalar → optional FK-side navigation (`User?`); required FK scalar → required FK-side navigation (`User`).
+
+**Mapping strategy:** deterministic `@map` / `@@map`, FK scalar fields preserved with synthesized relation fields, conservative unsupported policy. Views and schema namespaces are deferred (noted, not emitted).
+
+**No generic framework exporter abstraction.** Prisma export is a dedicated frontend module; production code does not call the Prisma importer.
 
 ---
 

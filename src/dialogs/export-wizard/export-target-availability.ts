@@ -1,3 +1,5 @@
+import type { DatabaseType } from '@/lib/domain/database-type';
+import { isPrismaExportSupported } from '@/lib/prisma-export';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { ExportTargetId } from './export-target-id';
 
@@ -6,6 +8,7 @@ export type ExportAvailabilityStatus = 'available' | 'disabled' | 'hidden';
 export interface ExportAvailabilityContext {
     isAuthenticated: boolean;
     diagramId: unknown;
+    databaseType: DatabaseType;
 }
 
 export interface ExportTargetAvailability {
@@ -39,6 +42,13 @@ export const getExportTargetAvailability = (
                 : { status: 'hidden' };
 
         case 'prisma':
+            return isPrismaExportSupported(ctx.databaseType)
+                ? { status: 'available' }
+                : {
+                      status: 'disabled',
+                      reasonKey: 'export_wizard.prisma.unsupported_database',
+                  };
+
         case 'ef_core':
         case 'rails':
         case 'django':

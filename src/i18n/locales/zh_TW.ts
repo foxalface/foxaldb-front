@@ -1109,6 +1109,79 @@ export const zh_TW: LanguageTranslation = {
                     error_empty: '畫布上沒有可匯出的內容。',
                 },
             },
+            prisma: {
+                unsupported_database: '目前資料庫類型不支援 Prisma 匯出。',
+                version_step: {
+                    title: 'Prisma 版本',
+                    description: '選擇 schema.prisma 匯出的 Prisma 主要版本。',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: '建議',
+                    prisma_6: 'Prisma 6',
+                    continue: '繼續',
+                },
+                preview_step: {
+                    description: '檢視產生的 Prisma 結構描述。',
+                    generating: '正在產生 Prisma 結構描述...',
+                    download: '下載 schema.prisma',
+                    generation_error: '無法產生 Prisma 結構描述。請再試一次。',
+                    empty: '目前圖表未產生 Prisma 結構描述。',
+                    limitations: '限制',
+                    errors: {
+                        unsupported_database:
+                            '此資料庫類型不支援 Prisma 匯出。',
+                        empty_diagram: '圖表沒有可匯出的資料表。',
+                        invalid_primary_key: '某個資料表的主鍵設定無效。',
+                        unsupported_structural_field:
+                            '主鍵或外鍵使用了不支援的欄位類型。',
+                        invalid_enum: '無法匯出列舉定義。',
+                    },
+                    notes: {
+                        view_skipped: '資料庫檢視不會匯出到 Prisma 結構描述。',
+                        schema_namespace_unsupported:
+                            '此匯出不會對應資料表結構描述/命名空間。',
+                        unsupported_field_omitted: '已省略部分不支援的欄位。',
+                        unsupported_default_omitted:
+                            '已省略部分不支援的預設值。',
+                        unsupported_index_omitted: '已省略部分索引。',
+                        relation_skipped: '無法匯出某個關聯。',
+                        relation_degraded: '某個關聯以降低保真度匯出。',
+                        composite_fk_unsupported: '不支援複合外鍵。',
+                        many_to_many_label_only:
+                            '沒有聯結表的多對多關聯僅作為標籤匯出。',
+                        set_null_omitted:
+                            '在不支援的情況下省略了 ON DELETE SET NULL。',
+                        enum_skipped: '無法匯出列舉。',
+                        composite_type_skipped: '無法匯出複合類型。',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description: '選擇如何匯出 Laravel 遷移。',

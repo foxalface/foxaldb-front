@@ -2,7 +2,6 @@ import type { DBField } from '@/lib/domain/db-field';
 import type { DBIndex } from '@/lib/domain/db-index';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
-import { determineRelationshipType } from '@/lib/domain/db-relationship';
 import {
     deriveForwardRelationFieldName,
     deriveInverseRelationFieldName,
@@ -10,6 +9,7 @@ import {
     sanitizeRelationName,
 } from './prisma-identifier';
 import type { PrismaExportNote } from './prisma-export-types';
+import { resolveRelationshipSides } from './resolve-relationship-sides';
 
 export interface PrismaRelationField {
     prismaName: string;
@@ -79,14 +79,14 @@ const formatReferentialAction = (
 
 const buildRelationName = (
     relationship: DBRelationship,
-    sourceModel: string,
-    targetModel: string,
+    fkModel: string,
+    referencedModel: string,
     fkFieldPrismaName: string,
     usedNames: Set<string>
 ): string => {
     const fromCanonical = sanitizeRelationName(
         relationship.name,
-        `${sourceModel}To${targetModel}${fkFieldPrismaName}`
+        `${fkModel}To${referencedModel}${fkFieldPrismaName}`
     );
 
     if (!usedNames.has(fromCanonical)) {
@@ -146,12 +146,37 @@ export const buildModelRelations = (
     );
 
     const relationshipGroups = new Map<string, DBRelationship[]>();
+    const immediateRelationships: DBRelationship[] = [];
 
     sortedRelationships.forEach((relationship) => {
-        const key = [
-            relationship.sourceTableId,
-            relationship.targetTableId,
-        ].join('\0');
+        const sourceContext = contextByTableId.get(relationship.sourceTableId);
+        const targetContext = contextByTableId.get(relationship.targetTableId);
+        const resolved = resolveRelationshipSides(
+            relationship,
+            sourceContext
+                ? {
+                      tableId: sourceContext.tableId,
+                      fieldById: sourceContext.fieldById,
+                  }
+                : undefined,
+            targetContext
+                ? {
+                      tableId: targetContext.tableId,
+                      fieldById: targetContext.fieldById,
+                  }
+                : undefined
+        );
+
+        if (
+            resolved === 'many_to_many' ||
+            resolved === 'missing_table' ||
+            resolved === 'missing_field'
+        ) {
+            immediateRelationships.push(relationship);
+            return;
+        }
+
+        const key = `${resolved.fkTableId}\0${resolved.referencedTableId}`;
         const group = relationshipGroups.get(key) ?? [];
         group.push(relationship);
         relationshipGroups.set(key, group);
@@ -162,49 +187,114 @@ export const buildModelRelations = (
             return false;
         }
 
-        const sourceFieldIds = group.map(
-            (relationship) => relationship.sourceFieldId
-        );
-        const targetFieldIds = group.map(
-            (relationship) => relationship.targetFieldId
-        );
-        const uniqueSourceFields = new Set(sourceFieldIds);
-        const uniqueTargetFields = new Set(targetFieldIds);
+        const fkFieldIds: string[] = [];
+        const referencedFieldIds: string[] = [];
+        let fkTableId: string | null = null;
+        let referencedTableId: string | null = null;
+
+        for (const relationship of group) {
+            const sourceContext = contextByTableId.get(
+                relationship.sourceTableId
+            );
+            const targetContext = contextByTableId.get(
+                relationship.targetTableId
+            );
+            const resolved = resolveRelationshipSides(
+                relationship,
+                sourceContext
+                    ? {
+                          tableId: sourceContext.tableId,
+                          fieldById: sourceContext.fieldById,
+                      }
+                    : undefined,
+                targetContext
+                    ? {
+                          tableId: targetContext.tableId,
+                          fieldById: targetContext.fieldById,
+                      }
+                    : undefined
+            );
+
+            if (typeof resolved !== 'object') {
+                return false;
+            }
+
+            if (fkTableId === null) {
+                fkTableId = resolved.fkTableId;
+                referencedTableId = resolved.referencedTableId;
+            } else if (
+                fkTableId !== resolved.fkTableId ||
+                referencedTableId !== resolved.referencedTableId
+            ) {
+                return false;
+            }
+
+            fkFieldIds.push(resolved.fkField.id);
+            referencedFieldIds.push(resolved.referencedField.id);
+        }
 
         if (
-            uniqueSourceFields.size !== group.length ||
-            uniqueTargetFields.size !== group.length
+            new Set(fkFieldIds).size !== group.length ||
+            new Set(referencedFieldIds).size !== group.length
         ) {
             return false;
         }
 
-        const targetContext = contextByTableId.get(group[0].targetTableId);
+        const referencedContext = contextByTableId.get(referencedTableId!);
 
-        if (!targetContext) {
+        if (!referencedContext) {
             return false;
         }
 
-        const targetPkFieldIds = new Set(
-            targetContext.indexes
+        const referencedPkFieldIds = new Set(
+            referencedContext.indexes
                 .filter((index) => index.isPrimaryKey)
                 .flatMap((index) => index.fieldIds)
         );
 
-        if (targetPkFieldIds.size <= 1) {
+        if (referencedPkFieldIds.size <= 1) {
             return false;
         }
 
-        return targetFieldIds.every((fieldId) => targetPkFieldIds.has(fieldId));
+        return referencedFieldIds.every((fieldId) =>
+            referencedPkFieldIds.has(fieldId)
+        );
     };
+
+    immediateRelationships.forEach((relationship) => {
+        processRelationship(relationship);
+    });
 
     relationshipGroups.forEach((group) => {
         if (isCompositeForeignKeyGroup(group)) {
             const first = group[0];
+            const sourceContext = contextByTableId.get(first.sourceTableId);
+            const targetContext = contextByTableId.get(first.targetTableId);
+            const resolved = resolveRelationshipSides(
+                first,
+                sourceContext
+                    ? {
+                          tableId: sourceContext.tableId,
+                          fieldById: sourceContext.fieldById,
+                      }
+                    : undefined,
+                targetContext
+                    ? {
+                          tableId: targetContext.tableId,
+                          fieldById: targetContext.fieldById,
+                      }
+                    : undefined
+            );
+            const path =
+                typeof resolved === 'object'
+                    ? `${resolved.fkTableId}->${resolved.referencedTableId}`
+                    : `${first.sourceTableId}->${first.targetTableId}`;
+
             notes.push({
                 code: 'composite_fk_unsupported',
                 message:
                     'Composite foreign key relations cannot be represented as a single Prisma relation.',
-                path: `${first.sourceTableId}->${first.targetTableId}`,
+                path,
             });
             return;
         }
@@ -215,12 +305,25 @@ export const buildModelRelations = (
     });
 
     function processRelationship(relationship: DBRelationship): void {
-        const relationshipType = determineRelationshipType({
-            sourceCardinality: relationship.sourceCardinality,
-            targetCardinality: relationship.targetCardinality,
-        });
+        const sourceContext = contextByTableId.get(relationship.sourceTableId);
+        const targetContext = contextByTableId.get(relationship.targetTableId);
+        const resolved = resolveRelationshipSides(
+            relationship,
+            sourceContext
+                ? {
+                      tableId: sourceContext.tableId,
+                      fieldById: sourceContext.fieldById,
+                  }
+                : undefined,
+            targetContext
+                ? {
+                      tableId: targetContext.tableId,
+                      fieldById: targetContext.fieldById,
+                  }
+                : undefined
+        );
 
-        if (relationshipType === 'many_to_many') {
+        if (resolved === 'many_to_many') {
             notes.push({
                 code: 'many_to_many_label_only',
                 message:
@@ -230,10 +333,7 @@ export const buildModelRelations = (
             return;
         }
 
-        const sourceContext = contextByTableId.get(relationship.sourceTableId);
-        const targetContext = contextByTableId.get(relationship.targetTableId);
-
-        if (!sourceContext || !targetContext) {
+        if (resolved === 'missing_table') {
             notes.push({
                 code: 'relation_skipped',
                 message: 'Relationship references a missing table.',
@@ -242,12 +342,7 @@ export const buildModelRelations = (
             return;
         }
 
-        const fkField = sourceContext.fieldById.get(relationship.sourceFieldId);
-        const targetField = targetContext.fieldById.get(
-            relationship.targetFieldId
-        );
-
-        if (!fkField || !targetField) {
+        if (resolved === 'missing_field') {
             notes.push({
                 code: 'relation_skipped',
                 message: 'Relationship references missing fields.',
@@ -256,35 +351,52 @@ export const buildModelRelations = (
             return;
         }
 
-        if (!fieldIsUniqueTarget(targetField, targetContext.indexes)) {
+        const fkContext = contextByTableId.get(resolved.fkTableId);
+        const referencedContext = contextByTableId.get(
+            resolved.referencedTableId
+        );
+
+        if (!fkContext || !referencedContext) {
+            notes.push({
+                code: 'relation_skipped',
+                message: 'Relationship references a missing table.',
+                path: relationship.id,
+            });
+            return;
+        }
+
+        const fkField = resolved.fkField;
+        const referencedField = resolved.referencedField;
+
+        if (!fieldIsUniqueTarget(referencedField, referencedContext.indexes)) {
             notes.push({
                 code: 'relation_skipped',
                 message:
                     'Referenced field is not a primary key or unique constraint.',
-                path: `${sourceContext.modelIdentifier}.${fkField.name}`,
+                path: `${fkContext.modelIdentifier}.${fkField.name} -> ${referencedContext.modelIdentifier}.${referencedField.name}`,
             });
             return;
         }
 
         const fkPrismaName =
-            sourceContext.fieldPrismaNames.get(fkField.id) ?? fkField.name;
-        const targetPrismaName =
-            targetContext.fieldPrismaNames.get(targetField.id) ??
-            targetField.name;
+            fkContext.fieldPrismaNames.get(fkField.id) ?? fkField.name;
+        const referencedPrismaName =
+            referencedContext.fieldPrismaNames.get(referencedField.id) ??
+            referencedField.name;
 
         const relationName = buildRelationName(
             relationship,
-            sourceContext.modelIdentifier,
-            targetContext.modelIdentifier,
+            fkContext.modelIdentifier,
+            referencedContext.modelIdentifier,
             fkPrismaName,
             usedRelationNames
         );
 
         const forwardAllocator = new IdentifierAllocator();
-        sourceContext.fieldPrismaNames.forEach((name) => {
+        fkContext.fieldPrismaNames.forEach((name) => {
             forwardAllocator.reserve(name);
         });
-        plans.get(sourceContext.tableId)?.relationFields.forEach((field) => {
+        plans.get(fkContext.tableId)?.relationFields.forEach((field) => {
             forwardAllocator.reserve(field.prismaName);
         });
 
@@ -294,7 +406,7 @@ export const buildModelRelations = (
         );
 
         const relationAttributes: string[] = [
-            `@relation("${relationName}", fields: [${fkPrismaName}], references: [${targetPrismaName}]`,
+            `@relation("${relationName}", fields: [${fkPrismaName}], references: [${referencedPrismaName}]`,
         ];
 
         const onDelete = formatReferentialAction(
@@ -311,7 +423,7 @@ export const buildModelRelations = (
                 code: 'set_null_omitted',
                 message:
                     'SetNull referential action omitted because foreign key is required.',
-                path: `${sourceContext.modelIdentifier}.${fkField.name}`,
+                path: `${fkContext.modelIdentifier}.${fkField.name}`,
             });
         } else if (onDelete) {
             relationAttributes[0] += `, ${onDelete}`;
@@ -323,39 +435,39 @@ export const buildModelRelations = (
 
         relationAttributes[0] += ')';
 
-        const isOneToOne = relationshipType === 'one_to_one' && fkField.unique;
+        const isOneToOne =
+            resolved.relationshipType === 'one_to_one' && fkField.unique;
 
-        if (relationshipType === 'one_to_one' && !fkField.unique) {
+        if (resolved.relationshipType === 'one_to_one' && !fkField.unique) {
             notes.push({
                 code: 'relation_degraded',
                 message:
                     'One-to-one relation exported as many-to-one because foreign key is not unique.',
-                path: `${sourceContext.modelIdentifier}.${fkField.name}`,
+                path: `${fkContext.modelIdentifier}.${fkField.name}`,
             });
         }
 
-        const forwardType = isOneToOne
-            ? targetContext.modelIdentifier
-            : targetContext.modelIdentifier;
-        const forwardNullable = isOneToOne && fkField.nullable ? '?' : '';
+        const forwardNullable = fkField.nullable ? '?' : '';
 
-        ensurePlan(sourceContext.tableId).relationFields.push({
+        ensurePlan(fkContext.tableId).relationFields.push({
             prismaName: forwardFieldName,
-            typeExpression: `${forwardType}${forwardNullable}`,
+            typeExpression: `${referencedContext.modelIdentifier}${forwardNullable}`,
             attributes: relationAttributes,
             isList: false,
         });
 
         const inverseAllocator = new IdentifierAllocator();
-        targetContext.fieldPrismaNames.forEach((name) => {
+        referencedContext.fieldPrismaNames.forEach((name) => {
             inverseAllocator.reserve(name);
         });
-        plans.get(targetContext.tableId)?.relationFields.forEach((field) => {
-            inverseAllocator.reserve(field.prismaName);
-        });
+        plans
+            .get(referencedContext.tableId)
+            ?.relationFields.forEach((field) => {
+                inverseAllocator.reserve(field.prismaName);
+            });
 
         let inverseFieldName = deriveInverseRelationFieldName(
-            sourceContext.modelIdentifier
+            fkContext.modelIdentifier
         );
 
         if (inverseAllocator.has(inverseFieldName)) {
@@ -370,16 +482,16 @@ export const buildModelRelations = (
         }
 
         if (isOneToOne) {
-            ensurePlan(targetContext.tableId).relationFields.push({
+            ensurePlan(referencedContext.tableId).relationFields.push({
                 prismaName: inverseFieldName,
-                typeExpression: `${sourceContext.modelIdentifier}?`,
+                typeExpression: `${fkContext.modelIdentifier}?`,
                 attributes: [`@relation("${relationName}")`],
                 isList: false,
             });
         } else {
-            ensurePlan(targetContext.tableId).relationFields.push({
+            ensurePlan(referencedContext.tableId).relationFields.push({
                 prismaName: inverseFieldName,
-                typeExpression: `${sourceContext.modelIdentifier}[]`,
+                typeExpression: `${fkContext.modelIdentifier}[]`,
                 attributes: [`@relation("${relationName}")`],
                 isList: true,
             });

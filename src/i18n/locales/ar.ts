@@ -1165,6 +1165,87 @@ export const ar: LanguageTranslation = {
                     error_empty: 'لا يوجد شيء للتصدير على اللوحة.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    'تصدير Prisma غير متاح لنوع قاعدة البيانات الحالي.',
+                version_step: {
+                    title: 'إصدار Prisma',
+                    description:
+                        'اختر الإصدار الرئيسي من Prisma لتصدير schema.prisma.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'موصى به',
+                    prisma_6: 'Prisma 6',
+                    continue: 'متابعة',
+                },
+                preview_step: {
+                    description: 'راجع مخطط Prisma المُنشأ.',
+                    generating: 'جارٍ إنشاء مخطط Prisma...',
+                    download: 'تنزيل schema.prisma',
+                    generation_error:
+                        'تعذر إنشاء مخطط Prisma. يرجى المحاولة مرة أخرى.',
+                    empty: 'لم يتم إنشاء مخطط Prisma للمخطط الحالي.',
+                    limitations: 'قيود',
+                    errors: {
+                        unsupported_database:
+                            'تصدير Prisma غير مدعوم لهذا نوع قاعدة البيانات.',
+                        empty_diagram:
+                            'لا يحتوي المخطط على جداول قابلة للتصدير.',
+                        invalid_primary_key:
+                            'يحتوي أحد الجداول على إعداد مفتاح أساسي غير صالح.',
+                        unsupported_structural_field:
+                            'يستخدم مفتاح أساسي أو خارجي نوع حقل غير مدعوم.',
+                        invalid_enum: 'تعذر تصدير تعريف enum.',
+                    },
+                    notes: {
+                        view_skipped:
+                            'لا تُصدَّر عروض قاعدة البيانات إلى مخططات Prisma.',
+                        schema_namespace_unsupported:
+                            'لا تُعرَّض مخططات/مساحات أسماء الجداول في هذا التصدير.',
+                        unsupported_field_omitted:
+                            'تم حذف بعض الحقول غير المدعومة.',
+                        unsupported_default_omitted:
+                            'تم حذف بعض القيم الافتراضية غير المدعومة.',
+                        unsupported_index_omitted: 'تم حذف بعض الفهارس.',
+                        relation_skipped: 'تعذر تصدير علاقة.',
+                        relation_degraded: 'تم تصدير علاقة بدرجة دقة أقل.',
+                        composite_fk_unsupported:
+                            'المفاتيح الخارجية المركبة غير مدعومة.',
+                        many_to_many_label_only:
+                            'تُصدَّر علاقات many-to-many بدون جدول ربط كتسمية فقط.',
+                        set_null_omitted:
+                            'تم حذف ON DELETE SET NULL حيث لا يُدعم.',
+                        enum_skipped: 'تعذر تصدير enum.',
+                        composite_type_skipped: 'تعذر تصدير نوع مركب.',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'اختر كيفية تصدير ترحيلات Laravel.',

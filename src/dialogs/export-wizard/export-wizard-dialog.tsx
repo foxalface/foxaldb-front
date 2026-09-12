@@ -42,6 +42,9 @@ import { ExportVisualOptionsStep } from './visual/export-visual-options-step';
 import { ExportVisualBranchContext } from './visual/export-visual-branch-context';
 import { ExportLaravelOptionsStep } from './laravel/export-laravel-options-step';
 import { ExportLaravelBranchContext } from './laravel/export-laravel-branch-context';
+import { ExportPrismaVersionStep } from './prisma/export-prisma-version-step';
+import { ExportPrismaPreviewStep } from './prisma/export-prisma-preview-step';
+import { ExportPrismaBranchContext } from './prisma/export-prisma-branch-context';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import {
@@ -62,6 +65,12 @@ import {
     VisualExportError,
     getDefaultIncludePattern,
 } from '@/lib/visual-export/visual-export-options';
+import {
+    generatePrismaSchemaFromDiagram,
+    type PrismaExportError,
+    type PrismaExportNote,
+    type PrismaExportVersion,
+} from '@/lib/prisma-export';
 
 export interface ExportWizardDialogProps extends BaseDialogProps {}
 
@@ -108,6 +117,17 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const [isLaravelExporting, setIsLaravelExporting] = useState(false);
     const [laravelErrorCode, setLaravelErrorCode] =
         useState<LaravelExportErrorCode | null>(null);
+    const [prismaVersion, setPrismaVersion] =
+        useState<PrismaExportVersion>('7');
+    const [prismaSchema, setPrismaSchema] = useState<string | undefined>(
+        undefined
+    );
+    const [prismaNotes, setPrismaNotes] = useState<PrismaExportNote[]>([]);
+    const [prismaGenerationError, setPrismaGenerationError] =
+        useState<PrismaExportError | null>(null);
+    const [prismaHasUnexpectedError, setPrismaHasUnexpectedError] =
+        useState(false);
+    const [isPrismaGenerating, setIsPrismaGenerating] = useState(false);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -140,6 +160,15 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         setLaravelErrorCode(null);
     }, []);
 
+    const resetPrismaBranchState = useCallback(() => {
+        setPrismaVersion('7');
+        setPrismaSchema(undefined);
+        setPrismaNotes([]);
+        setPrismaGenerationError(null);
+        setPrismaHasUnexpectedError(false);
+        setIsPrismaGenerating(false);
+    }, []);
+
     const applyVisualFormatDefaults = useCallback(
         (format: VisualExportFormat) => {
             setVisualFormat(format);
@@ -159,9 +188,11 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetDbmlBranchState();
         resetVisualBranchState();
         resetLaravelBranchState();
+        resetPrismaBranchState();
     }, [
         resetDbmlBranchState,
         resetLaravelBranchState,
+        resetPrismaBranchState,
         resetSqlBranchState,
         resetVisualBranchState,
     ]);
@@ -176,8 +207,9 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         () => ({
             isAuthenticated,
             diagramId: currentDiagram?.id,
+            databaseType,
         }),
-        [isAuthenticated, currentDiagram?.id]
+        [databaseType, isAuthenticated, currentDiagram?.id]
     );
 
     const sqlExportTargets = useMemo(
@@ -195,6 +227,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetDbmlBranchState();
                 resetVisualBranchState();
                 resetLaravelBranchState();
+                resetPrismaBranchState();
                 setStep(ExportWizardStep.SQL_TARGET);
                 return;
             }
@@ -204,6 +237,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetSqlBranchState();
                 resetVisualBranchState();
                 resetLaravelBranchState();
+                resetPrismaBranchState();
                 setStep(ExportWizardStep.DBML_PREVIEW);
                 return;
             }
@@ -213,6 +247,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetDbmlBranchState();
                 resetVisualBranchState();
                 resetLaravelBranchState();
+                resetPrismaBranchState();
                 setStep(ExportWizardStep.JSON_DOWNLOAD);
                 return;
             }
@@ -225,6 +260,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetSqlBranchState();
                 resetDbmlBranchState();
                 resetLaravelBranchState();
+                resetPrismaBranchState();
                 applyVisualFormatDefaults(targetId);
                 setStep(ExportWizardStep.VISUAL_OPTIONS);
                 return;
@@ -235,17 +271,38 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetDbmlBranchState();
                 resetVisualBranchState();
                 resetLaravelBranchState();
+                resetPrismaBranchState();
                 setStep(ExportWizardStep.LARAVEL_OPTIONS);
+                return;
+            }
+
+            if (targetId === 'prisma') {
+                resetSqlBranchState();
+                resetDbmlBranchState();
+                resetVisualBranchState();
+                resetLaravelBranchState();
+                resetPrismaBranchState();
+                setStep(ExportWizardStep.PRISMA_VERSION);
             }
         },
         [
             applyVisualFormatDefaults,
             resetDbmlBranchState,
             resetLaravelBranchState,
+            resetPrismaBranchState,
             resetSqlBranchState,
             resetVisualBranchState,
         ]
     );
+
+    const handleContinuePrismaVersion = useCallback(() => {
+        setPrismaSchema(undefined);
+        setPrismaNotes([]);
+        setPrismaGenerationError(null);
+        setPrismaHasUnexpectedError(false);
+        setIsPrismaGenerating(false);
+        setStep(ExportWizardStep.PRISMA_PREVIEW);
+    }, []);
 
     const handleSelectSqlTarget = useCallback(
         (targetDatabaseType: DatabaseType) => {
@@ -285,6 +342,22 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             return;
         }
 
+        if (step === ExportWizardStep.PRISMA_PREVIEW) {
+            setPrismaSchema(undefined);
+            setPrismaNotes([]);
+            setPrismaGenerationError(null);
+            setPrismaHasUnexpectedError(false);
+            setIsPrismaGenerating(false);
+            setStep(ExportWizardStep.PRISMA_VERSION);
+            return;
+        }
+
+        if (step === ExportWizardStep.PRISMA_VERSION) {
+            resetPrismaBranchState();
+            setStep(ExportWizardStep.TARGET_PICKER);
+            return;
+        }
+
         if (step === ExportWizardStep.SQL_PREVIEW) {
             setSqlScript(undefined);
             setSqlHasError(false);
@@ -302,8 +375,48 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         isVisualExporting,
         resetDbmlBranchState,
         resetLaravelBranchState,
+        resetPrismaBranchState,
         resetSqlBranchState,
         resetVisualBranchState,
+        step,
+    ]);
+
+    useEffect(() => {
+        if (
+            step !== ExportWizardStep.PRISMA_PREVIEW ||
+            prismaSchema !== undefined ||
+            prismaGenerationError !== null ||
+            prismaHasUnexpectedError
+        ) {
+            return;
+        }
+
+        setIsPrismaGenerating(true);
+
+        try {
+            const result = generatePrismaSchemaFromDiagram({
+                diagram: currentDiagram,
+                version: prismaVersion,
+            });
+
+            if (!result.success) {
+                setPrismaGenerationError(result.error);
+                return;
+            }
+
+            setPrismaSchema(result.schema);
+            setPrismaNotes(result.notes);
+        } catch {
+            setPrismaHasUnexpectedError(true);
+        } finally {
+            setIsPrismaGenerating(false);
+        }
+    }, [
+        currentDiagram,
+        prismaGenerationError,
+        prismaHasUnexpectedError,
+        prismaSchema,
+        prismaVersion,
         step,
     ]);
 
@@ -490,7 +603,9 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.DBML_PREVIEW ||
         step === ExportWizardStep.JSON_DOWNLOAD ||
         step === ExportWizardStep.VISUAL_OPTIONS ||
-        step === ExportWizardStep.LARAVEL_OPTIONS;
+        step === ExportWizardStep.LARAVEL_OPTIONS ||
+        step === ExportWizardStep.PRISMA_VERSION ||
+        step === ExportWizardStep.PRISMA_PREVIEW;
 
     const isSqlBranch =
         step === ExportWizardStep.SQL_TARGET ||
@@ -500,6 +615,9 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const isJsonBranch = step === ExportWizardStep.JSON_DOWNLOAD;
     const isVisualBranch = step === ExportWizardStep.VISUAL_OPTIONS;
     const isLaravelBranch = step === ExportWizardStep.LARAVEL_OPTIONS;
+    const isPrismaBranch =
+        step === ExportWizardStep.PRISMA_VERSION ||
+        step === ExportWizardStep.PRISMA_PREVIEW;
 
     const dialogTitle = t('export_wizard.title');
 
@@ -530,6 +648,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     : undefined;
             case ExportWizardStep.LARAVEL_OPTIONS:
                 return t('export_wizard.laravel.options_step.description');
+            case ExportWizardStep.PRISMA_VERSION:
+                return t('export_wizard.prisma.version_step.description');
+            case ExportWizardStep.PRISMA_PREVIEW:
+                return t('export_wizard.prisma.preview_step.description');
             default:
                 return t('export_wizard.description');
         }
@@ -537,11 +659,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
     const isWideDialog =
         step === ExportWizardStep.SQL_PREVIEW ||
-        step === ExportWizardStep.DBML_PREVIEW;
+        step === ExportWizardStep.DBML_PREVIEW ||
+        step === ExportWizardStep.PRISMA_PREVIEW;
 
     const isSqlPreview = step === ExportWizardStep.SQL_PREVIEW;
     const isDbmlPreview = step === ExportWizardStep.DBML_PREVIEW;
-    const isPreviewStep = isSqlPreview || isDbmlPreview;
+    const isPrismaPreview = step === ExportWizardStep.PRISMA_PREVIEW;
+    const isPreviewStep = isSqlPreview || isDbmlPreview || isPrismaPreview;
 
     return (
         <Dialog {...dialog} onOpenChange={handleOpenChange}>
@@ -566,6 +690,15 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                         <ExportVisualBranchContext format={visualFormat} />
                     ) : null}
                     {isLaravelBranch ? <ExportLaravelBranchContext /> : null}
+                    {isPrismaBranch ? (
+                        <ExportPrismaBranchContext
+                            version={
+                                step === ExportWizardStep.PRISMA_PREVIEW
+                                    ? prismaVersion
+                                    : null
+                            }
+                        />
+                    ) : null}
                     <DialogTitle>{dialogTitle}</DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
@@ -648,6 +781,24 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             onExport={() => {
                                 void handleVisualExport();
                             }}
+                        />
+                    ) : null}
+
+                    {step === ExportWizardStep.PRISMA_VERSION ? (
+                        <ExportPrismaVersionStep
+                            selectedVersion={prismaVersion}
+                            onSelectVersion={setPrismaVersion}
+                            onContinue={handleContinuePrismaVersion}
+                        />
+                    ) : null}
+
+                    {step === ExportWizardStep.PRISMA_PREVIEW ? (
+                        <ExportPrismaPreviewStep
+                            schema={prismaSchema}
+                            notes={prismaNotes}
+                            generationError={prismaGenerationError}
+                            isLoading={isPrismaGenerating}
+                            hasUnexpectedError={prismaHasUnexpectedError}
                         />
                     ) : null}
 

@@ -1184,6 +1184,89 @@ export const ne: LanguageTranslation = {
                     error_empty: 'क्यानभासमा निर्यात गर्ने केही छैन।',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    'हालको डाटाबेस प्रकारका लागि Prisma निर्यात उपलब्ध छैन।',
+                version_step: {
+                    title: 'Prisma संस्करण',
+                    description:
+                        'तपाईंको schema.prisma निर्यातका लागि Prisma मुख्य संस्करण छान्नुहोस्।',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'सिफारिस गरिएको',
+                    prisma_6: 'Prisma 6',
+                    continue: 'जारी राख्नुहोस्',
+                },
+                preview_step: {
+                    description: 'उत्पन्न Prisma स्किमा समीक्षा गर्नुहोस्।',
+                    generating: 'Prisma स्किमा उत्पन्न गर्दै...',
+                    download: 'schema.prisma डाउनलोड गर्नुहोस्',
+                    generation_error:
+                        'Prisma स्किमा उत्पन्न गर्न सकिएन। फेरि प्रयास गर्नुहोस्।',
+                    empty: 'हालको डायाग्रामका लागि कुनै Prisma स्किमा उत्पन्न भएन।',
+                    limitations: 'सीमाहरू',
+                    errors: {
+                        unsupported_database:
+                            'यो डाटाबेस प्रकारका लागि Prisma निर्यात समर्थित छैन।',
+                        empty_diagram:
+                            'डायाग्राममा निर्यात गर्न मिल्ने तालिकाहरू छैनन्।',
+                        invalid_primary_key:
+                            'एउटा तालिकाको प्राथमिक कुञ्जी कन्फिगरेसन अमान्य छ।',
+                        unsupported_structural_field:
+                            'प्राथमिक वा बाह्य कुञ्जीले असमर्थित फिल्ड प्रकार प्रयोग गरेको छ।',
+                        invalid_enum: 'enum परिभाषा निर्यात गर्न सकिएन।',
+                    },
+                    notes: {
+                        view_skipped:
+                            'डाटाबेस भ्यूहरू Prisma स्किमामा निर्यात हुँदैनन्।',
+                        schema_namespace_unsupported:
+                            'यो निर्यातमा तालिका स्किमा/नेमस्पेस म्याप गरिँदैन।',
+                        unsupported_field_omitted:
+                            'केही असमर्थित फिल्डहरू हटाइयो।',
+                        unsupported_default_omitted:
+                            'केही असमर्थित पूर्वनिर्धारित मानहरू हटाइयो।',
+                        unsupported_index_omitted: 'केही सूचकहरू हटाइयो।',
+                        relation_skipped: 'एउटा सम्बन्ध निर्यात गर्न सकिएन।',
+                        relation_degraded:
+                            'एउटा सम्बन्ध कम शुद्धतामा निर्यात भयो।',
+                        composite_fk_unsupported:
+                            'संयुक्त बाह्य कुञ्जीहरू समर्थित छैनन्।',
+                        many_to_many_label_only:
+                            'जोड तालिका बिनाका धेरै-देखि-धेरै सम्बन्धहरू लेबल मात्र निर्यात हुन्छन्।',
+                        set_null_omitted:
+                            'असमर्थित ठाउँमा ON DELETE SET NULL हटाइयो।',
+                        enum_skipped: 'enum निर्यात गर्न सकिएन।',
+                        composite_type_skipped:
+                            'संयुक्त प्रकार निर्यात गर्न सकिएन।',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description:

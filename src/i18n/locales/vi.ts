@@ -1180,6 +1180,88 @@ export const vi: LanguageTranslation = {
                     error_empty: 'Không có gì để xuất trên canvas.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    'Xuất Prisma không khả dụng cho loại cơ sở dữ liệu hiện tại.',
+                version_step: {
+                    title: 'Phiên bản Prisma',
+                    description:
+                        'Chọn phiên bản chính Prisma cho xuất schema.prisma.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'Đề xuất',
+                    prisma_6: 'Prisma 6',
+                    continue: 'Tiếp tục',
+                },
+                preview_step: {
+                    description: 'Xem lại schema Prisma đã tạo.',
+                    generating: 'Đang tạo schema Prisma...',
+                    download: 'Tải xuống schema.prisma',
+                    generation_error:
+                        'Không thể tạo schema Prisma. Vui lòng thử lại.',
+                    empty: 'Không có schema Prisma được tạo cho sơ đồ hiện tại.',
+                    limitations: 'Hạn chế',
+                    errors: {
+                        unsupported_database:
+                            'Xuất Prisma không được hỗ trợ cho loại cơ sở dữ liệu này.',
+                        empty_diagram: 'Sơ đồ không có bảng có thể xuất.',
+                        invalid_primary_key:
+                            'Một bảng có cấu hình khóa chính không hợp lệ.',
+                        unsupported_structural_field:
+                            'Khóa chính hoặc khóa ngoại dùng kiểu trường không được hỗ trợ.',
+                        invalid_enum: 'Không thể xuất định nghĩa enum.',
+                    },
+                    notes: {
+                        view_skipped:
+                            'View cơ sở dữ liệu không được xuất sang schema Prisma.',
+                        schema_namespace_unsupported:
+                            'Schema/namespace bảng không được ánh xạ trong xuất này.',
+                        unsupported_field_omitted:
+                            'Một số trường không được hỗ trợ đã bị bỏ qua.',
+                        unsupported_default_omitted:
+                            'Một số giá trị mặc định không được hỗ trợ đã bị bỏ qua.',
+                        unsupported_index_omitted:
+                            'Một số chỉ mục đã bị bỏ qua.',
+                        relation_skipped: 'Không thể xuất một quan hệ.',
+                        relation_degraded:
+                            'Một quan hệ được xuất với độ chính xác thấp hơn.',
+                        composite_fk_unsupported:
+                            'Khóa ngoại tổ hợp không được hỗ trợ.',
+                        many_to_many_label_only:
+                            'Quan hệ nhiều-nhiều không có bảng nối được xuất chỉ dưới dạng nhãn.',
+                        set_null_omitted:
+                            'ON DELETE SET NULL đã bị bỏ qua khi không được hỗ trợ.',
+                        enum_skipped: 'Không thể xuất enum.',
+                        composite_type_skipped: 'Không thể xuất kiểu tổ hợp.',
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Table schemas/namespaces are not mapped in this export. ({{count}} tables)',
+                        relation_skipped:
+                            'Some relationships could not be exported. ({{count}})',
+                        relation_degraded:
+                            'Some relationships were exported with reduced fidelity. ({{count}})',
+                        composite_fk_unsupported:
+                            'Composite foreign keys are not supported. ({{count}})',
+                        many_to_many_label_only:
+                            'Many-to-many relationships without a join table are exported as label-only. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL was omitted where unsupported. ({{count}})',
+                        view_skipped:
+                            'Database views are not exported to Prisma schemas. ({{count}})',
+                        unsupported_field_omitted:
+                            'Some unsupported fields were omitted. ({{count}})',
+                        unsupported_default_omitted:
+                            'Some unsupported default values were omitted. ({{count}})',
+                        unsupported_index_omitted:
+                            'Some indexes were omitted. ({{count}})',
+                        enum_skipped:
+                            'Some enums could not be exported. ({{count}})',
+                        composite_type_skipped:
+                            'Some composite types could not be exported. ({{count}})',
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'Chọn cách xuất các migration Laravel.',

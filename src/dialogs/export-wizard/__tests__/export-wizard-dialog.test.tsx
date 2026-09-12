@@ -223,16 +223,20 @@ describe('ExportWizardDialog', () => {
         ).toBeInTheDocument();
     });
 
-    it('shows planned framework targets as disabled', () => {
+    it('enables Prisma for supported databases', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        for (const targetKey of [
-            'prisma',
-            'ef_core',
-            'rails',
-            'django',
-            'drizzle',
-        ]) {
+        const prismaButton = screen
+            .getByText('export_wizard.targets.prisma.title')
+            .closest('button');
+
+        expect(prismaButton).not.toBeDisabled();
+    });
+
+    it('shows other planned framework targets as disabled', () => {
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        for (const targetKey of ['ef_core', 'rails', 'django', 'drizzle']) {
             const button = screen
                 .getByText(`export_wizard.targets.${targetKey}.title`)
                 .closest('button');
@@ -242,7 +246,7 @@ describe('ExportWizardDialog', () => {
 
         expect(
             screen.getAllByText('export_wizard.targets.framework.coming_soon')
-        ).toHaveLength(5);
+        ).toHaveLength(4);
     });
 
     it('hides Laravel export for guests', () => {

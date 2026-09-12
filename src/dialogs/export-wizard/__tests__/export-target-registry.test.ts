@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { DatabaseType } from '@/lib/domain/database-type';
 import { getExportTargetAvailability } from '../export-target-availability';
 import {
     EXPORT_TARGET_REGISTRY,
@@ -8,11 +9,13 @@ import {
 const guestContext = {
     isAuthenticated: false,
     diagramId: 'guest-diagram-1',
+    databaseType: DatabaseType.POSTGRESQL,
 };
 
 const authenticatedBackendContext = {
     isAuthenticated: true,
     diagramId: '42',
+    databaseType: DatabaseType.POSTGRESQL,
 };
 
 describe('export target availability', () => {
@@ -42,9 +45,26 @@ describe('export target availability', () => {
         });
     });
 
-    it('marks planned framework targets as disabled', () => {
+    it('marks Prisma as available for supported database types', () => {
+        expect(getExportTargetAvailability('prisma', guestContext)).toEqual({
+            status: 'available',
+        });
+    });
+
+    it('disables Prisma for unsupported database types', () => {
+        expect(
+            getExportTargetAvailability('prisma', {
+                ...guestContext,
+                databaseType: DatabaseType.ORACLE,
+            })
+        ).toEqual({
+            status: 'disabled',
+            reasonKey: 'export_wizard.prisma.unsupported_database',
+        });
+    });
+
+    it('marks other planned framework targets as disabled', () => {
         for (const targetId of [
-            'prisma',
             'ef_core',
             'rails',
             'django',

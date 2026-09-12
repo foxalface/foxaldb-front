@@ -1208,6 +1208,93 @@ export const fr: LanguageTranslation = {
                     error_empty: 'Il n’y a rien à exporter sur le canevas.',
                 },
             },
+            prisma: {
+                unsupported_database:
+                    "L'export Prisma n'est pas disponible pour le type de base de données actuel.",
+                version_step: {
+                    title: 'Version Prisma',
+                    description:
+                        'Choisissez la version majeure de Prisma pour votre export schema.prisma.',
+                    prisma_7: 'Prisma 7',
+                    prisma_7_recommended: 'Recommandé',
+                    prisma_6: 'Prisma 6',
+                    continue: 'Continuer',
+                },
+                preview_step: {
+                    description: 'Vérifiez le schéma Prisma généré.',
+                    generating: 'Génération du schéma Prisma...',
+                    download: 'Télécharger schema.prisma',
+                    generation_error:
+                        'Impossible de générer le schéma Prisma. Veuillez réessayer.',
+                    empty: "Aucun schéma Prisma n'a été généré pour le diagramme actuel.",
+                    limitations: 'Limitations',
+                    errors: {
+                        unsupported_database:
+                            "L'export Prisma n'est pas pris en charge pour ce type de base de données.",
+                        empty_diagram:
+                            "Le diagramme n'a pas de tables exportables.",
+                        invalid_primary_key:
+                            'Une table a une configuration de clé primaire invalide.',
+                        unsupported_structural_field:
+                            'Une clé primaire ou étrangère utilise un type de champ non pris en charge.',
+                        invalid_enum:
+                            "Une définition d'énumération n'a pas pu être exportée.",
+                    },
+                    notes: {
+                        view_skipped:
+                            'Les vues de base de données ne sont pas exportées vers les schémas Prisma.',
+                        schema_namespace_unsupported:
+                            'Les schémas/espaces de noms de tables ne sont pas mappés dans cet export.',
+                        unsupported_field_omitted:
+                            'Certains champs non pris en charge ont été omis.',
+                        unsupported_default_omitted:
+                            'Certaines valeurs par défaut non prises en charge ont été omises.',
+                        unsupported_index_omitted:
+                            'Certains index ont été omis.',
+                        relation_skipped:
+                            "Une relation n'a pas pu être exportée.",
+                        relation_degraded:
+                            'Une relation a été exportée avec une fidélité réduite.',
+                        composite_fk_unsupported:
+                            'Les clés étrangères composites ne sont pas prises en charge.',
+                        many_to_many_label_only:
+                            'Les relations plusieurs-à-plusieurs sans table de jointure sont exportées en libellé uniquement.',
+                        set_null_omitted:
+                            'ON DELETE SET NULL a été omis lorsque non pris en charge.',
+                        enum_skipped:
+                            "Une énumération n'a pas pu être exportée.",
+                        composite_type_skipped:
+                            "Un type composite n'a pas pu être exporté.",
+                    },
+                    notes_grouped: {
+                        schema_namespace_unsupported:
+                            'Les schémas/namespaces de table ne sont pas mappés dans cet export. ({{count}} tables)',
+                        relation_skipped:
+                            "Certaines relations n'ont pas pu être exportées. ({{count}})",
+                        relation_degraded:
+                            'Certaines relations ont été exportées avec une fidélité réduite. ({{count}})',
+                        composite_fk_unsupported:
+                            'Les clés étrangères composites ne sont pas prises en charge. ({{count}})',
+                        many_to_many_label_only:
+                            'Les relations plusieurs-à-plusieurs sans table de jointure sont exportées en libellé uniquement. ({{count}})',
+                        set_null_omitted:
+                            'ON DELETE SET NULL a été omis lorsque non pris en charge. ({{count}})',
+                        view_skipped:
+                            'Les vues de base de données ne sont pas exportées vers les schémas Prisma. ({{count}})',
+                        unsupported_field_omitted:
+                            'Certains champs non pris en charge ont été omis. ({{count}})',
+                        unsupported_default_omitted:
+                            'Certaines valeurs par défaut non prises en charge ont été omises. ({{count}})',
+                        unsupported_index_omitted:
+                            'Certains index ont été omis. ({{count}})',
+                        enum_skipped:
+                            "Certaines énumérations n'ont pas pu être exportées. ({{count}})",
+                        composite_type_skipped:
+                            "Certains types composites n'ont pas pu être exportés. ({{count}})",
+                        with_count: '{{message}} ({{count}})',
+                    },
+                },
+            },
             laravel: {
                 options_step: {
                     description:

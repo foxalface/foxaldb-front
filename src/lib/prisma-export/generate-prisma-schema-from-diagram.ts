@@ -19,6 +19,7 @@ import type {
 } from './prisma-export-types';
 import type { PrismaExportVersion } from './prisma-export-version';
 import { IdentifierAllocator } from './prisma-identifier';
+import { appendSchemaNamespaceNotes } from './append-schema-namespace-notes';
 import {
     buildModelRelations,
     isUnsupportedIndexType,
@@ -282,15 +283,9 @@ const buildModelBlocks = (
     const fieldPrismaNamesByTable = new Map<string, Map<string, string>>();
     const modelAllocator = new IdentifierAllocator();
 
-    tables.forEach((table) => {
-        if (table.schema) {
-            notes.push({
-                code: 'schema_namespace_unsupported',
-                message: `Table "${table.name}" schema "${table.schema}" is not exported to Prisma @@schema in V1.`,
-                path: table.name,
-            });
-        }
+    appendSchemaNamespaceNotes(tables, notes);
 
+    tables.forEach((table) => {
         const allocated = modelAllocator.allocate(
             table.name,
             'pascal',
