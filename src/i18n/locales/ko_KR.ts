@@ -1267,6 +1267,48 @@ export const ko_KR: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    '현재 데이터베이스 유형에서는 EF Core 내보내기를 사용할 수 없습니다.',
+                options_step: {
+                    description: 'EF Core 모델 프로젝트 내보내기를 구성합니다.',
+                    explanation:
+                        'EF Core 10(.NET 10) 모델 프로젝트를 내보냅니다. 데이터베이스 공급자는 현재 다이어그램에서 추론됩니다. 마이그레이션은 생성되지 않으며, 내보낸 프로젝트에서 로컬로 만들 수 있습니다.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: '공급자: {{provider}}',
+                    migrations_not_generated:
+                        '이 내보내기에는 마이그레이션이 포함되지 않습니다. 생성된 프로젝트를 사용해 EF Core CLI로 로컬에서 마이그레이션을 만드세요.',
+                    namespace: '네임스페이스',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        '생성된 프로젝트의 루트 C# 네임스페이스입니다. 비워 두면 서버가 다이어그램 이름에서 선택합니다.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext 클래스 이름입니다. 비워 두면 AppDbContext가 사용됩니다.',
+                    export: '내보내기',
+                    generating: 'EF Core 프로젝트를 생성하는 중…',
+                    error_rate_limited:
+                        '내보내기 요청이 너무 많습니다. 잠시 기다렸다가 다시 시도하세요.',
+                    error_unexpected:
+                        'EF Core 프로젝트를 내보낼 수 없습니다. 다시 시도하세요.',
+                    error_semantic: 'EF Core 프로젝트를 생성할 수 없습니다.',
+                    error_unauthenticated:
+                        'EF Core 프로젝트를 내보내려면 로그인해야 합니다.',
+                },
+                result_step: {
+                    description: '생성된 EF Core 프로젝트를 검토하세요.',
+                    success: 'EF Core 프로젝트가 생성되었습니다.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: '공급자: {{provider}}',
+                    generated_files: '생성된 파일({{count}})',
+                    notes: '참고',
+                    download_zip: 'ZIP 다운로드',
+                    error_unsafe_path:
+                        '내보내기에 안전하지 않은 파일 경로가 있어 다운로드하지 않았습니다.',
+                    error_empty_files: '내보내기에 파일이 포함되지 않았습니다.',
+                },
+            },
             laravel: {
                 options_step: {
                     description:

@@ -1265,6 +1265,49 @@ export const ru: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'Экспорт EF Core недоступен для текущего типа базы данных.',
+                options_step: {
+                    description:
+                        'Настройте экспорт модельного проекта EF Core.',
+                    explanation:
+                        'Экспортируйте модельный проект EF Core 10 (.NET 10). Поставщик базы данных определяется по текущей диаграмме. Миграции не создаются; вы можете сгенерировать их локально из экспортированного проекта.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Поставщик: {{provider}}',
+                    migrations_not_generated:
+                        'Этот экспорт не включает миграции. Используйте созданный проект, чтобы локально сгенерировать миграции с помощью CLI EF Core.',
+                    namespace: 'Пространство имён',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'Корневое пространство имён C# для созданного проекта. Оставьте пустым, чтобы сервер выбрал его по имени диаграммы.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'Имя класса DbContext. Оставьте пустым, чтобы использовать AppDbContext.',
+                    export: 'Экспортировать',
+                    generating: 'Создание проекта EF Core…',
+                    error_rate_limited:
+                        'Слишком много запросов на экспорт. Подождите немного и повторите попытку.',
+                    error_unexpected:
+                        'Не удалось экспортировать проект EF Core. Повторите попытку.',
+                    error_semantic: 'Не удалось создать проект EF Core.',
+                    error_unauthenticated:
+                        'Чтобы экспортировать проекты EF Core, необходимо войти в систему.',
+                },
+                result_step: {
+                    description: 'Проверьте созданный проект EF Core.',
+                    success: 'Проект EF Core создан.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Поставщик: {{provider}}',
+                    generated_files: 'Созданные файлы ({{count}})',
+                    notes: 'Замечания',
+                    download_zip: 'Скачать ZIP',
+                    error_unsafe_path:
+                        'Экспорт содержит небезопасный путь к файлу и не был скачан.',
+                    error_empty_files: 'Экспорт не содержал файлов.',
+                },
+            },
             laravel: {
                 options_step: {
                     description:

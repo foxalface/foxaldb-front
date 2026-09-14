@@ -1259,6 +1259,48 @@ export const mr: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'सध्याच्या डेटाबेस प्रकारासाठी EF Core निर्यात उपलब्ध नाही.',
+                options_step: {
+                    description: 'EF Core मॉडेल प्रकल्प निर्यात कॉन्फिगर करा.',
+                    explanation:
+                        'EF Core 10 (.NET 10) मॉडेल प्रकल्प निर्यात करा. डेटाबेस प्रदाता सध्याच्या आकृतीवरून ठरतो. मायग्रेशन तयार होत नाहीत; निर्यात केलेल्या प्रकल्पातून तुम्ही ते स्थानिक पातळीवर तयार करू शकता.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'प्रदाता: {{provider}}',
+                    migrations_not_generated:
+                        'या निर्यातीत मायग्रेशन समाविष्ट नाहीत. EF Core CLI ने स्थानिक पातळीवर मायग्रेशन तयार करण्यासाठी तयार झालेला प्रकल्प वापरा.',
+                    namespace: 'नेमस्पेस',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'तयार झालेल्या प्रकल्पाचा मूळ C# नेमस्पेस. सर्व्हरने आकृतीच्या नावावरून निवडावा यासाठी रिकामे ठेवा.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext वर्गाचे नाव. AppDbContext वापरण्यासाठी रिकामे ठेवा.',
+                    export: 'निर्यात करा',
+                    generating: 'EF Core प्रकल्प तयार होत आहे...',
+                    error_rate_limited:
+                        'खूप जास्त निर्यात विनंत्या. कृपया थोडा वेळ थांबून पुन्हा प्रयत्न करा.',
+                    error_unexpected:
+                        'EF Core प्रकल्प निर्यात करता आला नाही. कृपया पुन्हा प्रयत्न करा.',
+                    error_semantic: 'EF Core प्रकल्प तयार करता आला नाही.',
+                    error_unauthenticated:
+                        'EF Core प्रकल्प निर्यात करण्यासाठी तुम्ही साइन इन असणे आवश्यक आहे.',
+                },
+                result_step: {
+                    description: 'तयार झालेला EF Core प्रकल्प तपासा.',
+                    success: 'EF Core प्रकल्प तयार झाला.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'प्रदाता: {{provider}}',
+                    generated_files: 'तयार झालेल्या फाइल्स ({{count}})',
+                    notes: 'टिपा',
+                    download_zip: 'ZIP डाउनलोड करा',
+                    error_unsafe_path:
+                        'निर्यातीत असुरक्षित फाइल मार्ग आहे आणि तो डाउनलोड झाला नाही.',
+                    error_empty_files: 'निर्यातीत कोणतीही फाइल नव्हती.',
+                },
+            },
             laravel: {
                 options_step: {
                     description:

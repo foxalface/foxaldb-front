@@ -1182,6 +1182,43 @@ export const zh_TW: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database: '目前的資料庫類型無法使用 EF Core 匯出。',
+                options_step: {
+                    description: '設定 EF Core 模型專案匯出。',
+                    explanation:
+                        '匯出 EF Core 10（.NET 10）模型專案。資料庫提供者會依目前圖表推斷。不會產生遷移；你可以從匯出的專案在本機建立遷移。',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: '提供者：{{provider}}',
+                    migrations_not_generated:
+                        '此次匯出不包含遷移。請使用產生的專案，透過 EF Core CLI 在本機建立遷移。',
+                    namespace: '命名空間',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        '產生專案的根 C# 命名空間。留空則由伺服器依圖表名稱選擇。',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext 類別名稱。留空則使用 AppDbContext。',
+                    export: '匯出',
+                    generating: '正在產生 EF Core 專案…',
+                    error_rate_limited: '匯出要求過多。請稍候再試。',
+                    error_unexpected: '無法匯出 EF Core 專案。請再試一次。',
+                    error_semantic: '無法產生 EF Core 專案。',
+                    error_unauthenticated: '必須登入才能匯出 EF Core 專案。',
+                },
+                result_step: {
+                    description: '檢視產生的 EF Core 專案。',
+                    success: '已產生 EF Core 專案。',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: '提供者：{{provider}}',
+                    generated_files: '已產生檔案（{{count}}）',
+                    notes: '說明',
+                    download_zip: '下載 ZIP',
+                    error_unsafe_path: '匯出包含不安全的檔案路徑，因此未下載。',
+                    error_empty_files: '匯出未包含任何檔案。',
+                },
+            },
             laravel: {
                 options_step: {
                     description: '選擇如何匯出 Laravel 遷移。',

@@ -1251,6 +1251,48 @@ export const gu: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'વર્તમાન ડેટાબેઝ પ્રકાર માટે EF Core નિકાસ ઉપલબ્ધ નથી.',
+                options_step: {
+                    description: 'EF Core મોડલ પ્રોજેક્ટ નિકાસ ગોઠવો.',
+                    explanation:
+                        'EF Core 10 (.NET 10) મોડલ પ્રોજેક્ટ નિકાસ કરો. ડેટાબેઝ પ્રદાતા વર્તમાન આકૃતિમાંથી નક્કી થાય છે. માઇગ્રેશન બનતાં નથી; નિકાસ કરેલા પ્રોજેક્ટમાંથી તમે તેને સ્થાનિક રીતે બનાવી શકો છો.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'પ્રદાતા: {{provider}}',
+                    migrations_not_generated:
+                        'આ નિકાસમાં માઇગ્રેશન શામેલ નથી. EF Core CLI વડે સ્થાનિક રીતે માઇગ્રેશન બનાવવા માટે બનાવેલ પ્રોજેક્ટ વાપરો.',
+                    namespace: 'નેમસ્પેસ',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'બનાવેલ પ્રોજેક્ટનું મૂળ C# નેમસ્પેસ. સર્વર આકૃતિના નામમાંથી પસંદ કરે તે માટે ખાલી રાખો.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext વર્ગનું નામ. AppDbContext વાપરવા માટે ખાલી રાખો.',
+                    export: 'નિકાસ કરો',
+                    generating: 'EF Core પ્રોજેક્ટ બની રહ્યો છે...',
+                    error_rate_limited:
+                        'ઘણી બધી નિકાસ વિનંતીઓ. કૃપા કરીને થોડી રાહ જોઈને ફરી પ્રયાસ કરો.',
+                    error_unexpected:
+                        'EF Core પ્રોજેક્ટ નિકાસ થઈ શક્યો નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                    error_semantic: 'EF Core પ્રોજેક્ટ બની શક્યો નહીં.',
+                    error_unauthenticated:
+                        'EF Core પ્રોજેક્ટ નિકાસ કરવા માટે તમારે સાઇન ઇન હોવું જરૂરી છે.',
+                },
+                result_step: {
+                    description: 'બનાવેલ EF Core પ્રોજેક્ટની સમીક્ષા કરો.',
+                    success: 'EF Core પ્રોજેક્ટ બની ગયો.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'પ્રદાતા: {{provider}}',
+                    generated_files: 'બનાવેલી ફાઇલો ({{count}})',
+                    notes: 'નોંધો',
+                    download_zip: 'ZIP ડાઉનલોડ કરો',
+                    error_unsafe_path:
+                        'નિકાસમાં અસુરક્ષિત ફાઇલ પાથ છે અને તે ડાઉનલોડ થયો નથી.',
+                    error_empty_files: 'નિકાસમાં કોઈ ફાઇલ નહોતી.',
+                },
+            },
             laravel: {
                 options_step: {
                     description:

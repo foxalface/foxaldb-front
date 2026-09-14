@@ -1246,6 +1246,48 @@ export const ar: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'تصدير EF Core غير متاح لنوع قاعدة البيانات الحالي.',
+                options_step: {
+                    description: 'اضبط تصدير مشروع نموذج EF Core.',
+                    explanation:
+                        'صدّر مشروع نموذج EF Core 10 (.NET 10). يُستنتج مزوّد قاعدة البيانات من المخطط الحالي. لا تُنشأ الترحيلات؛ يمكنك إنشاؤها محليًا من المشروع المُصدَّر.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'المزوّد: {{provider}}',
+                    migrations_not_generated:
+                        'لا يتضمن هذا التصدير ترحيلات. استخدم المشروع المُنشأ لإنشاء الترحيلات محليًا عبر واجهة سطر أوامر EF Core.',
+                    namespace: 'فضاء الأسماء',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'فضاء أسماء C# الجذر للمشروع المُنشأ. اتركه فارغًا ليختار الخادم واحدًا من اسم المخطط.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'اسم صنف DbContext. اتركه فارغًا لاستخدام AppDbContext.',
+                    export: 'تصدير',
+                    generating: 'جارٍ إنشاء مشروع EF Core…',
+                    error_rate_limited:
+                        'طلبات تصدير كثيرة جدًا. يُرجى الانتظار قليلًا ثم المحاولة مرة أخرى.',
+                    error_unexpected:
+                        'تعذّر تصدير مشروع EF Core. يُرجى المحاولة مرة أخرى.',
+                    error_semantic: 'تعذّر إنشاء مشروع EF Core.',
+                    error_unauthenticated:
+                        'يجب تسجيل الدخول لتصدير مشاريع EF Core.',
+                },
+                result_step: {
+                    description: 'راجع مشروع EF Core المُنشأ.',
+                    success: 'تم إنشاء مشروع EF Core.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'المزوّد: {{provider}}',
+                    generated_files: 'الملفات المُنشأة ({{count}})',
+                    notes: 'ملاحظات',
+                    download_zip: 'تنزيل ZIP',
+                    error_unsafe_path:
+                        'يحتوي التصدير على مسار ملف غير آمن ولم يتم تنزيله.',
+                    error_empty_files: 'لم يتضمن التصدير أي ملفات.',
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'اختر كيفية تصدير ترحيلات Laravel.',

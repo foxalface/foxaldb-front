@@ -72,12 +72,7 @@ describe('export target availability', () => {
     });
 
     it('marks other planned framework targets as disabled', () => {
-        for (const targetId of [
-            'ef_core',
-            'rails',
-            'django',
-            'drizzle',
-        ] as const) {
+        for (const targetId of ['rails', 'django', 'drizzle'] as const) {
             expect(getExportTargetAvailability(targetId, guestContext)).toEqual(
                 {
                     status: 'disabled',
@@ -85,6 +80,20 @@ describe('export target availability', () => {
                 }
             );
         }
+    });
+
+    it('hides EF Core for guests', () => {
+        expect(getExportTargetAvailability('ef_core', guestContext)).toEqual({
+            status: 'hidden',
+        });
+    });
+
+    it('marks EF Core as available for authenticated users on supported databases', () => {
+        expect(
+            getExportTargetAvailability('ef_core', authenticatedBackendContext)
+        ).toEqual({
+            status: 'available',
+        });
     });
 });
 
@@ -128,7 +137,6 @@ describe('export target registry', () => {
 
         expect(database.map((target) => target.id)).toEqual(['sql']);
         expect(framework.map((target) => target.id)).toEqual([
-            'ef_core',
             'rails',
             'django',
             'drizzle',

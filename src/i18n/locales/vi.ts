@@ -1262,6 +1262,48 @@ export const vi: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'Xuất EF Core không khả dụng với loại cơ sở dữ liệu hiện tại.',
+                options_step: {
+                    description: 'Cấu hình xuất dự án mô hình EF Core.',
+                    explanation:
+                        'Xuất một dự án mô hình EF Core 10 (.NET 10). Nhà cung cấp cơ sở dữ liệu được suy ra từ sơ đồ hiện tại. Không tạo migration; bạn có thể tạo chúng cục bộ từ dự án đã xuất.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Nhà cung cấp: {{provider}}',
+                    migrations_not_generated:
+                        'Bản xuất này không bao gồm migration. Dùng dự án đã tạo để tạo migration cục bộ bằng CLI của EF Core.',
+                    namespace: 'Không gian tên',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'Không gian tên C# gốc của dự án được tạo. Để trống để máy chủ chọn từ tên sơ đồ.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'Tên lớp DbContext. Để trống để dùng AppDbContext.',
+                    export: 'Xuất',
+                    generating: 'Đang tạo dự án EF Core…',
+                    error_rate_limited:
+                        'Quá nhiều yêu cầu xuất. Vui lòng đợi một chút rồi thử lại.',
+                    error_unexpected:
+                        'Không thể xuất dự án EF Core. Vui lòng thử lại.',
+                    error_semantic: 'Không thể tạo dự án EF Core.',
+                    error_unauthenticated:
+                        'Bạn cần đăng nhập để xuất dự án EF Core.',
+                },
+                result_step: {
+                    description: 'Xem lại dự án EF Core đã tạo.',
+                    success: 'Đã tạo dự án EF Core.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Nhà cung cấp: {{provider}}',
+                    generated_files: 'Tệp đã tạo ({{count}})',
+                    notes: 'Ghi chú',
+                    download_zip: 'Tải ZIP',
+                    error_unsafe_path:
+                        'Bản xuất chứa đường dẫn tệp không an toàn và không được tải xuống.',
+                    error_empty_files: 'Bản xuất không chứa tệp nào.',
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'Chọn cách xuất các migration Laravel.',

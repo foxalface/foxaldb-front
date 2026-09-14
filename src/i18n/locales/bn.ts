@@ -1268,6 +1268,48 @@ export const bn: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'বর্তমান ডেটাবেস ধরনের জন্য EF Core রপ্তানি উপলব্ধ নয়।',
+                options_step: {
+                    description: 'EF Core মডেল প্রকল্প রপ্তানি কনফিগার করুন।',
+                    explanation:
+                        'একটি EF Core 10 (.NET 10) মডেল প্রকল্প রপ্তানি করুন। ডেটাবেস প্রদানকারী বর্তমান ডায়াগ্রাম থেকে নির্ধারিত হয়। মাইগ্রেশন তৈরি হয় না; রপ্তানি করা প্রকল্প থেকে আপনি সেগুলো স্থানীয়ভাবে তৈরি করতে পারেন।',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'প্রদানকারী: {{provider}}',
+                    migrations_not_generated:
+                        'এই রপ্তানিতে মাইগ্রেশন নেই। EF Core CLI দিয়ে স্থানীয়ভাবে মাইগ্রেশন তৈরি করতে তৈরি প্রকল্প ব্যবহার করুন।',
+                    namespace: 'নেমস্পেস',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'তৈরি প্রকল্পের মূল C# নেমস্পেস। সার্ভারকে ডায়াগ্রামের নাম থেকে বেছে নিতে খালি রাখুন।',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext ক্লাসের নাম। AppDbContext ব্যবহার করতে খালি রাখুন।',
+                    export: 'রপ্তানি করুন',
+                    generating: 'EF Core প্রকল্প তৈরি হচ্ছে...',
+                    error_rate_limited:
+                        'অতিরিক্ত রপ্তানি অনুরোধ। অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।',
+                    error_unexpected:
+                        'EF Core প্রকল্প রপ্তানি করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                    error_semantic: 'EF Core প্রকল্প তৈরি করা যায়নি।',
+                    error_unauthenticated:
+                        'EF Core প্রকল্প রপ্তানি করতে আপনাকে সাইন ইন থাকতে হবে।',
+                },
+                result_step: {
+                    description: 'তৈরি EF Core প্রকল্প পর্যালোচনা করুন।',
+                    success: 'EF Core প্রকল্প তৈরি হয়েছে।',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'প্রদানকারী: {{provider}}',
+                    generated_files: 'তৈরি ফাইল ({{count}})',
+                    notes: 'নোট',
+                    download_zip: 'ZIP ডাউনলোড করুন',
+                    error_unsafe_path:
+                        'রপ্তানিতে একটি অনিরাপদ ফাইল পথ আছে এবং তা ডাউনলোড হয়নি।',
+                    error_empty_files: 'রপ্তানিতে কোনো ফাইল ছিল না।',
+                },
+            },
             laravel: {
                 options_step: {
                     description:

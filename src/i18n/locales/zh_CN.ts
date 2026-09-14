@@ -1183,6 +1183,43 @@ export const zh_CN: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database: '当前数据库类型不支持 EF Core 导出。',
+                options_step: {
+                    description: '配置 EF Core 模型项目导出。',
+                    explanation:
+                        '导出 EF Core 10（.NET 10）模型项目。数据库提供程序由当前图推断。不会生成迁移；你可以在导出的项目中于本地创建迁移。',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: '提供程序：{{provider}}',
+                    migrations_not_generated:
+                        '此次导出不包含迁移。请使用生成的项目，通过 EF Core CLI 在本地创建迁移。',
+                    namespace: '命名空间',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        '生成项目的根 C# 命名空间。留空则由服务器根据图名称选择。',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext 类名。留空则使用 AppDbContext。',
+                    export: '导出',
+                    generating: '正在生成 EF Core 项目…',
+                    error_rate_limited: '导出请求过多。请稍候再试。',
+                    error_unexpected: '无法导出 EF Core 项目。请重试。',
+                    error_semantic: '无法生成 EF Core 项目。',
+                    error_unauthenticated: '需要登录才能导出 EF Core 项目。',
+                },
+                result_step: {
+                    description: '查看生成的 EF Core 项目。',
+                    success: '已生成 EF Core 项目。',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: '提供程序：{{provider}}',
+                    generated_files: '已生成文件（{{count}}）',
+                    notes: '说明',
+                    download_zip: '下载 ZIP',
+                    error_unsafe_path: '导出包含不安全的文件路径，因此未下载。',
+                    error_empty_files: '导出未包含任何文件。',
+                },
+            },
             laravel: {
                 options_step: {
                     description: '选择如何导出 Laravel 迁移。',

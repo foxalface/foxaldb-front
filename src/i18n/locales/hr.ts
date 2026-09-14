@@ -1265,6 +1265,49 @@ export const hr: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'Izvoz EF Core nije dostupan za trenutačni tip baze podataka.',
+                options_step: {
+                    description:
+                        'Konfigurirajte izvoz modelnog projekta EF Core.',
+                    explanation:
+                        'Izvezite modelni projekt EF Core 10 (.NET 10). Pružatelj baze podataka izvodi se iz trenutačnog dijagrama. Migracije se ne generiraju; možete ih lokalno stvoriti iz izvezenog projekta.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Pružatelj: {{provider}}',
+                    migrations_not_generated:
+                        'Ovaj izvoz ne uključuje migracije. Upotrijebite generirani projekt da biste lokalno stvorili migracije pomoću EF Core CLI-ja.',
+                    namespace: 'Imenski prostor',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'Korijenski C# imenski prostor za generirani projekt. Ostavite prazno da poslužitelj odabere jedan iz naziva dijagrama.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'Naziv klase DbContext. Ostavite prazno da biste koristili AppDbContext.',
+                    export: 'Izvezi',
+                    generating: 'Generiranje EF Core projekta…',
+                    error_rate_limited:
+                        'Previše zahtjeva za izvoz. Pričekajte trenutak i pokušajte ponovno.',
+                    error_unexpected:
+                        'Nije moguće izvesti EF Core projekt. Pokušajte ponovno.',
+                    error_semantic: 'EF Core projekt nije moguće generirati.',
+                    error_unauthenticated:
+                        'Morate biti prijavljeni da biste izvezli EF Core projekte.',
+                },
+                result_step: {
+                    description: 'Pregledajte generirani EF Core projekt.',
+                    success: 'EF Core projekt je generiran.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Pružatelj: {{provider}}',
+                    generated_files: 'Generirane datoteke ({{count}})',
+                    notes: 'Napomene',
+                    download_zip: 'Preuzmi ZIP',
+                    error_unsafe_path:
+                        'Izvoz sadrži nesigurnu putanju datoteke i nije preuzet.',
+                    error_empty_files: 'Izvoz nije sadržavao nijednu datoteku.',
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'Odaberite kako izvesti Laravel migracije.',

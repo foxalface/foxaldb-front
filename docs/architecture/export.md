@@ -54,14 +54,14 @@ Transforms the canonical `Diagram` into framework-native schema/code artifacts:
 
 - Laravel migrations (ZIP) — **implemented**
 - Prisma (`schema.prisma`) — **implemented**
-- EF Core — **planned** (separate milestone)
+- EF Core (model project ZIP) — **implemented**
 - Rails — **planned** (separate milestone)
 - Django — **planned** (separate milestone)
 - Drizzle — **planned** (separate milestone)
 
 Framework import parsers are **not** inverted into exporters. Each framework export receives its own implementation milestone with independent tests and QA.
 
-**Framework export authentication:** framework-native exports require an authenticated user (Sanctum). This applies to Laravel and Prisma today, and to EF Core, Rails, Django, and Drizzle when implemented. Authentication is **not** paid-plan gating — registered free users may use framework exports unless another product rule applies. Portable/local exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain guest-accessible.
+**Framework export authentication:** framework-native exports require an authenticated user (Sanctum). This applies to Laravel, Prisma, and EF Core today, and to Rails, Django, and Drizzle when implemented. Authentication is **not** paid-plan gating — registered free users may use framework exports unless another product rule applies. Portable/local exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain guest-accessible.
 
 ### C. Portable / Schema
 
@@ -98,9 +98,9 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 **Target groups:** Database, Framework, Portable / Schema, Visual.
 
-**Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, Laravel migrations, and Prisma are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
+**Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, Laravel migrations, Prisma, and EF Core are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
 
-**Planned framework targets** (EF Core, Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones. **Prisma** and **Laravel** require authentication; Prisma is additionally gated by supported `diagram.databaseType` (unsupported DB types show a localized disabled reason for authenticated users; guests do not see Prisma in the target picker).
+**Planned framework targets** (Rails, Django, Drizzle) appear as disabled entries until their dedicated milestones. **Prisma**, **Laravel**, and **EF Core** require authentication. Prisma and EF Core are additionally gated by supported `diagram.databaseType` (unsupported DB types show a localized disabled reason for authenticated users; guests do not see those targets). Laravel remains hidden unless the diagram has a numeric backend ID.
 
 ---
 
@@ -241,7 +241,41 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 **No generic framework exporter abstraction.** Prisma generation is private backend application logic. The public frontend exposes wizard UX, version selection, API transport, preview, copy/download, and availability presentation only. Production code does not call the Prisma importer.
 
-**Architectural rule:** Framework-native export generators (Laravel, Prisma, future EF Core/Rails/Django/Drizzle) are private backend-owned application logic and require authentication. Generic/portable/visual exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain frontend-side where appropriate and may remain guest-accessible.
+### EF Core (model project ZIP)
+
+| Attribute | Detail |
+|-----------|--------|
+| **Input** | Full unfiltered `currentDiagram` (live editor state; no schema/table filter) |
+| **Execution** | Private Laravel backend (`backend/app/Services/EfCoreExport/`) |
+| **Auth** | Sanctum (`auth:sanctum` + `throttle:ef-core-export`); unauthenticated callers receive `401`. Guests **hide** the target. Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. Stateless — diagram payload is not persisted. |
+| **Endpoint** | `POST /api/exports/ef-core` with `{ diagram: Diagram, namespace?: string, dbContextName?: string }` |
+| **Frontend client** | `frontend/src/lib/api/ef-core-export.ts` |
+| **Frontend types** | `frontend/src/lib/api/ef-core-export-types.ts` |
+| **Target availability** | `frontend/src/lib/export/ef-core-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type) |
+| **ZIP** | Built in the browser with existing `fflate` `zipSync` from `response.files[]`. Backend does **not** create a ZIP and does **not** run `dotnet`. |
+| **Output** | `{slug}-ef-core.zip` (`application/zip`) using backend `filename` |
+| **Entry points** | Export wizard → EF Core (`EF_CORE_OPTIONS` → `EF_CORE_RESULT`) |
+| **Tests** | `frontend/src/lib/api/__tests__/ef-core-export.test.ts`; `frontend/src/lib/export/__tests__/ef-core-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-ef-core.test.tsx`; backend PHPUnit under `backend/tests/Feature/EfCoreExportTest.php` and `backend/tests/Unit/Services/EfCoreExport/` |
+
+**EF Core 10 / .NET 10 only.** There is no version selector and no version request field.
+
+**Provider inference:** `diagram.databaseType` only. No provider override and no connection string.
+
+**Supported database types:** PostgreSQL, SQL Server, SQLite, MySQL.
+
+**Unsupported (target disabled for authenticated users; hidden for guests):** MariaDB (not aliased to MySQL), Oracle, CockroachDB, ClickHouse, GENERIC, unknown types.
+
+**Artifact:** in-memory model project (entities, Fluent `DbContext`, `.csproj`, README). Migrations, ModelSnapshot, and Designer.cs are **not** generated. The README explains generating migrations locally.
+
+**Options:** optional root namespace (frontend suggests a PascalCase value from the diagram name; blank omits the field and the backend chooses) and optional DbContext class name (frontend default `AppDbContext`; blank omits and the backend uses `AppDbContext`). Backend identifier sanitization remains authoritative.
+
+**Notes:** backend `notes[]` are shown on the result step (message + path). Do not recreate generator note semantics in the frontend.
+
+**ZIP safety:** frontend rejects empty, absolute, or `..` traversal paths and fails the download visibly rather than writing a dangerous archive entry.
+
+**No generic framework exporter abstraction.** EF Core generation is private backend application logic. The public frontend exposes wizard UX, API transport, availability, notes, and browser ZIP download only.
+
+**Architectural rule:** Framework-native export generators (Laravel, Prisma, EF Core, future Rails/Django/Drizzle) are private backend-owned application logic and require authentication. Generic/portable/visual exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain frontend-side where appropriate and may remain guest-accessible.
 
 ---
 
@@ -423,13 +457,15 @@ These are **not** the future generic Schema Diff/Sync/Merge design.
 - Diagram JSON export
 - PNG / JPG / SVG
 - Existing Laravel migration ZIP export (auth-gated)
+- Prisma schema export (auth-gated)
+- EF Core model project export (auth-gated; browser ZIP)
 
 ### Strategic framework targets (separate milestones each)
 
-Each receives its own implementation, automated tests, manual QA, commit, and push:
+Each remaining target receives its own implementation, automated tests, manual QA, commit, and push:
 
-- Prisma export
-- EF Core export
+- Prisma export — **implemented**
+- EF Core export — **implemented** (EF Core 10 / .NET 10 model project; MariaDB deferred; no `dotnet` execution; frontend ZIP)
 - Rails export
 - Django export
 - Drizzle export
@@ -459,7 +495,7 @@ FoxalDB imports more DBMS and framework formats than it exports in V1. Examples:
 | DBML | Yes | Wizard-native (standard DBML only); side panel unchanged |
 | Diagram JSON | Yes | Yes (via wizard) |
 | Metadata JSON | Yes | No |
-| Project ZIP (6 frameworks) | Yes | Laravel export yes; Prisma/EF/Rails/Django/Drizzle planned (wizard shows disabled) |
+| Project ZIP (6 frameworks) | Yes | Laravel, Prisma, and EF Core export yes; Rails/Django/Drizzle planned (wizard shows disabled) |
 | Laravel migrations ZIP | Import (legacy + project) | Export (backend, auth) |
 
 Do not force artificial feature symmetry.
@@ -495,7 +531,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 | Laravel export | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite | Covered |
 | Diagram JSON export | `frontend/src/lib/__tests__/diagram-json-export.test.ts`, filename + wizard JSON tests | Covered (JSON-B) |
 | Image export | `frontend/src/lib/visual-export/__tests__/`; wizard visual + provider tests | Covered |
-| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON + visual + Laravel branches) |
+| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON + visual + Laravel + Prisma + EF Core branches) |
 
 ### Expected Export V1 regression strategy
 
@@ -514,7 +550,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 
 Verified in current code:
 
-- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, Diagram JSON, visual, and Laravel branches are wizard-native
+- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, Diagram JSON, visual, Laravel, Prisma, and EF Core branches are wizard-native
 - **Legacy AI SQL path** — active in `exportSQL` and legacy `ExportSQLDialog`; unreachable from Export Wizard
 - **Misleading UI labels** — legacy `ExportSQLDialog` still has ✨ targets, Sparkles loader, hardcoded English "Deterministic"/"AI" toggle
 - **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback in generator; wizard shows unsupported UX, not fake targets
@@ -523,6 +559,7 @@ Verified in current code:
 - **Inconsistent delivery** — SQL/DBML wizard have copy + download; JSON is download-only; images/Laravel file download
 - **Laravel export** — requires an authenticated backend diagram ID; generation remains backend-owned
 - **Prisma export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required)
+- **EF Core export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; MariaDB is deferred; real `dotnet` QA is still pending
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML full diagram; images follow rendered canvas (filters/hidden nodes respected)
 - **SVG portability** — visual SVG remains html-to-image `foreignObject` HTML, not a native vector engine
 
@@ -535,7 +572,7 @@ This document and implementation milestones do **not**:
 - implement a generic `Exporter` interface
 - remove legacy AI SQL code
 - add Oracle/CockroachDB/ClickHouse dedicated SQL exporters
-- implement Prisma/EF/Rails/Django/Drizzle framework exporters (each is a separate milestone)
+- implement Rails/Django/Drizzle framework exporters (each is a separate milestone)
 - modify Import
 - implement Sync/Diff/Merge
 - introduce `ChangeSet`
@@ -584,6 +621,21 @@ This document and implementation milestones do **not**:
 - `frontend/src/lib/laravel-export/`
 - `frontend/src/dialogs/export-wizard/laravel/`
 
+### Frontend — Prisma client
+
+- `frontend/src/lib/api/prisma-export.ts`
+- `frontend/src/lib/api/prisma-export-types.ts`
+- `frontend/src/lib/export/prisma-export-capability.ts`
+- `frontend/src/dialogs/export-wizard/prisma/`
+
+### Frontend — EF Core client
+
+- `frontend/src/lib/api/ef-core-export.ts`
+- `frontend/src/lib/api/ef-core-export-types.ts`
+- `frontend/src/lib/export/ef-core-export-capability.ts`
+- `frontend/src/lib/export/ef-core-export-zip.ts`
+- `frontend/src/dialogs/export-wizard/ef-core/`
+
 ### Frontend — UX entry
 
 - `frontend/src/dialogs/export-wizard/`
@@ -595,3 +647,9 @@ This document and implementation milestones do **not**:
 - `backend/app/Http/Controllers/LaravelMigrationExportController.php`
 - `backend/app/Services/LaravelMigrationExport/`
 - `backend/docs/laravel-migration-export.md`
+
+### Backend — EF Core export
+
+- `backend/app/Http/Controllers/EfCoreExportController.php`
+- `backend/app/Services/EfCoreExport/`
+- `backend/docs/ef-core-export.md`

@@ -1304,6 +1304,50 @@ export const de: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'Der EF-Core-Export ist für den aktuellen Datenbanktyp nicht verfügbar.',
+                options_step: {
+                    description:
+                        'Konfigurieren Sie den Export des EF-Core-Modellprojekts.',
+                    explanation:
+                        'Exportieren Sie ein EF-Core-10-Modellprojekt (.NET 10). Der Datenbankanbieter wird aus dem aktuellen Diagramm abgeleitet. Es werden keine Migrationen erzeugt; Sie können sie lokal aus dem exportierten Projekt erstellen.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Anbieter: {{provider}}',
+                    migrations_not_generated:
+                        'Dieser Export enthält keine Migrationen. Verwenden Sie das erzeugte Projekt, um Migrationen lokal mit der EF-Core-CLI zu erstellen.',
+                    namespace: 'Namespace',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'Wurzel-C#-Namespace für das erzeugte Projekt. Leer lassen, damit der Server einen Namen aus dem Diagrammnamen wählt.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'Name der DbContext-Klasse. Leer lassen, um AppDbContext zu verwenden.',
+                    export: 'Exportieren',
+                    generating: 'EF-Core-Projekt wird erzeugt…',
+                    error_rate_limited:
+                        'Zu viele Exportanfragen. Bitte warten Sie einen Moment und versuchen Sie es erneut.',
+                    error_unexpected:
+                        'Das EF-Core-Projekt konnte nicht exportiert werden. Bitte versuchen Sie es erneut.',
+                    error_semantic:
+                        'Das EF-Core-Projekt konnte nicht erzeugt werden.',
+                    error_unauthenticated:
+                        'Sie müssen angemeldet sein, um EF-Core-Projekte zu exportieren.',
+                },
+                result_step: {
+                    description: 'Prüfen Sie das erzeugte EF-Core-Projekt.',
+                    success: 'EF-Core-Projekt erzeugt.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Anbieter: {{provider}}',
+                    generated_files: 'Erzeugte Dateien ({{count}})',
+                    notes: 'Hinweise',
+                    download_zip: 'ZIP herunterladen',
+                    error_unsafe_path:
+                        'Der Export enthält einen unsicheren Dateipfad und wurde nicht heruntergeladen.',
+                    error_empty_files: 'Der Export enthielt keine Dateien.',
+                },
+            },
             laravel: {
                 options_step: {
                     description:

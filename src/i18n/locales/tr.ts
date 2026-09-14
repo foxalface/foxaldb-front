@@ -1251,6 +1251,50 @@ export const tr: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'EF Core dışa aktarma, geçerli veritabanı türü için kullanılamaz.',
+                options_step: {
+                    description:
+                        'EF Core model projesinin dışa aktarımını yapılandırın.',
+                    explanation:
+                        'Bir EF Core 10 (.NET 10) model projesi dışa aktarın. Veritabanı sağlayıcısı geçerli diyagramdan çıkarılır. Geçişler (migrations) üretilmez; bunları dışa aktarılan projeden yerel olarak oluşturabilirsiniz.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Sağlayıcı: {{provider}}',
+                    migrations_not_generated:
+                        'Bu dışa aktarma geçiş dosyaları içermez. EF Core CLI ile geçişleri yerel olarak oluşturmak için üretilen projeyi kullanın.',
+                    namespace: 'Ad alanı',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'Üretilen proje için kök C# ad alanı. Sunucunun diyagram adından bir ad seçmesi için boş bırakın.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext sınıf adı. AppDbContext kullanmak için boş bırakın.',
+                    export: 'Dışa aktar',
+                    generating: 'EF Core projesi oluşturuluyor…',
+                    error_rate_limited:
+                        'Çok fazla dışa aktarma isteği. Lütfen biraz bekleyip yeniden deneyin.',
+                    error_unexpected:
+                        'EF Core projesi dışa aktarılamadı. Lütfen yeniden deneyin.',
+                    error_semantic: 'EF Core projesi oluşturulamadı.',
+                    error_unauthenticated:
+                        'EF Core projelerini dışa aktarmak için oturum açmanız gerekir.',
+                },
+                result_step: {
+                    description:
+                        'Oluşturulan EF Core projesini gözden geçirin.',
+                    success: 'EF Core projesi oluşturuldu.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Sağlayıcı: {{provider}}',
+                    generated_files: 'Oluşturulan dosyalar ({{count}})',
+                    notes: 'Notlar',
+                    download_zip: 'ZIP indir',
+                    error_unsafe_path:
+                        'Dışa aktarma güvenli olmayan bir dosya yolu içeriyor ve indirilmedi.',
+                    error_empty_files: 'Dışa aktarma hiçbir dosya içermiyordu.',
+                },
+            },
             laravel: {
                 options_step: {
                     description:

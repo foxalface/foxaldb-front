@@ -1268,6 +1268,49 @@ export const id_ID: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'Ekspor EF Core tidak tersedia untuk jenis basis data saat ini.',
+                options_step: {
+                    description: 'Konfigurasikan ekspor proyek model EF Core.',
+                    explanation:
+                        'Ekspor proyek model EF Core 10 (.NET 10). Penyedia basis data disimpulkan dari diagram saat ini. Migrasi tidak dibuat; Anda dapat membuatnya secara lokal dari proyek yang diekspor.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Penyedia: {{provider}}',
+                    migrations_not_generated:
+                        'Ekspor ini tidak menyertakan migrasi. Gunakan proyek yang dihasilkan untuk membuat migrasi secara lokal dengan CLI EF Core.',
+                    namespace: 'Namespace',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'Namespace C# akar untuk proyek yang dihasilkan. Biarkan kosong agar server memilih dari nama diagram.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'Nama kelas DbContext. Biarkan kosong untuk menggunakan AppDbContext.',
+                    export: 'Ekspor',
+                    generating: 'Menghasilkan proyek EF Core…',
+                    error_rate_limited:
+                        'Terlalu banyak permintaan ekspor. Tunggu sebentar lalu coba lagi.',
+                    error_unexpected:
+                        'Tidak dapat mengekspor proyek EF Core. Silakan coba lagi.',
+                    error_semantic: 'Proyek EF Core tidak dapat dihasilkan.',
+                    error_unauthenticated:
+                        'Anda harus masuk untuk mengekspor proyek EF Core.',
+                },
+                result_step: {
+                    description: 'Tinjau proyek EF Core yang dihasilkan.',
+                    success: 'Proyek EF Core dihasilkan.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Penyedia: {{provider}}',
+                    generated_files: 'Berkas yang dihasilkan ({{count}})',
+                    notes: 'Catatan',
+                    download_zip: 'Unduh ZIP',
+                    error_unsafe_path:
+                        'Ekspor berisi jalur berkas yang tidak aman dan tidak diunduh.',
+                    error_empty_files:
+                        'Ekspor tidak menyertakan berkas apa pun.',
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'Pilih cara mengekspor migrasi Laravel.',

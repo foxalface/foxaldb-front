@@ -136,7 +136,6 @@ describe('ExportWizardDialog', () => {
 
         const expectedTargets = [
             'export_wizard.targets.sql.title',
-            'export_wizard.targets.ef_core.title',
             'export_wizard.targets.rails.title',
             'export_wizard.targets.django.title',
             'export_wizard.targets.drizzle.title',
@@ -242,10 +241,18 @@ describe('ExportWizardDialog', () => {
         expect(prismaButton).not.toBeDisabled();
     });
 
+    it('hides EF Core for guests', () => {
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        expect(
+            screen.queryByText('export_wizard.targets.ef_core.title')
+        ).not.toBeInTheDocument();
+    });
+
     it('shows other planned framework targets as disabled', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        for (const targetKey of ['ef_core', 'rails', 'django', 'drizzle']) {
+        for (const targetKey of ['rails', 'django', 'drizzle']) {
             const button = screen
                 .getByText(`export_wizard.targets.${targetKey}.title`)
                 .closest('button');
@@ -255,7 +262,7 @@ describe('ExportWizardDialog', () => {
 
         expect(
             screen.getAllByText('export_wizard.targets.framework.coming_soon')
-        ).toHaveLength(4);
+        ).toHaveLength(3);
     });
 
     it('hides Laravel export for guests', () => {

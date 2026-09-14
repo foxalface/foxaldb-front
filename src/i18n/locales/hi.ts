@@ -1260,6 +1260,50 @@ export const hi: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'वर्तमान डेटाबेस प्रकार के लिए EF Core निर्यात उपलब्ध नहीं है।',
+                options_step: {
+                    description:
+                        'EF Core मॉडल प्रोजेक्ट निर्यात कॉन्फ़िगर करें।',
+                    explanation:
+                        'एक EF Core 10 (.NET 10) मॉडल प्रोजेक्ट निर्यात करें। डेटाबेस प्रदाता वर्तमान आरेख से निर्धारित होता है। माइग्रेशन जनरेट नहीं होते; आप निर्यात किए गए प्रोजेक्ट से उन्हें स्थानीय रूप से बना सकते हैं।',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'प्रदाता: {{provider}}',
+                    migrations_not_generated:
+                        'इस निर्यात में माइग्रेशन शामिल नहीं हैं। EF Core CLI से स्थानीय रूप से माइग्रेशन बनाने के लिए जनरेट किए गए प्रोजेक्ट का उपयोग करें।',
+                    namespace: 'नेमस्पेस',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'जनरेट किए गए प्रोजेक्ट का मूल C# नेमस्पेस। सर्वर को आरेख नाम से चुनने देने के लिए खाली छोड़ें।',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext क्लास का नाम। AppDbContext उपयोग करने के लिए खाली छोड़ें।',
+                    export: 'निर्यात करें',
+                    generating: 'EF Core प्रोजेक्ट जनरेट हो रहा है...',
+                    error_rate_limited:
+                        'बहुत अधिक निर्यात अनुरोध। कृपया थोड़ी देर प्रतीक्षा करके फिर कोशिश करें।',
+                    error_unexpected:
+                        'EF Core प्रोजेक्ट निर्यात नहीं हो सका। कृपया फिर कोशिश करें।',
+                    error_semantic: 'EF Core प्रोजेक्ट जनरेट नहीं हो सका।',
+                    error_unauthenticated:
+                        'EF Core प्रोजेक्ट निर्यात करने के लिए आपको साइन इन होना होगा।',
+                },
+                result_step: {
+                    description:
+                        'जनरेट किए गए EF Core प्रोजेक्ट की समीक्षा करें।',
+                    success: 'EF Core प्रोजेक्ट जनरेट हो गया।',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'प्रदाता: {{provider}}',
+                    generated_files: 'जनरेट की गई फ़ाइलें ({{count}})',
+                    notes: 'नोट्स',
+                    download_zip: 'ZIP डाउनलोड करें',
+                    error_unsafe_path:
+                        'निर्यात में एक असुरक्षित फ़ाइल पथ है और उसे डाउनलोड नहीं किया गया।',
+                    error_empty_files: 'निर्यात में कोई फ़ाइल शामिल नहीं थी।',
+                },
+            },
             laravel: {
                 options_step: {
                     description:

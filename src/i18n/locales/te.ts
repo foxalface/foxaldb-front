@@ -1275,6 +1275,50 @@ export const te: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'ప్రస్తుత డేటాబేస్ రకానికి EF Core ఎగుమతి అందుబాటులో లేదు.',
+                options_step: {
+                    description:
+                        'EF Core మోడల్ ప్రాజెక్ట్ ఎగుమతిని కాన్ఫిగర్ చేయండి.',
+                    explanation:
+                        'EF Core 10 (.NET 10) మోడల్ ప్రాజెక్ట్‌ను ఎగుమతి చేయండి. డేటాబేస్ ప్రొవైడర్ ప్రస్తుత రేఖాచిత్రం నుండి నిర్ధారించబడుతుంది. మైగ్రేషన్లు రూపొందించబడవు; ఎగుమతి చేసిన ప్రాజెక్ట్ నుండి వాటిని స్థానికంగా సృష్టించవచ్చు.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'ప్రొవైడర్: {{provider}}',
+                    migrations_not_generated:
+                        'ఈ ఎగుమతిలో మైగ్రేషన్లు ఉండవు. EF Core CLIతో స్థానికంగా మైగ్రేషన్లు సృష్టించడానికి రూపొందించిన ప్రాజెక్ట్‌ను ఉపయోగించండి.',
+                    namespace: 'నేమ్‌స్పేస్',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'రూపొందించిన ప్రాజెక్ట్ యొక్క రూట్ C# నేమ్‌స్పేస్. సర్వర్ రేఖాచిత్రం పేరు నుండి ఎంచుకునేలా ఖాళీగా ఉంచండి.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext తరగతి పేరు. AppDbContext ఉపయోగించడానికి ఖాళీగా ఉంచండి.',
+                    export: 'ఎగుమతి చేయి',
+                    generating: 'EF Core ప్రాజెక్ట్ రూపొందిస్తోంది...',
+                    error_rate_limited:
+                        'చాలా ఎగుమతి అభ్యర్థనలు. దయచేసి కాసేపు వేచి మళ్లీ ప్రయత్నించండి.',
+                    error_unexpected:
+                        'EF Core ప్రాజెక్ట్‌ను ఎగుమతి చేయలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                    error_semantic: 'EF Core ప్రాజెక్ట్‌ను రూపొందించలేకపోయాం.',
+                    error_unauthenticated:
+                        'EF Core ప్రాజెక్ట్‌లను ఎగుమతి చేయడానికి మీరు సైన్ ఇన్ అయి ఉండాలి.',
+                },
+                result_step: {
+                    description:
+                        'రూపొందించిన EF Core ప్రాజెక్ట్‌ను సమీక్షించండి.',
+                    success: 'EF Core ప్రాజెక్ట్ రూపొందించబడింది.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'ప్రొవైడర్: {{provider}}',
+                    generated_files: 'రూపొందించిన ఫైళ్లు ({{count}})',
+                    notes: 'గమనికలు',
+                    download_zip: 'ZIP డౌన్‌లోడ్ చేయి',
+                    error_unsafe_path:
+                        'ఎగుమతిలో సురక్షితం కాని ఫైల్ మార్గం ఉంది కాబట్టి డౌన్‌లోడ్ కాలేదు.',
+                    error_empty_files: 'ఎగుమతిలో ఫైళ్లు లేవు.',
+                },
+            },
             laravel: {
                 options_step: {
                     description:

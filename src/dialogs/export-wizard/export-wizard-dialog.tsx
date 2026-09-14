@@ -51,6 +51,10 @@ import { ExportLaravelBranchContext } from './laravel/export-laravel-branch-cont
 import { ExportPrismaVersionStep } from './prisma/export-prisma-version-step';
 import { ExportPrismaPreviewStep } from './prisma/export-prisma-preview-step';
 import { ExportPrismaBranchContext } from './prisma/export-prisma-branch-context';
+import { ExportEfCoreOptionsStep } from './ef-core/export-ef-core-options-step';
+import { ExportEfCoreResultStep } from './ef-core/export-ef-core-result-step';
+import { ExportEfCoreBranchContext } from './ef-core/export-ef-core-branch-context';
+import type { EfCoreWizardRequestError } from './ef-core/export-ef-core-options-step';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import {
@@ -73,6 +77,11 @@ import {
 } from '@/lib/visual-export/visual-export-options';
 import { ApiError } from '@/lib/api/client';
 import { exportPrismaSchema } from '@/lib/api/prisma-export';
+import { exportEfCoreProject } from '@/lib/api/ef-core-export';
+import type { EfCoreExportSuccessResponse } from '@/lib/api/ef-core-export-types';
+import { DEFAULT_EF_CORE_DB_CONTEXT_NAME } from '@/lib/export/ef-core-export-constants';
+import { isEfCoreExportSupported } from '@/lib/export/ef-core-export-capability';
+import { suggestEfCoreNamespace } from '@/lib/export/suggest-ef-core-namespace';
 import type {
     PrismaExportError,
     PrismaExportNote,
@@ -136,6 +145,16 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         useState(false);
     const [isPrismaGenerating, setIsPrismaGenerating] = useState(false);
     const prismaExportRequestIdRef = useRef(0);
+    const [efCoreNamespace, setEfCoreNamespace] = useState('');
+    const [efCoreDbContextName, setEfCoreDbContextName] = useState(
+        DEFAULT_EF_CORE_DB_CONTEXT_NAME
+    );
+    const [efCoreSuccess, setEfCoreSuccess] =
+        useState<EfCoreExportSuccessResponse | null>(null);
+    const [efCoreError, setEfCoreError] =
+        useState<EfCoreWizardRequestError | null>(null);
+    const [isEfCoreExporting, setIsEfCoreExporting] = useState(false);
+    const efCoreExportRequestIdRef = useRef(0);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -178,6 +197,15 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         setIsPrismaGenerating(false);
     }, []);
 
+    const resetEfCoreBranchState = useCallback(() => {
+        efCoreExportRequestIdRef.current += 1;
+        setEfCoreNamespace(suggestEfCoreNamespace(currentDiagram?.name ?? ''));
+        setEfCoreDbContextName(DEFAULT_EF_CORE_DB_CONTEXT_NAME);
+        setEfCoreSuccess(null);
+        setEfCoreError(null);
+        setIsEfCoreExporting(false);
+    }, [currentDiagram?.name]);
+
     const applyVisualFormatDefaults = useCallback(
         (format: VisualExportFormat) => {
             setVisualFormat(format);
@@ -198,8 +226,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetVisualBranchState();
         resetLaravelBranchState();
         resetPrismaBranchState();
+        resetEfCoreBranchState();
     }, [
         resetDbmlBranchState,
+        resetEfCoreBranchState,
         resetLaravelBranchState,
         resetPrismaBranchState,
         resetSqlBranchState,
@@ -237,6 +267,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetVisualBranchState();
                 resetLaravelBranchState();
                 resetPrismaBranchState();
+                resetEfCoreBranchState();
                 setStep(ExportWizardStep.SQL_TARGET);
                 return;
             }
@@ -247,6 +278,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetVisualBranchState();
                 resetLaravelBranchState();
                 resetPrismaBranchState();
+                resetEfCoreBranchState();
                 setStep(ExportWizardStep.DBML_PREVIEW);
                 return;
             }
@@ -257,6 +289,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetVisualBranchState();
                 resetLaravelBranchState();
                 resetPrismaBranchState();
+                resetEfCoreBranchState();
                 setStep(ExportWizardStep.JSON_DOWNLOAD);
                 return;
             }
@@ -270,6 +303,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetDbmlBranchState();
                 resetLaravelBranchState();
                 resetPrismaBranchState();
+                resetEfCoreBranchState();
                 applyVisualFormatDefaults(targetId);
                 setStep(ExportWizardStep.VISUAL_OPTIONS);
                 return;
@@ -281,6 +315,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetVisualBranchState();
                 resetLaravelBranchState();
                 resetPrismaBranchState();
+                resetEfCoreBranchState();
                 setStep(ExportWizardStep.LARAVEL_OPTIONS);
                 return;
             }
@@ -291,12 +326,34 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetVisualBranchState();
                 resetLaravelBranchState();
                 resetPrismaBranchState();
+                resetEfCoreBranchState();
                 setStep(ExportWizardStep.PRISMA_VERSION);
+                return;
+            }
+
+            if (targetId === 'ef_core') {
+                if (
+                    !isAuthenticated ||
+                    !isEfCoreExportSupported(databaseType)
+                ) {
+                    return;
+                }
+
+                resetSqlBranchState();
+                resetDbmlBranchState();
+                resetVisualBranchState();
+                resetLaravelBranchState();
+                resetPrismaBranchState();
+                resetEfCoreBranchState();
+                setStep(ExportWizardStep.EF_CORE_OPTIONS);
             }
         },
         [
             applyVisualFormatDefaults,
+            databaseType,
+            isAuthenticated,
             resetDbmlBranchState,
+            resetEfCoreBranchState,
             resetLaravelBranchState,
             resetPrismaBranchState,
             resetSqlBranchState,
@@ -369,6 +426,21 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             return;
         }
 
+        if (step === ExportWizardStep.EF_CORE_RESULT) {
+            efCoreExportRequestIdRef.current += 1;
+            setEfCoreSuccess(null);
+            setEfCoreError(null);
+            setIsEfCoreExporting(false);
+            setStep(ExportWizardStep.EF_CORE_OPTIONS);
+            return;
+        }
+
+        if (step === ExportWizardStep.EF_CORE_OPTIONS) {
+            resetEfCoreBranchState();
+            setStep(ExportWizardStep.TARGET_PICKER);
+            return;
+        }
+
         if (step === ExportWizardStep.SQL_PREVIEW) {
             setSqlScript(undefined);
             setSqlHasError(false);
@@ -385,6 +457,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         isLaravelExporting,
         isVisualExporting,
         resetDbmlBranchState,
+        resetEfCoreBranchState,
         resetLaravelBranchState,
         resetPrismaBranchState,
         resetSqlBranchState,
@@ -632,9 +705,78 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         laravelVersion,
     ]);
 
+    const handleEfCoreExport = useCallback(async () => {
+        if (isEfCoreExporting || !isEfCoreExportSupported(databaseType)) {
+            return;
+        }
+
+        const requestId = efCoreExportRequestIdRef.current + 1;
+        efCoreExportRequestIdRef.current = requestId;
+        setIsEfCoreExporting(true);
+        setEfCoreError(null);
+        setEfCoreSuccess(null);
+
+        try {
+            const result = await exportEfCoreProject({
+                diagram: currentDiagram,
+                namespace: efCoreNamespace,
+                dbContextName: efCoreDbContextName,
+            });
+
+            if (requestId !== efCoreExportRequestIdRef.current) {
+                return;
+            }
+
+            if (!result.success) {
+                setEfCoreError({
+                    kind: 'semantic',
+                    message: result.error.message,
+                    code: result.error.code,
+                    path: result.error.path,
+                });
+                return;
+            }
+
+            setEfCoreSuccess(result);
+            setStep(ExportWizardStep.EF_CORE_RESULT);
+        } catch (error) {
+            if (requestId !== efCoreExportRequestIdRef.current) {
+                return;
+            }
+
+            if (error instanceof ApiError) {
+                if (error.status === 429) {
+                    setEfCoreError({ kind: 'rate_limited' });
+                    return;
+                }
+
+                if (error.status === 401) {
+                    setEfCoreError({ kind: 'unauthenticated' });
+                    return;
+                }
+
+                setEfCoreError({ kind: 'unexpected' });
+                return;
+            }
+
+            setEfCoreError({ kind: 'unexpected' });
+        } finally {
+            if (requestId === efCoreExportRequestIdRef.current) {
+                setIsEfCoreExporting(false);
+            }
+        }
+    }, [
+        currentDiagram,
+        databaseType,
+        efCoreDbContextName,
+        efCoreNamespace,
+        isEfCoreExporting,
+    ]);
+
     const handleOpenChange = useCallback(
         (open: boolean) => {
             if (!open) {
+                efCoreExportRequestIdRef.current += 1;
                 closeExportWizardDialog();
             }
         },
@@ -649,7 +791,9 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.VISUAL_OPTIONS ||
         step === ExportWizardStep.LARAVEL_OPTIONS ||
         step === ExportWizardStep.PRISMA_VERSION ||
-        step === ExportWizardStep.PRISMA_PREVIEW;
+        step === ExportWizardStep.PRISMA_PREVIEW ||
+        step === ExportWizardStep.EF_CORE_OPTIONS ||
+        step === ExportWizardStep.EF_CORE_RESULT;
 
     const isSqlBranch =
         step === ExportWizardStep.SQL_TARGET ||
@@ -662,6 +806,9 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const isPrismaBranch =
         step === ExportWizardStep.PRISMA_VERSION ||
         step === ExportWizardStep.PRISMA_PREVIEW;
+    const isEfCoreBranch =
+        step === ExportWizardStep.EF_CORE_OPTIONS ||
+        step === ExportWizardStep.EF_CORE_RESULT;
 
     const dialogTitle = t('export_wizard.title');
 
@@ -696,6 +843,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 return t('export_wizard.prisma.version_step.description');
             case ExportWizardStep.PRISMA_PREVIEW:
                 return t('export_wizard.prisma.preview_step.description');
+            case ExportWizardStep.EF_CORE_OPTIONS:
+                return t('export_wizard.ef_core.options_step.description');
+            case ExportWizardStep.EF_CORE_RESULT:
+                return t('export_wizard.ef_core.result_step.description');
             default:
                 return t('export_wizard.description');
         }
@@ -740,6 +891,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                                 step === ExportWizardStep.PRISMA_PREVIEW
                                     ? prismaVersion
                                     : null
+                            }
+                        />
+                    ) : null}
+                    {isEfCoreBranch ? (
+                        <ExportEfCoreBranchContext
+                            showResult={
+                                step === ExportWizardStep.EF_CORE_RESULT
                             }
                         />
                     ) : null}
@@ -862,6 +1020,31 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             onExport={() => {
                                 void handleLaravelExport();
                             }}
+                        />
+                    ) : null}
+
+                    {step === ExportWizardStep.EF_CORE_OPTIONS ? (
+                        <ExportEfCoreOptionsStep
+                            providerLabel={databaseTypeToLabelMap[databaseType]}
+                            namespaceValue={efCoreNamespace}
+                            dbContextName={efCoreDbContextName}
+                            isExporting={isEfCoreExporting}
+                            error={efCoreError}
+                            onNamespaceChange={setEfCoreNamespace}
+                            onDbContextNameChange={setEfCoreDbContextName}
+                            onExport={() => {
+                                void handleEfCoreExport();
+                            }}
+                        />
+                    ) : null}
+
+                    {step === ExportWizardStep.EF_CORE_RESULT &&
+                    efCoreSuccess ? (
+                        <ExportEfCoreResultStep
+                            providerLabel={databaseTypeToLabelMap[databaseType]}
+                            filename={efCoreSuccess.filename}
+                            files={efCoreSuccess.files}
+                            notes={efCoreSuccess.notes}
                         />
                     ) : null}
                 </div>

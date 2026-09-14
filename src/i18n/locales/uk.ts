@@ -1269,6 +1269,49 @@ export const uk: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    'Експорт EF Core недоступний для поточного типу бази даних.',
+                options_step: {
+                    description:
+                        'Налаштуйте експорт модельного проєкту EF Core.',
+                    explanation:
+                        'Експортуйте модельний проєкт EF Core 10 (.NET 10). Постачальника бази даних визначено з поточної діаграми. Міграції не генеруються; ви можете створити їх локально з експортованого проєкту.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Постачальник: {{provider}}',
+                    migrations_not_generated:
+                        'Цей експорт не містить міграцій. Використайте згенерований проєкт, щоб створити міграції локально за допомогою CLI EF Core.',
+                    namespace: 'Простір імен',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        'Кореневий простір імен C# для згенерованого проєкту. Залиште порожнім, щоб сервер обрав його з назви діаграми.',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'Ім’я класу DbContext. Залиште порожнім, щоб використати AppDbContext.',
+                    export: 'Експортувати',
+                    generating: 'Генерування проєкту EF Core…',
+                    error_rate_limited:
+                        'Забагато запитів на експорт. Зачекайте трохи й спробуйте знову.',
+                    error_unexpected:
+                        'Не вдалося експортувати проєкт EF Core. Спробуйте ще раз.',
+                    error_semantic: 'Не вдалося згенерувати проєкт EF Core.',
+                    error_unauthenticated:
+                        'Щоб експортувати проєкти EF Core, потрібно увійти в обліковий запис.',
+                },
+                result_step: {
+                    description: 'Перегляньте згенерований проєкт EF Core.',
+                    success: 'Проєкт EF Core згенеровано.',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'Постачальник: {{provider}}',
+                    generated_files: 'Згенеровані файли ({{count}})',
+                    notes: 'Примітки',
+                    download_zip: 'Завантажити ZIP',
+                    error_unsafe_path:
+                        'Експорт містить небезпечний шлях до файлу, тому його не завантажено.',
+                    error_empty_files: 'Експорт не містив жодного файлу.',
+                },
+            },
             laravel: {
                 options_step: {
                     description: 'Виберіть, як експортувати міграції Laravel.',

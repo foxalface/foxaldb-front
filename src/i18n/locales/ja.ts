@@ -1289,6 +1289,52 @@ export const ja: LanguageTranslation = {
                     },
                 },
             },
+            ef_core: {
+                unsupported_database:
+                    '現在のデータベース種類では EF Core エクスポートは利用できません。',
+                options_step: {
+                    description:
+                        'EF Core モデルプロジェクトのエクスポートを設定します。',
+                    explanation:
+                        'EF Core 10（.NET 10）のモデルプロジェクトをエクスポートします。データベースプロバイダーは現在のダイアグラムから推定されます。マイグレーションは生成されません。エクスポートしたプロジェクトからローカルで作成できます。',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'プロバイダー: {{provider}}',
+                    migrations_not_generated:
+                        'このエクスポートにはマイグレーションは含まれません。生成されたプロジェクトを使い、EF Core CLI でローカルにマイグレーションを作成してください。',
+                    namespace: '名前空間',
+                    namespace_placeholder: 'Acme.Catalog',
+                    namespace_help:
+                        '生成プロジェクトのルート C# 名前空間です。空欄にすると、サーバーがダイアグラム名から選択します。',
+                    db_context: 'DbContext',
+                    db_context_placeholder: 'CatalogDbContext',
+                    db_context_help:
+                        'DbContext クラス名です。空欄にすると AppDbContext が使われます。',
+                    export: 'エクスポート',
+                    generating: 'EF Core プロジェクトを生成しています…',
+                    error_rate_limited:
+                        'エクスポート要求が多すぎます。しばらく待ってから再試行してください。',
+                    error_unexpected:
+                        'EF Core プロジェクトをエクスポートできませんでした。もう一度お試しください。',
+                    error_semantic:
+                        'EF Core プロジェクトを生成できませんでした。',
+                    error_unauthenticated:
+                        'EF Core プロジェクトをエクスポートするにはサインインが必要です。',
+                },
+                result_step: {
+                    description:
+                        '生成された EF Core プロジェクトを確認します。',
+                    success: 'EF Core プロジェクトを生成しました。',
+                    ef_core_10: 'EF Core 10 (.NET 10)',
+                    provider_label: 'プロバイダー: {{provider}}',
+                    generated_files: '生成されたファイル（{{count}}）',
+                    notes: '注意事項',
+                    download_zip: 'ZIP をダウンロード',
+                    error_unsafe_path:
+                        'エクスポートに安全でないファイルパスが含まれているため、ダウンロードしませんでした。',
+                    error_empty_files:
+                        'エクスポートにファイルが含まれていませんでした。',
+                },
+            },
             laravel: {
                 options_step: {
                     description:
