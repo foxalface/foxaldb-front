@@ -257,7 +257,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | **Entry points** | Export wizard → EF Core (`EF_CORE_OPTIONS` → `EF_CORE_RESULT`) |
 | **Tests** | `frontend/src/lib/api/__tests__/ef-core-export.test.ts`; `frontend/src/lib/export/__tests__/ef-core-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-ef-core.test.tsx`; backend PHPUnit under `backend/tests/Feature/EfCoreExportTest.php` and `backend/tests/Unit/Services/EfCoreExport/` |
 
-**EF Core 10 / .NET 10 only.** There is no version selector and no version request field.
+**EF Core 10 / .NET 10 only.** There is no version selector and no version request field. EF6 real `.NET 10` restore/build/model QA passed for PostgreSQL, SQL Server, SQLite, and MySQL representative generated projects. `dotnet ef migrations add` from the standalone class library is **not** sufficient (no connection string / `OnConfiguring` / design-time factory); a host/startup project or `IDesignTimeDbContextFactory` is required. Browser ZIP extraction was not re-tested in EF6.
 
 **Provider inference:** `diagram.databaseType` only. No provider override and no connection string.
 
@@ -465,7 +465,7 @@ These are **not** the future generic Schema Diff/Sync/Merge design.
 Each remaining target receives its own implementation, automated tests, manual QA, commit, and push:
 
 - Prisma export — **implemented**
-- EF Core export — **implemented** (EF Core 10 / .NET 10 model project; MariaDB deferred; no `dotnet` execution; frontend ZIP)
+- EF Core export — **implemented** (EF Core 10 / .NET 10 model project; MariaDB deferred; no Laravel `dotnet` execution; frontend ZIP; EF6 real restore/build/model QA passed)
 - Rails export
 - Django export
 - Drizzle export
@@ -559,7 +559,7 @@ Verified in current code:
 - **Inconsistent delivery** — SQL/DBML wizard have copy + download; JSON is download-only; images/Laravel file download
 - **Laravel export** — requires an authenticated backend diagram ID; generation remains backend-owned
 - **Prisma export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required)
-- **EF Core export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; MariaDB is deferred; real `dotnet` QA is still pending
+- **EF Core export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; MariaDB is deferred; real `dotnet` restore/build/model QA passed (EF6); `dotnet ef` needs a startup project or design-time factory
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML full diagram; images follow rendered canvas (filters/hidden nodes respected)
 - **SVG portability** — visual SVG remains html-to-image `foreignObject` HTML, not a native vector engine
 
