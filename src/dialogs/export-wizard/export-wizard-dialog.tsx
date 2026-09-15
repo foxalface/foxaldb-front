@@ -55,6 +55,9 @@ import { ExportEfCoreOptionsStep } from './ef-core/export-ef-core-options-step';
 import { ExportEfCoreResultStep } from './ef-core/export-ef-core-result-step';
 import { ExportEfCoreBranchContext } from './ef-core/export-ef-core-branch-context';
 import type { EfCoreWizardRequestError } from './ef-core/export-ef-core-options-step';
+import { ExportRailsResultStep } from './rails/export-rails-result-step';
+import { ExportRailsBranchContext } from './rails/export-rails-branch-context';
+import type { RailsWizardRequestError } from './rails/export-rails-result-step';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import {
@@ -78,9 +81,12 @@ import {
 import { ApiError } from '@/lib/api/client';
 import { exportPrismaSchema } from '@/lib/api/prisma-export';
 import { exportEfCoreProject } from '@/lib/api/ef-core-export';
+import { exportRailsProject } from '@/lib/api/rails-export';
 import type { EfCoreExportSuccessResponse } from '@/lib/api/ef-core-export-types';
+import type { RailsExportSuccess } from '@/lib/api/rails-export-types';
 import { DEFAULT_EF_CORE_DB_CONTEXT_NAME } from '@/lib/export/ef-core-export-constants';
 import { isEfCoreExportSupported } from '@/lib/export/ef-core-export-capability';
+import { isRailsExportSupported } from '@/lib/export/rails-export-capability';
 import { suggestEfCoreNamespace } from '@/lib/export/suggest-ef-core-namespace';
 import type {
     PrismaExportError,
@@ -155,6 +161,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         useState<EfCoreWizardRequestError | null>(null);
     const [isEfCoreExporting, setIsEfCoreExporting] = useState(false);
     const efCoreExportRequestIdRef = useRef(0);
+    const [railsSuccess, setRailsSuccess] = useState<RailsExportSuccess | null>(
+        null
+    );
+    const [railsError, setRailsError] =
+        useState<RailsWizardRequestError | null>(null);
+    const [isRailsExporting, setIsRailsExporting] = useState(false);
+    const railsExportRequestIdRef = useRef(0);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -206,6 +219,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         setIsEfCoreExporting(false);
     }, [currentDiagram?.name]);
 
+    const resetRailsBranchState = useCallback(() => {
+        railsExportRequestIdRef.current += 1;
+        setRailsSuccess(null);
+        setRailsError(null);
+        setIsRailsExporting(false);
+    }, []);
+
     const applyVisualFormatDefaults = useCallback(
         (format: VisualExportFormat) => {
             setVisualFormat(format);
@@ -227,11 +247,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetLaravelBranchState();
         resetPrismaBranchState();
         resetEfCoreBranchState();
+        resetRailsBranchState();
     }, [
         resetDbmlBranchState,
         resetEfCoreBranchState,
         resetLaravelBranchState,
         resetPrismaBranchState,
+        resetRailsBranchState,
         resetSqlBranchState,
         resetVisualBranchState,
     ]);
@@ -268,6 +290,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetLaravelBranchState();
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
+                resetRailsBranchState();
                 setStep(ExportWizardStep.SQL_TARGET);
                 return;
             }
@@ -279,6 +302,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetLaravelBranchState();
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
+                resetRailsBranchState();
                 setStep(ExportWizardStep.DBML_PREVIEW);
                 return;
             }
@@ -290,6 +314,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetLaravelBranchState();
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
+                resetRailsBranchState();
                 setStep(ExportWizardStep.JSON_DOWNLOAD);
                 return;
             }
@@ -304,6 +329,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetLaravelBranchState();
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
+                resetRailsBranchState();
                 applyVisualFormatDefaults(targetId);
                 setStep(ExportWizardStep.VISUAL_OPTIONS);
                 return;
@@ -316,6 +342,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetLaravelBranchState();
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
+                resetRailsBranchState();
                 setStep(ExportWizardStep.LARAVEL_OPTIONS);
                 return;
             }
@@ -327,6 +354,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetLaravelBranchState();
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
+                resetRailsBranchState();
                 setStep(ExportWizardStep.PRISMA_VERSION);
                 return;
             }
@@ -345,7 +373,24 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetLaravelBranchState();
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
+                resetRailsBranchState();
                 setStep(ExportWizardStep.EF_CORE_OPTIONS);
+                return;
+            }
+
+            if (targetId === 'rails') {
+                if (!isAuthenticated || !isRailsExportSupported(databaseType)) {
+                    return;
+                }
+
+                resetSqlBranchState();
+                resetDbmlBranchState();
+                resetVisualBranchState();
+                resetLaravelBranchState();
+                resetPrismaBranchState();
+                resetEfCoreBranchState();
+                resetRailsBranchState();
+                setStep(ExportWizardStep.RAILS_RESULT);
             }
         },
         [
@@ -356,6 +401,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             resetEfCoreBranchState,
             resetLaravelBranchState,
             resetPrismaBranchState,
+            resetRailsBranchState,
             resetSqlBranchState,
             resetVisualBranchState,
         ]
@@ -441,6 +487,12 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             return;
         }
 
+        if (step === ExportWizardStep.RAILS_RESULT) {
+            resetRailsBranchState();
+            setStep(ExportWizardStep.TARGET_PICKER);
+            return;
+        }
+
         if (step === ExportWizardStep.SQL_PREVIEW) {
             setSqlScript(undefined);
             setSqlHasError(false);
@@ -460,6 +512,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetEfCoreBranchState,
         resetLaravelBranchState,
         resetPrismaBranchState,
+        resetRailsBranchState,
         resetSqlBranchState,
         resetVisualBranchState,
         step,
@@ -773,10 +826,114 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         isEfCoreExporting,
     ]);
 
+    const handleRailsRetry = useCallback(() => {
+        if (isRailsExporting) {
+            return;
+        }
+
+        railsExportRequestIdRef.current += 1;
+        setRailsSuccess(null);
+        setRailsError(null);
+    }, [isRailsExporting]);
+
+    useEffect(() => {
+        if (step !== ExportWizardStep.RAILS_RESULT) {
+            return;
+        }
+
+        if (railsSuccess !== null || railsError !== null) {
+            return;
+        }
+
+        if (!isAuthenticated || !isRailsExportSupported(databaseType)) {
+            return;
+        }
+
+        const requestId = railsExportRequestIdRef.current + 1;
+        railsExportRequestIdRef.current = requestId;
+        let cancelled = false;
+        setIsRailsExporting(true);
+
+        void (async () => {
+            try {
+                const result = await exportRailsProject({
+                    diagram: currentDiagram,
+                });
+
+                if (
+                    cancelled ||
+                    requestId !== railsExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (!result.success) {
+                    setRailsError({
+                        kind: 'semantic',
+                        message: result.error.message,
+                        code: result.error.code,
+                        path: result.error.path,
+                    });
+                    return;
+                }
+
+                setRailsSuccess(result);
+            } catch (error) {
+                if (
+                    cancelled ||
+                    requestId !== railsExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (error instanceof ApiError) {
+                    if (error.status === 401) {
+                        setRailsError({ kind: 'unauthenticated' });
+                        return;
+                    }
+
+                    if (error.status === 422) {
+                        setRailsError({ kind: 'invalid_request' });
+                        return;
+                    }
+
+                    if (error.status === 429) {
+                        setRailsError({ kind: 'rate_limited' });
+                        return;
+                    }
+
+                    setRailsError({ kind: 'unexpected' });
+                    return;
+                }
+
+                setRailsError({ kind: 'unexpected' });
+            } finally {
+                if (
+                    !cancelled &&
+                    requestId === railsExportRequestIdRef.current
+                ) {
+                    setIsRailsExporting(false);
+                }
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [
+        currentDiagram,
+        databaseType,
+        isAuthenticated,
+        railsError,
+        railsSuccess,
+        step,
+    ]);
+
     const handleOpenChange = useCallback(
         (open: boolean) => {
             if (!open) {
                 efCoreExportRequestIdRef.current += 1;
+                railsExportRequestIdRef.current += 1;
                 closeExportWizardDialog();
             }
         },
@@ -793,7 +950,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.PRISMA_VERSION ||
         step === ExportWizardStep.PRISMA_PREVIEW ||
         step === ExportWizardStep.EF_CORE_OPTIONS ||
-        step === ExportWizardStep.EF_CORE_RESULT;
+        step === ExportWizardStep.EF_CORE_RESULT ||
+        step === ExportWizardStep.RAILS_RESULT;
 
     const isSqlBranch =
         step === ExportWizardStep.SQL_TARGET ||
@@ -809,6 +967,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const isEfCoreBranch =
         step === ExportWizardStep.EF_CORE_OPTIONS ||
         step === ExportWizardStep.EF_CORE_RESULT;
+    const isRailsBranch = step === ExportWizardStep.RAILS_RESULT;
 
     const dialogTitle = t('export_wizard.title');
 
@@ -847,6 +1006,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 return t('export_wizard.ef_core.options_step.description');
             case ExportWizardStep.EF_CORE_RESULT:
                 return t('export_wizard.ef_core.result_step.description');
+            case ExportWizardStep.RAILS_RESULT:
+                return t('export_wizard.rails.result_step.description');
             default:
                 return t('export_wizard.description');
         }
@@ -901,6 +1062,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             }
                         />
                     ) : null}
+                    {isRailsBranch ? <ExportRailsBranchContext /> : null}
                     <DialogTitle>{dialogTitle}</DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
@@ -1045,6 +1207,16 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             filename={efCoreSuccess.filename}
                             files={efCoreSuccess.files}
                             notes={efCoreSuccess.notes}
+                        />
+                    ) : null}
+
+                    {step === ExportWizardStep.RAILS_RESULT ? (
+                        <ExportRailsResultStep
+                            providerLabel={databaseTypeToLabelMap[databaseType]}
+                            isLoading={isRailsExporting}
+                            error={railsError}
+                            success={railsSuccess}
+                            onRetry={handleRailsRetry}
                         />
                     ) : null}
                 </div>

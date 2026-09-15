@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/ar';
 
 export const ar: LanguageTranslation = {
     translation: {
@@ -1286,6 +1287,37 @@ export const ar: LanguageTranslation = {
                     error_unsafe_path:
                         'يحتوي التصدير على مسار ملف غير آمن ولم يتم تنزيله.',
                     error_empty_files: 'لم يتضمن التصدير أي ملفات.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'تصدير Rails غير متاح لنوع قاعدة البيانات الحالي.',
+                result_step: {
+                    description: 'راجع حزمة Rails 8.1 المُنشأة.',
+                    explanation:
+                        'هذا التصدير أساس للمخطط الحالي في Rails 8.1، وليس سجل ترحيلات معاد بناءه. طبّقه على تطبيق Rails جديد أو قائم وفق ملف README المُنشأ.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'المزوّد: {{provider}}',
+                    generating: 'جارٍ إنشاء حزمة Rails…',
+                    success: 'تم إنشاء حزمة Rails 8.1.',
+                    generated_files: 'الملفات المُنشأة ({{count}})',
+                    notes_heading: 'ملاحظات',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'تنزيل ZIP',
+                    retry: 'إعادة المحاولة',
+                    error_semantic: 'تعذّر إنشاء حزمة Rails.',
+                    error_unauthenticated: 'يجب تسجيل الدخول لتصدير حزم Rails.',
+                    error_invalid_request:
+                        'تعذّر تصدير المخطط. قد يكون غير صالح أو كبيرًا جدًا.',
+                    error_rate_limited:
+                        'طلبات تصدير كثيرة جدًا. يُرجى الانتظار قليلًا ثم المحاولة مرة أخرى.',
+                    error_unexpected:
+                        'تعذّر تصدير حزمة Rails. يُرجى المحاولة مرة أخرى.',
+                    error_unsafe_path:
+                        'يحتوي التصدير على مسار ملف غير آمن ولم يُنزَّل.',
+                    error_empty_files: 'لم يتضمن التصدير أي ملفات.',
+                    error_invalid_package:
+                        'الحزمة المُنشأة غير صالحة ولم تُنزَّل.',
                 },
             },
             laravel: {

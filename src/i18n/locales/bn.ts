@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/bn';
 
 export const bn: LanguageTranslation = {
     translation: {
@@ -1308,6 +1309,39 @@ export const bn: LanguageTranslation = {
                     error_unsafe_path:
                         'রপ্তানিতে একটি অনিরাপদ ফাইল পথ আছে এবং তা ডাউনলোড হয়নি।',
                     error_empty_files: 'রপ্তানিতে কোনো ফাইল ছিল না।',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'বর্তমান ডাটাবেস ধরনের জন্য Rails রপ্তানি উপলব্ধ নয়।',
+                result_step: {
+                    description:
+                        'জেনারেট করা Rails 8.1 প্যাকেজ পর্যালোচনা করুন।',
+                    explanation:
+                        'এই রপ্তানি Rails 8.1-এর জন্য বর্তমান স্কিমার বেসলাইন, পুনর্গঠিত মাইগ্রেশন ইতিহাস নয়। জেনারেট করা README অনুসারে এটি নতুন বা বিদ্যমান Rails অ্যাপে প্রয়োগ করুন।',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'প্রদানকারী: {{provider}}',
+                    generating: 'Rails প্যাকেজ জেনারেট করা হচ্ছে...',
+                    success: 'Rails 8.1 প্যাকেজ জেনারেট হয়েছে।',
+                    generated_files: 'জেনারেট করা ফাইল ({{count}})',
+                    notes_heading: 'নোট',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'ZIP ডাউনলোড করুন',
+                    retry: 'আবার চেষ্টা করুন',
+                    error_semantic: 'Rails প্যাকেজ জেনারেট করা যায়নি।',
+                    error_unauthenticated:
+                        'Rails প্যাকেজ রপ্তানি করতে সাইন ইন করতে হবে।',
+                    error_invalid_request:
+                        'ডায়াগ্রাম রপ্তানি করা যায়নি। এটি অবৈধ বা খুব বড় হতে পারে।',
+                    error_rate_limited:
+                        'রপ্তানির অনুরোধ খুব বেশি। কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।',
+                    error_unexpected:
+                        'Rails প্যাকেজ রপ্তানি করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                    error_unsafe_path:
+                        'রপ্তানিতে একটি অনিরাপদ ফাইল পথ আছে বলে ডাউনলোড করা হয়নি।',
+                    error_empty_files: 'রপ্তানিতে কোনো ফাইল ছিল না।',
+                    error_invalid_package:
+                        'জেনারেট করা প্যাকেজ অবৈধ বলে ডাউনলোড করা হয়নি।',
                 },
             },
             laravel: {

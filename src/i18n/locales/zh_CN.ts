@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/zh_CN';
 
 export const zh_CN: LanguageTranslation = {
     translation: {
@@ -1214,10 +1215,36 @@ export const zh_CN: LanguageTranslation = {
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: '提供程序：{{provider}}',
                     generated_files: '已生成文件（{{count}}）',
-                    notes: '说明',
+                    notes: '备注',
                     download_zip: '下载 ZIP',
                     error_unsafe_path: '导出包含不安全的文件路径，因此未下载。',
                     error_empty_files: '导出未包含任何文件。',
+                },
+            },
+            rails: {
+                unsupported_database: '当前数据库类型不支持 Rails 导出。',
+                result_step: {
+                    description: '查看生成的 Rails 8.1 包。',
+                    explanation:
+                        '此导出是 Rails 8.1 的当前架构基线，不是重建的迁移历史。请按生成的 README 将其应用到新的或现有的 Rails 应用。',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: '提供程序：{{provider}}',
+                    generating: '正在生成 Rails 包…',
+                    success: '已生成 Rails 8.1 包。',
+                    generated_files: '已生成文件（{{count}}）',
+                    notes_heading: '说明',
+                    notes: railsExportNoteMessages,
+                    download_zip: '下载 ZIP',
+                    retry: '重试',
+                    error_semantic: '无法生成 Rails 包。',
+                    error_unauthenticated: '需要登录才能导出 Rails 包。',
+                    error_invalid_request:
+                        '无法导出该图表。它可能无效或体积过大。',
+                    error_rate_limited: '导出请求过多。请稍候再试。',
+                    error_unexpected: '无法导出 Rails 包。请重试。',
+                    error_unsafe_path: '导出包含不安全的文件路径，因此未下载。',
+                    error_empty_files: '导出未包含任何文件。',
+                    error_invalid_package: '生成的包无效，因此未下载。',
                 },
             },
             laravel: {

@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/tr';
 
 export const tr: LanguageTranslation = {
     translation: {
@@ -1293,6 +1294,38 @@ export const tr: LanguageTranslation = {
                     error_unsafe_path:
                         'Dışa aktarma güvenli olmayan bir dosya yolu içeriyor ve indirilmedi.',
                     error_empty_files: 'Dışa aktarma hiçbir dosya içermiyordu.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'Rails dışa aktarma, geçerli veritabanı türü için kullanılamaz.',
+                result_step: {
+                    description: 'Oluşturulan Rails 8.1 paketini inceleyin.',
+                    explanation:
+                        'Bu dışa aktarma, Rails 8.1 için mevcut şemanın temelidir; yeniden oluşturulmuş bir göç geçmişi değildir. Oluşturulan README’deki talimatlara göre yeni veya mevcut bir Rails uygulamasına uygulayın.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Sağlayıcı: {{provider}}',
+                    generating: 'Rails paketi oluşturuluyor...',
+                    success: 'Rails 8.1 paketi oluşturuldu.',
+                    generated_files: 'Oluşturulan dosyalar ({{count}})',
+                    notes_heading: 'Notlar',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'ZIP indir',
+                    retry: 'Yeniden dene',
+                    error_semantic: 'Rails paketi oluşturulamadı.',
+                    error_unauthenticated:
+                        'Rails paketlerini dışa aktarmak için oturum açmanız gerekir.',
+                    error_invalid_request:
+                        'Diyagram dışa aktarılamadı. Geçersiz veya çok büyük olabilir.',
+                    error_rate_limited:
+                        'Çok fazla dışa aktarma isteği. Lütfen bir süre bekleyip yeniden deneyin.',
+                    error_unexpected:
+                        'Rails paketi dışa aktarılamadı. Lütfen yeniden deneyin.',
+                    error_unsafe_path:
+                        'Dışa aktarma güvenli olmayan bir dosya yolu içeriyor ve indirilmedi.',
+                    error_empty_files: 'Dışa aktarma hiçbir dosya içermiyordu.',
+                    error_invalid_package:
+                        'Oluşturulan paket geçersiz ve indirilmedi.',
                 },
             },
             laravel: {

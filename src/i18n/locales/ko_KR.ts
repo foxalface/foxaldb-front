@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/ko_KR';
 
 export const ko_KR: LanguageTranslation = {
     translation: {
@@ -1302,11 +1303,43 @@ export const ko_KR: LanguageTranslation = {
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: '공급자: {{provider}}',
                     generated_files: '생성된 파일({{count}})',
-                    notes: '참고',
+                    notes: '메모',
                     download_zip: 'ZIP 다운로드',
                     error_unsafe_path:
                         '내보내기에 안전하지 않은 파일 경로가 있어 다운로드하지 않았습니다.',
                     error_empty_files: '내보내기에 파일이 포함되지 않았습니다.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    '현재 데이터베이스 유형에서는 Rails 보내기를 사용할 수 없습니다.',
+                result_step: {
+                    description: '생성된 Rails 8.1 패키지를 확인하세요.',
+                    explanation:
+                        '이 보내기는 Rails 8.1용 현재 스키마 기준선이며, 재구성된 마이그레이션 기록이 아닙니다. 생성된 README에 따라 새 Rails 앱 또는 기존 앱에 적용하세요.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: '공급자: {{provider}}',
+                    generating: 'Rails 패키지를 생성하는 중...',
+                    success: 'Rails 8.1 패키지가 생성되었습니다.',
+                    generated_files: '생성된 파일 ({{count}})',
+                    notes_heading: '참고',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'ZIP 다운로드',
+                    retry: '다시 시도',
+                    error_semantic: 'Rails 패키지를 생성할 수 없습니다.',
+                    error_unauthenticated:
+                        'Rails 패키지를 보내려면 로그인해야 합니다.',
+                    error_invalid_request:
+                        '다이어그램을 보낼 수 없습니다. 잘못되었거나 너무 클 수 있습니다.',
+                    error_rate_limited:
+                        '보내기 요청이 너무 많습니다. 잠시 후 다시 시도하세요.',
+                    error_unexpected:
+                        'Rails 패키지를 보낼 수 없습니다. 다시 시도하세요.',
+                    error_unsafe_path:
+                        '보내기에 안전하지 않은 파일 경로가 있어 다운로드하지 않았습니다.',
+                    error_empty_files: '보내기에 파일이 포함되지 않았습니다.',
+                    error_invalid_package:
+                        '생성된 패키지가 잘못되어 다운로드하지 않았습니다.',
                 },
             },
             laravel: {

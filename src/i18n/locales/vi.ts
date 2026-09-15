@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/vi';
 
 export const vi: LanguageTranslation = {
     translation: {
@@ -1302,6 +1303,38 @@ export const vi: LanguageTranslation = {
                     error_unsafe_path:
                         'Bản xuất chứa đường dẫn tệp không an toàn và không được tải xuống.',
                     error_empty_files: 'Bản xuất không chứa tệp nào.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'Xuất Rails không khả dụng với loại cơ sở dữ liệu hiện tại.',
+                result_step: {
+                    description: 'Xem gói Rails 8.1 đã tạo.',
+                    explanation:
+                        'Bản xuất này là đường cơ sở lược đồ hiện tại cho Rails 8.1, không phải lịch sử migration được dựng lại. Áp dụng vào ứng dụng Rails mới hoặc hiện có theo README đã tạo.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Nhà cung cấp: {{provider}}',
+                    generating: 'Đang tạo gói Rails...',
+                    success: 'Đã tạo gói Rails 8.1.',
+                    generated_files: 'Tệp đã tạo ({{count}})',
+                    notes_heading: 'Ghi chú',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'Tải ZIP',
+                    retry: 'Thử lại',
+                    error_semantic: 'Không thể tạo gói Rails.',
+                    error_unauthenticated:
+                        'Bạn cần đăng nhập để xuất gói Rails.',
+                    error_invalid_request:
+                        'Không thể xuất sơ đồ. Sơ đồ có thể không hợp lệ hoặc quá lớn.',
+                    error_rate_limited:
+                        'Quá nhiều yêu cầu xuất. Vui lòng đợi một chút rồi thử lại.',
+                    error_unexpected:
+                        'Không thể xuất gói Rails. Vui lòng thử lại.',
+                    error_unsafe_path:
+                        'Bản xuất chứa đường dẫn tệp không an toàn nên không được tải xuống.',
+                    error_empty_files: 'Bản xuất không chứa tệp nào.',
+                    error_invalid_package:
+                        'Gói đã tạo không hợp lệ nên không được tải xuống.',
                 },
             },
             laravel: {

@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/mr';
 
 export const mr: LanguageTranslation = {
     translation: {
@@ -1294,11 +1295,44 @@ export const mr: LanguageTranslation = {
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: 'प्रदाता: {{provider}}',
                     generated_files: 'तयार झालेल्या फाइल्स ({{count}})',
-                    notes: 'टिपा',
+                    notes: 'टीपा',
                     download_zip: 'ZIP डाउनलोड करा',
                     error_unsafe_path:
                         'निर्यातीत असुरक्षित फाइल मार्ग आहे आणि तो डाउनलोड झाला नाही.',
                     error_empty_files: 'निर्यातीत कोणतीही फाइल नव्हती.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'सध्याच्या डेटाबेस प्रकारासाठी Rails निर्यात उपलब्ध नाही.',
+                result_step: {
+                    description:
+                        'तयार केलेल्या Rails 8.1 पॅकेजचे पुनरावलोकन करा.',
+                    explanation:
+                        'हा निर्यात Rails 8.1 साठी सध्याच्या स्कीमाचा आधार आहे, पुन्हा तयार केलेला माइग्रेशन इतिहास नाही. तयार केलेल्या README नुसार तो नवीन किंवा विद्यमान Rails अॅपवर लागू करा.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'प्रदाता: {{provider}}',
+                    generating: 'Rails पॅकेज तयार होत आहे...',
+                    success: 'Rails 8.1 पॅकेज तयार झाले.',
+                    generated_files: 'तयार केलेल्या फाइल्स ({{count}})',
+                    notes_heading: 'टिपा',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'ZIP डाउनलोड करा',
+                    retry: 'पुन्हा प्रयत्न करा',
+                    error_semantic: 'Rails पॅकेज तयार करता आले नाही.',
+                    error_unauthenticated:
+                        'Rails पॅकेजेस निर्यात करण्यासाठी साइन इन करणे आवश्यक आहे.',
+                    error_invalid_request:
+                        'डायग्राम निर्यात करता आला नाही. तो अवैध किंवा खूप मोठा असू शकतो.',
+                    error_rate_limited:
+                        'खूप जास्त निर्यात विनंत्या. कृपया थोडा वेळ थांबून पुन्हा प्रयत्न करा.',
+                    error_unexpected:
+                        'Rails पॅकेज निर्यात करता आले नाही. कृपया पुन्हा प्रयत्न करा.',
+                    error_unsafe_path:
+                        'निर्यातीत असुरक्षित फाइल मार्ग आहे म्हणून तो डाउनलोड झाला नाही.',
+                    error_empty_files: 'निर्यातीत कोणतीही फाइल नव्हती.',
+                    error_invalid_package:
+                        'तयार केलेले पॅकेज अवैध आहे म्हणून ते डाउनलोड झाले नाही.',
                 },
             },
             laravel: {

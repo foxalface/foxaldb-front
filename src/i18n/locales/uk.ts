@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/uk';
 
 export const uk: LanguageTranslation = {
     translation: {
@@ -1310,6 +1311,38 @@ export const uk: LanguageTranslation = {
                     error_unsafe_path:
                         'Експорт містить небезпечний шлях до файлу, тому його не завантажено.',
                     error_empty_files: 'Експорт не містив жодного файлу.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'Експорт Rails недоступний для поточного типу бази даних.',
+                result_step: {
+                    description: 'Перегляньте згенерований пакет Rails 8.1.',
+                    explanation:
+                        'Цей експорт — поточна базова схема для Rails 8.1, а не відновлена історія міграцій. Застосуйте його до нового або наявного застосунку Rails згідно зі згенерованим README.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Провайдер: {{provider}}',
+                    generating: 'Генерується пакет Rails…',
+                    success: 'Пакет Rails 8.1 згенеровано.',
+                    generated_files: 'Згенеровані файли ({{count}})',
+                    notes_heading: 'Примітки',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'Завантажити ZIP',
+                    retry: 'Повторити',
+                    error_semantic: 'Не вдалося згенерувати пакет Rails.',
+                    error_unauthenticated:
+                        'Щоб експортувати пакети Rails, потрібно увійти.',
+                    error_invalid_request:
+                        'Не вдалося експортувати діаграму. Вона може бути недійсною або завеликою.',
+                    error_rate_limited:
+                        'Забагато запитів на експорт. Зачекайте хвилину й спробуйте ще раз.',
+                    error_unexpected:
+                        'Не вдалося експортувати пакет Rails. Спробуйте ще раз.',
+                    error_unsafe_path:
+                        'Експорт містить небезпечний шлях до файлу, тому його не завантажено.',
+                    error_empty_files: 'Експорт не містив жодного файлу.',
+                    error_invalid_package:
+                        'Згенерований пакет недійсний, тому його не завантажено.',
                 },
             },
             laravel: {

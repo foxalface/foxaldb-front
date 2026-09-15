@@ -1,0 +1,31 @@
+export const KNOWN_RAILS_EXPORT_NOTE_CODES = [
+    'view_skipped',
+    'schema_ignored_sqlite',
+    'mysql_catalog_omitted',
+    'mysql_multiple_catalogs_ignored',
+    'mariadb_catalog_omitted',
+    'mariadb_multiple_catalogs_ignored',
+    'default_omitted',
+    'type_degraded',
+    'type_omitted',
+    'enum_degraded',
+    'set_degraded',
+    'index_omitted',
+    'comment_omitted',
+    'check_omitted',
+    'composite_fk_unsupported',
+    'keyless_relationship_skipped',
+    'set_null_omitted',
+    'on_update_omitted',
+    'many_to_many_skipped',
+    'relationship_skipped',
+    'model_name_adjusted',
+    'model_name_collision',
+    'keyless_model',
+    'association_name_adjusted',
+    'one_to_one_degraded_non_unique_fk',
+    'many_to_many_through_skipped',
+] as const;
+
+export type KnownRailsExportNoteCode =
+    (typeof KNOWN_RAILS_EXPORT_NOTE_CODES)[number];

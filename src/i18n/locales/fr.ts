@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/fr';
 
 export const fr: LanguageTranslation = {
     translation: {
@@ -1336,6 +1337,38 @@ export const fr: LanguageTranslation = {
                     error_unsafe_path:
                         'L’export contient un chemin de fichier non sûr et n’a pas été téléchargé.',
                     error_empty_files: 'L’export n’incluait aucun fichier.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'L’export Rails n’est pas disponible pour le type de base de données actuel.',
+                result_step: {
+                    description: 'Vérifiez le paquet Rails 8.1 généré.',
+                    explanation:
+                        'Cet export est une base du schéma actuel pour Rails 8.1, et non un historique de migrations reconstitué. Appliquez-le à une application Rails nouvelle ou existante comme indiqué dans le README généré.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Fournisseur : {{provider}}',
+                    generating: 'Génération du paquet Rails…',
+                    success: 'Paquet Rails 8.1 généré.',
+                    generated_files: 'Fichiers générés ({{count}})',
+                    notes_heading: 'Remarques',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'Télécharger le ZIP',
+                    retry: 'Réessayer',
+                    error_semantic: 'Le paquet Rails n’a pas pu être généré.',
+                    error_unauthenticated:
+                        'Vous devez être connecté pour exporter des paquets Rails.',
+                    error_invalid_request:
+                        'Le diagramme n’a pas pu être exporté. Il est peut-être invalide ou trop volumineux.',
+                    error_rate_limited:
+                        'Trop de demandes d’export. Veuillez patienter un instant puis réessayer.',
+                    error_unexpected:
+                        'Impossible d’exporter le paquet Rails. Veuillez réessayer.',
+                    error_unsafe_path:
+                        'L’export contient un chemin de fichier non sûr et n’a pas été téléchargé.',
+                    error_empty_files: 'L’export n’incluait aucun fichier.',
+                    error_invalid_package:
+                        'Le paquet généré est invalide et n’a pas été téléchargé.',
                 },
             },
             laravel: {

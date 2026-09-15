@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/id_ID';
 
 export const id_ID: LanguageTranslation = {
     translation: {
@@ -1309,6 +1310,39 @@ export const id_ID: LanguageTranslation = {
                         'Ekspor berisi jalur berkas yang tidak aman dan tidak diunduh.',
                     error_empty_files:
                         'Ekspor tidak menyertakan berkas apa pun.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'Ekspor Rails tidak tersedia untuk jenis basis data saat ini.',
+                result_step: {
+                    description: 'Tinjau paket Rails 8.1 yang dihasilkan.',
+                    explanation:
+                        'Ekspor ini adalah baseline skema saat ini untuk Rails 8.1, bukan riwayat migrasi yang direkonstruksi. Terapkan ke aplikasi Rails baru atau yang sudah ada sesuai README yang dihasilkan.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Penyedia: {{provider}}',
+                    generating: 'Menghasilkan paket Rails...',
+                    success: 'Paket Rails 8.1 dihasilkan.',
+                    generated_files: 'Berkas yang dihasilkan ({{count}})',
+                    notes_heading: 'Catatan',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'Unduh ZIP',
+                    retry: 'Coba lagi',
+                    error_semantic: 'Paket Rails tidak dapat dihasilkan.',
+                    error_unauthenticated:
+                        'Anda harus masuk untuk mengekspor paket Rails.',
+                    error_invalid_request:
+                        'Diagram tidak dapat diekspor. Mungkin tidak valid atau terlalu besar.',
+                    error_rate_limited:
+                        'Terlalu banyak permintaan ekspor. Tunggu sebentar lalu coba lagi.',
+                    error_unexpected:
+                        'Paket Rails tidak dapat diekspor. Silakan coba lagi.',
+                    error_unsafe_path:
+                        'Ekspor berisi jalur berkas yang tidak aman dan tidak diunduh.',
+                    error_empty_files:
+                        'Ekspor tidak menyertakan berkas apa pun.',
+                    error_invalid_package:
+                        'Paket yang dihasilkan tidak valid dan tidak diunduh.',
                 },
             },
             laravel: {

@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/ru';
 
 export const ru: LanguageTranslation = {
     translation: {
@@ -1301,11 +1302,43 @@ export const ru: LanguageTranslation = {
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: 'Поставщик: {{provider}}',
                     generated_files: 'Созданные файлы ({{count}})',
-                    notes: 'Замечания',
+                    notes: 'Примечания',
                     download_zip: 'Скачать ZIP',
                     error_unsafe_path:
                         'Экспорт содержит небезопасный путь к файлу и не был скачан.',
                     error_empty_files: 'Экспорт не содержал файлов.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'Экспорт Rails недоступен для текущего типа базы данных.',
+                result_step: {
+                    description: 'Проверьте созданный пакет Rails 8.1.',
+                    explanation:
+                        'Этот экспорт — текущая базовая схема для Rails 8.1, а не восстановленная история миграций. Примените его к новому или существующему приложению Rails согласно созданному README.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Провайдер: {{provider}}',
+                    generating: 'Создание пакета Rails…',
+                    success: 'Пакет Rails 8.1 создан.',
+                    generated_files: 'Созданные файлы ({{count}})',
+                    notes_heading: 'Примечания',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'Скачать ZIP',
+                    retry: 'Повторить',
+                    error_semantic: 'Не удалось создать пакет Rails.',
+                    error_unauthenticated:
+                        'Чтобы экспортировать пакеты Rails, нужно войти в систему.',
+                    error_invalid_request:
+                        'Не удалось экспортировать диаграмму. Возможно, она недействительна или слишком большая.',
+                    error_rate_limited:
+                        'Слишком много запросов на экспорт. Подождите немного и повторите попытку.',
+                    error_unexpected:
+                        'Не удалось экспортировать пакет Rails. Повторите попытку.',
+                    error_unsafe_path:
+                        'Экспорт содержит небезопасный путь к файлу и не был скачан.',
+                    error_empty_files: 'Экспорт не содержал файлов.',
+                    error_invalid_package:
+                        'Созданный пакет недействителен и не был скачан.',
                 },
             },
             laravel: {

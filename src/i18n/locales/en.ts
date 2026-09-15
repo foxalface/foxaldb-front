@@ -1,4 +1,5 @@
 import type { LanguageMetadata } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/en';
 
 export const en = {
     translation: {
@@ -1305,6 +1306,38 @@ export const en = {
                     error_unsafe_path:
                         'The export contains an unsafe file path and was not downloaded.',
                     error_empty_files: 'The export did not include any files.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'Rails export is not available for the current database type.',
+                result_step: {
+                    description: 'Review the generated Rails 8.1 package.',
+                    explanation:
+                        'This export is a current-schema baseline for Rails 8.1, not a reconstructed migration history. Apply it to a new or existing Rails app as documented in the generated README.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Provider: {{provider}}',
+                    generating: 'Generating Rails package...',
+                    success: 'Rails 8.1 package generated.',
+                    generated_files: 'Generated files ({{count}})',
+                    notes_heading: 'Notes',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'Download ZIP',
+                    retry: 'Retry',
+                    error_semantic: 'The Rails package could not be generated.',
+                    error_unauthenticated:
+                        'You need to be signed in to export Rails packages.',
+                    error_invalid_request:
+                        'The diagram could not be exported. It may be invalid or too large.',
+                    error_rate_limited:
+                        'Too many export requests. Please wait a moment and try again.',
+                    error_unexpected:
+                        'Could not export the Rails package. Please try again.',
+                    error_unsafe_path:
+                        'The export contains an unsafe file path and was not downloaded.',
+                    error_empty_files: 'The export did not include any files.',
+                    error_invalid_package:
+                        'The generated package is invalid and was not downloaded.',
                 },
             },
             laravel: {

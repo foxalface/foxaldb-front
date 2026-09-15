@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/hi';
 
 export const hi: LanguageTranslation = {
     translation: {
@@ -1302,6 +1303,39 @@ export const hi: LanguageTranslation = {
                     error_unsafe_path:
                         'निर्यात में एक असुरक्षित फ़ाइल पथ है और उसे डाउनलोड नहीं किया गया।',
                     error_empty_files: 'निर्यात में कोई फ़ाइल शामिल नहीं थी।',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'वर्तमान डेटाबेस प्रकार के लिए Rails निर्यात उपलब्ध नहीं है।',
+                result_step: {
+                    description:
+                        'जनरेट किए गए Rails 8.1 पैकेज की समीक्षा करें।',
+                    explanation:
+                        'यह निर्यात Rails 8.1 के लिए वर्तमान स्कीमा का आधार है, पुनर्निर्मित माइग्रेशन इतिहास नहीं। जनरेट किए गए README के अनुसार इसे नए या मौजूदा Rails ऐप पर लागू करें।',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'प्रदाता: {{provider}}',
+                    generating: 'Rails पैकेज जनरेट हो रहा है...',
+                    success: 'Rails 8.1 पैकेज जनरेट हो गया।',
+                    generated_files: 'जनरेट की गई फ़ाइलें ({{count}})',
+                    notes_heading: 'नोट्स',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'ZIP डाउनलोड करें',
+                    retry: 'पुनः प्रयास करें',
+                    error_semantic: 'Rails पैकेज जनरेट नहीं किया जा सका।',
+                    error_unauthenticated:
+                        'Rails पैकेज निर्यात करने के लिए साइन इन करना आवश्यक है।',
+                    error_invalid_request:
+                        'डायग्राम निर्यात नहीं किया जा सका। यह अमान्य या बहुत बड़ा हो सकता है।',
+                    error_rate_limited:
+                        'बहुत अधिक निर्यात अनुरोध। कृपया थोड़ी देर प्रतीक्षा करके पुनः प्रयास करें।',
+                    error_unexpected:
+                        'Rails पैकेज निर्यात नहीं किया जा सका। कृपया पुनः प्रयास करें।',
+                    error_unsafe_path:
+                        'निर्यात में एक असुरक्षित फ़ाइल पथ है, इसलिए उसे डाउनलोड नहीं किया गया।',
+                    error_empty_files: 'निर्यात में कोई फ़ाइल शामिल नहीं थी।',
+                    error_invalid_package:
+                        'जनरेट किया गया पैकेज अमान्य है, इसलिए उसे डाउनलोड नहीं किया गया।',
                 },
             },
             laravel: {

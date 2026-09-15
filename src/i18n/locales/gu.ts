@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/gu';
 
 export const gu: LanguageTranslation = {
     translation: {
@@ -1291,6 +1292,38 @@ export const gu: LanguageTranslation = {
                     error_unsafe_path:
                         'નિકાસમાં અસુરક્ષિત ફાઇલ પાથ છે અને તે ડાઉનલોડ થયો નથી.',
                     error_empty_files: 'નિકાસમાં કોઈ ફાઇલ નહોતી.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'વર્તમાન ડેટાબેઝ પ્રકાર માટે Rails નિકાસ ઉપલબ્ધ નથી.',
+                result_step: {
+                    description: 'જનરેટ થયેલ Rails 8.1 પેકેજની સમીક્ષા કરો.',
+                    explanation:
+                        'આ નિકાસ Rails 8.1 માટે વર્તમાન સ્કીમાનો આધાર છે, પુનઃનિર્મિત માઇગ્રેશન ઇતિહાસ નથી. જનરેટ થયેલ README મુજબ તેને નવી અથવા હાલની Rails એપ પર લાગુ કરો.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'પ્રદાતા: {{provider}}',
+                    generating: 'Rails પેકેજ જનરેટ થઈ રહ્યું છે...',
+                    success: 'Rails 8.1 પેકેજ જનરેટ થયું.',
+                    generated_files: 'જનરેટ થયેલી ફાઇલો ({{count}})',
+                    notes_heading: 'નોંધો',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'ZIP ડાઉનલોડ કરો',
+                    retry: 'ફરી પ્રયાસ કરો',
+                    error_semantic: 'Rails પેકેજ જનરેટ કરી શકાયું નહીં.',
+                    error_unauthenticated:
+                        'Rails પેકેજ નિકાસ કરવા માટે સાઇન ઇન કરવું જરૂરી છે.',
+                    error_invalid_request:
+                        'ડાયાગ્રામ નિકાસ કરી શકાયો નહીં. તે અમાન્ય અથવા ખૂબ મોટો હોઈ શકે છે.',
+                    error_rate_limited:
+                        'ખૂબ વધુ નિકાસ વિનંતીઓ. કૃપા કરીને થોડી રાહ જોઈને ફરી પ્રયાસ કરો.',
+                    error_unexpected:
+                        'Rails પેકેજ નિકાસ કરી શકાયું નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                    error_unsafe_path:
+                        'નિકાસમાં અસુરક્ષિત ફાઇલ પાથ છે તેથી તે ડાઉનલોડ થયું નહીં.',
+                    error_empty_files: 'નિકાસમાં કોઈ ફાઇલ નહોતી.',
+                    error_invalid_package:
+                        'જનરેટ થયેલ પેકેજ અમાન્ય છે તેથી તે ડાઉનલોડ થયું નહીં.',
                 },
             },
             laravel: {

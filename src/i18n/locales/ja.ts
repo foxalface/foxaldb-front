@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/ja';
 
 export const ja: LanguageTranslation = {
     translation: {
@@ -1327,12 +1328,46 @@ export const ja: LanguageTranslation = {
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: 'プロバイダー: {{provider}}',
                     generated_files: '生成されたファイル（{{count}}）',
-                    notes: '注意事項',
+                    notes: 'メモ',
                     download_zip: 'ZIP をダウンロード',
                     error_unsafe_path:
                         'エクスポートに安全でないファイルパスが含まれているため、ダウンロードしませんでした。',
                     error_empty_files:
                         'エクスポートにファイルが含まれていませんでした。',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    '現在のデータベース種類では Rails エクスポートを利用できません。',
+                result_step: {
+                    description:
+                        '生成された Rails 8.1 パッケージを確認します。',
+                    explanation:
+                        'このエクスポートは Rails 8.1 向けの現在スキーマのベースラインであり、再構築されたマイグレーション履歴ではありません。生成された README の手順に従い、新規または既存の Rails アプリに適用してください。',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'プロバイダー: {{provider}}',
+                    generating: 'Rails パッケージを生成しています...',
+                    success: 'Rails 8.1 パッケージを生成しました。',
+                    generated_files: '生成ファイル ({{count}})',
+                    notes_heading: '注意事項',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'ZIP をダウンロード',
+                    retry: '再試行',
+                    error_semantic: 'Rails パッケージを生成できませんでした。',
+                    error_unauthenticated:
+                        'Rails パッケージをエクスポートするにはサインインが必要です。',
+                    error_invalid_request:
+                        'ダイアグラムをエクスポートできませんでした。無効か、サイズが大きすぎる可能性があります。',
+                    error_rate_limited:
+                        'エクスポート要求が多すぎます。しばらく待ってから再試行してください。',
+                    error_unexpected:
+                        'Rails パッケージをエクスポートできませんでした。もう一度お試しください。',
+                    error_unsafe_path:
+                        'エクスポートに安全でないファイルパスが含まれているため、ダウンロードしませんでした。',
+                    error_empty_files:
+                        'エクスポートにファイルが含まれていませんでした。',
+                    error_invalid_package:
+                        '生成されたパッケージは無効なため、ダウンロードしませんでした。',
                 },
             },
             laravel: {

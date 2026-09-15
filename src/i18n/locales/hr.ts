@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/hr';
 
 export const hr: LanguageTranslation = {
     translation: {
@@ -1306,6 +1307,38 @@ export const hr: LanguageTranslation = {
                     error_unsafe_path:
                         'Izvoz sadrži nesigurnu putanju datoteke i nije preuzet.',
                     error_empty_files: 'Izvoz nije sadržavao nijednu datoteku.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'Izvoz u Rails nije dostupan za trenutačni tip baze podataka.',
+                result_step: {
+                    description: 'Pregledajte generirani Rails 8.1 paket.',
+                    explanation:
+                        'Ovaj izvoz je trenutačna osnovna shema za Rails 8.1, a ne rekonstruirana povijest migracija. Primijenite ga na novu ili postojeću Rails aplikaciju prema generiranom README-u.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Pružatelj: {{provider}}',
+                    generating: 'Generiranje Rails paketa...',
+                    success: 'Rails 8.1 paket je generiran.',
+                    generated_files: 'Generirane datoteke ({{count}})',
+                    notes_heading: 'Napomene',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'Preuzmi ZIP',
+                    retry: 'Pokušaj ponovno',
+                    error_semantic: 'Rails paket nije bilo moguće generirati.',
+                    error_unauthenticated:
+                        'Morate biti prijavljeni da biste izvezli Rails pakete.',
+                    error_invalid_request:
+                        'Dijagram nije bilo moguće izvesti. Možda je nevažeći ili prevelik.',
+                    error_rate_limited:
+                        'Previše zahtjeva za izvoz. Pričekajte trenutak i pokušajte ponovno.',
+                    error_unexpected:
+                        'Rails paket nije bilo moguće izvesti. Pokušajte ponovno.',
+                    error_unsafe_path:
+                        'Izvoz sadrži nesigurnu putanju datoteke i nije preuzet.',
+                    error_empty_files: 'Izvoz nije sadržavao nijednu datoteku.',
+                    error_invalid_package:
+                        'Generirani paket nije važeći i nije preuzet.',
                 },
             },
             laravel: {

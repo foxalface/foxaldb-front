@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/es';
 
 export const es: LanguageTranslation = {
     translation: {
@@ -1328,6 +1329,39 @@ export const es: LanguageTranslation = {
                         'La exportación contiene una ruta de archivo no segura y no se descargó.',
                     error_empty_files:
                         'La exportación no incluyó ningún archivo.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'La exportación a Rails no está disponible para el tipo de base de datos actual.',
+                result_step: {
+                    description: 'Revise el paquete Rails 8.1 generado.',
+                    explanation:
+                        'Esta exportación es una base del esquema actual para Rails 8.1, no un historial de migraciones reconstruido. Aplíquela a una aplicación Rails nueva o existente según el README generado.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Proveedor: {{provider}}',
+                    generating: 'Generando el paquete Rails...',
+                    success: 'Paquete Rails 8.1 generado.',
+                    generated_files: 'Archivos generados ({{count}})',
+                    notes_heading: 'Notas',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'Descargar ZIP',
+                    retry: 'Reintentar',
+                    error_semantic: 'No se pudo generar el paquete Rails.',
+                    error_unauthenticated:
+                        'Debe iniciar sesión para exportar paquetes Rails.',
+                    error_invalid_request:
+                        'No se pudo exportar el diagrama. Puede ser inválido o demasiado grande.',
+                    error_rate_limited:
+                        'Demasiadas solicitudes de exportación. Espere un momento e inténtelo de nuevo.',
+                    error_unexpected:
+                        'No se pudo exportar el paquete Rails. Inténtelo de nuevo.',
+                    error_unsafe_path:
+                        'La exportación contiene una ruta de archivo no segura y no se descargó.',
+                    error_empty_files:
+                        'La exportación no incluyó ningún archivo.',
+                    error_invalid_package:
+                        'El paquete generado no es válido y no se descargó.',
                 },
             },
             laravel: {

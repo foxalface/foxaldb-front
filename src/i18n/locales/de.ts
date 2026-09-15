@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/de';
 
 export const de: LanguageTranslation = {
     translation: {
@@ -1346,6 +1347,39 @@ export const de: LanguageTranslation = {
                     error_unsafe_path:
                         'Der Export enthält einen unsicheren Dateipfad und wurde nicht heruntergeladen.',
                     error_empty_files: 'Der Export enthielt keine Dateien.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'Der Rails-Export ist für den aktuellen Datenbanktyp nicht verfügbar.',
+                result_step: {
+                    description: 'Prüfen Sie das erzeugte Rails-8.1-Paket.',
+                    explanation:
+                        'Dieser Export ist eine aktuelle Schema-Basis für Rails 8.1, keine rekonstruierte Migrationshistorie. Wenden Sie ihn gemäß der erzeugten README auf eine neue oder vorhandene Rails-App an.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'Anbieter: {{provider}}',
+                    generating: 'Rails-Paket wird erzeugt…',
+                    success: 'Rails-8.1-Paket erzeugt.',
+                    generated_files: 'Erzeugte Dateien ({{count}})',
+                    notes_heading: 'Hinweise',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'ZIP herunterladen',
+                    retry: 'Erneut versuchen',
+                    error_semantic:
+                        'Das Rails-Paket konnte nicht erzeugt werden.',
+                    error_unauthenticated:
+                        'Sie müssen angemeldet sein, um Rails-Pakete zu exportieren.',
+                    error_invalid_request:
+                        'Das Diagramm konnte nicht exportiert werden. Es ist möglicherweise ungültig oder zu groß.',
+                    error_rate_limited:
+                        'Zu viele Exportanfragen. Bitte warten Sie einen Moment und versuchen Sie es erneut.',
+                    error_unexpected:
+                        'Das Rails-Paket konnte nicht exportiert werden. Bitte versuchen Sie es erneut.',
+                    error_unsafe_path:
+                        'Der Export enthält einen unsicheren Dateipfad und wurde nicht heruntergeladen.',
+                    error_empty_files: 'Der Export enthielt keine Dateien.',
+                    error_invalid_package:
+                        'Das erzeugte Paket ist ungültig und wurde nicht heruntergeladen.',
                 },
             },
             laravel: {

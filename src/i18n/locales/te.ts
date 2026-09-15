@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/te';
 
 export const te: LanguageTranslation = {
     translation: {
@@ -1317,6 +1318,39 @@ export const te: LanguageTranslation = {
                     error_unsafe_path:
                         'ఎగుమతిలో సురక్షితం కాని ఫైల్ మార్గం ఉంది కాబట్టి డౌన్‌లోడ్ కాలేదు.',
                     error_empty_files: 'ఎగుమతిలో ఫైళ్లు లేవు.',
+                },
+            },
+            rails: {
+                unsupported_database:
+                    'ప్రస్తుత డేటాబేస్ రకానికి Rails ఎగుమతి అందుబాటులో లేదు.',
+                result_step: {
+                    description:
+                        'జనరేట్ చేసిన Rails 8.1 ప్యాకేజీని సమీక్షించండి.',
+                    explanation:
+                        'ఈ ఎగుమతి Rails 8.1 కోసం ప్రస్తుత స్కీమా బేస్‌లైన్, పునర్నిర్మించిన మైగ్రేషన్ చరిత్ర కాదు. జనరేట్ చేసిన README ప్రకారం కొత్త లేదా ఉన్న Rails యాప్‌కు వర్తింపజేయండి.',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: 'ప్రొవైడర్: {{provider}}',
+                    generating: 'Rails ప్యాకేజీని జనరేట్ చేస్తోంది...',
+                    success: 'Rails 8.1 ప్యాకేజీ జనరేట్ అయింది.',
+                    generated_files: 'జనరేట్ చేసిన ఫైళ్లు ({{count}})',
+                    notes_heading: 'గమనికలు',
+                    notes: railsExportNoteMessages,
+                    download_zip: 'ZIP డౌన్‌లోడ్ చేయండి',
+                    retry: 'మళ్లీ ప్రయత్నించండి',
+                    error_semantic: 'Rails ప్యాకేజీని జనరేట్ చేయలేకపోయాం.',
+                    error_unauthenticated:
+                        'Rails ప్యాకేజీలను ఎగుమతి చేయడానికి సైన్ ఇన్ చేయాలి.',
+                    error_invalid_request:
+                        'డయాగ్రామ్‌ను ఎగుమతి చేయలేకపోయాం. అది చెల్లదు లేదా చాలా పెద్దది కావచ్చు.',
+                    error_rate_limited:
+                        'ఎగుమతి అభ్యర్థనలు ఎక్కువయ్యాయి. కాసేపు వేచి మళ్లీ ప్రయత్నించండి.',
+                    error_unexpected:
+                        'Rails ప్యాకేజీని ఎగుమతి చేయలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                    error_unsafe_path:
+                        'ఎగుమతిలో సురక్షితం కాని ఫైల్ మార్గం ఉంది కాబట్టి డౌన్‌లోడ్ కాలేదు.',
+                    error_empty_files: 'ఎగుమతిలో ఫైళ్లు లేవు.',
+                    error_invalid_package:
+                        'జనరేట్ చేసిన ప్యాకేజీ చెల్లదు కాబట్టి డౌన్‌లోడ్ కాలేదు.',
                 },
             },
             laravel: {

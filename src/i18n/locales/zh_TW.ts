@@ -1,4 +1,5 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
+import { railsExportNoteMessages } from '../rails-export-notes/zh_TW';
 
 export const zh_TW: LanguageTranslation = {
     translation: {
@@ -1213,10 +1214,35 @@ export const zh_TW: LanguageTranslation = {
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: '提供者：{{provider}}',
                     generated_files: '已產生檔案（{{count}}）',
-                    notes: '說明',
+                    notes: '備註',
                     download_zip: '下載 ZIP',
                     error_unsafe_path: '匯出包含不安全的檔案路徑，因此未下載。',
                     error_empty_files: '匯出未包含任何檔案。',
+                },
+            },
+            rails: {
+                unsupported_database: '目前的資料庫類型不支援 Rails 匯出。',
+                result_step: {
+                    description: '檢視產生的 Rails 8.1 套件。',
+                    explanation:
+                        '此匯出是 Rails 8.1 的目前架構基準，不是重建的遷移歷史。請依照產生的 README，套用到新的或既有的 Rails 應用程式。',
+                    rails_8_1: 'Rails 8.1',
+                    provider_label: '提供者：{{provider}}',
+                    generating: '正在產生 Rails 套件…',
+                    success: '已產生 Rails 8.1 套件。',
+                    generated_files: '已產生檔案（{{count}}）',
+                    notes_heading: '備註',
+                    notes: railsExportNoteMessages,
+                    download_zip: '下載 ZIP',
+                    retry: '重試',
+                    error_semantic: '無法產生 Rails 套件。',
+                    error_unauthenticated: '必須登入才能匯出 Rails 套件。',
+                    error_invalid_request: '無法匯出此圖表。它可能無效或過大。',
+                    error_rate_limited: '匯出要求過多。請稍候再試。',
+                    error_unexpected: '無法匯出 Rails 套件。請再試一次。',
+                    error_unsafe_path: '匯出包含不安全的檔案路徑，因此未下載。',
+                    error_empty_files: '匯出未包含任何檔案。',
+                    error_invalid_package: '產生的套件無效，因此未下載。',
                 },
             },
             laravel: {
