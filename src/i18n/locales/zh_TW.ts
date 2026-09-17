@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/zh_TW';
+import { djangoExportNoteMessages } from '../django-export-notes/zh_TW';
 
 export const zh_TW: LanguageTranslation = {
     translation: {
@@ -1043,7 +1044,7 @@ export const zh_TW: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django 遷移匯出',
+                    description: 'Django 6.1 即插即用應用程式匯出',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1243,6 +1244,49 @@ export const zh_TW: LanguageTranslation = {
                     error_unsafe_path: '匯出包含不安全的檔案路徑，因此未下載。',
                     error_empty_files: '匯出未包含任何檔案。',
                     error_invalid_package: '產生的套件無效，因此未下載。',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django 匯出目前支援 PostgreSQL、MySQL、MariaDB 和 SQLite。',
+                result_step: {
+                    description: '檢視產生的 Django 6.1 套件。',
+                    explanation:
+                        '此匯出為可直接整合的 Django 應用程式（`foxaldb_models`）。0001_initial.py 是目前結構描述的初始移轉，而非重建的 Django 移轉歷史。尚未針對 Django 6.1 進行執階段驗證。',
+                    django_version: 'Django {{version}}',
+                    provider_label: '提供者：{{provider}}',
+                    package_type:
+                        '套件：可直接整合的 Django 應用程式（`foxaldb_models`）',
+                    generating: '正在產生 Django 套件…',
+                    success: '已產生 Django 6.1 套件。',
+                    generated_files: '產生的檔案（{{count}}）',
+                    notes_heading: '備註',
+                    warnings_heading: '警告 ({{count}})',
+                    adaptations_heading: '技術適配 ({{count}})',
+                    path_label: '路徑：{{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: '下載 ZIP',
+                    retry: '重試',
+                    error_semantic: '無法產生 Django 套件。',
+                    error_unauthenticated: '匯出 Django 套件需要登入。',
+                    error_invalid_request: '無法匯出圖表。它可能無效或過大。',
+                    error_rate_limited: '匯出要求過多。請稍候再試。',
+                    error_unexpected: '伺服器上的 Django 匯出失敗。請重試。',
+                    error_network: '無法連線到伺服器。請檢查連線後重試。',
+                    error_unsafe_path: '匯出包含不安全的檔案路徑，因此未下載。',
+                    error_empty_files: '匯出未包含任何檔案。',
+                    error_invalid_package: '產生的套件無效，因此未下載。',
+                    errors: {
+                        unsupported_database:
+                            '此資料庫類型不支援 Django 匯出。',
+                        empty_diagram: '圖表沒有可匯出的資料表。',
+                        unsupported_structural_field:
+                            '「{{path}}」上的主鍵欄位無法在 Django 中表示。',
+                        mysql_catalog_collision:
+                            '移除 catalog 後，「{{path}}」的 MySQL catalog 發生衝突。',
+                        mariadb_catalog_collision:
+                            '移除 catalog 後，「{{path}}」的 MariaDB catalog 發生衝突。',
+                    },
                 },
             },
             laravel: {

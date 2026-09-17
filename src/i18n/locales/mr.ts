@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/mr';
+import { djangoExportNoteMessages } from '../django-export-notes/mr';
 
 export const mr: LanguageTranslation = {
     translation: {
@@ -1105,7 +1106,8 @@ export const mr: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django मायग्रेशन निर्यात',
+                    description:
+                        'Django 6.1 थेट एकत्रित करता येणारा अ‍ॅप निर्यात',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1333,6 +1335,57 @@ export const mr: LanguageTranslation = {
                     error_empty_files: 'निर्यातीत कोणतीही फाइल नव्हती.',
                     error_invalid_package:
                         'तयार केलेले पॅकेज अवैध आहे म्हणून ते डाउनलोड झाले नाही.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django निर्यात सध्या PostgreSQL, MySQL, MariaDB आणि SQLite ला समर्थन देते.',
+                result_step: {
+                    description: 'तयार केलेले Django 6.1 पॅकेज पाहा.',
+                    explanation:
+                        'हा निर्यात थेट एकत्रित करता येणारा Django अ‍ॅप (`foxaldb_models`) आहे. 0001_initial.py ही सध्याच्या schema ची प्रारंभिक migration आहे, पुनर्निर्मित Django migration history नाही. Django 6.1 विरुद्ध runtime validation केले नाही.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'प्रदाता: {{provider}}',
+                    package_type:
+                        'पॅकेज: थेट एकत्रित करता येणारा Django अ‍ॅप (`foxaldb_models`)',
+                    generating: 'Django पॅकेज तयार होत आहे…',
+                    success: 'Django 6.1 पॅकेज तयार झाले.',
+                    generated_files: 'तयार केलेली फाइल्स ({{count}})',
+                    notes_heading: 'टिपा',
+                    warnings_heading: 'चेतावणी ({{count}})',
+                    adaptations_heading: 'तांत्रिक अनुकूलने ({{count}})',
+                    path_label: 'मार्ग: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'ZIP डाउनलोड करा',
+                    retry: 'पुन्हा प्रयत्न करा',
+                    error_semantic: 'Django पॅकेज तयार करता आले नाही.',
+                    error_unauthenticated:
+                        'Django पॅकेज निर्यात करण्यासाठी साइन इन करणे आवश्यक आहे.',
+                    error_invalid_request:
+                        'डायग्राम निर्यात करता आला नाही. तो अवैध किंवा खूप मोठा असू शकतो.',
+                    error_rate_limited:
+                        'खूप जास्त निर्यात विनंत्या. थोडा वेळ थांबा आणि पुन्हा प्रयत्न करा.',
+                    error_unexpected:
+                        'सर्व्हरवर Django निर्यात अयशस्वी झाले. कृपया पुन्हा प्रयत्न करा.',
+                    error_network:
+                        'सर्व्हरपर्यंत पोहोचता आले नाही. तुमचे कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',
+                    error_unsafe_path:
+                        'निर्यातात असुरक्षित फाइल path आहे आणि डाउनलोड झाले नाही.',
+                    error_empty_files: 'निर्यातात कोणत्याही फाइल्स नव्हत्या.',
+                    error_invalid_package:
+                        'तयार केलेले पॅकेज अवैध आहे म्हणून ते डाउनलोड झाले नाही.',
+                    errors: {
+                        unsupported_database:
+                            'या डेटाबेस प्रकारासाठी Django निर्यात उपलब्ध नाही.',
+                        empty_diagram:
+                            'डायग्राममध्ये निर्यात करण्यायोग्य टेबल्स नाहीत.',
+                        unsupported_structural_field:
+                            '«{{path}}» वरील primary-key field Django मध्ये represent करता येत नाही.',
+                        mysql_catalog_collision:
+                            '«{{path}}» साठी catalog काढल्यानंतर MySQL catalogs collide होतात.',
+                        mariadb_catalog_collision:
+                            '«{{path}}» साठी catalog काढल्यानंतर MariaDB catalogs collide होतात.',
+                    },
                 },
             },
             laravel: {

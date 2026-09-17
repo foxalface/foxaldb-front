@@ -56,12 +56,12 @@ Transforms the canonical `Diagram` into framework-native schema/code artifacts:
 - Prisma (`schema.prisma`) — **implemented**
 - EF Core (model project ZIP) — **implemented**
 - Rails (Rails 8.1 package ZIP) — **implemented** (wizard + browser ZIP; Ruby runtime QA still pending)
-- Django — **planned** (separate milestone)
+- Django (Django 6.1 drop-in app ZIP) — **implemented** (wizard + browser ZIP; runtime QA deferred; manual browser/ZIP QA still required)
 - Drizzle — **planned** (separate milestone)
 
 Framework import parsers are **not** inverted into exporters. Each framework export receives its own implementation milestone with independent tests and QA.
 
-**Framework export authentication:** framework-native exports require an authenticated user (Sanctum). This applies to Laravel, Prisma, EF Core, and Rails today, and to Django and Drizzle when implemented. Authentication is **not** paid-plan gating — registered free users may use framework exports unless another product rule applies. Portable/local exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain guest-accessible.
+**Framework export authentication:** framework-native exports require an authenticated user (Sanctum). This applies to Laravel, Prisma, EF Core, Rails, and Django today, and to Drizzle when implemented. Authentication is **not** paid-plan gating — registered free users may use framework exports unless another product rule applies. Portable/local exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain guest-accessible.
 
 ### C. Portable / Schema
 
@@ -98,9 +98,9 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 **Target groups:** Database, Framework, Portable / Schema, Visual.
 
-**Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, Laravel migrations, Prisma, EF Core, and Rails are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
+**Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, Laravel migrations, Prisma, EF Core, Rails, and Django are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
 
-**Planned framework targets** (Django, Drizzle) appear as disabled entries until their dedicated milestones. **Prisma**, **Laravel**, **EF Core**, and **Rails** require authentication. Prisma, EF Core, and Rails are additionally gated by supported `diagram.databaseType` (unsupported DB types show a localized disabled reason for authenticated users; guests do not see those targets). Laravel remains hidden unless the diagram has a numeric backend ID.
+**Planned framework target** (Drizzle) appears as a disabled entry until its dedicated milestone. **Prisma**, **Laravel**, **EF Core**, **Rails**, and **Django** require authentication. Prisma, EF Core, Rails, and Django are additionally gated by supported `diagram.databaseType` (unsupported DB types show a localized disabled reason for authenticated users; guests do not see those targets). Laravel remains hidden unless the diagram has a numeric backend ID.
 
 ---
 
@@ -307,7 +307,39 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 **No generic framework exporter abstraction.** Rails generation is private backend application logic. The public frontend exposes wizard UX, API transport, availability, localized note presentation, and browser ZIP download only.
 
-**Architectural rule:** Framework-native export generators (Laravel, Prisma, EF Core, Rails, future Django/Drizzle) are private backend-owned application logic and require authentication. Generic/portable/visual exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain frontend-side where appropriate and may remain guest-accessible.
+### Django (Django 6.1 drop-in app ZIP)
+
+| Attribute | Detail |
+|-----------|--------|
+| **Input** | Full unfiltered `currentDiagram` (live editor state; no schema/table filter) |
+| **Execution** | Private Laravel backend (`backend/app/Services/DjangoExport/`) |
+| **Auth** | Sanctum (`auth:sanctum` + `throttle:django-export`); unauthenticated callers receive `401`. Guests **hide** the target. Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. No paid-plan gate. Stateless — diagram payload is not persisted. |
+| **Endpoint** | `POST /api/exports/django` with `{ diagram: Diagram }` |
+| **Frontend client** | `frontend/src/lib/api/django-export.ts` |
+| **Frontend types** | `frontend/src/lib/api/django-export-types.ts` |
+| **Target availability** | `frontend/src/lib/export/django-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type) |
+| **ZIP** | Built in the browser with existing `fflate` `zipSync` from `response.files[]`. Backend does **not** create a ZIP and does **not** run Python/Django. |
+| **Output** | `{slug}-django.zip` (`application/zip`) using backend `filename` |
+| **Entry points** | Export wizard → Django (`DJANGO_RESULT`; no version, provider, or options step) |
+| **Tests** | `frontend/src/lib/api/__tests__/django-export.test.ts`; `frontend/src/lib/export/__tests__/django-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-django.test.tsx`; `frontend/src/i18n/__tests__/django-export-locale-consistency.test.ts`; backend PHPUnit under `backend/tests/Feature/DjangoExportTest.php` and `backend/tests/Unit/Services/DjangoExport/` |
+
+**Django 6.1 only.** There is no version selector, no Python version selector, and no provider selector. Wizard flow is `TARGET_PICKER` → `DJANGO_RESULT`. Selecting Django starts generation immediately. Runtime Django QA is deferred to unified Framework Export QA and is not done. Manual browser/ZIP QA is still required.
+
+**Provider inference:** `diagram.databaseType` only. No provider override and no connection string. Unsupported types are **not** aliased to SQLite.
+
+**Supported database types:** PostgreSQL, MySQL, MariaDB, SQLite.
+
+**Unsupported (target disabled for authenticated users; hidden for guests):** SQL Server, Oracle, CockroachDB, ClickHouse, GENERIC, unknown types.
+
+**Artifact:** README, optional `FoxalDB-NOTES.md` (backend includes it in `files[]` when notes exist), drop-in `foxaldb_models/` app, baseline `foxaldb_models/migrations/0001_initial.py`. Frontend does **not** generate `FoxalDB-NOTES.md` or any Django source. `0001_initial.py` is a **current-schema baseline**, not reconstructed Django migration history.
+
+**Notes:** backend `notes[]` carry stable English `message` strings (for API/debug and generated `FoxalDB-NOTES.md`) plus structured `code`, optional `path`, and optional `metadata` for UI interpolation. The D4 HTTP contract is unchanged: no `severity`, `version`, or UI-specific fields on note DTOs. The wizard applies a Django-specific frontend severity policy: **warnings** (real omissions/degradations: `view_skipped`, `keyless_table_skipped`, `type_omitted`, `type_degraded`, `enum_degraded`, `set_degraded`, `default_omitted`, `relationship_skipped`, `composite_fk_unsupported`, `set_null_omitted`, `on_delete_restrict_degraded`, `on_update_omitted`, `one_to_one_degraded_non_unique_fk`, `many_to_many_skipped`, `index_omitted`, `check_omitted`) render in an amber panel expanded by default; **technical adaptations** (`mysql_catalog_omitted`, `mysql_multiple_catalogs_ignored`, `mariadb_catalog_omitted`, `mariadb_multiple_catalogs_ignored`, `schema_ignored_sqlite`, `postgres_schema_qualified_db_table`, `model_name_adjusted`, `model_name_collision`, `field_name_adjusted`, `related_name_adjusted`, `composite_primary_key`, `many_to_many_through_skipped`, `comment_omitted`, `index_name_adjusted`, `constraint_name_adjusted`) render in a quieter disclosure collapsed by default. Zero warnings with N adaptations reads as a successful export with optional technical details. The localized note sentence and `note.path` are separate: the path is a labeled monospace line (`Path: …` / locale equivalent), never concatenated onto the sentence. The wizard localizes known note codes via `getDjangoExportNotePresentation()` using `export_wizard.django.result_step.notes.*` i18n keys in all 22 locales. Unknown codes, unknown reason tokens, or missing required metadata fall back to the backend `message`. Do not parse English `message` strings and do not recreate generator note semantics in the frontend. `FoxalDB-NOTES.md` inside the ZIP remains backend-generated English.
+
+**ZIP safety:** frontend rejects empty, absolute, `..` traversal, Windows drive, backslash-traversal, control characters, and duplicate paths, and fails the download visibly rather than writing a dangerous archive entry. ZIP metadata uses a stable 1980-01-01 mtime.
+
+**No generic framework exporter abstraction.** Django generation is private backend application logic. The public frontend exposes wizard UX, API transport, availability, localized note presentation, and browser ZIP download only.
+
+**Architectural rule:** Framework-native export generators (Laravel, Prisma, EF Core, Rails, Django, future Drizzle) are private backend-owned application logic and require authentication. Generic/portable/visual exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain frontend-side where appropriate and may remain guest-accessible.
 
 ---
 
@@ -492,6 +524,7 @@ These are **not** the future generic Schema Diff/Sync/Merge design.
 - Prisma schema export (auth-gated)
 - EF Core model project export (auth-gated; browser ZIP)
 - Rails 8.1 package export (auth-gated; browser ZIP; Ruby runtime QA pending)
+- Django 6.1 drop-in app export (auth-gated; browser ZIP; runtime QA deferred; manual browser/ZIP QA still required)
 
 ### Strategic framework targets (separate milestones each)
 
@@ -500,7 +533,7 @@ Each remaining target receives its own implementation, automated tests, manual Q
 - Prisma export — **implemented**
 - EF Core export — **implemented** (EF Core 10 / .NET 10 model project; MariaDB deferred; no Laravel `dotnet` execution; frontend ZIP; EF6 real restore/build/model QA passed)
 - Rails export — **implemented** (Rails 8.1; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; no version selector; Ruby runtime QA pending)
-- Django export
+- Django export — **implemented** (Django 6.1; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; no version selector; runtime QA deferred; manual browser/ZIP QA still required)
 - Drizzle export
 
 Import support for these frameworks does **not** imply export is implemented. Framework import parsers are **not** inverted into exporters.
@@ -528,7 +561,7 @@ FoxalDB imports more DBMS and framework formats than it exports in V1. Examples:
 | DBML | Yes | Wizard-native (standard DBML only); side panel unchanged |
 | Diagram JSON | Yes | Yes (via wizard) |
 | Metadata JSON | Yes | No |
-| Project ZIP (6 frameworks) | Yes | Laravel, Prisma, EF Core, and Rails export yes; Django/Drizzle planned (wizard shows disabled) |
+| Project ZIP (6 frameworks) | Yes | Laravel, Prisma, EF Core, Rails, and Django export yes; Drizzle planned (wizard shows disabled) |
 | Laravel migrations ZIP | Import (legacy + project) | Export (backend, auth) |
 
 Do not force artificial feature symmetry.
@@ -564,7 +597,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 | Laravel export | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite | Covered |
 | Diagram JSON export | `frontend/src/lib/__tests__/diagram-json-export.test.ts`, filename + wizard JSON tests | Covered (JSON-B) |
 | Image export | `frontend/src/lib/visual-export/__tests__/`; wizard visual + provider tests | Covered |
-| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON + visual + Laravel + Prisma + EF Core + Rails branches) |
+| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON + visual + Laravel + Prisma + EF Core + Rails + Django branches) |
 
 ### Expected Export V1 regression strategy
 
@@ -583,7 +616,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 
 Verified in current code:
 
-- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, Diagram JSON, visual, Laravel, Prisma, EF Core, and Rails branches are wizard-native
+- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, Diagram JSON, visual, Laravel, Prisma, EF Core, Rails, and Django branches are wizard-native
 - **Legacy AI SQL path** — active in `exportSQL` and legacy `ExportSQLDialog`; unreachable from Export Wizard
 - **Misleading UI labels** — legacy `ExportSQLDialog` still has ✨ targets, Sparkles loader, hardcoded English "Deterministic"/"AI" toggle
 - **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback in generator; wizard shows unsupported UX, not fake targets
@@ -594,6 +627,7 @@ Verified in current code:
 - **Prisma export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required)
 - **EF Core export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; MariaDB is deferred; real `dotnet` restore/build/model QA passed (EF6); `dotnet ef` needs a startup project or design-time factory
 - **Rails export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; Ruby/`rails` runtime QA (R6) is still pending
+- **Django export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; `0001_initial.py` is a current-schema baseline, not history; runtime Django QA is deferred to unified Framework Export QA; manual browser/ZIP QA is still required
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML full diagram; images follow rendered canvas (filters/hidden nodes respected)
 - **SVG portability** — visual SVG remains html-to-image `foreignObject` HTML, not a native vector engine
 
@@ -606,7 +640,7 @@ This document and implementation milestones do **not**:
 - implement a generic `Exporter` interface
 - remove legacy AI SQL code
 - add Oracle/CockroachDB/ClickHouse dedicated SQL exporters
-- implement Django/Drizzle framework exporters (each is a separate milestone)
+- implement Drizzle framework exporter (separate milestone)
 - modify Import
 - implement Sync/Diff/Merge
 - introduce `ChangeSet`
@@ -678,6 +712,15 @@ This document and implementation milestones do **not**:
 - `frontend/src/lib/export/rails-export-zip.ts`
 - `frontend/src/dialogs/export-wizard/rails/`
 
+### Frontend — Django client
+
+- `frontend/src/lib/api/django-export.ts`
+- `frontend/src/lib/api/django-export-types.ts`
+- `frontend/src/lib/export/django-export-capability.ts`
+- `frontend/src/lib/export/django-export-zip.ts`
+- `frontend/src/dialogs/export-wizard/django/`
+- `frontend/src/i18n/django-export-notes/`
+
 ### Frontend — UX entry
 
 - `frontend/src/dialogs/export-wizard/`
@@ -701,3 +744,9 @@ This document and implementation milestones do **not**:
 - `backend/app/Http/Controllers/RailsExportController.php`
 - `backend/app/Services/RailsExport/`
 - `backend/docs/rails-export.md`
+
+### Backend — Django export
+
+- `backend/app/Http/Controllers/DjangoExportController.php`
+- `backend/app/Services/DjangoExport/`
+- `backend/docs/django-export.md`

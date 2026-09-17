@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/zh_CN';
+import { djangoExportNoteMessages } from '../django-export-notes/zh_CN';
 
 export const zh_CN: LanguageTranslation = {
     translation: {
@@ -1044,7 +1045,7 @@ export const zh_CN: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django 迁移导出',
+                    description: 'Django 6.1 即插即用应用导出',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1245,6 +1246,49 @@ export const zh_CN: LanguageTranslation = {
                     error_unsafe_path: '导出包含不安全的文件路径，因此未下载。',
                     error_empty_files: '导出未包含任何文件。',
                     error_invalid_package: '生成的包无效，因此未下载。',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django 导出目前支持 PostgreSQL、MySQL、MariaDB 和 SQLite。',
+                result_step: {
+                    description: '查看生成的 Django 6.1 包。',
+                    explanation:
+                        '此导出为可直接集成的 Django 应用（`foxaldb_models`）。0001_initial.py 是当前模式的初始迁移，而非重建的 Django 迁移历史。尚未针对 Django 6.1 进行运行时验证。',
+                    django_version: 'Django {{version}}',
+                    provider_label: '提供程序：{{provider}}',
+                    package_type:
+                        '包：可直接集成的 Django 应用（`foxaldb_models`）',
+                    generating: '正在生成 Django 包…',
+                    success: '已生成 Django 6.1 包。',
+                    generated_files: '生成的文件（{{count}}）',
+                    notes_heading: '说明',
+                    warnings_heading: '警告 ({{count}})',
+                    adaptations_heading: '技术适配 ({{count}})',
+                    path_label: '路径：{{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: '下载 ZIP',
+                    retry: '重试',
+                    error_semantic: '无法生成 Django 包。',
+                    error_unauthenticated: '导出 Django 包需要登录。',
+                    error_invalid_request: '无法导出图表。它可能无效或过大。',
+                    error_rate_limited: '导出请求过多。请稍候再试。',
+                    error_unexpected: '服务器上的 Django 导出失败。请重试。',
+                    error_network: '无法连接到服务器。请检查网络后重试。',
+                    error_unsafe_path: '导出包含不安全的文件路径，因此未下载。',
+                    error_empty_files: '导出未包含任何文件。',
+                    error_invalid_package: '生成的包无效，因此未下载。',
+                    errors: {
+                        unsupported_database:
+                            '此数据库类型不支持 Django 导出。',
+                        empty_diagram: '图表没有可导出的表。',
+                        unsupported_structural_field:
+                            '「{{path}}」上的主键字段无法在 Django 中表示。',
+                        mysql_catalog_collision:
+                            '移除 catalog 后，「{{path}}」的 MySQL catalog 发生冲突。',
+                        mariadb_catalog_collision:
+                            '移除 catalog 后，「{{path}}」的 MariaDB catalog 发生冲突。',
+                    },
                 },
             },
             laravel: {

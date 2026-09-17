@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/gu';
+import { djangoExportNoteMessages } from '../django-export-notes/gu';
 
 export const gu: LanguageTranslation = {
     translation: {
@@ -1096,7 +1097,7 @@ export const gu: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django માઇગ્રેશન નિકાસ',
+                    description: 'Django 6.1 તરત એકીકૃત થઈ શકે તેવી એપ નિકાસ',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1324,6 +1325,56 @@ export const gu: LanguageTranslation = {
                     error_empty_files: 'નિકાસમાં કોઈ ફાઇલ નહોતી.',
                     error_invalid_package:
                         'જનરેટ થયેલ પેકેજ અમાન્ય છે તેથી તે ડાઉનલોડ થયું નહીં.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django નિકાસ હાલમાં PostgreSQL, MySQL, MariaDB અને SQLiteને સપોર્ટ કરે છે.',
+                result_step: {
+                    description: 'જનરેટ થયેલ Django 6.1 પેકેજની સમીક્ષા કરો.',
+                    explanation:
+                        'આ નિકાસ તરત એકીકૃત થઈ શકે તેવી Django એપ (`foxaldb_models`) છે. 0001_initial.py વર્તમાન schemaની પ્રારંભિક migration છે, પુનર્નિર્મિત Django migration history નથી. Django 6.1 સામે runtime validation કરવામાં આવી નથી.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'પ્રદાતા: {{provider}}',
+                    package_type:
+                        'પેકેજ: તરત એકીકૃત થઈ શકે તેવી Django એપ (`foxaldb_models`)',
+                    generating: 'Django પેકેજ જનરેટ થઈ રહ્યું છે…',
+                    success: 'Django 6.1 પેકેજ જનરેટ થયું.',
+                    generated_files: 'જનરેટ થયેલ ફાઇલો ({{count}})',
+                    notes_heading: 'નોંધો',
+                    warnings_heading: 'ચેતવણીઓ ({{count}})',
+                    adaptations_heading: 'તકનીકી અનુકૂલનો ({{count}})',
+                    path_label: 'પથ: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'ZIP ડાઉનલોડ કરો',
+                    retry: 'ફરી પ્રયાસ કરો',
+                    error_semantic: 'Django પેકેજ જનરેટ થઈ શક્યું નહીં.',
+                    error_unauthenticated:
+                        'Django પેકેજ નિકાસ કરવા સાઇન ઇન કરવું જરૂરી છે.',
+                    error_invalid_request:
+                        'ડાયાગ્રામ નિકાસ થઈ શક્યું નહીં. તે અમાન્ય અથવા ખૂબ મોટું હોઈ શકે છે.',
+                    error_rate_limited:
+                        'ઘણા બધા નિકાસ અનુરોધ. થોડી રાહ જુઓ અને ફરી પ્રયાસ કરો.',
+                    error_unexpected:
+                        'સર્વર પર Django નિકાસ નિષ્ફળ થયું. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                    error_network:
+                        'સર્વર સુધી પહોંચી શકાયું નહીં. તમારું કનેક્શન તપાસો અને ફરી પ્રયાસ કરો.',
+                    error_unsafe_path:
+                        'નિકાસમાં અસુરક્ષિત ફાઇલ path છે અને ડાઉનલોડ થયું નહીં.',
+                    error_empty_files: 'નિકાસમાં કોઈ ફાઇલ શામેલ નહોતી.',
+                    error_invalid_package:
+                        'જનરેટ થયેલ પેકેજ અમાન્ય છે તેથી ડાઉનલોડ થયું નહીં.',
+                    errors: {
+                        unsupported_database:
+                            'આ ડેટાબેઝ પ્રકાર માટે Django નિકાસ ઉપલબ્ધ નથી.',
+                        empty_diagram: 'ડાયાગ્રામમાં નિકાસ યોગ્ય ટેબલ નથી.',
+                        unsupported_structural_field:
+                            '«{{path}}» પર primary-key field Djangoમાં represent થઈ શકતું નથી.',
+                        mysql_catalog_collision:
+                            '«{{path}}» માટે catalog દૂર કર્યા પછી MySQL catalogs collide થાય છે.',
+                        mariadb_catalog_collision:
+                            '«{{path}}» માટે catalog દૂર કર્યા પછી MariaDB catalogs collide થાય છે.',
+                    },
                 },
             },
             laravel: {

@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/ar';
+import { djangoExportNoteMessages } from '../django-export-notes/ar';
 
 export const ar: LanguageTranslation = {
     translation: {
@@ -1098,7 +1099,7 @@ export const ar: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'تصدير ترحيلات Django',
+                    description: 'تصدير تطبيق Django 6.1 جاهز للدمج',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1318,6 +1319,57 @@ export const ar: LanguageTranslation = {
                     error_empty_files: 'لم يتضمن التصدير أي ملفات.',
                     error_invalid_package:
                         'الحزمة المُنشأة غير صالحة ولم تُنزَّل.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'تصدير Django يدعم حاليًا PostgreSQL وMySQL وMariaDB وSQLite.',
+                result_step: {
+                    description: 'راجع حزمة Django 6.1 المُنشأة.',
+                    explanation:
+                        'هذا التصدير تطبيق Django جاهز للدمج (`foxaldb_models`). 0001_initial.py هو ترحيل أولي للمخطط الحالي، وليس تاريخ ترحيل Django مُعاد بناؤه. لم تُجرَ عملية التحقق أثناء التشغيل مقابل Django 6.1.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'المزوّد: {{provider}}',
+                    package_type:
+                        'الحزمة: تطبيق Django جاهز للدمج (`foxaldb_models`)',
+                    generating: 'جارٍ إنشاء حزمة Django…',
+                    success: 'تم إنشاء حزمة Django 6.1.',
+                    generated_files: 'الملفات المُنشأة ({{count}})',
+                    notes_heading: 'ملاحظات',
+                    warnings_heading: 'تحذيرات ({{count}})',
+                    adaptations_heading: 'تكييفات تقنية ({{count}})',
+                    path_label: 'المسار: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'تنزيل ZIP',
+                    retry: 'إعادة المحاولة',
+                    error_semantic: 'تعذّر إنشاء حزمة Django.',
+                    error_unauthenticated:
+                        'يجب تسجيل الدخول لتصدير حزم Django.',
+                    error_invalid_request:
+                        'تعذّر تصدير المخطط. قد يكون غير صالح أو كبيرًا جدًا.',
+                    error_rate_limited:
+                        'طلبات تصدير كثيرة جدًا. يرجى الانتظار قليلًا ثم المحاولة مرة أخرى.',
+                    error_unexpected:
+                        'فشل تصدير Django على الخادم. يرجى المحاولة مرة أخرى.',
+                    error_network:
+                        'تعذّر الوصول إلى الخادم. تحقق من اتصالك ثم حاول مرة أخرى.',
+                    error_unsafe_path:
+                        'يحتوي التصدير على مسار ملف غير آمن ولم يُنزَّل.',
+                    error_empty_files: 'لم يتضمّن التصدير أي ملفات.',
+                    error_invalid_package:
+                        'الحزمة المُنشأة غير صالحة ولم تُنزَّل.',
+                    errors: {
+                        unsupported_database:
+                            'تصدير Django غير متاح لهذا النوع من قواعد البيانات.',
+                        empty_diagram:
+                            'المخطط لا يحتوي على جداول قابلة للتصدير.',
+                        unsupported_structural_field:
+                            'لا يمكن تمثيل حقل مفتاح أساسي على «{{path}}» في Django.',
+                        mysql_catalog_collision:
+                            'تتعارض catalogs MySQL بعد إزالة catalog لـ «{{path}}».',
+                        mariadb_catalog_collision:
+                            'تتعارض catalogs MariaDB بعد إزالة catalog لـ «{{path}}».',
+                    },
                 },
             },
             laravel: {

@@ -1,6 +1,7 @@
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { isEfCoreExportSupported } from '@/lib/export/ef-core-export-capability';
 import { isPrismaExportSupported } from '@/lib/export/prisma-export-capability';
+import { isDjangoExportSupported } from '@/lib/export/django-export-capability';
 import { isRailsExportSupported } from '@/lib/export/rails-export-capability';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { ExportTargetId } from './export-target-id';
@@ -80,6 +81,17 @@ export const getExportTargetAvailability = (
                   };
 
         case 'django':
+            if (!ctx.isAuthenticated) {
+                return { status: 'hidden' };
+            }
+
+            return isDjangoExportSupported(ctx.databaseType)
+                ? { status: 'available' }
+                : {
+                      status: 'disabled',
+                      reasonKey: 'export_wizard.django.unsupported_database',
+                  };
+
         case 'drizzle':
             return {
                 status: 'disabled',

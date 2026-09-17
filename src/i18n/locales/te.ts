@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/te';
+import { djangoExportNoteMessages } from '../django-export-notes/te';
 
 export const te: LanguageTranslation = {
     translation: {
@@ -1118,7 +1119,8 @@ export const te: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django మైగ్రేషన్ ఎగుమతి',
+                    description:
+                        'Django 6.1 నేరుగా ఇంటిగ్రేట్ అయ్యే యాప్ ఎగుమతి',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1351,6 +1353,58 @@ export const te: LanguageTranslation = {
                     error_empty_files: 'ఎగుమతిలో ఫైళ్లు లేవు.',
                     error_invalid_package:
                         'జనరేట్ చేసిన ప్యాకేజీ చెల్లదు కాబట్టి డౌన్‌లోడ్ కాలేదు.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django ఎగుమతి ప్రస్తుతం PostgreSQL, MySQL, MariaDB మరియు SQLiteకు మద్దతు ఇస్తుంది.',
+                result_step: {
+                    description:
+                        'జనరేట్ చేసిన Django 6.1 ప్యాకేజీని సమీక్షించండి.',
+                    explanation:
+                        'ఈ ఎగుమతి నేరుగా ఇంటిగ్రేట్ అయ్యే Django యాప్ (`foxaldb_models`). 0001_initial.py ప్రస్తుత schema యొక్క ప్రారంభ migration, పునర్నిర్మించిన Django migration history కాదు. Django 6.1 వ్యతిరేకంగా runtime validation చేయలేదు.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'ప్రొవైడర్: {{provider}}',
+                    package_type:
+                        'ప్యాకేజీ: నేరుగా ఇంటిగ్రేట్ అయ్యే Django యాప్ (`foxaldb_models`)',
+                    generating: 'Django ప్యాకేజీ జనరేట్ అవుతోంది…',
+                    success: 'Django 6.1 ప్యాకేజీ జనరేట్ అయింది.',
+                    generated_files: 'జనరేట్ చేసిన ఫైళ్లు ({{count}})',
+                    notes_heading: 'గమనికలు',
+                    warnings_heading: 'హెచ్చరికలు ({{count}})',
+                    adaptations_heading: 'సాంకేతిక అనుకూలతలు ({{count}})',
+                    path_label: 'మార్గం: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'ZIP డౌన్‌లోడ్ చేయండి',
+                    retry: 'మళ్లీ ప్రయత్నించండి',
+                    error_semantic: 'Django ప్యాకేజీని జనరేట్ చేయలేకపోయాం.',
+                    error_unauthenticated:
+                        'Django ప్యాకేజీలను ఎగుమతి చేయడానికి సైన్ ఇన్ అవసరం.',
+                    error_invalid_request:
+                        'డయాగ్రామ్‌ను ఎగుమతి చేయలేకపోయాం. అది చెల్లదు లేదా చాలా పెద్దది కావచ్చు.',
+                    error_rate_limited:
+                        'చాలా ఎగుమతి అభ్యర్థనలు. కొద్దిసేపు వేచి మళ్లీ ప్రయత్నించండి.',
+                    error_unexpected:
+                        'సర్వర్‌లో Django ఎగుమతి విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                    error_network:
+                        'సర్వర్‌ను చేరుకోలేకపోయాం. మీ కనెక్షన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+                    error_unsafe_path:
+                        'ఎగుమతిలో సురక్షితం కాని ఫైల్ మార్గం ఉంది కాబట్టి డౌన్‌లోడ్ కాలేదు.',
+                    error_empty_files: 'ఎగుమతిలో ఫైళ్లు లేవు.',
+                    error_invalid_package:
+                        'జనరేట్ చేసిన ప్యాకేజీ చెల్లదు కాబట్టి డౌన్‌లోడ్ కాలేదు.',
+                    errors: {
+                        unsupported_database:
+                            'ఈ డేటాబేస్ రకానికి Django ఎగుమతి అందుబాటులో లేదు.',
+                        empty_diagram:
+                            'డయాగ్రామ్‌లో ఎగుమతి చేయదగిన టేబుల్స్ లేవు.',
+                        unsupported_structural_field:
+                            '«{{path}}»పై primary-key field Djangoలో represent చేయలేము.',
+                        mysql_catalog_collision:
+                            '«{{path}}» కోసం catalog తొలగించిన తర్వాత MySQL catalogs collide అవుతాయి.',
+                        mariadb_catalog_collision:
+                            '«{{path}}» కోసం catalog తొలగించిన తర్వాత MariaDB catalogs collide అవుతాయి.',
+                    },
                 },
             },
             laravel: {

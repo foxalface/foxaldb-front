@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/hr';
+import { djangoExportNoteMessages } from '../django-export-notes/hr';
 
 export const hr: LanguageTranslation = {
     translation: {
@@ -1111,7 +1112,8 @@ export const hr: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Izvoz Django migracija',
+                    description:
+                        'Django 6.1 izvoz aplikacije spremne za ugradnju',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1339,6 +1341,56 @@ export const hr: LanguageTranslation = {
                     error_empty_files: 'Izvoz nije sadržavao nijednu datoteku.',
                     error_invalid_package:
                         'Generirani paket nije važeći i nije preuzet.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django izvoz trenutačno podržava PostgreSQL, MySQL, MariaDB i SQLite.',
+                result_step: {
+                    description: 'Pregledajte generirani Django 6.1 paket.',
+                    explanation:
+                        'Ovaj izvoz je Django aplikacija spremna za ugradnju (`foxaldb_models`). 0001_initial.py je početna migracija trenutačne sheme, a ne rekonstruirana Django povijest migracija. Provjera u izvođenju protiv Django 6.1 nije provedena.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'Pružatelj: {{provider}}',
+                    package_type:
+                        'Paket: Django aplikacija spremna za ugradnju (`foxaldb_models`)',
+                    generating: 'Generiranje Django paketa…',
+                    success: 'Django 6.1 paket generiran.',
+                    generated_files: 'Generirane datoteke ({{count}})',
+                    notes_heading: 'Napomene',
+                    warnings_heading: 'Upozorenja ({{count}})',
+                    adaptations_heading: 'Tehničke prilagodbe ({{count}})',
+                    path_label: 'Put: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'Preuzmi ZIP',
+                    retry: 'Pokušaj ponovno',
+                    error_semantic: 'Django paket nije mogao biti generiran.',
+                    error_unauthenticated:
+                        'Morate biti prijavljeni da biste izvezli Django pakete.',
+                    error_invalid_request:
+                        'Dijagram nije mogao biti izvezen. Možda je nevažeći ili prevelik.',
+                    error_rate_limited:
+                        'Previše zahtjeva za izvoz. Pričekajte trenutak i pokušajte ponovno.',
+                    error_unexpected:
+                        'Django izvoz nije uspio na poslužitelju. Pokušajte ponovno.',
+                    error_network:
+                        'Poslužitelj nije dostupan. Provjerite vezu i pokušajte ponovno.',
+                    error_unsafe_path:
+                        'Izvoz sadrži nesigurnu putanju datoteke i nije preuzet.',
+                    error_empty_files: 'Izvoz nije uključivao datoteke.',
+                    error_invalid_package:
+                        'Generirani paket nije važeći i nije preuzet.',
+                    errors: {
+                        unsupported_database:
+                            'Django izvoz nije dostupan za ovu vrstu baze podataka.',
+                        empty_diagram: 'Dijagram nema tablica za izvoz.',
+                        unsupported_structural_field:
+                            'Polje primarnog ključa na «{{path}}» ne može se predstaviti u Django.',
+                        mysql_catalog_collision:
+                            'MySQL katalozi se sudaraju nakon uklanjanja kataloga za «{{path}}».',
+                        mariadb_catalog_collision:
+                            'MariaDB katalozi se sudaraju nakon uklanjanja kataloga za «{{path}}».',
+                    },
                 },
             },
             laravel: {

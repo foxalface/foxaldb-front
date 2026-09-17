@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/de';
+import { djangoExportNoteMessages } from '../django-export-notes/de';
 
 export const de: LanguageTranslation = {
     translation: {
@@ -1143,7 +1144,7 @@ export const de: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django-Migrations-Export',
+                    description: 'Django-6.1-App-Export zum direkten Einbinden',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1380,6 +1381,58 @@ export const de: LanguageTranslation = {
                     error_empty_files: 'Der Export enthielt keine Dateien.',
                     error_invalid_package:
                         'Das erzeugte Paket ist ungültig und wurde nicht heruntergeladen.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Der Django-Export unterstützt derzeit PostgreSQL, MySQL, MariaDB und SQLite.',
+                result_step: {
+                    description: 'Prüfen Sie das erzeugte Django-6.1-Paket.',
+                    explanation:
+                        'Dieser Export ist eine Django-App zum direkten Einbinden (`foxaldb_models`). 0001_initial.py ist eine Ausgangsmigration des aktuellen Schemas, keine rekonstruierte Django-Migrationshistorie. Eine Laufzeitvalidierung gegen Django 6.1 wurde nicht durchgeführt.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'Anbieter: {{provider}}',
+                    package_type:
+                        'Paket: Django-App zum direkten Einbinden (`foxaldb_models`)',
+                    generating: 'Django-Paket wird erzeugt…',
+                    success: 'Django-6.1-Paket erzeugt.',
+                    generated_files: 'Erzeugte Dateien ({{count}})',
+                    notes_heading: 'Hinweise',
+                    warnings_heading: 'Warnungen ({{count}})',
+                    adaptations_heading: 'Technische Anpassungen ({{count}})',
+                    path_label: 'Pfad: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'ZIP herunterladen',
+                    retry: 'Erneut versuchen',
+                    error_semantic:
+                        'Das Django-Paket konnte nicht erzeugt werden.',
+                    error_unauthenticated:
+                        'Sie müssen angemeldet sein, um Django-Pakete zu exportieren.',
+                    error_invalid_request:
+                        'Das Diagramm konnte nicht exportiert werden. Es ist möglicherweise ungültig oder zu groß.',
+                    error_rate_limited:
+                        'Zu viele Exportanfragen. Bitte warten Sie einen Moment und versuchen Sie es erneut.',
+                    error_unexpected:
+                        'Der Django-Export ist auf dem Server fehlgeschlagen. Bitte versuchen Sie es erneut.',
+                    error_network:
+                        'Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
+                    error_unsafe_path:
+                        'Der Export enthält einen unsicheren Dateipfad und wurde nicht heruntergeladen.',
+                    error_empty_files: 'Der Export enthielt keine Dateien.',
+                    error_invalid_package:
+                        'Das erzeugte Paket ist ungültig und wurde nicht heruntergeladen.',
+                    errors: {
+                        unsupported_database:
+                            'Der Django-Export ist für diesen Datenbanktyp nicht verfügbar.',
+                        empty_diagram:
+                            'Das Diagramm hat keine exportierbaren Tabellen.',
+                        unsupported_structural_field:
+                            'Ein Primärschlüsselfeld auf „{{path}}“ kann in Django nicht dargestellt werden.',
+                        mysql_catalog_collision:
+                            'MySQL-Kataloge kollidieren nach Entfernen des Katalogs für „{{path}}“.',
+                        mariadb_catalog_collision:
+                            'MariaDB-Kataloge kollidieren nach Entfernen des Katalogs für „{{path}}“.',
+                    },
                 },
             },
             laravel: {

@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/ja';
+import { djangoExportNoteMessages } from '../django-export-notes/ja';
 
 export const ja: LanguageTranslation = {
     translation: {
@@ -1131,7 +1132,8 @@ export const ja: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django マイグレーションのエクスポート',
+                    description:
+                        'Django 6.1 そのまま組み込めるアプリのエクスポート',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1368,6 +1370,59 @@ export const ja: LanguageTranslation = {
                         'エクスポートにファイルが含まれていませんでした。',
                     error_invalid_package:
                         '生成されたパッケージは無効なため、ダウンロードしませんでした。',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django エクスポートは現在 PostgreSQL、MySQL、MariaDB、SQLite をサポートしています。',
+                result_step: {
+                    description:
+                        '生成された Django 6.1 パッケージを確認してください。',
+                    explanation:
+                        'このエクスポートはそのまま組み込める Django アプリ（`foxaldb_models`）です。0001_initial.py は現在のスキーマの初期マイグレーションであり、Django マイグレーション履歴の再構築ではありません。Django 6.1 に対する実行時検証は行われていません。',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'プロバイダー: {{provider}}',
+                    package_type:
+                        'パッケージ: そのまま組み込める Django アプリ（`foxaldb_models`）',
+                    generating: 'Django パッケージを生成しています…',
+                    success: 'Django 6.1 パッケージを生成しました。',
+                    generated_files: '生成されたファイル（{{count}}）',
+                    notes_heading: 'メモ',
+                    warnings_heading: '警告 ({{count}})',
+                    adaptations_heading: '技術的な適応 ({{count}})',
+                    path_label: 'パス: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'ZIP をダウンロード',
+                    retry: '再試行',
+                    error_semantic: 'Django パッケージを生成できませんでした。',
+                    error_unauthenticated:
+                        'Django パッケージをエクスポートするにはサインインが必要です。',
+                    error_invalid_request:
+                        'ダイアグラムをエクスポートできませんでした。無効または大きすぎる可能性があります。',
+                    error_rate_limited:
+                        'エクスポート要求が多すぎます。しばらく待ってから再試行してください。',
+                    error_unexpected:
+                        'サーバー上で Django エクスポートに失敗しました。もう一度お試しください。',
+                    error_network:
+                        'サーバーに接続できません。接続を確認してもう一度お試しください。',
+                    error_unsafe_path:
+                        'エクスポートに安全でないファイルパスが含まれているため、ダウンロードされませんでした。',
+                    error_empty_files:
+                        'エクスポートにファイルが含まれていませんでした。',
+                    error_invalid_package:
+                        '生成されたパッケージは無効なため、ダウンロードしませんでした。',
+                    errors: {
+                        unsupported_database:
+                            'このデータベースタイプでは Django エクスポートは利用できません。',
+                        empty_diagram:
+                            'ダイアグラムにエクスポート可能なテーブルがありません。',
+                        unsupported_structural_field:
+                            '「{{path}}」の主キーフィールドは Django で表現できません。',
+                        mysql_catalog_collision:
+                            '「{{path}}」の catalog 削除後に MySQL catalog が衝突します。',
+                        mariadb_catalog_collision:
+                            '「{{path}}」の catalog 削除後に MariaDB catalog が衝突します。',
+                    },
                 },
             },
             laravel: {

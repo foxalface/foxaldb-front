@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/bn';
+import { djangoExportNoteMessages } from '../django-export-notes/bn';
 
 export const bn: LanguageTranslation = {
     translation: {
@@ -1111,7 +1112,7 @@ export const bn: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django মাইগ্রেশন রপ্তানি',
+                    description: 'Django 6.1 সরাসরি একীকরণযোগ্য অ্যাপ রপ্তানি',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1342,6 +1343,57 @@ export const bn: LanguageTranslation = {
                     error_empty_files: 'রপ্তানিতে কোনো ফাইল ছিল না।',
                     error_invalid_package:
                         'জেনারেট করা প্যাকেজ অবৈধ বলে ডাউনলোড করা হয়নি।',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django রপ্তানি বর্তমানে PostgreSQL, MySQL, MariaDB এবং SQLite সমর্থন করে।',
+                result_step: {
+                    description:
+                        'জেনারেট করা Django 6.1 প্যাকেজ পর্যালোচনা করুন।',
+                    explanation:
+                        'এই রপ্তানি সরাসরি একীকরণযোগ্য Django অ্যাপ (`foxaldb_models`)। 0001_initial.py বর্তমান schema-এর প্রাথমিক migration, পুনর্গঠিত Django migration history নয়। Django 6.1-এর বিপক্ষে runtime validation করা হয়নি।',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'প্রদানকারী: {{provider}}',
+                    package_type:
+                        'প্যাকেজ: সরাসরি একীকরণযোগ্য Django অ্যাপ (`foxaldb_models`)',
+                    generating: 'Django প্যাকেজ জেনারেট হচ্ছে…',
+                    success: 'Django 6.1 প্যাকেজ জেনারেট হয়েছে।',
+                    generated_files: 'জেনারেট করা ফাইল ({{count}})',
+                    notes_heading: 'নোট',
+                    warnings_heading: 'সতর্কতা ({{count}})',
+                    adaptations_heading: 'কারিগরি অভিযোজন ({{count}})',
+                    path_label: 'পথ: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'ZIP ডাউনলোড করুন',
+                    retry: 'আবার চেষ্টা করুন',
+                    error_semantic: 'Django প্যাকেজ জেনারেট করা যায়নি।',
+                    error_unauthenticated:
+                        'Django প্যাকেজ রপ্তানি করতে সাইন ইন করতে হবে।',
+                    error_invalid_request:
+                        'ডায়াগ্রাম রপ্তানি করা যায়নি। এটি অবৈধ বা খুব বড় হতে পারে।',
+                    error_rate_limited:
+                        'অনেক বেশি রপ্তানি অনুরোধ। একটু অপেক্ষা করে আবার চেষ্টা করুন।',
+                    error_unexpected:
+                        'সার্ভারে Django রপ্তানি ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                    error_network:
+                        'সার্ভারে পৌঁছানো যায়নি। আপনার সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।',
+                    error_unsafe_path:
+                        'রপ্তানিতে অনিরাপদ ফাইল পথ আছে এবং ডাউনলোড করা হয়নি।',
+                    error_empty_files: 'রপ্তানিতে কোনো ফাইল ছিল না।',
+                    error_invalid_package:
+                        'জেনারেট করা প্যাকেজ অবৈধ বলে ডাউনলোড করা হয়নি।',
+                    errors: {
+                        unsupported_database:
+                            'এই ডেটাবেস ধরনের জন্য Django রপ্তানি উপলব্ধ নয়।',
+                        empty_diagram: 'ডায়াগ্রামে রপ্তানিযোগ্য টেবিল নেই।',
+                        unsupported_structural_field:
+                            '«{{path}}»-এ primary-key field Django-তে represent করা যায় না।',
+                        mysql_catalog_collision:
+                            '«{{path}}»-এর জন্য catalog সরানোর পর MySQL catalogs collide করে।',
+                        mariadb_catalog_collision:
+                            '«{{path}}»-এর জন্য catalog সরানোর পর MariaDB catalogs collide করে।',
+                    },
                 },
             },
             laravel: {

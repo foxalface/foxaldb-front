@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/tr';
+import { djangoExportNoteMessages } from '../django-export-notes/tr';
 
 export const tr: LanguageTranslation = {
     translation: {
@@ -1095,7 +1096,8 @@ export const tr: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django migrasyon dışa aktarma',
+                    description:
+                        'Django 6.1 doğrudan entegre uygulama dışa aktarımı',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1326,6 +1328,58 @@ export const tr: LanguageTranslation = {
                     error_empty_files: 'Dışa aktarma hiçbir dosya içermiyordu.',
                     error_invalid_package:
                         'Oluşturulan paket geçersiz ve indirilmedi.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django dışa aktarımı şu anda PostgreSQL, MySQL, MariaDB ve SQLite destekler.',
+                result_step: {
+                    description: 'Oluşturulan Django 6.1 paketini inceleyin.',
+                    explanation:
+                        'Bu dışa aktarım doğrudan entegre edilebilir bir Django uygulamasıdır (`foxaldb_models`). 0001_initial.py, mevcut şemanın başlangıç migrasyonudur; yeniden oluşturulmuş Django migrasyon geçmişi değildir. Django 6.1 karşısında çalışma zamanı doğrulaması yapılmamıştır.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'Sağlayıcı: {{provider}}',
+                    package_type:
+                        'Paket: doğrudan entegre Django uygulaması (`foxaldb_models`)',
+                    generating: 'Django paketi oluşturuluyor…',
+                    success: 'Django 6.1 paketi oluşturuldu.',
+                    generated_files: 'Oluşturulan dosyalar ({{count}})',
+                    notes_heading: 'Notlar',
+                    warnings_heading: 'Uyarılar ({{count}})',
+                    adaptations_heading: 'Teknik uyarlamalar ({{count}})',
+                    path_label: 'Yol: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'ZIP indir',
+                    retry: 'Yeniden dene',
+                    error_semantic: 'Django paketi oluşturulamadı.',
+                    error_unauthenticated:
+                        'Django paketlerini dışa aktarmak için oturum açmanız gerekir.',
+                    error_invalid_request:
+                        'Diyagram dışa aktarılamadı. Geçersiz veya çok büyük olabilir.',
+                    error_rate_limited:
+                        'Çok fazla dışa aktarma isteği. Lütfen biraz bekleyip tekrar deneyin.',
+                    error_unexpected:
+                        'Django dışa aktarımı sunucuda başarısız oldu. Lütfen tekrar deneyin.',
+                    error_network:
+                        'Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.',
+                    error_unsafe_path:
+                        'Dışa aktarma güvenli olmayan bir dosya yolu içeriyor ve indirilmedi.',
+                    error_empty_files:
+                        'Dışa aktarma herhangi bir dosya içermiyordu.',
+                    error_invalid_package:
+                        'Oluşturulan paket geçersiz ve indirilmedi.',
+                    errors: {
+                        unsupported_database:
+                            'Bu veritabanı türü için Django dışa aktarımı kullanılamaz.',
+                        empty_diagram:
+                            'Diyagramda dışa aktarılabilir tablo yok.',
+                        unsupported_structural_field:
+                            "«{{path}}» üzerindeki birincil anahtar alanı Django'da temsil edilemez.",
+                        mysql_catalog_collision:
+                            '«{{path}}» için katalog kaldırıldıktan sonra MySQL katalogları çakışıyor.',
+                        mariadb_catalog_collision:
+                            '«{{path}}» için katalog kaldırıldıktan sonra MariaDB katalogları çakışıyor.',
+                    },
                 },
             },
             laravel: {

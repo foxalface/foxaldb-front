@@ -109,15 +109,17 @@ describe('export target availability', () => {
         });
     });
 
+    it('hides Django for guests', () => {
+        expect(getExportTargetAvailability('django', guestContext)).toEqual({
+            status: 'hidden',
+        });
+    });
+
     it('marks remaining planned framework targets as disabled', () => {
-        for (const targetId of ['django', 'drizzle'] as const) {
-            expect(getExportTargetAvailability(targetId, guestContext)).toEqual(
-                {
-                    status: 'disabled',
-                    reasonKey: 'export_wizard.targets.framework.coming_soon',
-                }
-            );
-        }
+        expect(getExportTargetAvailability('drizzle', guestContext)).toEqual({
+            status: 'disabled',
+            reasonKey: 'export_wizard.targets.framework.coming_soon',
+        });
     });
 
     it('hides EF Core for guests', () => {
@@ -174,10 +176,7 @@ describe('export target registry', () => {
         );
 
         expect(database.map((target) => target.id)).toEqual(['sql']);
-        expect(framework.map((target) => target.id)).toEqual([
-            'django',
-            'drizzle',
-        ]);
+        expect(framework.map((target) => target.id)).toEqual(['drizzle']);
         expect(portable.map((target) => target.id)).toEqual([
             'dbml',
             'diagram_json',
@@ -313,5 +312,97 @@ describe('Rails export target availability', () => {
         expect(getExportTargetAvailability('ef_core', guestContext)).toEqual({
             status: 'hidden',
         });
+        expect(getExportTargetAvailability('django', guestContext)).toEqual({
+            status: 'hidden',
+        });
+    });
+});
+
+describe('Django export target availability', () => {
+    const guestContextFor = (databaseType: DatabaseType) => ({
+        isAuthenticated: false,
+        diagramId: 'guest-diagram-1',
+        databaseType,
+    });
+
+    const authenticatedContextFor = (
+        databaseType: DatabaseType,
+        diagramId: unknown = '42'
+    ) => ({
+        isAuthenticated: true,
+        diagramId,
+        databaseType,
+    });
+
+    const supportedTypes = [
+        DatabaseType.POSTGRESQL,
+        DatabaseType.MYSQL,
+        DatabaseType.MARIADB,
+        DatabaseType.SQLITE,
+    ] as const;
+
+    const unsupportedTypes = [
+        DatabaseType.SQL_SERVER,
+        DatabaseType.ORACLE,
+        DatabaseType.COCKROACHDB,
+        DatabaseType.CLICKHOUSE,
+        DatabaseType.GENERIC,
+    ] as const;
+
+    it('hides Django for guests even on supported databases', () => {
+        for (const databaseType of supportedTypes) {
+            expect(
+                getExportTargetAvailability(
+                    'django',
+                    guestContextFor(databaseType)
+                )
+            ).toEqual({ status: 'hidden' });
+        }
+    });
+
+    for (const databaseType of supportedTypes) {
+        it(`marks Django as available for authenticated users on ${databaseType}`, () => {
+            expect(
+                getExportTargetAvailability(
+                    'django',
+                    authenticatedContextFor(databaseType)
+                )
+            ).toEqual({ status: 'available' });
+        });
+    }
+
+    for (const databaseType of unsupportedTypes) {
+        it(`disables Django for authenticated users on ${databaseType}`, () => {
+            expect(
+                getExportTargetAvailability(
+                    'django',
+                    authenticatedContextFor(databaseType)
+                )
+            ).toEqual({
+                status: 'disabled',
+                reasonKey: 'export_wizard.django.unsupported_database',
+            });
+        });
+    }
+
+    it('does not show Django as coming soon once enabled', () => {
+        expect(
+            getExportTargetAvailability(
+                'django',
+                authenticatedContextFor(DatabaseType.POSTGRESQL)
+            ).reasonKey
+        ).not.toBe('export_wizard.targets.framework.coming_soon');
+    });
+
+    it('does not require a paid plan or backend diagram ID', () => {
+        expect(
+            getExportTargetAvailability(
+                'django',
+                authenticatedContextFor(
+                    DatabaseType.POSTGRESQL,
+                    'guest-diagram-1'
+                )
+            )
+        ).toEqual({ status: 'available' });
     });
 });

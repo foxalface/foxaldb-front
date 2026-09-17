@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/vi';
+import { djangoExportNoteMessages } from '../django-export-notes/vi';
 
 export const vi: LanguageTranslation = {
     translation: {
@@ -1113,7 +1114,7 @@ export const vi: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Xuất migration Django',
+                    description: 'Xuất ứng dụng Django 6.1 tích hợp trực tiếp',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1335,6 +1336,56 @@ export const vi: LanguageTranslation = {
                     error_empty_files: 'Bản xuất không chứa tệp nào.',
                     error_invalid_package:
                         'Gói đã tạo không hợp lệ nên không được tải xuống.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Xuất Django hiện hỗ trợ PostgreSQL, MySQL, MariaDB và SQLite.',
+                result_step: {
+                    description: 'Xem lại gói Django 6.1 đã tạo.',
+                    explanation:
+                        'Bản xuất này là ứng dụng Django tích hợp trực tiếp (`foxaldb_models`). 0001_initial.py là migration ban đầu của schema hiện tại, không phải lịch sử migration Django được tái tạo. Chưa xác thực runtime với Django 6.1.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'Nhà cung cấp: {{provider}}',
+                    package_type:
+                        'Gói: ứng dụng Django tích hợp trực tiếp (`foxaldb_models`)',
+                    generating: 'Đang tạo gói Django…',
+                    success: 'Đã tạo gói Django 6.1.',
+                    generated_files: 'Tệp đã tạo ({{count}})',
+                    notes_heading: 'Ghi chú',
+                    warnings_heading: 'Cảnh báo ({{count}})',
+                    adaptations_heading: 'Điều chỉnh kỹ thuật ({{count}})',
+                    path_label: 'Đường dẫn: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'Tải ZIP',
+                    retry: 'Thử lại',
+                    error_semantic: 'Không thể tạo gói Django.',
+                    error_unauthenticated:
+                        'Bạn cần đăng nhập để xuất gói Django.',
+                    error_invalid_request:
+                        'Không thể xuất sơ đồ. Sơ đồ có thể không hợp lệ hoặc quá lớn.',
+                    error_rate_limited:
+                        'Quá nhiều yêu cầu xuất. Vui lòng đợi một lát rồi thử lại.',
+                    error_unexpected:
+                        'Xuất Django thất bại trên máy chủ. Vui lòng thử lại.',
+                    error_network:
+                        'Không thể kết nối tới máy chủ. Kiểm tra kết nối rồi thử lại.',
+                    error_unsafe_path:
+                        'Bản xuất chứa đường dẫn tệp không an toàn và không được tải xuống.',
+                    error_empty_files: 'Bản xuất không bao gồm tệp nào.',
+                    error_invalid_package:
+                        'Gói đã tạo không hợp lệ nên không được tải xuống.',
+                    errors: {
+                        unsupported_database:
+                            'Xuất Django không khả dụng cho loại cơ sở dữ liệu này.',
+                        empty_diagram: 'Sơ đồ không có bảng có thể xuất.',
+                        unsupported_structural_field:
+                            'Trường khóa chính trên «{{path}}» không thể biểu diễn trong Django.',
+                        mysql_catalog_collision:
+                            'Catalog MySQL xung đột sau khi loại bỏ catalog cho «{{path}}».',
+                        mariadb_catalog_collision:
+                            'Catalog MariaDB xung đột sau khi loại bỏ catalog cho «{{path}}».',
+                    },
                 },
             },
             laravel: {

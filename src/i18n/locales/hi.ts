@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/hi';
+import { djangoExportNoteMessages } from '../django-export-notes/hi';
 
 export const hi: LanguageTranslation = {
     translation: {
@@ -1106,7 +1107,7 @@ export const hi: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django माइग्रेशन निर्यात',
+                    description: 'Django 6.1 तुरंत एकीकृत ऐप निर्यात',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1336,6 +1337,57 @@ export const hi: LanguageTranslation = {
                     error_empty_files: 'निर्यात में कोई फ़ाइल शामिल नहीं थी।',
                     error_invalid_package:
                         'जनरेट किया गया पैकेज अमान्य है, इसलिए उसे डाउनलोड नहीं किया गया।',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django निर्यात वर्तमान में PostgreSQL, MySQL, MariaDB और SQLite का समर्थन करता है।',
+                result_step: {
+                    description: 'जनरेट किया गया Django 6.1 पैकेज देखें।',
+                    explanation:
+                        'यह निर्यात तुरंत एकीकृत होने वाला Django ऐप (`foxaldb_models`) है। 0001_initial.py वर्तमान schema की प्रारंभिक migration है, Django migration history का पुनर्निर्माण नहीं। Django 6.1 के विरुद्ध runtime validation नहीं की गई।',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'प्रदाता: {{provider}}',
+                    package_type:
+                        'पैकेज: तुरंत एकीकृत Django ऐप (`foxaldb_models`)',
+                    generating: 'Django पैकेज जनरेट हो रहा है…',
+                    success: 'Django 6.1 पैकेज जनरेट हुआ।',
+                    generated_files: 'जनरेट की गई फ़ाइलें ({{count}})',
+                    notes_heading: 'नोट्स',
+                    warnings_heading: 'चेतावनियाँ ({{count}})',
+                    adaptations_heading: 'तकनीकी अनुकूलन ({{count}})',
+                    path_label: 'पथ: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'ZIP डाउनलोड करें',
+                    retry: 'पुनः प्रयास करें',
+                    error_semantic: 'Django पैकेज जनरेट नहीं हो सका।',
+                    error_unauthenticated:
+                        'Django पैकेज निर्यात करने के लिए साइन इन करना आवश्यक है।',
+                    error_invalid_request:
+                        'डायाग्राम निर्यात नहीं हो सका। यह अमान्य या बहुत बड़ा हो सकता है।',
+                    error_rate_limited:
+                        'बहुत अधिक निर्यात अनुरोध। कृपया थोड़ा प्रतीक्षा करें और पुनः प्रयास करें।',
+                    error_unexpected:
+                        'सर्वर पर Django निर्यात विफल रहा। कृपया फिर से प्रयास करें।',
+                    error_network:
+                        'सर्वर तक नहीं पहुँचा जा सका। अपना कनेक्शन जाँचें और फिर से प्रयास करें।',
+                    error_unsafe_path:
+                        'निर्यात में असुरक्षित फ़ाइल पथ है और डाउनलोड नहीं किया गया।',
+                    error_empty_files: 'निर्यात में कोई फ़ाइल शामिल नहीं थी।',
+                    error_invalid_package:
+                        'जनरेट किया गया पैकेज अमान्य है और डाउनलोड नहीं किया गया।',
+                    errors: {
+                        unsupported_database:
+                            'इस डेटाबेस प्रकार के लिए Django निर्यात उपलब्ध नहीं है।',
+                        empty_diagram:
+                            'डायाग्राम में कोई निर्यात योग्य तालिका नहीं है।',
+                        unsupported_structural_field:
+                            '«{{path}}» पर primary-key field Django में represent नहीं किया जा सकता।',
+                        mysql_catalog_collision:
+                            '«{{path}}» के लिए catalog हटाने के बाद MySQL catalogs collide करते हैं।',
+                        mariadb_catalog_collision:
+                            '«{{path}}» के लिए catalog हटाने के बाद MariaDB catalogs collide करते हैं।',
+                    },
                 },
             },
             laravel: {

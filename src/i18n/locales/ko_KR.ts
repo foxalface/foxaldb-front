@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/ko_KR';
+import { djangoExportNoteMessages } from '../django-export-notes/ko_KR';
 
 export const ko_KR: LanguageTranslation = {
     translation: {
@@ -1114,7 +1115,7 @@ export const ko_KR: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django 마이그레이션보내기',
+                    description: 'Django 6.1 즉시 통합 앱 내보내기',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1340,6 +1341,57 @@ export const ko_KR: LanguageTranslation = {
                     error_empty_files: '보내기에 파일이 포함되지 않았습니다.',
                     error_invalid_package:
                         '생성된 패키지가 잘못되어 다운로드하지 않았습니다.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django 내보내기는 현재 PostgreSQL, MySQL, MariaDB, SQLite를 지원합니다.',
+                result_step: {
+                    description: '생성된 Django 6.1 패키지를 검토하세요.',
+                    explanation:
+                        '이 내보내기는 즉시 통합 가능한 Django 앱(`foxaldb_models`)입니다. 0001_initial.py는 현재 스키마의 초기 마이그레이션이며, 재구성된 Django 마이그레이션 기록이 아닙니다. Django 6.1에 대한 런타임 검증은 수행되지 않았습니다.',
+                    django_version: 'Django {{version}}',
+                    provider_label: '제공자: {{provider}}',
+                    package_type:
+                        '패키지: 즉시 통합 Django 앱(`foxaldb_models`)',
+                    generating: 'Django 패키지 생성 중…',
+                    success: 'Django 6.1 패키지가 생성되었습니다.',
+                    generated_files: '생성된 파일({{count}})',
+                    notes_heading: '메모',
+                    warnings_heading: '경고 ({{count}})',
+                    adaptations_heading: '기술적 적응 ({{count}})',
+                    path_label: '경로: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'ZIP 다운로드',
+                    retry: '다시 시도',
+                    error_semantic: 'Django 패키지를 생성할 수 없습니다.',
+                    error_unauthenticated:
+                        'Django 패키지를 내보내려면 로그인해야 합니다.',
+                    error_invalid_request:
+                        '다이어그램을 내보낼 수 없습니다. 유효하지 않거나 너무 클 수 있습니다.',
+                    error_rate_limited:
+                        '내보내기 요청이 너무 많습니다. 잠시 후 다시 시도하세요.',
+                    error_unexpected:
+                        '서버에서 Django 내보내기에 실패했습니다. 다시 시도해 주세요.',
+                    error_network:
+                        '서버에 연결할 수 없습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+                    error_unsafe_path:
+                        '내보내기에 안전하지 않은 파일 경로가 포함되어 다운로드되지 않았습니다.',
+                    error_empty_files: '내보내기에 파일이 포함되지 않았습니다.',
+                    error_invalid_package:
+                        '생성된 패키지가 잘못되어 다운로드하지 않았습니다.',
+                    errors: {
+                        unsupported_database:
+                            '이 데이터베이스 유형에서는 Django 내보내기를 사용할 수 없습니다.',
+                        empty_diagram:
+                            '다이어그램에 내보낼 수 있는 테이블이 없습니다.',
+                        unsupported_structural_field:
+                            '«{{path}}»의 기본 키 필드는 Django에서 표현할 수 없습니다.',
+                        mysql_catalog_collision:
+                            '«{{path}}»의 catalog 제거 후 MySQL catalog가 충돌합니다.',
+                        mariadb_catalog_collision:
+                            '«{{path}}»의 catalog 제거 후 MariaDB catalog가 충돌합니다.',
+                    },
                 },
             },
             laravel: {

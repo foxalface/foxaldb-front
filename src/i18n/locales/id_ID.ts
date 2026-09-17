@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/id_ID';
+import { djangoExportNoteMessages } from '../django-export-notes/id_ID';
 
 export const id_ID: LanguageTranslation = {
     translation: {
@@ -1113,7 +1114,7 @@ export const id_ID: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Ekspor migrasi Django',
+                    description: 'Ekspor aplikasi Django 6.1 siap integrasi',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1343,6 +1344,57 @@ export const id_ID: LanguageTranslation = {
                         'Ekspor tidak menyertakan berkas apa pun.',
                     error_invalid_package:
                         'Paket yang dihasilkan tidak valid dan tidak diunduh.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Ekspor Django saat ini mendukung PostgreSQL, MySQL, MariaDB, dan SQLite.',
+                result_step: {
+                    description: 'Tinjau paket Django 6.1 yang dihasilkan.',
+                    explanation:
+                        'Ekspor ini adalah aplikasi Django siap integrasi (`foxaldb_models`). 0001_initial.py adalah migrasi awal skema saat ini, bukan riwayat migrasi Django yang direkonstruksi. Validasi runtime terhadap Django 6.1 belum dilakukan.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'Penyedia: {{provider}}',
+                    package_type:
+                        'Paket: aplikasi Django siap integrasi (`foxaldb_models`)',
+                    generating: 'Menghasilkan paket Django…',
+                    success: 'Paket Django 6.1 dihasilkan.',
+                    generated_files: 'File yang dihasilkan ({{count}})',
+                    notes_heading: 'Catatan',
+                    warnings_heading: 'Peringatan ({{count}})',
+                    adaptations_heading: 'Adaptasi teknis ({{count}})',
+                    path_label: 'Jalur: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'Unduh ZIP',
+                    retry: 'Coba lagi',
+                    error_semantic: 'Paket Django tidak dapat dihasilkan.',
+                    error_unauthenticated:
+                        'Anda perlu masuk untuk mengekspor paket Django.',
+                    error_invalid_request:
+                        'Diagram tidak dapat diekspor. Mungkin tidak valid atau terlalu besar.',
+                    error_rate_limited:
+                        'Terlalu banyak permintaan ekspor. Tunggu sebentar lalu coba lagi.',
+                    error_unexpected:
+                        'Ekspor Django gagal di server. Silakan coba lagi.',
+                    error_network:
+                        'Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.',
+                    error_unsafe_path:
+                        'Ekspor berisi jalur file yang tidak aman dan tidak diunduh.',
+                    error_empty_files: 'Ekspor tidak menyertakan file apa pun.',
+                    error_invalid_package:
+                        'Paket yang dihasilkan tidak valid dan tidak diunduh.',
+                    errors: {
+                        unsupported_database:
+                            'Ekspor Django tidak tersedia untuk jenis basis data ini.',
+                        empty_diagram:
+                            'Diagram tidak memiliki tabel yang dapat diekspor.',
+                        unsupported_structural_field:
+                            'Field kunci utama pada «{{path}}» tidak dapat direpresentasikan di Django.',
+                        mysql_catalog_collision:
+                            'Katalog MySQL bentrok setelah penghapusan katalog untuk «{{path}}».',
+                        mariadb_catalog_collision:
+                            'Katalog MariaDB bentrok setelah penghapusan katalog untuk «{{path}}».',
+                    },
                 },
             },
             laravel: {

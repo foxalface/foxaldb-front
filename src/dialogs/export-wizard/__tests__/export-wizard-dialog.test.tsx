@@ -136,7 +136,6 @@ describe('ExportWizardDialog', () => {
 
         const expectedTargets = [
             'export_wizard.targets.sql.title',
-            'export_wizard.targets.django.title',
             'export_wizard.targets.drizzle.title',
             'export_wizard.targets.dbml.title',
             'export_wizard.targets.diagram_json.title',
@@ -256,20 +255,26 @@ describe('ExportWizardDialog', () => {
         ).not.toBeInTheDocument();
     });
 
+    it('hides Django for guests', () => {
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        expect(
+            screen.queryByText('export_wizard.targets.django.title')
+        ).not.toBeInTheDocument();
+    });
+
     it('shows remaining planned framework targets as disabled', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        for (const targetKey of ['django', 'drizzle']) {
-            const button = screen
-                .getByText(`export_wizard.targets.${targetKey}.title`)
-                .closest('button');
+        const button = screen
+            .getByText('export_wizard.targets.drizzle.title')
+            .closest('button');
 
-            expect(button).toBeDisabled();
-        }
+        expect(button).toBeDisabled();
 
         expect(
             screen.getAllByText('export_wizard.targets.framework.coming_soon')
-        ).toHaveLength(2);
+        ).toHaveLength(1);
     });
 
     it('hides Laravel export for guests', () => {

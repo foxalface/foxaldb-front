@@ -58,6 +58,9 @@ import type { EfCoreWizardRequestError } from './ef-core/export-ef-core-options-
 import { ExportRailsResultStep } from './rails/export-rails-result-step';
 import { ExportRailsBranchContext } from './rails/export-rails-branch-context';
 import type { RailsWizardRequestError } from './rails/export-rails-result-step';
+import { ExportDjangoResultStep } from './django/export-django-result-step';
+import { ExportDjangoBranchContext } from './django/export-django-branch-context';
+import type { DjangoWizardRequestError } from './django/export-django-result-step';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import {
@@ -82,10 +85,13 @@ import { ApiError } from '@/lib/api/client';
 import { exportPrismaSchema } from '@/lib/api/prisma-export';
 import { exportEfCoreProject } from '@/lib/api/ef-core-export';
 import { exportRailsProject } from '@/lib/api/rails-export';
+import { exportDjangoProject } from '@/lib/api/django-export';
 import type { EfCoreExportSuccessResponse } from '@/lib/api/ef-core-export-types';
 import type { RailsExportSuccess } from '@/lib/api/rails-export-types';
+import type { DjangoExportSuccess } from '@/lib/api/django-export-types';
 import { DEFAULT_EF_CORE_DB_CONTEXT_NAME } from '@/lib/export/ef-core-export-constants';
 import { isEfCoreExportSupported } from '@/lib/export/ef-core-export-capability';
+import { isDjangoExportSupported } from '@/lib/export/django-export-capability';
 import { isRailsExportSupported } from '@/lib/export/rails-export-capability';
 import { suggestEfCoreNamespace } from '@/lib/export/suggest-ef-core-namespace';
 import type {
@@ -168,6 +174,12 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         useState<RailsWizardRequestError | null>(null);
     const [isRailsExporting, setIsRailsExporting] = useState(false);
     const railsExportRequestIdRef = useRef(0);
+    const [djangoSuccess, setDjangoSuccess] =
+        useState<DjangoExportSuccess | null>(null);
+    const [djangoError, setDjangoError] =
+        useState<DjangoWizardRequestError | null>(null);
+    const [isDjangoExporting, setIsDjangoExporting] = useState(false);
+    const djangoExportRequestIdRef = useRef(0);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -226,6 +238,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         setIsRailsExporting(false);
     }, []);
 
+    const resetDjangoBranchState = useCallback(() => {
+        djangoExportRequestIdRef.current += 1;
+        setDjangoSuccess(null);
+        setDjangoError(null);
+        setIsDjangoExporting(false);
+    }, []);
+
     const applyVisualFormatDefaults = useCallback(
         (format: VisualExportFormat) => {
             setVisualFormat(format);
@@ -248,8 +267,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetPrismaBranchState();
         resetEfCoreBranchState();
         resetRailsBranchState();
+        resetDjangoBranchState();
     }, [
         resetDbmlBranchState,
+        resetDjangoBranchState,
         resetEfCoreBranchState,
         resetLaravelBranchState,
         resetPrismaBranchState,
@@ -291,6 +312,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
                 resetRailsBranchState();
+                resetDjangoBranchState();
                 setStep(ExportWizardStep.SQL_TARGET);
                 return;
             }
@@ -303,6 +325,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
                 resetRailsBranchState();
+                resetDjangoBranchState();
                 setStep(ExportWizardStep.DBML_PREVIEW);
                 return;
             }
@@ -315,6 +338,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
                 resetRailsBranchState();
+                resetDjangoBranchState();
                 setStep(ExportWizardStep.JSON_DOWNLOAD);
                 return;
             }
@@ -330,6 +354,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
                 resetRailsBranchState();
+                resetDjangoBranchState();
                 applyVisualFormatDefaults(targetId);
                 setStep(ExportWizardStep.VISUAL_OPTIONS);
                 return;
@@ -343,6 +368,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
                 resetRailsBranchState();
+                resetDjangoBranchState();
                 setStep(ExportWizardStep.LARAVEL_OPTIONS);
                 return;
             }
@@ -355,6 +381,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
                 resetRailsBranchState();
+                resetDjangoBranchState();
                 setStep(ExportWizardStep.PRISMA_VERSION);
                 return;
             }
@@ -374,6 +401,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
                 resetRailsBranchState();
+                resetDjangoBranchState();
                 setStep(ExportWizardStep.EF_CORE_OPTIONS);
                 return;
             }
@@ -390,7 +418,28 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetPrismaBranchState();
                 resetEfCoreBranchState();
                 resetRailsBranchState();
+                resetDjangoBranchState();
                 setStep(ExportWizardStep.RAILS_RESULT);
+                return;
+            }
+
+            if (targetId === 'django') {
+                if (
+                    !isAuthenticated ||
+                    !isDjangoExportSupported(databaseType)
+                ) {
+                    return;
+                }
+
+                resetSqlBranchState();
+                resetDbmlBranchState();
+                resetVisualBranchState();
+                resetLaravelBranchState();
+                resetPrismaBranchState();
+                resetEfCoreBranchState();
+                resetRailsBranchState();
+                resetDjangoBranchState();
+                setStep(ExportWizardStep.DJANGO_RESULT);
             }
         },
         [
@@ -398,6 +447,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             databaseType,
             isAuthenticated,
             resetDbmlBranchState,
+            resetDjangoBranchState,
             resetEfCoreBranchState,
             resetLaravelBranchState,
             resetPrismaBranchState,
@@ -493,6 +543,12 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             return;
         }
 
+        if (step === ExportWizardStep.DJANGO_RESULT) {
+            resetDjangoBranchState();
+            setStep(ExportWizardStep.TARGET_PICKER);
+            return;
+        }
+
         if (step === ExportWizardStep.SQL_PREVIEW) {
             setSqlScript(undefined);
             setSqlHasError(false);
@@ -513,6 +569,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetLaravelBranchState,
         resetPrismaBranchState,
         resetRailsBranchState,
+        resetDjangoBranchState,
         resetSqlBranchState,
         resetVisualBranchState,
         step,
@@ -929,11 +986,115 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step,
     ]);
 
+    const handleDjangoRetry = useCallback(() => {
+        if (isDjangoExporting) {
+            return;
+        }
+
+        djangoExportRequestIdRef.current += 1;
+        setDjangoSuccess(null);
+        setDjangoError(null);
+    }, [isDjangoExporting]);
+
+    useEffect(() => {
+        if (step !== ExportWizardStep.DJANGO_RESULT) {
+            return;
+        }
+
+        if (djangoSuccess !== null || djangoError !== null) {
+            return;
+        }
+
+        if (!isAuthenticated || !isDjangoExportSupported(databaseType)) {
+            return;
+        }
+
+        const requestId = djangoExportRequestIdRef.current + 1;
+        djangoExportRequestIdRef.current = requestId;
+        let cancelled = false;
+        setIsDjangoExporting(true);
+
+        void (async () => {
+            try {
+                const result = await exportDjangoProject({
+                    diagram: currentDiagram,
+                });
+
+                if (
+                    cancelled ||
+                    requestId !== djangoExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (!result.success) {
+                    setDjangoError({
+                        kind: 'semantic',
+                        message: result.error.message,
+                        code: result.error.code,
+                        path: result.error.path,
+                    });
+                    return;
+                }
+
+                setDjangoSuccess(result);
+            } catch (error) {
+                if (
+                    cancelled ||
+                    requestId !== djangoExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (error instanceof ApiError) {
+                    if (error.status === 401) {
+                        setDjangoError({ kind: 'unauthenticated' });
+                        return;
+                    }
+
+                    if (error.status === 422) {
+                        setDjangoError({ kind: 'invalid_request' });
+                        return;
+                    }
+
+                    if (error.status === 429) {
+                        setDjangoError({ kind: 'rate_limited' });
+                        return;
+                    }
+
+                    setDjangoError({ kind: 'unexpected' });
+                    return;
+                }
+
+                setDjangoError({ kind: 'network' });
+            } finally {
+                if (
+                    !cancelled &&
+                    requestId === djangoExportRequestIdRef.current
+                ) {
+                    setIsDjangoExporting(false);
+                }
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [
+        currentDiagram,
+        databaseType,
+        isAuthenticated,
+        djangoError,
+        djangoSuccess,
+        step,
+    ]);
+
     const handleOpenChange = useCallback(
         (open: boolean) => {
             if (!open) {
                 efCoreExportRequestIdRef.current += 1;
                 railsExportRequestIdRef.current += 1;
+                djangoExportRequestIdRef.current += 1;
                 closeExportWizardDialog();
             }
         },
@@ -951,7 +1112,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.PRISMA_PREVIEW ||
         step === ExportWizardStep.EF_CORE_OPTIONS ||
         step === ExportWizardStep.EF_CORE_RESULT ||
-        step === ExportWizardStep.RAILS_RESULT;
+        step === ExportWizardStep.RAILS_RESULT ||
+        step === ExportWizardStep.DJANGO_RESULT;
 
     const isSqlBranch =
         step === ExportWizardStep.SQL_TARGET ||
@@ -968,6 +1130,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.EF_CORE_OPTIONS ||
         step === ExportWizardStep.EF_CORE_RESULT;
     const isRailsBranch = step === ExportWizardStep.RAILS_RESULT;
+    const isDjangoBranch = step === ExportWizardStep.DJANGO_RESULT;
 
     const dialogTitle = t('export_wizard.title');
 
@@ -1008,6 +1171,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 return t('export_wizard.ef_core.result_step.description');
             case ExportWizardStep.RAILS_RESULT:
                 return t('export_wizard.rails.result_step.description');
+            case ExportWizardStep.DJANGO_RESULT:
+                return t('export_wizard.django.result_step.description');
             default:
                 return t('export_wizard.description');
         }
@@ -1063,6 +1228,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                         />
                     ) : null}
                     {isRailsBranch ? <ExportRailsBranchContext /> : null}
+                    {isDjangoBranch ? <ExportDjangoBranchContext /> : null}
                     <DialogTitle>{dialogTitle}</DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
@@ -1217,6 +1383,16 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             error={railsError}
                             success={railsSuccess}
                             onRetry={handleRailsRetry}
+                        />
+                    ) : null}
+
+                    {step === ExportWizardStep.DJANGO_RESULT ? (
+                        <ExportDjangoResultStep
+                            providerLabel={databaseTypeToLabelMap[databaseType]}
+                            isLoading={isDjangoExporting}
+                            error={djangoError}
+                            success={djangoSuccess}
+                            onRetry={handleDjangoRetry}
                         />
                     ) : null}
                 </div>

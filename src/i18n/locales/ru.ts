@@ -1,5 +1,6 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/ru';
+import { djangoExportNoteMessages } from '../django-export-notes/ru';
 
 export const ru: LanguageTranslation = {
     translation: {
@@ -1108,7 +1109,8 @@ export const ru: LanguageTranslation = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Экспорт миграций Django',
+                    description:
+                        'Экспорт приложения Django 6.1 для прямой интеграции',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1339,6 +1341,57 @@ export const ru: LanguageTranslation = {
                     error_empty_files: 'Экспорт не содержал файлов.',
                     error_invalid_package:
                         'Созданный пакет недействителен и не был скачан.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Экспорт Django в настоящее время поддерживает PostgreSQL, MySQL, MariaDB и SQLite.',
+                result_step: {
+                    description: 'Проверьте созданный пакет Django 6.1.',
+                    explanation:
+                        'Этот экспорт — приложение Django для прямой интеграции (`foxaldb_models`). 0001_initial.py — начальная миграция текущей схемы, а не восстановленная история миграций Django. Проверка во время выполнения против Django 6.1 не проводилась.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'Провайдер: {{provider}}',
+                    package_type:
+                        'Пакет: приложение Django для прямой интеграции (`foxaldb_models`)',
+                    generating: 'Создание пакета Django…',
+                    success: 'Пакет Django 6.1 создан.',
+                    generated_files: 'Созданные файлы ({{count}})',
+                    notes_heading: 'Примечания',
+                    warnings_heading: 'Предупреждения ({{count}})',
+                    adaptations_heading: 'Технические адаптации ({{count}})',
+                    path_label: 'Путь: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'Скачать ZIP',
+                    retry: 'Повторить',
+                    error_semantic: 'Не удалось создать пакет Django.',
+                    error_unauthenticated:
+                        'Для экспорта пакетов Django необходимо войти в систему.',
+                    error_invalid_request:
+                        'Не удалось экспортировать диаграмму. Она может быть недействительной или слишком большой.',
+                    error_rate_limited:
+                        'Слишком много запросов на экспорт. Подождите немного и повторите попытку.',
+                    error_unexpected:
+                        'Экспорт Django не выполнен на сервере. Попробуйте ещё раз.',
+                    error_network:
+                        'Не удалось связаться с сервером. Проверьте подключение и попробуйте ещё раз.',
+                    error_unsafe_path:
+                        'Экспорт содержит небезопасный путь к файлу и не был скачан.',
+                    error_empty_files: 'Экспорт не включал ни одного файла.',
+                    error_invalid_package:
+                        'Созданный пакет недействителен и не был скачан.',
+                    errors: {
+                        unsupported_database:
+                            'Экспорт Django недоступен для этого типа базы данных.',
+                        empty_diagram:
+                            'На диаграмме нет экспортируемых таблиц.',
+                        unsupported_structural_field:
+                            'Поле первичного ключа на «{{path}}» нельзя представить в Django.',
+                        mysql_catalog_collision:
+                            'Каталоги MySQL конфликтуют после удаления каталога для «{{path}}».',
+                        mariadb_catalog_collision:
+                            'Каталоги MariaDB конфликтуют после удаления каталога для «{{path}}».',
+                    },
                 },
             },
             laravel: {

@@ -1,5 +1,6 @@
 import type { LanguageMetadata } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/en';
+import { djangoExportNoteMessages } from '../django-export-notes/en';
 
 export const en = {
     translation: {
@@ -1084,7 +1085,7 @@ export const en = {
                 },
                 django: {
                     title: 'Django',
-                    description: 'Django migrations export',
+                    description: 'Django 6.1 drop-in app export',
                 },
                 drizzle: {
                     title: 'Drizzle',
@@ -1338,6 +1339,57 @@ export const en = {
                     error_empty_files: 'The export did not include any files.',
                     error_invalid_package:
                         'The generated package is invalid and was not downloaded.',
+                },
+            },
+            django: {
+                unsupported_database:
+                    'Django export currently supports PostgreSQL, MySQL, MariaDB, and SQLite.',
+                result_step: {
+                    description: 'Review the generated Django 6.1 package.',
+                    explanation:
+                        'This export is a drop-in Django app (`foxaldb_models`). 0001_initial.py is a current-schema baseline, not reconstructed Django migration history. Runtime validation against Django 6.1 has not been performed.',
+                    django_version: 'Django {{version}}',
+                    provider_label: 'Provider: {{provider}}',
+                    package_type:
+                        'Package: drop-in Django app (`foxaldb_models`)',
+                    generating: 'Generating Django package...',
+                    success: 'Django 6.1 package generated.',
+                    generated_files: 'Generated files ({{count}})',
+                    notes_heading: 'Notes',
+                    warnings_heading: 'Warnings ({{count}})',
+                    adaptations_heading: 'Technical adaptations ({{count}})',
+                    path_label: 'Path: {{path}}',
+                    notes: djangoExportNoteMessages,
+                    download_zip: 'Download ZIP',
+                    retry: 'Retry',
+                    error_semantic:
+                        'The Django package could not be generated.',
+                    error_unauthenticated:
+                        'You need to be signed in to export Django packages.',
+                    error_invalid_request:
+                        'The diagram could not be exported. It may be invalid or too large.',
+                    error_rate_limited:
+                        'Too many export requests. Please wait a moment and try again.',
+                    error_unexpected:
+                        'Django export failed on the server. Please try again.',
+                    error_network:
+                        'Unable to reach the server. Check your connection and try again.',
+                    error_unsafe_path:
+                        'The export contains an unsafe file path and was not downloaded.',
+                    error_empty_files: 'The export did not include any files.',
+                    error_invalid_package:
+                        'The generated package is invalid and was not downloaded.',
+                    errors: {
+                        unsupported_database:
+                            'Django export is not available for this database type.',
+                        empty_diagram: 'The diagram has no exportable tables.',
+                        unsupported_structural_field:
+                            'A primary-key field on "{{path}}" cannot be represented in Django.',
+                        mysql_catalog_collision:
+                            'MySQL catalogs collide after catalog removal for "{{path}}".',
+                        mariadb_catalog_collision:
+                            'MariaDB catalogs collide after catalog removal for "{{path}}".',
+                    },
                 },
             },
             laravel: {
