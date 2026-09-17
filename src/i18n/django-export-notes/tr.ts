@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: '«{{path}}» görünümü atlandı.',
     keyless_table_skipped:
-        '«{{path}}» tablosu atlandı; Django V1 yedek bir birincil anahtar icat etmez.',
+        '"{{path}}" tablosu atlandı çünkü birincil anahtar uydurmadan güvenli, yalnızca veritabanı SQL’i olarak temsil edilemez.',
+    keyless_table_sql_created:
+        'Django birincil anahtarı olmayan bir tabloyu şemasını değiştirmeden modelleyemediği için fiziksel tablo "{{path}}" yalnızca veritabanı SQL’i ile oluşturulur.',
+    keyless_model_omitted:
+        'Django birincil anahtar gerektirdiği için "{{path}}" için Django ORM modeli üretilmez.',
     schema_ignored_sqlite:
         'SQLite «{{schema}}» şemasını kullanmaz; «{{path}}» tablosu şema niteleyicisi olmadan dışa aktarılır.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             '«{{path}}» ilişkisi atlandı; sahip sütun birincil anahtarın parçasıdır.',
         unsupported_target_field:
             '«{{path}}» ilişkisi atlandı; hedef alan benzersiz bir Django hedefi değildir.',
+        keyless_target:
+            '"{{path}}" ilişkisi atlandı çünkü Django modeli olmayan anahtarsız bir tabloyu hedefliyor.',
     },
     index_omitted: {
         unsupported_type:

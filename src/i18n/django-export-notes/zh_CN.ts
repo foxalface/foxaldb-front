@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: '已跳过视图「{{path}}」。',
     keyless_table_skipped:
-        '已跳过表「{{path}}」，因为 Django V1 不会生成替代主键。',
+        '已跳过表“{{path}}”，因为在不编造主键的情况下无法将其安全地表示为仅数据库 SQL。',
+    keyless_table_sql_created:
+        '物理表“{{path}}”通过仅数据库 SQL 创建，因为 Django 无法在不改变架构的情况下为无主键的表建模。',
+    keyless_model_omitted:
+        '未为“{{path}}”生成 Django ORM 模型，因为 Django 需要主键。',
     schema_ignored_sqlite:
         'SQLite 不使用 schema「{{schema}}」；表「{{path}}」将以无 schema 限定符的方式导出。',
     mysql_catalog_omitted:
@@ -50,6 +54,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
         primary_key_fk: '已跳过关系「{{path}}」，因为所属列是主键的一部分。',
         unsupported_target_field:
             '已跳过关系「{{path}}」，因为目标字段不是唯一的 Django 目标。',
+        keyless_target:
+            '已跳过关系“{{path}}”，因为它指向没有 Django 模型的无键表。',
     },
     index_omitted: {
         unsupported_type:

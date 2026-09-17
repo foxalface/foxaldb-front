@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'View „{{path}}“ übersprungen.',
     keyless_table_skipped:
-        'Tabelle „{{path}}“ übersprungen, weil Django V1 keinen Ersatz-Primärschlüssel erfindet.',
+        'Tabelle „{{path}}“ übersprungen, weil sie nicht als sicheres datenbankseitiges SQL ohne erfundenen Primärschlüssel dargestellt werden kann.',
+    keyless_table_sql_created:
+        'Die physische Tabelle „{{path}}“ wird durch datenbankseitiges SQL erzeugt, weil Django eine Tabelle ohne Primärschlüssel nicht ohne Schemaänderung modellieren kann.',
+    keyless_model_omitted:
+        'Für „{{path}}“ wird kein Django-ORM-Modell erzeugt, weil Django einen Primärschlüssel verlangt.',
     schema_ignored_sqlite:
         'SQLite verwendet das Schema „{{schema}}“ nicht; Tabelle „{{path}}“ wird ohne Schemaqualifizierer exportiert.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'Beziehung „{{path}}“ wurde übersprungen, weil die besitzende Spalte Teil des Primärschlüssels ist.',
         unsupported_target_field:
             'Beziehung „{{path}}“ wurde übersprungen, weil das Zielfeld kein eindeutiges Django-Ziel ist.',
+        keyless_target:
+            'Beziehung „{{path}}“ übersprungen, weil sie auf eine schlüssellose Tabelle ohne Django-Modell zeigt.',
     },
     index_omitted: {
         unsupported_type:

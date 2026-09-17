@@ -84,6 +84,8 @@ const NOTE_PRESENTATION_POLICIES: Record<
 > = {
     view_skipped: simplePathPolicy(),
     keyless_table_skipped: simplePathPolicy(),
+    keyless_table_sql_created: simplePathPolicy(),
+    keyless_model_omitted: simplePathPolicy(),
     composite_fk_unsupported: simplePathPolicy(),
     many_to_many_skipped: simplePathPolicy(),
     one_to_one_degraded_non_unique_fk: simplePathPolicy(),

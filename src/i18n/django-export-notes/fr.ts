@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'Vue « {{path}} » ignorée.',
     keyless_table_skipped:
-        'Table « {{path}} » ignorée, car Django V1 n’invente pas de clé primaire de substitution.',
+        'Table « {{path}} » ignorée, car elle ne peut pas être représentée en SQL de base de données uniquement sans inventer de clé primaire.',
+    keyless_table_sql_created:
+        'La table physique « {{path}} » est créée par du SQL de base de données uniquement, car Django ne peut pas modéliser une table sans clé primaire sans modifier son schéma.',
+    keyless_model_omitted:
+        'Aucun modèle ORM Django n’est généré pour « {{path}} », car Django exige une clé primaire.',
     schema_ignored_sqlite:
         'SQLite n’utilise pas le schéma « {{schema}} » ; la table « {{path}} » est exportée sans qualificateur de schéma.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'La relation « {{path}} » a été ignorée, car la colonne propriétaire fait partie de la clé primaire.',
         unsupported_target_field:
             'La relation « {{path}} » a été ignorée, car le champ cible n’est pas une cible Django unique.',
+        keyless_target:
+            'La relation « {{path}} » a été ignorée, car elle cible une table sans clé qui n’a pas de modèle Django.',
     },
     index_omitted: {
         unsupported_type:

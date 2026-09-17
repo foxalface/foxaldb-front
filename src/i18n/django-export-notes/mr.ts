@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'व्ह्यू «{{path}}» वगळले.',
     keyless_table_skipped:
-        'टेबल «{{path}}» वगळले, कारण Django V1 पर्यायी प्राथमिक की तयार करत नाही.',
+        'प्राथमिक की न बनवता सुरक्षित डेटाबेस-केवळ SQL म्हणून दाखवता येत नसल्याने तक्ता "{{path}}" वगळला.',
+    keyless_table_sql_created:
+        'Django प्राथमिक कीशिवाय तक्ता स्कीमा न बदलता मॉडेल करू शकत नसल्याने भौतिक तक्ता "{{path}}" डेटाबेस-केवळ SQL ने तयार होतो.',
+    keyless_model_omitted:
+        'Django ला प्राथमिक की लागते म्हणून "{{path}}" साठी Django ORM मॉडेल तयार होत नाही.',
     schema_ignored_sqlite:
         'SQLite schema «{{schema}}» वापरत नाही; टेबल «{{path}}» schema qualifier शिवाय निर्यात केले जाते.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'संबंध «{{path}}» वगळला, कारण owning column primary keyचा भाग आहे.',
         unsupported_target_field:
             'संबंध «{{path}}» वगळला, कारण target field unique Django target नाही.',
+        keyless_target:
+            'Django मॉडेल नसलेल्या कीविरहित तक्त्याकडे निर्देश करत असल्याने संबंध "{{path}}" वगळला.',
     },
     index_omitted: {
         unsupported_type:

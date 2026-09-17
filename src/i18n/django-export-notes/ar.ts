@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'تم تخطي العرض «{{path}}».',
     keyless_table_skipped:
-        'تم تخطي الجدول «{{path}}» لأن Django V1 لا يُنشئ مفتاحًا أساسيًا بديلاً.',
+        'تم تخطي الجدول "{{path}}" لأنه لا يمكن تمثيله كـ SQL خاص بقاعدة البيانات فقط دون اختراع مفتاح أساسي.',
+    keyless_table_sql_created:
+        'يُنشأ الجدول الفعلي "{{path}}" عبر SQL خاص بقاعدة البيانات فقط لأن Django لا يستطيع نمذجة جدول بلا مفتاح أساسي دون تغيير مخططه.',
+    keyless_model_omitted:
+        'لا يُنشأ نموذج Django ORM للجدول "{{path}}" لأن Django يتطلب مفتاحًا أساسيًا.',
     schema_ignored_sqlite:
         'SQLite لا يستخدم المخطط «{{schema}}»؛ يُصدَّر الجدول «{{path}}» بدون مُحدِّد مخطط.',
     mysql_catalog_omitted:
@@ -55,6 +59,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'تم تخطي العلاقة «{{path}}» لأن العمود المالك جزء من المفتاح الأساسي.',
         unsupported_target_field:
             'تم تخطي العلاقة «{{path}}» لأن الحقل المستهدف ليس هدف Django فريدًا.',
+        keyless_target:
+            'تم تخطي العلاقة "{{path}}" لأنها تستهدف جدولًا بلا مفتاح وليس له نموذج Django.',
     },
     index_omitted: {
         unsupported_type:

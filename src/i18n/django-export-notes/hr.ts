@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'Pogled «{{path}}» preskočen.',
     keyless_table_skipped:
-        'Tablica «{{path}}» preskočena jer Django V1 ne izmišlja zamjenski primarni ključ.',
+        'Tablica "{{path}}" je preskočena jer se ne može sigurno prikazati kao SQL samo za bazu bez izmišljanja primarnog ključa.',
+    keyless_table_sql_created:
+        'Fizička tablica "{{path}}" stvara se SQL-om samo za bazu jer Django ne može modelirati tablicu bez primarnog ključa bez mijenjanja sheme.',
+    keyless_model_omitted:
+        'Za "{{path}}" se ne generira Django ORM model jer Django zahtijeva primarni ključ.',
     schema_ignored_sqlite:
         'SQLite ne koristi shemu «{{schema}}»; tablica «{{path}}» izvoze se bez kvalifikatora sheme.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'Odnos «{{path}}» preskočen jer vlasnički stupac dio je primarnog ključa.',
         unsupported_target_field:
             'Odnos «{{path}}» preskočen jer ciljno polje nije jedinstveni Django cilj.',
+        keyless_target:
+            'Veza "{{path}}" je preskočena jer cilja tablicu bez ključa koja nema Django model.',
     },
     index_omitted: {
         unsupported_type:

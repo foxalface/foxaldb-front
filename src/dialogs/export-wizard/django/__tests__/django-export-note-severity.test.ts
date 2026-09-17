@@ -30,6 +30,7 @@ describe('django export note severity', () => {
             expect.arrayContaining([
                 'view_skipped',
                 'keyless_table_skipped',
+                'keyless_model_omitted',
                 'type_omitted',
                 'type_degraded',
                 'enum_degraded',
@@ -61,6 +62,7 @@ describe('django export note severity', () => {
                 'mariadb_multiple_catalogs_ignored',
                 'schema_ignored_sqlite',
                 'postgres_schema_qualified_db_table',
+                'keyless_table_sql_created',
                 'model_name_adjusted',
                 'model_name_collision',
                 'field_name_adjusted',

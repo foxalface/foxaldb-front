@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'Đã bỏ qua view «{{path}}».',
     keyless_table_skipped:
-        'Đã bỏ qua bảng «{{path}}» vì Django V1 không tạo khóa chính thay thế.',
+        'Đã bỏ qua bảng "{{path}}" vì không thể biểu diễn an toàn bằng SQL chỉ dành cho cơ sở dữ liệu mà không bịa khóa chính.',
+    keyless_table_sql_created:
+        'Bảng vật lý "{{path}}" được tạo bằng SQL chỉ dành cho cơ sở dữ liệu vì Django không thể mô hình hóa bảng không có khóa chính nếu không đổi lược đồ.',
+    keyless_model_omitted:
+        'Không tạo mô hình Django ORM cho "{{path}}" vì Django yêu cầu khóa chính.',
     schema_ignored_sqlite:
         'SQLite không dùng schema «{{schema}}»; bảng «{{path}}» được xuất mà không có bộ hạn định schema.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'Quan hệ «{{path}}» bị bỏ qua vì cột sở hữu là một phần của khóa chính.',
         unsupported_target_field:
             'Quan hệ «{{path}}» bị bỏ qua vì trường đích không phải là đích Django duy nhất.',
+        keyless_target:
+            'Đã bỏ qua quan hệ "{{path}}" vì nó trỏ tới bảng không khóa không có mô hình Django.',
     },
     index_omitted: {
         unsupported_type:

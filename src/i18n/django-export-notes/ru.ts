@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'Представление «{{path}}» пропущено.',
     keyless_table_skipped:
-        'Таблица «{{path}}» пропущена, поскольку Django V1 не создаёт суррогатный первичный ключ.',
+        'Таблица «{{path}}» пропущена, потому что её нельзя безопасно представить как SQL только для базы без выдуманного первичного ключа.',
+    keyless_table_sql_created:
+        'Физическая таблица «{{path}}» создаётся SQL только для базы, потому что Django не может смоделировать таблицу без первичного ключа, не изменив схему.',
+    keyless_model_omitted:
+        'Модель Django ORM для «{{path}}» не создаётся, потому что Django требует первичный ключ.',
     schema_ignored_sqlite:
         'SQLite не использует схему «{{schema}}»; таблица «{{path}}» экспортируется без квалификатора схемы.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'Связь «{{path}}» пропущена, поскольку владеющий столбец является частью первичного ключа.',
         unsupported_target_field:
             'Связь «{{path}}» пропущена, поскольку целевое поле не является уникальной целью Django.',
+        keyless_target:
+            'Связь «{{path}}» пропущена, потому что она указывает на таблицу без ключа, у которой нет модели Django.',
     },
     index_omitted: {
         unsupported_type:

@@ -1,6 +1,8 @@
 export const KNOWN_DJANGO_EXPORT_NOTE_CODES = [
     'view_skipped',
     'keyless_table_skipped',
+    'keyless_table_sql_created',
+    'keyless_model_omitted',
     'schema_ignored_sqlite',
     'mysql_catalog_omitted',
     'mysql_multiple_catalogs_ignored',

@@ -86,6 +86,30 @@ const knownNoteFixtures: Array<{
     },
     {
         note: note({
+            code: 'keyless_table_sql_created',
+            message: 'SENTINEL',
+            path: 'article_categories',
+            metadata: {
+                tableName: 'article_categories',
+                reason: 'no_primary_key',
+            },
+        }),
+        mustContain: ['article_categories'],
+    },
+    {
+        note: note({
+            code: 'keyless_model_omitted',
+            message: 'SENTINEL',
+            path: 'article_categories',
+            metadata: {
+                tableName: 'article_categories',
+                reason: 'no_primary_key',
+            },
+        }),
+        mustContain: ['article_categories'],
+    },
+    {
+        note: note({
             code: 'schema_ignored_sqlite',
             message: 'SENTINEL',
             path: 'users',

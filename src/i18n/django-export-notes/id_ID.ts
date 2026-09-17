@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'View «{{path}}» dilewati.',
     keyless_table_skipped:
-        'Tabel «{{path}}» dilewati karena Django V1 tidak membuat kunci utama pengganti.',
+        'Tabel "{{path}}" dilewati karena tidak dapat direpresentasikan sebagai SQL khusus basis data tanpa membuat kunci primer.',
+    keyless_table_sql_created:
+        'Tabel fisik "{{path}}" dibuat melalui SQL khusus basis data karena Django tidak dapat memodelkan tabel tanpa kunci primer tanpa mengubah skemanya.',
+    keyless_model_omitted:
+        'Tidak ada model ORM Django yang dihasilkan untuk "{{path}}" karena Django memerlukan kunci primer.',
     schema_ignored_sqlite:
         'SQLite tidak menggunakan schema «{{schema}}»; tabel «{{path}}» diekspor tanpa kualifikasi schema.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'Relasi «{{path}}» dilewati karena kolom pemilik adalah bagian dari kunci utama.',
         unsupported_target_field:
             'Relasi «{{path}}» dilewati karena field target bukan target Django yang unik.',
+        keyless_target:
+            'Relasi "{{path}}" dilewati karena menargetkan tabel tanpa kunci yang tidak memiliki model Django.',
     },
     index_omitted: {
         unsupported_type:

@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'ভিউ «{{path}}» এড়িয়ে যাওয়া হয়েছে।',
     keyless_table_skipped:
-        'টেবিল «{{path}}» এড়িয়ে যাওয়া হয়েছে, কারণ Django V1 বিকল্প প্রাথমিক কী তৈরি করে না।',
+        '"{{path}}" টেবিল বাদ দেওয়া হয়েছে কারণ প্রাথমিক কী উদ্ভাবন না করে এটিকে নিরাপদ ডাটাবেস-শুধু SQL হিসেবে উপস্থাপন করা যায় না।',
+    keyless_table_sql_created:
+        'ভৌত টেবিল "{{path}}" ডাটাবেস-শুধু SQL দিয়ে তৈরি হয় কারণ Django প্রাথমিক কী ছাড়া টেবিলকে স্কিমা না বদলে মডেল করতে পারে না।',
+    keyless_model_omitted:
+        '"{{path}}"-এর জন্য কোনো Django ORM মডেল তৈরি হয় না কারণ Django-এর প্রাথমিক কী প্রয়োজন।',
     schema_ignored_sqlite:
         'SQLite schema «{{schema}}» ব্যবহার করে না; টেবিল «{{path}}» schema qualifier ছাড়াই রপ্তানি করা হয়।',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'সম্পর্ক «{{path}}» এড়িয়ে যাওয়া হয়েছে, কারণ owning column primary key-এর অংশ।',
         unsupported_target_field:
             'সম্পর্ক «{{path}}» এড়িয়ে যাওয়া হয়েছে, কারণ target field unique Django target নয়।',
+        keyless_target:
+            '"{{path}}" সম্পর্ক বাদ দেওয়া হয়েছে কারণ এটি এমন একটি কীহীন টেবিলকে লক্ষ্য করে যার Django মডেল নেই।',
     },
     index_omitted: {
         unsupported_type:

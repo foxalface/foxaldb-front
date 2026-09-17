@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'ビュー「{{path}}」をスキップしました。',
     keyless_table_skipped:
-        'テーブル「{{path}}」をスキップしました。Django V1 は代替主キーを生成しません。',
+        '主キーを捏造せずに安全なデータベース専用 SQL として表現できないため、テーブル「{{path}}」をスキップしました。',
+    keyless_table_sql_created:
+        'Django は主キーのないテーブルをスキーマ変更なしではモデル化できないため、物理テーブル「{{path}}」はデータベース専用 SQL で作成されます。',
+    keyless_model_omitted:
+        'Django は主キーを必要とするため、「{{path}}」の Django ORM モデルは生成されません。',
     schema_ignored_sqlite:
         'SQLite は schema「{{schema}}」を使用しません。テーブル「{{path}}」は schema 修飾子なしでエクスポートされます。',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'リレーションシップ「{{path}}」は、所有列が主キーの一部であるためスキップされました。',
         unsupported_target_field:
             'リレーションシップ「{{path}}」は、ターゲットフィールドが一意の Django ターゲットではないためスキップされました。',
+        keyless_target:
+            'Django モデルのないキーなしテーブルを参照するため、リレーション「{{path}}」をスキップしました。',
     },
     index_omitted: {
         unsupported_type:

@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'View "{{path}}" ignorada.',
     keyless_table_skipped:
-        'Tabela "{{path}}" ignorada porque o Django V1 não inventa uma chave primária substituta.',
+        'A tabela "{{path}}" foi ignorada porque não pode ser representada como SQL apenas de banco sem inventar uma chave primária.',
+    keyless_table_sql_created:
+        'A tabela física "{{path}}" é criada por SQL apenas de banco porque o Django não consegue modelar uma tabela sem chave primária sem alterar o esquema.',
+    keyless_model_omitted:
+        'Nenhum modelo ORM Django é gerado para "{{path}}" porque o Django exige uma chave primária.',
     schema_ignored_sqlite:
         'SQLite não usa o schema "{{schema}}"; a tabela "{{path}}" é exportada sem qualificador de schema.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'O relacionamento "{{path}}" foi ignorado porque a coluna proprietária faz parte da chave primária.',
         unsupported_target_field:
             'O relacionamento "{{path}}" foi ignorado porque o campo alvo não é um alvo Django único.',
+        keyless_target:
+            'O relacionamento "{{path}}" foi ignorado porque aponta para uma tabela sem chave que não tem modelo Django.',
     },
     index_omitted: {
         unsupported_type:

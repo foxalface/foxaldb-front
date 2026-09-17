@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'వ్యూ «{{path}}» దాటవేయబడింది.',
     keyless_table_skipped:
-        'టేబుల్ «{{path}}» దాటవేయబడింది, ఎందుకంటే Django V1 ప్రత్యామ్నాయ ప్రాథమిక కీని సృష్టించదు.',
+        'ప్రాథమిక కీని కల్పించకుండా సురక్షితమైన డేటాబేస్-మాత్రమే SQLగా చూపించలేనందున టేబుల్ "{{path}}" దాటవేయబడింది.',
+    keyless_table_sql_created:
+        'Django స్కీమా మార్చకుండా ప్రాథమిక కీ లేని టేబుల్‌ను మోడల్ చేయలేనందున భౌతిక టేబుల్ "{{path}}" డేటాబేస్-మాత్రమే SQL ద్వారా సృష్టించబడుతుంది.',
+    keyless_model_omitted:
+        'Djangoకి ప్రాథమిక కీ అవసరం కాబట్టి "{{path}}" కోసం Django ORM మోడల్ ఉత్పత్తి కాదు.',
     schema_ignored_sqlite:
         'SQLite schema «{{schema}}»ను ఉపయోగించదు; టేబుల్ «{{path}}» schema qualifier లేకుండా ఎగుమతి చేయబడుతుంది.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'సంబంధం «{{path}}» దాటవేయబడింది, ఎందుకంటే owning column primary keyలో భాగం.',
         unsupported_target_field:
             'సంబంధం «{{path}}» దాటవేయబడింది, ఎందుకంటే target field unique Django target కాదు.',
+        keyless_target:
+            'Django మోడల్ లేని కీలేని టేబుల్‌ను లక్ష్యంగా చేస్తున్నందున సంబంధం "{{path}}" దాటవేయబడింది.',
     },
     index_omitted: {
         unsupported_type:

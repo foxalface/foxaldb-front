@@ -1,7 +1,11 @@
 export const djangoExportNoteMessages = {
     view_skipped: 'Skipped view "{{path}}".',
     keyless_table_skipped:
-        'Skipped table "{{path}}" because Django V1 does not invent a surrogate primary key.',
+        'Skipped table "{{path}}" because it cannot be represented as safe database-only SQL without inventing a primary key.',
+    keyless_table_sql_created:
+        'Physical table "{{path}}" is created through database-only SQL because Django cannot model a table with no primary key without changing its schema.',
+    keyless_model_omitted:
+        'No Django ORM model is generated for "{{path}}" because Django requires a primary key.',
     schema_ignored_sqlite:
         'SQLite does not use schema "{{schema}}"; table "{{path}}" is exported without a schema qualifier.',
     mysql_catalog_omitted:
@@ -54,6 +58,8 @@ export const djangoExportNoteMessages = {
             'Relationship "{{path}}" was skipped because the owning column is part of the primary key.',
         unsupported_target_field:
             'Relationship "{{path}}" was skipped because the target field is not a unique Django target.',
+        keyless_target:
+            'Relationship "{{path}}" was skipped because it targets a keyless table that has no Django model.',
     },
     index_omitted: {
         unsupported_type:

@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: '뷰 «{{path}}»를 건너뛰었습니다.',
     keyless_table_skipped:
-        '테이블 «{{path}}»를 건너뛰었습니다. Django V1은 대체 기본 키를 만들지 않습니다.',
+        '기본 키를 만들지 않고는 안전한 데이터베이스 전용 SQL로 표현할 수 없어 테이블 "{{path}}"을(를) 건너뛰었습니다.',
+    keyless_table_sql_created:
+        'Django는 스키마를 바꾸지 않고는 기본 키 없는 테이블을 모델링할 수 없으므로 물리 테이블 "{{path}}"은(는) 데이터베이스 전용 SQL로 생성됩니다.',
+    keyless_model_omitted:
+        'Django는 기본 키를 요구하므로 "{{path}}"에 대한 Django ORM 모델은 생성되지 않습니다.',
     schema_ignored_sqlite:
         'SQLite는 schema «{{schema}}»를 사용하지 않습니다. 테이블 «{{path}}»는 schema 한정자 없이 내보냅니다.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             '관계 «{{path}}»를 건너뛰었습니다. 소유 열이 기본 키의 일부입니다.',
         unsupported_target_field:
             '관계 «{{path}}»를 건너뛰었습니다. 대상 필드가 고유한 Django 대상이 아닙니다.',
+        keyless_target:
+            'Django 모델이 없는 키 없는 테이블을 가리키므로 관계 "{{path}}"을(를) 건너뛰었습니다.',
     },
     index_omitted: {
         unsupported_type:

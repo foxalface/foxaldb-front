@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'વ્યૂ «{{path}}» છોડી દેવામાં આવ્યું.',
     keyless_table_skipped:
-        'ટેબલ «{{path}}» છોડી દેવામાં આવી, કારણ કે Django V1 વિકલ્પ પ્રાથમિક કી બનાવતું નથી.',
+        'ટેબલ "{{path}}" છોડવામાં આવી કારણ કે પ્રાથમિક કી શોધ્યા વિના તેને સુરક્ષિત ડેટાબેઝ-માત્ર SQL તરીકે રજૂ કરી શકાતી નથી.',
+    keyless_table_sql_created:
+        'ભૌતિક ટેબલ "{{path}}" ડેટાબેઝ-માત્ર SQL દ્વારા બને છે કારણ કે Django પ્રાથમિક કી વગરની ટેબલને સ્કીમા બદલ્યા વિના મોડલ કરી શકતું નથી.',
+    keyless_model_omitted:
+        '"{{path}}" માટે Django ORM મોડલ બનતું નથી કારણ કે Django ને પ્રાથમિક કી જોઈએ છે.',
     schema_ignored_sqlite:
         'SQLite schema «{{schema}}» વાપરતું નથી; ટેબલ «{{path}}» schema qualifier વગર નિકાસ કરવામાં આવે છે.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'સંબંધ «{{path}}» છોડી દેવામાં આવ્યો, કારણ કે owning column primary keyનો ભાગ છે.',
         unsupported_target_field:
             'સંબંધ «{{path}}» છોડી દેવામાં આવ્યો, કારણ કે target field unique Django target નથી.',
+        keyless_target:
+            'સંબંધ "{{path}}" છોડવામાં આવ્યો કારણ કે તે કી વગરની ટેબલ તરફ નિર્દેશ કરે છે જેનું Django મોડલ નથી.',
     },
     index_omitted: {
         unsupported_type:

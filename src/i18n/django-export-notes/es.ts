@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'Vista « {{path}} » omitida.',
     keyless_table_skipped:
-        'Tabla « {{path}} » omitida porque Django V1 no inventa una clave primaria sustituta.',
+        'Se omitió la tabla « {{path}} » porque no puede representarse como SQL solo de base de datos sin inventar una clave primaria.',
+    keyless_table_sql_created:
+        'La tabla física « {{path}} » se crea con SQL solo de base de datos porque Django no puede modelar una tabla sin clave primaria sin cambiar su esquema.',
+    keyless_model_omitted:
+        'No se genera un modelo ORM de Django para « {{path}} » porque Django exige una clave primaria.',
     schema_ignored_sqlite:
         'SQLite no usa el esquema « {{schema}} »; la tabla « {{path}} » se exporta sin calificador de esquema.',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'La relación « {{path}} » se omitió porque la columna propietaria forma parte de la clave primaria.',
         unsupported_target_field:
             'La relación « {{path}} » se omitió porque el campo destino no es un destino Django único.',
+        keyless_target:
+            'La relación « {{path}} » se omitió porque apunta a una tabla sin clave que no tiene modelo Django.',
     },
     index_omitted: {
         unsupported_type:

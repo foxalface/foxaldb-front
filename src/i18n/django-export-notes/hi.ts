@@ -3,7 +3,11 @@ import type { DjangoExportNoteMessages } from './types';
 export const djangoExportNoteMessages: DjangoExportNoteMessages = {
     view_skipped: 'व्यू «{{path}}» छोड़ दिया गया।',
     keyless_table_skipped:
-        'तालिका «{{path}}» छोड़ दी गई क्योंकि Django V1 विकल्प प्राथमिक कुंजी नहीं बनाता।',
+        'तालिका "{{path}}" छोड़ दी गई क्योंकि प्राथमिक कुंजी गढ़े बिना इसे सुरक्षित डेटाबेस-केवल SQL के रूप में दर्शाया नहीं जा सकता।',
+    keyless_table_sql_created:
+        'भौतिक तालिका "{{path}}" डेटाबेस-केवल SQL से बनाई जाती है क्योंकि Django प्राथमिक कुंजी के बिना तालिका को स्कीमा बदले बिना मॉडल नहीं कर सकता।',
+    keyless_model_omitted:
+        '"{{path}}" के लिए कोई Django ORM मॉडल नहीं बनता क्योंकि Django को प्राथमिक कुंजी चाहिए।',
     schema_ignored_sqlite:
         'SQLite schema «{{schema}}» का उपयोग नहीं करता; तालिका «{{path}}» schema qualifier के बिना निर्यात की जाती है।',
     mysql_catalog_omitted:
@@ -56,6 +60,8 @@ export const djangoExportNoteMessages: DjangoExportNoteMessages = {
             'संबंध «{{path}}» छोड़ दिया गया क्योंकि owning column प्राथमिक कुंजी का हिस्सा है।',
         unsupported_target_field:
             'संबंध «{{path}}» छोड़ दिया गया क्योंकि target field अद्वितीय Django target नहीं है।',
+        keyless_target:
+            'संबंध "{{path}}" छोड़ दिया गया क्योंकि यह कुंजीहीन तालिका को लक्ष्य करता है जिसका Django मॉडल नहीं है।',
     },
     index_omitted: {
         unsupported_type:
