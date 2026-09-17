@@ -52,6 +52,7 @@ export interface ColumnDefinition {
 export interface ConstraintDefinition {
     resource: string;
     constraint_type: string;
+    constraint?: string;
     constraint_name?: string;
     definition?: Array<ColumnReference> | { columns?: string[] };
     columns?: string[];

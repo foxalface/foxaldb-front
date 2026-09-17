@@ -3,9 +3,12 @@ import {
     REFERENTIAL_ACTION_NONE,
     buildRelationshipReferentialActions,
     buildRelationshipReferentialActionsFromDefinition,
+    extractConstraintScopedSqlFragment,
     extractSqlReferentialActionPhrases,
     fromOnDeleteSelectValue,
     fromOnUpdateSelectValue,
+    isSingleForeignKeySqlDefinition,
+    mapParserReferentialOnActions,
     mapSqlOnDeleteAction,
     mapSqlOnUpdateAction,
     parseSqlReferentialActionsFromDefinition,
@@ -140,5 +143,94 @@ describe('foreign-key-referential-action', () => {
             onDelete: 'cascade',
             onUpdate: 'restrict',
         });
+    });
+
+    it('treats a single-FK SQL fragment as a valid action fallback', () => {
+        expect(
+            isSingleForeignKeySqlDefinition(
+                'FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL'
+            )
+        ).toBe(true);
+
+        expect(
+            isSingleForeignKeySqlDefinition(
+                'ALTER TABLE ONLY playlists ADD CONSTRAINT fk_playlists_user_id FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL;'
+            )
+        ).toBe(true);
+    });
+
+    it('rejects multi-FK CREATE TABLE SQL as an action fallback', () => {
+        const createTableSql = `
+CREATE TABLE projects (
+    id BIGINT PRIMARY KEY,
+    organization_id BIGINT NOT NULL,
+    owner_id BIGINT,
+    CONSTRAINT projects_org_fk
+        FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    CONSTRAINT projects_owner_id_fk
+        FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL
+);
+        `;
+
+        expect(isSingleForeignKeySqlDefinition(createTableSql)).toBe(false);
+
+        expect(
+            buildRelationshipReferentialActions(
+                undefined,
+                undefined,
+                createTableSql
+            )
+        ).toEqual({});
+
+        expect(
+            buildRelationshipReferentialActions(
+                'SET NULL',
+                undefined,
+                createTableSql
+            )
+        ).toEqual({
+            onDelete: 'set_null',
+        });
+    });
+
+    it('maps node-sql-parser on_action entries into SQL action phrases', () => {
+        expect(
+            mapParserReferentialOnActions([
+                {
+                    type: 'on delete',
+                    value: { type: 'origin', value: 'set null' },
+                },
+                {
+                    type: 'on update',
+                    value: { type: 'origin', value: 'cascade' },
+                },
+            ])
+        ).toEqual({
+            deleteAction: 'set null',
+            updateAction: 'cascade',
+        });
+
+        expect(mapParserReferentialOnActions([])).toEqual({});
+        expect(mapParserReferentialOnActions(undefined)).toEqual({});
+    });
+
+    it('extracts a constraint-scoped SQL fragment after a FK match', () => {
+        const sql =
+            'FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL, FOREIGN KEY (org_id) REFERENCES organizations(id) ON DELETE CASCADE';
+        const match =
+            /FOREIGN\s+KEY\s*\(\s*owner_id\s*\)\s*REFERENCES\s+users\s*\(\s*id\s*\)/i.exec(
+                sql
+            );
+
+        expect(match).not.toBeNull();
+        expect(
+            extractConstraintScopedSqlFragment(
+                sql,
+                match?.index ?? 0,
+                match?.[0].length ?? 0
+            )
+        ).toBe(
+            'FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL'
+        );
     });
 });

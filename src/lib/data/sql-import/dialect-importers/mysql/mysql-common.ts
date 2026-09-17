@@ -54,11 +54,28 @@ export interface ColumnDefinition {
 export interface ConstraintDefinition {
     resource: string;
     constraint_type: string;
+    constraint?: string | null;
     constraint_name?: string;
+    index?: string | null;
+    index_type?: string | null;
+    keyword?: string | null;
     definition?: Array<ColumnReference> | { columns?: string[] };
     columns?: string[];
     reference_definition?: ReferenceDefinition;
     reference?: ReferenceDefinition;
+}
+
+export interface TableIndexDefinition {
+    resource: string;
+    index?: string | null;
+    index_type?: string | null;
+    keyword?: string | null;
+    definition?: Array<ColumnReference> | { columns?: string[] };
+}
+
+export interface SqlParserOnAction {
+    type?: string;
+    value?: string | { type?: string; value?: string } | null;
 }
 
 export interface ReferenceDefinition {
@@ -67,11 +84,14 @@ export interface ReferenceDefinition {
     definition?: Array<ColumnReference>;
     on_update?: string;
     on_delete?: string;
+    on_action?: SqlParserOnAction[];
 }
 
 export interface CreateTableStatement extends SQLAstNode {
     table: TableReference | TableReference[];
-    create_definitions?: Array<ColumnDefinition | ConstraintDefinition>;
+    create_definitions?: Array<
+        ColumnDefinition | ConstraintDefinition | TableIndexDefinition
+    >;
     comment?: string;
 }
 
@@ -162,21 +182,109 @@ export function extractColumnName(
     return '';
 }
 
+export function stripMysqlIdentifierQuotes(value: string): string {
+    return value.replace(/`/g, '');
+}
+
+export function isMysqlTableUniqueConstraintType(
+    constraintType: string | undefined
+): boolean {
+    if (!constraintType) {
+        return false;
+    }
+
+    const normalized = constraintType.toLowerCase();
+    return (
+        normalized === 'unique' ||
+        normalized === 'unique key' ||
+        normalized === 'unique index'
+    );
+}
+
+export function mysqlExplicitIndexName(def: {
+    constraint?: string | null;
+    constraint_name?: string;
+    index?: string | null;
+}): string | undefined {
+    const candidates = [def.constraint, def.constraint_name, def.index];
+
+    for (const candidate of candidates) {
+        if (typeof candidate === 'string' && candidate.trim().length > 0) {
+            return stripMysqlIdentifierQuotes(candidate);
+        }
+    }
+
+    return undefined;
+}
+
+export function extractMysqlIndexColumns(
+    definition:
+        | ConstraintDefinition['definition']
+        | TableIndexDefinition['definition']
+): string[] {
+    if (Array.isArray(definition)) {
+        return definition
+            .map((colDef) =>
+                stripMysqlIdentifierQuotes(
+                    typeof colDef === 'string'
+                        ? colDef
+                        : extractColumnName(colDef)
+                )
+            )
+            .filter((column) => column.length > 0);
+    }
+
+    if (
+        definition &&
+        typeof definition === 'object' &&
+        Array.isArray(definition.columns)
+    ) {
+        return definition.columns
+            .map((col) =>
+                stripMysqlIdentifierQuotes(
+                    typeof col === 'string' ? col : extractColumnName(col)
+                )
+            )
+            .filter((column) => column.length > 0);
+    }
+
+    return [];
+}
+
 // Helper function to extract type arguments from column definition
 export function getTypeArgs(
     definition: ColumnDefinition['definition'] | undefined
 ): TypeArgs {
     const typeArgs: TypeArgs = {};
 
-    if (!definition) return typeArgs;
-
-    if (definition.length !== undefined) {
-        typeArgs.length = definition.length;
+    if (!definition) {
+        return typeArgs;
     }
 
-    if (definition.scale !== undefined && definition.precision !== undefined) {
-        typeArgs.precision = definition.precision;
+    const dataType = definition.dataType?.toLowerCase();
+    const isNumeric = dataType === 'decimal' || dataType === 'numeric';
+
+    if (typeof definition.scale === 'number') {
+        if (typeof definition.precision === 'number') {
+            typeArgs.precision = definition.precision;
+        } else if (typeof definition.length === 'number') {
+            typeArgs.precision = definition.length;
+        }
         typeArgs.scale = definition.scale;
+        return typeArgs;
+    }
+
+    if (typeof definition.precision === 'number') {
+        typeArgs.precision = definition.precision;
+        return typeArgs;
+    }
+
+    if (typeof definition.length === 'number') {
+        if (isNumeric) {
+            typeArgs.precision = definition.length;
+        } else {
+            typeArgs.length = definition.length;
+        }
     }
 
     return typeArgs;
@@ -202,13 +310,14 @@ export function parseTypeArgsFromRawType(
         return typeArgs;
     }
 
-    if (
-        (normalizedType === 'decimal' || normalizedType === 'numeric') &&
-        numericParts.length >= 2
-    ) {
-        typeArgs.precision = numericParts[0];
-        typeArgs.scale = numericParts[1];
+    if (normalizedType === 'decimal' || normalizedType === 'numeric') {
+        if (numericParts.length >= 2) {
+            typeArgs.precision = numericParts[0];
+            typeArgs.scale = numericParts[1];
+            return typeArgs;
+        }
 
+        typeArgs.precision = numericParts[0];
         return typeArgs;
     }
 

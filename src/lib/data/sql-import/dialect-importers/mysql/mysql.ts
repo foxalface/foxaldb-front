@@ -8,6 +8,11 @@ import type {
     SQLCheckConstraint,
 } from '../../common';
 import { buildSQLFromAST } from '../../common';
+import {
+    extractConstraintScopedSqlFragment,
+    extractSqlReferentialActionPhrases,
+    mapParserReferentialOnActions,
+} from '@/lib/domain/foreign-key-referential-action';
 
 /**
  * Extract CHECK constraints from CREATE TABLE statements
@@ -54,12 +59,17 @@ import type {
     ColumnDefinition,
     ConstraintDefinition,
     CreateTableStatement,
+    ReferenceDefinition,
+    TableIndexDefinition,
     TableReference,
 } from './mysql-common';
 import {
     parserOpts,
     extractColumnName,
+    extractMysqlIndexColumns,
     getTypeArgs,
+    isMysqlTableUniqueConstraintType,
+    mysqlExplicitIndexName,
     parseTypeArgsFromRawType,
 } from './mysql-common';
 
@@ -74,6 +84,45 @@ interface PendingForeignKey {
     updateAction?: string;
     deleteAction?: string;
     sourceSql?: string;
+}
+
+function referentialActionsFromMysqlReference(
+    reference: ReferenceDefinition,
+    constraintSql?: string
+): {
+    deleteAction?: string;
+    updateAction?: string;
+    sourceSql?: string;
+} {
+    const fromOnAction = mapParserReferentialOnActions(reference.on_action);
+
+    return {
+        deleteAction: reference.on_delete ?? fromOnAction.deleteAction,
+        updateAction: reference.on_update ?? fromOnAction.updateAction,
+        sourceSql: constraintSql,
+    };
+}
+
+function mysqlConstraintSourceSql(
+    createTableSql: string,
+    sourceColumn: string
+): string | undefined {
+    const escapedColumn = sourceColumn.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp(
+        `FOREIGN\\s+KEY\\s*\\(\\s*\`?${escapedColumn}\`?\\s*\\)\\s*REFERENCES\\s+(?:\`?[^\\\`\\s(]+)?\\s*\\([^)]*\\)`,
+        'i'
+    );
+    const match = pattern.exec(createTableSql);
+
+    if (!match) {
+        return undefined;
+    }
+
+    return extractConstraintScopedSqlFragment(
+        createTableSql,
+        match.index,
+        match[0].length
+    );
 }
 
 // Helper to extract statements from PostgreSQL dump
@@ -349,6 +398,19 @@ function processAlterTableAddColumn(
     }
 }
 
+function pushMysqlTableIndex(indexes: SQLIndex[], next: SQLIndex): void {
+    const existingIndex = indexes.find(
+        (idx) =>
+            idx.name === next.name ||
+            (idx.columns.length === next.columns.length &&
+                idx.columns.every((col, i) => col === next.columns[i]))
+    );
+
+    if (!existingIndex) {
+        indexes.push(next);
+    }
+}
+
 // Process PostgreSQL pg_dump CREATE INDEX statements
 function processCreateIndexStatement(
     statement: string,
@@ -558,6 +620,7 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                         def:
                                             | ColumnDefinition
                                             | ConstraintDefinition
+                                            | TableIndexDefinition
                                     ) => {
                                         if (def.resource === 'column') {
                                             const columnDef =
@@ -678,55 +741,31 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                     }
                                                 }
                                             }
-                                            // Handle UNIQUE constraint
+                                            // Handle UNIQUE / UNIQUE KEY / UNIQUE INDEX
                                             else if (
-                                                constraintDef.constraint_type ===
-                                                'unique'
+                                                isMysqlTableUniqueConstraintType(
+                                                    constraintDef.constraint_type
+                                                )
                                             ) {
                                                 const uniqueColumns =
-                                                    Array.isArray(
+                                                    extractMysqlIndexColumns(
                                                         constraintDef.definition
-                                                    )
-                                                        ? constraintDef.definition.map(
-                                                              (colDef) =>
-                                                                  extractColumnName(
-                                                                      colDef
-                                                                  ).replace(
-                                                                      /`/g,
-                                                                      ''
-                                                                  )
-                                                          )
-                                                        : (
-                                                              constraintDef
-                                                                  .definition
-                                                                  ?.columns ||
-                                                              []
-                                                          ).map((col) =>
-                                                              typeof col ===
-                                                              'string'
-                                                                  ? col.replace(
-                                                                        /`/g,
-                                                                        ''
-                                                                    )
-                                                                  : extractColumnName(
-                                                                        col
-                                                                    ).replace(
-                                                                        /`/g,
-                                                                        ''
-                                                                    )
-                                                          );
+                                                    );
 
                                                 if (uniqueColumns.length > 0) {
-                                                    indexes.push({
-                                                        name: constraintDef.constraint_name
-                                                            ? constraintDef.constraint_name.replace(
-                                                                  /`/g,
-                                                                  ''
-                                                              )
-                                                            : `${tableName}_${uniqueColumns[0]}_key`,
-                                                        columns: uniqueColumns,
-                                                        unique: true,
-                                                    });
+                                                    pushMysqlTableIndex(
+                                                        indexes,
+                                                        {
+                                                            name:
+                                                                mysqlExplicitIndexName(
+                                                                    constraintDef
+                                                                ) ??
+                                                                `${tableName}_${uniqueColumns[0]}_key`,
+                                                            columns:
+                                                                uniqueColumns,
+                                                            unique: true,
+                                                        }
+                                                    );
                                                 }
                                             }
                                             // Handle FOREIGN KEY constraints
@@ -867,6 +906,16 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                             ];
 
                                                         if (!targetTableId) {
+                                                            const constraintSql =
+                                                                mysqlConstraintSourceSql(
+                                                                    trimmedStmt,
+                                                                    sourceColumns[0]
+                                                                );
+                                                            const referentialActions =
+                                                                referentialActionsFromMysqlReference(
+                                                                    reference,
+                                                                    constraintSql
+                                                                );
                                                             // Store for later processing (after all tables are created)
                                                             const pendingFk: PendingForeignKey =
                                                                 {
@@ -884,11 +933,11 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                                     targetTable,
                                                                     targetColumns,
                                                                     updateAction:
-                                                                        reference.on_update,
+                                                                        referentialActions.updateAction,
                                                                     deleteAction:
-                                                                        reference.on_delete,
+                                                                        referentialActions.deleteAction,
                                                                     sourceSql:
-                                                                        trimmedStmt,
+                                                                        referentialActions.sourceSql,
                                                                 };
                                                             pendingForeignKeys.push(
                                                                 pendingFk
@@ -904,6 +953,18 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                                 );
                                                                 i++
                                                             ) {
+                                                                const constraintSql =
+                                                                    mysqlConstraintSourceSql(
+                                                                        trimmedStmt,
+                                                                        sourceColumns[
+                                                                            i
+                                                                        ]
+                                                                    );
+                                                                const referentialActions =
+                                                                    referentialActionsFromMysqlReference(
+                                                                        reference,
+                                                                        constraintSql
+                                                                    );
                                                                 const fk: SQLForeignKey =
                                                                     {
                                                                         name: constraintDef.constraint_name
@@ -927,11 +988,11 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                                             tableId,
                                                                         targetTableId,
                                                                         updateAction:
-                                                                            reference.on_update,
+                                                                            referentialActions.updateAction,
                                                                         deleteAction:
-                                                                            reference.on_delete,
+                                                                            referentialActions.deleteAction,
                                                                         sourceSql:
-                                                                            trimmedStmt,
+                                                                            referentialActions.sourceSql,
                                                                     };
 
                                                                 relationships.push(
@@ -945,6 +1006,33 @@ export async function fromMySQL(sqlContent: string): Promise<SQLParserResult> {
                                                         }
                                                     }
                                                 }
+                                            }
+                                        } else if (def.resource === 'index') {
+                                            const indexDef =
+                                                def as TableIndexDefinition;
+                                            const indexColumns =
+                                                extractMysqlIndexColumns(
+                                                    indexDef.definition
+                                                );
+                                            const indexName =
+                                                mysqlExplicitIndexName(
+                                                    indexDef
+                                                ) ??
+                                                (indexColumns.length > 0
+                                                    ? `${tableName}_${indexColumns[0]}_idx`
+                                                    : '');
+
+                                            if (
+                                                indexName &&
+                                                indexColumns.length > 0
+                                            ) {
+                                                pushMysqlTableIndex(indexes, {
+                                                    name: indexName,
+                                                    columns: indexColumns,
+                                                    unique:
+                                                        indexDef.index_type ===
+                                                        'unique',
+                                                });
                                             }
                                         }
                                     }
@@ -1377,6 +1465,13 @@ function findForeignKeysUsingRegex(
             // For one-to-one relationships, both sides are 'one'
             const sourceCardinality = isUnique ? 'one' : 'many';
             const targetCardinality = 'one'; // Referenced PK is always one
+            const sourceSql = extractConstraintScopedSqlFragment(
+                stmt,
+                fkMatch.index,
+                fkMatch[0].length
+            );
+            const { deleteAction, updateAction } =
+                extractSqlReferentialActionPhrases(sourceSql);
 
             // Add the relationship
             relationships.push({
@@ -1391,7 +1486,9 @@ function findForeignKeysUsingRegex(
                 targetTableId,
                 sourceCardinality,
                 targetCardinality,
-                sourceSql: stmt,
+                deleteAction,
+                updateAction,
+                sourceSql,
             });
 
             addedRelationships.add(relationshipKey);

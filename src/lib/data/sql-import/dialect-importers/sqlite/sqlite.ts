@@ -23,6 +23,10 @@ import {
     getTableIdWithSchemaSupport,
     isValidForeignKeyRelationship,
 } from './sqlite-common';
+import {
+    extractConstraintScopedSqlFragment,
+    extractSqlReferentialActionPhrases,
+} from '@/lib/domain/foreign-key-referential-action';
 
 /**
  * SQLite-specific parsing logic
@@ -49,10 +53,12 @@ export async function fromSQLite(sqlContent: string): Promise<SQLParserResult> {
                     id: tableId,
                     name: table.name,
                     columns: table.columns,
-                    indexes: [],
+                    indexes: table.indexes,
                     order: tables.length,
                 });
             });
+
+            attachStandaloneCreateIndexStatements(sqlContent, tables);
 
             // Process foreign keys using the regex approach
             findForeignKeysUsingRegex(sqlContent, tableMap, relationships);
@@ -194,11 +200,13 @@ function addCheckConstraintsToTables(
 function parseCreateTableStatements(sqlContent: string): {
     name: string;
     columns: SQLColumn[];
+    indexes: SQLIndex[];
 }[] {
     const tables: {
         name: string;
         columns: SQLColumn[];
         primaryKeyColumns?: string[];
+        indexes: SQLIndex[];
     }[] = [];
 
     // Remove comments before processing
@@ -226,10 +234,12 @@ function parseCreateTableStatements(sqlContent: string): {
             name: string;
             columns: SQLColumn[];
             primaryKeyColumns?: string[];
+            indexes: SQLIndex[];
         } = {
             name: tableName,
             columns: [],
             primaryKeyColumns: [],
+            indexes: [],
         };
 
         // Special case: sqlite_sequence or tables with columns but no types
@@ -299,10 +309,52 @@ function parseCreateTableStatements(sqlContent: string): {
                     continue;
                 }
 
+                // Handle table-level UNIQUE constraints
+                // UNIQUE (col) / CONSTRAINT name UNIQUE (col_a, col_b)
+                if (
+                    upperLine.startsWith('UNIQUE') ||
+                    (upperLine.startsWith('CONSTRAINT') &&
+                        /\bUNIQUE\s*\(/i.test(upperLine) &&
+                        !upperLine.includes('PRIMARY KEY'))
+                ) {
+                    const uniqueMatch = line.match(/UNIQUE\s*\(([^)]+)\)/i);
+                    const nameMatch = line.match(
+                        /CONSTRAINT\s+["'`]?(\w+)["'`]?/i
+                    );
+
+                    if (uniqueMatch) {
+                        const uniqueColumns = uniqueMatch[1]
+                            .split(',')
+                            .map((column) =>
+                                column.trim().replace(/["'`]/g, '')
+                            )
+                            .filter((column) => column !== '');
+
+                        if (uniqueColumns.length > 0) {
+                            table.indexes.push({
+                                name:
+                                    nameMatch?.[1] ||
+                                    `uk_${tableName}_${uniqueColumns.join('_')}`,
+                                columns: uniqueColumns,
+                                unique: true,
+                            });
+
+                            if (uniqueColumns.length === 1) {
+                                const uniqueColumn = table.columns.find(
+                                    (column) => column.name === uniqueColumns[0]
+                                );
+                                if (uniqueColumn) {
+                                    uniqueColumn.unique = true;
+                                }
+                            }
+                        }
+                    }
+                    continue;
+                }
+
                 // Skip other constraints
                 if (
                     upperLine.startsWith('FOREIGN KEY') ||
-                    upperLine.startsWith('UNIQUE') ||
                     upperLine.startsWith('CHECK') ||
                     upperLine.startsWith('CONSTRAINT')
                 ) {
@@ -420,6 +472,59 @@ function parseCreateTableStatements(sqlContent: string): {
     }
 
     return tables;
+}
+
+function attachStandaloneCreateIndexStatements(
+    sqlContent: string,
+    tables: SQLTable[]
+): void {
+    const indexRegex =
+        /CREATE\s+(UNIQUE\s+)?INDEX\s+(?:IF\s+NOT\s+EXISTS\s+)?["'`]?(\w+)["'`]?\s+ON\s+["'`]?(\w+)["'`]?\s*\(([^)]+)\)(\s+WHERE\b)?/gi;
+
+    let match;
+    while ((match = indexRegex.exec(sqlContent)) !== null) {
+        const isUnique = Boolean(match[1]);
+        const indexName = match[2];
+        const tableName = match[3];
+        const columnsPart = match[4];
+        const isPartial = Boolean(match[5]);
+
+        // Canonical DBIndex cannot represent a WHERE predicate. Skip partial
+        // indexes rather than importing an over-broad unique/non-unique index.
+        if (isPartial) {
+            continue;
+        }
+
+        const table = tables.find(
+            (candidate) =>
+                candidate.name.toLowerCase() === tableName.toLowerCase()
+        );
+        if (!table) {
+            continue;
+        }
+
+        const columns = columnsPart
+            .split(',')
+            .map((column) => column.trim().replace(/["'`]/g, ''))
+            .filter((column) => column !== '');
+
+        if (columns.length === 0) {
+            continue;
+        }
+
+        const alreadyPresent = table.indexes.some(
+            (index) => index.name.toLowerCase() === indexName.toLowerCase()
+        );
+        if (alreadyPresent) {
+            continue;
+        }
+
+        table.indexes.push({
+            name: indexName,
+            columns,
+            unique: isUnique,
+        });
+    }
 }
 
 /**
@@ -827,14 +932,13 @@ function findForeignKeysUsingRegex(
                 getTableIdWithSchemaSupport(targetTable);
 
             // Add the relationship
-            const createTableEnd = sqlContent.indexOf(';', match.index);
-            const createTableSql =
-                createTableEnd >= 0
-                    ? sqlContent.substring(
-                          lastCreateTablePos,
-                          createTableEnd + 1
-                      )
-                    : sqlContent.substring(lastCreateTablePos);
+            const sourceSql = extractConstraintScopedSqlFragment(
+                sqlContent,
+                match.index,
+                match[0].length
+            );
+            const { deleteAction, updateAction } =
+                extractSqlReferentialActionPhrases(sourceSql);
 
             relationships.push({
                 name: `FK_${sourceTable}_${sourceColumn}_${targetTable}`,
@@ -846,7 +950,9 @@ function findForeignKeysUsingRegex(
                 targetColumn,
                 sourceTableId,
                 targetTableId,
-                sourceSql: createTableSql,
+                deleteAction,
+                updateAction,
+                sourceSql,
             });
         }
     }
@@ -879,6 +985,21 @@ function findForeignKeysUsingRegex(
         const targetTableId =
             tableMap[targetTable] || getTableIdWithSchemaSupport(targetTable);
 
+        const fkMatch =
+            /FOREIGN\s+KEY\s*\(\s*["'`]?\w+["'`]?\s*\)\s+REFERENCES\s+["'`]?\w+["'`]\s*\(\s*["'`]?\w+["'`]?\s*\)/i.exec(
+                match[0]
+            );
+        const sourceSql = fkMatch
+            ? extractConstraintScopedSqlFragment(
+                  match[0],
+                  fkMatch.index,
+                  fkMatch[0].length
+              )
+            : undefined;
+        const { deleteAction, updateAction } = sourceSql
+            ? extractSqlReferentialActionPhrases(sourceSql)
+            : {};
+
         // Add the relationship
         relationships.push({
             name: `FK_${sourceTable}_${sourceColumn}_${targetTable}`,
@@ -890,7 +1011,9 @@ function findForeignKeysUsingRegex(
             targetColumn,
             sourceTableId,
             targetTableId,
-            sourceSql: match[0],
+            deleteAction,
+            updateAction,
+            sourceSql,
         });
     }
 

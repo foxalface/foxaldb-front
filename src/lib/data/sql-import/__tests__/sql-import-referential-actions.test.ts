@@ -457,4 +457,325 @@ ALTER TABLE playlists ADD CONSTRAINT fk_playlists_user_id
         expect(diagram.relationships?.[0]?.onDelete).toBeUndefined();
         expect(diagram.relationships?.[0]?.onUpdate).toBeUndefined();
     });
+
+    it('keeps sibling PostgreSQL CREATE TABLE FK actions independent', async () => {
+        const sql = `
+CREATE TABLE organizations (
+    id BIGINT PRIMARY KEY
+);
+
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY
+);
+
+CREATE TABLE categories (
+    id BIGINT PRIMARY KEY
+);
+
+CREATE TABLE projects (
+    id BIGINT PRIMARY KEY,
+    organization_id BIGINT NOT NULL,
+    owner_id BIGINT,
+    category_id BIGINT,
+    name TEXT NOT NULL,
+    CONSTRAINT projects_org_fk
+        FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    CONSTRAINT projects_owner_id_fk
+        FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL,
+    CONSTRAINT projects_category_id_fk
+        FOREIGN KEY (category_id) REFERENCES categories(id),
+    CONSTRAINT projects_org_name_unique
+        UNIQUE (organization_id, name)
+);
+        `;
+
+        const parserResult = await fromPostgres(sql);
+        const diagram = convertToChartDBDiagram(
+            parserResult,
+            DatabaseType.POSTGRESQL,
+            DatabaseType.POSTGRESQL
+        );
+
+        const projects = diagram.tables?.find(
+            (table) => table.name === 'projects'
+        );
+        const orgRel = diagram.relationships?.find(
+            (relationship) =>
+                relationship.targetFieldId ===
+                projects?.fields.find(
+                    (field) => field.name === 'organization_id'
+                )?.id
+        );
+        const ownerRel = diagram.relationships?.find(
+            (relationship) =>
+                relationship.targetFieldId ===
+                projects?.fields.find((field) => field.name === 'owner_id')?.id
+        );
+        const categoryRel = diagram.relationships?.find(
+            (relationship) =>
+                relationship.targetFieldId ===
+                projects?.fields.find((field) => field.name === 'category_id')
+                    ?.id
+        );
+
+        expect(orgRel?.onDelete).toBe('cascade');
+        expect(orgRel?.onUpdate).toBeUndefined();
+        expect(ownerRel?.onDelete).toBe('set_null');
+        expect(ownerRel?.onUpdate).toBeUndefined();
+        expect(categoryRel?.onDelete).toBeUndefined();
+        expect(categoryRel?.onUpdate).toBeUndefined();
+
+        const uniqueIndex = projects?.indexes.find(
+            (index) => index.name === 'projects_org_name_unique'
+        );
+        const organizationId = projects?.fields.find(
+            (field) => field.name === 'organization_id'
+        );
+        const nameField = projects?.fields.find(
+            (field) => field.name === 'name'
+        );
+
+        expect(uniqueIndex?.unique).toBe(true);
+        expect(uniqueIndex?.fieldIds).toEqual([
+            organizationId?.id,
+            nameField?.id,
+        ]);
+        expect(organizationId?.unique).toBe(false);
+        expect(nameField?.unique).toBe(false);
+    });
+
+    it('maps PostgreSQL CREATE TABLE ON DELETE RESTRICT and ON UPDATE CASCADE independently', async () => {
+        const sql = `
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY
+);
+
+CREATE TABLE playlists (
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    CONSTRAINT fk_playlists_user_id
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+        `;
+
+        const diagram = convertToChartDBDiagram(
+            await fromPostgres(sql),
+            DatabaseType.POSTGRESQL,
+            DatabaseType.POSTGRESQL
+        );
+
+        expect(diagram.relationships).toHaveLength(1);
+        expect(diagram.relationships?.[0]?.onDelete).toBe('restrict');
+        expect(diagram.relationships?.[0]?.onUpdate).toBe('cascade');
+    });
+
+    it('omits PostgreSQL CREATE TABLE ON DELETE NO ACTION', async () => {
+        const sql = `
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY
+);
+
+CREATE TABLE playlists (
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    CONSTRAINT fk_playlists_user_id
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE NO ACTION
+);
+        `;
+
+        const diagram = convertToChartDBDiagram(
+            await fromPostgres(sql),
+            DatabaseType.POSTGRESQL,
+            DatabaseType.POSTGRESQL
+        );
+
+        expect(diagram.relationships).toHaveLength(1);
+        expect(diagram.relationships?.[0]?.onDelete).toBeUndefined();
+        expect(diagram.relationships?.[0]?.onUpdate).toBeUndefined();
+    });
+
+    it('keeps sibling CockroachDB CREATE TABLE FK actions independent via fromPostgres', async () => {
+        const sql = `
+CREATE TABLE organizations (
+    id BIGINT PRIMARY KEY
+);
+
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY
+);
+
+CREATE TABLE projects (
+    id BIGINT PRIMARY KEY,
+    organization_id BIGINT NOT NULL,
+    owner_id BIGINT,
+    CONSTRAINT projects_org_fk
+        FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE CASCADE,
+    CONSTRAINT projects_owner_id_fk
+        FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL
+);
+        `;
+
+        const parserResult = await fromPostgres(sql);
+        const diagram = convertToChartDBDiagram(
+            parserResult,
+            DatabaseType.COCKROACHDB,
+            DatabaseType.COCKROACHDB
+        );
+
+        const projects = diagram.tables?.find(
+            (table) => table.name === 'projects'
+        );
+        const orgRel = diagram.relationships?.find(
+            (relationship) =>
+                relationship.targetFieldId ===
+                projects?.fields.find(
+                    (field) => field.name === 'organization_id'
+                )?.id
+        );
+        const ownerRel = diagram.relationships?.find(
+            (relationship) =>
+                relationship.targetFieldId ===
+                projects?.fields.find((field) => field.name === 'owner_id')?.id
+        );
+
+        expect(orgRel?.onDelete).toBe('cascade');
+        expect(ownerRel?.onDelete).toBe('set_null');
+    });
+
+    it('keeps sibling MySQL CREATE TABLE FK actions independent', async () => {
+        const sql = `
+CREATE TABLE products (
+    id BIGINT PRIMARY KEY
+) ENGINE=InnoDB;
+
+CREATE TABLE orders (
+    id BIGINT PRIMARY KEY
+) ENGINE=InnoDB;
+
+CREATE TABLE order_items (
+    id BIGINT PRIMARY KEY,
+    order_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
+    CONSTRAINT fk_order_items_order_id FOREIGN KEY (order_id)
+        REFERENCES orders(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_order_items_product_id FOREIGN KEY (product_id)
+        REFERENCES products(id)
+) ENGINE=InnoDB;
+        `;
+
+        const parserResult = await fromMySQL(sql);
+        const mysqlDiagram = convertToChartDBDiagram(
+            parserResult,
+            DatabaseType.MYSQL,
+            DatabaseType.MYSQL
+        );
+        const mariaDiagram = convertToChartDBDiagram(
+            parserResult,
+            DatabaseType.MARIADB,
+            DatabaseType.MARIADB
+        );
+
+        for (const diagram of [mysqlDiagram, mariaDiagram]) {
+            const orderItems = diagram.tables?.find(
+                (table) => table.name === 'order_items'
+            );
+            const orderRel = diagram.relationships?.find(
+                (relationship) =>
+                    relationship.targetFieldId ===
+                    orderItems?.fields.find(
+                        (field) => field.name === 'order_id'
+                    )?.id
+            );
+            const productRel = diagram.relationships?.find(
+                (relationship) =>
+                    relationship.targetFieldId ===
+                    orderItems?.fields.find(
+                        (field) => field.name === 'product_id'
+                    )?.id
+            );
+
+            expect(orderRel?.onDelete).toBe('cascade');
+            expect(orderRel?.onUpdate).toBeUndefined();
+            expect(productRel?.onDelete).toBeUndefined();
+            expect(productRel?.onUpdate).toBeUndefined();
+        }
+    });
+
+    it('maps MySQL ON DELETE SET NULL and RESTRICT without inventing sibling actions', async () => {
+        const sql = `
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY
+) ENGINE=InnoDB;
+
+CREATE TABLE categories (
+    id BIGINT PRIMARY KEY
+) ENGINE=InnoDB;
+
+CREATE TABLE posts (
+    id BIGINT PRIMARY KEY,
+    author_id BIGINT,
+    category_id BIGINT NOT NULL,
+    CONSTRAINT fk_posts_author FOREIGN KEY (author_id)
+        REFERENCES users(id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_posts_category FOREIGN KEY (category_id)
+        REFERENCES categories(id)
+        ON DELETE RESTRICT
+) ENGINE=InnoDB;
+        `;
+
+        const diagram = convertToChartDBDiagram(
+            await fromMySQL(sql),
+            DatabaseType.MYSQL,
+            DatabaseType.MYSQL
+        );
+
+        const posts = diagram.tables?.find((table) => table.name === 'posts');
+        const authorRel = diagram.relationships?.find(
+            (relationship) =>
+                relationship.targetFieldId ===
+                posts?.fields.find((field) => field.name === 'author_id')?.id
+        );
+        const categoryRel = diagram.relationships?.find(
+            (relationship) =>
+                relationship.targetFieldId ===
+                posts?.fields.find((field) => field.name === 'category_id')?.id
+        );
+
+        expect(authorRel?.onDelete).toBe('set_null');
+        expect(authorRel?.onUpdate).toBe('cascade');
+        expect(categoryRel?.onDelete).toBe('restrict');
+        expect(categoryRel?.onUpdate).toBeUndefined();
+    });
+
+    it('omits MySQL ON DELETE NO ACTION', async () => {
+        const sql = `
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY
+) ENGINE=InnoDB;
+
+CREATE TABLE playlists (
+    id BIGINT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    CONSTRAINT fk_playlists_user_id FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE NO ACTION
+) ENGINE=InnoDB;
+        `;
+
+        const diagram = convertToChartDBDiagram(
+            await fromMySQL(sql),
+            DatabaseType.MYSQL,
+            DatabaseType.MYSQL
+        );
+
+        expect(diagram.relationships).toHaveLength(1);
+        expect(diagram.relationships?.[0]?.onDelete).toBeUndefined();
+        expect(diagram.relationships?.[0]?.onUpdate).toBeUndefined();
+    });
 });

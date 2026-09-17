@@ -81,6 +81,111 @@ const ON_DELETE_CLAUSE_REGEX =
 const ON_UPDATE_CLAUSE_REGEX =
     /ON UPDATE\s+([A-Za-z\s_]+?)(?:\s+ON|\s*[;,)]|\s*$)/i;
 
+const countSqlKeyword = (sql: string, pattern: RegExp): number =>
+    sql.match(pattern)?.length ?? 0;
+
+export const isSingleForeignKeySqlDefinition = (sql: string): boolean => {
+    if (!sql.trim()) {
+        return false;
+    }
+
+    const foreignKeyCount = countSqlKeyword(sql, /\bFOREIGN\s+KEY\b/gi);
+    const referencesCount = countSqlKeyword(sql, /\bREFERENCES\b/gi);
+    const onDeleteCount = countSqlKeyword(sql, /\bON\s+DELETE\b/gi);
+    const onUpdateCount = countSqlKeyword(sql, /\bON\s+UPDATE\b/gi);
+
+    return (
+        foreignKeyCount <= 1 &&
+        referencesCount <= 1 &&
+        onDeleteCount <= 1 &&
+        onUpdateCount <= 1
+    );
+};
+
+export const extractConstraintScopedSqlFragment = (
+    sql: string,
+    matchIndex: number,
+    matchLength: number
+): string => {
+    const afterMatch = sql.slice(matchIndex + matchLength);
+    let depth = 0;
+    let end = afterMatch.length;
+
+    for (let i = 0; i < afterMatch.length; i++) {
+        const char = afterMatch[i];
+
+        if (char === '(') {
+            depth++;
+        } else if (char === ')') {
+            if (depth === 0) {
+                end = i;
+                break;
+            }
+            depth--;
+        } else if ((char === ',' || char === ';') && depth === 0) {
+            end = i;
+            break;
+        }
+    }
+
+    return sql.slice(matchIndex, matchIndex + matchLength + end).trim();
+};
+
+export interface SqlParserReferentialOnAction {
+    type?: string;
+    value?: string | { type?: string; value?: string } | null;
+}
+
+const readParserOnActionValue = (
+    value: SqlParserReferentialOnAction['value']
+): string | undefined => {
+    if (typeof value === 'string') {
+        const trimmed = value.trim();
+        return trimmed === '' ? undefined : trimmed;
+    }
+
+    if (value && typeof value === 'object' && typeof value.value === 'string') {
+        const trimmed = value.value.trim();
+        return trimmed === '' ? undefined : trimmed;
+    }
+
+    return undefined;
+};
+
+export const mapParserReferentialOnActions = (
+    onAction?: SqlParserReferentialOnAction[] | null
+): {
+    deleteAction?: string;
+    updateAction?: string;
+} => {
+    if (!onAction || onAction.length === 0) {
+        return {};
+    }
+
+    let deleteAction: string | undefined;
+    let updateAction: string | undefined;
+
+    for (const entry of onAction) {
+        const kind = normalizeSqlReferentialAction(entry.type ?? '');
+        const rawValue = readParserOnActionValue(entry.value);
+
+        if (!rawValue) {
+            continue;
+        }
+
+        if (kind === 'ondelete') {
+            deleteAction = rawValue;
+        } else if (kind === 'onupdate') {
+            updateAction = rawValue;
+        }
+    }
+
+    return {
+        ...(deleteAction ? { deleteAction } : {}),
+        ...(updateAction ? { updateAction } : {}),
+    };
+};
+
 export const extractSqlReferentialActionPhrases = (
     definition: string
 ): {
@@ -108,7 +213,9 @@ export const resolveSqlReferentialActionPhrases = (
     deleteAction?: string;
     updateAction?: string;
 } => {
-    const fromDefinition = extractSqlReferentialActionPhrases(definition);
+    const fromDefinition = isSingleForeignKeySqlDefinition(definition)
+        ? extractSqlReferentialActionPhrases(definition)
+        : {};
 
     return {
         deleteAction: deleteAction?.trim() || fromDefinition.deleteAction,

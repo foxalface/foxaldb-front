@@ -9,7 +9,11 @@ import type {
     SQLCheckConstraint,
 } from '../../common';
 import { buildSQLFromAST } from '../../common';
-import { resolveSqlReferentialActionPhrases } from '@/lib/domain/foreign-key-referential-action';
+import {
+    extractConstraintScopedSqlFragment,
+    extractSqlReferentialActionPhrases,
+    resolveSqlReferentialActionPhrases,
+} from '@/lib/domain/foreign-key-referential-action';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type {
     TableReference,
@@ -785,6 +789,14 @@ function extractForeignKeysFromCreateTable(
         const targetTableId = tableMap[targetTableKey];
 
         if (targetTableId) {
+            const sourceSql = extractConstraintScopedSqlFragment(
+                tableBody,
+                match.index,
+                match[0].length
+            );
+            const { deleteAction, updateAction } =
+                extractSqlReferentialActionPhrases(sourceSql);
+
             relationships.push({
                 name: `fk_${tableName}_${sourceColumn}_${targetTable}`,
                 sourceTable: tableName,
@@ -797,7 +809,9 @@ function extractForeignKeysFromCreateTable(
                 targetTableId,
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                sourceSql: sql,
+                deleteAction,
+                updateAction,
+                sourceSql,
             });
         }
     }
@@ -817,6 +831,14 @@ function extractForeignKeysFromCreateTable(
         const targetTableId = tableMap[targetTableKey];
 
         if (targetTableId) {
+            const sourceSql = extractConstraintScopedSqlFragment(
+                tableBody,
+                match.index,
+                match[0].length
+            );
+            const { deleteAction, updateAction } =
+                extractSqlReferentialActionPhrases(sourceSql);
+
             relationships.push({
                 name: `fk_${tableName}_${sourceColumn}_${targetTable}`,
                 sourceTable: tableName,
@@ -829,12 +851,49 @@ function extractForeignKeysFromCreateTable(
                 targetTableId,
                 sourceCardinality: 'many',
                 targetCardinality: 'one',
-                sourceSql: sql,
+                deleteAction,
+                updateAction,
+                sourceSql,
             });
         }
     }
 
     return relationships;
+}
+
+function extractUniqueIndexesFromCreateTable(
+    sql: string,
+    tableName: string
+): SQLIndex[] {
+    const indexes: SQLIndex[] = [];
+    const tableBodyMatch = sql.match(/\(([\s\S]+)\)/);
+    if (!tableBodyMatch) {
+        return indexes;
+    }
+
+    const uniquePattern =
+        /(?:CONSTRAINT\s+(?:"([^"]+)"|([^\s(]+))\s+)?UNIQUE\s*\(([^)]+)\)/gi;
+    let match;
+
+    while ((match = uniquePattern.exec(tableBodyMatch[1])) !== null) {
+        const columns = match[3]
+            .split(',')
+            .map((column) => column.trim().replace(/^["']|["']$/g, ''))
+            .filter((column) => column !== '');
+
+        if (columns.length === 0) {
+            continue;
+        }
+
+        indexes.push({
+            name:
+                match[1] || match[2] || `${tableName}_${columns.join('_')}_key`,
+            columns,
+            unique: true,
+        });
+    }
+
+    return indexes;
 }
 
 /**
@@ -1243,11 +1302,84 @@ export async function fromPostgres(
                                         }
                                     );
                                 }
+                            } else if (
+                                constraintDef.constraint_type === 'unique' ||
+                                constraintDef.constraint_type === 'UNIQUE'
+                            ) {
+                                const uniqueColumns = Array.isArray(
+                                    constraintDef.definition
+                                )
+                                    ? constraintDef.definition
+                                          .map((colDef: ColumnReference) =>
+                                              extractColumnName(colDef)
+                                          )
+                                          .filter(
+                                              (columnName) => columnName !== ''
+                                          )
+                                    : (
+                                          constraintDef.definition?.columns ||
+                                          constraintDef.columns ||
+                                          []
+                                      ).filter(
+                                          (columnName) => columnName !== ''
+                                      );
+
+                                if (uniqueColumns.length > 0) {
+                                    const uniqueIndexName =
+                                        constraintDef.constraint ||
+                                        constraintDef.constraint_name ||
+                                        `${tableName}_${uniqueColumns.join('_')}_key`;
+
+                                    indexes.push({
+                                        name: uniqueIndexName,
+                                        columns: uniqueColumns,
+                                        unique: true,
+                                    });
+
+                                    if (uniqueColumns.length === 1) {
+                                        const uniqueColumn = columns.find(
+                                            (column) =>
+                                                column.name === uniqueColumns[0]
+                                        );
+                                        if (uniqueColumn) {
+                                            uniqueColumn.unique = true;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 );
             }
+
+            const uniqueIndexesFromSql = extractUniqueIndexesFromCreateTable(
+                stmt.sql,
+                tableName
+            );
+            uniqueIndexesFromSql.forEach((uniqueIndex) => {
+                const alreadyPresent = indexes.some(
+                    (index) =>
+                        index.unique &&
+                        index.columns.length === uniqueIndex.columns.length &&
+                        index.columns.every(
+                            (column, columnIndex) =>
+                                column === uniqueIndex.columns[columnIndex]
+                        )
+                );
+
+                if (!alreadyPresent) {
+                    indexes.push(uniqueIndex);
+                }
+
+                if (uniqueIndex.columns.length === 1) {
+                    const uniqueColumn = columns.find(
+                        (column) => column.name === uniqueIndex.columns[0]
+                    );
+                    if (uniqueColumn) {
+                        uniqueColumn.unique = true;
+                    }
+                }
+            });
 
             // Extract foreign keys from the original SQL
             const tableFKs = extractForeignKeysFromCreateTable(
@@ -1321,6 +1453,22 @@ export async function fromPostgres(
                     // Extract check constraints
                     const checkConstraints =
                         extractCheckConstraintsFromCreateTable(stmt.sql);
+                    const uniqueIndexes = extractUniqueIndexesFromCreateTable(
+                        stmt.sql,
+                        tableName
+                    );
+
+                    uniqueIndexes.forEach((uniqueIndex) => {
+                        if (uniqueIndex.columns.length === 1) {
+                            const uniqueColumn = columns.find(
+                                (column) =>
+                                    column.name === uniqueIndex.columns[0]
+                            );
+                            if (uniqueColumn) {
+                                uniqueColumn.unique = true;
+                            }
+                        }
+                    });
 
                     // Create table object
                     const table: SQLTable = {
@@ -1328,7 +1476,7 @@ export async function fromPostgres(
                         name: tableName,
                         schema: schemaName,
                         columns,
-                        indexes: [],
+                        indexes: uniqueIndexes,
                         checkConstraints:
                             checkConstraints.length > 0
                                 ? checkConstraints
