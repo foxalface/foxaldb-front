@@ -70,9 +70,9 @@ export const bn: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'আপনার ডাটাবেস বেছে নিন',
+            title: 'ডায়াগ্রাম মুছুন',
             description:
-                'আপনার নতুন ডায়াগ্রামের জন্য ডাটাবেস সিস্টেম নির্বাচন করুন।',
+                'এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না। এটি ডায়াগ্রামটি স্থায়ীভাবে মুছে ফেলবে।',
             cancel: 'বাতিল করুন',
             delete: 'মুছুন',
         },
@@ -87,9 +87,8 @@ export const bn: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'আপনার ডাটাবেস বেছে নিন',
-                description:
-                    'আপনার নতুন ডায়াগ্রামের জন্য ডাটাবেস সিস্টেম নির্বাচন করুন।',
+                title: 'অ্যাক্সেস সরানো হয়েছে',
+                description: 'আপনার এই ডায়াগ্রামে আর অ্যাক্সেস নেই।',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -699,7 +698,7 @@ export const bn: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'আপনার ডাটাবেস বেছে নিন',
+                title: 'আপনার DBMS বেছে নিন',
                 description:
                     'আপনার নতুন ডায়াগ্রামের জন্য ডাটাবেস সিস্টেম নির্বাচন করুন।',
                 search_placeholder: 'ডাটাবেস ম্যানেজমেন্ট সিস্টেম খুঁজুন…',

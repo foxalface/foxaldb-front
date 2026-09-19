@@ -70,8 +70,9 @@ export const ar: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'اختر قاعدة البيانات',
-            description: 'حدد نظام قاعدة البيانات للمخطط الجديد.',
+            title: 'حذف المخطط',
+            description:
+                'لا يمكن التراجع عن هذا الإجراء. سيتم حذف المخطط نهائيًا.',
             cancel: 'إلغاء',
             delete: 'حذف',
         },
@@ -86,8 +87,8 @@ export const ar: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'اختر قاعدة البيانات',
-                description: 'حدد نظام قاعدة البيانات للمخطط الجديد.',
+                title: 'تمت إزالة الوصول',
+                description: 'لم يعد لديك وصول إلى هذا المخطط.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -690,7 +691,7 @@ export const ar: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'اختر قاعدة البيانات',
+                title: 'اختر نظام إدارة قواعد البيانات',
                 description: 'حدد نظام قاعدة البيانات للمخطط الجديد.',
                 search_placeholder: 'البحث عن أنظمة إدارة قواعد البيانات…',
                 search_no_results:

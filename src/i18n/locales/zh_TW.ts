@@ -69,8 +69,8 @@ export const zh_TW: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: '選擇您的資料庫',
-            description: '為您的新圖表選擇資料庫系統。',
+            title: '刪除圖表',
+            description: '此操作無法復原，圖表將被永久刪除。',
             cancel: '取消',
             delete: '刪除',
         },
@@ -84,8 +84,8 @@ export const zh_TW: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: '已移除存取權限',
+                description: '您已無法存取此圖表。',
             },
             role_changed_viewer: {
                 title: '選擇您的資料庫',
@@ -667,7 +667,7 @@ export const zh_TW: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '選擇您的資料庫',
+                title: '選擇您的 DBMS',
                 description: '為您的新圖表選擇資料庫系統。',
                 search_placeholder: '搜尋資料庫管理系統…',
                 search_no_results: '沒有符合搜尋條件的資料庫管理系統。',

@@ -69,8 +69,9 @@ export const ru: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Выберите базу данных',
-            description: 'Выберите систему баз данных для новой диаграммы.',
+            title: 'Удалить диаграмму',
+            description:
+                'Это действие нельзя отменить. Диаграмма будет удалена навсегда.',
             cancel: 'Отменить',
             delete: 'Удалить',
         },
@@ -85,8 +86,8 @@ export const ru: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Выберите базу данных',
-                description: 'Выберите систему баз данных для новой диаграммы.',
+                title: 'Доступ удалён',
+                description: 'У вас больше нет доступа к этой диаграмме.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -702,7 +703,7 @@ export const ru: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Выберите базу данных',
+                title: 'Выберите СУБД',
                 description: 'Выберите систему баз данных для новой диаграммы.',
                 search_placeholder: 'Поиск систем управления базами данных…',
                 search_no_results:

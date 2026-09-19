@@ -71,9 +71,9 @@ export const pt_BR: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Escolha seu banco de dados',
+            title: 'Excluir diagrama',
             description:
-                'Selecione o sistema de banco de dados para o seu novo diagrama.',
+                'Esta ação não pode ser desfeita. Isso excluirá permanentemente o diagrama.',
             cancel: 'Cancelar',
             delete: 'Excluir',
         },
@@ -88,9 +88,8 @@ export const pt_BR: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Escolha seu banco de dados',
-                description:
-                    'Selecione o sistema de banco de dados para o seu novo diagrama.',
+                title: 'Acesso removido',
+                description: 'Você não tem mais acesso a este diagrama.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -711,7 +710,7 @@ export const pt_BR: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Escolha seu banco de dados',
+                title: 'Escolha seu SGBD',
                 description:
                     'Selecione o sistema de banco de dados para o seu novo diagrama.',
                 search_placeholder: 'Pesquisar sistemas de banco de dados…',

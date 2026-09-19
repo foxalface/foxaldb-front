@@ -69,8 +69,9 @@ export const hi: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'अपना डेटाबेस चुनें',
-            description: 'अपने नए डायग्राम के लिए डेटाबेस सिस्टम चुनें।',
+            title: 'आरेख हटाएँ',
+            description:
+                'यह क्रिया पूर्ववत नहीं की जा सकती। यह आरेख को स्थायी रूप से हटा देगी।',
             cancel: 'रद्द करें',
             delete: 'हटाएँ',
         },
@@ -85,8 +86,8 @@ export const hi: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'अपना डेटाबेस चुनें',
-                description: 'अपने नए डायग्राम के लिए डेटाबेस सिस्टम चुनें।',
+                title: 'पहुँच हटा दी गई',
+                description: 'अब आपके पास इस डायग्राम तक पहुँच नहीं है।',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -702,7 +703,7 @@ export const hi: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'अपना डेटाबेस चुनें',
+                title: 'अपना DBMS चुनें',
                 description: 'अपने नए डायग्राम के लिए डेटाबेस सिस्टम चुनें।',
                 search_placeholder: 'डेटाबेस प्रबंधन प्रणाली खोजें…',
                 search_no_results:

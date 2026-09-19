@@ -71,8 +71,9 @@ export const gu: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'તમારી ડેટાબેઝ પસંદ કરો',
-            description: 'તમારા નવા ડાયાગ્રામ માટે ડેટાબેઝ સિસ્ટમ પસંદ કરો.',
+            title: 'ડાયાગ્રામ કાઢી નાખો',
+            description:
+                'આ ક્રિયા પરત નહીં લઈ શકાય. આ ડાયાગ્રામ કાયમ માટે કાઢી નાખશે.',
             cancel: 'રદ કરો',
             delete: 'કાઢી નાખો',
         },
@@ -87,9 +88,8 @@ export const gu: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'તમારી ડેટાબેઝ પસંદ કરો',
-                description:
-                    'તમારા નવા ડાયાગ્રામ માટે ડેટાબેઝ સિસ્ટમ પસંદ કરો.',
+                title: 'ઍક્સેસ દૂર કરવામાં આવી',
+                description: 'તમને આ ડાયાગ્રામની વધુ ઍક્સેસ નથી.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -695,7 +695,7 @@ export const gu: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'તમારી ડેટાબેઝ પસંદ કરો',
+                title: 'તમારું DBMS પસંદ કરો',
                 description:
                     'તમારા નવા ડાયાગ્રામ માટે ડેટાબેઝ સિસ્ટમ પસંદ કરો.',
                 search_placeholder: 'ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમ શોધો…',

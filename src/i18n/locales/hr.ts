@@ -69,8 +69,9 @@ export const hr: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Odaberite bazu podataka',
-            description: 'Odaberite sustav baze podataka za novi dijagram.',
+            title: 'Izbriši dijagram',
+            description:
+                'Ova radnja se ne može poništiti. Dijagram će biti trajno izbrisan.',
             cancel: 'Odustani',
             delete: 'Izbriši',
         },
@@ -85,8 +86,8 @@ export const hr: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Odaberite bazu podataka',
-                description: 'Odaberite sustav baze podataka za novi dijagram.',
+                title: 'Pristup uklonjen',
+                description: 'Više nemate pristup ovom dijagramu.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -698,7 +699,7 @@ export const hr: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Odaberite bazu podataka',
+                title: 'Odaberite svoj SGBD',
                 description: 'Odaberite sustav baze podataka za novi dijagram.',
                 search_placeholder:
                     'Pretraži sustave za upravljanje baze podataka…',

@@ -70,9 +70,9 @@ export const vi: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Chọn cơ sở dữ liệu của bạn',
+            title: 'Xóa sơ đồ',
             description:
-                'Chọn hệ quản trị cơ sở dữ liệu cho sơ đồ mới của bạn.',
+                'Không thể hoàn tác hành động này. Sơ đồ sẽ bị xóa vĩnh viễn.',
             cancel: 'Hủy',
             delete: 'Xóa',
         },
@@ -87,9 +87,8 @@ export const vi: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Chọn cơ sở dữ liệu của bạn',
-                description:
-                    'Chọn hệ quản trị cơ sở dữ liệu cho sơ đồ mới của bạn.',
+                title: 'Đã xóa quyền truy cập',
+                description: 'Bạn không còn quyền truy cập sơ đồ này.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -706,7 +705,7 @@ export const vi: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Chọn cơ sở dữ liệu của bạn',
+                title: 'Chọn DBMS của bạn',
                 description:
                     'Chọn hệ quản trị cơ sở dữ liệu cho sơ đồ mới của bạn.',
                 search_placeholder: 'Tìm hệ quản trị cơ sở dữ liệu…',

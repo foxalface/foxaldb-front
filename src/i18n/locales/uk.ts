@@ -69,8 +69,9 @@ export const uk: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Виберіть базу даних',
-            description: 'Виберіть систему баз даних для нової діаграми.',
+            title: 'Видалити діаграму',
+            description:
+                'Цю дію не можна скасувати. Діаграму буде видалено назавжди.',
             cancel: 'Скасувати',
             delete: 'Видалити',
         },
@@ -85,8 +86,8 @@ export const uk: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Виберіть базу даних',
-                description: 'Виберіть систему баз даних для нової діаграми.',
+                title: 'Доступ видалено',
+                description: 'У вас більше немає доступу до цієї діаграми.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -704,7 +705,7 @@ export const uk: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Виберіть базу даних',
+                title: 'Виберіть СУБД',
                 description: 'Виберіть систему баз даних для нової діаграми.',
                 search_placeholder: 'Пошук систем управління базами даних…',
                 search_no_results:

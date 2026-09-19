@@ -69,8 +69,8 @@ export const zh_CN: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: '选择您的数据库',
-            description: '为您的新图表选择数据库系统。',
+            title: '删除关系图',
+            description: '此操作无法撤销。这将永久删除该关系图。',
             cancel: '取消',
             delete: '删除',
         },
@@ -84,8 +84,8 @@ export const zh_CN: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Access removed',
-                description: 'You no longer have access to this diagram.',
+                title: '访问权限已移除',
+                description: '您已无法访问此关系图。',
             },
             role_changed_viewer: {
                 title: '选择您的数据库',
@@ -667,7 +667,7 @@ export const zh_CN: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '选择您的数据库',
+                title: '选择您的 DBMS',
                 description: '为您的新图表选择数据库系统。',
                 search_placeholder: '搜索数据库管理系统…',
                 search_no_results: '没有与搜索匹配的数据库管理系统。',

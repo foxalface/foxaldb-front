@@ -70,9 +70,9 @@ export const de: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Wählen Sie Ihre Datenbank',
+            title: 'Diagramm löschen',
             description:
-                'Wählen Sie das Datenbanksystem für Ihr neues Diagramm.',
+                'Diese Aktion kann nicht rückgängig gemacht werden. Das Diagramm wird dauerhaft gelöscht.',
             cancel: 'Abbrechen',
             delete: 'Löschen',
         },
@@ -87,9 +87,9 @@ export const de: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Wählen Sie Ihre Datenbank',
+                title: 'Zugriff entfernt',
                 description:
-                    'Wählen Sie das Datenbanksystem für Ihr neues Diagramm.',
+                    'Sie haben keinen Zugriff mehr auf dieses Diagramm.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -723,7 +723,7 @@ export const de: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Wählen Sie Ihre Datenbank',
+                title: 'Wählen Sie Ihr DBMS',
                 description:
                     'Wählen Sie das Datenbanksystem für Ihr neues Diagramm.',
                 search_placeholder: 'Datenbankmanagementsystem suchen…',

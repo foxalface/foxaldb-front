@@ -70,9 +70,9 @@ export const te: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'మీ డేటాబేస్‌ను ఎంచుకోండి',
+            title: 'డయాగ్రామ్‌ను తొలగించు',
             description:
-                'మీ కొత్త డయాగ్రామ్ కోసం డేటాబేస్ సిస్టమ్‌ను ఎంచుకోండి.',
+                'ఈ చర్యను తిరిగి చేయలేరు. ఇది డయాగ్రామ్‌ను శాశ్వతంగా తొలగిస్తుంది.',
             cancel: 'రద్దు',
             delete: 'తొలగించు',
         },
@@ -87,9 +87,8 @@ export const te: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'మీ డేటాబేస్‌ను ఎంచుకోండి',
-                description:
-                    'మీ కొత్త డయాగ్రామ్ కోసం డేటాబేస్ సిస్టమ్‌ను ఎంచుకోండి.',
+                title: 'యాక్సెస్ తీసివేయబడింది',
+                description: 'మీకు ఈ డయాగ్రామ్‌కు ఇంకా యాక్సెస్ లేదు.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -699,7 +698,7 @@ export const te: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'మీ డేటాబేస్‌ను ఎంచుకోండి',
+                title: 'మీ DBMS ను ఎంచుకోండి',
                 description:
                     'మీ కొత్త డయాగ్రామ్ కోసం డేటాబేస్ సిస్టమ్‌ను ఎంచుకోండి.',
                 search_placeholder:

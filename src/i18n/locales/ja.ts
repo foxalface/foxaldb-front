@@ -70,9 +70,9 @@ export const ja: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'データベースを選択',
+            title: 'ダイアグラムを削除',
             description:
-                '新しいダイアグラムのデータベースシステムを選択してください。',
+                'この操作は元に戻せません。ダイアグラムは完全に削除されます。',
             cancel: 'キャンセル',
             delete: '削除',
         },
@@ -87,9 +87,8 @@ export const ja: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'データベースを選択',
-                description:
-                    '新しいダイアグラムのデータベースシステムを選択してください。',
+                title: 'アクセスが削除されました',
+                description: 'このダイアグラムにアクセスできなくなりました。',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -704,7 +703,7 @@ export const ja: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'データベースを選択',
+                title: 'DBMS を選択',
                 description:
                     '新しいダイアグラムのデータベースシステムを選択してください。',
                 search_placeholder: 'データベース管理システムを検索…',

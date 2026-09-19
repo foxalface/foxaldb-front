@@ -69,9 +69,9 @@ export const ko_KR: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: '데이터베이스를 선택하세요',
+            title: '다이어그램 삭제',
             description:
-                '새 다이어그램에 사용할 데이터베이스 시스템을 선택하세요.',
+                '이 작업은 되돌릴 수 없습니다. 다이어그램이 영구적으로 삭제됩니다.',
             cancel: '취소',
             delete: '삭제',
         },
@@ -86,9 +86,8 @@ export const ko_KR: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: '데이터베이스를 선택하세요',
-                description:
-                    '새 다이어그램에 사용할 데이터베이스 시스템을 선택하세요.',
+                title: '액세스가 제거됨',
+                description: '이 다이어그램에 더 이상 액세스할 수 없습니다.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -698,7 +697,7 @@ export const ko_KR: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: '데이터베이스를 선택하세요',
+                title: 'DBMS를 선택하세요',
                 description:
                     '새 다이어그램에 사용할 데이터베이스 시스템을 선택하세요.',
                 search_placeholder: '데이터베이스 관리 시스템 검색…',

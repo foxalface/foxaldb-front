@@ -70,8 +70,9 @@ export const id_ID: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Pilih basis data Anda',
-            description: 'Pilih sistem basis data untuk diagram baru Anda.',
+            title: 'Hapus Diagram',
+            description:
+                'Tindakan ini tidak dapat dibatalkan. Diagram akan dihapus secara permanen.',
             cancel: 'Batal',
             delete: 'Hapus',
         },
@@ -86,8 +87,8 @@ export const id_ID: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Pilih basis data Anda',
-                description: 'Pilih sistem basis data untuk diagram baru Anda.',
+                title: 'Akses dihapus',
+                description: 'Anda tidak lagi memiliki akses ke diagram ini.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -705,7 +706,7 @@ export const id_ID: LanguageTranslation = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Pilih basis data Anda',
+                title: 'Pilih DBMS Anda',
                 description: 'Pilih sistem basis data untuk diagram baru Anda.',
                 search_placeholder: 'Cari sistem manajemen basis data…',
                 search_no_results:

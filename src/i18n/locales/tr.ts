@@ -70,8 +70,9 @@ export const tr: LanguageTranslation = {
         },
 
         delete_diagram_alert: {
-            title: 'Veritabanınızı seçin',
-            description: 'Yeni diyagramınız için veritabanı sistemini seçin.',
+            title: 'Diyagramı Sil',
+            description:
+                'Bu işlem geri alınamaz. Diyagram kalıcı olarak silinecektir.',
             cancel: 'İptal',
             delete: 'Sil',
         },
@@ -86,9 +87,8 @@ export const tr: LanguageTranslation = {
 
         diagram_access: {
             removed: {
-                title: 'Veritabanınızı seçin',
-                description:
-                    'Yeni diyagramınız için veritabanı sistemini seçin.',
+                title: 'Erişim kaldırıldı',
+                description: 'Bu diyagrama artık erişiminiz yok.',
             },
             role_changed_viewer: {
                 title: 'View-only access',
@@ -691,7 +691,7 @@ export const tr: LanguageTranslation = {
         },
         new_diagram_dialog: {
             database_selection: {
-                title: 'Veritabanınızı seçin',
+                title: "DBMS'nizi seçin",
                 description:
                     'Yeni diyagramınız için veritabanı sistemini seçin.',
                 search_placeholder: 'Veritabanı yönetim sistemlerinde ara…',

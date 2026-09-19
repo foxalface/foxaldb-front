@@ -696,7 +696,7 @@ export const en = {
 
         new_diagram_dialog: {
             database_selection: {
-                title: 'Choose your database',
+                title: 'Choose your DBMS',
                 description: 'Select the database system for your new diagram.',
                 search_placeholder: 'Search database systems...',
                 search_no_results: 'No database systems match your search.',
