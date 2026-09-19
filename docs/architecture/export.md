@@ -29,11 +29,11 @@ Export V1 is a **multi-target product capability**. That does **not** require al
 
 `Diagram` (`frontend/src/lib/domain/diagram.ts`) is the single schema representation for export.
 
-| Concern | Rule |
-|---------|------|
-| Input | `Diagram` (tables, relationships, dependencies, customTypes, areas, notes, `databaseType`, optional `databaseEdition`) |
-| Mutation | Exporters must **not** mutate the source `Diagram` |
-| Dialect | `diagram.databaseType` is the diagram's DBMS; SQL export may target a different dialect via `targetDatabaseType` |
+| Concern     | Rule                                                                                                                                                                                                                                     |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Input       | `Diagram` (tables, relationships, dependencies, customTypes, areas, notes, `databaseType`, optional `databaseEdition`)                                                                                                                   |
+| Mutation    | Exporters must **not** mutate the source `Diagram`                                                                                                                                                                                       |
+| Dialect     | `diagram.databaseType` is the diagram's DBMS; SQL export may target a different dialect via `targetDatabaseType`                                                                                                                         |
 | Persistence | Frontend exports use `currentDiagram` from editor state. Laravel generation is backend-owned: the wizard sends that current Diagram as ephemeral request `content`. Persisted `diagrams.content` is used only when `content` is omitted. |
 
 ---
@@ -57,11 +57,11 @@ Transforms the canonical `Diagram` into framework-native schema/code artifacts:
 - EF Core (model project ZIP) — **implemented**
 - Rails (Rails 8.1 package ZIP) — **implemented** (wizard + browser ZIP; Ruby runtime QA still pending)
 - Django (Django 6.1 drop-in app ZIP) — **implemented** (wizard + browser ZIP; runtime QA deferred; manual browser/ZIP QA still required)
-- Drizzle — **planned** (separate milestone)
+- Drizzle (drizzle-orm ^0.45 schema package ZIP) — **implemented** (wizard + browser ZIP; runtime drizzle-kit QA deferred; manual browser/ZIP QA still required)
 
 Framework import parsers are **not** inverted into exporters. Each framework export receives its own implementation milestone with independent tests and QA.
 
-**Framework export authentication:** framework-native exports require an authenticated user (Sanctum). This applies to Laravel, Prisma, EF Core, Rails, and Django today, and to Drizzle when implemented. Authentication is **not** paid-plan gating — registered free users may use framework exports unless another product rule applies. Portable/local exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain guest-accessible.
+**Framework export authentication:** framework-native exports require an authenticated user (Sanctum). This applies to Laravel, Prisma, EF Core, Rails, Django, and Drizzle. Authentication is **not** paid-plan gating — registered free users may use framework exports unless another product rule applies. Portable/local exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain guest-accessible.
 
 ### C. Portable / Schema
 
@@ -88,19 +88,19 @@ Visual export is technically independent. It uses DOM/React Flow capture (`html-
 
 The wizard is **product/orchestration UX only**. It does not imply a universal exporter implementation, generic `Exporter` interface, or shared backend export router.
 
-| Layer | Location |
-|-------|----------|
-| Orchestrator | `export-wizard-dialog.tsx` |
-| Target registry | `export-target-registry.ts` |
-| Availability | `export-target-availability.ts` |
-| Target picker step | `export-target-picker-step.tsx` |
-| Dialog API | `openExportWizardDialog` / `closeExportWizardDialog` in `dialog-context` |
+| Layer              | Location                                                                 |
+| ------------------ | ------------------------------------------------------------------------ |
+| Orchestrator       | `export-wizard-dialog.tsx`                                               |
+| Target registry    | `export-target-registry.ts`                                              |
+| Availability       | `export-target-availability.ts`                                          |
+| Target picker step | `export-target-picker-step.tsx`                                          |
+| Dialog API         | `openExportWizardDialog` / `closeExportWizardDialog` in `dialog-context` |
 
 **Target groups:** Database, Framework, Portable / Schema, Visual.
 
-**Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, Laravel migrations, Prisma, EF Core, Rails, and Django are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
+**Current routing:** SQL, DBML, Diagram JSON, PNG/JPG/SVG, Laravel migrations, Prisma, EF Core, Rails, Django, and Drizzle are wizard-native. Backup → Export diagram still opens `ExportDiagramDialog`, which shares the Diagram JSON serializer.
 
-**Planned framework target** (Drizzle) appears as a disabled entry until its dedicated milestone. **Prisma**, **Laravel**, **EF Core**, **Rails**, and **Django** require authentication. Prisma, EF Core, Rails, and Django are additionally gated by supported `diagram.databaseType` (unsupported DB types show a localized disabled reason for authenticated users; guests do not see those targets). Laravel remains hidden unless the diagram has a numeric backend ID.
+**Prisma**, **Laravel**, **EF Core**, **Rails**, **Django**, and **Drizzle** require authentication. Prisma, EF Core, Rails, Django, and Drizzle are additionally gated by supported `diagram.databaseType` (unsupported DB types show a localized disabled reason for authenticated users; guests do not see those targets). Laravel remains hidden unless the diagram has a numeric backend ID.
 
 ---
 
@@ -108,15 +108,15 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 ### SQL
 
-| Attribute | Detail |
-|-----------|--------|
-| **Input** | Filtered `Diagram` from `useChartDB().currentDiagram` (schema filter applied to tables, relationships, dependencies) |
-| **Execution** | Browser only |
-| **Auth** | None (guest OK) |
-| **Generators** | `frontend/src/lib/data/sql-export/export-sql-script.ts` (`exportBaseSQL`, `exportSQL`), `export-per-type/*`, `cross-dialect/*` |
-| **Output** | SQL DDL string; wizard preview via `CodeSnippet` (copy + `.sql` download) |
+| Attribute        | Detail                                                                                                                                                                |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Input**        | Filtered `Diagram` from `useChartDB().currentDiagram` (schema filter applied to tables, relationships, dependencies)                                                  |
+| **Execution**    | Browser only                                                                                                                                                          |
+| **Auth**         | None (guest OK)                                                                                                                                                       |
+| **Generators**   | `frontend/src/lib/data/sql-export/export-sql-script.ts` (`exportBaseSQL`, `exportSQL`), `export-per-type/*`, `cross-dialect/*`                                        |
+| **Output**       | SQL DDL string; wizard preview via `CodeSnippet` (copy + `.sql` download)                                                                                             |
 | **Entry points** | Actions → Export wizard → SQL (`export-wizard-dialog.tsx`, `export-wizard/sql/*`); legacy `export-sql-dialog.tsx` (no user-facing entry; retained in dialog provider) |
-| **Tests** | `frontend/src/lib/data/sql-export/__tests__/`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-sql.test.tsx` |
+| **Tests**        | `frontend/src/lib/data/sql-export/__tests__/`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-sql.test.tsx`                                              |
 
 **Routing (`exportBaseSQL`):**
 
@@ -127,15 +127,15 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 ### DBML
 
-| Attribute | Detail |
-|-----------|--------|
-| **Input** | Full `currentDiagram` (unfiltered; empty tables/fields sanitized inside generator) |
-| **Execution** | Browser only |
-| **Auth** | None |
-| **Generator** | `generateDBMLFromDiagram()` in `frontend/src/lib/dbml/dbml-export/dbml-export.ts` |
-| **Output** | `standardDbml` (wizard export); side panel also exposes `inlineDbml` / `relationshipsDbml` for live editing |
-| **Entry points** | Export wizard → DBML (`DBML_PREVIEW` with copy + `.dbml` download); side panel → DBML section (unchanged) |
-| **Tests** | `frontend/src/lib/dbml/dbml-export/__tests__/`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-dbml.test.tsx` |
+| Attribute        | Detail                                                                                                                     |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **Input**        | Full `currentDiagram` (unfiltered; empty tables/fields sanitized inside generator)                                         |
+| **Execution**    | Browser only                                                                                                               |
+| **Auth**         | None                                                                                                                       |
+| **Generator**    | `generateDBMLFromDiagram()` in `frontend/src/lib/dbml/dbml-export/dbml-export.ts`                                          |
+| **Output**       | `standardDbml` (wizard export); side panel also exposes `inlineDbml` / `relationshipsDbml` for live editing                |
+| **Entry points** | Export wizard → DBML (`DBML_PREVIEW` with copy + `.dbml` download); side panel → DBML section (unchanged)                  |
+| **Tests**        | `frontend/src/lib/dbml/dbml-export/__tests__/`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-dbml.test.tsx` |
 
 **Pipeline:** Diagram → `exportBaseSQL({ isDBMLFlow: true, skipFKGeneration: true })` → SQL sanitization → `@dbml/core` importer → post-processing (schemas, composite PKs, enums, refs, etc.).
 
@@ -143,31 +143,31 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 
 ### Diagram JSON
 
-| Attribute | Detail |
-|-----------|--------|
-| **Input** | Full unfiltered `currentDiagram` |
-| **Execution** | Browser only |
-| **Auth** | None |
-| **Generator** | `diagramToJSONOutput()` in `frontend/src/lib/export-import-utils.ts` |
-| **Output** | Pretty-printed Diagram-shaped JSON with sibling `schemaVersion: 1`; filename `{diagram-slug}.json` |
-| **Semantics** | Portable clone snapshot. FILE preserves internal entity IDs; root file id is `"diagram"`. Import creates a **new** diagram identity. Not restore-in-place. |
-| **Entry points** | Export wizard → Diagram JSON (`JSON_DOWNLOAD`); Backup → Export diagram (`ExportDiagramDialog`) |
-| **Tests** | `frontend/src/lib/__tests__/diagram-json-export.test.ts`; `build-diagram-json-export-filename.test.ts`; wizard JSON branch tests |
+| Attribute        | Detail                                                                                                                                                     |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Input**        | Full unfiltered `currentDiagram`                                                                                                                           |
+| **Execution**    | Browser only                                                                                                                                               |
+| **Auth**         | None                                                                                                                                                       |
+| **Generator**    | `diagramToJSONOutput()` in `frontend/src/lib/export-import-utils.ts`                                                                                       |
+| **Output**       | Pretty-printed Diagram-shaped JSON with sibling `schemaVersion: 1`; filename `{diagram-slug}.json`                                                         |
+| **Semantics**    | Portable clone snapshot. FILE preserves internal entity IDs; root file id is `"diagram"`. Import creates a **new** diagram identity. Not restore-in-place. |
+| **Entry points** | Export wizard → Diagram JSON (`JSON_DOWNLOAD`); Backup → Export diagram (`ExportDiagramDialog`)                                                            |
+| **Tests**        | `frontend/src/lib/__tests__/diagram-json-export.test.ts`; `build-diagram-json-export-filename.test.ts`; wizard JSON branch tests                           |
 
 Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate stringify logic.
 
 ### PNG / JPG / SVG
 
-| Attribute | Detail |
-|-----------|--------|
-| **Input** | Live React Flow DOM (`.react-flow__viewport`) of the **currently rendered** editor state, not `Diagram` JSON |
-| **Execution** | Browser only (`html-to-image`); no backend; no AI |
-| **Auth** | None |
-| **Provider** | `frontend/src/context/export-image-context/export-image-provider.tsx` |
-| **Helpers** | `frontend/src/lib/visual-export/` (filename, MIME, background, raster safety, capture layout) |
-| **Output** | `{diagram-slug}.png` / `{diagram-slug}.jpg` / `{diagram-slug}.svg` via `downloadBlob` |
-| **Entry points** | Export wizard → PNG / JPG / SVG (`VISUAL_OPTIONS`) |
-| **Tests** | `frontend/src/lib/visual-export/__tests__/`; `export-wizard-visual.test.tsx`; `export-image-provider.test.tsx` |
+| Attribute        | Detail                                                                                                         |
+| ---------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Input**        | Live React Flow DOM (`.react-flow__viewport`) of the **currently rendered** editor state, not `Diagram` JSON   |
+| **Execution**    | Browser only (`html-to-image`); no backend; no AI                                                              |
+| **Auth**         | None                                                                                                           |
+| **Provider**     | `frontend/src/context/export-image-context/export-image-provider.tsx`                                          |
+| **Helpers**      | `frontend/src/lib/visual-export/` (filename, MIME, background, raster safety, capture layout)                  |
+| **Output**       | `{diagram-slug}.png` / `{diagram-slug}.jpg` / `{diagram-slug}.svg` via `downloadBlob`                          |
+| **Entry points** | Export wizard → PNG / JPG / SVG (`VISUAL_OPTIONS`)                                                             |
+| **Tests**        | `frontend/src/lib/visual-export/__tests__/`; `export-wizard-visual.test.tsx`; `export-image-provider.test.tsx` |
 
 **Rendered-state semantics:** visual export follows the live canvas, not the full unfiltered canonical `Diagram`. Schema-filter-hidden tables, `node.hidden`, and `showDBViews` remain respected. Areas follow current canvas visibility. Notes follow current canvas behavior. This intentionally differs from DBML/JSON.
 
@@ -183,17 +183,17 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 ### Laravel migrations (ZIP)
 
-| Attribute | Detail |
-|-----------|--------|
-| **Input** | Full unfiltered `currentDiagram` sent as optional request `content`. If omitted, persisted `diagrams.content`. Generation does **not** persist the override. |
-| **Execution** | Private Laravel backend |
-| **Auth** | Sanctum + `DiagramPolicy::view` (owner/editor/viewer); valid backend diagram ID required. Guest/local IDs **hide** the target. Availability is independent of `databaseType`. |
-| **API** | `POST /api/diagrams/{diagram}/export/laravel-migrations` |
-| **Backend** | `backend/app/Http/Controllers/LaravelMigrationExportController.php` → `LaravelMigrationExportService` → `DiagramContentReader::fromArray` or `fromDiagram` → `LaravelMigrationGenerator` → `MigrationArchiveBuilder` |
-| **Frontend client** | `frontend/src/lib/api/diagram-laravel-export.ts` |
-| **Output** | ZIP (`{slug}-laravel-migrations.zip`) with `database/migrations/*.php` |
-| **Entry points** | Export wizard → Laravel migrations (`LARAVEL_OPTIONS`) |
-| **Tests** | `frontend/src/dialogs/export-wizard/__tests__/export-wizard-laravel.test.tsx`; `backend/tests/Feature/LaravelMigrationExportTest.php`, `LaravelMigrationExportSqliteExecutionTest.php`, opt-in `LaravelMigrationExportMysqlExecutionTest.php`; Unit files under `backend/tests/Unit/Services/LaravelMigrationExport/`; round-trip test in `LaravelMigrationImportExportRoundTripTest.php` |
+| Attribute           | Detail                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Input**           | Full unfiltered `currentDiagram` sent as optional request `content`. If omitted, persisted `diagrams.content`. Generation does **not** persist the override.                                                                                                                                                                                                                              |
+| **Execution**       | Private Laravel backend                                                                                                                                                                                                                                                                                                                                                                   |
+| **Auth**            | Sanctum + `DiagramPolicy::view` (owner/editor/viewer); valid backend diagram ID required. Guest/local IDs **hide** the target. Availability is independent of `databaseType`.                                                                                                                                                                                                             |
+| **API**             | `POST /api/diagrams/{diagram}/export/laravel-migrations`                                                                                                                                                                                                                                                                                                                                  |
+| **Backend**         | `backend/app/Http/Controllers/LaravelMigrationExportController.php` → `LaravelMigrationExportService` → `DiagramContentReader::fromArray` or `fromDiagram` → `LaravelMigrationGenerator` → `MigrationArchiveBuilder`                                                                                                                                                                      |
+| **Frontend client** | `frontend/src/lib/api/diagram-laravel-export.ts`                                                                                                                                                                                                                                                                                                                                          |
+| **Output**          | ZIP (`{slug}-laravel-migrations.zip`) with `database/migrations/*.php`                                                                                                                                                                                                                                                                                                                    |
+| **Entry points**    | Export wizard → Laravel migrations (`LARAVEL_OPTIONS`)                                                                                                                                                                                                                                                                                                                                    |
+| **Tests**           | `frontend/src/dialogs/export-wizard/__tests__/export-wizard-laravel.test.tsx`; `backend/tests/Feature/LaravelMigrationExportTest.php`, `LaravelMigrationExportSqliteExecutionTest.php`, opt-in `LaravelMigrationExportMysqlExecutionTest.php`; Unit files under `backend/tests/Unit/Services/LaravelMigrationExport/`; round-trip test in `LaravelMigrationImportExportRoundTripTest.php` |
 
 **Options:** `laravelVersion` (`10`–`13`, default `13`), `includeIndexes` (default true), `includeForeignKeys` (default true). Versions 10–13 currently share the same generator; only the `Generated for Laravel {n}.` comment differs.
 
@@ -205,25 +205,25 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 ### Prisma (`schema.prisma`)
 
-| Attribute | Detail |
-|-----------|--------|
-| **Input** | Full unfiltered `currentDiagram` (live editor state; no schema/table filter) |
-| **Execution** | Private Laravel backend (`backend/app/Services/PrismaSchemaExport/`) |
-| **Auth** | Sanctum (`auth:sanctum`); unauthenticated callers receive `401`. Guests **hide** the target in the wizard (same framework pattern as Laravel). Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. Stateless — diagram payload is not persisted. |
-| **Endpoint** | `POST /api/exports/prisma` with `{ version: "6" \| "7", diagram: Diagram }` |
-| **Frontend client** | `frontend/src/lib/api/prisma-export.ts` |
-| **Frontend types** | `frontend/src/lib/api/prisma-export-types.ts` |
-| **Target availability** | `frontend/src/lib/export/prisma-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type) |
-| **Output** | Fixed filename `schema.prisma` (`text/plain`); copy + download in wizard preview |
-| **Entry points** | Export wizard → Prisma (`PRISMA_VERSION` → `PRISMA_PREVIEW`) |
-| **Tests** | `frontend/src/lib/api/__tests__/prisma-export.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-prisma.test.tsx`; backend PHPUnit under `backend/tests/Feature/PrismaSchemaExportTest.php` and `backend/tests/Unit/Services/PrismaSchemaExport/` |
+| Attribute               | Detail                                                                                                                                                                                                                                                                                                                                          |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Input**               | Full unfiltered `currentDiagram` (live editor state; no schema/table filter)                                                                                                                                                                                                                                                                    |
+| **Execution**           | Private Laravel backend (`backend/app/Services/PrismaSchemaExport/`)                                                                                                                                                                                                                                                                            |
+| **Auth**                | Sanctum (`auth:sanctum`); unauthenticated callers receive `401`. Guests **hide** the target in the wizard (same framework pattern as Laravel). Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. Stateless — diagram payload is not persisted. |
+| **Endpoint**            | `POST /api/exports/prisma` with `{ version: "6" \| "7", diagram: Diagram }`                                                                                                                                                                                                                                                                     |
+| **Frontend client**     | `frontend/src/lib/api/prisma-export.ts`                                                                                                                                                                                                                                                                                                         |
+| **Frontend types**      | `frontend/src/lib/api/prisma-export-types.ts`                                                                                                                                                                                                                                                                                                   |
+| **Target availability** | `frontend/src/lib/export/prisma-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type)                                                                                                                                                                                                  |
+| **Output**              | Fixed filename `schema.prisma` (`text/plain`); copy + download in wizard preview                                                                                                                                                                                                                                                                |
+| **Entry points**        | Export wizard → Prisma (`PRISMA_VERSION` → `PRISMA_PREVIEW`)                                                                                                                                                                                                                                                                                    |
+| **Tests**               | `frontend/src/lib/api/__tests__/prisma-export.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-prisma.test.tsx`; backend PHPUnit under `backend/tests/Feature/PrismaSchemaExportTest.php` and `backend/tests/Unit/Services/PrismaSchemaExport/`                                                                            |
 
 **Version selector:** Prisma 7 (default, recommended) and Prisma 6. Wizard-local state only; resets to `7` on dialog close/reopen.
 
-| Version | Generator block | Datasource |
-|---------|-----------------|------------|
-| Prisma 6 | `provider = "prisma-client-js"` | `provider` + `url = env("DATABASE_URL")` |
-| Prisma 7 | `provider = "prisma-client"` + `output = "../generated/prisma"` | `provider` only (no URL) |
+| Version  | Generator block                                                 | Datasource                               |
+| -------- | --------------------------------------------------------------- | ---------------------------------------- |
+| Prisma 6 | `provider = "prisma-client-js"`                                 | `provider` + `url = env("DATABASE_URL")` |
+| Prisma 7 | `provider = "prisma-client"` + `output = "../generated/prisma"` | `provider` only (no URL)                 |
 
 **Provider inference:** `diagram.databaseType` maps to Prisma datasource provider on the backend. No provider override in V1.
 
@@ -243,19 +243,19 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 ### EF Core (model project ZIP)
 
-| Attribute | Detail |
-|-----------|--------|
-| **Input** | Full unfiltered `currentDiagram` (live editor state; no schema/table filter) |
-| **Execution** | Private Laravel backend (`backend/app/Services/EfCoreExport/`) |
-| **Auth** | Sanctum (`auth:sanctum` + `throttle:ef-core-export`); unauthenticated callers receive `401`. Guests **hide** the target. Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. Stateless — diagram payload is not persisted. |
-| **Endpoint** | `POST /api/exports/ef-core` with `{ diagram: Diagram, namespace?: string, dbContextName?: string }` |
-| **Frontend client** | `frontend/src/lib/api/ef-core-export.ts` |
-| **Frontend types** | `frontend/src/lib/api/ef-core-export-types.ts` |
-| **Target availability** | `frontend/src/lib/export/ef-core-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type) |
-| **ZIP** | Built in the browser with existing `fflate` `zipSync` from `response.files[]`. Backend does **not** create a ZIP and does **not** run `dotnet`. |
-| **Output** | `{slug}-ef-core.zip` (`application/zip`) using backend `filename` |
-| **Entry points** | Export wizard → EF Core (`EF_CORE_OPTIONS` → `EF_CORE_RESULT`) |
-| **Tests** | `frontend/src/lib/api/__tests__/ef-core-export.test.ts`; `frontend/src/lib/export/__tests__/ef-core-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-ef-core.test.tsx`; backend PHPUnit under `backend/tests/Feature/EfCoreExportTest.php` and `backend/tests/Unit/Services/EfCoreExport/` |
+| Attribute               | Detail                                                                                                                                                                                                                                                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Input**               | Full unfiltered `currentDiagram` (live editor state; no schema/table filter)                                                                                                                                                                                                                                              |
+| **Execution**           | Private Laravel backend (`backend/app/Services/EfCoreExport/`)                                                                                                                                                                                                                                                            |
+| **Auth**                | Sanctum (`auth:sanctum` + `throttle:ef-core-export`); unauthenticated callers receive `401`. Guests **hide** the target. Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. Stateless — diagram payload is not persisted. |
+| **Endpoint**            | `POST /api/exports/ef-core` with `{ diagram: Diagram, namespace?: string, dbContextName?: string }`                                                                                                                                                                                                                       |
+| **Frontend client**     | `frontend/src/lib/api/ef-core-export.ts`                                                                                                                                                                                                                                                                                  |
+| **Frontend types**      | `frontend/src/lib/api/ef-core-export-types.ts`                                                                                                                                                                                                                                                                            |
+| **Target availability** | `frontend/src/lib/export/ef-core-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type)                                                                                                                                                                           |
+| **ZIP**                 | Built in the browser with existing `fflate` `zipSync` from `response.files[]`. Backend does **not** create a ZIP and does **not** run `dotnet`.                                                                                                                                                                           |
+| **Output**              | `{slug}-ef-core.zip` (`application/zip`) using backend `filename`                                                                                                                                                                                                                                                         |
+| **Entry points**        | Export wizard → EF Core (`EF_CORE_OPTIONS` → `EF_CORE_RESULT`)                                                                                                                                                                                                                                                            |
+| **Tests**               | `frontend/src/lib/api/__tests__/ef-core-export.test.ts`; `frontend/src/lib/export/__tests__/ef-core-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-ef-core.test.tsx`; backend PHPUnit under `backend/tests/Feature/EfCoreExportTest.php` and `backend/tests/Unit/Services/EfCoreExport/`  |
 
 **EF Core 10 / .NET 10 only.** There is no version selector and no version request field. EF6 real `.NET 10` restore/build/model QA passed for PostgreSQL, SQL Server, SQLite, and MySQL representative generated projects. EF6.1 adds MySQL catalog Policy C: canonical `table.schema` remains the MySQL database/catalog name (SQL import/export unchanged), but EF Core omits the `ToTable` qualifier when the exportable table set has zero or one distinct catalog so `Database=` selects the target database. Two or more catalogs preserve `ToTable("table", "catalog")` because Oracle `MySql.EntityFrameworkCore` treats EF schema as a MySQL database qualifier. EF6 missed this because the MySQL QA fixture used `schema: null`. `dotnet ef migrations add` from the standalone class library is **not** sufficient (no connection string / `OnConfiguring` / design-time factory); a host/startup project or `IDesignTimeDbContextFactory` is required. Browser ZIP extraction was not re-tested in EF6.
 
@@ -277,19 +277,19 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 ### Rails (Rails 8.1 package ZIP)
 
-| Attribute | Detail |
-|-----------|--------|
-| **Input** | Full unfiltered `currentDiagram` (live editor state; no schema/table filter) |
-| **Execution** | Private Laravel backend (`backend/app/Services/RailsExport/`) |
-| **Auth** | Sanctum (`auth:sanctum` + `throttle:rails-export`); unauthenticated callers receive `401`. Guests **hide** the target. Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. No paid-plan gate. Stateless — diagram payload is not persisted. |
-| **Endpoint** | `POST /api/exports/rails` with `{ diagram: Diagram }` |
-| **Frontend client** | `frontend/src/lib/api/rails-export.ts` |
-| **Frontend types** | `frontend/src/lib/api/rails-export-types.ts` |
-| **Target availability** | `frontend/src/lib/export/rails-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type) |
-| **ZIP** | Built in the browser with existing `fflate` `zipSync` from `response.files[]`. Backend does **not** create a ZIP and does **not** run Ruby/`rails`. |
-| **Output** | `{slug}-rails.zip` (`application/zip`) using backend `filename` |
-| **Entry points** | Export wizard → Rails (`RAILS_RESULT`; no version or options step) |
-| **Tests** | `frontend/src/lib/api/__tests__/rails-export.test.ts`; `frontend/src/lib/export/__tests__/rails-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-rails.test.tsx`; backend PHPUnit under `backend/tests/Feature/RailsExportTest.php` and `backend/tests/Unit/Services/RailsExport/` |
+| Attribute               | Detail                                                                                                                                                                                                                                                                                                                                     |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Input**               | Full unfiltered `currentDiagram` (live editor state; no schema/table filter)                                                                                                                                                                                                                                                               |
+| **Execution**           | Private Laravel backend (`backend/app/Services/RailsExport/`)                                                                                                                                                                                                                                                                              |
+| **Auth**                | Sanctum (`auth:sanctum` + `throttle:rails-export`); unauthenticated callers receive `401`. Guests **hide** the target. Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. No paid-plan gate. Stateless — diagram payload is not persisted. |
+| **Endpoint**            | `POST /api/exports/rails` with `{ diagram: Diagram }`                                                                                                                                                                                                                                                                                      |
+| **Frontend client**     | `frontend/src/lib/api/rails-export.ts`                                                                                                                                                                                                                                                                                                     |
+| **Frontend types**      | `frontend/src/lib/api/rails-export-types.ts`                                                                                                                                                                                                                                                                                               |
+| **Target availability** | `frontend/src/lib/export/rails-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type)                                                                                                                                                                                              |
+| **ZIP**                 | Built in the browser with existing `fflate` `zipSync` from `response.files[]`. Backend does **not** create a ZIP and does **not** run Ruby/`rails`.                                                                                                                                                                                        |
+| **Output**              | `{slug}-rails.zip` (`application/zip`) using backend `filename`                                                                                                                                                                                                                                                                            |
+| **Entry points**        | Export wizard → Rails (`RAILS_RESULT`; no version or options step)                                                                                                                                                                                                                                                                         |
+| **Tests**               | `frontend/src/lib/api/__tests__/rails-export.test.ts`; `frontend/src/lib/export/__tests__/rails-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-rails.test.tsx`; backend PHPUnit under `backend/tests/Feature/RailsExportTest.php` and `backend/tests/Unit/Services/RailsExport/`                           |
 
 **Rails 8.1 only.** There is no version selector and no version request field. Wizard flow is `TARGET_PICKER` → `RAILS_RESULT`. Selecting Rails starts generation immediately. Ruby/`rails` runtime QA is **R6** and is not done.
 
@@ -309,19 +309,19 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 ### Django (Django 6.1 drop-in app ZIP)
 
-| Attribute | Detail |
-|-----------|--------|
-| **Input** | Full unfiltered `currentDiagram` (live editor state; no schema/table filter) |
-| **Execution** | Private Laravel backend (`backend/app/Services/DjangoExport/`) |
-| **Auth** | Sanctum (`auth:sanctum` + `throttle:django-export`); unauthenticated callers receive `401`. Guests **hide** the target. Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. No paid-plan gate. Stateless — diagram payload is not persisted. |
-| **Endpoint** | `POST /api/exports/django` with `{ diagram: Diagram }` |
-| **Frontend client** | `frontend/src/lib/api/django-export.ts` |
-| **Frontend types** | `frontend/src/lib/api/django-export-types.ts` |
-| **Target availability** | `frontend/src/lib/export/django-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type) |
-| **ZIP** | Built in the browser with existing `fflate` `zipSync` from `response.files[]`. Backend does **not** create a ZIP and does **not** run Python/Django. |
-| **Output** | `{slug}-django.zip` (`application/zip`) using backend `filename` |
-| **Entry points** | Export wizard → Django (`DJANGO_RESULT`; no version, provider, or options step) |
-| **Tests** | `frontend/src/lib/api/__tests__/django-export.test.ts`; `frontend/src/lib/export/__tests__/django-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-django.test.tsx`; `frontend/src/i18n/__tests__/django-export-locale-consistency.test.ts`; backend PHPUnit under `backend/tests/Feature/DjangoExportTest.php` and `backend/tests/Unit/Services/DjangoExport/` |
+| Attribute               | Detail                                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Input**               | Full unfiltered `currentDiagram` (live editor state; no schema/table filter)                                                                                                                                                                                                                                                                                                                  |
+| **Execution**           | Private Laravel backend (`backend/app/Services/DjangoExport/`)                                                                                                                                                                                                                                                                                                                                |
+| **Auth**                | Sanctum (`auth:sanctum` + `throttle:django-export`); unauthenticated callers receive `401`. Guests **hide** the target. Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. No paid-plan gate. Stateless — diagram payload is not persisted.                                                   |
+| **Endpoint**            | `POST /api/exports/django` with `{ diagram: Diagram }`                                                                                                                                                                                                                                                                                                                                        |
+| **Frontend client**     | `frontend/src/lib/api/django-export.ts`                                                                                                                                                                                                                                                                                                                                                       |
+| **Frontend types**      | `frontend/src/lib/api/django-export-types.ts`                                                                                                                                                                                                                                                                                                                                                 |
+| **Target availability** | `frontend/src/lib/export/django-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type)                                                                                                                                                                                                                                                |
+| **ZIP**                 | Built in the browser with existing `fflate` `zipSync` from `response.files[]`. Backend does **not** create a ZIP and does **not** run Python/Django.                                                                                                                                                                                                                                          |
+| **Output**              | `{slug}-django.zip` (`application/zip`) using backend `filename`                                                                                                                                                                                                                                                                                                                              |
+| **Entry points**        | Export wizard → Django (`DJANGO_RESULT`; no version, provider, or options step)                                                                                                                                                                                                                                                                                                               |
+| **Tests**               | `frontend/src/lib/api/__tests__/django-export.test.ts`; `frontend/src/lib/export/__tests__/django-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-django.test.tsx`; `frontend/src/i18n/__tests__/django-export-locale-consistency.test.ts`; backend PHPUnit under `backend/tests/Feature/DjangoExportTest.php` and `backend/tests/Unit/Services/DjangoExport/` |
 
 **Django 6.1 only.** There is no version selector, no Python version selector, and no provider selector. Wizard flow is `TARGET_PICKER` → `DJANGO_RESULT`. Selecting Django starts generation immediately. Runtime Django QA is deferred to unified Framework Export QA and is not done. Manual browser/ZIP QA is still required.
 
@@ -339,7 +339,39 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 **No generic framework exporter abstraction.** Django generation is private backend application logic. The public frontend exposes wizard UX, API transport, availability, localized note presentation, and browser ZIP download only.
 
-**Architectural rule:** Framework-native export generators (Laravel, Prisma, EF Core, Rails, Django, future Drizzle) are private backend-owned application logic and require authentication. Generic/portable/visual exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain frontend-side where appropriate and may remain guest-accessible.
+### Drizzle (schema package ZIP)
+
+| Attribute               | Detail                                                                                                                                                                                                                                                                                                                                                                                              |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Input**               | Full unfiltered `currentDiagram` (live editor state; no schema/table filter)                                                                                                                                                                                                                                                                                                                        |
+| **Execution**           | Private Laravel backend (`backend/app/Services/DrizzleExport/`)                                                                                                                                                                                                                                                                                                                                     |
+| **Auth**                | Sanctum (`auth:sanctum` + `throttle:drizzle-export`); unauthenticated callers receive `401`. Guests **hide** the target. Authenticated users on supported `databaseType` may export; unsupported DB types show a localized disabled reason. No backend diagram ID required. No paid-plan gate. Stateless — diagram payload is not persisted.                                                        |
+| **Endpoint**            | `POST /api/exports/drizzle` with `{ diagram: Diagram }`                                                                                                                                                                                                                                                                                                                                             |
+| **Frontend client**     | `frontend/src/lib/api/drizzle-export.ts`                                                                                                                                                                                                                                                                                                                                                            |
+| **Frontend types**      | `frontend/src/lib/api/drizzle-export-types.ts`                                                                                                                                                                                                                                                                                                                                                      |
+| **Target availability** | `frontend/src/lib/export/drizzle-export-capability.ts` (UI-only supported DB list) + `export-target-availability.ts` (authentication + DB type)                                                                                                                                                                                                                                                     |
+| **ZIP**                 | Built in the browser with existing `fflate` `zipSync` from `response.files[]`. Backend does **not** create a ZIP and does **not** run Node/drizzle-kit.                                                                                                                                                                                                                                             |
+| **Output**              | `{slug}-drizzle.zip` (`application/zip`) using backend `filename`                                                                                                                                                                                                                                                                                                                                   |
+| **Entry points**        | Export wizard → Drizzle (`DRIZZLE_RESULT`; no version, provider, or options step)                                                                                                                                                                                                                                                                                                                   |
+| **Tests**               | `frontend/src/lib/api/__tests__/drizzle-export.test.ts`; `frontend/src/lib/export/__tests__/drizzle-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-drizzle.test.tsx`; `frontend/src/i18n/__tests__/drizzle-export-locale-consistency.test.ts`; backend PHPUnit under `backend/tests/Feature/DrizzleExportTest.php` and `backend/tests/Unit/Services/DrizzleExport/` |
+
+**drizzle-orm ^0.45 / drizzle-kit ^0.31 only.** There is no version selector, no provider selector, and no options step. Wizard flow is `TARGET_PICKER` → `DRIZZLE_RESULT`. Selecting Drizzle starts generation immediately. D5 automated frontend QA passed (Drizzle API/ZIP/capability/notes/wizard tests, export-wizard Django/Rails/EF Core/Prisma/SQL/DBML/JSON/visual regressions, locale consistency, Drizzle importer tests, TypeScript, ESLint, Prettier). Manual browser/ZIP QA is still required. Runtime `drizzle-kit` QA is deferred to unified Framework Export QA and is not done.
+
+**Provider inference:** `diagram.databaseType` only. No provider override and no connection string. Unsupported types are **not** aliased to PostgreSQL or SQLite.
+
+**Supported database types:** PostgreSQL, MySQL, MariaDB, SQLite.
+
+**Unsupported (target disabled for authenticated users; hidden for guests):** SQL Server, Oracle, CockroachDB, ClickHouse, GENERIC, unknown types.
+
+**Artifact:** README, optional `FoxalDB-NOTES.md` (backend includes it in `files[]` when notes exist), `schema.ts`, credential-free `drizzle.config.ts`. Frontend does **not** generate `FoxalDB-NOTES.md`, `schema.ts`, or any other Drizzle source. `schema.ts` is the source of truth; SQL migration history is not reconstructed.
+
+**Notes:** backend `notes[]` carry stable English `message` strings (for API/debug and generated `FoxalDB-NOTES.md`) plus structured `code`, optional `path`, and optional `metadata` for UI interpolation. The D4 HTTP contract is unchanged: no `severity`, `version`, or UI-specific fields on note DTOs. The wizard applies a Drizzle-specific frontend severity policy: **warnings** (`view_skipped`, `type_omitted`, `type_degraded`, `enum_degraded`, `set_degraded`, `uuid_as_text`, `default_omitted`, `increment_omitted`, `relationship_skipped`, `index_omitted`, `check_omitted`, `comment_omitted`, `set_null_omitted`, `keyless_table_skipped`) render in an amber panel expanded by default; **technical adaptations** (`mariadb_mysql_dialect_adapted`, `mysql_catalog_omitted`, `mysql_multiple_catalogs_ignored`, `mariadb_catalog_omitted`, `mariadb_multiple_catalogs_ignored`, `schema_ignored_sqlite`, `postgres_schema_qualified`, `table_name_adjusted`, `table_name_collision`, `column_name_adjusted`, `keyless_table`, `sqlite_boolean_integer`, `sqlite_json_text`) render in a quieter disclosure collapsed by default. Unknown codes are treated as warnings. The localized note sentence and `note.path` are separate: the path is a labeled monospace line, never concatenated onto the sentence. The wizard localizes known note codes via `getDrizzleExportNotePresentation()` using `export_wizard.drizzle.result_step.notes.*` i18n keys in all 22 locales. Unknown codes, unknown reason tokens, or missing required metadata fall back to the backend `message` (or a generic localized fallback if the message is empty). Do not parse English `message` strings and do not recreate generator note semantics in the frontend. `FoxalDB-NOTES.md` inside the ZIP remains backend-generated English.
+
+**ZIP safety:** frontend rejects empty, absolute, `..` traversal, Windows drive, backslash-traversal, control characters, and duplicate paths, and fails the download visibly rather than writing a dangerous archive entry. ZIP metadata uses a stable 1980-01-01 mtime.
+
+**No generic framework exporter abstraction.** Drizzle generation is private backend application logic. The public frontend exposes wizard UX, API transport, availability, localized note presentation, and browser ZIP download only.
+
+**Architectural rule:** Framework-native export generators (Laravel, Prisma, EF Core, Rails, Django, Drizzle) are private backend-owned application logic and require authentication. Generic/portable/visual exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain frontend-side where appropriate and may remain guest-accessible.
 
 ---
 
@@ -353,29 +385,29 @@ Derived from current code (`export-sql-script.ts`, `cross-dialect-support.ts`, `
 
 ### Same-dialect export
 
-| DBMS | Dedicated deterministic exporter | Notes |
-|------|----------------------------------|-------|
-| PostgreSQL | Yes (`export-per-type/postgresql.ts`) | Core supported |
-| MySQL | Yes (`export-per-type/mysql.ts`) | Core supported |
-| MariaDB | Yes (shared MySQL exporter) | Core supported |
-| SQL Server | Yes (`export-per-type/mssql.ts`) | Core supported |
-| SQLite | Yes (`export-per-type/sqlite.ts`) | Core supported |
-| GENERIC | No — falls through to PostgreSQL exporter (`default` switch case) | Menu-exposed; PG-flavored output |
-| CockroachDB | **No** — `default` case uses PostgreSQL exporter | **Not** official dialect support; do not advertise |
-| ClickHouse | **No** — `default` case uses PostgreSQL exporter | **Not** official dialect support; do not advertise |
-| Oracle | **No** — `default` case uses PostgreSQL exporter | **Not** official dialect support; do not advertise |
+| DBMS        | Dedicated deterministic exporter                                  | Notes                                              |
+| ----------- | ----------------------------------------------------------------- | -------------------------------------------------- |
+| PostgreSQL  | Yes (`export-per-type/postgresql.ts`)                             | Core supported                                     |
+| MySQL       | Yes (`export-per-type/mysql.ts`)                                  | Core supported                                     |
+| MariaDB     | Yes (shared MySQL exporter)                                       | Core supported                                     |
+| SQL Server  | Yes (`export-per-type/mssql.ts`)                                  | Core supported                                     |
+| SQLite      | Yes (`export-per-type/sqlite.ts`)                                 | Core supported                                     |
+| GENERIC     | No — falls through to PostgreSQL exporter (`default` switch case) | Menu-exposed; PG-flavored output                   |
+| CockroachDB | **No** — `default` case uses PostgreSQL exporter                  | **Not** official dialect support; do not advertise |
+| ClickHouse  | **No** — `default` case uses PostgreSQL exporter                  | **Not** official dialect support; do not advertise |
+| Oracle      | **No** — `default` case uses PostgreSQL exporter                  | **Not** official dialect support; do not advertise |
 
 PostgreSQL fallback for Oracle/CockroachDB/ClickHouse produces PG-flavored DDL. This is implementation fallback, not genuine dedicated dialect support.
 
 ### Cross-dialect export
 
-| Source → Target | Deterministic | Legacy AI | Export wizard |
-|-----------------|---------------|-----------|---------------|
-| PostgreSQL → MySQL | Yes (`cross-dialect/postgresql/to-mysql.ts`) | Optional toggle in legacy dialog | Yes |
-| PostgreSQL → MariaDB | Yes (same converter as MySQL) | Optional toggle in legacy dialog | Yes |
-| PostgreSQL → SQL Server | Yes (`cross-dialect/postgresql/to-mssql.ts`) | Optional toggle in legacy dialog | Yes |
-| Any → GENERIC (target) | Yes (generic builder when `targetDatabaseType === GENERIC`) | No | **Not exposed** |
-| All other cross-dialect pairs | No | **Required** (`exportSQL` + LLM config) | **Not exposed** |
+| Source → Target               | Deterministic                                               | Legacy AI                               | Export wizard   |
+| ----------------------------- | ----------------------------------------------------------- | --------------------------------------- | --------------- |
+| PostgreSQL → MySQL            | Yes (`cross-dialect/postgresql/to-mysql.ts`)                | Optional toggle in legacy dialog        | Yes             |
+| PostgreSQL → MariaDB          | Yes (same converter as MySQL)                               | Optional toggle in legacy dialog        | Yes             |
+| PostgreSQL → SQL Server       | Yes (`cross-dialect/postgresql/to-mssql.ts`)                | Optional toggle in legacy dialog        | Yes             |
+| Any → GENERIC (target)        | Yes (generic builder when `targetDatabaseType === GENERIC`) | No                                      | **Not exposed** |
+| All other cross-dialect pairs | No                                                          | **Required** (`exportSQL` + LLM config) | **Not exposed** |
 
 Verified deterministic cross-dialect paths (`frontend/src/lib/data/sql-export/cross-dialect/cross-dialect-support.ts`):
 
@@ -413,16 +445,16 @@ Cross-dialect PG targets show a Deterministic/AI toggle. Other cross-dialect pai
 
 **Not part of FoxalDB Export architecture.** Documented for audit and migration only.
 
-| Aspect | Detail |
-|--------|--------|
-| **Location** | `exportSQL()` in `frontend/src/lib/data/sql-export/export-sql-script.ts` |
-| **Trigger** | Legacy `ExportSQLDialog` only (no wizard/menu entry); when `hasDeterministicPath` is false, or user selects AI on PG cross-dialect exports |
-| **Execution** | Client-side; `@ai-sdk/openai` + `ai` package (`streamText` / `generateText`) |
-| **Config** | `VITE_OPENAI_API_KEY`, `VITE_OPENAI_API_ENDPOINT`, `VITE_LLM_MODEL_NAME` (or `window.env.*`) |
-| **Cache** | `localStorage` via `export-sql-cache.ts` |
-| **Origin** | Inherited ChartDB behavior |
-| **SaaS** | Without injected keys/custom endpoint, cross-dialect AI paths fail at `validateConfiguration()` |
-| **Policy** | Must not become required for FoxalDB's core schema lifecycle; final SaaS exposure/removal is a later Export V1 UX decision |
+| Aspect        | Detail                                                                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Location**  | `exportSQL()` in `frontend/src/lib/data/sql-export/export-sql-script.ts`                                                                   |
+| **Trigger**   | Legacy `ExportSQLDialog` only (no wizard/menu entry); when `hasDeterministicPath` is false, or user selects AI on PG cross-dialect exports |
+| **Execution** | Client-side; `@ai-sdk/openai` + `ai` package (`streamText` / `generateText`)                                                               |
+| **Config**    | `VITE_OPENAI_API_KEY`, `VITE_OPENAI_API_ENDPOINT`, `VITE_LLM_MODEL_NAME` (or `window.env.*`)                                               |
+| **Cache**     | `localStorage` via `export-sql-cache.ts`                                                                                                   |
+| **Origin**    | Inherited ChartDB behavior                                                                                                                 |
+| **SaaS**      | Without injected keys/custom endpoint, cross-dialect AI paths fail at `validateConfiguration()`                                            |
+| **Policy**    | Must not become required for FoxalDB's core schema lifecycle; final SaaS exposure/removal is a later Export V1 UX decision                 |
 
 `exportSQL` early-returns without LLM when `databaseType === diagram.databaseType` (after `exportBaseSQL`).
 
@@ -525,6 +557,7 @@ These are **not** the future generic Schema Diff/Sync/Merge design.
 - EF Core model project export (auth-gated; browser ZIP)
 - Rails 8.1 package export (auth-gated; browser ZIP; Ruby runtime QA pending)
 - Django 6.1 drop-in app export (auth-gated; browser ZIP; runtime QA deferred; manual browser/ZIP QA still required)
+- Drizzle 0.45 schema package export (auth-gated; browser ZIP; runtime drizzle-kit QA deferred; manual browser/ZIP QA still required)
 
 ### Strategic framework targets (separate milestones each)
 
@@ -534,7 +567,7 @@ Each remaining target receives its own implementation, automated tests, manual Q
 - EF Core export — **implemented** (EF Core 10 / .NET 10 model project; MariaDB deferred; no Laravel `dotnet` execution; frontend ZIP; EF6 real restore/build/model QA passed)
 - Rails export — **implemented** (Rails 8.1; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; no version selector; Ruby runtime QA pending)
 - Django export — **implemented** (Django 6.1; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; no version selector; runtime QA deferred; manual browser/ZIP QA still required)
-- Drizzle export
+- Drizzle export — **implemented** (drizzle-orm ^0.45; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; no version selector; runtime drizzle-kit QA deferred; manual browser/ZIP QA still required)
 
 Import support for these frameworks does **not** imply export is implemented. Framework import parsers are **not** inverted into exporters.
 
@@ -555,14 +588,14 @@ Import support for these frameworks does **not** imply export is implemented. Fr
 
 FoxalDB imports more DBMS and framework formats than it exports in V1. Examples:
 
-| Capability | Import | Export V1 |
-|------------|--------|-----------|
-| SQL DDL (8 DBMS) | Yes (varies by DBMS) | Deterministic for 5 dialects + PG cross-dialect (wizard SQL milestone) |
-| DBML | Yes | Wizard-native (standard DBML only); side panel unchanged |
-| Diagram JSON | Yes | Yes (via wizard) |
-| Metadata JSON | Yes | No |
-| Project ZIP (6 frameworks) | Yes | Laravel, Prisma, EF Core, Rails, and Django export yes; Drizzle planned (wizard shows disabled) |
-| Laravel migrations ZIP | Import (legacy + project) | Export (backend, auth) |
+| Capability                 | Import                    | Export V1                                                              |
+| -------------------------- | ------------------------- | ---------------------------------------------------------------------- |
+| SQL DDL (8 DBMS)           | Yes (varies by DBMS)      | Deterministic for 5 dialects + PG cross-dialect (wizard SQL milestone) |
+| DBML                       | Yes                       | Wizard-native (standard DBML only); side panel unchanged               |
+| Diagram JSON               | Yes                       | Yes (via wizard)                                                       |
+| Metadata JSON              | Yes                       | No                                                                     |
+| Project ZIP (6 frameworks) | Yes                       | Laravel, Prisma, EF Core, Rails, Django, and Drizzle export yes        |
+| Laravel migrations ZIP     | Import (legacy + project) | Export (backend, auth)                                                 |
 
 Do not force artificial feature symmetry.
 
@@ -588,16 +621,16 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 
 ### Current coverage (high level)
 
-| Area | Location | Status |
-|------|----------|--------|
-| SQL same-dialect | `frontend/src/lib/data/sql-export/__tests__/` | Covered |
-| SQL cross-dialect (PG) | `cross-dialect-export.test.ts` | Covered |
-| SQL DBML flow flag | `export-sql-dbml.test.ts` | Covered |
-| DBML generator | `frontend/src/lib/dbml/dbml-export/__tests__/` (9 files) | Covered |
-| Laravel export | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite | Covered |
-| Diagram JSON export | `frontend/src/lib/__tests__/diagram-json-export.test.ts`, filename + wizard JSON tests | Covered (JSON-B) |
-| Image export | `frontend/src/lib/visual-export/__tests__/`; wizard visual + provider tests | Covered |
-| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/` | Covered (foundation + SQL + DBML + JSON + visual + Laravel + Prisma + EF Core + Rails + Django branches) |
+| Area                       | Location                                                                               | Status                                                                                                             |
+| -------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| SQL same-dialect           | `frontend/src/lib/data/sql-export/__tests__/`                                          | Covered                                                                                                            |
+| SQL cross-dialect (PG)     | `cross-dialect-export.test.ts`                                                         | Covered                                                                                                            |
+| SQL DBML flow flag         | `export-sql-dbml.test.ts`                                                              | Covered                                                                                                            |
+| DBML generator             | `frontend/src/lib/dbml/dbml-export/__tests__/` (9 files)                               | Covered                                                                                                            |
+| Laravel export             | `backend/tests/Feature/LaravelMigrationExportTest.php` + Unit suite                    | Covered                                                                                                            |
+| Diagram JSON export        | `frontend/src/lib/__tests__/diagram-json-export.test.ts`, filename + wizard JSON tests | Covered (JSON-B)                                                                                                   |
+| Image export               | `frontend/src/lib/visual-export/__tests__/`; wizard visual + provider tests            | Covered                                                                                                            |
+| Export UX / wizard routing | `frontend/src/dialogs/export-wizard/__tests__/`                                        | Covered (foundation + SQL + DBML + JSON + visual + Laravel + Prisma + EF Core + Rails + Django + Drizzle branches) |
 
 ### Expected Export V1 regression strategy
 
@@ -616,7 +649,7 @@ Do not rely on frozen global test counts. Re-run relevant suites when validating
 
 Verified in current code:
 
-- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, Diagram JSON, visual, Laravel, Prisma, EF Core, Rails, and Django branches are wizard-native
+- **Fragmented Export UX** — resolved by Export Wizard foundation; SQL, DBML, Diagram JSON, visual, Laravel, Prisma, EF Core, Rails, Django, and Drizzle branches are wizard-native
 - **Legacy AI SQL path** — active in `exportSQL` and legacy `ExportSQLDialog`; unreachable from Export Wizard
 - **Misleading UI labels** — legacy `ExportSQLDialog` still has ✨ targets, Sparkles loader, hardcoded English "Deterministic"/"AI" toggle
 - **Oracle/CockroachDB/ClickHouse** — PostgreSQL exporter fallback in generator; wizard shows unsupported UX, not fake targets
@@ -628,6 +661,7 @@ Verified in current code:
 - **EF Core export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; MariaDB is deferred; real `dotnet` restore/build/model QA passed (EF6); `dotnet ef` needs a startup project or design-time factory
 - **Rails export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; Ruby/`rails` runtime QA (R6) is still pending
 - **Django export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; `0001_initial.py` is a current-schema baseline, not history; runtime Django QA is deferred to unified Framework Export QA; manual browser/ZIP QA is still required
+- **Drizzle export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; frontend does not generate `schema.ts`; runtime drizzle-kit QA is deferred to unified Framework Export QA; manual browser/ZIP QA is still required
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML full diagram; images follow rendered canvas (filters/hidden nodes respected)
 - **SVG portability** — visual SVG remains html-to-image `foreignObject` HTML, not a native vector engine
 
@@ -640,7 +674,7 @@ This document and implementation milestones do **not**:
 - implement a generic `Exporter` interface
 - remove legacy AI SQL code
 - add Oracle/CockroachDB/ClickHouse dedicated SQL exporters
-- implement Drizzle framework exporter (separate milestone)
+- implement Drizzle framework exporter (D5 wizard implemented; V1 not complete until manual + runtime QA)
 - modify Import
 - implement Sync/Diff/Merge
 - introduce `ChangeSet`
@@ -721,6 +755,15 @@ This document and implementation milestones do **not**:
 - `frontend/src/dialogs/export-wizard/django/`
 - `frontend/src/i18n/django-export-notes/`
 
+### Frontend — Drizzle client
+
+- `frontend/src/lib/api/drizzle-export.ts`
+- `frontend/src/lib/api/drizzle-export-types.ts`
+- `frontend/src/lib/export/drizzle-export-capability.ts`
+- `frontend/src/lib/export/drizzle-export-zip.ts`
+- `frontend/src/dialogs/export-wizard/drizzle/`
+- `frontend/src/i18n/drizzle-export-notes/`
+
 ### Frontend — UX entry
 
 - `frontend/src/dialogs/export-wizard/`
@@ -750,3 +793,9 @@ This document and implementation milestones do **not**:
 - `backend/app/Http/Controllers/DjangoExportController.php`
 - `backend/app/Services/DjangoExport/`
 - `backend/docs/django-export.md`
+
+### Backend — Drizzle export
+
+- `backend/app/Http/Controllers/DrizzleExportController.php`
+- `backend/app/Services/DrizzleExport/`
+- `backend/docs/drizzle-export.md`

@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/pt_BR';
 import { djangoExportNoteMessages } from '../django-export-notes/pt_BR';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/pt_BR';
 
 export const pt_BR: LanguageTranslation = {
     translation: {
@@ -1133,7 +1134,7 @@ export const pt_BR: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Exportação de esquema Drizzle',
+                    description: 'Exportação de pacote de esquema Drizzle 0.45',
                 },
                 png: {
                     title: 'PNG',
@@ -1414,6 +1415,61 @@ export const pt_BR: LanguageTranslation = {
                             'Catálogos MySQL colidem após remoção do catálogo para «{{path}}».',
                         mariadb_catalog_collision:
                             'Catálogos MariaDB colidem após remoção do catálogo para «{{path}}».',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'A exportação Drizzle atualmente oferece suporte a PostgreSQL, MySQL, MariaDB e SQLite.',
+                result_step: {
+                    description: 'Revise o pacote Drizzle 0.45 gerado.',
+                    explanation:
+                        'Esta exportação é um pacote de esquema Drizzle. schema.ts é a fonte da verdade. drizzle.config.ts não contém credenciais (apenas dialeto, caminho do esquema e diretório de saída). O histórico de migrações SQL não é reconstruído. A validação em tempo de execução com drizzle-kit não foi realizada.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'Provedor: {{provider}}',
+                    package_type:
+                        'Pacote: esquema Drizzle (schema.ts + drizzle.config.ts)',
+                    generating: 'Gerando o pacote Drizzle...',
+                    success: 'Pacote Drizzle gerado.',
+                    generated_files: 'Arquivos gerados ({{count}})',
+                    notes_heading: 'Observações',
+                    warnings_heading: 'Avisos ({{count}})',
+                    adaptations_heading: 'Adaptações técnicas ({{count}})',
+                    path_label: 'Caminho: {{path}}',
+                    unknown_note:
+                        'Uma nota de exportação adicional foi retornada e não pôde ser localizada.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'Baixar ZIP',
+                    retry: 'Tentar novamente',
+                    error_semantic: 'Não foi possível gerar o pacote Drizzle.',
+                    error_unauthenticated:
+                        'Você precisa estar conectado para exportar pacotes Drizzle.',
+                    error_invalid_request:
+                        'Não foi possível exportar o diagrama. Ele pode ser inválido ou grande demais.',
+                    error_rate_limited:
+                        'Muitas solicitações de exportação. Aguarde um momento e tente novamente.',
+                    error_unexpected:
+                        'A exportação Drizzle falhou no servidor. Tente novamente.',
+                    error_network:
+                        'Não foi possível alcançar o servidor. Verifique sua conexão e tente novamente.',
+                    error_unsafe_path:
+                        'A exportação contém um caminho de arquivo inseguro e não foi baixada.',
+                    error_empty_files:
+                        'A exportação não incluiu nenhum arquivo.',
+                    error_invalid_package:
+                        'O pacote gerado é inválido e não foi baixado.',
+                    errors: {
+                        unsupported_database:
+                            'A exportação Drizzle não está disponível para este tipo de banco de dados.',
+                        empty_diagram:
+                            'O diagrama não tem tabelas exportáveis.',
+                        unsupported_structural_field:
+                            'Um campo de chave primária ou estrutural em "{{path}}" não pode ser representado no Drizzle.',
+                        mysql_catalog_collision:
+                            'Vários catálogos MySQL contêm a mesma tabela física "{{path}}" e não podem ser achatados com segurança em um único esquema Drizzle MySQL.',
+                        mariadb_catalog_collision:
+                            'Vários catálogos MariaDB contêm a mesma tabela física "{{path}}" e não podem ser achatados com segurança em um único esquema Drizzle MariaDB.',
                     },
                 },
             },

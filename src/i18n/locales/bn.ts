@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/bn';
 import { djangoExportNoteMessages } from '../django-export-notes/bn';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/bn';
 
 export const bn: LanguageTranslation = {
     translation: {
@@ -1116,7 +1117,7 @@ export const bn: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Drizzle স্কিমা রপ্তানি',
+                    description: 'Drizzle 0.45 স্কিমা প্যাকেজ রপ্তানি',
                 },
                 png: {
                     title: 'PNG',
@@ -1393,6 +1394,60 @@ export const bn: LanguageTranslation = {
                             '«{{path}}»-এর জন্য catalog সরানোর পর MySQL catalogs collide করে।',
                         mariadb_catalog_collision:
                             '«{{path}}»-এর জন্য catalog সরানোর পর MariaDB catalogs collide করে।',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Drizzle রপ্তানি বর্তমানে PostgreSQL, MySQL, MariaDB এবং SQLite সমর্থন করে।',
+                result_step: {
+                    description:
+                        'জেনারেট করা Drizzle 0.45 প্যাকেজ পর্যালোচনা করুন।',
+                    explanation:
+                        'এই রপ্তানি একটি Drizzle স্কিমা প্যাকেজ। schema.ts সত্যের উৎস। drizzle.config.ts ক্রেডেনশিয়াল-মুক্ত (শুধু dialect, স্কিমা পথ এবং আউটপুট ডিরেক্টরি)। SQL মাইগ্রেশন ইতিহাস পুনর্গঠিত হয় না। drizzle-kit রানটাইম যাচাই করা হয়নি।',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'প্রদানকারী: {{provider}}',
+                    package_type:
+                        'প্যাকেজ: Drizzle স্কিমা (schema.ts + drizzle.config.ts)',
+                    generating: 'Drizzle প্যাকেজ জেনারেট হচ্ছে…',
+                    success: 'Drizzle প্যাকেজ জেনারেট হয়েছে।',
+                    generated_files: 'জেনারেট করা ফাইল ({{count}})',
+                    notes_heading: 'নোট',
+                    warnings_heading: 'সতর্কতা ({{count}})',
+                    adaptations_heading: 'কারিগরি অভিযোজন ({{count}})',
+                    path_label: 'পথ: {{path}}',
+                    unknown_note:
+                        'একটি অতিরিক্ত রপ্তানি নোট ফেরত এসেছে এবং স্থানীয়করণ করা যায়নি।',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'ZIP ডাউনলোড করুন',
+                    retry: 'আবার চেষ্টা করুন',
+                    error_semantic: 'Drizzle প্যাকেজ জেনারেট করা যায়নি।',
+                    error_unauthenticated:
+                        'Drizzle প্যাকেজ রপ্তানি করতে সাইন ইন করতে হবে।',
+                    error_invalid_request:
+                        'ডায়াগ্রাম রপ্তানি করা যায়নি। এটি অবৈধ বা খুব বড় হতে পারে।',
+                    error_rate_limited:
+                        'রপ্তানি অনুরোধ অতিরিক্ত। কিছুক্ষণ অপেক্ষা করে আবার চেষ্টা করুন।',
+                    error_unexpected:
+                        'সার্ভারে Drizzle রপ্তানি ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
+                    error_network:
+                        'সার্ভারে পৌঁছানো যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।',
+                    error_unsafe_path:
+                        'রপ্তানিতে অনিরাপদ ফাইল পথ আছে এবং ডাউনলোড হয়নি।',
+                    error_empty_files: 'রপ্তানিতে কোনো ফাইল ছিল না।',
+                    error_invalid_package:
+                        'জেনারেট করা প্যাকেজ অবৈধ এবং ডাউনলোড হয়নি।',
+                    errors: {
+                        unsupported_database:
+                            'এই ডাটাবেস ধরনের জন্য Drizzle রপ্তানি উপলব্ধ নয়।',
+                        empty_diagram: 'ডায়াগ্রামে রপ্তানিযোগ্য টেবিল নেই।',
+                        unsupported_structural_field:
+                            '«{{path}}»-এর প্রাথমিক-কী বা কাঠামোগত ফিল্ড Drizzle-এ উপস্থাপন করা যায় না।',
+                        mysql_catalog_collision:
+                            'একাধিক MySQL catalog-এ একই ভৌত টেবিল «{{path}}» আছে এবং সেগুলোকে একটি Drizzle MySQL স্কিমায় নিরাপদে সমতল করা যায় না।',
+                        mariadb_catalog_collision:
+                            'একাধিক MariaDB catalog-এ একই ভৌত টেবিল «{{path}}» আছে এবং সেগুলোকে একটি Drizzle MariaDB স্কিমায় নিরাপদে সমতল করা যায় না।',
                     },
                 },
             },

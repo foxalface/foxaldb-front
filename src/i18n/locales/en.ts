@@ -1,6 +1,7 @@
 import type { LanguageMetadata } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/en';
 import { djangoExportNoteMessages } from '../django-export-notes/en';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/en';
 
 export const en = {
     translation: {
@@ -1089,7 +1090,7 @@ export const en = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Drizzle schema export',
+                    description: 'Drizzle 0.45 schema package export',
                 },
                 png: {
                     title: 'PNG',
@@ -1389,6 +1390,60 @@ export const en = {
                             'MySQL catalogs collide after catalog removal for "{{path}}".',
                         mariadb_catalog_collision:
                             'MariaDB catalogs collide after catalog removal for "{{path}}".',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Drizzle export currently supports PostgreSQL, MySQL, MariaDB, and SQLite.',
+                result_step: {
+                    description: 'Review the generated Drizzle 0.45 package.',
+                    explanation:
+                        'This export is a Drizzle schema package. schema.ts is the source of truth. drizzle.config.ts is credential-free (dialect, schema path, and output directory only). SQL migration history is not reconstructed. Runtime drizzle-kit validation has not been performed.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'Provider: {{provider}}',
+                    package_type:
+                        'Package: Drizzle schema (schema.ts + drizzle.config.ts)',
+                    generating: 'Generating Drizzle package...',
+                    success: 'Drizzle package generated.',
+                    generated_files: 'Generated files ({{count}})',
+                    notes_heading: 'Notes',
+                    warnings_heading: 'Warnings ({{count}})',
+                    adaptations_heading: 'Technical adaptations ({{count}})',
+                    path_label: 'Path: {{path}}',
+                    unknown_note:
+                        'An additional export note was returned and could not be localized.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'Download ZIP',
+                    retry: 'Retry',
+                    error_semantic:
+                        'The Drizzle package could not be generated.',
+                    error_unauthenticated:
+                        'You need to be signed in to export Drizzle packages.',
+                    error_invalid_request:
+                        'The diagram could not be exported. It may be invalid or too large.',
+                    error_rate_limited:
+                        'Too many export requests. Please wait a moment and try again.',
+                    error_unexpected:
+                        'Drizzle export failed on the server. Please try again.',
+                    error_network:
+                        'Unable to reach the server. Check your connection and try again.',
+                    error_unsafe_path:
+                        'The export contains an unsafe file path and was not downloaded.',
+                    error_empty_files: 'The export did not include any files.',
+                    error_invalid_package:
+                        'The generated package is invalid and was not downloaded.',
+                    errors: {
+                        unsupported_database:
+                            'Drizzle export is not available for this database type.',
+                        empty_diagram: 'The diagram has no exportable tables.',
+                        unsupported_structural_field:
+                            'A primary-key or structural field on "{{path}}" cannot be represented in Drizzle.',
+                        mysql_catalog_collision:
+                            'Multiple MySQL catalogs contain the same physical table "{{path}}" and cannot safely be flattened into one Drizzle MySQL schema.',
+                        mariadb_catalog_collision:
+                            'Multiple MariaDB catalogs contain the same physical table "{{path}}" and cannot safely be flattened into one Drizzle MariaDB schema.',
                     },
                 },
             },

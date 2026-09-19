@@ -100,15 +100,15 @@ describe('ExportWizardDialog', () => {
         };
     });
 
-    it('renders four export groups', () => {
+    it('renders guest-visible export groups', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         expect(
             screen.getByText('export_wizard.sections.database')
         ).toBeInTheDocument();
         expect(
-            screen.getByText('export_wizard.sections.framework')
-        ).toBeInTheDocument();
+            screen.queryByText('export_wizard.sections.framework')
+        ).not.toBeInTheDocument();
         expect(
             screen.getByText('export_wizard.sections.portable')
         ).toBeInTheDocument();
@@ -136,7 +136,6 @@ describe('ExportWizardDialog', () => {
 
         const expectedTargets = [
             'export_wizard.targets.sql.title',
-            'export_wizard.targets.drizzle.title',
             'export_wizard.targets.dbml.title',
             'export_wizard.targets.diagram_json.title',
             'export_wizard.targets.png.title',
@@ -263,18 +262,15 @@ describe('ExportWizardDialog', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('shows remaining planned framework targets as disabled', () => {
+    it('hides Drizzle for guests', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const button = screen
-            .getByText('export_wizard.targets.drizzle.title')
-            .closest('button');
-
-        expect(button).toBeDisabled();
-
         expect(
-            screen.getAllByText('export_wizard.targets.framework.coming_soon')
-        ).toHaveLength(1);
+            screen.queryByText('export_wizard.targets.drizzle.title')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('export_wizard.targets.framework.coming_soon')
+        ).not.toBeInTheDocument();
     });
 
     it('hides Laravel export for guests', () => {

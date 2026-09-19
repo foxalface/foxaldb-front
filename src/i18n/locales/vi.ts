@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/vi';
 import { djangoExportNoteMessages } from '../django-export-notes/vi';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/vi';
 
 export const vi: LanguageTranslation = {
     translation: {
@@ -1118,7 +1119,7 @@ export const vi: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Xuất lược đồ Drizzle',
+                    description: 'Xuất gói lược đồ Drizzle 0.45',
                 },
                 png: {
                     title: 'PNG',
@@ -1385,6 +1386,59 @@ export const vi: LanguageTranslation = {
                             'Catalog MySQL xung đột sau khi loại bỏ catalog cho «{{path}}».',
                         mariadb_catalog_collision:
                             'Catalog MariaDB xung đột sau khi loại bỏ catalog cho «{{path}}».',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Xuất Drizzle hiện hỗ trợ PostgreSQL, MySQL, MariaDB và SQLite.',
+                result_step: {
+                    description: 'Xem lại gói Drizzle 0.45 đã tạo.',
+                    explanation:
+                        'Bản xuất này là gói lược đồ Drizzle. schema.ts là nguồn sự thật. drizzle.config.ts không chứa thông tin đăng nhập (chỉ dialect, đường dẫn lược đồ và thư mục đầu ra). Lịch sử migration SQL không được tái tạo. Chưa thực hiện kiểm tra drizzle-kit lúc chạy.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'Nhà cung cấp: {{provider}}',
+                    package_type:
+                        'Gói: lược đồ Drizzle (schema.ts + drizzle.config.ts)',
+                    generating: 'Đang tạo gói Drizzle…',
+                    success: 'Đã tạo gói Drizzle.',
+                    generated_files: 'Tệp đã tạo ({{count}})',
+                    notes_heading: 'Ghi chú',
+                    warnings_heading: 'Cảnh báo ({{count}})',
+                    adaptations_heading: 'Điều chỉnh kỹ thuật ({{count}})',
+                    path_label: 'Đường dẫn: {{path}}',
+                    unknown_note:
+                        'Một ghi chú xuất bổ sung đã được trả về và không thể bản địa hóa.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'Tải ZIP',
+                    retry: 'Thử lại',
+                    error_semantic: 'Không thể tạo gói Drizzle.',
+                    error_unauthenticated:
+                        'Bạn cần đăng nhập để xuất các gói Drizzle.',
+                    error_invalid_request:
+                        'Không thể xuất sơ đồ. Nó có thể không hợp lệ hoặc quá lớn.',
+                    error_rate_limited:
+                        'Quá nhiều yêu cầu xuất. Vui lòng đợi một lát rồi thử lại.',
+                    error_unexpected:
+                        'Xuất Drizzle thất bại trên máy chủ. Vui lòng thử lại.',
+                    error_network:
+                        'Không thể kết nối tới máy chủ. Kiểm tra kết nối rồi thử lại.',
+                    error_unsafe_path:
+                        'Bản xuất chứa đường dẫn tệp không an toàn và không được tải xuống.',
+                    error_empty_files: 'Bản xuất không bao gồm tệp nào.',
+                    error_invalid_package:
+                        'Gói đã tạo không hợp lệ nên không được tải xuống.',
+                    errors: {
+                        unsupported_database:
+                            'Xuất Drizzle không khả dụng cho loại cơ sở dữ liệu này.',
+                        empty_diagram: 'Sơ đồ không có bảng có thể xuất.',
+                        unsupported_structural_field:
+                            'Trường khóa chính hoặc trường cấu trúc trên «{{path}}» không thể biểu diễn trong Drizzle.',
+                        mysql_catalog_collision:
+                            'Nhiều catalog MySQL chứa cùng một bảng vật lý «{{path}}» và không thể được làm phẳng an toàn thành một lược đồ Drizzle MySQL.',
+                        mariadb_catalog_collision:
+                            'Nhiều catalog MariaDB chứa cùng một bảng vật lý «{{path}}» và không thể được làm phẳng an toàn thành một lược đồ Drizzle MariaDB.',
                     },
                 },
             },

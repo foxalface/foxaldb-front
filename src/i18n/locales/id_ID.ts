@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/id_ID';
 import { djangoExportNoteMessages } from '../django-export-notes/id_ID';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/id_ID';
 
 export const id_ID: LanguageTranslation = {
     translation: {
@@ -1118,7 +1119,7 @@ export const id_ID: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Ekspor skema Drizzle',
+                    description: 'Ekspor paket skema Drizzle 0.45',
                 },
                 png: {
                     title: 'PNG',
@@ -1394,6 +1395,60 @@ export const id_ID: LanguageTranslation = {
                             'Katalog MySQL bentrok setelah penghapusan katalog untuk «{{path}}».',
                         mariadb_catalog_collision:
                             'Katalog MariaDB bentrok setelah penghapusan katalog untuk «{{path}}».',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Ekspor Drizzle saat ini mendukung PostgreSQL, MySQL, MariaDB, dan SQLite.',
+                result_step: {
+                    description: 'Tinjau paket Drizzle 0.45 yang dihasilkan.',
+                    explanation:
+                        'Ekspor ini adalah paket skema Drizzle. schema.ts adalah sumber kebenaran. drizzle.config.ts bebas kredensial (hanya dialek, jalur skema, dan direktori keluaran). Riwayat migrasi SQL tidak direkonstruksi. Validasi runtime drizzle-kit belum dilakukan.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'Penyedia: {{provider}}',
+                    package_type:
+                        'Paket: skema Drizzle (schema.ts + drizzle.config.ts)',
+                    generating: 'Menghasilkan paket Drizzle…',
+                    success: 'Paket Drizzle dihasilkan.',
+                    generated_files: 'File yang dihasilkan ({{count}})',
+                    notes_heading: 'Catatan',
+                    warnings_heading: 'Peringatan ({{count}})',
+                    adaptations_heading: 'Adaptasi teknis ({{count}})',
+                    path_label: 'Jalur: {{path}}',
+                    unknown_note:
+                        'Catatan ekspor tambahan dikembalikan dan tidak dapat dilokalkan.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'Unduh ZIP',
+                    retry: 'Coba lagi',
+                    error_semantic: 'Paket Drizzle tidak dapat dihasilkan.',
+                    error_unauthenticated:
+                        'Anda harus masuk untuk mengekspor paket Drizzle.',
+                    error_invalid_request:
+                        'Diagram tidak dapat diekspor. Mungkin tidak valid atau terlalu besar.',
+                    error_rate_limited:
+                        'Terlalu banyak permintaan ekspor. Tunggu sebentar lalu coba lagi.',
+                    error_unexpected:
+                        'Ekspor Drizzle gagal di server. Silakan coba lagi.',
+                    error_network:
+                        'Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.',
+                    error_unsafe_path:
+                        'Ekspor berisi jalur file yang tidak aman dan tidak diunduh.',
+                    error_empty_files: 'Ekspor tidak menyertakan file apa pun.',
+                    error_invalid_package:
+                        'Paket yang dihasilkan tidak valid dan tidak diunduh.',
+                    errors: {
+                        unsupported_database:
+                            'Ekspor Drizzle tidak tersedia untuk jenis basis data ini.',
+                        empty_diagram:
+                            'Diagram tidak memiliki tabel yang dapat diekspor.',
+                        unsupported_structural_field:
+                            'Bidang kunci primer atau struktural pada «{{path}}» tidak dapat direpresentasikan di Drizzle.',
+                        mysql_catalog_collision:
+                            'Beberapa katalog MySQL berisi tabel fisik yang sama «{{path}}» dan tidak dapat diratakan dengan aman menjadi satu skema Drizzle MySQL.',
+                        mariadb_catalog_collision:
+                            'Beberapa katalog MariaDB berisi tabel fisik yang sama «{{path}}» dan tidak dapat diratakan dengan aman menjadi satu skema Drizzle MariaDB.',
                     },
                 },
             },

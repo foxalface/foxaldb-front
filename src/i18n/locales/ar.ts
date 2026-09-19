@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/ar';
 import { djangoExportNoteMessages } from '../django-export-notes/ar';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/ar';
 
 export const ar: LanguageTranslation = {
     translation: {
@@ -1103,7 +1104,7 @@ export const ar: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'تصدير مخطط Drizzle',
+                    description: 'تصدير حزمة مخطط Drizzle 0.45',
                 },
                 png: {
                     title: 'PNG',
@@ -1369,6 +1370,59 @@ export const ar: LanguageTranslation = {
                             'تتعارض catalogs MySQL بعد إزالة catalog لـ «{{path}}».',
                         mariadb_catalog_collision:
                             'تتعارض catalogs MariaDB بعد إزالة catalog لـ «{{path}}».',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'يدعم تصدير Drizzle حاليًا PostgreSQL وMySQL وMariaDB وSQLite.',
+                result_step: {
+                    description: 'راجع حزمة Drizzle 0.45 المُنشأة.',
+                    explanation:
+                        'هذا التصدير حزمة مخطط Drizzle. schema.ts هو مصدر الحقيقة. drizzle.config.ts خالٍ من بيانات الاعتماد (اللهجة ومسار المخطط ودليل الإخراج فقط). لا يُعاد بناء تاريخ ترحيل SQL. لم تُجرَ عملية التحقق أثناء التشغيل بواسطة drizzle-kit.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'المزوّد: {{provider}}',
+                    package_type:
+                        'الحزمة: مخطط Drizzle (schema.ts + drizzle.config.ts)',
+                    generating: 'جارٍ إنشاء حزمة Drizzle…',
+                    success: 'تم إنشاء حزمة Drizzle.',
+                    generated_files: 'الملفات المُنشأة ({{count}})',
+                    notes_heading: 'ملاحظات',
+                    warnings_heading: 'تحذيرات ({{count}})',
+                    adaptations_heading: 'تكييفات تقنية ({{count}})',
+                    path_label: 'المسار: {{path}}',
+                    unknown_note: 'أُرجعت ملاحظة تصدير إضافية وتعذّر توطينها.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'تنزيل ZIP',
+                    retry: 'إعادة المحاولة',
+                    error_semantic: 'تعذّر إنشاء حزمة Drizzle.',
+                    error_unauthenticated:
+                        'يجب تسجيل الدخول لتصدير حزم Drizzle.',
+                    error_invalid_request:
+                        'تعذّر تصدير المخطط. قد يكون غير صالح أو كبيرًا جدًا.',
+                    error_rate_limited:
+                        'طلبات تصدير كثيرة جدًا. يرجى الانتظار قليلًا ثم المحاولة مرة أخرى.',
+                    error_unexpected:
+                        'فشل تصدير Drizzle على الخادم. يرجى المحاولة مرة أخرى.',
+                    error_network:
+                        'تعذّر الوصول إلى الخادم. تحقق من اتصالك ثم حاول مرة أخرى.',
+                    error_unsafe_path:
+                        'يحتوي التصدير على مسار ملف غير آمن ولم يُنزَّل.',
+                    error_empty_files: 'لم يتضمّن التصدير أي ملفات.',
+                    error_invalid_package:
+                        'الحزمة المُنشأة غير صالحة ولم تُنزَّل.',
+                    errors: {
+                        unsupported_database:
+                            'تصدير Drizzle غير متاح لهذا النوع من قواعد البيانات.',
+                        empty_diagram:
+                            'المخطط لا يحتوي على جداول قابلة للتصدير.',
+                        unsupported_structural_field:
+                            'لا يمكن تمثيل حقل مفتاح أساسي أو هيكلي على «{{path}}» في Drizzle.',
+                        mysql_catalog_collision:
+                            'تحتوي عدة كتالوجات MySQL على الجدول الفعلي نفسه «{{path}}» ولا يمكن تسطيحها بأمان في مخطط Drizzle MySQL واحد.',
+                        mariadb_catalog_collision:
+                            'تحتوي عدة كتالوجات MariaDB على الجدول الفعلي نفسه «{{path}}» ولا يمكن تسطيحها بأمان في مخطط Drizzle MariaDB واحد.',
                     },
                 },
             },

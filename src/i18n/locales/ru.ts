@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/ru';
 import { djangoExportNoteMessages } from '../django-export-notes/ru';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/ru';
 
 export const ru: LanguageTranslation = {
     translation: {
@@ -1114,7 +1115,7 @@ export const ru: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Экспорт схемы Drizzle',
+                    description: 'Экспорт пакета схемы Drizzle 0.45',
                 },
                 png: {
                     title: 'PNG',
@@ -1391,6 +1392,60 @@ export const ru: LanguageTranslation = {
                             'Каталоги MySQL конфликтуют после удаления каталога для «{{path}}».',
                         mariadb_catalog_collision:
                             'Каталоги MariaDB конфликтуют после удаления каталога для «{{path}}».',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Экспорт Drizzle сейчас поддерживает PostgreSQL, MySQL, MariaDB и SQLite.',
+                result_step: {
+                    description: 'Проверьте созданный пакет Drizzle 0.45.',
+                    explanation:
+                        'Этот экспорт — пакет схемы Drizzle. schema.ts является источником истины. drizzle.config.ts не содержит учётных данных (только диалект, путь к схеме и каталог вывода). История SQL-миграций не восстанавливается. Проверка drizzle-kit во время выполнения не проводилась.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'Провайдер: {{provider}}',
+                    package_type:
+                        'Пакет: схема Drizzle (schema.ts + drizzle.config.ts)',
+                    generating: 'Создание пакета Drizzle…',
+                    success: 'Пакет Drizzle создан.',
+                    generated_files: 'Созданные файлы ({{count}})',
+                    notes_heading: 'Примечания',
+                    warnings_heading: 'Предупреждения ({{count}})',
+                    adaptations_heading: 'Технические адаптации ({{count}})',
+                    path_label: 'Путь: {{path}}',
+                    unknown_note:
+                        'Была возвращена дополнительная заметка экспорта, которую не удалось локализовать.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'Скачать ZIP',
+                    retry: 'Повторить',
+                    error_semantic: 'Не удалось создать пакет Drizzle.',
+                    error_unauthenticated:
+                        'Для экспорта пакетов Drizzle необходимо войти в систему.',
+                    error_invalid_request:
+                        'Не удалось экспортировать диаграмму. Она может быть недействительной или слишком большой.',
+                    error_rate_limited:
+                        'Слишком много запросов на экспорт. Подождите немного и повторите попытку.',
+                    error_unexpected:
+                        'Экспорт Drizzle не выполнен на сервере. Попробуйте ещё раз.',
+                    error_network:
+                        'Не удалось связаться с сервером. Проверьте подключение и попробуйте ещё раз.',
+                    error_unsafe_path:
+                        'Экспорт содержит небезопасный путь к файлу и не был скачан.',
+                    error_empty_files: 'Экспорт не включал ни одного файла.',
+                    error_invalid_package:
+                        'Созданный пакет недействителен и не был скачан.',
+                    errors: {
+                        unsupported_database:
+                            'Экспорт Drizzle недоступен для этого типа базы данных.',
+                        empty_diagram:
+                            'На диаграмме нет экспортируемых таблиц.',
+                        unsupported_structural_field:
+                            'Поле первичного ключа или структурное поле на «{{path}}» нельзя представить в Drizzle.',
+                        mysql_catalog_collision:
+                            'Несколько каталогов MySQL содержат одну и ту же физическую таблицу «{{path}}» и не могут быть безопасно сведены в одну схему Drizzle MySQL.',
+                        mariadb_catalog_collision:
+                            'Несколько каталогов MariaDB содержат одну и ту же физическую таблицу «{{path}}» и не могут быть безопасно сведены в одну схему Drizzle MariaDB.',
                     },
                 },
             },

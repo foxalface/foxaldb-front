@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/zh_CN';
 import { djangoExportNoteMessages } from '../django-export-notes/zh_CN';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/zh_CN';
 
 export const zh_CN: LanguageTranslation = {
     translation: {
@@ -1049,7 +1050,7 @@ export const zh_CN: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Drizzle 架构导出',
+                    description: 'Drizzle 0.45 架构包导出',
                 },
                 png: {
                     title: 'PNG',
@@ -1288,6 +1289,51 @@ export const zh_CN: LanguageTranslation = {
                             '移除 catalog 后，「{{path}}」的 MySQL catalog 发生冲突。',
                         mariadb_catalog_collision:
                             '移除 catalog 后，「{{path}}」的 MariaDB catalog 发生冲突。',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Drizzle 导出目前支持 PostgreSQL、MySQL、MariaDB 和 SQLite。',
+                result_step: {
+                    description: '请查看生成的 Drizzle 0.45 包。',
+                    explanation:
+                        '此导出是 Drizzle 架构包。schema.ts 是事实来源。drizzle.config.ts 不含凭据（仅有 dialect、架构路径和输出目录）。不会重建 SQL 迁移历史。尚未对 drizzle-kit 进行运行时校验。',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: '提供程序：{{provider}}',
+                    package_type:
+                        '包：Drizzle 架构（schema.ts + drizzle.config.ts）',
+                    generating: '正在生成 Drizzle 包…',
+                    success: '已生成 Drizzle 包。',
+                    generated_files: '生成的文件（{{count}}）',
+                    notes_heading: '说明',
+                    warnings_heading: '警告 ({{count}})',
+                    adaptations_heading: '技术适配 ({{count}})',
+                    path_label: '路径：{{path}}',
+                    unknown_note: '返回了一条额外的导出说明，无法本地化。',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: '下载 ZIP',
+                    retry: '重试',
+                    error_semantic: '无法生成 Drizzle 包。',
+                    error_unauthenticated: '导出 Drizzle 包需要登录。',
+                    error_invalid_request: '无法导出图表。它可能无效或过大。',
+                    error_rate_limited: '导出请求过多。请稍候再试。',
+                    error_unexpected: '服务器上的 Drizzle 导出失败。请重试。',
+                    error_network: '无法连接到服务器。请检查网络后重试。',
+                    error_unsafe_path: '导出包含不安全的文件路径，因此未下载。',
+                    error_empty_files: '导出未包含任何文件。',
+                    error_invalid_package: '生成的包无效，因此未下载。',
+                    errors: {
+                        unsupported_database:
+                            '此数据库类型不支持 Drizzle 导出。',
+                        empty_diagram: '图表没有可导出的表。',
+                        unsupported_structural_field:
+                            '「{{path}}」上的主键或结构字段无法在 Drizzle 中表示。',
+                        mysql_catalog_collision:
+                            '多个 MySQL catalog 包含同一张物理表「{{path}}」，无法安全地展平为单个 Drizzle MySQL 架构。',
+                        mariadb_catalog_collision:
+                            '多个 MariaDB catalog 包含同一张物理表「{{path}}」，无法安全地展平为单个 Drizzle MariaDB 架构。',
                     },
                 },
             },

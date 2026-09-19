@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/hr';
 import { djangoExportNoteMessages } from '../django-export-notes/hr';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/hr';
 
 export const hr: LanguageTranslation = {
     translation: {
@@ -1117,7 +1118,7 @@ export const hr: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Izvoz Drizzle sheme',
+                    description: 'Izvoz Drizzle 0.45 paketa sheme',
                 },
                 png: {
                     title: 'PNG',
@@ -1390,6 +1391,59 @@ export const hr: LanguageTranslation = {
                             'MySQL katalozi se sudaraju nakon uklanjanja kataloga za «{{path}}».',
                         mariadb_catalog_collision:
                             'MariaDB katalozi se sudaraju nakon uklanjanja kataloga za «{{path}}».',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Drizzle izvoz trenutačno podržava PostgreSQL, MySQL, MariaDB i SQLite.',
+                result_step: {
+                    description: 'Pregledajte generirani Drizzle 0.45 paket.',
+                    explanation:
+                        'Ovaj izvoz je Drizzle paket sheme. schema.ts je izvor istine. drizzle.config.ts je bez vjerodajnica (samo dijalekt, put sheme i izlazni direktorij). Povijest SQL migracija se ne rekonstruira. Runtime provjera drizzle-kit nije izvršena.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'Pružatelj: {{provider}}',
+                    package_type:
+                        'Paket: Drizzle shema (schema.ts + drizzle.config.ts)',
+                    generating: 'Generiranje Drizzle paketa…',
+                    success: 'Drizzle paket generiran.',
+                    generated_files: 'Generirane datoteke ({{count}})',
+                    notes_heading: 'Napomene',
+                    warnings_heading: 'Upozorenja ({{count}})',
+                    adaptations_heading: 'Tehničke prilagodbe ({{count}})',
+                    path_label: 'Put: {{path}}',
+                    unknown_note:
+                        'Vraćena je dodatna napomena izvoza koja se nije mogla lokalizirati.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'Preuzmi ZIP',
+                    retry: 'Pokušaj ponovno',
+                    error_semantic: 'Drizzle paket nije mogao biti generiran.',
+                    error_unauthenticated:
+                        'Morate biti prijavljeni da biste izvezli Drizzle pakete.',
+                    error_invalid_request:
+                        'Dijagram se nije mogao izvesti. Možda je nevažeći ili prevelik.',
+                    error_rate_limited:
+                        'Previše zahtjeva za izvoz. Pričekajte trenutak pa pokušajte ponovno.',
+                    error_unexpected:
+                        'Drizzle izvoz nije uspio na poslužitelju. Pokušajte ponovno.',
+                    error_network:
+                        'Nije moguće dohvatiti poslužitelj. Provjerite vezu i pokušajte ponovno.',
+                    error_unsafe_path:
+                        'Izvoz sadrži nesiguran put datoteke i nije preuzet.',
+                    error_empty_files: 'Izvoz nije sadržavao nijednu datoteku.',
+                    error_invalid_package:
+                        'Generirani paket nije valjan i nije preuzet.',
+                    errors: {
+                        unsupported_database:
+                            'Drizzle izvoz nije dostupan za ovaj tip baze podataka.',
+                        empty_diagram: 'Dijagram nema tablica za izvoz.',
+                        unsupported_structural_field:
+                            'Polje primarnog ključa ili strukturno polje na «{{path}}» ne može se prikazati u Drizzleu.',
+                        mysql_catalog_collision:
+                            'Više MySQL kataloga sadrži istu fizičku tablicu «{{path}}» i ne mogu se sigurno spljoštiti u jednu Drizzle MySQL shemu.',
+                        mariadb_catalog_collision:
+                            'Više MariaDB kataloga sadrži istu fizičku tablicu «{{path}}» i ne mogu se sigurno spljoštiti u jednu Drizzle MariaDB shemu.',
                     },
                 },
             },

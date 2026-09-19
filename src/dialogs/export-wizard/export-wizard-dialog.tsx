@@ -61,6 +61,9 @@ import type { RailsWizardRequestError } from './rails/export-rails-result-step';
 import { ExportDjangoResultStep } from './django/export-django-result-step';
 import { ExportDjangoBranchContext } from './django/export-django-branch-context';
 import type { DjangoWizardRequestError } from './django/export-django-result-step';
+import { ExportDrizzleResultStep } from './drizzle/export-drizzle-result-step';
+import { ExportDrizzleBranchContext } from './drizzle/export-drizzle-branch-context';
+import type { DrizzleWizardRequestError } from './drizzle/export-drizzle-result-step';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import {
@@ -86,12 +89,15 @@ import { exportPrismaSchema } from '@/lib/api/prisma-export';
 import { exportEfCoreProject } from '@/lib/api/ef-core-export';
 import { exportRailsProject } from '@/lib/api/rails-export';
 import { exportDjangoProject } from '@/lib/api/django-export';
+import { exportDrizzleProject } from '@/lib/api/drizzle-export';
 import type { EfCoreExportSuccessResponse } from '@/lib/api/ef-core-export-types';
 import type { RailsExportSuccess } from '@/lib/api/rails-export-types';
 import type { DjangoExportSuccess } from '@/lib/api/django-export-types';
+import type { DrizzleExportSuccess } from '@/lib/api/drizzle-export-types';
 import { DEFAULT_EF_CORE_DB_CONTEXT_NAME } from '@/lib/export/ef-core-export-constants';
 import { isEfCoreExportSupported } from '@/lib/export/ef-core-export-capability';
 import { isDjangoExportSupported } from '@/lib/export/django-export-capability';
+import { isDrizzleExportSupported } from '@/lib/export/drizzle-export-capability';
 import { isRailsExportSupported } from '@/lib/export/rails-export-capability';
 import { suggestEfCoreNamespace } from '@/lib/export/suggest-ef-core-namespace';
 import type {
@@ -180,6 +186,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         useState<DjangoWizardRequestError | null>(null);
     const [isDjangoExporting, setIsDjangoExporting] = useState(false);
     const djangoExportRequestIdRef = useRef(0);
+    const [drizzleSuccess, setDrizzleSuccess] =
+        useState<DrizzleExportSuccess | null>(null);
+    const [drizzleError, setDrizzleError] =
+        useState<DrizzleWizardRequestError | null>(null);
+    const [isDrizzleExporting, setIsDrizzleExporting] = useState(false);
+    const drizzleExportRequestIdRef = useRef(0);
+    const wasDialogOpenRef = useRef(false);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -245,6 +258,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         setIsDjangoExporting(false);
     }, []);
 
+    const resetDrizzleBranchState = useCallback(() => {
+        drizzleExportRequestIdRef.current += 1;
+        setDrizzleSuccess(null);
+        setDrizzleError(null);
+        setIsDrizzleExporting(false);
+    }, []);
+
     const applyVisualFormatDefaults = useCallback(
         (format: VisualExportFormat) => {
             setVisualFormat(format);
@@ -268,9 +288,11 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetEfCoreBranchState();
         resetRailsBranchState();
         resetDjangoBranchState();
+        resetDrizzleBranchState();
     }, [
         resetDbmlBranchState,
         resetDjangoBranchState,
+        resetDrizzleBranchState,
         resetEfCoreBranchState,
         resetLaravelBranchState,
         resetPrismaBranchState,
@@ -280,9 +302,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     ]);
 
     useEffect(() => {
-        if (dialog.open) {
+        const isOpen = dialog.open === true;
+
+        if (isOpen && !wasDialogOpenRef.current) {
             resetWizardState();
         }
+
+        wasDialogOpenRef.current = isOpen;
     }, [dialog.open, resetWizardState]);
 
     const availabilityContext = useMemo<ExportAvailabilityContext>(
@@ -313,6 +339,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetEfCoreBranchState();
                 resetRailsBranchState();
                 resetDjangoBranchState();
+                resetDrizzleBranchState();
                 setStep(ExportWizardStep.SQL_TARGET);
                 return;
             }
@@ -326,6 +353,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetEfCoreBranchState();
                 resetRailsBranchState();
                 resetDjangoBranchState();
+                resetDrizzleBranchState();
                 setStep(ExportWizardStep.DBML_PREVIEW);
                 return;
             }
@@ -339,6 +367,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetEfCoreBranchState();
                 resetRailsBranchState();
                 resetDjangoBranchState();
+                resetDrizzleBranchState();
                 setStep(ExportWizardStep.JSON_DOWNLOAD);
                 return;
             }
@@ -355,6 +384,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetEfCoreBranchState();
                 resetRailsBranchState();
                 resetDjangoBranchState();
+                resetDrizzleBranchState();
                 applyVisualFormatDefaults(targetId);
                 setStep(ExportWizardStep.VISUAL_OPTIONS);
                 return;
@@ -369,6 +399,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetEfCoreBranchState();
                 resetRailsBranchState();
                 resetDjangoBranchState();
+                resetDrizzleBranchState();
                 setStep(ExportWizardStep.LARAVEL_OPTIONS);
                 return;
             }
@@ -382,6 +413,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetEfCoreBranchState();
                 resetRailsBranchState();
                 resetDjangoBranchState();
+                resetDrizzleBranchState();
                 setStep(ExportWizardStep.PRISMA_VERSION);
                 return;
             }
@@ -402,6 +434,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetEfCoreBranchState();
                 resetRailsBranchState();
                 resetDjangoBranchState();
+                resetDrizzleBranchState();
                 setStep(ExportWizardStep.EF_CORE_OPTIONS);
                 return;
             }
@@ -419,6 +452,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetEfCoreBranchState();
                 resetRailsBranchState();
                 resetDjangoBranchState();
+                resetDrizzleBranchState();
                 setStep(ExportWizardStep.RAILS_RESULT);
                 return;
             }
@@ -439,7 +473,29 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetEfCoreBranchState();
                 resetRailsBranchState();
                 resetDjangoBranchState();
+                resetDrizzleBranchState();
                 setStep(ExportWizardStep.DJANGO_RESULT);
+                return;
+            }
+
+            if (targetId === 'drizzle') {
+                if (
+                    !isAuthenticated ||
+                    !isDrizzleExportSupported(databaseType)
+                ) {
+                    return;
+                }
+
+                resetSqlBranchState();
+                resetDbmlBranchState();
+                resetVisualBranchState();
+                resetLaravelBranchState();
+                resetPrismaBranchState();
+                resetEfCoreBranchState();
+                resetRailsBranchState();
+                resetDjangoBranchState();
+                resetDrizzleBranchState();
+                setStep(ExportWizardStep.DRIZZLE_RESULT);
             }
         },
         [
@@ -448,6 +504,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             isAuthenticated,
             resetDbmlBranchState,
             resetDjangoBranchState,
+            resetDrizzleBranchState,
             resetEfCoreBranchState,
             resetLaravelBranchState,
             resetPrismaBranchState,
@@ -549,6 +606,12 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             return;
         }
 
+        if (step === ExportWizardStep.DRIZZLE_RESULT) {
+            resetDrizzleBranchState();
+            setStep(ExportWizardStep.TARGET_PICKER);
+            return;
+        }
+
         if (step === ExportWizardStep.SQL_PREVIEW) {
             setSqlScript(undefined);
             setSqlHasError(false);
@@ -570,6 +633,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetPrismaBranchState,
         resetRailsBranchState,
         resetDjangoBranchState,
+        resetDrizzleBranchState,
         resetSqlBranchState,
         resetVisualBranchState,
         step,
@@ -1089,12 +1153,116 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step,
     ]);
 
+    const handleDrizzleRetry = useCallback(() => {
+        if (isDrizzleExporting) {
+            return;
+        }
+
+        drizzleExportRequestIdRef.current += 1;
+        setDrizzleSuccess(null);
+        setDrizzleError(null);
+    }, [isDrizzleExporting]);
+
+    useEffect(() => {
+        if (step !== ExportWizardStep.DRIZZLE_RESULT) {
+            return;
+        }
+
+        if (drizzleSuccess !== null || drizzleError !== null) {
+            return;
+        }
+
+        if (!isAuthenticated || !isDrizzleExportSupported(databaseType)) {
+            return;
+        }
+
+        const requestId = drizzleExportRequestIdRef.current + 1;
+        drizzleExportRequestIdRef.current = requestId;
+        let cancelled = false;
+        setIsDrizzleExporting(true);
+
+        void (async () => {
+            try {
+                const result = await exportDrizzleProject({
+                    diagram: currentDiagram,
+                });
+
+                if (
+                    cancelled ||
+                    requestId !== drizzleExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (!result.success) {
+                    setDrizzleError({
+                        kind: 'semantic',
+                        message: result.error.message,
+                        code: result.error.code,
+                        path: result.error.path,
+                    });
+                    return;
+                }
+
+                setDrizzleSuccess(result);
+            } catch (error) {
+                if (
+                    cancelled ||
+                    requestId !== drizzleExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (error instanceof ApiError) {
+                    if (error.status === 401) {
+                        setDrizzleError({ kind: 'unauthenticated' });
+                        return;
+                    }
+
+                    if (error.status === 422) {
+                        setDrizzleError({ kind: 'invalid_request' });
+                        return;
+                    }
+
+                    if (error.status === 429) {
+                        setDrizzleError({ kind: 'rate_limited' });
+                        return;
+                    }
+
+                    setDrizzleError({ kind: 'unexpected' });
+                    return;
+                }
+
+                setDrizzleError({ kind: 'network' });
+            } finally {
+                if (
+                    !cancelled &&
+                    requestId === drizzleExportRequestIdRef.current
+                ) {
+                    setIsDrizzleExporting(false);
+                }
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [
+        currentDiagram,
+        databaseType,
+        isAuthenticated,
+        drizzleError,
+        drizzleSuccess,
+        step,
+    ]);
+
     const handleOpenChange = useCallback(
         (open: boolean) => {
             if (!open) {
                 efCoreExportRequestIdRef.current += 1;
                 railsExportRequestIdRef.current += 1;
                 djangoExportRequestIdRef.current += 1;
+                drizzleExportRequestIdRef.current += 1;
                 closeExportWizardDialog();
             }
         },
@@ -1113,7 +1281,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.EF_CORE_OPTIONS ||
         step === ExportWizardStep.EF_CORE_RESULT ||
         step === ExportWizardStep.RAILS_RESULT ||
-        step === ExportWizardStep.DJANGO_RESULT;
+        step === ExportWizardStep.DJANGO_RESULT ||
+        step === ExportWizardStep.DRIZZLE_RESULT;
 
     const isSqlBranch =
         step === ExportWizardStep.SQL_TARGET ||
@@ -1131,6 +1300,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.EF_CORE_RESULT;
     const isRailsBranch = step === ExportWizardStep.RAILS_RESULT;
     const isDjangoBranch = step === ExportWizardStep.DJANGO_RESULT;
+    const isDrizzleBranch = step === ExportWizardStep.DRIZZLE_RESULT;
 
     const dialogTitle = t('export_wizard.title');
 
@@ -1173,6 +1343,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 return t('export_wizard.rails.result_step.description');
             case ExportWizardStep.DJANGO_RESULT:
                 return t('export_wizard.django.result_step.description');
+            case ExportWizardStep.DRIZZLE_RESULT:
+                return t('export_wizard.drizzle.result_step.description');
             default:
                 return t('export_wizard.description');
         }
@@ -1229,6 +1401,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     ) : null}
                     {isRailsBranch ? <ExportRailsBranchContext /> : null}
                     {isDjangoBranch ? <ExportDjangoBranchContext /> : null}
+                    {isDrizzleBranch ? <ExportDrizzleBranchContext /> : null}
                     <DialogTitle>{dialogTitle}</DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
@@ -1393,6 +1566,16 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             error={djangoError}
                             success={djangoSuccess}
                             onRetry={handleDjangoRetry}
+                        />
+                    ) : null}
+
+                    {step === ExportWizardStep.DRIZZLE_RESULT ? (
+                        <ExportDrizzleResultStep
+                            providerLabel={databaseTypeToLabelMap[databaseType]}
+                            isLoading={isDrizzleExporting}
+                            error={drizzleError}
+                            success={drizzleSuccess}
+                            onRetry={handleDrizzleRetry}
                         />
                     ) : null}
                 </div>

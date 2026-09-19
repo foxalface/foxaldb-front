@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/tr';
 import { djangoExportNoteMessages } from '../django-export-notes/tr';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/tr';
 
 export const tr: LanguageTranslation = {
     translation: {
@@ -1101,7 +1102,7 @@ export const tr: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Drizzle şema dışa aktarma',
+                    description: 'Drizzle 0.45 şema paketi dışa aktarma',
                 },
                 png: {
                     title: 'PNG',
@@ -1379,6 +1380,60 @@ export const tr: LanguageTranslation = {
                             '«{{path}}» için katalog kaldırıldıktan sonra MySQL katalogları çakışıyor.',
                         mariadb_catalog_collision:
                             '«{{path}}» için katalog kaldırıldıktan sonra MariaDB katalogları çakışıyor.',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Drizzle dışa aktarma şu anda PostgreSQL, MySQL, MariaDB ve SQLite’ı destekler.',
+                result_step: {
+                    description: 'Oluşturulan Drizzle 0.45 paketini inceleyin.',
+                    explanation:
+                        'Bu dışa aktarma bir Drizzle şema paketidir. schema.ts doğruluk kaynağıdır. drizzle.config.ts kimlik bilgisi içermez (yalnızca diyalekt, şema yolu ve çıktı dizini). SQL geçiş geçmişi yeniden oluşturulmaz. drizzle-kit çalışma zamanı doğrulaması yapılmamıştır.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'Sağlayıcı: {{provider}}',
+                    package_type:
+                        'Paket: Drizzle şeması (schema.ts + drizzle.config.ts)',
+                    generating: 'Drizzle paketi oluşturuluyor…',
+                    success: 'Drizzle paketi oluşturuldu.',
+                    generated_files: 'Oluşturulan dosyalar ({{count}})',
+                    notes_heading: 'Notlar',
+                    warnings_heading: 'Uyarılar ({{count}})',
+                    adaptations_heading: 'Teknik uyarlamalar ({{count}})',
+                    path_label: 'Yol: {{path}}',
+                    unknown_note:
+                        'Ek bir dışa aktarma notu döndürüldü ve yerelleştirilemedi.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'ZIP indir',
+                    retry: 'Yeniden dene',
+                    error_semantic: 'Drizzle paketi oluşturulamadı.',
+                    error_unauthenticated:
+                        'Drizzle paketlerini dışa aktarmak için oturum açmanız gerekir.',
+                    error_invalid_request:
+                        'Diyagram dışa aktarılamadı. Geçersiz veya çok büyük olabilir.',
+                    error_rate_limited:
+                        'Çok fazla dışa aktarma isteği. Lütfen bir süre bekleyip yeniden deneyin.',
+                    error_unexpected:
+                        'Sunucuda Drizzle dışa aktarma başarısız oldu. Lütfen yeniden deneyin.',
+                    error_network:
+                        'Sunucuya ulaşılamıyor. Bağlantınızı kontrol edip yeniden deneyin.',
+                    error_unsafe_path:
+                        'Dışa aktarma güvenli olmayan bir dosya yolu içeriyor ve indirilmedi.',
+                    error_empty_files: 'Dışa aktarma hiçbir dosya içermiyordu.',
+                    error_invalid_package:
+                        'Oluşturulan paket geçersiz ve indirilmedi.',
+                    errors: {
+                        unsupported_database:
+                            'Bu veritabanı türü için Drizzle dışa aktarma kullanılamaz.',
+                        empty_diagram:
+                            'Diyagramda dışa aktarılabilir tablo yok.',
+                        unsupported_structural_field:
+                            '«{{path}}» üzerindeki bir birincil anahtar veya yapısal alan Drizzle’da temsil edilemez.',
+                        mysql_catalog_collision:
+                            'Birden fazla MySQL kataloğu aynı fiziksel tabloyu «{{path}}» içeriyor ve güvenle tek bir Drizzle MySQL şemasına düzleştirilemez.',
+                        mariadb_catalog_collision:
+                            'Birden fazla MariaDB kataloğu aynı fiziksel tabloyu «{{path}}» içeriyor ve güvenle tek bir Drizzle MariaDB şemasına düzleştirilemez.',
                     },
                 },
             },

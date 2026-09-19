@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/ko_KR';
 import { djangoExportNoteMessages } from '../django-export-notes/ko_KR';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/ko_KR';
 
 export const ko_KR: LanguageTranslation = {
     translation: {
@@ -1119,7 +1120,7 @@ export const ko_KR: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Drizzle 스키마보내기',
+                    description: 'Drizzle 0.45 스키마 패키지 내보내기',
                 },
                 png: {
                     title: 'PNG',
@@ -1391,6 +1392,60 @@ export const ko_KR: LanguageTranslation = {
                             '«{{path}}»의 catalog 제거 후 MySQL catalog가 충돌합니다.',
                         mariadb_catalog_collision:
                             '«{{path}}»의 catalog 제거 후 MariaDB catalog가 충돌합니다.',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Drizzle 보내기는 현재 PostgreSQL, MySQL, MariaDB, SQLite를 지원합니다.',
+                result_step: {
+                    description: '생성된 Drizzle 0.45 패키지를 검토하세요.',
+                    explanation:
+                        '이 보내기는 Drizzle 스키마 패키지입니다. schema.ts가 신뢰 원본입니다. drizzle.config.ts는 자격 증명이 없습니다(dialect, 스키마 경로, 출력 디렉터리만). SQL 마이그레이션 기록은 재구성되지 않습니다. drizzle-kit 런타임 검증은 수행되지 않았습니다.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: '제공자: {{provider}}',
+                    package_type:
+                        '패키지: Drizzle 스키마(schema.ts + drizzle.config.ts)',
+                    generating: 'Drizzle 패키지 생성 중…',
+                    success: 'Drizzle 패키지가 생성되었습니다.',
+                    generated_files: '생성된 파일({{count}})',
+                    notes_heading: '메모',
+                    warnings_heading: '경고 ({{count}})',
+                    adaptations_heading: '기술적 적응 ({{count}})',
+                    path_label: '경로: {{path}}',
+                    unknown_note:
+                        '추가 보내기 메모가 반환되었지만 지역화할 수 없습니다.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'ZIP 다운로드',
+                    retry: '다시 시도',
+                    error_semantic: 'Drizzle 패키지를 생성할 수 없습니다.',
+                    error_unauthenticated:
+                        'Drizzle 패키지를 보내려면 로그인해야 합니다.',
+                    error_invalid_request:
+                        '다이어그램을 내보낼 수 없습니다. 유효하지 않거나 너무 클 수 있습니다.',
+                    error_rate_limited:
+                        '내보내기 요청이 너무 많습니다. 잠시 후 다시 시도하세요.',
+                    error_unexpected:
+                        '서버에서 Drizzle 내보내기에 실패했습니다. 다시 시도해 주세요.',
+                    error_network:
+                        '서버에 연결할 수 없습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+                    error_unsafe_path:
+                        '내보내기에 안전하지 않은 파일 경로가 포함되어 다운로드되지 않았습니다.',
+                    error_empty_files: '내보내기에 파일이 포함되지 않았습니다.',
+                    error_invalid_package:
+                        '생성된 패키지가 잘못되어 다운로드하지 않았습니다.',
+                    errors: {
+                        unsupported_database:
+                            '이 데이터베이스 유형에서는 Drizzle 보내기를 사용할 수 없습니다.',
+                        empty_diagram:
+                            '다이어그램에 내보낼 수 있는 테이블이 없습니다.',
+                        unsupported_structural_field:
+                            '«{{path}}»의 기본 키 또는 구조 필드는 Drizzle에서 표현할 수 없습니다.',
+                        mysql_catalog_collision:
+                            '여러 MySQL catalog가 동일한 물리 테이블 «{{path}}»을(를) 포함하고 있어 하나의 Drizzle MySQL 스키마로 안전하게 평탄화할 수 없습니다.',
+                        mariadb_catalog_collision:
+                            '여러 MariaDB catalog가 동일한 물리 테이블 «{{path}}»을(를) 포함하고 있어 하나의 Drizzle MariaDB 스키마로 안전하게 평탄화할 수 없습니다.',
                     },
                 },
             },

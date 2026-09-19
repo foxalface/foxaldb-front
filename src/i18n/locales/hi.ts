@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/hi';
 import { djangoExportNoteMessages } from '../django-export-notes/hi';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/hi';
 
 export const hi: LanguageTranslation = {
     translation: {
@@ -1111,7 +1112,7 @@ export const hi: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Drizzle स्कीमा निर्यात',
+                    description: 'Drizzle 0.45 स्कीमा पैकेज निर्यात',
                 },
                 png: {
                     title: 'PNG',
@@ -1387,6 +1388,61 @@ export const hi: LanguageTranslation = {
                             '«{{path}}» के लिए catalog हटाने के बाद MySQL catalogs collide करते हैं।',
                         mariadb_catalog_collision:
                             '«{{path}}» के लिए catalog हटाने के बाद MariaDB catalogs collide करते हैं।',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Drizzle निर्यात वर्तमान में PostgreSQL, MySQL, MariaDB और SQLite का समर्थन करता है।',
+                result_step: {
+                    description:
+                        'जनरेट किए गए Drizzle 0.45 पैकेज की समीक्षा करें।',
+                    explanation:
+                        'यह निर्यात एक Drizzle स्कीमा पैकेज है। schema.ts सत्य का स्रोत है। drizzle.config.ts क्रेडेंशियल-मुक्त है (केवल dialect, स्कीमा पथ और आउटपुट निर्देशिका)। SQL माइग्रेशन इतिहास पुनर्निर्मित नहीं होता। drizzle-kit रनटाइम सत्यापन नहीं किया गया है।',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'प्रदाता: {{provider}}',
+                    package_type:
+                        'पैकेज: Drizzle स्कीमा (schema.ts + drizzle.config.ts)',
+                    generating: 'Drizzle पैकेज जनरेट हो रहा है…',
+                    success: 'Drizzle पैकेज जनरेट हुआ।',
+                    generated_files: 'जनरेट की गई फ़ाइलें ({{count}})',
+                    notes_heading: 'नोट्स',
+                    warnings_heading: 'चेतावनियाँ ({{count}})',
+                    adaptations_heading: 'तकनीकी अनुकूलन ({{count}})',
+                    path_label: 'पथ: {{path}}',
+                    unknown_note:
+                        'एक अतिरिक्त निर्यात नोट लौटाया गया और उसे स्थानीयकृत नहीं किया जा सका।',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'ZIP डाउनलोड करें',
+                    retry: 'पुनः प्रयास करें',
+                    error_semantic: 'Drizzle पैकेज जनरेट नहीं हो सका।',
+                    error_unauthenticated:
+                        'Drizzle पैकेज निर्यात करने के लिए साइन इन होना आवश्यक है।',
+                    error_invalid_request:
+                        'आरेख निर्यात नहीं किया जा सका। यह अमान्य या बहुत बड़ा हो सकता है।',
+                    error_rate_limited:
+                        'बहुत अधिक निर्यात अनुरोध। कृपया कुछ देर प्रतीक्षा कर फिर प्रयास करें।',
+                    error_unexpected:
+                        'सर्वर पर Drizzle निर्यात विफल रहा। कृपया पुनः प्रयास करें।',
+                    error_network:
+                        'सर्वर तक नहीं पहुँच सके। कनेक्शन जाँचें और पुनः प्रयास करें।',
+                    error_unsafe_path:
+                        'निर्यात में असुरक्षित फ़ाइल पथ है और डाउनलोड नहीं हुआ।',
+                    error_empty_files: 'निर्यात में कोई फ़ाइल शामिल नहीं थी।',
+                    error_invalid_package:
+                        'जनरेट किया गया पैकेज अमान्य है और डाउनलोड नहीं हुआ।',
+                    errors: {
+                        unsupported_database:
+                            'इस डेटाबेस प्रकार के लिए Drizzle निर्यात उपलब्ध नहीं है।',
+                        empty_diagram:
+                            'आरेख में कोई निर्यात योग्य तालिका नहीं है।',
+                        unsupported_structural_field:
+                            '«{{path}}» पर प्राथमिक-कुंजी या संरचनात्मक फ़ील्ड को Drizzle में दर्शाया नहीं जा सकता।',
+                        mysql_catalog_collision:
+                            'कई MySQL catalog में एक ही भौतिक तालिका «{{path}}» है और उन्हें एक Drizzle MySQL स्कीमा में सुरक्षित रूप से समतल नहीं किया जा सकता।',
+                        mariadb_catalog_collision:
+                            'कई MariaDB catalog में एक ही भौतिक तालिका «{{path}}» है और उन्हें एक Drizzle MariaDB स्कीमा में सुरक्षित रूप से समतल नहीं किया जा सकता।',
                     },
                 },
             },

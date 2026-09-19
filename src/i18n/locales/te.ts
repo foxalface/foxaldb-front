@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/te';
 import { djangoExportNoteMessages } from '../django-export-notes/te';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/te';
 
 export const te: LanguageTranslation = {
     translation: {
@@ -1124,7 +1125,7 @@ export const te: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Drizzle స్కీమా ఎగుమతి',
+                    description: 'Drizzle 0.45 స్కీమా ప్యాకేజీ ఎగుమతి',
                 },
                 png: {
                     title: 'PNG',
@@ -1404,6 +1405,61 @@ export const te: LanguageTranslation = {
                             '«{{path}}» కోసం catalog తొలగించిన తర్వాత MySQL catalogs collide అవుతాయి.',
                         mariadb_catalog_collision:
                             '«{{path}}» కోసం catalog తొలగించిన తర్వాత MariaDB catalogs collide అవుతాయి.',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Drizzle ఎగుమతి ప్రస్తుతం PostgreSQL, MySQL, MariaDB మరియు SQLiteను మద్దతు ఇస్తుంది.',
+                result_step: {
+                    description:
+                        'జనరేట్ చేసిన Drizzle 0.45 ప్యాకేజీని సమీక్షించండి.',
+                    explanation:
+                        'ఈ ఎగుమతి Drizzle స్కీమా ప్యాకేజీ. schema.ts సత్య మూలం. drizzle.config.ts క్రెడెన్షియల్-రహితం (dialect, స్కీమా మార్గం మరియు అవుట్‌పుట్ డైరెక్టరీ మాత్రమే). SQL మైగ్రేషన్ చరిత్ర పునర్నిర్మించబడదు. drizzle-kit రన్‌టైమ్ ధృవీకరణ జరగలేదు.',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'ప్రొవైడర్: {{provider}}',
+                    package_type:
+                        'ప్యాకేజీ: Drizzle స్కీమా (schema.ts + drizzle.config.ts)',
+                    generating: 'Drizzle ప్యాకేజీ జనరేట్ అవుతోంది…',
+                    success: 'Drizzle ప్యాకేజీ జనరేట్ అయింది.',
+                    generated_files: 'జనరేట్ చేసిన ఫైళ్లు ({{count}})',
+                    notes_heading: 'గమనికలు',
+                    warnings_heading: 'హెచ్చరికలు ({{count}})',
+                    adaptations_heading: 'సాంకేతిక అనుకూలతలు ({{count}})',
+                    path_label: 'మార్గం: {{path}}',
+                    unknown_note:
+                        'అదనపు ఎగుమతి గమనిక తిరిగి వచ్చింది మరియు స్థానికీకరించలేకపోయాం.',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'ZIP డౌన్‌లోడ్ చేయండి',
+                    retry: 'మళ్లీ ప్రయత్నించండి',
+                    error_semantic: 'Drizzle ప్యాకేజీని జనరేట్ చేయలేకపోయాం.',
+                    error_unauthenticated:
+                        'Drizzle ప్యాకేజీలను ఎగుమతి చేయడానికి సైన్ ఇన్ అవసరం.',
+                    error_invalid_request:
+                        'రేఖాచిత్రాన్ని ఎగుమతి చేయలేకపోయాం. అది చెల్లనిది లేదా చాలా పెద్దది కావచ్చు.',
+                    error_rate_limited:
+                        'ఎగుమతి అభ్యర్థనలు ఎక్కువ. కాసేపు వేచి మళ్లీ ప్రయత్నించండి.',
+                    error_unexpected:
+                        'సర్వర్‌పై Drizzle ఎగుమతి విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                    error_network:
+                        'సర్వర్‌ను చేరుకోలేకపోయాం. కనెక్షన్ తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+                    error_unsafe_path:
+                        'ఎగుమతిలో సురక్షితం కాని ఫైల్ మార్గం ఉంది కాబట్టి డౌన్‌లోడ్ కాలేదు.',
+                    error_empty_files: 'ఎగుమతిలో ఫైళ్లు లేవు.',
+                    error_invalid_package:
+                        'జనరేట్ చేసిన ప్యాకేజీ చెల్లదు కాబట్టి డౌన్‌లోడ్ కాలేదు.',
+                    errors: {
+                        unsupported_database:
+                            'ఈ డేటాబేస్ రకానికి Drizzle ఎగుమతి అందుబాటులో లేదు.',
+                        empty_diagram:
+                            'రేఖాచిత్రంలో ఎగుమతి చేయదగిన టేబుల్‌లు లేవు.',
+                        unsupported_structural_field:
+                            '«{{path}}»పై ప్రాథమిక-కీ లేదా నిర్మాణాత్మక ఫీల్డ్‌ను Drizzleలో చూపించలేము.',
+                        mysql_catalog_collision:
+                            'బహుళ MySQL catalogలు ఒకే భౌతిక టేబుల్ «{{path}}»ను కలిగి ఉన్నాయి మరియు వాటిని ఒక Drizzle MySQL స్కీమాగా సురక్షితంగా చదును చేయలేము.',
+                        mariadb_catalog_collision:
+                            'బహుళ MariaDB catalogలు ఒకే భౌతిక టేబుల్ «{{path}}»ను కలిగి ఉన్నాయి మరియు వాటిని ఒక Drizzle MariaDB స్కీమాగా సురక్షితంగా చదును చేయలేము.',
                     },
                 },
             },

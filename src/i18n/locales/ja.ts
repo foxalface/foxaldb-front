@@ -1,6 +1,7 @@
 import type { LanguageMetadata, LanguageTranslation } from '../types';
 import { railsExportNoteMessages } from '../rails-export-notes/ja';
 import { djangoExportNoteMessages } from '../django-export-notes/ja';
+import { drizzleExportNoteMessages } from '../drizzle-export-notes/ja';
 
 export const ja: LanguageTranslation = {
     translation: {
@@ -1137,7 +1138,8 @@ export const ja: LanguageTranslation = {
                 },
                 drizzle: {
                     title: 'Drizzle',
-                    description: 'Drizzle スキーマのエクスポート',
+                    description:
+                        'Drizzle 0.45 スキーマパッケージのエクスポート',
                 },
                 png: {
                     title: 'PNG',
@@ -1422,6 +1424,63 @@ export const ja: LanguageTranslation = {
                             '「{{path}}」の catalog 削除後に MySQL catalog が衝突します。',
                         mariadb_catalog_collision:
                             '「{{path}}」の catalog 削除後に MariaDB catalog が衝突します。',
+                    },
+                },
+            },
+            drizzle: {
+                unsupported_database:
+                    'Drizzle エクスポートは現在 PostgreSQL、MySQL、MariaDB、SQLite をサポートしています。',
+                result_step: {
+                    description:
+                        '生成された Drizzle 0.45 パッケージを確認してください。',
+                    explanation:
+                        'このエクスポートは Drizzle スキーマパッケージです。schema.ts が信頼できる情報源です。drizzle.config.ts は認証情報なしです（dialect、スキーマパス、出力ディレクトリのみ）。SQL マイグレーション履歴は再構築されません。drizzle-kit の実行時検証は行われていません。',
+                    drizzle_version:
+                        'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    provider_label: 'プロバイダー: {{provider}}',
+                    package_type:
+                        'パッケージ: Drizzle スキーマ（schema.ts + drizzle.config.ts）',
+                    generating: 'Drizzle パッケージを生成しています…',
+                    success: 'Drizzle パッケージを生成しました。',
+                    generated_files: '生成されたファイル（{{count}}）',
+                    notes_heading: 'メモ',
+                    warnings_heading: '警告 ({{count}})',
+                    adaptations_heading: '技術的な適応 ({{count}})',
+                    path_label: 'パス: {{path}}',
+                    unknown_note:
+                        '追加のエクスポートメモが返されましたが、ローカライズできませんでした。',
+                    notes: drizzleExportNoteMessages,
+                    download_zip: 'ZIP をダウンロード',
+                    retry: '再試行',
+                    error_semantic:
+                        'Drizzle パッケージを生成できませんでした。',
+                    error_unauthenticated:
+                        'Drizzle パッケージをエクスポートするにはサインインが必要です。',
+                    error_invalid_request:
+                        'ダイアグラムをエクスポートできませんでした。無効または大きすぎる可能性があります。',
+                    error_rate_limited:
+                        'エクスポート要求が多すぎます。しばらく待ってから再試行してください。',
+                    error_unexpected:
+                        'サーバー上で Drizzle エクスポートに失敗しました。もう一度お試しください。',
+                    error_network:
+                        'サーバーに接続できません。接続を確認してもう一度お試しください。',
+                    error_unsafe_path:
+                        'エクスポートに安全でないファイルパスが含まれているため、ダウンロードされませんでした。',
+                    error_empty_files:
+                        'エクスポートにファイルが含まれていませんでした。',
+                    error_invalid_package:
+                        '生成されたパッケージは無効なため、ダウンロードしませんでした。',
+                    errors: {
+                        unsupported_database:
+                            'このデータベースタイプでは Drizzle エクスポートは利用できません。',
+                        empty_diagram:
+                            'ダイアグラムにエクスポート可能なテーブルがありません。',
+                        unsupported_structural_field:
+                            '「{{path}}」上の主キーまたは構造フィールドは Drizzle で表現できません。',
+                        mysql_catalog_collision:
+                            '複数の MySQL catalog が同じ物理テーブル「{{path}}」を含んでおり、1 つの Drizzle MySQL スキーマに安全に平坦化できません。',
+                        mariadb_catalog_collision:
+                            '複数の MariaDB catalog が同じ物理テーブル「{{path}}」を含んでおり、1 つの Drizzle MariaDB スキーマに安全に平坦化できません。',
                     },
                 },
             },
