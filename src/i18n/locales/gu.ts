@@ -26,7 +26,7 @@ export const gu: LanguageTranslation = {
                 browse: 'બધા ડેટાબેસ...',
                 save: 'સાચવો',
                 import: 'ડેટાબેસ આયાત કરો',
-                export: 'Export',
+                export: 'નિકાસ કરો...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1058,10 +1058,12 @@ export const gu: LanguageTranslation = {
             sections: {
                 database: 'ડેટાબેસ',
                 framework: 'ફ્રેમવર્ક',
-                portable: 'પોર્ટેબલ / સ્કીમા',
+                portable: 'સ્કીમા',
                 visual: 'વિઝ્યુઅલ',
             },
             targets: {
+                unsupported_framework:
+                    '{{framework}} નિકાસ ડાયાગ્રામના ડેટાબેઝ મેનેજમેન્ટ સિસ્ટમ સાથે અસંગત છે',
                 sql: {
                     title: 'SQL',
                     description: 'વર્તમાન ડાયાગ્રામ માટે ડેટાબેસ DDL સ્ક્રિપ્ટ',
@@ -1077,11 +1079,11 @@ export const gu: LanguageTranslation = {
                     coming_soon: 'ભવિષ્યના નિકાસ માઇલસ્ટોન માટે યોજના બનાવેલી.',
                 },
                 diagram_json: {
-                    title: 'ડાયાગ્રામ JSON',
+                    title: 'JSON',
                     description: 'પોર્ટેબલ FoxalDB ડાયાગ્રામ ફાઇલ',
                 },
                 laravel: {
-                    title: 'Laravel માઇગ્રેશન',
+                    title: 'Laravel',
                     description: 'Laravel માઇગ્રેશન ZIP આર્કાઇવ',
                 },
                 prisma: {

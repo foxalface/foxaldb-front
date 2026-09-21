@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { unzipSync, strFromU8 } from 'fflate';
@@ -168,7 +168,9 @@ const successResponse = (
 const openRailsBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
     await userEvent.click(
-        screen.getByText('export_wizard.targets.rails.title')
+        screen.getByRole('button', {
+            name: 'export_wizard.targets.rails.title',
+        })
     );
 };
 
@@ -686,7 +688,9 @@ describe('ExportWizardDialog Rails branch', () => {
         exportRailsProjectMock.mockRejectedValueOnce(new Error('network down'));
         await userEvent.click(screen.getByText('export_wizard.back'));
         await userEvent.click(
-            screen.getByText('export_wizard.targets.rails.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.rails.title',
+            })
         );
 
         await waitFor(() => {
@@ -726,7 +730,9 @@ describe('ExportWizardDialog Rails branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.rails.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.rails.title',
+            })
         );
 
         await waitFor(() => {
@@ -748,7 +754,9 @@ describe('ExportWizardDialog Rails branch', () => {
         exportRailsProjectMock.mockClear();
         exportRailsProjectMock.mockResolvedValueOnce(successResponse());
         await userEvent.click(
-            screen.getByText('export_wizard.targets.rails.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.rails.title',
+            })
         );
 
         await waitFor(() => {
@@ -791,7 +799,9 @@ describe('ExportWizardDialog Rails branch', () => {
             <ExportWizardDialog dialog={{ open: true }} />
         );
         await userEvent.click(
-            screen.getByText('export_wizard.targets.rails.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.rails.title',
+            })
         );
 
         rerender(<ExportWizardDialog dialog={{ open: false }} />);
@@ -814,13 +824,15 @@ describe('ExportWizardDialog Rails branch', () => {
 
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const button = screen
-            .getByText('export_wizard.targets.rails.title')
-            .closest('button');
+        const button = screen.getByRole('button', {
+            name: 'export_wizard.targets.rails.title',
+        });
 
-        expect(button).toBeDisabled();
+        expect(button).toHaveAttribute('aria-disabled', 'true');
         expect(
-            screen.getByText('export_wizard.rails.unsupported_database')
+            within(button).getByText(
+                'export_wizard.targets.unsupported_framework'
+            )
         ).toBeInTheDocument();
 
         if (button) {
@@ -886,9 +898,9 @@ describe('ExportWizardDialog Rails picker availability', () => {
             <ExportWizardDialog dialog={{ open: true }} />
         );
         expect(
-            screen
-                .getByText('export_wizard.targets.rails.title')
-                .closest('button')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.rails.title',
+            })
         ).not.toBeDisabled();
         unmount();
 
@@ -896,9 +908,9 @@ describe('ExportWizardDialog Rails picker availability', () => {
         chartDbState.currentDiagram = buildSimpleDiagram(DatabaseType.MYSQL);
         render(<ExportWizardDialog dialog={{ open: true }} />);
         expect(
-            screen
-                .getByText('export_wizard.targets.rails.title')
-                .closest('button')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.rails.title',
+            })
         ).not.toBeDisabled();
     });
 });

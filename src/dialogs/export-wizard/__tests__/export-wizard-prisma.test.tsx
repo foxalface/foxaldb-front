@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ExportWizardDialog } from '../export-wizard-dialog';
@@ -256,7 +256,9 @@ const mockExportPrismaSchema = async ({
 const openPrismaBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
     await userEvent.click(
-        screen.getByText('export_wizard.targets.prisma.title')
+        screen.getByRole('button', {
+            name: 'export_wizard.targets.prisma.title',
+        })
     );
 };
 
@@ -546,7 +548,9 @@ describe('ExportWizardDialog Prisma branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.prisma.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.prisma.title',
+            })
         );
         await userEvent.click(screen.getByTestId('prisma-version-6'));
 
@@ -554,7 +558,9 @@ describe('ExportWizardDialog Prisma branch', () => {
         rerender(<ExportWizardDialog dialog={{ open: true }} />);
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.prisma.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.prisma.title',
+            })
         );
 
         expect(screen.getByTestId('prisma-version-7')).toHaveClass(
@@ -568,7 +574,9 @@ describe('ExportWizardDialog Prisma branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.prisma.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.prisma.title',
+            })
         );
         await continueToPreview();
 
@@ -871,9 +879,9 @@ describe('ExportWizardDialog Prisma picker availability', () => {
 
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const prismaButton = screen
-            .getByText('export_wizard.targets.prisma.title')
-            .closest('button');
+        const prismaButton = screen.getByRole('button', {
+            name: 'export_wizard.targets.prisma.title',
+        });
 
         expect(prismaButton).not.toBeDisabled();
     });
@@ -885,13 +893,15 @@ describe('ExportWizardDialog Prisma picker availability', () => {
 
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const prismaButton = screen
-            .getByText('export_wizard.targets.prisma.title')
-            .closest('button');
+        const prismaButton = screen.getByRole('button', {
+            name: 'export_wizard.targets.prisma.title',
+        });
 
-        expect(prismaButton).toBeDisabled();
+        expect(prismaButton).toHaveAttribute('aria-disabled', 'true');
         expect(
-            screen.getByText('export_wizard.prisma.unsupported_database')
+            within(prismaButton).getByText(
+                'export_wizard.targets.unsupported_framework'
+            )
         ).toBeInTheDocument();
     });
 
@@ -904,9 +914,9 @@ describe('ExportWizardDialog Prisma picker availability', () => {
 
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const prismaButton = screen
-            .getByText('export_wizard.targets.prisma.title')
-            .closest('button');
+        const prismaButton = screen.getByRole('button', {
+            name: 'export_wizard.targets.prisma.title',
+        });
 
         expect(prismaButton).not.toBeDisabled();
         expect(

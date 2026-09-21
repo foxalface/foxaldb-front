@@ -25,7 +25,7 @@ export const ja: LanguageTranslation = {
                 browse: 'すべてのデータベース...',
                 save: '保存',
                 import: 'データベースをインポート',
-                export: 'Export',
+                export: 'エクスポート...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1090,10 +1090,12 @@ export const ja: LanguageTranslation = {
             sections: {
                 database: 'データベース',
                 framework: 'フレームワーク',
-                portable: 'ポータブル / スキーマ',
+                portable: 'スキーマ',
                 visual: 'ビジュアル',
             },
             targets: {
+                unsupported_framework:
+                    '{{framework}}のエクスポートは図のデータベースと互換性がありません',
                 sql: {
                     title: 'SQL',
                     description:
@@ -1111,11 +1113,11 @@ export const ja: LanguageTranslation = {
                         '将来のエクスポートマイルストーンで提供予定です。',
                 },
                 diagram_json: {
-                    title: 'ダイアグラム JSON',
+                    title: 'JSON',
                     description: 'ポータブル FoxalDB ダイアグラムファイル',
                 },
                 laravel: {
-                    title: 'Laravel マイグレーション',
+                    title: 'Laravel',
                     description: 'Laravel マイグレーション ZIP アーカイブ',
                 },
                 prisma: {

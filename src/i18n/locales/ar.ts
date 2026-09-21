@@ -26,7 +26,7 @@ export const ar: LanguageTranslation = {
                 browse: 'جميع قواعد البيانات...',
                 save: 'حفظ',
                 import: 'استيراد قاعدة بيانات',
-                export: 'Export',
+                export: 'تصدير...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1061,10 +1061,12 @@ export const ar: LanguageTranslation = {
             sections: {
                 database: 'قاعدة البيانات',
                 framework: 'إطار العمل',
-                portable: 'محمول / مخطط',
+                portable: 'مخطط',
                 visual: 'مرئي',
             },
             targets: {
+                unsupported_framework:
+                    'تصدير {{framework}} غير متوافق مع نظام إدارة قواعد بيانات المخطط',
                 sql: {
                     title: 'SQL',
                     description: 'سكربت DDL لقاعدة البيانات للمخطط الحالي',
@@ -1080,11 +1082,11 @@ export const ar: LanguageTranslation = {
                     coming_soon: 'مخطط لمرحلة تصدير مستقبلية.',
                 },
                 diagram_json: {
-                    title: 'مخطط JSON',
+                    title: 'JSON',
                     description: 'ملف مخطط FoxalDB محمول',
                 },
                 laravel: {
-                    title: 'ترحيلات Laravel',
+                    title: 'Laravel',
                     description: 'أرشيف ZIP لترحيلات Laravel',
                 },
                 prisma: {

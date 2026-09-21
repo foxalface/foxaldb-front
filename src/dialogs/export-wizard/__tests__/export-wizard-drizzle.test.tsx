@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { unzipSync, strFromU8 } from 'fflate';
@@ -180,7 +180,9 @@ const successResponse = (
 const openDrizzleBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
     await userEvent.click(
-        screen.getByText('export_wizard.targets.drizzle.title')
+        screen.getByRole('button', {
+            name: 'export_wizard.targets.drizzle.title',
+        })
     );
 };
 
@@ -828,7 +830,9 @@ describe('ExportWizardDialog Drizzle branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.drizzle.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.drizzle.title',
+            })
         );
 
         await waitFor(() => {
@@ -847,7 +851,9 @@ describe('ExportWizardDialog Drizzle branch', () => {
         exportDrizzleProjectMock.mockClear();
         exportDrizzleProjectMock.mockResolvedValueOnce(successResponse());
         await userEvent.click(
-            screen.getByText('export_wizard.targets.drizzle.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.drizzle.title',
+            })
         );
 
         await waitFor(() => {
@@ -882,13 +888,15 @@ describe('ExportWizardDialog Drizzle branch', () => {
 
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const button = screen
-            .getByText('export_wizard.targets.drizzle.title')
-            .closest('button');
+        const button = screen.getByRole('button', {
+            name: 'export_wizard.targets.drizzle.title',
+        });
 
-        expect(button).toBeDisabled();
+        expect(button).toHaveAttribute('aria-disabled', 'true');
         expect(
-            screen.getByText('export_wizard.drizzle.unsupported_database')
+            within(button).getByText(
+                'export_wizard.targets.unsupported_framework'
+            )
         ).toBeInTheDocument();
 
         if (button) {
@@ -966,9 +974,9 @@ describe('ExportWizardDialog Drizzle picker availability', () => {
                 <ExportWizardDialog dialog={{ open: true }} />
             );
             expect(
-                screen
-                    .getByText('export_wizard.targets.drizzle.title')
-                    .closest('button')
+                screen.getByRole('button', {
+                    name: 'export_wizard.targets.drizzle.title',
+                })
             ).not.toBeDisabled();
             unmount();
         }

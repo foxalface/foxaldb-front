@@ -25,7 +25,7 @@ export const zh_TW: LanguageTranslation = {
                 browse: '所有資料庫...',
                 save: '儲存',
                 import: '匯入資料庫',
-                export: 'Export',
+                export: '匯出...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1005,10 +1005,12 @@ export const zh_TW: LanguageTranslation = {
             sections: {
                 database: '資料庫',
                 framework: '框架',
-                portable: '可攜 / 架構',
+                portable: '架構',
                 visual: '視覺',
             },
             targets: {
+                unsupported_framework:
+                    '{{framework}} 匯出與圖表的資料庫管理系統不相容',
                 sql: {
                     title: 'SQL',
                     description: '目前圖表的資料庫 DDL 腳本',
@@ -1024,11 +1026,11 @@ export const zh_TW: LanguageTranslation = {
                     coming_soon: '計劃在未來的匯出里程碑中提供。',
                 },
                 diagram_json: {
-                    title: '圖表 JSON',
+                    title: 'JSON',
                     description: '可攜式 FoxalDB 圖表檔案',
                 },
                 laravel: {
-                    title: 'Laravel 遷移',
+                    title: 'Laravel',
                     description: 'Laravel 遷移 ZIP 壓縮檔',
                 },
                 prisma: {

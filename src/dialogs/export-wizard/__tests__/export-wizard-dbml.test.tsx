@@ -112,7 +112,9 @@ const sampleDbml = 'Table users { id int [pk] }';
 
 const openDbmlBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
-    await userEvent.click(screen.getByText('export_wizard.targets.dbml.title'));
+    await userEvent.click(
+        screen.getByRole('button', { name: 'export_wizard.targets.dbml.title' })
+    );
 };
 
 describe('ExportWizardDialog DBML branch', () => {
@@ -201,7 +203,9 @@ describe('ExportWizardDialog DBML branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.dbml.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.dbml.title',
+            })
         );
 
         await waitFor(() => {
@@ -231,9 +235,9 @@ describe('ExportWizardDialog DBML availability', () => {
     it('enables the DBML target in the picker', async () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const dbmlButton = screen
-            .getByText('export_wizard.targets.dbml.title')
-            .closest('button');
+        const dbmlButton = screen.getByRole('button', {
+            name: 'export_wizard.targets.dbml.title',
+        });
 
         expect(dbmlButton).not.toBeDisabled();
         expect(

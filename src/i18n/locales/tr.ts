@@ -25,7 +25,7 @@ export const tr: LanguageTranslation = {
                 browse: 'Tüm veritabanları...',
                 save: 'Kaydet',
                 import: 'Veritabanı İçe Aktar',
-                export: 'Export',
+                export: 'Dışa aktar...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1056,10 +1056,12 @@ export const tr: LanguageTranslation = {
             sections: {
                 database: 'Veritabanı',
                 framework: 'Framework',
-                portable: 'Taşınabilir / Şema',
+                portable: 'Şema',
                 visual: 'Görsel',
             },
             targets: {
+                unsupported_framework:
+                    '{{framework}} dışa aktarımı diyagramın veritabanı yönetim sistemiyle uyumlu değil',
                 sql: {
                     title: 'SQL',
                     description: 'Geçerli diyagram için veritabanı DDL betiği',
@@ -1076,11 +1078,11 @@ export const tr: LanguageTranslation = {
                         'Gelecekteki bir dışa aktarma aşaması için planlandı.',
                 },
                 diagram_json: {
-                    title: 'Diyagram JSON',
+                    title: 'JSON',
                     description: 'Taşınabilir FoxalDB diyagram dosyası',
                 },
                 laravel: {
-                    title: 'Laravel migrasyonları',
+                    title: 'Laravel',
                     description: 'Laravel migrasyon ZIP arşivi',
                 },
                 prisma: {

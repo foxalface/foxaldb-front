@@ -104,7 +104,9 @@ const mockedExportLaravelMigrations = vi.mocked(exportLaravelMigrations);
 const openLaravelBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
     await userEvent.click(
-        screen.getByText('export_wizard.targets.laravel.title')
+        screen.getByRole('button', {
+            name: 'export_wizard.targets.laravel.title',
+        })
     );
 };
 
@@ -197,7 +199,9 @@ describe('ExportWizardDialog Laravel branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.laravel.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.laravel.title',
+            })
         );
 
         await userEvent.click(
@@ -210,7 +214,9 @@ describe('ExportWizardDialog Laravel branch', () => {
         rerender(<ExportWizardDialog dialog={{ open: true }} />);
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.laravel.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.laravel.title',
+            })
         );
 
         expect(

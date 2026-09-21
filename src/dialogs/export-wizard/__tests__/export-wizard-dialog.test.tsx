@@ -104,16 +104,24 @@ describe('ExportWizardDialog', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         expect(
-            screen.getByText('export_wizard.sections.database')
+            screen.getByRole('separator', {
+                name: 'export_wizard.sections.database',
+            })
         ).toBeInTheDocument();
         expect(
-            screen.queryByText('export_wizard.sections.framework')
+            screen.queryByRole('separator', {
+                name: 'export_wizard.sections.framework',
+            })
         ).not.toBeInTheDocument();
         expect(
-            screen.getByText('export_wizard.sections.portable')
+            screen.getByRole('separator', {
+                name: 'export_wizard.sections.portable',
+            })
         ).toBeInTheDocument();
         expect(
-            screen.getByText('export_wizard.sections.visual')
+            screen.getByRole('separator', {
+                name: 'export_wizard.sections.visual',
+            })
         ).toBeInTheDocument();
     });
 
@@ -131,6 +139,19 @@ describe('ExportWizardDialog', () => {
         );
     });
 
+    it('renders the target picker as a grouped square grid', () => {
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        const picker = screen.getByTestId('export-target-picker');
+        expect(picker.querySelector('.grid-cols-6')).not.toBeNull();
+
+        const sqlButton = screen.getByRole('button', {
+            name: 'export_wizard.targets.sql.title',
+        });
+        expect(sqlButton).toHaveClass('aspect-square');
+        expect(sqlButton).not.toHaveAttribute('title');
+    });
+
     it('renders all guest-visible export targets', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
@@ -144,7 +165,9 @@ describe('ExportWizardDialog', () => {
         ];
 
         for (const targetTitle of expectedTargets) {
-            expect(screen.getByText(targetTitle)).toBeInTheDocument();
+            expect(
+                screen.getByRole('button', { name: targetTitle })
+            ).toBeInTheDocument();
         }
     });
 
@@ -152,7 +175,9 @@ describe('ExportWizardDialog', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.sql.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.sql.title',
+            })
         );
 
         expect(dialogMocks.openExportSQLDialog).not.toHaveBeenCalled();
@@ -169,7 +194,9 @@ describe('ExportWizardDialog', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.diagram_json.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.diagram_json.title',
+            })
         );
 
         expect(dialogMocks.openExportDiagramDialog).not.toHaveBeenCalled();
@@ -186,7 +213,9 @@ describe('ExportWizardDialog', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.png.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.png.title',
+            })
         );
         expect(dialogMocks.closeExportWizardDialog).not.toHaveBeenCalled();
         expect(exportImageMock).not.toHaveBeenCalled();
@@ -201,13 +230,15 @@ describe('ExportWizardDialog', () => {
     it('opens the DBML preview from the target picker', async () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const dbmlButton = screen
-            .getByText('export_wizard.targets.dbml.title')
-            .closest('button');
+        const dbmlButton = screen.getByRole('button', {
+            name: 'export_wizard.targets.dbml.title',
+        });
 
         expect(dbmlButton).not.toBeDisabled();
         await userEvent.click(
-            screen.getByText('export_wizard.targets.dbml.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.dbml.title',
+            })
         );
 
         expect(
@@ -231,9 +262,9 @@ describe('ExportWizardDialog', () => {
 
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const prismaButton = screen
-            .getByText('export_wizard.targets.prisma.title')
-            .closest('button');
+        const prismaButton = screen.getByRole('button', {
+            name: 'export_wizard.targets.prisma.title',
+        });
 
         expect(prismaButton).not.toBeDisabled();
     });
@@ -291,11 +322,20 @@ describe('ExportWizardDialog', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         expect(
-            screen.getByText('export_wizard.targets.laravel.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.laravel.title',
+            })
         ).toBeInTheDocument();
+        expect(
+            screen
+                .getByTestId('export-target-picker')
+                .querySelector('.grid-cols-6')
+        ).not.toBeNull();
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.laravel.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.laravel.title',
+            })
         );
 
         expect(dialogMocks.closeExportWizardDialog).not.toHaveBeenCalled();
@@ -310,14 +350,18 @@ describe('ExportWizardDialog', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.sql.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.sql.title',
+            })
         );
 
         rerender(<ExportWizardDialog dialog={{ open: false }} />);
         rerender(<ExportWizardDialog dialog={{ open: true }} />);
 
         expect(
-            screen.getByText('export_wizard.sections.database')
+            screen.getByRole('separator', {
+                name: 'export_wizard.sections.database',
+            })
         ).toBeInTheDocument();
         expect(screen.queryByText('sql')).not.toBeInTheDocument();
     });

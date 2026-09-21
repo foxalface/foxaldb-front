@@ -26,7 +26,7 @@ export const id_ID: LanguageTranslation = {
                 browse: 'Semua database...',
                 save: 'Simpan',
                 import: 'Impor Database',
-                export: 'Export',
+                export: 'Ekspor...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1076,10 +1076,12 @@ export const id_ID: LanguageTranslation = {
             sections: {
                 database: 'Basis data',
                 framework: 'Framework',
-                portable: 'Portabel / Skema',
+                portable: 'Skema',
                 visual: 'Visual',
             },
             targets: {
+                unsupported_framework:
+                    'Ekspor {{framework}} tidak kompatibel dengan DBMS diagram',
                 sql: {
                     title: 'SQL',
                     description: 'Skrip DDL basis data untuk diagram saat ini',
@@ -1095,11 +1097,11 @@ export const id_ID: LanguageTranslation = {
                     coming_soon: 'Direncanakan untuk tonggak ekspor mendatang.',
                 },
                 diagram_json: {
-                    title: 'Diagram JSON',
+                    title: 'JSON',
                     description: 'File diagram FoxalDB portabel',
                 },
                 laravel: {
-                    title: 'Migrasi Laravel',
+                    title: 'Laravel',
                     description: 'Arsip ZIP migrasi Laravel',
                 },
                 prisma: {

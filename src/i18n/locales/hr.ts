@@ -26,7 +26,7 @@ export const hr: LanguageTranslation = {
                 browse: 'Sve baze podataka...',
                 save: 'Spremi',
                 import: 'Uvezi',
-                export: 'Export',
+                export: 'Izvezi...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1073,10 +1073,12 @@ export const hr: LanguageTranslation = {
             sections: {
                 database: 'Baza podataka',
                 framework: 'Framework',
-                portable: 'Prijenosno / Shema',
+                portable: 'Shema',
                 visual: 'Vizualno',
             },
             targets: {
+                unsupported_framework:
+                    'Izvoz {{framework}} nije kompatibilan sa SGBD-om dijagrama',
                 sql: {
                     title: 'SQL',
                     description:
@@ -1093,11 +1095,11 @@ export const hr: LanguageTranslation = {
                     coming_soon: 'Planirano za buduću fazu izvoza.',
                 },
                 diagram_json: {
-                    title: 'Dijagram JSON',
+                    title: 'JSON',
                     description: 'Prijenosna FoxalDB datoteka dijagrama',
                 },
                 laravel: {
-                    title: 'Laravel migracije',
+                    title: 'Laravel',
                     description: 'ZIP arhiva Laravel migracija',
                 },
                 prisma: {

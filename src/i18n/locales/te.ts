@@ -25,7 +25,7 @@ export const te: LanguageTranslation = {
                 browse: 'అన్ని డేటాబేస్‌లు...',
                 save: 'సేవ్',
                 import: 'డేటాబేస్‌ను దిగుమతి చేసుకోండి',
-                export: 'Export',
+                export: 'ఎగుమతి చేయి...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1077,10 +1077,12 @@ export const te: LanguageTranslation = {
             sections: {
                 database: 'డేటాబేస్',
                 framework: 'ఫ్రేమ్‌వర్క్',
-                portable: 'పోర్టబుల్ / స్కీమా',
+                portable: 'స్కీమా',
                 visual: 'విజువల్',
             },
             targets: {
+                unsupported_framework:
+                    '{{framework}} ఎక్స్పోర్ట్ డయాగ్రామ్ DBMSకి అనుకూలం కాదు',
                 sql: {
                     title: 'SQL',
                     description:
@@ -1098,11 +1100,11 @@ export const te: LanguageTranslation = {
                         'భవిష్యత్ ఎగుమతి మైల్‌స్టోన్ కోసం ప్రణాళిక చేయబడింది.',
                 },
                 diagram_json: {
-                    title: 'డయాగ్రామ్ JSON',
+                    title: 'JSON',
                     description: 'పోర్టబుల్ FoxalDB డయాగ్రామ్ ఫైల్',
                 },
                 laravel: {
-                    title: 'Laravel మైగ్రేషన్‌లు',
+                    title: 'Laravel',
                     description: 'Laravel మైగ్రేషన్ ZIP ఆర్కైవ్',
                 },
                 prisma: {

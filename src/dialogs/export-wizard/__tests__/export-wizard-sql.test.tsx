@@ -112,7 +112,9 @@ const mockedDownloadBlob = vi.mocked(downloadBlob);
 
 const openSqlBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
-    await userEvent.click(screen.getByText('export_wizard.targets.sql.title'));
+    await userEvent.click(
+        screen.getByRole('button', { name: 'export_wizard.targets.sql.title' })
+    );
 };
 
 describe('ExportWizardDialog SQL branch', () => {
@@ -226,7 +228,9 @@ describe('ExportWizardDialog SQL branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.sql.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.sql.title',
+            })
         );
         await userEvent.click(screen.getByText('MySQL'));
 

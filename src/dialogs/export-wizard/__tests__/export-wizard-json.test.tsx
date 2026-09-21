@@ -83,7 +83,9 @@ const mockedDownloadBlob = vi.mocked(downloadBlob);
 const openJsonBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
     await userEvent.click(
-        screen.getByText('export_wizard.targets.diagram_json.title')
+        screen.getByRole('button', {
+            name: 'export_wizard.targets.diagram_json.title',
+        })
     );
 };
 
@@ -146,7 +148,9 @@ describe('ExportWizardDialog JSON branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.diagram_json.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.diagram_json.title',
+            })
         );
 
         expect(

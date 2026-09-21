@@ -26,7 +26,7 @@ export const ru: LanguageTranslation = {
                 browse: 'Все базы данных...',
                 save: 'Сохранить',
                 import: 'Импортировать базу данных',
-                export: 'Export',
+                export: 'Экспортировать...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1071,10 +1071,12 @@ export const ru: LanguageTranslation = {
             sections: {
                 database: 'База данных',
                 framework: 'Фреймворк',
-                portable: 'Портативный / Схема',
+                portable: 'Схема',
                 visual: 'Визуальный',
             },
             targets: {
+                unsupported_framework:
+                    'Экспорт {{framework}} несовместим с СУБД диаграммы',
                 sql: {
                     title: 'SQL',
                     description: 'DDL-скрипт базы данных для текущей диаграммы',
@@ -1090,11 +1092,11 @@ export const ru: LanguageTranslation = {
                     coming_soon: 'Запланировано для будущего этапа экспорта.',
                 },
                 diagram_json: {
-                    title: 'Диаграмма JSON',
+                    title: 'JSON',
                     description: 'Портативный файл диаграммы FoxalDB',
                 },
                 laravel: {
-                    title: 'Миграции Laravel',
+                    title: 'Laravel',
                     description: 'ZIP-архив миграций Laravel',
                 },
                 prisma: {

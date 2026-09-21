@@ -25,7 +25,7 @@ export const ne: LanguageTranslation = {
                 browse: 'सबै डाटाबेसहरू...',
                 save: 'सुरक्षित गर्नुहोस्',
                 import: 'डाटाबेस आयात गर्नुहोस्',
-                export: 'Export',
+                export: 'निर्यात गर्नुहोस्...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1071,10 +1071,12 @@ export const ne: LanguageTranslation = {
             sections: {
                 database: 'डाटाबेस',
                 framework: 'फ्रेमवर्क',
-                portable: 'पोर्टेबल / स्किमा',
+                portable: 'स्किमा',
                 visual: 'भिजुअल',
             },
             targets: {
+                unsupported_framework:
+                    '{{framework}} निर्यात डायाग्रामको डाटाबेस व्यवस्थापन प्रणालीसँग मिल्दो छैन',
                 sql: {
                     title: 'SQL',
                     description: 'हालको डायाग्रामको लागि डाटाबेस DDL स्क्रिप्ट',
@@ -1091,11 +1093,11 @@ export const ne: LanguageTranslation = {
                         'भविष्यको निर्यात माइलस्टोनका लागि योजना गरिएको।',
                 },
                 diagram_json: {
-                    title: 'डायाग्राम JSON',
+                    title: 'JSON',
                     description: 'पोर्टेबल FoxalDB डायाग्राम फाइल',
                 },
                 laravel: {
-                    title: 'Laravel माइग्रेसन',
+                    title: 'Laravel',
                     description: 'Laravel माइग्रेसन ZIP अभिलेख',
                 },
                 prisma: {

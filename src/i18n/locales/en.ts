@@ -26,7 +26,7 @@ export const en = {
                 browse: 'All Databases...',
                 save: 'Save',
                 import: 'Import',
-                export: 'Export',
+                export: 'Export...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1046,10 +1046,12 @@ export const en = {
             sections: {
                 database: 'Database',
                 framework: 'Framework',
-                portable: 'Portable / Schema',
+                portable: 'Schema',
                 visual: 'Visual',
             },
             targets: {
+                unsupported_framework:
+                    "Export {{framework}} incompatible with the diagram's database",
                 sql: {
                     title: 'SQL',
                     description: 'Database DDL script for the current diagram',
@@ -1065,11 +1067,11 @@ export const en = {
                     coming_soon: 'Planned for a future Export milestone.',
                 },
                 diagram_json: {
-                    title: 'Diagram JSON',
+                    title: 'JSON',
                     description: 'Portable FoxalDB diagram file',
                 },
                 laravel: {
-                    title: 'Laravel migrations',
+                    title: 'Laravel',
                     description: 'Laravel migration ZIP archive',
                 },
                 prisma: {

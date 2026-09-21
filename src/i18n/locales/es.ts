@@ -26,7 +26,7 @@ export const es: LanguageTranslation = {
                 browse: 'Todas las bases de datos...',
                 save: 'Guardar',
                 import: 'Importar Base de Datos',
-                export: 'Export',
+                export: 'Exportar...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1089,10 +1089,12 @@ export const es: LanguageTranslation = {
             sections: {
                 database: 'Base de datos',
                 framework: 'Framework',
-                portable: 'Portable / Esquema',
+                portable: 'Esquema',
                 visual: 'Visual',
             },
             targets: {
+                unsupported_framework:
+                    'Exportación {{framework}} incompatible con el SGBD del diagrama',
                 sql: {
                     title: 'SQL',
                     description:
@@ -1110,11 +1112,11 @@ export const es: LanguageTranslation = {
                         'Planificado para un hito de exportación futuro.',
                 },
                 diagram_json: {
-                    title: 'Diagrama JSON',
+                    title: 'JSON',
                     description: 'Archivo de diagrama FoxalDB portable',
                 },
                 laravel: {
-                    title: 'Migraciones Laravel',
+                    title: 'Laravel',
                     description: 'Archivo ZIP de migraciones Laravel',
                 },
                 prisma: {

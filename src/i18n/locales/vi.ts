@@ -26,7 +26,7 @@ export const vi: LanguageTranslation = {
                 browse: 'Tất cả cơ sở dữ liệu...',
                 save: 'Lưu',
                 import: 'Nhập cơ sở dữ liệu',
-                export: 'Export',
+                export: 'Xuất...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1074,10 +1074,12 @@ export const vi: LanguageTranslation = {
             sections: {
                 database: 'Cơ sở dữ liệu',
                 framework: 'Framework',
-                portable: 'Di động / Lược đồ',
+                portable: 'Lược đồ',
                 visual: 'Hình ảnh',
             },
             targets: {
+                unsupported_framework:
+                    'Xuất {{framework}} không tương thích với hệ quản trị CSDL của sơ đồ',
                 sql: {
                     title: 'SQL',
                     description: 'Script DDL cơ sở dữ liệu cho sơ đồ hiện tại',
@@ -1093,11 +1095,11 @@ export const vi: LanguageTranslation = {
                     coming_soon: 'Dự kiến cho giai đoạn xuất trong tương lai.',
                 },
                 diagram_json: {
-                    title: 'Sơ đồ JSON',
+                    title: 'JSON',
                     description: 'Tệp sơ đồ FoxalDB di động',
                 },
                 laravel: {
-                    title: 'Migration Laravel',
+                    title: 'Laravel',
                     description: 'Tệp ZIP migration Laravel',
                 },
                 prisma: {

@@ -25,7 +25,7 @@ export const ko_KR: LanguageTranslation = {
                 browse: '모든 데이터베이스...',
                 save: '저장',
                 import: '데이터베이스 가져오기',
-                export: 'Export',
+                export: '내보내기...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1075,10 +1075,12 @@ export const ko_KR: LanguageTranslation = {
             sections: {
                 database: '데이터베이스',
                 framework: '프레임워크',
-                portable: '이식 가능 / 스키마',
+                portable: '스키마',
                 visual: '시각',
             },
             targets: {
+                unsupported_framework:
+                    '{{framework}}보내기는 다이어그램의 DBMS와 호환되지 않습니다',
                 sql: {
                     title: 'SQL',
                     description: '현재 다이어그램의 데이터베이스 DDL 스크립트',
@@ -1094,11 +1096,11 @@ export const ko_KR: LanguageTranslation = {
                     coming_soon: '향후보내기 마일스톤에서 제공될 예정입니다.',
                 },
                 diagram_json: {
-                    title: '다이어그램 JSON',
+                    title: 'JSON',
                     description: '이식 가능한 FoxalDB 다이어그램 파일',
                 },
                 laravel: {
-                    title: 'Laravel 마이그레이션',
+                    title: 'Laravel',
                     description: 'Laravel 마이그레이션 ZIP 아카이브',
                 },
                 prisma: {

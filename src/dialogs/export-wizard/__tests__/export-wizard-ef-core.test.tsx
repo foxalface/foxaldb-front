@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { unzipSync, strFromU8 } from 'fflate';
@@ -144,7 +144,9 @@ const successResponse = (
 const openEfCoreBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
     await userEvent.click(
-        screen.getByText('export_wizard.targets.ef_core.title')
+        screen.getByRole('button', {
+            name: 'export_wizard.targets.ef_core.title',
+        })
     );
 };
 
@@ -500,7 +502,9 @@ describe('ExportWizardDialog EF Core branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.ef_core.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.ef_core.title',
+            })
         );
         await userEvent.clear(screen.getByTestId('ef-core-namespace-input'));
         await userEvent.type(
@@ -516,7 +520,9 @@ describe('ExportWizardDialog EF Core branch', () => {
         ).toBeInTheDocument();
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.ef_core.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.ef_core.title',
+            })
         );
         expect(screen.getByTestId('ef-core-namespace-input')).toHaveValue(
             'MyDiagram'
@@ -562,7 +568,9 @@ describe('ExportWizardDialog EF Core branch', () => {
             <ExportWizardDialog dialog={{ open: true }} />
         );
         await userEvent.click(
-            screen.getByText('export_wizard.targets.ef_core.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.ef_core.title',
+            })
         );
         await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
@@ -584,13 +592,15 @@ describe('ExportWizardDialog EF Core branch', () => {
 
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
-        const button = screen
-            .getByText('export_wizard.targets.ef_core.title')
-            .closest('button');
+        const button = screen.getByRole('button', {
+            name: 'export_wizard.targets.ef_core.title',
+        });
 
-        expect(button).toBeDisabled();
+        expect(button).toHaveAttribute('aria-disabled', 'true');
         expect(
-            screen.getByText('export_wizard.ef_core.unsupported_database')
+            within(button).getByText(
+                'export_wizard.targets.unsupported_framework'
+            )
         ).toBeInTheDocument();
 
         if (button) {
@@ -658,9 +668,9 @@ describe('ExportWizardDialog EF Core picker availability', () => {
             <ExportWizardDialog dialog={{ open: true }} />
         );
         expect(
-            screen
-                .getByText('export_wizard.targets.ef_core.title')
-                .closest('button')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.ef_core.title',
+            })
         ).not.toBeDisabled();
         unmount();
 
@@ -668,9 +678,9 @@ describe('ExportWizardDialog EF Core picker availability', () => {
         chartDbState.currentDiagram = buildSimpleDiagram(DatabaseType.MYSQL);
         render(<ExportWizardDialog dialog={{ open: true }} />);
         expect(
-            screen
-                .getByText('export_wizard.targets.ef_core.title')
-                .closest('button')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.ef_core.title',
+            })
         ).not.toBeDisabled();
     });
 });

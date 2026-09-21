@@ -1365,9 +1365,14 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             <DialogContent
                 className={cn(
                     'flex max-h-dvh w-full flex-col overflow-hidden',
-                    isWideDialog ? 'max-w-3xl' : 'max-w-md'
+                    isWideDialog ? 'max-w-3xl' : 'max-w-[30rem]'
                 )}
                 showClose
+                onOpenAutoFocus={
+                    step === ExportWizardStep.TARGET_PICKER
+                        ? (event) => event.preventDefault()
+                        : undefined
+                }
             >
                 <DialogHeader className="shrink-0">
                     {isSqlBranch ? (

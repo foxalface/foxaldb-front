@@ -1,12 +1,7 @@
-import type { LucideIcon } from 'lucide-react';
-import {
-    Archive,
-    Database,
-    FileCode2,
-    FileImage,
-    FileJson,
-    Image,
-} from 'lucide-react';
+import type { IconType } from 'react-icons';
+import { LuFileCode2, LuFileJson2 } from 'react-icons/lu';
+import { PiFileJpg, PiFilePng, PiFileSql, PiFileSvg } from 'react-icons/pi';
+import type { ProjectFramework } from '@/lib/project-import/project-types';
 import type { ExportTargetId, ExportTargetSection } from './export-target-id';
 import {
     getExportTargetAvailability,
@@ -19,7 +14,8 @@ export interface ExportTargetDefinition {
     section: ExportTargetSection;
     titleKey: string;
     descriptionKey: string;
-    icon: LucideIcon;
+    icon?: IconType;
+    framework?: ProjectFramework;
 }
 
 export const EXPORT_TARGET_SECTIONS: ExportTargetSection[] = [
@@ -45,84 +41,84 @@ export const EXPORT_TARGET_REGISTRY: ExportTargetDefinition[] = [
         section: 'database',
         titleKey: 'export_wizard.targets.sql.title',
         descriptionKey: 'export_wizard.targets.sql.description',
-        icon: Database,
+        icon: PiFileSql,
     },
     {
         id: 'laravel',
         section: 'framework',
         titleKey: 'export_wizard.targets.laravel.title',
         descriptionKey: 'export_wizard.targets.laravel.description',
-        icon: Archive,
+        framework: 'laravel',
     },
     {
         id: 'prisma',
         section: 'framework',
         titleKey: 'export_wizard.targets.prisma.title',
         descriptionKey: 'export_wizard.targets.prisma.description',
-        icon: FileCode2,
+        framework: 'prisma',
     },
     {
         id: 'ef_core',
         section: 'framework',
         titleKey: 'export_wizard.targets.ef_core.title',
         descriptionKey: 'export_wizard.targets.ef_core.description',
-        icon: FileCode2,
+        framework: 'entity_framework_core',
     },
     {
         id: 'rails',
         section: 'framework',
         titleKey: 'export_wizard.targets.rails.title',
         descriptionKey: 'export_wizard.targets.rails.description',
-        icon: FileCode2,
+        framework: 'rails',
     },
     {
         id: 'django',
         section: 'framework',
         titleKey: 'export_wizard.targets.django.title',
         descriptionKey: 'export_wizard.targets.django.description',
-        icon: FileCode2,
+        framework: 'django',
     },
     {
         id: 'drizzle',
         section: 'framework',
         titleKey: 'export_wizard.targets.drizzle.title',
         descriptionKey: 'export_wizard.targets.drizzle.description',
-        icon: FileCode2,
+        framework: 'drizzle',
     },
     {
         id: 'dbml',
         section: 'portable',
         titleKey: 'export_wizard.targets.dbml.title',
         descriptionKey: 'export_wizard.targets.dbml.description',
-        icon: FileCode2,
+        icon: LuFileCode2,
     },
     {
         id: 'diagram_json',
         section: 'portable',
         titleKey: 'export_wizard.targets.diagram_json.title',
         descriptionKey: 'export_wizard.targets.diagram_json.description',
-        icon: FileJson,
+        icon: LuFileJson2,
     },
     {
         id: 'png',
         section: 'visual',
         titleKey: 'export_wizard.targets.png.title',
         descriptionKey: 'export_wizard.targets.png.description',
-        icon: Image,
+        icon: PiFilePng,
     },
     {
         id: 'jpg',
         section: 'visual',
         titleKey: 'export_wizard.targets.jpg.title',
         descriptionKey: 'export_wizard.targets.jpg.description',
-        icon: Image,
+        icon: PiFileJpg,
     },
     {
         id: 'svg',
         section: 'visual',
         titleKey: 'export_wizard.targets.svg.title',
         descriptionKey: 'export_wizard.targets.svg.description',
-        icon: FileImage,
+        icon: PiFileSvg,
     },
 ];
 

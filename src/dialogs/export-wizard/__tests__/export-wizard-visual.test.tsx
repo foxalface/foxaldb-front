@@ -77,7 +77,9 @@ vi.mock('react-i18next', () => ({
 const openVisualBranch = async (target: 'png' | 'jpg' | 'svg') => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
     await userEvent.click(
-        screen.getByText(`export_wizard.targets.${target}.title`)
+        screen.getByRole('button', {
+            name: `export_wizard.targets.${target}.title`,
+        })
     );
 };
 
@@ -200,7 +202,9 @@ describe('ExportWizardDialog visual branch', () => {
         );
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.png.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.png.title',
+            })
         );
         await userEvent.click(screen.getByTestId('visual-extent-viewport'));
         await userEvent.click(screen.getByTestId('visual-scale-4x'));
@@ -216,7 +220,9 @@ describe('ExportWizardDialog visual branch', () => {
         ).not.toBeInTheDocument();
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.png.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.png.title',
+            })
         );
 
         expect(screen.getByTestId('visual-extent-diagram')).toHaveAttribute(
@@ -230,7 +236,9 @@ describe('ExportWizardDialog visual branch', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         await userEvent.click(
-            screen.getByText('export_wizard.targets.png.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.png.title',
+            })
         );
         await userEvent.click(
             screen.getByLabelText(
@@ -240,7 +248,9 @@ describe('ExportWizardDialog visual branch', () => {
 
         await userEvent.click(screen.getByText('export_wizard.back'));
         await userEvent.click(
-            screen.getByText('export_wizard.targets.jpg.title')
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.jpg.title',
+            })
         );
 
         expect(

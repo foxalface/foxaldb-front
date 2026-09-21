@@ -25,7 +25,7 @@ export const bn: LanguageTranslation = {
                 browse: 'সমস্ত ডেটাবেস...',
                 save: 'সংরক্ষণ করুন',
                 import: 'ডাটাবেস আমদানি করুন',
-                export: 'Export',
+                export: 'রপ্তানি করুন...',
                 export_laravel_migrations: 'Laravel migrations',
                 import_laravel_migrations: 'Import Laravel migrations',
                 compare_laravel_migrations: 'Sync from Laravel migrations',
@@ -1070,10 +1070,12 @@ export const bn: LanguageTranslation = {
             sections: {
                 database: 'ডেটাবেস',
                 framework: 'ফ্রেমওয়ার্ক',
-                portable: 'পোর্টেবল / স্কিমা',
+                portable: 'স্কিমা',
                 visual: 'ভিজ্যুয়াল',
             },
             targets: {
+                unsupported_framework:
+                    '{{framework}} রপ্তানি ডায়াগ্রামের ডাটাবেস ম্যানেজমেন্ট সিস্টেমের সাথে সামঞ্জস্যপূর্ণ নয়',
                 sql: {
                     title: 'SQL',
                     description:
@@ -1091,11 +1093,11 @@ export const bn: LanguageTranslation = {
                         'ভবিষ্যতের রপ্তানি মাইলস্টোনের জন্য পরিকল্পিত।',
                 },
                 diagram_json: {
-                    title: 'ডায়াগ্রাম JSON',
+                    title: 'JSON',
                     description: 'পোর্টেবল FoxalDB ডায়াগ্রাম ফাইল',
                 },
                 laravel: {
-                    title: 'Laravel মাইগ্রেশন',
+                    title: 'Laravel',
                     description: 'Laravel মাইগ্রেশন ZIP আর্কাইভ',
                 },
                 prisma: {
