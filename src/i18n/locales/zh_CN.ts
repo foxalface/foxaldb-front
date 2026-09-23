@@ -979,6 +979,7 @@ export const zh_CN: LanguageTranslation = {
             title: '导出',
             description: '选择要导出图表的格式。',
             back: '返回',
+            export: '导出',
             sql: {
                 target_step: {
                     title: '导出 SQL',
@@ -1097,6 +1098,8 @@ export const zh_CN: LanguageTranslation = {
                     extent_viewport: '当前视图',
                     extent_viewport_description: '仅导出画布上当前可见的内容。',
                     scale_label: '缩放',
+                    scale_description:
+                        '乘以导出分辨率。\n2x 会将像素宽度和高度加倍。',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1105,7 +1108,8 @@ export const zh_CN: LanguageTranslation = {
                     transparent: '透明背景',
                     transparent_description: '导出不带纯色背景的 PNG。',
                     svg_limitation:
-                        '此 SVG 是供浏览器使用的图表快照，不是可完全编辑的矢量文件。',
+                        '此 SVG 是供浏览器使用的图表快照，\n不是可完全编辑的矢量文件。',
+                    svg_limitation_aria: '关于 SVG 导出限制',
                     export: '导出',
                     generating: '正在生成图片...',
                     error: '无法导出图片，请重试。',
@@ -1775,6 +1779,17 @@ export const zh_CN: LanguageTranslation = {
             activation_failed: '图表已创建但无法打开。本地副本已保留。',
             cleanup_failed: '图表已导入但无法删除本地副本。您可以手动删除。',
             check_failed: '无法读取本地图表。',
+        },
+
+        dbml: {
+            ref_format: {
+                label: '引用样式',
+                inline: '内联引用',
+                standard: '标准引用',
+                show_inline: '显示内联引用',
+                show_standard: '显示标准引用',
+                hint: '选择导出 DBML 中关系的写法。',
+            },
         },
 
         language_select: {

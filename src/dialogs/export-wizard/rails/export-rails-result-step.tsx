@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/button/button';
+import type {
+    ExportWizardFooterAction,
+    RegisterExportWizardFooterAction,
+} from '../export-wizard-footer-action';
+import { useRegisterExportWizardFooterAction } from '../use-register-export-wizard-footer-action';
 import { Label } from '@/components/label/label';
 import { Spinner } from '@/components/spinner/spinner';
 import { downloadBlob } from '@/lib/download-blob';
@@ -34,6 +37,7 @@ interface ExportRailsResultStepProps {
     error: RailsWizardRequestError | null;
     success: RailsExportSuccess | null;
     onRetry: () => void;
+    registerFooterAction?: RegisterExportWizardFooterAction;
 }
 
 export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
@@ -42,6 +46,7 @@ export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
     error,
     success,
     onRetry,
+    registerFooterAction,
 }) => {
     const { t } = useTranslation();
     const [downloadErrorCode, setDownloadErrorCode] = useState<
@@ -118,14 +123,38 @@ export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
         }
     }, [resolvedFilename, success]);
 
-    const handleRetry = () => {
+    const handleRetry = useCallback(() => {
         if (isLoading) {
             return;
         }
 
         setDownloadErrorCode(null);
         onRetry();
-    };
+    }, [isLoading, onRetry]);
+
+    const footerAction = useMemo((): ExportWizardFooterAction | null => {
+        if (errorMessage) {
+            return {
+                type: 'retry',
+                onClick: handleRetry,
+                disabled: isLoading,
+                testId: 'export-rails-retry',
+                label: t('export_wizard.rails.result_step.retry'),
+            };
+        }
+
+        if (success && !isLoading) {
+            return {
+                type: 'export',
+                onClick: handleDownload,
+                testId: 'export-rails-download-zip',
+            };
+        }
+
+        return null;
+    }, [errorMessage, handleDownload, handleRetry, isLoading, success, t]);
+
+    useRegisterExportWizardFooterAction(registerFooterAction, footerAction);
 
     return (
         <div
@@ -150,32 +179,21 @@ export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
             </p>
 
             {errorMessage ? (
-                <div className="flex flex-col items-start gap-3">
-                    <p
-                        className="break-words text-sm text-muted-foreground"
-                        role="alert"
-                        data-testid="export-rails-error"
-                        data-error-kind={error?.kind}
-                        data-error-code={error?.code}
-                    >
-                        {errorMessage}
-                        {error?.kind === 'semantic' && error.code ? (
-                            <span className="mt-1 block text-xs">
-                                {error.code}
-                                {error.path ? ` · ${error.path}` : ''}
-                            </span>
-                        ) : null}
-                    </p>
-                    <Button
-                        type="button"
-                        variant="secondary"
-                        disabled={isLoading}
-                        onClick={handleRetry}
-                        data-testid="export-rails-retry"
-                    >
-                        {t('export_wizard.rails.result_step.retry')}
-                    </Button>
-                </div>
+                <p
+                    className="break-words text-sm text-muted-foreground"
+                    role="alert"
+                    data-testid="export-rails-error"
+                    data-error-kind={error?.kind}
+                    data-error-code={error?.code}
+                >
+                    {errorMessage}
+                    {error?.kind === 'semantic' && error.code ? (
+                        <span className="mt-1 block text-xs">
+                            {error.code}
+                            {error.path ? ` · ${error.path}` : ''}
+                        </span>
+                    ) : null}
+                </p>
             ) : null}
 
             {isLoading && !errorMessage ? (
@@ -264,16 +282,6 @@ export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
                             {downloadErrorMessage}
                         </p>
                     ) : null}
-
-                    <Button
-                        type="button"
-                        className="w-fit"
-                        onClick={handleDownload}
-                        data-testid="export-rails-download-zip"
-                    >
-                        <Download className="mr-1 size-4" />
-                        {t('export_wizard.rails.result_step.download_zip')}
-                    </Button>
                 </>
             ) : null}
         </div>

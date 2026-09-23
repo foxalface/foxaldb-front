@@ -1027,6 +1027,7 @@ export const tr: LanguageTranslation = {
             title: 'Dışa aktar',
             description: 'Diyagramınızı dışa aktarmak için bir format seçin.',
             back: 'Geri',
+            export: 'Dışa aktar',
             sql: {
                 target_step: {
                     title: 'SQL dışa aktar',
@@ -1153,6 +1154,8 @@ export const tr: LanguageTranslation = {
                     extent_viewport_description:
                         'Yalnızca tuvalde şu anda görüneni dışa aktarın.',
                     scale_label: 'Ölçek',
+                    scale_description:
+                        'Dışa aktarma çözünürlüğünü çarpar.\n2x, piksel genişliğini ve yüksekliğini ikiye katlar.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1163,7 +1166,9 @@ export const tr: LanguageTranslation = {
                     transparent_description:
                         'PNG dosyasını düz bir arka plan rengi olmadan dışa aktarın.',
                     svg_limitation:
-                        'Bu SVG, tarayıcı için bir diyagram anlık görüntüsüdür; tam düzenlenebilir bir vektör dosyası değildir.',
+                        'Bu SVG, tarayıcı için bir diyagram anlık görüntüsüdür;\ntam düzenlenebilir bir vektör dosyası değildir.',
+                    svg_limitation_aria:
+                        'SVG dışa aktarma sınırlamaları hakkında',
                     export: 'Dışa aktar',
                     generating: 'Görsel oluşturuluyor...',
                     error: 'Görsel dışa aktarılamadı. Lütfen tekrar deneyin.',
@@ -1889,6 +1894,17 @@ export const tr: LanguageTranslation = {
             cleanup_failed:
                 'Diyagram aktarıldı ancak yerel kopya kaldırılamadı. Manuel olarak silebilirsiniz.',
             check_failed: 'Yerel diyagram okunamadı.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'Referans stili',
+                inline: 'Satır içi ref',
+                standard: 'Standart ref',
+                show_inline: 'Satır içi ref göster',
+                show_standard: 'Standart ref göster',
+                hint: 'Dışa aktarılan DBML içinde ilişkilerin nasıl yazılacağını seçin.',
+            },
         },
 
         language_select: {

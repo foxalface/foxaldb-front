@@ -1,44 +1,27 @@
-import React, { useCallback, useMemo } from 'react';
-import { Download } from 'lucide-react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Spinner } from '@/components/spinner/spinner';
 import { Label } from '@/components/label/label';
-import { downloadBlob } from '@/lib/download-blob';
-import { buildDbmlExportFilename } from '@/lib/dbml/dbml-export/build-dbml-export-filename';
+import { DbmlRefFormatToggle } from '@/lib/dbml/dbml-ref-format-toggle';
+import type { DbmlRefFormat } from '@/lib/dbml/dbml-ref-format';
 
 interface ExportDbmlPreviewStepProps {
-    diagramName: string;
     dbml?: string;
+    refFormat: DbmlRefFormat;
+    onRefFormatChange: (format: DbmlRefFormat) => void;
     isLoading: boolean;
     hasError: boolean;
 }
 
 export const ExportDbmlPreviewStep: React.FC<ExportDbmlPreviewStepProps> = ({
-    diagramName,
     dbml,
+    refFormat,
+    onRefFormatChange,
     isLoading,
     hasError,
 }) => {
     const { t } = useTranslation();
-
-    const downloadAction = useMemo(
-        () => ({
-            label: t('export_wizard.dbml.preview_step.download'),
-            icon: Download,
-            onClick: () => {
-                if (!dbml) {
-                    return;
-                }
-
-                downloadBlob(
-                    new Blob([dbml], { type: 'text/plain' }),
-                    buildDbmlExportFilename(diagramName)
-                );
-            },
-        }),
-        [dbml, diagramName, t]
-    );
 
     const renderContent = useCallback(() => {
         if (hasError) {
@@ -69,36 +52,37 @@ export const ExportDbmlPreviewStep: React.FC<ExportDbmlPreviewStepProps> = ({
         }
 
         return (
-            <div
-                className="h-96 min-h-72 w-full shrink-0"
-                data-testid="export-dbml-preview-container"
-            >
-                <CodeSnippet
-                    className="size-full flex-none"
-                    code={dbml}
-                    language="dbml"
-                    autoScroll={true}
-                    isComplete={!isLoading}
-                    actions={[downloadAction]}
-                    actionsTooltipSide="top"
-                    editorProps={{
-                        options: {
-                            scrollbar: {
-                                vertical: 'auto',
-                                horizontal: 'auto',
-                            },
-                        },
-                    }}
+            <>
+                <DbmlRefFormatToggle
+                    value={refFormat}
+                    onValueChange={onRefFormatChange}
                 />
-            </div>
+                <div
+                    className="h-96 min-h-72 w-full shrink-0"
+                    data-testid="export-dbml-preview-container"
+                >
+                    <CodeSnippet
+                        className="size-full flex-none"
+                        code={dbml}
+                        language="dbml"
+                        isComplete={!isLoading}
+                        editorProps={{
+                            options: {
+                                scrollbar: {
+                                    vertical: 'auto',
+                                    horizontal: 'auto',
+                                },
+                            },
+                        }}
+                    />
+                </div>
+            </>
         );
-    }, [dbml, downloadAction, hasError, isLoading, t]);
+    }, [dbml, hasError, isLoading, onRefFormatChange, refFormat, t]);
 
     return (
-        <div className="flex min-h-0 flex-1 flex-col">
-            <div className="flex min-h-0 flex-1 flex-col">
-                {renderContent()}
-            </div>
+        <div className="flex min-h-0 flex-1 flex-col gap-4">
+            {renderContent()}
         </div>
     );
 };

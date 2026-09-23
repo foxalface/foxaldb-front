@@ -128,10 +128,11 @@ describe('ExportWizardDialog Laravel branch', () => {
             screen.getByTestId('export-laravel-options-step')
         ).toBeInTheDocument();
         expect(
-            screen.getByTestId('export-laravel-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.laravel.title'
-        );
+            screen.getByText('export_wizard.targets.laravel.title')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-laravel-branch-context')
+        ).not.toBeInTheDocument();
         expect(mockedExportLaravelMigrations).not.toHaveBeenCalled();
     });
 

@@ -281,10 +281,11 @@ describe('ExportWizardDialog Rails branch', () => {
         ).not.toBeInTheDocument();
         expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
         expect(
-            screen.getByTestId('export-rails-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.rails.title → export_wizard.rails.result_step.rails_8_1'
-        );
+            screen.getByText('export_wizard.targets.rails.title')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-rails-branch-context')
+        ).not.toBeInTheDocument();
     });
 
     it('shows static Rails 8.1 information and the inferred provider', async () => {

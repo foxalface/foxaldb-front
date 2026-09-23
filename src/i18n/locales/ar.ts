@@ -1033,6 +1033,7 @@ export const ar: LanguageTranslation = {
             title: 'تصدير',
             description: 'اختر تنسيقًا لتصدير مخططك.',
             back: 'رجوع',
+            export: 'تصدير',
             sql: {
                 target_step: {
                     title: 'تصدير SQL',
@@ -1153,6 +1154,8 @@ export const ar: LanguageTranslation = {
                     extent_viewport_description:
                         'تصدير ما يظهر حالياً على اللوحة فقط.',
                     scale_label: 'المقياس',
+                    scale_description:
+                        'اضرب دقة التصدير.\n2x يضاعف العرض والارتفاع بالبكسل.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1161,7 +1164,8 @@ export const ar: LanguageTranslation = {
                     transparent: 'خلفية شفافة',
                     transparent_description: 'تصدير PNG بدون لون خلفية ثابت.',
                     svg_limitation:
-                        'ملف SVG هذا لقطة للمخطط مخصصة للمتصفح وليس ملفاً متجهاً قابلاً للتحرير بالكامل.',
+                        'ملف SVG هذا لقطة للمخطط مخصصة للمتصفح،\nوليس ملفاً متجهاً قابلاً للتحرير بالكامل.',
+                    svg_limitation_aria: 'حول قيود تصدير SVG',
                     export: 'تصدير',
                     generating: 'جارٍ إنشاء الصورة...',
                     error: 'تعذر تصدير الصورة. يرجى المحاولة مرة أخرى.',
@@ -1876,6 +1880,17 @@ export const ar: LanguageTranslation = {
             cleanup_failed:
                 'تم استيراد المخطط ولكن تعذر إزالة النسخة المحلية. يمكنك حذفها يدويًا.',
             check_failed: 'تعذر قراءة المخطط المحلي.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'نمط المراجع',
+                inline: 'مراجع مضمنة',
+                standard: 'مراجع قياسية',
+                show_inline: 'إظهار المراجع المضمنة',
+                show_standard: 'إظهار المراجع القياسية',
+                hint: 'اختر كيفية كتابة العلاقات في DBML المُصدَّر.',
+            },
         },
 
         language_select: {

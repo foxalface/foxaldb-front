@@ -1045,6 +1045,7 @@ export const hr: LanguageTranslation = {
             title: 'Izvoz',
             description: 'Odaberite format za izvoz dijagrama.',
             back: 'Natrag',
+            export: 'Izvezi',
             sql: {
                 target_step: {
                     title: 'Izvezi SQL',
@@ -1168,6 +1169,8 @@ export const hr: LanguageTranslation = {
                     extent_viewport_description:
                         'Izvezite samo ono što je trenutačno vidljivo na platnu.',
                     scale_label: 'Skala',
+                    scale_description:
+                        'Množi razlučivost izvoza.\n2x udvostručuje širinu i visinu u pikselima.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1178,7 +1181,8 @@ export const hr: LanguageTranslation = {
                     transparent_description:
                         'Izvezite PNG bez jednobojne pozadine.',
                     svg_limitation:
-                        'Ovaj SVG je snimka dijagrama za preglednik, a ne potpuno urediva vektorska datoteka.',
+                        'Ovaj SVG je snimka dijagrama za preglednik,\na ne potpuno urediva vektorska datoteka.',
+                    svg_limitation_aria: 'O ograničenjima SVG izvoza',
                     export: 'Izvezi',
                     generating: 'Generiranje slike...',
                     error: 'Sliku nije moguće izvesti. Pokušajte ponovno.',
@@ -1901,6 +1905,17 @@ export const hr: LanguageTranslation = {
             cleanup_failed:
                 'Dijagram je uvezen ali lokalna kopija nije uklonjena. Možete je ručno izbrisati.',
             check_failed: 'Lokalni dijagram nije mogao biti pročitan.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'Stil referenci',
+                inline: 'Inline ref',
+                standard: 'Standardne ref',
+                show_inline: 'Prikaži inline ref',
+                show_standard: 'Prikaži standardne ref',
+                hint: 'Odaberite kako se odnosi pišu u izvezenom DBML-u.',
+            },
         },
 
         language_select: {

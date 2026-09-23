@@ -1029,6 +1029,7 @@ export const gu: LanguageTranslation = {
             description:
                 'તમારું ડાયાગ્રામ નિકાસ કરવા માટે એક ફોર્મેટ પસંદ કરો.',
             back: 'પાછા',
+            export: 'નિકાસ',
             sql: {
                 target_step: {
                     title: 'SQL એક્સપોર્ટ',
@@ -1152,6 +1153,8 @@ export const gu: LanguageTranslation = {
                     extent_viewport_description:
                         'કેનવાસ પર હાલમાં દેખાતું હોય તે જ નિકાસ કરો.',
                     scale_label: 'સ્કેલ',
+                    scale_description:
+                        'એક્સપોર્ટ રિઝોલ્યુશન ગુણાકાર કરો.\n2x પિક્સેલમાં પહોળાઈ અને ઊંચાઈ બમણી કરે છે.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1162,7 +1165,8 @@ export const gu: LanguageTranslation = {
                     transparent_description:
                         'ઘન પૃષ્ઠભૂમિ રંગ વગર PNG નિકાસ કરો.',
                     svg_limitation:
-                        'આ SVG બ્રાઉઝર માટે ડાયાગ્રામનો સ્નેપશોટ છે, સંપૂર્ણ રીતે સંપાદનયોગ્ય વેક્ટર ફાઇલ નથી.',
+                        'આ SVG બ્રાઉઝર માટે ડાયાગ્રામનો સ્નેપશોટ છે,\nસંપૂર્ણ રીતે સંપાદનયોગ્ય વેક્ટર ફાઇલ નથી.',
+                    svg_limitation_aria: 'SVG નિકાસ મર્યાદાઓ વિશે',
                     export: 'નિકાસ',
                     generating: 'છબી બનાવી રહ્યા છીએ...',
                     error: 'છબી નિકાસ થઈ શકી નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
@@ -1884,6 +1888,17 @@ export const gu: LanguageTranslation = {
             cleanup_failed:
                 'ડાયાગ્રામ આયાત થયું પણ સ્થાનિક કોપી દૂર કરી શકાઈ નહીં. તમે મેન્યુઅલી કાઢી શકો છો.',
             check_failed: 'સ્થાનિક ડાયાગ્રામ વાંચી શકાયું નહીં.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'રેફરન્સ શૈલી',
+                inline: 'ઇનલાઇન રેફ',
+                standard: 'સ્ટાન્ડર્ડ રેફ',
+                show_inline: 'ઇનલાઇન રેફ બતાવો',
+                show_standard: 'સ્ટાન્ડર્ડ રેફ બતાવો',
+                hint: 'એક્સપોર્ટ કરેલ DBML માં સંબંધો કેવી રીતે લખાય તે પસંદ કરો.',
+            },
         },
 
         language_select: {

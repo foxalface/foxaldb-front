@@ -259,10 +259,11 @@ describe('ExportWizardDialog EF Core branch', () => {
             screen.queryByTestId('prisma-version-7')
         ).not.toBeInTheDocument();
         expect(
-            screen.getByTestId('export-ef-core-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.ef_core.title'
-        );
+            screen.getByText('export_wizard.targets.ef_core.title')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-ef-core-branch-context')
+        ).not.toBeInTheDocument();
     });
 
     it('defaults DbContext to AppDbContext and namespace from the diagram name', async () => {

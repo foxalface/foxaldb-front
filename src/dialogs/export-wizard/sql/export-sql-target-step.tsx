@@ -21,57 +21,49 @@ export const ExportSqlTargetStep: React.FC<ExportSqlTargetStepProps> = ({
     const sourceLabel = databaseTypeToLabelMap[sourceDatabaseType];
 
     return (
-        <div className="flex flex-col gap-4">
-            <p className="text-sm text-muted-foreground">
-                {t('export_wizard.sql.target_step.source_label', {
-                    database: sourceLabel,
-                })}
-            </p>
-            <div className="flex flex-col gap-2">
-                {targets.map((targetDatabaseType) => {
-                    const targetLabel =
-                        databaseTypeToLabelMap[targetDatabaseType];
-                    const logo = getDatabaseLogo(
-                        targetDatabaseType,
-                        effectiveTheme
-                    );
-                    const isCrossDialect =
-                        targetDatabaseType !== sourceDatabaseType;
+        <div className="flex flex-col gap-2">
+            {targets.map((targetDatabaseType) => {
+                const targetLabel = databaseTypeToLabelMap[targetDatabaseType];
+                const logo = getDatabaseLogo(
+                    targetDatabaseType,
+                    effectiveTheme
+                );
+                const isCrossDialect =
+                    targetDatabaseType !== sourceDatabaseType;
 
-                    return (
-                        <ExportTargetButton
-                            key={targetDatabaseType}
-                            icon={
-                                logo ? (
-                                    <img
-                                        src={logo}
-                                        alt=""
-                                        className="size-5 object-contain"
-                                    />
-                                ) : null
-                            }
-                            title={targetLabel}
-                            description={
-                                isCrossDialect
-                                    ? t(
-                                          'export_wizard.sql.target_step.cross_dialect_description',
-                                          {
-                                              source: sourceLabel,
-                                              target: targetLabel,
-                                          }
-                                      )
-                                    : t(
-                                          'export_wizard.sql.target_step.same_dialect_description',
-                                          {
-                                              database: targetLabel,
-                                          }
-                                      )
-                            }
-                            onClick={() => onSelectTarget(targetDatabaseType)}
-                        />
-                    );
-                })}
-            </div>
+                return (
+                    <ExportTargetButton
+                        key={targetDatabaseType}
+                        icon={
+                            logo ? (
+                                <img
+                                    src={logo}
+                                    alt=""
+                                    className="size-5 object-contain"
+                                />
+                            ) : null
+                        }
+                        title={targetLabel}
+                        description={
+                            isCrossDialect
+                                ? t(
+                                      'export_wizard.sql.target_step.cross_dialect_description',
+                                      {
+                                          source: sourceLabel,
+                                          target: targetLabel,
+                                      }
+                                  )
+                                : t(
+                                      'export_wizard.sql.target_step.same_dialect_description',
+                                      {
+                                          database: targetLabel,
+                                      }
+                                  )
+                        }
+                        onClick={() => onSelectTarget(targetDatabaseType)}
+                    />
+                );
+            })}
         </div>
     );
 };

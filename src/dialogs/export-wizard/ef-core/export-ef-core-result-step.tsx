@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/button/button';
+import type { RegisterExportWizardFooterAction } from '../export-wizard-footer-action';
+import { useRegisterExportWizardFooterAction } from '../use-register-export-wizard-footer-action';
 import { downloadBlob } from '@/lib/download-blob';
 import type {
     EfCoreExportFile,
@@ -19,6 +19,7 @@ interface ExportEfCoreResultStepProps {
     filename: string;
     files: EfCoreExportFile[];
     notes: EfCoreExportNote[];
+    registerFooterAction?: RegisterExportWizardFooterAction;
 }
 
 export const ExportEfCoreResultStep: React.FC<ExportEfCoreResultStepProps> = ({
@@ -26,6 +27,7 @@ export const ExportEfCoreResultStep: React.FC<ExportEfCoreResultStepProps> = ({
     filename,
     files,
     notes,
+    registerFooterAction,
 }) => {
     const { t } = useTranslation();
     const [downloadErrorCode, setDownloadErrorCode] = useState<
@@ -68,6 +70,17 @@ export const ExportEfCoreResultStep: React.FC<ExportEfCoreResultStepProps> = ({
             setDownloadErrorCode('empty_files');
         }
     }, [files, resolvedFilename]);
+
+    useRegisterExportWizardFooterAction(
+        registerFooterAction,
+        files.length > 0
+            ? {
+                  type: 'export',
+                  onClick: handleDownload,
+                  testId: 'export-ef-core-download-zip',
+              }
+            : null
+    );
 
     return (
         <div
@@ -144,16 +157,6 @@ export const ExportEfCoreResultStep: React.FC<ExportEfCoreResultStepProps> = ({
                     {downloadErrorMessage}
                 </p>
             ) : null}
-
-            <Button
-                type="button"
-                className="w-fit"
-                onClick={handleDownload}
-                data-testid="export-ef-core-download-zip"
-            >
-                <Download className="mr-1 size-4" />
-                {t('export_wizard.ef_core.result_step.download_zip')}
-            </Button>
         </div>
     );
 };

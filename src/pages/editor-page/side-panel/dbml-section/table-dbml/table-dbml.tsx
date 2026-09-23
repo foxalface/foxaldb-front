@@ -23,6 +23,10 @@ import {
     X,
 } from 'lucide-react';
 import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
+import {
+    DEFAULT_DBML_REF_FORMAT,
+    type DbmlRefFormat,
+} from '@/lib/dbml/dbml-ref-format';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { importDBMLToDiagram } from '@/lib/dbml/dbml-import/dbml-import';
 import { applyDBMLChanges } from '@/lib/dbml/apply-dbml/apply-dbml';
@@ -48,8 +52,8 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
         useChartDB();
     const { effectiveTheme } = useTheme();
     const { toast } = useToast();
-    const [dbmlFormat, setDbmlFormat] = useState<'inline' | 'standard'>(
-        'inline'
+    const [dbmlFormat, setDbmlFormat] = useState<DbmlRefFormat>(
+        DEFAULT_DBML_REF_FORMAT
     );
     const [isLoading, setIsLoading] = useState(true);
     const [standardDbml, setStandardDbml] = useState('');
@@ -432,7 +436,10 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                             ]
                           : [
                                 {
-                                    label: `Show ${dbmlFormat === 'inline' ? 'Standard' : 'Inline'} Refs`,
+                                    label:
+                                        dbmlFormat === 'inline'
+                                            ? t('dbml.ref_format.show_standard')
+                                            : t('dbml.ref_format.show_inline'),
                                     icon: ArrowLeftRight,
                                     onClick: toggleFormat,
                                 },

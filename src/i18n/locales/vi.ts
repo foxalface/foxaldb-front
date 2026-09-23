@@ -1046,6 +1046,7 @@ export const vi: LanguageTranslation = {
             title: 'Xuất',
             description: 'Chọn định dạng để xuất sơ đồ của bạn.',
             back: 'Quay lại',
+            export: 'Xuất',
             sql: {
                 target_step: {
                     title: 'Xuất SQL',
@@ -1166,6 +1167,8 @@ export const vi: LanguageTranslation = {
                     extent_viewport_description:
                         'Chỉ xuất những gì đang hiển thị trên canvas.',
                     scale_label: 'Tỷ lệ',
+                    scale_description:
+                        'Nhân độ phân giải xuất.\n2x nhân đôi chiều rộng và chiều cao tính theo pixel.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1174,7 +1177,8 @@ export const vi: LanguageTranslation = {
                     transparent: 'Nền trong suốt',
                     transparent_description: 'Xuất PNG không có màu nền đặc.',
                     svg_limitation:
-                        'SVG này là ảnh chụp sơ đồ dành cho trình duyệt, không phải tệp vector chỉnh sửa đầy đủ.',
+                        'SVG này là ảnh chụp sơ đồ dành cho trình duyệt,\nkhông phải tệp vector chỉnh sửa đầy đủ.',
+                    svg_limitation_aria: 'Giới hạn xuất SVG',
                     export: 'Xuất',
                     generating: 'Đang tạo ảnh...',
                     error: 'Không thể xuất ảnh. Vui lòng thử lại.',
@@ -1892,6 +1896,17 @@ export const vi: LanguageTranslation = {
             cleanup_failed:
                 'Sơ đồ đã được nhập nhưng không thể xóa bản sao cục bộ. Bạn có thể xóa thủ công.',
             check_failed: 'Không thể đọc sơ đồ cục bộ.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'Kiểu tham chiếu',
+                inline: 'Ref inline',
+                standard: 'Ref chuẩn',
+                show_inline: 'Hiển thị ref inline',
+                show_standard: 'Hiển thị ref chuẩn',
+                hint: 'Chọn cách viết quan hệ trong DBML được xuất.',
+            },
         },
 
         language_select: {

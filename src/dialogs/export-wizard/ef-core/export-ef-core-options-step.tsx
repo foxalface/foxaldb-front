@@ -1,7 +1,5 @@
 import React from 'react';
-import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
 import { Label } from '@/components/label/label';
 import { Spinner } from '@/components/spinner/spinner';
@@ -27,7 +25,6 @@ interface ExportEfCoreOptionsStepProps {
     error: EfCoreWizardRequestError | null;
     onNamespaceChange: (value: string) => void;
     onDbContextNameChange: (value: string) => void;
-    onExport: () => void;
 }
 
 export const ExportEfCoreOptionsStep: React.FC<
@@ -40,7 +37,6 @@ export const ExportEfCoreOptionsStep: React.FC<
     error,
     onNamespaceChange,
     onDbContextNameChange,
-    onExport,
 }) => {
     const { t } = useTranslation();
 
@@ -67,18 +63,10 @@ export const ExportEfCoreOptionsStep: React.FC<
         }
     })();
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (!isExporting) {
-            onExport();
-        }
-    };
-
     return (
-        <form
+        <div
             className="flex flex-col gap-4 py-1"
             data-testid="export-ef-core-options-step"
-            onSubmit={handleSubmit}
         >
             <p className="text-sm text-muted-foreground">
                 {t('export_wizard.ef_core.options_step.explanation')}
@@ -174,16 +162,6 @@ export const ExportEfCoreOptionsStep: React.FC<
                     </Label>
                 </div>
             ) : null}
-
-            <Button
-                type="submit"
-                className="w-fit"
-                disabled={isExporting}
-                data-testid="export-ef-core-submit"
-            >
-                <Download className="mr-1 size-4" />
-                {t('export_wizard.ef_core.options_step.export')}
-            </Button>
-        </form>
+        </div>
     );
 };

@@ -1060,6 +1060,7 @@ export const ja: LanguageTranslation = {
             title: 'エクスポート',
             description: 'ダイアグラムのエクスポート形式を選択してください。',
             back: '戻る',
+            export: '書き出す',
             sql: {
                 target_step: {
                     title: 'SQLをエクスポート',
@@ -1189,6 +1190,8 @@ export const ja: LanguageTranslation = {
                     extent_viewport_description:
                         'キャンバスに現在表示されている内容だけを書き出します。',
                     scale_label: '倍率',
+                    scale_description:
+                        '書き出し解像度の倍率です。\n2x はピクセル幅と高さを2倍にします。',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1199,7 +1202,8 @@ export const ja: LanguageTranslation = {
                     transparent_description:
                         '単色の背景なしで PNG を書き出します。',
                     svg_limitation:
-                        'この SVG はブラウザ向けのダイアグラムのスナップショットであり、完全に編集可能なベクターファイルではありません。',
+                        'この SVG はブラウザ向けのダイアグラムのスナップショットであり、\n完全に編集可能なベクターファイルではありません。',
+                    svg_limitation_aria: 'SVG 書き出しの制限について',
                     export: '書き出す',
                     generating: '画像を生成しています...',
                     error: '画像を書き出せませんでした。もう一度お試しください。',
@@ -1940,6 +1944,17 @@ export const ja: LanguageTranslation = {
             cleanup_failed:
                 '図はインポートされましたがローカルコピーを削除できませんでした。手動で削除できます。',
             check_failed: 'ローカル図を読み取れませんでした。',
+        },
+
+        dbml: {
+            ref_format: {
+                label: '参照スタイル',
+                inline: 'インライン参照',
+                standard: '標準参照',
+                show_inline: 'インライン参照を表示',
+                show_standard: '標準参照を表示',
+                hint: 'エクスポートする DBML でリレーションをどの形式で書くか選択します。',
+            },
         },
 
         language_select: {

@@ -13,6 +13,7 @@ import { DarkTheme } from './themes/dark';
 import { LightTheme } from './themes/light';
 import type { editor } from 'monaco-editor';
 import { copyTextToClipboard } from '@/lib/copy-text-to-clipboard';
+import { setupDBMLLanguage } from './languages/dbml-language';
 
 export const Editor = lazy(() =>
     import('./code-editor').then((module) => ({
@@ -39,7 +40,7 @@ export interface CodeSnippetProps {
     className?: string;
     code: string;
     codeToCopy?: string;
-    language?: 'sql' | 'shell' | 'dbml' | 'plaintext';
+    language?: 'sql' | 'shell' | 'dbml' | 'json' | 'plaintext';
     loading?: boolean;
     autoScroll?: boolean;
     isComplete?: boolean;
@@ -71,14 +72,27 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         const hiddenCopyTextareaRef = React.useRef<HTMLTextAreaElement>(null);
         const textToCopy = codeToCopy ?? code;
 
+        const editorTheme = useMemo(() => {
+            if (language === 'dbml') {
+                return effectiveTheme === 'dark' ? 'dbml-dark' : 'dbml-light';
+            }
+
+            return effectiveTheme;
+        }, [effectiveTheme, language]);
+
         const handleBeforeMount = useCallback(
             (monaco: Monaco) => {
                 monaco.editor.defineTheme('dark', DarkTheme);
                 monaco.editor.defineTheme('light', LightTheme);
-                monaco.editor.setTheme(effectiveTheme);
+
+                if (language === 'dbml') {
+                    setupDBMLLanguage(monaco);
+                }
+
+                monaco.editor.setTheme(editorTheme);
                 editorProps?.beforeMount?.(monaco);
             },
-            [effectiveTheme, editorProps]
+            [editorProps, editorTheme, language]
         );
 
         const handleMount = useCallback(
@@ -218,7 +232,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                             value={code}
                             language={language}
                             loading={<Spinner />}
-                            theme={effectiveTheme}
+                            theme={editorTheme}
                             {...mergedEditorProps}
                             options={{
                                 editContext: false,

@@ -481,7 +481,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         >
             <DialogContent
                 className={cn(
-                    'flex max-h-dvh w-full flex-col overflow-hidden',
+                    'flex max-h-dvh w-full flex-col',
                     step === CreateDiagramDialogStep.SELECT_TABLES
                         ? 'max-w-2xl'
                         : 'max-w-[30rem]'

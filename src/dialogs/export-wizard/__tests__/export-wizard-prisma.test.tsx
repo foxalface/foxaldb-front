@@ -392,10 +392,11 @@ describe('ExportWizardDialog Prisma branch', () => {
             screen.getByTestId('export-prisma-version-step')
         ).toBeInTheDocument();
         expect(
-            screen.getByTestId('export-prisma-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.prisma.title'
-        );
+            screen.getByText('export_wizard.prisma.version_step.title')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-prisma-branch-context')
+        ).not.toBeInTheDocument();
     });
 
     it('defaults to Prisma 7', async () => {
@@ -447,29 +448,6 @@ describe('ExportWizardDialog Prisma branch', () => {
         expect(schema).toContain('provider = "prisma-client-js"');
         expect(schema).toContain('url      = env("DATABASE_URL")');
         expect(schema).not.toContain('output   = "../generated/prisma"');
-    });
-
-    it('shows Prisma 7 breadcrumb on preview', async () => {
-        await openPrismaBranch();
-        await continueToPreview();
-
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('export-prisma-branch-context')
-            ).toHaveTextContent('export_wizard.prisma.version_step.prisma_7');
-        });
-    });
-
-    it('shows Prisma 6 breadcrumb on preview', async () => {
-        await openPrismaBranch();
-        await userEvent.click(screen.getByTestId('prisma-version-6'));
-        await continueToPreview();
-
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('export-prisma-branch-context')
-            ).toHaveTextContent('export_wizard.prisma.version_step.prisma_6');
-        });
     });
 
     it('navigates back from preview to version step', async () => {

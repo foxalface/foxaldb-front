@@ -1,7 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/button/button';
+import type {
+    ExportWizardFooterAction,
+    RegisterExportWizardFooterAction,
+} from '../export-wizard-footer-action';
+import { useRegisterExportWizardFooterAction } from '../use-register-export-wizard-footer-action';
 import { Label } from '@/components/label/label';
 import { Spinner } from '@/components/spinner/spinner';
 import { downloadBlob } from '@/lib/download-blob';
@@ -44,6 +47,7 @@ interface ExportDjangoResultStepProps {
     error: DjangoWizardRequestError | null;
     success: DjangoExportSuccess | null;
     onRetry: () => void;
+    registerFooterAction?: RegisterExportWizardFooterAction;
 }
 
 export const ExportDjangoResultStep: React.FC<ExportDjangoResultStepProps> = ({
@@ -52,6 +56,7 @@ export const ExportDjangoResultStep: React.FC<ExportDjangoResultStepProps> = ({
     error,
     success,
     onRetry,
+    registerFooterAction,
 }) => {
     const { t } = useTranslation();
     const [downloadErrorCode, setDownloadErrorCode] = useState<
@@ -146,7 +151,7 @@ export const ExportDjangoResultStep: React.FC<ExportDjangoResultStepProps> = ({
         }
     }, [resolvedFilename, success]);
 
-    const handleRetry = () => {
+    const handleRetry = useCallback(() => {
         if (isLoading) {
             return;
         }
@@ -154,7 +159,31 @@ export const ExportDjangoResultStep: React.FC<ExportDjangoResultStepProps> = ({
         setDownloadErrorCode(null);
         setAdaptationsOpen(false);
         onRetry();
-    };
+    }, [isLoading, onRetry]);
+
+    const footerAction = useMemo((): ExportWizardFooterAction | null => {
+        if (errorMessage) {
+            return {
+                type: 'retry',
+                onClick: handleRetry,
+                disabled: isLoading,
+                testId: 'export-django-retry',
+                label: t('export_wizard.django.result_step.retry'),
+            };
+        }
+
+        if (success && !isLoading) {
+            return {
+                type: 'export',
+                onClick: handleDownload,
+                testId: 'export-django-download-zip',
+            };
+        }
+
+        return null;
+    }, [errorMessage, handleDownload, handleRetry, isLoading, success, t]);
+
+    useRegisterExportWizardFooterAction(registerFooterAction, footerAction);
 
     return (
         <div
@@ -185,32 +214,21 @@ export const ExportDjangoResultStep: React.FC<ExportDjangoResultStepProps> = ({
             </p>
 
             {errorMessage ? (
-                <div className="flex flex-col items-start gap-3">
-                    <p
-                        className="break-words text-sm text-muted-foreground"
-                        role="alert"
-                        data-testid="export-django-error"
-                        data-error-kind={error?.kind}
-                        data-error-code={error?.code}
-                    >
-                        {errorMessage}
-                        {error?.kind === 'semantic' && error.code ? (
-                            <span className="mt-1 block text-xs">
-                                {error.code}
-                                {error.path ? ` · ${error.path}` : ''}
-                            </span>
-                        ) : null}
-                    </p>
-                    <Button
-                        type="button"
-                        variant="secondary"
-                        disabled={isLoading}
-                        onClick={handleRetry}
-                        data-testid="export-django-retry"
-                    >
-                        {t('export_wizard.django.result_step.retry')}
-                    </Button>
-                </div>
+                <p
+                    className="break-words text-sm text-muted-foreground"
+                    role="alert"
+                    data-testid="export-django-error"
+                    data-error-kind={error?.kind}
+                    data-error-code={error?.code}
+                >
+                    {errorMessage}
+                    {error?.kind === 'semantic' && error.code ? (
+                        <span className="mt-1 block text-xs">
+                            {error.code}
+                            {error.path ? ` · ${error.path}` : ''}
+                        </span>
+                    ) : null}
+                </p>
             ) : null}
 
             {isLoading && !errorMessage ? (
@@ -317,16 +335,6 @@ export const ExportDjangoResultStep: React.FC<ExportDjangoResultStepProps> = ({
                             {downloadErrorMessage}
                         </p>
                     ) : null}
-
-                    <Button
-                        type="button"
-                        className="w-fit"
-                        onClick={handleDownload}
-                        data-testid="export-django-download-zip"
-                    >
-                        <Download className="mr-1 size-4" />
-                        {t('export_wizard.django.result_step.download_zip')}
-                    </Button>
                 </>
             ) : null}
         </div>

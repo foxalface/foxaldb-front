@@ -1043,6 +1043,7 @@ export const en = {
             title: 'Export',
             description: 'Choose a format to export your diagram.',
             back: 'Back',
+            export: 'Export',
             sections: {
                 database: 'Database',
                 framework: 'Framework',
@@ -1111,7 +1112,7 @@ export const en = {
                 target_step: {
                     title: 'Export SQL',
                     description:
-                        'Choose a target database for your {{database}} diagram.',
+                        'Choose an export target for your {{database}} diagram.',
                     source_label: 'Source database: {{database}}',
                     same_dialect_description: 'Export as {{database}} DDL',
                     cross_dialect_description:
@@ -1164,6 +1165,8 @@ export const en = {
                     extent_viewport_description:
                         'Export only what is currently shown on the canvas.',
                     scale_label: 'Scale',
+                    scale_description:
+                        'Multiply the export resolution.\n2x doubles the width and height in pixels.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1174,7 +1177,8 @@ export const en = {
                     transparent_description:
                         'Export PNG without a solid background color.',
                     svg_limitation:
-                        'This SVG is a snapshot of the diagram for use in a browser. It is not a fully editable vector file.',
+                        'This SVG is a snapshot of the diagram for use in a browser.\nIt is not a fully editable vector file.',
+                    svg_limitation_aria: 'About SVG export limitations',
                     export: 'Export',
                     generating: 'Generating image...',
                     error: 'Could not export the image. Please try again.',
@@ -1899,6 +1903,17 @@ export const en = {
             cleanup_failed:
                 'Your diagram was imported but the local copy could not be removed. You can delete it manually.',
             check_failed: 'Could not read your local diagram.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'Reference style',
+                inline: 'Inline refs',
+                standard: 'Standard refs',
+                show_inline: 'Show inline refs',
+                show_standard: 'Show standard refs',
+                hint: 'Choose how relationships are written in the exported DBML.',
+            },
         },
 
         language_select: {

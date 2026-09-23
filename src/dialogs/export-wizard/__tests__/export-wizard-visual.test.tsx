@@ -97,13 +97,14 @@ describe('ExportWizardDialog visual branch', () => {
             screen.getByTestId('export-visual-options-step')
         ).toHaveAttribute('data-format', 'png');
         expect(
-            screen.getByTestId('export-visual-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.png.title'
-        );
+            screen.getByText('export_wizard.targets.png.title')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-visual-branch-context')
+        ).not.toBeInTheDocument();
         expect(screen.getByTestId('visual-extent-diagram')).toHaveAttribute(
-            'aria-pressed',
-            'true'
+            'data-state',
+            'active'
         );
         expect(screen.getByTestId('visual-scale-2x')).toBeInTheDocument();
         expect(
@@ -140,8 +141,13 @@ describe('ExportWizardDialog visual branch', () => {
         expect(dialogMocks.closeExportWizardDialog).not.toHaveBeenCalled();
         expect(exportImageMock).not.toHaveBeenCalled();
         expect(
-            screen.getByText('export_wizard.visual.options_step.svg_limitation')
+            screen.getByTestId('visual-svg-limitation-info')
         ).toBeInTheDocument();
+        expect(
+            screen.queryByText(
+                'export_wizard.visual.options_step.svg_limitation'
+            )
+        ).not.toBeInTheDocument();
         expect(screen.queryByTestId('visual-scale-2x')).not.toBeInTheDocument();
         expect(
             screen.queryByLabelText(
@@ -166,12 +172,12 @@ describe('ExportWizardDialog visual branch', () => {
         });
     });
 
-    it('exports JPG as opaque jpeg options with .jpg filename', async () => {
+    it('exports JPG as opaque jpeg options', async () => {
         await openVisualBranch('jpg');
 
-        expect(screen.getByTestId('export-visual-filename')).toHaveTextContent(
-            'my-diagram.jpg'
-        );
+        expect(
+            screen.queryByTestId('export-visual-filename')
+        ).not.toBeInTheDocument();
 
         await userEvent.click(screen.getByTestId('export-visual-submit'));
 
@@ -226,8 +232,8 @@ describe('ExportWizardDialog visual branch', () => {
         );
 
         expect(screen.getByTestId('visual-extent-diagram')).toHaveAttribute(
-            'aria-pressed',
-            'true'
+            'data-state',
+            'active'
         );
         expect(screen.getByTestId('visual-scale-2x')).toBeInTheDocument();
     });
@@ -259,8 +265,8 @@ describe('ExportWizardDialog visual branch', () => {
             )
         ).not.toBeInTheDocument();
         expect(screen.getByTestId('visual-extent-diagram')).toHaveAttribute(
-            'aria-pressed',
-            'true'
+            'data-state',
+            'active'
         );
     });
 

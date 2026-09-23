@@ -1048,6 +1048,7 @@ export const id_ID: LanguageTranslation = {
             title: 'Ekspor',
             description: 'Pilih format untuk mengekspor diagram Anda.',
             back: 'Kembali',
+            export: 'Ekspor',
             sql: {
                 target_step: {
                     title: 'Ekspor SQL',
@@ -1169,6 +1170,8 @@ export const id_ID: LanguageTranslation = {
                     extent_viewport_description:
                         'Hanya ekspor apa yang sedang terlihat di kanvas.',
                     scale_label: 'Skala',
+                    scale_description:
+                        'Kalikan resolusi ekspor.\n2x menggandakan lebar dan tinggi dalam piksel.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1179,7 +1182,8 @@ export const id_ID: LanguageTranslation = {
                     transparent_description:
                         'Ekspor PNG tanpa warna latar belakang solid.',
                     svg_limitation:
-                        'SVG ini adalah snapshot diagram untuk peramban, bukan file vektor yang sepenuhnya dapat diedit.',
+                        'SVG ini adalah snapshot diagram untuk peramban,\nbukan file vektor yang sepenuhnya dapat diedit.',
+                    svg_limitation_aria: 'Tentang batasan ekspor SVG',
                     export: 'Ekspor',
                     generating: 'Membuat gambar...',
                     error: 'Tidak dapat mengekspor gambar. Silakan coba lagi.',
@@ -1906,6 +1910,17 @@ export const id_ID: LanguageTranslation = {
             cleanup_failed:
                 'Diagram diimpor tetapi salinan lokal tidak dapat dihapus. Anda dapat menghapusnya secara manual.',
             check_failed: 'Tidak dapat membaca diagram lokal.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'Gaya referensi',
+                inline: 'Ref inline',
+                standard: 'Ref standar',
+                show_inline: 'Tampilkan ref inline',
+                show_standard: 'Tampilkan ref standar',
+                hint: 'Pilih cara penulisan relasi dalam DBML yang diekspor.',
+            },
         },
 
         language_select: {

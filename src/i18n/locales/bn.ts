@@ -1040,6 +1040,7 @@ export const bn: LanguageTranslation = {
             title: 'রপ্তানি',
             description: 'আপনার ডায়াগ্রাম রপ্তানি করতে একটি ফরম্যাট বেছে নিন।',
             back: 'পিছনে',
+            export: 'রপ্তানি',
             sql: {
                 target_step: {
                     title: 'SQL এক্সপোর্ট',
@@ -1167,6 +1168,8 @@ export const bn: LanguageTranslation = {
                     extent_viewport_description:
                         'কেবল ক্যানভাসে এখন যা দেখা যাচ্ছে তা রপ্তানি করুন।',
                     scale_label: 'স্কেল',
+                    scale_description:
+                        'এক্সপোর্ট রেজোলিউশন গুণ করুন।\n2x পিক্সেলে প্রস্থ ও উচ্চতা দ্বিগুণ করে।',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1177,7 +1180,8 @@ export const bn: LanguageTranslation = {
                     transparent_description:
                         'কঠিন পটভূমির রং ছাড়া PNG রপ্তানি করুন।',
                     svg_limitation:
-                        'এই SVG ব্রাউজারের জন্য ডায়াগ্রামের একটি স্ন্যাপশট, সম্পূর্ণ সম্পাদনাযোগ্য ভেক্টর ফাইল নয়।',
+                        'এই SVG ব্রাউজারের জন্য ডায়াগ্রামের একটি স্ন্যাপশট,\nসম্পূর্ণ সম্পাদনাযোগ্য ভেক্টর ফাইল নয়।',
+                    svg_limitation_aria: 'SVG এক্সপোর্ট সীমাবদ্ধতা সম্পর্কে',
                     export: 'রপ্তানি',
                     generating: 'ছবি তৈরি করা হচ্ছে...',
                     error: 'ছবি রপ্তানি করা যায়নি। আবার চেষ্টা করুন।',
@@ -1901,6 +1905,17 @@ export const bn: LanguageTranslation = {
             cleanup_failed:
                 'ডায়াগ্রাম ইমপোর্ট হয়েছে কিন্তু স্থানীয় কপি মুছে ফেলা যায়নি। আপনি ম্যানুয়ালি মুছতে পারেন।',
             check_failed: 'স্থানীয় ডায়াগ্রাম পড়া যায়নি।',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'রেফারেন্স স্টাইল',
+                inline: 'ইনলাইন রেফ',
+                standard: 'স্ট্যান্ডার্ড রেফ',
+                show_inline: 'ইনলাইন রেফ দেখান',
+                show_standard: 'স্ট্যান্ডার্ড রেফ দেখান',
+                hint: 'এক্সপোর্ট করা DBML-এ সম্পর্ক কীভাবে লেখা হবে তা বেছে নিন।',
+            },
         },
 
         language_select: {

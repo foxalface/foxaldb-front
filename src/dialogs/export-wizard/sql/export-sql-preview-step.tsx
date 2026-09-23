@@ -1,17 +1,12 @@
-import React, { useCallback, useMemo } from 'react';
-import { Download } from 'lucide-react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Spinner } from '@/components/spinner/spinner';
 import { Label } from '@/components/label/label';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import type { DatabaseType } from '@/lib/domain/database-type';
-import { downloadBlob } from '@/lib/download-blob';
-import { buildSqlExportFilename } from '@/lib/data/sql-export/build-sql-export-filename';
 
 interface ExportSqlPreviewStepProps {
-    diagramName: string;
-    sourceDatabaseType: DatabaseType;
     targetDatabaseType: DatabaseType;
     script?: string;
     isLoading: boolean;
@@ -19,8 +14,6 @@ interface ExportSqlPreviewStepProps {
 }
 
 export const ExportSqlPreviewStep: React.FC<ExportSqlPreviewStepProps> = ({
-    diagramName,
-    sourceDatabaseType,
     targetDatabaseType,
     script,
     isLoading,
@@ -28,28 +21,6 @@ export const ExportSqlPreviewStep: React.FC<ExportSqlPreviewStepProps> = ({
 }) => {
     const { t } = useTranslation();
     const targetLabel = databaseTypeToLabelMap[targetDatabaseType];
-
-    const downloadAction = useMemo(
-        () => ({
-            label: t('export_wizard.sql.preview_step.download'),
-            icon: Download,
-            onClick: () => {
-                if (!script) {
-                    return;
-                }
-
-                downloadBlob(
-                    new Blob([script], { type: 'application/sql' }),
-                    buildSqlExportFilename(
-                        diagramName,
-                        sourceDatabaseType,
-                        targetDatabaseType
-                    )
-                );
-            },
-        }),
-        [diagramName, script, sourceDatabaseType, targetDatabaseType, t]
-    );
 
     const renderContent = useCallback(() => {
         if (hasError) {
@@ -90,10 +61,7 @@ export const ExportSqlPreviewStep: React.FC<ExportSqlPreviewStepProps> = ({
                     className="size-full flex-none"
                     code={script}
                     language="sql"
-                    autoScroll={true}
                     isComplete={!isLoading}
-                    actions={[downloadAction]}
-                    actionsTooltipSide="top"
                     editorProps={{
                         options: {
                             scrollbar: {
@@ -105,18 +73,9 @@ export const ExportSqlPreviewStep: React.FC<ExportSqlPreviewStepProps> = ({
                 />
             </div>
         );
-    }, [downloadAction, hasError, isLoading, script, t, targetLabel]);
+    }, [hasError, isLoading, script, t, targetLabel]);
 
     return (
-        <div className="flex min-h-0 flex-1 flex-col gap-3">
-            <p className="text-sm text-muted-foreground">
-                {t('export_wizard.sql.preview_step.target_label', {
-                    database: targetLabel,
-                })}
-            </p>
-            <div className="flex min-h-0 flex-1 flex-col">
-                {renderContent()}
-            </div>
-        </div>
+        <div className="flex min-h-0 flex-1 flex-col">{renderContent()}</div>
     );
 };

@@ -1,6 +1,7 @@
 import React, {
     useCallback,
     useEffect,
+    useLayoutEffect,
     useMemo,
     useRef,
     useState,
@@ -39,30 +40,28 @@ import type { ExportAvailabilityContext } from './export-target-availability';
 import { ExportSqlTargetStep } from './sql/export-sql-target-step';
 import { ExportSqlUnsupportedStep } from './sql/export-sql-unsupported-step';
 import { ExportSqlPreviewStep } from './sql/export-sql-preview-step';
-import { ExportSqlBranchContext } from './sql/export-sql-branch-context';
+import { ExportWizardExportButton } from './export-wizard-export-button';
+import type { ExportWizardFooterAction } from './export-wizard-footer-action';
+import { buildSqlExportFilename } from '@/lib/data/sql-export/build-sql-export-filename';
+import { buildDbmlExportFilename } from '@/lib/dbml/dbml-export/build-dbml-export-filename';
+import { buildDiagramJsonExportFilename } from '@/lib/build-diagram-json-export-filename';
+import { diagramToJSONOutput } from '@/lib/export-import-utils';
+import { PRISMA_EXPORT_FILENAME } from '@/lib/export/prisma-export-constants';
 import { ExportDbmlPreviewStep } from './dbml/export-dbml-preview-step';
-import { ExportDbmlBranchContext } from './dbml/export-dbml-branch-context';
 import { ExportJsonDownloadStep } from './json/export-json-download-step';
-import { ExportJsonBranchContext } from './json/export-json-branch-context';
 import { ExportVisualOptionsStep } from './visual/export-visual-options-step';
-import { ExportVisualBranchContext } from './visual/export-visual-branch-context';
+import { VisualExportSvgInfoTooltip } from './visual/visual-export-svg-info-tooltip';
 import { ExportLaravelOptionsStep } from './laravel/export-laravel-options-step';
-import { ExportLaravelBranchContext } from './laravel/export-laravel-branch-context';
 import { ExportPrismaVersionStep } from './prisma/export-prisma-version-step';
 import { ExportPrismaPreviewStep } from './prisma/export-prisma-preview-step';
-import { ExportPrismaBranchContext } from './prisma/export-prisma-branch-context';
 import { ExportEfCoreOptionsStep } from './ef-core/export-ef-core-options-step';
 import { ExportEfCoreResultStep } from './ef-core/export-ef-core-result-step';
-import { ExportEfCoreBranchContext } from './ef-core/export-ef-core-branch-context';
 import type { EfCoreWizardRequestError } from './ef-core/export-ef-core-options-step';
 import { ExportRailsResultStep } from './rails/export-rails-result-step';
-import { ExportRailsBranchContext } from './rails/export-rails-branch-context';
 import type { RailsWizardRequestError } from './rails/export-rails-result-step';
 import { ExportDjangoResultStep } from './django/export-django-result-step';
-import { ExportDjangoBranchContext } from './django/export-django-branch-context';
 import type { DjangoWizardRequestError } from './django/export-django-result-step';
 import { ExportDrizzleResultStep } from './drizzle/export-drizzle-result-step';
-import { ExportDrizzleBranchContext } from './drizzle/export-drizzle-branch-context';
 import type { DrizzleWizardRequestError } from './drizzle/export-drizzle-result-step';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { databaseTypeToLabelMap } from '@/lib/databases';
@@ -73,6 +72,11 @@ import {
 import { exportBaseSQL } from '@/lib/data/sql-export/export-sql-script';
 import { getFilteredDiagramForSqlExport } from '@/lib/data/sql-export/get-filtered-diagram-for-sql-export';
 import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
+import {
+    DEFAULT_DBML_REF_FORMAT,
+    getDbmlForRefFormat,
+    type DbmlRefFormat,
+} from '@/lib/dbml/dbml-ref-format';
 import { cn } from '@/lib/utils';
 import type {
     VisualExportExtent,
@@ -126,8 +130,12 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const [sqlScript, setSqlScript] = useState<string | undefined>(undefined);
     const [sqlHasError, setSqlHasError] = useState(false);
     const [isSqlGenerating, setIsSqlGenerating] = useState(false);
-    const [dbmlContent, setDbmlContent] = useState<string | undefined>(
+    const [dbmlStandard, setDbmlStandard] = useState<string | undefined>(
         undefined
+    );
+    const [dbmlInline, setDbmlInline] = useState<string | undefined>(undefined);
+    const [dbmlRefFormat, setDbmlRefFormat] = useState<DbmlRefFormat>(
+        DEFAULT_DBML_REF_FORMAT
     );
     const [dbmlHasError, setDbmlHasError] = useState(false);
     const [isDbmlGenerating, setIsDbmlGenerating] = useState(false);
@@ -193,6 +201,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const [isDrizzleExporting, setIsDrizzleExporting] = useState(false);
     const drizzleExportRequestIdRef = useRef(0);
     const wasDialogOpenRef = useRef(false);
+    const [registeredFooterAction, setRegisteredFooterAction] =
+        useState<ExportWizardFooterAction | null>(null);
 
     const resetSqlBranchState = useCallback(() => {
         setSqlTargetDatabaseType(null);
@@ -202,10 +212,20 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     }, []);
 
     const resetDbmlBranchState = useCallback(() => {
-        setDbmlContent(undefined);
+        setDbmlStandard(undefined);
+        setDbmlInline(undefined);
+        setDbmlRefFormat(DEFAULT_DBML_REF_FORMAT);
         setDbmlHasError(false);
         setIsDbmlGenerating(false);
     }, []);
+
+    const activeDbmlContent = useMemo(
+        () =>
+            dbmlStandard === undefined || dbmlInline === undefined
+                ? undefined
+                : getDbmlForRefFormat(dbmlRefFormat, dbmlInline, dbmlStandard),
+        [dbmlInline, dbmlRefFormat, dbmlStandard]
+    );
 
     const resetVisualBranchState = useCallback(() => {
         setVisualFormat(null);
@@ -328,19 +348,49 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const isSqlSourceSupported =
         isDeterministicSqlExportSourceSupported(databaseType);
 
+    const hasMultipleSqlExportTargets = sqlExportTargets.length > 1;
+
+    const beginSqlBranch = useCallback(() => {
+        resetSqlBranchState();
+        resetDbmlBranchState();
+        resetVisualBranchState();
+        resetLaravelBranchState();
+        resetPrismaBranchState();
+        resetEfCoreBranchState();
+        resetRailsBranchState();
+        resetDjangoBranchState();
+        resetDrizzleBranchState();
+
+        if (!isSqlSourceSupported) {
+            setStep(ExportWizardStep.SQL_TARGET);
+            return;
+        }
+
+        if (sqlExportTargets.length === 1) {
+            setSqlTargetDatabaseType(sqlExportTargets[0]);
+            setStep(ExportWizardStep.SQL_PREVIEW);
+            return;
+        }
+
+        setStep(ExportWizardStep.SQL_TARGET);
+    }, [
+        isSqlSourceSupported,
+        resetDbmlBranchState,
+        resetDjangoBranchState,
+        resetDrizzleBranchState,
+        resetEfCoreBranchState,
+        resetLaravelBranchState,
+        resetPrismaBranchState,
+        resetRailsBranchState,
+        resetSqlBranchState,
+        resetVisualBranchState,
+        sqlExportTargets,
+    ]);
+
     const handleSelectTarget = useCallback(
         (targetId: ExportTargetId) => {
             if (targetId === 'sql') {
-                resetSqlBranchState();
-                resetDbmlBranchState();
-                resetVisualBranchState();
-                resetLaravelBranchState();
-                resetPrismaBranchState();
-                resetEfCoreBranchState();
-                resetRailsBranchState();
-                resetDjangoBranchState();
-                resetDrizzleBranchState();
-                setStep(ExportWizardStep.SQL_TARGET);
+                beginSqlBranch();
                 return;
             }
 
@@ -500,6 +550,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         },
         [
             applyVisualFormatDefaults,
+            beginSqlBranch,
             databaseType,
             isAuthenticated,
             resetDbmlBranchState,
@@ -616,7 +667,15 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             setSqlScript(undefined);
             setSqlHasError(false);
             setIsSqlGenerating(false);
-            setStep(ExportWizardStep.SQL_TARGET);
+
+            if (hasMultipleSqlExportTargets) {
+                setSqlTargetDatabaseType(null);
+                setStep(ExportWizardStep.SQL_TARGET);
+                return;
+            }
+
+            resetSqlBranchState();
+            setStep(ExportWizardStep.TARGET_PICKER);
             return;
         }
 
@@ -634,10 +693,68 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetRailsBranchState,
         resetDjangoBranchState,
         resetDrizzleBranchState,
+        hasMultipleSqlExportTargets,
         resetSqlBranchState,
         resetVisualBranchState,
         step,
     ]);
+
+    const handleSqlDownload = useCallback(() => {
+        if (!sqlScript || !sqlTargetDatabaseType || sqlScript.length === 0) {
+            return;
+        }
+
+        downloadBlob(
+            new Blob([sqlScript], { type: 'application/sql' }),
+            buildSqlExportFilename(
+                currentDiagram.name ?? 'diagram',
+                databaseType,
+                sqlTargetDatabaseType
+            )
+        );
+    }, [currentDiagram.name, databaseType, sqlScript, sqlTargetDatabaseType]);
+
+    const handleDbmlDownload = useCallback(() => {
+        if (!activeDbmlContent || activeDbmlContent.length === 0) {
+            return;
+        }
+
+        downloadBlob(
+            new Blob([activeDbmlContent], { type: 'text/plain' }),
+            buildDbmlExportFilename(currentDiagram.name ?? 'diagram')
+        );
+    }, [activeDbmlContent, currentDiagram.name]);
+
+    const handleJsonDownload = useCallback(() => {
+        const json = diagramToJSONOutput(currentDiagram);
+
+        downloadBlob(
+            new Blob([json], { type: 'application/json' }),
+            buildDiagramJsonExportFilename(currentDiagram.name ?? 'diagram')
+        );
+    }, [currentDiagram]);
+
+    const handlePrismaDownload = useCallback(() => {
+        if (!prismaSchema || prismaSchema.length === 0) {
+            return;
+        }
+
+        downloadBlob(
+            new Blob([prismaSchema], { type: 'text/plain' }),
+            PRISMA_EXPORT_FILENAME
+        );
+    }, [prismaSchema]);
+
+    const registerFooterAction = useCallback(
+        (action: ExportWizardFooterAction | null) => {
+            setRegisteredFooterAction(action);
+        },
+        []
+    );
+
+    useLayoutEffect(() => {
+        setRegisteredFooterAction(null);
+    }, [step]);
 
     useEffect(() => {
         if (
@@ -714,7 +831,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     useEffect(() => {
         if (
             step !== ExportWizardStep.DBML_PREVIEW ||
-            dbmlContent !== undefined ||
+            dbmlStandard !== undefined ||
             dbmlHasError
         ) {
             return;
@@ -738,7 +855,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     return;
                 }
 
-                setDbmlContent(result.standardDbml);
+                setDbmlStandard(result.standardDbml);
+                setDbmlInline(result.inlineDbml);
             } catch {
                 if (!cancelled) {
                     setDbmlHasError(true);
@@ -755,7 +873,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         return () => {
             cancelled = true;
         };
-    }, [currentDiagram, dbmlContent, dbmlHasError, step]);
+    }, [currentDiagram, dbmlHasError, dbmlStandard, step]);
 
     useEffect(() => {
         if (
@@ -1284,43 +1402,58 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.DJANGO_RESULT ||
         step === ExportWizardStep.DRIZZLE_RESULT;
 
-    const isSqlBranch =
-        step === ExportWizardStep.SQL_TARGET ||
-        step === ExportWizardStep.SQL_PREVIEW;
-
-    const isDbmlBranch = step === ExportWizardStep.DBML_PREVIEW;
-    const isJsonBranch = step === ExportWizardStep.JSON_DOWNLOAD;
-    const isVisualBranch = step === ExportWizardStep.VISUAL_OPTIONS;
-    const isLaravelBranch = step === ExportWizardStep.LARAVEL_OPTIONS;
-    const isPrismaBranch =
-        step === ExportWizardStep.PRISMA_VERSION ||
-        step === ExportWizardStep.PRISMA_PREVIEW;
-    const isEfCoreBranch =
-        step === ExportWizardStep.EF_CORE_OPTIONS ||
-        step === ExportWizardStep.EF_CORE_RESULT;
-    const isRailsBranch = step === ExportWizardStep.RAILS_RESULT;
-    const isDjangoBranch = step === ExportWizardStep.DJANGO_RESULT;
-    const isDrizzleBranch = step === ExportWizardStep.DRIZZLE_RESULT;
-
-    const dialogTitle = t('export_wizard.title');
+    const dialogTitle = useMemo(() => {
+        switch (step) {
+            case ExportWizardStep.SQL_TARGET:
+                return isSqlSourceSupported
+                    ? t('export_wizard.sql.target_step.title')
+                    : t('export_wizard.sql.unsupported_source.title', {
+                          database: databaseTypeToLabelMap[databaseType],
+                      });
+            case ExportWizardStep.SQL_PREVIEW:
+                return t('export_wizard.targets.sql.title');
+            case ExportWizardStep.DBML_PREVIEW:
+                return t('export_wizard.targets.dbml.title');
+            case ExportWizardStep.JSON_DOWNLOAD:
+                return t('export_wizard.targets.diagram_json.title');
+            case ExportWizardStep.VISUAL_OPTIONS:
+                return visualFormat
+                    ? t(`export_wizard.targets.${visualFormat}.title`)
+                    : t('export_wizard.title');
+            case ExportWizardStep.LARAVEL_OPTIONS:
+                return t('export_wizard.targets.laravel.title');
+            case ExportWizardStep.PRISMA_VERSION:
+                return t('export_wizard.prisma.version_step.title');
+            case ExportWizardStep.PRISMA_PREVIEW:
+                return t('export_wizard.targets.prisma.title');
+            case ExportWizardStep.EF_CORE_OPTIONS:
+            case ExportWizardStep.EF_CORE_RESULT:
+                return t('export_wizard.targets.ef_core.title');
+            case ExportWizardStep.RAILS_RESULT:
+                return t('export_wizard.targets.rails.title');
+            case ExportWizardStep.DJANGO_RESULT:
+                return t('export_wizard.targets.django.title');
+            case ExportWizardStep.DRIZZLE_RESULT:
+                return t('export_wizard.targets.drizzle.title');
+            default:
+                return t('export_wizard.title');
+        }
+    }, [databaseType, isSqlSourceSupported, step, t, visualFormat]);
 
     const dialogDescription = useMemo(() => {
         switch (step) {
             case ExportWizardStep.SQL_TARGET:
-                return t('export_wizard.sql.target_step.description', {
-                    database: databaseTypeToLabelMap[databaseType],
-                });
-            case ExportWizardStep.SQL_PREVIEW:
-                return sqlTargetDatabaseType
-                    ? t('export_wizard.sql.preview_step.description', {
-                          database:
-                              databaseTypeToLabelMap[sqlTargetDatabaseType],
+                return isSqlSourceSupported
+                    ? t('export_wizard.sql.target_step.description', {
+                          database: databaseTypeToLabelMap[databaseType],
                       })
-                    : undefined;
+                    : t('export_wizard.sql.unsupported_source.description');
+            case ExportWizardStep.SQL_PREVIEW:
+                return undefined;
             case ExportWizardStep.DBML_PREVIEW:
-                return t('export_wizard.dbml.preview_step.description');
+                return undefined;
             case ExportWizardStep.JSON_DOWNLOAD:
-                return t('export_wizard.json.download_step.description');
+                return undefined;
             case ExportWizardStep.VISUAL_OPTIONS:
                 return visualFormat
                     ? t('export_wizard.visual.options_step.description', {
@@ -1348,25 +1481,138 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             default:
                 return t('export_wizard.description');
         }
-    }, [databaseType, sqlTargetDatabaseType, step, t, visualFormat]);
+    }, [databaseType, isSqlSourceSupported, step, t, visualFormat]);
+
+    const staticFooterAction = useMemo((): ExportWizardFooterAction | null => {
+        switch (step) {
+            case ExportWizardStep.SQL_PREVIEW:
+                return sqlScript !== undefined &&
+                    sqlScript.length > 0 &&
+                    !isSqlGenerating &&
+                    !sqlHasError
+                    ? {
+                          type: 'export',
+                          onClick: handleSqlDownload,
+                          testId: 'export-sql-download',
+                      }
+                    : null;
+            case ExportWizardStep.DBML_PREVIEW:
+                return activeDbmlContent !== undefined &&
+                    activeDbmlContent.length > 0 &&
+                    !isDbmlGenerating &&
+                    !dbmlHasError
+                    ? {
+                          type: 'export',
+                          onClick: handleDbmlDownload,
+                          testId: 'export-dbml-download',
+                      }
+                    : null;
+            case ExportWizardStep.JSON_DOWNLOAD:
+                return {
+                    type: 'export',
+                    onClick: handleJsonDownload,
+                    testId: 'export-json-download',
+                };
+            case ExportWizardStep.VISUAL_OPTIONS:
+                return {
+                    type: 'export',
+                    onClick: () => {
+                        void handleVisualExport();
+                    },
+                    disabled: isVisualExporting,
+                    testId: 'export-visual-submit',
+                };
+            case ExportWizardStep.LARAVEL_OPTIONS:
+                return {
+                    type: 'export',
+                    onClick: () => {
+                        void handleLaravelExport();
+                    },
+                    disabled: isLaravelExporting,
+                    testId: 'export-laravel-submit',
+                };
+            case ExportWizardStep.PRISMA_VERSION:
+                return {
+                    type: 'continue',
+                    onClick: handleContinuePrismaVersion,
+                    testId: 'prisma-version-continue',
+                    label: t('export_wizard.prisma.version_step.continue'),
+                };
+            case ExportWizardStep.PRISMA_PREVIEW:
+                return prismaSchema !== undefined &&
+                    prismaSchema.length > 0 &&
+                    !isPrismaGenerating &&
+                    prismaGenerationError === null &&
+                    !prismaHasUnexpectedError
+                    ? {
+                          type: 'export',
+                          onClick: handlePrismaDownload,
+                          testId: 'export-prisma-download',
+                      }
+                    : null;
+            case ExportWizardStep.EF_CORE_OPTIONS:
+                return {
+                    type: 'export',
+                    onClick: () => {
+                        void handleEfCoreExport();
+                    },
+                    disabled: isEfCoreExporting,
+                    testId: 'export-ef-core-submit',
+                };
+            default:
+                return null;
+        }
+    }, [
+        activeDbmlContent,
+        dbmlHasError,
+        handleContinuePrismaVersion,
+        handleDbmlDownload,
+        handleEfCoreExport,
+        handleJsonDownload,
+        handleLaravelExport,
+        handlePrismaDownload,
+        handleSqlDownload,
+        handleVisualExport,
+        isDbmlGenerating,
+        isEfCoreExporting,
+        isLaravelExporting,
+        isPrismaGenerating,
+        isSqlGenerating,
+        isVisualExporting,
+        prismaGenerationError,
+        prismaHasUnexpectedError,
+        prismaSchema,
+        sqlHasError,
+        sqlScript,
+        step,
+        t,
+    ]);
+
+    const primaryFooterAction = registeredFooterAction ?? staticFooterAction;
 
     const isWideDialog =
         step === ExportWizardStep.SQL_PREVIEW ||
         step === ExportWizardStep.DBML_PREVIEW ||
+        step === ExportWizardStep.JSON_DOWNLOAD ||
         step === ExportWizardStep.PRISMA_PREVIEW;
 
     const isSqlPreview = step === ExportWizardStep.SQL_PREVIEW;
     const isDbmlPreview = step === ExportWizardStep.DBML_PREVIEW;
+    const isJsonDownload = step === ExportWizardStep.JSON_DOWNLOAD;
     const isPrismaPreview = step === ExportWizardStep.PRISMA_PREVIEW;
-    const isPreviewStep = isSqlPreview || isDbmlPreview || isPrismaPreview;
+    const isPreviewStep =
+        isSqlPreview || isDbmlPreview || isJsonDownload || isPrismaPreview;
 
     return (
         <Dialog {...dialog} onOpenChange={handleOpenChange}>
             <DialogContent
                 className={cn(
-                    'flex max-h-dvh w-full flex-col overflow-hidden',
+                    'flex max-h-dvh w-full flex-col',
                     isWideDialog ? 'max-w-3xl' : 'max-w-[30rem]'
                 )}
+                {...(dialogDescription
+                    ? {}
+                    : { 'aria-describedby': undefined })}
                 showClose
                 onOpenAutoFocus={
                     step === ExportWizardStep.TARGET_PICKER
@@ -1375,39 +1621,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 }
             >
                 <DialogHeader className="shrink-0">
-                    {isSqlBranch ? (
-                        <ExportSqlBranchContext
-                            targetDatabaseType={
-                                isSqlPreview ? sqlTargetDatabaseType : null
-                            }
-                        />
-                    ) : null}
-                    {isDbmlBranch ? <ExportDbmlBranchContext /> : null}
-                    {isJsonBranch ? <ExportJsonBranchContext /> : null}
-                    {isVisualBranch && visualFormat ? (
-                        <ExportVisualBranchContext format={visualFormat} />
-                    ) : null}
-                    {isLaravelBranch ? <ExportLaravelBranchContext /> : null}
-                    {isPrismaBranch ? (
-                        <ExportPrismaBranchContext
-                            version={
-                                step === ExportWizardStep.PRISMA_PREVIEW
-                                    ? prismaVersion
-                                    : null
-                            }
-                        />
-                    ) : null}
-                    {isEfCoreBranch ? (
-                        <ExportEfCoreBranchContext
-                            showResult={
-                                step === ExportWizardStep.EF_CORE_RESULT
-                            }
-                        />
-                    ) : null}
-                    {isRailsBranch ? <ExportRailsBranchContext /> : null}
-                    {isDjangoBranch ? <ExportDjangoBranchContext /> : null}
-                    {isDrizzleBranch ? <ExportDrizzleBranchContext /> : null}
-                    <DialogTitle>{dialogTitle}</DialogTitle>
+                    <DialogTitle className="flex items-center gap-1.5">
+                        {dialogTitle}
+                        {step === ExportWizardStep.VISUAL_OPTIONS &&
+                        visualFormat === 'svg' ? (
+                            <VisualExportSvgInfoTooltip />
+                        ) : null}
+                    </DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
                             {dialogDescription}
@@ -1420,7 +1640,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                         'min-h-0 flex-1',
                         isPreviewStep
                             ? 'flex flex-col overflow-hidden'
-                            : 'overflow-y-auto'
+                            : 'overflow-y-auto p-1'
                     )}
                     data-testid="export-wizard-scroll-body"
                 >
@@ -1440,17 +1660,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                                 onSelectTarget={handleSelectSqlTarget}
                             />
                         ) : (
-                            <ExportSqlUnsupportedStep
-                                sourceDatabaseType={databaseType}
-                            />
+                            <ExportSqlUnsupportedStep />
                         )
                     ) : null}
 
                     {step === ExportWizardStep.SQL_PREVIEW &&
                     sqlTargetDatabaseType ? (
                         <ExportSqlPreviewStep
-                            diagramName={currentDiagram.name ?? 'diagram'}
-                            sourceDatabaseType={databaseType}
                             targetDatabaseType={sqlTargetDatabaseType}
                             script={sqlScript}
                             isLoading={isSqlGenerating}
@@ -1460,8 +1676,9 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
                     {step === ExportWizardStep.DBML_PREVIEW ? (
                         <ExportDbmlPreviewStep
-                            diagramName={currentDiagram.name ?? 'diagram'}
-                            dbml={dbmlContent}
+                            dbml={activeDbmlContent}
+                            refFormat={dbmlRefFormat}
+                            onRefFormatChange={setDbmlRefFormat}
                             isLoading={isDbmlGenerating}
                             hasError={dbmlHasError}
                         />
@@ -1475,7 +1692,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     visualFormat ? (
                         <ExportVisualOptionsStep
                             format={visualFormat}
-                            diagramName={currentDiagram.name ?? 'diagram'}
                             extent={visualExtent}
                             scale={visualScale}
                             includePatternBG={visualIncludePatternBG}
@@ -1486,9 +1702,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             onScaleChange={setVisualScale}
                             onIncludePatternBGChange={setVisualIncludePatternBG}
                             onTransparentChange={setVisualTransparent}
-                            onExport={() => {
-                                void handleVisualExport();
-                            }}
                         />
                     ) : null}
 
@@ -1496,7 +1709,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                         <ExportPrismaVersionStep
                             selectedVersion={prismaVersion}
                             onSelectVersion={setPrismaVersion}
-                            onContinue={handleContinuePrismaVersion}
                         />
                     ) : null}
 
@@ -1523,9 +1735,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             onIncludeForeignKeysChange={
                                 setLaravelIncludeForeignKeys
                             }
-                            onExport={() => {
-                                void handleLaravelExport();
-                            }}
                         />
                     ) : null}
 
@@ -1538,9 +1747,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             error={efCoreError}
                             onNamespaceChange={setEfCoreNamespace}
                             onDbContextNameChange={setEfCoreDbContextName}
-                            onExport={() => {
-                                void handleEfCoreExport();
-                            }}
                         />
                     ) : null}
 
@@ -1551,6 +1757,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             filename={efCoreSuccess.filename}
                             files={efCoreSuccess.files}
                             notes={efCoreSuccess.notes}
+                            registerFooterAction={registerFooterAction}
                         />
                     ) : null}
 
@@ -1561,6 +1768,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             error={railsError}
                             success={railsSuccess}
                             onRetry={handleRailsRetry}
+                            registerFooterAction={registerFooterAction}
                         />
                     ) : null}
 
@@ -1571,6 +1779,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             error={djangoError}
                             success={djangoSuccess}
                             onRetry={handleDjangoRetry}
+                            registerFooterAction={registerFooterAction}
                         />
                     ) : null}
 
@@ -1581,12 +1790,20 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                             error={drizzleError}
                             success={drizzleSuccess}
                             onRetry={handleDrizzleRetry}
+                            registerFooterAction={registerFooterAction}
                         />
                     ) : null}
                 </div>
 
                 {showBackButton ? (
-                    <DialogFooter className="shrink-0 !justify-start gap-2">
+                    <DialogFooter
+                        className={cn(
+                            'mt-4 shrink-0 gap-2',
+                            primaryFooterAction
+                                ? '!justify-between'
+                                : '!justify-start'
+                        )}
+                    >
                         <Button
                             type="button"
                             variant="secondary"
@@ -1595,6 +1812,34 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                         >
                             {t('export_wizard.back')}
                         </Button>
+                        {primaryFooterAction?.type === 'export' ? (
+                            <ExportWizardExportButton
+                                type="button"
+                                onClick={primaryFooterAction.onClick}
+                                disabled={primaryFooterAction.disabled}
+                                data-testid={primaryFooterAction.testId}
+                            />
+                        ) : null}
+                        {primaryFooterAction?.type === 'continue' ? (
+                            <Button
+                                type="button"
+                                onClick={primaryFooterAction.onClick}
+                                disabled={primaryFooterAction.disabled}
+                                data-testid={primaryFooterAction.testId}
+                            >
+                                {primaryFooterAction.label}
+                            </Button>
+                        ) : null}
+                        {primaryFooterAction?.type === 'retry' ? (
+                            <Button
+                                type="button"
+                                onClick={primaryFooterAction.onClick}
+                                disabled={primaryFooterAction.disabled}
+                                data-testid={primaryFooterAction.testId}
+                            >
+                                {primaryFooterAction.label}
+                            </Button>
+                        ) : null}
                     </DialogFooter>
                 ) : null}
             </DialogContent>

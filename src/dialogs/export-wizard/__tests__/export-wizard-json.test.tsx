@@ -71,6 +71,23 @@ vi.mock('@/lib/download-blob', () => ({
     downloadBlob: vi.fn(),
 }));
 
+vi.mock('@/components/code-snippet/code-snippet', () => ({
+    CodeSnippet: ({
+        code,
+        className,
+    }: {
+        code: string;
+        className?: string;
+    }) => (
+        <div data-testid="code-snippet" data-classname={className}>
+            <pre>{code}</pre>
+            <button type="button" data-testid="code-snippet-copy">
+                copy
+            </button>
+        </div>
+    ),
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, options?: { filename?: string }) =>
@@ -100,25 +117,28 @@ describe('ExportWizardDialog JSON branch', () => {
         expect(dialogMocks.openExportDiagramDialog).not.toHaveBeenCalled();
         expect(dialogMocks.closeExportWizardDialog).not.toHaveBeenCalled();
         expect(
-            screen.getByText('export_wizard.json.download_step.description')
+            screen.getByText('export_wizard.targets.diagram_json.title')
         ).toBeInTheDocument();
         expect(
-            screen.getByTestId('export-json-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.diagram_json.title'
+            screen.queryByText('export_wizard.json.download_step.description')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-json-branch-context')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByTestId('export-json-preview-container')
+        ).toBeInTheDocument();
+        expect(screen.getByTestId('code-snippet-copy')).toBeInTheDocument();
+        expect(screen.getByTestId('export-json-download')).toBeInTheDocument();
+        expect(screen.getByTestId('code-snippet')).toHaveTextContent(
+            '"schemaVersion"'
         );
-        expect(
-            screen.getByText('export_wizard.json.download_step.download')
-        ).toBeInTheDocument();
-        expect(screen.queryByTestId('code-snippet')).not.toBeInTheDocument();
     });
 
     it('downloads the shared serializer output as application/json', async () => {
         await openJsonBranch();
 
-        await userEvent.click(
-            screen.getByText('export_wizard.json.download_step.download')
-        );
+        await userEvent.click(screen.getByTestId('export-json-download'));
 
         expect(mockedDownloadBlob).toHaveBeenCalledTimes(1);
         const [blob, filename] = mockedDownloadBlob.mock.calls[0];

@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
-import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/button/button';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import { Label } from '@/components/label/label';
 import {
@@ -29,7 +27,6 @@ interface ExportLaravelOptionsStepProps {
     onLaravelVersionChange: (version: LaravelVersion) => void;
     onIncludeIndexesChange: (includeIndexes: boolean) => void;
     onIncludeForeignKeysChange: (includeForeignKeys: boolean) => void;
-    onExport: () => void;
 }
 
 export const ExportLaravelOptionsStep: React.FC<
@@ -44,7 +41,6 @@ export const ExportLaravelOptionsStep: React.FC<
     onLaravelVersionChange,
     onIncludeIndexesChange,
     onIncludeForeignKeysChange,
-    onExport,
 }) => {
     const { t } = useTranslation();
     const filename = buildLaravelExportFilename(diagramName);
@@ -194,17 +190,6 @@ export const ExportLaravelOptionsStep: React.FC<
                     </Label>
                 </div>
             ) : null}
-
-            <Button
-                type="button"
-                className="w-fit"
-                onClick={onExport}
-                disabled={isExporting}
-                data-testid="export-laravel-submit"
-            >
-                <Download className="mr-1 size-4" />
-                {t('export_wizard.laravel.options_step.export')}
-            </Button>
         </div>
     );
 };

@@ -1,9 +1,5 @@
-import React, { useCallback } from 'react';
-import { Download } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/button/button';
-import { downloadBlob } from '@/lib/download-blob';
-import { buildDiagramJsonExportFilename } from '@/lib/build-diagram-json-export-filename';
+import React, { useMemo } from 'react';
+import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { diagramToJSONOutput } from '@/lib/export-import-utils';
 import type { Diagram } from '@/lib/domain/diagram';
 
@@ -14,32 +10,32 @@ interface ExportJsonDownloadStepProps {
 export const ExportJsonDownloadStep: React.FC<ExportJsonDownloadStepProps> = ({
     diagram,
 }) => {
-    const { t } = useTranslation();
-    const filename = buildDiagramJsonExportFilename(diagram.name ?? 'diagram');
-
-    const handleDownload = useCallback(() => {
-        const json = diagramToJSONOutput(diagram);
-
-        downloadBlob(new Blob([json], { type: 'application/json' }), filename);
-    }, [diagram, filename]);
+    const json = useMemo(() => diagramToJSONOutput(diagram), [diagram]);
 
     return (
         <div
-            className="flex flex-col gap-4 py-1"
+            className="flex min-h-0 flex-1 flex-col"
             data-testid="export-json-download-step"
         >
-            <p className="text-sm text-muted-foreground">
-                {t('export_wizard.json.download_step.explanation')}
-            </p>
-            <p className="text-sm" data-testid="export-json-filename">
-                {t('export_wizard.json.download_step.filename_label', {
-                    filename,
-                })}
-            </p>
-            <Button type="button" className="w-fit" onClick={handleDownload}>
-                <Download className="mr-1 size-4" />
-                {t('export_wizard.json.download_step.download')}
-            </Button>
+            <div
+                className="h-96 min-h-72 w-full shrink-0"
+                data-testid="export-json-preview-container"
+            >
+                <CodeSnippet
+                    className="size-full flex-none"
+                    code={json}
+                    language="json"
+                    isComplete={true}
+                    editorProps={{
+                        options: {
+                            scrollbar: {
+                                vertical: 'auto',
+                                horizontal: 'auto',
+                            },
+                        },
+                    }}
+                />
+            </div>
         </div>
     );
 };

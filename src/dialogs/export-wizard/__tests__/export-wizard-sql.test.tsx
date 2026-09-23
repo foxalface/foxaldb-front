@@ -76,27 +76,16 @@ vi.mock('@/lib/download-blob', () => ({
 vi.mock('@/components/code-snippet/code-snippet', () => ({
     CodeSnippet: ({
         code,
-        actions,
         className,
     }: {
         code: string;
         className?: string;
-        actions?: Array<{ label: string; onClick: () => void }>;
     }) => (
         <div data-testid="code-snippet" data-classname={className}>
             <pre>{code}</pre>
             <button type="button" data-testid="code-snippet-copy">
                 copy
             </button>
-            {actions?.map((action) => (
-                <button
-                    key={action.label}
-                    type="button"
-                    onClick={action.onClick}
-                >
-                    {action.label}
-                </button>
-            ))}
         </div>
     ),
 }));
@@ -136,12 +125,12 @@ describe('ExportWizardDialog SQL branch', () => {
         await openSqlBranch();
 
         expect(dialogMocks.openExportSQLDialog).not.toHaveBeenCalled();
-        expect(screen.getByText('export_wizard.title')).toBeInTheDocument();
         expect(
-            screen.getByTestId('export-sql-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.sql.title'
-        );
+            screen.getByText('export_wizard.sql.target_step.title')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-sql-branch-context')
+        ).not.toBeInTheDocument();
         expect(
             screen.getByText('export_wizard.sql.target_step.description')
         ).toBeInTheDocument();
@@ -165,21 +154,17 @@ describe('ExportWizardDialog SQL branch', () => {
         });
 
         expect(
-            screen.getByText('export_wizard.sql.preview_step.description')
+            screen.getByText('export_wizard.targets.sql.title')
         ).toBeInTheDocument();
         expect(
-            screen.getByTestId('export-sql-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.sql.title → MySQL'
-        );
+            screen.queryByText('export_wizard.sql.preview_step.description')
+        ).not.toBeInTheDocument();
         expect(
             screen.getByTestId('export-sql-preview-container')
         ).toBeInTheDocument();
         expect(screen.getByTestId('code-snippet-copy')).toBeInTheDocument();
         expect(screen.getByText('CREATE TABLE users ();')).toBeInTheDocument();
-        expect(
-            screen.getByText('export_wizard.sql.preview_step.download')
-        ).toBeInTheDocument();
+        expect(screen.getByTestId('export-sql-download')).toBeInTheDocument();
     });
 
     it('navigates back from preview to SQL target and to target picker', async () => {
@@ -191,7 +176,9 @@ describe('ExportWizardDialog SQL branch', () => {
         });
 
         await userEvent.click(screen.getByText('export_wizard.back'));
-        expect(screen.getByText('export_wizard.title')).toBeInTheDocument();
+        expect(
+            screen.getByText('export_wizard.sql.target_step.title')
+        ).toBeInTheDocument();
         expect(
             screen.getByText('export_wizard.sql.target_step.description')
         ).toBeInTheDocument();
@@ -212,9 +199,7 @@ describe('ExportWizardDialog SQL branch', () => {
             ).toBeInTheDocument();
         });
 
-        await userEvent.click(
-            screen.getByText('export_wizard.sql.preview_step.download')
-        );
+        await userEvent.click(screen.getByTestId('export-sql-download'));
 
         expect(mockedDownloadBlob).toHaveBeenCalledTimes(1);
         const [blob, filename] = mockedDownloadBlob.mock.calls[0];
@@ -254,7 +239,7 @@ describe('ExportWizardDialog SQL branch by source database', () => {
         mockedExportBaseSQL.mockResolvedValue('SELECT 1;');
     });
 
-    it('shows only MySQL for a MySQL source diagram', async () => {
+    it('skips the SQL target step for a MySQL source diagram', async () => {
         chartDbState.databaseType = DatabaseType.MYSQL;
         chartDbState.currentDiagram = {
             ...chartDbState.currentDiagram,
@@ -263,12 +248,21 @@ describe('ExportWizardDialog SQL branch by source database', () => {
 
         await openSqlBranch();
 
-        expect(screen.getByText('MySQL')).toBeInTheDocument();
-        expect(screen.queryByText('PostgreSQL')).not.toBeInTheDocument();
-        expect(screen.queryByText('SQL Server')).not.toBeInTheDocument();
+        expect(
+            screen.getByText('export_wizard.targets.sql.title')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText('export_wizard.sql.target_step.title')
+        ).not.toBeInTheDocument();
+        await waitFor(() => {
+            expect(mockedExportBaseSQL).toHaveBeenCalledWith({
+                diagram: chartDbState.currentDiagram,
+                targetDatabaseType: DatabaseType.MYSQL,
+            });
+        });
     });
 
-    it('shows only MariaDB for a MariaDB source diagram', async () => {
+    it('skips the SQL target step for a MariaDB source diagram', async () => {
         chartDbState.databaseType = DatabaseType.MARIADB;
         chartDbState.currentDiagram = {
             ...chartDbState.currentDiagram,
@@ -277,11 +271,18 @@ describe('ExportWizardDialog SQL branch by source database', () => {
 
         await openSqlBranch();
 
-        expect(screen.getByText('MariaDB')).toBeInTheDocument();
-        expect(screen.queryByText('PostgreSQL')).not.toBeInTheDocument();
+        expect(
+            screen.getByText('export_wizard.targets.sql.title')
+        ).toBeInTheDocument();
+        await waitFor(() => {
+            expect(mockedExportBaseSQL).toHaveBeenCalledWith({
+                diagram: chartDbState.currentDiagram,
+                targetDatabaseType: DatabaseType.MARIADB,
+            });
+        });
     });
 
-    it('shows only SQL Server for a SQL Server source diagram', async () => {
+    it('skips the SQL target step for a SQL Server source diagram', async () => {
         chartDbState.databaseType = DatabaseType.SQL_SERVER;
         chartDbState.currentDiagram = {
             ...chartDbState.currentDiagram,
@@ -290,11 +291,18 @@ describe('ExportWizardDialog SQL branch by source database', () => {
 
         await openSqlBranch();
 
-        expect(screen.getByText('SQL Server')).toBeInTheDocument();
-        expect(screen.queryByText('PostgreSQL')).not.toBeInTheDocument();
+        expect(
+            screen.getByText('export_wizard.targets.sql.title')
+        ).toBeInTheDocument();
+        await waitFor(() => {
+            expect(mockedExportBaseSQL).toHaveBeenCalledWith({
+                diagram: chartDbState.currentDiagram,
+                targetDatabaseType: DatabaseType.SQL_SERVER,
+            });
+        });
     });
 
-    it('shows only SQLite for a SQLite source diagram', async () => {
+    it('skips the SQL target step for a SQLite source diagram', async () => {
         chartDbState.databaseType = DatabaseType.SQLITE;
         chartDbState.currentDiagram = {
             ...chartDbState.currentDiagram,
@@ -303,8 +311,38 @@ describe('ExportWizardDialog SQL branch by source database', () => {
 
         await openSqlBranch();
 
-        expect(screen.getByText('SQLite')).toBeInTheDocument();
-        expect(screen.queryByText('PostgreSQL')).not.toBeInTheDocument();
+        expect(
+            screen.getByText('export_wizard.targets.sql.title')
+        ).toBeInTheDocument();
+        await waitFor(() => {
+            expect(mockedExportBaseSQL).toHaveBeenCalledWith({
+                diagram: chartDbState.currentDiagram,
+                targetDatabaseType: DatabaseType.SQLITE,
+            });
+        });
+    });
+
+    it('navigates back from a single-target preview directly to the target picker', async () => {
+        chartDbState.databaseType = DatabaseType.MYSQL;
+        chartDbState.currentDiagram = {
+            ...chartDbState.currentDiagram,
+            databaseType: DatabaseType.MYSQL,
+        };
+
+        await openSqlBranch();
+
+        await waitFor(() => {
+            expect(mockedExportBaseSQL).toHaveBeenCalled();
+        });
+
+        await userEvent.click(screen.getByText('export_wizard.back'));
+
+        expect(
+            screen.getByText('export_wizard.sections.database')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText('export_wizard.sql.target_step.title')
+        ).not.toBeInTheDocument();
     });
 
     it('shows unsupported SQL UX for Oracle source diagrams', async () => {
@@ -317,7 +355,9 @@ describe('ExportWizardDialog SQL branch by source database', () => {
         await openSqlBranch();
 
         expect(
-            screen.getByText('export_wizard.sql.unsupported_source.title')
+            screen.getByRole('heading', {
+                name: 'export_wizard.sql.unsupported_source.title',
+            })
         ).toBeInTheDocument();
         expect(screen.queryByText('Oracle')).not.toBeInTheDocument();
         expect(dialogMocks.openExportSQLDialog).not.toHaveBeenCalled();

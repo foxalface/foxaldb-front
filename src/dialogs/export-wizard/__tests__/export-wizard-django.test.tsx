@@ -303,10 +303,11 @@ describe('ExportWizardDialog Django branch', () => {
         ).not.toBeInTheDocument();
         expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
         expect(
-            screen.getByTestId('export-django-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.django.title → export_wizard.django.result_step.django_version:6.1'
-        );
+            screen.getByText('export_wizard.targets.django.title')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-django-branch-context')
+        ).not.toBeInTheDocument();
     });
 
     it('shows static Django 6.1 information and the inferred provider', async () => {

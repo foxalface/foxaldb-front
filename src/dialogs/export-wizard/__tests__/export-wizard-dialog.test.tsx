@@ -129,14 +129,15 @@ describe('ExportWizardDialog', () => {
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
         const scrollBody = screen.getByTestId('export-wizard-scroll-body');
-        expect(scrollBody).toHaveClass('min-h-0', 'flex-1', 'overflow-y-auto');
+        expect(scrollBody).toHaveClass(
+            'min-h-0',
+            'flex-1',
+            'overflow-y-auto',
+            'p-1'
+        );
 
         const dialogContent = scrollBody.parentElement;
-        expect(dialogContent).toHaveClass(
-            'max-h-dvh',
-            'overflow-hidden',
-            'flex-col'
-        );
+        expect(dialogContent).toHaveClass('max-h-dvh', 'flex-col');
     });
 
     it('renders the target picker as a grouped square grid', () => {
@@ -181,10 +182,12 @@ describe('ExportWizardDialog', () => {
         );
 
         expect(dialogMocks.openExportSQLDialog).not.toHaveBeenCalled();
-        expect(screen.getByText('export_wizard.title')).toBeInTheDocument();
         expect(
-            screen.getByTestId('export-sql-branch-context')
+            screen.getByText('export_wizard.sql.target_step.title')
         ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-sql-branch-context')
+        ).not.toBeInTheDocument();
         expect(
             screen.getByText('export_wizard.sql.target_step.description')
         ).toBeInTheDocument();
@@ -202,11 +205,14 @@ describe('ExportWizardDialog', () => {
         expect(dialogMocks.openExportDiagramDialog).not.toHaveBeenCalled();
         expect(dialogMocks.closeExportWizardDialog).not.toHaveBeenCalled();
         expect(
-            screen.getByText('export_wizard.json.download_step.description')
+            screen.getByText('export_wizard.targets.diagram_json.title')
         ).toBeInTheDocument();
         expect(
-            screen.getByTestId('export-json-branch-context')
-        ).toBeInTheDocument();
+            screen.queryByText('export_wizard.json.download_step.description')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-json-branch-context')
+        ).not.toBeInTheDocument();
     });
 
     it('opens the visual options step from PNG, JPG and SVG without auto-download', async () => {
@@ -223,8 +229,12 @@ describe('ExportWizardDialog', () => {
             screen.getByTestId('export-visual-options-step')
         ).toHaveAttribute('data-format', 'png');
         expect(
-            screen.getByTestId('export-visual-branch-context')
+            screen.getByText('export_wizard.targets.png.title')
         ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-visual-branch-context')
+        ).not.toBeInTheDocument();
+        expect(screen.getByTestId('export-visual-submit')).toBeInTheDocument();
     });
 
     it('opens the DBML preview from the target picker', async () => {
@@ -242,11 +252,14 @@ describe('ExportWizardDialog', () => {
         );
 
         expect(
-            screen.getByText('export_wizard.dbml.preview_step.description')
+            screen.getByText('export_wizard.targets.dbml.title')
         ).toBeInTheDocument();
         expect(
-            screen.getByTestId('export-dbml-branch-context')
-        ).toBeInTheDocument();
+            screen.queryByText('export_wizard.dbml.preview_step.description')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-dbml-branch-context')
+        ).not.toBeInTheDocument();
     });
 
     it('hides Prisma for guests', () => {

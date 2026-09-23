@@ -1047,6 +1047,7 @@ export const ko_KR: LanguageTranslation = {
             title: '보내기',
             description: '다이어그램을보낼 형식을 선택하세요.',
             back: '뒤로',
+            export: '내보내기',
             sql: {
                 target_step: {
                     title: 'SQL보내기',
@@ -1169,6 +1170,8 @@ export const ko_KR: LanguageTranslation = {
                     extent_viewport_description:
                         '캔버스에 현재 보이는 내용만 내보냅니다.',
                     scale_label: '배율',
+                    scale_description:
+                        '보내기 해상도 배율입니다.\n2x는 픽셀 너비와 높이를 두 배로 만듭니다.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1178,7 +1181,8 @@ export const ko_KR: LanguageTranslation = {
                     transparent: '투명 배경',
                     transparent_description: '단색 배경 없이 PNG를 내보냅니다.',
                     svg_limitation:
-                        '이 SVG는 브라우저용 다이어그램 스냅샷이며 완전히 편집 가능한 벡터 파일이 아닙니다.',
+                        '이 SVG는 브라우저용 다이어그램 스냅샷이며\n완전히 편집 가능한 벡터 파일이 아닙니다.',
+                    svg_limitation_aria: 'SVG보내기 제한 안내',
                     export: '내보내기',
                     generating: '이미지를 생성하는 중...',
                     error: '이미지를 내보낼 수 없습니다. 다시 시도하세요.',
@@ -1898,6 +1902,17 @@ export const ko_KR: LanguageTranslation = {
             cleanup_failed:
                 '다이어그램은 가져왔지만 로컬 사본을 제거할 수 없습니다. 수동으로 삭제할 수 있습니다.',
             check_failed: '로컬 다이어그램을 읽을 수 없습니다.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: '참조 스타일',
+                inline: '인라인 참조',
+                standard: '표준 참조',
+                show_inline: '인라인 참조 표시',
+                show_standard: '표준 참조 표시',
+                hint: 'DBML에서 관계를 작성하는 방식을 선택하세요.',
+            },
         },
 
         language_select: {

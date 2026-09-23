@@ -1,7 +1,15 @@
 import type { Monaco } from '@monaco-editor/react';
 import { dataTypes } from '@/lib/data/data-types/data-types';
 
+let isDbmlLanguageSetup = false;
+
 export const setupDBMLLanguage = (monaco: Monaco) => {
+    if (isDbmlLanguageSetup) {
+        return;
+    }
+
+    isDbmlLanguageSetup = true;
+
     monaco.languages.register({ id: 'dbml' });
 
     // Define themes for DBML

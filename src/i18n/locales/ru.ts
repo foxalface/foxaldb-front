@@ -1042,6 +1042,7 @@ export const ru: LanguageTranslation = {
             title: 'Экспорт',
             description: 'Выберите формат для экспорта диаграммы.',
             back: 'Назад',
+            export: 'Экспортировать',
             sql: {
                 target_step: {
                     title: 'Экспорт SQL',
@@ -1167,6 +1168,8 @@ export const ru: LanguageTranslation = {
                     extent_viewport_description:
                         'Экспортировать только то, что сейчас видно на холсте.',
                     scale_label: 'Масштаб',
+                    scale_description:
+                        'Умножает разрешение экспорта.\n2x удваивает ширину и высоту в пикселях.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1177,7 +1180,8 @@ export const ru: LanguageTranslation = {
                     transparent_description:
                         'Экспортировать PNG без сплошного цвета фона.',
                     svg_limitation:
-                        'Этот SVG — снимок диаграммы для браузера, а не полностью редактируемый векторный файл.',
+                        'Этот SVG — снимок диаграммы для браузера,\nа не полностью редактируемый векторный файл.',
+                    svg_limitation_aria: 'Об ограничениях экспорта SVG',
                     export: 'Экспортировать',
                     generating: 'Создание изображения...',
                     error: 'Не удалось экспортировать изображение. Попробуйте ещё раз.',
@@ -1904,6 +1908,17 @@ export const ru: LanguageTranslation = {
             cleanup_failed:
                 'Диаграмма импортирована, но локальная копия не удалена. Удалите её вручную.',
             check_failed: 'Не удалось прочитать локальную диаграмму.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'Стиль ссылок',
+                inline: 'Встроенные ref',
+                standard: 'Стандартные ref',
+                show_inline: 'Показать встроенные ref',
+                show_standard: 'Показать стандартные ref',
+                hint: 'Выберите, как связи записываются в экспортируемом DBML.',
+            },
         },
 
         language_select: {

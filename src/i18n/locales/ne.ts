@@ -1041,6 +1041,7 @@ export const ne: LanguageTranslation = {
             title: 'निर्यात',
             description: 'आफ्नो डायाग्राम निर्यात गर्न ढाँचा छान्नुहोस्।',
             back: 'पछाडि',
+            export: 'निर्यात',
             sql: {
                 target_step: {
                     title: 'SQL निर्यात',
@@ -1169,6 +1170,8 @@ export const ne: LanguageTranslation = {
                     extent_viewport_description:
                         'क्यानभासमा अहिले देखिएको मात्र निर्यात गर्नुहोस्।',
                     scale_label: 'स्केल',
+                    scale_description:
+                        'निर्यात रिजोल्युसन गुणा गर्नुहोस्।\n2x ले पिक्सेलमा चौडाइ र उचाइ दोब्बर बनाउँछ।',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1179,7 +1182,8 @@ export const ne: LanguageTranslation = {
                     transparent_description:
                         'ठोस पृष्ठभूमि रङ बिना PNG निर्यात गर्नुहोस्।',
                     svg_limitation:
-                        'यो SVG ब्राउजरका लागि रेखाचित्रको स्न्यापसट हो, पूर्ण रूपमा सम्पादन गर्न मिल्ने भेक्टर फाइल होइन।',
+                        'यो SVG ब्राउजरका लागि रेखाचित्रको स्न्यापसट हो,\nपूर्ण रूपमा सम्पादन गर्न मिल्ने भेक्टर फाइल होइन।',
+                    svg_limitation_aria: 'SVG निर्यात सीमाहरूको बारेमा',
                     export: 'निर्यात',
                     generating: 'तस्बिर बनाइँदैछ...',
                     error: 'तस्बिर निर्यात गर्न सकिएन। कृपया फेरि प्रयास गर्नुहोस्।',
@@ -1909,6 +1913,17 @@ export const ne: LanguageTranslation = {
             cleanup_failed:
                 'डायग्राम आयात भयो तर स्थानीय प्रतिलिपि हटाउन सकिएन। तपाईं म्यानुअल मेट्न सक्नुहुन्छ।',
             check_failed: 'स्थानीय डायग्राम पढ्न सकिएन।',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'सन्दर्भ शैली',
+                inline: 'इनलाइन रेफ',
+                standard: 'मानक रेफ',
+                show_inline: 'इनलाइन रेफ देखाउनुहोस्',
+                show_standard: 'मानक रेफ देखाउनुहोस्',
+                hint: 'निर्यात गरिएको DBML मा सम्बन्ध कसरी लेखिने छान्नुहोस्।',
+            },
         },
 
         language_select: {

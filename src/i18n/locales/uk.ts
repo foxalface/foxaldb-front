@@ -1046,6 +1046,7 @@ export const uk: LanguageTranslation = {
             title: 'Експорт',
             description: 'Виберіть формат для експорту діаграми.',
             back: 'Назад',
+            export: 'Експортувати',
             sql: {
                 target_step: {
                     title: 'Експорт SQL',
@@ -1170,6 +1171,8 @@ export const uk: LanguageTranslation = {
                     extent_viewport_description:
                         'Експортувати лише те, що зараз видно на полотні.',
                     scale_label: 'Масштаб',
+                    scale_description:
+                        'Множить роздільну здатність експорту.\n2x подвоює ширину та висоту в пікселях.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1180,7 +1183,8 @@ export const uk: LanguageTranslation = {
                     transparent_description:
                         'Експортувати PNG без суцільного кольору тла.',
                     svg_limitation:
-                        'Цей SVG — знімок діаграми для браузера, а не повністю редагований векторний файл.',
+                        'Цей SVG — знімок діаграми для браузера,\nа не повністю редагований векторний файл.',
+                    svg_limitation_aria: 'Про обмеження експорту SVG',
                     export: 'Експортувати',
                     generating: 'Створення зображення...',
                     error: 'Не вдалося експортувати зображення. Спробуйте ще раз.',
@@ -1905,6 +1909,17 @@ export const uk: LanguageTranslation = {
             cleanup_failed:
                 'Діаграму імпортовано, але локальну копію не видалено. Видаліть її вручну.',
             check_failed: 'Не вдалося прочитати локальну діаграму.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'Стиль посилань',
+                inline: 'Вбудовані ref',
+                standard: 'Стандартні ref',
+                show_inline: 'Показати вбудовані ref',
+                show_standard: 'Показати стандартні ref',
+                hint: 'Виберіть, як записуються зв’язки в експортованому DBML.',
+            },
         },
 
         language_select: {

@@ -1039,6 +1039,7 @@ export const mr: LanguageTranslation = {
             title: 'निर्यात',
             description: 'तुमचा डायग्राम निर्यात करण्यासाठी एक फॉरमॅट निवडा.',
             back: 'मागे',
+            export: 'निर्यात',
             sql: {
                 target_step: {
                     title: 'SQL एक्सपोर्ट',
@@ -1163,6 +1164,8 @@ export const mr: LanguageTranslation = {
                     extent_viewport_description:
                         'कॅनव्हासवर सध्या दिसत असलेलेच निर्यात करा.',
                     scale_label: 'स्केल',
+                    scale_description:
+                        'एक्सपोर्ट रिझोल्यूशन गुणाकार करा.\n2x पिक्सेलमध्ये रुंदी आणि उंची दुप्पट करते.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1172,7 +1175,8 @@ export const mr: LanguageTranslation = {
                     transparent_description:
                         'घन पार्श्वभूमी रंग नसलेली PNG निर्यात करा.',
                     svg_limitation:
-                        'हे SVG ब्राउझरसाठी आकृतीचा स्नॅपशॉट आहे, पूर्णपणे संपादनयोग्य व्हेक्टर फाइल नाही.',
+                        'हे SVG ब्राउझरसाठी आकृतीचा स्नॅपशॉट आहे,\nपूर्णपणे संपादनयोग्य व्हेक्टर फाइल नाही.',
+                    svg_limitation_aria: 'SVG निर्यात मर्यादांबद्दल',
                     export: 'निर्यात',
                     generating: 'प्रतिमा तयार होत आहे...',
                     error: 'प्रतिमा निर्यात करता आली नाही. कृपया पुन्हा प्रयत्न करा.',
@@ -1902,6 +1906,17 @@ export const mr: LanguageTranslation = {
             cleanup_failed:
                 'डायग्राम आयात झाला पण स्थानिक प्रत काढता आली नाही. ती मॅन्युअली हटवू शकता.',
             check_failed: 'स्थानिक डायग्राम वाचू शकलो नाही.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'संदर्भ शैली',
+                inline: 'इनलाइन रेफ',
+                standard: 'मानक रेफ',
+                show_inline: 'इनलाइन रेफ दाखवा',
+                show_standard: 'मानक रेफ दाखवा',
+                hint: 'एक्सपोर्ट केलेल्या DBML मध्ये संबंध कसे लिहिले जातील ते निवडा.',
+            },
         },
 
         language_select: {

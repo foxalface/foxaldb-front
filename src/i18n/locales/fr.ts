@@ -1068,11 +1068,12 @@ export const fr: LanguageTranslation = {
             title: 'Exporter',
             description: 'Choisissez un format pour exporter votre diagramme.',
             back: 'Retour',
+            export: 'Exporter',
             sql: {
                 target_step: {
                     title: 'Exporter SQL',
                     description:
-                        'Choisissez une base de données cible pour votre diagramme {{database}}.',
+                        'Choisissez une cible d’export pour votre diagramme {{database}}.',
                     source_label: 'Base source : {{database}}',
                     same_dialect_description: 'Exporter en DDL {{database}}',
                     cross_dialect_description:
@@ -1192,6 +1193,8 @@ export const fr: LanguageTranslation = {
                     extent_viewport_description:
                         'Exporter uniquement ce qui est actuellement visible sur le canevas.',
                     scale_label: 'Échelle',
+                    scale_description:
+                        'Multiplie la résolution d’export.\n2x double la largeur et la hauteur en pixels.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1202,7 +1205,8 @@ export const fr: LanguageTranslation = {
                     transparent_description:
                         'Exporter le PNG sans couleur d’arrière-plan unie.',
                     svg_limitation:
-                        'Ce SVG est un instantané du diagramme destiné au navigateur. Ce n’est pas un fichier vectoriel pleinement éditable.',
+                        'Ce SVG est un instantané du diagramme destiné au navigateur.\nCe n’est pas un fichier vectoriel pleinement éditable.',
+                    svg_limitation_aria: 'À propos des limites de l’export SVG',
                     export: 'Exporter',
                     generating: 'Génération de l’image...',
                     error: 'Impossible d’exporter l’image. Veuillez réessayer.',
@@ -1934,6 +1938,17 @@ export const fr: LanguageTranslation = {
             cleanup_failed:
                 "Votre diagramme a été importé mais la copie locale n'a pas pu être supprimée. Vous pouvez la supprimer manuellement.",
             check_failed: 'Impossible de lire votre diagramme local.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'Style des références',
+                inline: 'Références inline',
+                standard: 'Références standard',
+                show_inline: 'Afficher les références inline',
+                show_standard: 'Afficher les références standard',
+                hint: 'Choisissez comment les relations sont écrites dans le DBML exporté.',
+            },
         },
 
         language_select: {

@@ -1073,6 +1073,7 @@ export const de: LanguageTranslation = {
             description:
                 'Wählen Sie ein Format zum Exportieren Ihres Diagramms.',
             back: 'Zurück',
+            export: 'Exportieren',
             sql: {
                 target_step: {
                     title: 'SQL exportieren',
@@ -1200,6 +1201,8 @@ export const de: LanguageTranslation = {
                     extent_viewport_description:
                         'Nur das exportieren, was derzeit auf der Zeichenfläche sichtbar ist.',
                     scale_label: 'Skalierung',
+                    scale_description:
+                        'Multipliziert die Exportauflösung.\n2x verdoppelt Breite und Höhe in Pixeln.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1210,7 +1213,8 @@ export const de: LanguageTranslation = {
                     transparent_description:
                         'PNG ohne einfarbigen Hintergrund exportieren.',
                     svg_limitation:
-                        'Dieses SVG ist eine Browser-Momentaufnahme des Diagramms, keine vollständig bearbeitbare Vektordatei.',
+                        'Dieses SVG ist eine Browser-Momentaufnahme des Diagramms,\nkeine vollständig bearbeitbare Vektordatei.',
+                    svg_limitation_aria: 'Hinweise zu SVG-Exportbeschränkungen',
                     export: 'Exportieren',
                     generating: 'Bild wird erzeugt...',
                     error: 'Das Bild konnte nicht exportiert werden. Bitte erneut versuchen.',
@@ -1952,6 +1956,17 @@ export const de: LanguageTranslation = {
             cleanup_failed:
                 'Ihr Diagramm wurde importiert, aber die lokale Kopie konnte nicht entfernt werden. Sie können sie manuell löschen.',
             check_failed: 'Das lokale Diagramm konnte nicht gelesen werden.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'Referenzstil',
+                inline: 'Inline-Refs',
+                standard: 'Standard-Refs',
+                show_inline: 'Inline-Refs anzeigen',
+                show_standard: 'Standard-Refs anzeigen',
+                hint: 'Wählen Sie, wie Beziehungen im exportierten DBML geschrieben werden.',
+            },
         },
 
         language_select: {

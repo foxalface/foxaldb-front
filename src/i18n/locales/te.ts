@@ -1048,6 +1048,7 @@ export const te: LanguageTranslation = {
             description:
                 'మీ డయాగ్రామ్‌ను ఎగుమతి చేయడానికి ఫార్మాట్‌ను ఎంచుకోండి.',
             back: 'వెనక్కి',
+            export: 'ఎగుమతి',
             sql: {
                 target_step: {
                     title: 'SQL ఎగుమతి',
@@ -1175,6 +1176,8 @@ export const te: LanguageTranslation = {
                     extent_viewport_description:
                         'కాన్వాస్‌పై ప్రస్తుతం కనిపించేదాన్ని మాత్రమే ఎగుమతి చేయండి.',
                     scale_label: 'స్కేల్',
+                    scale_description:
+                        'ఎగుమతి రిజల్యూషన్‌ను గుణించండి.\n2x పిక్సెల్‌లలో వెడల్పు మరియు ఎత్తును రెట్టింపు చేస్తుంది.',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1185,7 +1188,8 @@ export const te: LanguageTranslation = {
                     transparent_description:
                         'ఘన నేపథ్య రంగు లేకుండా PNGని ఎగుమతి చేయండి.',
                     svg_limitation:
-                        'ఈ SVG బ్రౌజర్ కోసం రేఖాచిత్రం యొక్క స్నాప్‌షాట్, పూర్తిగా సవరించదగిన వెక్టర్ ఫైల్ కాదు.',
+                        'ఈ SVG బ్రౌజర్ కోసం రేఖాచిత్రం యొక్క స్నాప్‌షాట్,\nపూర్తిగా సవరించదగిన వెక్టర్ ఫైల్ కాదు.',
+                    svg_limitation_aria: 'SVG ఎగుమతి పరిమితుల గురించి',
                     export: 'ఎగుమతి',
                     generating: 'చిత్రం సృష్టిస్తోంది...',
                     error: 'చిత్రాన్ని ఎగుమతి చేయలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.',
@@ -1924,6 +1928,17 @@ export const te: LanguageTranslation = {
             cleanup_failed:
                 'డయాగ్రామ్ దిగుమతి చేయబడింది కానీ స్థానిక కాపీ తొలగించలేకపోయింది. మీరు మాన్యువల్‌గా తొలగించవచ్చు.',
             check_failed: 'స్థానిక డయాగ్రామ్ చదవలేకపోయింది.',
+        },
+
+        dbml: {
+            ref_format: {
+                label: 'రిఫరెన్స్ శైలి',
+                inline: 'ఇన్‌లైన్ రెఫ్‌లు',
+                standard: 'స్టాండర్డ్ రెఫ్‌లు',
+                show_inline: 'ఇన్‌లైన్ రెఫ్‌లు చూపించు',
+                show_standard: 'స్టాండర్డ్ రెఫ్‌లు చూపించు',
+                hint: 'ఎక్స్‌పోర్ట్ చేసిన DBML లో సంబంధాలు ఎలా వ్రాయబడతాయో ఎంచుకోండి.',
+            },
         },
 
         language_select: {

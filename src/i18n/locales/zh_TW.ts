@@ -978,6 +978,7 @@ export const zh_TW: LanguageTranslation = {
             title: '匯出',
             description: '選擇要匯出圖表的格式。',
             back: '返回',
+            export: '匯出',
             sql: {
                 target_step: {
                     title: '匯出 SQL',
@@ -1096,6 +1097,8 @@ export const zh_TW: LanguageTranslation = {
                     extent_viewport: '目前檢視',
                     extent_viewport_description: '僅匯出畫布上目前可見的內容。',
                     scale_label: '縮放',
+                    scale_description:
+                        '乘以匯出解析度。\n2x 會將像素寬度與高度加倍。',
                     scale_1x: '1x',
                     scale_2x: '2x',
                     scale_4x: '4x',
@@ -1104,7 +1107,8 @@ export const zh_TW: LanguageTranslation = {
                     transparent: '透明背景',
                     transparent_description: '匯出不含純色背景的 PNG。',
                     svg_limitation:
-                        '此 SVG 是供瀏覽器使用的圖表快照，不是可完全編輯的向量檔。',
+                        '此 SVG 是供瀏覽器使用的圖表快照，\n不是可完全編輯的向量檔。',
+                    svg_limitation_aria: '關於 SVG 匯出限制',
                     export: '匯出',
                     generating: '正在產生圖片...',
                     error: '無法匯出圖片，請再試一次。',
@@ -1773,6 +1777,17 @@ export const zh_TW: LanguageTranslation = {
             activation_failed: '圖表已建立但無法開啟。本機副本已保留。',
             cleanup_failed: '圖表已匯入但無法刪除本機副本。您可以手動刪除。',
             check_failed: '無法讀取本機圖表。',
+        },
+
+        dbml: {
+            ref_format: {
+                label: '參考樣式',
+                inline: '內嵌參考',
+                standard: '標準參考',
+                show_inline: '顯示內嵌參考',
+                show_standard: '顯示標準參考',
+                hint: '選擇匯出的 DBML 中關聯的寫法。',
+            },
         },
 
         language_select: {

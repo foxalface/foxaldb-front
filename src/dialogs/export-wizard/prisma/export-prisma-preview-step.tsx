@@ -1,15 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
-import { Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { CodeSnippet } from '@/components/code-snippet/code-snippet';
 import { Spinner } from '@/components/spinner/spinner';
 import { Label } from '@/components/label/label';
-import { downloadBlob } from '@/lib/download-blob';
 import type {
     PrismaExportError,
     PrismaExportNote,
 } from '@/lib/api/prisma-export-types';
-import { PRISMA_EXPORT_FILENAME } from '@/lib/export/prisma-export-constants';
 import {
     formatPrismaExportError,
     formatGroupedPrismaExportNote,
@@ -49,24 +46,6 @@ export const ExportPrismaPreviewStep: React.FC<
                 formatGroupedPrismaExportNote(group, t)
             ),
         [groupedNotes, t]
-    );
-
-    const downloadAction = useMemo(
-        () => ({
-            label: t('export_wizard.prisma.preview_step.download'),
-            icon: Download,
-            onClick: () => {
-                if (!schema) {
-                    return;
-                }
-
-                downloadBlob(
-                    new Blob([schema], { type: 'text/plain' }),
-                    PRISMA_EXPORT_FILENAME
-                );
-            },
-        }),
-        [schema, t]
     );
 
     const renderContent = useCallback(() => {
@@ -115,8 +94,6 @@ export const ExportPrismaPreviewStep: React.FC<
                     language="plaintext"
                     autoScroll={true}
                     isComplete={!isLoading}
-                    actions={[downloadAction]}
-                    actionsTooltipSide="top"
                     editorProps={{
                         options: {
                             scrollbar: {
@@ -128,7 +105,7 @@ export const ExportPrismaPreviewStep: React.FC<
                 />
             </div>
         );
-    }, [downloadAction, errorMessage, isLoading, schema, t]);
+    }, [errorMessage, isLoading, schema, t]);
 
     return (
         <div className="flex min-h-0 flex-1 flex-col gap-3">

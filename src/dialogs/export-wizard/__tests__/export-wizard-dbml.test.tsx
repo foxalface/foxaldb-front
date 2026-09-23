@@ -108,7 +108,8 @@ vi.mock('react-i18next', () => ({
 const mockedGenerateDBML = vi.mocked(generateDBMLFromDiagram);
 const mockedDownloadBlob = vi.mocked(downloadBlob);
 
-const sampleDbml = 'Table users { id int [pk] }';
+const sampleStandardDbml = 'Table users { id int [pk] }';
+const sampleInlineDbml = 'Table users { id int [pk, ref: > other.id] }';
 
 const openDbmlBranch = async () => {
     render(<ExportWizardDialog dialog={{ open: true }} />);
@@ -121,8 +122,8 @@ describe('ExportWizardDialog DBML branch', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         mockedGenerateDBML.mockResolvedValue({
-            standardDbml: sampleDbml,
-            inlineDbml: '',
+            standardDbml: sampleStandardDbml,
+            inlineDbml: sampleInlineDbml,
             relationshipsDbml: '',
         });
     });
@@ -131,13 +132,14 @@ describe('ExportWizardDialog DBML branch', () => {
         await openDbmlBranch();
 
         expect(
-            screen.getByText('export_wizard.dbml.preview_step.description')
+            screen.getByText('export_wizard.targets.dbml.title')
         ).toBeInTheDocument();
         expect(
-            screen.getByTestId('export-dbml-branch-context')
-        ).toHaveTextContent(
-            'export_wizard.title → export_wizard.targets.dbml.title'
-        );
+            screen.queryByText('export_wizard.dbml.preview_step.description')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-dbml-branch-context')
+        ).not.toBeInTheDocument();
     });
 
     it('generates DBML from the current diagram', async () => {
@@ -150,37 +152,58 @@ describe('ExportWizardDialog DBML branch', () => {
         });
     });
 
-    it('renders generated DBML with copy and download actions', async () => {
+    it('renders generated DBML with ref format toggle, copy and footer export action', async () => {
         await openDbmlBranch();
 
         await waitFor(() => {
-            expect(screen.getByText(sampleDbml)).toBeInTheDocument();
+            expect(screen.getByText(sampleStandardDbml)).toBeInTheDocument();
         });
 
+        expect(
+            screen.getByTestId('dbml-ref-format-toggle')
+        ).toBeInTheDocument();
         expect(
             screen.getByTestId('export-dbml-preview-container')
         ).toBeInTheDocument();
         expect(screen.getByTestId('code-snippet-copy')).toBeInTheDocument();
-        expect(
-            screen.getByText('export_wizard.dbml.preview_step.download')
-        ).toBeInTheDocument();
+        expect(screen.getByTestId('export-dbml-download')).toBeInTheDocument();
     });
 
-    it('downloads the previewed DBML with a .dbml filename', async () => {
+    it('defaults to standard refs and can switch to inline refs', async () => {
         await openDbmlBranch();
 
         await waitFor(() => {
-            expect(screen.getByText(sampleDbml)).toBeInTheDocument();
+            expect(screen.getByText(sampleStandardDbml)).toBeInTheDocument();
         });
 
-        await userEvent.click(
-            screen.getByText('export_wizard.dbml.preview_step.download')
-        );
+        await userEvent.click(screen.getByTestId('dbml-ref-format-inline'));
+
+        await waitFor(() => {
+            expect(screen.getByText(sampleInlineDbml)).toBeInTheDocument();
+        });
+    });
+
+    it('downloads the selected ref format with a .dbml filename', async () => {
+        await openDbmlBranch();
+
+        await waitFor(() => {
+            expect(screen.getByText(sampleStandardDbml)).toBeInTheDocument();
+        });
+
+        await userEvent.click(screen.getByTestId('export-dbml-download'));
 
         expect(mockedDownloadBlob).toHaveBeenCalledTimes(1);
-        const [blob, filename] = mockedDownloadBlob.mock.calls[0];
+        let [blob, filename] = mockedDownloadBlob.mock.calls[0];
         expect(filename).toBe('my-diagram.dbml');
-        await expect(blob.text()).resolves.toBe(sampleDbml);
+        await expect(blob.text()).resolves.toBe(sampleStandardDbml);
+
+        await userEvent.click(screen.getByTestId('dbml-ref-format-inline'));
+        await userEvent.click(screen.getByTestId('export-dbml-download'));
+
+        expect(mockedDownloadBlob).toHaveBeenCalledTimes(2);
+        [blob, filename] = mockedDownloadBlob.mock.calls[1];
+        expect(filename).toBe('my-diagram.dbml');
+        await expect(blob.text()).resolves.toBe(sampleInlineDbml);
     });
 
     it('navigates back from DBML preview to target picker', async () => {
@@ -226,8 +249,8 @@ describe('ExportWizardDialog DBML availability', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         mockedGenerateDBML.mockResolvedValue({
-            standardDbml: sampleDbml,
-            inlineDbml: '',
+            standardDbml: sampleStandardDbml,
+            inlineDbml: sampleInlineDbml,
             relationshipsDbml: '',
         });
     });
