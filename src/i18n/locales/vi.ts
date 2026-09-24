@@ -1456,7 +1456,7 @@ export const vi: LanguageTranslation = {
                     laravel_version: 'Phiên bản Laravel',
                     include_indexes: 'Bao gồm chỉ mục bảng',
                     include_indexes_description:
-                        'Xuất các định nghĩa chỉ mục tường minh. Ràng buộc unique cấp trường luôn được bao gồm.',
+                        'Xuất các định nghĩa chỉ mục tường minh.\nRàng buộc unique cấp trường luôn được bao gồm.',
                     include_foreign_keys: 'Bao gồm khóa ngoại',
                     include_foreign_keys_description:
                         'Xuất các file migration riêng cho khóa ngoại.',

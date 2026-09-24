@@ -1491,7 +1491,7 @@ export const es: LanguageTranslation = {
                     laravel_version: 'Versión de Laravel',
                     include_indexes: 'Incluir índices de tabla',
                     include_indexes_description:
-                        'Exportar las definiciones explícitas de índices. Las restricciones unique a nivel de campo siempre se incluyen.',
+                        'Exportar las definiciones explícitas de índices.\nLas restricciones unique a nivel de campo siempre se incluyen.',
                     include_foreign_keys: 'Incluir claves foráneas',
                     include_foreign_keys_description:
                         'Exportar archivos de migración separados para las claves foráneas.',

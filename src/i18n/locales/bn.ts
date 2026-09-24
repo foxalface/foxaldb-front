@@ -1466,7 +1466,7 @@ export const bn: LanguageTranslation = {
                     laravel_version: 'Laravel সংস্করণ',
                     include_indexes: 'টেবিল ইনডেক্স অন্তর্ভুক্ত করুন',
                     include_indexes_description:
-                        'স্পষ্ট টেবিল ইনডেক্স সংজ্ঞা রপ্তানি করুন। ফিল্ড-স্তরের ইউনিক সীমাবদ্ধতা সবসময় অন্তর্ভুক্ত থাকে।',
+                        'স্পষ্ট টেবিল ইনডেক্স সংজ্ঞা রপ্তানি করুন।\nফিল্ড-স্তরের ইউনিক সীমাবদ্ধতা সবসময় অন্তর্ভুক্ত থাকে।',
                     include_foreign_keys: 'ফরেন কী অন্তর্ভুক্ত করুন',
                     include_foreign_keys_description:
                         'ফরেন কির জন্য আলাদা মাইগ্রেশন ফাইল রপ্তানি করুন।',

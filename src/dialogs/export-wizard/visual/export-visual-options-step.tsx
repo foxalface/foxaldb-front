@@ -7,7 +7,7 @@ import type {
     VisualExportExtent,
     VisualExportFormat,
 } from '@/lib/visual-export/visual-export-options';
-import { VisualExportCheckboxOption } from './visual-export-checkbox-option';
+import { ExportWizardCheckboxOption } from '../export-wizard-checkbox-option';
 import { VisualExportExtentToggle } from './visual-export-extent-toggle';
 import { VisualExportScaleToggle } from './visual-export-scale-toggle';
 
@@ -87,7 +87,7 @@ export const ExportVisualOptionsStep: React.FC<
                     />
                 ) : null}
 
-                <VisualExportCheckboxOption
+                <ExportWizardCheckboxOption
                     id="visual-pattern-checkbox"
                     label={t('export_wizard.visual.options_step.pattern')}
                     description={t(
@@ -99,7 +99,7 @@ export const ExportVisualOptionsStep: React.FC<
                 />
 
                 {showTransparent ? (
-                    <VisualExportCheckboxOption
+                    <ExportWizardCheckboxOption
                         id="visual-transparent-checkbox"
                         label={t(
                             'export_wizard.visual.options_step.transparent'

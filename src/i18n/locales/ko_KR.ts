@@ -1464,7 +1464,7 @@ export const ko_KR: LanguageTranslation = {
                     laravel_version: 'Laravel 버전',
                     include_indexes: '테이블 인덱스 포함',
                     include_indexes_description:
-                        '명시적 테이블 인덱스 정의를 내보냅니다. 필드 수준 고유 제약은 항상 포함됩니다.',
+                        '명시적 테이블 인덱스 정의를 내보냅니다.\n필드 수준 고유 제약은 항상 포함됩니다.',
                     include_foreign_keys: '외래 키 포함',
                     include_foreign_keys_description:
                         '외래 키 마이그레이션 파일을 별도로 내보냅니다.',

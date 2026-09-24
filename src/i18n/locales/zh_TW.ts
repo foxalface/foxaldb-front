@@ -1349,7 +1349,7 @@ export const zh_TW: LanguageTranslation = {
                     laravel_version: 'Laravel 版本',
                     include_indexes: '包含資料表索引',
                     include_indexes_description:
-                        '匯出明確的資料表索引定義。欄位層級的唯一約束一律會包含。',
+                        '匯出明確的資料表索引定義。\n欄位層級的唯一約束一律會包含。',
                     include_foreign_keys: '包含外鍵',
                     include_foreign_keys_description:
                         '匯出獨立的外鍵遷移檔案。',

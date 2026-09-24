@@ -1459,7 +1459,7 @@ export const mr: LanguageTranslation = {
                     laravel_version: 'Laravel आवृत्ती',
                     include_indexes: 'टेबल इंडेक्स समाविष्ट करा',
                     include_indexes_description:
-                        'स्पष्ट टेबल इंडेक्स व्याख्या निर्यात करा. फील्ड-स्तरीय युनिक बंधने नेहमी समाविष्ट असतात.',
+                        'स्पष्ट टेबल इंडेक्स व्याख्या निर्यात करा.\nफील्ड-स्तरीय युनिक बंधने नेहमी समाविष्ट असतात.',
                     include_foreign_keys: 'परकीय की समाविष्ट करा',
                     include_foreign_keys_description:
                         'परकीय कींसाठी वेगळ्या मायग्रेशन फाइल्स निर्यात करा.',

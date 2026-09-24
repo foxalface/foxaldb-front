@@ -52,7 +52,6 @@ import { ExportJsonDownloadStep } from './json/export-json-download-step';
 import { ExportVisualOptionsStep } from './visual/export-visual-options-step';
 import { VisualExportSvgInfoTooltip } from './visual/visual-export-svg-info-tooltip';
 import { ExportLaravelOptionsStep } from './laravel/export-laravel-options-step';
-import { ExportPrismaVersionStep } from './prisma/export-prisma-version-step';
 import { ExportPrismaPreviewStep } from './prisma/export-prisma-preview-step';
 import { ExportEfCoreOptionsStep } from './ef-core/export-ef-core-options-step';
 import { ExportEfCoreResultStep } from './ef-core/export-ef-core-result-step';
@@ -464,7 +463,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 resetRailsBranchState();
                 resetDjangoBranchState();
                 resetDrizzleBranchState();
-                setStep(ExportWizardStep.PRISMA_VERSION);
+                setStep(ExportWizardStep.PRISMA_PREVIEW);
                 return;
             }
 
@@ -565,15 +564,20 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         ]
     );
 
-    const handleContinuePrismaVersion = useCallback(() => {
-        prismaExportRequestIdRef.current += 1;
-        setPrismaSchema(undefined);
-        setPrismaNotes([]);
-        setPrismaGenerationError(null);
-        setPrismaHasUnexpectedError(false);
-        setIsPrismaGenerating(false);
-        setStep(ExportWizardStep.PRISMA_PREVIEW);
-    }, []);
+    const handlePrismaVersionChange = useCallback(
+        (version: PrismaExportVersion) => {
+            if (version === prismaVersion) {
+                return;
+            }
+
+            prismaExportRequestIdRef.current += 1;
+            setPrismaVersion(version);
+            setPrismaGenerationError(null);
+            setPrismaHasUnexpectedError(false);
+            setIsPrismaGenerating(true);
+        },
+        [prismaVersion]
+    );
 
     const handleSelectSqlTarget = useCallback(
         (targetDatabaseType: DatabaseType) => {
@@ -614,17 +618,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         }
 
         if (step === ExportWizardStep.PRISMA_PREVIEW) {
-            prismaExportRequestIdRef.current += 1;
-            setPrismaSchema(undefined);
-            setPrismaNotes([]);
-            setPrismaGenerationError(null);
-            setPrismaHasUnexpectedError(false);
-            setIsPrismaGenerating(false);
-            setStep(ExportWizardStep.PRISMA_VERSION);
-            return;
-        }
-
-        if (step === ExportWizardStep.PRISMA_VERSION) {
             resetPrismaBranchState();
             setStep(ExportWizardStep.TARGET_PICKER);
             return;
@@ -757,12 +750,11 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     }, [step]);
 
     useEffect(() => {
-        if (
-            step !== ExportWizardStep.PRISMA_PREVIEW ||
-            prismaSchema !== undefined ||
-            prismaGenerationError !== null ||
-            prismaHasUnexpectedError
-        ) {
+        if (step !== ExportWizardStep.PRISMA_PREVIEW) {
+            return;
+        }
+
+        if (prismaGenerationError !== null || prismaHasUnexpectedError) {
             return;
         }
 
@@ -823,7 +815,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         currentDiagram,
         prismaGenerationError,
         prismaHasUnexpectedError,
-        prismaSchema,
         prismaVersion,
         step,
     ]);
@@ -1394,7 +1385,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.JSON_DOWNLOAD ||
         step === ExportWizardStep.VISUAL_OPTIONS ||
         step === ExportWizardStep.LARAVEL_OPTIONS ||
-        step === ExportWizardStep.PRISMA_VERSION ||
         step === ExportWizardStep.PRISMA_PREVIEW ||
         step === ExportWizardStep.EF_CORE_OPTIONS ||
         step === ExportWizardStep.EF_CORE_RESULT ||
@@ -1422,8 +1412,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     : t('export_wizard.title');
             case ExportWizardStep.LARAVEL_OPTIONS:
                 return t('export_wizard.targets.laravel.title');
-            case ExportWizardStep.PRISMA_VERSION:
-                return t('export_wizard.prisma.version_step.title');
             case ExportWizardStep.PRISMA_PREVIEW:
                 return t('export_wizard.targets.prisma.title');
             case ExportWizardStep.EF_CORE_OPTIONS:
@@ -1464,10 +1452,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     : undefined;
             case ExportWizardStep.LARAVEL_OPTIONS:
                 return t('export_wizard.laravel.options_step.description');
-            case ExportWizardStep.PRISMA_VERSION:
-                return t('export_wizard.prisma.version_step.description');
             case ExportWizardStep.PRISMA_PREVIEW:
-                return t('export_wizard.prisma.preview_step.description');
+                return undefined;
             case ExportWizardStep.EF_CORE_OPTIONS:
                 return t('export_wizard.ef_core.options_step.description');
             case ExportWizardStep.EF_CORE_RESULT:
@@ -1531,13 +1517,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     disabled: isLaravelExporting,
                     testId: 'export-laravel-submit',
                 };
-            case ExportWizardStep.PRISMA_VERSION:
-                return {
-                    type: 'continue',
-                    onClick: handleContinuePrismaVersion,
-                    testId: 'prisma-version-continue',
-                    label: t('export_wizard.prisma.version_step.continue'),
-                };
             case ExportWizardStep.PRISMA_PREVIEW:
                 return prismaSchema !== undefined &&
                     prismaSchema.length > 0 &&
@@ -1565,7 +1544,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     }, [
         activeDbmlContent,
         dbmlHasError,
-        handleContinuePrismaVersion,
         handleDbmlDownload,
         handleEfCoreExport,
         handleJsonDownload,
@@ -1585,7 +1563,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         sqlHasError,
         sqlScript,
         step,
-        t,
     ]);
 
     const primaryFooterAction = registeredFooterAction ?? staticFooterAction;
@@ -1705,26 +1682,20 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                         />
                     ) : null}
 
-                    {step === ExportWizardStep.PRISMA_VERSION ? (
-                        <ExportPrismaVersionStep
-                            selectedVersion={prismaVersion}
-                            onSelectVersion={setPrismaVersion}
-                        />
-                    ) : null}
-
                     {step === ExportWizardStep.PRISMA_PREVIEW ? (
                         <ExportPrismaPreviewStep
+                            prismaVersion={prismaVersion}
                             schema={prismaSchema}
                             notes={prismaNotes}
                             generationError={prismaGenerationError}
                             isLoading={isPrismaGenerating}
                             hasUnexpectedError={prismaHasUnexpectedError}
+                            onPrismaVersionChange={handlePrismaVersionChange}
                         />
                     ) : null}
 
                     {step === ExportWizardStep.LARAVEL_OPTIONS ? (
                         <ExportLaravelOptionsStep
-                            diagramName={currentDiagram.name ?? 'diagram'}
                             laravelVersion={laravelVersion}
                             includeIndexes={laravelIncludeIndexes}
                             includeForeignKeys={laravelIncludeForeignKeys}

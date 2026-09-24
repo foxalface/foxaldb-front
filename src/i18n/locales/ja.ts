@@ -1499,7 +1499,7 @@ export const ja: LanguageTranslation = {
                     laravel_version: 'Laravelバージョン',
                     include_indexes: 'テーブルインデックスを含める',
                     include_indexes_description:
-                        '明示的なテーブルインデックス定義を書き出します。フィールドレベルのユニーク制約は常に含まれます。',
+                        '明示的なテーブルインデックス定義を書き出します。\nフィールドレベルのユニーク制約は常に含まれます。',
                     include_foreign_keys: '外部キーを含める',
                     include_foreign_keys_description:
                         '外部キー用のマイグレーションファイルを別に書き出します。',

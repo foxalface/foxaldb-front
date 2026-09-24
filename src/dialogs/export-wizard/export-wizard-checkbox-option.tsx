@@ -6,7 +6,7 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 
-interface VisualExportCheckboxOptionProps {
+interface ExportWizardCheckboxOptionProps {
     id: string;
     label: string;
     description: string;
@@ -15,8 +15,8 @@ interface VisualExportCheckboxOptionProps {
     onCheckedChange: (checked: boolean) => void;
 }
 
-export const VisualExportCheckboxOption: React.FC<
-    VisualExportCheckboxOptionProps
+export const ExportWizardCheckboxOption: React.FC<
+    ExportWizardCheckboxOptionProps
 > = ({
     id,
     label,

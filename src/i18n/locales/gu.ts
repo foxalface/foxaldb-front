@@ -1447,7 +1447,7 @@ export const gu: LanguageTranslation = {
                     laravel_version: 'Laravel સંસ્કરણ',
                     include_indexes: 'ટેબલ ઇન્ડેક્સ શામેલ કરો',
                     include_indexes_description:
-                        'સ્પષ્ટ ટેબલ ઇન્ડેક્સ વ્યાખ્યાઓ નિકાસ કરો. ફીલ્ડ-સ્તરની યુનિક અવરોધો હંમેશાં શામેલ રહે છે.',
+                        'સ્પષ્ટ ટેબલ ઇન્ડેક્સ વ્યાખ્યાઓ નિકાસ કરો.\nફીલ્ડ-સ્તરની યુનિક અવરોધો હંમેશાં શામેલ રહે છે.',
                     include_foreign_keys: 'વિદેશી કીઓ શામેલ કરો',
                     include_foreign_keys_description:
                         'વિદેશી કીઓ માટે અલગ માઇગ્રેશન ફાઇલો નિકાસ કરો.',

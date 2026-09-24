@@ -1469,7 +1469,7 @@ export const uk: LanguageTranslation = {
                     laravel_version: 'Версія Laravel',
                     include_indexes: 'Включити індекси таблиць',
                     include_indexes_description:
-                        'Експортувати явні визначення індексів. Унікальні обмеження на рівні полів завжди включаються.',
+                        'Експортувати явні визначення індексів.\nУнікальні обмеження на рівні полів завжди включаються.',
                     include_foreign_keys: 'Включити зовнішні ключі',
                     include_foreign_keys_description:
                         'Експортувати окремі файли міграцій для зовнішніх ключів.',

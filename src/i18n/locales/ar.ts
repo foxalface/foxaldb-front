@@ -1442,7 +1442,7 @@ export const ar: LanguageTranslation = {
                     laravel_version: 'إصدار Laravel',
                     include_indexes: 'تضمين فهارس الجدول',
                     include_indexes_description:
-                        'تصدير تعريفات الفهارس الصريحة. قيود التفرّد على مستوى الحقل تُضمَّن دائماً.',
+                        'تصدير تعريفات الفهارس الصريحة.\nقيود التفرّد على مستوى الحقل تُضمَّن دائماً.',
                     include_foreign_keys: 'تضمين المفاتيح الأجنبية',
                     include_foreign_keys_description:
                         'تصدير ملفات ترحيل منفصلة للمفاتيح الأجنبية.',

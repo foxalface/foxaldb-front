@@ -112,12 +112,18 @@ vi.mock('@/components/code-snippet/code-snippet', () => ({
         code,
         actions,
         className,
+        language,
     }: {
         code: string;
         className?: string;
+        language?: string;
         actions?: Array<{ label: string; onClick: () => void }>;
     }) => (
-        <div data-testid="code-snippet" data-classname={className}>
+        <div
+            data-testid="code-snippet"
+            data-classname={className}
+            data-language={language}
+        >
             <pre data-testid="prisma-schema-content">{code}</pre>
             <button type="button" data-testid="code-snippet-copy">
                 copy
@@ -262,8 +268,19 @@ const openPrismaBranch = async () => {
     );
 };
 
-const continueToPreview = async () => {
-    await userEvent.click(screen.getByTestId('prisma-version-continue'));
+const waitForPrismaPreview = async () => {
+    await waitFor(() => {
+        expect(
+            screen.getByTestId('export-prisma-preview-container')
+        ).toBeInTheDocument();
+    });
+};
+
+const expectActivePrismaVersion = (version: '6' | '7') => {
+    expect(screen.getByTestId(`prisma-version-${version}`)).toHaveAttribute(
+        'data-state',
+        'active'
+    );
 };
 
 describe('Prisma export target availability', () => {
@@ -385,47 +402,45 @@ describe('ExportWizardDialog Prisma branch', () => {
         exportPrismaSchemaMock.mockImplementation(mockExportPrismaSchema);
     });
 
-    it('enters the Prisma version step when Prisma is selected', async () => {
+    it('opens Prisma preview directly when Prisma is selected', async () => {
         await openPrismaBranch();
 
         expect(
-            screen.getByTestId('export-prisma-version-step')
+            screen.getByText('export_wizard.targets.prisma.title')
         ).toBeInTheDocument();
         expect(
-            screen.getByText('export_wizard.prisma.version_step.title')
-        ).toBeInTheDocument();
-        expect(
-            screen.queryByTestId('export-prisma-branch-context')
+            screen.queryByTestId('export-prisma-version-step')
         ).not.toBeInTheDocument();
-    });
-
-    it('defaults to Prisma 7', async () => {
-        await openPrismaBranch();
-
-        expect(screen.getByTestId('prisma-version-7')).toHaveClass(
-            'border-primary'
-        );
-    });
-
-    it('allows selecting Prisma 6', async () => {
-        await openPrismaBranch();
-
-        await userEvent.click(screen.getByTestId('prisma-version-6'));
-
-        expect(screen.getByTestId('prisma-version-6')).toHaveClass(
-            'border-primary'
-        );
-    });
-
-    it('continues to preview with Prisma 7 output', async () => {
-        await openPrismaBranch();
-        await continueToPreview();
+        expect(
+            screen.queryByTestId('prisma-version-continue')
+        ).not.toBeInTheDocument();
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-prisma-preview-container')
+                screen.getByTestId('prisma-export-version-toggle')
             ).toBeInTheDocument();
         });
+    });
+
+    it('defaults to Prisma 7 in the preview toggle', async () => {
+        await openPrismaBranch();
+        await waitForPrismaPreview();
+
+        expectActivePrismaVersion('7');
+    });
+
+    it('allows selecting Prisma 6 in the preview toggle', async () => {
+        await openPrismaBranch();
+        await waitForPrismaPreview();
+
+        await userEvent.click(screen.getByTestId('prisma-version-6'));
+
+        expectActivePrismaVersion('6');
+    });
+
+    it('shows Prisma 7 output by default', async () => {
+        await openPrismaBranch();
+        await waitForPrismaPreview();
 
         const schema = screen.getByTestId('prisma-schema-content').textContent;
         expect(schema).toContain('provider = "prisma-client"');
@@ -435,61 +450,40 @@ describe('ExportWizardDialog Prisma branch', () => {
 
     it('shows Prisma 6 preview contract when Prisma 6 is selected', async () => {
         await openPrismaBranch();
+        await waitForPrismaPreview();
+
         await userEvent.click(screen.getByTestId('prisma-version-6'));
-        await continueToPreview();
 
         await waitFor(() => {
             expect(
                 screen.getByTestId('prisma-schema-content')
-            ).toBeInTheDocument();
+            ).toHaveTextContent('prisma-client-js');
         });
 
         const schema = screen.getByTestId('prisma-schema-content').textContent;
-        expect(schema).toContain('provider = "prisma-client-js"');
         expect(schema).toContain('url      = env("DATABASE_URL")');
         expect(schema).not.toContain('output   = "../generated/prisma"');
     });
 
-    it('navigates back from preview to version step', async () => {
+    it('navigates back from preview to target picker', async () => {
         await openPrismaBranch();
-        await continueToPreview();
-
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('export-prisma-preview-container')
-            ).toBeInTheDocument();
-        });
-
-        await userEvent.click(screen.getByText('export_wizard.back'));
-
-        expect(
-            screen.getByTestId('export-prisma-version-step')
-        ).toBeInTheDocument();
-    });
-
-    it('navigates back from version step to target picker', async () => {
-        await openPrismaBranch();
+        await waitForPrismaPreview();
 
         await userEvent.click(screen.getByText('export_wizard.back'));
 
         expect(
             screen.getByText('export_wizard.sections.database')
         ).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-prisma-preview-container')
+        ).not.toBeInTheDocument();
     });
 
-    it('regenerates when switching from Prisma 7 to Prisma 6', async () => {
+    it('regenerates when switching from Prisma 7 to Prisma 6 in preview', async () => {
         await openPrismaBranch();
-        await continueToPreview();
+        await waitForPrismaPreview();
 
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('prisma-schema-content')
-            ).toHaveTextContent('prisma-client');
-        });
-
-        await userEvent.click(screen.getByText('export_wizard.back'));
         await userEvent.click(screen.getByTestId('prisma-version-6'));
-        await continueToPreview();
 
         await waitFor(() => {
             expect(
@@ -498,10 +492,11 @@ describe('ExportWizardDialog Prisma branch', () => {
         });
     });
 
-    it('regenerates when switching from Prisma 6 to Prisma 7', async () => {
+    it('regenerates when switching from Prisma 6 to Prisma 7 in preview', async () => {
         await openPrismaBranch();
+        await waitForPrismaPreview();
+
         await userEvent.click(screen.getByTestId('prisma-version-6'));
-        await continueToPreview();
 
         await waitFor(() => {
             expect(
@@ -509,9 +504,7 @@ describe('ExportWizardDialog Prisma branch', () => {
             ).toHaveTextContent('prisma-client-js');
         });
 
-        await userEvent.click(screen.getByText('export_wizard.back'));
         await userEvent.click(screen.getByTestId('prisma-version-7'));
-        await continueToPreview();
 
         await waitFor(() => {
             expect(
@@ -530,6 +523,7 @@ describe('ExportWizardDialog Prisma branch', () => {
                 name: 'export_wizard.targets.prisma.title',
             })
         );
+        await waitForPrismaPreview();
         await userEvent.click(screen.getByTestId('prisma-version-6'));
 
         rerender(<ExportWizardDialog dialog={{ open: false }} />);
@@ -540,10 +534,9 @@ describe('ExportWizardDialog Prisma branch', () => {
                 name: 'export_wizard.targets.prisma.title',
             })
         );
+        await waitForPrismaPreview();
 
-        expect(screen.getByTestId('prisma-version-7')).toHaveClass(
-            'border-primary'
-        );
+        expectActivePrismaVersion('7');
     });
 
     it('clears preview state when the wizard reopens', async () => {
@@ -556,13 +549,7 @@ describe('ExportWizardDialog Prisma branch', () => {
                 name: 'export_wizard.targets.prisma.title',
             })
         );
-        await continueToPreview();
-
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('export-prisma-preview-container')
-            ).toBeInTheDocument();
-        });
+        await waitForPrismaPreview();
 
         rerender(<ExportWizardDialog dialog={{ open: false }} />);
         rerender(<ExportWizardDialog dialog={{ open: true }} />);
@@ -577,13 +564,7 @@ describe('ExportWizardDialog Prisma branch', () => {
 
     it('downloads schema.prisma with text/plain content', async () => {
         await openPrismaBranch();
-        await continueToPreview();
-
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('export-prisma-download')
-            ).toBeInTheDocument();
-        });
+        await waitForPrismaPreview();
 
         const schema =
             screen.getByTestId('prisma-schema-content').textContent ?? '';
@@ -599,13 +580,21 @@ describe('ExportWizardDialog Prisma branch', () => {
 
     it('uses a bounded preview container', async () => {
         await openPrismaBranch();
-        await continueToPreview();
+        await waitForPrismaPreview();
 
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('export-prisma-preview-container')
-            ).toHaveClass('h-96', 'min-h-72', 'w-full', 'shrink-0');
-        });
+        expect(
+            screen.getByTestId('export-prisma-preview-container')
+        ).toHaveClass('h-96', 'min-h-72', 'w-full', 'shrink-0');
+    });
+
+    it('uses Prisma syntax highlighting in the code preview', async () => {
+        await openPrismaBranch();
+        await waitForPrismaPreview();
+
+        expect(screen.getByTestId('code-snippet')).toHaveAttribute(
+            'data-language',
+            'prisma'
+        );
     });
 
     it('shows generation error for blocking P1 validation', async () => {
@@ -630,7 +619,6 @@ describe('ExportWizardDialog Prisma branch', () => {
         });
 
         await openPrismaBranch();
-        await continueToPreview();
 
         await waitFor(() => {
             expect(
@@ -666,14 +654,11 @@ describe('ExportWizardDialog Prisma branch', () => {
         });
 
         await openPrismaBranch();
-        await continueToPreview();
+        await waitForPrismaPreview();
 
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('export-prisma-limitations')
-            ).toBeInTheDocument();
-        });
-
+        expect(
+            screen.getByTestId('export-prisma-limitations')
+        ).toBeInTheDocument();
         expect(
             screen.getByTestId('export-prisma-download')
         ).toBeInTheDocument();
@@ -702,13 +687,7 @@ describe('ExportWizardDialog Prisma branch', () => {
         });
 
         await openPrismaBranch();
-        await continueToPreview();
-
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('export-prisma-limitations')
-            ).toBeInTheDocument();
-        });
+        await waitForPrismaPreview();
 
         const limitationItems = screen
             .getByTestId('export-prisma-limitations')
@@ -720,7 +699,6 @@ describe('ExportWizardDialog Prisma branch', () => {
 
     it('calls the backend export API with the selected version and diagram', async () => {
         await openPrismaBranch();
-        await continueToPreview();
 
         await waitFor(() => {
             expect(exportPrismaSchemaMock).toHaveBeenCalledWith({
@@ -740,7 +718,6 @@ describe('ExportWizardDialog Prisma branch', () => {
         );
 
         await openPrismaBranch();
-        await continueToPreview();
 
         expect(
             screen.getByTestId('export-prisma-generating')
@@ -752,11 +729,7 @@ describe('ExportWizardDialog Prisma branch', () => {
             notes: [],
         });
 
-        await waitFor(() => {
-            expect(
-                screen.queryByTestId('export-prisma-generating')
-            ).not.toBeInTheDocument();
-        });
+        await waitForPrismaPreview();
     });
 
     it('shows unexpected error state for HTTP failures', async () => {
@@ -767,7 +740,6 @@ describe('ExportWizardDialog Prisma branch', () => {
         );
 
         await openPrismaBranch();
-        await continueToPreview();
 
         await waitFor(() => {
             expect(
@@ -778,13 +750,7 @@ describe('ExportWizardDialog Prisma branch', () => {
 
     it('does not trigger duplicate generation requests on preview entry', async () => {
         await openPrismaBranch();
-        await continueToPreview();
-
-        await waitFor(() => {
-            expect(
-                screen.getByTestId('export-prisma-preview-container')
-            ).toBeInTheDocument();
-        });
+        await waitForPrismaPreview();
 
         expect(exportPrismaSchemaMock).toHaveBeenCalledTimes(1);
     });
@@ -799,8 +765,6 @@ describe('ExportWizardDialog Prisma branch', () => {
         );
 
         await openPrismaBranch();
-        await continueToPreview();
-
         await userEvent.click(screen.getByText('export_wizard.back'));
 
         resolveExport?.({
@@ -810,7 +774,7 @@ describe('ExportWizardDialog Prisma branch', () => {
         });
 
         expect(
-            screen.getByTestId('export-prisma-version-step')
+            screen.getByText('export_wizard.sections.database')
         ).toBeInTheDocument();
         expect(
             screen.queryByTestId('export-prisma-preview-container')

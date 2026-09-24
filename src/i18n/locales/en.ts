@@ -1462,7 +1462,7 @@ export const en = {
                     laravel_version: 'Laravel version',
                     include_indexes: 'Include table indexes',
                     include_indexes_description:
-                        'Export explicit table index definitions. Field-level unique constraints are always included.',
+                        'Export explicit table index definitions.\nField-level unique constraints are always included.',
                     include_foreign_keys: 'Include foreign keys',
                     include_foreign_keys_description:
                         'Export separate foreign key migration files.',

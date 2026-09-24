@@ -1454,7 +1454,7 @@ export const tr: LanguageTranslation = {
                     laravel_version: 'Laravel sürümü',
                     include_indexes: 'Tablo dizinlerini dahil et',
                     include_indexes_description:
-                        'Açık tablo dizin tanımlarını dışa aktarın. Alan düzeyindeki benzersiz kısıtlamalar her zaman dahildir.',
+                        'Açık tablo dizin tanımlarını dışa aktarın.\nAlan düzeyindeki benzersiz kısıtlamalar her zaman dahildir.',
                     include_foreign_keys: 'Yabancı anahtarları dahil et',
                     include_foreign_keys_description:
                         'Yabancı anahtarlar için ayrı migrasyon dosyaları dışa aktarın.',

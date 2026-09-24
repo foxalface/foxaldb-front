@@ -1507,7 +1507,7 @@ export const de: LanguageTranslation = {
                     laravel_version: 'Laravel-Version',
                     include_indexes: 'Tabellenindizes einschließen',
                     include_indexes_description:
-                        'Explizite Tabellenindex-Definitionen exportieren. Eindeutige Einschränkungen auf Feldebene werden immer einbezogen.',
+                        'Explizite Tabellenindex-Definitionen exportieren.\nEindeutige Einschränkungen auf Feldebene werden immer einbezogen.',
                     include_foreign_keys: 'Fremdschlüssel einschließen',
                     include_foreign_keys_description:
                         'Separate Migrationsdateien für Fremdschlüssel exportieren.',

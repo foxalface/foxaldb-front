@@ -1468,7 +1468,7 @@ export const id_ID: LanguageTranslation = {
                     laravel_version: 'Versi Laravel',
                     include_indexes: 'Sertakan indeks tabel',
                     include_indexes_description:
-                        'Ekspor definisi indeks tabel eksplisit. Batasan unique tingkat field selalu disertakan.',
+                        'Ekspor definisi indeks tabel eksplisit.\nBatasan unique tingkat field selalu disertakan.',
                     include_foreign_keys: 'Sertakan kunci asing',
                     include_foreign_keys_description:
                         'Ekspor file migrasi terpisah untuk kunci asing.',

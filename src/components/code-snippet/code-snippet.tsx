@@ -14,6 +14,7 @@ import { LightTheme } from './themes/light';
 import type { editor } from 'monaco-editor';
 import { copyTextToClipboard } from '@/lib/copy-text-to-clipboard';
 import { setupDBMLLanguage } from './languages/dbml-language';
+import { setupPrismaLanguage } from './languages/prisma-language';
 
 export const Editor = lazy(() =>
     import('./code-editor').then((module) => ({
@@ -40,7 +41,7 @@ export interface CodeSnippetProps {
     className?: string;
     code: string;
     codeToCopy?: string;
-    language?: 'sql' | 'shell' | 'dbml' | 'json' | 'plaintext';
+    language?: 'sql' | 'shell' | 'dbml' | 'json' | 'prisma' | 'plaintext';
     loading?: boolean;
     autoScroll?: boolean;
     isComplete?: boolean;
@@ -77,6 +78,12 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                 return effectiveTheme === 'dark' ? 'dbml-dark' : 'dbml-light';
             }
 
+            if (language === 'prisma') {
+                return effectiveTheme === 'dark'
+                    ? 'prisma-dark'
+                    : 'prisma-light';
+            }
+
             return effectiveTheme;
         }, [effectiveTheme, language]);
 
@@ -87,6 +94,10 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
 
                 if (language === 'dbml') {
                     setupDBMLLanguage(monaco);
+                }
+
+                if (language === 'prisma') {
+                    setupPrismaLanguage(monaco);
                 }
 
                 monaco.editor.setTheme(editorTheme);

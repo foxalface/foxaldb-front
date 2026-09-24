@@ -1463,7 +1463,7 @@ export const hr: LanguageTranslation = {
                     laravel_version: 'Laravel verzija',
                     include_indexes: 'Uključi indekse tablica',
                     include_indexes_description:
-                        'Izvezi eksplicitne definicije indeksa. Jedinstvena ograničenja na razini polja uvijek su uključena.',
+                        'Izvezi eksplicitne definicije indeksa.\nJedinstvena ograničenja na razini polja uvijek su uključena.',
                     include_foreign_keys: 'Uključi vanjske ključeve',
                     include_foreign_keys_description:
                         'Izvezi zasebne migracijske datoteke za vanjske ključeve.',

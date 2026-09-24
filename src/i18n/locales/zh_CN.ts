@@ -1352,7 +1352,7 @@ export const zh_CN: LanguageTranslation = {
                     laravel_version: 'Laravel 版本',
                     include_indexes: '包含表索引',
                     include_indexes_description:
-                        '导出显式表索引定义。字段级唯一约束始终包含。',
+                        '导出显式表索引定义。\n字段级唯一约束始终包含。',
                     include_foreign_keys: '包含外键',
                     include_foreign_keys_description:
                         '导出单独的外键迁移文件。',
