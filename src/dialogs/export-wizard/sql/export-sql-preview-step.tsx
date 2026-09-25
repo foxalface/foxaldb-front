@@ -1,10 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { CodeSnippet } from '@/components/code-snippet/code-snippet';
-import { Spinner } from '@/components/spinner/spinner';
-import { Label } from '@/components/label/label';
 import { databaseTypeToLabelMap } from '@/lib/databases';
 import type { DatabaseType } from '@/lib/domain/database-type';
+import { ExportCodePreviewBlock } from '../export-code-preview-block';
 
 interface ExportSqlPreviewStepProps {
     targetDatabaseType: DatabaseType;
@@ -21,61 +19,38 @@ export const ExportSqlPreviewStep: React.FC<ExportSqlPreviewStepProps> = ({
 }) => {
     const { t } = useTranslation();
     const targetLabel = databaseTypeToLabelMap[targetDatabaseType];
+    const generatingLabel = t('export_wizard.sql.preview_step.generating', {
+        database: targetLabel,
+    });
+    const isContentReady =
+        !isLoading && script !== undefined && script.length > 0;
 
-    const renderContent = useCallback(() => {
-        if (hasError) {
-            return (
-                <p className="text-sm text-muted-foreground" role="alert">
-                    {t('export_wizard.sql.preview_step.error')}
-                </p>
-            );
-        }
-
-        if (isLoading || script === undefined) {
-            return (
-                <div className="flex flex-col items-center gap-2 py-8">
-                    <Spinner />
-                    <Label className="text-sm">
-                        {t('export_wizard.sql.preview_step.generating', {
-                            database: targetLabel,
-                        })}
-                    </Label>
-                </div>
-            );
-        }
-
-        if (script.length === 0) {
-            return (
-                <p className="text-sm text-muted-foreground" role="alert">
-                    {t('export_wizard.sql.preview_step.empty')}
-                </p>
-            );
-        }
-
+    if (hasError) {
         return (
-            <div
-                className="h-96 min-h-72 w-full shrink-0"
-                data-testid="export-sql-preview-container"
-            >
-                <CodeSnippet
-                    className="size-full flex-none"
-                    code={script}
-                    language="sql"
-                    isComplete={!isLoading}
-                    editorProps={{
-                        options: {
-                            scrollbar: {
-                                vertical: 'auto',
-                                horizontal: 'auto',
-                            },
-                        },
-                    }}
-                />
-            </div>
+            <p className="text-sm text-muted-foreground" role="alert">
+                {t('export_wizard.sql.preview_step.error')}
+            </p>
         );
-    }, [hasError, isLoading, script, t, targetLabel]);
+    }
+
+    if (!isLoading && script !== undefined && script.length === 0) {
+        return (
+            <p className="text-sm text-muted-foreground" role="alert">
+                {t('export_wizard.sql.preview_step.empty')}
+            </p>
+        );
+    }
 
     return (
-        <div className="flex min-h-0 flex-1 flex-col">{renderContent()}</div>
+        <ExportCodePreviewBlock
+            code={isContentReady ? script : undefined}
+            isLoading={!isContentReady}
+            language="sql"
+            loadingAriaLabel={generatingLabel}
+            loadingTestId="export-sql-generating"
+            containerTestId={
+                isContentReady ? 'export-sql-preview-container' : undefined
+            }
+        />
     );
 };

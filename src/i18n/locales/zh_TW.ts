@@ -1083,6 +1083,7 @@ export const zh_TW: LanguageTranslation = {
                         '將匯出完整圖表。匯入此檔案會建立新圖表，不會覆寫目前的圖表。',
                     filename_label: '檔案名稱：{{filename}}',
                     download: '下載 JSON',
+                    loading: '正在載入 JSON 預覽...',
                 },
             },
             visual: {
@@ -1194,7 +1195,10 @@ export const zh_TW: LanguageTranslation = {
             ef_core: {
                 unsupported_database: '目前的資料庫類型無法使用 EF Core 匯出。',
                 options_step: {
-                    description: '設定 EF Core 模型專案匯出。',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: '關於此 EF Core 匯出',
+                    export_info:
+                        '此匯出會產生 EF Core 10 (.NET 10) 模型專案。\n不包含遷移。\n請從匯出的專案使用 EF Core CLI 在本機建立遷移。',
                     explanation:
                         '匯出 EF Core 10（.NET 10）模型專案。資料庫提供者會依目前圖表推斷。不會產生遷移；你可以從匯出的專案在本機建立遷移。',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1204,11 +1208,13 @@ export const zh_TW: LanguageTranslation = {
                     namespace: '命名空間',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        '產生專案的根 C# 命名空間。留空則由伺服器依圖表名稱選擇。',
+                        '產生專案的根 C# 命名空間。\n留空則由伺服器依圖表名稱選擇。',
+                    namespace_help_aria: '命名空間說明',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext 類別名稱。留空則使用 AppDbContext。',
+                        'DbContext 類別名稱。\n留空則使用 AppDbContext。',
+                    db_context_help_aria: 'DbContext 說明',
                     export: '匯出',
                     generating: '正在產生 EF Core 專案…',
                     error_rate_limited: '匯出要求過多。請稍候再試。',
@@ -1231,7 +1237,10 @@ export const zh_TW: LanguageTranslation = {
             rails: {
                 unsupported_database: '目前的資料庫類型不支援 Rails 匯出。',
                 result_step: {
-                    description: '檢視產生的 Rails 8.1 套件。',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: '關於此 Rails 匯出',
+                    export_info:
+                        '此匯出是 Rails 8.1 的目前架構基準，不是重建的遷移歷史。請依照產生的 README，套用到新的或既有的 Rails 應用程式。',
                     explanation:
                         '此匯出是 Rails 8.1 的目前架構基準，不是重建的遷移歷史。請依照產生的 README，套用到新的或既有的 Rails 應用程式。',
                     rails_8_1: 'Rails 8.1',
@@ -1257,7 +1266,10 @@ export const zh_TW: LanguageTranslation = {
                 unsupported_database:
                     'Django 匯出目前支援 PostgreSQL、MySQL、MariaDB 和 SQLite。',
                 result_step: {
-                    description: '檢視產生的 Django 6.1 套件。',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: '關於此 Django 匯出',
+                    export_info:
+                        '此匯出為可直接整合的 Django 應用程式（`foxaldb_models`）。0001_initial.py 是目前結構描述的初始移轉，而非重建的 Django 移轉歷史。尚未針對 Django 6.1 進行執階段驗證。',
                     explanation:
                         '此匯出為可直接整合的 Django 應用程式（`foxaldb_models`）。0001_initial.py 是目前結構描述的初始移轉，而非重建的 Django 移轉歷史。尚未針對 Django 6.1 進行執階段驗證。',
                     django_version: 'Django {{version}}',
@@ -1269,7 +1281,8 @@ export const zh_TW: LanguageTranslation = {
                     generated_files: '產生的檔案（{{count}}）',
                     notes_heading: '備註',
                     warnings_heading: '警告 ({{count}})',
-                    adaptations_heading: '技術適配 ({{count}})',
+                    adaptations_heading_one: '技術適配',
+                    adaptations_heading_other: '技術適配 ({{count}})',
                     path_label: '路徑：{{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: '下載 ZIP',
@@ -1300,7 +1313,11 @@ export const zh_TW: LanguageTranslation = {
                 unsupported_database:
                     'Drizzle 匯出目前支援 PostgreSQL、MySQL、MariaDB 和 SQLite。',
                 result_step: {
-                    description: '請檢視產生的 Drizzle 0.45 套件。',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: '關於此 Drizzle 匯出',
+                    export_info:
+                        '此匯出是 Drizzle 架構套件。schema.ts 是真實來源。drizzle.config.ts 不含憑證（僅有 dialect、架構路徑與輸出目錄）。不會重建 SQL 遷移歷史。尚未對 drizzle-kit 進行執行階段驗證。',
                     explanation:
                         '此匯出是 Drizzle 架構套件。schema.ts 是真實來源。drizzle.config.ts 不含憑證（僅有 dialect、架構路徑與輸出目錄）。不會重建 SQL 遷移歷史。尚未對 drizzle-kit 進行執行階段驗證。',
                     drizzle_version:
@@ -1313,7 +1330,8 @@ export const zh_TW: LanguageTranslation = {
                     generated_files: '產生的檔案（{{count}}）',
                     notes_heading: '備註',
                     warnings_heading: '警告 ({{count}})',
-                    adaptations_heading: '技術適配 ({{count}})',
+                    adaptations_heading_one: '技術適配',
+                    adaptations_heading_other: '技術適配 ({{count}})',
                     path_label: '路徑：{{path}}',
                     unknown_note: '傳回了額外的匯出備註，無法本地化。',
                     notes: drizzleExportNoteMessages,

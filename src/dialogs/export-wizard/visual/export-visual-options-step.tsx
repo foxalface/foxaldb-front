@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Label } from '@/components/label/label';
-import { Spinner } from '@/components/spinner/spinner';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
+import { ExportInlineLoadingSkeleton } from '../export-inline-loading-skeleton';
 import type {
     VisualExportExtent,
     VisualExportFormat,
@@ -124,15 +123,12 @@ export const ExportVisualOptionsStep: React.FC<
                 ) : null}
 
                 {isExporting ? (
-                    <div
-                        className="flex items-center gap-2"
-                        data-testid="export-visual-generating"
-                    >
-                        <Spinner />
-                        <Label className="text-sm">
-                            {t('export_wizard.visual.options_step.generating')}
-                        </Label>
-                    </div>
+                    <ExportInlineLoadingSkeleton
+                        testId="export-visual-generating"
+                        ariaLabel={t(
+                            'export_wizard.visual.options_step.generating'
+                        )}
+                    />
                 ) : null}
             </div>
         </TooltipProvider>

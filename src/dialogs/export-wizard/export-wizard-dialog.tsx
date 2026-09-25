@@ -54,7 +54,8 @@ import { VisualExportSvgInfoTooltip } from './visual/visual-export-svg-info-tool
 import { ExportLaravelOptionsStep } from './laravel/export-laravel-options-step';
 import { ExportPrismaPreviewStep } from './prisma/export-prisma-preview-step';
 import { ExportEfCoreOptionsStep } from './ef-core/export-ef-core-options-step';
-import { ExportEfCoreResultStep } from './ef-core/export-ef-core-result-step';
+import { EfCoreExportInfoTooltip } from './ef-core/ef-core-export-info-tooltip';
+import { ExportWizardInfoTooltip } from './export-wizard-info-tooltip';
 import type { EfCoreWizardRequestError } from './ef-core/export-ef-core-options-step';
 import { ExportRailsResultStep } from './rails/export-rails-result-step';
 import type { RailsWizardRequestError } from './rails/export-rails-result-step';
@@ -98,6 +99,11 @@ import type { RailsExportSuccess } from '@/lib/api/rails-export-types';
 import type { DjangoExportSuccess } from '@/lib/api/django-export-types';
 import type { DrizzleExportSuccess } from '@/lib/api/drizzle-export-types';
 import { DEFAULT_EF_CORE_DB_CONTEXT_NAME } from '@/lib/export/ef-core-export-constants';
+import { DJANGO_EXPORT_VERSION } from '@/lib/export/django-export-constants';
+import {
+    DRIZZLE_EXPORT_KIT_VERSION,
+    DRIZZLE_EXPORT_ORM_VERSION,
+} from '@/lib/export/drizzle-export-constants';
 import { isEfCoreExportSupported } from '@/lib/export/ef-core-export-capability';
 import { isDjangoExportSupported } from '@/lib/export/django-export-capability';
 import { isDrizzleExportSupported } from '@/lib/export/drizzle-export-capability';
@@ -180,6 +186,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         useState<EfCoreWizardRequestError | null>(null);
     const [isEfCoreExporting, setIsEfCoreExporting] = useState(false);
     const efCoreExportRequestIdRef = useRef(0);
+    const efCoreInitialExportDoneRef = useRef(false);
     const [railsSuccess, setRailsSuccess] = useState<RailsExportSuccess | null>(
         null
     );
@@ -256,6 +263,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
     const resetEfCoreBranchState = useCallback(() => {
         efCoreExportRequestIdRef.current += 1;
+        efCoreInitialExportDoneRef.current = false;
         setEfCoreNamespace(suggestEfCoreNamespace(currentDiagram?.name ?? ''));
         setEfCoreDbContextName(DEFAULT_EF_CORE_DB_CONTEXT_NAME);
         setEfCoreSuccess(null);
@@ -623,15 +631,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             return;
         }
 
-        if (step === ExportWizardStep.EF_CORE_RESULT) {
-            efCoreExportRequestIdRef.current += 1;
-            setEfCoreSuccess(null);
-            setEfCoreError(null);
-            setIsEfCoreExporting(false);
-            setStep(ExportWizardStep.EF_CORE_OPTIONS);
-            return;
-        }
-
         if (step === ExportWizardStep.EF_CORE_OPTIONS) {
             resetEfCoreBranchState();
             setStep(ExportWizardStep.TARGET_PICKER);
@@ -988,6 +987,34 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         laravelVersion,
     ]);
 
+    const handleEfCoreNamespaceChange = useCallback(
+        (value: string) => {
+            setEfCoreNamespace(value);
+
+            if (efCoreSuccess !== null) {
+                efCoreExportRequestIdRef.current += 1;
+                setEfCoreSuccess(null);
+                setEfCoreError(null);
+                setIsEfCoreExporting(false);
+            }
+        },
+        [efCoreSuccess]
+    );
+
+    const handleEfCoreDbContextNameChange = useCallback(
+        (value: string) => {
+            setEfCoreDbContextName(value);
+
+            if (efCoreSuccess !== null) {
+                efCoreExportRequestIdRef.current += 1;
+                setEfCoreSuccess(null);
+                setEfCoreError(null);
+                setIsEfCoreExporting(false);
+            }
+        },
+        [efCoreSuccess]
+    );
+
     const handleEfCoreExport = useCallback(async () => {
         if (isEfCoreExporting || !isEfCoreExportSupported(databaseType)) {
             return;
@@ -1021,7 +1048,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             }
 
             setEfCoreSuccess(result);
-            setStep(ExportWizardStep.EF_CORE_RESULT);
         } catch (error) {
             if (requestId !== efCoreExportRequestIdRef.current) {
                 return;
@@ -1054,6 +1080,99 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         efCoreDbContextName,
         efCoreNamespace,
         isEfCoreExporting,
+    ]);
+
+    useEffect(() => {
+        if (step !== ExportWizardStep.EF_CORE_OPTIONS) {
+            return;
+        }
+
+        if (efCoreInitialExportDoneRef.current) {
+            return;
+        }
+
+        if (!isAuthenticated || !isEfCoreExportSupported(databaseType)) {
+            return;
+        }
+
+        efCoreInitialExportDoneRef.current = true;
+        const requestId = efCoreExportRequestIdRef.current + 1;
+        efCoreExportRequestIdRef.current = requestId;
+        let cancelled = false;
+        setIsEfCoreExporting(true);
+        setEfCoreError(null);
+        setEfCoreSuccess(null);
+
+        void (async () => {
+            try {
+                const result = await exportEfCoreProject({
+                    diagram: currentDiagram,
+                    namespace: efCoreNamespace,
+                    dbContextName: efCoreDbContextName,
+                });
+
+                if (
+                    cancelled ||
+                    requestId !== efCoreExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (!result.success) {
+                    setEfCoreError({
+                        kind: 'semantic',
+                        message: result.error.message,
+                        code: result.error.code,
+                        path: result.error.path,
+                    });
+                    return;
+                }
+
+                setEfCoreSuccess(result);
+            } catch (error) {
+                if (
+                    cancelled ||
+                    requestId !== efCoreExportRequestIdRef.current
+                ) {
+                    return;
+                }
+
+                if (error instanceof ApiError) {
+                    if (error.status === 429) {
+                        setEfCoreError({ kind: 'rate_limited' });
+                        return;
+                    }
+
+                    if (error.status === 401) {
+                        setEfCoreError({ kind: 'unauthenticated' });
+                        return;
+                    }
+
+                    setEfCoreError({ kind: 'unexpected' });
+                    return;
+                }
+
+                setEfCoreError({ kind: 'unexpected' });
+            } finally {
+                if (
+                    !cancelled &&
+                    requestId === efCoreExportRequestIdRef.current
+                ) {
+                    setIsEfCoreExporting(false);
+                }
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [
+        currentDiagram,
+        databaseType,
+        efCoreDbContextName,
+        efCoreNamespace,
+        isAuthenticated,
+        step,
     ]);
 
     const handleRailsRetry = useCallback(() => {
@@ -1387,7 +1506,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.LARAVEL_OPTIONS ||
         step === ExportWizardStep.PRISMA_PREVIEW ||
         step === ExportWizardStep.EF_CORE_OPTIONS ||
-        step === ExportWizardStep.EF_CORE_RESULT ||
         step === ExportWizardStep.RAILS_RESULT ||
         step === ExportWizardStep.DJANGO_RESULT ||
         step === ExportWizardStep.DRIZZLE_RESULT;
@@ -1415,7 +1533,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             case ExportWizardStep.PRISMA_PREVIEW:
                 return t('export_wizard.targets.prisma.title');
             case ExportWizardStep.EF_CORE_OPTIONS:
-            case ExportWizardStep.EF_CORE_RESULT:
                 return t('export_wizard.targets.ef_core.title');
             case ExportWizardStep.RAILS_RESULT:
                 return t('export_wizard.targets.rails.title');
@@ -1455,15 +1572,24 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             case ExportWizardStep.PRISMA_PREVIEW:
                 return undefined;
             case ExportWizardStep.EF_CORE_OPTIONS:
-                return t('export_wizard.ef_core.options_step.description');
-            case ExportWizardStep.EF_CORE_RESULT:
-                return t('export_wizard.ef_core.result_step.description');
+                return t('export_wizard.ef_core.options_step.description', {
+                    provider: databaseTypeToLabelMap[databaseType],
+                });
             case ExportWizardStep.RAILS_RESULT:
-                return t('export_wizard.rails.result_step.description');
+                return t('export_wizard.rails.result_step.description', {
+                    provider: databaseTypeToLabelMap[databaseType],
+                });
             case ExportWizardStep.DJANGO_RESULT:
-                return t('export_wizard.django.result_step.description');
+                return t('export_wizard.django.result_step.description', {
+                    provider: databaseTypeToLabelMap[databaseType],
+                    version: DJANGO_EXPORT_VERSION,
+                });
             case ExportWizardStep.DRIZZLE_RESULT:
-                return t('export_wizard.drizzle.result_step.description');
+                return t('export_wizard.drizzle.result_step.description', {
+                    provider: databaseTypeToLabelMap[databaseType],
+                    orm: DRIZZLE_EXPORT_ORM_VERSION,
+                    kit: DRIZZLE_EXPORT_KIT_VERSION,
+                });
             default:
                 return t('export_wizard.description');
         }
@@ -1530,6 +1656,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                       }
                     : null;
             case ExportWizardStep.EF_CORE_OPTIONS:
+                if (efCoreSuccess) {
+                    return null;
+                }
+
                 return {
                     type: 'export',
                     onClick: () => {
@@ -1545,6 +1675,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         activeDbmlContent,
         dbmlHasError,
         handleDbmlDownload,
+        efCoreSuccess,
         handleEfCoreExport,
         handleJsonDownload,
         handleLaravelExport,
@@ -1584,8 +1715,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         <Dialog {...dialog} onOpenChange={handleOpenChange}>
             <DialogContent
                 className={cn(
-                    'flex max-h-dvh w-full flex-col',
-                    isWideDialog ? 'max-w-3xl' : 'max-w-[30rem]'
+                    'flex max-h-dvh min-w-0 flex-col overflow-hidden',
+                    isWideDialog
+                        ? 'w-[min(48rem,calc(100vw-2rem))] max-w-3xl'
+                        : 'w-full max-w-[30rem]'
                 )}
                 {...(dialogDescription
                     ? {}
@@ -1604,6 +1737,42 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                         visualFormat === 'svg' ? (
                             <VisualExportSvgInfoTooltip />
                         ) : null}
+                        {step === ExportWizardStep.EF_CORE_OPTIONS ? (
+                            <EfCoreExportInfoTooltip />
+                        ) : null}
+                        {step === ExportWizardStep.RAILS_RESULT ? (
+                            <ExportWizardInfoTooltip
+                                ariaLabel={t(
+                                    'export_wizard.rails.result_step.export_info_aria'
+                                )}
+                                content={t(
+                                    'export_wizard.rails.result_step.export_info'
+                                )}
+                                testId="rails-export-info"
+                            />
+                        ) : null}
+                        {step === ExportWizardStep.DJANGO_RESULT ? (
+                            <ExportWizardInfoTooltip
+                                ariaLabel={t(
+                                    'export_wizard.django.result_step.export_info_aria'
+                                )}
+                                content={t(
+                                    'export_wizard.django.result_step.export_info'
+                                )}
+                                testId="django-export-info"
+                            />
+                        ) : null}
+                        {step === ExportWizardStep.DRIZZLE_RESULT ? (
+                            <ExportWizardInfoTooltip
+                                ariaLabel={t(
+                                    'export_wizard.drizzle.result_step.export_info_aria'
+                                )}
+                                content={t(
+                                    'export_wizard.drizzle.result_step.export_info'
+                                )}
+                                testId="drizzle-export-info"
+                            />
+                        ) : null}
                     </DialogTitle>
                     {dialogDescription ? (
                         <DialogDescription>
@@ -1614,7 +1783,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
                 <div
                     className={cn(
-                        'min-h-0 flex-1',
+                        'min-h-0 min-w-0 flex-1',
                         isPreviewStep
                             ? 'flex flex-col overflow-hidden'
                             : 'overflow-y-auto p-1'
@@ -1711,30 +1880,21 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
                     {step === ExportWizardStep.EF_CORE_OPTIONS ? (
                         <ExportEfCoreOptionsStep
-                            providerLabel={databaseTypeToLabelMap[databaseType]}
                             namespaceValue={efCoreNamespace}
                             dbContextName={efCoreDbContextName}
                             isExporting={isEfCoreExporting}
                             error={efCoreError}
-                            onNamespaceChange={setEfCoreNamespace}
-                            onDbContextNameChange={setEfCoreDbContextName}
-                        />
-                    ) : null}
-
-                    {step === ExportWizardStep.EF_CORE_RESULT &&
-                    efCoreSuccess ? (
-                        <ExportEfCoreResultStep
-                            providerLabel={databaseTypeToLabelMap[databaseType]}
-                            filename={efCoreSuccess.filename}
-                            files={efCoreSuccess.files}
-                            notes={efCoreSuccess.notes}
+                            success={efCoreSuccess}
+                            onNamespaceChange={handleEfCoreNamespaceChange}
+                            onDbContextNameChange={
+                                handleEfCoreDbContextNameChange
+                            }
                             registerFooterAction={registerFooterAction}
                         />
                     ) : null}
 
                     {step === ExportWizardStep.RAILS_RESULT ? (
                         <ExportRailsResultStep
-                            providerLabel={databaseTypeToLabelMap[databaseType]}
                             isLoading={isRailsExporting}
                             error={railsError}
                             success={railsSuccess}
@@ -1745,7 +1905,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
                     {step === ExportWizardStep.DJANGO_RESULT ? (
                         <ExportDjangoResultStep
-                            providerLabel={databaseTypeToLabelMap[databaseType]}
                             isLoading={isDjangoExporting}
                             error={djangoError}
                             success={djangoSuccess}
@@ -1756,7 +1915,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
                     {step === ExportWizardStep.DRIZZLE_RESULT ? (
                         <ExportDrizzleResultStep
-                            providerLabel={databaseTypeToLabelMap[databaseType]}
                             isLoading={isDrizzleExporting}
                             error={drizzleError}
                             success={drizzleSuccess}

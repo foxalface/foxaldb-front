@@ -50,6 +50,8 @@ const locales = [
 const requiredLeafPaths = [
     'unsupported_database',
     'result_step.description',
+    'result_step.export_info_aria',
+    'result_step.export_info',
     'result_step.explanation',
     'result_step.rails_8_1',
     'result_step.provider_label',
@@ -162,8 +164,8 @@ describe('Rails export locale consistency', () => {
     it('does not leave English sentence placeholders in non-English locales', () => {
         const englishSentences = [
             en.translation.export_wizard.rails.unsupported_database,
-            en.translation.export_wizard.rails.result_step.description,
-            en.translation.export_wizard.rails.result_step.explanation,
+            en.translation.export_wizard.rails.result_step.export_info_aria,
+            en.translation.export_wizard.rails.result_step.export_info,
             en.translation.export_wizard.rails.result_step.generating,
             en.translation.export_wizard.rails.result_step.success,
             en.translation.export_wizard.rails.result_step.notes_heading,
@@ -190,8 +192,8 @@ describe('Rails export locale consistency', () => {
             const section = locale.translation.export_wizard.rails;
             const localizedSentences = [
                 section.unsupported_database,
-                section.result_step.description,
-                section.result_step.explanation,
+                section.result_step.export_info_aria,
+                section.result_step.export_info,
                 section.result_step.generating,
                 section.result_step.success,
                 section.result_step.notes_heading,

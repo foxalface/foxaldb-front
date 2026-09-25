@@ -1149,6 +1149,7 @@ export const en = {
                         'The full diagram is exported. Importing this file creates a new diagram; it does not overwrite the current one.',
                     filename_label: 'Filename: {{filename}}',
                     download: 'Download JSON',
+                    loading: 'Loading JSON preview...',
                 },
             },
             visual: {
@@ -1277,7 +1278,10 @@ export const en = {
                 unsupported_database:
                     'EF Core export is not available for the current database type.',
                 options_step: {
-                    description: 'Configure the EF Core model project export.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'About this EF Core export',
+                    export_info:
+                        'This export generates an EF Core 10 (.NET 10) model project.\nMigrations are not included.\nCreate them locally with the EF Core CLI from the exported project.',
                     explanation:
                         'Export an EF Core 10 (.NET 10) model project. The database provider is inferred from the current diagram. Migrations are not generated; you can create them locally from the exported project.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1287,11 +1291,13 @@ export const en = {
                     namespace: 'Namespace',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'Root C# namespace for the generated project. Leave blank to let the server choose one from the diagram name.',
+                        'Root C# namespace for the generated project.\nLeave blank to let the server choose one from the diagram name.',
+                    namespace_help_aria: 'Namespace help',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext class name. Leave blank to use AppDbContext.',
+                        'DbContext class name.\nLeave blank to use AppDbContext.',
+                    db_context_help_aria: 'DbContext help',
                     export: 'Export',
                     generating: 'Generating EF Core project...',
                     error_rate_limited:
@@ -1320,7 +1326,10 @@ export const en = {
                 unsupported_database:
                     'Rails export is not available for the current database type.',
                 result_step: {
-                    description: 'Review the generated Rails 8.1 package.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'About this Rails export',
+                    export_info:
+                        'This export is a current-schema baseline for Rails 8.1, not a reconstructed migration history. Apply it to a new or existing Rails app as documented in the generated README.',
                     explanation:
                         'This export is a current-schema baseline for Rails 8.1, not a reconstructed migration history. Apply it to a new or existing Rails app as documented in the generated README.',
                     rails_8_1: 'Rails 8.1',
@@ -1352,7 +1361,10 @@ export const en = {
                 unsupported_database:
                     'Django export currently supports PostgreSQL, MySQL, MariaDB, and SQLite.',
                 result_step: {
-                    description: 'Review the generated Django 6.1 package.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'About this Django export',
+                    export_info:
+                        'This export is a drop-in Django app (`foxaldb_models`). 0001_initial.py is a current-schema baseline, not reconstructed Django migration history. Runtime validation against Django 6.1 has not been performed.',
                     explanation:
                         'This export is a drop-in Django app (`foxaldb_models`). 0001_initial.py is a current-schema baseline, not reconstructed Django migration history. Runtime validation against Django 6.1 has not been performed.',
                     django_version: 'Django {{version}}',
@@ -1364,7 +1376,9 @@ export const en = {
                     generated_files: 'Generated files ({{count}})',
                     notes_heading: 'Notes',
                     warnings_heading: 'Warnings ({{count}})',
-                    adaptations_heading: 'Technical adaptations ({{count}})',
+                    adaptations_heading_one: 'Technical adaptation',
+                    adaptations_heading_other:
+                        'Technical adaptations ({{count}})',
                     path_label: 'Path: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'Download ZIP',
@@ -1403,7 +1417,11 @@ export const en = {
                 unsupported_database:
                     'Drizzle export currently supports PostgreSQL, MySQL, MariaDB, and SQLite.',
                 result_step: {
-                    description: 'Review the generated Drizzle 0.45 package.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'About this Drizzle export',
+                    export_info:
+                        'This export is a Drizzle schema package. schema.ts is the source of truth. drizzle.config.ts is credential-free (dialect, schema path, and output directory only). SQL migration history is not reconstructed. Runtime drizzle-kit validation has not been performed.',
                     explanation:
                         'This export is a Drizzle schema package. schema.ts is the source of truth. drizzle.config.ts is credential-free (dialect, schema path, and output directory only). SQL migration history is not reconstructed. Runtime drizzle-kit validation has not been performed.',
                     drizzle_version:
@@ -1416,7 +1434,9 @@ export const en = {
                     generated_files: 'Generated files ({{count}})',
                     notes_heading: 'Notes',
                     warnings_heading: 'Warnings ({{count}})',
-                    adaptations_heading: 'Technical adaptations ({{count}})',
+                    adaptations_heading_one: 'Technical adaptation',
+                    adaptations_heading_other:
+                        'Technical adaptations ({{count}})',
                     path_label: 'Path: {{path}}',
                     unknown_note:
                         'An additional export note was returned and could not be localized.',

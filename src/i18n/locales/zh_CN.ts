@@ -1084,6 +1084,7 @@ export const zh_CN: LanguageTranslation = {
                         '将导出完整图表。导入此文件会创建新图表，不会覆盖当前图表。',
                     filename_label: '文件名：{{filename}}',
                     download: '下载 JSON',
+                    loading: '正在加载 JSON 预览...',
                 },
             },
             visual: {
@@ -1195,7 +1196,10 @@ export const zh_CN: LanguageTranslation = {
             ef_core: {
                 unsupported_database: '当前数据库类型不支持 EF Core 导出。',
                 options_step: {
-                    description: '配置 EF Core 模型项目导出。',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: '关于此 EF Core 导出',
+                    export_info:
+                        '此导出会生成 EF Core 10 (.NET 10) 模型项目。\n不包含迁移。\n请从导出的项目使用 EF Core CLI 在本地创建迁移。',
                     explanation:
                         '导出 EF Core 10（.NET 10）模型项目。数据库提供程序由当前图推断。不会生成迁移；你可以在导出的项目中于本地创建迁移。',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1205,11 +1209,13 @@ export const zh_CN: LanguageTranslation = {
                     namespace: '命名空间',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        '生成项目的根 C# 命名空间。留空则由服务器根据图名称选择。',
+                        '生成项目的根 C# 命名空间。\n留空则由服务器根据图名称选择。',
+                    namespace_help_aria: '命名空间帮助',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext 类名。留空则使用 AppDbContext。',
+                        'DbContext 类名。\n留空则使用 AppDbContext。',
+                    db_context_help_aria: 'DbContext 帮助',
                     export: '导出',
                     generating: '正在生成 EF Core 项目…',
                     error_rate_limited: '导出请求过多。请稍候再试。',
@@ -1232,7 +1238,10 @@ export const zh_CN: LanguageTranslation = {
             rails: {
                 unsupported_database: '当前数据库类型不支持 Rails 导出。',
                 result_step: {
-                    description: '查看生成的 Rails 8.1 包。',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: '关于此 Rails 导出',
+                    export_info:
+                        '此导出是 Rails 8.1 的当前架构基线，不是重建的迁移历史。请按生成的 README 将其应用到新的或现有的 Rails 应用。',
                     explanation:
                         '此导出是 Rails 8.1 的当前架构基线，不是重建的迁移历史。请按生成的 README 将其应用到新的或现有的 Rails 应用。',
                     rails_8_1: 'Rails 8.1',
@@ -1259,7 +1268,10 @@ export const zh_CN: LanguageTranslation = {
                 unsupported_database:
                     'Django 导出目前支持 PostgreSQL、MySQL、MariaDB 和 SQLite。',
                 result_step: {
-                    description: '查看生成的 Django 6.1 包。',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: '关于此 Django 导出',
+                    export_info:
+                        '此导出为可直接集成的 Django 应用（`foxaldb_models`）。0001_initial.py 是当前模式的初始迁移，而非重建的 Django 迁移历史。尚未针对 Django 6.1 进行运行时验证。',
                     explanation:
                         '此导出为可直接集成的 Django 应用（`foxaldb_models`）。0001_initial.py 是当前模式的初始迁移，而非重建的 Django 迁移历史。尚未针对 Django 6.1 进行运行时验证。',
                     django_version: 'Django {{version}}',
@@ -1271,7 +1283,8 @@ export const zh_CN: LanguageTranslation = {
                     generated_files: '生成的文件（{{count}}）',
                     notes_heading: '说明',
                     warnings_heading: '警告 ({{count}})',
-                    adaptations_heading: '技术适配 ({{count}})',
+                    adaptations_heading_one: '技术适配',
+                    adaptations_heading_other: '技术适配 ({{count}})',
                     path_label: '路径：{{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: '下载 ZIP',
@@ -1302,7 +1315,11 @@ export const zh_CN: LanguageTranslation = {
                 unsupported_database:
                     'Drizzle 导出目前支持 PostgreSQL、MySQL、MariaDB 和 SQLite。',
                 result_step: {
-                    description: '请查看生成的 Drizzle 0.45 包。',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: '关于此 Drizzle 导出',
+                    export_info:
+                        '此导出是 Drizzle 架构包。schema.ts 是事实来源。drizzle.config.ts 不含凭据（仅有 dialect、架构路径和输出目录）。不会重建 SQL 迁移历史。尚未对 drizzle-kit 进行运行时校验。',
                     explanation:
                         '此导出是 Drizzle 架构包。schema.ts 是事实来源。drizzle.config.ts 不含凭据（仅有 dialect、架构路径和输出目录）。不会重建 SQL 迁移历史。尚未对 drizzle-kit 进行运行时校验。',
                     drizzle_version:
@@ -1315,7 +1332,8 @@ export const zh_CN: LanguageTranslation = {
                     generated_files: '生成的文件（{{count}}）',
                     notes_heading: '说明',
                     warnings_heading: '警告 ({{count}})',
-                    adaptations_heading: '技术适配 ({{count}})',
+                    adaptations_heading_one: '技术适配',
+                    adaptations_heading_other: '技术适配 ({{count}})',
                     path_label: '路径：{{path}}',
                     unknown_note: '返回了一条额外的导出说明，无法本地化。',
                     notes: drizzleExportNoteMessages,

@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/input/input';
-import { Label } from '@/components/label/label';
-import { Spinner } from '@/components/spinner/spinner';
+import { TooltipProvider } from '@/components/tooltip/tooltip';
+import type { EfCoreExportSuccessResponse } from '@/lib/api/ef-core-export-types';
+import { downloadBlob } from '@/lib/download-blob';
+import { EF_CORE_ZIP_MIME_TYPE } from '@/lib/export/ef-core-export-constants';
+import {
+    buildEfCoreExportZip,
+    EfCoreExportZipError,
+    resolveEfCoreExportFilename,
+} from '@/lib/export/ef-core-export-zip';
+import type { RegisterExportWizardFooterAction } from '../export-wizard-footer-action';
+import { useRegisterExportWizardFooterAction } from '../use-register-export-wizard-footer-action';
+import { ExportFileListSkeleton } from '../export-file-list-skeleton';
+import { ExportGeneratedFilesTree } from '../export-generated-files-tree';
+import { ExportWizardFieldLabel } from '../export-wizard-field-label';
+import { ExportWizardNotesPanel } from '../export-wizard-notes-panel';
 
 export type EfCoreWizardRequestErrorKind =
     | 'semantic'
@@ -18,27 +31,37 @@ export interface EfCoreWizardRequestError {
 }
 
 interface ExportEfCoreOptionsStepProps {
-    providerLabel: string;
     namespaceValue: string;
     dbContextName: string;
     isExporting: boolean;
     error: EfCoreWizardRequestError | null;
+    success: EfCoreExportSuccessResponse | null;
     onNamespaceChange: (value: string) => void;
     onDbContextNameChange: (value: string) => void;
+    registerFooterAction?: RegisterExportWizardFooterAction;
 }
 
 export const ExportEfCoreOptionsStep: React.FC<
     ExportEfCoreOptionsStepProps
 > = ({
-    providerLabel,
     namespaceValue,
     dbContextName,
     isExporting,
     error,
+    success,
     onNamespaceChange,
     onDbContextNameChange,
+    registerFooterAction,
 }) => {
     const { t } = useTranslation();
+    const [downloadErrorCode, setDownloadErrorCode] = useState<
+        'unsafe_path' | 'empty_files' | null
+    >(null);
+
+    const resolvedFilename = useMemo(
+        () => resolveEfCoreExportFilename(success?.filename ?? ''),
+        [success?.filename]
+    );
 
     const errorMessage = (() => {
         if (!error) {
@@ -63,105 +86,201 @@ export const ExportEfCoreOptionsStep: React.FC<
         }
     })();
 
+    const downloadErrorMessage = useMemo(() => {
+        if (downloadErrorCode === 'unsafe_path') {
+            return t('export_wizard.ef_core.result_step.error_unsafe_path');
+        }
+
+        if (downloadErrorCode === 'empty_files') {
+            return t('export_wizard.ef_core.result_step.error_empty_files');
+        }
+
+        return null;
+    }, [downloadErrorCode, t]);
+
+    const handleDownload = useCallback(() => {
+        if (!success) {
+            return;
+        }
+
+        try {
+            const zipBytes = buildEfCoreExportZip(success.files);
+            downloadBlob(
+                new Blob([new Uint8Array(zipBytes)], {
+                    type: EF_CORE_ZIP_MIME_TYPE,
+                }),
+                resolvedFilename
+            );
+            setDownloadErrorCode(null);
+        } catch (zipError) {
+            if (zipError instanceof EfCoreExportZipError) {
+                setDownloadErrorCode(zipError.code);
+                return;
+            }
+
+            setDownloadErrorCode('empty_files');
+        }
+    }, [resolvedFilename, success]);
+
+    useRegisterExportWizardFooterAction(
+        registerFooterAction,
+        success && success.files.length > 0
+            ? {
+                  type: 'export',
+                  onClick: handleDownload,
+                  testId: 'export-ef-core-download-zip',
+              }
+            : null
+    );
+
+    const showGenerating = isExporting && !errorMessage;
+
     return (
-        <div
-            className="flex flex-col gap-4 py-1"
-            data-testid="export-ef-core-options-step"
-        >
-            <p className="text-sm text-muted-foreground">
-                {t('export_wizard.ef_core.options_step.explanation')}
-            </p>
-
-            <p
-                className="text-sm font-medium"
-                data-testid="export-ef-core-version-info"
+        <TooltipProvider>
+            <div
+                className="flex flex-col gap-4 py-1"
+                data-testid="export-ef-core-options-step"
             >
-                {t('export_wizard.ef_core.options_step.ef_core_10')}
-            </p>
-
-            <p className="text-sm" data-testid="export-ef-core-provider">
-                {t('export_wizard.ef_core.options_step.provider_label', {
-                    provider: providerLabel,
-                })}
-            </p>
-
-            <p className="text-sm text-muted-foreground">
-                {t(
-                    'export_wizard.ef_core.options_step.migrations_not_generated'
-                )}
-            </p>
-
-            <div className="space-y-2">
-                <Label htmlFor="ef-core-namespace">
-                    {t('export_wizard.ef_core.options_step.namespace')}
-                </Label>
-                <Input
-                    id="ef-core-namespace"
-                    value={namespaceValue}
-                    disabled={isExporting}
-                    placeholder={t(
-                        'export_wizard.ef_core.options_step.namespace_placeholder'
-                    )}
-                    onChange={(event) => onNamespaceChange(event.target.value)}
-                    data-testid="ef-core-namespace-input"
-                    autoComplete="off"
-                />
-                <p className="text-sm text-muted-foreground">
-                    {t('export_wizard.ef_core.options_step.namespace_help')}
-                </p>
-            </div>
-
-            <div className="space-y-2">
-                <Label htmlFor="ef-core-db-context">
-                    {t('export_wizard.ef_core.options_step.db_context')}
-                </Label>
-                <Input
-                    id="ef-core-db-context"
-                    value={dbContextName}
-                    disabled={isExporting}
-                    placeholder={t(
-                        'export_wizard.ef_core.options_step.db_context_placeholder'
-                    )}
-                    onChange={(event) =>
-                        onDbContextNameChange(event.target.value)
-                    }
-                    data-testid="ef-core-db-context-input"
-                    autoComplete="off"
-                />
-                <p className="text-sm text-muted-foreground">
-                    {t('export_wizard.ef_core.options_step.db_context_help')}
-                </p>
-            </div>
-
-            {errorMessage ? (
-                <p
-                    className="break-words text-sm text-muted-foreground"
-                    role="alert"
-                    data-testid="export-ef-core-error"
-                    data-error-kind={error?.kind}
-                    data-error-code={error?.code}
-                >
-                    {errorMessage}
-                    {error?.kind === 'semantic' && error.code ? (
-                        <span className="mt-1 block text-xs">
-                            {error.code}
-                            {error.path ? ` · ${error.path}` : ''}
-                        </span>
-                    ) : null}
-                </p>
-            ) : null}
-
-            {isExporting ? (
-                <div
-                    className="flex items-center gap-2"
-                    data-testid="export-ef-core-generating"
-                >
-                    <Spinner />
-                    <Label className="text-sm">
-                        {t('export_wizard.ef_core.options_step.generating')}
-                    </Label>
+                <div className="space-y-2">
+                    <ExportWizardFieldLabel
+                        htmlFor="ef-core-namespace"
+                        label={t(
+                            'export_wizard.ef_core.options_step.namespace'
+                        )}
+                        tooltipAriaLabel={t(
+                            'export_wizard.ef_core.options_step.namespace_help_aria'
+                        )}
+                        tooltipContent={t(
+                            'export_wizard.ef_core.options_step.namespace_help'
+                        )}
+                    />
+                    <Input
+                        id="ef-core-namespace"
+                        value={namespaceValue}
+                        disabled={isExporting}
+                        placeholder={t(
+                            'export_wizard.ef_core.options_step.namespace_placeholder'
+                        )}
+                        onChange={(event) =>
+                            onNamespaceChange(event.target.value)
+                        }
+                        data-testid="ef-core-namespace-input"
+                        autoComplete="off"
+                    />
                 </div>
-            ) : null}
-        </div>
+
+                <div className="space-y-2">
+                    <ExportWizardFieldLabel
+                        htmlFor="ef-core-db-context"
+                        label={t(
+                            'export_wizard.ef_core.options_step.db_context'
+                        )}
+                        tooltipAriaLabel={t(
+                            'export_wizard.ef_core.options_step.db_context_help_aria'
+                        )}
+                        tooltipContent={t(
+                            'export_wizard.ef_core.options_step.db_context_help'
+                        )}
+                    />
+                    <Input
+                        id="ef-core-db-context"
+                        value={dbContextName}
+                        disabled={isExporting}
+                        placeholder={t(
+                            'export_wizard.ef_core.options_step.db_context_placeholder'
+                        )}
+                        onChange={(event) =>
+                            onDbContextNameChange(event.target.value)
+                        }
+                        data-testid="ef-core-db-context-input"
+                        autoComplete="off"
+                    />
+                </div>
+
+                {errorMessage ? (
+                    <p
+                        className="break-words text-sm text-muted-foreground"
+                        role="alert"
+                        data-testid="export-ef-core-error"
+                        data-error-kind={error?.kind}
+                        data-error-code={error?.code}
+                    >
+                        {errorMessage}
+                        {error?.kind === 'semantic' && error.code ? (
+                            <span className="mt-1 block text-xs">
+                                {error.code}
+                                {error.path ? ` · ${error.path}` : ''}
+                            </span>
+                        ) : null}
+                    </p>
+                ) : null}
+
+                {success && !errorMessage && !isExporting ? (
+                    <div>
+                        <p className="text-sm font-medium">
+                            {t(
+                                'export_wizard.ef_core.result_step.generated_files',
+                                {
+                                    count: success.files.length,
+                                }
+                            )}
+                        </p>
+                        {success.files.length > 0 ? (
+                            <ExportGeneratedFilesTree
+                                paths={success.files.map((file) => file.path)}
+                                testId="export-ef-core-file-list"
+                            />
+                        ) : null}
+                    </div>
+                ) : null}
+
+                {showGenerating ? (
+                    <ExportFileListSkeleton
+                        testId="export-ef-core-generating"
+                        ariaLabel={t(
+                            'export_wizard.ef_core.options_step.generating'
+                        )}
+                    />
+                ) : null}
+
+                {success && !errorMessage && !isExporting ? (
+                    <>
+                        {success.notes.length > 0 ? (
+                            <ExportWizardNotesPanel
+                                heading={t(
+                                    'export_wizard.ef_core.result_step.notes'
+                                )}
+                                testId="export-ef-core-notes"
+                                listTestId="export-ef-core-notes-list"
+                            >
+                                {success.notes.map((note, index) => (
+                                    <li
+                                        key={`${note.code}-${note.path ?? index}`}
+                                        className="break-words"
+                                    >
+                                        <span>{note.message}</span>
+                                        {note.path ? (
+                                            <span className="mt-0.5 block break-all text-xs opacity-80">
+                                                {note.path}
+                                            </span>
+                                        ) : null}
+                                    </li>
+                                ))}
+                            </ExportWizardNotesPanel>
+                        ) : null}
+
+                        {downloadErrorMessage ? (
+                            <p
+                                className="break-words text-sm text-muted-foreground"
+                                role="alert"
+                                data-testid="export-ef-core-download-error"
+                            >
+                                {downloadErrorMessage}
+                            </p>
+                        ) : null}
+                    </>
+                ) : null}
+            </div>
+        </TooltipProvider>
     );
 };

@@ -75,17 +75,27 @@ vi.mock('@/components/code-snippet/code-snippet', () => ({
     CodeSnippet: ({
         code,
         className,
+        editorProps,
     }: {
         code: string;
         className?: string;
-    }) => (
-        <div data-testid="code-snippet" data-classname={className}>
-            <pre>{code}</pre>
-            <button type="button" data-testid="code-snippet-copy">
-                copy
-            </button>
-        </div>
-    ),
+        editorProps?: {
+            onMount?: (editor: unknown, monaco: unknown) => void;
+        };
+    }) => {
+        React.useEffect(() => {
+            editorProps?.onMount?.({}, {});
+        }, [editorProps]);
+
+        return (
+            <div data-testid="code-snippet" data-classname={className}>
+                <pre>{code}</pre>
+                <button type="button" data-testid="code-snippet-copy">
+                    copy
+                </button>
+            </div>
+        );
+    },
 }));
 
 vi.mock('react-i18next', () => ({

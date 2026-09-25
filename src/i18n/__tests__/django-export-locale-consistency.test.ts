@@ -51,6 +51,8 @@ const locales = [
 const requiredLeafPaths = [
     'unsupported_database',
     'result_step.description',
+    'result_step.export_info_aria',
+    'result_step.export_info',
     'result_step.explanation',
     'result_step.django_version',
     'result_step.provider_label',
@@ -60,7 +62,8 @@ const requiredLeafPaths = [
     'result_step.generated_files',
     'result_step.notes_heading',
     'result_step.warnings_heading',
-    'result_step.adaptations_heading',
+    'result_step.adaptations_heading_one',
+    'result_step.adaptations_heading_other',
     'result_step.path_label',
     'result_step.download_zip',
     'result_step.retry',
@@ -141,7 +144,10 @@ describe('Django export locale consistency', () => {
             );
             expect(section.result_step.generated_files).toContain('{{count}}');
             expect(section.result_step.warnings_heading).toContain('{{count}}');
-            expect(section.result_step.adaptations_heading).toContain(
+            expect(section.result_step.adaptations_heading_other).toContain(
+                '{{count}}'
+            );
+            expect(section.result_step.adaptations_heading_one).not.toContain(
                 '{{count}}'
             );
             expect(section.result_step.path_label).toContain('{{path}}');
@@ -193,14 +199,16 @@ describe('Django export locale consistency', () => {
     it('does not leave English sentence placeholders in non-English locales', () => {
         const englishSentences = [
             en.translation.export_wizard.django.unsupported_database,
-            en.translation.export_wizard.django.result_step.description,
-            en.translation.export_wizard.django.result_step.explanation,
-            en.translation.export_wizard.django.result_step.package_type,
+            en.translation.export_wizard.django.result_step.export_info_aria,
+            en.translation.export_wizard.django.result_step.export_info,
             en.translation.export_wizard.django.result_step.generating,
             en.translation.export_wizard.django.result_step.success,
             en.translation.export_wizard.django.result_step.notes_heading,
             en.translation.export_wizard.django.result_step.warnings_heading,
-            en.translation.export_wizard.django.result_step.adaptations_heading,
+            en.translation.export_wizard.django.result_step
+                .adaptations_heading_one,
+            en.translation.export_wizard.django.result_step
+                .adaptations_heading_other,
             en.translation.export_wizard.django.result_step.path_label,
             en.translation.export_wizard.django.result_step.download_zip,
             en.translation.export_wizard.django.result_step.retry,
@@ -228,14 +236,14 @@ describe('Django export locale consistency', () => {
             const section = locale.translation.export_wizard.django;
             const localizedSentences = [
                 section.unsupported_database,
-                section.result_step.description,
-                section.result_step.explanation,
-                section.result_step.package_type,
+                section.result_step.export_info_aria,
+                section.result_step.export_info,
                 section.result_step.generating,
                 section.result_step.success,
                 section.result_step.notes_heading,
                 section.result_step.warnings_heading,
-                section.result_step.adaptations_heading,
+                section.result_step.adaptations_heading_one,
+                section.result_step.adaptations_heading_other,
                 section.result_step.path_label,
                 section.result_step.download_zip,
                 section.result_step.retry,

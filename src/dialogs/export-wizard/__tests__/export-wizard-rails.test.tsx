@@ -288,18 +288,21 @@ describe('ExportWizardDialog Rails branch', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('shows static Rails 8.1 information and the inferred provider', async () => {
+    it('shows provider context in the description and export info tooltip', async () => {
         await openRailsBranch();
 
-        expect(screen.getByTestId('export-rails-version')).toHaveTextContent(
-            'export_wizard.rails.result_step.rails_8_1'
-        );
-        expect(screen.getByTestId('export-rails-provider')).toHaveTextContent(
-            'export_wizard.rails.result_step.provider_label:PostgreSQL'
-        );
         expect(
-            screen.getByText('export_wizard.rails.result_step.explanation')
+            screen.getByText(
+                'export_wizard.rails.result_step.description:PostgreSQL'
+            )
         ).toBeInTheDocument();
+        expect(screen.getByTestId('rails-export-info')).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-rails-version')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-rails-provider')
+        ).not.toBeInTheDocument();
     });
 
     it('sends the full current live Diagram and no extra options', async () => {
@@ -349,7 +352,7 @@ describe('ExportWizardDialog Rails branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-rails-result-success')
+                screen.getByTestId('export-rails-file-list')
             ).toBeInTheDocument();
         });
         expect(exportRailsProjectMock).toHaveBeenCalledTimes(1);
@@ -360,7 +363,7 @@ describe('ExportWizardDialog Rails branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-rails-result-success')
+                screen.getByTestId('export-rails-file-list')
             ).toBeInTheDocument();
         });
 
@@ -369,18 +372,15 @@ describe('ExportWizardDialog Rails branch', () => {
                 'export_wizard.rails.result_step.generated_files:4'
             )
         ).toBeInTheDocument();
-        expect(screen.getByTestId('export-rails-file-list')).toHaveTextContent(
-            'README.md'
-        );
-        expect(screen.getByTestId('export-rails-file-list')).toHaveTextContent(
-            'app/models/user.rb'
-        );
-        expect(screen.getByTestId('export-rails-file-list')).toHaveTextContent(
-            'db/migrate/20240101120001_create_users.rb'
-        );
-        expect(screen.getByTestId('export-rails-file-list')).toHaveTextContent(
-            'db/schema.rb'
-        );
+        const fileList = screen.getByTestId('export-rails-file-list');
+        expect(fileList).toHaveTextContent('README.md');
+        expect(fileList).toHaveTextContent('app');
+        expect(fileList).toHaveTextContent('models');
+        expect(fileList).toHaveTextContent('user.rb');
+        expect(fileList).toHaveTextContent('db');
+        expect(fileList).toHaveTextContent('migrate');
+        expect(fileList).toHaveTextContent('20240101120001_create_users.rb');
+        expect(fileList).toHaveTextContent('schema.rb');
         expect(screen.getByTestId('export-rails-notes')).toHaveTextContent(
             'export_wizard.rails.result_step.notes.type_degraded.uuid_as_string[path=users.uuid]'
         );
@@ -405,7 +405,7 @@ describe('ExportWizardDialog Rails branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-rails-result-success')
+                screen.getByTestId('export-rails-file-list')
             ).toBeInTheDocument();
         });
 
@@ -550,7 +550,7 @@ describe('ExportWizardDialog Rails branch', () => {
             'semantic'
         );
         expect(
-            screen.queryByTestId('export-rails-result-success')
+            screen.queryByTestId('export-rails-file-list')
         ).not.toBeInTheDocument();
         expect(screen.getByTestId('export-rails-retry')).toBeInTheDocument();
     });
@@ -577,7 +577,7 @@ describe('ExportWizardDialog Rails branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-rails-result-success')
+                screen.getByTestId('export-rails-file-list')
             ).toBeInTheDocument();
         });
 
@@ -671,7 +671,7 @@ describe('ExportWizardDialog Rails branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-rails-result-success')
+                screen.getByTestId('export-rails-file-list')
             ).toBeInTheDocument();
         });
         expect(exportRailsProjectMock).toHaveBeenCalledTimes(2);
@@ -682,7 +682,7 @@ describe('ExportWizardDialog Rails branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-rails-result-success')
+                screen.getByTestId('export-rails-file-list')
             ).toBeInTheDocument();
         });
 
@@ -700,7 +700,7 @@ describe('ExportWizardDialog Rails branch', () => {
             ).toBeInTheDocument();
         });
         expect(
-            screen.queryByTestId('export-rails-result-success')
+            screen.queryByTestId('export-rails-file-list')
         ).not.toBeInTheDocument();
         expect(
             screen.queryByTestId('export-rails-file-list')
@@ -738,7 +738,7 @@ describe('ExportWizardDialog Rails branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-rails-result-success')
+                screen.getByTestId('export-rails-file-list')
             ).toBeInTheDocument();
         });
 
@@ -783,7 +783,7 @@ describe('ExportWizardDialog Rails branch', () => {
             screen.getByText('export_wizard.sections.database')
         ).toBeInTheDocument();
         expect(
-            screen.queryByTestId('export-rails-result-success')
+            screen.queryByTestId('export-rails-file-list')
         ).not.toBeInTheDocument();
     });
 

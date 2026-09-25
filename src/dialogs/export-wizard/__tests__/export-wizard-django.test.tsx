@@ -310,18 +310,21 @@ describe('ExportWizardDialog Django branch', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('shows static Django 6.1 information and the inferred provider', async () => {
+    it('shows provider context in the description and export info tooltip', async () => {
         await openDjangoBranch();
 
-        expect(screen.getByTestId('export-django-version')).toHaveTextContent(
-            'export_wizard.django.result_step.django_version:6.1'
-        );
-        expect(screen.getByTestId('export-django-provider')).toHaveTextContent(
-            'export_wizard.django.result_step.provider_label:PostgreSQL'
-        );
         expect(
-            screen.getByText('export_wizard.django.result_step.explanation')
+            screen.getByText(
+                'export_wizard.django.result_step.description:PostgreSQL'
+            )
         ).toBeInTheDocument();
+        expect(screen.getByTestId('django-export-info')).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-django-version')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-django-provider')
+        ).not.toBeInTheDocument();
     });
 
     it('sends the full current live Diagram and no extra options', async () => {
@@ -380,7 +383,7 @@ describe('ExportWizardDialog Django branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-django-result-success')
+                screen.getByTestId('export-django-file-list')
             ).toBeInTheDocument();
         });
         expect(exportDjangoProjectMock).toHaveBeenCalledTimes(1);
@@ -391,7 +394,7 @@ describe('ExportWizardDialog Django branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-django-result-success')
+                screen.getByTestId('export-django-file-list')
             ).toBeInTheDocument();
         });
 
@@ -400,54 +403,40 @@ describe('ExportWizardDialog Django branch', () => {
                 'export_wizard.django.result_step.generated_files:4'
             )
         ).toBeInTheDocument();
-        expect(screen.getByTestId('export-django-file-list')).toHaveTextContent(
-            'README.md'
-        );
-        expect(screen.getByTestId('export-django-file-list')).toHaveTextContent(
-            'foxaldb_models/models.py'
-        );
-        expect(screen.getByTestId('export-django-file-list')).toHaveTextContent(
-            'foxaldb_models/migrations/0001_initial.py'
-        );
-        expect(screen.getByTestId('export-django-file-list')).toHaveTextContent(
-            'foxaldb_models/apps.py'
-        );
+        const fileList = screen.getByTestId('export-django-file-list');
+        expect(fileList).toHaveTextContent('README.md');
+        expect(fileList).toHaveTextContent('foxaldb_models');
+        expect(fileList).toHaveTextContent('models.py');
+        expect(fileList).toHaveTextContent('migrations');
+        expect(fileList).toHaveTextContent('0001_initial.py');
+        expect(fileList).toHaveTextContent('apps.py');
         expect(
             screen.queryByTestId('export-django-warnings')
         ).not.toBeInTheDocument();
         expect(
-            screen.getByTestId('export-django-adaptations-toggle')
+            screen.getByTestId('export-django-adaptations')
         ).toHaveTextContent(
             'export_wizard.django.result_step.adaptations_heading:1'
         );
         expect(
-            screen.queryByTestId('export-django-adaptations-list')
-        ).not.toBeInTheDocument();
+            screen.getByTestId('export-django-adaptations-list')
+        ).toHaveTextContent(
+            'export_wizard.django.result_step.notes.schema_ignored_sqlite[path=users,schema=ignored]'
+        );
         expect(
-            screen.getByTestId('export-django-package-type')
-        ).toHaveTextContent('export_wizard.django.result_step.package_type');
+            screen.queryByTestId('export-django-package-type')
+        ).not.toBeInTheDocument();
     });
 
-    it('expands technical adaptations on demand and renders path separately', async () => {
+    it('shows technical adaptations and renders path separately', async () => {
         await openDjangoBranch();
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-django-adaptations-toggle')
+                screen.getByTestId('export-django-adaptations-list')
             ).toBeInTheDocument();
         });
 
-        expect(
-            screen.getByTestId('export-django-adaptations-toggle')
-        ).toHaveAttribute('aria-expanded', 'false');
-
-        await userEvent.click(
-            screen.getByTestId('export-django-adaptations-toggle')
-        );
-
-        expect(
-            screen.getByTestId('export-django-adaptations-toggle')
-        ).toHaveAttribute('aria-expanded', 'true');
         expect(
             screen.getByTestId('export-django-adaptations-list')
         ).toHaveTextContent(
@@ -479,7 +468,7 @@ describe('ExportWizardDialog Django branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-django-result-success')
+                screen.getByTestId('export-django-file-list')
             ).toBeInTheDocument();
         });
 
@@ -536,18 +525,10 @@ describe('ExportWizardDialog Django branch', () => {
             'export_wizard.django.result_step.notes.index_omitted.unsupported_type[path=items.payload_gin,indexType=gin]'
         );
         expect(
-            screen.getByTestId('export-django-adaptations-toggle')
+            screen.getByTestId('export-django-adaptations')
         ).toHaveTextContent(
             'export_wizard.django.result_step.adaptations_heading:1'
         );
-        expect(
-            screen.queryByTestId('export-django-adaptations-list')
-        ).not.toBeInTheDocument();
-
-        await userEvent.click(
-            screen.getByTestId('export-django-adaptations-toggle')
-        );
-
         expect(
             screen.getByTestId('export-django-adaptations-list')
         ).toHaveTextContent(
@@ -572,7 +553,7 @@ describe('ExportWizardDialog Django branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-django-result-success')
+                screen.getByTestId('export-django-file-list')
             ).toBeInTheDocument();
         });
 
@@ -724,7 +705,7 @@ describe('ExportWizardDialog Django branch', () => {
             'semantic'
         );
         expect(
-            screen.queryByTestId('export-django-result-success')
+            screen.queryByTestId('export-django-file-list')
         ).not.toBeInTheDocument();
         expect(screen.getByTestId('export-django-retry')).toBeInTheDocument();
     });
@@ -751,7 +732,7 @@ describe('ExportWizardDialog Django branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-django-result-success')
+                screen.getByTestId('export-django-file-list')
             ).toBeInTheDocument();
         });
 
@@ -869,7 +850,7 @@ describe('ExportWizardDialog Django branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-django-result-success')
+                screen.getByTestId('export-django-file-list')
             ).toBeInTheDocument();
         });
         expect(exportDjangoProjectMock).toHaveBeenCalledTimes(2);
@@ -880,7 +861,7 @@ describe('ExportWizardDialog Django branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-django-result-success')
+                screen.getByTestId('export-django-file-list')
             ).toBeInTheDocument();
         });
 
@@ -900,7 +881,7 @@ describe('ExportWizardDialog Django branch', () => {
             ).toBeInTheDocument();
         });
         expect(
-            screen.queryByTestId('export-django-result-success')
+            screen.queryByTestId('export-django-file-list')
         ).not.toBeInTheDocument();
         expect(
             screen.queryByTestId('export-django-file-list')
@@ -938,7 +919,7 @@ describe('ExportWizardDialog Django branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-django-result-success')
+                screen.getByTestId('export-django-file-list')
             ).toBeInTheDocument();
         });
 
@@ -983,7 +964,7 @@ describe('ExportWizardDialog Django branch', () => {
             screen.getByText('export_wizard.sections.database')
         ).toBeInTheDocument();
         expect(
-            screen.queryByTestId('export-django-result-success')
+            screen.queryByTestId('export-django-file-list')
         ).not.toBeInTheDocument();
     });
 

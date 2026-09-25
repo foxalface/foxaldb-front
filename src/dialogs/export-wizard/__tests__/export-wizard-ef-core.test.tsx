@@ -246,12 +246,15 @@ describe('ExportWizardDialog EF Core branch', () => {
         exportEfCoreProjectMock.mockResolvedValue(successResponse());
     });
 
-    it('enters the EF Core options step when EF Core is selected', async () => {
+    it('enters the EF Core step when EF Core is selected', async () => {
         await openEfCoreBranch();
 
         expect(
             screen.getByTestId('export-ef-core-options-step')
         ).toBeInTheDocument();
+        await waitFor(() => {
+            expect(exportEfCoreProjectMock).toHaveBeenCalledTimes(1);
+        });
         expect(
             screen.queryByTestId('export-prisma-version-step')
         ).not.toBeInTheDocument();
@@ -277,41 +280,30 @@ describe('ExportWizardDialog EF Core branch', () => {
         );
     });
 
-    it('shows static EF Core 10 information and the inferred provider', async () => {
+    it('shows provider context in the description and export info tooltip', async () => {
         await openEfCoreBranch();
 
-        expect(
-            screen.getByTestId('export-ef-core-version-info')
-        ).toHaveTextContent('export_wizard.ef_core.options_step.ef_core_10');
-        expect(screen.getByTestId('export-ef-core-provider')).toHaveTextContent(
-            'export_wizard.ef_core.options_step.provider_label:PostgreSQL'
-        );
         expect(
             screen.getByText(
-                'export_wizard.ef_core.options_step.migrations_not_generated'
+                'export_wizard.ef_core.options_step.description:PostgreSQL'
             )
         ).toBeInTheDocument();
+        expect(screen.getByTestId('ef-core-export-info')).toBeInTheDocument();
+        expect(
+            screen.getByTestId('ef-core-namespace-info')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByTestId('ef-core-db-context-info')
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText(
+                'export_wizard.ef_core.options_step.migrations_not_generated'
+            )
+        ).not.toBeInTheDocument();
     });
 
-    it('omits blank namespace and DbContext from the API request', async () => {
+    it('auto-starts export with default namespace and DbContext', async () => {
         await openEfCoreBranch();
-
-        await userEvent.clear(screen.getByTestId('ef-core-namespace-input'));
-        await userEvent.clear(screen.getByTestId('ef-core-db-context-input'));
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
-
-        await waitFor(() => {
-            expect(exportEfCoreProjectMock).toHaveBeenCalledWith({
-                diagram: chartDbState.currentDiagram,
-                namespace: '',
-                dbContextName: '',
-            });
-        });
-    });
-
-    it('invokes the API once with the live canonical diagram', async () => {
-        await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
         await waitFor(() => {
             expect(exportEfCoreProjectMock).toHaveBeenCalledTimes(1);
@@ -324,7 +316,43 @@ describe('ExportWizardDialog EF Core branch', () => {
         });
     });
 
-    it('does not send a second request when Export is clicked twice', async () => {
+    it('omits blank namespace and DbContext from a manual re-export', async () => {
+        exportEfCoreProjectMock.mockResolvedValueOnce(successResponse());
+
+        await openEfCoreBranch();
+
+        await waitFor(() => {
+            expect(
+                screen.getByTestId('export-ef-core-file-list')
+            ).toBeInTheDocument();
+        });
+
+        await userEvent.clear(screen.getByTestId('ef-core-namespace-input'));
+        await userEvent.clear(screen.getByTestId('ef-core-db-context-input'));
+        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
+
+        await waitFor(() => {
+            expect(exportEfCoreProjectMock).toHaveBeenLastCalledWith({
+                diagram: chartDbState.currentDiagram,
+                namespace: '',
+                dbContextName: '',
+            });
+        });
+    });
+
+    it('invokes the API once with the live canonical diagram on entry', async () => {
+        await openEfCoreBranch();
+
+        await waitFor(() => {
+            expect(exportEfCoreProjectMock).toHaveBeenCalledTimes(1);
+        });
+
+        expect(exportEfCoreProjectMock.mock.calls[0]?.[0]?.diagram).toBe(
+            chartDbState.currentDiagram
+        );
+    });
+
+    it('does not send a second request while the initial export is pending', async () => {
         let resolveExport: ((value: EfCoreExportResponse) => void) | undefined;
         exportEfCoreProjectMock.mockImplementationOnce(
             () =>
@@ -334,8 +362,6 @@ describe('ExportWizardDialog EF Core branch', () => {
         );
 
         await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
         expect(exportEfCoreProjectMock).toHaveBeenCalledTimes(1);
         expect(
@@ -346,38 +372,28 @@ describe('ExportWizardDialog EF Core branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-ef-core-result-step')
+                screen.getByTestId('export-ef-core-file-list')
             ).toBeInTheDocument();
         });
     });
 
     it('shows a successful result with files and notes', async () => {
         await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-ef-core-result-step')
+                screen.getByTestId('export-ef-core-file-list')
             ).toBeInTheDocument();
         });
 
         expect(
-            screen.getByTestId('export-ef-core-result-success')
+            screen.getByTestId('export-ef-core-options-step')
         ).toBeInTheDocument();
-        expect(
-            screen.getByTestId('export-ef-core-result-version')
-        ).toHaveTextContent('export_wizard.ef_core.result_step.ef_core_10');
-        expect(
-            screen.getByTestId('export-ef-core-result-provider')
-        ).toHaveTextContent(
-            'export_wizard.ef_core.result_step.provider_label:PostgreSQL'
-        );
-        expect(
-            screen.getByTestId('export-ef-core-file-list')
-        ).toHaveTextContent('README.md');
-        expect(
-            screen.getByTestId('export-ef-core-file-list')
-        ).toHaveTextContent('Models/Users.cs');
+
+        const fileList = screen.getByTestId('export-ef-core-file-list');
+        expect(fileList).toHaveTextContent('README.md');
+        expect(fileList).toHaveTextContent('Models');
+        expect(fileList).toHaveTextContent('Users.cs');
         expect(screen.getByTestId('export-ef-core-notes')).toHaveTextContent(
             'Views are not exported.'
         );
@@ -388,7 +404,6 @@ describe('ExportWizardDialog EF Core branch', () => {
 
     it('downloads a ZIP using the backend filename and application/zip MIME', async () => {
         await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
         await waitFor(() => {
             expect(
@@ -423,7 +438,6 @@ describe('ExportWizardDialog EF Core branch', () => {
         });
 
         await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
         await waitFor(() => {
             expect(
@@ -436,7 +450,7 @@ describe('ExportWizardDialog EF Core branch', () => {
             'semantic'
         );
         expect(
-            screen.queryByTestId('export-ef-core-result-step')
+            screen.queryByTestId('export-ef-core-file-list')
         ).not.toBeInTheDocument();
     });
 
@@ -446,7 +460,6 @@ describe('ExportWizardDialog EF Core branch', () => {
         );
 
         await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
         await waitFor(() => {
             expect(
@@ -465,7 +478,6 @@ describe('ExportWizardDialog EF Core branch', () => {
         );
 
         await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
         await waitFor(() => {
             expect(
@@ -476,20 +488,14 @@ describe('ExportWizardDialog EF Core branch', () => {
         });
     });
 
-    it('returns from the result step to options and from options to the picker', async () => {
+    it('returns from the EF Core step to the picker after a successful export', async () => {
         await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-ef-core-result-step')
+                screen.getByTestId('export-ef-core-file-list')
             ).toBeInTheDocument();
         });
-
-        await userEvent.click(screen.getByText('export_wizard.back'));
-        expect(
-            screen.getByTestId('export-ef-core-options-step')
-        ).toBeInTheDocument();
 
         await userEvent.click(screen.getByText('export_wizard.back'));
         expect(
@@ -543,7 +549,6 @@ describe('ExportWizardDialog EF Core branch', () => {
         );
 
         await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
         await userEvent.click(screen.getByText('export_wizard.back'));
 
         resolveExport?.(successResponse());
@@ -552,7 +557,7 @@ describe('ExportWizardDialog EF Core branch', () => {
             screen.getByText('export_wizard.sections.database')
         ).toBeInTheDocument();
         expect(
-            screen.queryByTestId('export-ef-core-result-step')
+            screen.queryByTestId('export-ef-core-file-list')
         ).not.toBeInTheDocument();
     });
 
@@ -573,8 +578,6 @@ describe('ExportWizardDialog EF Core branch', () => {
                 name: 'export_wizard.targets.ef_core.title',
             })
         );
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
-
         rerender(<ExportWizardDialog dialog={{ open: false }} />);
         resolveExport?.(successResponse());
         rerender(<ExportWizardDialog dialog={{ open: true }} />);
@@ -583,7 +586,7 @@ describe('ExportWizardDialog EF Core branch', () => {
             screen.getByText('export_wizard.sections.database')
         ).toBeInTheDocument();
         expect(
-            screen.queryByTestId('export-ef-core-result-step')
+            screen.queryByTestId('export-ef-core-file-list')
         ).not.toBeInTheDocument();
     });
 
@@ -622,7 +625,6 @@ describe('ExportWizardDialog EF Core branch', () => {
         );
 
         await openEfCoreBranch();
-        await userEvent.click(screen.getByTestId('export-ef-core-submit'));
 
         await waitFor(() => {
             expect(

@@ -1139,6 +1139,7 @@ export const ar: LanguageTranslation = {
                         'يتم تصدير المخطط بالكامل. استيراد هذا الملف ينشئ مخططًا جديدًا ولا يستبدل المخطط الحالي.',
                     filename_label: 'اسم الملف: {{filename}}',
                     download: 'تنزيل JSON',
+                    loading: 'جارٍ تحميل معاينة JSON...',
                 },
             },
             visual: {
@@ -1260,7 +1261,10 @@ export const ar: LanguageTranslation = {
                 unsupported_database:
                     'تصدير EF Core غير متاح لنوع قاعدة البيانات الحالي.',
                 options_step: {
-                    description: 'اضبط تصدير مشروع نموذج EF Core.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'حول تصدير EF Core هذا',
+                    export_info:
+                        'ينشئ هذا التصدير مشروع نموذج EF Core 10 (.NET 10).\nلا تتضمن الترحيلات.\nأنشئها محليًا باستخدام EF Core CLI من المشروع المُصدَّر.',
                     explanation:
                         'صدّر مشروع نموذج EF Core 10 (.NET 10). يُستنتج مزوّد قاعدة البيانات من المخطط الحالي. لا تُنشأ الترحيلات؛ يمكنك إنشاؤها محليًا من المشروع المُصدَّر.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1270,11 +1274,13 @@ export const ar: LanguageTranslation = {
                     namespace: 'فضاء الأسماء',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'فضاء أسماء C# الجذر للمشروع المُنشأ. اتركه فارغًا ليختار الخادم واحدًا من اسم المخطط.',
+                        'فضاء أسماء C# الجذر للمشروع المُنشأ.\nاتركه فارغًا ليختار الخادم واحدًا من اسم المخطط.',
+                    namespace_help_aria: 'مساعدة مساحة الاسم',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'اسم صنف DbContext. اتركه فارغًا لاستخدام AppDbContext.',
+                        'اسم صنف DbContext.\nاتركه فارغًا لاستخدام AppDbContext.',
+                    db_context_help_aria: 'مساعدة DbContext',
                     export: 'تصدير',
                     generating: 'جارٍ إنشاء مشروع EF Core…',
                     error_rate_limited:
@@ -1302,7 +1308,10 @@ export const ar: LanguageTranslation = {
                 unsupported_database:
                     'تصدير Rails غير متاح لنوع قاعدة البيانات الحالي.',
                 result_step: {
-                    description: 'راجع حزمة Rails 8.1 المُنشأة.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'حول تصدير Rails هذا',
+                    export_info:
+                        'هذا التصدير أساس للمخطط الحالي في Rails 8.1، وليس سجل ترحيلات معاد بناءه. طبّقه على تطبيق Rails جديد أو قائم وفق ملف README المُنشأ.',
                     explanation:
                         'هذا التصدير أساس للمخطط الحالي في Rails 8.1، وليس سجل ترحيلات معاد بناءه. طبّقه على تطبيق Rails جديد أو قائم وفق ملف README المُنشأ.',
                     rails_8_1: 'Rails 8.1',
@@ -1333,7 +1342,10 @@ export const ar: LanguageTranslation = {
                 unsupported_database:
                     'تصدير Django يدعم حاليًا PostgreSQL وMySQL وMariaDB وSQLite.',
                 result_step: {
-                    description: 'راجع حزمة Django 6.1 المُنشأة.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'حول تصدير Django هذا',
+                    export_info:
+                        'هذا التصدير تطبيق Django جاهز للدمج (`foxaldb_models`). 0001_initial.py هو ترحيل أولي للمخطط الحالي، وليس تاريخ ترحيل Django مُعاد بناؤه. لم تُجرَ عملية التحقق أثناء التشغيل مقابل Django 6.1.',
                     explanation:
                         'هذا التصدير تطبيق Django جاهز للدمج (`foxaldb_models`). 0001_initial.py هو ترحيل أولي للمخطط الحالي، وليس تاريخ ترحيل Django مُعاد بناؤه. لم تُجرَ عملية التحقق أثناء التشغيل مقابل Django 6.1.',
                     django_version: 'Django {{version}}',
@@ -1345,7 +1357,8 @@ export const ar: LanguageTranslation = {
                     generated_files: 'الملفات المُنشأة ({{count}})',
                     notes_heading: 'ملاحظات',
                     warnings_heading: 'تحذيرات ({{count}})',
-                    adaptations_heading: 'تكييفات تقنية ({{count}})',
+                    adaptations_heading_one: 'تكييف تقني',
+                    adaptations_heading_other: 'تكييفات تقنية ({{count}})',
                     path_label: 'المسار: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'تنزيل ZIP',
@@ -1384,7 +1397,11 @@ export const ar: LanguageTranslation = {
                 unsupported_database:
                     'يدعم تصدير Drizzle حاليًا PostgreSQL وMySQL وMariaDB وSQLite.',
                 result_step: {
-                    description: 'راجع حزمة Drizzle 0.45 المُنشأة.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'حول تصدير Drizzle هذا',
+                    export_info:
+                        'هذا التصدير حزمة مخطط Drizzle. schema.ts هو مصدر الحقيقة. drizzle.config.ts خالٍ من بيانات الاعتماد (اللهجة ومسار المخطط ودليل الإخراج فقط). لا يُعاد بناء تاريخ ترحيل SQL. لم تُجرَ عملية التحقق أثناء التشغيل بواسطة drizzle-kit.',
                     explanation:
                         'هذا التصدير حزمة مخطط Drizzle. schema.ts هو مصدر الحقيقة. drizzle.config.ts خالٍ من بيانات الاعتماد (اللهجة ومسار المخطط ودليل الإخراج فقط). لا يُعاد بناء تاريخ ترحيل SQL. لم تُجرَ عملية التحقق أثناء التشغيل بواسطة drizzle-kit.',
                     drizzle_version:
@@ -1397,7 +1414,8 @@ export const ar: LanguageTranslation = {
                     generated_files: 'الملفات المُنشأة ({{count}})',
                     notes_heading: 'ملاحظات',
                     warnings_heading: 'تحذيرات ({{count}})',
-                    adaptations_heading: 'تكييفات تقنية ({{count}})',
+                    adaptations_heading_one: 'تكييف تقني',
+                    adaptations_heading_other: 'تكييفات تقنية ({{count}})',
                     path_label: 'المسار: {{path}}',
                     unknown_note: 'أُرجعت ملاحظة تصدير إضافية وتعذّر توطينها.',
                     notes: drizzleExportNoteMessages,

@@ -1159,6 +1159,7 @@ export const te: LanguageTranslation = {
                         'పూర్తి డయాగ్రామ్ ఎగుమతి అవుతుంది. ఈ ఫైల్‌ను దిగుమతి చేస్తే కొత్త డయాగ్రామ్ ఏర్పడుతుంది; ప్రస్తుత డయాగ్రామ్ ఓవర్‌రైట్ కాదు.',
                     filename_label: 'ఫైల్ పేరు: {{filename}}',
                     download: 'JSON డౌన్‌లోడ్',
+                    loading: 'JSON ప్రివ్యూ లోడ్ అవుతోంది...',
                 },
             },
             visual: {
@@ -1288,8 +1289,10 @@ export const te: LanguageTranslation = {
                 unsupported_database:
                     'ప్రస్తుత డేటాబేస్ రకానికి EF Core ఎగుమతి అందుబాటులో లేదు.',
                 options_step: {
-                    description:
-                        'EF Core మోడల్ ప్రాజెక్ట్ ఎగుమతిని కాన్ఫిగర్ చేయండి.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'ఈ EF Core ఎగుమతి గురించి',
+                    export_info:
+                        'ఈ ఎగుమతి EF Core 10 (.NET 10) మోడల్ ప్రాజెక్ట్‌ను సృష్టిస్తుంది.\nమైగ్రేషన్‌లు భాగంగా లేవు.\nఎగుమతి చేసిన ప్రాజెక్ట్ నుండి EF Core CLI తో స్థానికంగా సృష్టించండి.',
                     explanation:
                         'EF Core 10 (.NET 10) మోడల్ ప్రాజెక్ట్‌ను ఎగుమతి చేయండి. డేటాబేస్ ప్రొవైడర్ ప్రస్తుత రేఖాచిత్రం నుండి నిర్ధారించబడుతుంది. మైగ్రేషన్లు రూపొందించబడవు; ఎగుమతి చేసిన ప్రాజెక్ట్ నుండి వాటిని స్థానికంగా సృష్టించవచ్చు.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1299,11 +1302,13 @@ export const te: LanguageTranslation = {
                     namespace: 'నేమ్‌స్పేస్',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'రూపొందించిన ప్రాజెక్ట్ యొక్క రూట్ C# నేమ్‌స్పేస్. సర్వర్ రేఖాచిత్రం పేరు నుండి ఎంచుకునేలా ఖాళీగా ఉంచండి.',
+                        'రూపొందించిన ప్రాజెక్ట్ యొక్క రూట్ C# నేమ్‌స్పేస్.\nసర్వర్ రేఖాచిత్రం పేరు నుండి ఎంచుకునేలా ఖాళీగా ఉంచండి.',
+                    namespace_help_aria: 'నేమ్‌స్పేస్ సహాయం',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext తరగతి పేరు. AppDbContext ఉపయోగించడానికి ఖాళీగా ఉంచండి.',
+                        'DbContext తరగతి పేరు.\nAppDbContext ఉపయోగించడానికి ఖాళీగా ఉంచండి.',
+                    db_context_help_aria: 'DbContext సహాయం',
                     export: 'ఎగుమతి చేయి',
                     generating: 'EF Core ప్రాజెక్ట్ రూపొందిస్తోంది...',
                     error_rate_limited:
@@ -1332,8 +1337,10 @@ export const te: LanguageTranslation = {
                 unsupported_database:
                     'ప్రస్తుత డేటాబేస్ రకానికి Rails ఎగుమతి అందుబాటులో లేదు.',
                 result_step: {
-                    description:
-                        'జనరేట్ చేసిన Rails 8.1 ప్యాకేజీని సమీక్షించండి.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'ఈ Rails ఎగుమతి గురించి',
+                    export_info:
+                        'ఈ ఎగుమతి Rails 8.1 కోసం ప్రస్తుత స్కీమా బేస్‌లైన్, పునర్నిర్మించిన మైగ్రేషన్ చరిత్ర కాదు. జనరేట్ చేసిన README ప్రకారం కొత్త లేదా ఉన్న Rails యాప్‌కు వర్తింపజేయండి.',
                     explanation:
                         'ఈ ఎగుమతి Rails 8.1 కోసం ప్రస్తుత స్కీమా బేస్‌లైన్, పునర్నిర్మించిన మైగ్రేషన్ చరిత్ర కాదు. జనరేట్ చేసిన README ప్రకారం కొత్త లేదా ఉన్న Rails యాప్‌కు వర్తింపజేయండి.',
                     rails_8_1: 'Rails 8.1',
@@ -1365,8 +1372,10 @@ export const te: LanguageTranslation = {
                 unsupported_database:
                     'Django ఎగుమతి ప్రస్తుతం PostgreSQL, MySQL, MariaDB మరియు SQLiteకు మద్దతు ఇస్తుంది.',
                 result_step: {
-                    description:
-                        'జనరేట్ చేసిన Django 6.1 ప్యాకేజీని సమీక్షించండి.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'ఈ Django ఎగుమతి గురించి',
+                    export_info:
+                        'ఈ ఎగుమతి నేరుగా ఇంటిగ్రేట్ అయ్యే Django యాప్ (`foxaldb_models`). 0001_initial.py ప్రస్తుత schema యొక్క ప్రారంభ migration, పునర్నిర్మించిన Django migration history కాదు. Django 6.1 వ్యతిరేకంగా runtime validation చేయలేదు.',
                     explanation:
                         'ఈ ఎగుమతి నేరుగా ఇంటిగ్రేట్ అయ్యే Django యాప్ (`foxaldb_models`). 0001_initial.py ప్రస్తుత schema యొక్క ప్రారంభ migration, పునర్నిర్మించిన Django migration history కాదు. Django 6.1 వ్యతిరేకంగా runtime validation చేయలేదు.',
                     django_version: 'Django {{version}}',
@@ -1378,7 +1387,8 @@ export const te: LanguageTranslation = {
                     generated_files: 'జనరేట్ చేసిన ఫైళ్లు ({{count}})',
                     notes_heading: 'గమనికలు',
                     warnings_heading: 'హెచ్చరికలు ({{count}})',
-                    adaptations_heading: 'సాంకేతిక అనుకూలతలు ({{count}})',
+                    adaptations_heading_one: 'సాంకేతిక అనుకూలత',
+                    adaptations_heading_other: 'సాంకేతిక అనుకూలతలు ({{count}})',
                     path_label: 'మార్గం: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'ZIP డౌన్‌లోడ్ చేయండి',
@@ -1418,7 +1428,10 @@ export const te: LanguageTranslation = {
                     'Drizzle ఎగుమతి ప్రస్తుతం PostgreSQL, MySQL, MariaDB మరియు SQLiteను మద్దతు ఇస్తుంది.',
                 result_step: {
                     description:
-                        'జనరేట్ చేసిన Drizzle 0.45 ప్యాకేజీని సమీక్షించండి.',
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'ఈ Drizzle ఎగుమతి గురించి',
+                    export_info:
+                        'ఈ ఎగుమతి Drizzle స్కీమా ప్యాకేజీ. schema.ts సత్య మూలం. drizzle.config.ts క్రెడెన్షియల్-రహితం (dialect, స్కీమా మార్గం మరియు అవుట్‌పుట్ డైరెక్టరీ మాత్రమే). SQL మైగ్రేషన్ చరిత్ర పునర్నిర్మించబడదు. drizzle-kit రన్‌టైమ్ ధృవీకరణ జరగలేదు.',
                     explanation:
                         'ఈ ఎగుమతి Drizzle స్కీమా ప్యాకేజీ. schema.ts సత్య మూలం. drizzle.config.ts క్రెడెన్షియల్-రహితం (dialect, స్కీమా మార్గం మరియు అవుట్‌పుట్ డైరెక్టరీ మాత్రమే). SQL మైగ్రేషన్ చరిత్ర పునర్నిర్మించబడదు. drizzle-kit రన్‌టైమ్ ధృవీకరణ జరగలేదు.',
                     drizzle_version:
@@ -1431,7 +1444,8 @@ export const te: LanguageTranslation = {
                     generated_files: 'జనరేట్ చేసిన ఫైళ్లు ({{count}})',
                     notes_heading: 'గమనికలు',
                     warnings_heading: 'హెచ్చరికలు ({{count}})',
-                    adaptations_heading: 'సాంకేతిక అనుకూలతలు ({{count}})',
+                    adaptations_heading_one: 'సాంకేతిక అనుకూలత',
+                    adaptations_heading_other: 'సాంకేతిక అనుకూలతలు ({{count}})',
                     path_label: 'మార్గం: {{path}}',
                     unknown_note:
                         'అదనపు ఎగుమతి గమనిక తిరిగి వచ్చింది మరియు స్థానికీకరించలేకపోయాం.',

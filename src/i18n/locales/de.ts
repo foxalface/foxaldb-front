@@ -1184,6 +1184,7 @@ export const de: LanguageTranslation = {
                         'Das vollständige Diagramm wird exportiert. Das Importieren dieser Datei erstellt ein neues Diagramm; das aktuelle Diagramm wird nicht überschrieben.',
                     filename_label: 'Dateiname: {{filename}}',
                     download: 'JSON herunterladen',
+                    loading: 'JSON-Vorschau wird geladen...',
                 },
             },
             visual: {
@@ -1317,8 +1318,10 @@ export const de: LanguageTranslation = {
                 unsupported_database:
                     'Der EF-Core-Export ist für den aktuellen Datenbanktyp nicht verfügbar.',
                 options_step: {
-                    description:
-                        'Konfigurieren Sie den Export des EF-Core-Modellprojekts.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'Über diesen EF-Core-Export',
+                    export_info:
+                        'Dieser Export erzeugt ein EF-Core-10-Modellprojekt (.NET 10).\nMigrationen sind nicht enthalten.\nErstellen Sie sie lokal mit der EF-Core-CLI aus dem exportierten Projekt.',
                     explanation:
                         'Exportieren Sie ein EF-Core-10-Modellprojekt (.NET 10). Der Datenbankanbieter wird aus dem aktuellen Diagramm abgeleitet. Es werden keine Migrationen erzeugt; Sie können sie lokal aus dem exportierten Projekt erstellen.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1328,11 +1331,13 @@ export const de: LanguageTranslation = {
                     namespace: 'Namespace',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'Wurzel-C#-Namespace für das erzeugte Projekt. Leer lassen, damit der Server einen Namen aus dem Diagrammnamen wählt.',
+                        'Wurzel-C#-Namespace für das erzeugte Projekt.\nLeer lassen, damit der Server einen Namen aus dem Diagrammnamen wählt.',
+                    namespace_help_aria: 'Hilfe zum Namespace',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'Name der DbContext-Klasse. Leer lassen, um AppDbContext zu verwenden.',
+                        'Name der DbContext-Klasse.\nLeer lassen, um AppDbContext zu verwenden.',
+                    db_context_help_aria: 'Hilfe zum DbContext',
                     export: 'Exportieren',
                     generating: 'EF-Core-Projekt wird erzeugt…',
                     error_rate_limited:
@@ -1345,7 +1350,8 @@ export const de: LanguageTranslation = {
                         'Sie müssen angemeldet sein, um EF-Core-Projekte zu exportieren.',
                 },
                 result_step: {
-                    description: 'Prüfen Sie das erzeugte EF-Core-Projekt.',
+                    description:
+                        'Überprüfen Sie das generierte EF Core-Projekt.',
                     success: 'EF-Core-Projekt erzeugt.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: 'Anbieter: {{provider}}',
@@ -1361,7 +1367,10 @@ export const de: LanguageTranslation = {
                 unsupported_database:
                     'Der Rails-Export ist für den aktuellen Datenbanktyp nicht verfügbar.',
                 result_step: {
-                    description: 'Prüfen Sie das erzeugte Rails-8.1-Paket.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'Über diesen Rails-Export',
+                    export_info:
+                        'Dieser Export ist eine aktuelle Schema-Basis für Rails 8.1, keine rekonstruierte Migrationshistorie. Wenden Sie ihn gemäß der erzeugten README auf eine neue oder vorhandene Rails-App an.',
                     explanation:
                         'Dieser Export ist eine aktuelle Schema-Basis für Rails 8.1, keine rekonstruierte Migrationshistorie. Wenden Sie ihn gemäß der erzeugten README auf eine neue oder vorhandene Rails-App an.',
                     rails_8_1: 'Rails 8.1',
@@ -1394,7 +1403,10 @@ export const de: LanguageTranslation = {
                 unsupported_database:
                     'Der Django-Export unterstützt derzeit PostgreSQL, MySQL, MariaDB und SQLite.',
                 result_step: {
-                    description: 'Prüfen Sie das erzeugte Django-6.1-Paket.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'Über diesen Django-Export',
+                    export_info:
+                        'Dieser Export ist eine Django-App zum direkten Einbinden (`foxaldb_models`). 0001_initial.py ist eine Ausgangsmigration des aktuellen Schemas, keine rekonstruierte Django-Migrationshistorie. Eine Laufzeitvalidierung gegen Django 6.1 wurde nicht durchgeführt.',
                     explanation:
                         'Dieser Export ist eine Django-App zum direkten Einbinden (`foxaldb_models`). 0001_initial.py ist eine Ausgangsmigration des aktuellen Schemas, keine rekonstruierte Django-Migrationshistorie. Eine Laufzeitvalidierung gegen Django 6.1 wurde nicht durchgeführt.',
                     django_version: 'Django {{version}}',
@@ -1406,7 +1418,9 @@ export const de: LanguageTranslation = {
                     generated_files: 'Erzeugte Dateien ({{count}})',
                     notes_heading: 'Hinweise',
                     warnings_heading: 'Warnungen ({{count}})',
-                    adaptations_heading: 'Technische Anpassungen ({{count}})',
+                    adaptations_heading_one: 'Technische Anpassung',
+                    adaptations_heading_other:
+                        'Technische Anpassungen ({{count}})',
                     path_label: 'Pfad: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'ZIP herunterladen',
@@ -1446,7 +1460,11 @@ export const de: LanguageTranslation = {
                 unsupported_database:
                     'Der Drizzle-Export unterstützt derzeit PostgreSQL, MySQL, MariaDB und SQLite.',
                 result_step: {
-                    description: 'Prüfen Sie das erzeugte Drizzle-0.45-Paket.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'Über diesen Drizzle-Export',
+                    export_info:
+                        'Dieser Export ist ein Drizzle-Schema-Paket. schema.ts ist die Quelle der Wahrheit. drizzle.config.ts ist ohne Zugangsdaten (nur Dialekt, Schema-Pfad und Ausgabeverzeichnis). Die SQL-Migrationshistorie wird nicht rekonstruiert. Eine Laufzeitprüfung mit drizzle-kit wurde nicht durchgeführt.',
                     explanation:
                         'Dieser Export ist ein Drizzle-Schema-Paket. schema.ts ist die Quelle der Wahrheit. drizzle.config.ts ist ohne Zugangsdaten (nur Dialekt, Schema-Pfad und Ausgabeverzeichnis). Die SQL-Migrationshistorie wird nicht rekonstruiert. Eine Laufzeitprüfung mit drizzle-kit wurde nicht durchgeführt.',
                     drizzle_version:
@@ -1459,7 +1477,9 @@ export const de: LanguageTranslation = {
                     generated_files: 'Erzeugte Dateien ({{count}})',
                     notes_heading: 'Hinweise',
                     warnings_heading: 'Warnungen ({{count}})',
-                    adaptations_heading: 'Technische Anpassungen ({{count}})',
+                    adaptations_heading_one: 'Technische Anpassung',
+                    adaptations_heading_other:
+                        'Technische Anpassungen ({{count}})',
                     path_label: 'Pfad: {{path}}',
                     unknown_note:
                         'Ein zusätzlicher Exporthinweis wurde zurückgegeben und konnte nicht lokalisiert werden.',

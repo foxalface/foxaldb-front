@@ -1154,6 +1154,7 @@ export const uk: LanguageTranslation = {
                         'Експортується повна діаграма. Імпорт цього файлу створює нову діаграму і не перезаписує поточну.',
                     filename_label: 'Ім’я файлу: {{filename}}',
                     download: 'Завантажити JSON',
+                    loading: 'Завантаження попереднього перегляду JSON...',
                 },
             },
             visual: {
@@ -1284,8 +1285,10 @@ export const uk: LanguageTranslation = {
                 unsupported_database:
                     'Експорт EF Core недоступний для поточного типу бази даних.',
                 options_step: {
-                    description:
-                        'Налаштуйте експорт модельного проєкту EF Core.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'Про цей експорт EF Core',
+                    export_info:
+                        'Цей експорт створює проєкт моделі EF Core 10 (.NET 10).\nМіграції не включені.\nСтворіть їх локально за допомогою CLI EF Core з експортованого проєкту.',
                     explanation:
                         'Експортуйте модельний проєкт EF Core 10 (.NET 10). Постачальника бази даних визначено з поточної діаграми. Міграції не генеруються; ви можете створити їх локально з експортованого проєкту.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1295,11 +1298,13 @@ export const uk: LanguageTranslation = {
                     namespace: 'Простір імен',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'Кореневий простір імен C# для згенерованого проєкту. Залиште порожнім, щоб сервер обрав його з назви діаграми.',
+                        'Кореневий простір імен C# для згенерованого проєкту.\nЗалиште порожнім, щоб сервер обрав його з назви діаграми.',
+                    namespace_help_aria: 'Довідка щодо простору імен',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'Ім’я класу DbContext. Залиште порожнім, щоб використати AppDbContext.',
+                        'Ім’я класу DbContext.\nЗалиште порожнім, щоб використати AppDbContext.',
+                    db_context_help_aria: 'Довідка щодо DbContext',
                     export: 'Експортувати',
                     generating: 'Генерування проєкту EF Core…',
                     error_rate_limited:
@@ -1327,7 +1332,10 @@ export const uk: LanguageTranslation = {
                 unsupported_database:
                     'Експорт Rails недоступний для поточного типу бази даних.',
                 result_step: {
-                    description: 'Перегляньте згенерований пакет Rails 8.1.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'Про цей експорт Rails',
+                    export_info:
+                        'Цей експорт — поточна базова схема для Rails 8.1, а не відновлена історія міграцій. Застосуйте його до нового або наявного застосунку Rails згідно зі згенерованим README.',
                     explanation:
                         'Цей експорт — поточна базова схема для Rails 8.1, а не відновлена історія міграцій. Застосуйте його до нового або наявного застосунку Rails згідно зі згенерованим README.',
                     rails_8_1: 'Rails 8.1',
@@ -1359,7 +1367,10 @@ export const uk: LanguageTranslation = {
                 unsupported_database:
                     'Експорт Django наразі підтримує PostgreSQL, MySQL, MariaDB і SQLite.',
                 result_step: {
-                    description: 'Перевірте згенерований пакет Django 6.1.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'Про цей експорт Django',
+                    export_info:
+                        'Цей експорт — застосунок Django для прямої інтеграції (`foxaldb_models`). 0001_initial.py — початкова міграція поточної схеми, а не відновлена історія міграцій Django. Перевірку під час виконання проти Django 6.1 не проводили.',
                     explanation:
                         'Цей експорт — застосунок Django для прямої інтеграції (`foxaldb_models`). 0001_initial.py — початкова міграція поточної схеми, а не відновлена історія міграцій Django. Перевірку під час виконання проти Django 6.1 не проводили.',
                     django_version: 'Django {{version}}',
@@ -1371,7 +1382,8 @@ export const uk: LanguageTranslation = {
                     generated_files: 'Згенеровані файли ({{count}})',
                     notes_heading: 'Примітки',
                     warnings_heading: 'Попередження ({{count}})',
-                    adaptations_heading: 'Технічні адаптації ({{count}})',
+                    adaptations_heading_one: 'Технічна адаптація',
+                    adaptations_heading_other: 'Технічні адаптації ({{count}})',
                     path_label: 'Шлях: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'Завантажити ZIP',
@@ -1410,7 +1422,11 @@ export const uk: LanguageTranslation = {
                 unsupported_database:
                     'Експорт Drizzle зараз підтримує PostgreSQL, MySQL, MariaDB і SQLite.',
                 result_step: {
-                    description: 'Перевірте згенерований пакет Drizzle 0.45.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'Про цей експорт Drizzle',
+                    export_info:
+                        'Цей експорт — пакет схеми Drizzle. schema.ts є джерелом істини. drizzle.config.ts не містить облікових даних (лише діалект, шлях до схеми та каталог виводу). Історію SQL-міграцій не відновлено. Перевірку drizzle-kit під час виконання не проводили.',
                     explanation:
                         'Цей експорт — пакет схеми Drizzle. schema.ts є джерелом істини. drizzle.config.ts не містить облікових даних (лише діалект, шлях до схеми та каталог виводу). Історію SQL-міграцій не відновлено. Перевірку drizzle-kit під час виконання не проводили.',
                     drizzle_version:
@@ -1423,7 +1439,8 @@ export const uk: LanguageTranslation = {
                     generated_files: 'Згенеровані файли ({{count}})',
                     notes_heading: 'Примітки',
                     warnings_heading: 'Попередження ({{count}})',
-                    adaptations_heading: 'Технічні адаптації ({{count}})',
+                    adaptations_heading_one: 'Технічна адаптація',
+                    adaptations_heading_other: 'Технічні адаптації ({{count}})',
                     path_label: 'Шлях: {{path}}',
                     unknown_note:
                         'Повернуто додаткову примітку експорту, яку не вдалося локалізувати.',

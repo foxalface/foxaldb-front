@@ -1153,6 +1153,7 @@ export const hr: LanguageTranslation = {
                         'Izvozi se cijeli dijagram. Uvoz ove datoteke stvara novi dijagram; trenutni dijagram se ne prepisuje.',
                     filename_label: 'Naziv datoteke: {{filename}}',
                     download: 'Preuzmi JSON',
+                    loading: 'Učitavanje JSON pregleda...',
                 },
             },
             visual: {
@@ -1280,8 +1281,10 @@ export const hr: LanguageTranslation = {
                 unsupported_database:
                     'Izvoz EF Core nije dostupan za trenutačni tip baze podataka.',
                 options_step: {
-                    description:
-                        'Konfigurirajte izvoz modelnog projekta EF Core.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'O ovom EF Core izvozu',
+                    export_info:
+                        'Ovaj izvoz generira EF Core 10 (.NET 10) model projekt.\nMigracije nisu uključene.\nIzradite ih lokalno pomoću EF Core CLI iz izvezenog projekta.',
                     explanation:
                         'Izvezite modelni projekt EF Core 10 (.NET 10). Pružatelj baze podataka izvodi se iz trenutačnog dijagrama. Migracije se ne generiraju; možete ih lokalno stvoriti iz izvezenog projekta.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1291,11 +1294,13 @@ export const hr: LanguageTranslation = {
                     namespace: 'Imenski prostor',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'Korijenski C# imenski prostor za generirani projekt. Ostavite prazno da poslužitelj odabere jedan iz naziva dijagrama.',
+                        'Korijenski C# imenski prostor za generirani projekt.\nOstavite prazno da poslužitelj odabere jedan iz naziva dijagrama.',
+                    namespace_help_aria: 'Pomoć za namespace',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'Naziv klase DbContext. Ostavite prazno da biste koristili AppDbContext.',
+                        'Naziv klase DbContext.\nOstavite prazno da biste koristili AppDbContext.',
+                    db_context_help_aria: 'Pomoć za DbContext',
                     export: 'Izvezi',
                     generating: 'Generiranje EF Core projekta…',
                     error_rate_limited:
@@ -1323,7 +1328,10 @@ export const hr: LanguageTranslation = {
                 unsupported_database:
                     'Izvoz u Rails nije dostupan za trenutačni tip baze podataka.',
                 result_step: {
-                    description: 'Pregledajte generirani Rails 8.1 paket.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'O ovom Rails izvozu',
+                    export_info:
+                        'Ovaj izvoz je trenutačna osnovna shema za Rails 8.1, a ne rekonstruirana povijest migracija. Primijenite ga na novu ili postojeću Rails aplikaciju prema generiranom README-u.',
                     explanation:
                         'Ovaj izvoz je trenutačna osnovna shema za Rails 8.1, a ne rekonstruirana povijest migracija. Primijenite ga na novu ili postojeću Rails aplikaciju prema generiranom README-u.',
                     rails_8_1: 'Rails 8.1',
@@ -1355,7 +1363,10 @@ export const hr: LanguageTranslation = {
                 unsupported_database:
                     'Django izvoz trenutačno podržava PostgreSQL, MySQL, MariaDB i SQLite.',
                 result_step: {
-                    description: 'Pregledajte generirani Django 6.1 paket.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'O ovom Django izvozu',
+                    export_info:
+                        'Ovaj izvoz je Django aplikacija spremna za ugradnju (`foxaldb_models`). 0001_initial.py je početna migracija trenutačne sheme, a ne rekonstruirana Django povijest migracija. Provjera u izvođenju protiv Django 6.1 nije provedena.',
                     explanation:
                         'Ovaj izvoz je Django aplikacija spremna za ugradnju (`foxaldb_models`). 0001_initial.py je početna migracija trenutačne sheme, a ne rekonstruirana Django povijest migracija. Provjera u izvođenju protiv Django 6.1 nije provedena.',
                     django_version: 'Django {{version}}',
@@ -1367,7 +1378,9 @@ export const hr: LanguageTranslation = {
                     generated_files: 'Generirane datoteke ({{count}})',
                     notes_heading: 'Napomene',
                     warnings_heading: 'Upozorenja ({{count}})',
-                    adaptations_heading: 'Tehničke prilagodbe ({{count}})',
+                    adaptations_heading_one: 'Tehnička prilagodba',
+                    adaptations_heading_other:
+                        'Tehničke prilagodbe ({{count}})',
                     path_label: 'Put: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'Preuzmi ZIP',
@@ -1405,7 +1418,11 @@ export const hr: LanguageTranslation = {
                 unsupported_database:
                     'Drizzle izvoz trenutačno podržava PostgreSQL, MySQL, MariaDB i SQLite.',
                 result_step: {
-                    description: 'Pregledajte generirani Drizzle 0.45 paket.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'O ovom Drizzle izvozu',
+                    export_info:
+                        'Ovaj izvoz je Drizzle paket sheme. schema.ts je izvor istine. drizzle.config.ts je bez vjerodajnica (samo dijalekt, put sheme i izlazni direktorij). Povijest SQL migracija se ne rekonstruira. Runtime provjera drizzle-kit nije izvršena.',
                     explanation:
                         'Ovaj izvoz je Drizzle paket sheme. schema.ts je izvor istine. drizzle.config.ts je bez vjerodajnica (samo dijalekt, put sheme i izlazni direktorij). Povijest SQL migracija se ne rekonstruira. Runtime provjera drizzle-kit nije izvršena.',
                     drizzle_version:
@@ -1418,7 +1435,9 @@ export const hr: LanguageTranslation = {
                     generated_files: 'Generirane datoteke ({{count}})',
                     notes_heading: 'Napomene',
                     warnings_heading: 'Upozorenja ({{count}})',
-                    adaptations_heading: 'Tehničke prilagodbe ({{count}})',
+                    adaptations_heading_one: 'Tehnička prilagodba',
+                    adaptations_heading_other:
+                        'Tehničke prilagodbe ({{count}})',
                     path_label: 'Put: {{path}}',
                     unknown_note:
                         'Vraćena je dodatna napomena izvoza koja se nije mogla lokalizirati.',

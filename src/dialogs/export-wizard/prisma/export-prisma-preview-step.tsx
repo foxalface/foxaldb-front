@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { CodeSnippet } from '@/components/code-snippet/code-snippet';
-import { Spinner } from '@/components/spinner/spinner';
-import { Label } from '@/components/label/label';
 import { cn } from '@/lib/utils';
+import { ExportCodePreviewBlock } from '../export-code-preview-block';
 import type {
     PrismaExportError,
     PrismaExportNote,
@@ -16,7 +14,6 @@ import {
 } from './format-prisma-export-message';
 import { groupPrismaExportNotes } from './group-prisma-export-notes';
 import { PrismaExportVersionToggle } from './prisma-export-version-toggle';
-
 interface ExportPrismaPreviewStepProps {
     prismaVersion: PrismaExportVersion;
     schema?: string;
@@ -41,6 +38,8 @@ export const ExportPrismaPreviewStep: React.FC<
     onPrismaVersionChange,
 }) => {
     const { t } = useTranslation();
+
+    const generatingLabel = t('export_wizard.prisma.preview_step.generating');
 
     const errorMessage = useMemo(() => {
         if (generationError) {
@@ -67,20 +66,12 @@ export const ExportPrismaPreviewStep: React.FC<
     const showLimitations =
         localizedNotes.length > 0 &&
         !errorMessage &&
+        !isLoading &&
         schema !== undefined &&
         schema.length > 0;
 
-    const renderLoadingOverlay = () => (
-        <div
-            className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/60"
-            data-testid="export-prisma-generating"
-        >
-            <Spinner />
-            <Label className="text-sm">
-                {t('export_wizard.prisma.preview_step.generating')}
-            </Label>
-        </div>
-    );
+    const isContentReady =
+        !isLoading && schema !== undefined && schema.length > 0;
 
     const renderPreviewArea = () => {
         if (errorMessage) {
@@ -102,34 +93,6 @@ export const ExportPrismaPreviewStep: React.FC<
             );
         }
 
-        if (schema !== undefined && schema.length > 0) {
-            return (
-                <div
-                    className={PREVIEW_AREA_CLASS_NAME}
-                    data-testid="export-prisma-preview-container"
-                >
-                    <CodeSnippet
-                        className={cn(
-                            'size-full flex-none',
-                            isLoading && 'pointer-events-none opacity-50'
-                        )}
-                        code={schema}
-                        language="prisma"
-                        isComplete={!isLoading}
-                        editorProps={{
-                            options: {
-                                scrollbar: {
-                                    vertical: 'auto',
-                                    horizontal: 'auto',
-                                },
-                            },
-                        }}
-                    />
-                    {isLoading ? renderLoadingOverlay() : null}
-                </div>
-            );
-        }
-
         if (!isLoading && schema !== undefined && schema.length === 0) {
             return (
                 <div
@@ -146,30 +109,30 @@ export const ExportPrismaPreviewStep: React.FC<
         }
 
         return (
-            <div
-                className={cn(
-                    PREVIEW_AREA_CLASS_NAME,
-                    'flex flex-col items-center justify-center gap-2'
-                )}
-                data-testid="export-prisma-generating"
-            >
-                <Spinner />
-                <Label className="text-sm">
-                    {t('export_wizard.prisma.preview_step.generating')}
-                </Label>
-            </div>
+            <ExportCodePreviewBlock
+                code={isContentReady ? schema : undefined}
+                isLoading={!isContentReady}
+                language="prisma"
+                loadingAriaLabel={generatingLabel}
+                loadingTestId="export-prisma-generating"
+                containerTestId={
+                    isContentReady
+                        ? 'export-prisma-preview-container'
+                        : undefined
+                }
+            />
         );
     };
 
     return (
-        <div className="flex min-h-0 flex-1 flex-col gap-4">
+        <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
             <PrismaExportVersionToggle
                 value={prismaVersion}
                 onValueChange={onPrismaVersionChange}
                 disabled={isLoading}
             />
 
-            <div className="flex min-h-0 flex-1 flex-col">
+            <div className="flex min-h-0 w-full flex-1 flex-col">
                 {renderPreviewArea()}
             </div>
 

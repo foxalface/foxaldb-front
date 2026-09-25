@@ -76,27 +76,37 @@ vi.mock('@/components/code-snippet/code-snippet', () => ({
         code,
         actions,
         className,
+        editorProps,
     }: {
         code: string;
         className?: string;
         actions?: Array<{ label: string; onClick: () => void }>;
-    }) => (
-        <div data-testid="code-snippet" data-classname={className}>
-            <pre>{code}</pre>
-            <button type="button" data-testid="code-snippet-copy">
-                copy
-            </button>
-            {actions?.map((action) => (
-                <button
-                    key={action.label}
-                    type="button"
-                    onClick={action.onClick}
-                >
-                    {action.label}
+        editorProps?: {
+            onMount?: (editor: unknown, monaco: unknown) => void;
+        };
+    }) => {
+        React.useEffect(() => {
+            editorProps?.onMount?.({}, {});
+        }, [editorProps]);
+
+        return (
+            <div data-testid="code-snippet" data-classname={className}>
+                <pre>{code}</pre>
+                <button type="button" data-testid="code-snippet-copy">
+                    copy
                 </button>
-            ))}
-        </div>
-    ),
+                {actions?.map((action) => (
+                    <button
+                        key={action.label}
+                        type="button"
+                        onClick={action.onClick}
+                    >
+                        {action.label}
+                    </button>
+                ))}
+            </div>
+        );
+    },
 }));
 
 vi.mock('react-i18next', () => ({
@@ -152,6 +162,42 @@ describe('ExportWizardDialog DBML branch', () => {
         });
     });
 
+    it('shows the ref format toggle and skeleton while DBML is generating', async () => {
+        let resolveGenerate:
+            | ((value: {
+                  standardDbml: string;
+                  inlineDbml: string;
+                  relationshipsDbml: string;
+              }) => void)
+            | undefined;
+
+        mockedGenerateDBML.mockImplementationOnce(
+            () =>
+                new Promise((resolve) => {
+                    resolveGenerate = resolve;
+                })
+        );
+
+        await openDbmlBranch();
+
+        expect(
+            screen.getByTestId('dbml-ref-format-toggle')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByTestId('export-dbml-generating')
+        ).toBeInTheDocument();
+
+        resolveGenerate?.({
+            standardDbml: sampleStandardDbml,
+            inlineDbml: sampleInlineDbml,
+            relationshipsDbml: '',
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText(sampleStandardDbml)).toBeInTheDocument();
+        });
+    });
+
     it('renders generated DBML with ref format toggle, copy and footer export action', async () => {
         await openDbmlBranch();
 
@@ -181,6 +227,10 @@ describe('ExportWizardDialog DBML branch', () => {
         await waitFor(() => {
             expect(screen.getByText(sampleInlineDbml)).toBeInTheDocument();
         });
+
+        expect(
+            screen.queryByTestId('export-dbml-generating')
+        ).not.toBeInTheDocument();
     });
 
     it('downloads the selected ref format with a .dbml filename', async () => {

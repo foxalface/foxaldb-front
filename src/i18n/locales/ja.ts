@@ -1173,6 +1173,7 @@ export const ja: LanguageTranslation = {
                         'ダイアグラム全体がエクスポートされます。このファイルをインポートすると新しいダイアグラムが作成され、現在のダイアグラムは上書きされません。',
                     filename_label: 'ファイル名: {{filename}}',
                     download: 'JSONをダウンロード',
+                    loading: 'JSONプレビューを読み込み中...',
                 },
             },
             visual: {
@@ -1303,8 +1304,10 @@ export const ja: LanguageTranslation = {
                 unsupported_database:
                     '現在のデータベース種類では EF Core エクスポートは利用できません。',
                 options_step: {
-                    description:
-                        'EF Core モデルプロジェクトのエクスポートを設定します。',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'この EF Core エクスポートについて',
+                    export_info:
+                        'このエクスポートは EF Core 10 (.NET 10) のモデル プロジェクトを生成します。\nマイグレーションは含まれません。\nエクスポートしたプロジェクトから EF Core CLI でローカルに作成してください。',
                     explanation:
                         'EF Core 10（.NET 10）のモデルプロジェクトをエクスポートします。データベースプロバイダーは現在のダイアグラムから推定されます。マイグレーションは生成されません。エクスポートしたプロジェクトからローカルで作成できます。',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1314,11 +1317,13 @@ export const ja: LanguageTranslation = {
                     namespace: '名前空間',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        '生成プロジェクトのルート C# 名前空間です。空欄にすると、サーバーがダイアグラム名から選択します。',
+                        '生成プロジェクトのルート C# 名前空間です。\n空欄にすると、サーバーがダイアグラム名から選択します。',
+                    namespace_help_aria: '名前空間のヘルプ',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext クラス名です。空欄にすると AppDbContext が使われます。',
+                        'DbContext クラス名です。\n空欄にすると AppDbContext が使われます。',
+                    db_context_help_aria: 'DbContext のヘルプ',
                     export: 'エクスポート',
                     generating: 'EF Core プロジェクトを生成しています…',
                     error_rate_limited:
@@ -1332,7 +1337,7 @@ export const ja: LanguageTranslation = {
                 },
                 result_step: {
                     description:
-                        '生成された EF Core プロジェクトを確認します。',
+                        '生成された EF Core プロジェクトを確認してください。',
                     success: 'EF Core プロジェクトを生成しました。',
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: 'プロバイダー: {{provider}}',
@@ -1349,8 +1354,10 @@ export const ja: LanguageTranslation = {
                 unsupported_database:
                     '現在のデータベース種類では Rails エクスポートを利用できません。',
                 result_step: {
-                    description:
-                        '生成された Rails 8.1 パッケージを確認します。',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'この Rails エクスポートについて',
+                    export_info:
+                        'このエクスポートは Rails 8.1 向けの現在スキーマのベースラインであり、再構築されたマイグレーション履歴ではありません。生成された README の手順に従い、新規または既存の Rails アプリに適用してください。',
                     explanation:
                         'このエクスポートは Rails 8.1 向けの現在スキーマのベースラインであり、再構築されたマイグレーション履歴ではありません。生成された README の手順に従い、新規または既存の Rails アプリに適用してください。',
                     rails_8_1: 'Rails 8.1',
@@ -1383,8 +1390,10 @@ export const ja: LanguageTranslation = {
                 unsupported_database:
                     'Django エクスポートは現在 PostgreSQL、MySQL、MariaDB、SQLite をサポートしています。',
                 result_step: {
-                    description:
-                        '生成された Django 6.1 パッケージを確認してください。',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'この Django エクスポートについて',
+                    export_info:
+                        'このエクスポートはそのまま組み込める Django アプリ（`foxaldb_models`）です。0001_initial.py は現在のスキーマの初期マイグレーションであり、Django マイグレーション履歴の再構築ではありません。Django 6.1 に対する実行時検証は行われていません。',
                     explanation:
                         'このエクスポートはそのまま組み込める Django アプリ（`foxaldb_models`）です。0001_initial.py は現在のスキーマの初期マイグレーションであり、Django マイグレーション履歴の再構築ではありません。Django 6.1 に対する実行時検証は行われていません。',
                     django_version: 'Django {{version}}',
@@ -1396,7 +1405,8 @@ export const ja: LanguageTranslation = {
                     generated_files: '生成されたファイル（{{count}}）',
                     notes_heading: 'メモ',
                     warnings_heading: '警告 ({{count}})',
-                    adaptations_heading: '技術的な適応 ({{count}})',
+                    adaptations_heading_one: '技術的な適応',
+                    adaptations_heading_other: '技術的な適応 ({{count}})',
                     path_label: 'パス: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'ZIP をダウンロード',
@@ -1437,7 +1447,10 @@ export const ja: LanguageTranslation = {
                     'Drizzle エクスポートは現在 PostgreSQL、MySQL、MariaDB、SQLite をサポートしています。',
                 result_step: {
                     description:
-                        '生成された Drizzle 0.45 パッケージを確認してください。',
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'この Drizzle エクスポートについて',
+                    export_info:
+                        'このエクスポートは Drizzle スキーマパッケージです。schema.ts が信頼できる情報源です。drizzle.config.ts は認証情報なしです（dialect、スキーマパス、出力ディレクトリのみ）。SQL マイグレーション履歴は再構築されません。drizzle-kit の実行時検証は行われていません。',
                     explanation:
                         'このエクスポートは Drizzle スキーマパッケージです。schema.ts が信頼できる情報源です。drizzle.config.ts は認証情報なしです（dialect、スキーマパス、出力ディレクトリのみ）。SQL マイグレーション履歴は再構築されません。drizzle-kit の実行時検証は行われていません。',
                     drizzle_version:
@@ -1450,7 +1463,8 @@ export const ja: LanguageTranslation = {
                     generated_files: '生成されたファイル（{{count}}）',
                     notes_heading: 'メモ',
                     warnings_heading: '警告 ({{count}})',
-                    adaptations_heading: '技術的な適応 ({{count}})',
+                    adaptations_heading_one: '技術的な適応',
+                    adaptations_heading_other: '技術的な適応 ({{count}})',
                     path_label: 'パス: {{path}}',
                     unknown_note:
                         '追加のエクスポートメモが返されましたが、ローカライズできませんでした。',

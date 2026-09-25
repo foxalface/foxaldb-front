@@ -1152,6 +1152,7 @@ export const vi: LanguageTranslation = {
                         'Toàn bộ sơ đồ được xuất. Nhập tệp này sẽ tạo một sơ đồ mới; sơ đồ hiện tại không bị ghi đè.',
                     filename_label: 'Tên tệp: {{filename}}',
                     download: 'Tải JSON',
+                    loading: 'Đang tải xem trước JSON...',
                 },
             },
             visual: {
@@ -1274,7 +1275,10 @@ export const vi: LanguageTranslation = {
                 unsupported_database:
                     'Xuất EF Core không khả dụng với loại cơ sở dữ liệu hiện tại.',
                 options_step: {
-                    description: 'Cấu hình xuất dự án mô hình EF Core.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'Giới thiệu về xuất EF Core này',
+                    export_info:
+                        'Xuất này tạo dự án mô hình EF Core 10 (.NET 10).\nKhông bao gồm migration.\nTạo cục bộ bằng EF Core CLI từ dự án đã xuất.',
                     explanation:
                         'Xuất một dự án mô hình EF Core 10 (.NET 10). Nhà cung cấp cơ sở dữ liệu được suy ra từ sơ đồ hiện tại. Không tạo migration; bạn có thể tạo chúng cục bộ từ dự án đã xuất.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1284,11 +1288,13 @@ export const vi: LanguageTranslation = {
                     namespace: 'Không gian tên',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'Không gian tên C# gốc của dự án được tạo. Để trống để máy chủ chọn từ tên sơ đồ.',
+                        'Không gian tên C# gốc của dự án được tạo.\nĐể trống để máy chủ chọn từ tên sơ đồ.',
+                    namespace_help_aria: 'Trợ giúp namespace',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'Tên lớp DbContext. Để trống để dùng AppDbContext.',
+                        'Tên lớp DbContext.\nĐể trống để dùng AppDbContext.',
+                    db_context_help_aria: 'Trợ giúp DbContext',
                     export: 'Xuất',
                     generating: 'Đang tạo dự án EF Core…',
                     error_rate_limited:
@@ -1316,7 +1322,10 @@ export const vi: LanguageTranslation = {
                 unsupported_database:
                     'Xuất Rails không khả dụng với loại cơ sở dữ liệu hiện tại.',
                 result_step: {
-                    description: 'Xem gói Rails 8.1 đã tạo.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'Giới thiệu xuất Rails này',
+                    export_info:
+                        'Bản xuất này là đường cơ sở lược đồ hiện tại cho Rails 8.1, không phải lịch sử migration được dựng lại. Áp dụng vào ứng dụng Rails mới hoặc hiện có theo README đã tạo.',
                     explanation:
                         'Bản xuất này là đường cơ sở lược đồ hiện tại cho Rails 8.1, không phải lịch sử migration được dựng lại. Áp dụng vào ứng dụng Rails mới hoặc hiện có theo README đã tạo.',
                     rails_8_1: 'Rails 8.1',
@@ -1348,7 +1357,10 @@ export const vi: LanguageTranslation = {
                 unsupported_database:
                     'Xuất Django hiện hỗ trợ PostgreSQL, MySQL, MariaDB và SQLite.',
                 result_step: {
-                    description: 'Xem lại gói Django 6.1 đã tạo.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'Giới thiệu xuất Django này',
+                    export_info:
+                        'Bản xuất này là ứng dụng Django tích hợp trực tiếp (`foxaldb_models`). 0001_initial.py là migration ban đầu của schema hiện tại, không phải lịch sử migration Django được tái tạo. Chưa xác thực runtime với Django 6.1.',
                     explanation:
                         'Bản xuất này là ứng dụng Django tích hợp trực tiếp (`foxaldb_models`). 0001_initial.py là migration ban đầu của schema hiện tại, không phải lịch sử migration Django được tái tạo. Chưa xác thực runtime với Django 6.1.',
                     django_version: 'Django {{version}}',
@@ -1360,7 +1372,9 @@ export const vi: LanguageTranslation = {
                     generated_files: 'Tệp đã tạo ({{count}})',
                     notes_heading: 'Ghi chú',
                     warnings_heading: 'Cảnh báo ({{count}})',
-                    adaptations_heading: 'Điều chỉnh kỹ thuật ({{count}})',
+                    adaptations_heading_one: 'Điều chỉnh kỹ thuật',
+                    adaptations_heading_other:
+                        'Điều chỉnh kỹ thuật ({{count}})',
                     path_label: 'Đường dẫn: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'Tải ZIP',
@@ -1398,7 +1412,11 @@ export const vi: LanguageTranslation = {
                 unsupported_database:
                     'Xuất Drizzle hiện hỗ trợ PostgreSQL, MySQL, MariaDB và SQLite.',
                 result_step: {
-                    description: 'Xem lại gói Drizzle 0.45 đã tạo.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'Giới thiệu xuất Drizzle này',
+                    export_info:
+                        'Bản xuất này là gói lược đồ Drizzle. schema.ts là nguồn sự thật. drizzle.config.ts không chứa thông tin đăng nhập (chỉ dialect, đường dẫn lược đồ và thư mục đầu ra). Lịch sử migration SQL không được tái tạo. Chưa thực hiện kiểm tra drizzle-kit lúc chạy.',
                     explanation:
                         'Bản xuất này là gói lược đồ Drizzle. schema.ts là nguồn sự thật. drizzle.config.ts không chứa thông tin đăng nhập (chỉ dialect, đường dẫn lược đồ và thư mục đầu ra). Lịch sử migration SQL không được tái tạo. Chưa thực hiện kiểm tra drizzle-kit lúc chạy.',
                     drizzle_version:
@@ -1411,7 +1429,9 @@ export const vi: LanguageTranslation = {
                     generated_files: 'Tệp đã tạo ({{count}})',
                     notes_heading: 'Ghi chú',
                     warnings_heading: 'Cảnh báo ({{count}})',
-                    adaptations_heading: 'Điều chỉnh kỹ thuật ({{count}})',
+                    adaptations_heading_one: 'Điều chỉnh kỹ thuật',
+                    adaptations_heading_other:
+                        'Điều chỉnh kỹ thuật ({{count}})',
                     path_label: 'Đường dẫn: {{path}}',
                     unknown_note:
                         'Một ghi chú xuất bổ sung đã được trả về và không thể bản địa hóa.',

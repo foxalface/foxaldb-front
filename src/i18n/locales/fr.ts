@@ -1176,6 +1176,7 @@ export const fr: LanguageTranslation = {
                         'Le diagramme complet est exporté. Importer ce fichier crée un nouveau diagramme ; il n’écrase pas le diagramme actuel.',
                     filename_label: 'Nom du fichier : {{filename}}',
                     download: 'Télécharger le JSON',
+                    loading: 'Chargement de l’aperçu JSON…',
                 },
             },
             visual: {
@@ -1308,8 +1309,10 @@ export const fr: LanguageTranslation = {
                 unsupported_database:
                     "L'export EF Core n'est pas disponible pour le type de base de données actuel.",
                 options_step: {
-                    description:
-                        'Configurez l’export du projet modèle EF Core.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'À propos de cet export EF Core',
+                    export_info:
+                        'Cet export génère un projet modèle EF Core 10 (.NET 10).\nLes migrations ne sont pas incluses.\nCréez-les localement avec la CLI EF Core à partir du projet exporté.',
                     explanation:
                         'Exportez un projet modèle EF Core 10 (.NET 10). Le fournisseur de base de données est déduit du diagramme actuel. Les migrations ne sont pas générées ; vous pourrez les créer localement à partir du projet exporté.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1319,11 +1322,13 @@ export const fr: LanguageTranslation = {
                     namespace: 'Espace de noms',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'Espace de noms C# racine du projet généré. Laissez vide pour laisser le serveur en choisir un à partir du nom du diagramme.',
+                        'Espace de noms C# racine du projet généré.\nLaissez vide pour laisser le serveur en choisir un à partir du nom du diagramme.',
+                    namespace_help_aria: 'Aide sur l’espace de noms',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'Nom de la classe DbContext. Laissez vide pour utiliser AppDbContext.',
+                        'Nom de la classe DbContext.\nLaissez vide pour utiliser AppDbContext.',
+                    db_context_help_aria: 'Aide sur le DbContext',
                     export: 'Exporter',
                     generating: 'Génération du projet EF Core…',
                     error_rate_limited:
@@ -1351,7 +1356,10 @@ export const fr: LanguageTranslation = {
                 unsupported_database:
                     'L’export Rails n’est pas disponible pour le type de base de données actuel.',
                 result_step: {
-                    description: 'Vérifiez le paquet Rails 8.1 généré.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'À propos de cet export Rails',
+                    export_info:
+                        'Cet export est une base du schéma actuel pour Rails 8.1, et non un historique de migrations reconstitué. Appliquez-le à une application Rails nouvelle ou existante comme indiqué dans le README généré.',
                     explanation:
                         'Cet export est une base du schéma actuel pour Rails 8.1, et non un historique de migrations reconstitué. Appliquez-le à une application Rails nouvelle ou existante comme indiqué dans le README généré.',
                     rails_8_1: 'Rails 8.1',
@@ -1383,7 +1391,10 @@ export const fr: LanguageTranslation = {
                 unsupported_database:
                     'L’export Django prend actuellement en charge PostgreSQL, MySQL, MariaDB et SQLite.',
                 result_step: {
-                    description: 'Vérifiez le paquet Django 6.1 généré.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'À propos de cet export Django',
+                    export_info:
+                        'Cet export produit une application Django prête à intégrer à un projet existant (`foxaldb_models`). Le fichier 0001_initial.py est une migration initiale représentant l’état actuel du schéma ; il ne reconstitue pas l’historique des migrations Django. Cet export n’a pas été validé à l’exécution contre Django 6.1.',
                     explanation:
                         'Cet export produit une application Django prête à intégrer à un projet existant (`foxaldb_models`). Le fichier 0001_initial.py est une migration initiale représentant l’état actuel du schéma ; il ne reconstitue pas l’historique des migrations Django. Cet export n’a pas été validé à l’exécution contre Django 6.1.',
                     django_version: 'Django {{version}}',
@@ -1395,7 +1406,9 @@ export const fr: LanguageTranslation = {
                     generated_files: 'Fichiers générés ({{count}})',
                     notes_heading: 'Remarques',
                     warnings_heading: 'Avertissements ({{count}})',
-                    adaptations_heading: 'Adaptations techniques ({{count}})',
+                    adaptations_heading_one: 'Adaptation technique',
+                    adaptations_heading_other:
+                        'Adaptations techniques ({{count}})',
                     path_label: 'Chemin : {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'Télécharger le ZIP',
@@ -1434,7 +1447,11 @@ export const fr: LanguageTranslation = {
                 unsupported_database:
                     'L’export Drizzle prend actuellement en charge PostgreSQL, MySQL, MariaDB et SQLite.',
                 result_step: {
-                    description: 'Vérifiez le paquet Drizzle 0.45 généré.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'À propos de cet export Drizzle',
+                    export_info:
+                        'Cet export est un paquet de schéma Drizzle. schema.ts est la source de vérité. drizzle.config.ts est sans identifiants (dialecte, chemin du schéma et répertoire de sortie uniquement). L’historique des migrations SQL n’est pas reconstitué. La validation drizzle-kit à l’exécution n’a pas été effectuée.',
                     explanation:
                         'Cet export est un paquet de schéma Drizzle. schema.ts est la source de vérité. drizzle.config.ts est sans identifiants (dialecte, chemin du schéma et répertoire de sortie uniquement). L’historique des migrations SQL n’est pas reconstitué. La validation drizzle-kit à l’exécution n’a pas été effectuée.',
                     drizzle_version:
@@ -1447,7 +1464,9 @@ export const fr: LanguageTranslation = {
                     generated_files: 'Fichiers générés ({{count}})',
                     notes_heading: 'Remarques',
                     warnings_heading: 'Avertissements ({{count}})',
-                    adaptations_heading: 'Adaptations techniques ({{count}})',
+                    adaptations_heading_one: 'Adaptation technique',
+                    adaptations_heading_other:
+                        'Adaptations techniques ({{count}})',
                     path_label: 'Chemin : {{path}}',
                     unknown_note:
                         'Une note d’export supplémentaire a été renvoyée et n’a pas pu être localisée.',

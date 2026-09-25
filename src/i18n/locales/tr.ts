@@ -1137,6 +1137,7 @@ export const tr: LanguageTranslation = {
                         'Diyagramın tamamı dışa aktarılır. Bu dosyayı içe aktarmak yeni bir diyagram oluşturur; mevcut diyagramın üzerine yazılmaz.',
                     filename_label: 'Dosya adı: {{filename}}',
                     download: 'JSON indir',
+                    loading: 'JSON önizlemesi yükleniyor...',
                 },
             },
             visual: {
@@ -1266,8 +1267,10 @@ export const tr: LanguageTranslation = {
                 unsupported_database:
                     'EF Core dışa aktarma, geçerli veritabanı türü için kullanılamaz.',
                 options_step: {
-                    description:
-                        'EF Core model projesinin dışa aktarımını yapılandırın.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'Bu EF Core dışa aktarımı hakkında',
+                    export_info:
+                        'Bu dışa aktarım bir EF Core 10 (.NET 10) model projesi oluşturur.\nMigrasyonlar dahil değildir.\nDışa aktarılan projeden EF Core CLI ile yerelde oluşturun.',
                     explanation:
                         'Bir EF Core 10 (.NET 10) model projesi dışa aktarın. Veritabanı sağlayıcısı geçerli diyagramdan çıkarılır. Geçişler (migrations) üretilmez; bunları dışa aktarılan projeden yerel olarak oluşturabilirsiniz.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1277,11 +1280,13 @@ export const tr: LanguageTranslation = {
                     namespace: 'Ad alanı',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'Üretilen proje için kök C# ad alanı. Sunucunun diyagram adından bir ad seçmesi için boş bırakın.',
+                        'Üretilen proje için kök C# ad alanı.\nSunucunun diyagram adından bir ad seçmesi için boş bırakın.',
+                    namespace_help_aria: 'Ad alanı yardımı',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext sınıf adı. AppDbContext kullanmak için boş bırakın.',
+                        'DbContext sınıf adı.\nAppDbContext kullanmak için boş bırakın.',
+                    db_context_help_aria: 'DbContext yardımı',
                     export: 'Dışa aktar',
                     generating: 'EF Core projesi oluşturuluyor…',
                     error_rate_limited:
@@ -1293,8 +1298,7 @@ export const tr: LanguageTranslation = {
                         'EF Core projelerini dışa aktarmak için oturum açmanız gerekir.',
                 },
                 result_step: {
-                    description:
-                        'Oluşturulan EF Core projesini gözden geçirin.',
+                    description: 'Oluşturulan EF Core projesini inceleyin.',
                     success: 'EF Core projesi oluşturuldu.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: 'Sağlayıcı: {{provider}}',
@@ -1310,7 +1314,10 @@ export const tr: LanguageTranslation = {
                 unsupported_database:
                     'Rails dışa aktarma, geçerli veritabanı türü için kullanılamaz.',
                 result_step: {
-                    description: 'Oluşturulan Rails 8.1 paketini inceleyin.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'Bu Rails dışa aktarımı hakkında',
+                    export_info:
+                        'Bu dışa aktarma, Rails 8.1 için mevcut şemanın temelidir; yeniden oluşturulmuş bir göç geçmişi değildir. Oluşturulan README’deki talimatlara göre yeni veya mevcut bir Rails uygulamasına uygulayın.',
                     explanation:
                         'Bu dışa aktarma, Rails 8.1 için mevcut şemanın temelidir; yeniden oluşturulmuş bir göç geçmişi değildir. Oluşturulan README’deki talimatlara göre yeni veya mevcut bir Rails uygulamasına uygulayın.',
                     rails_8_1: 'Rails 8.1',
@@ -1342,7 +1349,10 @@ export const tr: LanguageTranslation = {
                 unsupported_database:
                     'Django dışa aktarımı şu anda PostgreSQL, MySQL, MariaDB ve SQLite destekler.',
                 result_step: {
-                    description: 'Oluşturulan Django 6.1 paketini inceleyin.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'Bu Django dışa aktarımı hakkında',
+                    export_info:
+                        'Bu dışa aktarım doğrudan entegre edilebilir bir Django uygulamasıdır (`foxaldb_models`). 0001_initial.py, mevcut şemanın başlangıç migrasyonudur; yeniden oluşturulmuş Django migrasyon geçmişi değildir. Django 6.1 karşısında çalışma zamanı doğrulaması yapılmamıştır.',
                     explanation:
                         'Bu dışa aktarım doğrudan entegre edilebilir bir Django uygulamasıdır (`foxaldb_models`). 0001_initial.py, mevcut şemanın başlangıç migrasyonudur; yeniden oluşturulmuş Django migrasyon geçmişi değildir. Django 6.1 karşısında çalışma zamanı doğrulaması yapılmamıştır.',
                     django_version: 'Django {{version}}',
@@ -1354,7 +1364,8 @@ export const tr: LanguageTranslation = {
                     generated_files: 'Oluşturulan dosyalar ({{count}})',
                     notes_heading: 'Notlar',
                     warnings_heading: 'Uyarılar ({{count}})',
-                    adaptations_heading: 'Teknik uyarlamalar ({{count}})',
+                    adaptations_heading_one: 'Teknik uyarlama',
+                    adaptations_heading_other: 'Teknik uyarlamalar ({{count}})',
                     path_label: 'Yol: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'ZIP indir',
@@ -1394,7 +1405,11 @@ export const tr: LanguageTranslation = {
                 unsupported_database:
                     'Drizzle dışa aktarma şu anda PostgreSQL, MySQL, MariaDB ve SQLite’ı destekler.',
                 result_step: {
-                    description: 'Oluşturulan Drizzle 0.45 paketini inceleyin.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'Bu Drizzle dışa aktarımı hakkında',
+                    export_info:
+                        'Bu dışa aktarma bir Drizzle şema paketidir. schema.ts doğruluk kaynağıdır. drizzle.config.ts kimlik bilgisi içermez (yalnızca diyalekt, şema yolu ve çıktı dizini). SQL geçiş geçmişi yeniden oluşturulmaz. drizzle-kit çalışma zamanı doğrulaması yapılmamıştır.',
                     explanation:
                         'Bu dışa aktarma bir Drizzle şema paketidir. schema.ts doğruluk kaynağıdır. drizzle.config.ts kimlik bilgisi içermez (yalnızca diyalekt, şema yolu ve çıktı dizini). SQL geçiş geçmişi yeniden oluşturulmaz. drizzle-kit çalışma zamanı doğrulaması yapılmamıştır.',
                     drizzle_version:
@@ -1407,7 +1422,8 @@ export const tr: LanguageTranslation = {
                     generated_files: 'Oluşturulan dosyalar ({{count}})',
                     notes_heading: 'Notlar',
                     warnings_heading: 'Uyarılar ({{count}})',
-                    adaptations_heading: 'Teknik uyarlamalar ({{count}})',
+                    adaptations_heading_one: 'Teknik uyarlama',
+                    adaptations_heading_other: 'Teknik uyarlamalar ({{count}})',
                     path_label: 'Yol: {{path}}',
                     unknown_note:
                         'Ek bir dışa aktarma notu döndürüldü ve yerelleştirilemedi.',

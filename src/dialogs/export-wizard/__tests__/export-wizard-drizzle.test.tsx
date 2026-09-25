@@ -306,24 +306,24 @@ describe('ExportWizardDialog Drizzle branch', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('shows static Drizzle version information and the inferred provider', async () => {
+    it('shows provider context in the description and export info tooltip', async () => {
         await openDrizzleBranch();
 
-        expect(screen.getByTestId('export-drizzle-version')).toHaveTextContent(
-            'export_wizard.drizzle.result_step.drizzle_version:^0.45/^0.31'
-        );
-        expect(screen.getByTestId('export-drizzle-provider')).toHaveTextContent(
-            'export_wizard.drizzle.result_step.provider_label:PostgreSQL'
-        );
         expect(
-            screen.getByTestId('export-drizzle-package-type')
-        ).toHaveTextContent('export_wizard.drizzle.result_step.package_type');
-        expect(
-            screen.getByTestId('export-drizzle-package-type').textContent
-        ).not.toContain('`');
-        expect(
-            screen.getByText('export_wizard.drizzle.result_step.explanation')
+            screen.getByText(
+                'export_wizard.drizzle.result_step.description:PostgreSQL'
+            )
         ).toBeInTheDocument();
+        expect(screen.getByTestId('drizzle-export-info')).toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-drizzle-version')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-drizzle-provider')
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('export-drizzle-package-type')
+        ).not.toBeInTheDocument();
     });
 
     it('sends the full current live Diagram and no extra options', async () => {
@@ -373,7 +373,7 @@ describe('ExportWizardDialog Drizzle branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-drizzle-result-success')
+                screen.getByTestId('export-drizzle-file-list')
             ).toBeInTheDocument();
         });
         expect(exportDrizzleProjectMock).toHaveBeenCalledTimes(1);
@@ -384,7 +384,7 @@ describe('ExportWizardDialog Drizzle branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-drizzle-result-success')
+                screen.getByTestId('export-drizzle-file-list')
             ).toBeInTheDocument();
         });
 
@@ -406,9 +406,14 @@ describe('ExportWizardDialog Drizzle branch', () => {
             screen.queryByTestId('export-drizzle-warnings')
         ).not.toBeInTheDocument();
         expect(
-            screen.getByTestId('export-drizzle-adaptations-toggle')
+            screen.getByTestId('export-drizzle-adaptations')
         ).toHaveTextContent(
             'export_wizard.drizzle.result_step.adaptations_heading:1'
+        );
+        expect(
+            screen.getByTestId('export-drizzle-adaptations-list')
+        ).toHaveTextContent(
+            'export_wizard.drizzle.result_step.notes.schema_ignored_sqlite[path=users,schema=ignored]'
         );
     });
 
@@ -441,18 +446,14 @@ describe('ExportWizardDialog Drizzle branch', () => {
         ).toBeInTheDocument();
     });
 
-    it('expands technical adaptations on demand and renders path separately', async () => {
+    it('shows technical adaptations and renders path separately', async () => {
         await openDrizzleBranch();
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-drizzle-adaptations-toggle')
+                screen.getByTestId('export-drizzle-adaptations-list')
             ).toBeInTheDocument();
         });
-
-        await userEvent.click(
-            screen.getByTestId('export-drizzle-adaptations-toggle')
-        );
 
         expect(
             screen.getByTestId('export-drizzle-adaptations-list')
@@ -485,7 +486,7 @@ describe('ExportWizardDialog Drizzle branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-drizzle-result-success')
+                screen.getByTestId('export-drizzle-file-list')
             ).toBeInTheDocument();
         });
 
@@ -533,15 +534,10 @@ describe('ExportWizardDialog Drizzle branch', () => {
             'export_wizard.drizzle.result_step.notes.index_omitted.unsupported_method[path=items.payload_gin,indexType=gist]'
         );
         expect(
-            screen.getByTestId('export-drizzle-adaptations-toggle')
+            screen.getByTestId('export-drizzle-adaptations')
         ).toHaveTextContent(
             'export_wizard.drizzle.result_step.adaptations_heading:1'
         );
-
-        await userEvent.click(
-            screen.getByTestId('export-drizzle-adaptations-toggle')
-        );
-
         expect(
             screen.getByTestId('export-drizzle-adaptations-list')
         ).toHaveTextContent(
@@ -713,7 +709,7 @@ describe('ExportWizardDialog Drizzle branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-drizzle-result-success')
+                screen.getByTestId('export-drizzle-file-list')
             ).toBeInTheDocument();
         });
 
@@ -838,7 +834,7 @@ describe('ExportWizardDialog Drizzle branch', () => {
 
         await waitFor(() => {
             expect(
-                screen.getByTestId('export-drizzle-result-success')
+                screen.getByTestId('export-drizzle-file-list')
             ).toBeInTheDocument();
         });
 
@@ -877,7 +873,7 @@ describe('ExportWizardDialog Drizzle branch', () => {
         resolveExport?.(successResponse());
 
         expect(
-            screen.queryByTestId('export-drizzle-result-success')
+            screen.queryByTestId('export-drizzle-file-list')
         ).not.toBeInTheDocument();
     });
 

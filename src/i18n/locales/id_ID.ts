@@ -1154,6 +1154,7 @@ export const id_ID: LanguageTranslation = {
                         'Seluruh diagram diekspor. Mengimpor file ini membuat diagram baru; diagram saat ini tidak ditimpa.',
                     filename_label: 'Nama file: {{filename}}',
                     download: 'Unduh JSON',
+                    loading: 'Memuat pratinjau JSON...',
                 },
             },
             visual: {
@@ -1282,7 +1283,10 @@ export const id_ID: LanguageTranslation = {
                 unsupported_database:
                     'Ekspor EF Core tidak tersedia untuk jenis basis data saat ini.',
                 options_step: {
-                    description: 'Konfigurasikan ekspor proyek model EF Core.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'Tentang ekspor EF Core ini',
+                    export_info:
+                        'Ekspor ini menghasilkan proyek model EF Core 10 (.NET 10).\nMigrasi tidak disertakan.\nBuat secara lokal dengan EF Core CLI dari proyek yang diekspor.',
                     explanation:
                         'Ekspor proyek model EF Core 10 (.NET 10). Penyedia basis data disimpulkan dari diagram saat ini. Migrasi tidak dibuat; Anda dapat membuatnya secara lokal dari proyek yang diekspor.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1292,11 +1296,13 @@ export const id_ID: LanguageTranslation = {
                     namespace: 'Namespace',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'Namespace C# akar untuk proyek yang dihasilkan. Biarkan kosong agar server memilih dari nama diagram.',
+                        'Namespace C# akar untuk proyek yang dihasilkan.\nBiarkan kosong agar server memilih dari nama diagram.',
+                    namespace_help_aria: 'Bantuan namespace',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'Nama kelas DbContext. Biarkan kosong untuk menggunakan AppDbContext.',
+                        'Nama kelas DbContext.\nBiarkan kosong untuk menggunakan AppDbContext.',
+                    db_context_help_aria: 'Bantuan DbContext',
                     export: 'Ekspor',
                     generating: 'Menghasilkan proyek EF Core…',
                     error_rate_limited:
@@ -1325,7 +1331,10 @@ export const id_ID: LanguageTranslation = {
                 unsupported_database:
                     'Ekspor Rails tidak tersedia untuk jenis basis data saat ini.',
                 result_step: {
-                    description: 'Tinjau paket Rails 8.1 yang dihasilkan.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'Tentang ekspor Rails ini',
+                    export_info:
+                        'Ekspor ini adalah baseline skema saat ini untuk Rails 8.1, bukan riwayat migrasi yang direkonstruksi. Terapkan ke aplikasi Rails baru atau yang sudah ada sesuai README yang dihasilkan.',
                     explanation:
                         'Ekspor ini adalah baseline skema saat ini untuk Rails 8.1, bukan riwayat migrasi yang direkonstruksi. Terapkan ke aplikasi Rails baru atau yang sudah ada sesuai README yang dihasilkan.',
                     rails_8_1: 'Rails 8.1',
@@ -1358,7 +1367,10 @@ export const id_ID: LanguageTranslation = {
                 unsupported_database:
                     'Ekspor Django saat ini mendukung PostgreSQL, MySQL, MariaDB, dan SQLite.',
                 result_step: {
-                    description: 'Tinjau paket Django 6.1 yang dihasilkan.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'Tentang ekspor Django ini',
+                    export_info:
+                        'Ekspor ini adalah aplikasi Django siap integrasi (`foxaldb_models`). 0001_initial.py adalah migrasi awal skema saat ini, bukan riwayat migrasi Django yang direkonstruksi. Validasi runtime terhadap Django 6.1 belum dilakukan.',
                     explanation:
                         'Ekspor ini adalah aplikasi Django siap integrasi (`foxaldb_models`). 0001_initial.py adalah migrasi awal skema saat ini, bukan riwayat migrasi Django yang direkonstruksi. Validasi runtime terhadap Django 6.1 belum dilakukan.',
                     django_version: 'Django {{version}}',
@@ -1370,7 +1382,8 @@ export const id_ID: LanguageTranslation = {
                     generated_files: 'File yang dihasilkan ({{count}})',
                     notes_heading: 'Catatan',
                     warnings_heading: 'Peringatan ({{count}})',
-                    adaptations_heading: 'Adaptasi teknis ({{count}})',
+                    adaptations_heading_one: 'Adaptasi teknis',
+                    adaptations_heading_other: 'Adaptasi teknis ({{count}})',
                     path_label: 'Jalur: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'Unduh ZIP',
@@ -1409,7 +1422,11 @@ export const id_ID: LanguageTranslation = {
                 unsupported_database:
                     'Ekspor Drizzle saat ini mendukung PostgreSQL, MySQL, MariaDB, dan SQLite.',
                 result_step: {
-                    description: 'Tinjau paket Drizzle 0.45 yang dihasilkan.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'Tentang ekspor Drizzle ini',
+                    export_info:
+                        'Ekspor ini adalah paket skema Drizzle. schema.ts adalah sumber kebenaran. drizzle.config.ts bebas kredensial (hanya dialek, jalur skema, dan direktori keluaran). Riwayat migrasi SQL tidak direkonstruksi. Validasi runtime drizzle-kit belum dilakukan.',
                     explanation:
                         'Ekspor ini adalah paket skema Drizzle. schema.ts adalah sumber kebenaran. drizzle.config.ts bebas kredensial (hanya dialek, jalur skema, dan direktori keluaran). Riwayat migrasi SQL tidak direkonstruksi. Validasi runtime drizzle-kit belum dilakukan.',
                     drizzle_version:
@@ -1422,7 +1439,8 @@ export const id_ID: LanguageTranslation = {
                     generated_files: 'File yang dihasilkan ({{count}})',
                     notes_heading: 'Catatan',
                     warnings_heading: 'Peringatan ({{count}})',
-                    adaptations_heading: 'Adaptasi teknis ({{count}})',
+                    adaptations_heading_one: 'Adaptasi teknis',
+                    adaptations_heading_other: 'Adaptasi teknis ({{count}})',
                     path_label: 'Jalur: {{path}}',
                     unknown_note:
                         'Catatan ekspor tambahan dikembalikan dan tidak dapat dilokalkan.',

@@ -1151,6 +1151,7 @@ export const ru: LanguageTranslation = {
                         'Экспортируется вся диаграмма. Импорт этого файла создаёт новую диаграмму и не перезаписывает текущую.',
                     filename_label: 'Имя файла: {{filename}}',
                     download: 'Скачать JSON',
+                    loading: 'Загрузка предпросмотра JSON...',
                 },
             },
             visual: {
@@ -1280,8 +1281,10 @@ export const ru: LanguageTranslation = {
                 unsupported_database:
                     'Экспорт EF Core недоступен для текущего типа базы данных.',
                 options_step: {
-                    description:
-                        'Настройте экспорт модельного проекта EF Core.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'Об этом экспорте EF Core',
+                    export_info:
+                        'Этот экспорт создаёт проект модели EF Core 10 (.NET 10).\nМиграции не включены.\nСоздайте их локально с помощью CLI EF Core из экспортированного проекта.',
                     explanation:
                         'Экспортируйте модельный проект EF Core 10 (.NET 10). Поставщик базы данных определяется по текущей диаграмме. Миграции не создаются; вы можете сгенерировать их локально из экспортированного проекта.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1291,11 +1294,13 @@ export const ru: LanguageTranslation = {
                     namespace: 'Пространство имён',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'Корневое пространство имён C# для созданного проекта. Оставьте пустым, чтобы сервер выбрал его по имени диаграммы.',
+                        'Корневое пространство имён C# для созданного проекта.\nОставьте пустым, чтобы сервер выбрал его по имени диаграммы.',
+                    namespace_help_aria: 'Справка по пространству имён',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'Имя класса DbContext. Оставьте пустым, чтобы использовать AppDbContext.',
+                        'Имя класса DbContext.\nОставьте пустым, чтобы использовать AppDbContext.',
+                    db_context_help_aria: 'Справка по DbContext',
                     export: 'Экспортировать',
                     generating: 'Создание проекта EF Core…',
                     error_rate_limited:
@@ -1307,7 +1312,7 @@ export const ru: LanguageTranslation = {
                         'Чтобы экспортировать проекты EF Core, необходимо войти в систему.',
                 },
                 result_step: {
-                    description: 'Проверьте созданный проект EF Core.',
+                    description: 'Просмотрите сгенерированный проект EF Core.',
                     success: 'Проект EF Core создан.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: 'Поставщик: {{provider}}',
@@ -1323,7 +1328,10 @@ export const ru: LanguageTranslation = {
                 unsupported_database:
                     'Экспорт Rails недоступен для текущего типа базы данных.',
                 result_step: {
-                    description: 'Проверьте созданный пакет Rails 8.1.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'Об этом экспорте Rails',
+                    export_info:
+                        'Этот экспорт — текущая базовая схема для Rails 8.1, а не восстановленная история миграций. Примените его к новому или существующему приложению Rails согласно созданному README.',
                     explanation:
                         'Этот экспорт — текущая базовая схема для Rails 8.1, а не восстановленная история миграций. Примените его к новому или существующему приложению Rails согласно созданному README.',
                     rails_8_1: 'Rails 8.1',
@@ -1355,7 +1363,10 @@ export const ru: LanguageTranslation = {
                 unsupported_database:
                     'Экспорт Django в настоящее время поддерживает PostgreSQL, MySQL, MariaDB и SQLite.',
                 result_step: {
-                    description: 'Проверьте созданный пакет Django 6.1.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'Об этом экспорте Django',
+                    export_info:
+                        'Этот экспорт — приложение Django для прямой интеграции (`foxaldb_models`). 0001_initial.py — начальная миграция текущей схемы, а не восстановленная история миграций Django. Проверка во время выполнения против Django 6.1 не проводилась.',
                     explanation:
                         'Этот экспорт — приложение Django для прямой интеграции (`foxaldb_models`). 0001_initial.py — начальная миграция текущей схемы, а не восстановленная история миграций Django. Проверка во время выполнения против Django 6.1 не проводилась.',
                     django_version: 'Django {{version}}',
@@ -1367,7 +1378,9 @@ export const ru: LanguageTranslation = {
                     generated_files: 'Созданные файлы ({{count}})',
                     notes_heading: 'Примечания',
                     warnings_heading: 'Предупреждения ({{count}})',
-                    adaptations_heading: 'Технические адаптации ({{count}})',
+                    adaptations_heading_one: 'Техническая адаптация',
+                    adaptations_heading_other:
+                        'Технические адаптации ({{count}})',
                     path_label: 'Путь: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'Скачать ZIP',
@@ -1406,7 +1419,11 @@ export const ru: LanguageTranslation = {
                 unsupported_database:
                     'Экспорт Drizzle сейчас поддерживает PostgreSQL, MySQL, MariaDB и SQLite.',
                 result_step: {
-                    description: 'Проверьте созданный пакет Drizzle 0.45.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'Об этом экспорте Drizzle',
+                    export_info:
+                        'Этот экспорт — пакет схемы Drizzle. schema.ts является источником истины. drizzle.config.ts не содержит учётных данных (только диалект, путь к схеме и каталог вывода). История SQL-миграций не восстанавливается. Проверка drizzle-kit во время выполнения не проводилась.',
                     explanation:
                         'Этот экспорт — пакет схемы Drizzle. schema.ts является источником истины. drizzle.config.ts не содержит учётных данных (только диалект, путь к схеме и каталог вывода). История SQL-миграций не восстанавливается. Проверка drizzle-kit во время выполнения не проводилась.',
                     drizzle_version:
@@ -1419,7 +1436,9 @@ export const ru: LanguageTranslation = {
                     generated_files: 'Созданные файлы ({{count}})',
                     notes_heading: 'Примечания',
                     warnings_heading: 'Предупреждения ({{count}})',
-                    adaptations_heading: 'Технические адаптации ({{count}})',
+                    adaptations_heading_one: 'Техническая адаптация',
+                    adaptations_heading_other:
+                        'Технические адаптации ({{count}})',
                     path_label: 'Путь: {{path}}',
                     unknown_note:
                         'Была возвращена дополнительная заметка экспорта, которую не удалось локализовать.',

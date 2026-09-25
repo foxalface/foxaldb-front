@@ -1151,6 +1151,7 @@ export const bn: LanguageTranslation = {
                         'সম্পূর্ণ ডায়াগ্রাম রপ্তানি হয়। এই ফাইল আমদানি করলে একটি নতুন ডায়াগ্রাম তৈরি হয়; বর্তমান ডায়াগ্রাম ওভাররাইট হয় না।',
                     filename_label: 'ফাইলের নাম: {{filename}}',
                     download: 'JSON ডাউনলোড',
+                    loading: 'JSON প্রিভিউ লোড হচ্ছে...',
                 },
             },
             visual: {
@@ -1280,7 +1281,10 @@ export const bn: LanguageTranslation = {
                 unsupported_database:
                     'বর্তমান ডেটাবেস ধরনের জন্য EF Core রপ্তানি উপলব্ধ নয়।',
                 options_step: {
-                    description: 'EF Core মডেল প্রকল্প রপ্তানি কনফিগার করুন।',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'এই EF Core এক্সপোর্ট সম্পর্কে',
+                    export_info:
+                        'এই এক্সপোর্ট EF Core 10 (.NET 10) মডেল প্রকল্প তৈরি করে।\nমাইগ্রেশন অন্তর্ভুক্ত নয়।\nএক্সপোর্ট করা প্রকল্প থেকে EF Core CLI দিয়ে স্থানীয়ভাবে তৈরি করুন।',
                     explanation:
                         'একটি EF Core 10 (.NET 10) মডেল প্রকল্প রপ্তানি করুন। ডেটাবেস প্রদানকারী বর্তমান ডায়াগ্রাম থেকে নির্ধারিত হয়। মাইগ্রেশন তৈরি হয় না; রপ্তানি করা প্রকল্প থেকে আপনি সেগুলো স্থানীয়ভাবে তৈরি করতে পারেন।',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1290,11 +1294,13 @@ export const bn: LanguageTranslation = {
                     namespace: 'নেমস্পেস',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'তৈরি প্রকল্পের মূল C# নেমস্পেস। সার্ভারকে ডায়াগ্রামের নাম থেকে বেছে নিতে খালি রাখুন।',
+                        'তৈরি প্রকল্পের মূল C# নেমস্পেস।\nসার্ভারকে ডায়াগ্রামের নাম থেকে বেছে নিতে খালি রাখুন।',
+                    namespace_help_aria: 'নেমস্পেস সহায়তা',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext ক্লাসের নাম। AppDbContext ব্যবহার করতে খালি রাখুন।',
+                        'DbContext ক্লাসের নাম।\nAppDbContext ব্যবহার করতে খালি রাখুন।',
+                    db_context_help_aria: 'DbContext সহায়তা',
                     export: 'রপ্তানি করুন',
                     generating: 'EF Core প্রকল্প তৈরি হচ্ছে...',
                     error_rate_limited:
@@ -1322,8 +1328,10 @@ export const bn: LanguageTranslation = {
                 unsupported_database:
                     'বর্তমান ডাটাবেস ধরনের জন্য Rails রপ্তানি উপলব্ধ নয়।',
                 result_step: {
-                    description:
-                        'জেনারেট করা Rails 8.1 প্যাকেজ পর্যালোচনা করুন।',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'এই Rails এক্সপোর্ট সম্পর্কে',
+                    export_info:
+                        'এই রপ্তানি Rails 8.1-এর জন্য বর্তমান স্কিমার বেসলাইন, পুনর্গঠিত মাইগ্রেশন ইতিহাস নয়। জেনারেট করা README অনুসারে এটি নতুন বা বিদ্যমান Rails অ্যাপে প্রয়োগ করুন।',
                     explanation:
                         'এই রপ্তানি Rails 8.1-এর জন্য বর্তমান স্কিমার বেসলাইন, পুনর্গঠিত মাইগ্রেশন ইতিহাস নয়। জেনারেট করা README অনুসারে এটি নতুন বা বিদ্যমান Rails অ্যাপে প্রয়োগ করুন।',
                     rails_8_1: 'Rails 8.1',
@@ -1355,8 +1363,10 @@ export const bn: LanguageTranslation = {
                 unsupported_database:
                     'Django রপ্তানি বর্তমানে PostgreSQL, MySQL, MariaDB এবং SQLite সমর্থন করে।',
                 result_step: {
-                    description:
-                        'জেনারেট করা Django 6.1 প্যাকেজ পর্যালোচনা করুন।',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'এই Django এক্সপোর্ট সম্পর্কে',
+                    export_info:
+                        'এই রপ্তানি সরাসরি একীকরণযোগ্য Django অ্যাপ (`foxaldb_models`)। 0001_initial.py বর্তমান schema-এর প্রাথমিক migration, পুনর্গঠিত Django migration history নয়। Django 6.1-এর বিপক্ষে runtime validation করা হয়নি।',
                     explanation:
                         'এই রপ্তানি সরাসরি একীকরণযোগ্য Django অ্যাপ (`foxaldb_models`)। 0001_initial.py বর্তমান schema-এর প্রাথমিক migration, পুনর্গঠিত Django migration history নয়। Django 6.1-এর বিপক্ষে runtime validation করা হয়নি।',
                     django_version: 'Django {{version}}',
@@ -1368,7 +1378,8 @@ export const bn: LanguageTranslation = {
                     generated_files: 'জেনারেট করা ফাইল ({{count}})',
                     notes_heading: 'নোট',
                     warnings_heading: 'সতর্কতা ({{count}})',
-                    adaptations_heading: 'কারিগরি অভিযোজন ({{count}})',
+                    adaptations_heading_one: 'প্রযুক্তিগত অভিযোজন',
+                    adaptations_heading_other: 'কারিগরি অভিযোজন ({{count}})',
                     path_label: 'পথ: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'ZIP ডাউনলোড করুন',
@@ -1407,7 +1418,10 @@ export const bn: LanguageTranslation = {
                     'Drizzle রপ্তানি বর্তমানে PostgreSQL, MySQL, MariaDB এবং SQLite সমর্থন করে।',
                 result_step: {
                     description:
-                        'জেনারেট করা Drizzle 0.45 প্যাকেজ পর্যালোচনা করুন।',
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'এই Drizzle এক্সপোর্ট সম্পর্কে',
+                    export_info:
+                        'এই রপ্তানি একটি Drizzle স্কিমা প্যাকেজ। schema.ts সত্যের উৎস। drizzle.config.ts ক্রেডেনশিয়াল-মুক্ত (শুধু dialect, স্কিমা পথ এবং আউটপুট ডিরেক্টরি)। SQL মাইগ্রেশন ইতিহাস পুনর্গঠিত হয় না। drizzle-kit রানটাইম যাচাই করা হয়নি।',
                     explanation:
                         'এই রপ্তানি একটি Drizzle স্কিমা প্যাকেজ। schema.ts সত্যের উৎস। drizzle.config.ts ক্রেডেনশিয়াল-মুক্ত (শুধু dialect, স্কিমা পথ এবং আউটপুট ডিরেক্টরি)। SQL মাইগ্রেশন ইতিহাস পুনর্গঠিত হয় না। drizzle-kit রানটাইম যাচাই করা হয়নি।',
                     drizzle_version:
@@ -1420,7 +1434,8 @@ export const bn: LanguageTranslation = {
                     generated_files: 'জেনারেট করা ফাইল ({{count}})',
                     notes_heading: 'নোট',
                     warnings_heading: 'সতর্কতা ({{count}})',
-                    adaptations_heading: 'কারিগরি অভিযোজন ({{count}})',
+                    adaptations_heading_one: 'প্রযুক্তিগত অভিযোজন',
+                    adaptations_heading_other: 'কারিগরি অভিযোজন ({{count}})',
                     path_label: 'পথ: {{path}}',
                     unknown_note:
                         'একটি অতিরিক্ত রপ্তানি নোট ফেরত এসেছে এবং স্থানীয়করণ করা যায়নি।',

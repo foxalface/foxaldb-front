@@ -5,9 +5,10 @@ import type {
     RegisterExportWizardFooterAction,
 } from '../export-wizard-footer-action';
 import { useRegisterExportWizardFooterAction } from '../use-register-export-wizard-footer-action';
-import { Label } from '@/components/label/label';
-import { Spinner } from '@/components/spinner/spinner';
 import { downloadBlob } from '@/lib/download-blob';
+import { ExportFileListSkeleton } from '../export-file-list-skeleton';
+import { ExportGeneratedFilesTree } from '../export-generated-files-tree';
+import { ExportWizardNotesPanel } from '../export-wizard-notes-panel';
 import type { RailsExportSuccess } from '@/lib/api/rails-export-types';
 import { getRailsExportNotePresentation } from './get-rails-export-note-presentation';
 import { RAILS_ZIP_MIME_TYPE } from '@/lib/export/rails-export-constants';
@@ -32,7 +33,6 @@ export interface RailsWizardRequestError {
 }
 
 interface ExportRailsResultStepProps {
-    providerLabel: string;
     isLoading: boolean;
     error: RailsWizardRequestError | null;
     success: RailsExportSuccess | null;
@@ -41,7 +41,6 @@ interface ExportRailsResultStepProps {
 }
 
 export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
-    providerLabel,
     isLoading,
     error,
     success,
@@ -156,28 +155,13 @@ export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
 
     useRegisterExportWizardFooterAction(registerFooterAction, footerAction);
 
+    const showGenerating = isLoading && !errorMessage;
+
     return (
         <div
             className="flex flex-col gap-4 py-1"
             data-testid="export-rails-result-step"
         >
-            <p
-                className="text-sm font-medium"
-                data-testid="export-rails-version"
-            >
-                {t('export_wizard.rails.result_step.rails_8_1')}
-            </p>
-
-            <p className="text-sm" data-testid="export-rails-provider">
-                {t('export_wizard.rails.result_step.provider_label', {
-                    provider: providerLabel,
-                })}
-            </p>
-
-            <p className="text-sm text-muted-foreground">
-                {t('export_wizard.rails.result_step.explanation')}
-            </p>
-
             {errorMessage ? (
                 <p
                     className="break-words text-sm text-muted-foreground"
@@ -196,93 +180,67 @@ export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
                 </p>
             ) : null}
 
-            {isLoading && !errorMessage ? (
-                <div
-                    className="flex items-center gap-2"
-                    data-testid="export-rails-generating"
-                >
-                    <Spinner />
-                    <Label className="text-sm">
-                        {t('export_wizard.rails.result_step.generating')}
-                    </Label>
+            {success && !errorMessage && !isLoading ? (
+                <div>
+                    <p className="text-sm font-medium">
+                        {t('export_wizard.rails.result_step.generated_files', {
+                            count: success.files.length,
+                        })}
+                    </p>
+                    {success.files.length > 0 ? (
+                        <ExportGeneratedFilesTree
+                            paths={success.files.map((file) => file.path)}
+                            testId="export-rails-file-list"
+                        />
+                    ) : null}
                 </div>
             ) : null}
 
-            {success && !errorMessage && !isLoading ? (
-                <>
-                    <p
-                        className="text-sm font-medium"
-                        data-testid="export-rails-result-success"
-                    >
-                        {t('export_wizard.rails.result_step.success')}
-                    </p>
+            {showGenerating ? (
+                <ExportFileListSkeleton
+                    testId="export-rails-generating"
+                    ariaLabel={t('export_wizard.rails.result_step.generating')}
+                />
+            ) : null}
 
-                    <div>
-                        <p className="text-sm font-medium">
-                            {t(
-                                'export_wizard.rails.result_step.generated_files',
+            {success &&
+            !errorMessage &&
+            !isLoading &&
+            success.notes.length > 0 ? (
+                <ExportWizardNotesPanel
+                    heading={t('export_wizard.rails.result_step.notes_heading')}
+                    testId="export-rails-notes"
+                    listTestId="export-rails-notes-list"
+                >
+                    {success.notes.map((note, index) => (
+                        <li
+                            key={`${note.code}-${note.path ?? index}`}
+                            className="break-words"
+                        >
+                            <span>
                                 {
-                                    count: success.files.length,
+                                    getRailsExportNotePresentation(note, t)
+                                        .message
                                 }
-                            )}
-                        </p>
-                        {success.files.length > 0 ? (
-                            <ul
-                                className="mt-2 max-h-40 list-disc space-y-1 overflow-y-auto break-all pl-5 text-sm text-muted-foreground"
-                                data-testid="export-rails-file-list"
-                            >
-                                {success.files.map((file) => (
-                                    <li key={file.path}>{file.path}</li>
-                                ))}
-                            </ul>
-                        ) : null}
-                    </div>
+                            </span>
+                            {note.path ? (
+                                <span className="mt-0.5 block break-all text-xs opacity-80">
+                                    {note.path}
+                                </span>
+                            ) : null}
+                        </li>
+                    ))}
+                </ExportWizardNotesPanel>
+            ) : null}
 
-                    {success.notes.length > 0 ? (
-                        <div
-                            className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-100"
-                            data-testid="export-rails-notes"
-                        >
-                            <p className="font-medium">
-                                {t(
-                                    'export_wizard.rails.result_step.notes_heading'
-                                )}
-                            </p>
-                            <ul className="mt-1 max-h-40 list-disc space-y-1 overflow-y-auto pl-4">
-                                {success.notes.map((note, index) => (
-                                    <li
-                                        key={`${note.code}-${note.path ?? index}`}
-                                        className="break-words"
-                                    >
-                                        <span>
-                                            {
-                                                getRailsExportNotePresentation(
-                                                    note,
-                                                    t
-                                                ).message
-                                            }
-                                        </span>
-                                        {note.path ? (
-                                            <span className="mt-0.5 block break-all text-xs opacity-80">
-                                                {note.path}
-                                            </span>
-                                        ) : null}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ) : null}
-
-                    {downloadErrorMessage ? (
-                        <p
-                            className="break-words text-sm text-muted-foreground"
-                            role="alert"
-                            data-testid="export-rails-download-error"
-                        >
-                            {downloadErrorMessage}
-                        </p>
-                    ) : null}
-                </>
+            {downloadErrorMessage ? (
+                <p
+                    className="break-words text-sm text-muted-foreground"
+                    role="alert"
+                    data-testid="export-rails-download-error"
+                >
+                    {downloadErrorMessage}
+                </p>
             ) : null}
         </div>
     );

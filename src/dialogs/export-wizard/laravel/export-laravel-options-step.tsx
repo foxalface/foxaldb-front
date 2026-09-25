@@ -8,8 +8,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/select/select';
-import { Spinner } from '@/components/spinner/spinner';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
+import { ExportInlineLoadingSkeleton } from '../export-inline-loading-skeleton';
 import {
     LARAVEL_VERSIONS,
     type LaravelVersion,
@@ -144,15 +144,12 @@ export const ExportLaravelOptionsStep: React.FC<
                 ) : null}
 
                 {isExporting ? (
-                    <div
-                        className="flex items-center gap-2"
-                        data-testid="export-laravel-generating"
-                    >
-                        <Spinner />
-                        <Label className="text-sm">
-                            {t('export_wizard.laravel.options_step.generating')}
-                        </Label>
-                    </div>
+                    <ExportInlineLoadingSkeleton
+                        testId="export-laravel-generating"
+                        ariaLabel={t(
+                            'export_wizard.laravel.options_step.generating'
+                        )}
+                    />
                 ) : null}
             </div>
         </TooltipProvider>

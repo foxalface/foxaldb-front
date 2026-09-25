@@ -1147,6 +1147,7 @@ export const hi: LanguageTranslation = {
                         'पूरा डायग्राम निर्यात होता है। इस फ़ाइल को आयात करने से एक नया डायग्राम बनता है; वर्तमान डायग्राम ओवरराइट नहीं होता।',
                     filename_label: 'फ़ाइल नाम: {{filename}}',
                     download: 'JSON डाउनलोड',
+                    loading: 'JSON पूर्वावलोकन लोड हो रहा है...',
                 },
             },
             visual: {
@@ -1274,8 +1275,10 @@ export const hi: LanguageTranslation = {
                 unsupported_database:
                     'वर्तमान डेटाबेस प्रकार के लिए EF Core निर्यात उपलब्ध नहीं है।',
                 options_step: {
-                    description:
-                        'EF Core मॉडल प्रोजेक्ट निर्यात कॉन्फ़िगर करें।',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'इस EF Core निर्यात के बारे में',
+                    export_info:
+                        'यह निर्यात EF Core 10 (.NET 10) मॉडल प्रोजेक्ट बनाता है।\nमाइग्रेशन शामिल नहीं हैं।\nनिर्यात किए गए प्रोजेक्ट से EF Core CLI से स्थानीय रूप से बनाएं।',
                     explanation:
                         'एक EF Core 10 (.NET 10) मॉडल प्रोजेक्ट निर्यात करें। डेटाबेस प्रदाता वर्तमान आरेख से निर्धारित होता है। माइग्रेशन जनरेट नहीं होते; आप निर्यात किए गए प्रोजेक्ट से उन्हें स्थानीय रूप से बना सकते हैं।',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1285,11 +1288,13 @@ export const hi: LanguageTranslation = {
                     namespace: 'नेमस्पेस',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'जनरेट किए गए प्रोजेक्ट का मूल C# नेमस्पेस। सर्वर को आरेख नाम से चुनने देने के लिए खाली छोड़ें।',
+                        'जनरेट किए गए प्रोजेक्ट का मूल C# नेमस्पेस।\nसर्वर को आरेख नाम से चुनने देने के लिए खाली छोड़ें।',
+                    namespace_help_aria: 'नेमस्पेस सहायता',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext क्लास का नाम। AppDbContext उपयोग करने के लिए खाली छोड़ें।',
+                        'DbContext क्लास का नाम।\nAppDbContext उपयोग करने के लिए खाली छोड़ें।',
+                    db_context_help_aria: 'DbContext सहायता',
                     export: 'निर्यात करें',
                     generating: 'EF Core प्रोजेक्ट जनरेट हो रहा है...',
                     error_rate_limited:
@@ -1302,7 +1307,7 @@ export const hi: LanguageTranslation = {
                 },
                 result_step: {
                     description:
-                        'जनरेट किए गए EF Core प्रोजेक्ट की समीक्षा करें।',
+                        'जेनरेट किए गए EF Core प्रोजेक्ट की समीक्षा करें।',
                     success: 'EF Core प्रोजेक्ट जनरेट हो गया।',
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: 'प्रदाता: {{provider}}',
@@ -1318,8 +1323,10 @@ export const hi: LanguageTranslation = {
                 unsupported_database:
                     'वर्तमान डेटाबेस प्रकार के लिए Rails निर्यात उपलब्ध नहीं है।',
                 result_step: {
-                    description:
-                        'जनरेट किए गए Rails 8.1 पैकेज की समीक्षा करें।',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'इस Rails निर्यात के बारे में',
+                    export_info:
+                        'यह निर्यात Rails 8.1 के लिए वर्तमान स्कीमा का आधार है, पुनर्निर्मित माइग्रेशन इतिहास नहीं। जनरेट किए गए README के अनुसार इसे नए या मौजूदा Rails ऐप पर लागू करें।',
                     explanation:
                         'यह निर्यात Rails 8.1 के लिए वर्तमान स्कीमा का आधार है, पुनर्निर्मित माइग्रेशन इतिहास नहीं। जनरेट किए गए README के अनुसार इसे नए या मौजूदा Rails ऐप पर लागू करें।',
                     rails_8_1: 'Rails 8.1',
@@ -1351,7 +1358,10 @@ export const hi: LanguageTranslation = {
                 unsupported_database:
                     'Django निर्यात वर्तमान में PostgreSQL, MySQL, MariaDB और SQLite का समर्थन करता है।',
                 result_step: {
-                    description: 'जनरेट किया गया Django 6.1 पैकेज देखें।',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'इस Django निर्यात के बारे में',
+                    export_info:
+                        'यह निर्यात तुरंत एकीकृत होने वाला Django ऐप (`foxaldb_models`) है। 0001_initial.py वर्तमान schema की प्रारंभिक migration है, Django migration history का पुनर्निर्माण नहीं। Django 6.1 के विरुद्ध runtime validation नहीं की गई।',
                     explanation:
                         'यह निर्यात तुरंत एकीकृत होने वाला Django ऐप (`foxaldb_models`) है। 0001_initial.py वर्तमान schema की प्रारंभिक migration है, Django migration history का पुनर्निर्माण नहीं। Django 6.1 के विरुद्ध runtime validation नहीं की गई।',
                     django_version: 'Django {{version}}',
@@ -1363,7 +1373,8 @@ export const hi: LanguageTranslation = {
                     generated_files: 'जनरेट की गई फ़ाइलें ({{count}})',
                     notes_heading: 'नोट्स',
                     warnings_heading: 'चेतावनियाँ ({{count}})',
-                    adaptations_heading: 'तकनीकी अनुकूलन ({{count}})',
+                    adaptations_heading_one: 'तकनीकी अनुकूलन',
+                    adaptations_heading_other: 'तकनीकी अनुकूलन ({{count}})',
                     path_label: 'पथ: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'ZIP डाउनलोड करें',
@@ -1403,7 +1414,10 @@ export const hi: LanguageTranslation = {
                     'Drizzle निर्यात वर्तमान में PostgreSQL, MySQL, MariaDB और SQLite का समर्थन करता है।',
                 result_step: {
                     description:
-                        'जनरेट किए गए Drizzle 0.45 पैकेज की समीक्षा करें।',
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'इस Drizzle निर्यात के बारे में',
+                    export_info:
+                        'यह निर्यात एक Drizzle स्कीमा पैकेज है। schema.ts सत्य का स्रोत है। drizzle.config.ts क्रेडेंशियल-मुक्त है (केवल dialect, स्कीमा पथ और आउटपुट निर्देशिका)। SQL माइग्रेशन इतिहास पुनर्निर्मित नहीं होता। drizzle-kit रनटाइम सत्यापन नहीं किया गया है।',
                     explanation:
                         'यह निर्यात एक Drizzle स्कीमा पैकेज है। schema.ts सत्य का स्रोत है। drizzle.config.ts क्रेडेंशियल-मुक्त है (केवल dialect, स्कीमा पथ और आउटपुट निर्देशिका)। SQL माइग्रेशन इतिहास पुनर्निर्मित नहीं होता। drizzle-kit रनटाइम सत्यापन नहीं किया गया है।',
                     drizzle_version:
@@ -1416,7 +1430,8 @@ export const hi: LanguageTranslation = {
                     generated_files: 'जनरेट की गई फ़ाइलें ({{count}})',
                     notes_heading: 'नोट्स',
                     warnings_heading: 'चेतावनियाँ ({{count}})',
-                    adaptations_heading: 'तकनीकी अनुकूलन ({{count}})',
+                    adaptations_heading_one: 'तकनीकी अनुकूलन',
+                    adaptations_heading_other: 'तकनीकी अनुकूलन ({{count}})',
                     path_label: 'पथ: {{path}}',
                     unknown_note:
                         'एक अतिरिक्त निर्यात नोट लौटाया गया और उसे स्थानीयकृत नहीं किया जा सका।',

@@ -1153,6 +1153,7 @@ export const ko_KR: LanguageTranslation = {
                         '전체 다이어그램이 내보내집니다. 이 파일을 가져오면 새 다이어그램이 만들어지며 현재 다이어그램은 덮어쓰지 않습니다.',
                     filename_label: '파일 이름: {{filename}}',
                     download: 'JSON 다운로드',
+                    loading: 'JSON 미리보기 로딩 중...',
                 },
             },
             visual: {
@@ -1279,7 +1280,10 @@ export const ko_KR: LanguageTranslation = {
                 unsupported_database:
                     '현재 데이터베이스 유형에서는 EF Core 내보내기를 사용할 수 없습니다.',
                 options_step: {
-                    description: 'EF Core 모델 프로젝트 내보내기를 구성합니다.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: '이 EF Core보내기 정보',
+                    export_info:
+                        '이보내기는 EF Core 10 (.NET 10) 모델 프로젝트를 생성합니다.\n마이그레이션은 포함되지 않습니다.\n보낸 프로젝트에서 EF Core CLI로 로컬에서 생성하세요.',
                     explanation:
                         'EF Core 10(.NET 10) 모델 프로젝트를 내보냅니다. 데이터베이스 공급자는 현재 다이어그램에서 추론됩니다. 마이그레이션은 생성되지 않으며, 내보낸 프로젝트에서 로컬로 만들 수 있습니다.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1289,11 +1293,13 @@ export const ko_KR: LanguageTranslation = {
                     namespace: '네임스페이스',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        '생성된 프로젝트의 루트 C# 네임스페이스입니다. 비워 두면 서버가 다이어그램 이름에서 선택합니다.',
+                        '생성된 프로젝트의 루트 C# 네임스페이스입니다.\n비워 두면 서버가 다이어그램 이름에서 선택합니다.',
+                    namespace_help_aria: '네임스페이스 도움말',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext 클래스 이름입니다. 비워 두면 AppDbContext가 사용됩니다.',
+                        'DbContext 클래스 이름입니다.\n비워 두면 AppDbContext가 사용됩니다.',
+                    db_context_help_aria: 'DbContext 도움말',
                     export: '내보내기',
                     generating: 'EF Core 프로젝트를 생성하는 중…',
                     error_rate_limited:
@@ -1321,7 +1327,10 @@ export const ko_KR: LanguageTranslation = {
                 unsupported_database:
                     '현재 데이터베이스 유형에서는 Rails 보내기를 사용할 수 없습니다.',
                 result_step: {
-                    description: '생성된 Rails 8.1 패키지를 확인하세요.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: '이 Rails보내기 정보',
+                    export_info:
+                        '이 보내기는 Rails 8.1용 현재 스키마 기준선이며, 재구성된 마이그레이션 기록이 아닙니다. 생성된 README에 따라 새 Rails 앱 또는 기존 앱에 적용하세요.',
                     explanation:
                         '이 보내기는 Rails 8.1용 현재 스키마 기준선이며, 재구성된 마이그레이션 기록이 아닙니다. 생성된 README에 따라 새 Rails 앱 또는 기존 앱에 적용하세요.',
                     rails_8_1: 'Rails 8.1',
@@ -1353,7 +1362,10 @@ export const ko_KR: LanguageTranslation = {
                 unsupported_database:
                     'Django 내보내기는 현재 PostgreSQL, MySQL, MariaDB, SQLite를 지원합니다.',
                 result_step: {
-                    description: '생성된 Django 6.1 패키지를 검토하세요.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: '이 Django보내기 정보',
+                    export_info:
+                        '이 내보내기는 즉시 통합 가능한 Django 앱(`foxaldb_models`)입니다. 0001_initial.py는 현재 스키마의 초기 마이그레이션이며, 재구성된 Django 마이그레이션 기록이 아닙니다. Django 6.1에 대한 런타임 검증은 수행되지 않았습니다.',
                     explanation:
                         '이 내보내기는 즉시 통합 가능한 Django 앱(`foxaldb_models`)입니다. 0001_initial.py는 현재 스키마의 초기 마이그레이션이며, 재구성된 Django 마이그레이션 기록이 아닙니다. Django 6.1에 대한 런타임 검증은 수행되지 않았습니다.',
                     django_version: 'Django {{version}}',
@@ -1365,7 +1377,8 @@ export const ko_KR: LanguageTranslation = {
                     generated_files: '생성된 파일({{count}})',
                     notes_heading: '메모',
                     warnings_heading: '경고 ({{count}})',
-                    adaptations_heading: '기술적 적응 ({{count}})',
+                    adaptations_heading_one: '기술적 적응',
+                    adaptations_heading_other: '기술적 적응 ({{count}})',
                     path_label: '경로: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'ZIP 다운로드',
@@ -1404,7 +1417,11 @@ export const ko_KR: LanguageTranslation = {
                 unsupported_database:
                     'Drizzle 보내기는 현재 PostgreSQL, MySQL, MariaDB, SQLite를 지원합니다.',
                 result_step: {
-                    description: '생성된 Drizzle 0.45 패키지를 검토하세요.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: '이 Drizzle보내기 정보',
+                    export_info:
+                        '이 보내기는 Drizzle 스키마 패키지입니다. schema.ts가 신뢰 원본입니다. drizzle.config.ts는 자격 증명이 없습니다(dialect, 스키마 경로, 출력 디렉터리만). SQL 마이그레이션 기록은 재구성되지 않습니다. drizzle-kit 런타임 검증은 수행되지 않았습니다.',
                     explanation:
                         '이 보내기는 Drizzle 스키마 패키지입니다. schema.ts가 신뢰 원본입니다. drizzle.config.ts는 자격 증명이 없습니다(dialect, 스키마 경로, 출력 디렉터리만). SQL 마이그레이션 기록은 재구성되지 않습니다. drizzle-kit 런타임 검증은 수행되지 않았습니다.',
                     drizzle_version:
@@ -1417,7 +1434,8 @@ export const ko_KR: LanguageTranslation = {
                     generated_files: '생성된 파일({{count}})',
                     notes_heading: '메모',
                     warnings_heading: '경고 ({{count}})',
-                    adaptations_heading: '기술적 적응 ({{count}})',
+                    adaptations_heading_one: '기술적 적응',
+                    adaptations_heading_other: '기술적 적응 ({{count}})',
                     path_label: '경로: {{path}}',
                     unknown_note:
                         '추가 보내기 메모가 반환되었지만 지역화할 수 없습니다.',

@@ -1136,6 +1136,7 @@ export const gu: LanguageTranslation = {
                         'સંપૂર્ણ ડાયાગ્રામ નિકાસ થાય છે. આ ફાઇલ આયાત કરવાથી નવું ડાયાગ્રામ બને છે; વર્તમાન ડાયાગ્રામ ઓવરરાઇટ થતું નથી.',
                     filename_label: 'ફાઇલનું નામ: {{filename}}',
                     download: 'JSON ડાઉનલોડ',
+                    loading: 'JSON પૂર્વાવલોકન લોડ થઈ રહ્યું છે...',
                 },
             },
             visual: {
@@ -1264,7 +1265,10 @@ export const gu: LanguageTranslation = {
                 unsupported_database:
                     'વર્તમાન ડેટાબેઝ પ્રકાર માટે EF Core નિકાસ ઉપલબ્ધ નથી.',
                 options_step: {
-                    description: 'EF Core મોડલ પ્રોજેક્ટ નિકાસ ગોઠવો.',
+                    description: '{{provider}} · EF Core 10 (.NET 10)',
+                    export_info_aria: 'આ EF Core એક્સપોર્ટ વિશે',
+                    export_info:
+                        'આ એક્સપોર્ટ EF Core 10 (.NET 10) મોડેલ પ્રોજેક્ટ બનાવે છે.\nમાઇગ્રેશન સામેલ નથી.\nએક્સપોર્ટ કરેલા પ્રોજેક્ટથી EF Core CLI વડે સ્થાનિક રીતે બનાવો.',
                     explanation:
                         'EF Core 10 (.NET 10) મોડલ પ્રોજેક્ટ નિકાસ કરો. ડેટાબેઝ પ્રદાતા વર્તમાન આકૃતિમાંથી નક્કી થાય છે. માઇગ્રેશન બનતાં નથી; નિકાસ કરેલા પ્રોજેક્ટમાંથી તમે તેને સ્થાનિક રીતે બનાવી શકો છો.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
@@ -1274,11 +1278,13 @@ export const gu: LanguageTranslation = {
                     namespace: 'નેમસ્પેસ',
                     namespace_placeholder: 'Acme.Catalog',
                     namespace_help:
-                        'બનાવેલ પ્રોજેક્ટનું મૂળ C# નેમસ્પેસ. સર્વર આકૃતિના નામમાંથી પસંદ કરે તે માટે ખાલી રાખો.',
+                        'બનાવેલ પ્રોજેક્ટનું મૂળ C# નેમસ્પેસ.\nસર્વર આકૃતિના નામમાંથી પસંદ કરે તે માટે ખાલી રાખો.',
+                    namespace_help_aria: 'નેઇમસ્પેસ મદદ',
                     db_context: 'DbContext',
                     db_context_placeholder: 'CatalogDbContext',
                     db_context_help:
-                        'DbContext વર્ગનું નામ. AppDbContext વાપરવા માટે ખાલી રાખો.',
+                        'DbContext વર્ગનું નામ.\nAppDbContext વાપરવા માટે ખાલી રાખો.',
+                    db_context_help_aria: 'DbContext મદદ',
                     export: 'નિકાસ કરો',
                     generating: 'EF Core પ્રોજેક્ટ બની રહ્યો છે...',
                     error_rate_limited:
@@ -1290,7 +1296,7 @@ export const gu: LanguageTranslation = {
                         'EF Core પ્રોજેક્ટ નિકાસ કરવા માટે તમારે સાઇન ઇન હોવું જરૂરી છે.',
                 },
                 result_step: {
-                    description: 'બનાવેલ EF Core પ્રોજેક્ટની સમીક્ષા કરો.',
+                    description: 'જનરેટ થયેલ EF Core પ્રોજેક્ટની સમીક્ષા કરો.',
                     success: 'EF Core પ્રોજેક્ટ બની ગયો.',
                     ef_core_10: 'EF Core 10 (.NET 10)',
                     provider_label: 'પ્રદાતા: {{provider}}',
@@ -1306,7 +1312,10 @@ export const gu: LanguageTranslation = {
                 unsupported_database:
                     'વર્તમાન ડેટાબેઝ પ્રકાર માટે Rails નિકાસ ઉપલબ્ધ નથી.',
                 result_step: {
-                    description: 'જનરેટ થયેલ Rails 8.1 પેકેજની સમીક્ષા કરો.',
+                    description: '{{provider}} · Rails 8.1',
+                    export_info_aria: 'આ Rails એક્સપોર્ટ વિશે',
+                    export_info:
+                        'આ નિકાસ Rails 8.1 માટે વર્તમાન સ્કીમાનો આધાર છે, પુનઃનિર્મિત માઇગ્રેશન ઇતિહાસ નથી. જનરેટ થયેલ README મુજબ તેને નવી અથવા હાલની Rails એપ પર લાગુ કરો.',
                     explanation:
                         'આ નિકાસ Rails 8.1 માટે વર્તમાન સ્કીમાનો આધાર છે, પુનઃનિર્મિત માઇગ્રેશન ઇતિહાસ નથી. જનરેટ થયેલ README મુજબ તેને નવી અથવા હાલની Rails એપ પર લાગુ કરો.',
                     rails_8_1: 'Rails 8.1',
@@ -1338,7 +1347,10 @@ export const gu: LanguageTranslation = {
                 unsupported_database:
                     'Django નિકાસ હાલમાં PostgreSQL, MySQL, MariaDB અને SQLiteને સપોર્ટ કરે છે.',
                 result_step: {
-                    description: 'જનરેટ થયેલ Django 6.1 પેકેજની સમીક્ષા કરો.',
+                    description: '{{provider}} · Django {{version}}',
+                    export_info_aria: 'આ Django એક્સપોર્ટ વિશે',
+                    export_info:
+                        'આ નિકાસ તરત એકીકૃત થઈ શકે તેવી Django એપ (`foxaldb_models`) છે. 0001_initial.py વર્તમાન schemaની પ્રારંભિક migration છે, પુનર્નિર્મિત Django migration history નથી. Django 6.1 સામે runtime validation કરવામાં આવી નથી.',
                     explanation:
                         'આ નિકાસ તરત એકીકૃત થઈ શકે તેવી Django એપ (`foxaldb_models`) છે. 0001_initial.py વર્તમાન schemaની પ્રારંભિક migration છે, પુનર્નિર્મિત Django migration history નથી. Django 6.1 સામે runtime validation કરવામાં આવી નથી.',
                     django_version: 'Django {{version}}',
@@ -1350,7 +1362,8 @@ export const gu: LanguageTranslation = {
                     generated_files: 'જનરેટ થયેલ ફાઇલો ({{count}})',
                     notes_heading: 'નોંધો',
                     warnings_heading: 'ચેતવણીઓ ({{count}})',
-                    adaptations_heading: 'તકનીકી અનુકૂલનો ({{count}})',
+                    adaptations_heading_one: 'તકનીકી અનુકૂલન',
+                    adaptations_heading_other: 'તકનીકી અનુકૂલનો ({{count}})',
                     path_label: 'પથ: {{path}}',
                     notes: djangoExportNoteMessages,
                     download_zip: 'ZIP ડાઉનલોડ કરો',
@@ -1388,7 +1401,11 @@ export const gu: LanguageTranslation = {
                 unsupported_database:
                     'Drizzle નિકાસ હાલમાં PostgreSQL, MySQL, MariaDB અને SQLiteને સમર્થન આપે છે.',
                 result_step: {
-                    description: 'જનરેટ થયેલ Drizzle 0.45 પેકેજની સમીક્ષા કરો.',
+                    description:
+                        '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
+                    export_info_aria: 'આ Drizzle એક્સપોર્ટ વિશે',
+                    export_info:
+                        'આ નિકાસ Drizzle સ્કીમા પેકેજ છે. schema.ts સત્યનો સ્ત્રોત છે. drizzle.config.ts ક્રેડેન્શિયલ-મુક્ત છે (માત્ર dialect, સ્કીમા પથ અને આઉટપુટ ડિરેક્ટરી). SQL માઇગ્રેશન ઇતિહાસ પુનઃનિર્મિત થતો નથી. drizzle-kit રનટાઇમ ચકાસણી કરવામાં આવી નથી.',
                     explanation:
                         'આ નિકાસ Drizzle સ્કીમા પેકેજ છે. schema.ts સત્યનો સ્ત્રોત છે. drizzle.config.ts ક્રેડેન્શિયલ-મુક્ત છે (માત્ર dialect, સ્કીમા પથ અને આઉટપુટ ડિરેક્ટરી). SQL માઇગ્રેશન ઇતિહાસ પુનઃનિર્મિત થતો નથી. drizzle-kit રનટાઇમ ચકાસણી કરવામાં આવી નથી.',
                     drizzle_version:
@@ -1401,7 +1418,8 @@ export const gu: LanguageTranslation = {
                     generated_files: 'જનરેટ થયેલ ફાઇલો ({{count}})',
                     notes_heading: 'નોંધો',
                     warnings_heading: 'ચેતવણીઓ ({{count}})',
-                    adaptations_heading: 'તકનીકી અનુકૂલનો ({{count}})',
+                    adaptations_heading_one: 'તકનીકી અનુકૂલન',
+                    adaptations_heading_other: 'તકનીકી અનુકૂલનો ({{count}})',
                     path_label: 'પથ: {{path}}',
                     unknown_note:
                         'વધારાની નિકાસ નોંધ પરત આવી અને તેને સ્થાનિકીકરણ કરી શકાઈ નહીં.',
