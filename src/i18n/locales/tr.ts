@@ -1028,6 +1028,10 @@ export const tr: LanguageTranslation = {
             description: 'Diyagramınızı dışa aktarmak için bir format seçin.',
             back: 'Geri',
             export: 'Dışa aktar',
+            generated_files: {
+                close_preview: 'Önizlemeyi kapat',
+                close_preview_aria: 'Dosya önizlemesini kapat',
+            },
             sql: {
                 target_step: {
                     title: 'SQL dışa aktar',

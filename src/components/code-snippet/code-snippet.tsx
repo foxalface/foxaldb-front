@@ -13,6 +13,8 @@ import { DarkTheme } from './themes/dark';
 import { LightTheme } from './themes/light';
 import type { editor } from 'monaco-editor';
 import { copyTextToClipboard } from '@/lib/copy-text-to-clipboard';
+import { CodeBlockHoverActions } from './code-block-hover-actions';
+import type { CodeSnippetLanguage } from './code-snippet-language';
 import { setupDBMLLanguage } from './languages/dbml-language';
 import { setupPrismaLanguage } from './languages/prisma-language';
 
@@ -30,6 +32,19 @@ export const DiffEditor = lazy(() =>
 
 type EditorType = typeof Editor;
 
+/** Matches `.scrollbar-app` (`--scrollbar-size`, 0.5rem / 8px). */
+const CODE_SNIPPET_SCROLLBAR_SIZE = 8;
+
+const codeSnippetScrollbarOptions = {
+    verticalScrollbarSize: CODE_SNIPPET_SCROLLBAR_SIZE,
+    horizontalScrollbarSize: CODE_SNIPPET_SCROLLBAR_SIZE,
+    verticalSliderSize: CODE_SNIPPET_SCROLLBAR_SIZE,
+    horizontalSliderSize: CODE_SNIPPET_SCROLLBAR_SIZE,
+    useShadows: false,
+    verticalHasArrows: false,
+    horizontalHasArrows: false,
+};
+
 export interface CodeSnippetAction {
     label: string;
     icon: LucideIcon;
@@ -41,7 +56,7 @@ export interface CodeSnippetProps {
     className?: string;
     code: string;
     codeToCopy?: string;
-    language?: 'sql' | 'shell' | 'dbml' | 'json' | 'prisma' | 'plaintext';
+    language?: CodeSnippetLanguage;
     loading?: boolean;
     autoScroll?: boolean;
     isComplete?: boolean;
@@ -156,7 +171,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         return (
             <div
                 className={cn(
-                    'flex relative flex-1 justify-center border rounded-md overflow-hidden',
+                    'code-snippet-root group flex relative flex-1 justify-center border rounded-md overflow-hidden',
                     className
                 )}
             >
@@ -173,7 +188,9 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                 ) : (
                     <Suspense fallback={<Spinner />}>
                         {isComplete ? (
-                            <div className="absolute right-1 top-1 z-10 flex flex-col gap-1">
+                            <CodeBlockHoverActions
+                                forceVisible={isCopied || tooltipOpen}
+                            >
                                 {allowCopy ? (
                                     <Tooltip
                                         onOpenChange={setTooltipOpen}
@@ -236,7 +253,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                             </TooltipContent>
                                         </Tooltip>
                                     ))}
-                            </div>
+                            </CodeBlockHoverActions>
                         ) : null}
 
                         <Editor
@@ -262,6 +279,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
                                     ...editorProps?.options?.guides,
                                 },
                                 scrollbar: {
+                                    ...codeSnippetScrollbarOptions,
                                     vertical: 'hidden',
                                     horizontal: 'hidden',
                                     alwaysConsumeMouseWheel: false,

@@ -1039,6 +1039,10 @@ export const hi: LanguageTranslation = {
             description: 'अपना डायग्राम निर्यात करने के लिए एक प्रारूप चुनें।',
             back: 'वापस',
             export: 'निर्यात',
+            generated_files: {
+                close_preview: 'पूर्वावलोकन बंद करें',
+                close_preview_aria: 'फ़ाइल पूर्वावलोकन बंद करें',
+            },
             sql: {
                 target_step: {
                     title: 'SQL निर्यात',

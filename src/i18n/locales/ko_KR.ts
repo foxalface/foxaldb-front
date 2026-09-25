@@ -1048,6 +1048,10 @@ export const ko_KR: LanguageTranslation = {
             description: '다이어그램을보낼 형식을 선택하세요.',
             back: '뒤로',
             export: '내보내기',
+            generated_files: {
+                close_preview: '미리보기 닫기',
+                close_preview_aria: '파일 미리보기 닫기',
+            },
             sql: {
                 target_step: {
                     title: 'SQL보내기',

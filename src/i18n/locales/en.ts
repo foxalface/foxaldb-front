@@ -1044,6 +1044,10 @@ export const en = {
             description: 'Choose a format to export your diagram.',
             back: 'Back',
             export: 'Export',
+            generated_files: {
+                close_preview: 'Close preview',
+                close_preview_aria: 'Close file preview',
+            },
             sections: {
                 database: 'Database',
                 framework: 'Framework',

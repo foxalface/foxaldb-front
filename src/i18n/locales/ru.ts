@@ -1043,6 +1043,10 @@ export const ru: LanguageTranslation = {
             description: 'Выберите формат для экспорта диаграммы.',
             back: 'Назад',
             export: 'Экспортировать',
+            generated_files: {
+                close_preview: 'Закрыть предпросмотр',
+                close_preview_aria: 'Закрыть предпросмотр файла',
+            },
             sql: {
                 target_step: {
                     title: 'Экспорт SQL',

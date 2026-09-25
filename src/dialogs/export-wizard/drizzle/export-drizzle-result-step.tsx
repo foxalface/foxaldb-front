@@ -218,8 +218,9 @@ export const ExportDrizzleResultStep: React.FC<
                     </p>
                     {success.files.length > 0 ? (
                         <ExportGeneratedFilesTree
-                            paths={success.files.map((file) => file.path)}
+                            files={success.files}
                             testId="export-drizzle-file-list"
+                            previewTestId="export-drizzle-file-preview"
                         />
                     ) : null}
                 </div>

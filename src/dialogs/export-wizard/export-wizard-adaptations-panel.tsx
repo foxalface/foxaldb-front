@@ -13,7 +13,7 @@ export const ExportWizardAdaptationsPanel: React.FC<
 > = ({ heading, testId, listTestId, children }) => (
     <div
         role="note"
-        className="flex max-h-36 shrink-0 items-start gap-3 overflow-y-auto rounded-lg border border-sky-500/50 bg-sky-500/10 px-4 py-3 text-sm dark:border-sky-400/40 dark:bg-sky-500/10"
+        className="scrollbar-app flex max-h-36 shrink-0 items-start gap-3 overflow-y-auto rounded-lg border border-sky-500/50 bg-sky-500/10 px-4 py-3 text-sm dark:border-sky-400/40 dark:bg-sky-500/10"
         data-testid={testId}
     >
         <Wrench

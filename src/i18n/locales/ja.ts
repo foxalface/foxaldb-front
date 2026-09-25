@@ -1061,6 +1061,10 @@ export const ja: LanguageTranslation = {
             description: 'ダイアグラムのエクスポート形式を選択してください。',
             back: '戻る',
             export: '書き出す',
+            generated_files: {
+                close_preview: 'プレビューを閉じる',
+                close_preview_aria: 'ファイルプレビューを閉じる',
+            },
             sql: {
                 target_step: {
                     title: 'SQLをエクスポート',

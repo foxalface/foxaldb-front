@@ -1046,6 +1046,10 @@ export const hr: LanguageTranslation = {
             description: 'Odaberite format za izvoz dijagrama.',
             back: 'Natrag',
             export: 'Izvezi',
+            generated_files: {
+                close_preview: 'Zatvori pregled',
+                close_preview_aria: 'Zatvori pregled datoteke',
+            },
             sql: {
                 target_step: {
                     title: 'Izvezi SQL',

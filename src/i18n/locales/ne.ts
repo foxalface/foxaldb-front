@@ -1042,6 +1042,10 @@ export const ne: LanguageTranslation = {
             description: 'आफ्नो डायाग्राम निर्यात गर्न ढाँचा छान्नुहोस्।',
             back: 'पछाडि',
             export: 'निर्यात',
+            generated_files: {
+                close_preview: 'पूर्वावलोकन बन्द गर्नुहोस्',
+                close_preview_aria: 'फाइल पूर्वावलोकन बन्द गर्नुहोस्',
+            },
             sql: {
                 target_step: {
                     title: 'SQL निर्यात',

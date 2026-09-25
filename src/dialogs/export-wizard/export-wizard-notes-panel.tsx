@@ -16,7 +16,7 @@ export const ExportWizardNotesPanel: React.FC<ExportWizardNotesPanelProps> = ({
 }) => (
     <div
         role="status"
-        className="flex max-h-36 shrink-0 items-start gap-3 overflow-y-auto rounded-lg border border-amber-500 bg-amber-500/10 px-4 py-3 text-sm dark:border-amber-500/70 dark:bg-amber-500/15"
+        className="scrollbar-app flex max-h-36 shrink-0 items-start gap-3 overflow-y-auto rounded-lg border border-amber-500 bg-amber-500/10 px-4 py-3 text-sm dark:border-amber-500/70 dark:bg-amber-500/15"
         data-testid={testId}
     >
         <AlertTriangle

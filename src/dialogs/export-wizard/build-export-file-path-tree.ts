@@ -23,7 +23,7 @@ interface MutableTreeNode {
     children: Map<string, MutableTreeNode>;
 }
 
-const normalizeExportFilePath = (filePath: string): string =>
+export const normalizeExportFilePath = (filePath: string): string =>
     filePath
         .trim()
         .replace(/^\.?\//, '')

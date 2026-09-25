@@ -1702,7 +1702,11 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         step === ExportWizardStep.SQL_PREVIEW ||
         step === ExportWizardStep.DBML_PREVIEW ||
         step === ExportWizardStep.JSON_DOWNLOAD ||
-        step === ExportWizardStep.PRISMA_PREVIEW;
+        step === ExportWizardStep.PRISMA_PREVIEW ||
+        step === ExportWizardStep.EF_CORE_OPTIONS ||
+        step === ExportWizardStep.RAILS_RESULT ||
+        step === ExportWizardStep.DJANGO_RESULT ||
+        step === ExportWizardStep.DRIZZLE_RESULT;
 
     const isSqlPreview = step === ExportWizardStep.SQL_PREVIEW;
     const isDbmlPreview = step === ExportWizardStep.DBML_PREVIEW;

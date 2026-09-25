@@ -1030,6 +1030,10 @@ export const gu: LanguageTranslation = {
                 'તમારું ડાયાગ્રામ નિકાસ કરવા માટે એક ફોર્મેટ પસંદ કરો.',
             back: 'પાછા',
             export: 'નિકાસ',
+            generated_files: {
+                close_preview: 'પૂર્વાવલોકન બંધ કરો',
+                close_preview_aria: 'ફાઇલ પૂર્વાવલોકન બંધ કરો',
+            },
             sql: {
                 target_step: {
                     title: 'SQL એક્સપોર્ટ',

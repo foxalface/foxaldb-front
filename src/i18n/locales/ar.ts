@@ -1034,6 +1034,10 @@ export const ar: LanguageTranslation = {
             description: 'اختر تنسيقًا لتصدير مخططك.',
             back: 'رجوع',
             export: 'تصدير',
+            generated_files: {
+                close_preview: 'إغلاق المعاينة',
+                close_preview_aria: 'إغلاق معاينة الملف',
+            },
             sql: {
                 target_step: {
                     title: 'تصدير SQL',

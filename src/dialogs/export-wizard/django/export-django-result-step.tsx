@@ -213,8 +213,9 @@ export const ExportDjangoResultStep: React.FC<ExportDjangoResultStepProps> = ({
                     </p>
                     {success.files.length > 0 ? (
                         <ExportGeneratedFilesTree
-                            paths={success.files.map((file) => file.path)}
+                            files={success.files}
                             testId="export-django-file-list"
+                            previewTestId="export-django-file-preview"
                         />
                     ) : null}
                 </div>

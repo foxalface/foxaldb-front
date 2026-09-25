@@ -1061,6 +1061,10 @@ export const es: LanguageTranslation = {
             description: 'Elija un formato para exportar su diagrama.',
             back: 'Atrás',
             export: 'Exportar',
+            generated_files: {
+                close_preview: 'Cerrar vista previa',
+                close_preview_aria: 'Cerrar vista previa del archivo',
+            },
             sql: {
                 target_step: {
                     title: 'Exportar SQL',

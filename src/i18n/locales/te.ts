@@ -1049,6 +1049,10 @@ export const te: LanguageTranslation = {
                 'మీ డయాగ్రామ్‌ను ఎగుమతి చేయడానికి ఫార్మాట్‌ను ఎంచుకోండి.',
             back: 'వెనక్కి',
             export: 'ఎగుమతి',
+            generated_files: {
+                close_preview: 'ప్రివ్యూను మూసివేయి',
+                close_preview_aria: 'ఫైల్ ప్రివ్యూను మూసివేయి',
+            },
             sql: {
                 target_step: {
                     title: 'SQL ఎగుమతి',

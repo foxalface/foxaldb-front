@@ -1041,6 +1041,10 @@ export const bn: LanguageTranslation = {
             description: 'আপনার ডায়াগ্রাম রপ্তানি করতে একটি ফরম্যাট বেছে নিন।',
             back: 'পিছনে',
             export: 'রপ্তানি',
+            generated_files: {
+                close_preview: 'প্রিভিউ বন্ধ করুন',
+                close_preview_aria: 'ফাইল প্রিভিউ বন্ধ করুন',
+            },
             sql: {
                 target_step: {
                     title: 'SQL এক্সপোর্ট',

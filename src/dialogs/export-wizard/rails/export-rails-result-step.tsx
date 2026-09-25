@@ -189,8 +189,9 @@ export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
                     </p>
                     {success.files.length > 0 ? (
                         <ExportGeneratedFilesTree
-                            paths={success.files.map((file) => file.path)}
+                            files={success.files}
                             testId="export-rails-file-list"
+                            previewTestId="export-rails-file-preview"
                         />
                     ) : null}
                 </div>

@@ -979,6 +979,10 @@ export const zh_TW: LanguageTranslation = {
             description: '選擇要匯出圖表的格式。',
             back: '返回',
             export: '匯出',
+            generated_files: {
+                close_preview: '關閉預覽',
+                close_preview_aria: '關閉檔案預覽',
+            },
             sql: {
                 target_step: {
                     title: '匯出 SQL',

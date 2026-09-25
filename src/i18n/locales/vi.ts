@@ -1047,6 +1047,10 @@ export const vi: LanguageTranslation = {
             description: 'Chọn định dạng để xuất sơ đồ của bạn.',
             back: 'Quay lại',
             export: 'Xuất',
+            generated_files: {
+                close_preview: 'Đóng xem trước',
+                close_preview_aria: 'Đóng xem trước tệp',
+            },
             sql: {
                 target_step: {
                     title: 'Xuất SQL',

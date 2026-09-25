@@ -1040,6 +1040,10 @@ export const mr: LanguageTranslation = {
             description: 'तुमचा डायग्राम निर्यात करण्यासाठी एक फॉरमॅट निवडा.',
             back: 'मागे',
             export: 'निर्यात',
+            generated_files: {
+                close_preview: 'पूर्वावलोकन बंद करा',
+                close_preview_aria: 'फाइल पूर्वावलोकन बंद करा',
+            },
             sql: {
                 target_step: {
                     title: 'SQL एक्सपोर्ट',

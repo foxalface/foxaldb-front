@@ -980,6 +980,10 @@ export const zh_CN: LanguageTranslation = {
             description: '选择要导出图表的格式。',
             back: '返回',
             export: '导出',
+            generated_files: {
+                close_preview: '关闭预览',
+                close_preview_aria: '关闭文件预览',
+            },
             sql: {
                 target_step: {
                     title: '导出 SQL',

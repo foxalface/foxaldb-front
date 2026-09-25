@@ -4,13 +4,14 @@
 
 @layer utilities {
     .scrollbar-app {
+        --scrollbar-size: 0.5rem;
         scrollbar-width: thin;
         scrollbar-color: hsl(var(--border)) transparent;
     }
 
     .scrollbar-app::-webkit-scrollbar {
-        width: 0.625rem;
-        height: 0.625rem;
+        width: var(--scrollbar-size);
+        height: var(--scrollbar-size);
     }
 
     .scrollbar-app::-webkit-scrollbar-track {
@@ -18,10 +19,66 @@
     }
 
     .scrollbar-app::-webkit-scrollbar-thumb {
-        border: 1px solid transparent;
+        border: 2px solid transparent;
         border-radius: 9999px;
         background-color: hsl(var(--border));
         background-clip: padding-box;
+    }
+
+    .code-snippet-root {
+        --scrollbar-size: 0.5rem;
+    }
+
+    /* Code block action buttons: visible on hover/focus; always on touch. */
+    .code-block-hover-actions {
+        opacity: 1;
+        transition: opacity 150ms ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .code-block-hover-actions {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .code-block-hover-actions--visible,
+        .group:hover .code-block-hover-actions,
+        .group:focus-within .code-block-hover-actions {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    }
+
+    /*
+     * Monaco uses custom scrollbars (not native). Match .scrollbar-app:
+     * thin thumb, transparent track, fade in/out via Monaco visibility classes.
+     */
+    .code-snippet-root .monaco-scrollable-element > .scrollbar {
+        background: transparent !important;
+    }
+
+    .code-snippet-root .monaco-scrollable-element > .scrollbar.vertical {
+        width: var(--scrollbar-size, 0.5rem) !important;
+    }
+
+    .code-snippet-root .monaco-scrollable-element > .scrollbar.horizontal {
+        height: var(--scrollbar-size, 0.5rem) !important;
+    }
+
+    .code-snippet-root .monaco-scrollable-element > .scrollbar > .slider {
+        border-radius: 9999px;
+        background: hsl(var(--border)) !important;
+    }
+
+    .code-snippet-root
+        .monaco-scrollable-element
+        > .scrollbar
+        > .slider:hover,
+    .code-snippet-root
+        .monaco-scrollable-element
+        > .scrollbar
+        > .slider.active {
+        background: hsl(var(--muted-foreground) / 0.45) !important;
     }
 }
 

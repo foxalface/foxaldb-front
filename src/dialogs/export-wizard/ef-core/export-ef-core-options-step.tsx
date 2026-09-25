@@ -227,8 +227,9 @@ export const ExportEfCoreOptionsStep: React.FC<
                         </p>
                         {success.files.length > 0 ? (
                             <ExportGeneratedFilesTree
-                                paths={success.files.map((file) => file.path)}
+                                files={success.files}
                                 testId="export-ef-core-file-list"
+                                previewTestId="export-ef-core-file-preview"
                             />
                         ) : null}
                     </div>

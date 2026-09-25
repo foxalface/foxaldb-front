@@ -1047,6 +1047,10 @@ export const uk: LanguageTranslation = {
             description: 'Виберіть формат для експорту діаграми.',
             back: 'Назад',
             export: 'Експортувати',
+            generated_files: {
+                close_preview: 'Закрити попередній перегляд',
+                close_preview_aria: 'Закрити попередній перегляд файлу',
+            },
             sql: {
                 target_step: {
                     title: 'Експорт SQL',

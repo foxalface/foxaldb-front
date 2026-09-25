@@ -1049,6 +1049,10 @@ export const id_ID: LanguageTranslation = {
             description: 'Pilih format untuk mengekspor diagram Anda.',
             back: 'Kembali',
             export: 'Ekspor',
+            generated_files: {
+                close_preview: 'Tutup pratinjau',
+                close_preview_aria: 'Tutup pratinjau file',
+            },
             sql: {
                 target_step: {
                     title: 'Ekspor SQL',
