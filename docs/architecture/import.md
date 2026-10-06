@@ -42,6 +42,8 @@ No AI or network calls in import paths.
 - SQL dialect mismatch → block; never switch diagram DBMS or convert silently.
 - Ambiguous SQL → explicit resolution; current diagram DBMS preferred as hint.
 
+Schema Merge source preparation reuses these detectors through `prepareSchemaMergeSource()`. It does not merge into the open diagram. Diagram JSON is accepted there when the embedded database type is compatible with the current diagram. This existing-diagram dialog still rejects diagram JSON.
+
 ## User flows
 
 ### Create diagram wizard
@@ -132,7 +134,7 @@ Users may upload a full project ZIP, a project subfolder ZIP, or a minimal relev
 
 When a single archive contains **multiple logical database schemas** (for example Laravel `database/migrations/catalog/` and `database/migrations/tenant/`, or multiple EF Core `DbContext` snapshots), FoxalDB detects the groups and asks which schema to import. One selected group produces one new diagram. Shared root migrations may be included as supporting files when framework semantics require them.
 
-Merge / Fusionner is **not** part of project import; deferred to a future milestone.
+Project ZIP import still creates a new diagram. Schema Merge source preparation reuses `importProject()` and does not merge into the open diagram. See [schema merge](./schema-merge.md).
 
 ### Known limitations (summary)
 
@@ -164,3 +166,4 @@ Generic project import uses `POST /api/project-import/parse` only.
 - `lib/data/import-metadata/` — metadata scripts and loader
 - `lib/project-import/` — project ZIP detection, bundle collection, local/remote parsers
 - `lib/project-import/import-project.ts` — generic project import dispatcher
+- `lib/schema-merge/prepare-schema-merge-source.ts` — Schema Merge source preparation
