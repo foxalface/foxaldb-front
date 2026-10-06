@@ -20,4 +20,7 @@ export interface UploadCapabilities {
     laravelMigrationArchive: {
         maxBytes: number;
     };
+    schemaMerge: {
+        payloadMaxBytes: number;
+    };
 }

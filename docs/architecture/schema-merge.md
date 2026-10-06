@@ -72,7 +72,7 @@ M1 does not implement those algorithms. Operation ids are opaque; the client doe
 
 M3.1 is complete. `backend/config/uploads.php` is the upload authority, and `GET /api/capabilities/uploads` publishes the public limits. The merge wizard will read those capabilities when it accepts a file or archive.
 
-`uploads.schema_merge.payload_max_bytes` is still `null`. M3.2 chooses the Compare body limit after measuring realistic normalized `Diagram` payloads. It does not reuse the Prisma export 512 KiB budget.
+`uploads.schema_merge.payload_max_bytes` is 16 MiB. `GET /api/capabilities/uploads` exposes it as `schemaMerge.payloadMaxBytes`. The frontend capability type includes that field. Merge wizard UI is not implemented. The 512 KiB framework-export budget is not this limit.
 
 ## Out of scope for M1
 

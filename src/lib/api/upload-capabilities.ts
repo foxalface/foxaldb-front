@@ -31,6 +31,7 @@ export const parseUploadCapabilities = (
         root.laravelMigrationArchive,
         'laravelMigrationArchive'
     );
+    const schemaMerge = requireObject(root.schemaMerge, 'schemaMerge');
 
     return {
         schema: {
@@ -88,6 +89,12 @@ export const parseUploadCapabilities = (
             maxBytes: requirePositiveInt(
                 laravelMigrationArchive.maxBytes,
                 'laravelMigrationArchive.maxBytes'
+            ),
+        },
+        schemaMerge: {
+            payloadMaxBytes: requirePositiveInt(
+                schemaMerge.payloadMaxBytes,
+                'schemaMerge.payloadMaxBytes'
             ),
         },
     };

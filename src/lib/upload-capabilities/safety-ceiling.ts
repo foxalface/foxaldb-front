@@ -36,4 +36,7 @@ export const CONSERVATIVE_UPLOAD_SAFETY_CEILING: UploadCapabilities = {
     laravelMigrationArchive: {
         maxBytes: 5 * MIB,
     },
+    schemaMerge: {
+        payloadMaxBytes: 16 * MIB,
+    },
 };

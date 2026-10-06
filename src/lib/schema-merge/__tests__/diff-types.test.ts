@@ -77,6 +77,7 @@ describe('schema merge diff contract', () => {
             'unsupported_source',
             'database_type_mismatch',
             'malformed_archive',
+            'malformed_diagram',
             'payload_too_large',
             'stale_comparison',
             'incomplete_selection',

@@ -5,6 +5,7 @@
  * This module does not compute them and does not diff diagrams.
  *
  * Backend reference: backend/docs/schema-merge.md
+ * M3.2 adds `malformed_diagram` for a structurally invalid Compare body.
  */
 
 export const CHANGE_TYPES = ['add', 'modify', 'rename', 'delete'] as const;
@@ -30,6 +31,7 @@ export const SCHEMA_MERGE_ERROR_CODES = [
     'unsupported_source',
     'database_type_mismatch',
     'malformed_archive',
+    'malformed_diagram',
     'payload_too_large',
     'stale_comparison',
     'incomplete_selection',
