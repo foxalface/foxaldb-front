@@ -18,7 +18,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { compareDiagramToLaravelMigrationArchive } from '@/lib/api/laravel-migration-diff';
-import { LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES } from '@/lib/api/laravel-migration-import';
+import { resolveUploadCapabilities } from '@/lib/upload-capabilities';
 import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import {
@@ -188,7 +188,9 @@ export const LaravelMigrationDiffDialog: React.FC<
             return;
         }
 
-        if (archive.size > LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES) {
+        const capabilities = await resolveUploadCapabilities();
+
+        if (archive.size > capabilities.laravelMigrationArchive.maxBytes) {
             setArchiveError(
                 t('compare_laravel_migrations_dialog.errors.file_too_large')
             );

@@ -14,10 +14,8 @@ import { FileUploader } from '@/components/file-uploader/file-uploader';
 import { Spinner } from '@/components/spinner/spinner';
 import { useAuth } from '@/hooks/use-auth';
 import { useDialog } from '@/hooks/use-dialog';
-import {
-    LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES,
-    uploadLaravelMigrationArchive,
-} from '@/lib/api/laravel-migration-import';
+import { uploadLaravelMigrationArchive } from '@/lib/api/laravel-migration-import';
+import { resolveUploadCapabilities } from '@/lib/upload-capabilities';
 import { formatApiErrorMessage } from '@/pages/auth/format-api-error-message';
 import type { LaravelMigrationSchemaSnapshot } from '@/types/laravel-migration';
 import { useTranslation } from 'react-i18next';
@@ -74,7 +72,9 @@ export const LaravelMigrationImportDialog: React.FC<
             return;
         }
 
-        if (file.size > LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES) {
+        const capabilities = await resolveUploadCapabilities();
+
+        if (file.size > capabilities.laravelMigrationArchive.maxBytes) {
             setUploadError(
                 t('import_laravel_migrations_dialog.errors.file_too_large')
             );

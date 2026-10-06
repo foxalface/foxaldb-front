@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { ArchiveReader } from '../../../archive/archive-reader';
 import { importProject } from '../../../import-project';
 import { createTestZipFile } from '../../../__tests__/fixtures/build-test-zip';
 import { usersPostsSchema } from './fixtures/prisma-schemas';
+import { openFixtureArchive } from '../../../__tests__/fixtures/open-fixture-archive';
 
 describe('importProject prisma integration', () => {
     it('parses Prisma locally without remote API calls', async () => {
         const file = createTestZipFile({
             'prisma/schema.prisma': usersPostsSchema,
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
 
         const result = await importProject({
             archive,

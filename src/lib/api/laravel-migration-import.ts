@@ -4,8 +4,6 @@ import type { LaravelMigrationSchemaSnapshot } from '@/types/laravel-migration';
 const API_BASE_URL: string =
     import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api';
 
-export const LARAVEL_MIGRATION_ARCHIVE_MAX_BYTES = 5 * 1024 * 1024;
-
 interface LaravelMigrationImportResponse {
     snapshot: LaravelMigrationSchemaSnapshot;
 }

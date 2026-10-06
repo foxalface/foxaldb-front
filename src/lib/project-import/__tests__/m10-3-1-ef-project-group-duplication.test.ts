@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { ArchiveReader } from '../archive/archive-reader';
 import { collectGroupBundle } from '../bundle/collect-group-bundle';
 import { analyzeProjectArchive } from '../analyze-project-archive';
 import { detectProjectCandidates } from '../detection/detect-project';
 import { detectDatabaseGroups } from '../detection/database-groups/detect-database-groups';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 
 const EF_CSPROJ =
     '<Project><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" /></ItemGroup></Project>';
@@ -26,7 +26,7 @@ const QA_FILES = {
 describe('M10.3.1 EF Core project vs database-group duplication', () => {
     it('same project / multi-DbContext QA archive yields one project and two groups', async () => {
         const file = createTestZipFile(QA_FILES);
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const candidates = await detectProjectCandidates(archive);
         const ef = candidates.filter(
             (candidate) => candidate.framework === 'entity_framework_core'
@@ -55,7 +55,7 @@ describe('M10.3.1 EF Core project vs database-group duplication', () => {
 
     it('preserves DbContext label casing', async () => {
         const file = createTestZipFile(QA_FILES);
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const ef = (await detectProjectCandidates(archive)).find(
             (candidate) => candidate.framework === 'entity_framework_core'
         )!;
@@ -73,7 +73,7 @@ describe('M10.3.1 EF Core project vs database-group duplication', () => {
 
     it('selected AppDbContext bundle excludes Catalog snapshot', async () => {
         const file = createTestZipFile(QA_FILES);
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const ef = (await detectProjectCandidates(archive)).find(
             (candidate) => candidate.framework === 'entity_framework_core'
         )!;
@@ -94,7 +94,7 @@ describe('M10.3.1 EF Core project vs database-group duplication', () => {
 
     it('selected CatalogDbContext bundle excludes App snapshot', async () => {
         const file = createTestZipFile(QA_FILES);
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const ef = (await detectProjectCandidates(archive)).find(
             (candidate) => candidate.framework === 'entity_framework_core'
         )!;
@@ -120,7 +120,7 @@ describe('M10.3.1 EF Core project vs database-group duplication', () => {
             'admin/Admin.csproj': EF_CSPROJ,
             'admin/Migrations/AdminDbContextModelSnapshot.cs': ADMIN_SNAPSHOT,
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const candidates = await detectProjectCandidates(archive);
         const ef = candidates.filter(
             (candidate) => candidate.framework === 'entity_framework_core'
@@ -143,7 +143,7 @@ describe('M10.3.1 EF Core project vs database-group duplication', () => {
             'Migrations/AppDbContextModelSnapshot.cs': APP_SNAPSHOT,
             'Backup/Migrations/AppDbContextModelSnapshot.cs': APP_SNAPSHOT,
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const ef = (await detectProjectCandidates(archive)).find(
             (candidate) => candidate.framework === 'entity_framework_core'
         )!;

@@ -3,7 +3,12 @@ import { notifySessionExpired } from './session-expired';
 const API_BASE_URL: string =
     import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api';
 
-const PUBLIC_AUTH_PATHS = new Set(['/login', '/register', '/session']);
+const PUBLIC_AUTH_PATHS = new Set([
+    '/login',
+    '/register',
+    '/session',
+    '/capabilities/uploads',
+]);
 
 const shouldNotifySessionExpired = (path: string, status: number): boolean => {
     if (status !== 401) {

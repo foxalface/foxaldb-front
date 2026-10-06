@@ -68,6 +68,12 @@ The backend Apply check is independent. It rejects a selection that is not depen
 
 M1 does not implement those algorithms. Operation ids are opaque; the client does not decode them.
 
+## Upload capabilities
+
+M3.1 is complete. `backend/config/uploads.php` is the upload authority, and `GET /api/capabilities/uploads` publishes the public limits. The merge wizard will read those capabilities when it accepts a file or archive.
+
+`uploads.schema_merge.payload_max_bytes` is still `null`. M3.2 chooses the Compare body limit after measuring realistic normalized `Diagram` payloads. It does not reuse the Prisma export 512 KiB budget.
+
 ## Out of scope for M1
 
 - semantic diff

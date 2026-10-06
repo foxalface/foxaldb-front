@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { ArchiveReader } from '../archive/archive-reader';
 import { collectFileBundle } from '../bundle/collect-file-bundle';
 import { detectProjectCandidates } from '../detection/detect-project';
 import { analyzeProjectArchive } from '../analyze-project-archive';
@@ -8,6 +7,7 @@ import { parseRailsProject } from '../local/rails/rails-project-parser';
 import { parseDrizzleProject } from '../local/drizzle/drizzle-project-parser';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 import {
     CANONICAL_PRISMA_SCHEMA,
     DJANGO_POSTS_INITIAL,
@@ -35,7 +35,7 @@ const detectFromZip = async (
     zipName = 'test.zip'
 ) => {
     const file = createTestZipFile(files, zipName);
-    const archive = await ArchiveReader.open(file);
+    const archive = await openFixtureArchive(file);
     const candidates = await detectProjectCandidates(archive);
 
     return { archive, candidates, file };
@@ -219,7 +219,7 @@ describe('M10.2 flexible layout — Prisma', () => {
             'apps/a/schema.prisma': FLEXIBLE_PRISMA_SCHEMA,
             'apps/b/schema.prisma': FLEXIBLE_PRISMA_SCHEMA,
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const analysis = await analyzeProjectArchive(archive);
 
         const flexiblePrisma = analysis.candidates.filter(
@@ -249,8 +249,8 @@ describe('M10.2 flexible layout — Prisma', () => {
             'schema.zip'
         );
 
-        const canonicalArchive = await ArchiveReader.open(canonicalZip);
-        const flatArchive = await ArchiveReader.open(flatZip);
+        const canonicalArchive = await openFixtureArchive(canonicalZip);
+        const flatArchive = await openFixtureArchive(flatZip);
         const canonicalCandidate = (
             await detectProjectCandidates(canonicalArchive)
         ).find((candidate) => candidate.framework === 'prisma');
@@ -434,10 +434,10 @@ describe('M10.2 flexible layout — Rails', () => {
     });
 
     it('G. canonical vs flattened equivalent diagrams', async () => {
-        const canonicalArchive = await ArchiveReader.open(
+        const canonicalArchive = await openFixtureArchive(
             createTestZipFile({ 'db/schema.rb': FLEXIBLE_RAILS_SCHEMA })
         );
-        const flatArchive = await ArchiveReader.open(
+        const flatArchive = await openFixtureArchive(
             createTestZipFile(
                 { 'schema.rb': FLEXIBLE_RAILS_SCHEMA },
                 'rails.zip'
@@ -606,14 +606,14 @@ describe('M10.2 flexible layout — Drizzle', () => {
     });
 
     it('G. canonical vs flattened equivalent diagrams', async () => {
-        const canonicalArchive = await ArchiveReader.open(
+        const canonicalArchive = await openFixtureArchive(
             createTestZipFile({
                 'drizzle/meta/_journal.json': FLEXIBLE_DRIZZLE_JOURNAL,
                 'drizzle/0000_initial.sql': FLEXIBLE_DRIZZLE_INITIAL_SQL,
                 'drizzle/0001_add_posts.sql': FLEXIBLE_DRIZZLE_ADD_POSTS_SQL,
             })
         );
-        const flatArchive = await ArchiveReader.open(
+        const flatArchive = await openFixtureArchive(
             createTestZipFile(
                 {
                     '_journal.json': FLEXIBLE_DRIZZLE_JOURNAL,
@@ -663,7 +663,7 @@ describe('M10.2 diagram naming', () => {
             { 'schema.prisma': FLEXIBLE_PRISMA_SCHEMA },
             'schema.zip'
         );
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const candidate = (await detectProjectCandidates(archive)).find(
             (entry) => entry.framework === 'prisma' && entry.usesVirtualLayout
         );

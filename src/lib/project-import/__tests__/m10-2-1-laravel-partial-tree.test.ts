@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { ArchiveReader } from '../archive/archive-reader';
 import { collectFileBundle } from '../bundle/collect-file-bundle';
 import { getCandidateImportPaths } from '../bundle/candidate-import-paths';
 import { detectProjectCandidates } from '../detection/detect-project';
 import { getProjectSummaryMetrics } from '../project-summary-metrics';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 import {
     LARAVEL_CREATE_POSTS_MIGRATION,
     LARAVEL_CREATE_USERS_MIGRATION,
@@ -32,7 +32,7 @@ const REAL_QA_MIGRATION_FILES: Record<string, string> = {
 };
 
 const detectLaravel = async (files: Record<string, string>) => {
-    const archive = await ArchiveReader.open(createTestZipFile(files));
+    const archive = await openFixtureArchive(createTestZipFile(files));
     const candidates = await detectProjectCandidates(archive);
     const laravel = candidates.filter(
         (candidate) =>

@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { ArchiveReader } from '../archive/archive-reader';
 import { importProject } from '../import-project';
 import { ProjectImportParserUnavailableError } from '../project-import-errors';
 import type { ProjectDetectionCandidate } from '../project-types';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 
 const {
     isProjectImportParserAvailableMock,
@@ -59,7 +59,7 @@ describe('importProject', () => {
             'database/migrations/2024_01_01_000000_create_users_table.php':
                 '<?php',
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
 
         await expect(
             importProject({
@@ -94,7 +94,7 @@ describe('importProject', () => {
                 'database/migrations/2024_01_01_000000_create_users_table.php':
                     '<?php',
             });
-            const archive = await ArchiveReader.open(file);
+            const archive = await openFixtureArchive(file);
 
             await importProject({
                 archive,
@@ -124,7 +124,7 @@ describe('importProject', () => {
         const file = createTestZipFile({
             'prisma/schema.prisma': 'model User { id Int @id }',
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
 
         await importProject({
             archive,
@@ -149,7 +149,7 @@ describe('importProject', () => {
             const file = createTestZipFile({
                 'prisma/schema.prisma': 'model User { id Int @id }',
             });
-            const archive = await ArchiveReader.open(file);
+            const archive = await openFixtureArchive(file);
 
             await expect(
                 importProject({
@@ -184,7 +184,7 @@ describe('importProject', () => {
             'apps/api/database/migrations/2024_01_01_000000_create_users_table.php':
                 '<?php',
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
 
         await importProject({
             archive,

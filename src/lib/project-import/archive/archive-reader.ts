@@ -14,12 +14,7 @@ import {
     ArchiveTooManyFilesError,
     ArchiveUnsupportedFormatError,
 } from './archive-errors';
-import {
-    MAX_ARCHIVE_COMPRESSED_BYTES,
-    MAX_ARCHIVE_ENTRY_UNCOMPRESSED_BYTES,
-    MAX_ARCHIVE_FILE_COUNT,
-    MAX_ARCHIVE_UNCOMPRESSED_BYTES,
-} from './archive-limits';
+import type { ArchiveLimits } from './archive-limits';
 import {
     getPathExtension,
     isZipArchiveBytes,
@@ -31,7 +26,8 @@ interface IndexedArchiveEntry extends ArchiveEntry {
 }
 
 const collectArchiveIndex = (
-    archiveBytes: Uint8Array
+    archiveBytes: Uint8Array,
+    limits: ArchiveLimits
 ): {
     entries: IndexedArchiveEntry[];
     totalUncompressedBytes: number;
@@ -50,15 +46,15 @@ const collectArchiveIndex = (
         }
 
         try {
-            if (entries.length >= MAX_ARCHIVE_FILE_COUNT) {
+            if (entries.length >= limits.maxEntries) {
                 throw new ArchiveTooManyFilesError(
                     entries.length + 1,
-                    MAX_ARCHIVE_FILE_COUNT
+                    limits.maxEntries
                 );
             }
 
             const originalPath = file.name;
-            const normalizedPath = normalizeArchivePath(originalPath);
+            const normalizedPath = normalizeArchivePath(originalPath, limits);
             const isDirectory = normalizedPath.endsWith('/');
             const sizeCompressed = file.size ?? 0;
             const sizeUncompressed = file.originalSize ?? 0;
@@ -74,20 +70,20 @@ const collectArchiveIndex = (
             normalizedPaths.set(normalizedPath, originalPath);
 
             if (!isDirectory) {
-                if (sizeUncompressed > MAX_ARCHIVE_ENTRY_UNCOMPRESSED_BYTES) {
+                if (sizeUncompressed > limits.maxEntryBytes) {
                     throw new ArchiveEntryTooLargeError(
                         normalizedPath,
                         sizeUncompressed,
-                        MAX_ARCHIVE_ENTRY_UNCOMPRESSED_BYTES
+                        limits.maxEntryBytes
                     );
                 }
 
                 totalUncompressedBytes += sizeUncompressed;
 
-                if (totalUncompressedBytes > MAX_ARCHIVE_UNCOMPRESSED_BYTES) {
+                if (totalUncompressedBytes > limits.uncompressedMaxBytes) {
                     throw new ArchiveExtractionTooLargeError(
                         totalUncompressedBytes,
-                        MAX_ARCHIVE_UNCOMPRESSED_BYTES
+                        limits.uncompressedMaxBytes
                     );
                 }
             }
@@ -132,27 +128,31 @@ export class ArchiveReader {
 
     private constructor(
         archiveBytes: Uint8Array,
-        entries: IndexedArchiveEntry[]
+        entries: IndexedArchiveEntry[],
+        private readonly limits: ArchiveLimits
     ) {
         this.archiveBytes = archiveBytes;
         this.entries = entries;
     }
 
-    static async open(file: File): Promise<ArchiveReader> {
-        if (file.size > MAX_ARCHIVE_COMPRESSED_BYTES) {
+    static async open(
+        file: File,
+        limits: ArchiveLimits
+    ): Promise<ArchiveReader> {
+        if (file.size > limits.compressedMaxBytes) {
             throw new ArchiveTooLargeError(
                 file.size,
-                MAX_ARCHIVE_COMPRESSED_BYTES
+                limits.compressedMaxBytes
             );
         }
 
         const buffer = await file.arrayBuffer();
         const archiveBytes = new Uint8Array(buffer);
 
-        if (archiveBytes.length > MAX_ARCHIVE_COMPRESSED_BYTES) {
+        if (archiveBytes.length > limits.compressedMaxBytes) {
             throw new ArchiveTooLargeError(
                 archiveBytes.length,
-                MAX_ARCHIVE_COMPRESSED_BYTES
+                limits.compressedMaxBytes
             );
         }
 
@@ -162,7 +162,7 @@ export class ArchiveReader {
 
         let index: ReturnType<typeof collectArchiveIndex>;
         try {
-            index = collectArchiveIndex(archiveBytes);
+            index = collectArchiveIndex(archiveBytes, limits);
         } catch (error) {
             if (error instanceof ArchiveError) {
                 throw error;
@@ -178,7 +178,7 @@ export class ArchiveReader {
             throw new ArchiveCorruptedError('Archive contains no entries.');
         }
 
-        return new ArchiveReader(archiveBytes, index.entries);
+        return new ArchiveReader(archiveBytes, index.entries, limits);
     }
 
     listEntries(): readonly ArchiveEntry[] {
@@ -188,7 +188,7 @@ export class ArchiveReader {
 
     has(path: string): boolean {
         this.assertOpen();
-        const normalizedPath = normalizeArchivePath(path);
+        const normalizedPath = normalizeArchivePath(path, this.limits);
         return this.entries.some(
             (entry) => entry.normalizedPath === normalizedPath
         );
@@ -197,7 +197,7 @@ export class ArchiveReader {
     readBytes(path: string): Uint8Array {
         this.assertOpen();
 
-        const normalizedPath = normalizeArchivePath(path);
+        const normalizedPath = normalizeArchivePath(path, this.limits);
         const entry = this.getEntry(normalizedPath);
 
         if (entry.isDirectory) {
@@ -213,7 +213,8 @@ export class ArchiveReader {
         try {
             extracted = unzipSync(archiveBytes, {
                 filter: (file) =>
-                    normalizeArchivePath(file.name) === normalizedPath,
+                    normalizeArchivePath(file.name, this.limits) ===
+                    normalizedPath,
             });
         } catch (error) {
             throw new ArchiveCorruptedError(
@@ -231,11 +232,11 @@ export class ArchiveReader {
             throw new ArchiveEntryNotFoundError(normalizedPath);
         }
 
-        if (bytes.length > MAX_ARCHIVE_ENTRY_UNCOMPRESSED_BYTES) {
+        if (bytes.length > this.limits.maxEntryBytes) {
             throw new ArchiveEntryTooLargeError(
                 normalizedPath,
                 bytes.length,
-                MAX_ARCHIVE_ENTRY_UNCOMPRESSED_BYTES
+                this.limits.maxEntryBytes
             );
         }
 
@@ -249,7 +250,7 @@ export class ArchiveReader {
             return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
         } catch {
             throw new ArchiveInvalidUtf8ContentError(
-                normalizeArchivePath(path)
+                normalizeArchivePath(path, this.limits)
             );
         }
     }

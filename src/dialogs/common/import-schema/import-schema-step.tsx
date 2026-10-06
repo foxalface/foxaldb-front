@@ -23,7 +23,6 @@ import type { Diagram } from '@/lib/domain/diagram';
 import {
     ArchiveError,
     ArchiveReader,
-    MAX_ARCHIVE_COMPRESSED_BYTES,
     analyzeProjectArchive,
     detectDatabaseGroups,
     getProjectCandidateKey,
@@ -31,6 +30,8 @@ import {
     importProject,
     isZipArchiveFile,
 } from '@/lib/project-import/types';
+import type { ArchiveLimits } from '@/lib/project-import/archive/archive-limits';
+import { resolveUploadCapabilities } from '@/lib/upload-capabilities';
 import { canExecuteProjectImport } from '@/lib/project-import/project-import-capability';
 import type {
     ProjectArchiveAnalysis,
@@ -41,7 +42,6 @@ import type {
 import { analyzeImportContent } from './analyze-import-content';
 import {
     IMPORT_SCHEMA_FILE_ACCEPT,
-    MAX_IMPORT_FILE_SIZE_BYTES,
     isImportSchemaFileNameAllowed,
 } from './constants';
 import { DetectionSummary } from './detection-summary';
@@ -476,14 +476,14 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
     );
 
     const analyzeProjectFile = useCallback(
-        async (file: File) => {
+        async (file: File, limits: ArchiveLimits) => {
             resetProjectArchiveState();
             setIsAnalyzingProject(true);
             setSelectedFileName(file.name);
             setFileErrorKey(null);
 
             try {
-                const archive = await ArchiveReader.open(file);
+                const archive = await ArchiveReader.open(file, limits);
                 archiveReaderRef.current = archive;
                 setScriptResult('');
                 const analysis = await analyzeProjectArchive(archive);
@@ -536,17 +536,18 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
 
             setFileErrorKey(null);
 
+            const capabilities = await resolveUploadCapabilities();
             const isZipArchive = await isZipArchiveFile(file);
 
             if (isZipArchive) {
-                if (file.size > MAX_ARCHIVE_COMPRESSED_BYTES) {
+                if (file.size > capabilities.archive.compressedMaxBytes) {
                     setFileErrorKey(
                         'new_diagram_dialog.import_schema.errors.archive_too_large'
                     );
                     return;
                 }
 
-                await analyzeProjectFile(file);
+                await analyzeProjectFile(file, capabilities.archive);
                 return;
             }
 
@@ -559,7 +560,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                 return;
             }
 
-            if (file.size > MAX_IMPORT_FILE_SIZE_BYTES) {
+            if (file.size > capabilities.schema.textMaxBytes) {
                 setFileErrorKey(
                     'new_diagram_dialog.import_schema.errors.file_too_large'
                 );

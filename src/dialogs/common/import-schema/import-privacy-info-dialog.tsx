@@ -2,6 +2,7 @@ import React from 'react';
 import { Check, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
+import { Skeleton } from '@/components/skeleton/skeleton';
 import {
     Dialog,
     DialogContent,
@@ -18,10 +19,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/table/table';
-import { MAX_ARCHIVE_COMPRESSED_BYTES } from '@/lib/project-import/archive/archive-limits';
+import { useUploadCapabilities } from '@/hooks/use-upload-capabilities';
 import { PROJECT_FRAMEWORK_LABEL_KEYS } from '@/lib/project-import/framework-labels';
 import { ProjectFrameworkIcon } from '@/lib/project-import/project-framework-icon';
-import { MAX_IMPORT_FILE_SIZE_BYTES } from './constants';
 import { IMPORT_PRIVACY_INFO_FRAMEWORK_ROWS } from './import-privacy-info-framework-rows';
 
 const bytesToMegabytes = (bytes: number): number =>
@@ -61,8 +61,15 @@ export const ImportPrivacyInfoDialog: React.FC<
     ImportPrivacyInfoDialogProps
 > = ({ open, onOpenChange }) => {
     const { t } = useTranslation();
-    const simpleFileSizeMb = bytesToMegabytes(MAX_IMPORT_FILE_SIZE_BYTES);
-    const archiveSizeMb = bytesToMegabytes(MAX_ARCHIVE_COMPRESSED_BYTES);
+    const { capabilities } = useUploadCapabilities(open);
+    const simpleFileSizeMb =
+        capabilities === null
+            ? null
+            : bytesToMegabytes(capabilities.schema.textMaxBytes);
+    const archiveSizeMb =
+        capabilities === null
+            ? null
+            : bytesToMegabytes(capabilities.archive.compressedMaxBytes);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -106,12 +113,16 @@ export const ImportPrivacyInfoDialog: React.FC<
                                 'new_diagram_dialog.import_schema.privacy_info.simple_formats_title'
                             )}
                         </h3>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                            {t(
-                                'new_diagram_dialog.import_schema.privacy_info.simple_formats_description',
-                                { sizeMb: simpleFileSizeMb }
-                            )}
-                        </p>
+                        {simpleFileSizeMb === null ? (
+                            <Skeleton className="mt-1 h-10 w-full" />
+                        ) : (
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                {t(
+                                    'new_diagram_dialog.import_schema.privacy_info.simple_formats_description',
+                                    { sizeMb: simpleFileSizeMb }
+                                )}
+                            </p>
+                        )}
                     </section>
 
                     <section className="mt-6">
@@ -120,12 +131,16 @@ export const ImportPrivacyInfoDialog: React.FC<
                                 'new_diagram_dialog.import_schema.privacy_info.project_archives_title'
                             )}
                         </h3>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                            {t(
-                                'new_diagram_dialog.import_schema.privacy_info.project_archives_description',
-                                { sizeMb: archiveSizeMb }
-                            )}
-                        </p>
+                        {archiveSizeMb === null ? (
+                            <Skeleton className="mt-1 h-10 w-full" />
+                        ) : (
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                {t(
+                                    'new_diagram_dialog.import_schema.privacy_info.project_archives_description',
+                                    { sizeMb: archiveSizeMb }
+                                )}
+                            </p>
+                        )}
                         <p className="mt-2 text-xs text-muted-foreground">
                             {t(
                                 'new_diagram_dialog.import_schema.privacy_info.excluded_paths'

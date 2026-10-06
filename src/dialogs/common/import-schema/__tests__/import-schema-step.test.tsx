@@ -19,6 +19,8 @@ import {
 } from '@/lib/import/__tests__/fixtures/import-samples';
 import { ImportSchemaStep } from '../import-schema-step';
 import type * as ClientModule from '@/lib/api/client';
+import { resetUploadCapabilitiesCache } from '@/lib/upload-capabilities';
+import { CONSERVATIVE_UPLOAD_SAFETY_CEILING } from '@/lib/upload-capabilities/safety-ceiling';
 
 const stressSql = readFileSync(
     join(
@@ -441,7 +443,9 @@ describe('ImportSchemaStep', () => {
                 name: 'Change file, currently schema.sql',
             })
         ).toHaveTextContent('schema.sql');
-        expect(setScriptResult).toHaveBeenCalled();
+        await waitFor(() => {
+            expect(setScriptResult).toHaveBeenCalled();
+        });
     });
 
     it('restricts file selection to supported schema and project extensions', () => {
@@ -478,7 +482,39 @@ describe('ImportSchemaStep', () => {
         });
     });
 
-    it('rejects files larger than 5 MB before reading them', async () => {
+    it('rejects schema files above the fetched text limit', async () => {
+        resetUploadCapabilitiesCache();
+        const capabilities = structuredClone(
+            CONSERVATIVE_UPLOAD_SAFETY_CEILING
+        );
+        capabilities.schema.textMaxBytes = 8;
+        apiRequestMock.mockResolvedValue(capabilities);
+
+        const user = userEvent.setup();
+        const setScriptResult = vi.fn();
+        const largeFile = new File(['0123456789'], 'large.sql', {
+            type: 'text/plain',
+        });
+
+        const { container } = renderImportSchemaStep({ setScriptResult });
+        const fileInput =
+            container.querySelector('input[type="file"]') ??
+            document.body.querySelector('input[type="file"]');
+
+        await user.upload(fileInput as HTMLInputElement, largeFile);
+
+        expect(setScriptResult).not.toHaveBeenCalled();
+        expect(
+            screen.getByText(
+                'new_diagram_dialog.import_schema.errors.file_too_large'
+            )
+        ).toBeInTheDocument();
+        resetUploadCapabilitiesCache();
+    });
+
+    it('rejects files above the safety ceiling when capabilities cannot be loaded', async () => {
+        resetUploadCapabilitiesCache();
+        apiRequestMock.mockRejectedValue(new Error('offline'));
         const user = userEvent.setup();
         const setScriptResult = vi.fn();
         const largeFile = new File(['x'], 'large.sql', { type: 'text/plain' });
@@ -543,11 +579,19 @@ describe('ImportSchemaStep', () => {
     });
 });
 
+const expectOnlyUploadCapabilitiesRequest = (): void => {
+    expect(apiRequestMock).toHaveBeenCalled();
+    for (const call of apiRequestMock.mock.calls) {
+        expect(call[0]).toBe('/capabilities/uploads');
+    }
+};
+
 describe('ImportSchemaStep project archives', () => {
     beforeEach(() => {
         isAuthenticated = true;
         apiRequestMock.mockReset();
         importProjectMock.mockReset();
+        resetUploadCapabilitiesCache();
     });
 
     const uploadZip = async (
@@ -572,6 +616,25 @@ describe('ImportSchemaStep project archives', () => {
 
         return { setScriptResult, onContinue, user };
     };
+
+    it('rejects archives above the fetched compressed limit', async () => {
+        const capabilities = structuredClone(
+            CONSERVATIVE_UPLOAD_SAFETY_CEILING
+        );
+        capabilities.archive.compressedMaxBytes = 1;
+        apiRequestMock.mockResolvedValue(capabilities);
+
+        await uploadZip({
+            'prisma/schema.prisma': 'model User { id Int @id }',
+        });
+
+        expect(
+            screen.getByText(
+                'new_diagram_dialog.import_schema.errors.archive_too_large'
+            )
+        ).toBeInTheDocument();
+        expect(importProjectMock).not.toHaveBeenCalled();
+    });
 
     it('detects a valid Laravel ZIP without populating the textarea', async () => {
         const { setScriptResult } = await uploadZip({
@@ -651,7 +714,7 @@ describe('ImportSchemaStep project archives', () => {
             expect(importProjectMock).toHaveBeenCalledOnce();
         });
 
-        expect(apiRequestMock).not.toHaveBeenCalled();
+        expectOnlyUploadCapabilitiesRequest();
         expect(onContinue).toHaveBeenCalledWith(
             expect.objectContaining({
                 importMethod: 'project',
@@ -664,7 +727,7 @@ describe('ImportSchemaStep project archives', () => {
             'prisma/schema.prisma': 'model User { id Int @id }',
         });
 
-        expect(apiRequestMock).not.toHaveBeenCalled();
+        expectOnlyUploadCapabilitiesRequest();
         expect(importProjectMock).not.toHaveBeenCalled();
     });
 
@@ -1026,7 +1089,7 @@ end`,
             expect(importProjectMock).toHaveBeenCalledOnce();
         });
 
-        expect(apiRequestMock).not.toHaveBeenCalled();
+        expectOnlyUploadCapabilitiesRequest();
     });
 
     it('detects Django and requires sign-in for guests', async () => {
@@ -1053,7 +1116,7 @@ end`,
             )
         ).toBeInTheDocument();
         expect(importProjectMock).not.toHaveBeenCalled();
-        expect(apiRequestMock).not.toHaveBeenCalled();
+        expectOnlyUploadCapabilitiesRequest();
     });
 
     it('enables Continue for authenticated Django projects', async () => {
@@ -1176,7 +1239,7 @@ end`,
             expect(importProjectMock).toHaveBeenCalledOnce();
         });
 
-        expect(apiRequestMock).not.toHaveBeenCalled();
+        expectOnlyUploadCapabilitiesRequest();
     });
 
     it('shows database group selection when Laravel archive has multiple schemas', async () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ArchiveReader } from '../archive/archive-reader';
+import type { ArchiveReader } from '../archive/archive-reader';
 import { collectGroupBundle } from '../bundle/collect-group-bundle';
 import { detectProjectCandidates } from '../detection/detect-project';
 import { detectDatabaseGroups } from '../detection/database-groups/detect-database-groups';
@@ -16,6 +16,7 @@ import {
     LARAVEL_CREATE_USERS_MIGRATION,
 } from './fixtures/flexible-layout-fixtures';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 
 const EF_CSPROJ =
     '<Project><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" /></ItemGroup></Project>';
@@ -43,7 +44,7 @@ const selectFrameworkCandidate = (
 
 const detectGroupsFromZip = async (files: Record<string, string>) => {
     const file = createTestZipFile(files);
-    const archive = await ArchiveReader.open(file);
+    const archive = await openFixtureArchive(file);
     const candidates = await detectProjectCandidates(archive);
 
     return {

@@ -112,9 +112,17 @@ Six frameworks supported via the create-diagram wizard (`ImportSchemaStep` → p
 - **Remote parsers** (Laravel, EF Core, Django): only minimum selected text files sent via authenticated `POST /api/project-import/parse`; full archive never uploaded.
 - User-selected **target DBMS** is authoritative (`diagram.databaseType`); source dialect does not override it.
 
+### Upload limits
+
+`backend/config/uploads.php` is the product authority. The import UI reads the public subset from `GET /api/capabilities/uploads` and caches a successful response for the page session. Frontend checks are UX and local safety. Backend validation remains authoritative for anything that is posted.
+
+`ArchiveReader.open(file, limits)` receives those archive limits explicitly. It does not keep its own numeric defaults. Compressed size, uncompressed size, entry count, per-entry size, path length, nesting depth, and zip-slip rejection stay in force.
+
+Guest SQL/DBML/JSON import and local Prisma, Rails, and Drizzle ZIP parsing do not upload source. If the capabilities request fails, local inspection uses `CONSERVATIVE_UPLOAD_SAFETY_CEILING`. That ceiling matches the shipped backend defaults and is not a second authority. A later successful fetch replaces it. An operator override that the client has not fetched can be stricter than the ceiling; the backend still enforces that override on posted bodies. Local inspection does not continue with unlimited input.
+
 ### Detection and dispatch
 
-1. `ArchiveReader` opens ZIP with M1 security limits.
+1. `ArchiveReader` opens the ZIP with the resolved archive limits.
 2. `detectProjectCandidates()` scores framework evidence from canonical paths first, then applies conservative **virtual layout** inference when canonical structure is missing but file content signatures are strong (physical paths are mapped to logical framework paths in bundle metadata only).
 3. `collectFileBundle()` retains only framework-specific allowed files (reads physical paths, exposes logical paths to parsers).
 4. `importProject()` dispatches to `parseLocalProject()` or `parseRemoteProject()` based on per-framework capability — no UI framework conditionals for parsing.

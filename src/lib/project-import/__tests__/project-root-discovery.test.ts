@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { buildArchivePathIndex } from '../detection/archive-paths';
 import { discoverProjectRootCandidates } from '../detection/project-root-discovery';
-import { ArchiveReader } from '../archive/archive-reader';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 
 const rootsFromZip = async (
     files: Record<string, string>
 ): Promise<string[]> => {
     const file = createTestZipFile(files);
-    const archive = await ArchiveReader.open(file);
+    const archive = await openFixtureArchive(file);
     const index = buildArchivePathIndex(archive);
     const roots = discoverProjectRootCandidates(index);
     archive.close();

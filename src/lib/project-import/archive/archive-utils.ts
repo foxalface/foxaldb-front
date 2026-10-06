@@ -5,10 +5,7 @@ import {
     ArchivePathTooLongError,
     ArchivePathTraversalError,
 } from './archive-errors';
-import {
-    MAX_ARCHIVE_DIRECTORY_DEPTH,
-    MAX_ARCHIVE_PATH_LENGTH,
-} from './archive-limits';
+import type { ArchiveLimits } from './archive-limits';
 
 const WINDOWS_ABSOLUTE_PATH_PATTERN = /^[a-zA-Z]:[\\/]/;
 
@@ -70,7 +67,7 @@ export const getPathDepth = (path: string): number => {
 
 export const assertPathDepthWithinLimit = (
     path: string,
-    maxDepth: number = MAX_ARCHIVE_DIRECTORY_DEPTH
+    maxDepth: number
 ): void => {
     const depth = getPathDepth(path);
 
@@ -81,7 +78,7 @@ export const assertPathDepthWithinLimit = (
 
 export const assertPathLengthWithinLimit = (
     path: string,
-    maxLength: number = MAX_ARCHIVE_PATH_LENGTH
+    maxLength: number
 ): void => {
     if (path.length > maxLength) {
         throw new ArchivePathTooLongError(path, path.length, maxLength);
@@ -92,7 +89,10 @@ export const assertPathLengthWithinLimit = (
  * Normalizes an archive entry path for indexing and lookup.
  * Throws typed errors for invalid paths.
  */
-export const normalizeArchivePath = (rawPath: string): string => {
+export const normalizeArchivePath = (
+    rawPath: string,
+    limits: ArchiveLimits
+): string => {
     if (rawPath.length === 0) {
         throw new ArchiveInvalidPathError(rawPath, 'path must not be empty');
     }
@@ -135,8 +135,8 @@ export const normalizeArchivePath = (rawPath: string): string => {
 
     const normalizedPath = isDirectory ? `${normalized}/` : normalized;
 
-    assertPathLengthWithinLimit(normalizedPath);
-    assertPathDepthWithinLimit(normalizedPath);
+    assertPathLengthWithinLimit(normalizedPath, limits.maxPathLength);
+    assertPathDepthWithinLimit(normalizedPath, limits.maxDepth);
 
     return normalizedPath;
 };

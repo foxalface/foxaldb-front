@@ -19,14 +19,7 @@ export {
     ArchiveTooManyFilesError,
     ArchiveUnsupportedFormatError,
 } from './archive/archive-errors';
-export {
-    MAX_ARCHIVE_COMPRESSED_BYTES,
-    MAX_ARCHIVE_DIRECTORY_DEPTH,
-    MAX_ARCHIVE_ENTRY_UNCOMPRESSED_BYTES,
-    MAX_ARCHIVE_FILE_COUNT,
-    MAX_ARCHIVE_PATH_LENGTH,
-    MAX_ARCHIVE_UNCOMPRESSED_BYTES,
-} from './archive/archive-limits';
+export type { ArchiveLimits } from './archive/archive-limits';
 export { isZipArchiveBytes } from './archive/archive-utils';
 export { analyzeProjectArchive } from './analyze-project-archive';
 export { collectFileBundle } from './bundle/collect-file-bundle';

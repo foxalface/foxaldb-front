@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { ArchiveReader } from '../archive/archive-reader';
 import { collectFileBundle } from '../bundle/collect-file-bundle';
 import { getCandidateImportPaths } from '../bundle/candidate-import-paths';
 import { detectProjectCandidates } from '../detection/detect-project';
@@ -8,6 +7,7 @@ import {
     getProjectSummaryMetrics,
 } from '../project-summary-metrics';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 import {
     FLEXIBLE_DRIZZLE_ADD_POSTS_SQL,
     FLEXIBLE_DRIZZLE_INITIAL_SQL,
@@ -46,7 +46,7 @@ const detectFramework = async (
     files: Record<string, string>,
     framework: string
 ) => {
-    const archive = await ArchiveReader.open(createTestZipFile(files));
+    const archive = await openFixtureArchive(createTestZipFile(files));
     const candidates = await detectProjectCandidates(archive);
     const matches = candidates.filter(
         (candidate) =>

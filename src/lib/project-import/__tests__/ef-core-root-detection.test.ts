@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { ArchiveReader } from '../archive/archive-reader';
 import { analyzeProjectArchive } from '../analyze-project-archive';
 import { collectFileBundle } from '../bundle/collect-file-bundle';
 import { detectProjectCandidates } from '../detection/detect-project';
 import { discoverProjectRootCandidates } from '../detection/project-root-discovery';
 import { buildArchivePathIndex } from '../detection/archive-paths';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 
 const EF_CSPROJ =
     '<Project><ItemGroup><PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" /></ItemGroup></Project>';
@@ -18,7 +18,7 @@ const AUDIT_SNAPSHOT =
 
 const detectFromZip = async (files: Record<string, string>) => {
     const file = createTestZipFile(files);
-    const archive = await ArchiveReader.open(file);
+    const archive = await openFixtureArchive(file);
     const candidates = await detectProjectCandidates(archive);
     return { archive, candidates };
 };
@@ -161,7 +161,7 @@ describe('EF Core project root detection (M7.1)', () => {
             'foxaldb-efcore-qa-basic/Migrations/AppDbContextModelSnapshot.cs':
                 MODEL_SNAPSHOT,
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const index = buildArchivePathIndex(archive);
         const roots = discoverProjectRootCandidates(index);
 
@@ -179,7 +179,7 @@ describe('EF Core project root detection (M7.1)', () => {
             'foxaldb-efcore-qa-basic/Migrations/20260101000000_Initial.cs':
                 'partial class Initial : Migration { }',
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const analysis = await analyzeProjectArchive(archive);
         const candidate = analysis.recommendedCandidate;
 

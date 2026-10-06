@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { ArchiveReader } from '../archive/archive-reader';
 import { collectFileBundle } from '../bundle/collect-file-bundle';
 import type { ProjectDetectionCandidate } from '../project-types';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 
 const collectForFramework = async (
     files: Record<string, string>,
@@ -12,7 +12,7 @@ const collectForFramework = async (
     >
 ) => {
     const file = createTestZipFile(files);
-    const archive = await ArchiveReader.open(file);
+    const archive = await openFixtureArchive(file);
     const bundle = await collectFileBundle(archive, {
         ...candidate,
         score: 20,

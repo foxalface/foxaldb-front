@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { ArchiveReader } from '../archive/archive-reader';
 import { detectProjectCandidates } from '../detection/detect-project';
 import { analyzeProjectArchive } from '../analyze-project-archive';
 import { collectFileBundle } from '../bundle/collect-file-bundle';
 import { getProjectCandidateKey } from '../framework-labels';
 import { createTestZipFile } from './fixtures/build-test-zip';
+import { openFixtureArchive } from './fixtures/open-fixture-archive';
 
 const detectFromZip = async (files: Record<string, string>) => {
     const file = createTestZipFile(files);
-    const archive = await ArchiveReader.open(file);
+    const archive = await openFixtureArchive(file);
     const candidates = await detectProjectCandidates(archive);
     return { archive, candidates };
 };
@@ -214,7 +214,7 @@ describe('analyzeProjectArchive ambiguity', () => {
                 'model User { id Int @id }',
         });
 
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const analysis = await analyzeProjectArchive(archive);
 
         expect(analysis.status).toBe('ambiguous');
@@ -236,7 +236,7 @@ describe('analyzeProjectArchive ambiguity', () => {
             'repo/packages/db/.env': 'SECRET=1',
         });
 
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
         const analysis = await analyzeProjectArchive(archive);
         const laravel = analysis.candidates.find(
             (candidate) =>

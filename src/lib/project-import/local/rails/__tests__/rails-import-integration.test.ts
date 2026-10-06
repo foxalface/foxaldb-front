@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
-import { ArchiveReader } from '../../../archive/archive-reader';
 import { importProject } from '../../../import-project';
 import { createTestZipFile } from '../../../__tests__/fixtures/build-test-zip';
 import { USERS_POSTS_SCHEMA } from './fixtures/rails-schemas';
+import { openFixtureArchive } from '../../../__tests__/fixtures/open-fixture-archive';
 
 describe('importProject rails integration', () => {
     it('parses Rails locally without remote API calls', async () => {
@@ -11,7 +11,7 @@ describe('importProject rails integration', () => {
             'db/schema.rb': USERS_POSTS_SCHEMA,
             Gemfile: "gem 'rails', '~> 7.1'",
         });
-        const archive = await ArchiveReader.open(file);
+        const archive = await openFixtureArchive(file);
 
         const result = await importProject({
             archive,

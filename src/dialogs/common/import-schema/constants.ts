@@ -1,5 +1,3 @@
-export const MAX_IMPORT_FILE_SIZE_BYTES = 5 * 1024 * 1024;
-
 export const IMPORT_SCHEMA_FILE_EXTENSIONS = [
     '.sql',
     '.dbml',

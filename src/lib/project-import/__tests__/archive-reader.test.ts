@@ -1,6 +1,10 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { strToU8 } from 'fflate';
 import { ArchiveReader } from '../archive/archive-reader';
+import {
+    fixtureArchiveLimits,
+    openFixtureArchive,
+} from './fixtures/open-fixture-archive';
 import {
     ArchiveClosedError,
     ArchiveCorruptedError,
@@ -14,55 +18,53 @@ import {
     ArchiveTooLargeError,
     ArchiveUnsupportedFormatError,
 } from '../archive/archive-errors';
-import {
-    MAX_ARCHIVE_COMPRESSED_BYTES,
-    MAX_ARCHIVE_DIRECTORY_DEPTH,
-} from '../archive/archive-limits';
 import { normalizeArchivePath } from '../archive/archive-utils';
 import { createRawZipFile, createTestZipFile } from './fixtures/build-test-zip';
 
 describe('normalizeArchivePath', () => {
     it('normalizes duplicate slashes', () => {
-        expect(normalizeArchivePath('foo//bar/baz.txt')).toBe(
-            'foo/bar/baz.txt'
-        );
+        expect(
+            normalizeArchivePath('foo//bar/baz.txt', fixtureArchiveLimits)
+        ).toBe('foo/bar/baz.txt');
     });
 
     it('normalizes backslashes', () => {
-        expect(normalizeArchivePath('foo\\bar\\baz.txt')).toBe(
-            'foo/bar/baz.txt'
-        );
+        expect(
+            normalizeArchivePath('foo\\bar\\baz.txt', fixtureArchiveLimits)
+        ).toBe('foo/bar/baz.txt');
     });
 
     it('removes dot segments', () => {
-        expect(normalizeArchivePath('foo/./bar/./baz.txt')).toBe(
-            'foo/bar/baz.txt'
-        );
+        expect(
+            normalizeArchivePath('foo/./bar/./baz.txt', fixtureArchiveLimits)
+        ).toBe('foo/bar/baz.txt');
     });
 
     it('preserves directory trailing slash', () => {
-        expect(normalizeArchivePath('foo/bar/')).toBe('foo/bar/');
+        expect(normalizeArchivePath('foo/bar/', fixtureArchiveLimits)).toBe(
+            'foo/bar/'
+        );
     });
 
     it('rejects path traversal', () => {
-        expect(() => normalizeArchivePath('../etc/passwd')).toThrow(
-            ArchivePathTraversalError
-        );
+        expect(() =>
+            normalizeArchivePath('../etc/passwd', fixtureArchiveLimits)
+        ).toThrow(ArchivePathTraversalError);
     });
 
     it('rejects absolute paths', () => {
-        expect(() => normalizeArchivePath('/etc/passwd')).toThrow(
-            ArchiveInvalidPathError
-        );
-        expect(() => normalizeArchivePath('C:\\windows\\system32')).toThrow(
-            ArchiveInvalidPathError
-        );
+        expect(() =>
+            normalizeArchivePath('/etc/passwd', fixtureArchiveLimits)
+        ).toThrow(ArchiveInvalidPathError);
+        expect(() =>
+            normalizeArchivePath('C:\\windows\\system32', fixtureArchiveLimits)
+        ).toThrow(ArchiveInvalidPathError);
     });
 });
 
 describe('ArchiveReader', () => {
     it('opens a valid archive and lists entries', async () => {
-        const reader = await ArchiveReader.open(
+        const reader = await openFixtureArchive(
             createTestZipFile({
                 'readme.txt': 'hello',
                 'src/main.ts': 'export {};',
@@ -92,7 +94,7 @@ describe('ArchiveReader', () => {
     });
 
     it('looks up entries with has()', async () => {
-        const reader = await ArchiveReader.open(
+        const reader = await openFixtureArchive(
             createTestZipFile({ 'docs/guide.md': '# Guide' })
         );
 
@@ -104,7 +106,7 @@ describe('ArchiveReader', () => {
     });
 
     it('reads file bytes and text on demand', async () => {
-        const reader = await ArchiveReader.open(
+        const reader = await openFixtureArchive(
             createTestZipFile({
                 'data/binary.bin': '\u0000\u0001',
                 'data/text.txt': 'café',
@@ -121,7 +123,7 @@ describe('ArchiveReader', () => {
     });
 
     it('rejects reading a directory entry', async () => {
-        const reader = await ArchiveReader.open(
+        const reader = await openFixtureArchive(
             createTestZipFile({ 'nested/': '' })
         );
 
@@ -133,7 +135,7 @@ describe('ArchiveReader', () => {
     });
 
     it('throws when reading a missing entry', async () => {
-        const reader = await ArchiveReader.open(
+        const reader = await openFixtureArchive(
             createTestZipFile({ 'only.txt': 'x' })
         );
 
@@ -146,7 +148,7 @@ describe('ArchiveReader', () => {
 
     it('rejects duplicate normalized paths', async () => {
         await expect(
-            ArchiveReader.open(
+            openFixtureArchive(
                 createTestZipFile({
                     'foo/bar.txt': 'one',
                     'foo//bar.txt': 'two',
@@ -157,122 +159,84 @@ describe('ArchiveReader', () => {
 
     it('rejects path traversal entries', async () => {
         await expect(
-            ArchiveReader.open(createTestZipFile({ '../escape.txt': 'bad' }))
+            openFixtureArchive(createTestZipFile({ '../escape.txt': 'bad' }))
         ).rejects.toThrow(ArchivePathTraversalError);
     });
 
     it('rejects absolute path entries', async () => {
         await expect(
-            ArchiveReader.open(createTestZipFile({ '/absolute.txt': 'bad' }))
+            openFixtureArchive(createTestZipFile({ '/absolute.txt': 'bad' }))
         ).rejects.toThrow(ArchiveInvalidPathError);
     });
 
     it('rejects archives exceeding directory depth', async () => {
         const segments = Array.from(
-            { length: MAX_ARCHIVE_DIRECTORY_DEPTH + 1 },
+            { length: fixtureArchiveLimits.maxDepth + 1 },
             (_, index) => `level-${index}`
         );
         const deepPath = `${segments.join('/')}/deep.txt`;
 
         await expect(
-            ArchiveReader.open(createTestZipFile({ [deepPath]: 'deep' }))
+            openFixtureArchive(createTestZipFile({ [deepPath]: 'deep' }))
         ).rejects.toThrow(ArchiveDepthExceededError);
     });
 
     it('rejects archives exceeding compressed size limit', async () => {
         const oversized = new File(
-            [new Uint8Array(MAX_ARCHIVE_COMPRESSED_BYTES + 1)],
+            [new Uint8Array(fixtureArchiveLimits.compressedMaxBytes + 1)],
             'big.zip',
             { type: 'application/zip' }
         );
 
-        await expect(ArchiveReader.open(oversized)).rejects.toThrow(
+        await expect(openFixtureArchive(oversized)).rejects.toThrow(
             ArchiveTooLargeError
         );
     });
 
     it('rejects archives exceeding per-entry uncompressed size', async () => {
-        vi.resetModules();
-        vi.doMock('../archive/archive-limits', () => ({
-            MAX_ARCHIVE_COMPRESSED_BYTES: 50 * 1024 * 1024,
-            MAX_ARCHIVE_UNCOMPRESSED_BYTES: 200 * 1024 * 1024,
-            MAX_ARCHIVE_FILE_COUNT: 10_000,
-            MAX_ARCHIVE_ENTRY_UNCOMPRESSED_BYTES: 4,
-            MAX_ARCHIVE_PATH_LENGTH: 512,
-            MAX_ARCHIVE_DIRECTORY_DEPTH: 32,
-        }));
-
-        const { ArchiveReader: LimitedArchiveReader } =
-            await import('../archive/archive-reader');
-
         await expect(
-            LimitedArchiveReader.open(
-                createTestZipFile({ 'large.txt': '12345' })
-            )
+            ArchiveReader.open(createTestZipFile({ 'large.txt': '12345' }), {
+                ...fixtureArchiveLimits,
+                maxEntryBytes: 4,
+            })
         ).rejects.toMatchObject({ code: 'ARCHIVE_ENTRY_TOO_LARGE' });
-
-        vi.unmock('../archive/archive-limits');
-        vi.resetModules();
     });
 
     it('rejects archives exceeding total uncompressed estimate', async () => {
-        vi.resetModules();
-        vi.doMock('../archive/archive-limits', () => ({
-            MAX_ARCHIVE_COMPRESSED_BYTES: 50 * 1024 * 1024,
-            MAX_ARCHIVE_UNCOMPRESSED_BYTES: 10,
-            MAX_ARCHIVE_FILE_COUNT: 10_000,
-            MAX_ARCHIVE_ENTRY_UNCOMPRESSED_BYTES: 10,
-            MAX_ARCHIVE_PATH_LENGTH: 512,
-            MAX_ARCHIVE_DIRECTORY_DEPTH: 32,
-        }));
-
-        const { ArchiveReader: LimitedArchiveReader } =
-            await import('../archive/archive-reader');
-
         await expect(
-            LimitedArchiveReader.open(
+            ArchiveReader.open(
                 createTestZipFile({
                     'a.txt': 'aaaaa',
                     'b.txt': 'bbbbb',
                     'c.txt': 'ccccc',
-                })
+                }),
+                {
+                    ...fixtureArchiveLimits,
+                    uncompressedMaxBytes: 10,
+                    maxEntryBytes: 10,
+                }
             )
         ).rejects.toMatchObject({ code: 'ARCHIVE_EXTRACTION_TOO_LARGE' });
-
-        vi.unmock('../archive/archive-limits');
-        vi.resetModules();
     });
 
     it('rejects archives exceeding file count limit', async () => {
-        vi.resetModules();
-        vi.doMock('../archive/archive-limits', () => ({
-            MAX_ARCHIVE_COMPRESSED_BYTES: 50 * 1024 * 1024,
-            MAX_ARCHIVE_UNCOMPRESSED_BYTES: 200 * 1024 * 1024,
-            MAX_ARCHIVE_FILE_COUNT: 2,
-            MAX_ARCHIVE_ENTRY_UNCOMPRESSED_BYTES: 10 * 1024 * 1024,
-            MAX_ARCHIVE_PATH_LENGTH: 512,
-            MAX_ARCHIVE_DIRECTORY_DEPTH: 32,
-        }));
-
-        const { ArchiveReader: LimitedArchiveReader } =
-            await import('../archive/archive-reader');
-
         await expect(
-            LimitedArchiveReader.open(
+            ArchiveReader.open(
                 createTestZipFile({
                     'one.txt': '1',
                     'two.txt': '2',
                     'three.txt': '3',
-                })
+                }),
+                {
+                    ...fixtureArchiveLimits,
+                    maxEntries: 2,
+                }
             )
         ).rejects.toMatchObject({ code: 'ARCHIVE_TOO_MANY_FILES' });
-
-        vi.unmock('../archive/archive-limits');
-        vi.resetModules();
     });
 
     it('rejects unsupported formats', async () => {
-        const readerPromise = ArchiveReader.open(
+        const readerPromise = openFixtureArchive(
             createRawZipFile(strToU8('not-a-zip-archive'))
         );
 
@@ -285,12 +249,12 @@ describe('ArchiveReader', () => {
         const corrupted = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0xff, 0xff]);
 
         await expect(
-            ArchiveReader.open(createRawZipFile(corrupted))
+            openFixtureArchive(createRawZipFile(corrupted))
         ).rejects.toThrow(ArchiveCorruptedError);
     });
 
     it('rejects invalid UTF-8 file content when reading text', async () => {
-        const reader = await ArchiveReader.open(
+        const reader = await openFixtureArchive(
             createTestZipFile({
                 'invalid.txt': new Uint8Array([0xff, 0xfe, 0xfd]),
             })
@@ -304,7 +268,7 @@ describe('ArchiveReader', () => {
     });
 
     it('closes the reader and blocks subsequent operations', async () => {
-        const reader = await ArchiveReader.open(
+        const reader = await openFixtureArchive(
             createTestZipFile({ 'after-close.txt': 'value' })
         );
 
@@ -320,7 +284,7 @@ describe('ArchiveReader', () => {
     });
 
     it('indexes entries without reading file contents during open', async () => {
-        const reader = await ArchiveReader.open(
+        const reader = await openFixtureArchive(
             createTestZipFile({ 'lazy.txt': 'lazy-content' })
         );
 
