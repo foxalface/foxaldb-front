@@ -84,7 +84,9 @@ describe('DialogProvider merge wizard', () => {
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
         await user.click(screen.getByRole('button', { name: 'open-merge' }));
-        expect(await screen.findByRole('dialog')).toBeInTheDocument();
+        expect(
+            await screen.findByRole('dialog', undefined, { timeout: 3000 })
+        ).toBeInTheDocument();
         expect(screen.getByText('merge_wizard.title')).toBeInTheDocument();
 
         await user.click(

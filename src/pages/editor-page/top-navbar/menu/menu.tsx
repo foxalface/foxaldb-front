@@ -258,6 +258,7 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                     <MenubarItem onClick={openExportWizardDialog}>
                         {t('menu.actions.export')}
                     </MenubarItem>
+                    {/* Merge stays out of Actions until M8 can apply the selection. */}
                     <MenubarSeparator />
                     <MenubarItem
                         onClick={() =>

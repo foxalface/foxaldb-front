@@ -156,9 +156,14 @@ describe('Menu export navigation', () => {
         expect(dialogMocks.openExportDiagramDialog).toHaveBeenCalledTimes(1);
     });
 
-    it('does not expose schema merge from Actions yet', async () => {
+    it('keeps schema merge out of Actions until Apply is wired', async () => {
+        // M7 can review a diff, but Merge cannot apply it yet.
+        // Showing Actions → Merge would be a production dead-end, so the entry waits for M8.
         await openActionsMenu();
 
+        expect(
+            screen.queryByRole('menuitem', { name: 'menu.actions.merge' })
+        ).not.toBeInTheDocument();
         expect(
             screen.queryByRole('menuitem', { name: 'merge_wizard.title' })
         ).not.toBeInTheDocument();

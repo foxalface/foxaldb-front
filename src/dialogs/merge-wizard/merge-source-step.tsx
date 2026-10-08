@@ -52,6 +52,7 @@ export interface MergeSourceStepProps {
     onIncludeDeletionsChange: (includeDeletions: boolean) => void;
     onCompare: () => void;
     onCancel: () => void;
+    hasCachedCompare: boolean;
 }
 
 export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
@@ -77,6 +78,7 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
     onIncludeDeletionsChange,
     onCompare,
     onCancel,
+    hasCachedCompare,
 }) => {
     const { t } = useTranslation();
     const textareaId = useId();
@@ -113,6 +115,10 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
             <div
                 className="min-h-0 flex-1 overflow-y-auto"
                 data-testid="merge-wizard-source-step"
+                data-source-dialect={sourceDialect ?? ''}
+                data-project-candidate={projectCandidateKey ?? ''}
+                data-database-group={databaseGroupId ?? ''}
+                data-cached-compare={hasCachedCompare ? 'true' : 'false'}
             >
                 <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-4">
                     {unavailable ? (

@@ -70,8 +70,52 @@ describe('merge wizard locales', () => {
         expect(fr.translation.merge_wizard.include_deletions.label).toBe(
             'Prendre en compte les suppressions'
         );
+        expect(fr.translation.menu.actions.merge).toBe('Fusionner...');
+        expect(fr.translation.merge_wizard.result.sections.table).toBe(
+            'Tables'
+        );
+        expect(fr.translation.merge_wizard.result.sections.field).toBe(
+            'Champs'
+        );
+        expect(fr.translation.merge_wizard.result.sections.relationship).toBe(
+            'Relations'
+        );
+        expect(fr.translation.merge_wizard.result.sections.view).toBe('Vues');
+        expect(fr.translation.merge_wizard.result.change.add).toBe('Ajouter');
+        expect(fr.translation.merge_wizard.result.change.modify).toBe(
+            'Modifier'
+        );
+        expect(fr.translation.merge_wizard.result.change.rename).toBe(
+            'Renommer'
+        );
+        expect(fr.translation.merge_wizard.result.change.delete).toBe(
+            'Supprimer'
+        );
+        expect(fr.translation.merge_wizard.result.no_differences).toBe(
+            'Aucune différence trouvée'
+        );
+        expect(fr.translation.merge_wizard.result.merge_one).toBe(
+            'Fusionner {{count}} modification'
+        );
+        expect(fr.translation.merge_wizard.result.merge_other).toBe(
+            'Fusionner {{count}} modifications'
+        );
+
+        const placeholders = (value: string): string[] =>
+            [...value.matchAll(/\{\{[^{}]+\}\}/g)]
+                .map((match) => match[0])
+                .sort();
 
         for (const locale of locales) {
+            expect(
+                locale.translation.menu.actions.merge.trim().length
+            ).toBeGreaterThan(0);
+            if (locale !== en) {
+                expect(locale.translation.menu.actions.merge).not.toBe(
+                    'Merge...'
+                );
+            }
+
             for (const key of keys) {
                 const value = key
                     .split('.')
@@ -82,10 +126,24 @@ describe('merge wizard locales', () => {
                                 : undefined,
                         locale.translation.merge_wizard
                     );
+                const english = key
+                    .split('.')
+                    .reduce<unknown>(
+                        (current, part) =>
+                            typeof current === 'object' && current !== null
+                                ? (current as Record<string, unknown>)[part]
+                                : undefined,
+                        en.translation.merge_wizard
+                    );
 
                 expect(typeof value).toBe('string');
                 expect((value as string).trim().length).toBeGreaterThan(0);
+                expect(placeholders(value as string)).toEqual(
+                    placeholders(english as string)
+                );
             }
         }
+
+        expect(en.translation.menu.actions.merge).toBe('Merge...');
     });
 });

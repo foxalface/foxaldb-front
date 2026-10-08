@@ -138,7 +138,7 @@ const candidate = (
 const prismaApp = candidate('prisma', 'apps/shop');
 const laravelApp = candidate('laravel', 'services/billing');
 
-let scenario: 'ready' | 'project' | 'groups' = 'ready';
+let scenario: 'ready' | 'project' | 'groups' | 'dialect' = 'ready';
 
 const renderWizard = (open = true) =>
     render(<MergeWizardDialog dialog={{ open }} />);
@@ -187,6 +187,43 @@ describe('Merge wizard shell', () => {
                             recommendedCandidate: prismaApp,
                         },
                         candidates: [prismaApp, laravelApp],
+                    } satisfies SchemaMergeSourcePreparationResult;
+                }
+
+                if (
+                    scenario === 'dialect' &&
+                    !context.resolution?.sourceDialect
+                ) {
+                    return {
+                        status: 'needs_dialect_resolution',
+                        analysis: {
+                            format: { format: 'sql', confidence: 'high' },
+                            dialect: null,
+                            importMethod: null,
+                            canContinue: false,
+                            displayKind: 'sql_ambiguous',
+                            severity: 'warning',
+                            detectedDatabaseType: DatabaseType.POSTGRESQL,
+                            resolutionState: 'ambiguous',
+                            resolvedSourceDialect: null,
+                            dialectCandidates: [
+                                DatabaseType.POSTGRESQL,
+                                DatabaseType.COCKROACHDB,
+                            ],
+                            dialectCandidateScores: [
+                                {
+                                    databaseType: DatabaseType.POSTGRESQL,
+                                    score: 2,
+                                    confidencePercent: 80,
+                                },
+                                {
+                                    databaseType: DatabaseType.COCKROACHDB,
+                                    score: 1,
+                                    confidencePercent: 40,
+                                },
+                            ],
+                            requiresExplicitSourceDialect: true,
+                        },
                     } satisfies SchemaMergeSourcePreparationResult;
                 }
 
@@ -572,6 +609,186 @@ describe('Merge wizard shell', () => {
                 }),
             })
         );
+    });
+
+    it('returns to the source and replaces the previous result on the next compare', async () => {
+        const user = userEvent.setup();
+        scenario = 'dialect';
+        const first = {
+            ...emptyCompare,
+            operations: [
+                {
+                    id: 'opaque-first-operation',
+                    category: 'field',
+                    type: 'modify',
+                    entityId: 'opaque-first-entity',
+                    renameTo: null,
+                    identity: {
+                        kind: 'field',
+                        schema: 'public',
+                        table: 'users',
+                        name: 'email',
+                    },
+                    before: null,
+                    after: null,
+                    changes: [],
+                    dependsOn: [],
+                },
+            ],
+        };
+        const second = {
+            ...emptyCompare,
+            baseContentHash: 'd'.repeat(64),
+            operations: [
+                {
+                    id: 'opaque-second-operation',
+                    category: 'table',
+                    type: 'add',
+                    entityId: null,
+                    renameTo: null,
+                    identity: {
+                        kind: 'table',
+                        schema: 'public',
+                        name: 'invoices',
+                    },
+                    before: null,
+                    after: null,
+                    changes: [],
+                    dependsOn: [],
+                },
+            ],
+        };
+        control.apiRequest.mockResolvedValueOnce(first);
+        renderWizard();
+        paste('select 1');
+        await user.click(
+            screen.getByRole('checkbox', {
+                name: 'merge_wizard.include_deletions.label',
+            })
+        );
+        await user.click(
+            await screen.findByRole('radio', { name: /CockroachDB/ })
+        );
+
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        const firstChange = await screen.findByRole('checkbox', {
+            name: /users.email/,
+        });
+        expect(firstChange).toBeChecked();
+        await user.click(firstChange);
+        expect(firstChange).not.toBeChecked();
+
+        await user.click(
+            screen.getByRole('button', { name: 'new_diagram_dialog.back' })
+        );
+
+        expect(screen.getByTestId('merge-wizard-source-step')).toHaveAttribute(
+            'data-cached-compare',
+            'true'
+        );
+        expect(screen.getByTestId('merge-wizard-source-step')).toHaveAttribute(
+            'data-source-dialect',
+            DatabaseType.COCKROACHDB
+        );
+        expect(screen.getByRole('textbox')).toHaveValue('select 1');
+        expect(
+            screen.getByRole('checkbox', {
+                name: 'merge_wizard.include_deletions.label',
+            })
+        ).toBeChecked();
+        expect(control.apiRequest).toHaveBeenCalledTimes(1);
+
+        control.apiRequest.mockResolvedValueOnce(second);
+        const compareAgain = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compareAgain).toBeEnabled());
+        await user.click(compareAgain);
+
+        expect(
+            await screen.findByText(
+                'merge_wizard.result.entity.table name:invoices'
+            )
+        ).toBeInTheDocument();
+        expect(screen.queryByText('users.email')).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('checkbox', { name: /invoices/ })
+        ).toBeChecked();
+        expect(screen.getByTestId('merge-wizard-result-step')).toHaveAttribute(
+            'data-base-hash',
+            'd'.repeat(64)
+        );
+        expect(screen.getByTestId('merge-wizard-result-step')).toHaveAttribute(
+            'data-include-deletions',
+            'true'
+        );
+        expect(control.apiRequest).toHaveBeenCalledTimes(2);
+        expect(control.prepare).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+                resolution: { sourceDialect: DatabaseType.COCKROACHDB },
+            })
+        );
+    });
+
+    it('keeps a project resolution after returning from the result', async () => {
+        const user = userEvent.setup();
+        scenario = 'project';
+        renderWizard();
+        paste('archive-placeholder');
+        await user.click(
+            await screen.findByRole('radio', { name: /frameworks\.laravel/ })
+        );
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        await user.click(
+            screen.getByRole('button', { name: 'new_diagram_dialog.back' })
+        );
+
+        expect(screen.getByTestId('merge-wizard-source-step')).toHaveAttribute(
+            'data-project-candidate',
+            getProjectCandidateKey(laravelApp)
+        );
+        expect(screen.getByTestId('merge-wizard-source-step')).toHaveAttribute(
+            'data-cached-compare',
+            'true'
+        );
+        expect(screen.getByRole('textbox')).toHaveValue('archive-placeholder');
+    });
+
+    it('keeps a database group resolution after returning from the result', async () => {
+        const user = userEvent.setup();
+        scenario = 'groups';
+        renderWizard();
+        paste('archive-placeholder');
+        await user.click(await screen.findByRole('radio', { name: /Catalog/ }));
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        await user.click(
+            screen.getByRole('button', { name: 'new_diagram_dialog.back' })
+        );
+
+        expect(screen.getByTestId('merge-wizard-source-step')).toHaveAttribute(
+            'data-database-group',
+            'catalog'
+        );
+        expect(
+            screen.getByRole('checkbox', {
+                name: 'merge_wizard.include_deletions.label',
+            })
+        ).not.toBeChecked();
     });
 
     it('closes from Cancel', async () => {

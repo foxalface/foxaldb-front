@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/dialog/dialog';
+import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
 import type { BaseDialogProps } from '@/dialogs/common/base-dialog-props';
 import { useAuth } from '@/hooks/use-auth';
@@ -17,27 +11,21 @@ import {
     type SchemaMergeCompareFailure,
 } from '@/lib/api/schema-merge-compare';
 import type { DatabaseType } from '@/lib/domain/database-type';
-import type { Diagram } from '@/lib/domain/diagram';
 import { isZipArchiveFile } from '@/lib/project-import/is-zip-archive-file';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
-import type { SchemaMergeCompareResponse } from '@/lib/schema-merge/compare-response';
-import type { SchemaMergeCompareSource } from '@/lib/schema-merge/source-kinds';
 import { prepareSchemaMergeSource } from '@/lib/schema-merge/prepare-schema-merge-source';
 import type {
     SchemaMergeSourceInput,
     SchemaMergeSourcePreparationResult,
     SchemaMergeSourceResolution,
 } from '@/lib/schema-merge/source-adapter-types';
-import { useTranslation } from 'react-i18next';
+import { defaultSchemas } from '@/lib/data/default-schemas';
+import { MergeResultStep } from './merge-result-step';
 import { MergeSourceStep } from './merge-source-step';
+import type { MergeWizardApplyContext } from './merge-wizard-apply-context';
 import { MergeWizardStep } from './merge-wizard-step';
 
-export interface MergeWizardApplyContext {
-    incomingDiagram: Diagram;
-    source: SchemaMergeCompareSource;
-    includeDeletions: boolean;
-    response: SchemaMergeCompareResponse;
-}
+export type { MergeWizardApplyContext };
 
 interface SelectedMergeFile {
     file: File;
@@ -81,7 +69,6 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
     dialog,
 }) => {
     const { closeMergeWizardDialog } = useDialog();
-    const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
     const { currentDiagram, databaseType: chartDatabaseType } = useChartDB();
     const wasOpenRef = useRef(false);
@@ -90,6 +77,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
     const prepareRequestIdRef = useRef(0);
     const fileSelectionIdRef = useRef(0);
     const fileTokenRef = useRef(0);
+    const compareGenerationRef = useRef(0);
 
     const [step, setStep] = useState<MergeWizardStep>(MergeWizardStep.SOURCE);
     const [text, setText] = useState('');
@@ -304,6 +292,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                     return;
                 }
 
+                compareGenerationRef.current += 1;
                 setApplyContext({
                     incomingDiagram: ready.incomingDiagram,
                     source: {
@@ -311,6 +300,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                     },
                     includeDeletions,
                     response,
+                    generation: compareGenerationRef.current,
                 });
                 setStep(MergeWizardStep.RESULT);
             })
@@ -347,6 +337,10 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         setCompareError(null);
     }, []);
 
+    const handleBackToSource = useCallback(() => {
+        setStep(MergeWizardStep.SOURCE);
+    }, []);
+
     return (
         <Dialog
             {...dialog}
@@ -357,36 +351,19 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-dvh w-full max-w-[30rem] flex-col overflow-hidden"
+                className="flex max-h-dvh w-full max-w-[30rem] flex-col overflow-hidden sm:max-w-xl"
                 showClose
             >
                 <TooltipProvider>
                     {step === MergeWizardStep.RESULT && applyContext ? (
-                        <>
-                            <DialogHeader className="sr-only">
-                                <DialogTitle>
-                                    {t('merge_wizard.title')}
-                                </DialogTitle>
-                                <DialogDescription>
-                                    {t('merge_wizard.description')}
-                                </DialogDescription>
-                            </DialogHeader>
-                            <div
-                                data-testid="merge-wizard-result-step"
-                                data-operation-count={
-                                    applyContext.response.operations.length
-                                }
-                                data-base-hash={
-                                    applyContext.response.baseContentHash
-                                }
-                                data-include-deletions={
-                                    applyContext.includeDeletions
-                                        ? 'true'
-                                        : 'false'
-                                }
-                                data-source-kind={applyContext.source.kind}
-                            />
-                        </>
+                        <MergeResultStep
+                            key={applyContext.generation}
+                            applyContext={applyContext}
+                            defaultSchema={
+                                defaultSchemas[currentDatabaseType] ?? null
+                            }
+                            onBack={handleBackToSource}
+                        />
                     ) : (
                         <MergeSourceStep
                             text={text}
@@ -413,6 +390,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                             onIncludeDeletionsChange={setIncludeDeletions}
                             onCompare={handleCompare}
                             onCancel={closeMergeWizardDialog}
+                            hasCachedCompare={applyContext !== null}
                         />
                     )}
                 </TooltipProvider>

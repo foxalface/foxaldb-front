@@ -1,6 +1,6 @@
 # Schema merge
 
-Product architecture for Schema Merge. M1 is the shared contract. M5 is the frontend source adapter. M6 is the wizard shell and source step. The result UI and the Actions menu entry are not implemented.
+Product architecture for Schema Merge. M1 is the shared contract. M5 is the frontend source adapter. M6 is the wizard shell and source step. M7 is the result UI. Actions → Merge stays hidden until M8 wires Apply.
 
 The backend contract, operation ids, and error codes are specified in [`backend/docs/schema-merge.md`](../../../backend/docs/schema-merge.md). This document does not repeat that specification. Frontend types in `frontend/src/lib/schema-merge/diff-types.ts` mirror the JSON contract. They do not compute operation ids and they do not diff diagrams.
 
@@ -199,7 +199,7 @@ Text byte length and `file.size` use `uploadCapabilities.schema.textMaxBytes`. Z
 
 Status: complete. Dialog: `frontend/src/dialogs/merge-wizard/`. Opener: `openMergeWizardDialog()`. The dialog is registered on `DialogProvider` and stays closed until that opener runs.
 
-The Actions menu does not expose Merge. The result UI is not built. M7 adds the result step and the Actions entry together. There is no temporary feature flag.
+The Actions menu does not expose Merge. M7 builds the result step and keeps the menu closed. There is no temporary feature flag.
 
 ### Step 1
 
@@ -231,4 +231,55 @@ On success the wizard stores `incomingDiagram`, `source`, `includeDeletions`, an
 
 Compare uses the persisted diagram. `useDiagramAutosave` debounces for 900 ms and has no flush handle. M6 does not wait, sleep, or flush. Deterministic flush stays in M8. The hidden dialog is not a substitute for that flush.
 
-Apply, the result UI, and the Actions entry remain unbuilt. Next milestone: M7 Results UI + Actions entry.
+Apply and the Actions entry remain unbuilt. The result UI is described under M7.
+
+## M7 result UI
+
+Status: complete. The result step renders the Compare response already stored by M6. It does not call Compare again, does not reparse the source, and does not call Apply.
+
+The parent keeps `incomingDiagram`, `source.kind`, `includeDeletions`, and the Compare response, including `baseContentHash` and `baseUpdatedAt`. The hash is not shown. `viewsCompared` comes from the response. The UI does not infer it from `source.kind`.
+
+### Sections
+
+Operations are grouped only by `table`, `field`, `relationship`, and `view`, in that order. Order inside a section is the backend order. Indexes, checks, custom types, and dependencies stay on their owning operations.
+
+All four sections are shown when the comparison has operations. An empty section shows a compact empty state. If `viewsCompared` is false and the view section is empty, the section explains that the source format cannot compare views reliably. Those views are not listed as deletions.
+
+If `operations` is empty, the step shows “No differences found”. That is a successful comparison. Checkboxes are omitted and Merge stays disabled. When views were not compared, that explanation is still shown.
+
+Sections start expanded.
+
+### Change rows
+
+Each row uses an icon and a word:
+
+| Change | Color | Icon |
+| ------ | ----- | ---- |
+| add | green | plus |
+| modify | blue | pencil |
+| rename | amber | arrow |
+| delete | red | minus |
+
+Labels come from semantic identity. The default schema is omitted unless the same name appears in another schema. Relationship rows use endpoints, for example `users.id → posts.user_id`. A field rename shows both names, for example `users.name → full_name`. Operation ids, entity ids, and raw JSON are not shown.
+
+Attribute changes use one formatter. One or two changes are written as a short line. More than two become a property count. Indexes, checks, dependencies, and composite relationship columns are summarized, not dumped.
+
+### Selection
+
+Every operation starts selected, including deletions when the user asked for them. Selection is a set of operation ids. The operation objects stay immutable.
+
+Selecting an operation also selects its `dependsOn` prerequisites, including prerequisites in other sections. Clearing an operation also clears operations that depend on it, including dependents in other sections. Section checkboxes follow the same closure: checked, unchecked, or indeterminate. There is no global select-all.
+
+A cycle, a self-dependency, or a missing prerequisite in client data shows an analysis error instead of walking the graph. The backend graph is still authoritative at Apply time.
+
+The footer count is “Merge N changes”. N = 0 disables the control. In M7 the control stays disabled even when N > 0, because Apply is not wired. The click does not call `POST /merge/apply`.
+
+### Back
+
+Back returns to SOURCE and keeps the pasted text or file, dialect, project, and database-group resolutions, `includeDeletions`, and the latest ready preparation. The Compare response stays cached until the next successful Compare, which replaces the result and selects every new operation.
+
+### Actions
+
+Actions → Merge is not shown. A menu entry would open a review that cannot apply, which is a dead-end. M8 exposes the entry together with autosave flush, the Apply call, local state replacement, realtime peer refetch, and undo/history.
+
+Guests, local-only diagrams, and readonly viewers must stay excluded when that entry appears. The editor already has that permission state. M7 does not duplicate backend policy.
