@@ -1944,6 +1944,49 @@ export const ru: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'Объединить',
+            description: 'Источник для сравнения',
+            source_label: 'Источник',
+            source_placeholder: 'Вставьте SQL, DBML или JSON…',
+            source_hint: 'Формат определяется автоматически.',
+            choose_file: 'Импортировать файл',
+            change_file_aria: 'Выбранный файл: {{name}}. Выбрать другой.',
+            analyzing: 'Определение источника…',
+            compare: 'Сравнить',
+            comparing: 'Сравнение…',
+            cancel: 'Отмена',
+            unavailable: 'Объединение доступно для сохранённых диаграмм.',
+            include_deletions: {
+                label: 'Учитывать удаления',
+                description:
+                    'Включить элементы диаграммы, которых нет в источнике.',
+                warning:
+                    'Неполный источник может предложить удалить элементы, которых в нём нет.',
+            },
+            errors: {
+                unable_to_detect: 'Не удалось распознать этот источник.',
+                unsupported_source: 'Этот источник не поддерживается.',
+                unsupported_file_extension: 'Этот тип файла не поддерживается.',
+                malformed_source: 'Не удалось прочитать этот источник.',
+                malformed_archive: 'Не удалось прочитать этот архив.',
+                unreadable_file: 'Не удалось прочитать выбранный файл.',
+                file_too_large: 'Этот файл слишком большой.',
+                malformed_diagram: 'Не удалось сравнить этот источник.',
+                database_type_mismatch:
+                    'Этот источник не соответствует базе диаграммы.',
+                payload_too_large: 'Сравнение слишком большое.',
+                analysis_failed: 'Сравнение не удалось.',
+                rate_limit: 'Слишком много сравнений. Повторите чуть позже.',
+                unauthenticated: 'Войдите, чтобы сравнить.',
+                forbidden: 'Вы не можете сравнить эту диаграмму.',
+                unexpected: 'Сравнение не удалось.',
+                project_unreadable: 'Не удалось прочитать этот проект.',
+                invalid_resolution:
+                    'Выберите допустимый вариант, чтобы продолжить.',
+            },
+        },
+
         language_select: {
             change_language: 'Сменить язык',
         },

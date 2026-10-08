@@ -1937,6 +1937,47 @@ export const ko_KR: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: '병합',
+            description: '비교할 원본',
+            source_label: '원본',
+            source_placeholder: 'SQL, DBML 또는 JSON 붙여넣기…',
+            source_hint: '형식은 자동으로 감지됩니다.',
+            choose_file: '파일 가져오기',
+            change_file_aria: '선택한 파일: {{name}}. 다른 파일을 선택하세요.',
+            analyzing: '원본을 감지하는 중…',
+            compare: '비교',
+            comparing: '비교하는 중…',
+            cancel: '취소',
+            unavailable: '병합은 저장된 다이어그램에서 사용할 수 있습니다.',
+            include_deletions: {
+                label: '삭제 반영',
+                description: '원본에 없는 다이어그램 요소를 포함합니다.',
+                warning:
+                    '일부만 담긴 원본은 포함되지 않은 요소의 삭제를 제안할 수 있습니다.',
+            },
+            errors: {
+                unable_to_detect: '이 원본을 인식할 수 없습니다.',
+                unsupported_source: '이 원본은 지원되지 않습니다.',
+                unsupported_file_extension: '이 파일 형식은 지원되지 않습니다.',
+                malformed_source: '이 원본을 읽을 수 없습니다.',
+                malformed_archive: '이 아카이브를 읽을 수 없습니다.',
+                unreadable_file: '선택한 파일을 읽을 수 없습니다.',
+                file_too_large: '이 파일은 너무 큽니다.',
+                malformed_diagram: '이 원본을 비교할 수 없습니다.',
+                database_type_mismatch:
+                    '이 원본은 다이어그램 데이터베이스와 맞지 않습니다.',
+                payload_too_large: '비교 내용이 너무 큽니다.',
+                analysis_failed: '비교에 실패했습니다.',
+                rate_limit: '비교가 너무 많습니다. 잠시 후 다시 시도하세요.',
+                unauthenticated: '비교하려면 로그인하세요.',
+                forbidden: '이 다이어그램은 비교할 수 없습니다.',
+                unexpected: '비교에 실패했습니다.',
+                project_unreadable: '이 프로젝트를 읽을 수 없습니다.',
+                invalid_resolution: '계속하려면 올바른 옵션을 선택하세요.',
+            },
+        },
+
         language_select: {
             change_language: '언어',
         },

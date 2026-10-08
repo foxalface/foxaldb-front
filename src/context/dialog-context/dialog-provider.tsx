@@ -41,6 +41,12 @@ const ExportSQLDialogLazy = lazy(() =>
     }))
 );
 
+const MergeWizardDialogLazy = lazy(() =>
+    import('@/dialogs/merge-wizard/merge-wizard-dialog').then((module) => ({
+        default: module.MergeWizardDialog,
+    }))
+);
+
 const ImportDatabaseDialogLazy = lazy(() =>
     import('@/dialogs/import-database-dialog/import-database-dialog').then(
         (module) => ({
@@ -167,6 +173,11 @@ export const DialogProvider: React.FC<
     // Export wizard
     const [openExportWizardDialog, setOpenExportWizardDialog] = useState(false);
 
+    // Schema merge wizard. Mounted on first open and kept mounted so close
+    // and reopen can reset wizard state without a new context.
+    const [openMergeWizardDialog, setOpenMergeWizardDialog] = useState(false);
+    const [mergeWizardMounted, setMergeWizardMounted] = useState(false);
+
     // Import diagram dialog
     const [openImportDiagramDialog, setOpenImportDiagramDialog] =
         useState(false);
@@ -195,6 +206,12 @@ export const DialogProvider: React.FC<
         }
     }, [openImportDatabaseDialog]);
 
+    useEffect(() => {
+        if (openMergeWizardDialog) {
+            setMergeWizardMounted(true);
+        }
+    }, [openMergeWizardDialog]);
+
     const [
         openLaravelMigrationImportDialog,
         setOpenLaravelMigrationImportDialog,
@@ -222,6 +239,8 @@ export const DialogProvider: React.FC<
                 closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
                 openExportWizardDialog: () => setOpenExportWizardDialog(true),
                 closeExportWizardDialog: () => setOpenExportWizardDialog(false),
+                openMergeWizardDialog: () => setOpenMergeWizardDialog(true),
+                closeMergeWizardDialog: () => setOpenMergeWizardDialog(false),
                 openLaravelMigrationImportDialog: () =>
                     setOpenLaravelMigrationImportDialog(true),
                 closeLaravelMigrationImportDialog: () =>
@@ -311,6 +330,13 @@ export const DialogProvider: React.FC<
                 {...guestDiagramMigrationDialogParams}
             />
             <ExportWizardDialog dialog={{ open: openExportWizardDialog }} />
+            {mergeWizardMounted ? (
+                <Suspense fallback={null}>
+                    <MergeWizardDialogLazy
+                        dialog={{ open: openMergeWizardDialog }}
+                    />
+                </Suspense>
+            ) : null}
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
             <LaravelMigrationImportDialog

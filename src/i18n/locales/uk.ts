@@ -1943,6 +1943,49 @@ export const uk: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'Об’єднати',
+            description: 'Джерело для порівняння',
+            source_label: 'Джерело',
+            source_placeholder: 'Вставте SQL, DBML або JSON…',
+            source_hint: 'Формат визначається автоматично.',
+            choose_file: 'Імпортувати файл',
+            change_file_aria: 'Вибраний файл: {{name}}. Вибрати інший.',
+            analyzing: 'Визначення джерела…',
+            compare: 'Порівняти',
+            comparing: 'Порівняння…',
+            cancel: 'Скасувати',
+            unavailable: 'Об’єднання доступне для збережених діаграм.',
+            include_deletions: {
+                label: 'Враховувати видалення',
+                description:
+                    'Включити елементи діаграми, яких немає в джерелі.',
+                warning:
+                    'Неповне джерело може запропонувати видалити елементи, яких у ньому немає.',
+            },
+            errors: {
+                unable_to_detect: 'Не вдалося розпізнати це джерело.',
+                unsupported_source: 'Це джерело не підтримується.',
+                unsupported_file_extension: 'Цей тип файлу не підтримується.',
+                malformed_source: 'Не вдалося прочитати це джерело.',
+                malformed_archive: 'Не вдалося прочитати цей архів.',
+                unreadable_file: 'Не вдалося прочитати вибраний файл.',
+                file_too_large: 'Цей файл завеликий.',
+                malformed_diagram: 'Не вдалося порівняти це джерело.',
+                database_type_mismatch:
+                    'Це джерело не відповідає базі діаграми.',
+                payload_too_large: 'Порівняння завелике.',
+                analysis_failed: 'Порівняння не вдалося.',
+                rate_limit: 'Забагато порівнянь. Спробуйте трохи згодом.',
+                unauthenticated: 'Увійдіть, щоб порівняти.',
+                forbidden: 'Ви не можете порівняти цю діаграму.',
+                unexpected: 'Порівняння не вдалося.',
+                project_unreadable: 'Не вдалося прочитати цей проєкт.',
+                invalid_resolution:
+                    'Виберіть припустимий варіант, щоб продовжити.',
+            },
+        },
+
         language_select: {
             change_language: 'Мова',
         },

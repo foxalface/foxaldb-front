@@ -1923,6 +1923,47 @@ export const gu: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'મર્જ',
+            description: 'સરખામણી માટેનો સ્રોત',
+            source_label: 'સ્રોત',
+            source_placeholder: 'SQL, DBML અથવા JSON પેસ્ટ કરો…',
+            source_hint: 'ફોર્મેટ આપમેળે ઓળખાય છે.',
+            choose_file: 'ફાઇલ આયાત કરો',
+            change_file_aria: 'પસંદ કરેલી ફાઇલ: {{name}}. બીજી ફાઇલ પસંદ કરો.',
+            analyzing: 'સ્રોત ઓળખાઈ રહ્યો છે…',
+            compare: 'સરખામણી',
+            comparing: 'સરખામણી થઈ રહી છે…',
+            cancel: 'રદ કરો',
+            unavailable: 'મર્જ સાચવેલા આકૃતિઓ માટે ઉપલબ્ધ છે.',
+            include_deletions: {
+                label: 'કાઢી નાખવાનું ધ્યાનમાં લો',
+                description: 'સ્રોતમાં ન હોય તેવા આકૃતિના ઘટકો શામેલ કરો.',
+                warning:
+                    'અપૂર્ણ સ્રોત એવા ઘટકો કાઢી નાખવાનું સૂચવી શકે છે જે તેમાં નથી.',
+            },
+            errors: {
+                unable_to_detect: 'આ સ્રોત ઓળખી શકાયો નહીં.',
+                unsupported_source: 'આ સ્રોત સમર્થિત નથી.',
+                unsupported_file_extension: 'આ ફાઇલ પ્રકાર સમર્થિત નથી.',
+                malformed_source: 'આ સ્રોત વાંચી શકાયો નહીં.',
+                malformed_archive: 'આ આર્કાઇવ વાંચી શકાયું નહીં.',
+                unreadable_file: 'પસંદ કરેલી ફાઇલ વાંચી શકાઈ નહીં.',
+                file_too_large: 'આ ફાઇલ ખૂબ મોટી છે.',
+                malformed_diagram: 'આ સ્રોતની સરખામણી થઈ શકી નહીં.',
+                database_type_mismatch:
+                    'આ સ્રોત આકૃતિના ડેટાબેઝ સાથે મેળ ખાતો નથી.',
+                payload_too_large: 'સરખામણી ખૂબ મોટી છે.',
+                analysis_failed: 'સરખામણી નિષ્ફળ રહી.',
+                rate_limit: 'ઘણી સરખામણીઓ. થોડી વાર પછી ફરી પ્રયાસ કરો.',
+                unauthenticated: 'સરખામણી કરવા સાઇન ઇન કરો.',
+                forbidden: 'તમે આ આકૃતિની સરખામણી કરી શકતા નથી.',
+                unexpected: 'સરખામણી નિષ્ફળ રહી.',
+                project_unreadable: 'આ પ્રોજેક્ટ વાંચી શકાયો નહીં.',
+                invalid_resolution: 'આગળ વધવા માન્ય વિકલ્પ પસંદ કરો.',
+            },
+        },
+
         language_select: {
             change_language: 'ભાષા બદલો',
         },

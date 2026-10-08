@@ -1993,6 +1993,55 @@ export const de: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'Zusammenführen',
+            description: 'Quelle zum Vergleichen',
+            source_label: 'Quelle',
+            source_placeholder: 'SQL, DBML oder JSON einfügen…',
+            source_hint: 'Das Format wird automatisch erkannt.',
+            choose_file: 'Datei importieren',
+            change_file_aria:
+                'Ausgewählte Datei: {{name}}. Andere Datei wählen.',
+            analyzing: 'Quelle wird erkannt…',
+            compare: 'Vergleichen',
+            comparing: 'Vergleich läuft…',
+            cancel: 'Abbrechen',
+            unavailable:
+                'Zusammenführen ist für gespeicherte Diagramme verfügbar.',
+            include_deletions: {
+                label: 'Löschungen berücksichtigen',
+                description:
+                    'Diagrammelemente einbeziehen, die in der Quelle fehlen.',
+                warning:
+                    'Eine unvollständige Quelle kann Löschungen für Elemente vorschlagen, die sie nicht enthält.',
+            },
+            errors: {
+                unable_to_detect: 'Diese Quelle konnte nicht erkannt werden.',
+                unsupported_source: 'Diese Quelle wird nicht unterstützt.',
+                unsupported_file_extension:
+                    'Dieser Dateityp wird nicht unterstützt.',
+                malformed_source: 'Diese Quelle konnte nicht gelesen werden.',
+                malformed_archive: 'Dieses Archiv konnte nicht gelesen werden.',
+                unreadable_file:
+                    'Die ausgewählte Datei konnte nicht gelesen werden.',
+                file_too_large: 'Diese Datei ist zu groß.',
+                malformed_diagram:
+                    'Diese Quelle konnte nicht verglichen werden.',
+                database_type_mismatch:
+                    'Diese Quelle passt nicht zur Datenbank des Diagramms.',
+                payload_too_large: 'Der Vergleich ist zu groß.',
+                analysis_failed: 'Vergleich fehlgeschlagen.',
+                rate_limit: 'Zu viele Vergleiche. Bitte kurz warten.',
+                unauthenticated: 'Melde dich an, um zu vergleichen.',
+                forbidden: 'Du kannst dieses Diagramm nicht vergleichen.',
+                unexpected: 'Vergleich fehlgeschlagen.',
+                project_unreadable:
+                    'Dieses Projekt konnte nicht gelesen werden.',
+                invalid_resolution:
+                    'Wähle eine gültige Option, um fortzufahren.',
+            },
+        },
+
         language_select: {
             change_language: 'Sprache',
         },

@@ -1947,6 +1947,47 @@ export const ne: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'मर्ज',
+            description: 'तुलना गर्ने स्रोत',
+            source_label: 'स्रोत',
+            source_placeholder: 'SQL, DBML वा JSON टाँस्नुहोस्…',
+            source_hint: 'ढाँचा स्वतः पहिचान हुन्छ।',
+            choose_file: 'फाइल आयात गर्नुहोस्',
+            change_file_aria: 'छानिएको फाइल: {{name}}। अर्को फाइल छान्नुहोस्।',
+            analyzing: 'स्रोत पहिचान हुँदैछ…',
+            compare: 'तुलना गर्नुहोस्',
+            comparing: 'तुलना हुँदैछ…',
+            cancel: 'रद्द गर्नुहोस्',
+            unavailable: 'मर्ज सुरक्षित रेखाचित्रका लागि उपलब्ध छ।',
+            include_deletions: {
+                label: 'मेटाउने कुरा समावेश गर्नुहोस्',
+                description: 'स्रोतमा नभएका रेखाचित्रका तत्व समावेश गर्नुहोस्।',
+                warning:
+                    'आंशिक स्रोतले आफूमा नभएका तत्व मेटाउन प्रस्ताव गर्न सक्छ।',
+            },
+            errors: {
+                unable_to_detect: 'यो स्रोत चिन्न सकिएन।',
+                unsupported_source: 'यो स्रोत समर्थित छैन।',
+                unsupported_file_extension: 'यो फाइल प्रकार समर्थित छैन।',
+                malformed_source: 'यो स्रोत पढ्न सकिएन।',
+                malformed_archive: 'यो अभिलेख पढ्न सकिएन।',
+                unreadable_file: 'छानिएको फाइल पढ्न सकिएन।',
+                file_too_large: 'यो फाइल धेरै ठूलो छ।',
+                malformed_diagram: 'यो स्रोत तुलना गर्न सकिएन।',
+                database_type_mismatch:
+                    'यो स्रोत रेखाचित्रको डाटाबेससँग मिल्दैन।',
+                payload_too_large: 'तुलना धेरै ठूलो छ।',
+                analysis_failed: 'तुलना असफल भयो।',
+                rate_limit: 'धेरै तुलना। केही बेरपछि फेरि प्रयास गर्नुहोस्।',
+                unauthenticated: 'तुलना गर्न साइन इन गर्नुहोस्।',
+                forbidden: 'तपाईं यो रेखाचित्र तुलना गर्न सक्नुहुन्न।',
+                unexpected: 'तुलना असफल भयो।',
+                project_unreadable: 'यो परियोजना पढ्न सकिएन।',
+                invalid_resolution: 'जारी राख्न मान्य विकल्प छान्नुहोस्।',
+            },
+        },
+
         language_select: {
             change_language: 'भाषा परिवर्तन गर्नुहोस्',
         },

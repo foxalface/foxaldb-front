@@ -155,4 +155,15 @@ describe('Menu export navigation', () => {
 
         expect(dialogMocks.openExportDiagramDialog).toHaveBeenCalledTimes(1);
     });
+
+    it('does not expose schema merge from Actions yet', async () => {
+        await openActionsMenu();
+
+        expect(
+            screen.queryByRole('menuitem', { name: 'merge_wizard.title' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('menuitem', { name: /fusionner/i })
+        ).not.toBeInTheDocument();
+    });
 });

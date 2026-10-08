@@ -1,6 +1,6 @@
 # Schema merge
 
-Product architecture for Schema Merge. M1 is the shared contract. M5 is the frontend source adapter. No merge wizard is implemented.
+Product architecture for Schema Merge. M1 is the shared contract. M5 is the frontend source adapter. M6 is the wizard shell and source step. The result UI and the Actions menu entry are not implemented.
 
 The backend contract, operation ids, and error codes are specified in [`backend/docs/schema-merge.md`](../../../backend/docs/schema-merge.md). This document does not repeat that specification. Frontend types in `frontend/src/lib/schema-merge/diff-types.ts` mirror the JSON contract. They do not compute operation ids and they do not diff diagrams.
 
@@ -70,17 +70,17 @@ M1 does not implement those algorithms. Operation ids are opaque; the client doe
 
 ## Upload capabilities
 
-M3.1 is complete. `backend/config/uploads.php` is the upload authority, and `GET /api/capabilities/uploads` publishes the public limits. The merge wizard will read those capabilities when it accepts a file or archive.
+M3.1 is complete. `backend/config/uploads.php` is the upload authority, and `GET /api/capabilities/uploads` publishes the public limits. Source preparation and the Compare client read those capabilities. The wizard does not hardcode byte limits.
 
-`uploads.schema_merge.payload_max_bytes` is 16 MiB. `GET /api/capabilities/uploads` exposes it as `schemaMerge.payloadMaxBytes`. The frontend capability type includes that field. Merge wizard UI is not implemented. The 512 KiB framework-export budget is not this limit.
+`uploads.schema_merge.payload_max_bytes` is 16 MiB. `GET /api/capabilities/uploads` exposes it as `schemaMerge.payloadMaxBytes`. The frontend capability type includes that field. The Compare client rejects a body larger than `schemaMerge.payloadMaxBytes` before the request. The 512 KiB framework-export budget is not this limit.
 
-The M5 source adapter reads `schema.textMaxBytes` for pasted text and text files, and `archive` for ZIP inspection. It does not apply `schemaMerge.payloadMaxBytes`. That limit belongs to the later Compare request.
+The M5 source adapter reads `schema.textMaxBytes` for pasted text and text files, and `archive` for ZIP inspection. It does not apply `schemaMerge.payloadMaxBytes`.
 
 ## M5 source adapter
 
 Status: complete. Entry point: `prepareSchemaMergeSource()` in `frontend/src/lib/schema-merge/prepare-schema-merge-source.ts`.
 
-M5 prepares one incoming source. It does not add the wizard, an Actions menu item, autosave, realtime refetch, undo, or a Compare/Apply client. `SchemaMergeCompareRequest` is a type only. Nothing calls `POST /api/diagrams/{diagram}/merge/compare`.
+M5 prepares one incoming source. It does not add the wizard, an Actions menu item, autosave, realtime refetch, undo, or Apply. The Compare client is M6.
 
 ```
 text | text file | archive
@@ -195,4 +195,40 @@ Text byte length and `file.size` use `uploadCapabilities.schema.textMaxBytes`. Z
 - autosave changes
 - merge UI
 
-M5 prepares the incoming source only. The wizard, Compare client, and Apply client are still unbuilt. Next milestone: M6 Wizard Shell + Step 1.
+## M6 wizard shell
+
+Status: complete. Dialog: `frontend/src/dialogs/merge-wizard/`. Opener: `openMergeWizardDialog()`. The dialog is registered on `DialogProvider` and stays closed until that opener runs.
+
+The Actions menu does not expose Merge. The result UI is not built. M7 adds the result step and the Actions entry together. There is no temporary feature flag.
+
+### Step 1
+
+The only product step is SOURCE. The user pastes schema text or imports one file. One hidden file input accepts `.sql`, `.dbml`, `.json`, and `.zip`. ZIP bytes become an archive input. Other files become a text-file input. Paste and file selection replace each other, so only one source is active.
+
+Detection goes through `prepareSchemaMergeSource()`. The wizard does not reimplement detection. A ready source shows the existing detection summary. Ambiguous SQL uses `DialectResolutionPanel` and stores `sourceDialect`. An ambiguous project uses the existing project panel and stores `projectCandidateKey`. Several database groups use `ProjectDatabaseGroupPanel` and store `databaseGroupId`. The first group is not selected automatically. A database mismatch uses `DialectMismatchPanel` and does not offer changing the current diagram type. Compare stays disabled until the adapter status is `ready`.
+
+`includeDeletions` defaults to `false`. Turning it on shows a short warning: a partial source may propose deletions for elements it does not contain. There is no second confirmation.
+
+Footer actions are Cancel and Compare. Step 1 has no Back button.
+
+### Compare request
+
+`compareSchemaMerge()` posts `POST /api/diagrams/{diagramId}/merge/compare`.
+
+```
+{
+  incomingDiagram,
+  includeDeletions,
+  source: { kind }
+}
+```
+
+The client rebuilds that body. It does not send the current diagram, `viewsSupported`, `source.databaseType`, capabilities, or a base hash. A guest or local-only diagram is not compared. The response is decoded as `baseContentHash`, `baseUpdatedAt`, `viewsCompared`, and `operations`. An empty `operations` array is a successful result.
+
+On success the wizard stores `incomingDiagram`, `source`, `includeDeletions`, and the Compare response, then switches its internal step to RESULT. RESULT is a state boundary for the later review UI. It is not a product screen. Closing and reopening returns to SOURCE and clears the source, resolutions, deletion option, errors, and Compare result. A later Back from RESULT can keep the source without reparsing it.
+
+### Autosave
+
+Compare uses the persisted diagram. `useDiagramAutosave` debounces for 900 ms and has no flush handle. M6 does not wait, sleep, or flush. Deterministic flush stays in M8. The hidden dialog is not a substitute for that flush.
+
+Apply, the result UI, and the Actions entry remain unbuilt. Next milestone: M7 Results UI + Actions entry.

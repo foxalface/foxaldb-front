@@ -1940,6 +1940,47 @@ export const mr: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'विलीन करा',
+            description: 'तुलना करण्याचा स्रोत',
+            source_label: 'स्रोत',
+            source_placeholder: 'SQL, DBML किंवा JSON पेस्ट करा…',
+            source_hint: 'स्वरूप आपोआप ओळखले जाते.',
+            choose_file: 'फाइल आयात करा',
+            change_file_aria: 'निवडलेली फाइल: {{name}}. दुसरी फाइल निवडा.',
+            analyzing: 'स्रोत ओळखला जात आहे…',
+            compare: 'तुलना करा',
+            comparing: 'तुलना सुरू आहे…',
+            cancel: 'रद्द करा',
+            unavailable: 'विलीनीकरण जतन केलेल्या आकृत्यांसाठी उपलब्ध आहे.',
+            include_deletions: {
+                label: 'हटवणे विचारात घ्या',
+                description: 'स्रोतात नसलेले आकृतीचे घटक समाविष्ट करा.',
+                warning:
+                    'अपूर्ण स्रोत त्यात नसलेले घटक हटवण्याचा प्रस्ताव देऊ शकतो.',
+            },
+            errors: {
+                unable_to_detect: 'हा स्रोत ओळखता आला नाही.',
+                unsupported_source: 'हा स्रोत समर्थित नाही.',
+                unsupported_file_extension: 'हा फाइल प्रकार समर्थित नाही.',
+                malformed_source: 'हा स्रोत वाचता आला नाही.',
+                malformed_archive: 'हे संग्रहण वाचता आले नाही.',
+                unreadable_file: 'निवडलेली फाइल वाचता आली नाही.',
+                file_too_large: 'ही फाइल खूप मोठी आहे.',
+                malformed_diagram: 'या स्रोताची तुलना करता आली नाही.',
+                database_type_mismatch:
+                    'हा स्रोत आकृतीच्या डेटाबेसशी जुळत नाही.',
+                payload_too_large: 'तुलना खूप मोठी आहे.',
+                analysis_failed: 'तुलना अयशस्वी.',
+                rate_limit: 'खूप तुलना. थोड्या वेळाने पुन्हा प्रयत्न करा.',
+                unauthenticated: 'तुलना करण्यासाठी साइन इन करा.',
+                forbidden: 'तुम्ही या आकृतीची तुलना करू शकत नाही.',
+                unexpected: 'तुलना अयशस्वी.',
+                project_unreadable: 'हा प्रकल्प वाचता आला नाही.',
+                invalid_resolution: 'पुढे जाण्यासाठी वैध पर्याय निवडा.',
+            },
+        },
+
         language_select: {
             change_language: 'भाषा बदला',
         },

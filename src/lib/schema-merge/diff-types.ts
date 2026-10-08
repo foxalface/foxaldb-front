@@ -40,6 +40,11 @@ export const SCHEMA_MERGE_ERROR_CODES = [
 
 export type SchemaMergeErrorCode = (typeof SCHEMA_MERGE_ERROR_CODES)[number];
 
+export const isSchemaMergeErrorCode = (
+    value: string
+): value is SchemaMergeErrorCode =>
+    (SCHEMA_MERGE_ERROR_CODES as readonly string[]).includes(value);
+
 export const isChangeType = (value: string): value is ChangeType =>
     (CHANGE_TYPES as readonly string[]).includes(value);
 

@@ -1968,6 +1968,49 @@ export const pt_BR: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'Mesclar',
+            description: 'Fonte para comparar',
+            source_label: 'Fonte',
+            source_placeholder: 'Cole SQL, DBML ou JSON…',
+            source_hint: 'O formato é detectado automaticamente.',
+            choose_file: 'Importar um arquivo',
+            change_file_aria: 'Arquivo selecionado: {{name}}. Escolher outro.',
+            analyzing: 'Detectando a fonte…',
+            compare: 'Comparar',
+            comparing: 'Comparando…',
+            cancel: 'Cancelar',
+            unavailable: 'A mesclagem está disponível para diagramas salvos.',
+            include_deletions: {
+                label: 'Considerar exclusões',
+                description: 'Incluir elementos do diagrama ausentes na fonte.',
+                warning:
+                    'Uma fonte parcial pode propor exclusões de elementos que ela não contém.',
+            },
+            errors: {
+                unable_to_detect: 'Não foi possível reconhecer esta fonte.',
+                unsupported_source: 'Esta fonte não é suportada.',
+                unsupported_file_extension:
+                    'Este tipo de arquivo não é suportado.',
+                malformed_source: 'Não foi possível ler esta fonte.',
+                malformed_archive:
+                    'Não foi possível ler este arquivo compactado.',
+                unreadable_file: 'Não foi possível ler o arquivo selecionado.',
+                file_too_large: 'Este arquivo é grande demais.',
+                malformed_diagram: 'Não foi possível comparar esta fonte.',
+                database_type_mismatch:
+                    'Esta fonte não corresponde ao banco do diagrama.',
+                payload_too_large: 'A comparação é grande demais.',
+                analysis_failed: 'A comparação falhou.',
+                rate_limit: 'Comparações demais. Tente de novo em instantes.',
+                unauthenticated: 'Entre para comparar.',
+                forbidden: 'Você não pode comparar este diagrama.',
+                unexpected: 'A comparação falhou.',
+                project_unreadable: 'Não foi possível ler este projeto.',
+                invalid_resolution: 'Escolha uma opção válida para continuar.',
+            },
+        },
+
         language_select: {
             change_language: 'Idioma',
         },

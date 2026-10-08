@@ -1940,6 +1940,47 @@ export const hi: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'मर्ज करें',
+            description: 'तुलना करने का स्रोत',
+            source_label: 'स्रोत',
+            source_placeholder: 'SQL, DBML या JSON चिपकाएँ…',
+            source_hint: 'प्रारूप अपने आप पहचाना जाता है।',
+            choose_file: 'फ़ाइल आयात करें',
+            change_file_aria: 'चुनी गई फ़ाइल: {{name}}। दूसरी फ़ाइल चुनें।',
+            analyzing: 'स्रोत पहचाना जा रहा है…',
+            compare: 'तुलना करें',
+            comparing: 'तुलना हो रही है…',
+            cancel: 'रद्द करें',
+            unavailable: 'मर्ज सहेजे गए आरेखों के लिए उपलब्ध है।',
+            include_deletions: {
+                label: 'हटाने को ध्यान में रखें',
+                description: 'स्रोत में न होने वाले आरेख तत्व शामिल करें।',
+                warning:
+                    'अधूरा स्रोत उन तत्वों को हटाने का सुझाव दे सकता है जो उसमें नहीं हैं।',
+            },
+            errors: {
+                unable_to_detect: 'यह स्रोत पहचाना नहीं जा सका।',
+                unsupported_source: 'यह स्रोत समर्थित नहीं है।',
+                unsupported_file_extension: 'यह फ़ाइल प्रकार समर्थित नहीं है।',
+                malformed_source: 'यह स्रोत पढ़ा नहीं जा सका।',
+                malformed_archive: 'यह संग्रह पढ़ा नहीं जा सका।',
+                unreadable_file: 'चुनी गई फ़ाइल पढ़ी नहीं जा सकी।',
+                file_too_large: 'यह फ़ाइल बहुत बड़ी है।',
+                malformed_diagram: 'इस स्रोत की तुलना नहीं हो सकी।',
+                database_type_mismatch:
+                    'यह स्रोत आरेख के डेटाबेस से मेल नहीं खाता।',
+                payload_too_large: 'तुलना बहुत बड़ी है।',
+                analysis_failed: 'तुलना विफल रही।',
+                rate_limit: 'बहुत अधिक तुलनाएँ। थोड़ी देर बाद फिर कोशिश करें।',
+                unauthenticated: 'तुलना करने के लिए साइन इन करें।',
+                forbidden: 'आप इस आरेख की तुलना नहीं कर सकते।',
+                unexpected: 'तुलना विफल रही।',
+                project_unreadable: 'यह प्रोजेक्ट पढ़ा नहीं जा सका।',
+                invalid_resolution: 'जारी रखने के लिए मान्य विकल्प चुनें।',
+            },
+        },
+
         language_select: {
             change_language: 'भाषा बदलें',
         },

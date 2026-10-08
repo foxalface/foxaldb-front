@@ -1975,6 +1975,50 @@ export const ja: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'マージ',
+            description: '比較するソース',
+            source_label: 'ソース',
+            source_placeholder: 'SQL、DBML、JSON を貼り付け…',
+            source_hint: '形式は自動で判定されます。',
+            choose_file: 'ファイルを取り込む',
+            change_file_aria:
+                '選択中のファイル: {{name}}。別のファイルを選ぶ。',
+            analyzing: 'ソースを判定しています…',
+            compare: '比較',
+            comparing: '比較しています…',
+            cancel: 'キャンセル',
+            unavailable: 'マージは保存済みの図で使えます。',
+            include_deletions: {
+                label: '削除を考慮する',
+                description: 'ソースにない図の要素を含めます。',
+                warning:
+                    '部分的なソースは、含まれない要素の削除を提案することがあります。',
+            },
+            errors: {
+                unable_to_detect: 'このソースを判定できませんでした。',
+                unsupported_source: 'このソースはサポートされていません。',
+                unsupported_file_extension:
+                    'このファイル形式はサポートされていません。',
+                malformed_source: 'このソースを読み取れませんでした。',
+                malformed_archive: 'このアーカイブを読み取れませんでした。',
+                unreadable_file: '選択したファイルを読み取れませんでした。',
+                file_too_large: 'このファイルは大きすぎます。',
+                malformed_diagram: 'このソースを比較できませんでした。',
+                database_type_mismatch:
+                    'このソースは図のデータベースと一致しません。',
+                payload_too_large: '比較データが大きすぎます。',
+                analysis_failed: '比較に失敗しました。',
+                rate_limit:
+                    '比較が多すぎます。しばらくしてから再試行してください。',
+                unauthenticated: '比較するにはサインインしてください。',
+                forbidden: 'この図は比較できません。',
+                unexpected: '比較に失敗しました。',
+                project_unreadable: 'このプロジェクトを読み取れませんでした。',
+                invalid_resolution: '続けるには有効な選択肢を選んでください。',
+            },
+        },
+
         language_select: {
             change_language: '言語',
         },

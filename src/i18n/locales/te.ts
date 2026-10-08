@@ -1959,6 +1959,48 @@ export const te: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'విలీనం',
+            description: 'పోల్చాల్సిన మూలం',
+            source_label: 'మూలం',
+            source_placeholder: 'SQL, DBML లేదా JSON అతికించండి…',
+            source_hint: 'ఫార్మాట్ స్వయంగా గుర్తించబడుతుంది.',
+            choose_file: 'ఫైల్‌ను దిగుమతి చేయండి',
+            change_file_aria: 'ఎంచుకున్న ఫైల్: {{name}}. మరో ఫైల్ ఎంచుకోండి.',
+            analyzing: 'మూలం గుర్తించబడుతోంది…',
+            compare: 'పోల్చండి',
+            comparing: 'పోలుస్తోంది…',
+            cancel: 'రద్దు',
+            unavailable: 'విలీనం సేవ్ చేసిన రేఖాచిత్రాలకు అందుబాటులో ఉంటుంది.',
+            include_deletions: {
+                label: 'తొలగింపులను పరిగణించండి',
+                description: 'మూలంలో లేని రేఖాచిత్ర అంశాలను చేర్చండి.',
+                warning:
+                    'పాక్షిక మూలం తనలో లేని అంశాల తొలగింపును ప్రతిపాదించవచ్చు.',
+            },
+            errors: {
+                unable_to_detect: 'ఈ మూలాన్ని గుర్తించలేకపోయాం.',
+                unsupported_source: 'ఈ మూలం మద్దతు లేదు.',
+                unsupported_file_extension: 'ఈ ఫైల్ రకం మద్దతు లేదు.',
+                malformed_source: 'ఈ మూలాన్ని చదవలేకపోయాం.',
+                malformed_archive: 'ఈ ఆర్కైవ్‌ను చదవలేకపోయాం.',
+                unreadable_file: 'ఎంచుకున్న ఫైల్‌ను చదవలేకపోయాం.',
+                file_too_large: 'ఈ ఫైల్ చాలా పెద్దది.',
+                malformed_diagram: 'ఈ మూలాన్ని పోల్చలేకపోయాం.',
+                database_type_mismatch:
+                    'ఈ మూలం రేఖాచిత్ర డేటాబేస్‌తో సరిపోలడం లేదు.',
+                payload_too_large: 'పోలిక చాలా పెద్దది.',
+                analysis_failed: 'పోలిక విఫలమైంది.',
+                rate_limit: 'చాలా పోలికలు. కాసేపు తర్వాత మళ్లీ ప్రయత్నించండి.',
+                unauthenticated: 'పోల్చడానికి సైన్ ఇన్ చేయండి.',
+                forbidden: 'మీరు ఈ రేఖాచిత్రాన్ని పోల్చలేరు.',
+                unexpected: 'పోలిక విఫలమైంది.',
+                project_unreadable: 'ఈ ప్రాజెక్ట్‌ను చదవలేకపోయాం.',
+                invalid_resolution:
+                    'కొనసాగించడానికి చెల్లుబాటు అయ్యే ఎంపికను ఎంచుకోండి.',
+            },
+        },
+
         language_select: {
             change_language: 'భాష మార్చు',
         },

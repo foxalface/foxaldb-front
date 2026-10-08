@@ -1940,6 +1940,48 @@ export const en = {
             },
         },
 
+        merge_wizard: {
+            title: 'Merge',
+            description: 'Source to compare',
+            source_label: 'Source',
+            source_placeholder: 'Paste SQL, DBML, or JSON…',
+            source_hint: 'Format is detected automatically.',
+            choose_file: 'Import a file',
+            change_file_aria: 'Selected file: {{name}}. Choose another.',
+            analyzing: 'Detecting source…',
+            compare: 'Compare',
+            comparing: 'Comparing…',
+            cancel: 'Cancel',
+            unavailable: 'Merge is available for saved diagrams.',
+            include_deletions: {
+                label: 'Include deletions',
+                description:
+                    'Include diagram elements missing from the source.',
+                warning:
+                    'A partial source may propose deletions for elements it does not contain.',
+            },
+            errors: {
+                unable_to_detect: 'Could not detect this source.',
+                unsupported_source: 'This source is not supported.',
+                unsupported_file_extension: 'This file type is not supported.',
+                malformed_source: 'This source could not be read.',
+                malformed_archive: 'This archive could not be read.',
+                unreadable_file: 'Could not read the selected file.',
+                file_too_large: 'This file is too large.',
+                malformed_diagram: 'The source could not be compared.',
+                database_type_mismatch:
+                    'This source does not match the diagram database.',
+                payload_too_large: 'The comparison is too large.',
+                analysis_failed: 'Comparison failed.',
+                rate_limit: 'Too many comparisons. Try again shortly.',
+                unauthenticated: 'Sign in to compare.',
+                forbidden: 'You cannot compare this diagram.',
+                unexpected: 'Comparison failed.',
+                project_unreadable: 'This project could not be read.',
+                invalid_resolution: 'Choose a valid option to continue.',
+            },
+        },
+
         language_select: {
             change_language: 'Language',
         },

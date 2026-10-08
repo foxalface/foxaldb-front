@@ -1937,6 +1937,48 @@ export const bn: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'মার্জ',
+            description: 'তুলনার উৎস',
+            source_label: 'উৎস',
+            source_placeholder: 'SQL, DBML বা JSON পেস্ট করুন…',
+            source_hint: 'ফরম্যাট স্বয়ংক্রিয়ভাবে শনাক্ত হয়।',
+            choose_file: 'একটি ফাইল আমদানি করুন',
+            change_file_aria: 'নির্বাচিত ফাইল: {{name}}। অন্য ফাইল বেছে নিন।',
+            analyzing: 'উৎস শনাক্ত হচ্ছে…',
+            compare: 'তুলনা করুন',
+            comparing: 'তুলনা হচ্ছে…',
+            cancel: 'বাতিল',
+            unavailable: 'মার্জ সংরক্ষিত ডায়াগ্রামের জন্য উপলব্ধ।',
+            include_deletions: {
+                label: 'মুছে ফেলা বিবেচনা করুন',
+                description:
+                    'উৎসে নেই এমন ডায়াগ্রামের উপাদান অন্তর্ভুক্ত করুন।',
+                warning:
+                    'আংশিক উৎস এমন উপাদান মুছে ফেলার প্রস্তাব করতে পারে যা সে ধারণ করে না।',
+            },
+            errors: {
+                unable_to_detect: 'এই উৎস শনাক্ত করা যায়নি।',
+                unsupported_source: 'এই উৎস সমর্থিত নয়।',
+                unsupported_file_extension: 'এই ফাইলের ধরন সমর্থিত নয়।',
+                malformed_source: 'এই উৎস পড়া যায়নি।',
+                malformed_archive: 'এই আর্কাইভ পড়া যায়নি।',
+                unreadable_file: 'নির্বাচিত ফাইল পড়া যায়নি।',
+                file_too_large: 'এই ফাইলটি খুব বড়।',
+                malformed_diagram: 'এই উৎস তুলনা করা যায়নি।',
+                database_type_mismatch:
+                    'এই উৎস ডায়াগ্রামের ডাটাবেসের সাথে মেলে না।',
+                payload_too_large: 'তুলনাটি খুব বড়।',
+                analysis_failed: 'তুলনা ব্যর্থ হয়েছে।',
+                rate_limit: 'অনেক বেশি তুলনা। একটু পরে আবার চেষ্টা করুন।',
+                unauthenticated: 'তুলনা করতে সাইন ইন করুন।',
+                forbidden: 'আপনি এই ডায়াগ্রাম তুলনা করতে পারবেন না।',
+                unexpected: 'তুলনা ব্যর্থ হয়েছে।',
+                project_unreadable: 'এই প্রকল্প পড়া যায়নি।',
+                invalid_resolution: 'চালিয়ে যেতে একটি বৈধ বিকল্প বেছে নিন।',
+            },
+        },
+
         language_select: {
             change_language: 'ভাষা পরিবর্তন করুন',
         },

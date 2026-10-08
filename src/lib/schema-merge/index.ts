@@ -1,4 +1,7 @@
 export type { SchemaMergeCompareRequest } from './compare-request';
+export { decodeSchemaMergeCompareResponse } from './compare-response';
+export type { SchemaMergeCompareResponse } from './compare-response';
+export { isSchemaMergeErrorCode } from './diff-types';
 export { prepareSchemaMergeSource } from './prepare-schema-merge-source';
 export type {
     PrepareSchemaMergeSourceContext,

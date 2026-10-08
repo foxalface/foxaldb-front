@@ -1945,6 +1945,49 @@ export const id_ID: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'Gabungkan',
+            description: 'Sumber untuk dibandingkan',
+            source_label: 'Sumber',
+            source_placeholder: 'Tempel SQL, DBML, atau JSON…',
+            source_hint: 'Format terdeteksi secara otomatis.',
+            choose_file: 'Impor file',
+            change_file_aria: 'File dipilih: {{name}}. Pilih file lain.',
+            analyzing: 'Mendeteksi sumber…',
+            compare: 'Bandingkan',
+            comparing: 'Membandingkan…',
+            cancel: 'Batal',
+            unavailable: 'Penggabungan tersedia untuk diagram yang tersimpan.',
+            include_deletions: {
+                label: 'Perhitungkan penghapusan',
+                description:
+                    'Sertakan elemen diagram yang tidak ada di sumber.',
+                warning:
+                    'Sumber yang tidak lengkap dapat mengusulkan penghapusan elemen yang tidak ada di dalamnya.',
+            },
+            errors: {
+                unable_to_detect: 'Sumber ini tidak dikenali.',
+                unsupported_source: 'Sumber ini tidak didukung.',
+                unsupported_file_extension: 'Jenis file ini tidak didukung.',
+                malformed_source: 'Sumber ini tidak dapat dibaca.',
+                malformed_archive: 'Arsip ini tidak dapat dibaca.',
+                unreadable_file: 'File yang dipilih tidak dapat dibaca.',
+                file_too_large: 'File ini terlalu besar.',
+                malformed_diagram: 'Sumber ini tidak dapat dibandingkan.',
+                database_type_mismatch:
+                    'Sumber ini tidak cocok dengan basis data diagram.',
+                payload_too_large: 'Perbandingan terlalu besar.',
+                analysis_failed: 'Perbandingan gagal.',
+                rate_limit:
+                    'Terlalu banyak perbandingan. Coba lagi sebentar lagi.',
+                unauthenticated: 'Masuk untuk membandingkan.',
+                forbidden: 'Anda tidak dapat membandingkan diagram ini.',
+                unexpected: 'Perbandingan gagal.',
+                project_unreadable: 'Proyek ini tidak dapat dibaca.',
+                invalid_resolution: 'Pilih opsi yang valid untuk melanjutkan.',
+            },
+        },
+
         language_select: {
             change_language: 'Bahasa',
         },

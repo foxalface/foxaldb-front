@@ -1927,6 +1927,49 @@ export const tr: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'Birleştir',
+            description: 'Karşılaştırılacak kaynak',
+            source_label: 'Kaynak',
+            source_placeholder: 'SQL, DBML veya JSON yapıştırın…',
+            source_hint: 'Biçim otomatik algılanır.',
+            choose_file: 'Dosya içe aktar',
+            change_file_aria: 'Seçilen dosya: {{name}}. Başka bir dosya seçin.',
+            analyzing: 'Kaynak algılanıyor…',
+            compare: 'Karşılaştır',
+            comparing: 'Karşılaştırılıyor…',
+            cancel: 'İptal',
+            unavailable: 'Birleştirme kayıtlı diyagramlar için kullanılabilir.',
+            include_deletions: {
+                label: 'Silmeleri dikkate al',
+                description: 'Kaynakta olmayan diyagram öğelerini dahil et.',
+                warning:
+                    'Eksik bir kaynak, içermediği öğeler için silme önerebilir.',
+            },
+            errors: {
+                unable_to_detect: 'Bu kaynak tanınamadı.',
+                unsupported_source: 'Bu kaynak desteklenmiyor.',
+                unsupported_file_extension: 'Bu dosya türü desteklenmiyor.',
+                malformed_source: 'Bu kaynak okunamadı.',
+                malformed_archive: 'Bu arşiv okunamadı.',
+                unreadable_file: 'Seçilen dosya okunamadı.',
+                file_too_large: 'Bu dosya çok büyük.',
+                malformed_diagram: 'Bu kaynak karşılaştırılamadı.',
+                database_type_mismatch:
+                    'Bu kaynak diyagramın veritabanıyla eşleşmiyor.',
+                payload_too_large: 'Karşılaştırma çok büyük.',
+                analysis_failed: 'Karşılaştırma başarısız.',
+                rate_limit:
+                    'Çok fazla karşılaştırma. Kısa süre sonra yeniden deneyin.',
+                unauthenticated: 'Karşılaştırmak için oturum açın.',
+                forbidden: 'Bu diyagramı karşılaştıramazsınız.',
+                unexpected: 'Karşılaştırma başarısız.',
+                project_unreadable: 'Bu proje okunamadı.',
+                invalid_resolution:
+                    'Devam etmek için geçerli bir seçenek belirleyin.',
+            },
+        },
+
         language_select: {
             change_language: 'Dil',
         },

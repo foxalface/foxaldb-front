@@ -1941,6 +1941,47 @@ export const hr: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'Spoji',
+            description: 'Izvor za usporedbu',
+            source_label: 'Izvor',
+            source_placeholder: 'Zalijepite SQL, DBML ili JSON…',
+            source_hint: 'Format se prepoznaje automatski.',
+            choose_file: 'Uvezi datoteku',
+            change_file_aria: 'Odabrana datoteka: {{name}}. Odaberite drugu.',
+            analyzing: 'Prepoznavanje izvora…',
+            compare: 'Usporedi',
+            comparing: 'Uspoređivanje…',
+            cancel: 'Odustani',
+            unavailable: 'Spajanje je dostupno za spremljene dijagrame.',
+            include_deletions: {
+                label: 'Uzmi u obzir brisanja',
+                description: 'Uključi elemente dijagrama kojih nema u izvoru.',
+                warning:
+                    'Djelomičan izvor može predložiti brisanje elemenata koje ne sadrži.',
+            },
+            errors: {
+                unable_to_detect: 'Ovaj izvor nije prepoznat.',
+                unsupported_source: 'Ovaj izvor nije podržan.',
+                unsupported_file_extension: 'Ova vrsta datoteke nije podržana.',
+                malformed_source: 'Ovaj izvor nije moguće pročitati.',
+                malformed_archive: 'Ovu arhivu nije moguće pročitati.',
+                unreadable_file: 'Odabranu datoteku nije moguće pročitati.',
+                file_too_large: 'Ova datoteka je prevelika.',
+                malformed_diagram: 'Ovaj izvor nije moguće usporediti.',
+                database_type_mismatch:
+                    'Ovaj izvor ne odgovara bazi dijagrama.',
+                payload_too_large: 'Usporedba je prevelika.',
+                analysis_failed: 'Usporedba nije uspjela.',
+                rate_limit: 'Previše usporedbi. Pokušajte ponovno za trenutak.',
+                unauthenticated: 'Prijavite se za usporedbu.',
+                forbidden: 'Ne možete usporediti ovaj dijagram.',
+                unexpected: 'Usporedba nije uspjela.',
+                project_unreadable: 'Ovaj projekt nije moguće pročitati.',
+                invalid_resolution: 'Odaberite valjanu opciju za nastavak.',
+            },
+        },
+
         language_select: {
             change_language: 'Jezik',
         },

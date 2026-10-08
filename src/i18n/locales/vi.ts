@@ -1933,6 +1933,48 @@ export const vi: LanguageTranslation = {
             },
         },
 
+        merge_wizard: {
+            title: 'Hợp nhất',
+            description: 'Nguồn để so sánh',
+            source_label: 'Nguồn',
+            source_placeholder: 'Dán SQL, DBML hoặc JSON…',
+            source_hint: 'Định dạng được nhận diện tự động.',
+            choose_file: 'Nhập một tệp',
+            change_file_aria: 'Tệp đã chọn: {{name}}. Chọn tệp khác.',
+            analyzing: 'Đang nhận diện nguồn…',
+            compare: 'So sánh',
+            comparing: 'Đang so sánh…',
+            cancel: 'Hủy',
+            unavailable: 'Hợp nhất chỉ dùng cho sơ đồ đã lưu.',
+            include_deletions: {
+                label: 'Tính cả các mục đã xóa',
+                description:
+                    'Bao gồm phần tử có trong sơ đồ nhưng không có trong nguồn.',
+                warning:
+                    'Nguồn không đầy đủ có thể đề xuất xóa các phần tử mà nó không chứa.',
+            },
+            errors: {
+                unable_to_detect: 'Không nhận ra nguồn này.',
+                unsupported_source: 'Nguồn này không được hỗ trợ.',
+                unsupported_file_extension: 'Loại tệp này không được hỗ trợ.',
+                malformed_source: 'Không đọc được nguồn này.',
+                malformed_archive: 'Không đọc được kho lưu trữ này.',
+                unreadable_file: 'Không đọc được tệp đã chọn.',
+                file_too_large: 'Tệp này quá lớn.',
+                malformed_diagram: 'Không so sánh được nguồn này.',
+                database_type_mismatch:
+                    'Nguồn này không khớp cơ sở dữ liệu của sơ đồ.',
+                payload_too_large: 'Bản so sánh quá lớn.',
+                analysis_failed: 'So sánh thất bại.',
+                rate_limit: 'Quá nhiều lần so sánh. Hãy thử lại sau ít phút.',
+                unauthenticated: 'Đăng nhập để so sánh.',
+                forbidden: 'Bạn không thể so sánh sơ đồ này.',
+                unexpected: 'So sánh thất bại.',
+                project_unreadable: 'Không đọc được dự án này.',
+                invalid_resolution: 'Chọn một tùy chọn hợp lệ để tiếp tục.',
+            },
+        },
+
         language_select: {
             change_language: 'Ngôn ngữ',
         },
