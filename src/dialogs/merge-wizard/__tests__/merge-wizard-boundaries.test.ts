@@ -12,8 +12,10 @@ const read = (path: string): string =>
     readFileSync(join(frontendRoot, path), 'utf8');
 
 describe('schema merge wizard boundaries', () => {
-    it('does not wait for autosave, call Apply, or hardcode upload limits', () => {
-        const autosave = read('src/pages/editor-page/use-diagram-autosave.ts');
+    it('flushes autosave, calls Apply, and exposes Merge without a timer workaround', () => {
+        const autosave = read(
+            'src/lib/diagram-autosave/diagram-autosave-controller.ts'
+        );
         const wizard = read('src/dialogs/merge-wizard/merge-wizard-dialog.tsx');
         const sourceStep = read(
             'src/dialogs/merge-wizard/merge-source-step.tsx'
@@ -24,28 +26,31 @@ describe('schema merge wizard boundaries', () => {
         const formatter = read(
             'src/dialogs/merge-wizard/format-merge-change.ts'
         );
-        const client = read('src/lib/api/schema-merge-compare.ts');
+        const compareClient = read('src/lib/api/schema-merge-compare.ts');
+        const applyClient = read('src/lib/api/schema-merge-apply.ts');
         const menu = read('src/pages/editor-page/top-navbar/menu/menu.tsx');
 
-        expect(autosave).toContain('const AUTOSAVE_DEBOUNCE_MS = 900');
-        expect(autosave).not.toMatch(/export const flush/);
-        expect(autosave).not.toMatch(/flushDiagramAutosave/);
+        expect(autosave).toContain('export const flushDiagramAutosave');
+        expect(autosave).toContain('AUTOSAVE_DEBOUNCE_MS = 900');
+        expect(wizard).toContain('flushDiagramAutosave');
+        expect(wizard).toContain('applySchemaMerge');
+        expect(wizard).not.toMatch(/setTimeout\s*\(\s*900/);
+        expect(wizard).not.toMatch(/\bsleep\s*\(/);
+        expect(sourceStep).not.toMatch(/setTimeout\s*\(/);
+        expect(resultStep).not.toMatch(/setTimeout\s*\(/);
+        expect(resultStep).not.toContain('mergeEnabled = false');
+        expect(formatter).not.toContain('JSON.stringify');
+        expect(compareClient).toContain('payloadMaxBytes');
+        expect(compareClient).not.toContain('/merge/apply');
+        expect(applyClient).toContain('/merge/apply');
+        expect(applyClient).toContain('getClientId');
+        expect(menu).toContain('openMergeWizardDialog');
+        expect(menu).toContain('menu.actions.merge');
 
-        for (const source of [wizard, sourceStep, resultStep, client]) {
-            expect(source).not.toMatch(/setTimeout\s*\(/);
-            expect(source).not.toMatch(/\bsleep\s*\(/);
+        for (const source of [wizard, sourceStep, resultStep, applyClient]) {
             expect(source).not.toMatch(/16777216/);
             expect(source).not.toMatch(/16\s*\*\s*1024/);
             expect(source).not.toMatch(/5\s*\*\s*1024\s*\*\s*1024/);
-            expect(source).not.toContain('/merge/apply');
         }
-
-        expect(formatter).not.toContain('JSON.stringify');
-        expect(resultStep).toContain('mergeEnabled = false');
-        expect(client).toContain('payloadMaxBytes');
-        expect(client).toContain('M8');
-        expect(menu).not.toContain('openMergeWizardDialog');
-        expect(menu).not.toContain('merge_wizard');
-        expect(menu).toContain('until M8 can apply');
     });
 });

@@ -1958,6 +1958,8 @@ export const id_ID: LanguageTranslation = {
             compare: 'Bandingkan',
             comparing: 'Membandingkan…',
             cancel: 'Batal',
+            applying: 'Menerapkan…',
+            applied: 'Penggabungan diterapkan',
             unavailable: 'Penggabungan tersedia untuk diagram yang tersimpan.',
             include_deletions: {
                 label: 'Perhitungkan penghapusan',
@@ -1984,8 +1986,26 @@ export const id_ID: LanguageTranslation = {
                 unauthenticated: 'Masuk untuk membandingkan.',
                 forbidden: 'Anda tidak dapat membandingkan diagram ini.',
                 unexpected: 'Perbandingan gagal.',
+                autosave_failed:
+                    'Diagram tidak dapat disimpan sebelum dibandingkan.',
+                stale_comparison: 'Diagram berubah. Bandingkan lagi.',
+                incomplete_selection:
+                    'Perbandingan ini sudah tidak berlaku. Bandingkan lagi.',
                 project_unreadable: 'Proyek ini tidak dapat dibaca.',
                 invalid_resolution: 'Pilih opsi yang valid untuk melanjutkan.',
+            },
+            apply_errors: {
+                malformed_diagram: 'Penggabungan tidak dapat diterapkan.',
+                database_type_mismatch:
+                    'Sumber ini tidak sesuai dengan basis data diagram.',
+                payload_too_large: 'Penggabungan terlalu besar.',
+                unsupported_source: 'Sumber ini tidak didukung.',
+                analysis_failed: 'Penggabungan gagal.',
+                rate_limit:
+                    'Terlalu banyak percobaan penggabungan. Coba lagi sebentar lagi.',
+                unauthenticated: 'Masuk untuk menggabungkan.',
+                forbidden: 'Anda tidak dapat menggabungkan diagram ini.',
+                unexpected: 'Penggabungan gagal.',
             },
             result: {
                 summary: 'Tinjau perubahan sebelum menggabungkan.',

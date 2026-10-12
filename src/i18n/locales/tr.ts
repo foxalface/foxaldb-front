@@ -1940,6 +1940,8 @@ export const tr: LanguageTranslation = {
             compare: 'Karşılaştır',
             comparing: 'Karşılaştırılıyor…',
             cancel: 'İptal',
+            applying: 'Uygulanıyor…',
+            applied: 'Birleştirme uygulandı',
             unavailable: 'Birleştirme kayıtlı diyagramlar için kullanılabilir.',
             include_deletions: {
                 label: 'Silmeleri dikkate al',
@@ -1965,9 +1967,27 @@ export const tr: LanguageTranslation = {
                 unauthenticated: 'Karşılaştırmak için oturum açın.',
                 forbidden: 'Bu diyagramı karşılaştıramazsınız.',
                 unexpected: 'Karşılaştırma başarısız.',
+                autosave_failed:
+                    'Karşılaştırmadan önce diyagram kaydedilemedi.',
+                stale_comparison: 'Diyagram değişti. Yeniden karşılaştırın.',
+                incomplete_selection:
+                    'Bu karşılaştırma güncel değil. Yeniden karşılaştırın.',
                 project_unreadable: 'Bu proje okunamadı.',
                 invalid_resolution:
                     'Devam etmek için geçerli bir seçenek belirleyin.',
+            },
+            apply_errors: {
+                malformed_diagram: 'Birleştirme uygulanamadı.',
+                database_type_mismatch:
+                    'Bu kaynak diyagramın veritabanıyla eşleşmiyor.',
+                payload_too_large: 'Birleştirme çok büyük.',
+                unsupported_source: 'Bu kaynak desteklenmiyor.',
+                analysis_failed: 'Birleştirme başarısız oldu.',
+                rate_limit:
+                    'Çok fazla birleştirme denemesi. Kısa süre sonra yeniden deneyin.',
+                unauthenticated: 'Birleştirmek için oturum açın.',
+                forbidden: 'Bu diyagramı birleştiremezsiniz.',
+                unexpected: 'Birleştirme başarısız oldu.',
             },
             result: {
                 summary: 'Birleştirmeden önce değişiklikleri gözden geçirin.',

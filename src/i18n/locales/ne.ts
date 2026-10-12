@@ -1960,6 +1960,8 @@ export const ne: LanguageTranslation = {
             compare: 'तुलना गर्नुहोस्',
             comparing: 'तुलना हुँदैछ…',
             cancel: 'रद्द गर्नुहोस्',
+            applying: 'लागू गर्दै…',
+            applied: 'मर्ज लागू भयो',
             unavailable: 'मर्ज सुरक्षित रेखाचित्रका लागि उपलब्ध छ।',
             include_deletions: {
                 label: 'मेटाउने कुरा समावेश गर्नुहोस्',
@@ -1984,8 +1986,25 @@ export const ne: LanguageTranslation = {
                 unauthenticated: 'तुलना गर्न साइन इन गर्नुहोस्।',
                 forbidden: 'तपाईं यो रेखाचित्र तुलना गर्न सक्नुहुन्न।',
                 unexpected: 'तुलना असफल भयो।',
+                autosave_failed: 'तुलनाअघि रेखाचित्र सुरक्षित गर्न सकिएन।',
+                stale_comparison: 'रेखाचित्र बदलियो। फेरि तुलना गर्नुहोस्।',
+                incomplete_selection:
+                    'यो तुलना पुरानो भयो। फेरि तुलना गर्नुहोस्।',
                 project_unreadable: 'यो परियोजना पढ्न सकिएन।',
                 invalid_resolution: 'जारी राख्न मान्य विकल्प छान्नुहोस्।',
+            },
+            apply_errors: {
+                malformed_diagram: 'मर्ज लागू गर्न सकिएन।',
+                database_type_mismatch:
+                    'यो स्रोत रेखाचित्रको डाटाबेससँग मेल खाँदैन।',
+                payload_too_large: 'मर्ज धेरै ठूलो छ।',
+                unsupported_source: 'यो स्रोत समर्थित छैन।',
+                analysis_failed: 'मर्ज असफल भयो।',
+                rate_limit:
+                    'मर्जका प्रयास धेरै भए। केही बेरपछि फेरि प्रयास गर्नुहोस्।',
+                unauthenticated: 'मर्ज गर्न साइन इन गर्नुहोस्।',
+                forbidden: 'तपाईं यो रेखाचित्र मर्ज गर्न सक्नुहुन्न।',
+                unexpected: 'मर्ज असफल भयो।',
             },
             result: {
                 summary: 'मर्ज गर्नु अघि परिवर्तनहरू हेर्नुहोस्।',

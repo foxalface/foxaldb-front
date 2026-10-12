@@ -1953,6 +1953,8 @@ export const mr: LanguageTranslation = {
             compare: 'तुलना करा',
             comparing: 'तुलना सुरू आहे…',
             cancel: 'रद्द करा',
+            applying: 'लागू करत आहे…',
+            applied: 'विलीनीकरण लागू झाले',
             unavailable: 'विलीनीकरण जतन केलेल्या आकृत्यांसाठी उपलब्ध आहे.',
             include_deletions: {
                 label: 'हटवणे विचारात घ्या',
@@ -1977,8 +1979,25 @@ export const mr: LanguageTranslation = {
                 unauthenticated: 'तुलना करण्यासाठी साइन इन करा.',
                 forbidden: 'तुम्ही या आकृतीची तुलना करू शकत नाही.',
                 unexpected: 'तुलना अयशस्वी.',
+                autosave_failed: 'तुलना करण्यापूर्वी आकृती जतन करता आली नाही.',
+                stale_comparison: 'आकृती बदलली. पुन्हा तुलना करा.',
+                incomplete_selection:
+                    'ही तुलना जुनी झाली आहे. पुन्हा तुलना करा.',
                 project_unreadable: 'हा प्रकल्प वाचता आला नाही.',
                 invalid_resolution: 'पुढे जाण्यासाठी वैध पर्याय निवडा.',
+            },
+            apply_errors: {
+                malformed_diagram: 'विलीनीकरण लागू करता आले नाही.',
+                database_type_mismatch:
+                    'हा स्रोत आकृतीच्या डेटाबेसशी जुळत नाही.',
+                payload_too_large: 'विलीनीकरण खूप मोठे आहे.',
+                unsupported_source: 'हा स्रोत समर्थित नाही.',
+                analysis_failed: 'विलीनीकरण अयशस्वी.',
+                rate_limit:
+                    'विलीनीकरणाचे खूप प्रयत्न. थोड्या वेळाने पुन्हा प्रयत्न करा.',
+                unauthenticated: 'विलीन करण्यासाठी साइन इन करा.',
+                forbidden: 'तुम्ही ही आकृती विलीन करू शकत नाही.',
+                unexpected: 'विलीनीकरण अयशस्वी.',
             },
             result: {
                 summary: 'विलीन करण्यापूर्वी बदल तपासा.',

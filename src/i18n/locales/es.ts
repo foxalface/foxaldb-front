@@ -1986,6 +1986,8 @@ export const es: LanguageTranslation = {
             compare: 'Comparar',
             comparing: 'Comparando…',
             cancel: 'Cancelar',
+            applying: 'Aplicando…',
+            applied: 'Fusión aplicada',
             unavailable: 'La fusión está disponible para diagramas guardados.',
             include_deletions: {
                 label: 'Tener en cuenta las eliminaciones',
@@ -2013,8 +2015,26 @@ export const es: LanguageTranslation = {
                 unauthenticated: 'Inicia sesión para comparar.',
                 forbidden: 'No puedes comparar este diagrama.',
                 unexpected: 'La comparación falló.',
+                autosave_failed:
+                    'No se pudo guardar el diagrama antes de comparar.',
+                stale_comparison: 'El diagrama cambió. Compara de nuevo.',
+                incomplete_selection:
+                    'Esta comparación ya no es válida. Compara de nuevo.',
                 project_unreadable: 'No se pudo leer este proyecto.',
                 invalid_resolution: 'Elige una opción válida para continuar.',
+            },
+            apply_errors: {
+                malformed_diagram: 'No se pudo aplicar la fusión.',
+                database_type_mismatch:
+                    'Esta fuente no coincide con la base del diagrama.',
+                payload_too_large: 'La fusión es demasiado grande.',
+                unsupported_source: 'Esta fuente no es compatible.',
+                analysis_failed: 'La fusión falló.',
+                rate_limit:
+                    'Demasiados intentos de fusión. Inténtalo en un momento.',
+                unauthenticated: 'Inicia sesión para fusionar.',
+                forbidden: 'No puedes fusionar este diagrama.',
+                unexpected: 'La fusión falló.',
             },
             result: {
                 summary: 'Revisa los cambios antes de fusionar.',

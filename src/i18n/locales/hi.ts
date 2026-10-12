@@ -1953,6 +1953,8 @@ export const hi: LanguageTranslation = {
             compare: 'तुलना करें',
             comparing: 'तुलना हो रही है…',
             cancel: 'रद्द करें',
+            applying: 'लागू किया जा रहा है…',
+            applied: 'मर्ज लागू हो गया',
             unavailable: 'मर्ज सहेजे गए आरेखों के लिए उपलब्ध है।',
             include_deletions: {
                 label: 'हटाने को ध्यान में रखें',
@@ -1977,8 +1979,25 @@ export const hi: LanguageTranslation = {
                 unauthenticated: 'तुलना करने के लिए साइन इन करें।',
                 forbidden: 'आप इस आरेख की तुलना नहीं कर सकते।',
                 unexpected: 'तुलना विफल रही।',
+                autosave_failed: 'तुलना से पहले आरेख सहेजा नहीं जा सका।',
+                stale_comparison: 'आरेख बदल गया। फिर से तुलना करें।',
+                incomplete_selection:
+                    'यह तुलना पुरानी हो गई है। फिर से तुलना करें।',
                 project_unreadable: 'यह प्रोजेक्ट पढ़ा नहीं जा सका।',
                 invalid_resolution: 'जारी रखने के लिए मान्य विकल्प चुनें।',
+            },
+            apply_errors: {
+                malformed_diagram: 'मर्ज लागू नहीं हो सका।',
+                database_type_mismatch:
+                    'यह स्रोत आरेख के डेटाबेस से मेल नहीं खाता।',
+                payload_too_large: 'मर्ज बहुत बड़ा है।',
+                unsupported_source: 'यह स्रोत समर्थित नहीं है।',
+                analysis_failed: 'मर्ज विफल रहा।',
+                rate_limit:
+                    'मर्ज के बहुत अधिक प्रयास। थोड़ी देर बाद फिर कोशिश करें।',
+                unauthenticated: 'मर्ज करने के लिए साइन इन करें।',
+                forbidden: 'आप इस आरेख को मर्ज नहीं कर सकते।',
+                unexpected: 'मर्ज विफल रहा।',
             },
             result: {
                 summary: 'मर्ज करने से पहले बदलाव देखें।',

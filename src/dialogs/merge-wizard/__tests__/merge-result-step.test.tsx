@@ -82,6 +82,10 @@ const renderResult = (
                     applyContext={applyContext}
                     defaultSchema="public"
                     onBack={onBack}
+                    onMerge={vi.fn()}
+                    isApplying={false}
+                    applyError={null}
+                    canApply
                 />
             </DialogContent>
         </Dialog>
@@ -418,17 +422,17 @@ describe('Merge result step', () => {
         expect(relationshipDelete).toBeChecked();
         expect(
             screen.getByRole('button', { name: /merge_wizard.result.merge/ })
-        ).toBeDisabled();
+        ).toBeEnabled();
     });
 
-    it('leaves Merge disabled when every change stays selected', () => {
+    it('enables Merge when every change stays selected', () => {
         renderResult(mixed());
 
         expect(
             screen.getByRole('button', {
                 name: 'merge_wizard.result.merge count:8',
             })
-        ).toBeDisabled();
+        ).toBeEnabled();
         expect(screen.getByTestId('merge-wizard-result-step')).toHaveAttribute(
             'data-base-hash',
             hash
@@ -451,6 +455,61 @@ describe('Merge result step', () => {
         expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
         expect(
             screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        ).toBeDisabled();
+    });
+
+    it('disables Merge when the selection is empty', async () => {
+        const user = userEvent.setup();
+        renderResult([table('only', 'only', 'modify')]);
+        await user.click(
+            screen.getByRole('checkbox', { name: /select_change/ })
+        );
+
+        expect(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        ).toBeDisabled();
+    });
+
+    it('disables review controls while Apply is pending', () => {
+        const applyContext: MergeWizardApplyContext = {
+            incomingDiagram: incoming,
+            source: { kind: 'sql' },
+            includeDeletions: false,
+            generation: 1,
+            response: {
+                baseContentHash: hash,
+                baseUpdatedAt: null,
+                viewsCompared: true,
+                operations: [table('only', 'only', 'modify')],
+            },
+        };
+
+        render(
+            <Dialog open>
+                <DialogContent>
+                    <MergeResultStep
+                        applyContext={applyContext}
+                        defaultSchema="public"
+                        onBack={vi.fn()}
+                        onMerge={vi.fn()}
+                        isApplying
+                        applyError={null}
+                        canApply
+                    />
+                </DialogContent>
+            </Dialog>
+        );
+
+        expect(
+            screen.getByRole('button', { name: 'new_diagram_dialog.back' })
+        ).toBeDisabled();
+        expect(
+            screen
+                .getAllByRole('checkbox')
+                .every((checkbox) => checkbox.hasAttribute('disabled'))
+        ).toBe(true);
+        expect(
+            screen.getByRole('button', { name: 'merge_wizard.applying' })
         ).toBeDisabled();
     });
 });

@@ -1989,6 +1989,8 @@ export const ja: LanguageTranslation = {
             compare: '比較',
             comparing: '比較しています…',
             cancel: 'キャンセル',
+            applying: '適用しています…',
+            applied: 'マージを適用しました',
             unavailable: 'マージは保存済みの図で使えます。',
             include_deletions: {
                 label: '削除を考慮する',
@@ -2015,8 +2017,26 @@ export const ja: LanguageTranslation = {
                 unauthenticated: '比較するにはサインインしてください。',
                 forbidden: 'この図は比較できません。',
                 unexpected: '比較に失敗しました。',
+                autosave_failed: '比較の前に図を保存できませんでした。',
+                stale_comparison:
+                    '図が変更されました。もう一度比較してください。',
+                incomplete_selection:
+                    'この比較は最新ではありません。もう一度比較してください。',
                 project_unreadable: 'このプロジェクトを読み取れませんでした。',
                 invalid_resolution: '続けるには有効な選択肢を選んでください。',
+            },
+            apply_errors: {
+                malformed_diagram: 'マージを適用できませんでした。',
+                database_type_mismatch:
+                    'このソースは図のデータベースと一致しません。',
+                payload_too_large: 'マージが大きすぎます。',
+                unsupported_source: 'このソースはサポートされていません。',
+                analysis_failed: 'マージに失敗しました。',
+                rate_limit:
+                    'マージの試行が多すぎます。しばらくしてから再試行してください。',
+                unauthenticated: 'マージするにはサインインしてください。',
+                forbidden: 'この図をマージできません。',
+                unexpected: 'マージに失敗しました。',
             },
             result: {
                 summary: 'マージする前に変更内容を確認します。',

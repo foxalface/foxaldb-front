@@ -1,6 +1,6 @@
 # Schema merge
 
-Product architecture for Schema Merge. M1 is the shared contract. M5 is the frontend source adapter. M6 is the wizard shell and source step. M7 is the result UI. Actions → Merge stays hidden until M8 wires Apply.
+Product architecture for Schema Merge. M1 is the shared contract. M5 is the frontend source adapter. M6 is the wizard shell and source step. M7 is the result UI. M8 wires Apply, autosave flush, authoritative replacement, one local undo step, and peer refresh. Actions → Merge is available for an authenticated editor of a persisted backend diagram.
 
 The backend contract, operation ids, and error codes are specified in [`backend/docs/schema-merge.md`](../../../backend/docs/schema-merge.md). This document does not repeat that specification. Frontend types in `frontend/src/lib/schema-merge/diff-types.ts` mirror the JSON contract. They do not compute operation ids and they do not diff diagrams.
 
@@ -199,7 +199,7 @@ Text byte length and `file.size` use `uploadCapabilities.schema.textMaxBytes`. Z
 
 Status: complete. Dialog: `frontend/src/dialogs/merge-wizard/`. Opener: `openMergeWizardDialog()`. The dialog is registered on `DialogProvider` and stays closed until that opener runs.
 
-The Actions menu does not expose Merge. M7 builds the result step and keeps the menu closed. There is no temporary feature flag.
+M6 registered the dialog and left the Actions menu closed. M8 exposes it. There is no temporary feature flag.
 
 ### Step 1
 
@@ -229,13 +229,11 @@ On success the wizard stores `incomingDiagram`, `source`, `includeDeletions`, an
 
 ### Autosave
 
-Compare uses the persisted diagram. `useDiagramAutosave` debounces for 900 ms and has no flush handle. M6 does not wait, sleep, or flush. Deterministic flush stays in M8. The hidden dialog is not a substitute for that flush.
-
-Apply and the Actions entry remain unbuilt. The result UI is described under M7.
+Compare uses the persisted diagram. M6 called Compare without waiting for the 900 ms debounce. M8 flushes that save before Compare. The flush contract is described under M8.
 
 ## M7 result UI
 
-Status: complete. The result step renders the Compare response already stored by M6. It does not call Compare again, does not reparse the source, and does not call Apply.
+Status: complete. The result step renders the Compare response already stored by M6. It does not call Compare again and does not reparse the source. Apply is owned by the dialog, not by replaying operations in the result step.
 
 The parent keeps `incomingDiagram`, `source.kind`, `includeDeletions`, and the Compare response, including `baseContentHash` and `baseUpdatedAt`. The hash is not shown. `viewsCompared` comes from the response. The UI does not infer it from `source.kind`.
 
@@ -272,7 +270,7 @@ Selecting an operation also selects its `dependsOn` prerequisites, including pre
 
 A cycle, a self-dependency, or a missing prerequisite in client data shows an analysis error instead of walking the graph. The backend graph is still authoritative at Apply time.
 
-The footer count is “Merge N changes”. N = 0 disables the control. In M7 the control stays disabled even when N > 0, because Apply is not wired. The click does not call `POST /merge/apply`.
+The footer count is “Merge N changes”. N = 0 disables the control. M8 enables it when the selection is non-empty, the dependency graph is valid, Apply is not already running, and the diagram is a persisted backend diagram. The click posts `POST /merge/apply`.
 
 ### Back
 
@@ -280,6 +278,82 @@ Back returns to SOURCE and keeps the pasted text or file, dialect, project, and 
 
 ### Actions
 
-Actions → Merge is not shown. A menu entry would open a review that cannot apply, which is a dead-end. M8 exposes the entry together with autosave flush, the Apply call, local state replacement, realtime peer refetch, and undo/history.
+Actions → Merge is shown after Export and before Delete. The label is `menu.actions.merge` (“Merge...” / “Fusionner...”). It is visible when the user is authenticated, the diagram id is a persisted backend id, the editor is not readonly, and `diagramAccess.can_edit` is not false. Guests, local-only diagrams, and viewers stay hidden. The menu uses that existing frontend permission state and does not call the backend to decide visibility. The click runs `openMergeWizardDialog()`.
 
-Guests, local-only diagrams, and readonly viewers must stay excluded when that entry appears. The editor already has that permission state. M7 does not duplicate backend policy.
+## M8 apply integration
+
+Status: complete.
+
+### Autosave flush
+
+`useDiagramAutosave` still debounces for 900 ms. The reusable control is `flushDiagramAutosave()` in `frontend/src/lib/diagram-autosave/diagram-autosave-controller.ts`. It is not Merge-specific.
+
+- Nothing pending and nothing in flight resolves immediately, with no request.
+- A pending debounce is cancelled and that save runs immediately.
+- An in-flight save is awaited. If a newer editor snapshot arrived during that request, that newer snapshot is persisted before flush resolves.
+- A save error rejects flush.
+
+Compare submission is: source still ready, pending state, `await flushDiagramAutosave()`, then Compare, then RESULT. Flush runs only on Compare submit. A flush failure stays on SOURCE and shows `merge_wizard.errors.autosave_failed`. Compare is not sent. The pending Compare control covers both the flush and the Compare request. There is no separate Saving step and no timer wait.
+
+### Apply request
+
+`applySchemaMerge()` posts `POST /api/diagrams/{diagramId}/merge/apply`.
+
+```
+{
+  baseContentHash,
+  incomingDiagram,
+  includeDeletions,
+  source: { kind },
+  selectedOperationIds,
+  clientId
+}
+```
+
+`baseContentHash`, `incomingDiagram`, `source`, and `includeDeletions` are the values retained from Compare. `selectedOperationIds` follows Compare operation order filtered by the selected set. `clientId` is `getClientId()`, the same realtime session id used by diagram operations. The body does not include operation objects, `dependsOn`, the current diagram, `viewsSupported`, `source.databaseType`, or a client-computed hash.
+
+The response decoder requires `resultContentHash`, `updatedAt`, `content`, `appliedOperationIds`, and `summary`. `content` is normalized with the existing diagram decoder.
+
+### Errors
+
+`stale_comparison` keeps the source, resolutions, and deletion option, clears the Compare result and selection, and returns to SOURCE with “Diagram changed. Compare again.” There is no automatic Compare or Apply.
+
+`incomplete_selection` uses the same recompare path. The client does not add missing prerequisites.
+
+`429` keeps the result and the selection so the user can retry later. Other analysis and payload errors stay on the result and do not change the diagram. `401` and `403` keep the data and disable retry. While Apply is in flight, Back, checkboxes, section toggles, Merge, and dialog close are disabled. A second click does not send a second Apply.
+
+### Authoritative replacement
+
+A successful Apply calls `replaceDiagram(content, { updateHistory: true, authoritative: true })`. The frontend does not replay `DiffOperation` values. Backend entity ids and layout in `content` become the editor state in one transition. `load_diagram` does not emit collaboration operations.
+
+`authoritative: true` cancels any pending autosave, writes the returned diagram to local storage, and sets the autosave baseline to that content. The replacement does not PUT the same content back. Later local edits still autosave. Undo and redo of this step are not marked authoritative, so they persist through the normal autosave path.
+
+A pending debounce from before Apply is cancelled before the replacement, so it cannot overwrite the merged document. An HTTP save already on the wire cannot be aborted.
+
+### M8.1 full-document autosave concurrency
+
+Status: complete.
+
+Normal `PUT /api/diagrams/{id}` autosaves send `baseContentHash` from the latest server-issued hash. Diagram load (`GET`) exposes `content_hash`, SHA-256 of the exact persisted `diagrams.content` string. The client does not compute that hash from the decoded `Diagram` object.
+
+After a successful autosave, the response `content_hash` becomes the next base. Queued saves during an in-flight request use the hash returned by the previous successful write, not the older base.
+
+Merge Apply and remote `apply_schema_merge` refresh set the autosave token to `resultContentHash` (or the refetched `content_hash`). The next legitimate edit, including Undo back to a pre-merge snapshot after a local Apply, autosaves with that post-merge base. That Undo is valid when the server still matches the merged document.
+
+`409 stale_content` means the server rejected a full-document write. The autosave controller does not retry the same payload. It refetches once. If the editor still matches the failed snapshot, it replaces locally with the authoritative document. If the user has newer local edits, only the hash advances so the next save uses the current server revision.
+
+Schema Merge Compare/Apply keep `stale_comparison`. Granular diagram operations do not update `diagrams.content` immediately; they do not advance the full-document hash until a later autosave or another authoritative write.
+
+### Local undo
+
+Successful replacement records one `replaceDiagram` undo entry. Its snapshot is the editor diagram from before the replacement, which is the state flushed before Compare while the modal blocked further edits. Apply failure, a stale comparison, and a remote refresh record no undo entry. There is no inverse Apply request and no per-operation history entry.
+
+### Realtime peer refresh
+
+`apply_schema_merge` is parsed beside diagram operations. It is not a `DiagramOperationAction` and its compact payload is not diagram content. The event carries `resultContentHash`, `updatedAt`, `userId`, `clientId`, and `sentAt`.
+
+The actor’s own `clientId` does not refetch. A remote event cancels a pending autosave, fetches the diagram once, and calls `replaceDiagram` with `authoritative: true`, `updateHistory: false`, and `resetHistory: true`. That refresh does not autosave and does not emit collaboration operations. A second event for the same diagram waits for the in-flight fetch. If a newer `resultContentHash` arrived, the drain fetches again until the newest hash is applied. A local hash that already matches skips the fetch. `updatedAt` is not the concurrency identity.
+
+A peer with unsaved edits is replaced by that authoritative document. The same full-document overwrite already exists for reconnect refresh. Granular diagram operations are unchanged. The pending debounce is cancelled so it cannot PUT the pre-merge snapshot after the refresh. A save already in flight cannot be aborted.
+
+Canvas nodes are rebuilt from the loaded tables. `load_diagram` clears the highlighted custom type. An open sidebar target is layout state and is not cleared by a full load; a missing entity must not be assumed to still exist. Conversations are cleaned on the server. M8 does not add a separate selection cleanup.

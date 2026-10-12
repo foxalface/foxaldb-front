@@ -13,6 +13,8 @@ export interface DiagramApiResource {
     id: number | string;
     name: string;
     content?: unknown;
+    content_hash?: string;
+    contentHash?: string;
     tables_count?: number;
     database_type?: string;
     database_edition?: string | null;
@@ -31,6 +33,7 @@ export interface DiagramsGroupedList {
 export interface DiagramPayload {
     name: string;
     content: unknown;
+    baseContentHash?: string;
 }
 
 interface GetDiagramsResponse {

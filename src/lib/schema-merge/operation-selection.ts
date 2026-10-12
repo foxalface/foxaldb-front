@@ -61,6 +61,21 @@ export const initialOperationSelection = (
     operations: readonly DiffOperation[]
 ): Set<string> => new Set(operations.map((operation) => operation.id));
 
+export const selectedOperationIdsInCompareOrder = (
+    selected: ReadonlySet<string>,
+    operations: readonly DiffOperation[]
+): string[] => {
+    const ids: string[] = [];
+
+    for (const operation of operations) {
+        if (selected.has(operation.id)) {
+            ids.push(operation.id);
+        }
+    }
+
+    return ids;
+};
+
 export const selectionInOperationOrder = (
     selected: ReadonlySet<string>,
     operations: readonly DiffOperation[]

@@ -1981,6 +1981,8 @@ export const pt_BR: LanguageTranslation = {
             compare: 'Comparar',
             comparing: 'Comparando…',
             cancel: 'Cancelar',
+            applying: 'Aplicando…',
+            applied: 'Mesclagem aplicada',
             unavailable: 'A mesclagem está disponível para diagramas salvos.',
             include_deletions: {
                 label: 'Considerar exclusões',
@@ -2007,8 +2009,26 @@ export const pt_BR: LanguageTranslation = {
                 unauthenticated: 'Entre para comparar.',
                 forbidden: 'Você não pode comparar este diagrama.',
                 unexpected: 'A comparação falhou.',
+                autosave_failed:
+                    'Não foi possível salvar o diagrama antes de comparar.',
+                stale_comparison: 'O diagrama mudou. Compare novamente.',
+                incomplete_selection:
+                    'Esta comparação está desatualizada. Compare novamente.',
                 project_unreadable: 'Não foi possível ler este projeto.',
                 invalid_resolution: 'Escolha uma opção válida para continuar.',
+            },
+            apply_errors: {
+                malformed_diagram: 'Não foi possível aplicar a mesclagem.',
+                database_type_mismatch:
+                    'Esta fonte não corresponde ao banco do diagrama.',
+                payload_too_large: 'A mesclagem é grande demais.',
+                unsupported_source: 'Esta fonte não é compatível.',
+                analysis_failed: 'A mesclagem falhou.',
+                rate_limit:
+                    'Muitas tentativas de mesclagem. Tente novamente em instantes.',
+                unauthenticated: 'Entre para mesclar.',
+                forbidden: 'Você não pode mesclar este diagrama.',
+                unexpected: 'A mesclagem falhou.',
             },
             result: {
                 summary: 'Revise as alterações antes de mesclar.',

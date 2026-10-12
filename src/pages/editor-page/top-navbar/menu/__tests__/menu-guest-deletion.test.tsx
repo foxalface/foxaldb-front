@@ -40,7 +40,14 @@ vi.mock('@/hooks/use-chartdb', () => ({
         updateDiagramUpdatedAt: vi.fn(),
         databaseType: 'generic',
         currentDiagram: chartDbState.currentDiagram,
+        readonly: false,
         deleteDiagram: deleteLocalDiagram,
+    }),
+}));
+
+vi.mock('@/hooks/use-diagram-access', () => ({
+    useDiagramAccess: () => ({
+        diagramAccess: null,
     }),
 }));
 
@@ -52,6 +59,7 @@ vi.mock('@/hooks/use-dialog', () => ({
         openImportDatabaseDialog: vi.fn(),
         openExportDiagramDialog: vi.fn(),
         openExportWizardDialog: vi.fn(),
+        openMergeWizardDialog: vi.fn(),
         openImportDiagramDialog: vi.fn(),
         openLaravelMigrationImportDialog: vi.fn(),
         openLaravelMigrationDiffDialog: vi.fn(),

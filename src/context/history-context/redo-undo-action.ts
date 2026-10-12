@@ -8,6 +8,7 @@ import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { Note } from '@/lib/domain/note';
+import type { Diagram } from '@/lib/domain/diagram';
 
 type Action = keyof ChartDBContext;
 
@@ -207,6 +208,12 @@ type RedoUndoActionRemoveNotes = RedoUndoActionBase<
     { notes: Note[] }
 >;
 
+type RedoUndoActionReplaceDiagram = RedoUndoActionBase<
+    'replaceDiagram',
+    { diagram: Diagram },
+    { diagram: Diagram }
+>;
+
 export type RedoUndoAction =
     | RedoUndoActionAddTables
     | RedoUndoActionRemoveTables
@@ -236,7 +243,8 @@ export type RedoUndoAction =
     | RedoUndoActionRemoveCustomTypes
     | RedoUndoActionAddNotes
     | RedoUndoActionUpdateNote
-    | RedoUndoActionRemoveNotes;
+    | RedoUndoActionRemoveNotes
+    | RedoUndoActionReplaceDiagram;
 
 export type RedoActionData<T extends Action> = Extract<
     RedoUndoAction,

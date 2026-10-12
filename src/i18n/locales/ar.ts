@@ -1928,6 +1928,8 @@ export const ar: LanguageTranslation = {
             compare: 'مقارنة',
             comparing: 'جارٍ المقارنة…',
             cancel: 'إلغاء',
+            applying: 'جارٍ التطبيق…',
+            applied: 'تم تطبيق الدمج',
             unavailable: 'الدمج متاح للمخططات المحفوظة.',
             include_deletions: {
                 label: 'أخذ عمليات الحذف في الحسبان',
@@ -1950,8 +1952,24 @@ export const ar: LanguageTranslation = {
                 unauthenticated: 'سجّل الدخول للمقارنة.',
                 forbidden: 'لا يمكنك مقارنة هذا المخطط.',
                 unexpected: 'فشلت المقارنة.',
+                autosave_failed: 'تعذر حفظ المخطط قبل المقارنة.',
+                stale_comparison: 'تغيّر المخطط. قارن مرة أخرى.',
+                incomplete_selection:
+                    'هذه المقارنة لم تعد صالحة. قارن مرة أخرى.',
                 project_unreadable: 'تعذر قراءة هذا المشروع.',
                 invalid_resolution: 'اختر خيارًا صالحًا للمتابعة.',
+            },
+            apply_errors: {
+                malformed_diagram: 'تعذر تطبيق الدمج.',
+                database_type_mismatch:
+                    'هذا المصدر لا يطابق قاعدة بيانات المخطط.',
+                payload_too_large: 'الدمج أكبر من الحد المسموح.',
+                unsupported_source: 'هذا المصدر غير مدعوم.',
+                analysis_failed: 'فشل الدمج.',
+                rate_limit: 'محاولات دمج كثيرة. أعد المحاولة بعد قليل.',
+                unauthenticated: 'سجّل الدخول للدمج.',
+                forbidden: 'لا يمكنك دمج هذا المخطط.',
+                unexpected: 'فشل الدمج.',
             },
             result: {
                 summary: 'راجع التغييرات قبل الدمج.',

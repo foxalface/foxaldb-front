@@ -1950,6 +1950,8 @@ export const bn: LanguageTranslation = {
             compare: 'তুলনা করুন',
             comparing: 'তুলনা হচ্ছে…',
             cancel: 'বাতিল',
+            applying: 'প্রয়োগ করা হচ্ছে…',
+            applied: 'মার্জ প্রয়োগ হয়েছে',
             unavailable: 'মার্জ সংরক্ষিত ডায়াগ্রামের জন্য উপলব্ধ।',
             include_deletions: {
                 label: 'মুছে ফেলা বিবেচনা করুন',
@@ -1975,8 +1977,25 @@ export const bn: LanguageTranslation = {
                 unauthenticated: 'তুলনা করতে সাইন ইন করুন।',
                 forbidden: 'আপনি এই ডায়াগ্রাম তুলনা করতে পারবেন না।',
                 unexpected: 'তুলনা ব্যর্থ হয়েছে।',
+                autosave_failed: 'তুলনার আগে ডায়াগ্রাম সংরক্ষণ করা যায়নি।',
+                stale_comparison: 'ডায়াগ্রাম বদলে গেছে। আবার তুলনা করুন।',
+                incomplete_selection:
+                    'এই তুলনাটি আর প্রযোজ্য নয়। আবার তুলনা করুন।',
                 project_unreadable: 'এই প্রকল্প পড়া যায়নি।',
                 invalid_resolution: 'চালিয়ে যেতে একটি বৈধ বিকল্প বেছে নিন।',
+            },
+            apply_errors: {
+                malformed_diagram: 'মার্জ প্রয়োগ করা যায়নি।',
+                database_type_mismatch:
+                    'এই উৎসটি ডায়াগ্রামের ডাটাবেসের সাথে মেলে না।',
+                payload_too_large: 'মার্জটি অনেক বড়।',
+                unsupported_source: 'এই উৎসটি সমর্থিত নয়।',
+                analysis_failed: 'মার্জ ব্যর্থ হয়েছে।',
+                rate_limit:
+                    'অনেক বেশি মার্জের চেষ্টা। একটু পরে আবার চেষ্টা করুন।',
+                unauthenticated: 'মার্জ করতে সাইন ইন করুন।',
+                forbidden: 'আপনি এই ডায়াগ্রাম মার্জ করতে পারবেন না।',
+                unexpected: 'মার্জ ব্যর্থ হয়েছে।',
             },
             result: {
                 summary: 'মার্জ করার আগে পরিবর্তনগুলো দেখে নিন।',

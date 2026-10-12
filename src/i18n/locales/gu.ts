@@ -1936,6 +1936,8 @@ export const gu: LanguageTranslation = {
             compare: 'સરખામણી',
             comparing: 'સરખામણી થઈ રહી છે…',
             cancel: 'રદ કરો',
+            applying: 'લાગુ કરી રહ્યા છીએ…',
+            applied: 'મર્જ લાગુ થયું',
             unavailable: 'મર્જ સાચવેલા આકૃતિઓ માટે ઉપલબ્ધ છે.',
             include_deletions: {
                 label: 'કાઢી નાખવાનું ધ્યાનમાં લો',
@@ -1960,8 +1962,24 @@ export const gu: LanguageTranslation = {
                 unauthenticated: 'સરખામણી કરવા સાઇન ઇન કરો.',
                 forbidden: 'તમે આ આકૃતિની સરખામણી કરી શકતા નથી.',
                 unexpected: 'સરખામણી નિષ્ફળ રહી.',
+                autosave_failed: 'સરખામણી પહેલાં આકૃતિ સાચવી શકાઈ નહીં.',
+                stale_comparison: 'આકૃતિ બદલાઈ ગઈ. ફરી સરખામણી કરો.',
+                incomplete_selection:
+                    'આ સરખામણી જૂની થઈ ગઈ છે. ફરી સરખામણી કરો.',
                 project_unreadable: 'આ પ્રોજેક્ટ વાંચી શકાયો નહીં.',
                 invalid_resolution: 'આગળ વધવા માન્ય વિકલ્પ પસંદ કરો.',
+            },
+            apply_errors: {
+                malformed_diagram: 'મર્જ લાગુ કરી શકાયું નહીં.',
+                database_type_mismatch:
+                    'આ સ્ત્રોત આકૃતિના ડેટાબેઝ સાથે મેળ ખાતો નથી.',
+                payload_too_large: 'મર્જ ખૂબ મોટું છે.',
+                unsupported_source: 'આ સ્ત્રોત સમર્થિત નથી.',
+                analysis_failed: 'મર્જ નિષ્ફળ રહ્યું.',
+                rate_limit: 'મર્જના ઘણા પ્રયાસો. થોડી વાર પછી ફરી પ્રયાસ કરો.',
+                unauthenticated: 'મર્જ કરવા સાઇન ઇન કરો.',
+                forbidden: 'તમે આ આકૃતિ મર્જ કરી શકતા નથી.',
+                unexpected: 'મર્જ નિષ્ફળ રહ્યું.',
             },
             result: {
                 summary: 'મર્જ કરતા પહેલાં ફેરફારો તપાસો.',

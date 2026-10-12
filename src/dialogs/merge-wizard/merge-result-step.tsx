@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
+import { Alert, AlertDescription } from '@/components/alert/alert';
 import { Button } from '@/components/button/button';
 import { Accordion } from '@/components/accordion/accordion';
+import { Spinner } from '@/components/spinner/spinner';
 import {
     DialogDescription,
     DialogFooter,
@@ -15,6 +17,9 @@ import { useTranslation } from 'react-i18next';
 import type { MergeText } from './format-merge-change';
 import { buildMergeLabelContext } from './merge-operation-label';
 import { MergeResultSection } from './merge-result-section';
+import type { SchemaMergeApplyFailure } from '@/lib/api/schema-merge-apply';
+import { selectedOperationIdsInCompareOrder } from '@/lib/schema-merge/operation-selection';
+import { mergeApplyBlocksRetry, mergeApplyErrorKey } from './merge-apply-error';
 import type { MergeWizardApplyContext } from './merge-wizard-apply-context';
 import { useMergeOperationSelection } from './use-merge-operation-selection';
 
@@ -22,7 +27,19 @@ export const MergeResultStep: React.FC<{
     applyContext: MergeWizardApplyContext;
     defaultSchema: string | null;
     onBack: () => void;
-}> = ({ applyContext, defaultSchema, onBack }) => {
+    onMerge: (selectedOperationIds: readonly string[]) => void;
+    isApplying: boolean;
+    applyError: SchemaMergeApplyFailure | null;
+    canApply: boolean;
+}> = ({
+    applyContext,
+    defaultSchema,
+    onBack,
+    onMerge,
+    isApplying,
+    applyError,
+    canApply,
+}) => {
     const { t } = useTranslation();
     const text = useCallback<MergeText>(
         (key, options) => (options ? String(t(key, options)) : String(t(key))),
@@ -33,11 +50,13 @@ export const MergeResultStep: React.FC<{
     const labelContext = buildMergeLabelContext(operations, defaultSchema);
     const selection = useMergeOperationSelection(operations);
     const noDifferences = operations.length === 0;
-    // M8 enables this after Apply, autosave flush, and history are wired.
-    // A clickable Merge control before that would be a dead-end.
-    const mergeEnabled = false;
+    const retryBlocked =
+        applyError !== null && mergeApplyBlocksRetry(applyError);
     const canMerge =
-        mergeEnabled &&
+        canApply &&
+        !isApplying &&
+        !retryBlocked &&
+        operations.length > 0 &&
         selection.selectedCount > 0 &&
         !selection.hasAnalysisError;
 
@@ -100,6 +119,7 @@ export const MergeResultStep: React.FC<{
                                 )}
                                 labelContext={labelContext}
                                 text={text}
+                                disabled={isApplying}
                                 onToggleOperation={(operationId, next) => {
                                     if (next) {
                                         selection.select(operationId);
@@ -119,16 +139,45 @@ export const MergeResultStep: React.FC<{
                         ))}
                     </Accordion>
                 )}
+                {applyError ? (
+                    <Alert variant="destructive" className="mt-3">
+                        <AlertDescription>
+                            {text(mergeApplyErrorKey(applyError))}
+                        </AlertDescription>
+                    </Alert>
+                ) : null}
             </div>
 
             <DialogFooter className="mt-4 flex shrink-0 !justify-between gap-2">
-                <Button type="button" variant="secondary" onClick={onBack}>
+                <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={onBack}
+                    disabled={isApplying}
+                >
                     {text('new_diagram_dialog.back')}
                 </Button>
-                <Button type="button" disabled={!canMerge}>
-                    {text('merge_wizard.result.merge', {
-                        count: selection.selectedCount,
-                    })}
+                <Button
+                    type="button"
+                    disabled={!canMerge}
+                    aria-busy={isApplying}
+                    onClick={() => {
+                        onMerge(
+                            selectedOperationIdsInCompareOrder(
+                                selection.selected,
+                                operations
+                            )
+                        );
+                    }}
+                >
+                    {isApplying ? (
+                        <Spinner className="mr-1 size-5 text-primary-foreground" />
+                    ) : null}
+                    {isApplying
+                        ? text('merge_wizard.applying')
+                        : text('merge_wizard.result.merge', {
+                              count: selection.selectedCount,
+                          })}
                 </Button>
             </DialogFooter>
         </>

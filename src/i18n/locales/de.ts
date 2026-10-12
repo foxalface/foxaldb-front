@@ -2007,6 +2007,8 @@ export const de: LanguageTranslation = {
             compare: 'Vergleichen',
             comparing: 'Vergleich läuft…',
             cancel: 'Abbrechen',
+            applying: 'Wird angewendet…',
+            applied: 'Zusammenführung angewendet',
             unavailable:
                 'Zusammenführen ist für gespeicherte Diagramme verfügbar.',
             include_deletions: {
@@ -2036,10 +2038,29 @@ export const de: LanguageTranslation = {
                 unauthenticated: 'Melde dich an, um zu vergleichen.',
                 forbidden: 'Du kannst dieses Diagramm nicht vergleichen.',
                 unexpected: 'Vergleich fehlgeschlagen.',
+                autosave_failed:
+                    'Das Diagramm konnte vor dem Vergleich nicht gespeichert werden.',
+                stale_comparison:
+                    'Das Diagramm hat sich geändert. Erneut vergleichen.',
+                incomplete_selection:
+                    'Dieser Vergleich ist nicht mehr aktuell. Erneut vergleichen.',
                 project_unreadable:
                     'Dieses Projekt konnte nicht gelesen werden.',
                 invalid_resolution:
                     'Wähle eine gültige Option, um fortzufahren.',
+            },
+            apply_errors: {
+                malformed_diagram:
+                    'Die Zusammenführung konnte nicht angewendet werden.',
+                database_type_mismatch:
+                    'Diese Quelle passt nicht zur Datenbank des Diagramms.',
+                payload_too_large: 'Die Zusammenführung ist zu groß.',
+                unsupported_source: 'Diese Quelle wird nicht unterstützt.',
+                analysis_failed: 'Zusammenführung fehlgeschlagen.',
+                rate_limit: 'Zu viele Zusammenführungen. Bitte kurz warten.',
+                unauthenticated: 'Melde dich an, um zusammenzuführen.',
+                forbidden: 'Du kannst dieses Diagramm nicht zusammenführen.',
+                unexpected: 'Zusammenführung fehlgeschlagen.',
             },
             result: {
                 summary: 'Prüfe die Änderungen vor dem Zusammenführen.',

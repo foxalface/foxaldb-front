@@ -1956,6 +1956,8 @@ export const uk: LanguageTranslation = {
             compare: 'Порівняти',
             comparing: 'Порівняння…',
             cancel: 'Скасувати',
+            applying: 'Застосування…',
+            applied: 'Об’єднання застосовано',
             unavailable: 'Об’єднання доступне для збережених діаграм.',
             include_deletions: {
                 label: 'Враховувати видалення',
@@ -1981,9 +1983,27 @@ export const uk: LanguageTranslation = {
                 unauthenticated: 'Увійдіть, щоб порівняти.',
                 forbidden: 'Ви не можете порівняти цю діаграму.',
                 unexpected: 'Порівняння не вдалося.',
+                autosave_failed:
+                    'Не вдалося зберегти діаграму перед порівнянням.',
+                stale_comparison: 'Діаграму змінено. Порівняйте знову.',
+                incomplete_selection:
+                    'Це порівняння застаріло. Порівняйте знову.',
                 project_unreadable: 'Не вдалося прочитати цей проєкт.',
                 invalid_resolution:
                     'Виберіть припустимий варіант, щоб продовжити.',
+            },
+            apply_errors: {
+                malformed_diagram: 'Не вдалося застосувати об’єднання.',
+                database_type_mismatch:
+                    'Це джерело не відповідає базі діаграми.',
+                payload_too_large: 'Об’єднання завелике.',
+                unsupported_source: 'Це джерело не підтримується.',
+                analysis_failed: 'Об’єднання не вдалося.',
+                rate_limit:
+                    'Забагато спроб об’єднання. Спробуйте трохи згодом.',
+                unauthenticated: 'Увійдіть, щоб об’єднати.',
+                forbidden: 'Ви не можете об’єднати цю діаграму.',
+                unexpected: 'Об’єднання не вдалося.',
             },
             result: {
                 summary: 'Перевірте зміни перед об’єднанням.',

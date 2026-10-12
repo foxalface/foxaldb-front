@@ -1954,6 +1954,8 @@ export const hr: LanguageTranslation = {
             compare: 'Usporedi',
             comparing: 'Uspoređivanje…',
             cancel: 'Odustani',
+            applying: 'Primjenjuje se…',
+            applied: 'Spajanje je primijenjeno',
             unavailable: 'Spajanje je dostupno za spremljene dijagrame.',
             include_deletions: {
                 label: 'Uzmi u obzir brisanja',
@@ -1978,8 +1980,26 @@ export const hr: LanguageTranslation = {
                 unauthenticated: 'Prijavite se za usporedbu.',
                 forbidden: 'Ne možete usporediti ovaj dijagram.',
                 unexpected: 'Usporedba nije uspjela.',
+                autosave_failed:
+                    'Dijagram nije moguće spremiti prije usporedbe.',
+                stale_comparison: 'Dijagram se promijenio. Usporedite ponovno.',
+                incomplete_selection:
+                    'Ova usporedba više ne vrijedi. Usporedite ponovno.',
                 project_unreadable: 'Ovaj projekt nije moguće pročitati.',
                 invalid_resolution: 'Odaberite valjanu opciju za nastavak.',
+            },
+            apply_errors: {
+                malformed_diagram: 'Spajanje nije moguće primijeniti.',
+                database_type_mismatch:
+                    'Ovaj izvor ne odgovara bazi dijagrama.',
+                payload_too_large: 'Spajanje je preveliko.',
+                unsupported_source: 'Ovaj izvor nije podržan.',
+                analysis_failed: 'Spajanje nije uspjelo.',
+                rate_limit:
+                    'Previše pokušaja spajanja. Pokušajte ponovno uskoro.',
+                unauthenticated: 'Prijavite se za spajanje.',
+                forbidden: 'Ne možete spojiti ovaj dijagram.',
+                unexpected: 'Spajanje nije uspjelo.',
             },
             result: {
                 summary: 'Pregledajte promjene prije spajanja.',

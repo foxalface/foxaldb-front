@@ -1946,6 +1946,8 @@ export const vi: LanguageTranslation = {
             compare: 'So sánh',
             comparing: 'Đang so sánh…',
             cancel: 'Hủy',
+            applying: 'Đang áp dụng…',
+            applied: 'Đã áp dụng hợp nhất',
             unavailable: 'Hợp nhất chỉ dùng cho sơ đồ đã lưu.',
             include_deletions: {
                 label: 'Tính cả các mục đã xóa',
@@ -1971,8 +1973,23 @@ export const vi: LanguageTranslation = {
                 unauthenticated: 'Đăng nhập để so sánh.',
                 forbidden: 'Bạn không thể so sánh sơ đồ này.',
                 unexpected: 'So sánh thất bại.',
+                autosave_failed: 'Không thể lưu sơ đồ trước khi so sánh.',
+                stale_comparison: 'Sơ đồ đã thay đổi. Hãy so sánh lại.',
+                incomplete_selection: 'Bản so sánh này đã cũ. Hãy so sánh lại.',
                 project_unreadable: 'Không đọc được dự án này.',
                 invalid_resolution: 'Chọn một tùy chọn hợp lệ để tiếp tục.',
+            },
+            apply_errors: {
+                malformed_diagram: 'Không thể áp dụng hợp nhất.',
+                database_type_mismatch:
+                    'Nguồn này không khớp với cơ sở dữ liệu của sơ đồ.',
+                payload_too_large: 'Bản hợp nhất quá lớn.',
+                unsupported_source: 'Nguồn này không được hỗ trợ.',
+                analysis_failed: 'Hợp nhất thất bại.',
+                rate_limit: 'Quá nhiều lần hợp nhất. Hãy thử lại sau giây lát.',
+                unauthenticated: 'Đăng nhập để hợp nhất.',
+                forbidden: 'Bạn không thể hợp nhất sơ đồ này.',
+                unexpected: 'Hợp nhất thất bại.',
             },
             result: {
                 summary: 'Xem lại các thay đổi trước khi hợp nhất.',

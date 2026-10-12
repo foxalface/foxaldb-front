@@ -36,6 +36,10 @@ import {
 } from '@/lib/domain/db-custom-type';
 import { getDefaultPrimaryKeyType } from '@/lib/data/data-types/data-types';
 import { isRemoteSyncActive } from '@/lib/realtime/diagram-sync-state';
+import {
+    acceptAuthoritativeDiagram,
+    cancelPendingDiagramAutosave,
+} from '@/lib/diagram-autosave/diagram-autosave-controller';
 
 export interface ChartDBProviderProps {
     diagram?: Diagram;
@@ -2014,47 +2018,99 @@ export const ChartDBProvider: React.FC<
             : undefined;
     }, [highlightedCustomTypeId, customTypes]);
 
+    const assignDiagramState = useCallback(
+        (diagram: Diagram, resetHistory: boolean) => {
+            setDiagramId(diagram.id);
+            setDiagramName(diagram.name);
+            setDatabaseType(diagram.databaseType);
+            setDatabaseEdition(diagram.databaseEdition);
+            setTables(diagram.tables ?? []);
+            setRelationships(diagram.relationships ?? []);
+            setDependencies(diagram.dependencies ?? []);
+            setAreas(diagram.areas ?? []);
+            setCustomTypes(diagram.customTypes ?? []);
+            setDiagramCreatedAt(diagram.createdAt);
+            setDiagramUpdatedAt(diagram.updatedAt);
+            setHighlightedCustomTypeId(undefined);
+            setNotes(diagram.notes ?? []);
+
+            events.emit({ action: 'load_diagram', data: { diagram } });
+
+            if (resetHistory) {
+                resetRedoStack();
+                resetUndoStack();
+            }
+        },
+        [
+            setDiagramId,
+            setDiagramName,
+            setDatabaseType,
+            setDatabaseEdition,
+            setTables,
+            setRelationships,
+            setDependencies,
+            setAreas,
+            setCustomTypes,
+            setDiagramCreatedAt,
+            setDiagramUpdatedAt,
+            setHighlightedCustomTypeId,
+            events,
+            setNotes,
+            resetRedoStack,
+            resetUndoStack,
+        ]
+    );
+
     const loadDiagramFromData: ChartDBContext['loadDiagramFromData'] =
         useCallback(
             (diagram) => {
-                setDiagramId(diagram.id);
-                setDiagramName(diagram.name);
-                setDatabaseType(diagram.databaseType);
-                setDatabaseEdition(diagram.databaseEdition);
-                setTables(diagram.tables ?? []);
-                setRelationships(diagram.relationships ?? []);
-                setDependencies(diagram.dependencies ?? []);
-                setAreas(diagram.areas ?? []);
-                setCustomTypes(diagram.customTypes ?? []);
-                setDiagramCreatedAt(diagram.createdAt);
-                setDiagramUpdatedAt(diagram.updatedAt);
-                setHighlightedCustomTypeId(undefined);
-                setNotes(diagram.notes ?? []);
-
-                events.emit({ action: 'load_diagram', data: { diagram } });
-
-                resetRedoStack();
-                resetUndoStack();
+                assignDiagramState(diagram, true);
             },
-            [
-                setDiagramId,
-                setDiagramName,
-                setDatabaseType,
-                setDatabaseEdition,
-                setTables,
-                setRelationships,
-                setDependencies,
-                setAreas,
-                setCustomTypes,
-                setDiagramCreatedAt,
-                setDiagramUpdatedAt,
-                setHighlightedCustomTypeId,
-                events,
-                setNotes,
-                resetRedoStack,
-                resetUndoStack,
-            ]
+            [assignDiagramState]
         );
+
+    const replaceDiagram: ChartDBContext['replaceDiagram'] = useCallback(
+        async (diagram, options) => {
+            const recordHistory = options?.updateHistory === true;
+            const authoritative = options?.authoritative === true;
+            const resetHistory = options?.resetHistory === true;
+            const previous = recordHistory
+                ? structuredClone(currentDiagram)
+                : null;
+
+            if (authoritative) {
+                cancelPendingDiagramAutosave();
+            }
+
+            await storageDB.deleteDiagram(diagram.id);
+            await storageDB.addDiagram({ diagram });
+
+            if (authoritative) {
+                acceptAuthoritativeDiagram(
+                    diagram,
+                    options?.authoritativeContentHash
+                );
+            }
+
+            assignDiagramState(diagram, resetHistory);
+
+            if (recordHistory && previous && !resetHistory) {
+                addUndoAction({
+                    action: 'replaceDiagram',
+                    redoData: { diagram: structuredClone(diagram) },
+                    undoData: { diagram: previous },
+                });
+                resetRedoStack();
+            }
+        },
+        [
+            addUndoAction,
+            assignDiagramState,
+            currentDiagram,
+            resetRedoStack,
+            storageDB,
+        ]
+    );
 
     const updateDiagramData: ChartDBContext['updateDiagramData'] = useCallback(
         async (diagram, options) => {
@@ -2246,6 +2302,7 @@ export const ChartDBProvider: React.FC<
                 events,
                 readonly,
                 updateDiagramData,
+                replaceDiagram,
                 updateDiagramId,
                 updateDiagramName,
                 loadDiagram,

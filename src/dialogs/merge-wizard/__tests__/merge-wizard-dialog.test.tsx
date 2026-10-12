@@ -14,6 +14,15 @@ import type {
     SchemaMergeSourcePreparationResult,
     SchemaMergeSourceResolution,
 } from '@/lib/schema-merge/source-adapter-types';
+import { ApiError } from '@/lib/api/client';
+import {
+    initializeDiagramAutosaveFromServer,
+    observeDiagramForAutosave,
+    resetDiagramAutosaveForTests,
+    setDiagramAutosaveEnabled,
+} from '@/lib/diagram-autosave/diagram-autosave-controller';
+
+const autosaveServerHash = 'f'.repeat(64);
 import { MergeWizardDialog } from '../merge-wizard-dialog';
 
 const closeMergeWizardDialog = vi.fn();
@@ -21,6 +30,7 @@ const closeMergeWizardDialog = vi.fn();
 const chartState = {
     isAuthenticated: true,
     databaseType: DatabaseType.POSTGRESQL,
+    replaceDiagram: vi.fn(),
     currentDiagram: {
         id: '42',
         name: 'Saved',
@@ -48,6 +58,10 @@ vi.mock('@/hooks/use-auth', () => ({
 
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartState,
+}));
+
+vi.mock('@/lib/realtime/client-id', () => ({
+    getClientId: () => 'client-1',
 }));
 
 vi.mock('@/lib/schema-merge/prepare-schema-merge-source', () => ({
@@ -155,6 +169,10 @@ const paste = (value: string) => {
 describe('Merge wizard shell', () => {
     beforeEach(() => {
         closeMergeWizardDialog.mockReset();
+        chartState.replaceDiagram.mockReset();
+        chartState.replaceDiagram.mockResolvedValue(undefined);
+        resetDiagramAutosaveForTests();
+        initializeDiagramAutosaveFromServer('42', autosaveServerHash);
         control.prepare.mockReset();
         control.apiRequest.mockReset();
         control.capabilities = null;
@@ -789,6 +807,520 @@ describe('Merge wizard shell', () => {
                 name: 'merge_wizard.include_deletions.label',
             })
         ).not.toBeChecked();
+    });
+
+    it('flushes autosave before Compare and does not compare when flush fails', async () => {
+        const user = userEvent.setup();
+        const saved = {
+            ...chartState.currentDiagram,
+            name: 'Saved',
+        };
+        const dirty = {
+            ...saved,
+            name: 'Unsaved edit',
+        };
+        setDiagramAutosaveEnabled(true);
+        observeDiagramForAutosave(saved, { schedule: false });
+        observeDiagramForAutosave(dirty, { schedule: true });
+        control.apiRequest.mockRejectedValueOnce(new Error('save failed'));
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+
+        await screen.findByText('merge_wizard.errors.autosave_failed');
+        expect(control.apiRequest).toHaveBeenCalledTimes(1);
+        expect(control.apiRequest.mock.calls[0]?.[0]).toBe('/diagrams/42');
+        expect(control.apiRequest.mock.calls[0]?.[1]).toEqual(
+            expect.objectContaining({ method: 'PUT' })
+        );
+        expect(
+            screen.getByTestId('merge-wizard-source-step')
+        ).toBeInTheDocument();
+    });
+
+    it('does not start a second flush or Compare from one pending click', async () => {
+        const user = userEvent.setup();
+        const saved = { ...chartState.currentDiagram, name: 'Saved' };
+        const dirty = { ...saved, name: 'Unsaved edit' };
+        setDiagramAutosaveEnabled(true);
+        observeDiagramForAutosave(saved, { schedule: false });
+        observeDiagramForAutosave(dirty, { schedule: true });
+        let releaseSave: () => void = () => undefined;
+        const saveGate = new Promise<void>((resolve) => {
+            releaseSave = resolve;
+        });
+        control.apiRequest.mockImplementation((path: string) => {
+            if (path === '/diagrams/42') {
+                return saveGate.then(() => ({
+                    id: 42,
+                    content_hash: autosaveServerHash,
+                }));
+            }
+
+            return Promise.resolve(emptyCompare);
+        });
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await user.click(compare);
+        await waitFor(() =>
+            expect(control.apiRequest).toHaveBeenCalledTimes(1)
+        );
+        expect(
+            control.apiRequest.mock.calls.some((call) =>
+                String(call[0]).includes('/merge/compare')
+            )
+        ).toBe(false);
+        releaseSave();
+        await screen.findByTestId('merge-wizard-result-step');
+        expect(
+            control.apiRequest.mock.calls.filter((call) =>
+                String(call[0]).includes('/merge/compare')
+            )
+        ).toHaveLength(1);
+    });
+
+    it('persists the unsaved edit, applies the selection, and closes', async () => {
+        const user = userEvent.setup();
+        const saved = { ...chartState.currentDiagram, name: 'Saved' };
+        const dirty = { ...saved, name: 'Unsaved edit' };
+        setDiagramAutosaveEnabled(true);
+        observeDiagramForAutosave(saved, { schedule: false });
+        observeDiagramForAutosave(dirty, { schedule: true });
+        const hash = 'e'.repeat(64);
+        const resultHash = 'f'.repeat(64);
+        const merged = {
+            id: '42',
+            name: 'Saved',
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [
+                {
+                    id: 'backendtableid00000000001',
+                    name: 'invoices',
+                    x: 480,
+                    y: 80,
+                    fields: [],
+                    indexes: [],
+                    color: '#8eb7ff',
+                    isView: false,
+                    createdAt: 0,
+                },
+            ],
+            relationships: [],
+            createdAt: '2026-01-01T00:00:00.000Z',
+            updatedAt: '2026-01-02T00:00:00.000Z',
+        };
+        control.apiRequest.mockImplementation(
+            (path: string, options?: { method?: string }) => {
+                if (options?.method === 'PUT') {
+                    return Promise.resolve({
+                        id: 42,
+                        content_hash: autosaveServerHash,
+                    });
+                }
+
+                if (String(path).endsWith('/merge/compare')) {
+                    return Promise.resolve({
+                        baseContentHash: hash,
+                        baseUpdatedAt: null,
+                        viewsCompared: true,
+                        operations: [
+                            {
+                                id: 'keep-me',
+                                category: 'table',
+                                type: 'add',
+                                entityId: null,
+                                renameTo: null,
+                                identity: {
+                                    kind: 'table',
+                                    schema: null,
+                                    name: 'invoices',
+                                },
+                                before: null,
+                                after: null,
+                                changes: [],
+                                dependsOn: [],
+                            },
+                            {
+                                id: 'drop-me',
+                                category: 'table',
+                                type: 'add',
+                                entityId: null,
+                                renameTo: null,
+                                identity: {
+                                    kind: 'table',
+                                    schema: null,
+                                    name: 'legacy',
+                                },
+                                before: null,
+                                after: null,
+                                changes: [],
+                                dependsOn: [],
+                            },
+                        ],
+                    });
+                }
+
+                return Promise.resolve({
+                    resultContentHash: resultHash,
+                    updatedAt: '2026-01-02T00:00:00.000Z',
+                    content: merged,
+                    appliedOperationIds: ['keep-me'],
+                    summary: {
+                        selected: 1,
+                        categories: {
+                            table: 1,
+                            field: 0,
+                            relationship: 0,
+                            view: 0,
+                        },
+                        types: { add: 1, modify: 0, rename: 0, delete: 0 },
+                    },
+                });
+            }
+        );
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        const putIndex = control.apiRequest.mock.calls.findIndex(
+            (call) => call[1]?.method === 'PUT'
+        );
+        const compareIndex = control.apiRequest.mock.calls.findIndex((call) =>
+            String(call[0]).includes('/merge/compare')
+        );
+        expect(putIndex).toBeGreaterThanOrEqual(0);
+        expect(compareIndex).toBeGreaterThan(putIndex);
+        expect(
+            control.apiRequest.mock.calls[putIndex]?.[1].data.content.name
+        ).toBe('Unsaved edit');
+
+        const drop = screen.getByRole('checkbox', {
+            name: /legacy/,
+        });
+        await user.click(drop);
+        await user.click(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        );
+        await waitFor(() =>
+            expect(chartState.replaceDiagram).toHaveBeenCalledTimes(1)
+        );
+        const applyCall = control.apiRequest.mock.calls.find((call) =>
+            String(call[0]).includes('/merge/apply')
+        );
+        expect(applyCall?.[0]).toBe('/diagrams/42/merge/apply');
+        expect(applyCall?.[1].data).toEqual(
+            expect.objectContaining({
+                baseContentHash: hash,
+                includeDeletions: false,
+                source: { kind: 'sql' },
+                selectedOperationIds: ['keep-me'],
+                clientId: 'client-1',
+            })
+        );
+        expect(applyCall?.[1].data).not.toHaveProperty('operations');
+        expect(applyCall?.[1].data).not.toHaveProperty('dependsOn');
+        expect(applyCall?.[1].data).not.toHaveProperty('currentDiagram');
+        expect(chartState.replaceDiagram).toHaveBeenCalledWith(
+            expect.objectContaining({
+                id: '42',
+                tables: [
+                    expect.objectContaining({
+                        id: 'backendtableid00000000001',
+                        x: 480,
+                    }),
+                ],
+            }),
+            {
+                updateHistory: true,
+                authoritative: true,
+                authoritativeContentHash: resultHash,
+            }
+        );
+        expect(closeMergeWizardDialog).toHaveBeenCalled();
+        expect(
+            control.apiRequest.mock.calls.filter((call) =>
+                String(call[0]).includes('/merge/compare')
+            )
+        ).toHaveLength(1);
+    });
+
+    it('returns to Compare again when Apply is stale and does not replace the diagram', async () => {
+        const user = userEvent.setup();
+        const hash = 'a'.repeat(64);
+        control.apiRequest.mockImplementation((path: string) => {
+            if (String(path).endsWith('/merge/compare')) {
+                return Promise.resolve({
+                    ...emptyCompare,
+                    baseContentHash: hash,
+                    operations: [
+                        {
+                            id: 'keep-me',
+                            category: 'table',
+                            type: 'modify',
+                            entityId: 'users',
+                            renameTo: null,
+                            identity: {
+                                kind: 'table',
+                                schema: null,
+                                name: 'users',
+                            },
+                            before: null,
+                            after: null,
+                            changes: [],
+                            dependsOn: [],
+                        },
+                    ],
+                });
+            }
+
+            return Promise.reject(
+                new ApiError('stale', 409, { code: 'stale_comparison' })
+            );
+        });
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        await user.click(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        );
+        await screen.findByText('merge_wizard.errors.stale_comparison');
+        expect(
+            screen.getByTestId('merge-wizard-source-step')
+        ).toBeInTheDocument();
+        expect(chartState.replaceDiagram).not.toHaveBeenCalled();
+        expect(
+            screen.queryByRole('checkbox', { name: /users/ })
+        ).not.toBeInTheDocument();
+    });
+
+    it('requires a fresh Compare when Apply reports an incomplete selection', async () => {
+        const user = userEvent.setup();
+        const hash = 'b'.repeat(64);
+        control.apiRequest.mockImplementation((path: string) => {
+            if (String(path).endsWith('/merge/compare')) {
+                return Promise.resolve({
+                    ...emptyCompare,
+                    baseContentHash: hash,
+                    operations: [
+                        {
+                            id: 'keep-me',
+                            category: 'table',
+                            type: 'modify',
+                            entityId: 'users',
+                            renameTo: null,
+                            identity: {
+                                kind: 'table',
+                                schema: null,
+                                name: 'users',
+                            },
+                            before: null,
+                            after: null,
+                            changes: [],
+                            dependsOn: [],
+                        },
+                    ],
+                });
+            }
+
+            return Promise.reject(
+                new ApiError('incomplete', 422, {
+                    code: 'incomplete_selection',
+                })
+            );
+        });
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        await user.click(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        );
+        await screen.findByText('merge_wizard.errors.incomplete_selection');
+        expect(
+            screen.getByTestId('merge-wizard-source-step')
+        ).toBeInTheDocument();
+        expect(chartState.replaceDiagram).not.toHaveBeenCalled();
+    });
+
+    it('keeps the review when Apply is rate limited or analysis fails', async () => {
+        const user = userEvent.setup();
+        const hash = 'c'.repeat(64);
+        const compareBody = {
+            ...emptyCompare,
+            baseContentHash: hash,
+            operations: [
+                {
+                    id: 'keep-me',
+                    category: 'table',
+                    type: 'modify',
+                    entityId: 'users',
+                    renameTo: null,
+                    identity: { kind: 'table', schema: null, name: 'users' },
+                    before: null,
+                    after: null,
+                    changes: [],
+                    dependsOn: [],
+                },
+            ],
+        };
+
+        control.apiRequest.mockImplementation((path: string) => {
+            if (String(path).endsWith('/merge/compare')) {
+                return Promise.resolve(compareBody);
+            }
+
+            return Promise.reject(new ApiError('limited', 429, {}));
+        });
+        const { unmount } = renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        await user.click(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        );
+        await screen.findByText('merge_wizard.apply_errors.rate_limit');
+        expect(
+            screen.getByTestId('merge-wizard-result-step')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        ).toBeEnabled();
+        expect(chartState.replaceDiagram).not.toHaveBeenCalled();
+        unmount();
+
+        control.apiRequest.mockImplementation((path: string) => {
+            if (String(path).endsWith('/merge/compare')) {
+                return Promise.resolve(compareBody);
+            }
+
+            return Promise.reject(
+                new ApiError('failed', 422, { code: 'analysis_failed' })
+            );
+        });
+        renderWizard();
+        paste('select 1');
+        const compareAgain = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compareAgain).toBeEnabled());
+        await user.click(compareAgain);
+        await screen.findByTestId('merge-wizard-result-step');
+        await user.click(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        );
+        await screen.findByText('merge_wizard.apply_errors.analysis_failed');
+        expect(
+            screen.getByTestId('merge-wizard-result-step')
+        ).toBeInTheDocument();
+        expect(chartState.replaceDiagram).not.toHaveBeenCalled();
+    });
+
+    it('does not start a second Apply while the first request is pending', async () => {
+        const user = userEvent.setup();
+        const hash = 'd'.repeat(64);
+        let release: (() => void) | undefined;
+        control.apiRequest.mockImplementation((path: string) => {
+            if (String(path).endsWith('/merge/compare')) {
+                return Promise.resolve({
+                    ...emptyCompare,
+                    baseContentHash: hash,
+                    operations: [
+                        {
+                            id: 'keep-me',
+                            category: 'table',
+                            type: 'modify',
+                            entityId: 'users',
+                            renameTo: null,
+                            identity: {
+                                kind: 'table',
+                                schema: null,
+                                name: 'users',
+                            },
+                            before: null,
+                            after: null,
+                            changes: [],
+                            dependsOn: [],
+                        },
+                    ],
+                });
+            }
+
+            return new Promise((resolve) => {
+                release = () =>
+                    resolve({
+                        resultContentHash: hash,
+                        updatedAt: null,
+                        content: chartState.currentDiagram,
+                        appliedOperationIds: ['keep-me'],
+                        summary: {
+                            selected: 1,
+                            categories: {
+                                table: 1,
+                                field: 0,
+                                relationship: 0,
+                                view: 0,
+                            },
+                            types: {
+                                add: 0,
+                                modify: 1,
+                                rename: 0,
+                                delete: 0,
+                            },
+                        },
+                    });
+            });
+        });
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        const merge = screen.getByRole('button', {
+            name: /merge_wizard.result.merge/,
+        });
+        await user.click(merge);
+        await screen.findByRole('button', { name: 'merge_wizard.applying' });
+        await user.click(
+            screen.getByRole('button', { name: 'merge_wizard.applying' })
+        );
+        expect(
+            control.apiRequest.mock.calls.filter((call) =>
+                String(call[0]).includes('/merge/apply')
+            )
+        ).toHaveLength(1);
+        release?.();
+        await waitFor(() =>
+            expect(chartState.replaceDiagram).toHaveBeenCalledTimes(1)
+        );
     });
 
     it('closes from Cancel', async () => {

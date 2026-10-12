@@ -1,9 +1,20 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useStorage } from '@/hooks/use-storage';
+import { readDiagramContentHashFromApi } from '@/lib/api/diagram-content-hash';
+import { getDiagram } from '@/lib/api/diagrams';
+import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
+import { setDiagramAutosaveContentHash } from '@/lib/diagram-autosave/diagram-autosave-controller';
+import { cancelPendingDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { getClientId } from '@/lib/realtime/client-id';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { getEcho } from '@/lib/realtime/echo';
+import {
+    handleApplySchemaMergeEvent,
+    isApplySchemaMergeAction,
+    parseApplySchemaMergeEvent,
+    resetSchemaMergeRefresh,
+} from '@/lib/realtime/schema-merge-refresh';
 import {
     applyRemoteDiagramOperation,
     isDiagramOperationAction,
@@ -113,6 +124,7 @@ export const useDiagramRealtime = (): void => {
         addAreas,
         removeAreas,
         updateArea,
+        replaceDiagram,
     } = useChartDB();
 
     const existingTableIdsRef = useRef<ReadonlySet<string>>(new Set());
@@ -195,6 +207,9 @@ export const useDiagramRealtime = (): void => {
         updateDependency,
     };
 
+    const replaceDiagramRef = useRef(replaceDiagram);
+    replaceDiagramRef.current = replaceDiagram;
+
     const storageRef = useRef<DiagramRealtimeStorage>({
         getTableFromStorage,
         getRelationshipFromStorage,
@@ -228,6 +243,50 @@ export const useDiagramRealtime = (): void => {
         };
 
         const handleDiagramOperation = (value: unknown): void => {
+            if (isApplySchemaMergeAction(value)) {
+                const mergeEvent = parseApplySchemaMergeEvent(value);
+
+                if (mergeEvent === null) {
+                    console.warn(
+                        '[DiagramOperation] Invalid schema merge payload',
+                        value
+                    );
+                    return;
+                }
+
+                const activeDiagramId = diagramIdRef.current;
+
+                if (activeDiagramId === null) {
+                    return;
+                }
+
+                void handleApplySchemaMergeEvent(mergeEvent, activeDiagramId, {
+                    fetchDiagram: async (id) => {
+                        const raw = await getDiagram(id);
+                        const contentHash = readDiagramContentHashFromApi(raw);
+
+                        if (contentHash !== null) {
+                            setDiagramAutosaveContentHash(id, contentHash);
+                        }
+
+                        return normalizeDiagramFromApi(raw, id);
+                    },
+                    replaceDiagram: (diagram) =>
+                        replaceDiagramRef.current(diagram, {
+                            updateHistory: false,
+                            authoritative: true,
+                            resetHistory: true,
+                        }),
+                    cancelPendingAutosave: cancelPendingDiagramAutosave,
+                }).catch((error: unknown) => {
+                    console.warn(
+                        '[DiagramOperation] Failed to refresh merged diagram',
+                        error
+                    );
+                });
+                return;
+            }
+
             const payload = parseDiagramOperationPayload(value);
 
             if (payload === null) {
@@ -318,6 +377,8 @@ export const useDiagramRealtime = (): void => {
         }
 
         return () => {
+            resetSchemaMergeRefresh();
+
             try {
                 channel?.stopListening('.Realtime.Ping', handleRealtimePing);
                 channel?.stopListening(

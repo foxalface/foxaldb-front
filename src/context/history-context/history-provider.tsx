@@ -46,6 +46,7 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
         addNotes,
         removeNotes,
         updateNote,
+        replaceDiagram,
     } = useChartDB();
 
     const redoActionHandlers = useMemo(
@@ -175,6 +176,12 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             updateNote: ({ redoData: { noteId, note } }) => {
                 return updateNote(noteId, note, { updateHistory: false });
             },
+            replaceDiagram: ({ redoData: { diagram } }) => {
+                return replaceDiagram(diagram, {
+                    updateHistory: false,
+                    authoritative: false,
+                });
+            },
         }),
         [
             addTables,
@@ -206,6 +213,7 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addNotes,
             removeNotes,
             updateNote,
+            replaceDiagram,
         ]
     );
 
@@ -348,6 +356,12 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             updateNote: ({ undoData: { noteId, note } }) => {
                 return updateNote(noteId, note, { updateHistory: false });
             },
+            replaceDiagram: ({ undoData: { diagram } }) => {
+                return replaceDiagram(diagram, {
+                    updateHistory: false,
+                    authoritative: false,
+                });
+            },
         }),
         [
             addTables,
@@ -379,6 +393,7 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addNotes,
             removeNotes,
             updateNote,
+            replaceDiagram,
         ]
     );
 

@@ -28,6 +28,7 @@ export const MergeResultSection: React.FC<{
     sectionState: boolean | 'indeterminate';
     labelContext: MergeLabelContext;
     text: MergeText;
+    disabled?: boolean;
     onToggleOperation: (operationId: string, selected: boolean) => void;
     onToggleSection: () => void;
 }> = ({
@@ -38,6 +39,7 @@ export const MergeResultSection: React.FC<{
     sectionState,
     labelContext,
     text,
+    disabled = false,
     onToggleOperation,
     onToggleSection,
 }) => {
@@ -55,6 +57,7 @@ export const MergeResultSection: React.FC<{
                 {selectable ? (
                     <Checkbox
                         checked={sectionState}
+                        disabled={disabled}
                         aria-label={text(
                             'merge_wizard.result.select_all_section',
                             { section: title }
@@ -90,6 +93,7 @@ export const MergeResultSection: React.FC<{
                                     selected={selected.has(operation.id)}
                                     labelContext={labelContext}
                                     text={text}
+                                    disabled={disabled}
                                     onSelect={() =>
                                         onToggleOperation(operation.id, true)
                                     }

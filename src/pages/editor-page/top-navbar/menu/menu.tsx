@@ -22,14 +22,13 @@ import { useHistory } from '@/hooks/use-history';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from '@/hooks/use-layout';
 import { useTheme } from '@/hooks/use-theme';
-import {
-    deleteDiagram as deleteDiagramApi,
-    updateDiagram,
-} from '@/lib/api/diagrams';
+import { deleteDiagram as deleteDiagramApi } from '@/lib/api/diagrams';
+import { flushDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useAuth } from '@/hooks/use-auth';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 
 export interface MenuProps {
@@ -42,8 +41,10 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
         updateDiagramUpdatedAt,
         databaseType,
         currentDiagram,
+        readonly,
         deleteDiagram: deleteLocalDiagram,
     } = useChartDB();
+    const { diagramAccess } = useDiagramAccess();
     const {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
@@ -51,6 +52,7 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
         openImportDiagramDialog,
         openExportWizardDialog,
         openExportDiagramDialog,
+        openMergeWizardDialog,
         openLaravelMigrationImportDialog,
         openLaravelMigrationDiffDialog,
     } = useDialog();
@@ -146,16 +148,20 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
             return;
         }
 
-        await updateDiagram(String(currentDiagram.id), {
-            name: currentDiagram.name ?? 'Untitled diagram',
-            content: currentDiagram,
-        });
+        await flushDiagramAutosave();
     }, [currentDiagram, updateDiagramUpdatedAt]);
 
     const canExportLaravelMigrations =
         isAuthenticated &&
         currentDiagram?.id &&
         isValidBackendDiagramId(currentDiagram.id);
+
+    const canMergeDiagram =
+        isAuthenticated &&
+        !!currentDiagram?.id &&
+        isValidBackendDiagramId(currentDiagram.id) &&
+        readonly !== true &&
+        diagramAccess?.can_edit !== false;
 
     const openLaravelMigrationsDiff = useCallback(() => {
         if (!canExportLaravelMigrations || !currentDiagram?.id) {
@@ -258,7 +264,11 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                     <MenubarItem onClick={openExportWizardDialog}>
                         {t('menu.actions.export')}
                     </MenubarItem>
-                    {/* Merge stays out of Actions until M8 can apply the selection. */}
+                    {canMergeDiagram ? (
+                        <MenubarItem onClick={openMergeWizardDialog}>
+                            {t('menu.actions.merge')}
+                        </MenubarItem>
+                    ) : null}
                     <MenubarSeparator />
                     <MenubarItem
                         onClick={() =>

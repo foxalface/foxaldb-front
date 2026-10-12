@@ -1953,6 +1953,8 @@ export const en = {
             compare: 'Compare',
             comparing: 'Comparing…',
             cancel: 'Cancel',
+            applying: 'Applying…',
+            applied: 'Merge applied',
             unavailable: 'Merge is available for saved diagrams.',
             include_deletions: {
                 label: 'Include deletions',
@@ -1978,8 +1980,24 @@ export const en = {
                 unauthenticated: 'Sign in to compare.',
                 forbidden: 'You cannot compare this diagram.',
                 unexpected: 'Comparison failed.',
+                autosave_failed: 'Could not save the diagram before comparing.',
+                stale_comparison: 'Diagram changed. Compare again.',
+                incomplete_selection:
+                    'This comparison is out of date. Compare again.',
                 project_unreadable: 'This project could not be read.',
                 invalid_resolution: 'Choose a valid option to continue.',
+            },
+            apply_errors: {
+                malformed_diagram: 'The merge could not be applied.',
+                database_type_mismatch:
+                    'This source does not match the diagram database.',
+                payload_too_large: 'The merge is too large.',
+                unsupported_source: 'This source is not supported.',
+                analysis_failed: 'Merge failed.',
+                rate_limit: 'Too many merge attempts. Try again shortly.',
+                unauthenticated: 'Sign in to merge.',
+                forbidden: 'You cannot merge this diagram.',
+                unexpected: 'Merge failed.',
             },
             result: {
                 summary: 'Review the changes before merging.',

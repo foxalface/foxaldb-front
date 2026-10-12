@@ -9,6 +9,7 @@ import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { getDiagram, getDiagrams } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
+import { syncDiagramAutosaveFromApiLoad } from '@/lib/diagram-autosave/sync-diagram-autosave-from-api';
 import type { Diagram } from '@/lib/domain/diagram';
 import {
     isDiagramAccessDenied,
@@ -293,6 +294,8 @@ export const useEntryFlowAuthenticatedResolution = ({
                 if (!isResolutionCurrent(token)) {
                     return;
                 }
+
+                syncDiagramAutosaveFromApiLoad(diagramId, diagram);
 
                 const normalizedDiagram = normalizeDiagramFromApi(
                     diagram,

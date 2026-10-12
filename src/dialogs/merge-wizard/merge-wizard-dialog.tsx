@@ -1,18 +1,27 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
+import { useToast } from '@/components/toast/use-toast';
 import type { BaseDialogProps } from '@/dialogs/common/base-dialog-props';
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import {
+    applySchemaMerge,
+    mapSchemaMergeApplyError,
+    type SchemaMergeApplyFailure,
+} from '@/lib/api/schema-merge-apply';
+import {
     compareSchemaMerge,
     mapSchemaMergeCompareError,
     type SchemaMergeCompareFailure,
 } from '@/lib/api/schema-merge-compare';
+import { flushDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { isZipArchiveFile } from '@/lib/project-import/is-zip-archive-file';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
+import { noteSchemaMergeAuthoritativeHash } from '@/lib/realtime/schema-merge-refresh';
+import { isSelectionDependencyClosed } from '@/lib/schema-merge/operation-selection';
 import { prepareSchemaMergeSource } from '@/lib/schema-merge/prepare-schema-merge-source';
 import type {
     SchemaMergeSourceInput,
@@ -20,6 +29,8 @@ import type {
     SchemaMergeSourceResolution,
 } from '@/lib/schema-merge/source-adapter-types';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import { useTranslation } from 'react-i18next';
+import { mergeApplyInvalidatesComparison } from './merge-apply-error';
 import { MergeResultStep } from './merge-result-step';
 import { MergeSourceStep } from './merge-source-step';
 import type { MergeWizardApplyContext } from './merge-wizard-apply-context';
@@ -69,11 +80,18 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
     dialog,
 }) => {
     const { closeMergeWizardDialog } = useDialog();
+    const { toast } = useToast();
+    const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
-    const { currentDiagram, databaseType: chartDatabaseType } = useChartDB();
+    const {
+        currentDiagram,
+        databaseType: chartDatabaseType,
+        replaceDiagram,
+    } = useChartDB();
     const wasOpenRef = useRef(false);
     const sessionRef = useRef(0);
     const compareInFlightRef = useRef(false);
+    const applyInFlightRef = useRef(false);
     const prepareRequestIdRef = useRef(0);
     const fileSelectionIdRef = useRef(0);
     const fileTokenRef = useRef(0);
@@ -100,6 +118,11 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         useState<SchemaMergeCompareFailure | null>(null);
     const [applyContext, setApplyContext] =
         useState<MergeWizardApplyContext | null>(null);
+    const [isApplying, setIsApplying] = useState(false);
+    const [applyError, setApplyError] =
+        useState<SchemaMergeApplyFailure | null>(null);
+    const preparationRef = useRef(preparation);
+    preparationRef.current = preparation;
 
     const diagramId = currentDiagram?.id;
     const currentDatabaseType =
@@ -112,6 +135,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         prepareRequestIdRef.current += 1;
         fileSelectionIdRef.current += 1;
         compareInFlightRef.current = false;
+        applyInFlightRef.current = false;
         setStep(MergeWizardStep.SOURCE);
         setText('');
         setSelectedFile(null);
@@ -124,6 +148,8 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         setIsComparing(false);
         setCompareError(null);
         setApplyContext(null);
+        setIsApplying(false);
+        setApplyError(null);
     }, []);
 
     useEffect(() => {
@@ -280,30 +306,54 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         setIsComparing(true);
         setCompareError(null);
 
-        void compareSchemaMerge(diagramId, {
-            incomingDiagram: ready.incomingDiagram,
-            includeDeletions,
-            source: {
-                kind: ready.source.kind,
-            },
-        })
-            .then((response) => {
+        void (async () => {
+            try {
+                await flushDiagramAutosave();
+            } catch {
                 if (session !== sessionRef.current) {
                     return;
                 }
 
-                compareGenerationRef.current += 1;
-                setApplyContext({
-                    incomingDiagram: ready.incomingDiagram,
-                    source: {
-                        kind: ready.source.kind,
-                    },
-                    includeDeletions,
-                    response,
-                    generation: compareGenerationRef.current,
-                });
-                setStep(MergeWizardStep.RESULT);
-            })
+                setCompareError({ type: 'autosave' });
+                return;
+            }
+
+            if (session !== sessionRef.current) {
+                return;
+            }
+
+            if (
+                preparationRef.current?.status !== 'ready' ||
+                !isValidBackendDiagramId(diagramId)
+            ) {
+                return;
+            }
+
+            const response = await compareSchemaMerge(diagramId, {
+                incomingDiagram: ready.incomingDiagram,
+                includeDeletions,
+                source: {
+                    kind: ready.source.kind,
+                },
+            });
+
+            if (session !== sessionRef.current) {
+                return;
+            }
+
+            compareGenerationRef.current += 1;
+            setApplyContext({
+                incomingDiagram: ready.incomingDiagram,
+                source: {
+                    kind: ready.source.kind,
+                },
+                includeDeletions,
+                response,
+                generation: compareGenerationRef.current,
+            });
+            setApplyError(null);
+            setStep(MergeWizardStep.RESULT);
+        })()
             .catch((error: unknown) => {
                 if (session !== sessionRef.current) {
                     return;
@@ -338,21 +388,136 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
     }, []);
 
     const handleBackToSource = useCallback(() => {
+        if (applyInFlightRef.current) {
+            return;
+        }
+
         setStep(MergeWizardStep.SOURCE);
     }, []);
+
+    const handleApply = useCallback(
+        (selectedOperationIds: readonly string[]) => {
+            if (
+                applyInFlightRef.current ||
+                isApplying ||
+                applyContext === null ||
+                !isValidBackendDiagramId(diagramId)
+            ) {
+                return;
+            }
+
+            if (
+                !isSelectionDependencyClosed(
+                    new Set(selectedOperationIds),
+                    applyContext.response.operations
+                )
+            ) {
+                setApplyContext(null);
+                setStep(MergeWizardStep.SOURCE);
+                setCompareError({
+                    type: 'merge_code',
+                    code: 'incomplete_selection',
+                });
+                return;
+            }
+
+            const session = sessionRef.current;
+            const context = applyContext;
+            applyInFlightRef.current = true;
+            setIsApplying(true);
+            setApplyError(null);
+
+            void applySchemaMerge(diagramId, {
+                baseContentHash: context.response.baseContentHash,
+                incomingDiagram: context.incomingDiagram,
+                includeDeletions: context.includeDeletions,
+                source: context.source,
+                selectedOperationIds,
+            })
+                .then(async (response) => {
+                    if (session !== sessionRef.current) {
+                        return;
+                    }
+
+                    await replaceDiagram(response.content, {
+                        updateHistory: true,
+                        authoritative: true,
+                        authoritativeContentHash: response.resultContentHash,
+                    });
+
+                    if (session !== sessionRef.current) {
+                        return;
+                    }
+
+                    noteSchemaMergeAuthoritativeHash(
+                        String(diagramId),
+                        response.resultContentHash
+                    );
+                    toast({
+                        title: t('merge_wizard.applied'),
+                    });
+                    closeMergeWizardDialog();
+                })
+                .catch((error: unknown) => {
+                    if (session !== sessionRef.current) {
+                        return;
+                    }
+
+                    const failure = mapSchemaMergeApplyError(error);
+
+                    if (mergeApplyInvalidatesComparison(failure)) {
+                        setApplyContext(null);
+                        setApplyError(null);
+                        setStep(MergeWizardStep.SOURCE);
+                        setCompareError(
+                            failure.type === 'merge_code'
+                                ? {
+                                      type: 'merge_code',
+                                      code: failure.code,
+                                  }
+                                : { type: 'unexpected' }
+                        );
+                        return;
+                    }
+
+                    setApplyError(failure);
+                })
+                .finally(() => {
+                    if (session !== sessionRef.current) {
+                        return;
+                    }
+
+                    applyInFlightRef.current = false;
+                    setIsApplying(false);
+                });
+        },
+        [
+            applyContext,
+            closeMergeWizardDialog,
+            diagramId,
+            isApplying,
+            replaceDiagram,
+            t,
+            toast,
+        ]
+    );
 
     return (
         <Dialog
             {...dialog}
             onOpenChange={(open) => {
                 if (!open) {
+                    if (isApplying) {
+                        return;
+                    }
+
                     closeMergeWizardDialog();
                 }
             }}
         >
             <DialogContent
                 className="flex max-h-dvh w-full max-w-[30rem] flex-col overflow-hidden sm:max-w-xl"
-                showClose
+                showClose={!isApplying}
             >
                 <TooltipProvider>
                     {step === MergeWizardStep.RESULT && applyContext ? (
@@ -363,6 +528,10 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                                 defaultSchemas[currentDatabaseType] ?? null
                             }
                             onBack={handleBackToSource}
+                            onMerge={handleApply}
+                            isApplying={isApplying}
+                            applyError={applyError}
+                            canApply={isValidBackendDiagramId(diagramId)}
                         />
                     ) : (
                         <MergeSourceStep

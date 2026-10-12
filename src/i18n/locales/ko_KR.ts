@@ -1950,6 +1950,8 @@ export const ko_KR: LanguageTranslation = {
             compare: '비교',
             comparing: '비교하는 중…',
             cancel: '취소',
+            applying: '적용하는 중…',
+            applied: '병합을 적용했습니다',
             unavailable: '병합은 저장된 다이어그램에서 사용할 수 있습니다.',
             include_deletions: {
                 label: '삭제 반영',
@@ -1974,8 +1976,27 @@ export const ko_KR: LanguageTranslation = {
                 unauthenticated: '비교하려면 로그인하세요.',
                 forbidden: '이 다이어그램은 비교할 수 없습니다.',
                 unexpected: '비교에 실패했습니다.',
+                autosave_failed:
+                    '비교하기 전에 다이어그램을 저장하지 못했습니다.',
+                stale_comparison:
+                    '다이어그램이 변경되었습니다. 다시 비교하세요.',
+                incomplete_selection:
+                    '이 비교는 최신이 아닙니다. 다시 비교하세요.',
                 project_unreadable: '이 프로젝트를 읽을 수 없습니다.',
                 invalid_resolution: '계속하려면 올바른 옵션을 선택하세요.',
+            },
+            apply_errors: {
+                malformed_diagram: '병합을 적용할 수 없습니다.',
+                database_type_mismatch:
+                    '이 원본이 다이어그램의 데이터베이스와 일치하지 않습니다.',
+                payload_too_large: '병합이 너무 큽니다.',
+                unsupported_source: '이 원본은 지원되지 않습니다.',
+                analysis_failed: '병합에 실패했습니다.',
+                rate_limit:
+                    '병합 시도가 너무 많습니다. 잠시 후 다시 시도하세요.',
+                unauthenticated: '병합하려면 로그인하세요.',
+                forbidden: '이 다이어그램을 병합할 수 없습니다.',
+                unexpected: '병합에 실패했습니다.',
             },
             result: {
                 summary: '병합하기 전에 변경 내용을 검토하세요.',

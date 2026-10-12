@@ -3,8 +3,10 @@ import { useAlert } from '@/context/alert-context/alert-context';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
+import { readDiagramContentHashFromApi } from '@/lib/api/diagram-content-hash';
 import { getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
+import { setDiagramAutosaveContentHash } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
     isDiagramAccessDenied,
@@ -95,6 +97,12 @@ export const useDiagramReconnectRefresh = (): void => {
 
         try {
             const raw = await getDiagram(diagramId);
+            const contentHash = readDiagramContentHashFromApi(raw);
+
+            if (contentHash !== null) {
+                setDiagramAutosaveContentHash(diagramId, contentHash);
+            }
+
             const diagram = normalizeDiagramFromApi(raw, diagramId);
             setDiagramAccess(raw.access ?? null);
             await updateDiagramData(diagram, { forceUpdateStorage: true });

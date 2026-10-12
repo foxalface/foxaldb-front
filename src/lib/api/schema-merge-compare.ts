@@ -45,6 +45,9 @@ export type SchemaMergeCompareFailure =
       }
     | {
           type: 'unexpected';
+      }
+    | {
+          type: 'autosave';
       };
 
 const readErrorCode = (payload: unknown): string | null => {
@@ -109,8 +112,8 @@ const requestByteLength = (request: SchemaMergeCompareRequest): number =>
 /**
  * Posts a normalized incoming diagram to Compare.
  *
- * The body is rebuilt so `source` stays `{ kind }` only. Pending editor
- * changes are not flushed: autosave has no flush handle. That flush is M8.
+ * The body is rebuilt so `source` stays `{ kind }` only. The wizard flushes
+ * autosave before calling this function.
  */
 export const compareSchemaMerge = async (
     diagramId: string | number,

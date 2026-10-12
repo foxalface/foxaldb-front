@@ -7,6 +7,7 @@ import { useStorage } from '@/hooks/use-storage';
 import { useToast } from '@/components/toast/use-toast';
 import { createDiagram, getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
+import { syncDiagramAutosaveFromApiLoad } from '@/lib/diagram-autosave/sync-diagram-autosave-from-api';
 import { findGuestLocalDiagramIdForMigration } from '@/lib/diagram/find-guest-local-diagram-id';
 import type { EntryFlowEvent, EntryFlowState } from '@/lib/entry-flow';
 import { useTranslation } from 'react-i18next';
@@ -208,6 +209,8 @@ export const useEntryFlowGuestMigration = ({
                     });
                     return;
                 }
+
+                syncDiagramAutosaveFromApiLoad(remoteDiagramId, remoteDiagram);
 
                 const normalizedDiagram = normalizeDiagramFromApi(
                     remoteDiagram,

@@ -15,9 +15,18 @@ export const MergeResultRow: React.FC<{
     selected: boolean;
     labelContext: MergeLabelContext;
     text: MergeText;
+    disabled?: boolean;
     onSelect: () => void;
     onDeselect: () => void;
-}> = ({ operation, selected, labelContext, text, onSelect, onDeselect }) => {
+}> = ({
+    operation,
+    selected,
+    labelContext,
+    text,
+    disabled = false,
+    onSelect,
+    onDeselect,
+}) => {
     const label = mergeOperationLabel(operation, labelContext, text);
     const detail = formatMergeOperationDetail(operation, text);
 
@@ -26,6 +35,7 @@ export const MergeResultRow: React.FC<{
             <Checkbox
                 className="mt-0.5"
                 checked={selected}
+                disabled={disabled}
                 aria-label={mergeOperationSelectLabel(
                     operation,
                     labelContext,

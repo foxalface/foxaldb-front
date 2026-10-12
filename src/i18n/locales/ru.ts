@@ -1957,6 +1957,8 @@ export const ru: LanguageTranslation = {
             compare: 'Сравнить',
             comparing: 'Сравнение…',
             cancel: 'Отмена',
+            applying: 'Применение…',
+            applied: 'Объединение применено',
             unavailable: 'Объединение доступно для сохранённых диаграмм.',
             include_deletions: {
                 label: 'Учитывать удаления',
@@ -1982,9 +1984,26 @@ export const ru: LanguageTranslation = {
                 unauthenticated: 'Войдите, чтобы сравнить.',
                 forbidden: 'Вы не можете сравнить эту диаграмму.',
                 unexpected: 'Сравнение не удалось.',
+                autosave_failed:
+                    'Не удалось сохранить диаграмму перед сравнением.',
+                stale_comparison: 'Диаграмма изменилась. Сравните снова.',
+                incomplete_selection: 'Это сравнение устарело. Сравните снова.',
                 project_unreadable: 'Не удалось прочитать этот проект.',
                 invalid_resolution:
                     'Выберите допустимый вариант, чтобы продолжить.',
+            },
+            apply_errors: {
+                malformed_diagram: 'Не удалось применить объединение.',
+                database_type_mismatch:
+                    'Этот источник не соответствует базе диаграммы.',
+                payload_too_large: 'Объединение слишком большое.',
+                unsupported_source: 'Этот источник не поддерживается.',
+                analysis_failed: 'Объединение не удалось.',
+                rate_limit:
+                    'Слишком много попыток объединения. Повторите чуть позже.',
+                unauthenticated: 'Войдите, чтобы объединить.',
+                forbidden: 'Вы не можете объединить эту диаграмму.',
+                unexpected: 'Объединение не удалось.',
             },
             result: {
                 summary: 'Проверьте изменения перед объединением.',

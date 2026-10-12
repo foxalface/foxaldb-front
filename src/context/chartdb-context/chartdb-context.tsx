@@ -195,6 +195,20 @@ export interface ChartDBContext {
         diagram: Diagram,
         options?: { forceUpdateStorage?: boolean }
     ) => Promise<void>;
+    /**
+     * Replaces the open diagram in one step.
+     * `updateHistory` records one undo entry. `authoritative` marks the
+     * snapshot as already persisted. `resetHistory` clears local undo.
+     */
+    replaceDiagram: (
+        diagram: Diagram,
+        options?: {
+            updateHistory?: boolean;
+            authoritative?: boolean;
+            resetHistory?: boolean;
+            authoritativeContentHash?: string;
+        }
+    ) => Promise<void>;
 
     // Database type operations
     updateDatabaseType: (databaseType: DatabaseType) => Promise<void>;
@@ -456,6 +470,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     clearDiagramData: emptyFn,
     deleteDiagram: emptyFn,
     updateDiagramData: emptyFn,
+    replaceDiagram: emptyFn,
 
     // Database type operations
     updateDatabaseType: emptyFn,

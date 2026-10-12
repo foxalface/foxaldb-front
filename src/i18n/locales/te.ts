@@ -1972,6 +1972,8 @@ export const te: LanguageTranslation = {
             compare: 'పోల్చండి',
             comparing: 'పోలుస్తోంది…',
             cancel: 'రద్దు',
+            applying: 'వర్తింపజేస్తోంది…',
+            applied: 'విలీనం వర్తింపజేయబడింది',
             unavailable: 'విలీనం సేవ్ చేసిన రేఖాచిత్రాలకు అందుబాటులో ఉంటుంది.',
             include_deletions: {
                 label: 'తొలగింపులను పరిగణించండి',
@@ -1996,9 +1998,26 @@ export const te: LanguageTranslation = {
                 unauthenticated: 'పోల్చడానికి సైన్ ఇన్ చేయండి.',
                 forbidden: 'మీరు ఈ రేఖాచిత్రాన్ని పోల్చలేరు.',
                 unexpected: 'పోలిక విఫలమైంది.',
+                autosave_failed:
+                    'పోలికకు ముందు రేఖాచిత్రాన్ని సేవ్ చేయలేకపోయాం.',
+                stale_comparison: 'రేఖాచిత్రం మారింది. మళ్లీ పోల్చండి.',
+                incomplete_selection: 'ఈ పోలిక పాతదైంది. మళ్లీ పోల్చండి.',
                 project_unreadable: 'ఈ ప్రాజెక్ట్‌ను చదవలేకపోయాం.',
                 invalid_resolution:
                     'కొనసాగించడానికి చెల్లుబాటు అయ్యే ఎంపికను ఎంచుకోండి.',
+            },
+            apply_errors: {
+                malformed_diagram: 'విలీనాన్ని వర్తింపజేయలేకపోయాం.',
+                database_type_mismatch:
+                    'ఈ మూలం రేఖాచిత్రం డేటాబేస్‌తో సరిపోలదు.',
+                payload_too_large: 'విలీనం చాలా పెద్దది.',
+                unsupported_source: 'ఈ మూలానికి మద్దతు లేదు.',
+                analysis_failed: 'విలీనం విఫలమైంది.',
+                rate_limit:
+                    'విలీన ప్రయత్నాలు చాలా ఎక్కువ. కాసేపు తర్వాత మళ్లీ ప్రయత్నించండి.',
+                unauthenticated: 'విలీనం చేయడానికి సైన్ ఇన్ చేయండి.',
+                forbidden: 'మీరు ఈ రేఖాచిత్రాన్ని విలీనం చేయలేరు.',
+                unexpected: 'విలీనం విఫలమైంది.',
             },
             result: {
                 summary: 'విలీనం చేయడానికి ముందు మార్పులను సమీక్షించండి.',
