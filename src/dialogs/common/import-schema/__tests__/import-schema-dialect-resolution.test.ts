@@ -43,20 +43,20 @@ describe('analyzeImportContent dialect resolution', () => {
         expect(result.resolvedSourceDialect).toBeNull();
     });
 
-    it('requires explicit resolution for ambiguous SQL', () => {
+    it('matches generic ambiguous SQL to the selected database without a picker', () => {
         const result = analyzeImportContent(
             genericAmbiguousSql,
             DatabaseType.POSTGRESQL
         );
 
-        expect(result.resolutionState).toBe('ambiguous');
-        expect(result.canContinue).toBe(false);
-        expect(result.requiresExplicitSourceDialect).toBe(true);
-        expect(result.dialectCandidates[0]).toBe(DatabaseType.POSTGRESQL);
+        expect(result.resolutionState).toBe('matched');
+        expect(result.canContinue).toBe(true);
+        expect(result.requiresExplicitSourceDialect).toBe(false);
+        expect(result.resolvedSourceDialect).toBe(DatabaseType.POSTGRESQL);
     });
 
-    it('allows continue only after an explicit dialect is resolved', () => {
-        const unresolved = analyzeImportContent(
+    it('still accepts an explicit dialect override for generic ambiguous SQL', () => {
+        const autoMatched = analyzeImportContent(
             genericAmbiguousSql,
             DatabaseType.POSTGRESQL
         );
@@ -66,7 +66,7 @@ describe('analyzeImportContent dialect resolution', () => {
             { resolvedSourceDialect: DatabaseType.POSTGRESQL }
         );
 
-        expect(unresolved.canContinue).toBe(false);
+        expect(autoMatched.canContinue).toBe(true);
         expect(resolved.resolutionState).toBe('resolved');
         expect(resolved.canContinue).toBe(true);
         expect(resolved.resolvedSourceDialect).toBe(DatabaseType.POSTGRESQL);

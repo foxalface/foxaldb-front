@@ -340,6 +340,18 @@ CREATE TABLE users (
         });
     });
 
+    it('imports generic ambiguous SQL without asking for dialect resolution', async () => {
+        const result = await prepareText(
+            genericAmbiguousSql,
+            DatabaseType.POSTGRESQL
+        );
+
+        const ready = expectReady(result, 'sql');
+        expect(ready?.incomingDiagram.databaseType).toBe(
+            DatabaseType.POSTGRESQL
+        );
+    });
+
     it('does not keep dialect resolution in module state', async () => {
         await prepareText(genericAmbiguousSql, DatabaseType.POSTGRESQL);
 

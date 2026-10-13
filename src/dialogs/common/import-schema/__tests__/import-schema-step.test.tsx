@@ -307,7 +307,7 @@ describe('ImportSchemaStep', () => {
         expect(setDatabaseType).toHaveBeenCalledWith(DatabaseType.MYSQL);
     });
 
-    it('shows ambiguous SQL resolution UI and blocks Continue until resolved', async () => {
+    it('enables Continue for generic ambiguous SQL without a dialect picker', async () => {
         const user = userEvent.setup();
         const onContinue = vi.fn();
 
@@ -317,16 +317,14 @@ describe('ImportSchemaStep', () => {
         });
 
         expect(
-            screen.getByText('new_diagram_dialog.import_schema.ambiguous.title')
-        ).toBeInTheDocument();
+            screen.queryByText(
+                'new_diagram_dialog.import_schema.ambiguous.title'
+            )
+        ).not.toBeInTheDocument();
 
         const continueButton = screen.getByRole('button', {
             name: 'new_diagram_dialog.import_schema.import',
         });
-
-        expect(continueButton).toBeDisabled();
-
-        await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
 
         expect(continueButton).toBeEnabled();
 
@@ -1514,7 +1512,7 @@ describe('ImportSchemaStep existing diagram mode', () => {
         ).toBeDisabled();
     });
 
-    it('blocks ambiguous SQL import until the DBMS is chosen explicitly', async () => {
+    it('enables ambiguous generic SQL import without choosing a DBMS explicitly', async () => {
         const user = userEvent.setup();
         const { onContinue } = renderExistingImportSchemaStep({
             scriptResult: genericAmbiguousSql,
@@ -1523,10 +1521,6 @@ describe('ImportSchemaStep existing diagram mode', () => {
         const importButton = screen.getByRole('button', {
             name: 'import_database_dialog.import_schema.import',
         });
-
-        expect(importButton).toBeDisabled();
-
-        await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
 
         expect(importButton).toBeEnabled();
 

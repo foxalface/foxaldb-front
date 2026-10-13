@@ -184,6 +184,56 @@ const looksLikeJson = (content: string): boolean => {
 const hasClickHouseEvidence = (dialect: DialectDetectionResult): boolean =>
     dialect.evidence.some((item) => item.databaseType === 'clickhouse');
 
+const buildSingleDialectCandidateSqlAnalysis = ({
+    format,
+    dialect,
+    selectedDatabaseType,
+    dialectCandidates,
+}: {
+    format: FormatDetectionResult;
+    dialect: DialectDetectionResult;
+    selectedDatabaseType: DatabaseType;
+    dialectCandidates: DatabaseType[];
+}): ImportDetectionAnalysis | null => {
+    if (dialectCandidates.length !== 1) {
+        return null;
+    }
+
+    const soleCandidate = dialectCandidates[0];
+
+    if (!areDialectsCompatibleForMatch(selectedDatabaseType, soleCandidate)) {
+        return {
+            format,
+            dialect,
+            importMethod: 'ddl',
+            canContinue: false,
+            displayKind: 'dialect_mismatch',
+            severity: 'warning',
+            detectedDatabaseType: soleCandidate,
+            resolutionState: 'mismatch',
+            resolvedSourceDialect: null,
+            dialectCandidates: [],
+            dialectCandidateScores: [],
+            requiresExplicitSourceDialect: true,
+        };
+    }
+
+    return {
+        format,
+        dialect,
+        importMethod: 'ddl',
+        canContinue: true,
+        displayKind: 'dialect',
+        severity: 'success',
+        detectedDatabaseType: soleCandidate,
+        resolutionState: 'matched',
+        resolvedSourceDialect: soleCandidate,
+        dialectCandidates: [],
+        dialectCandidateScores: [],
+        requiresExplicitSourceDialect: false,
+    };
+};
+
 const buildSqlAnalysis = ({
     format,
     dialect,
@@ -219,6 +269,17 @@ const buildSqlAnalysis = ({
             dialectCandidateScores: [],
             requiresExplicitSourceDialect: false,
         };
+    }
+
+    const singleDialectCandidateAnalysis =
+        buildSingleDialectCandidateSqlAnalysis({
+            format,
+            dialect,
+            selectedDatabaseType,
+            dialectCandidates,
+        });
+    if (singleDialectCandidateAnalysis) {
+        return singleDialectCandidateAnalysis;
     }
 
     if (requiresAmbiguousDialectResolution(dialect, selectedDatabaseType)) {

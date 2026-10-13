@@ -124,16 +124,18 @@ describe('analyzeImportContent', () => {
         expect(result.importMethod).toBeNull();
     });
 
-    it('blocks continue for ambiguous SQL until resolved', () => {
+    it('auto-resolves generic ambiguous SQL when only one importable dialect applies', () => {
         const result = analyzeImportContent(
             genericAmbiguousSql,
             DatabaseType.POSTGRESQL
         );
 
         expect(result.importMethod).toBe('ddl');
-        expect(result.canContinue).toBe(false);
-        expect(result.displayKind).toBe('sql_ambiguous');
-        expect(result.resolutionState).toBe('ambiguous');
+        expect(result.canContinue).toBe(true);
+        expect(result.displayKind).toBe('dialect');
+        expect(result.resolutionState).toBe('matched');
+        expect(result.resolvedSourceDialect).toBe(DatabaseType.POSTGRESQL);
+        expect(result.requiresExplicitSourceDialect).toBe(false);
     });
 
     it('treats postgres dumps as PostgreSQL SQL when PostgreSQL is selected', () => {
