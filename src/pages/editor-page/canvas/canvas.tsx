@@ -2016,9 +2016,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             </Controls>
                         ) : null}
                         <Controls
-                            position={
-                                isDesktop ? 'bottom-center' : 'top-center'
-                            }
+                            position="bottom-center"
                             orientation="horizontal"
                             showZoom={false}
                             showFitView={false}
