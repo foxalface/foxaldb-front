@@ -1,6 +1,6 @@
 # Schema merge
 
-Product architecture for Schema Merge. M1 is the shared contract. M5 is the frontend source adapter. M6 is the wizard shell and source step. M7 is the result UI. M8 wires Apply, autosave flush, authoritative replacement, one local undo step, and peer refresh. Actions → Merge is available for an authenticated editor of a persisted backend diagram.
+Product architecture for Schema Merge V1. M1–M9 are complete: shared contract, source adapter, two-step wizard (Source → Result), dependency-aware selection, Compare/Apply clients, autosave flush before Compare, authoritative Apply replacement with one local undo, M8.1 full-document optimistic concurrency (`content_hash` / `baseContentHash`, 409 `stale_content`), and peer refresh on `apply_schema_merge`. Actions → Merge is available for an authenticated editor of a persisted backend diagram.
 
 The backend contract, operation ids, and error codes are specified in [`backend/docs/schema-merge.md`](../../../backend/docs/schema-merge.md). This document does not repeat that specification. Frontend types in `frontend/src/lib/schema-merge/diff-types.ts` mirror the JSON contract. They do not compute operation ids and they do not diff diagrams.
 
@@ -28,9 +28,7 @@ The product concept is a two-step wizard:
 1. Choose the incoming source. Detection and parsing reuse the existing import pipeline until it produces a normalized `Diagram`.
 2. Review the backend diff and apply the selected operations.
 
-M1 does not add the wizard, an Actions menu entry, or i18n strings.
-
-The wizard should reuse existing shells and patterns:
+The wizard reuses existing shells and patterns:
 
 - Sidebar
 - Import wizard
@@ -59,14 +57,12 @@ Delete operations may appear in the diff. The deletion option defaults to off. T
 
 Selection is by operation id. `dependsOn` lists prerequisite operation ids.
 
-Later UI behavior:
+The result UI implements dependency-closed selection:
 
 - selecting an operation also selects its prerequisites
 - clearing a prerequisite also clears operations that depend on it
 
-The backend Apply check is independent. It rejects a selection that is not dependency-closed. It does not add missing operations.
-
-M1 does not implement those algorithms. Operation ids are opaque; the client does not decode them.
+The backend Apply check is independent. It rejects a selection that is not dependency-closed. It does not add missing operations. Operation ids are opaque; the client does not decode them.
 
 ## Upload capabilities
 
@@ -321,6 +317,17 @@ The response decoder requires `resultContentHash`, `updatedAt`, `content`, `appl
 `incomplete_selection` uses the same recompare path. The client does not add missing prerequisites.
 
 `429` keeps the result and the selection so the user can retry later. Other analysis and payload errors stay on the result and do not change the diagram. `401` and `403` keep the data and disable retry. While Apply is in flight, Back, checkboxes, section toggles, Merge, and dialog close are disabled. A second click does not send a second Apply.
+
+Apply error classes (no raw backend message in UI):
+
+| Class | Codes / HTTP | Behavior |
+| ----- | ------------ | -------- |
+| A. Re-Compare | `stale_comparison`, `incomplete_selection` | Return to Source, clear Compare result |
+| B. Retry on Result | `analysis_failed`, `payload_too_large`, `malformed_diagram`, `database_type_mismatch`, `unsupported_source`, 429 | Keep selection |
+| C. Permission | 401, 403 | Disable retry |
+| D. Internal | 500, unexpected | Generic failure |
+
+Source-step errors (`unable_to_detect`, `ambiguous_source`, `malformed_archive`, and adapter failures) are handled before Compare and use `merge_wizard.errors.*` only.
 
 ### Authoritative replacement
 
