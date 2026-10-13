@@ -68,7 +68,7 @@ describe('merge wizard locales', () => {
         expect(locales).toHaveLength(22);
         expect(fr.translation.merge_wizard.compare).toBe('Comparer');
         expect(fr.translation.merge_wizard.include_deletions.label).toBe(
-            'Prendre en compte les suppressions'
+            'Proposer les suppressions'
         );
         expect(fr.translation.menu.actions.merge).toBe('Fusionner...');
         expect(fr.translation.merge_wizard.result.sections.table).toBe(

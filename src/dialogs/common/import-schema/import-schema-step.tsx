@@ -1,23 +1,19 @@
 import React, {
     useCallback,
     useEffect,
-    useId,
     useMemo,
     useRef,
     useState,
 } from 'react';
-import { Upload, FileText } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
 } from '@/components/dialog/dialog';
-import { Textarea } from '@/components/textarea/textarea';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
 import type { Diagram } from '@/lib/domain/diagram';
 import {
@@ -40,20 +36,15 @@ import type {
     ProjectDetectionCandidate,
 } from '@/lib/project-import/project-types';
 import { analyzeImportContent } from './analyze-import-content';
-import {
-    IMPORT_SCHEMA_FILE_ACCEPT,
-    isImportSchemaFileNameAllowed,
-} from './constants';
+import { isImportSchemaFileNameAllowed } from './constants';
 import { DetectionSummary } from './detection-summary';
 import { DialectMismatchPanel } from './dialect-mismatch-panel';
 import { DialectResolutionPanel } from './dialect-resolution-panel';
 import { ProjectAmbiguityPanel } from './project-ambiguity-panel';
 import { ProjectDatabaseGroupPanel } from './project-database-group-panel';
 import { ProjectDetectionSummary } from './project-detection-summary';
-import {
-    ImportPrivacyInfoDialog,
-    ImportPrivacyInfoLink,
-} from './import-privacy-info-dialog';
+import { WIZARD_DIALOG_BODY_CLASS } from '@/dialogs/common/wizard-dialog-size';
+import { WizardSchemaSourceField } from './wizard-schema-source-field';
 
 export interface ImportSchemaContinueParams {
     importMethod: ImportMethod;
@@ -114,9 +105,6 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
 
     const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
-    const textareaId = useId();
-    const fileInputId = useId();
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const archiveReaderRef = useRef<ArchiveReader | null>(null);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(
         null
@@ -136,7 +124,6 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         useState(false);
     const [isAnalyzingProject, setIsAnalyzingProject] = useState(false);
     const [isProjectImporting, setIsProjectImporting] = useState(false);
-    const [isPrivacyInfoOpen, setIsPrivacyInfoOpen] = useState(false);
     const [projectImportErrorKey, setProjectImportErrorKey] = useState<
         string | null
     >(null);
@@ -525,15 +512,8 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         [resetProjectArchiveState, setScriptResult]
     );
 
-    const handleFileChange = useCallback(
-        async (event: React.ChangeEvent<HTMLInputElement>) => {
-            const file = event.target.files?.[0];
-            event.target.value = '';
-
-            if (!file) {
-                return;
-            }
-
+    const handleFileSelected = useCallback(
+        async (file: File) => {
             setFileErrorKey(null);
 
             const capabilities = await resolveUploadCapabilities();
@@ -591,11 +571,11 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
     );
 
     const handleTextareaChange = useCallback(
-        (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        (value: string) => {
             setFileErrorKey(null);
             setSelectedFileName(null);
             resetProjectArchiveState();
-            setScriptResult(event.target.value);
+            setScriptResult(value);
         },
         [resetProjectArchiveState, setScriptResult]
     );
@@ -628,98 +608,31 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
             </DialogHeader>
 
             <div className="min-h-0 flex-1 overflow-y-auto">
-                <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-4">
-                    <div className="flex flex-col gap-2">
-                        <label
-                            htmlFor={textareaId}
-                            className="text-sm font-medium"
-                        >
-                            {t(
-                                'new_diagram_dialog.import_schema.textarea_label'
-                            )}
-                        </label>
-                        <Textarea
-                            id={textareaId}
-                            value={scriptResult}
-                            onChange={handleTextareaChange}
-                            placeholder={t(
-                                'new_diagram_dialog.import_schema.textarea_placeholder'
-                            )}
-                            className="max-h-48 min-h-40 resize-none overflow-y-auto"
-                            disabled={isImporting || isAnalyzingProject}
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="h-px flex-1 bg-border" aria-hidden />
-                        <span>
-                            {t('new_diagram_dialog.import_schema.or_divider')}
-                        </span>
-                        <span className="h-px flex-1 bg-border" aria-hidden />
-                    </div>
-
-                    <div className="mb-4 flex w-full flex-col items-center gap-2">
-                        <input
-                            ref={fileInputRef}
-                            id={fileInputId}
-                            type="file"
-                            accept={IMPORT_SCHEMA_FILE_ACCEPT}
-                            className="sr-only"
-                            tabIndex={-1}
-                            aria-hidden
-                            onChange={handleFileChange}
-                            disabled={isImporting || isAnalyzingProject}
-                        />
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="w-full max-w-full gap-2"
-                            onClick={() => fileInputRef.current?.click()}
-                            disabled={isImporting || isAnalyzingProject}
-                            aria-label={
-                                selectedFileName
-                                    ? t(
-                                          'new_diagram_dialog.import_schema.change_file_aria',
-                                          { name: selectedFileName }
-                                      )
-                                    : t(
-                                          'new_diagram_dialog.import_schema.choose_file_or_project'
-                                      )
-                            }
-                            title={selectedFileName ?? undefined}
-                        >
-                            {selectedFileName ? (
-                                <FileText
-                                    className="size-4 shrink-0"
-                                    aria-hidden
-                                />
-                            ) : (
-                                <Upload
-                                    className="size-4 shrink-0"
-                                    aria-hidden
-                                />
-                            )}
-                            <span
-                                className={cn(selectedFileName && 'truncate')}
-                            >
-                                {selectedFileName ??
-                                    t(
-                                        'new_diagram_dialog.import_schema.choose_file_or_project'
-                                    )}
-                            </span>
-                        </Button>
-                        <ImportPrivacyInfoLink
-                            onClick={() => setIsPrivacyInfoOpen(true)}
-                        />
-                        {fileErrorKey ? (
-                            <p
-                                role="alert"
-                                className="text-sm text-destructive"
-                            >
-                                {t(fileErrorKey)}
-                            </p>
-                        ) : null}
-                    </div>
+                <div className={WIZARD_DIALOG_BODY_CLASS}>
+                    <WizardSchemaSourceField
+                        label={t(
+                            'new_diagram_dialog.import_schema.textarea_label'
+                        )}
+                        placeholder={t(
+                            'new_diagram_dialog.import_schema.source_placeholder'
+                        )}
+                        value={scriptResult}
+                        onValueChange={handleTextareaChange}
+                        selectedFileName={selectedFileName}
+                        onFileSelected={(file) => {
+                            void handleFileSelected(file);
+                        }}
+                        disabled={isImporting || isAnalyzingProject}
+                        chooseFileAriaLabel={t(
+                            'new_diagram_dialog.import_schema.choose_file_or_project'
+                        )}
+                        changeFileAriaLabel={t(
+                            'new_diagram_dialog.import_schema.change_file_aria',
+                            { name: selectedFileName ?? '' }
+                        )}
+                        fileErrorMessage={fileErrorKey ? t(fileErrorKey) : null}
+                        privacyContext="import"
+                    />
 
                     {isAnalyzingProject || isAnalyzingDatabaseGroups ? (
                         <p className="text-sm text-muted-foreground">
@@ -862,11 +775,6 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     {resolvedContinueLabel}
                 </Button>
             </DialogFooter>
-
-            <ImportPrivacyInfoDialog
-                open={isPrivacyInfoOpen}
-                onOpenChange={setIsPrivacyInfoOpen}
-            />
         </>
     );
 };

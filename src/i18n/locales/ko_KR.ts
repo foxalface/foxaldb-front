@@ -761,8 +761,8 @@ export const ko_KR: LanguageTranslation = {
             import_schema: {
                 title: '스키마 붙여넣기',
                 textarea_label: '스키마 내용',
-                textarea_placeholder:
-                    '여기에 SQL, DBML 또는 JSON 메타데이터를 붙여넣으세요…',
+                source_placeholder:
+                    'SQL, DBML 또는 JSON을 붙여넣거나 파일을 놓으세요…',
                 auto_detect_hint: '형식을 자동으로 감지합니다.',
                 or_divider: '또는',
                 choose_file: '파일 선택',
@@ -772,7 +772,10 @@ export const ko_KR: LanguageTranslation = {
                 privacy_info: {
                     link_label: '자세히 보기…',
                     title: '개인정보 보호 및 지원 형식',
-                    intro: '파일을 선택하기 전에 가져오기 중 FoxalDB가 데이터를 처리하는 방식을 확인하세요.',
+                    intro_import:
+                        '파일을 선택하기 전에 가져오기 중 FoxalDB가 데이터를 처리하는 방식을 확인하세요.',
+                    intro_merge:
+                        '파일을 선택하기 전에 병합 시 FoxalDB가 데이터를 처리하는 방식을 확인하세요. 프로젝트 아카이브는 기기에 남고, 비교를 위해 준비된 스키마만 전송됩니다.',
                     highlights: {
                         no_execution:
                             '가져오기는 정적 분석만 사용합니다 — 코드는 절대 실행되지 않습니다.',
@@ -1942,11 +1945,14 @@ export const ko_KR: LanguageTranslation = {
             title: '병합',
             description: '비교할 원본',
             source_label: '원본',
-            source_placeholder: 'SQL, DBML 또는 JSON 붙여넣기…',
             source_hint: '형식은 자동으로 감지됩니다.',
             choose_file: '파일 가져오기',
             change_file_aria: '선택한 파일: {{name}}. 다른 파일을 선택하세요.',
             analyzing: '원본을 감지하는 중…',
+            detection: {
+                unsupported_description:
+                    '이 형식은 병합에서 지원되지 않습니다.',
+            },
             compare: '비교',
             comparing: '비교하는 중…',
             cancel: '취소',
@@ -1954,10 +1960,12 @@ export const ko_KR: LanguageTranslation = {
             applied: '병합을 적용했습니다',
             unavailable: '병합은 저장된 다이어그램에서 사용할 수 있습니다.',
             include_deletions: {
-                label: '삭제 반영',
-                description: '원본에 없는 다이어그램 요소를 포함합니다.',
+                label: '삭제 제안',
+                description:
+                    '비교한 원본에 없는 요소를 다이어그램에서 제거하도록 제안합니다.',
                 warning:
                     '일부만 담긴 원본은 포함되지 않은 요소의 삭제를 제안할 수 있습니다.',
+                warning_info_aria: '부분 원본 삭제 관련 정보',
             },
             errors: {
                 unable_to_detect: '이 원본을 인식할 수 없습니다.',

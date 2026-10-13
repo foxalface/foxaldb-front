@@ -65,6 +65,7 @@ export interface SchemaMergeReadySource {
     detectedFormat: ImportFormat | null;
     detectedFramework: ProjectFramework | null;
     detectedDatabaseType: DatabaseType;
+    projectCandidate?: ProjectDetectionCandidate | null;
 }
 
 export interface SchemaMergeNeedsDialectResolution {

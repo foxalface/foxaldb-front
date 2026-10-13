@@ -776,7 +776,8 @@ export const pt_BR: LanguageTranslation = {
             import_schema: {
                 title: 'Cole seu esquema',
                 textarea_label: 'Conteúdo do esquema',
-                textarea_placeholder: 'Cole SQL, DBML ou metadados JSON aqui…',
+                source_placeholder:
+                    'Cole SQL, DBML ou JSON, ou solte um arquivo…',
                 auto_detect_hint: 'Detectaremos o formato automaticamente.',
                 or_divider: 'OU',
                 choose_file: 'Escolher um arquivo',
@@ -786,7 +787,10 @@ export const pt_BR: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Mais informações…',
                     title: 'Privacidade e formatos suportados',
-                    intro: 'Antes de escolher um arquivo, veja como o FoxalDB trata seus dados durante a importação.',
+                    intro_import:
+                        'Antes de escolher um arquivo, veja como o FoxalDB trata seus dados durante a importação.',
+                    intro_merge:
+                        'Antes de escolher um arquivo, veja como o FoxalDB trata seus dados na mesclagem. Arquivos de projeto permanecem no seu dispositivo; apenas o esquema preparado é enviado para comparação.',
                     highlights: {
                         no_execution:
                             'As importações usam apenas análise estática — seu código nunca é executado.',
@@ -1973,11 +1977,14 @@ export const pt_BR: LanguageTranslation = {
             title: 'Mesclar',
             description: 'Fonte para comparar',
             source_label: 'Fonte',
-            source_placeholder: 'Cole SQL, DBML ou JSON…',
             source_hint: 'O formato é detectado automaticamente.',
             choose_file: 'Importar um arquivo',
             change_file_aria: 'Arquivo selecionado: {{name}}. Escolher outro.',
             analyzing: 'Detectando a fonte…',
+            detection: {
+                unsupported_description:
+                    'Este formato não é compatível com a mesclagem.',
+            },
             compare: 'Comparar',
             comparing: 'Comparando…',
             cancel: 'Cancelar',
@@ -1985,10 +1992,13 @@ export const pt_BR: LanguageTranslation = {
             applied: 'Mesclagem aplicada',
             unavailable: 'A mesclagem está disponível para diagramas salvos.',
             include_deletions: {
-                label: 'Considerar exclusões',
-                description: 'Incluir elementos do diagrama ausentes na fonte.',
+                label: 'Propor exclusões',
+                description:
+                    'Propor remover do diagrama os elementos ausentes na fonte comparada.',
                 warning:
                     'Uma fonte parcial pode propor exclusões de elementos que ela não contém.',
+                warning_info_aria:
+                    'Informações sobre exclusões com fonte parcial',
             },
             errors: {
                 unable_to_detect: 'Não foi possível reconhecer esta fonte.',

@@ -767,8 +767,8 @@ export const mr: LanguageTranslation = {
             import_schema: {
                 title: 'तुमचे स्कीमा पेस्ट करा',
                 textarea_label: 'स्कीमा सामग्री',
-                textarea_placeholder:
-                    'येथे SQL, DBML किंवा JSON मेटाडेटा पेस्ट करा…',
+                source_placeholder:
+                    'SQL, DBML किंवा JSON पेस्ट करा, किंवा फाइल ड्रॉप करा…',
                 auto_detect_hint: 'आम्ही फॉरमॅट आपोआप ओळखू.',
                 or_divider: 'किंवा',
                 choose_file: 'फाइल निवडा',
@@ -778,7 +778,10 @@ export const mr: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'अधिक माहिती…',
                     title: 'गोपनीयता आणि समर्थित स्वरूपे',
-                    intro: 'फाइल निवडण्यापूर्वी, आयात दरम्यान FoxalDB तुमचा डेटा कसा हाताळतो ते जाणून घ्या.',
+                    intro_import:
+                        'फाइल निवडण्यापूर्वी, आयात दरम्यान FoxalDB तुमचा डेटा कसा हाताळतो ते जाणून घ्या.',
+                    intro_merge:
+                        'फाइल निवडण्यापूर्वी, विलीन करण्यासाठी FoxalDB तुमचा डेटा कसा हाताळतो ते जाणून घ्या. प्रोजेक्ट आर्काइव्ह तुमच्या डिव्हाइसवर राहतात; तुलनेसाठी फक्त तयार स्कीमा पाठवली जाते.',
                     highlights: {
                         no_execution:
                             'आयात फक्त स्थिर विश्लेषण वापरतो — तुमचा कोड कधीही चालवला जात नाही.',
@@ -1945,11 +1948,14 @@ export const mr: LanguageTranslation = {
             title: 'विलीन करा',
             description: 'तुलना करण्याचा स्रोत',
             source_label: 'स्रोत',
-            source_placeholder: 'SQL, DBML किंवा JSON पेस्ट करा…',
             source_hint: 'स्वरूप आपोआप ओळखले जाते.',
             choose_file: 'फाइल आयात करा',
             change_file_aria: 'निवडलेली फाइल: {{name}}. दुसरी फाइल निवडा.',
             analyzing: 'स्रोत ओळखला जात आहे…',
+            detection: {
+                unsupported_description:
+                    'विलीन करण्यासाठी हा स्वरूप समर्थित नाही.',
+            },
             compare: 'तुलना करा',
             comparing: 'तुलना सुरू आहे…',
             cancel: 'रद्द करा',
@@ -1957,10 +1963,12 @@ export const mr: LanguageTranslation = {
             applied: 'विलीनीकरण लागू झाले',
             unavailable: 'विलीनीकरण जतन केलेल्या आकृत्यांसाठी उपलब्ध आहे.',
             include_deletions: {
-                label: 'हटवणे विचारात घ्या',
-                description: 'स्रोतात नसलेले आकृतीचे घटक समाविष्ट करा.',
+                label: 'हटवण्याचा प्रस्ताव द्या',
+                description:
+                    'तुलना केलेल्या स्रोतात नसलेले घटक आकृतीतून काढण्याचा प्रस्ताव द्या.',
                 warning:
                     'अपूर्ण स्रोत त्यात नसलेले घटक हटवण्याचा प्रस्ताव देऊ शकतो.',
+                warning_info_aria: 'आंशिक स्रोतासह हटवण्याबद्दल माहिती',
             },
             errors: {
                 unable_to_detect: 'हा स्रोत ओळखता आला नाही.',

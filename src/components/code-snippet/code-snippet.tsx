@@ -86,6 +86,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
         const [isCopied, setIsCopied] = React.useState(false);
         const [tooltipOpen, setTooltipOpen] = React.useState(false);
         const hiddenCopyTextareaRef = React.useRef<HTMLTextAreaElement>(null);
+        const monacoRef = React.useRef<Monaco | null>(null);
         const textToCopy = codeToCopy ?? code;
 
         const editorTheme = useMemo(() => {
@@ -104,22 +105,20 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
 
         const handleBeforeMount = useCallback(
             (monaco: Monaco) => {
+                monacoRef.current = monaco;
                 monaco.editor.defineTheme('dark', DarkTheme);
                 monaco.editor.defineTheme('light', LightTheme);
-
-                if (language === 'dbml') {
-                    setupDBMLLanguage(monaco);
-                }
-
-                if (language === 'prisma') {
-                    setupPrismaLanguage(monaco);
-                }
-
+                setupDBMLLanguage(monaco);
+                setupPrismaLanguage(monaco);
                 monaco.editor.setTheme(editorTheme);
                 editorProps?.beforeMount?.(monaco);
             },
-            [editorProps, editorTheme, language]
+            [editorProps, editorTheme]
         );
+
+        useEffect(() => {
+            monacoRef.current?.editor.setTheme(editorTheme);
+        }, [editorTheme]);
 
         const handleMount = useCallback(
             (editorInstance: editor.IStandaloneCodeEditor, monaco: Monaco) => {

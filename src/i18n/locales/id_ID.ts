@@ -768,8 +768,8 @@ export const id_ID: LanguageTranslation = {
             import_schema: {
                 title: 'Tempel skema Anda',
                 textarea_label: 'Konten skema',
-                textarea_placeholder:
-                    'Tempel SQL, DBML, atau metadata JSON di sini…',
+                source_placeholder:
+                    'Tempel SQL, DBML, atau JSON, atau jatuhkan file…',
                 auto_detect_hint:
                     'Kami akan mendeteksi format secara otomatis.',
                 or_divider: 'ATAU',
@@ -780,7 +780,10 @@ export const id_ID: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Informasi selengkapnya…',
                     title: 'Privasi dan format yang didukung',
-                    intro: 'Sebelum memilih file, pelajari bagaimana FoxalDB menangani data Anda selama impor.',
+                    intro_import:
+                        'Sebelum memilih file, pelajari bagaimana FoxalDB menangani data Anda selama impor.',
+                    intro_merge:
+                        'Sebelum memilih file, pelajari bagaimana FoxalDB menangani data Anda untuk penggabungan. Arsip proyek tetap di perangkat Anda; hanya skema yang disiapkan yang dikirim untuk perbandingan.',
                     highlights: {
                         no_execution:
                             'Impor hanya menggunakan analisis statis — kode Anda tidak pernah dijalankan.',
@@ -1950,11 +1953,14 @@ export const id_ID: LanguageTranslation = {
             title: 'Gabungkan',
             description: 'Sumber untuk dibandingkan',
             source_label: 'Sumber',
-            source_placeholder: 'Tempel SQL, DBML, atau JSON…',
             source_hint: 'Format terdeteksi secara otomatis.',
             choose_file: 'Impor file',
             change_file_aria: 'File dipilih: {{name}}. Pilih file lain.',
             analyzing: 'Mendeteksi sumber…',
+            detection: {
+                unsupported_description:
+                    'Format ini tidak didukung untuk penggabungan.',
+            },
             compare: 'Bandingkan',
             comparing: 'Membandingkan…',
             cancel: 'Batal',
@@ -1962,11 +1968,13 @@ export const id_ID: LanguageTranslation = {
             applied: 'Penggabungan diterapkan',
             unavailable: 'Penggabungan tersedia untuk diagram yang tersimpan.',
             include_deletions: {
-                label: 'Perhitungkan penghapusan',
+                label: 'Usulkan penghapusan',
                 description:
-                    'Sertakan elemen diagram yang tidak ada di sumber.',
+                    'Usulkan menghapus dari diagram elemen yang tidak ada di sumber yang dibandingkan.',
                 warning:
                     'Sumber yang tidak lengkap dapat mengusulkan penghapusan elemen yang tidak ada di dalamnya.',
+                warning_info_aria:
+                    'Informasi penghapusan dengan sumber sebagian',
             },
             errors: {
                 unable_to_detect: 'Sumber ini tidak dikenali.',

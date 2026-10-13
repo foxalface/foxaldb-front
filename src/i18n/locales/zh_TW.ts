@@ -722,7 +722,7 @@ export const zh_TW: LanguageTranslation = {
             import_schema: {
                 title: '貼上您的結構描述',
                 textarea_label: '結構描述內容',
-                textarea_placeholder: '在此貼上 SQL、DBML 或 JSON 中繼資料…',
+                source_placeholder: '貼上 SQL、DBML 或 JSON，或拖放檔案…',
                 auto_detect_hint: '我們會自動偵測格式。',
                 or_divider: '或',
                 choose_file: '選擇檔案',
@@ -732,7 +732,10 @@ export const zh_TW: LanguageTranslation = {
                 privacy_info: {
                     link_label: '更多資訊…',
                     title: '隱私與支援格式',
-                    intro: '在選擇檔案之前，請先了解 FoxalDB 在匯入時如何處理您的資料。',
+                    intro_import:
+                        '在選擇檔案之前，請先了解 FoxalDB 在匯入時如何處理您的資料。',
+                    intro_merge:
+                        '在選擇檔案之前，請先了解 FoxalDB 在合併時如何處理您的資料。專案壓縮檔保留在您的裝置上；僅將準備好的結構描述傳送以進行比較。',
                     highlights: {
                         no_execution:
                             '匯入僅使用靜態分析，絕不會執行您的程式碼。',
@@ -1817,11 +1820,13 @@ export const zh_TW: LanguageTranslation = {
             title: '合併',
             description: '要比較的來源',
             source_label: '來源',
-            source_placeholder: '貼上 SQL、DBML 或 JSON…',
             source_hint: '格式會自動辨識。',
             choose_file: '匯入檔案',
             change_file_aria: '已選檔案：{{name}}。另選一個檔案。',
             analyzing: '正在辨識來源…',
+            detection: {
+                unsupported_description: '此格式不支援合併。',
+            },
             compare: '比較',
             comparing: '正在比較…',
             cancel: '取消',
@@ -1829,9 +1834,10 @@ export const zh_TW: LanguageTranslation = {
             applied: '已套用合併',
             unavailable: '合併僅適用於已儲存的圖。',
             include_deletions: {
-                label: '考慮刪除',
-                description: '包含圖中有而來源中沒有的元素。',
+                label: '建議刪除',
+                description: '建議從圖中移除比較來源中不存在的元素。',
                 warning: '不完整的來源可能會建議刪除它未包含的元素。',
+                warning_info_aria: '關於部分來源刪除的說明',
             },
             errors: {
                 unable_to_detect: '無法辨識此來源。',

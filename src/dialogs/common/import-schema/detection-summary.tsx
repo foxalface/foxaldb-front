@@ -5,12 +5,16 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import type { ImportDetectionAnalysis } from './analyze-import-content';
 
+export type DetectionSummaryContext = 'import' | 'merge';
+
 export interface DetectionSummaryProps {
     analysis: ImportDetectionAnalysis;
+    context?: DetectionSummaryContext;
 }
 
 export const DetectionSummary: React.FC<DetectionSummaryProps> = ({
     analysis,
+    context = 'import',
 }) => {
     const { t } = useTranslation();
 
@@ -120,11 +124,13 @@ export const DetectionSummary: React.FC<DetectionSummaryProps> = ({
         return {
             title: t('new_diagram_dialog.import_schema.detection.unsupported'),
             description: t(
-                'new_diagram_dialog.import_schema.errors.unsupported'
+                context === 'merge'
+                    ? 'merge_wizard.detection.unsupported_description'
+                    : 'new_diagram_dialog.import_schema.errors.unsupported'
             ),
             severity: 'warning' as const,
         };
-    }, [analysis, t]);
+    }, [analysis, context, t]);
 
     if (!content) {
         return null;

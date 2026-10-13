@@ -751,8 +751,7 @@ export const ar: LanguageTranslation = {
             import_schema: {
                 title: 'الصق المخطط الخاص بك',
                 textarea_label: 'محتوى المخطط',
-                textarea_placeholder:
-                    'الصق SQL أو DBML أو بيانات JSON الوصفية هنا…',
+                source_placeholder: 'الصق SQL أو DBML أو JSON، أو أسقط ملفًا…',
                 auto_detect_hint: 'سنكتشف التنسيق تلقائيًا.',
                 or_divider: 'أو',
                 choose_file: 'اختر ملفًا',
@@ -762,7 +761,10 @@ export const ar: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'مزيد من المعلومات…',
                     title: 'الخصوصية والصيغ المدعومة',
-                    intro: 'قبل اختيار ملف، إليك كيفية تعامل FoxalDB مع بياناتك أثناء الاستيراد.',
+                    intro_import:
+                        'قبل اختيار ملف، إليك كيفية تعامل FoxalDB مع بياناتك أثناء الاستيراد.',
+                    intro_merge:
+                        'قبل اختيار ملف، إليك كيفية تعامل FoxalDB مع بياناتك أثناء الدمج. تبقى أرشيفات المشروع على جهازك؛ يُرسل للمقارنة المخطط المُعد فقط.',
                     highlights: {
                         no_execution:
                             'يستخدم الاستيراد التحليل الثابت فقط — لا يتم تنفيذ الكود أبدًا.',
@@ -1920,11 +1922,13 @@ export const ar: LanguageTranslation = {
             title: 'دمج',
             description: 'المصدر للمقارنة',
             source_label: 'المصدر',
-            source_placeholder: 'الصق SQL أو DBML أو JSON…',
             source_hint: 'يُكتشف التنسيق تلقائيًا.',
             choose_file: 'استيراد ملف',
             change_file_aria: 'الملف المحدد: {{name}}. اختيار ملف آخر.',
             analyzing: 'جارٍ اكتشاف المصدر…',
+            detection: {
+                unsupported_description: 'هذا التنسيق غير مدعوم للدمج.',
+            },
             compare: 'مقارنة',
             comparing: 'جارٍ المقارنة…',
             cancel: 'إلغاء',
@@ -1932,9 +1936,11 @@ export const ar: LanguageTranslation = {
             applied: 'تم تطبيق الدمج',
             unavailable: 'الدمج متاح للمخططات المحفوظة.',
             include_deletions: {
-                label: 'أخذ عمليات الحذف في الحسبان',
-                description: 'تضمين عناصر المخطط غير الموجودة في المصدر.',
+                label: 'اقتراح عمليات الحذف',
+                description:
+                    'اقتراح إزالة من المخطط العناصر غير الموجودة في المصدر المقارَن.',
                 warning: 'قد يقترح مصدر جزئي حذف عناصر لا يحتويها.',
+                warning_info_aria: 'معلومات عن الحذف مع مصدر جزئي',
             },
             errors: {
                 unable_to_detect: 'تعذر التعرف على هذا المصدر.',

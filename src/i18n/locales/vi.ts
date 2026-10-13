@@ -769,8 +769,8 @@ export const vi: LanguageTranslation = {
             import_schema: {
                 title: 'Dán lược đồ của bạn',
                 textarea_label: 'Nội dung lược đồ',
-                textarea_placeholder:
-                    'Dán SQL, DBML hoặc siêu dữ liệu JSON vào đây…',
+                source_placeholder:
+                    'Dán SQL, DBML hoặc JSON, hoặc thả tệp vào đây…',
                 auto_detect_hint: 'Chúng tôi sẽ tự động phát hiện định dạng.',
                 or_divider: 'HOẶC',
                 choose_file: 'Chọn tệp',
@@ -780,7 +780,10 @@ export const vi: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Thêm thông tin…',
                     title: 'Quyền riêng tư và định dạng được hỗ trợ',
-                    intro: 'Trước khi chọn tệp, đây là cách FoxalDB xử lý dữ liệu của bạn trong quá trình nhập.',
+                    intro_import:
+                        'Trước khi chọn tệp, đây là cách FoxalDB xử lý dữ liệu của bạn trong quá trình nhập.',
+                    intro_merge:
+                        'Trước khi chọn tệp, đây là cách FoxalDB xử lý dữ liệu của bạn khi hợp nhất. Lưu trữ dự án ở trên thiết bị của bạn; chỉ lược đồ đã chuẩn bị được gửi để so sánh.',
                     highlights: {
                         no_execution:
                             'Nhập chỉ sử dụng phân tích tĩnh — mã của bạn không bao giờ được thực thi.',
@@ -1938,11 +1941,14 @@ export const vi: LanguageTranslation = {
             title: 'Hợp nhất',
             description: 'Nguồn để so sánh',
             source_label: 'Nguồn',
-            source_placeholder: 'Dán SQL, DBML hoặc JSON…',
             source_hint: 'Định dạng được nhận diện tự động.',
             choose_file: 'Nhập một tệp',
             change_file_aria: 'Tệp đã chọn: {{name}}. Chọn tệp khác.',
             analyzing: 'Đang nhận diện nguồn…',
+            detection: {
+                unsupported_description:
+                    'Định dạng này không được hỗ trợ để hợp nhất.',
+            },
             compare: 'So sánh',
             comparing: 'Đang so sánh…',
             cancel: 'Hủy',
@@ -1950,11 +1956,12 @@ export const vi: LanguageTranslation = {
             applied: 'Đã áp dụng hợp nhất',
             unavailable: 'Hợp nhất chỉ dùng cho sơ đồ đã lưu.',
             include_deletions: {
-                label: 'Tính cả các mục đã xóa',
+                label: 'Đề xuất xóa',
                 description:
-                    'Bao gồm phần tử có trong sơ đồ nhưng không có trong nguồn.',
+                    'Đề xuất gỡ khỏi sơ đồ các phần tử không có trong nguồn được so sánh.',
                 warning:
                     'Nguồn không đầy đủ có thể đề xuất xóa các phần tử mà nó không chứa.',
+                warning_info_aria: 'Thông tin về xóa với nguồn không đầy đủ',
             },
             errors: {
                 unable_to_detect: 'Không nhận ra nguồn này.',

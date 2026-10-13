@@ -16,6 +16,7 @@ import {
 } from '@/components/dialog/dialog';
 import { Button } from '@/components/button/button';
 import type { BaseDialogProps } from '../common/base-dialog-props';
+import { wizardDialogContentClassName } from '../common/wizard-dialog-size';
 import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/hooks/use-dialog';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -1718,12 +1719,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     return (
         <Dialog {...dialog} onOpenChange={handleOpenChange}>
             <DialogContent
-                className={cn(
-                    'flex max-h-dvh min-w-0 flex-col overflow-hidden',
-                    isWideDialog
-                        ? 'w-[min(48rem,calc(100vw-2rem))] max-w-3xl'
-                        : 'w-full max-w-[30rem]'
-                )}
+                className={wizardDialogContentClassName(isWideDialog)}
                 {...(dialogDescription
                     ? {}
                     : { 'aria-describedby': undefined })}

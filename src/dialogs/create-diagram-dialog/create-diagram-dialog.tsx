@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useConfig } from '@/hooks/use-config';
 import type { DatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
 import { loadDatabaseMetadata } from '@/lib/data/import-metadata/metadata-types/database-metadata';
-import { generateDiagramId, cn } from '@/lib/utils';
+import { generateDiagramId } from '@/lib/utils';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
@@ -33,6 +33,7 @@ import {
     importDiagramFromJson,
 } from '@/lib/import/import-diagram-from-json';
 import type { BaseDialogProps } from '../common/base-dialog-props';
+import { wizardDialogContentClassName } from '../common/wizard-dialog-size';
 import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
 import { useToast } from '@/components/toast/use-toast';
@@ -466,6 +467,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         );
     }, [selectTablesOrigin]);
 
+    const isWideDialog =
+        step === CreateDiagramDialogStep.IMPORT_DATABASE ||
+        step === CreateDiagramDialogStep.SELECT_TABLES;
+
     return (
         <Dialog
             {...dialog}
@@ -480,13 +485,9 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className={cn(
-                    'flex max-h-dvh w-full flex-col',
-                    step === CreateDiagramDialogStep.SELECT_TABLES
-                        ? 'max-w-2xl'
-                        : 'max-w-[30rem]'
-                )}
+                className={wizardDialogContentClassName(isWideDialog)}
                 showClose={canClose}
+                onOpenAutoFocus={(event) => event.preventDefault()}
                 onInteractOutside={(event) => {
                     if (isEntryFlowOwned) {
                         event.preventDefault();

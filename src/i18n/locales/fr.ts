@@ -774,8 +774,8 @@ export const fr: LanguageTranslation = {
             import_schema: {
                 title: 'Collez votre schéma',
                 textarea_label: 'Contenu du schéma',
-                textarea_placeholder:
-                    'Collez du SQL, du DBML ou des métadonnées JSON ici…',
+                source_placeholder:
+                    'Collez du SQL, du DBML, du JSON, ou déposez un fichier…',
                 auto_detect_hint: 'Nous détecterons le format automatiquement.',
                 or_divider: 'OU',
                 choose_file: 'Choisir un fichier',
@@ -785,7 +785,10 @@ export const fr: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Plus d’informations…',
                     title: 'Confidentialité et formats pris en charge',
-                    intro: 'Avant de choisir un fichier, voici comment FoxalDB traite vos données lors de l’import.',
+                    intro_import:
+                        'Avant de choisir un fichier, voici comment FoxalDB traite vos données lors de l’import.',
+                    intro_merge:
+                        'Avant de choisir un fichier, voici comment FoxalDB traite vos données pour la fusion. Les archives projet restent sur votre appareil ; seul le schéma préparé est envoyé pour la comparaison.',
                     highlights: {
                         no_execution:
                             'L’import repose sur une analyse statique — votre code n’est jamais exécuté.',
@@ -1979,12 +1982,15 @@ export const fr: LanguageTranslation = {
             title: 'Fusionner',
             description: 'Source à comparer',
             source_label: 'Source',
-            source_placeholder: 'Collez du SQL, du DBML ou du JSON…',
             source_hint: 'Le format est détecté automatiquement.',
             choose_file: 'Importer un fichier',
             change_file_aria:
                 'Fichier sélectionné : {{name}}. En choisir un autre.',
             analyzing: 'Détection de la source…',
+            detection: {
+                unsupported_description:
+                    "Ce format n'est pas pris en charge pour la fusion.",
+            },
             compare: 'Comparer',
             comparing: 'Comparaison…',
             cancel: 'Annuler',
@@ -1993,11 +1999,13 @@ export const fr: LanguageTranslation = {
             unavailable:
                 'La fusion est disponible pour les diagrammes enregistrés.',
             include_deletions: {
-                label: 'Prendre en compte les suppressions',
+                label: 'Proposer les suppressions',
                 description:
-                    'Inclure les éléments du diagramme absents de la source.',
+                    'Proposer de retirer du diagramme les éléments absents de la source comparée.',
                 warning:
                     'Une source partielle peut proposer la suppression d’éléments qu’elle ne contient pas.',
+                warning_info_aria:
+                    'Informations sur les suppressions avec source partielle',
             },
             errors: {
                 unable_to_detect: 'Impossible de reconnaître cette source.',

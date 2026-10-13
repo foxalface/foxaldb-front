@@ -9,6 +9,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import { useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
+import { wizardDialogContentClassName } from '../common/wizard-dialog-size';
 import {
     ImportSchemaStep,
     type ImportSchemaContinueParams,
@@ -182,8 +183,9 @@ export const ImportDatabaseDialog: React.FC<ImportDatabaseDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-screen w-full flex-col md:max-w-[900px]"
+                className={wizardDialogContentClassName(true)}
                 showClose
+                onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <ImportSchemaStep
                     mode="existing"

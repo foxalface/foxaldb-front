@@ -778,7 +778,8 @@ export const es: LanguageTranslation = {
             import_schema: {
                 title: 'Pegue su esquema',
                 textarea_label: 'Contenido del esquema',
-                textarea_placeholder: 'Pegue SQL, DBML o metadatos JSON aquí…',
+                source_placeholder:
+                    'Pega SQL, DBML o JSON, o suelta un archivo…',
                 auto_detect_hint: 'Detectaremos el formato automáticamente.',
                 or_divider: 'O',
                 choose_file: 'Elegir un archivo',
@@ -788,7 +789,10 @@ export const es: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Más información…',
                     title: 'Privacidad y formatos compatibles',
-                    intro: 'Antes de elegir un archivo, así es como FoxalDB trata sus datos durante la importación.',
+                    intro_import:
+                        'Antes de elegir un archivo, así es como FoxalDB trata sus datos durante la importación.',
+                    intro_merge:
+                        'Antes de elegir un archivo, así es como FoxalDB trata sus datos para la fusión. Los archivos de proyecto permanecen en su dispositivo; solo el esquema preparado se envía para la comparación.',
                     highlights: {
                         no_execution:
                             'Las importaciones usan solo análisis estático: su código nunca se ejecuta.',
@@ -1978,11 +1982,14 @@ export const es: LanguageTranslation = {
             title: 'Fusionar',
             description: 'Fuente para comparar',
             source_label: 'Fuente',
-            source_placeholder: 'Pega SQL, DBML o JSON…',
             source_hint: 'El formato se detecta automáticamente.',
             choose_file: 'Importar un archivo',
             change_file_aria: 'Archivo seleccionado: {{name}}. Elegir otro.',
             analyzing: 'Detectando la fuente…',
+            detection: {
+                unsupported_description:
+                    'Este formato no se admite para la fusión.',
+            },
             compare: 'Comparar',
             comparing: 'Comparando…',
             cancel: 'Cancelar',
@@ -1990,11 +1997,13 @@ export const es: LanguageTranslation = {
             applied: 'Fusión aplicada',
             unavailable: 'La fusión está disponible para diagramas guardados.',
             include_deletions: {
-                label: 'Tener en cuenta las eliminaciones',
+                label: 'Proponer eliminaciones',
                 description:
-                    'Incluir elementos del diagrama que no están en la fuente.',
+                    'Proponer quitar del diagrama los elementos que faltan en la fuente comparada.',
                 warning:
                     'Una fuente parcial puede proponer eliminaciones de elementos que no contiene.',
+                warning_info_aria:
+                    'Información sobre eliminaciones con fuente parcial',
             },
             errors: {
                 unable_to_detect: 'No se pudo reconocer esta fuente.',

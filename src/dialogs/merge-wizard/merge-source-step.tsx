@@ -1,37 +1,36 @@
-import React, { useId, useMemo, useRef } from 'react';
-import { AlertTriangle, FileText, Upload } from 'lucide-react';
+import React, { useId, useMemo } from 'react';
 import { Alert, AlertDescription } from '@/components/alert/alert';
 import { Button } from '@/components/button/button';
 import {
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { Spinner } from '@/components/spinner/spinner';
-import { Textarea } from '@/components/textarea/textarea';
 import { WizardCheckboxOption } from '@/dialogs/common/wizard-checkbox-option';
+import { WIZARD_DIALOG_BODY_CLASS } from '@/dialogs/common/wizard-dialog-size';
+import { WizardSchemaSourceField } from '@/dialogs/common/import-schema/wizard-schema-source-field';
 import { DialectMismatchPanel } from '@/dialogs/common/import-schema/dialect-mismatch-panel';
 import { DialectResolutionPanel } from '@/dialogs/common/import-schema/dialect-resolution-panel';
 import { ProjectAmbiguityPanel } from '@/dialogs/common/import-schema/project-ambiguity-panel';
 import { ProjectDatabaseGroupPanel } from '@/dialogs/common/import-schema/project-database-group-panel';
-import { IMPORT_SCHEMA_FILE_ACCEPT } from '@/dialogs/common/import-schema/constants';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { getSelectableCandidates } from '@/lib/project-import/detection/detect-project';
 import { getProjectCandidateKey } from '@/lib/project-import/framework-labels';
 import type { SchemaMergeCompareFailure } from '@/lib/api/schema-merge-compare';
 import type { SchemaMergeSourcePreparationResult } from '@/lib/schema-merge/source-adapter-types';
-import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import { buildDetectionAnalysisForMergeReady } from '@/dialogs/common/import-schema/build-detection-analysis-for-merge-ready';
+import { DetectionSummary } from '@/dialogs/common/import-schema/detection-summary';
+import { ProjectDetectionSummary } from '@/dialogs/common/import-schema/project-detection-summary';
 import { mergeCompareErrorKey } from './merge-compare-error';
-import { MergeSourceDetectionSummary } from './merge-source-detection-summary';
 import { mergeSourcePreparationErrorKey } from './merge-source-preparation-message';
-
-const DELETION_WARNING_ID = 'merge-include-deletions-warning';
+import { mergeUnsupportedDetectionAnalysis } from './merge-source-unsupported-detection';
 
 export interface MergeSourceStepProps {
     text: string;
     fileName: string | null;
+    fileErrorKey?: string | null;
     preparation: SchemaMergeSourcePreparationResult | null;
     isAnalyzing: boolean;
     isComparing: boolean;
@@ -58,6 +57,7 @@ export interface MergeSourceStepProps {
 export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
     text,
     fileName,
+    fileErrorKey = null,
     preparation,
     isAnalyzing,
     isComparing,
@@ -81,10 +81,7 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
     hasCachedCompare,
 }) => {
     const { t } = useTranslation();
-    const textareaId = useId();
-    const fileInputId = useId();
     const deletionsId = useId();
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const inputsLocked = unavailable || isComparing;
     const preparationErrorKey = mergeSourcePreparationErrorKey(preparation);
     const compareErrorKey = compareError
@@ -103,13 +100,37 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
         );
     }, [preparation]);
 
+    const readyDetectionAnalysis = useMemo(() => {
+        if (preparation?.status !== 'ready') {
+            return null;
+        }
+
+        return buildDetectionAnalysisForMergeReady(preparation);
+    }, [preparation]);
+
+    const readyProjectCandidate = useMemo(() => {
+        if (preparation?.status !== 'ready') {
+            return null;
+        }
+
+        return preparation.projectCandidate ?? null;
+    }, [preparation]);
+
+    const unsupportedDetectionAnalysis = useMemo(
+        () =>
+            mergeUnsupportedDetectionAnalysis(
+                preparation,
+                text,
+                currentDatabaseType,
+                sourceDialect
+            ),
+        [preparation, text, currentDatabaseType, sourceDialect]
+    );
+
     return (
         <>
             <DialogHeader className="shrink-0">
                 <DialogTitle>{t('merge_wizard.title')}</DialogTitle>
-                <DialogDescription>
-                    {t('merge_wizard.description')}
-                </DialogDescription>
             </DialogHeader>
 
             <div
@@ -120,7 +141,7 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
                 data-database-group={databaseGroupId ?? ''}
                 data-cached-compare={hasCachedCompare ? 'true' : 'false'}
             >
-                <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-4">
+                <div className={WIZARD_DIALOG_BODY_CLASS}>
                     {unavailable ? (
                         <Alert variant="destructive">
                             <AlertDescription>
@@ -129,86 +150,26 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
                         </Alert>
                     ) : null}
 
-                    <div className="flex flex-col gap-2">
-                        <label
-                            htmlFor={textareaId}
-                            className="text-sm font-medium"
-                        >
-                            {t('merge_wizard.source_label')}
-                        </label>
-                        <Textarea
-                            id={textareaId}
-                            value={text}
-                            onChange={(event) =>
-                                onTextChange(event.target.value)
+                    <WizardSchemaSourceField
+                        label={t('merge_wizard.source_label')}
+                        placeholder={t(
+                            'new_diagram_dialog.import_schema.source_placeholder'
+                        )}
+                        value={text}
+                        onValueChange={onTextChange}
+                        selectedFileName={fileName}
+                        onFileSelected={onFileSelected}
+                        disabled={inputsLocked}
+                        chooseFileAriaLabel={t('merge_wizard.choose_file')}
+                        changeFileAriaLabel={t(
+                            'merge_wizard.change_file_aria',
+                            {
+                                name: fileName ?? '',
                             }
-                            placeholder={t('merge_wizard.source_placeholder')}
-                            className="max-h-48 min-h-40 resize-none overflow-y-auto"
-                            disabled={inputsLocked}
-                        />
-                        <p className="text-xs text-muted-foreground">
-                            {t('merge_wizard.source_hint')}
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="h-px flex-1 bg-border" aria-hidden />
-                        <span>
-                            {t('new_diagram_dialog.import_schema.or_divider')}
-                        </span>
-                        <span className="h-px flex-1 bg-border" aria-hidden />
-                    </div>
-
-                    <div className="flex w-full flex-col items-center gap-2">
-                        <input
-                            ref={fileInputRef}
-                            id={fileInputId}
-                            type="file"
-                            accept={IMPORT_SCHEMA_FILE_ACCEPT}
-                            className="sr-only"
-                            tabIndex={-1}
-                            aria-hidden
-                            onChange={(event) => {
-                                const file = event.target.files?.[0];
-                                event.target.value = '';
-
-                                if (file) {
-                                    onFileSelected(file);
-                                }
-                            }}
-                            disabled={inputsLocked}
-                        />
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="w-full max-w-full gap-2"
-                            onClick={() => fileInputRef.current?.click()}
-                            disabled={inputsLocked}
-                            aria-label={
-                                fileName
-                                    ? t('merge_wizard.change_file_aria', {
-                                          name: fileName,
-                                      })
-                                    : t('merge_wizard.choose_file')
-                            }
-                            title={fileName ?? undefined}
-                        >
-                            {fileName ? (
-                                <FileText
-                                    className="size-4 shrink-0"
-                                    aria-hidden
-                                />
-                            ) : (
-                                <Upload
-                                    className="size-4 shrink-0"
-                                    aria-hidden
-                                />
-                            )}
-                            <span className={cn(fileName && 'truncate')}>
-                                {fileName ?? t('merge_wizard.choose_file')}
-                            </span>
-                        </Button>
-                    </div>
+                        )}
+                        fileErrorMessage={fileErrorKey ? t(fileErrorKey) : null}
+                        privacyContext="merge"
+                    />
 
                     {isAnalyzing ? (
                         <p
@@ -219,8 +180,25 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
                         </p>
                     ) : null}
 
-                    {preparation?.status === 'ready' ? (
-                        <MergeSourceDetectionSummary result={preparation} />
+                    {readyProjectCandidate ? (
+                        <ProjectDetectionSummary
+                            candidate={readyProjectCandidate}
+                            isAuthenticated={isAuthenticated}
+                        />
+                    ) : null}
+
+                    {readyDetectionAnalysis ? (
+                        <DetectionSummary
+                            analysis={readyDetectionAnalysis}
+                            context="merge"
+                        />
+                    ) : null}
+
+                    {unsupportedDetectionAnalysis ? (
+                        <DetectionSummary
+                            analysis={unsupportedDetectionAnalysis}
+                            context="merge"
+                        />
                     ) : null}
 
                     {preparation?.status === 'needs_dialect_resolution' ? (
@@ -280,34 +258,6 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
                         />
                     ) : null}
 
-                    <WizardCheckboxOption
-                        id={deletionsId}
-                        label={t('merge_wizard.include_deletions.label')}
-                        description={t(
-                            'merge_wizard.include_deletions.description'
-                        )}
-                        checked={includeDeletions}
-                        disabled={inputsLocked}
-                        describedBy={
-                            includeDeletions ? DELETION_WARNING_ID : undefined
-                        }
-                        onCheckedChange={onIncludeDeletionsChange}
-                    />
-
-                    {includeDeletions ? (
-                        <div
-                            id={DELETION_WARNING_ID}
-                            role="status"
-                            className="flex items-start gap-3 rounded-lg border border-amber-500 bg-amber-500/10 px-4 py-3 text-sm dark:border-amber-500/70 dark:bg-amber-500/15"
-                        >
-                            <AlertTriangle
-                                className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-500"
-                                aria-hidden
-                            />
-                            <p>{t('merge_wizard.include_deletions.warning')}</p>
-                        </div>
-                    ) : null}
-
                     {preparationErrorKey ? (
                         <Alert variant="destructive">
                             <AlertDescription>
@@ -326,23 +276,35 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
                 </div>
             </div>
 
-            <DialogFooter className="mt-4 flex shrink-0 !justify-between gap-2">
+            <DialogFooter className="mt-4 flex shrink-0 flex-wrap items-center !justify-between gap-2">
                 <Button type="button" variant="secondary" onClick={onCancel}>
                     {t('merge_wizard.cancel')}
                 </Button>
-                <Button
-                    type="button"
-                    onClick={onCompare}
-                    disabled={!canCompare}
-                    aria-busy={isComparing}
-                >
-                    {isComparing ? (
-                        <Spinner className="mr-1 size-5 text-primary-foreground" />
-                    ) : null}
-                    {isComparing
-                        ? t('merge_wizard.comparing')
-                        : t('merge_wizard.compare')}
-                </Button>
+                <div className="flex min-w-0 flex-wrap items-center justify-end gap-3">
+                    <WizardCheckboxOption
+                        id={deletionsId}
+                        label={t('merge_wizard.include_deletions.label')}
+                        description={t(
+                            'merge_wizard.include_deletions.description'
+                        )}
+                        checked={includeDeletions}
+                        disabled={inputsLocked}
+                        onCheckedChange={onIncludeDeletionsChange}
+                    />
+                    <Button
+                        type="button"
+                        onClick={onCompare}
+                        disabled={!canCompare}
+                        aria-busy={isComparing}
+                    >
+                        {isComparing ? (
+                            <Spinner className="mr-1 size-5 text-primary-foreground" />
+                        ) : null}
+                        {isComparing
+                            ? t('merge_wizard.comparing')
+                            : t('merge_wizard.compare')}
+                    </Button>
+                </div>
             </DialogFooter>
         </>
     );

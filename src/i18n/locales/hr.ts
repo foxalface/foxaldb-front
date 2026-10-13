@@ -763,8 +763,8 @@ export const hr: LanguageTranslation = {
             import_schema: {
                 title: 'Zalijepite svoju shemu',
                 textarea_label: 'Sadržaj sheme',
-                textarea_placeholder:
-                    'Ovdje zalijepite SQL, DBML ili JSON metapodatke…',
+                source_placeholder:
+                    'Zalijepite SQL, DBML ili JSON ili ispustite datoteku…',
                 auto_detect_hint: 'Format ćemo automatski prepoznati.',
                 or_divider: 'ILI',
                 choose_file: 'Odaberi datoteku',
@@ -774,7 +774,10 @@ export const hr: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Više informacija…',
                     title: 'Privatnost i podržani formati',
-                    intro: 'Prije odabira datoteke, saznajte kako FoxalDB obrađuje vaše podatke tijekom uvoza.',
+                    intro_import:
+                        'Prije odabira datoteke, saznajte kako FoxalDB obrađuje vaše podatke tijekom uvoza.',
+                    intro_merge:
+                        'Prije odabira datoteke saznajte kako FoxalDB obrađuje vaše podatke pri spajanju. Arhivi projekata ostaju na vašem uređaju; za usporedbu šalje se samo pripremljena shema.',
                     highlights: {
                         no_execution:
                             'Uvoz koristi samo statičku analizu — vaš se kod nikada ne izvršava.',
@@ -1946,11 +1949,14 @@ export const hr: LanguageTranslation = {
             title: 'Spoji',
             description: 'Izvor za usporedbu',
             source_label: 'Izvor',
-            source_placeholder: 'Zalijepite SQL, DBML ili JSON…',
             source_hint: 'Format se prepoznaje automatski.',
             choose_file: 'Uvezi datoteku',
             change_file_aria: 'Odabrana datoteka: {{name}}. Odaberite drugu.',
             analyzing: 'Prepoznavanje izvora…',
+            detection: {
+                unsupported_description:
+                    'Ovaj format nije podržan za spajanje.',
+            },
             compare: 'Usporedi',
             comparing: 'Uspoređivanje…',
             cancel: 'Odustani',
@@ -1958,10 +1964,13 @@ export const hr: LanguageTranslation = {
             applied: 'Spajanje je primijenjeno',
             unavailable: 'Spajanje je dostupno za spremljene dijagrame.',
             include_deletions: {
-                label: 'Uzmi u obzir brisanja',
-                description: 'Uključi elemente dijagrama kojih nema u izvoru.',
+                label: 'Predloži brisanja',
+                description:
+                    'Predloži uklanjanje s dijagrama elemenata kojih nema u uspoređenom izvoru.',
                 warning:
                     'Djelomičan izvor može predložiti brisanje elemenata koje ne sadrži.',
+                warning_info_aria:
+                    'Informacije o brisanju s djelomičnim izvorom',
             },
             errors: {
                 unable_to_detect: 'Ovaj izvor nije prepoznat.',

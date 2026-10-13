@@ -766,8 +766,8 @@ export const ru: LanguageTranslation = {
             import_schema: {
                 title: 'Вставьте схему',
                 textarea_label: 'Содержимое схемы',
-                textarea_placeholder:
-                    'Вставьте SQL, DBML или JSON-метаданные сюда…',
+                source_placeholder:
+                    'Вставьте SQL, DBML или JSON или перетащите файл…',
                 auto_detect_hint: 'Мы автоматически определим формат.',
                 or_divider: 'ИЛИ',
                 choose_file: 'Выбрать файл',
@@ -777,7 +777,10 @@ export const ru: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Подробнее…',
                     title: 'Конфиденциальность и поддерживаемые форматы',
-                    intro: 'Перед выбором файла узнайте, как FoxalDB обрабатывает ваши данные при импорте.',
+                    intro_import:
+                        'Перед выбором файла узнайте, как FoxalDB обрабатывает ваши данные при импорте.',
+                    intro_merge:
+                        'Перед выбором файла узнайте, как FoxalDB обрабатывает ваши данные при слиянии. Архивы проектов остаются на устройстве; для сравнения отправляется только подготовленная схема.',
                     highlights: {
                         no_execution:
                             'Импорт использует только статический анализ — ваш код никогда не выполняется.',
@@ -1949,11 +1952,14 @@ export const ru: LanguageTranslation = {
             title: 'Объединить',
             description: 'Источник для сравнения',
             source_label: 'Источник',
-            source_placeholder: 'Вставьте SQL, DBML или JSON…',
             source_hint: 'Формат определяется автоматически.',
             choose_file: 'Импортировать файл',
             change_file_aria: 'Выбранный файл: {{name}}. Выбрать другой.',
             analyzing: 'Определение источника…',
+            detection: {
+                unsupported_description:
+                    'Этот формат не поддерживается для слияния.',
+            },
             compare: 'Сравнить',
             comparing: 'Сравнение…',
             cancel: 'Отмена',
@@ -1961,11 +1967,13 @@ export const ru: LanguageTranslation = {
             applied: 'Объединение применено',
             unavailable: 'Объединение доступно для сохранённых диаграмм.',
             include_deletions: {
-                label: 'Учитывать удаления',
+                label: 'Предлагать удаления',
                 description:
-                    'Включить элементы диаграммы, которых нет в источнике.',
+                    'Предлагать удалить с диаграммы элементы, отсутствующие в сравниваемом источнике.',
                 warning:
                     'Неполный источник может предложить удалить элементы, которых в нём нет.',
+                warning_info_aria:
+                    'Информация об удалениях при неполном источнике',
             },
             errors: {
                 unable_to_detect: 'Не удалось распознать этот источник.',

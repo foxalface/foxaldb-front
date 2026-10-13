@@ -769,8 +769,8 @@ export const ne: LanguageTranslation = {
             import_schema: {
                 title: 'आफ्नो स्किमा टाँस्नुहोस्',
                 textarea_label: 'स्किमा सामग्री',
-                textarea_placeholder:
-                    'यहाँ SQL, DBML वा JSON मेटाडेटा टाँस्नुहोस्…',
+                source_placeholder:
+                    'SQL, DBML वा JSON टाँस्नुहोस्, वा फाइल छोड्नुहोस्…',
                 auto_detect_hint: 'हामी ढाँचा स्वचालित रूपमा पत्ता लगाउँछौं।',
                 or_divider: 'वा',
                 choose_file: 'फाइल छान्नुहोस्',
@@ -780,7 +780,10 @@ export const ne: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'थप जानकारी…',
                     title: 'गोपनीयता र समर्थित ढाँचाहरू',
-                    intro: 'फाइल छान्नु अघि, आयात गर्दा FoxalDB ले तपाईंको डाटा कसरी ह्यान्डल गर्छ भन्ने जान्नुहोस्।',
+                    intro_import:
+                        'फाइल छान्नु अघि, आयात गर्दा FoxalDB ले तपाईंको डाटा कसरी ह्यान्डल गर्छ भन्ने जान्नुहोस्।',
+                    intro_merge:
+                        'फाइल छान्नु अघि, मर्जका लागि FoxalDB ले तपाईंको डाटा कसरी ह्यान्डल गर्छ भन्ने जान्नुहोस्। प्रोजेक्ट अभिलेखहरू तपाईंको यन्त्रमा रहन्छन्; तुलनाका लागि तयार स्किमा मात्र पठाइन्छ।',
                     highlights: {
                         no_execution:
                             'आयातले मात्र स्थिर विश्लेषण प्रयोग गर्छ — तपाईंको कोड कहिल्यै चलाइँदैन।',
@@ -1952,11 +1955,13 @@ export const ne: LanguageTranslation = {
             title: 'मर्ज',
             description: 'तुलना गर्ने स्रोत',
             source_label: 'स्रोत',
-            source_placeholder: 'SQL, DBML वा JSON टाँस्नुहोस्…',
             source_hint: 'ढाँचा स्वतः पहिचान हुन्छ।',
             choose_file: 'फाइल आयात गर्नुहोस्',
             change_file_aria: 'छानिएको फाइल: {{name}}। अर्को फाइल छान्नुहोस्।',
             analyzing: 'स्रोत पहिचान हुँदैछ…',
+            detection: {
+                unsupported_description: 'मर्जका लागि यो ढाँचा समर्थित छैन।',
+            },
             compare: 'तुलना गर्नुहोस्',
             comparing: 'तुलना हुँदैछ…',
             cancel: 'रद्द गर्नुहोस्',
@@ -1964,10 +1969,12 @@ export const ne: LanguageTranslation = {
             applied: 'मर्ज लागू भयो',
             unavailable: 'मर्ज सुरक्षित रेखाचित्रका लागि उपलब्ध छ।',
             include_deletions: {
-                label: 'मेटाउने कुरा समावेश गर्नुहोस्',
-                description: 'स्रोतमा नभएका रेखाचित्रका तत्व समावेश गर्नुहोस्।',
+                label: 'मेटाउने प्रस्ताव गर्नुहोस्',
+                description:
+                    'तुलना गरिएको स्रोतमा नभएका तत्वहरू रेखाचित्रबाट हटाउने प्रस्ताव गर्नुहोस्।',
                 warning:
                     'आंशिक स्रोतले आफूमा नभएका तत्व मेटाउन प्रस्ताव गर्न सक्छ।',
+                warning_info_aria: 'आंशिक स्रोतमा मेटाउने बारे जानकारी',
             },
             errors: {
                 unable_to_detect: 'यो स्रोत चिन्न सकिएन।',

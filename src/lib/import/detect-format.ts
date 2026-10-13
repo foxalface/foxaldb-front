@@ -7,13 +7,21 @@ import type {
 } from './types';
 import { hasGenericDdlKeywords } from './sql-evidence';
 
+/** Identifiers in DBML exports may be bare (`users`) or quoted (`"schema"."table"`). */
+const DBML_IDENTIFIER = '(?:"[^"]+"|\\w+)';
+
 const DBML_PATTERNS = [
-    /^Table\s+\w+\s*{/m,
+    new RegExp(
+        `^Table\\s+${DBML_IDENTIFIER}(?:\\.${DBML_IDENTIFIER})?\\s*{`,
+        'm'
+    ),
     /^Ref:\s*\w+/m,
-    /^Enum\s+\w+\s*{/m,
+    /^Ref\s+"[^"]+"/m,
+    new RegExp(`^Enum\\s+${DBML_IDENTIFIER}\\s*{`, 'm'),
     /^TableGroup\s+/m,
-    /^Note\s+\w+\s*{/m,
-    /\[pk\]/,
+    new RegExp(`^Note\\s+${DBML_IDENTIFIER}\\s*{`, 'm'),
+    /^Indexes\s*{/m,
+    /\[pk\b/,
     /\[ref:\s*[<>-]/,
 ] as const;
 

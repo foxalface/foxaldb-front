@@ -18,7 +18,9 @@ import {
 } from '@/lib/api/schema-merge-compare';
 import { flushDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import type { DatabaseType } from '@/lib/domain/database-type';
+import { isImportSchemaFileNameAllowed } from '@/dialogs/common/import-schema/constants';
 import { isZipArchiveFile } from '@/lib/project-import/is-zip-archive-file';
+import { resolveUploadCapabilities } from '@/lib/upload-capabilities';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { noteSchemaMergeAuthoritativeHash } from '@/lib/realtime/schema-merge-refresh';
 import { isSelectionDependencyClosed } from '@/lib/schema-merge/operation-selection';
@@ -35,6 +37,7 @@ import { MergeResultStep } from './merge-result-step';
 import { MergeSourceStep } from './merge-source-step';
 import type { MergeWizardApplyContext } from './merge-wizard-apply-context';
 import { MergeWizardStep } from './merge-wizard-step';
+import { wizardDialogContentClassName } from '@/dialogs/common/wizard-dialog-size';
 
 export type { MergeWizardApplyContext };
 
@@ -99,6 +102,10 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
 
     const [step, setStep] = useState<MergeWizardStep>(MergeWizardStep.SOURCE);
     const [text, setText] = useState('');
+    const [selectedFileName, setSelectedFileName] = useState<string | null>(
+        null
+    );
+    const [fileErrorKey, setFileErrorKey] = useState<string | null>(null);
     const [selectedFile, setSelectedFile] = useState<SelectedMergeFile | null>(
         null
     );
@@ -138,6 +145,8 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         applyInFlightRef.current = false;
         setStep(MergeWizardStep.SOURCE);
         setText('');
+        setSelectedFileName(null);
+        setFileErrorKey(null);
         setSelectedFile(null);
         setSourceDialect(null);
         setProjectCandidateKey(null);
@@ -170,33 +179,99 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
 
     const handleTextChange = useCallback(
         (value: string) => {
+            const archiveActive = selectedFile?.input.type === 'archive';
+
+            if (archiveActive && value.trim() === '' && text.trim() === '') {
+                return;
+            }
+
             fileSelectionIdRef.current += 1;
+            setFileErrorKey(null);
             setText(value);
-            setSelectedFile(null);
+
+            if (!archiveActive || value.trim().length > 0) {
+                setSelectedFile(null);
+                setSelectedFileName(null);
+            }
+
             clearResolutions();
             setCompareError(null);
         },
-        [clearResolutions]
+        [clearResolutions, selectedFile, text]
     );
 
     const handleFileSelected = useCallback(
         async (file: File) => {
             const selectionId = ++fileSelectionIdRef.current;
+            setFileErrorKey(null);
+
+            const capabilities = await resolveUploadCapabilities();
             const zip = await isZipArchiveFile(file);
 
             if (selectionId !== fileSelectionIdRef.current) {
                 return;
             }
 
-            const token = ++fileTokenRef.current;
-            setText('');
-            setSelectedFile({
-                file,
-                token,
-                input: zip
-                    ? { type: 'archive', file }
-                    : { type: 'text_file', file },
-            });
+            if (zip) {
+                if (file.size > capabilities.archive.compressedMaxBytes) {
+                    setFileErrorKey(
+                        'new_diagram_dialog.import_schema.errors.archive_too_large'
+                    );
+                    setSelectedFile(null);
+                    setSelectedFileName(null);
+                    setText('');
+                    return;
+                }
+
+                const token = ++fileTokenRef.current;
+                setSelectedFile({
+                    file,
+                    token,
+                    input: { type: 'archive', file },
+                });
+                setSelectedFileName(file.name);
+                setText('');
+                clearResolutions();
+                setCompareError(null);
+                return;
+            }
+
+            if (!isImportSchemaFileNameAllowed(file.name)) {
+                setFileErrorKey(
+                    'new_diagram_dialog.import_schema.errors.unsupported_file_extension'
+                );
+                return;
+            }
+
+            if (file.size > capabilities.schema.textMaxBytes) {
+                setFileErrorKey(
+                    'new_diagram_dialog.import_schema.errors.file_too_large'
+                );
+                return;
+            }
+
+            let content: string;
+
+            try {
+                content = await file.text();
+            } catch {
+                if (selectionId !== fileSelectionIdRef.current) {
+                    return;
+                }
+
+                setFileErrorKey(
+                    'new_diagram_dialog.import_schema.errors.unreadable_file'
+                );
+                return;
+            }
+
+            if (selectionId !== fileSelectionIdRef.current) {
+                return;
+            }
+
+            setSelectedFile(null);
+            setSelectedFileName(file.name);
+            setText(content);
             clearResolutions();
             setCompareError(null);
         },
@@ -516,8 +591,10 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex max-h-dvh w-full max-w-[30rem] flex-col overflow-hidden sm:max-w-xl"
+                className={wizardDialogContentClassName(true)}
                 showClose={!isApplying}
+                aria-describedby={undefined}
+                onOpenAutoFocus={(event) => event.preventDefault()}
             >
                 <TooltipProvider>
                     {step === MergeWizardStep.RESULT && applyContext ? (
@@ -536,7 +613,8 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                     ) : (
                         <MergeSourceStep
                             text={text}
-                            fileName={selectedFile?.file.name ?? null}
+                            fileName={selectedFileName}
+                            fileErrorKey={fileErrorKey}
                             preparation={preparation}
                             isAnalyzing={isAnalyzing}
                             isComparing={isComparing}

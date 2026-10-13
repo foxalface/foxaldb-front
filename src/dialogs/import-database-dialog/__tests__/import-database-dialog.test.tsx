@@ -50,6 +50,27 @@ vi.mock('@/lib/import/merge-import-into-diagram', () => ({
         mockMergeImportIntoDiagram(...args),
 }));
 
+vi.mock('@/components/code-snippet/code-snippet', () => ({
+    CodeSnippet: ({
+        code,
+        editorProps,
+    }: {
+        code: string;
+        editorProps?: {
+            onChange?: (value: string) => void;
+            options?: { ariaLabel?: string };
+        };
+    }) => (
+        <textarea
+            aria-label={editorProps?.options?.ariaLabel ?? 'code-editor'}
+            value={code}
+            onChange={(event) => {
+                editorProps?.onChange?.(event.target.value);
+            }}
+        />
+    ),
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, options?: Record<string, string>) => {

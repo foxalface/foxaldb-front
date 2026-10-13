@@ -769,8 +769,8 @@ export const ja: LanguageTranslation = {
             import_schema: {
                 title: 'スキーマを貼り付け',
                 textarea_label: 'スキーマの内容',
-                textarea_placeholder:
-                    'ここに SQL、DBML、または JSON メタデータを貼り付け…',
+                source_placeholder:
+                    'SQL、DBML、JSON を貼り付けるか、ファイルをドロップしてください…',
                 auto_detect_hint: '形式は自動的に検出されます。',
                 or_divider: 'または',
                 choose_file: 'ファイルを選択',
@@ -780,7 +780,10 @@ export const ja: LanguageTranslation = {
                 privacy_info: {
                     link_label: '詳細情報…',
                     title: 'プライバシーと対応形式',
-                    intro: 'ファイルを選択する前に、インポート時に FoxalDB がデータをどのように扱うかをご確認ください。',
+                    intro_import:
+                        'ファイルを選択する前に、インポート時に FoxalDB がデータをどのように扱うかをご確認ください。',
+                    intro_merge:
+                        'ファイルを選択する前に、マージ時に FoxalDB がデータをどのように扱うかをご確認ください。プロジェクトアーカイブは端末に残り、比較には準備済みスキーマのみが送信されます。',
                     highlights: {
                         no_execution:
                             'インポートは静的解析のみを使用します。コードは実行されません。',
@@ -1980,12 +1983,14 @@ export const ja: LanguageTranslation = {
             title: 'マージ',
             description: '比較するソース',
             source_label: 'ソース',
-            source_placeholder: 'SQL、DBML、JSON を貼り付け…',
             source_hint: '形式は自動で判定されます。',
             choose_file: 'ファイルを取り込む',
             change_file_aria:
                 '選択中のファイル: {{name}}。別のファイルを選ぶ。',
             analyzing: 'ソースを判定しています…',
+            detection: {
+                unsupported_description: 'この形式はマージに対応していません。',
+            },
             compare: '比較',
             comparing: '比較しています…',
             cancel: 'キャンセル',
@@ -1993,10 +1998,12 @@ export const ja: LanguageTranslation = {
             applied: 'マージを適用しました',
             unavailable: 'マージは保存済みの図で使えます。',
             include_deletions: {
-                label: '削除を考慮する',
-                description: 'ソースにない図の要素を含めます。',
+                label: '削除を提案する',
+                description:
+                    '比較したソースにない要素を図から削除するよう提案します。',
                 warning:
                     '部分的なソースは、含まれない要素の削除を提案することがあります。',
+                warning_info_aria: '部分的なソースでの削除についての情報',
             },
             errors: {
                 unable_to_detect: 'このソースを判定できませんでした。',

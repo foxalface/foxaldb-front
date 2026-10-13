@@ -60,6 +60,28 @@ vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartState,
 }));
 
+vi.mock('@/components/code-snippet/code-snippet', () => ({
+    CodeSnippet: ({
+        code,
+        editorProps,
+    }: {
+        code: string;
+        editorProps?: {
+            onChange?: (value: string) => void;
+            options?: { ariaLabel?: string; readOnly?: boolean };
+        };
+    }) => (
+        <textarea
+            aria-label={editorProps?.options?.ariaLabel ?? 'code-editor'}
+            value={code}
+            disabled={editorProps?.options?.readOnly}
+            onChange={(event) => {
+                editorProps?.onChange?.(event.target.value);
+            }}
+        />
+    ),
+}));
+
 vi.mock('@/lib/realtime/client-id', () => ({
     getClientId: () => 'client-1',
 }));
@@ -342,7 +364,7 @@ describe('Merge wizard shell', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('sends includeDeletions and shows the deletion warning', async () => {
+    it('sends includeDeletions when the option is checked', async () => {
         const user = userEvent.setup();
         renderWizard();
         paste('select 1');
@@ -351,15 +373,9 @@ describe('Merge wizard shell', () => {
             name: 'merge_wizard.include_deletions.label',
         });
         expect(checkbox).not.toBeChecked();
-        expect(
-            screen.queryByText('merge_wizard.include_deletions.warning')
-        ).not.toBeInTheDocument();
 
         await user.click(checkbox);
         expect(checkbox).toBeChecked();
-        expect(
-            screen.getByText('merge_wizard.include_deletions.warning')
-        ).toBeInTheDocument();
 
         const compare = await screen.findByRole('button', {
             name: 'merge_wizard.compare',
@@ -532,9 +548,6 @@ describe('Merge wizard shell', () => {
         ).not.toBeChecked();
         expect(
             screen.queryByTestId('merge-wizard-result-step')
-        ).not.toBeInTheDocument();
-        expect(
-            screen.queryByText('merge_wizard.include_deletions.warning')
         ).not.toBeInTheDocument();
     });
 

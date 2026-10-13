@@ -15,15 +15,7 @@ export const mergeSourcePreparationErrorKey = (
         case 'database_type_mismatch':
             return null;
         case 'unsupported':
-            if (result.code === 'unable_to_detect') {
-                return 'merge_wizard.errors.unable_to_detect';
-            }
-
-            if (result.code === 'unsupported_file_extension') {
-                return 'merge_wizard.errors.unsupported_file_extension';
-            }
-
-            return 'merge_wizard.errors.unsupported_source';
+            return null;
         case 'invalid':
             if (result.code === 'empty_content') {
                 return null;

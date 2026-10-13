@@ -764,8 +764,8 @@ export const bn: LanguageTranslation = {
             import_schema: {
                 title: 'আপনার স্কিমা পেস্ট করুন',
                 textarea_label: 'স্কিমার বিষয়বস্তু',
-                textarea_placeholder:
-                    'এখানে SQL, DBML বা JSON মেটাডেটা পেস্ট করুন…',
+                source_placeholder:
+                    'SQL, DBML বা JSON পেস্ট করুন, অথবা ফাইল ড্রপ করুন…',
                 auto_detect_hint: 'আমরা স্বয়ংক্রিয়ভাবে ফরম্যাট শনাক্ত করব।',
                 or_divider: 'অথবা',
                 choose_file: 'একটি ফাইল বেছে নিন',
@@ -775,7 +775,10 @@ export const bn: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'আরও তথ্য…',
                     title: 'গোপনীয়তা এবং সমর্থিত ফরম্যাট',
-                    intro: 'ফাইল বেছে নেওয়ার আগে, আমদানির সময় FoxalDB কীভাবে আপনার ডেটা পরিচালনা করে তা জানুন।',
+                    intro_import:
+                        'ফাইল বেছে নেওয়ার আগে, আমদানির সময় FoxalDB কীভাবে আপনার ডেটা পরিচালনা করে তা জানুন।',
+                    intro_merge:
+                        'ফাইল বেছে নেওয়ার আগে, মার্জের জন্য FoxalDB কীভাবে আপনার ডেটা পরিচালনা করে তা জানুন। প্রকল্প আর্কাইভ আপনার ডিভাইসে থাকে; তুলনার জন্য শুধু প্রস্তুত স্কিমা পাঠানো হয়।',
                     highlights: {
                         no_execution:
                             'আমদানি শুধুমাত্র স্ট্যাটিক বিশ্লেষণ ব্যবহার করে — আপনার কোড কখনো চালানো হয় না।',
@@ -1942,11 +1945,13 @@ export const bn: LanguageTranslation = {
             title: 'মার্জ',
             description: 'তুলনার উৎস',
             source_label: 'উৎস',
-            source_placeholder: 'SQL, DBML বা JSON পেস্ট করুন…',
             source_hint: 'ফরম্যাট স্বয়ংক্রিয়ভাবে শনাক্ত হয়।',
             choose_file: 'একটি ফাইল আমদানি করুন',
             change_file_aria: 'নির্বাচিত ফাইল: {{name}}। অন্য ফাইল বেছে নিন।',
             analyzing: 'উৎস শনাক্ত হচ্ছে…',
+            detection: {
+                unsupported_description: 'মার্জের জন্য এই ফরম্যাট সমর্থিত নয়।',
+            },
             compare: 'তুলনা করুন',
             comparing: 'তুলনা হচ্ছে…',
             cancel: 'বাতিল',
@@ -1954,11 +1959,12 @@ export const bn: LanguageTranslation = {
             applied: 'মার্জ প্রয়োগ হয়েছে',
             unavailable: 'মার্জ সংরক্ষিত ডায়াগ্রামের জন্য উপলব্ধ।',
             include_deletions: {
-                label: 'মুছে ফেলা বিবেচনা করুন',
+                label: 'মুছে ফেলার প্রস্তাব দিন',
                 description:
-                    'উৎসে নেই এমন ডায়াগ্রামের উপাদান অন্তর্ভুক্ত করুন।',
+                    'তুলনা করা উৎসে নেই এমন উপাদান ডায়াগ্রাম থেকে সরানোর প্রস্তাব দিন।',
                 warning:
                     'আংশিক উৎস এমন উপাদান মুছে ফেলার প্রস্তাব করতে পারে যা সে ধারণ করে না।',
+                warning_info_aria: 'আংশিক উৎসে মুছে ফেলার তথ্য',
             },
             errors: {
                 unable_to_detect: 'এই উৎস শনাক্ত করা যায়নি।',

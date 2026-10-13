@@ -70,6 +70,19 @@ export const dbmlSample = `Table users {
   name varchar
 }`;
 
+/** FoxalDB DBML export (quoted schema/table names, named Ref lines). */
+export const dbmlFoxalExportSample = `Table "foxaldb"."diagram_activities" {
+  "id" bigint [pk, not null, increment]
+  "diagram_id" bigint [not null]
+
+  Indexes {
+    (diagram_id, created_at) [name: "diagram_activities_diagram_id_created_at_index"]
+  }
+}
+
+Ref "fk_0_diagram_activities_diagram_id_foreign":"foxaldb"."diagrams"."id" < "foxaldb"."diagram_activities"."diagram_id"
+`;
+
 export const metadataJsonSample = JSON.stringify({
     fk_info: [],
     pk_info: [],

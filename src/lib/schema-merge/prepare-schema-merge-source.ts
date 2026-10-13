@@ -141,12 +141,14 @@ const finishReady = ({
     detectedFormat,
     detectedFramework,
     currentDatabaseType,
+    projectCandidate = null,
 }: {
     diagram: Diagram;
     sourceKind: SchemaMergeSourceKind;
     detectedFormat: ImportFormat | null;
     detectedFramework: ProjectFramework | null;
     currentDatabaseType: DatabaseType;
+    projectCandidate?: ProjectDetectionCandidate | null;
 }): SchemaMergeSourcePreparationResult => {
     if (!isKnownDatabaseType(diagram.databaseType)) {
         return invalid('malformed_source');
@@ -183,6 +185,7 @@ const finishReady = ({
         detectedFormat,
         detectedFramework,
         detectedDatabaseType: diagram.databaseType,
+        projectCandidate,
     };
 };
 
@@ -717,6 +720,7 @@ const prepareArchive = async (
                 detectedFormat: null,
                 detectedFramework: candidate.framework,
                 currentDatabaseType: context.currentDiagram.databaseType,
+                projectCandidate: candidate,
             });
         } catch (error: unknown) {
             return mapProjectError(error, candidate.framework);

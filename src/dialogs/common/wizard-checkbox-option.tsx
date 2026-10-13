@@ -12,7 +12,6 @@ interface WizardCheckboxOptionProps {
     description: string;
     checked: boolean;
     disabled?: boolean;
-    describedBy?: string;
     onCheckedChange: (checked: boolean) => void;
 }
 
@@ -22,7 +21,6 @@ export const WizardCheckboxOption: React.FC<WizardCheckboxOptionProps> = ({
     description,
     checked,
     disabled = false,
-    describedBy,
     onCheckedChange,
 }) => (
     <div className="flex items-center gap-3">
@@ -30,12 +28,14 @@ export const WizardCheckboxOption: React.FC<WizardCheckboxOptionProps> = ({
             id={id}
             checked={checked}
             disabled={disabled}
-            aria-describedby={describedBy}
             onCheckedChange={(value) => onCheckedChange(value === true)}
         />
         <Tooltip>
             <TooltipTrigger asChild>
-                <label htmlFor={id} className="cursor-pointer font-medium">
+                <label
+                    htmlFor={id}
+                    className="cursor-pointer text-sm font-normal"
+                >
                     {label}
                 </label>
             </TooltipTrigger>

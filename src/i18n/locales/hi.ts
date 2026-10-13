@@ -767,8 +767,8 @@ export const hi: LanguageTranslation = {
             import_schema: {
                 title: 'अपना स्कीमा पेस्ट करें',
                 textarea_label: 'स्कीमा सामग्री',
-                textarea_placeholder:
-                    'यहाँ SQL, DBML या JSON मेटाडेटा पेस्ट करें…',
+                source_placeholder:
+                    'SQL, DBML या JSON चिपकाएँ, या फ़ाइल छोड़ें…',
                 auto_detect_hint: 'हम प्रारूप को स्वचालित रूप से पहचानेंगे।',
                 or_divider: 'या',
                 choose_file: 'फ़ाइल चुनें',
@@ -778,7 +778,10 @@ export const hi: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'अधिक जानकारी…',
                     title: 'गोपनीयता और समर्थित प्रारूप',
-                    intro: 'फ़ाइल चुनने से पहले, जानें कि आयात के दौरान FoxalDB आपके डेटा को कैसे संभालता है।',
+                    intro_import:
+                        'फ़ाइल चुनने से पहले, जानें कि आयात के दौरान FoxalDB आपके डेटा को कैसे संभालता है।',
+                    intro_merge:
+                        'फ़ाइल चुनने से पहले, जानें कि मर्ज के लिए FoxalDB आपके डेटा को कैसे संभालता है। प्रोजेक्ट आर्काइव आपके डिवाइस पर रहते हैं; तुलना के लिए केवल तैयार स्कीमा भेजी जाती है।',
                     highlights: {
                         no_execution:
                             'आयात केवल स्थैतिक विश्लेषण का उपयोग करता है — आपका कोड कभी निष्पादित नहीं होता।',
@@ -1945,11 +1948,14 @@ export const hi: LanguageTranslation = {
             title: 'मर्ज करें',
             description: 'तुलना करने का स्रोत',
             source_label: 'स्रोत',
-            source_placeholder: 'SQL, DBML या JSON चिपकाएँ…',
             source_hint: 'प्रारूप अपने आप पहचाना जाता है।',
             choose_file: 'फ़ाइल आयात करें',
             change_file_aria: 'चुनी गई फ़ाइल: {{name}}। दूसरी फ़ाइल चुनें।',
             analyzing: 'स्रोत पहचाना जा रहा है…',
+            detection: {
+                unsupported_description:
+                    'मर्ज के लिए यह प्रारूप समर्थित नहीं है।',
+            },
             compare: 'तुलना करें',
             comparing: 'तुलना हो रही है…',
             cancel: 'रद्द करें',
@@ -1957,10 +1963,12 @@ export const hi: LanguageTranslation = {
             applied: 'मर्ज लागू हो गया',
             unavailable: 'मर्ज सहेजे गए आरेखों के लिए उपलब्ध है।',
             include_deletions: {
-                label: 'हटाने को ध्यान में रखें',
-                description: 'स्रोत में न होने वाले आरेख तत्व शामिल करें।',
+                label: 'हटाने का प्रस्ताव दें',
+                description:
+                    'तुलना किए गए स्रोत में न होने वाले तत्वों को आरेख से हटाने का प्रस्ताव दें।',
                 warning:
                     'अधूरा स्रोत उन तत्वों को हटाने का सुझाव दे सकता है जो उसमें नहीं हैं।',
+                warning_info_aria: 'आंशिक स्रोत के साथ हटाने की जानकारी',
             },
             errors: {
                 unable_to_detect: 'यह स्रोत पहचाना नहीं जा सका।',

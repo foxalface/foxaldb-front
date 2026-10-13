@@ -49,6 +49,25 @@
         }
     }
 
+    /* Schema import/merge upload: hover only (Monaco focus must not pin the button). */
+    .wizard-schema-upload-actions {
+        opacity: 1;
+        transition: opacity 150ms ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .wizard-schema-upload-actions {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .wizard-schema-upload-actions--visible,
+        .group:hover .wizard-schema-upload-actions {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    }
+
     /*
      * Monaco uses custom scrollbars (not native). Match .scrollbar-app:
      * thin thumb, transparent track, fade in/out via Monaco visibility classes.

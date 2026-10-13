@@ -33,9 +33,12 @@ const PRIVACY_HIGHLIGHT_KEYS = [
     'new_diagram_dialog.import_schema.privacy_info.highlights.filtered_files',
 ] as const;
 
+export type ImportPrivacyInfoContext = 'import' | 'merge';
+
 interface ImportPrivacyInfoDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    context?: ImportPrivacyInfoContext;
 }
 
 export const ImportPrivacyInfoLink: React.FC<{
@@ -47,7 +50,7 @@ export const ImportPrivacyInfoLink: React.FC<{
         <button
             type="button"
             onClick={onClick}
-            className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-1 rounded-sm text-xs text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         >
             <Info className="size-3.5 shrink-0" aria-hidden />
             <span className="underline-offset-2 hover:underline">
@@ -59,8 +62,12 @@ export const ImportPrivacyInfoLink: React.FC<{
 
 export const ImportPrivacyInfoDialog: React.FC<
     ImportPrivacyInfoDialogProps
-> = ({ open, onOpenChange }) => {
+> = ({ open, onOpenChange, context = 'import' }) => {
     const { t } = useTranslation();
+    const introKey =
+        context === 'merge'
+            ? 'new_diagram_dialog.import_schema.privacy_info.intro_merge'
+            : 'new_diagram_dialog.import_schema.privacy_info.intro_import';
     const { capabilities } = useUploadCapabilities(open);
     const simpleFileSizeMb =
         capabilities === null
@@ -85,11 +92,7 @@ export const ImportPrivacyInfoDialog: React.FC<
                                 'new_diagram_dialog.import_schema.privacy_info.title'
                             )}
                         </DialogTitle>
-                        <DialogDescription>
-                            {t(
-                                'new_diagram_dialog.import_schema.privacy_info.intro'
-                            )}
-                        </DialogDescription>
+                        <DialogDescription>{t(introKey)}</DialogDescription>
                     </DialogHeader>
 
                     <ul className="mt-4 space-y-2">

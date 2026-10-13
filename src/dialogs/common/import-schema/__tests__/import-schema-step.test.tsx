@@ -63,6 +63,27 @@ vi.mock('@/hooks/use-auth', () => ({
     }),
 }));
 
+vi.mock('@/components/code-snippet/code-snippet', () => ({
+    CodeSnippet: ({
+        code,
+        editorProps,
+    }: {
+        code: string;
+        editorProps?: {
+            onChange?: (value: string) => void;
+            options?: { ariaLabel?: string };
+        };
+    }) => (
+        <textarea
+            aria-label={editorProps?.options?.ariaLabel ?? 'code-editor'}
+            value={code}
+            onChange={(event) => {
+                editorProps?.onChange?.(event.target.value);
+            }}
+        />
+    ),
+}));
+
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, options?: Record<string, string>) => {
@@ -422,7 +443,7 @@ describe('ImportSchemaStep', () => {
         ).toBeDisabled();
     });
 
-    it('shows the selected file name on the upload button', async () => {
+    it('shows the selected file name after upload', async () => {
         const user = userEvent.setup();
         const setScriptResult = vi.fn();
         const file = new File(['CREATE TABLE t (id INT);'], 'schema.sql', {
@@ -439,10 +460,13 @@ describe('ImportSchemaStep', () => {
         await user.upload(fileInput as HTMLInputElement, file);
 
         expect(
+            screen.getByText('Selected file: schema.sql')
+        ).toBeInTheDocument();
+        expect(
             screen.getByRole('button', {
                 name: 'Change file, currently schema.sql',
             })
-        ).toHaveTextContent('schema.sql');
+        ).toBeInTheDocument();
         await waitFor(() => {
             expect(setScriptResult).toHaveBeenCalled();
         });

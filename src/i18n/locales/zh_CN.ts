@@ -722,7 +722,7 @@ export const zh_CN: LanguageTranslation = {
             import_schema: {
                 title: '粘贴您的架构',
                 textarea_label: '架构内容',
-                textarea_placeholder: '在此粘贴 SQL、DBML 或 JSON 元数据…',
+                source_placeholder: '粘贴 SQL、DBML 或 JSON，或拖放文件…',
                 auto_detect_hint: '我们将自动检测格式。',
                 or_divider: '或',
                 choose_file: '选择文件',
@@ -732,7 +732,10 @@ export const zh_CN: LanguageTranslation = {
                 privacy_info: {
                     link_label: '更多信息…',
                     title: '隐私与支持格式',
-                    intro: '在选择文件之前，请先了解 FoxalDB 在导入时如何处理您的数据。',
+                    intro_import:
+                        '在选择文件之前，请先了解 FoxalDB 在导入时如何处理您的数据。',
+                    intro_merge:
+                        '在选择文件之前，请先了解 FoxalDB 在合并时如何处理您的数据。项目压缩包保留在您的设备上；仅将准备好的架构发送以进行比较。',
                     highlights: {
                         no_execution:
                             '导入仅使用静态分析，绝不会执行您的代码。',
@@ -1819,11 +1822,13 @@ export const zh_CN: LanguageTranslation = {
             title: '合并',
             description: '要比较的来源',
             source_label: '来源',
-            source_placeholder: '粘贴 SQL、DBML 或 JSON…',
             source_hint: '格式会自动识别。',
             choose_file: '导入文件',
             change_file_aria: '已选文件：{{name}}。另选一个文件。',
             analyzing: '正在识别来源…',
+            detection: {
+                unsupported_description: '此格式不支持合并。',
+            },
             compare: '比较',
             comparing: '正在比较…',
             cancel: '取消',
@@ -1831,9 +1836,10 @@ export const zh_CN: LanguageTranslation = {
             applied: '已应用合并',
             unavailable: '合并仅适用于已保存的图。',
             include_deletions: {
-                label: '考虑删除',
-                description: '包含图中有而来源中没有的元素。',
+                label: '建议删除',
+                description: '建议从图中移除比较来源中不存在的元素。',
                 warning: '不完整的来源可能会建议删除它未包含的元素。',
+                warning_info_aria: '关于部分来源删除的说明',
             },
             errors: {
                 unable_to_detect: '无法识别此来源。',

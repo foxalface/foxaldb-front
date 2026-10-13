@@ -790,8 +790,8 @@ export const de: LanguageTranslation = {
             import_schema: {
                 title: 'Schema einfügen',
                 textarea_label: 'Schemainhalt',
-                textarea_placeholder:
-                    'SQL, DBML oder JSON-Metadaten hier einfügen…',
+                source_placeholder:
+                    'SQL, DBML oder JSON einfügen oder eine Datei ablegen…',
                 auto_detect_hint: 'Wir erkennen das Format automatisch.',
                 or_divider: 'ODER',
                 choose_file: 'Datei auswählen',
@@ -801,7 +801,10 @@ export const de: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Weitere Informationen…',
                     title: 'Datenschutz und unterstützte Formate',
-                    intro: 'Bevor Sie eine Datei auswählen, erfahren Sie hier, wie FoxalDB Ihre Daten beim Import behandelt.',
+                    intro_import:
+                        'Bevor Sie eine Datei auswählen, erfahren Sie hier, wie FoxalDB Ihre Daten beim Import behandelt.',
+                    intro_merge:
+                        'Bevor Sie eine Datei auswählen, erfahren Sie hier, wie FoxalDB Ihre Daten für die Zusammenführung behandelt. Projektarchive bleiben auf Ihrem Gerät; nur das vorbereitete Schema wird zum Vergleich gesendet.',
                     highlights: {
                         no_execution:
                             'Importe nutzen nur statische Analyse — Ihr Code wird nie ausgeführt.',
@@ -1998,12 +2001,15 @@ export const de: LanguageTranslation = {
             title: 'Zusammenführen',
             description: 'Quelle zum Vergleichen',
             source_label: 'Quelle',
-            source_placeholder: 'SQL, DBML oder JSON einfügen…',
             source_hint: 'Das Format wird automatisch erkannt.',
             choose_file: 'Datei importieren',
             change_file_aria:
                 'Ausgewählte Datei: {{name}}. Andere Datei wählen.',
             analyzing: 'Quelle wird erkannt…',
+            detection: {
+                unsupported_description:
+                    'Dieses Format wird für die Zusammenführung nicht unterstützt.',
+            },
             compare: 'Vergleichen',
             comparing: 'Vergleich läuft…',
             cancel: 'Abbrechen',
@@ -2012,11 +2018,13 @@ export const de: LanguageTranslation = {
             unavailable:
                 'Zusammenführen ist für gespeicherte Diagramme verfügbar.',
             include_deletions: {
-                label: 'Löschungen berücksichtigen',
+                label: 'Löschungen vorschlagen',
                 description:
-                    'Diagrammelemente einbeziehen, die in der Quelle fehlen.',
+                    'Vorschlagen, Elemente aus dem Diagramm zu entfernen, die in der verglichenen Quelle fehlen.',
                 warning:
                     'Eine unvollständige Quelle kann Löschungen für Elemente vorschlagen, die sie nicht enthält.',
+                warning_info_aria:
+                    'Informationen zu Löschungen bei unvollständiger Quelle',
             },
             errors: {
                 unable_to_detect: 'Diese Quelle konnte nicht erkannt werden.',

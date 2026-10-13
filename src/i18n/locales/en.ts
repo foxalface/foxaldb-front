@@ -758,7 +758,7 @@ export const en = {
             import_schema: {
                 title: 'Paste your schema',
                 textarea_label: 'Schema content',
-                textarea_placeholder: 'Paste SQL, DBML, or JSON metadata here…',
+                source_placeholder: 'Paste SQL, DBML, or JSON, or drop a file…',
                 auto_detect_hint: "We'll detect the format automatically.",
                 or_divider: 'OR',
                 choose_file: 'Choose a file',
@@ -768,7 +768,10 @@ export const en = {
                 privacy_info: {
                     link_label: 'More information…',
                     title: 'Privacy and supported formats',
-                    intro: 'Before you choose a file, here is how FoxalDB handles your data during import.',
+                    intro_import:
+                        'Before you choose a file, here is how FoxalDB handles your data during import.',
+                    intro_merge:
+                        'Before you choose a file, here is how FoxalDB handles your data for merge. Project archives stay on your device; only the prepared schema is sent for comparison.',
                     highlights: {
                         no_execution:
                             'Imports use static analysis only — your code is never executed.',
@@ -1945,11 +1948,14 @@ export const en = {
             title: 'Merge',
             description: 'Source to compare',
             source_label: 'Source',
-            source_placeholder: 'Paste SQL, DBML, or JSON…',
             source_hint: 'Format is detected automatically.',
             choose_file: 'Import a file',
             change_file_aria: 'Selected file: {{name}}. Choose another.',
             analyzing: 'Detecting source…',
+            detection: {
+                unsupported_description:
+                    'This format is not supported for merge.',
+            },
             compare: 'Compare',
             comparing: 'Comparing…',
             cancel: 'Cancel',
@@ -1957,11 +1963,12 @@ export const en = {
             applied: 'Merge applied',
             unavailable: 'Merge is available for saved diagrams.',
             include_deletions: {
-                label: 'Include deletions',
+                label: 'Propose deletions',
                 description:
-                    'Include diagram elements missing from the source.',
+                    'Propose removing from the diagram elements missing from the compared source.',
                 warning:
                     'A partial source may propose deletions for elements it does not contain.',
+                warning_info_aria: 'Partial source deletion information',
             },
             errors: {
                 unable_to_detect: 'Could not detect this source.',

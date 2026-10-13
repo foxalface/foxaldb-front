@@ -767,8 +767,8 @@ export const uk: LanguageTranslation = {
             import_schema: {
                 title: 'Вставте схему',
                 textarea_label: 'Вміст схеми',
-                textarea_placeholder:
-                    'Вставте SQL, DBML або JSON-метадані тут…',
+                source_placeholder:
+                    'Вставте SQL, DBML або JSON або перетягніть файл…',
                 auto_detect_hint: 'Ми автоматично визначимо формат.',
                 or_divider: 'АБО',
                 choose_file: 'Вибрати файл',
@@ -778,7 +778,10 @@ export const uk: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Докладніше…',
                     title: 'Конфіденційність і підтримувані формати',
-                    intro: 'Перш ніж обрати файл, дізнайтеся, як FoxalDB обробляє ваші дані під час імпорту.',
+                    intro_import:
+                        'Перш ніж обрати файл, дізнайтеся, як FoxalDB обробляє ваші дані під час імпорту.',
+                    intro_merge:
+                        'Перш ніж обрати файл, дізнайтеся, як FoxalDB обробляє ваші дані під час злиття. Архіви проєктів залишаються на пристрої; для порівняння надсилається лише підготовлена схема.',
                     highlights: {
                         no_execution:
                             'Імпорт використовує лише статичний аналіз — ваш код ніколи не виконується.',
@@ -1948,11 +1951,14 @@ export const uk: LanguageTranslation = {
             title: 'Об’єднати',
             description: 'Джерело для порівняння',
             source_label: 'Джерело',
-            source_placeholder: 'Вставте SQL, DBML або JSON…',
             source_hint: 'Формат визначається автоматично.',
             choose_file: 'Імпортувати файл',
             change_file_aria: 'Вибраний файл: {{name}}. Вибрати інший.',
             analyzing: 'Визначення джерела…',
+            detection: {
+                unsupported_description:
+                    'Цей формат не підтримується для злиття.',
+            },
             compare: 'Порівняти',
             comparing: 'Порівняння…',
             cancel: 'Скасувати',
@@ -1960,11 +1966,13 @@ export const uk: LanguageTranslation = {
             applied: 'Об’єднання застосовано',
             unavailable: 'Об’єднання доступне для збережених діаграм.',
             include_deletions: {
-                label: 'Враховувати видалення',
+                label: 'Пропонувати видалення',
                 description:
-                    'Включити елементи діаграми, яких немає в джерелі.',
+                    'Пропонувати прибрати з діаграми елементи, яких немає в порівнюваному джерелі.',
                 warning:
                     'Неповне джерело може запропонувати видалити елементи, яких у ньому немає.',
+                warning_info_aria:
+                    'Інформація про видалення з неповного джерела',
             },
             errors: {
                 unable_to_detect: 'Не вдалося розпізнати це джерело.',

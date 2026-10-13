@@ -765,8 +765,8 @@ export const te: LanguageTranslation = {
             import_schema: {
                 title: 'మీ స్కీమాను అతికించండి',
                 textarea_label: 'స్కీమా కంటెంట్',
-                textarea_placeholder:
-                    'ఇక్కడ SQL, DBML లేదా JSON మెటాడేటాను అతికించండి…',
+                source_placeholder:
+                    'SQL, DBML లేదా JSON అతికించండి, లేదా ఫైల్ డ్రాప్ చేయండి…',
                 auto_detect_hint: 'మేము ఫార్మాట్‌ను స్వయంచాలకంగా గుర్తిస్తాము.',
                 or_divider: 'లేదా',
                 choose_file: 'ఫైల్ ఎంచుకోండి',
@@ -776,7 +776,10 @@ export const te: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'మరింత సమాచారం…',
                     title: 'గోప్యత మరియు మద్దతు ఇచ్చే ఫార్మాట్‌లు',
-                    intro: 'ఫైల్ ఎంచుకోవడానికి ముందు, దిగుమతి సమయంలో FoxalDB మీ డేటాను ఎలా నిర్వహిస్తుందో తెలుసుకోండి.',
+                    intro_import:
+                        'ఫైల్ ఎంచుకోవడానికి ముందు, దిగుమతి సమయంలో FoxalDB మీ డేటాను ఎలా నిర్వహిస్తుందో తెలుసుకోండి.',
+                    intro_merge:
+                        'ఫైల్ ఎంచుకోవడానికి ముందు, విలీనం కోసం FoxalDB మీ డేటాను ఎలా నిర్వహిస్తుందో తెలుసుకోండి. ప్రాజెక్ట్ ఆర్కైవ్‌లు మీ పరికరంలో ఉంటాయి; పోలిక కోసం సిద్ధం చేసిన స్కీమా మాత్రమే పంపబడుతుంది.',
                     highlights: {
                         no_execution:
                             'దిగుమతి స్థిర విశ్లేషణను మాత్రమే ఉపయోగిస్తుంది — మీ కోడ్ ఎప్పుడూ అమలు కాదు.',
@@ -1964,11 +1967,13 @@ export const te: LanguageTranslation = {
             title: 'విలీనం',
             description: 'పోల్చాల్సిన మూలం',
             source_label: 'మూలం',
-            source_placeholder: 'SQL, DBML లేదా JSON అతికించండి…',
             source_hint: 'ఫార్మాట్ స్వయంగా గుర్తించబడుతుంది.',
             choose_file: 'ఫైల్‌ను దిగుమతి చేయండి',
             change_file_aria: 'ఎంచుకున్న ఫైల్: {{name}}. మరో ఫైల్ ఎంచుకోండి.',
             analyzing: 'మూలం గుర్తించబడుతోంది…',
+            detection: {
+                unsupported_description: 'మర్జ్ కోసం ఈ ఫార్మాట్ మద్దతు లేదు.',
+            },
             compare: 'పోల్చండి',
             comparing: 'పోలుస్తోంది…',
             cancel: 'రద్దు',
@@ -1976,10 +1981,12 @@ export const te: LanguageTranslation = {
             applied: 'విలీనం వర్తింపజేయబడింది',
             unavailable: 'విలీనం సేవ్ చేసిన రేఖాచిత్రాలకు అందుబాటులో ఉంటుంది.',
             include_deletions: {
-                label: 'తొలగింపులను పరిగణించండి',
-                description: 'మూలంలో లేని రేఖాచిత్ర అంశాలను చేర్చండి.',
+                label: 'తొలగింపులను ప్రతిపాదించండి',
+                description:
+                    'పోల్చిన మూలంలో లేని అంశాలను రేఖాచిత్రం నుండి తీసివేయడానికి ప్రతిపాదించండి.',
                 warning:
                     'పాక్షిక మూలం తనలో లేని అంశాల తొలగింపును ప్రతిపాదించవచ్చు.',
+                warning_info_aria: 'పాక్షిక మూలంతో తొలగింపు సమాచారం',
             },
             errors: {
                 unable_to_detect: 'ఈ మూలాన్ని గుర్తించలేకపోయాం.',

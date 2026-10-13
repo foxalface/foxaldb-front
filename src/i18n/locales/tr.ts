@@ -755,8 +755,8 @@ export const tr: LanguageTranslation = {
             import_schema: {
                 title: 'Şemanızı yapıştırın',
                 textarea_label: 'Şema içeriği',
-                textarea_placeholder:
-                    'SQL, DBML veya JSON meta verilerini buraya yapıştırın…',
+                source_placeholder:
+                    'SQL, DBML veya JSON yapıştırın veya bir dosya bırakın…',
                 auto_detect_hint: 'Formatı otomatik olarak algılayacağız.',
                 or_divider: 'VEYA',
                 choose_file: 'Dosya seç',
@@ -766,7 +766,10 @@ export const tr: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'Daha fazla bilgi…',
                     title: 'Gizlilik ve desteklenen formatlar',
-                    intro: 'Bir dosya seçmeden önce FoxalDB’nin içe aktarma sırasında verilerinizi nasıl işlediğini öğrenin.',
+                    intro_import:
+                        'Bir dosya seçmeden önce FoxalDB’nin içe aktarma sırasında verilerinizi nasıl işlediğini öğrenin.',
+                    intro_merge:
+                        'Bir dosya seçmeden önce, birleştirme için FoxalDB’nin verilerinizi nasıl işlediğini öğrenin. Proje arşivleri cihazınızda kalır; karşılaştırma için yalnızca hazırlanan şema gönderilir.',
                     highlights: {
                         no_execution:
                             'İçe aktarmalar yalnızca statik analiz kullanır — kodunuz asla çalıştırılmaz.',
@@ -1932,11 +1935,14 @@ export const tr: LanguageTranslation = {
             title: 'Birleştir',
             description: 'Karşılaştırılacak kaynak',
             source_label: 'Kaynak',
-            source_placeholder: 'SQL, DBML veya JSON yapıştırın…',
             source_hint: 'Biçim otomatik algılanır.',
             choose_file: 'Dosya içe aktar',
             change_file_aria: 'Seçilen dosya: {{name}}. Başka bir dosya seçin.',
             analyzing: 'Kaynak algılanıyor…',
+            detection: {
+                unsupported_description:
+                    'Bu format birleştirme için desteklenmiyor.',
+            },
             compare: 'Karşılaştır',
             comparing: 'Karşılaştırılıyor…',
             cancel: 'İptal',
@@ -1944,10 +1950,12 @@ export const tr: LanguageTranslation = {
             applied: 'Birleştirme uygulandı',
             unavailable: 'Birleştirme kayıtlı diyagramlar için kullanılabilir.',
             include_deletions: {
-                label: 'Silmeleri dikkate al',
-                description: 'Kaynakta olmayan diyagram öğelerini dahil et.',
+                label: 'Silme öner',
+                description:
+                    'Karşılaştırılan kaynakta olmayan öğeleri diyagramdan kaldırmayı öner.',
                 warning:
                     'Eksik bir kaynak, içermediği öğeler için silme önerebilir.',
+                warning_info_aria: 'Eksik kaynakla silme hakkında bilgi',
             },
             errors: {
                 unable_to_detect: 'Bu kaynak tanınamadı.',

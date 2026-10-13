@@ -759,8 +759,8 @@ export const gu: LanguageTranslation = {
             import_schema: {
                 title: 'તમારું સ્કીમા પેસ્ટ કરો',
                 textarea_label: 'સ્કીમા સામગ્રી',
-                textarea_placeholder:
-                    'અહીં SQL, DBML અથવા JSON મેટાડેટા પેસ્ટ કરો…',
+                source_placeholder:
+                    'SQL, DBML અથવા JSON પેસ્ટ કરો, અથવા ફાઇલ ડ્રોપ કરો…',
                 auto_detect_hint: 'અમે ફોર્મેટ આપમેળે શોધીશું.',
                 or_divider: 'અથવા',
                 choose_file: 'ફાઇલ પસંદ કરો',
@@ -770,7 +770,10 @@ export const gu: LanguageTranslation = {
                 privacy_info: {
                     link_label: 'વધુ માહિતી…',
                     title: 'ગોપનીયતા અને સમર્થિત ફોર્મેટ',
-                    intro: 'ફાઇલ પસંદ કરતા પહેલાં, આયાત દરમિયાન FoxalDB તમારા ડેટાને કેવી રીતે હેન્ડલ કરે છે તે જાણો.',
+                    intro_import:
+                        'ફાઇલ પસંદ કરતા પહેલાં, આયાત દરમિયાન FoxalDB તમારા ડેટાને કેવી રીતે હેન્ડલ કરે છે તે જાણો.',
+                    intro_merge:
+                        'ફાઇલ પસંદ કરતા પહેલાં, મર્જ માટે FoxalDB તમારા ડેટાને કેવી રીતે હેન્ડલ કરે છે તે જાણો. પ્રોજેક્ટ આર્કાઇવ તમારા ઉપકરણ પર રહે છે; તુલના માટે ફક્ત તૈયાર સ્કીમા મોકલવામાં આવે છે.',
                     highlights: {
                         no_execution:
                             'આયાત માત્ર સ્થિર વિશ્લેષણનો ઉપયોગ કરે છે — તમારો કોડ ક્યારેય ચલાવવામાં આવતો નથી.',
@@ -1928,11 +1931,13 @@ export const gu: LanguageTranslation = {
             title: 'મર્જ',
             description: 'સરખામણી માટેનો સ્રોત',
             source_label: 'સ્રોત',
-            source_placeholder: 'SQL, DBML અથવા JSON પેસ્ટ કરો…',
             source_hint: 'ફોર્મેટ આપમેળે ઓળખાય છે.',
             choose_file: 'ફાઇલ આયાત કરો',
             change_file_aria: 'પસંદ કરેલી ફાઇલ: {{name}}. બીજી ફાઇલ પસંદ કરો.',
             analyzing: 'સ્રોત ઓળખાઈ રહ્યો છે…',
+            detection: {
+                unsupported_description: 'મર્જ માટે આ ફોર્મેટ સમર્થિત નથી.',
+            },
             compare: 'સરખામણી',
             comparing: 'સરખામણી થઈ રહી છે…',
             cancel: 'રદ કરો',
@@ -1940,10 +1945,12 @@ export const gu: LanguageTranslation = {
             applied: 'મર્જ લાગુ થયું',
             unavailable: 'મર્જ સાચવેલા આકૃતિઓ માટે ઉપલબ્ધ છે.',
             include_deletions: {
-                label: 'કાઢી નાખવાનું ધ્યાનમાં લો',
-                description: 'સ્રોતમાં ન હોય તેવા આકૃતિના ઘટકો શામેલ કરો.',
+                label: 'કાઢી નાખવાનું સૂચવો',
+                description:
+                    'સરખાવેલ સ્રોતમાં ન હોય તેવા ઘટકો આકૃતિમાંથી દૂર કરવાનું સૂચવો.',
                 warning:
                     'અપૂર્ણ સ્રોત એવા ઘટકો કાઢી નાખવાનું સૂચવી શકે છે જે તેમાં નથી.',
+                warning_info_aria: 'આંશિક સ્રોત સાથે કાઢી નાખવાની માહિતી',
             },
             errors: {
                 unable_to_detect: 'આ સ્રોત ઓળખી શકાયો નહીં.',

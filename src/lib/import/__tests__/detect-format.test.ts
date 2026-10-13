@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { detectImportFormat } from '../detect-format';
 import {
+    dbmlFoxalExportSample,
     dbmlSample,
     diagramJsonSample,
     genericAmbiguousSql,
@@ -15,6 +16,11 @@ import {
 describe('detectImportFormat', () => {
     it('recognizes DBML', () => {
         const result = detectImportFormat(dbmlSample);
+        expect(result).toEqual({ format: 'dbml', confidence: 'high' });
+    });
+
+    it('recognizes FoxalDB DBML export syntax', () => {
+        const result = detectImportFormat(dbmlFoxalExportSample);
         expect(result).toEqual({ format: 'dbml', confidence: 'high' });
     });
 

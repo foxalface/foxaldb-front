@@ -44,6 +44,27 @@ vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartState,
 }));
 
+vi.mock('@/components/code-snippet/code-snippet', () => ({
+    CodeSnippet: ({
+        code,
+        editorProps,
+    }: {
+        code: string;
+        editorProps?: {
+            onChange?: (value: string) => void;
+            options?: { ariaLabel?: string };
+        };
+    }) => (
+        <textarea
+            aria-label={editorProps?.options?.ariaLabel ?? 'code-editor'}
+            value={code}
+            onChange={(event) => {
+                editorProps?.onChange?.(event.target.value);
+            }}
+        />
+    ),
+}));
+
 vi.mock('@/lib/upload-capabilities', async () => {
     const actual = (await vi.importActual(
         '@/lib/upload-capabilities'
@@ -212,7 +233,7 @@ describe('Merge wizard source detection', () => {
         );
 
         await waitFor(() =>
-            expect(screen.getByRole('textbox')).toHaveValue('')
+            expect(screen.getByRole('textbox')).toHaveValue(dbmlSample)
         );
         expect(
             screen.getByRole('button', {
