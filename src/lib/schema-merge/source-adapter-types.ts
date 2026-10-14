@@ -105,12 +105,14 @@ export type SchemaMergeInvalidCode =
     | 'archive_input_required'
     | 'unknown_project_candidate'
     | 'unknown_database_group'
-    | 'invalid_dialect_resolution';
+    | 'invalid_dialect_resolution'
+    | 'invalid_diagram_json';
 
 export interface SchemaMergeInvalidSource {
     status: 'invalid';
     code: SchemaMergeInvalidCode;
     archiveCode?: string;
+    diagramJsonPath?: string | null;
 }
 
 export interface SchemaMergeDatabaseTypeMismatch {

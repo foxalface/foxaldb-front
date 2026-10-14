@@ -7,7 +7,7 @@ import {
     getDiagramJsonDatabaseType,
     detectImportFormat,
 } from '@/lib/import/detect-format';
-import { importDiagramFromJson } from '@/lib/import/import-diagram-from-json';
+import { parseDiagramJsonContent } from '@/lib/import/parse-diagram-json-content';
 import { importSchema } from '@/lib/import/import-schema';
 import { areDialectsCompatibleForMatch } from '@/lib/import/import-schema-resolution';
 import type { ImportFormat } from '@/lib/import/types';
@@ -86,12 +86,20 @@ const unsupported = (
 
 const invalid = (
     code: SchemaMergeInvalidSource['code'],
-    archiveCode?: string
+    options: { archiveCode?: string; diagramJsonPath?: string | null } = {}
 ): SchemaMergeInvalidSource => ({
     status: 'invalid',
     code,
-    ...(archiveCode ? { archiveCode } : {}),
+    ...(options.archiveCode ? { archiveCode: options.archiveCode } : {}),
+    ...(options.diagramJsonPath !== undefined
+        ? { diagramJsonPath: options.diagramJsonPath }
+        : {}),
 });
+
+const invalidDiagramJson = (
+    diagramJsonPath: string | null
+): SchemaMergeInvalidSource =>
+    invalid('invalid_diagram_json', { diagramJsonPath });
 
 const fileTooLarge = (
     limit: SchemaMergeFileTooLarge['limit'],
@@ -220,7 +228,7 @@ const mapArchiveError = (
         );
     }
 
-    return invalid('malformed_archive', error.code);
+    return invalid('malformed_archive', { archiveCode: error.code });
 };
 
 const mapProjectError = (
@@ -276,19 +284,19 @@ const prepareDiagramJson = (
         );
     }
 
-    try {
-        const diagram = importDiagramFromJson(content, detectedDatabaseType);
+    const parsed = parseDiagramJsonContent(content, detectedDatabaseType);
 
-        return finishReady({
-            diagram,
-            sourceKind,
-            detectedFormat: 'diagram_json',
-            detectedFramework: null,
-            currentDatabaseType: context.currentDiagram.databaseType,
-        });
-    } catch {
-        return invalid('malformed_source');
+    if (!parsed.ok) {
+        return invalidDiagramJson(parsed.failure.path);
     }
+
+    return finishReady({
+        diagram: parsed.diagram,
+        sourceKind,
+        detectedFormat: 'diagram_json',
+        detectedFramework: null,
+        currentDatabaseType: context.currentDiagram.databaseType,
+    });
 };
 
 /**

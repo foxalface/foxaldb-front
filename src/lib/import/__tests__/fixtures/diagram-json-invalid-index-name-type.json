@@ -1,0 +1,37 @@
+{
+  "id": "diagram",
+  "name": "broken-fixture",
+  "databaseType": "mysql",
+  "tables": [
+    {
+      "id": "table-1",
+      "name": "users",
+      "x": 0,
+      "y": 0,
+      "fields": [
+        {
+          "id": "field-1",
+          "name": "id",
+          "type": { "id": "int", "name": "int" },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1
+        }
+      ],
+      "indexes": [
+        {
+          "id": "index-1",
+          "name": 123,
+          "unique": false,
+          "fieldIds": ["field-1"],
+          "createdAt": 1
+        }
+      ],
+      "color": "#fff",
+      "isView": false,
+      "createdAt": 1
+    }
+  ],
+  "relationships": []
+}

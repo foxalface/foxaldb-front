@@ -871,6 +871,7 @@ export const ar: LanguageTranslation = {
                     dbml: 'تم اكتشاف DBML',
                     metadata_json: 'تم اكتشاف بيانات JSON الوصفية',
                     diagram_json: 'تم اكتشاف JSON للمخطط',
+                    invalid_diagram_json: 'JSON مخطط غير صالح',
                     sql_ambiguous_title: 'تم اكتشاف SQL',
                     sql_ambiguous_description: 'تعذر تحديد قاعدة البيانات.',
                     clickhouse_unsupported: 'تم اكتشاف SQL لـ ClickHouse',
@@ -956,6 +957,7 @@ export const ar: LanguageTranslation = {
                         'تعذر استيراد المخطط. تحقق من المحتوى وحاول مرة أخرى.',
                     invalid_diagram_json:
                         'JSON المخطط غير صالح. تحقق من الملف وحاول مرة أخرى.',
+                    invalid_diagram_json_hint: 'تحقق من الملف وحاول مرة أخرى.',
                 },
             },
 
@@ -1947,6 +1949,8 @@ export const ar: LanguageTranslation = {
                 unsupported_source: 'هذا المصدر غير مدعوم.',
                 unsupported_file_extension: 'نوع الملف هذا غير مدعوم.',
                 malformed_source: 'تعذر قراءة هذا المصدر.',
+                invalid_diagram_json:
+                    'JSON المخطط غير صالح. تحقق من الملف وحاول مرة أخرى.',
                 malformed_archive: 'تعذر قراءة هذا الأرشيف.',
                 unreadable_file: 'تعذر قراءة الملف المحدد.',
                 file_too_large: 'هذا الملف كبير جدًا.',

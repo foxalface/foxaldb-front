@@ -834,6 +834,7 @@ export const zh_CN: LanguageTranslation = {
                     dbml: '已检测到 DBML',
                     metadata_json: '已检测到元数据 JSON',
                     diagram_json: '已检测到图表 JSON',
+                    invalid_diagram_json: '无效的图表 JSON',
                     sql_ambiguous_title: '已检测到 SQL',
                     sql_ambiguous_description: '无法识别数据库。',
                     clickhouse_unsupported: '检测到 ClickHouse SQL',
@@ -903,6 +904,7 @@ export const zh_CN: LanguageTranslation = {
                         '仅支持 .sql、.dbml、.json 和 .zip 项目压缩包。',
                     import_failed: '无法导入架构。请检查内容后重试。',
                     invalid_diagram_json: '图表 JSON 无效。请检查文件后重试。',
+                    invalid_diagram_json_hint: '请检查文件后重试。',
                 },
             },
 
@@ -1846,6 +1848,7 @@ export const zh_CN: LanguageTranslation = {
                 unsupported_source: '不支持此来源。',
                 unsupported_file_extension: '不支持此文件类型。',
                 malformed_source: '无法读取此来源。',
+                invalid_diagram_json: '图表 JSON 无效。请检查文件后重试。',
                 malformed_archive: '无法读取此压缩包。',
                 unreadable_file: '无法读取所选文件。',
                 file_too_large: '此文件太大。',

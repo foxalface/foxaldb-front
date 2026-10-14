@@ -879,6 +879,7 @@ export const hr: LanguageTranslation = {
                     dbml: 'DBML prepoznat',
                     metadata_json: 'JSON metapodataka prepoznat',
                     diagram_json: 'JSON dijagrama prepoznat',
+                    invalid_diagram_json: 'Nevažeći JSON dijagrama',
                     sql_ambiguous_title: 'SQL prepoznat',
                     sql_ambiguous_description:
                         'DBMS nije mogao biti automatski prepoznat.',
@@ -969,6 +970,8 @@ export const hr: LanguageTranslation = {
                         'Shemu nije bilo moguće uvesti. Provjerite sadržaj i pokušajte ponovno.',
                     invalid_diagram_json:
                         'JSON dijagrama nije valjan. Provjerite datoteku i pokušajte ponovno.',
+                    invalid_diagram_json_hint:
+                        'Provjerite datoteku i pokušajte ponovno.',
                 },
             },
 
@@ -1977,6 +1980,8 @@ export const hr: LanguageTranslation = {
                 unsupported_source: 'Ovaj izvor nije podržan.',
                 unsupported_file_extension: 'Ova vrsta datoteke nije podržana.',
                 malformed_source: 'Ovaj izvor nije moguće pročitati.',
+                invalid_diagram_json:
+                    'JSON dijagrama nije valjan. Provjerite datoteku i pokušajte ponovno.',
                 malformed_archive: 'Ovu arhivu nije moguće pročitati.',
                 unreadable_file: 'Odabranu datoteku nije moguće pročitati.',
                 file_too_large: 'Ova datoteka je prevelika.',

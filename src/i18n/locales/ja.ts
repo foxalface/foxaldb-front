@@ -886,6 +886,7 @@ export const ja: LanguageTranslation = {
                     dbml: 'DBML を検出',
                     metadata_json: 'メタデータ JSON を検出',
                     diagram_json: 'ダイアグラム JSON を検出',
+                    invalid_diagram_json: '無効なダイアグラム JSON',
                     sql_ambiguous_title: 'SQL を検出',
                     sql_ambiguous_description:
                         'DBMS を自動的に特定できませんでした。',
@@ -982,6 +983,8 @@ export const ja: LanguageTranslation = {
                         'スキーマをインポートできませんでした。内容を確認して再試行してください。',
                     invalid_diagram_json:
                         'ダイアグラム JSON が無効です。ファイルを確認して再度お試しください。',
+                    invalid_diagram_json_hint:
+                        'ファイルを確認して、もう一度お試しください。',
                 },
             },
 
@@ -2011,6 +2014,8 @@ export const ja: LanguageTranslation = {
                 unsupported_file_extension:
                     'このファイル形式はサポートされていません。',
                 malformed_source: 'このソースを読み取れませんでした。',
+                invalid_diagram_json:
+                    'ダイアグラム JSON が無効です。ファイルを確認して再度お試しください。',
                 malformed_archive: 'このアーカイブを読み取れませんでした。',
                 unreadable_file: '選択したファイルを読み取れませんでした。',
                 file_too_large: 'このファイルは大きすぎます。',

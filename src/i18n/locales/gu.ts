@@ -874,6 +874,7 @@ export const gu: LanguageTranslation = {
                     dbml: 'DBML શોધાયું',
                     metadata_json: 'મેટાડેટા JSON શોધાયું',
                     diagram_json: 'ડાયાગ્રામ JSON શોધાયું',
+                    invalid_diagram_json: 'અમાન્ય ડાયાગ્રામ JSON',
                     sql_ambiguous_title: 'SQL શોધાયું',
                     sql_ambiguous_description: 'ડેટાબેઝ ઓળખી શકાયું નહીં.',
                     clickhouse_unsupported: 'ClickHouse SQL શોધાયું',
@@ -952,6 +953,7 @@ export const gu: LanguageTranslation = {
                         'સ્કીમા આયાત થઈ શક્યું નહીં. સામગ્રી તપાસીને ફરી પ્રયાસ કરો.',
                     invalid_diagram_json:
                         'ડાયાગ્રામ JSON અમાન્ય છે. ફાઇલ તપાસીને ફરી પ્રયાસ કરો.',
+                    invalid_diagram_json_hint: 'ફાઇલ તપાસો અને ફરી પ્રયાસ કરો.',
                 },
             },
 
@@ -1957,6 +1959,8 @@ export const gu: LanguageTranslation = {
                 unsupported_source: 'આ સ્રોત સમર્થિત નથી.',
                 unsupported_file_extension: 'આ ફાઇલ પ્રકાર સમર્થિત નથી.',
                 malformed_source: 'આ સ્રોત વાંચી શકાયો નહીં.',
+                invalid_diagram_json:
+                    'ડાયાગ્રામ JSON અમાન્ય છે. ફાઇલ તપાસીને ફરી પ્રયાસ કરો.',
                 malformed_archive: 'આ આર્કાઇવ વાંચી શકાયું નહીં.',
                 unreadable_file: 'પસંદ કરેલી ફાઇલ વાંચી શકાઈ નહીં.',
                 file_too_large: 'આ ફાઇલ ખૂબ મોટી છે.',

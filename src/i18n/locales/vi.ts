@@ -885,6 +885,7 @@ export const vi: LanguageTranslation = {
                     dbml: 'Đã phát hiện DBML',
                     metadata_json: 'Đã phát hiện siêu dữ liệu JSON',
                     diagram_json: 'Đã phát hiện JSON sơ đồ',
+                    invalid_diagram_json: 'JSON sơ đồ không hợp lệ',
                     sql_ambiguous_title: 'Đã phát hiện SQL',
                     sql_ambiguous_description:
                         'Không thể tự động xác định DBMS.',
@@ -969,6 +970,7 @@ export const vi: LanguageTranslation = {
                         'Không thể nhập lược đồ. Kiểm tra nội dung và thử lại.',
                     invalid_diagram_json:
                         'JSON sơ đồ không hợp lệ. Kiểm tra tệp và thử lại.',
+                    invalid_diagram_json_hint: 'Kiểm tra tệp và thử lại.',
                 },
             },
 
@@ -1968,6 +1970,8 @@ export const vi: LanguageTranslation = {
                 unsupported_source: 'Nguồn này không được hỗ trợ.',
                 unsupported_file_extension: 'Loại tệp này không được hỗ trợ.',
                 malformed_source: 'Không đọc được nguồn này.',
+                invalid_diagram_json:
+                    'JSON sơ đồ không hợp lệ. Kiểm tra tệp và thử lại.',
                 malformed_archive: 'Không đọc được kho lưu trữ này.',
                 unreadable_file: 'Không đọc được tệp đã chọn.',
                 file_too_large: 'Tệp này quá lớn.',

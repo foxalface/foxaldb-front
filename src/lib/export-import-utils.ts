@@ -1,6 +1,6 @@
 import { cloneDiagram } from './clone';
-import { diagramSchema, type Diagram } from './domain/diagram';
-import { generateDiagramId } from './utils';
+import type { Diagram } from './domain/diagram';
+import { parseDiagramJsonContent } from './import/parse-diagram-json-content';
 
 export const DIAGRAM_JSON_SCHEMA_VERSION = 1 as const;
 
@@ -23,11 +23,6 @@ export const cloneDiagramWithRunningIds = (
     return { diagram: clonedDiagram, idsMap };
 };
 
-const cloneDiagramWithIds = (diagram: Diagram): Diagram => ({
-    ...cloneDiagram(diagram).diagram,
-    id: generateDiagramId(),
-});
-
 export const diagramToJSONOutput = (diagram: Diagram): string => {
     return JSON.stringify(
         {
@@ -41,13 +36,11 @@ export const diagramToJSONOutput = (diagram: Diagram): string => {
 };
 
 export const diagramFromJSONInput = (json: string): Diagram => {
-    const loadedDiagram = JSON.parse(json);
+    const parsed = parseDiagramJsonContent(json);
 
-    const diagram = diagramSchema.parse({
-        ...loadedDiagram,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-    });
+    if (!parsed.ok) {
+        throw new Error('Invalid diagram JSON');
+    }
 
-    return cloneDiagramWithIds(diagram);
+    return parsed.diagram;
 };

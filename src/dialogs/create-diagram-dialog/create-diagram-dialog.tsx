@@ -376,9 +376,15 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 if (error instanceof ImportSchemaResolutionError) {
                     message = error.message;
                 } else if (error instanceof ImportDiagramJsonError) {
-                    message = t(
-                        'new_diagram_dialog.import_schema.errors.invalid_diagram_json'
+                    const hint = t(
+                        'new_diagram_dialog.import_schema.errors.invalid_diagram_json_hint'
                     );
+                    const title = t(
+                        'new_diagram_dialog.import_schema.detection.invalid_diagram_json'
+                    );
+                    message = error.failure.path
+                        ? `${title} — ${hint} ${error.failure.path}`
+                        : `${title} — ${hint}`;
                 }
 
                 setImportError(message);

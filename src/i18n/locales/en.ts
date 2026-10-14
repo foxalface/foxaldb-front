@@ -887,6 +887,7 @@ export const en = {
                     dbml: 'DBML detected',
                     metadata_json: 'Metadata JSON detected',
                     diagram_json: 'Diagram JSON detected',
+                    invalid_diagram_json: 'Invalid diagram JSON',
                     sql_ambiguous_title: 'SQL detected',
                     sql_ambiguous_description:
                         'The DBMS could not be identified automatically.',
@@ -967,6 +968,7 @@ export const en = {
                         'The schema could not be imported. Check the content and try again.',
                     invalid_diagram_json:
                         'The diagram JSON is invalid. Check the file and try again.',
+                    invalid_diagram_json_hint: 'Check the file and try again.',
                 },
             },
 
@@ -1975,6 +1977,8 @@ export const en = {
                 unsupported_source: 'This source is not supported.',
                 unsupported_file_extension: 'This file type is not supported.',
                 malformed_source: 'This source could not be read.',
+                invalid_diagram_json:
+                    'The diagram JSON is invalid. Check the file and try again.',
                 malformed_archive: 'This archive could not be read.',
                 unreadable_file: 'Could not read the selected file.',
                 file_too_large: 'This file is too large.',

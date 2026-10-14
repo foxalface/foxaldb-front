@@ -882,6 +882,7 @@ export const te: LanguageTranslation = {
                     dbml: 'DBML గుర్తించబడింది',
                     metadata_json: 'మెటాడేటా JSON గుర్తించబడింది',
                     diagram_json: 'డయాగ్రామ్ JSON గుర్తించబడింది',
+                    invalid_diagram_json: 'చెల్లని డయాగ్రామ్ JSON',
                     sql_ambiguous_title: 'SQL గుర్తించబడింది',
                     sql_ambiguous_description: 'డేటాబేస్ గుర్తించబడలేదు.',
                     clickhouse_unsupported: 'ClickHouse SQL గుర్తించబడింది',
@@ -969,6 +970,8 @@ export const te: LanguageTranslation = {
                         'స్కీమాను దిగుమతి చేయలేకపోయాము. కంటెంట్ తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
                     invalid_diagram_json:
                         'డయాగ్రామ్ JSON చెల్లదు. ఫైల్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+                    invalid_diagram_json_hint:
+                        'ఫైల్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
                 },
             },
 
@@ -1993,6 +1996,8 @@ export const te: LanguageTranslation = {
                 unsupported_source: 'ఈ మూలం మద్దతు లేదు.',
                 unsupported_file_extension: 'ఈ ఫైల్ రకం మద్దతు లేదు.',
                 malformed_source: 'ఈ మూలాన్ని చదవలేకపోయాం.',
+                invalid_diagram_json:
+                    'డయాగ్రామ్ JSON చెల్లదు. ఫైల్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
                 malformed_archive: 'ఈ ఆర్కైవ్‌ను చదవలేకపోయాం.',
                 unreadable_file: 'ఎంచుకున్న ఫైల్‌ను చదవలేకపోయాం.',
                 file_too_large: 'ఈ ఫైల్ చాలా పెద్దది.',

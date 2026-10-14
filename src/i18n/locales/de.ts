@@ -908,6 +908,7 @@ export const de: LanguageTranslation = {
                     dbml: 'DBML erkannt',
                     metadata_json: 'Metadaten-JSON erkannt',
                     diagram_json: 'Diagramm-JSON erkannt',
+                    invalid_diagram_json: 'Ungültiges Diagramm-JSON',
                     sql_ambiguous_title: 'SQL erkannt',
                     sql_ambiguous_description:
                         'Das DBMS konnte nicht automatisch erkannt werden.',
@@ -994,6 +995,8 @@ export const de: LanguageTranslation = {
                         'Das Schema konnte nicht importiert werden. Prüfen Sie den Inhalt und versuchen Sie es erneut.',
                     invalid_diagram_json:
                         'Das Diagramm-JSON ist ungültig. Prüfen Sie die Datei und versuchen Sie es erneut.',
+                    invalid_diagram_json_hint:
+                        'Überprüfen Sie die Datei und versuchen Sie es erneut.',
                 },
             },
 
@@ -2032,6 +2035,8 @@ export const de: LanguageTranslation = {
                 unsupported_file_extension:
                     'Dieser Dateityp wird nicht unterstützt.',
                 malformed_source: 'Diese Quelle konnte nicht gelesen werden.',
+                invalid_diagram_json:
+                    'Das Diagramm-JSON ist ungültig. Prüfen Sie die Datei und versuchen Sie es erneut.',
                 malformed_archive: 'Dieses Archiv konnte nicht gelesen werden.',
                 unreadable_file:
                     'Die ausgewählte Datei konnte nicht gelesen werden.',

@@ -884,6 +884,7 @@ export const uk: LanguageTranslation = {
                     dbml: 'Виявлено DBML',
                     metadata_json: 'Виявлено метадані JSON',
                     diagram_json: 'Виявлено JSON діаграми',
+                    invalid_diagram_json: 'Недійсний JSON діаграми',
                     sql_ambiguous_title: 'Виявлено SQL',
                     sql_ambiguous_description:
                         'СУБД не вдалося визначити автоматично.',
@@ -969,6 +970,8 @@ export const uk: LanguageTranslation = {
                         'Не вдалося імпортувати схему. Перевірте вміст і спробуйте знову.',
                     invalid_diagram_json:
                         'JSON діаграми недійсний. Перевірте файл і повторіть спробу.',
+                    invalid_diagram_json_hint:
+                        'Перевірте файл і повторіть спробу.',
                 },
             },
 
@@ -1979,6 +1982,8 @@ export const uk: LanguageTranslation = {
                 unsupported_source: 'Це джерело не підтримується.',
                 unsupported_file_extension: 'Цей тип файлу не підтримується.',
                 malformed_source: 'Не вдалося прочитати це джерело.',
+                invalid_diagram_json:
+                    'JSON діаграми недійсний. Перевірте файл і повторіть спробу.',
                 malformed_archive: 'Не вдалося прочитати цей архів.',
                 unreadable_file: 'Не вдалося прочитати вибраний файл.',
                 file_too_large: 'Цей файл завеликий.',

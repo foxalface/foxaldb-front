@@ -894,6 +894,7 @@ export const pt_BR: LanguageTranslation = {
                     dbml: 'DBML detectado',
                     metadata_json: 'Metadados JSON detectados',
                     diagram_json: 'JSON de diagrama detectado',
+                    invalid_diagram_json: 'JSON de diagrama inválido',
                     sql_ambiguous_title: 'SQL detectado',
                     sql_ambiguous_description:
                         'O SGBD não pôde ser identificado automaticamente.',
@@ -981,6 +982,8 @@ export const pt_BR: LanguageTranslation = {
                         'Não foi possível importar o esquema. Verifique o conteúdo e tente novamente.',
                     invalid_diagram_json:
                         'O JSON do diagrama é inválido. Verifique o arquivo e tente novamente.',
+                    invalid_diagram_json_hint:
+                        'Verifique o arquivo e tente novamente.',
                 },
             },
 
@@ -2006,6 +2009,8 @@ export const pt_BR: LanguageTranslation = {
                 unsupported_file_extension:
                     'Este tipo de arquivo não é suportado.',
                 malformed_source: 'Não foi possível ler esta fonte.',
+                invalid_diagram_json:
+                    'O JSON do diagrama é inválido. Verifique o arquivo e tente novamente.',
                 malformed_archive:
                     'Não foi possível ler este arquivo compactado.',
                 unreadable_file: 'Não foi possível ler o arquivo selecionado.',

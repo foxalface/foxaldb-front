@@ -883,6 +883,7 @@ export const ru: LanguageTranslation = {
                     dbml: 'Обнаружен DBML',
                     metadata_json: 'Обнаружены метаданные JSON',
                     diagram_json: 'Обнаружен JSON диаграммы',
+                    invalid_diagram_json: 'Недопустимый JSON диаграммы',
                     sql_ambiguous_title: 'Обнаружен SQL',
                     sql_ambiguous_description:
                         'СУБД не удалось определить автоматически.',
@@ -965,6 +966,8 @@ export const ru: LanguageTranslation = {
                         'Не удалось импортировать схему. Проверьте содержимое и попробуйте снова.',
                     invalid_diagram_json:
                         'JSON диаграммы недействителен. Проверьте файл и повторите попытку.',
+                    invalid_diagram_json_hint:
+                        'Проверьте файл и повторите попытку.',
                 },
             },
 
@@ -1980,6 +1983,8 @@ export const ru: LanguageTranslation = {
                 unsupported_source: 'Этот источник не поддерживается.',
                 unsupported_file_extension: 'Этот тип файла не поддерживается.',
                 malformed_source: 'Не удалось прочитать этот источник.',
+                invalid_diagram_json:
+                    'JSON диаграммы недействителен. Проверьте файл и повторите попытку.',
                 malformed_archive: 'Не удалось прочитать этот архив.',
                 unreadable_file: 'Не удалось прочитать выбранный файл.',
                 file_too_large: 'Этот файл слишком большой.',

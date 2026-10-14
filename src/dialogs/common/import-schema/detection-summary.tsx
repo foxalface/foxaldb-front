@@ -4,6 +4,7 @@ import { databaseTypeToLabelMap } from '@/lib/databases';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import type { ImportDetectionAnalysis } from './analyze-import-content';
+import { InvalidDiagramJsonDetectionPanel } from './diagram-json-parse-error';
 
 export type DetectionSummaryContext = 'import' | 'merge';
 
@@ -21,6 +22,13 @@ export const DetectionSummary: React.FC<DetectionSummaryProps> = ({
     const content = useMemo(() => {
         if (analysis.displayKind === 'empty') {
             return null;
+        }
+
+        if (analysis.displayKind === 'invalid_diagram_json') {
+            return {
+                kind: 'invalid_diagram_json' as const,
+                path: analysis.diagramJsonErrorPath ?? null,
+            };
         }
 
         if (
@@ -134,6 +142,10 @@ export const DetectionSummary: React.FC<DetectionSummaryProps> = ({
 
     if (!content) {
         return null;
+    }
+
+    if ('kind' in content && content.kind === 'invalid_diagram_json') {
+        return <InvalidDiagramJsonDetectionPanel path={content.path} />;
     }
 
     const Icon =

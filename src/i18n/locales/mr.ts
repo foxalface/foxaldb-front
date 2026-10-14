@@ -883,6 +883,7 @@ export const mr: LanguageTranslation = {
                     dbml: 'DBML आढळले',
                     metadata_json: 'मेटाडेटा JSON आढळले',
                     diagram_json: 'डायग्राम JSON आढळले',
+                    invalid_diagram_json: 'अवैध डायाग्राम JSON',
                     sql_ambiguous_title: 'SQL आढळले',
                     sql_ambiguous_description: 'डेटाबेस ओळखता आला नाही.',
                     clickhouse_unsupported: 'ClickHouse SQL आढळले',
@@ -962,6 +963,8 @@ export const mr: LanguageTranslation = {
                         'स्कीमा आयात करता आले नाही. सामग्री तपासा आणि पुन्हा प्रयत्न करा.',
                     invalid_diagram_json:
                         'डायाग्राम JSON अवैध आहे. फाइल तपासा आणि पुन्हा प्रयत्न करा.',
+                    invalid_diagram_json_hint:
+                        'फाइल तपासा आणि पुन्हा प्रयत्न करा.',
                 },
             },
 
@@ -1975,6 +1978,8 @@ export const mr: LanguageTranslation = {
                 unsupported_source: 'हा स्रोत समर्थित नाही.',
                 unsupported_file_extension: 'हा फाइल प्रकार समर्थित नाही.',
                 malformed_source: 'हा स्रोत वाचता आला नाही.',
+                invalid_diagram_json:
+                    'डायाग्राम JSON अवैध आहे. फाइल तपासा आणि पुन्हा प्रयत्न करा.',
                 malformed_archive: 'हे संग्रहण वाचता आले नाही.',
                 unreadable_file: 'निवडलेली फाइल वाचता आली नाही.',
                 file_too_large: 'ही फाइल खूप मोठी आहे.',

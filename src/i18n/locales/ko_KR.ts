@@ -876,6 +876,7 @@ export const ko_KR: LanguageTranslation = {
                     dbml: 'DBML 감지됨',
                     metadata_json: '메타데이터 JSON 감지됨',
                     diagram_json: '다이어그램 JSON 감지됨',
+                    invalid_diagram_json: '잘못된 다이어그램 JSON',
                     sql_ambiguous_title: 'SQL 감지됨',
                     sql_ambiguous_description:
                         'DBMS를 자동으로 식별할 수 없습니다.',
@@ -970,6 +971,8 @@ export const ko_KR: LanguageTranslation = {
                         '스키마를 가져올 수 없습니다. 내용을 확인하고 다시 시도하세요.',
                     invalid_diagram_json:
                         '다이어그램 JSON이 유효하지 않습니다. 파일을 확인한 후 다시 시도하세요.',
+                    invalid_diagram_json_hint:
+                        '파일을 확인한 후 다시 시도하세요.',
                 },
             },
 
@@ -1972,6 +1975,8 @@ export const ko_KR: LanguageTranslation = {
                 unsupported_source: '이 원본은 지원되지 않습니다.',
                 unsupported_file_extension: '이 파일 형식은 지원되지 않습니다.',
                 malformed_source: '이 원본을 읽을 수 없습니다.',
+                invalid_diagram_json:
+                    '다이어그램 JSON이 유효하지 않습니다. 파일을 확인한 후 다시 시도하세요.',
                 malformed_archive: '이 아카이브를 읽을 수 없습니다.',
                 unreadable_file: '선택한 파일을 읽을 수 없습니다.',
                 file_too_large: '이 파일은 너무 큽니다.',

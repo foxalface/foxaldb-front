@@ -888,6 +888,7 @@ export const id_ID: LanguageTranslation = {
                     dbml: 'DBML terdeteksi',
                     metadata_json: 'Metadata JSON terdeteksi',
                     diagram_json: 'JSON diagram terdeteksi',
+                    invalid_diagram_json: 'JSON diagram tidak valid',
                     sql_ambiguous_title: 'SQL terdeteksi',
                     sql_ambiguous_description:
                         'DBMS tidak dapat diidentifikasi secara otomatis.',
@@ -972,6 +973,7 @@ export const id_ID: LanguageTranslation = {
                         'Skema tidak dapat diimpor. Periksa konten dan coba lagi.',
                     invalid_diagram_json:
                         'JSON diagram tidak valid. Periksa file dan coba lagi.',
+                    invalid_diagram_json_hint: 'Periksa file dan coba lagi.',
                 },
             },
 
@@ -1981,6 +1983,8 @@ export const id_ID: LanguageTranslation = {
                 unsupported_source: 'Sumber ini tidak didukung.',
                 unsupported_file_extension: 'Jenis file ini tidak didukung.',
                 malformed_source: 'Sumber ini tidak dapat dibaca.',
+                invalid_diagram_json:
+                    'JSON diagram tidak valid. Periksa file dan coba lagi.',
                 malformed_archive: 'Arsip ini tidak dapat dibaca.',
                 unreadable_file: 'File yang dipilih tidak dapat dibaca.',
                 file_too_large: 'File ini terlalu besar.',

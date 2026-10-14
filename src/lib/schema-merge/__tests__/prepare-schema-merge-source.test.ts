@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type * as ClientModule from '@/lib/api/client';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -64,6 +67,21 @@ CREATE TABLE events (
     created_at DateTime
 ) ENGINE = MergeTree ORDER BY id;
 `;
+
+const mergeFixturesDir = join(
+    dirname(fileURLToPath(import.meta.url)),
+    '../../import/__tests__/fixtures'
+);
+
+const diagramJsonNullPkIndexNames = readFileSync(
+    join(mergeFixturesDir, 'diagram-json-null-pk-index-names.json'),
+    'utf8'
+);
+
+const diagramJsonInvalidIndexName = readFileSync(
+    join(mergeFixturesDir, 'diagram-json-invalid-index-name-type.json'),
+    'utf8'
+);
 
 const diagramJsonWithTable = JSON.stringify({
     id: 'diagram',
@@ -275,6 +293,28 @@ describe('prepareSchemaMergeSource text', () => {
         );
 
         expectReady(result, 'diagram_json');
+    });
+
+    it('prepares diagram JSON with null PK index names', async () => {
+        const result = await prepareText(
+            diagramJsonNullPkIndexNames,
+            DatabaseType.MYSQL
+        );
+
+        expectReady(result, 'diagram_json');
+    });
+
+    it('returns invalid_diagram_json with a field path when validation fails', async () => {
+        const result = await prepareText(
+            diagramJsonInvalidIndexName,
+            DatabaseType.MYSQL
+        );
+
+        expect(result).toEqual({
+            status: 'invalid',
+            code: 'invalid_diagram_json',
+            diagramJsonPath: 'tables[0].indexes[0].name',
+        });
     });
 
     it('prepares metadata JSON as a normalized diagram', async () => {

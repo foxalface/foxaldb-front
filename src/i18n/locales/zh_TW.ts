@@ -834,6 +834,7 @@ export const zh_TW: LanguageTranslation = {
                     dbml: '已偵測到 DBML',
                     metadata_json: '已偵測到中繼資料 JSON',
                     diagram_json: '已偵測到圖表 JSON',
+                    invalid_diagram_json: '無效的圖表 JSON',
                     sql_ambiguous_title: '已偵測到 SQL',
                     sql_ambiguous_description: '無法識別資料庫。',
                     clickhouse_unsupported: '已偵測到 ClickHouse SQL',
@@ -903,6 +904,7 @@ export const zh_TW: LanguageTranslation = {
                         '僅支援 .sql、.dbml、.json 和 .zip 專案壓縮檔。',
                     import_failed: '無法匯入結構描述。請檢查內容後再試一次。',
                     invalid_diagram_json: '圖表 JSON 無效。請檢查檔案後重試。',
+                    invalid_diagram_json_hint: '請檢查檔案後再試一次。',
                 },
             },
 
@@ -1844,6 +1846,7 @@ export const zh_TW: LanguageTranslation = {
                 unsupported_source: '不支援此來源。',
                 unsupported_file_extension: '不支援此檔案類型。',
                 malformed_source: '無法讀取此來源。',
+                invalid_diagram_json: '圖表 JSON 無效。請檢查檔案後重試。',
                 malformed_archive: '無法讀取此壓縮檔。',
                 unreadable_file: '無法讀取所選檔案。',
                 file_too_large: '此檔案太大。',

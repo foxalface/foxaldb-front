@@ -881,6 +881,7 @@ export const bn: LanguageTranslation = {
                     dbml: 'DBML শনাক্ত হয়েছে',
                     metadata_json: 'মেটাডেটা JSON শনাক্ত হয়েছে',
                     diagram_json: 'ডায়াগ্রাম JSON শনাক্ত হয়েছে',
+                    invalid_diagram_json: 'অবৈধ ডায়াগ্রাম JSON',
                     sql_ambiguous_title: 'SQL শনাক্ত হয়েছে',
                     sql_ambiguous_description: 'ডাটাবেস শনাক্ত করা যায়নি।',
                     clickhouse_unsupported: 'ClickHouse SQL শনাক্ত হয়েছে',
@@ -963,6 +964,8 @@ export const bn: LanguageTranslation = {
                         'স্কিমা আমদানি করা যায়নি। বিষয়বস্তু পরীক্ষা করে আবার চেষ্টা করুন।',
                     invalid_diagram_json:
                         'ডায়াগ্রাম JSON অবৈধ। ফাইলটি পরীক্ষা করে আবার চেষ্টা করুন।',
+                    invalid_diagram_json_hint:
+                        'ফাইলটি পরীক্ষা করে আবার চেষ্টা করুন।',
                 },
             },
 
@@ -1971,6 +1974,8 @@ export const bn: LanguageTranslation = {
                 unsupported_source: 'এই উৎস সমর্থিত নয়।',
                 unsupported_file_extension: 'এই ফাইলের ধরন সমর্থিত নয়।',
                 malformed_source: 'এই উৎস পড়া যায়নি।',
+                invalid_diagram_json:
+                    'ডায়াগ্রাম JSON অবৈধ। ফাইলটি পরীক্ষা করে আবার চেষ্টা করুন।',
                 malformed_archive: 'এই আর্কাইভ পড়া যায়নি।',
                 unreadable_file: 'নির্বাচিত ফাইল পড়া যায়নি।',
                 file_too_large: 'এই ফাইলটি খুব বড়।',

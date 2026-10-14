@@ -904,6 +904,7 @@ export const fr: LanguageTranslation = {
                     dbml: 'DBML détecté',
                     metadata_json: 'Métadonnées JSON détectées',
                     diagram_json: 'JSON de diagramme détecté',
+                    invalid_diagram_json: 'JSON de diagramme invalide',
                     sql_ambiguous_title: 'SQL détecté',
                     sql_ambiguous_description:
                         "Le SGBD n'a pas pu être identifié automatiquement.",
@@ -991,6 +992,8 @@ export const fr: LanguageTranslation = {
                         "Le schéma n'a pas pu être importé. Vérifiez le contenu et réessayez.",
                     invalid_diagram_json:
                         "Le JSON de diagramme n'est pas valide. Vérifiez le fichier et réessayez.",
+                    invalid_diagram_json_hint:
+                        'Vérifiez le fichier et réessayez.',
                 },
             },
 
@@ -2013,6 +2016,8 @@ export const fr: LanguageTranslation = {
                 unsupported_file_extension:
                     'Ce type de fichier n’est pas pris en charge.',
                 malformed_source: 'Cette source est illisible.',
+                invalid_diagram_json:
+                    "Le JSON de diagramme n'est pas valide. Vérifiez le fichier et réessayez.",
                 malformed_archive: 'Cette archive est illisible.',
                 unreadable_file: 'Impossible de lire le fichier sélectionné.',
                 file_too_large: 'Ce fichier est trop volumineux.',

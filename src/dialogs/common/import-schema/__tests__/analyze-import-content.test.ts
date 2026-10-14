@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
 import {
@@ -11,6 +14,21 @@ import {
     randomText,
 } from '@/lib/import/__tests__/fixtures/import-samples';
 import { analyzeImportContent } from '../analyze-import-content';
+
+const fixturesDir = join(
+    dirname(fileURLToPath(import.meta.url)),
+    '../../../../lib/import/__tests__/fixtures'
+);
+
+const diagramJsonNullPkIndexNames = readFileSync(
+    join(fixturesDir, 'diagram-json-null-pk-index-names.json'),
+    'utf8'
+);
+
+const diagramJsonInvalidIndexName = readFileSync(
+    join(fixturesDir, 'diagram-json-invalid-index-name-type.json'),
+    'utf8'
+);
 
 describe('analyzeImportContent', () => {
     it('returns empty state for blank input', () => {
@@ -184,5 +202,26 @@ CREATE TABLE events (
 
         expect(result.canContinue).toBe(false);
         expect(result.displayKind).toBe('clickhouse_unsupported');
+    });
+
+    it('allows diagram JSON with null PK index names after normalization', () => {
+        const result = analyzeImportContent(
+            diagramJsonNullPkIndexNames,
+            DatabaseType.MYSQL
+        );
+
+        expect(result.displayKind).toBe('diagram_json');
+        expect(result.canContinue).toBe(true);
+    });
+
+    it('blocks diagram JSON when strict validation fails after normalization', () => {
+        const result = analyzeImportContent(
+            diagramJsonInvalidIndexName,
+            DatabaseType.MYSQL
+        );
+
+        expect(result.displayKind).toBe('invalid_diagram_json');
+        expect(result.canContinue).toBe(false);
+        expect(result.diagramJsonErrorPath).toContain('indexes');
     });
 });

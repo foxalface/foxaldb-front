@@ -872,6 +872,7 @@ export const tr: LanguageTranslation = {
                     dbml: 'DBML algılandı',
                     metadata_json: 'Meta veri JSON algılandı',
                     diagram_json: 'Diyagram JSON algılandı',
+                    invalid_diagram_json: 'Geçersiz diyagram JSON',
                     sql_ambiguous_title: 'SQL algılandı',
                     sql_ambiguous_description: 'Veritabanı tanımlanamadı.',
                     clickhouse_unsupported: 'ClickHouse SQL algılandı',
@@ -952,6 +953,8 @@ export const tr: LanguageTranslation = {
                         'Şema içe aktarılamadı. İçeriği kontrol edip tekrar deneyin.',
                     invalid_diagram_json:
                         'Diyagram JSON geçersiz. Dosyayı kontrol edip tekrar deneyin.',
+                    invalid_diagram_json_hint:
+                        'Dosyayı kontrol edip tekrar deneyin.',
                 },
             },
 
@@ -1962,6 +1965,8 @@ export const tr: LanguageTranslation = {
                 unsupported_source: 'Bu kaynak desteklenmiyor.',
                 unsupported_file_extension: 'Bu dosya türü desteklenmiyor.',
                 malformed_source: 'Bu kaynak okunamadı.',
+                invalid_diagram_json:
+                    'Diyagram JSON geçersiz. Dosyayı kontrol edip tekrar deneyin.',
                 malformed_archive: 'Bu arşiv okunamadı.',
                 unreadable_file: 'Seçilen dosya okunamadı.',
                 file_too_large: 'Bu dosya çok büyük.',

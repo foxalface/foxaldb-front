@@ -29,6 +29,10 @@ export const mergeSourcePreparationErrorKey = (
                 return 'merge_wizard.errors.unreadable_file';
             }
 
+            if (result.code === 'invalid_diagram_json') {
+                return null;
+            }
+
             if (
                 result.code === 'invalid_dialect_resolution' ||
                 result.code === 'unknown_project_candidate' ||

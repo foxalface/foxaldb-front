@@ -885,6 +885,7 @@ export const ne: LanguageTranslation = {
                     dbml: 'DBML पत्ता लाग्यो',
                     metadata_json: 'मेटाडेटा JSON पत्ता लाग्यो',
                     diagram_json: 'डायग्राम JSON पत्ता लाग्यो',
+                    invalid_diagram_json: 'अवैध डायाग्राम JSON',
                     sql_ambiguous_title: 'SQL पत्ता लाग्यो',
                     sql_ambiguous_description: 'डाटाबेस पहिचान गर्न सकिएन।',
                     clickhouse_unsupported: 'ClickHouse SQL पत्ता लाग्यो',
@@ -964,6 +965,8 @@ export const ne: LanguageTranslation = {
                         'स्किमा आयात गर्न सकिएन। सामग्री जाँच गरेर फेरि प्रयास गर्नुहोस्।',
                     invalid_diagram_json:
                         'डायाग्राम JSON अमान्य छ। फाइल जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्।',
+                    invalid_diagram_json_hint:
+                        'फाइल जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्।',
                 },
             },
 
@@ -1981,6 +1984,8 @@ export const ne: LanguageTranslation = {
                 unsupported_source: 'यो स्रोत समर्थित छैन।',
                 unsupported_file_extension: 'यो फाइल प्रकार समर्थित छैन।',
                 malformed_source: 'यो स्रोत पढ्न सकिएन।',
+                invalid_diagram_json:
+                    'डायाग्राम JSON अमान्य छ। फाइल जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्।',
                 malformed_archive: 'यो अभिलेख पढ्न सकिएन।',
                 unreadable_file: 'छानिएको फाइल पढ्न सकिएन।',
                 file_too_large: 'यो फाइल धेरै ठूलो छ।',

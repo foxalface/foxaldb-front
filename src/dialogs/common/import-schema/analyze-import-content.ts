@@ -16,6 +16,7 @@ import type {
     FormatDetectionResult,
     ImportFormat,
 } from '@/lib/import/types';
+import { parseDiagramJsonContent } from '@/lib/import/parse-diagram-json-content';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 
 export type ImportDetectionDisplayKind =
@@ -30,7 +31,8 @@ export type ImportDetectionDisplayKind =
     | 'dialect_mismatch'
     | 'clickhouse_unsupported'
     | 'unsupported'
-    | 'malformed_json';
+    | 'malformed_json'
+    | 'invalid_diagram_json';
 
 export type ImportDetectionSeverity = 'success' | 'warning' | 'error';
 
@@ -54,6 +56,7 @@ export interface ImportDetectionAnalysis {
     dialectCandidates: DatabaseType[];
     dialectCandidateScores: DialectCandidateScore[];
     requiresExplicitSourceDialect: boolean;
+    diagramJsonErrorPath?: string | null;
 }
 
 export type ImportAnalysisContext = 'create' | 'existing';
@@ -62,6 +65,30 @@ export interface AnalyzeImportContentOptions {
     resolvedSourceDialect?: DatabaseType | null;
     importContext?: ImportAnalysisContext;
 }
+
+const attachDiagramJsonParseValidation = (
+    content: string,
+    analysis: ImportDetectionAnalysis,
+    databaseTypeForParse: DatabaseType
+): ImportDetectionAnalysis => {
+    if (analysis.importMethod !== 'diagram' || !analysis.canContinue) {
+        return analysis;
+    }
+
+    const parsed = parseDiagramJsonContent(content, databaseTypeForParse);
+
+    if (parsed.ok) {
+        return analysis;
+    }
+
+    return {
+        ...analysis,
+        canContinue: false,
+        displayKind: 'invalid_diagram_json',
+        severity: 'error',
+        diagramJsonErrorPath: parsed.failure.path,
+    };
+};
 
 const buildDiagramJsonCandidates = (
     selectedDatabaseType: DatabaseType,
@@ -467,13 +494,22 @@ export const analyzeImportContent = (
             };
         }
 
-        return buildDiagramJsonAnalysis({
+        const diagramAnalysis = buildDiagramJsonAnalysis({
             format,
             selectedDatabaseType,
             diagramDatabaseType,
             resolvedSourceDialect,
             importContext,
         });
+
+        const databaseTypeForParse =
+            diagramAnalysis.resolvedSourceDialect ?? diagramDatabaseType;
+
+        return attachDiagramJsonParseValidation(
+            trimmed,
+            diagramAnalysis,
+            databaseTypeForParse
+        );
     }
 
     if (format.format === 'dbml') {

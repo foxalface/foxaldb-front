@@ -1,0 +1,45 @@
+{
+  "id": "diagram",
+  "name": "foxaldb-fixture",
+  "databaseType": "mysql",
+  "schemaVersion": 1,
+  "tables": [
+    {
+      "id": "table-1",
+      "name": "users",
+      "schema": "app",
+      "x": 0,
+      "y": 0,
+      "fields": [
+        {
+          "id": "field-1",
+          "name": "id",
+          "type": { "id": "bigint", "name": "bigint" },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "increment": true,
+          "createdAt": 1
+        }
+      ],
+      "indexes": [
+        {
+          "id": "index-pk",
+          "name": null,
+          "unique": true,
+          "fieldIds": ["field-1"],
+          "createdAt": 1,
+          "isPrimaryKey": true
+        }
+      ],
+      "color": "#8eb7ff",
+      "isView": false,
+      "createdAt": 1
+    }
+  ],
+  "relationships": [],
+  "dependencies": [],
+  "areas": [],
+  "customTypes": [],
+  "notes": []
+}

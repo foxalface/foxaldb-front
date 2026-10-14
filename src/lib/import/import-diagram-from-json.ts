@@ -1,11 +1,17 @@
-import { diagramFromJSONInput } from '@/lib/export-import-utils';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseType } from '@/lib/domain/database-type';
+import {
+    parseDiagramJsonContent,
+    type DiagramJsonParseFailure,
+} from './parse-diagram-json-content';
 
 export class ImportDiagramJsonError extends Error {
-    constructor(message: string) {
-        super(message);
+    readonly failure: DiagramJsonParseFailure;
+
+    constructor(failure: DiagramJsonParseFailure) {
+        super('Invalid diagram JSON');
         this.name = 'ImportDiagramJsonError';
+        this.failure = failure;
     }
 }
 
@@ -13,14 +19,11 @@ export const importDiagramFromJson = (
     content: string,
     databaseType: DatabaseType
 ): Diagram => {
-    try {
-        const diagram = diagramFromJSONInput(content);
+    const result = parseDiagramJsonContent(content, databaseType);
 
-        return {
-            ...diagram,
-            databaseType,
-        };
-    } catch {
-        throw new ImportDiagramJsonError('Invalid diagram JSON');
+    if (!result.ok) {
+        throw new ImportDiagramJsonError(result.failure);
     }
+
+    return result.diagram;
 };

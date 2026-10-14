@@ -24,6 +24,7 @@ import { buildDetectionAnalysisForMergeReady } from '@/dialogs/common/import-sch
 import { DetectionSummary } from '@/dialogs/common/import-schema/detection-summary';
 import { ProjectDetectionSummary } from '@/dialogs/common/import-schema/project-detection-summary';
 import { mergeCompareErrorKey } from './merge-compare-error';
+import { InvalidDiagramJsonDetectionPanel } from '@/dialogs/common/import-schema/diagram-json-parse-error';
 import { mergeSourcePreparationErrorKey } from './merge-source-preparation-message';
 import { mergeUnsupportedDetectionAnalysis } from './merge-source-unsupported-detection';
 
@@ -84,6 +85,9 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
     const deletionsId = useId();
     const inputsLocked = unavailable || isComparing;
     const preparationErrorKey = mergeSourcePreparationErrorKey(preparation);
+    const showInvalidDiagramJsonError =
+        preparation?.status === 'invalid' &&
+        preparation.code === 'invalid_diagram_json';
     const compareErrorKey = compareError
         ? mergeCompareErrorKey(compareError)
         : null;
@@ -255,6 +259,12 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
                             onSelect={(group) =>
                                 onResolveDatabaseGroup(group.id)
                             }
+                        />
+                    ) : null}
+
+                    {showInvalidDiagramJsonError ? (
+                        <InvalidDiagramJsonDetectionPanel
+                            path={preparation.diagramJsonPath ?? null}
                         />
                     ) : null}
 

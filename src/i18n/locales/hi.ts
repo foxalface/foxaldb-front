@@ -885,6 +885,7 @@ export const hi: LanguageTranslation = {
                     dbml: 'DBML का पता चला',
                     metadata_json: 'मेटाडेटा JSON का पता चला',
                     diagram_json: 'डायग्राम JSON का पता चला',
+                    invalid_diagram_json: 'अमान्य डायग्राम JSON',
                     sql_ambiguous_title: 'SQL का पता चला',
                     sql_ambiguous_description: 'डेटाबेस की पहचान नहीं हो सकी।',
                     clickhouse_unsupported: 'ClickHouse SQL का पता चला',
@@ -961,6 +962,8 @@ export const hi: LanguageTranslation = {
                         'स्कीमा आयात नहीं हो सका। सामग्री जांचें और पुनः प्रयास करें।',
                     invalid_diagram_json:
                         'डायाग्राम JSON अमान्य है। फ़ाइल जाँचें और पुनः प्रयास करें।',
+                    invalid_diagram_json_hint:
+                        'फ़ाइल जाँचें और पुनः प्रयास करें।',
                 },
             },
 
@@ -1975,6 +1978,8 @@ export const hi: LanguageTranslation = {
                 unsupported_source: 'यह स्रोत समर्थित नहीं है।',
                 unsupported_file_extension: 'यह फ़ाइल प्रकार समर्थित नहीं है।',
                 malformed_source: 'यह स्रोत पढ़ा नहीं जा सका।',
+                invalid_diagram_json:
+                    'डायाग्राम JSON अमान्य है। फ़ाइल जाँचें और पुनः प्रयास करें।',
                 malformed_archive: 'यह संग्रह पढ़ा नहीं जा सका।',
                 unreadable_file: 'चुनी गई फ़ाइल पढ़ी नहीं जा सकी।',
                 file_too_large: 'यह फ़ाइल बहुत बड़ी है।',
