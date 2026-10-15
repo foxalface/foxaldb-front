@@ -1882,6 +1882,8 @@ export const zh_CN: LanguageTranslation = {
             },
             result: {
                 summary: '合并前请检查这些更改。',
+                changes: '变更',
+                preview: '预览',
                 no_differences: '未发现差异',
                 views_not_compared: '此源格式无法可靠地比较视图。',
                 analysis_error: '无法审阅此次比较。',

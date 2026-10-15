@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Alert, AlertDescription } from '@/components/alert/alert';
 import { Button } from '@/components/button/button';
 import { Accordion } from '@/components/accordion/accordion';
@@ -13,9 +13,11 @@ import {
     groupMergeOperations,
     MERGE_RESULT_SECTION_ORDER,
 } from '@/lib/schema-merge/group-operations';
+import { buildSchemaMergePreview } from '@/lib/schema-merge/preview/build-schema-merge-preview';
 import { useTranslation } from 'react-i18next';
 import type { MergeText } from './format-merge-change';
 import { buildMergeLabelContext } from './merge-operation-label';
+import { MergePreviewCanvas } from './merge-preview-canvas';
 import { MergeResultSection } from './merge-result-section';
 import type { SchemaMergeApplyFailure } from '@/lib/api/schema-merge-apply';
 import { selectedOperationIdsInCompareOrder } from '@/lib/schema-merge/operation-selection';
@@ -52,6 +54,7 @@ export const MergeResultStep: React.FC<{
     const noDifferences = operations.length === 0;
     const retryBlocked =
         applyError !== null && mergeApplyBlocksRetry(applyError);
+    const showPreviewWorkspace = !noDifferences && !selection.hasAnalysisError;
     const canMerge =
         canApply &&
         !isApplying &&
@@ -59,6 +62,66 @@ export const MergeResultStep: React.FC<{
         operations.length > 0 &&
         selection.selectedCount > 0 &&
         !selection.hasAnalysisError;
+
+    const previewProjection = useMemo(() => {
+        if (!showPreviewWorkspace) {
+            return null;
+        }
+
+        return buildSchemaMergePreview({
+            baseDiagram: applyContext.baseDiagram,
+            incomingDiagram: applyContext.incomingDiagram,
+            operations: applyContext.response.operations,
+            selectedOperationIds: selection.selected,
+            viewsCompared: applyContext.response.viewsCompared,
+            defaultSchema,
+        });
+    }, [
+        applyContext.baseDiagram,
+        applyContext.incomingDiagram,
+        applyContext.response.operations,
+        applyContext.response.viewsCompared,
+        defaultSchema,
+        selection.selected,
+        showPreviewWorkspace,
+    ]);
+
+    const changesList = (
+        <Accordion
+            type="multiple"
+            defaultValue={[...MERGE_RESULT_SECTION_ORDER]}
+            className="w-full"
+        >
+            {MERGE_RESULT_SECTION_ORDER.map((category) => (
+                <MergeResultSection
+                    key={category}
+                    category={category}
+                    operations={grouped[category]}
+                    viewsCompared={applyContext.response.viewsCompared}
+                    selected={selection.selected}
+                    sectionState={selection.sectionState(
+                        grouped[category].map((operation) => operation.id)
+                    )}
+                    labelContext={labelContext}
+                    text={text}
+                    disabled={isApplying}
+                    onToggleOperation={(operationId, next) => {
+                        if (next) {
+                            selection.select(operationId);
+                            return;
+                        }
+
+                        selection.deselect(operationId);
+                    }}
+                    onToggleSection={() =>
+                        selection.toggleSection(
+                            grouped[category].map((operation) => operation.id)
+                        )
+                    }
+                />
+            ))}
+        </Accordion>
+    );
 
     return (
         <>
@@ -74,9 +137,10 @@ export const MergeResultStep: React.FC<{
             </DialogHeader>
 
             <div
-                className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
+                className="flex min-h-0 flex-1 flex-col"
                 data-testid="merge-wizard-result-step"
                 data-operation-count={operations.length}
+                data-preview-workspace={showPreviewWorkspace ? 'true' : 'false'}
                 data-base-hash={applyContext.response.baseContentHash}
                 data-include-deletions={
                     applyContext.includeDeletions ? 'true' : 'false'
@@ -92,55 +156,67 @@ export const MergeResultStep: React.FC<{
                         {text('merge_wizard.result.analysis_error')}
                     </p>
                 ) : noDifferences ? (
-                    applyContext.response.viewsCompared ? null : (
-                        <p className="text-sm text-muted-foreground">
-                            {text('merge_wizard.result.views_not_compared')}
-                        </p>
-                    )
-                ) : (
-                    <Accordion
-                        type="multiple"
-                        defaultValue={[...MERGE_RESULT_SECTION_ORDER]}
-                        className="w-full"
+                    <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+                        {applyContext.response.viewsCompared ? null : (
+                            <p className="text-sm text-muted-foreground">
+                                {text('merge_wizard.result.views_not_compared')}
+                            </p>
+                        )}
+                    </div>
+                ) : showPreviewWorkspace && previewProjection ? (
+                    <div
+                        className="grid min-h-0 flex-1 gap-4 max-lg:grid-cols-1 lg:grid-cols-[minmax(300px,38%)_minmax(0,1fr)]"
+                        data-testid="merge-result-workspace"
                     >
-                        {MERGE_RESULT_SECTION_ORDER.map((category) => (
-                            <MergeResultSection
-                                key={category}
-                                category={category}
-                                operations={grouped[category]}
-                                viewsCompared={
-                                    applyContext.response.viewsCompared
-                                }
-                                selected={selection.selected}
-                                sectionState={selection.sectionState(
-                                    grouped[category].map(
-                                        (operation) => operation.id
-                                    )
-                                )}
-                                labelContext={labelContext}
-                                text={text}
-                                disabled={isApplying}
-                                onToggleOperation={(operationId, next) => {
-                                    if (next) {
-                                        selection.select(operationId);
-                                        return;
-                                    }
-
-                                    selection.deselect(operationId);
-                                }}
-                                onToggleSection={() =>
-                                    selection.toggleSection(
-                                        grouped[category].map(
-                                            (operation) => operation.id
-                                        )
-                                    )
-                                }
-                            />
-                        ))}
-                    </Accordion>
+                        <section
+                            aria-labelledby="merge-result-changes-heading"
+                            className="flex min-h-0 min-w-0 flex-col gap-2"
+                            data-testid="merge-result-changes-panel"
+                        >
+                            <h3
+                                id="merge-result-changes-heading"
+                                className="shrink-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                            >
+                                {text('merge_wizard.result.changes')}
+                            </h3>
+                            <div
+                                className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pr-1"
+                                data-testid="merge-result-changes-scroll"
+                            >
+                                {changesList}
+                            </div>
+                        </section>
+                        <section
+                            aria-labelledby="merge-result-preview-heading"
+                            className="flex min-h-0 min-w-0 flex-col gap-2"
+                            data-testid="merge-result-preview-panel"
+                        >
+                            <h3
+                                id="merge-result-preview-heading"
+                                className="shrink-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                            >
+                                {text('merge_wizard.result.preview')}
+                            </h3>
+                            <div
+                                className="relative min-h-[min(50vh,28rem)] flex-1 overflow-hidden rounded-md border border-border bg-background lg:min-h-0"
+                                data-testid="merge-result-preview-surface"
+                            >
+                                <MergePreviewCanvas
+                                    diagram={previewProjection.diagram}
+                                    decorations={previewProjection.decorations}
+                                    layoutGeneration={applyContext.generation}
+                                    className="absolute inset-0"
+                                />
+                            </div>
+                        </section>
+                    </div>
+                ) : (
+                    <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+                        {changesList}
+                    </div>
                 )}
                 {applyError ? (
-                    <Alert variant="destructive" className="mt-3">
+                    <Alert variant="destructive" className="mt-3 shrink-0">
                         <AlertDescription>
                             {text(mergeApplyErrorKey(applyError))}
                         </AlertDescription>

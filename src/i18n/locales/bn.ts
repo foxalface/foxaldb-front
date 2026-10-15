@@ -2013,6 +2013,8 @@ export const bn: LanguageTranslation = {
             },
             result: {
                 summary: 'মার্জ করার আগে পরিবর্তনগুলো দেখে নিন।',
+                changes: 'পরিবর্তন',
+                preview: 'প্রিভিউ',
                 no_differences: 'কোনো পার্থক্য পাওয়া যায়নি',
                 views_not_compared:
                     'এই উৎস ফরম্যাটে ভিউ নির্ভরযোগ্যভাবে তুলনা করা যায় না।',

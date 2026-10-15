@@ -2055,6 +2055,8 @@ export const ja: LanguageTranslation = {
             },
             result: {
                 summary: 'マージする前に変更内容を確認します。',
+                changes: '変更',
+                preview: 'プレビュー',
                 no_differences: '差分はありません',
                 views_not_compared:
                     'このソース形式ではビューを確実に比較できません。',

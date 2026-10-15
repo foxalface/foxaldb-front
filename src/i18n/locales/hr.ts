@@ -2020,6 +2020,8 @@ export const hr: LanguageTranslation = {
             },
             result: {
                 summary: 'Pregledajte promjene prije spajanja.',
+                changes: 'Promjene',
+                preview: 'Pregled',
                 no_differences: 'Nema pronađenih razlika',
                 views_not_compared:
                     'Ovaj oblik izvora ne omogućuje pouzdanu usporedbu pogleda.',

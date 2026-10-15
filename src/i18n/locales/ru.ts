@@ -2023,6 +2023,8 @@ export const ru: LanguageTranslation = {
             },
             result: {
                 summary: 'Проверьте изменения перед объединением.',
+                changes: 'Изменения',
+                preview: 'Предпросмотр',
                 no_differences: 'Различий не найдено',
                 views_not_compared:
                     'Этот формат источника не позволяет надёжно сравнивать представления.',

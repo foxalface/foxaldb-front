@@ -6,6 +6,8 @@ import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DiffOperation } from '@/lib/schema-merge/diff-types';
+import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
+import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { MergeResultStep } from '../merge-result-step';
 import type { MergeWizardApplyContext } from '../merge-wizard-apply-context';
 
@@ -87,19 +89,23 @@ const renderResult = (
     };
 
     const view = render(
-        <Dialog open>
-            <DialogContent>
-                <MergeResultStep
-                    applyContext={applyContext}
-                    defaultSchema="public"
-                    onBack={onBack}
-                    onMerge={vi.fn()}
-                    isApplying={false}
-                    applyError={null}
-                    canApply
-                />
-            </DialogContent>
-        </Dialog>
+        <ThemeProvider>
+            <LocalConfigProvider>
+                <Dialog open>
+                    <DialogContent className="flex h-[720px] max-h-dvh w-[1100px] flex-col">
+                        <MergeResultStep
+                            applyContext={applyContext}
+                            defaultSchema="public"
+                            onBack={onBack}
+                            onMerge={vi.fn()}
+                            isApplying={false}
+                            applyError={null}
+                            canApply
+                        />
+                    </DialogContent>
+                </Dialog>
+            </LocalConfigProvider>
+        </ThemeProvider>
     );
 
     return { ...view, onBack };
@@ -296,7 +302,7 @@ describe('Merge result step', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('renders a no-differences state without checkboxes', async () => {
+    it('renders a no-differences state without checkboxes or preview', async () => {
         const { onBack } = renderResult([], false);
 
         expect(
@@ -309,6 +315,13 @@ describe('Merge result step', () => {
         expect(
             screen.queryByTestId('merge-result-section-table')
         ).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('merge-preview-canvas')
+        ).not.toBeInTheDocument();
+        expect(screen.getByTestId('merge-wizard-result-step')).toHaveAttribute(
+            'data-preview-workspace',
+            'false'
+        );
         expect(
             screen.getByRole('button', { name: /merge_wizard.result.merge/ })
         ).toBeDisabled();
@@ -454,7 +467,7 @@ describe('Merge result step', () => {
         );
     });
 
-    it('shows an analysis error for a cyclic graph and does not offer checkboxes', () => {
+    it('shows an analysis error for a cyclic graph and does not offer checkboxes or preview', () => {
         renderResult([
             table('left', 'left', 'modify', { dependsOn: ['right'] }),
             table('right', 'right', 'modify', { dependsOn: ['left'] }),
@@ -464,6 +477,9 @@ describe('Merge result step', () => {
             'merge_wizard.result.analysis_error'
         );
         expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+        expect(
+            screen.queryByTestId('merge-preview-canvas')
+        ).not.toBeInTheDocument();
         expect(
             screen.getByRole('button', { name: /merge_wizard.result.merge/ })
         ).toBeDisabled();
@@ -497,19 +513,23 @@ describe('Merge result step', () => {
         };
 
         render(
-            <Dialog open>
-                <DialogContent>
-                    <MergeResultStep
-                        applyContext={applyContext}
-                        defaultSchema="public"
-                        onBack={vi.fn()}
-                        onMerge={vi.fn()}
-                        isApplying
-                        applyError={null}
-                        canApply
-                    />
-                </DialogContent>
-            </Dialog>
+            <ThemeProvider>
+                <LocalConfigProvider>
+                    <Dialog open>
+                        <DialogContent className="flex h-[720px] flex-col">
+                            <MergeResultStep
+                                applyContext={applyContext}
+                                defaultSchema="public"
+                                onBack={vi.fn()}
+                                onMerge={vi.fn()}
+                                isApplying
+                                applyError={null}
+                                canApply
+                            />
+                        </DialogContent>
+                    </Dialog>
+                </LocalConfigProvider>
+            </ThemeProvider>
         );
 
         expect(

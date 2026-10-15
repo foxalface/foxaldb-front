@@ -2055,6 +2055,8 @@ export const es: LanguageTranslation = {
             },
             result: {
                 summary: 'Revisa los cambios antes de fusionar.',
+                changes: 'Cambios',
+                preview: 'Vista previa',
                 no_differences: 'No se encontraron diferencias',
                 views_not_compared:
                     'Este formato de origen no permite comparar vistas de forma fiable.',

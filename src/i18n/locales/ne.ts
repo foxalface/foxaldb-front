@@ -2023,6 +2023,8 @@ export const ne: LanguageTranslation = {
             },
             result: {
                 summary: 'मर्ज गर्नु अघि परिवर्तनहरू हेर्नुहोस्।',
+                changes: 'परिवर्तनहरू',
+                preview: 'पूर्वावलोकन',
                 no_differences: 'कुनै भिन्नता भेटिएन',
                 views_not_compared:
                     'यो स्रोत ढाँचाले भ्यूहरू भरपर्दो रूपमा तुलना गर्न सक्दैन।',

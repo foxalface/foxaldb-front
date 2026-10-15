@@ -394,3 +394,11 @@ Renderer metadata stays on React Flow `node.data.mergePreview` / `edge.data.merg
 - **Relationships:** stroke color/weight; delete uses dashed red styling; ghosts stay rendered.
 - **Delete ghosts:** selected table, field, and relationship deletions remain visible with reduced emphasis (opacity / strike-through on names where appropriate). Parent table delete dominates: field-level delete decorations are suppressed on that node to avoid noise.
 - **Invariant:** M10.1 maps at most one decoration per entity id (`add` | `modify` | `rename` | `delete`); rename wins when rename operations also carry attribute changes.
+
+### M10.4 Result workspace integration
+
+The Result step with operations uses a **two-column** workspace (stacked below the large breakpoint): **Changes** (existing accordion + dependency-closed `useMergeOperationSelection`) and **Preview** (`buildSchemaMergePreview` → `MergePreviewCanvas`). The dialog widens only for Result with `operations.length > 0`; Source and zero-difference Result keep the normal wide wizard size (`~48rem`).
+
+`applyContext.baseDiagram` and the current `selection.selected` set feed `buildSchemaMergePreview()`; preview updates immediately on checkbox changes. **No preview → selection** feedback. Apply still posts only `selectedOperationIds` (and existing Compare fields); preview diagram/decorations are never sent.
+
+When every operation is deselected, preview shows the frozen **baseDiagram** with **no** decorations (not incoming, not empty). Selected deletes render as ghosts; deselecting a delete operation restores normal base styling. Initial `fitView` runs once when the preview panel has measurable size (`ResizeObserver`); pan/zoom are preserved across selection toggles (manual Fit only afterward). Zero-difference and analysis-error Result states do not mount the preview workspace.

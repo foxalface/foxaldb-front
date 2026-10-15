@@ -38,7 +38,7 @@ import { MergeResultStep } from './merge-result-step';
 import { MergeSourceStep } from './merge-source-step';
 import type { MergeWizardApplyContext } from './merge-wizard-apply-context';
 import { MergeWizardStep } from './merge-wizard-step';
-import { wizardDialogContentClassName } from '@/dialogs/common/wizard-dialog-size';
+import { mergeWizardDialogContentClassName } from './merge-wizard-dialog-size';
 
 export type { MergeWizardApplyContext };
 
@@ -581,6 +581,11 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         ]
     );
 
+    const resultWithPreviewWorkspace =
+        step === MergeWizardStep.RESULT &&
+        applyContext !== null &&
+        applyContext.response.operations.length > 0;
+
     return (
         <Dialog
             {...dialog}
@@ -595,7 +600,14 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
             }}
         >
             <DialogContent
-                className={wizardDialogContentClassName(true)}
+                className={mergeWizardDialogContentClassName(
+                    step === MergeWizardStep.RESULT ? 'result' : 'source',
+                    resultWithPreviewWorkspace
+                )}
+                data-merge-wizard-step={step}
+                data-merge-result-workspace={
+                    resultWithPreviewWorkspace ? 'true' : 'false'
+                }
                 showClose={!isApplying}
                 aria-describedby={undefined}
                 onOpenAutoFocus={(event) => event.preventDefault()}

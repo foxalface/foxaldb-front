@@ -2057,6 +2057,8 @@ export const fr: LanguageTranslation = {
             },
             result: {
                 summary: 'Vérifiez les modifications avant de fusionner.',
+                changes: 'Modifications',
+                preview: 'Aperçu',
                 no_differences: 'Aucune différence trouvée',
                 views_not_compared:
                     'Ce format de source ne permet pas une comparaison fiable des vues.',

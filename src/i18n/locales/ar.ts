@@ -1986,6 +1986,8 @@ export const ar: LanguageTranslation = {
             },
             result: {
                 summary: 'راجع التغييرات قبل الدمج.',
+                changes: 'التغييرات',
+                preview: 'معاينة',
                 no_differences: 'لم يُعثر على أي اختلاف',
                 views_not_compared:
                     'تنسيق المصدر هذا لا يسمح بمقارنة موثوقة للعروض.',

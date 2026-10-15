@@ -2080,6 +2080,8 @@ export const de: LanguageTranslation = {
             },
             result: {
                 summary: 'Prüfe die Änderungen vor dem Zusammenführen.',
+                changes: 'Änderungen',
+                preview: 'Vorschau',
                 no_differences: 'Keine Unterschiede gefunden',
                 views_not_compared:
                     'Dieses Quellformat erlaubt keinen verlässlichen Vergleich von Ansichten.',

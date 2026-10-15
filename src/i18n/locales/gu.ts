@@ -1997,6 +1997,8 @@ export const gu: LanguageTranslation = {
             },
             result: {
                 summary: 'મર્જ કરતા પહેલાં ફેરફારો તપાસો.',
+                changes: 'ફેરફારો',
+                preview: 'પૂર્વાવલોકન',
                 no_differences: 'કોઈ તફાવત મળ્યો નથી',
                 views_not_compared:
                     'આ સ્રોત ફોર્મેટ વ્યૂની વિશ્વસનીય તુલના કરી શકતું નથી.',

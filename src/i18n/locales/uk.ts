@@ -2023,6 +2023,8 @@ export const uk: LanguageTranslation = {
             },
             result: {
                 summary: 'Перевірте зміни перед об’єднанням.',
+                changes: 'Зміни',
+                preview: 'Попередній перегляд',
                 no_differences: 'Відмінностей не знайдено',
                 views_not_compared:
                     'Цей формат джерела не дає надійно порівняти подання.',

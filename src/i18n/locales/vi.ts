@@ -2007,6 +2007,8 @@ export const vi: LanguageTranslation = {
             },
             result: {
                 summary: 'Xem lại các thay đổi trước khi hợp nhất.',
+                changes: 'Thay đổi',
+                preview: 'Xem trước',
                 no_differences: 'Không có khác biệt',
                 views_not_compared:
                     'Định dạng nguồn này không so sánh khung nhìn một cách đáng tin cậy.',

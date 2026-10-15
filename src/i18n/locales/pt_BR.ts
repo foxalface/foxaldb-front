@@ -2051,6 +2051,8 @@ export const pt_BR: LanguageTranslation = {
             },
             result: {
                 summary: 'Revise as alterações antes de mesclar.',
+                changes: 'Alterações',
+                preview: 'Pré-visualização',
                 no_differences: 'Nenhuma diferença encontrada',
                 views_not_compared:
                     'Este formato de origem não permite comparar visões de forma confiável.',

@@ -2024,6 +2024,8 @@ export const id_ID: LanguageTranslation = {
             },
             result: {
                 summary: 'Tinjau perubahan sebelum menggabungkan.',
+                changes: 'Perubahan',
+                preview: 'Pratinjau',
                 no_differences: 'Tidak ada perbedaan',
                 views_not_compared:
                     'Format sumber ini tidak dapat membandingkan tampilan secara andal.',

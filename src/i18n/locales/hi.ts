@@ -2017,6 +2017,8 @@ export const hi: LanguageTranslation = {
             },
             result: {
                 summary: 'मर्ज करने से पहले बदलाव देखें।',
+                changes: 'परिवर्तन',
+                preview: 'पूर्वावलोकन',
                 no_differences: 'कोई अंतर नहीं मिला',
                 views_not_compared:
                     'यह स्रोत प्रारूप दृश्यों की विश्वसनीय तुलना नहीं कर सकता।',

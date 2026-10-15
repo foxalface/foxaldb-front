@@ -31,6 +31,8 @@ export interface MergePreviewCanvasProps {
     diagram: Diagram;
     decorations: MergePreviewDecorations;
     className?: string;
+    /** Resets initial fit when Compare generation / Result remounts. */
+    layoutGeneration?: number;
 }
 
 const PREVIEW_FLOW_PROPS = {
@@ -52,7 +54,9 @@ const PREVIEW_FLOW_PROPS = {
 const MergePreviewCanvasFlow: React.FC<{
     diagram: Diagram;
     decorations: MergePreviewDecorations;
-}> = ({ diagram, decorations }) => {
+    layoutGeneration?: number;
+    containerRef: React.RefObject<HTMLDivElement | null>;
+}> = ({ diagram, decorations, layoutGeneration, containerRef }) => {
     const { effectiveTheme } = useTheme();
     const { fitView } = useReactFlow();
     const initialFitDoneRef = useRef(false);
@@ -100,17 +104,43 @@ const MergePreviewCanvasFlow: React.FC<{
     }, [diagram.id]);
 
     useEffect(() => {
-        if (initialFitDoneRef.current || nodes.length === 0) {
+        initialFitDoneRef.current = false;
+    }, [layoutGeneration]);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) {
             return;
         }
 
-        const frame = requestAnimationFrame(() => {
+        const tryFit = () => {
+            if (initialFitDoneRef.current) {
+                return;
+            }
+
+            const { width, height } = container.getBoundingClientRect();
+            if (width < 64 || height < 64) {
+                return;
+            }
+
+            if (nodes.length === 0) {
+                initialFitDoneRef.current = true;
+                return;
+            }
+
             fitView({ padding: 0.1, maxZoom: 0.8, duration: 200 });
             initialFitDoneRef.current = true;
+        };
+
+        const observer = new ResizeObserver(() => {
+            requestAnimationFrame(tryFit);
         });
 
-        return () => cancelAnimationFrame(frame);
-    }, [fitView, nodes.length]);
+        observer.observe(container);
+        requestAnimationFrame(tryFit);
+
+        return () => observer.disconnect();
+    }, [containerRef, fitView, nodes.length, layoutGeneration]);
 
     return (
         <ReactFlow
@@ -140,12 +170,15 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
     diagram,
     decorations,
     className,
+    layoutGeneration,
 }) => {
     const { t } = useTranslation();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     return (
         <TooltipProvider>
             <div
+                ref={containerRef}
                 className={cn('relative size-full min-h-0', className)}
                 data-testid="merge-preview-canvas-root"
                 aria-label={t('merge_wizard.preview.canvas_aria')}
@@ -156,6 +189,8 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
                             <MergePreviewCanvasFlow
                                 diagram={diagram}
                                 decorations={decorations}
+                                layoutGeneration={layoutGeneration}
+                                containerRef={containerRef}
                             />
                         </div>
                     </MergePreviewProviders>

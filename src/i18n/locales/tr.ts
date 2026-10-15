@@ -2007,6 +2007,8 @@ export const tr: LanguageTranslation = {
             },
             result: {
                 summary: 'Birleştirmeden önce değişiklikleri gözden geçirin.',
+                changes: 'Değişiklikler',
+                preview: 'Önizleme',
                 no_differences: 'Fark bulunamadı',
                 views_not_compared:
                     'Bu kaynak biçimi görünümleri güvenilir şekilde karşılaştıramaz.',

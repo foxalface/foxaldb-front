@@ -2015,6 +2015,8 @@ export const en = {
             },
             result: {
                 summary: 'Review the changes before merging.',
+                changes: 'Changes',
+                preview: 'Preview',
                 no_differences: 'No differences found',
                 views_not_compared:
                     'This source format does not support reliable view comparison.',
