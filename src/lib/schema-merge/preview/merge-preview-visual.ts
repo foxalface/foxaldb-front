@@ -1,0 +1,132 @@
+import type { LucideIcon } from 'lucide-react';
+import { ArrowRight, Minus, Pencil, Plus } from 'lucide-react';
+import type { MergeChangeVisual } from './preview-types';
+import { cn } from '@/lib/utils';
+
+/** Shared semantic palette for Result list badges and canvas preview decorations. */
+export const MERGE_CHANGE_VISUAL: Record<
+    MergeChangeVisual,
+    {
+        readonly icon: LucideIcon;
+        readonly textClassName: string;
+        readonly tableRingClassName: string;
+        readonly tableContainerClassName: string;
+        readonly tableNameClassName: string;
+        readonly fieldRowClassName: string;
+        readonly fieldNameClassName: string;
+        readonly edgeStrokeClassName: string;
+        readonly edgeDashed: boolean;
+    }
+> = {
+    add: {
+        icon: Plus,
+        textClassName: 'text-emerald-800 dark:text-emerald-300',
+        tableRingClassName:
+            'ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-emerald-500 dark:ring-emerald-400',
+        tableContainerClassName: 'border-emerald-500 dark:border-emerald-600',
+        tableNameClassName:
+            'bg-emerald-100 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-200',
+        fieldRowClassName:
+            'border-l-[3px] border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 dark:border-emerald-500',
+        fieldNameClassName: 'text-emerald-900 dark:text-emerald-200',
+        edgeStrokeClassName: '!stroke-emerald-500 dark:!stroke-emerald-400',
+        edgeDashed: false,
+    },
+    modify: {
+        icon: Pencil,
+        textClassName: 'text-blue-800 dark:text-blue-300',
+        tableRingClassName:
+            'ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-sky-500 dark:ring-sky-400',
+        tableContainerClassName: 'border-sky-500 dark:border-sky-600',
+        tableNameClassName:
+            'bg-sky-100 text-sky-900 dark:bg-sky-950 dark:text-sky-200',
+        fieldRowClassName:
+            'border-l-[3px] border-sky-500 bg-sky-50/80 dark:bg-sky-950/40 dark:border-sky-500',
+        fieldNameClassName: 'text-sky-900 dark:text-sky-200',
+        edgeStrokeClassName: '!stroke-sky-500 dark:!stroke-sky-400',
+        edgeDashed: false,
+    },
+    rename: {
+        icon: ArrowRight,
+        textClassName: 'text-amber-800 dark:text-amber-300',
+        tableRingClassName:
+            'ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-amber-500 dark:ring-amber-400',
+        tableContainerClassName: 'border-amber-500 dark:border-amber-600',
+        tableNameClassName:
+            'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200',
+        fieldRowClassName:
+            'border-l-[3px] border-amber-500 bg-amber-50/80 dark:bg-amber-950/40 dark:border-amber-500',
+        fieldNameClassName: 'text-amber-900 dark:text-amber-200',
+        edgeStrokeClassName: '!stroke-amber-500 dark:!stroke-amber-400',
+        edgeDashed: false,
+    },
+    delete: {
+        icon: Minus,
+        textClassName: 'text-red-800 dark:text-red-300',
+        tableRingClassName:
+            'ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-red-500 dark:ring-red-400',
+        tableContainerClassName: 'border-red-500 dark:border-red-600',
+        tableNameClassName:
+            'bg-red-100 text-red-900 line-through dark:bg-red-950 dark:text-red-200',
+        fieldRowClassName:
+            'border-l-[3px] border-red-500 bg-red-50/60 opacity-80 dark:bg-red-950/30 dark:border-red-500',
+        fieldNameClassName: 'text-red-900 line-through dark:text-red-200',
+        edgeStrokeClassName: '!stroke-red-500 dark:!stroke-red-400',
+        edgeDashed: true,
+    },
+};
+
+export const getMergePreviewTableClasses = (
+    change: MergeChangeVisual | undefined
+): {
+    ring: string;
+    border: string;
+    container: string;
+    name: string;
+} => {
+    if (!change) {
+        return { ring: '', border: '', container: '', name: '' };
+    }
+
+    const visual = MERGE_CHANGE_VISUAL[change];
+    return {
+        ring: visual.tableRingClassName,
+        border: visual.tableContainerClassName,
+        container: change === 'delete' ? 'opacity-[0.88] saturate-[0.92]' : '',
+        name: visual.tableNameClassName,
+    };
+};
+
+export const getMergePreviewFieldClasses = (
+    change: MergeChangeVisual | undefined
+): { row: string; name: string } => {
+    if (!change) {
+        return { row: '', name: '' };
+    }
+
+    const visual = MERGE_CHANGE_VISUAL[change];
+    return {
+        row: visual.fieldRowClassName,
+        name: visual.fieldNameClassName,
+    };
+};
+
+export const getMergePreviewEdgeClasses = (
+    change: MergeChangeVisual | undefined,
+    selected: boolean
+): { stroke: string; dashed: boolean; opacity: number } => {
+    if (!change) {
+        return {
+            stroke: selected ? '!stroke-pink-600' : '!stroke-slate-400',
+            dashed: false,
+            opacity: 1,
+        };
+    }
+
+    const visual = MERGE_CHANGE_VISUAL[change];
+    return {
+        stroke: cn('!stroke-[3px]', visual.edgeStrokeClassName),
+        dashed: visual.edgeDashed,
+        opacity: change === 'delete' ? 0.85 : 1,
+    };
+};

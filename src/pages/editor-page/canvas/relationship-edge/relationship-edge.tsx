@@ -13,6 +13,8 @@ import { useLocalConfig } from '@/hooks/use-local-config';
 import { useCanvas } from '@/hooks/use-canvas';
 import { EditRelationshipPopover } from './edit-relationship-popover';
 import { EllipsisIcon } from 'lucide-react';
+import { getMergePreviewEdgeClasses } from '@/lib/schema-merge/preview/merge-preview-visual';
+import { MergePreviewChangeIndicator } from '../merge-preview-change-indicator';
 
 export type RelationshipEdgeType = Edge<
     {
@@ -378,6 +380,16 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 [checkIfRelationshipRemoved, relationship?.id]
             );
 
+            const mergePreviewChange = data?.mergePreview?.change;
+            const mergePreviewEdgeStyle = useMemo(
+                () =>
+                    getMergePreviewEdgeClasses(
+                        mergePreviewChange,
+                        selected ?? false
+                    ),
+                [mergePreviewChange, selected]
+            );
+
             // Calculate the midpoint of the edge for the indicator
             const edgeMidpoint = useMemo(() => {
                 const sourceXPos =
@@ -407,13 +419,24 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         markerStart={`url(#${sourceMarker})`}
                         markerEnd={`url(#${targetMarker})`}
                         fill="none"
+                        data-merge-change={mergePreviewChange ?? undefined}
+                        strokeDasharray={
+                            mergePreviewEdgeStyle.dashed ? '8 6' : undefined
+                        }
+                        style={{
+                            strokeOpacity: mergePreviewEdgeStyle.opacity,
+                        }}
                         className={cn([
                             'react-flow__edge-path',
-                            `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
+                            mergePreviewChange
+                                ? mergePreviewEdgeStyle.stroke
+                                : `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
                             {
                                 '!stroke-green-500 !stroke-[3px]':
+                                    !mergePreviewChange &&
                                     isDiffNewRelationship,
                                 '!stroke-red-500 !stroke-[3px]':
+                                    !mergePreviewChange &&
                                     isDiffRelationshipRemoved,
                             },
                         ])}
@@ -430,7 +453,22 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         onClick={handleEdgeClick}
                         onContextMenu={handleContextMenu}
                     />
-                    {selected && (
+                    {mergePreviewChange && !selected ? (
+                        <foreignObject
+                            width={20}
+                            height={20}
+                            x={edgeMidpoint.x - 10}
+                            y={edgeMidpoint.y - 10}
+                            className="pointer-events-none overflow-visible"
+                        >
+                            <div className="flex size-5 items-center justify-center rounded-full border border-border bg-background/95 shadow-sm">
+                                <MergePreviewChangeIndicator
+                                    change={mergePreviewChange}
+                                />
+                            </div>
+                        </foreignObject>
+                    ) : null}
+                    {selected && !readonly && (
                         <foreignObject
                             width={24}
                             height={24}

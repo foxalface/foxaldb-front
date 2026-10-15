@@ -39,6 +39,12 @@ import { useLayout } from '@/hooks/use-layout';
 import { useChartDB } from '@/hooks/use-chartdb';
 import type { RelationshipEdgeType } from '../relationship-edge/relationship-edge';
 import type { MergePreviewNodeDecoration } from '../diagram-flow-elements';
+import { MergePreviewChangeIndicator } from '../merge-preview-change-indicator';
+import {
+    buildFieldMergeChangeById,
+    resolveTableMergeChange,
+} from '../merge-preview-node-utils';
+import { getMergePreviewTableClasses } from '@/lib/schema-merge/preview/merge-preview-visual';
 import type { DBField } from '@/lib/domain/db-field';
 import { useTranslation } from 'react-i18next';
 import { TableNodeContextMenu } from './table-node-context-menu';
@@ -96,6 +102,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             highlightTable,
             isRelationshipCreatingTarget,
             targetEdgeCounts,
+            mergePreview,
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
@@ -160,6 +167,20 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
         } = useDiff();
 
         const fields = useMemo(() => table.fields, [table.fields]);
+
+        const tableMergeChange = useMemo(
+            () => resolveTableMergeChange(mergePreview),
+            [mergePreview]
+        );
+        const fieldMergeChanges = useMemo(
+            () => buildFieldMergeChangeById(mergePreview),
+            [mergePreview]
+        );
+        const mergePreviewTableClasses = useMemo(
+            () => getMergePreviewTableClasses(tableMergeChange),
+            [tableMergeChange]
+        );
+        const suppressFieldMergePreview = tableMergeChange === 'delete';
 
         // Effect to manage field count when entering/exiting edit mode
         useEffect(() => {
@@ -388,9 +409,13 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 cn(
                     'flex w-full flex-col border-2 bg-slate-50 dark:bg-slate-950 rounded-lg shadow-sm transition-transform duration-300',
                     table.isView ? 'border-dashed' : '',
-                    selected || isTarget || isPartOfCreatingRelationship
-                        ? 'border-pink-600'
-                        : 'border-slate-500 dark:border-slate-700',
+                    tableMergeChange
+                        ? mergePreviewTableClasses.border
+                        : selected || isTarget || isPartOfCreatingRelationship
+                          ? 'border-pink-600'
+                          : 'border-slate-500 dark:border-slate-700',
+                    mergePreviewTableClasses.ring,
+                    mergePreviewTableClasses.container,
                     isOverlapping
                         ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-blue-500 ring-offset-2'
                         : '',
@@ -444,6 +469,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 hasRemoteSelection,
                 primaryRemoteRingClass,
                 visualExportCaptureActive,
+                tableMergeChange,
+                mergePreviewTableClasses.border,
+                mergePreviewTableClasses.ring,
+                mergePreviewTableClasses.container,
             ]
         );
 
@@ -479,6 +508,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 ) : null}
                 <div
                     className={cn(tableClassName, 'relative')}
+                    data-merge-change={tableMergeChange ?? undefined}
                     onClick={(e) => {
                         if (e.detail === 2 && !readonly) {
                             e.stopPropagation();
@@ -604,6 +634,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                         Table Changed
                                     </TooltipContent>
                                 </Tooltip>
+                            ) : tableMergeChange ? (
+                                <MergePreviewChangeIndicator
+                                    change={tableMergeChange}
+                                />
                             ) : table.isView ? (
                                 <View className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
                             ) : (
@@ -632,6 +666,15 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 </Label>
                             ) : isDiffTableChanged && !isSummaryOnly ? (
                                 <Label className="flex h-5 flex-col justify-center truncate rounded-sm bg-sky-200 px-2 py-0.5 text-sm font-normal text-sky-900 dark:bg-sky-800 dark:text-sky-200">
+                                    {table.name}
+                                </Label>
+                            ) : tableMergeChange ? (
+                                <Label
+                                    className={cn(
+                                        'flex h-5 flex-col justify-center truncate rounded-sm px-2 py-0.5 text-sm font-normal',
+                                        mergePreviewTableClasses.name
+                                    )}
+                                >
                                     {table.name}
                                 </Label>
                             ) : (
@@ -704,6 +747,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 visible={true}
                                 isConnectable={!table.isView}
                                 targetEdgeCount={targetEdgeCounts?.[field.id]}
+                                mergePreviewChange={
+                                    suppressFieldMergePreview
+                                        ? undefined
+                                        : fieldMergeChanges.get(field.id)
+                                }
                             />
                         ))}
                     </div>

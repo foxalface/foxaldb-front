@@ -381,4 +381,16 @@ After `flushDiagramAutosave()` and before `compareSchemaMerge()`, the wizard dee
 
 `MergePreviewCanvas` (`frontend/src/dialogs/merge-wizard/merge-preview-canvas.tsx`) renders a projected diagram inside a **nested** `ReactFlowProvider` that is isolated from the live editor canvas. It reuses real `TableNode` / `RelationshipEdge` via shared `diagram-flow-elements.ts` transforms, with `ChartDBProvider readonly` inside `MergePreviewProviders` (storage, undo stack, and neutral `DiffProvider` only — no realtime, collaboration, export, or keyboard shortcuts).
 
-Interactions are limited to pan, scroll/pinch zoom, and zoom in / zoom out / fit view controls. Node drag, connect, select, delete keys, context menus, and relationship edit popovers are disabled (`readonly` on ChartDB plus explicit React Flow flags). Decoration metadata is passed on `node.data.mergePreview` / `edge.data.mergePreview` for M10.3 styling; M10.2 does not apply merge colors yet. Result step layout integration remains M10.4.
+Interactions are limited to pan, scroll/pinch zoom, and zoom in / zoom out / fit view controls. Node drag, connect, select, delete keys, context menus, and relationship edit popovers are disabled (`readonly` on ChartDB plus explicit React Flow flags). Result step layout integration remains M10.4.
+
+### M10.3 preview decoration visuals
+
+Merge preview uses the same semantic palette as the Result list (`merge-change-badge` / `merge-preview-visual.ts`): **add** emerald, **modify** sky/blue, **rename** amber, **delete** red. States are never color-only: compact Lucide icons plus accessible labels reuse `merge_wizard.result.change.*`.
+
+Renderer metadata stays on React Flow `node.data.mergePreview` / `edge.data.mergePreview` only; persisted `Diagram` JSON is unchanged. `DiffProvider` remains separate (neutral in preview); merge decorations do not reuse editor diff states.
+
+- **Tables / views:** semantic border/ring and header badge; user `table.color` strip is preserved.
+- **Fields:** row accent via `TableNodeField` optional `mergePreviewChange`; future values come from the projected diagram.
+- **Relationships:** stroke color/weight; delete uses dashed red styling; ghosts stay rendered.
+- **Delete ghosts:** selected table, field, and relationship deletions remain visible with reduced emphasis (opacity / strike-through on names where appropriate). Parent table delete dominates: field-level delete decorations are suppressed on that node to avoid noise.
+- **Invariant:** M10.1 maps at most one decoration per entity id (`add` | `modify` | `rename` | `delete`); rename wins when rename operations also carry attribute changes.

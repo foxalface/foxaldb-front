@@ -21,6 +21,9 @@ import {
     Pencil,
 } from 'lucide-react';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
+import type { MergeChangeVisual } from '@/lib/schema-merge/preview/preview-types';
+import { getMergePreviewFieldClasses } from '@/lib/schema-merge/preview/merge-preview-visual';
+import { MergePreviewChangeIndicator } from '../merge-preview-change-indicator';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
 import {
@@ -54,6 +57,8 @@ export interface TableNodeFieldProps {
     isConnectable: boolean;
     // Target edge count passed from canvas to ensure sync with edge creation
     targetEdgeCount?: number;
+    /** Merge wizard preview-only field decoration (M10.3). */
+    mergePreviewChange?: MergeChangeVisual;
 }
 
 const arePropsEqual = (
@@ -79,7 +84,8 @@ const arePropsEqual = (
         prevProps.visible === nextProps.visible &&
         prevProps.isConnectable === nextProps.isConnectable &&
         prevProps.tableNodeId === nextProps.tableNodeId &&
-        prevProps.targetEdgeCount === nextProps.targetEdgeCount
+        prevProps.targetEdgeCount === nextProps.targetEdgeCount &&
+        prevProps.mergePreviewChange === nextProps.mergePreviewChange
     );
 };
 
@@ -92,6 +98,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         visible,
         isConnectable,
         targetEdgeCount,
+        mergePreviewChange,
     }) => {
         const { relationships, readonly, highlightedCustomType, databaseType } =
             useChartDB();
@@ -351,11 +358,17 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         const remoteEditors = useEntityRemoteEditing('field', field.id);
         const conversationsAvailable = useConversationsAvailability();
 
+        const mergePreviewFieldClasses = useMemo(
+            () => getMergePreviewFieldClasses(mergePreviewChange),
+            [mergePreviewChange]
+        );
+
         return (
             <div
                 className={cn(
                     'group relative flex h-8 items-center justify-between gap-1 border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800',
                     'transition-all duration-200 ease-in-out',
+                    mergePreviewFieldClasses.row,
                     {
                         'bg-pink-100 dark:bg-pink-900':
                             highlighted && !isCustomTypeHighlighted,
@@ -374,6 +387,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                             isDiffNewField,
                     }
                 )}
+                data-merge-change={mergePreviewChange ?? undefined}
             >
                 {isConnectable ? (
                     <>
@@ -428,10 +442,19 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         <SquarePlus className="size-3.5 shrink-0 text-green-800 dark:text-green-200" />
                     ) : isDiffFieldChanged && !isSummaryOnly ? (
                         <SquareDot className="size-3.5 shrink-0 text-sky-800 dark:text-sky-200" />
+                    ) : mergePreviewChange ? (
+                        <MergePreviewChangeIndicator
+                            change={mergePreviewChange}
+                        />
                     ) : null}
 
                     <span
                         className={cn('truncate min-w-0', {
+                            [mergePreviewFieldClasses.name]:
+                                !!mergePreviewChange &&
+                                !isDiffFieldRemoved &&
+                                !isDiffNewField &&
+                                !isDiffFieldChanged,
                             'text-red-800 font-normal dark:text-red-200':
                                 isDiffFieldRemoved,
                             'text-green-800 font-normal dark:text-green-200':
