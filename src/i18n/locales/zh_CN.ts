@@ -1877,6 +1877,9 @@ export const zh_CN: LanguageTranslation = {
                 forbidden: '你不能合并此图。',
                 unexpected: '合并失败。',
             },
+            preview: {
+                canvas_aria: '架构合并图表预览',
+            },
             result: {
                 summary: '合并前请检查这些更改。',
                 no_differences: '未发现差异',

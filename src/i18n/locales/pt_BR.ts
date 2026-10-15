@@ -2045,6 +2045,10 @@ export const pt_BR: LanguageTranslation = {
                 forbidden: 'Você não pode mesclar este diagrama.',
                 unexpected: 'A mesclagem falhou.',
             },
+            preview: {
+                canvas_aria:
+                    'Pré-visualização do diagrama de mesclagem de esquema',
+            },
             result: {
                 summary: 'Revise as alterações antes de mesclar.',
                 no_differences: 'Nenhuma diferença encontrada',

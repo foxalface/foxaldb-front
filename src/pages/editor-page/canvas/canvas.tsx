@@ -38,14 +38,21 @@ import {
     TABLE_RELATIONSHIP_TARGET_HANDLE_ID_PREFIX,
     TableNode,
 } from './table-node/table-node';
+import {
+    BOTTOM_SOURCE_HANDLE_ID_PREFIX,
+    TOP_SOURCE_HANDLE_ID_PREFIX,
+} from './table-node/table-node-dependency-indicator';
 import type { RelationshipEdgeType } from './relationship-edge/relationship-edge';
 import { RelationshipEdge } from './relationship-edge/relationship-edge';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { emitTablePositionSync } from '@/lib/realtime/emit-table-position-sync';
 import {
-    LEFT_HANDLE_ID_PREFIX,
-    TARGET_ID_PREFIX,
-} from './table-node/table-node-field';
+    areaToAreaNode,
+    dependencyEdgesFromDiagram,
+    relationshipEdgesFromDiagram,
+    tableToTableNode,
+    noteToNoteNode,
+} from './diagram-flow-elements';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
 import {
@@ -62,7 +69,6 @@ import { Badge } from '@/components/badge/badge';
 import { useTheme } from '@/hooks/use-theme';
 import { useTranslation } from 'react-i18next';
 import type { DBTable } from '@/lib/domain/db-table';
-import { MIN_TABLE_SIZE } from '@/lib/domain/db-table';
 import { useLocalConfig } from '@/hooks/use-local-config';
 import {
     Tooltip,
@@ -83,12 +89,6 @@ import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
 import { cn, debounce, getOperatingSystem } from '@/lib/utils';
 import type { DependencyEdgeType } from './dependency-edge/dependency-edge';
 import { DependencyEdge } from './dependency-edge/dependency-edge';
-import {
-    BOTTOM_SOURCE_HANDLE_ID_PREFIX,
-    TARGET_DEP_PREFIX,
-    TOP_SOURCE_HANDLE_ID_PREFIX,
-} from './table-node/table-node-dependency-indicator';
-import type { DatabaseType } from '@/lib/domain/database-type';
 import { useCanvas } from '@/hooks/use-canvas';
 import type { AreaNodeType } from './area-node/area-node';
 import { AreaNode } from './area-node/area-node';
@@ -170,119 +170,6 @@ const nodeTypes: NodeTypes = {
 };
 
 const initialEdges: EdgeType[] = [];
-
-const tableToTableNode = (
-    table: DBTable,
-    {
-        filter,
-        databaseType,
-        filterLoading,
-        showDBViews,
-        forceShow,
-        isRelationshipCreatingTarget = false,
-        targetEdgeCounts,
-    }: {
-        filter?: DiagramFilter;
-        databaseType: DatabaseType;
-        filterLoading: boolean;
-        showDBViews?: boolean;
-        forceShow?: boolean;
-        isRelationshipCreatingTarget?: boolean;
-        targetEdgeCounts?: Record<string, number>;
-    }
-): TableNodeType => {
-    // Always use absolute position for now
-    const position = { x: table.x, y: table.y };
-
-    let hidden = false;
-
-    if (forceShow) {
-        hidden = false;
-    } else {
-        hidden =
-            !filterTable({
-                table: { id: table.id, schema: table.schema },
-                filter,
-                options: { defaultSchema: defaultSchemas[databaseType] },
-            }) ||
-            filterLoading ||
-            (!showDBViews && table.isView);
-    }
-
-    return {
-        id: table.id,
-        type: 'table',
-        position,
-        data: {
-            table,
-            isOverlapping: false,
-            isRelationshipCreatingTarget,
-            targetEdgeCounts,
-        },
-        width: table.width ?? MIN_TABLE_SIZE,
-        hidden,
-    };
-};
-
-const areaToAreaNode = (
-    area: Area,
-    {
-        tables,
-        filter,
-        databaseType,
-        filterLoading,
-    }: {
-        tables: DBTable[];
-        filter?: DiagramFilter;
-        databaseType: DatabaseType;
-        filterLoading: boolean;
-    }
-): AreaNodeType => {
-    // Get all tables in this area
-    const tablesInArea = tables.filter((t) => t.parentAreaId === area.id);
-
-    // Check if at least one table in the area is visible
-    const hasVisibleTable =
-        tablesInArea.length === 0 ||
-        tablesInArea.some((table) =>
-            filterTable({
-                table: { id: table.id, schema: table.schema },
-                filter,
-                options: {
-                    defaultSchema: defaultSchemas[databaseType],
-                },
-            })
-        );
-
-    return {
-        id: area.id,
-        type: 'area',
-        position: { x: area.x, y: area.y },
-        data: { area },
-        width: area.width,
-        height: area.height,
-        zIndex: -10,
-        style: {
-            zIndex: -10,
-        },
-        hidden: !hasVisibleTable || filterLoading,
-    };
-};
-
-const noteToNoteNode = (note: Note): NoteNodeType => {
-    return {
-        id: note.id,
-        type: 'note',
-        position: { x: note.x, y: note.y },
-        data: { note },
-        width: note.width,
-        height: note.height,
-        zIndex: 50,
-        style: {
-            zIndex: 50,
-        },
-    };
-};
 
 export interface CanvasProps {
     initialTables: DBTable[];
@@ -430,25 +317,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
         // Delay edge creation to ensure handles are registered
         const timeoutId = setTimeout(() => {
-            const targetIndexes: Record<string, number> = relationships.reduce(
-                (acc, relationship) => {
-                    acc[
-                        `${relationship.targetTableId}${relationship.targetFieldId}`
-                    ] = 0;
-                    return acc;
-                },
-                {} as Record<string, number>
-            );
-
-            const targetDepIndexes: Record<string, number> =
-                dependencies.reduce(
-                    (acc, dep) => {
-                        acc[dep.tableId] = 0;
-                        return acc;
-                    },
-                    {} as Record<string, number>
-                );
-
             setEdges((prevEdges) => {
                 // Create a map of previous edge states to preserve selection
                 const prevEdgeStates = new Map(
@@ -459,35 +327,23 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 );
 
                 return [
-                    ...relationships.map(
-                        (relationship): RelationshipEdgeType => {
-                            const prevState = prevEdgeStates.get(
-                                relationship.id
-                            );
+                    ...relationshipEdgesFromDiagram(relationships).map(
+                        (edge): RelationshipEdgeType => {
+                            const prevState = prevEdgeStates.get(edge.id);
                             return {
-                                id: relationship.id,
-                                source: relationship.sourceTableId,
-                                target: relationship.targetTableId,
-                                sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
-                                targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
-                                type: 'relationship-edge',
-                                data: { relationship },
+                                ...edge,
                                 selected: prevState?.selected ?? false,
                                 animated: prevState?.animated ?? false,
                             };
                         }
                     ),
-                    ...dependencies.map((dep): DependencyEdgeType => {
-                        const prevState = prevEdgeStates.get(dep.id);
+                    ...dependencyEdgesFromDiagram(
+                        dependencies,
+                        showDBViews
+                    ).map((edge): DependencyEdgeType => {
+                        const prevState = prevEdgeStates.get(edge.id);
                         return {
-                            id: dep.id,
-                            source: dep.dependentTableId,
-                            target: dep.tableId,
-                            sourceHandle: `${TOP_SOURCE_HANDLE_ID_PREFIX}${dep.dependentTableId}`,
-                            targetHandle: `${TARGET_DEP_PREFIX}${targetDepIndexes[dep.tableId]++}_${dep.tableId}`,
-                            type: 'dependency-edge',
-                            data: { dependency: dep },
-                            hidden: !showDBViews,
+                            ...edge,
                             selected: prevState?.selected ?? false,
                             animated: prevState?.animated ?? false,
                         };

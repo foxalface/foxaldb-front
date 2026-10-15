@@ -2002,6 +2002,9 @@ export const vi: LanguageTranslation = {
                 forbidden: 'Bạn không thể hợp nhất sơ đồ này.',
                 unexpected: 'Hợp nhất thất bại.',
             },
+            preview: {
+                canvas_aria: 'Xem trước sơ đồ gộp lược đồ',
+            },
             result: {
                 summary: 'Xem lại các thay đổi trước khi hợp nhất.',
                 no_differences: 'Không có khác biệt',

@@ -1981,6 +1981,9 @@ export const ar: LanguageTranslation = {
                 forbidden: 'لا يمكنك دمج هذا المخطط.',
                 unexpected: 'فشل الدمج.',
             },
+            preview: {
+                canvas_aria: 'معاينة مخطط دمج المخطط',
+            },
             result: {
                 summary: 'راجع التغييرات قبل الدمج.',
                 no_differences: 'لم يُعثر على أي اختلاف',

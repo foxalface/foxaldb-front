@@ -376,3 +376,9 @@ After `flushDiagramAutosave()` and before `compareSchemaMerge()`, the wizard dee
 ### Preview projection
 
 `buildSchemaMergePreview()` in `frontend/src/lib/schema-merge/preview/` takes `baseDiagram`, `incomingDiagram`, Compare `operations`, dependency-closed `selectedOperationIds`, and `viewsCompared`. It returns a synthetic `diagram` plus parallel `decorations` (`add` / `modify` / `rename` / `delete`) keyed by projected entity ids. The preview is non-authoritative: Apply still posts only `selectedOperationIds` and the backend `SchemaMergeApplier` remains the source of truth. Selected deletions stay in the projected diagram so a later canvas pass can render deletion ghosts. No backend or API contract changes.
+
+### M10.2 read-only preview canvas
+
+`MergePreviewCanvas` (`frontend/src/dialogs/merge-wizard/merge-preview-canvas.tsx`) renders a projected diagram inside a **nested** `ReactFlowProvider` that is isolated from the live editor canvas. It reuses real `TableNode` / `RelationshipEdge` via shared `diagram-flow-elements.ts` transforms, with `ChartDBProvider readonly` inside `MergePreviewProviders` (storage, undo stack, and neutral `DiffProvider` only — no realtime, collaboration, export, or keyboard shortcuts).
+
+Interactions are limited to pan, scroll/pinch zoom, and zoom in / zoom out / fit view controls. Node drag, connect, select, delete keys, context menus, and relationship edit popovers are disabled (`readonly` on ChartDB plus explicit React Flow flags). Decoration metadata is passed on `node.data.mergePreview` / `edge.data.mergePreview` for M10.3 styling; M10.2 does not apply merge colors yet. Result step layout integration remains M10.4.

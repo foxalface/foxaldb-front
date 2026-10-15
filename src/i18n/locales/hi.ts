@@ -2012,6 +2012,9 @@ export const hi: LanguageTranslation = {
                 forbidden: 'आप इस आरेख को मर्ज नहीं कर सकते।',
                 unexpected: 'मर्ज विफल रहा।',
             },
+            preview: {
+                canvas_aria: 'स्कीमा मर्ज आरेख पूर्वावलोकन',
+            },
             result: {
                 summary: 'मर्ज करने से पहले बदलाव देखें।',
                 no_differences: 'कोई अंतर नहीं मिला',

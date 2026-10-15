@@ -2075,6 +2075,9 @@ export const de: LanguageTranslation = {
                 forbidden: 'Du kannst dieses Diagramm nicht zusammenführen.',
                 unexpected: 'Zusammenführung fehlgeschlagen.',
             },
+            preview: {
+                canvas_aria: 'Vorschau des Schema-Merge-Diagramms',
+            },
             result: {
                 summary: 'Prüfe die Änderungen vor dem Zusammenführen.',
                 no_differences: 'Keine Unterschiede gefunden',

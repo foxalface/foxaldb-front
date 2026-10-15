@@ -2019,6 +2019,9 @@ export const id_ID: LanguageTranslation = {
                 forbidden: 'Anda tidak dapat menggabungkan diagram ini.',
                 unexpected: 'Penggabungan gagal.',
             },
+            preview: {
+                canvas_aria: 'Pratinjau diagram penggabungan skema',
+            },
             result: {
                 summary: 'Tinjau perubahan sebelum menggabungkan.',
                 no_differences: 'Tidak ada perbedaan',

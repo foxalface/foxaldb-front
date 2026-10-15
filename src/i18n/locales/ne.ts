@@ -2018,6 +2018,9 @@ export const ne: LanguageTranslation = {
                 forbidden: 'तपाईं यो रेखाचित्र मर्ज गर्न सक्नुहुन्न।',
                 unexpected: 'मर्ज असफल भयो।',
             },
+            preview: {
+                canvas_aria: 'स्किमा मर्ज डायाग्राम पूर्वावलोकन',
+            },
             result: {
                 summary: 'मर्ज गर्नु अघि परिवर्तनहरू हेर्नुहोस्।',
                 no_differences: 'कुनै भिन्नता भेटिएन',

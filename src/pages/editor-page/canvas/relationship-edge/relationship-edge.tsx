@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import type { Edge, EdgeProps } from '@xyflow/react';
 import { getSmoothStepPath, Position, useReactFlow } from '@xyflow/react';
+import type { MergePreviewEdgeDecoration } from '../diagram-flow-elements';
 import type { DBRelationship, Cardinality } from '@/lib/domain/db-relationship';
 import { RIGHT_HANDLE_ID_PREFIX } from '../table-node/table-node-field';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -17,6 +18,8 @@ export type RelationshipEdgeType = Edge<
     {
         relationship: DBRelationship;
         highlighted?: boolean;
+        /** Non-persisted merge preview metadata (M10.3 styling). */
+        mergePreview?: MergePreviewEdgeDecoration;
     },
     'relationship-edge'
 >;
@@ -39,8 +42,12 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 useDiff();
             const { showCardinality } = useLocalConfig();
 
-            const { relationships, updateRelationship, removeRelationship } =
-                useChartDB();
+            const {
+                relationships,
+                updateRelationship,
+                removeRelationship,
+                readonly,
+            } = useChartDB();
             const {
                 editRelationshipPopover,
                 openRelationshipPopover,
@@ -64,6 +71,10 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
 
             const handleEdgeClick = useCallback(
                 (e: React.MouseEvent) => {
+                    if (readonly) {
+                        return;
+                    }
+
                     if (e.detail === 2) {
                         // Double click - open popover
                         openRelationshipPopover({
@@ -73,11 +84,15 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                     }
                     // Single click just selects the edge, doesn't open popover
                 },
-                [openRelationshipPopover, id]
+                [openRelationshipPopover, id, readonly]
             );
 
             const handleContextMenu = useCallback(
                 (e: React.MouseEvent) => {
+                    if (readonly) {
+                        return;
+                    }
+
                     e.preventDefault();
                     e.stopPropagation();
                     openRelationshipPopover({
@@ -85,18 +100,22 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         position: { x: e.clientX, y: e.clientY },
                     });
                 },
-                [id, openRelationshipPopover]
+                [id, openRelationshipPopover, readonly]
             );
 
             const handleIndicatorClick = useCallback(
                 (e: React.MouseEvent) => {
+                    if (readonly) {
+                        return;
+                    }
+
                     e.stopPropagation();
                     openRelationshipPopover({
                         relationshipId: id,
                         position: { x: e.clientX, y: e.clientY },
                     });
                 },
-                [id, openRelationshipPopover]
+                [id, openRelationshipPopover, readonly]
             );
 
             const handleSwitchTables = useCallback(async () => {

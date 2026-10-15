@@ -2031,6 +2031,9 @@ export const te: LanguageTranslation = {
                 forbidden: 'మీరు ఈ రేఖాచిత్రాన్ని విలీనం చేయలేరు.',
                 unexpected: 'విలీనం విఫలమైంది.',
             },
+            preview: {
+                canvas_aria: 'స్కీమా మర్జ్ డయాగ్రామ్ ప్రివ్యూ',
+            },
             result: {
                 summary: 'విలీనం చేయడానికి ముందు మార్పులను సమీక్షించండి.',
                 no_differences: 'తేడాలు కనుగొనబడలేదు',

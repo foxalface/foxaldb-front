@@ -2052,6 +2052,9 @@ export const fr: LanguageTranslation = {
                 forbidden: 'Vous ne pouvez pas fusionner ce diagramme.',
                 unexpected: 'La fusion a échoué.',
             },
+            preview: {
+                canvas_aria: 'Aperçu du diagramme de fusion de schéma',
+            },
             result: {
                 summary: 'Vérifiez les modifications avant de fusionner.',
                 no_differences: 'Aucune différence trouvée',

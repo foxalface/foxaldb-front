@@ -38,6 +38,7 @@ import { TableNodeField } from './table-node-field';
 import { useLayout } from '@/hooks/use-layout';
 import { useChartDB } from '@/hooks/use-chartdb';
 import type { RelationshipEdgeType } from '../relationship-edge/relationship-edge';
+import type { MergePreviewNodeDecoration } from '../diagram-flow-elements';
 import type { DBField } from '@/lib/domain/db-field';
 import { useTranslation } from 'react-i18next';
 import { TableNodeContextMenu } from './table-node-context-menu';
@@ -76,6 +77,8 @@ export type TableNodeType = Node<
         isRelationshipCreatingTarget?: boolean;
         // Map of fieldId -> number of edges targeting that field (for handle creation)
         targetEdgeCounts?: Record<string, number>;
+        /** Non-persisted merge preview metadata (M10.3 styling). */
+        mergePreview?: MergePreviewNodeDecoration[];
     },
     'table'
 >;

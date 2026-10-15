@@ -2015,6 +2015,9 @@ export const hr: LanguageTranslation = {
                 forbidden: 'Ne možete spojiti ovaj dijagram.',
                 unexpected: 'Spajanje nije uspjelo.',
             },
+            preview: {
+                canvas_aria: 'Pregled dijagrama spajanja sheme',
+            },
             result: {
                 summary: 'Pregledajte promjene prije spajanja.',
                 no_differences: 'Nema pronađenih razlika',

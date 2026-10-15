@@ -2050,6 +2050,9 @@ export const es: LanguageTranslation = {
                 forbidden: 'No puedes fusionar este diagrama.',
                 unexpected: 'La fusión falló.',
             },
+            preview: {
+                canvas_aria: 'Vista previa del diagrama de fusión de esquema',
+            },
             result: {
                 summary: 'Revisa los cambios antes de fusionar.',
                 no_differences: 'No se encontraron diferencias',

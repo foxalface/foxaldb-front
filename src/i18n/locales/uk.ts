@@ -2018,6 +2018,9 @@ export const uk: LanguageTranslation = {
                 forbidden: 'Ви не можете об’єднати цю діаграму.',
                 unexpected: 'Об’єднання не вдалося.',
             },
+            preview: {
+                canvas_aria: 'Попередній перегляд діаграми злиття схеми',
+            },
             result: {
                 summary: 'Перевірте зміни перед об’єднанням.',
                 no_differences: 'Відмінностей не знайдено',

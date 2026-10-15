@@ -2012,6 +2012,9 @@ export const mr: LanguageTranslation = {
                 forbidden: 'तुम्ही ही आकृती विलीन करू शकत नाही.',
                 unexpected: 'विलीनीकरण अयशस्वी.',
             },
+            preview: {
+                canvas_aria: 'स्कीमा विलीन आकृती पूर्वावलोकन',
+            },
             result: {
                 summary: 'विलीन करण्यापूर्वी बदल तपासा.',
                 no_differences: 'कोणताही फरक आढळला नाही',

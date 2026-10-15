@@ -2050,6 +2050,9 @@ export const ja: LanguageTranslation = {
                 forbidden: 'この図をマージできません。',
                 unexpected: 'マージに失敗しました。',
             },
+            preview: {
+                canvas_aria: 'スキーママージ図のプレビュー',
+            },
             result: {
                 summary: 'マージする前に変更内容を確認します。',
                 no_differences: '差分はありません',

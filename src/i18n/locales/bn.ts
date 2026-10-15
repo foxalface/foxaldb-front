@@ -2008,6 +2008,9 @@ export const bn: LanguageTranslation = {
                 forbidden: 'আপনি এই ডায়াগ্রাম মার্জ করতে পারবেন না।',
                 unexpected: 'মার্জ ব্যর্থ হয়েছে।',
             },
+            preview: {
+                canvas_aria: 'স্কিমা মার্জ ডায়াগ্রাম প্রিভিউ',
+            },
             result: {
                 summary: 'মার্জ করার আগে পরিবর্তনগুলো দেখে নিন।',
                 no_differences: 'কোনো পার্থক্য পাওয়া যায়নি',

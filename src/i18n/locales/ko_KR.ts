@@ -2011,6 +2011,9 @@ export const ko_KR: LanguageTranslation = {
                 forbidden: '이 다이어그램을 병합할 수 없습니다.',
                 unexpected: '병합에 실패했습니다.',
             },
+            preview: {
+                canvas_aria: '스키마 병합 다이어그램 미리보기',
+            },
             result: {
                 summary: '병합하기 전에 변경 내용을 검토하세요.',
                 no_differences: '차이점이 없습니다',

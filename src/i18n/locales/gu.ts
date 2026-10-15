@@ -1992,6 +1992,9 @@ export const gu: LanguageTranslation = {
                 forbidden: 'તમે આ આકૃતિ મર્જ કરી શકતા નથી.',
                 unexpected: 'મર્જ નિષ્ફળ રહ્યું.',
             },
+            preview: {
+                canvas_aria: 'સ્કીમા મર્જ ડાયાગ્રામ પૂર્વાવલોકન',
+            },
             result: {
                 summary: 'મર્જ કરતા પહેલાં ફેરફારો તપાસો.',
                 no_differences: 'કોઈ તફાવત મળ્યો નથી',

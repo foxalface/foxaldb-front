@@ -2010,6 +2010,9 @@ export const en = {
                 forbidden: 'You cannot merge this diagram.',
                 unexpected: 'Merge failed.',
             },
+            preview: {
+                canvas_aria: 'Schema merge diagram preview',
+            },
             result: {
                 summary: 'Review the changes before merging.',
                 no_differences: 'No differences found',

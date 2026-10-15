@@ -2018,6 +2018,9 @@ export const ru: LanguageTranslation = {
                 forbidden: 'Вы не можете объединить эту диаграмму.',
                 unexpected: 'Объединение не удалось.',
             },
+            preview: {
+                canvas_aria: 'Предпросмотр диаграммы слияния схемы',
+            },
             result: {
                 summary: 'Проверьте изменения перед объединением.',
                 no_differences: 'Различий не найдено',

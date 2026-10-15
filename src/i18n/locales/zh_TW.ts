@@ -1875,6 +1875,9 @@ export const zh_TW: LanguageTranslation = {
                 forbidden: '你無法合併此圖。',
                 unexpected: '合併失敗。',
             },
+            preview: {
+                canvas_aria: '架構合併圖表預覽',
+            },
             result: {
                 summary: '合併前請檢查這些變更。',
                 no_differences: '未發現差異',

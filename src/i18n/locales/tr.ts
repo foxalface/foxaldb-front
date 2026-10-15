@@ -2002,6 +2002,9 @@ export const tr: LanguageTranslation = {
                 forbidden: 'Bu diyagramı birleştiremezsiniz.',
                 unexpected: 'Birleştirme başarısız oldu.',
             },
+            preview: {
+                canvas_aria: 'Şema birleştirme diyagramı önizlemesi',
+            },
             result: {
                 summary: 'Birleştirmeden önce değişiklikleri gözden geçirin.',
                 no_differences: 'Fark bulunamadı',
