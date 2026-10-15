@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
-import { buildMergePreviewFlowDecorationMaps } from '../merge-preview-decoration-maps';
+import {
+    buildMergePreviewFlowDecorationMaps,
+    buildMergePreviewHoverMaps,
+} from '../merge-preview-decoration-maps';
 
 const diagram: Diagram = {
     id: 'd1',
@@ -64,6 +67,36 @@ describe('buildMergePreviewFlowDecorationMaps', () => {
         ]);
         expect(maps.mergePreviewByRelationshipId.get('r1')).toEqual({
             change: 'delete',
+        });
+    });
+});
+
+describe('buildMergePreviewHoverMaps', () => {
+    it('returns empty maps when highlight is null', () => {
+        const maps = buildMergePreviewHoverMaps(diagram, null);
+        expect(maps.mergePreviewHoverByTableId.size).toBe(0);
+        expect(maps.mergePreviewHoverByRelationshipId.size).toBe(0);
+    });
+
+    it('focuses table and field and dims other tables', () => {
+        const maps = buildMergePreviewHoverMaps(diagram, {
+            tableId: 't1',
+            fieldId: 'f1',
+        });
+
+        expect(maps.mergePreviewHoverByTableId.get('t1')).toEqual({
+            tableFocused: true,
+            fieldFocusedId: 'f1',
+        });
+    });
+
+    it('focuses relationship edge and dims other edges', () => {
+        const maps = buildMergePreviewHoverMaps(diagram, {
+            relationshipId: 'r1',
+        });
+
+        expect(maps.mergePreviewHoverByRelationshipId.get('r1')).toEqual({
+            focused: true,
         });
     });
 });

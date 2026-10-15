@@ -44,7 +44,12 @@ import {
     buildFieldMergeChangeById,
     resolveTableMergeChange,
 } from '../merge-preview-node-utils';
-import { getMergePreviewTableClasses } from '@/lib/schema-merge/preview/merge-preview-visual';
+import {
+    getMergePreviewTableClasses,
+    MERGE_PREVIEW_TABLE_DIM_CLASS,
+    MERGE_PREVIEW_TABLE_FOCUS_RING,
+} from '@/lib/schema-merge/preview/merge-preview-visual';
+import type { MergePreviewHoverFlags } from '../diagram-flow-elements';
 import type { DBField } from '@/lib/domain/db-field';
 import { useTranslation } from 'react-i18next';
 import { TableNodeContextMenu } from './table-node-context-menu';
@@ -85,6 +90,7 @@ export type TableNodeType = Node<
         targetEdgeCounts?: Record<string, number>;
         /** Non-persisted merge preview metadata (M10.3 styling). */
         mergePreview?: MergePreviewNodeDecoration[];
+        mergePreviewHover?: MergePreviewHoverFlags;
     },
     'table'
 >;
@@ -103,6 +109,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             isRelationshipCreatingTarget,
             targetEdgeCounts,
             mergePreview,
+            mergePreviewHover,
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
@@ -416,6 +423,12 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                           : 'border-slate-500 dark:border-slate-700',
                     mergePreviewTableClasses.ring,
                     mergePreviewTableClasses.container,
+                    mergePreviewHover?.tableFocused
+                        ? MERGE_PREVIEW_TABLE_FOCUS_RING
+                        : '',
+                    mergePreviewHover?.dimmed
+                        ? MERGE_PREVIEW_TABLE_DIM_CLASS
+                        : '',
                     isOverlapping
                         ? 'ring-2 ring-offset-slate-50 dark:ring-offset-slate-900 ring-blue-500 ring-offset-2'
                         : '',
@@ -473,6 +486,8 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                 mergePreviewTableClasses.border,
                 mergePreviewTableClasses.ring,
                 mergePreviewTableClasses.container,
+                mergePreviewHover?.tableFocused,
+                mergePreviewHover?.dimmed,
             ]
         );
 
@@ -751,6 +766,10 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     suppressFieldMergePreview
                                         ? undefined
                                         : fieldMergeChanges.get(field.id)
+                                }
+                                mergePreviewFieldFocused={
+                                    mergePreviewHover?.fieldFocusedId ===
+                                    field.id
                                 }
                             />
                         ))}

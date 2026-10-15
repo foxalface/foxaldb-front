@@ -31,6 +31,12 @@ import {
     viewIdentityKey,
 } from './identity-key';
 import {
+    createPreviewIdentityRegistry,
+    registerTableRenameAliases,
+} from './preview-identity-registry';
+import type { PreviewIdentityRegistry } from './preview-identity-registry';
+import { transformRelationshipIdentityForIncoming } from './transform-relationship-identity-for-incoming';
+import {
     createPreviewPlacementState,
     defaultPreviewTableWidth,
     nextPreviewTablePosition,
@@ -132,46 +138,24 @@ const findRelationshipByEntityId = (
         (relationship) => relationship.id === entityId
     ) ?? null;
 
-const findTableByFieldIdentity = (
+const findTableByEntityIdInDiagram = (
     diagram: Diagram,
-    identity: FieldIdentity
-): DBTable | null => {
-    for (const table of diagram.tables ?? []) {
-        if (
-            (table.schema ?? null) === (identity.schema ?? null) &&
-            table.name === identity.table
-        ) {
-            return table;
-        }
-    }
+    tableId: string
+): DBTable | null =>
+    (diagram.tables ?? []).find((table) => table.id === tableId) ?? null;
 
-    return null;
-};
+const resolveRelationshipFieldIds = (
+    registry: PreviewIdentityRegistry,
+    identity: RelationshipIdentity
+): { sourceFieldId: string; targetFieldId: string } | null => {
+    const sourceFieldId = registry.resolveFieldEndpoint(identity.source);
+    const targetFieldId = registry.resolveFieldEndpoint(identity.target);
 
-const resolveFieldId = (
-    diagram: Diagram,
-    endpoint: {
-        schema: string | null;
-        table: string;
-        field: string;
-    }
-): string | null => {
-    const table = findTableByFieldIdentity(diagram, {
-        kind: 'field',
-        schema: endpoint.schema,
-        table: endpoint.table,
-        name: endpoint.field,
-    });
-
-    if (!table) {
+    if (!sourceFieldId || !targetFieldId) {
         return null;
     }
 
-    const field = table.fields.find(
-        (candidate) => candidate.name === endpoint.field
-    );
-
-    return field?.id ?? null;
+    return { sourceFieldId, targetFieldId };
 };
 
 const ensureCustomTypeFromIncoming = (
@@ -254,6 +238,8 @@ export const buildSchemaMergePreview = (
         input.selectedOperationIds
     );
 
+    const identityRegistry = createPreviewIdentityRegistry(diagram);
+
     let placement = createPreviewPlacementState(diagram.tables ?? []);
 
     const tableRenames = selected.filter(
@@ -294,14 +280,35 @@ export const buildSchemaMergePreview = (
             continue;
         }
 
+        const oldTableName = table.name;
+        const oldSchema = table.schema ?? null;
+
         if (operation.category === 'view') {
             const renameTo = operation.renameTo as ViewIdentity;
             table.name = renameTo.name;
             table.schema = renameTo.schema;
+            registerTableRenameAliases(
+                identityRegistry,
+                table,
+                oldTableName,
+                renameTo.name,
+                oldSchema,
+                renameTo.schema,
+                'view'
+            );
         } else {
             const renameTo = operation.renameTo as TableIdentity;
             table.name = renameTo.name;
             table.schema = renameTo.schema;
+            registerTableRenameAliases(
+                identityRegistry,
+                table,
+                oldTableName,
+                renameTo.name,
+                oldSchema,
+                renameTo.schema,
+                'table'
+            );
         }
 
         for (const change of operation.changes) {
@@ -327,7 +334,13 @@ export const buildSchemaMergePreview = (
             continue;
         }
 
-        located.field.name = operation.renameTo.name;
+        const renameTo = operation.renameTo as FieldIdentity;
+        located.field.name = renameTo.name;
+
+        identityRegistry.registerFieldAliases(located.field.id, [
+            operation.identity as FieldIdentity,
+            renameTo,
+        ]);
 
         for (const change of operation.changes) {
             applyFieldAttributeChange(located.field, change);
@@ -377,12 +390,41 @@ export const buildSchemaMergePreview = (
         );
 
         diagram.tables = [...(diagram.tables ?? []), added];
+        if (operation.category === 'view') {
+            identityRegistry.registerTableIdentity(
+                operation.identity as ViewIdentity,
+                tableId
+            );
+        } else {
+            identityRegistry.registerTableIdentity(
+                operation.identity as TableIdentity,
+                tableId
+            );
+        }
+        for (const field of added.fields) {
+            identityRegistry.registerFieldIdentity(
+                {
+                    kind: 'field',
+                    schema: added.schema ?? null,
+                    table: added.name,
+                    name: field.name,
+                },
+                field.id
+            );
+        }
         setDecoration(decorations, operation.category, tableId, 'add');
     }
 
     for (const operation of fieldAdds) {
         const identity = operation.identity as FieldIdentity;
-        const parent = findTableByFieldIdentity(diagram, identity);
+        const parentTableId = identityRegistry.resolveTableId({
+            kind: 'table',
+            schema: identity.schema,
+            name: identity.table,
+        });
+        const parent = parentTableId
+            ? findTableByEntityIdInDiagram(diagram, parentTableId)
+            : null;
 
         if (!parent) {
             continue;
@@ -415,6 +457,7 @@ export const buildSchemaMergePreview = (
         }
 
         parent.fields = [...parent.fields, field];
+        identityRegistry.registerFieldIdentity(identity, fieldId);
         setDecoration(decorations, 'field', fieldId, 'add');
     }
 
@@ -508,27 +551,30 @@ export const buildSchemaMergePreview = (
 
     for (const operation of sortedRelationshipOps) {
         if (operation.type === 'add') {
+            const lookupIdentity = transformRelationshipIdentityForIncoming(
+                operation.identity as RelationshipIdentity,
+                fieldRenames,
+                tableRenames
+            );
             const incoming = findIncomingRelationship(
                 input.incomingDiagram,
-                operation.identity as RelationshipIdentity
+                lookupIdentity
             );
 
             if (!incoming) {
                 continue;
             }
 
-            const sourceFieldId = resolveFieldId(
-                diagram,
-                operation.identity.source
-            );
-            const targetFieldId = resolveFieldId(
-                diagram,
-                operation.identity.target
+            const endpointIds = resolveRelationshipFieldIds(
+                identityRegistry,
+                operation.identity as RelationshipIdentity
             );
 
-            if (!sourceFieldId || !targetFieldId) {
+            if (!endpointIds) {
                 continue;
             }
+
+            const { sourceFieldId, targetFieldId } = endpointIds;
 
             const sourceTable = (diagram.tables ?? []).find((table) =>
                 table.fields.some((field) => field.id === sourceFieldId)

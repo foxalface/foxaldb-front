@@ -44,6 +44,17 @@ export interface MergePreviewEdgeDecoration {
     readonly change: MergeChangeVisual;
 }
 
+export interface MergePreviewHoverFlags {
+    readonly tableFocused?: boolean;
+    readonly fieldFocusedId?: string | null;
+    readonly dimmed?: boolean;
+}
+
+export interface MergePreviewEdgeHoverFlags {
+    readonly focused?: boolean;
+    readonly dimmed?: boolean;
+}
+
 export interface TableToTableNodeOptions {
     filter?: DiagramFilter;
     databaseType: DatabaseType;
@@ -53,6 +64,7 @@ export interface TableToTableNodeOptions {
     isRelationshipCreatingTarget?: boolean;
     targetEdgeCounts?: Record<string, number>;
     mergePreview?: MergePreviewNodeDecoration[];
+    mergePreviewHover?: MergePreviewHoverFlags;
 }
 
 export const tableToTableNode = (
@@ -68,6 +80,7 @@ export const tableToTableNode = (
         isRelationshipCreatingTarget = false,
         targetEdgeCounts,
         mergePreview,
+        mergePreviewHover,
     } = options;
 
     const position = { x: table.x, y: table.y };
@@ -97,6 +110,7 @@ export const tableToTableNode = (
             isRelationshipCreatingTarget,
             targetEdgeCounts,
             ...(mergePreview ? { mergePreview } : {}),
+            ...(mergePreviewHover ? { mergePreviewHover } : {}),
         },
         width: table.width ?? MIN_TABLE_SIZE,
         hidden,
@@ -179,6 +193,10 @@ export const relationshipEdgesFromDiagram = (
             string,
             MergePreviewEdgeDecoration
         >;
+        mergePreviewHoverByRelationshipId?: ReadonlyMap<
+            string,
+            MergePreviewEdgeHoverFlags
+        >;
     }
 ): RelationshipEdgeType[] => {
     const targetIndexes: Record<string, number> = relationships.reduce(
@@ -205,6 +223,16 @@ export const relationshipEdgesFromDiagram = (
             data: {
                 relationship,
                 ...(mergePreview ? { mergePreview } : {}),
+                ...(options?.mergePreviewHoverByRelationshipId?.get(
+                    relationship.id
+                )
+                    ? {
+                          mergePreviewHover:
+                              options.mergePreviewHoverByRelationshipId.get(
+                                  relationship.id
+                              ),
+                      }
+                    : {}),
             },
             selected: false,
             animated: false,
@@ -254,6 +282,11 @@ export interface DiagramToFlowElementsOptions {
         string,
         MergePreviewEdgeDecoration
     >;
+    mergePreviewHoverByTableId?: ReadonlyMap<string, MergePreviewHoverFlags>;
+    mergePreviewHoverByRelationshipId?: ReadonlyMap<
+        string,
+        MergePreviewEdgeHoverFlags
+    >;
 }
 
 export const diagramToFlowElements = (
@@ -278,6 +311,9 @@ export const diagramToFlowElements = (
             forceShow: options.forceShowTables,
             targetEdgeCounts: targetEdgeCounts,
             mergePreview: options.mergePreviewByTableId?.get(table.id),
+            mergePreviewHover: options.mergePreviewHoverByTableId?.get(
+                table.id
+            ),
         })
     );
 
@@ -300,6 +336,8 @@ export const diagramToFlowElements = (
 
     const relationshipEdges = relationshipEdgesFromDiagram(relationships, {
         mergePreviewByRelationshipId: options.mergePreviewByRelationshipId,
+        mergePreviewHoverByRelationshipId:
+            options.mergePreviewHoverByRelationshipId,
     });
 
     const dependencyEdges =

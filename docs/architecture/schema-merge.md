@@ -365,9 +365,9 @@ A peer with unsaved edits is replaced by that authoritative document. The same f
 
 Canvas nodes are rebuilt from the loaded tables. `load_diagram` clears the highlighted custom type. An open sidebar target is layout state and is not cleared by a full load; a missing entity must not be assumed to still exist. Conversations are cleaned on the server. M8 does not add a separate selection cleanup.
 
-## M10 visual preview (in progress)
+## M10 visual preview (complete)
 
-M10 adds a read-only diagram preview on the Merge Result step. M10.1 implements the pure projection layer only (no canvas yet).
+M10 adds a read-only diagram preview on the Merge Result step so reviewers can see topology beside the precise change list. Apply remains backend-authoritative; preview state is never sent on Compare or Apply.
 
 ### Compare baseline (`baseDiagram`)
 
@@ -381,7 +381,7 @@ After `flushDiagramAutosave()` and before `compareSchemaMerge()`, the wizard dee
 
 `MergePreviewCanvas` (`frontend/src/dialogs/merge-wizard/merge-preview-canvas.tsx`) renders a projected diagram inside a **nested** `ReactFlowProvider` that is isolated from the live editor canvas. It reuses real `TableNode` / `RelationshipEdge` via shared `diagram-flow-elements.ts` transforms, with `ChartDBProvider readonly` inside `MergePreviewProviders` (storage, undo stack, and neutral `DiffProvider` only — no realtime, collaboration, export, or keyboard shortcuts).
 
-Interactions are limited to pan, scroll/pinch zoom, and zoom in / zoom out / fit view controls. Node drag, connect, select, delete keys, context menus, and relationship edit popovers are disabled (`readonly` on ChartDB plus explicit React Flow flags). Result step layout integration remains M10.4.
+Interactions are limited to pan, scroll/pinch zoom, and zoom in / zoom out / fit view controls. Node drag, connect, select, delete keys, context menus, and relationship edit popovers are disabled (`readonly` on ChartDB plus explicit React Flow flags).
 
 ### M10.3 preview decoration visuals
 
@@ -402,3 +402,20 @@ The Result step with operations uses a **two-column** workspace (stacked below t
 `applyContext.baseDiagram` and the current `selection.selected` set feed `buildSchemaMergePreview()`; preview updates immediately on checkbox changes. **No preview → selection** feedback. Apply still posts only `selectedOperationIds` (and existing Compare fields); preview diagram/decorations are never sent.
 
 When every operation is deselected, preview shows the frozen **baseDiagram** with **no** decorations (not incoming, not empty). Selected deletes render as ghosts; deselecting a delete operation restores normal base styling. Initial `fitView` runs once when the preview panel has measurable size (`ResizeObserver`); pan/zoom are preserved across selection toggles (manual Fit only afterward). Zero-difference and analysis-error Result states do not mount the preview workspace.
+
+### M10.5 polish and cross-highlight
+
+Desktop Result uses roughly **36% Changes / 64% Preview** (`lg:grid-cols-[minmax(280px,36%)_minmax(0,1fr)]`). Below the large breakpoint the workspace stacks with a capped Changes scroll region so the preview keeps useful height.
+
+**List → preview cross-highlight** (hover and keyboard focus on a Result row) is preview-only metadata:
+
+- `MergeResultStep` holds `highlightedOperationId` separately from `useMergeOperationSelection`.
+- `resolvePreviewHighlightTarget(operation, projectedDiagram)` maps the hovered operation to projected `tableId` / `fieldId` / `relationshipId` (reuses M10 identity and preview ids; no DOM inference).
+- `buildMergePreviewHoverMaps()` drives optional focus rings and light dimming on unrelated nodes/edges; semantic add/modify/rename/delete styling is unchanged.
+- Highlight does **not** change selection, Apply payload, viewport, or `buildSchemaMergePreview` inputs.
+
+There is no preview → list selection or auto-pan/zoom on highlight.
+
+### M10.5.1 rename-aware relationship endpoints
+
+Relationship ADD/MODIFY projection resolves semantic endpoints through a **rename alias registry** (`PreviewIdentityRegistry`): selected table/field renames register old and new semantic identities to the same projected entity id. Relationship operations from Compare may still cite pre-rename endpoint names; lookup uses those aliases, not live projected names only. Incoming relationship templates are located with `transformRelationshipIdentityForIncoming()` so incoming diagrams (post-rename names) still match Compare identities. Incoming relationship ids are never authoritative on the preview diagram.

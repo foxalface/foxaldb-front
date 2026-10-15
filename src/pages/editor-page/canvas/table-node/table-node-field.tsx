@@ -22,7 +22,10 @@ import {
 } from 'lucide-react';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import type { MergeChangeVisual } from '@/lib/schema-merge/preview/preview-types';
-import { getMergePreviewFieldClasses } from '@/lib/schema-merge/preview/merge-preview-visual';
+import {
+    getMergePreviewFieldClasses,
+    MERGE_PREVIEW_FIELD_FOCUS_CLASS,
+} from '@/lib/schema-merge/preview/merge-preview-visual';
 import { MergePreviewChangeIndicator } from '../merge-preview-change-indicator';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
@@ -59,6 +62,7 @@ export interface TableNodeFieldProps {
     targetEdgeCount?: number;
     /** Merge wizard preview-only field decoration (M10.3). */
     mergePreviewChange?: MergeChangeVisual;
+    mergePreviewFieldFocused?: boolean;
 }
 
 const arePropsEqual = (
@@ -85,7 +89,9 @@ const arePropsEqual = (
         prevProps.isConnectable === nextProps.isConnectable &&
         prevProps.tableNodeId === nextProps.tableNodeId &&
         prevProps.targetEdgeCount === nextProps.targetEdgeCount &&
-        prevProps.mergePreviewChange === nextProps.mergePreviewChange
+        prevProps.mergePreviewChange === nextProps.mergePreviewChange &&
+        prevProps.mergePreviewFieldFocused ===
+            nextProps.mergePreviewFieldFocused
     );
 };
 
@@ -99,6 +105,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         isConnectable,
         targetEdgeCount,
         mergePreviewChange,
+        mergePreviewFieldFocused,
     }) => {
         const { relationships, readonly, highlightedCustomType, databaseType } =
             useChartDB();
@@ -369,6 +376,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     'group relative flex h-8 items-center justify-between gap-1 border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800',
                     'transition-all duration-200 ease-in-out',
                     mergePreviewFieldClasses.row,
+                    mergePreviewFieldFocused
+                        ? MERGE_PREVIEW_FIELD_FOCUS_CLASS
+                        : '',
                     {
                         'bg-pink-100 dark:bg-pink-900':
                             highlighted && !isCustomTypeHighlighted,

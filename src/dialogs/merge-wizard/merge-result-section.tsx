@@ -29,6 +29,9 @@ export const MergeResultSection: React.FC<{
     labelContext: MergeLabelContext;
     text: MergeText;
     disabled?: boolean;
+    highlightedOperationId?: string | null;
+    onHighlightOperation?: (operationId: string) => void;
+    onClearHighlight?: () => void;
     onToggleOperation: (operationId: string, selected: boolean) => void;
     onToggleSection: () => void;
 }> = ({
@@ -40,6 +43,9 @@ export const MergeResultSection: React.FC<{
     labelContext,
     text,
     disabled = false,
+    highlightedOperationId = null,
+    onHighlightOperation,
+    onClearHighlight,
     onToggleOperation,
     onToggleSection,
 }) => {
@@ -91,9 +97,18 @@ export const MergeResultSection: React.FC<{
                                 <MergeResultRow
                                     operation={operation}
                                     selected={selected.has(operation.id)}
+                                    highlighted={
+                                        highlightedOperationId === operation.id
+                                    }
                                     labelContext={labelContext}
                                     text={text}
                                     disabled={disabled}
+                                    onHighlight={() =>
+                                        onHighlightOperation?.(operation.id)
+                                    }
+                                    onClearHighlight={() =>
+                                        onClearHighlight?.()
+                                    }
                                     onSelect={() =>
                                         onToggleOperation(operation.id, true)
                                     }

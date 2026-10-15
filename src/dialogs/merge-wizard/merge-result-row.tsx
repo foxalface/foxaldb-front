@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import type { DiffOperation } from '@/lib/schema-merge/diff-types';
 import { formatMergeOperationDetail } from './format-merge-change';
@@ -16,6 +17,9 @@ export const MergeResultRow: React.FC<{
     labelContext: MergeLabelContext;
     text: MergeText;
     disabled?: boolean;
+    highlighted?: boolean;
+    onHighlight?: () => void;
+    onClearHighlight?: () => void;
     onSelect: () => void;
     onDeselect: () => void;
 }> = ({
@@ -24,6 +28,9 @@ export const MergeResultRow: React.FC<{
     labelContext,
     text,
     disabled = false,
+    highlighted = false,
+    onHighlight,
+    onClearHighlight,
     onSelect,
     onDeselect,
 }) => {
@@ -31,7 +38,26 @@ export const MergeResultRow: React.FC<{
     const detail = formatMergeOperationDetail(operation, text);
 
     return (
-        <div className="flex items-start gap-2 py-1.5">
+        <div
+            className={cn(
+                'flex items-start gap-2 rounded-sm py-1.5 pr-1 -mr-1 outline-none transition-colors',
+                highlighted && !selected
+                    ? 'bg-muted/70'
+                    : 'hover:bg-muted/50 focus-within:bg-muted/50'
+            )}
+            data-testid={`merge-result-row-${operation.id}`}
+            data-highlighted={highlighted ? 'true' : 'false'}
+            onMouseEnter={() => onHighlight?.()}
+            onMouseLeave={() => onClearHighlight?.()}
+            onFocusCapture={() => onHighlight?.()}
+            onBlurCapture={(event) => {
+                if (
+                    !event.currentTarget.contains(event.relatedTarget as Node)
+                ) {
+                    onClearHighlight?.();
+                }
+            }}
+        >
             <Checkbox
                 className="mt-0.5"
                 checked={selected}

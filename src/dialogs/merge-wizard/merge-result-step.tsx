@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/alert/alert';
 import { Button } from '@/components/button/button';
 import { Accordion } from '@/components/accordion/accordion';
@@ -14,6 +14,7 @@ import {
     MERGE_RESULT_SECTION_ORDER,
 } from '@/lib/schema-merge/group-operations';
 import { buildSchemaMergePreview } from '@/lib/schema-merge/preview/build-schema-merge-preview';
+import { resolvePreviewHighlightTarget } from '@/lib/schema-merge/preview/resolve-preview-highlight-target';
 import { useTranslation } from 'react-i18next';
 import type { MergeText } from './format-merge-change';
 import { buildMergeLabelContext } from './merge-operation-label';
@@ -51,6 +52,9 @@ export const MergeResultStep: React.FC<{
     const grouped = groupMergeOperations(operations);
     const labelContext = buildMergeLabelContext(operations, defaultSchema);
     const selection = useMergeOperationSelection(operations);
+    const [highlightedOperationId, setHighlightedOperationId] = useState<
+        string | null
+    >(null);
     const noDifferences = operations.length === 0;
     const retryBlocked =
         applyError !== null && mergeApplyBlocksRetry(applyError);
@@ -86,6 +90,25 @@ export const MergeResultStep: React.FC<{
         showPreviewWorkspace,
     ]);
 
+    const highlightTarget = useMemo(() => {
+        if (!highlightedOperationId || !previewProjection) {
+            return null;
+        }
+
+        const operation = operations.find(
+            (item) => item.id === highlightedOperationId
+        );
+
+        if (!operation) {
+            return null;
+        }
+
+        return resolvePreviewHighlightTarget(
+            operation,
+            previewProjection.diagram
+        );
+    }, [highlightedOperationId, operations, previewProjection]);
+
     const changesList = (
         <Accordion
             type="multiple"
@@ -105,6 +128,9 @@ export const MergeResultStep: React.FC<{
                     labelContext={labelContext}
                     text={text}
                     disabled={isApplying}
+                    highlightedOperationId={highlightedOperationId}
+                    onHighlightOperation={setHighlightedOperationId}
+                    onClearHighlight={() => setHighlightedOperationId(null)}
                     onToggleOperation={(operationId, next) => {
                         if (next) {
                             selection.select(operationId);
@@ -165,7 +191,7 @@ export const MergeResultStep: React.FC<{
                     </div>
                 ) : showPreviewWorkspace && previewProjection ? (
                     <div
-                        className="grid min-h-0 flex-1 gap-4 max-lg:grid-cols-1 lg:grid-cols-[minmax(300px,38%)_minmax(0,1fr)]"
+                        className="grid min-h-0 flex-1 gap-4 max-lg:grid-cols-1 lg:grid-cols-[minmax(280px,36%)_minmax(0,1fr)]"
                         data-testid="merge-result-workspace"
                     >
                         <section
@@ -180,7 +206,7 @@ export const MergeResultStep: React.FC<{
                                 {text('merge_wizard.result.changes')}
                             </h3>
                             <div
-                                className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pr-1"
+                                className="max-h-[min(40vh,20rem)] min-h-0 flex-1 overflow-y-auto overflow-x-hidden pr-1 max-lg:max-h-[min(40vh,20rem)] lg:max-h-none"
                                 data-testid="merge-result-changes-scroll"
                             >
                                 {changesList}
@@ -205,6 +231,7 @@ export const MergeResultStep: React.FC<{
                                     diagram={previewProjection.diagram}
                                     decorations={previewProjection.decorations}
                                     layoutGeneration={applyContext.generation}
+                                    highlightTarget={highlightTarget}
                                     className="absolute inset-0"
                                 />
                             </div>

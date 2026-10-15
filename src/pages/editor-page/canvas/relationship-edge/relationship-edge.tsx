@@ -13,7 +13,12 @@ import { useLocalConfig } from '@/hooks/use-local-config';
 import { useCanvas } from '@/hooks/use-canvas';
 import { EditRelationshipPopover } from './edit-relationship-popover';
 import { EllipsisIcon } from 'lucide-react';
-import { getMergePreviewEdgeClasses } from '@/lib/schema-merge/preview/merge-preview-visual';
+import {
+    getMergePreviewEdgeClasses,
+    MERGE_PREVIEW_EDGE_DIM_CLASS,
+    MERGE_PREVIEW_EDGE_FOCUS_CLASS,
+} from '@/lib/schema-merge/preview/merge-preview-visual';
+import type { MergePreviewEdgeHoverFlags } from '../diagram-flow-elements';
 import { MergePreviewChangeIndicator } from '../merge-preview-change-indicator';
 
 export type RelationshipEdgeType = Edge<
@@ -22,6 +27,7 @@ export type RelationshipEdgeType = Edge<
         highlighted?: boolean;
         /** Non-persisted merge preview metadata (M10.3 styling). */
         mergePreview?: MergePreviewEdgeDecoration;
+        mergePreviewHover?: MergePreviewEdgeHoverFlags;
     },
     'relationship-edge'
 >;
@@ -381,6 +387,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             );
 
             const mergePreviewChange = data?.mergePreview?.change;
+            const mergePreviewHover = data?.mergePreviewHover;
             const mergePreviewEdgeStyle = useMemo(
                 () =>
                     getMergePreviewEdgeClasses(
@@ -431,6 +438,12 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                             mergePreviewChange
                                 ? mergePreviewEdgeStyle.stroke
                                 : `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
+                            mergePreviewHover?.focused
+                                ? MERGE_PREVIEW_EDGE_FOCUS_CLASS
+                                : '',
+                            mergePreviewHover?.dimmed
+                                ? MERGE_PREVIEW_EDGE_DIM_CLASS
+                                : '',
                             {
                                 '!stroke-green-500 !stroke-[3px]':
                                     !mergePreviewChange &&

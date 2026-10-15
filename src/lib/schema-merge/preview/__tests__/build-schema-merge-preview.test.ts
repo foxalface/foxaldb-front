@@ -634,6 +634,363 @@ describe('buildSchemaMergePreview', () => {
         expect(modifyResult.decorations.relationships.r1).toBe('modify');
     });
 
+    it('resolves relationship ADD when source field was renamed (old endpoint identity)', () => {
+        const base = diagram([
+            table('t1', 'users', { fields: [field('f-name', 'name')] }),
+            table('t2', 'invoices', { fields: [field('f-user', 'user_id')] }),
+        ]);
+        const incoming = diagram(
+            [
+                table('i1', 'users', {
+                    fields: [field('if-name', 'full_name')],
+                }),
+                table('i2', 'invoices', {
+                    fields: [field('if-user', 'user_id')],
+                }),
+            ],
+            [
+                {
+                    id: 'incoming-rel',
+                    name: 'users_invoices',
+                    sourceTableId: 'i1',
+                    targetTableId: 'i2',
+                    sourceFieldId: 'if-name',
+                    targetFieldId: 'if-user',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'many',
+                    createdAt: 0,
+                },
+            ]
+        );
+
+        const operations = [
+            op({
+                id: 'rename-name',
+                category: 'field',
+                type: 'rename',
+                entityId: 'f-name',
+                renameTo: {
+                    kind: 'field',
+                    schema: 'public',
+                    table: 'users',
+                    name: 'full_name',
+                },
+                identity: {
+                    kind: 'field',
+                    schema: 'public',
+                    table: 'users',
+                    name: 'name',
+                },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: [],
+            } as DiffOperation),
+            op({
+                id: 'rel-add',
+                category: 'relationship',
+                type: 'add',
+                entityId: null,
+                renameTo: null,
+                identity: {
+                    kind: 'relationship',
+                    source: {
+                        schema: 'public',
+                        table: 'users',
+                        field: 'name',
+                    },
+                    target: {
+                        schema: 'public',
+                        table: 'invoices',
+                        field: 'user_id',
+                    },
+                },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: ['rename-name'],
+            } as DiffOperation),
+        ];
+
+        const result = build(base, incoming, operations, [
+            'rename-name',
+            'rel-add',
+        ]);
+
+        expect(result.diagram.relationships).toHaveLength(1);
+        const rel = result.diagram.relationships?.[0];
+        expect(rel?.sourceFieldId).toBe('f-name');
+        expect(rel?.targetFieldId).toBe('f-user');
+        expect(
+            result.diagram.tables?.[0]?.fields.find((f) => f.id === 'f-name')
+                ?.name
+        ).toBe('full_name');
+    });
+
+    it('resolves relationship ADD after combined table and field rename', () => {
+        const base = diagram([
+            table('t1', 'users', {
+                fields: [field('f1', 'name')],
+            }),
+            table('t2', 'invoices', { fields: [field('f2', 'user_id')] }),
+        ]);
+        const incoming = diagram(
+            [
+                table('i1', 'accounts', {
+                    fields: [field('if1', 'full_name')],
+                }),
+                table('i2', 'invoices', { fields: [field('if2', 'user_id')] }),
+            ],
+            [
+                {
+                    id: 'incoming-rel',
+                    name: 'rel',
+                    sourceTableId: 'i1',
+                    targetTableId: 'i2',
+                    sourceFieldId: 'if1',
+                    targetFieldId: 'if2',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'many',
+                    createdAt: 0,
+                },
+            ]
+        );
+
+        const operations = [
+            op({
+                id: 'rename-table',
+                category: 'table',
+                type: 'rename',
+                entityId: 't1',
+                renameTo: { kind: 'table', schema: 'public', name: 'accounts' },
+                identity: { kind: 'table', schema: 'public', name: 'users' },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: [],
+            } as DiffOperation),
+            op({
+                id: 'rename-field',
+                category: 'field',
+                type: 'rename',
+                entityId: 'f1',
+                renameTo: {
+                    kind: 'field',
+                    schema: 'public',
+                    table: 'accounts',
+                    name: 'full_name',
+                },
+                identity: {
+                    kind: 'field',
+                    schema: 'public',
+                    table: 'users',
+                    name: 'name',
+                },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: ['rename-table'],
+            } as DiffOperation),
+            op({
+                id: 'rel-add',
+                category: 'relationship',
+                type: 'add',
+                entityId: null,
+                renameTo: null,
+                identity: {
+                    kind: 'relationship',
+                    source: {
+                        schema: 'public',
+                        table: 'users',
+                        field: 'name',
+                    },
+                    target: {
+                        schema: 'public',
+                        table: 'invoices',
+                        field: 'user_id',
+                    },
+                },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: ['rename-field'],
+            } as DiffOperation),
+        ];
+
+        const result = build(base, incoming, operations, [
+            'rename-table',
+            'rename-field',
+            'rel-add',
+        ]);
+
+        expect(result.diagram.relationships).toHaveLength(1);
+        expect(result.diagram.relationships?.[0]?.sourceFieldId).toBe('f1');
+    });
+
+    it('resolves relationship ADD when target FK field was renamed', () => {
+        const base = diagram([
+            table('t1', 'users', { fields: [field('f-id', 'id')] }),
+            table('t2', 'posts', { fields: [field('f-user', 'user_id')] }),
+        ]);
+        const incoming = diagram(
+            [
+                table('i1', 'users', { fields: [field('if-id', 'id')] }),
+                table('i2', 'posts', {
+                    fields: [field('if-author', 'author_id')],
+                }),
+            ],
+            [
+                {
+                    id: 'incoming-rel',
+                    name: 'posts_users',
+                    sourceTableId: 'i1',
+                    targetTableId: 'i2',
+                    sourceFieldId: 'if-id',
+                    targetFieldId: 'if-author',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'many',
+                    createdAt: 0,
+                },
+            ]
+        );
+
+        const operations = [
+            op({
+                id: 'rename-fk',
+                category: 'field',
+                type: 'rename',
+                entityId: 'f-user',
+                renameTo: {
+                    kind: 'field',
+                    schema: 'public',
+                    table: 'posts',
+                    name: 'author_id',
+                },
+                identity: {
+                    kind: 'field',
+                    schema: 'public',
+                    table: 'posts',
+                    name: 'user_id',
+                },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: [],
+            } as DiffOperation),
+            op({
+                id: 'rel-add',
+                category: 'relationship',
+                type: 'add',
+                entityId: null,
+                renameTo: null,
+                identity: {
+                    kind: 'relationship',
+                    source: {
+                        schema: 'public',
+                        table: 'users',
+                        field: 'id',
+                    },
+                    target: {
+                        schema: 'public',
+                        table: 'posts',
+                        field: 'user_id',
+                    },
+                },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: ['rename-fk'],
+            } as DiffOperation),
+        ];
+
+        const result = build(base, incoming, operations, [
+            'rename-fk',
+            'rel-add',
+        ]);
+
+        expect(result.diagram.relationships).toHaveLength(1);
+        expect(result.diagram.relationships?.[0]?.targetFieldId).toBe('f-user');
+    });
+
+    it('keeps relationship DELETE decoration when endpoint field is renamed', () => {
+        const base = diagram(
+            [
+                table('t1', 'users', { fields: [field('f1', 'id')] }),
+                table('t2', 'posts', { fields: [field('f2', 'user_id')] }),
+            ],
+            [
+                {
+                    id: 'r1',
+                    name: 'rel',
+                    sourceTableId: 't1',
+                    targetTableId: 't2',
+                    sourceFieldId: 'f1',
+                    targetFieldId: 'f2',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'many',
+                    createdAt: 0,
+                },
+            ]
+        );
+
+        const operations = [
+            op({
+                id: 'rename-fk',
+                category: 'field',
+                type: 'rename',
+                entityId: 'f2',
+                renameTo: {
+                    kind: 'field',
+                    schema: 'public',
+                    table: 'posts',
+                    name: 'author_id',
+                },
+                identity: {
+                    kind: 'field',
+                    schema: 'public',
+                    table: 'posts',
+                    name: 'user_id',
+                },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: [],
+            } as DiffOperation),
+            op({
+                id: 'rel-delete',
+                category: 'relationship',
+                type: 'delete',
+                entityId: 'r1',
+                renameTo: null,
+                identity: {
+                    kind: 'relationship',
+                    source: {
+                        schema: 'public',
+                        table: 'users',
+                        field: 'id',
+                    },
+                    target: {
+                        schema: 'public',
+                        table: 'posts',
+                        field: 'user_id',
+                    },
+                },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: [],
+            } as DiffOperation),
+        ];
+
+        const result = build(base, diagram(), operations, [
+            'rename-fk',
+            'rel-delete',
+        ]);
+
+        expect(result.decorations.relationships.r1).toBe('delete');
+        expect(result.diagram.relationships?.[0]?.targetFieldId).toBe('f2');
+    });
+
     it('resolves relationship endpoints after table rename', () => {
         const base = diagram([
             table('t1', 'users', { fields: [field('f1', 'id')] }),

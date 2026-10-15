@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
@@ -91,6 +91,28 @@ describe('MergeResultStep preview integration', () => {
         expect(
             screen.queryByTestId('merge-preview-canvas')
         ).not.toBeInTheDocument();
+    });
+
+    it('deselects dependent add operations when table add is deselected', async () => {
+        const user = userEvent.setup();
+        const { applyContext, operationIds } = mergeResultPreviewFixture();
+        renderResultStep(applyContext);
+
+        const relationshipCheckbox = screen
+            .getByTestId(`merge-result-row-${operationIds.addRelationship}`)
+            .querySelector('button[role="checkbox"]');
+        expect(relationshipCheckbox).toHaveAttribute('data-state', 'checked');
+
+        const tableAddCheckbox = screen
+            .getAllByRole('checkbox')
+            .find((node) =>
+                node.getAttribute('aria-label')?.includes('invoices')
+            );
+        expect(tableAddCheckbox).toBeTruthy();
+        await user.click(tableAddCheckbox!);
+
+        expect(relationshipCheckbox).toHaveAttribute('data-state', 'unchecked');
+        expect(screen.queryByText('invoices')).not.toBeInTheDocument();
     });
 
     it('removes added table from preview when table add is deselected', async () => {
@@ -230,6 +252,60 @@ describe('MergeResultStep preview integration', () => {
         });
 
         expect(screen.queryByText('full_name')).not.toBeInTheDocument();
+    });
+
+    it('highlights preview target on row hover without changing selection', async () => {
+        const user = userEvent.setup();
+        const { applyContext, operationIds } = mergeResultPreviewFixture();
+        renderResultStep(applyContext);
+
+        const canvasRoot = screen.getByTestId('merge-preview-canvas-root');
+        expect(canvasRoot).not.toHaveAttribute('data-highlight-field-id');
+
+        const row = screen.getByTestId(
+            `merge-result-row-${operationIds.renameField}`
+        );
+        await user.hover(row);
+
+        expect(canvasRoot).toHaveAttribute('data-highlight-field-id', 'f-name');
+        expect(screen.getByTestId('merge-wizard-result-step')).toHaveAttribute(
+            'data-selected-count',
+            String(applyContext.response.operations.length)
+        );
+
+        fireEvent.mouseLeave(row);
+        expect(canvasRoot).not.toHaveAttribute('data-highlight-field-id');
+    });
+
+    it('highlights relationship ADD after source field rename on row hover', async () => {
+        const user = userEvent.setup();
+        const { applyContext, operationIds } = mergeResultPreviewFixture();
+        renderResultStep(applyContext);
+
+        expect(applyContext.response.operations.length).toBeGreaterThan(0);
+        const canvasRoot = screen.getByTestId('merge-preview-canvas-root');
+        const row = screen.getByTestId(
+            `merge-result-row-${operationIds.addRelationship}`
+        );
+        await user.hover(row);
+
+        expect(
+            canvasRoot.getAttribute('data-highlight-relationship-id')
+        ).toBeTruthy();
+    });
+
+    it('highlights added table target on row hover', async () => {
+        const user = userEvent.setup();
+        const { applyContext, operationIds } = mergeResultPreviewFixture();
+        renderResultStep(applyContext);
+
+        const canvasRoot = screen.getByTestId('merge-preview-canvas-root');
+        const row = screen.getByTestId(
+            `merge-result-row-${operationIds.addTable}`
+        );
+        await user.hover(row);
+
+        expect(canvasRoot.getAttribute('data-highlight-table-id')).toBeTruthy();
     });
 
     it('keeps preview mounted while Apply is pending', () => {

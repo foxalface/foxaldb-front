@@ -74,12 +74,33 @@ export const mergeResultPreviewFixture = (): {
         ]),
     ]);
 
-    const incomingDiagram = diagram([
-        table('incoming-invoices', 'invoices', [
-            field('incoming-id', 'id', { primaryKey: true }),
-            field('incoming-user', 'user_id'),
-        ]),
-    ]);
+    const incomingDiagram = diagram(
+        [
+            table('incoming-users', 'users', [
+                field('incoming-name', 'full_name'),
+            ]),
+            table('incoming-invoices', 'invoices', [
+                field('incoming-id', 'id', { primaryKey: true }),
+                field('incoming-user', 'user_id'),
+                field('incoming-amount', 'amount'),
+            ]),
+        ],
+        [
+            {
+                id: 'incoming-rel',
+                name: 'users_invoices',
+                sourceTableId: 'incoming-users',
+                targetTableId: 'incoming-invoices',
+                sourceFieldId: 'incoming-name',
+                targetFieldId: 'incoming-user',
+                sourceSchema: 'public',
+                targetSchema: 'public',
+                sourceCardinality: 'one',
+                targetCardinality: 'many',
+                createdAt: 0,
+            },
+        ]
+    );
 
     const addTableId = 'op-add-table';
     const addFieldId = 'op-add-field';

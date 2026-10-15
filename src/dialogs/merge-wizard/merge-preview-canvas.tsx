@@ -11,6 +11,7 @@ import {
 import '@xyflow/react/dist/style.css';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { MergePreviewDecorations } from '@/lib/schema-merge/preview/preview-types';
+import type { MergePreviewHighlightTarget } from '@/lib/schema-merge/preview/resolve-preview-highlight-target';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/hooks/use-theme';
 import {
@@ -21,7 +22,10 @@ import {
     type DiagramFlowNodeType,
 } from '@/pages/editor-page/canvas/diagram-flow-elements';
 import { MarkerDefinitions } from '@/pages/editor-page/canvas/marker-definitions';
-import { buildMergePreviewFlowDecorationMaps } from './merge-preview-decoration-maps';
+import {
+    buildMergePreviewFlowDecorationMaps,
+    buildMergePreviewHoverMaps,
+} from './merge-preview-decoration-maps';
 import { MergePreviewControls } from './merge-preview-controls';
 import { MergePreviewProviders } from './merge-preview-providers';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +37,7 @@ export interface MergePreviewCanvasProps {
     className?: string;
     /** Resets initial fit when Compare generation / Result remounts. */
     layoutGeneration?: number;
+    highlightTarget?: MergePreviewHighlightTarget | null;
 }
 
 const PREVIEW_FLOW_PROPS = {
@@ -55,8 +60,15 @@ const MergePreviewCanvasFlow: React.FC<{
     diagram: Diagram;
     decorations: MergePreviewDecorations;
     layoutGeneration?: number;
+    highlightTarget?: MergePreviewHighlightTarget | null;
     containerRef: React.RefObject<HTMLDivElement | null>;
-}> = ({ diagram, decorations, layoutGeneration, containerRef }) => {
+}> = ({
+    diagram,
+    decorations,
+    layoutGeneration,
+    highlightTarget,
+    containerRef,
+}) => {
     const { effectiveTheme } = useTheme();
     const { fitView } = useReactFlow();
     const initialFitDoneRef = useRef(false);
@@ -65,6 +77,11 @@ const MergePreviewCanvasFlow: React.FC<{
     const decorationMaps = useMemo(
         () => buildMergePreviewFlowDecorationMaps(diagram, decorations),
         [diagram, decorations]
+    );
+
+    const hoverMaps = useMemo(
+        () => buildMergePreviewHoverMaps(diagram, highlightTarget),
+        [diagram, highlightTarget]
     );
 
     const flowElements = useMemo(
@@ -80,8 +97,12 @@ const MergePreviewCanvasFlow: React.FC<{
                 mergePreviewByTableId: decorationMaps.mergePreviewByTableId,
                 mergePreviewByRelationshipId:
                     decorationMaps.mergePreviewByRelationshipId,
+                mergePreviewHoverByTableId:
+                    hoverMaps.mergePreviewHoverByTableId,
+                mergePreviewHoverByRelationshipId:
+                    hoverMaps.mergePreviewHoverByRelationshipId,
             }),
-        [diagram, decorationMaps]
+        [diagram, decorationMaps, hoverMaps]
     );
 
     const [nodes, setNodes, onNodesChange] = useNodesState<DiagramFlowNodeType>(
@@ -171,6 +192,7 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
     decorations,
     className,
     layoutGeneration,
+    highlightTarget,
 }) => {
     const { t } = useTranslation();
     const containerRef = useRef<HTMLDivElement>(null);
@@ -181,6 +203,11 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
                 ref={containerRef}
                 className={cn('relative size-full min-h-0', className)}
                 data-testid="merge-preview-canvas-root"
+                data-highlight-table-id={highlightTarget?.tableId ?? undefined}
+                data-highlight-field-id={highlightTarget?.fieldId ?? undefined}
+                data-highlight-relationship-id={
+                    highlightTarget?.relationshipId ?? undefined
+                }
                 aria-label={t('merge_wizard.preview.canvas_aria')}
             >
                 <ReactFlowProvider>
@@ -190,6 +217,7 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
                                 diagram={diagram}
                                 decorations={decorations}
                                 layoutGeneration={layoutGeneration}
+                                highlightTarget={highlightTarget}
                                 containerRef={containerRef}
                             />
                         </div>

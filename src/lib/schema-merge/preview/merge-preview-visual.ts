@@ -111,6 +111,20 @@ export const getMergePreviewFieldClasses = (
     };
 };
 
+/** Hover/focus emphasis layered on top of semantic change colors (M10.5). */
+export const MERGE_PREVIEW_TABLE_FOCUS_RING =
+    'ring-2 ring-primary/80 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900 shadow-md';
+
+export const MERGE_PREVIEW_TABLE_DIM_CLASS = 'opacity-55 saturate-[0.85]';
+
+export const MERGE_PREVIEW_FIELD_FOCUS_CLASS =
+    'ring-1 ring-inset ring-primary/80 bg-primary/10 dark:bg-primary/15';
+
+export const MERGE_PREVIEW_EDGE_FOCUS_CLASS =
+    '!stroke-[4px] !drop-shadow-[0_0_6px_rgba(59,130,246,0.45)]';
+
+export const MERGE_PREVIEW_EDGE_DIM_CLASS = 'opacity-45';
+
 export const getMergePreviewEdgeClasses = (
     change: MergeChangeVisual | undefined,
     selected: boolean
