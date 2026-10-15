@@ -25,6 +25,7 @@ import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { noteSchemaMergeAuthoritativeHash } from '@/lib/realtime/schema-merge-refresh';
 import { isSelectionDependencyClosed } from '@/lib/schema-merge/operation-selection';
 import { prepareSchemaMergeSource } from '@/lib/schema-merge/prepare-schema-merge-source';
+import { snapshotMergeBaseDiagram } from '@/lib/schema-merge/snapshot-merge-base-diagram';
 import type {
     SchemaMergeSourceInput,
     SchemaMergeSourcePreparationResult,
@@ -404,6 +405,8 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                 return;
             }
 
+            const baseDiagram = snapshotMergeBaseDiagram(currentDiagram);
+
             const response = await compareSchemaMerge(diagramId, {
                 incomingDiagram: ready.incomingDiagram,
                 includeDeletions,
@@ -418,6 +421,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
 
             compareGenerationRef.current += 1;
             setApplyContext({
+                baseDiagram,
                 incomingDiagram: ready.incomingDiagram,
                 source: {
                     kind: ready.source.kind,
@@ -444,7 +448,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                 compareInFlightRef.current = false;
                 setIsComparing(false);
             });
-    }, [diagramId, includeDeletions, isAnalyzing, preparation]);
+    }, [currentDiagram, diagramId, includeDeletions, isAnalyzing, preparation]);
 
     const handleResolveDialect = useCallback((dialect: DatabaseType) => {
         setSourceDialect(dialect);

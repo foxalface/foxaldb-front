@@ -1,6 +1,6 @@
 # Schema merge
 
-Product architecture for Schema Merge V1. M1–M9 are complete: shared contract, source adapter, two-step wizard (Source → Result), dependency-aware selection, Compare/Apply clients, autosave flush before Compare, authoritative Apply replacement with one local undo, M8.1 full-document optimistic concurrency (`content_hash` / `baseContentHash`, 409 `stale_content`), and peer refresh on `apply_schema_merge`. Actions → Merge is available for an authenticated editor of a persisted backend diagram.
+Product architecture for Schema Merge. M1–M9 (V1) are complete; M10 visual preview is in progress: shared contract, source adapter, two-step wizard (Source → Result), dependency-aware selection, Compare/Apply clients, autosave flush before Compare, authoritative Apply replacement with one local undo, M8.1 full-document optimistic concurrency (`content_hash` / `baseContentHash`, 409 `stale_content`), and peer refresh on `apply_schema_merge`. Actions → Merge is available for an authenticated editor of a persisted backend diagram.
 
 The backend contract, operation ids, and error codes are specified in [`backend/docs/schema-merge.md`](../../../backend/docs/schema-merge.md). This document does not repeat that specification. Frontend types in `frontend/src/lib/schema-merge/diff-types.ts` mirror the JSON contract. They do not compute operation ids and they do not diff diagrams.
 
@@ -364,3 +364,15 @@ The actor’s own `clientId` does not refetch. A remote event cancels a pending 
 A peer with unsaved edits is replaced by that authoritative document. The same full-document overwrite already exists for reconnect refresh. Granular diagram operations are unchanged. The pending debounce is cancelled so it cannot PUT the pre-merge snapshot after the refresh. A save already in flight cannot be aborted.
 
 Canvas nodes are rebuilt from the loaded tables. `load_diagram` clears the highlighted custom type. An open sidebar target is layout state and is not cleared by a full load; a missing entity must not be assumed to still exist. Conversations are cleaned on the server. M8 does not add a separate selection cleanup.
+
+## M10 visual preview (in progress)
+
+M10 adds a read-only diagram preview on the Merge Result step. M10.1 implements the pure projection layer only (no canvas yet).
+
+### Compare baseline (`baseDiagram`)
+
+After `flushDiagramAutosave()` and before `compareSchemaMerge()`, the wizard deep-clones the editor diagram into `MergeWizardApplyContext.baseDiagram` via `snapshotMergeBaseDiagram()` (`structuredClone`, same pattern as ChartDB undo snapshots). This snapshot is **client-only**. It is not sent on Compare or Apply. Preview projection uses `baseDiagram`, not the live `currentDiagram`, so edits after Compare do not skew a diff that was computed against the flushed baseline.
+
+### Preview projection
+
+`buildSchemaMergePreview()` in `frontend/src/lib/schema-merge/preview/` takes `baseDiagram`, `incomingDiagram`, Compare `operations`, dependency-closed `selectedOperationIds`, and `viewsCompared`. It returns a synthetic `diagram` plus parallel `decorations` (`add` / `modify` / `rename` / `delete`) keyed by projected entity ids. The preview is non-authoritative: Apply still posts only `selectedOperationIds` and the backend `SchemaMergeApplier` remains the source of truth. Selected deletions stay in the projected diagram so a later canvas pass can render deletion ghosts. No backend or API contract changes.

@@ -20,6 +20,16 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
+const baseDiagram = {
+    id: '42',
+    name: 'Base',
+    databaseType: DatabaseType.POSTGRESQL,
+    tables: [],
+    relationships: [],
+    createdAt: new Date(0),
+    updatedAt: new Date(0),
+} as Diagram;
+
 const incoming = {
     id: 'incoming',
     name: 'Incoming',
@@ -63,6 +73,7 @@ const renderResult = (
     onBack = vi.fn()
 ) => {
     const applyContext: MergeWizardApplyContext = {
+        baseDiagram,
         incomingDiagram: incoming,
         source: { kind: 'sql' },
         includeDeletions: true,
@@ -472,6 +483,7 @@ describe('Merge result step', () => {
 
     it('disables review controls while Apply is pending', () => {
         const applyContext: MergeWizardApplyContext = {
+            baseDiagram,
             incomingDiagram: incoming,
             source: { kind: 'sql' },
             includeDeletions: false,
