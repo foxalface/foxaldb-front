@@ -38,10 +38,13 @@ export interface MergePreviewNodeDecoration {
     readonly entityKind: 'table' | 'field';
     readonly entityId: string;
     readonly change: MergeChangeVisual;
+    readonly operationId: string;
 }
 
 export interface MergePreviewEdgeDecoration {
     readonly change: MergeChangeVisual;
+    readonly operationId: string;
+    readonly indicatorLane?: number;
 }
 
 export interface MergePreviewHoverFlags {
@@ -53,6 +56,7 @@ export interface MergePreviewHoverFlags {
 export interface MergePreviewEdgeHoverFlags {
     readonly focused?: boolean;
     readonly dimmed?: boolean;
+    readonly foreground?: boolean;
 }
 
 export interface TableToTableNodeOptions {
@@ -213,6 +217,15 @@ export const relationshipEdgesFromDiagram = (
             relationship.id
         );
 
+        const mergePreviewHover =
+            options?.mergePreviewHoverByRelationshipId?.get(relationship.id);
+
+        const zIndex = mergePreviewHover?.foreground
+            ? 1000
+            : mergePreview
+              ? 20
+              : 0;
+
         return {
             id: relationship.id,
             source: relationship.sourceTableId,
@@ -220,19 +233,11 @@ export const relationshipEdgesFromDiagram = (
             sourceHandle: `${LEFT_HANDLE_ID_PREFIX}${relationship.sourceFieldId}`,
             targetHandle: `${TARGET_ID_PREFIX}${targetIndexes[`${relationship.targetTableId}${relationship.targetFieldId}`]++}_${relationship.targetFieldId}`,
             type: 'relationship-edge',
+            zIndex,
             data: {
                 relationship,
                 ...(mergePreview ? { mergePreview } : {}),
-                ...(options?.mergePreviewHoverByRelationshipId?.get(
-                    relationship.id
-                )
-                    ? {
-                          mergePreviewHover:
-                              options.mergePreviewHoverByRelationshipId.get(
-                                  relationship.id
-                              ),
-                      }
-                    : {}),
+                ...(mergePreviewHover ? { mergePreviewHover } : {}),
             },
             selected: false,
             animated: false,

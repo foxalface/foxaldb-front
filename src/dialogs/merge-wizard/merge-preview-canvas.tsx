@@ -27,6 +27,7 @@ import {
     buildMergePreviewHoverMaps,
 } from './merge-preview-decoration-maps';
 import { MergePreviewControls } from './merge-preview-controls';
+import { MergePreviewHighlightProvider } from './merge-preview-highlight-provider';
 import { MergePreviewProviders } from './merge-preview-providers';
 import { useTranslation } from 'react-i18next';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
@@ -38,6 +39,8 @@ export interface MergePreviewCanvasProps {
     /** Resets initial fit when Compare generation / Result remounts. */
     layoutGeneration?: number;
     highlightTarget?: MergePreviewHighlightTarget | null;
+    onHighlightOperation?: (operationId: string) => void;
+    onClearHighlight?: () => void;
 }
 
 const PREVIEW_FLOW_PROPS = {
@@ -193,9 +196,18 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
     className,
     layoutGeneration,
     highlightTarget,
+    onHighlightOperation,
+    onClearHighlight,
 }) => {
     const { t } = useTranslation();
     const containerRef = useRef<HTMLDivElement>(null);
+    const highlightHandlers =
+        onHighlightOperation && onClearHighlight
+            ? {
+                  onHighlightOperation,
+                  onClearHighlight,
+              }
+            : null;
 
     return (
         <TooltipProvider>
@@ -212,15 +224,36 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
             >
                 <ReactFlowProvider>
                     <MergePreviewProviders diagram={diagram}>
-                        <div className="size-full min-h-48">
-                            <MergePreviewCanvasFlow
-                                diagram={diagram}
-                                decorations={decorations}
-                                layoutGeneration={layoutGeneration}
-                                highlightTarget={highlightTarget}
-                                containerRef={containerRef}
-                            />
-                        </div>
+                        {highlightHandlers ? (
+                            <MergePreviewHighlightProvider
+                                onHighlightOperation={
+                                    highlightHandlers.onHighlightOperation
+                                }
+                                onClearHighlight={
+                                    highlightHandlers.onClearHighlight
+                                }
+                            >
+                                <div className="size-full min-h-48">
+                                    <MergePreviewCanvasFlow
+                                        diagram={diagram}
+                                        decorations={decorations}
+                                        layoutGeneration={layoutGeneration}
+                                        highlightTarget={highlightTarget}
+                                        containerRef={containerRef}
+                                    />
+                                </div>
+                            </MergePreviewHighlightProvider>
+                        ) : (
+                            <div className="size-full min-h-48">
+                                <MergePreviewCanvasFlow
+                                    diagram={diagram}
+                                    decorations={decorations}
+                                    layoutGeneration={layoutGeneration}
+                                    highlightTarget={highlightTarget}
+                                    containerRef={containerRef}
+                                />
+                            </div>
+                        )}
                     </MergePreviewProviders>
                 </ReactFlowProvider>
             </div>

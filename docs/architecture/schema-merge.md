@@ -414,8 +414,25 @@ Desktop Result uses roughly **36% Changes / 64% Preview** (`lg:grid-cols-[minmax
 - `buildMergePreviewHoverMaps()` drives optional focus rings and light dimming on unrelated nodes/edges; semantic add/modify/rename/delete styling is unchanged.
 - Highlight does **not** change selection, Apply payload, viewport, or `buildSchemaMergePreview` inputs.
 
-There is no preview → list selection or auto-pan/zoom on highlight.
+**Preview → list cross-highlight** (pointer hover on decorated preview entities) uses the same `highlightedOperationId` state:
+
+- Decorations carry preview-only `operationId` metadata (not persisted, not sent on Apply).
+- Table header/badge hover highlights a **table-level** operation only when the table itself is decorated; field rows highlight their own field operation.
+- Relationship path, interaction band, and Merge indicator share one hover region and call `onHighlightOperation(operationId)` via `MergePreviewHighlightProvider`.
+- Highlight does **not** toggle checkboxes, open editor popovers, or change selection.
+
+There is no preview → selection feedback and no auto-pan/zoom on highlight.
+
+### M10.5.3 relationship overlay polish
+
+Merge relationship change indicators (`+` / `−` / modify) render in a fixed `size-5` flex-centered bubble (`merge-preview-change-indicator`, `variant="bubble"`). Indicators offset along the edge normal from the path midpoint using deterministic **lanes** (`assignRelationshipIndicatorLanes()` in `merge-preview-relationship-indicator-lanes.ts`, applied in `buildMergePreviewFlowDecorationMaps()`). Relationship paths and cardinality label geometry are unchanged; only the Merge indicator moves.
+
+On list or preview hover of a relationship operation, the hovered edge receives `mergePreviewHover.foreground` (plus focus/dim on siblings): path stroke, cardinality markers (`selected` marker ids), and the Merge indicator stack above unrelated preview edges. Delete dashed red styling and other semantic colors remain primary; hover adds emphasis only.
 
 ### M10.5.1 rename-aware relationship endpoints
 
 Relationship ADD/MODIFY projection resolves semantic endpoints through a **rename alias registry** (`PreviewIdentityRegistry`): selected table/field renames register old and new semantic identities to the same projected entity id. Relationship operations from Compare may still cite pre-rename endpoint names; lookup uses those aliases, not live projected names only. Incoming relationship templates are located with `transformRelationshipIdentityForIncoming()` so incoming diagrams (post-rename names) still match Compare identities. Incoming relationship ids are never authoritative on the preview diagram.
+
+### M10.5.2 collision-free preview placement
+
+Newly added tables/views are positioned with `PreviewTablePlacement` using ChartDB’s `getTableDimensions()` / `calcTableHeight()` (header, field rows, optional “show more” footer). Existing tables/views keep their stored `x`/`y` and act as occupied rectangles. Preview nodes stack in columns to the right of the diagram with `PREVIEW_PLACEMENT_VERTICAL_GAP` between estimated heights; columns wrap when a stack would exceed the existing diagram’s vertical span. Placement is deterministic, preview-only, and never sent on Apply.

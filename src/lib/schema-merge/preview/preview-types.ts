@@ -3,10 +3,15 @@ import type { Diagram } from '@/lib/domain/diagram';
 
 export type MergeChangeVisual = ChangeType;
 
+export interface MergePreviewDecorationEntry {
+    readonly change: MergeChangeVisual;
+    readonly operationId: string;
+}
+
 export interface MergePreviewDecorations {
-    tables: Record<string, MergeChangeVisual>;
-    fields: Record<string, MergeChangeVisual>;
-    relationships: Record<string, MergeChangeVisual>;
+    tables: Record<string, MergePreviewDecorationEntry>;
+    fields: Record<string, MergePreviewDecorationEntry>;
+    relationships: Record<string, MergePreviewDecorationEntry>;
 }
 
 export const emptyMergePreviewDecorations = (): MergePreviewDecorations => ({

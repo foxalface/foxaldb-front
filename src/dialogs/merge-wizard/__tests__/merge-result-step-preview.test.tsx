@@ -294,6 +294,79 @@ describe('MergeResultStep preview integration', () => {
         ).toBeTruthy();
     });
 
+    it('uses the same highlighted row for list hover and preview field hover', async () => {
+        const user = userEvent.setup();
+        const { applyContext, operationIds } = mergeResultPreviewFixture();
+        renderResultStep(applyContext);
+
+        const row = screen.getByTestId(
+            `merge-result-row-${operationIds.renameField}`
+        );
+        await user.hover(row);
+        expect(row).toHaveAttribute('data-highlighted', 'true');
+
+        const fieldPreview = document.querySelector(
+            `[data-merge-preview-operation-id="${operationIds.renameField}"]`
+        );
+        expect(fieldPreview).toBeTruthy();
+        fireEvent.mouseEnter(fieldPreview!);
+        expect(row).toHaveAttribute('data-highlighted', 'true');
+    });
+
+    it('highlights result row when preview field is hovered', async () => {
+        const { applyContext, operationIds } = mergeResultPreviewFixture();
+        renderResultStep(applyContext);
+
+        const fieldPreview = document.querySelector(
+            `[data-merge-preview-operation-id="${operationIds.renameField}"]`
+        );
+        expect(fieldPreview).toBeTruthy();
+
+        fireEvent.mouseEnter(fieldPreview!);
+
+        const row = screen.getByTestId(
+            `merge-result-row-${operationIds.renameField}`
+        );
+        expect(row).toHaveAttribute('data-highlighted', 'true');
+        expect(screen.getByTestId('merge-wizard-result-step')).toHaveAttribute(
+            'data-selected-count',
+            String(applyContext.response.operations.length)
+        );
+
+        fireEvent.mouseLeave(fieldPreview!);
+        expect(row).toHaveAttribute('data-highlighted', 'false');
+    });
+
+    it('highlights result row when preview table add badge is hovered', () => {
+        const { applyContext, operationIds } = mergeResultPreviewFixture();
+        renderResultStep(applyContext);
+
+        const tablePreview = document.querySelector(
+            `[data-merge-preview-operation-id="${operationIds.addTable}"]`
+        );
+        expect(tablePreview).toBeTruthy();
+
+        fireEvent.mouseEnter(tablePreview!);
+
+        expect(
+            screen.getByTestId(`merge-result-row-${operationIds.addTable}`)
+        ).toHaveAttribute('data-highlighted', 'true');
+    });
+
+    it('does not highlight rows when preview entity has no merge operation', () => {
+        const { applyContext, operationIds } = mergeResultPreviewFixture();
+        renderResultStep(applyContext);
+
+        const canvasRoot = screen.getByTestId('merge-preview-canvas-root');
+        fireEvent.mouseEnter(canvasRoot);
+
+        for (const operation of applyContext.response.operations) {
+            const row = screen.getByTestId(`merge-result-row-${operation.id}`);
+            expect(row).toHaveAttribute('data-highlighted', 'false');
+        }
+        expect(operationIds.renameField).toBeTruthy();
+    });
+
     it('highlights added table target on row hover', async () => {
         const user = userEvent.setup();
         const { applyContext, operationIds } = mergeResultPreviewFixture();

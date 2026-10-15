@@ -26,6 +26,7 @@ import {
     getMergePreviewFieldClasses,
     MERGE_PREVIEW_FIELD_FOCUS_CLASS,
 } from '@/lib/schema-merge/preview/merge-preview-visual';
+import { useMergePreviewHighlight } from '@/dialogs/merge-wizard/use-merge-preview-highlight';
 import { MergePreviewChangeIndicator } from '../merge-preview-change-indicator';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { cn } from '@/lib/utils';
@@ -63,6 +64,7 @@ export interface TableNodeFieldProps {
     /** Merge wizard preview-only field decoration (M10.3). */
     mergePreviewChange?: MergeChangeVisual;
     mergePreviewFieldFocused?: boolean;
+    mergePreviewOperationId?: string;
 }
 
 const arePropsEqual = (
@@ -91,7 +93,8 @@ const arePropsEqual = (
         prevProps.targetEdgeCount === nextProps.targetEdgeCount &&
         prevProps.mergePreviewChange === nextProps.mergePreviewChange &&
         prevProps.mergePreviewFieldFocused ===
-            nextProps.mergePreviewFieldFocused
+            nextProps.mergePreviewFieldFocused &&
+        prevProps.mergePreviewOperationId === nextProps.mergePreviewOperationId
     );
 };
 
@@ -106,7 +109,9 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
         targetEdgeCount,
         mergePreviewChange,
         mergePreviewFieldFocused,
+        mergePreviewOperationId,
     }) => {
+        const mergePreviewHighlight = useMergePreviewHighlight();
         const { relationships, readonly, highlightedCustomType, databaseType } =
             useChartDB();
 
@@ -398,6 +403,19 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                     }
                 )}
                 data-merge-change={mergePreviewChange ?? undefined}
+                data-merge-preview-operation-id={
+                    mergePreviewOperationId ?? undefined
+                }
+                onMouseEnter={() => {
+                    if (mergePreviewOperationId) {
+                        mergePreviewHighlight?.onHighlightOperation(
+                            mergePreviewOperationId
+                        );
+                    }
+                }}
+                onMouseLeave={() => {
+                    mergePreviewHighlight?.onClearHighlight();
+                }}
             >
                 {isConnectable ? (
                     <>

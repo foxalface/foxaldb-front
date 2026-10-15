@@ -55,18 +55,30 @@ describe('buildMergePreviewFlowDecorationMaps', () => {
     it('maps table, field, and relationship decorations without mutating diagram', () => {
         const before = structuredClone(diagram);
         const maps = buildMergePreviewFlowDecorationMaps(diagram, {
-            tables: { t1: 'add' },
-            fields: { f1: 'modify' },
-            relationships: { r1: 'delete' },
+            tables: { t1: { change: 'add', operationId: 'op-table' } },
+            fields: { f1: { change: 'modify', operationId: 'op-field' } },
+            relationships: { r1: { change: 'delete', operationId: 'op-rel' } },
         });
 
         expect(diagram).toEqual(before);
         expect(maps.mergePreviewByTableId.get('t1')).toEqual([
-            { entityKind: 'table', entityId: 't1', change: 'add' },
-            { entityKind: 'field', entityId: 'f1', change: 'modify' },
+            {
+                entityKind: 'table',
+                entityId: 't1',
+                change: 'add',
+                operationId: 'op-table',
+            },
+            {
+                entityKind: 'field',
+                entityId: 'f1',
+                change: 'modify',
+                operationId: 'op-field',
+            },
         ]);
         expect(maps.mergePreviewByRelationshipId.get('r1')).toEqual({
             change: 'delete',
+            operationId: 'op-rel',
+            indicatorLane: 0,
         });
     });
 });
@@ -97,6 +109,41 @@ describe('buildMergePreviewHoverMaps', () => {
 
         expect(maps.mergePreviewHoverByRelationshipId.get('r1')).toEqual({
             focused: true,
+            foreground: true,
         });
+        expect(maps.mergePreviewHoverByRelationshipId.get('r1')?.dimmed).toBe(
+            undefined
+        );
+    });
+
+    it('assigns distinct indicator lanes for collocated relationship decorations', () => {
+        const multiRelDiagram: Diagram = {
+            ...diagram,
+            relationships: [
+                diagram.relationships![0],
+                {
+                    ...diagram.relationships![0],
+                    id: 'r2',
+                    name: 'r2',
+                },
+            ],
+        };
+
+        const maps = buildMergePreviewFlowDecorationMaps(multiRelDiagram, {
+            tables: {},
+            fields: {},
+            relationships: {
+                r1: { change: 'modify', operationId: 'op-1' },
+                r2: { change: 'modify', operationId: 'op-2' },
+            },
+        });
+
+        const lane1 =
+            maps.mergePreviewByRelationshipId.get('r1')?.indicatorLane;
+        const lane2 =
+            maps.mergePreviewByRelationshipId.get('r2')?.indicatorLane;
+        expect(lane1).toBe(-0.5);
+        expect(lane2).toBe(0.5);
+        expect(lane1).not.toBe(lane2);
     });
 });

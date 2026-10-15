@@ -166,7 +166,12 @@ describe('TableNode merge preview decorations', () => {
             table: table(),
             isOverlapping: false,
             mergePreview: [
-                { entityKind: 'table', entityId: 't1', change: 'add' },
+                {
+                    entityKind: 'table',
+                    entityId: 't1',
+                    change: 'add',
+                    operationId: 'op-table-add',
+                },
             ],
         });
         const root = document.querySelector('[data-merge-change="add"]');
@@ -181,7 +186,12 @@ describe('TableNode merge preview decorations', () => {
             table: table({ color: '#ff00aa' }),
             isOverlapping: false,
             mergePreview: [
-                { entityKind: 'table', entityId: 't1', change: 'modify' },
+                {
+                    entityKind: 'table',
+                    entityId: 't1',
+                    change: 'modify',
+                    operationId: 'op-table-mod',
+                },
             ],
         });
         const strip = container.querySelector<HTMLElement>(
@@ -196,8 +206,18 @@ describe('TableNode merge preview decorations', () => {
             table: table(),
             isOverlapping: false,
             mergePreview: [
-                { entityKind: 'table', entityId: 't1', change: 'delete' },
-                { entityKind: 'field', entityId: 'f1', change: 'delete' },
+                {
+                    entityKind: 'table',
+                    entityId: 't1',
+                    change: 'delete',
+                    operationId: 'op-table-del',
+                },
+                {
+                    entityKind: 'field',
+                    entityId: 'f1',
+                    change: 'delete',
+                    operationId: 'op-field-del',
+                },
             ],
         });
         expect(
@@ -211,7 +231,12 @@ describe('TableNode merge preview decorations', () => {
             table: table(),
             isOverlapping: false,
             mergePreview: [
-                { entityKind: 'field', entityId: 'f1', change: 'rename' },
+                {
+                    entityKind: 'field',
+                    entityId: 'f1',
+                    change: 'rename',
+                    operationId: 'op-field-rename',
+                },
             ],
         });
         expect(screen.getByTestId('field-f1')).toHaveAttribute(
@@ -225,7 +250,12 @@ describe('TableNode merge preview decorations', () => {
             table: table({ isView: true, name: 'active_users' }),
             isOverlapping: false,
             mergePreview: [
-                { entityKind: 'table', entityId: 't1', change: 'add' },
+                {
+                    entityKind: 'table',
+                    entityId: 't1',
+                    change: 'add',
+                    operationId: 'op-table-add',
+                },
             ],
         });
         expect(screen.getByText('active_users')).toBeInTheDocument();

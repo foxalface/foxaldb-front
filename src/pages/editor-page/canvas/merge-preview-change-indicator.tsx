@@ -9,10 +9,14 @@ import {
 } from '@/components/tooltip/tooltip';
 import { cn } from '@/lib/utils';
 
+export const MERGE_PREVIEW_INDICATOR_BUBBLE_CLASS =
+    'inline-flex size-5 shrink-0 items-center justify-center rounded-full border border-border bg-background/95 shadow-sm';
+
 export const MergePreviewChangeIndicator: React.FC<{
     change: MergeChangeVisual;
     className?: string;
-}> = ({ change, className }) => {
+    variant?: 'inline' | 'bubble';
+}> = ({ change, className, variant = 'inline' }) => {
     const { t } = useTranslation();
     const visual = MERGE_CHANGE_VISUAL[change];
     const Icon = visual.icon;
@@ -23,14 +27,21 @@ export const MergePreviewChangeIndicator: React.FC<{
             <TooltipTrigger asChild>
                 <span
                     className={cn(
-                        'inline-flex shrink-0 items-center',
+                        variant === 'bubble'
+                            ? MERGE_PREVIEW_INDICATOR_BUBBLE_CLASS
+                            : 'inline-flex shrink-0 items-center justify-center',
                         visual.textClassName,
                         className
                     )}
                     data-merge-change={change}
+                    data-merge-indicator-variant={variant}
                     aria-label={label}
                 >
-                    <Icon className="size-3.5" strokeWidth={2.5} aria-hidden />
+                    <Icon
+                        className="size-3 shrink-0"
+                        strokeWidth={2.5}
+                        aria-hidden
+                    />
                 </span>
             </TooltipTrigger>
             <TooltipContent>{label}</TooltipContent>

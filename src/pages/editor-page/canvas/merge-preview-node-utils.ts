@@ -10,6 +10,11 @@ export const resolveTableMergeChange = (
 ): MergeChangeVisual | undefined =>
     decorations?.find((entry) => entry.entityKind === 'table')?.change;
 
+export const resolveTableMergeOperationId = (
+    decorations?: MergePreviewNodeDecoration[]
+): string | undefined =>
+    decorations?.find((entry) => entry.entityKind === 'table')?.operationId;
+
 export const buildFieldMergeChangeById = (
     decorations?: MergePreviewNodeDecoration[]
 ): ReadonlyMap<string, MergeChangeVisual> => {
@@ -17,6 +22,18 @@ export const buildFieldMergeChangeById = (
     for (const entry of decorations ?? []) {
         if (entry.entityKind === 'field') {
             map.set(entry.entityId, entry.change);
+        }
+    }
+    return map;
+};
+
+export const buildFieldMergeOperationIdById = (
+    decorations?: MergePreviewNodeDecoration[]
+): ReadonlyMap<string, string> => {
+    const map = new Map<string, string>();
+    for (const entry of decorations ?? []) {
+        if (entry.entityKind === 'field') {
+            map.set(entry.entityId, entry.operationId);
         }
     }
     return map;

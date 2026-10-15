@@ -232,6 +232,12 @@ export const MergeResultStep: React.FC<{
                                     decorations={previewProjection.decorations}
                                     layoutGeneration={applyContext.generation}
                                     highlightTarget={highlightTarget}
+                                    onHighlightOperation={
+                                        setHighlightedOperationId
+                                    }
+                                    onClearHighlight={() =>
+                                        setHighlightedOperationId(null)
+                                    }
                                     className="absolute inset-0"
                                 />
                             </div>

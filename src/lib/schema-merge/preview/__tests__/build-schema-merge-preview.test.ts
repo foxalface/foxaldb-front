@@ -10,6 +10,13 @@ import type { DiffOperation } from '../../diff-types';
 import { buildSchemaMergePreview } from '../build-schema-merge-preview';
 import { previewFieldId, previewTableId } from '../preview-id';
 import { fieldIdentityKey, tableIdentityKey } from '../identity-key';
+import {
+    placementRectFromTable,
+    PREVIEW_PLACEMENT_COLUMN_GAP,
+    PREVIEW_PLACEMENT_VERTICAL_GAP,
+    rectanglesOverlap,
+} from '../preview-placement';
+import { calcTableHeight } from '@/lib/domain/db-table';
 
 const field = (
     id: string,
@@ -165,10 +172,10 @@ describe('buildSchemaMergePreview', () => {
         );
         expect(added?.id).toBe(previewTableId(tableIdentityKey(identity)));
         expect(added?.id).not.toBe('incoming-id');
-        expect(added?.x).toBe(100 + 280 + 80);
-        expect(added?.y).toBe(0);
+        expect(added?.x).toBe(100 + 280 + PREVIEW_PLACEMENT_COLUMN_GAP);
+        expect(added?.y).toBe(50);
         expect(added?.fields[0]?.id).not.toBe('incoming-field');
-        expect(first.decorations.tables[added!.id]).toBe('add');
+        expect(first.decorations.tables[added!.id]?.change).toBe('add');
         expect(base.tables?.[0]?.x).toBe(100);
         expect(
             second.diagram.tables?.find((t) => t.name === 'invoices')?.id
@@ -302,7 +309,7 @@ describe('buildSchemaMergePreview', () => {
         expect(users?.fields).toHaveLength(2);
         const added = users?.fields.find((f) => f.name === 'nickname');
         expect(added?.id).toBe(previewFieldId(fieldIdentityKey(fieldIdentity)));
-        expect(result.decorations.fields[added!.id]).toBe('add');
+        expect(result.decorations.fields[added!.id]?.change).toBe('add');
     });
 
     it('applies selected field modify and keeps unselected modify at base value', () => {
@@ -342,7 +349,7 @@ describe('buildSchemaMergePreview', () => {
         const unselected = build(base, incoming, operations, []);
 
         expect(selected.diagram.tables?.[0]?.fields[0]?.nullable).toBe(true);
-        expect(selected.decorations.fields.f1).toBe('modify');
+        expect(selected.decorations.fields.f1?.change).toBe('modify');
         expect(unselected.diagram.tables?.[0]?.fields[0]?.nullable).toBe(false);
         expect(unselected.decorations.fields).toEqual({});
     });
@@ -405,8 +412,8 @@ describe('buildSchemaMergePreview', () => {
         expect(renamed?.name).toBe('accounts');
         expect(renamed?.fields[0]?.id).toBe('f1');
         expect(renamed?.fields[0]?.name).toBe('full_name');
-        expect(result.decorations.tables.t1).toBe('rename');
-        expect(result.decorations.fields.f1).toBe('rename');
+        expect(result.decorations.tables.t1?.change).toBe('rename');
+        expect(result.decorations.fields.f1?.change).toBe('rename');
     });
 
     it('keeps rename decoration when rename also carries attribute changes', () => {
@@ -456,7 +463,7 @@ describe('buildSchemaMergePreview', () => {
             'email_address'
         );
         expect(result.diagram.tables?.[0]?.fields[0]?.type.name).toBe('text');
-        expect(result.decorations.fields.f1).toBe('rename');
+        expect(result.decorations.fields.f1?.change).toBe('rename');
     });
 
     it('decorates deletes without removing entities', () => {
@@ -499,11 +506,11 @@ describe('buildSchemaMergePreview', () => {
 
         const tableOnly = build(base, diagram(), operations, ['delete-table']);
         expect(tableOnly.diagram.tables).toHaveLength(1);
-        expect(tableOnly.decorations.tables.t1).toBe('delete');
+        expect(tableOnly.decorations.tables.t1?.change).toBe('delete');
         expect(tableOnly.decorations.fields).toEqual({});
 
         const fieldOnly = build(base, diagram(), operations, ['delete-field']);
-        expect(fieldOnly.decorations.fields.f2).toBe('delete');
+        expect(fieldOnly.decorations.fields.f2?.change).toBe('delete');
         expect(fieldOnly.decorations.tables).toEqual({});
     });
 
@@ -631,7 +638,9 @@ describe('buildSchemaMergePreview', () => {
         expect(modifyResult.diagram.relationships?.[0]?.onDelete).toBe(
             'cascade'
         );
-        expect(modifyResult.decorations.relationships.r1).toBe('modify');
+        expect(modifyResult.decorations.relationships.r1?.change).toBe(
+            'modify'
+        );
     });
 
     it('resolves relationship ADD when source field was renamed (old endpoint identity)', () => {
@@ -987,7 +996,7 @@ describe('buildSchemaMergePreview', () => {
             'rel-delete',
         ]);
 
-        expect(result.decorations.relationships.r1).toBe('delete');
+        expect(result.decorations.relationships.r1?.change).toBe('delete');
         expect(result.diagram.relationships?.[0]?.targetFieldId).toBe('f2');
     });
 
@@ -1233,9 +1242,242 @@ describe('buildSchemaMergePreview', () => {
             y: t.y,
         }));
 
+        const heightA = calcTableHeight(
+            (result.diagram.tables ?? []).find((t) => t.name === 'a')!
+        );
         expect(positions).toEqual([
             { name: 'a', x: 0, y: 0 },
-            { name: 'b', x: 0, y: 160 },
+            {
+                name: 'b',
+                x: 0,
+                y: heightA + PREVIEW_PLACEMENT_VERTICAL_GAP,
+            },
         ]);
+    });
+
+    it('does not overlap variable-height preview adds (QA regression)', () => {
+        const mkFields = (prefix: string, count: number): DBField[] =>
+            Array.from({ length: count }, (_, index) =>
+                field(`${prefix}${index}`, `${prefix}_col_${index}`)
+            );
+
+        const base = diagram([
+            table('users', 'users', {
+                x: 0,
+                y: 0,
+                fields: [field('u1', 'id')],
+            }),
+            table('teams', 'teams', {
+                x: 320,
+                y: 0,
+                fields: [field('t1', 'id')],
+            }),
+            table('team_members', 'team_members', {
+                x: 640,
+                y: 0,
+                fields: [field('tm1', 'id')],
+            }),
+            table('posts', 'posts', {
+                x: 0,
+                y: 180,
+                fields: [field('p1', 'id')],
+            }),
+            table('comments', 'comments', {
+                x: 320,
+                y: 180,
+                fields: [field('c1', 'id')],
+            }),
+        ]);
+
+        const incoming = diagram([
+            table('i-ii', 'invoice_items', {
+                fields: mkFields('ii', 12),
+            }),
+            table('i-inv', 'invoices', {
+                fields: mkFields('inv', 3),
+            }),
+            table('i-prof', 'profiles', {
+                fields: mkFields('prof', 6),
+            }),
+            table('i-ud', 'user_directory', {
+                fields: mkFields('ud', 10),
+            }),
+        ]);
+
+        const tableNames = [
+            'invoice_items',
+            'invoices',
+            'profiles',
+            'user_directory',
+        ] as const;
+
+        const operations = tableNames.map((name) =>
+            op({
+                id: `add-${name}`,
+                category: 'table',
+                type: 'add',
+                entityId: null,
+                renameTo: null,
+                identity: { kind: 'table', schema: 'public', name },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: [],
+            } as DiffOperation)
+        );
+
+        const result = build(
+            base,
+            incoming,
+            operations,
+            operations.map((o) => o.id)
+        );
+        const tables = result.diagram.tables ?? [];
+        const baseBefore = structuredClone(base.tables);
+
+        for (const original of baseBefore ?? []) {
+            const after = tables.find((t) => t.id === original.id);
+            expect(after?.x).toBe(original.x);
+            expect(after?.y).toBe(original.y);
+        }
+
+        const rects = tables.map(placementRectFromTable);
+        for (let i = 0; i < rects.length; i += 1) {
+            for (let j = i + 1; j < rects.length; j += 1) {
+                expect(rectanglesOverlap(rects[i], rects[j])).toBe(false);
+            }
+        }
+
+        const rightmost = Math.max(
+            ...(base.tables ?? []).map((t) => t.x + (t.width ?? 280))
+        );
+        for (const name of tableNames) {
+            const added = tables.find((t) => t.name === name);
+            expect(added?.x).toBeGreaterThanOrEqual(
+                rightmost + PREVIEW_PLACEMENT_COLUMN_GAP - 1
+            );
+        }
+
+        const withoutProfiles = build(
+            base,
+            incoming,
+            operations,
+            operations
+                .filter((operation) => operation.id !== 'add-profiles')
+                .map((operation) => operation.id)
+        );
+        const profiles = (withoutProfiles.diagram.tables ?? []).find(
+            (t) => t.name === 'profiles'
+        );
+        expect(profiles).toBeUndefined();
+
+        const withProfilesAgain = build(
+            base,
+            incoming,
+            operations,
+            operations.map((operation) => operation.id)
+        );
+        const profilesAgain = (withProfilesAgain.diagram.tables ?? []).find(
+            (t) => t.name === 'profiles'
+        );
+        const profilesFirst = tables.find((t) => t.name === 'profiles');
+        expect(profilesAgain?.x).toBe(profilesFirst?.x);
+        expect(profilesAgain?.y).toBe(profilesFirst?.y);
+    });
+
+    it('treats delete-ghost tables as placement obstacles', () => {
+        const base = diagram([
+            table('t1', 'users', {
+                x: 200,
+                y: 0,
+                width: 280,
+                fields: Array.from({ length: 10 }, (_, i) =>
+                    field(`u${i}`, `c${i}`)
+                ),
+            }),
+        ]);
+        const incoming = diagram([
+            table('i1', 'invoices', { fields: [field('f1', 'id')] }),
+        ]);
+        const operations = [
+            op({
+                id: 'del-users',
+                category: 'table',
+                type: 'delete',
+                entityId: 't1',
+                renameTo: null,
+                identity: { kind: 'table', schema: 'public', name: 'users' },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: [],
+            } as DiffOperation),
+            op({
+                id: 'add-inv',
+                category: 'table',
+                type: 'add',
+                entityId: null,
+                renameTo: null,
+                identity: { kind: 'table', schema: 'public', name: 'invoices' },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: [],
+            } as DiffOperation),
+        ];
+
+        const result = build(base, incoming, operations, [
+            'del-users',
+            'add-inv',
+        ]);
+        const added = result.diagram.tables?.find((t) => t.name === 'invoices');
+        expect(added?.x).toBeGreaterThanOrEqual(
+            200 + 280 + PREVIEW_PLACEMENT_COLUMN_GAP - 1
+        );
+        expect(result.decorations.tables.t1?.change).toBe('delete');
+    });
+
+    it('places added view without overlapping existing tables', () => {
+        const base = diagram([
+            table('t1', 'users', {
+                x: 50,
+                y: 100,
+                fields: [field('f1', 'id')],
+            }),
+        ]);
+        const incoming = diagram([
+            table('iv', 'active_users', {
+                isView: true,
+                fields: Array.from({ length: 8 }, (_, i) =>
+                    field(`vf${i}`, `c${i}`)
+                ),
+            }),
+        ]);
+        const operations = [
+            op({
+                id: 'add-view',
+                category: 'view',
+                type: 'add',
+                entityId: null,
+                renameTo: null,
+                identity: {
+                    kind: 'view',
+                    schema: 'public',
+                    name: 'active_users',
+                },
+                before: null,
+                after: null,
+                changes: [],
+                dependsOn: [],
+            } as DiffOperation),
+        ];
+
+        const result = build(base, incoming, operations, ['add-view']);
+        const rects = (result.diagram.tables ?? []).map(placementRectFromTable);
+        for (let i = 0; i < rects.length; i += 1) {
+            for (let j = i + 1; j < rects.length; j += 1) {
+                expect(rectanglesOverlap(rects[i], rects[j])).toBe(false);
+            }
+        }
     });
 });

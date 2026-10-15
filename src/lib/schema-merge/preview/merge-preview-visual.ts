@@ -125,6 +125,9 @@ export const MERGE_PREVIEW_EDGE_FOCUS_CLASS =
 
 export const MERGE_PREVIEW_EDGE_DIM_CLASS = 'opacity-45';
 
+export const MERGE_PREVIEW_EDGE_FOREGROUND_CLASS =
+    '!stroke-[3px] drop-shadow-sm';
+
 export const getMergePreviewEdgeClasses = (
     change: MergeChangeVisual | undefined,
     selected: boolean

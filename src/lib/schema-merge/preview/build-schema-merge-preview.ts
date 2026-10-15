@@ -37,9 +37,8 @@ import {
 import type { PreviewIdentityRegistry } from './preview-identity-registry';
 import { transformRelationshipIdentityForIncoming } from './transform-relationship-identity-for-incoming';
 import {
-    createPreviewPlacementState,
     defaultPreviewTableWidth,
-    nextPreviewTablePosition,
+    PreviewTablePlacement,
 } from './preview-placement';
 import {
     previewFieldId,
@@ -89,18 +88,21 @@ const setDecoration = (
     decorations: MergePreviewDecorations,
     category: DiffOperation['category'],
     id: string,
+    operation: DiffOperation,
     visual: MergeChangeVisual
 ): void => {
+    const entry = { change: visual, operationId: operation.id };
+
     switch (category) {
         case 'table':
         case 'view':
-            decorations.tables[id] = visual;
+            decorations.tables[id] = entry;
             break;
         case 'field':
-            decorations.fields[id] = visual;
+            decorations.fields[id] = entry;
             break;
         case 'relationship':
-            decorations.relationships[id] = visual;
+            decorations.relationships[id] = entry;
             break;
         default:
             break;
@@ -240,7 +242,7 @@ export const buildSchemaMergePreview = (
 
     const identityRegistry = createPreviewIdentityRegistry(diagram);
 
-    let placement = createPreviewPlacementState(diagram.tables ?? []);
+    const placement = new PreviewTablePlacement(diagram.tables ?? []);
 
     const tableRenames = selected.filter(
         (operation) =>
@@ -320,7 +322,13 @@ export const buildSchemaMergePreview = (
             }
         }
 
-        setDecoration(decorations, operation.category, table.id, 'rename');
+        setDecoration(
+            decorations,
+            operation.category,
+            table.id,
+            operation,
+            'rename'
+        );
     }
 
     for (const operation of fieldRenames) {
@@ -355,7 +363,13 @@ export const buildSchemaMergePreview = (
             }
         }
 
-        setDecoration(decorations, 'field', located.field.id, 'rename');
+        setDecoration(
+            decorations,
+            'field',
+            located.field.id,
+            operation,
+            'rename'
+        );
     }
 
     for (const operation of tableAdds) {
@@ -379,8 +393,7 @@ export const buildSchemaMergePreview = (
                 ? viewIdentityKey(operation.identity as ViewIdentity)
                 : tableIdentityKey(operation.identity as TableIdentity);
         const tableId = previewTableId(identityKey);
-        const { position, state } = nextPreviewTablePosition(placement);
-        placement = state;
+        const position = placement.placeNext(incoming);
 
         const added = cloneTableFromIncoming(
             incoming,
@@ -412,7 +425,13 @@ export const buildSchemaMergePreview = (
                 field.id
             );
         }
-        setDecoration(decorations, operation.category, tableId, 'add');
+        setDecoration(
+            decorations,
+            operation.category,
+            tableId,
+            operation,
+            'add'
+        );
     }
 
     for (const operation of fieldAdds) {
@@ -458,7 +477,7 @@ export const buildSchemaMergePreview = (
 
         parent.fields = [...parent.fields, field];
         identityRegistry.registerFieldIdentity(identity, fieldId);
-        setDecoration(decorations, 'field', fieldId, 'add');
+        setDecoration(decorations, 'field', fieldId, operation, 'add');
     }
 
     for (const operation of modifies) {
@@ -477,11 +496,12 @@ export const buildSchemaMergePreview = (
                 applyTableAttributeChange(table, change);
             }
 
-            if (decorations.tables[table.id] !== 'rename') {
+            if (decorations.tables[table.id]?.change !== 'rename') {
                 setDecoration(
                     decorations,
                     operation.category,
                     table.id,
+                    operation,
                     'modify'
                 );
             }
@@ -513,8 +533,14 @@ export const buildSchemaMergePreview = (
                 }
             }
 
-            if (decorations.fields[located.field.id] !== 'rename') {
-                setDecoration(decorations, 'field', located.field.id, 'modify');
+            if (decorations.fields[located.field.id]?.change !== 'rename') {
+                setDecoration(
+                    decorations,
+                    'field',
+                    located.field.id,
+                    operation,
+                    'modify'
+                );
             }
 
             continue;
@@ -542,6 +568,7 @@ export const buildSchemaMergePreview = (
                 decorations,
                 'relationship',
                 relationship.id,
+                operation,
                 'modify'
             );
         }
@@ -606,7 +633,13 @@ export const buildSchemaMergePreview = (
                 ...(diagram.relationships ?? []),
                 relationship,
             ];
-            setDecoration(decorations, 'relationship', relationshipId, 'add');
+            setDecoration(
+                decorations,
+                'relationship',
+                relationshipId,
+                operation,
+                'add'
+            );
             continue;
         }
 
@@ -628,6 +661,7 @@ export const buildSchemaMergePreview = (
                 decorations,
                 'relationship',
                 relationship.id,
+                operation,
                 'modify'
             );
         }
@@ -645,7 +679,13 @@ export const buildSchemaMergePreview = (
                 continue;
             }
 
-            setDecoration(decorations, operation.category, table.id, 'delete');
+            setDecoration(
+                decorations,
+                operation.category,
+                table.id,
+                operation,
+                'delete'
+            );
             continue;
         }
 
@@ -660,7 +700,13 @@ export const buildSchemaMergePreview = (
                 continue;
             }
 
-            setDecoration(decorations, 'field', located.field.id, 'delete');
+            setDecoration(
+                decorations,
+                'field',
+                located.field.id,
+                operation,
+                'delete'
+            );
             continue;
         }
 
@@ -682,6 +728,7 @@ export const buildSchemaMergePreview = (
                 decorations,
                 'relationship',
                 relationship.id,
+                operation,
                 'delete'
             );
         }

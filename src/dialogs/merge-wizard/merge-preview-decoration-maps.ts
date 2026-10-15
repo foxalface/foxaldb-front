@@ -1,4 +1,5 @@
 import type { Diagram } from '@/lib/domain/diagram';
+import { assignRelationshipIndicatorLanes } from '@/lib/schema-merge/preview/merge-preview-relationship-indicator-lanes';
 import type { MergePreviewDecorations } from '@/lib/schema-merge/preview/preview-types';
 import type { MergePreviewHighlightTarget } from '@/lib/schema-merge/preview/resolve-preview-highlight-target';
 import type {
@@ -30,13 +31,18 @@ export const buildMergePreviewFlowDecorationMaps = (
         MergePreviewEdgeDecoration
     >();
 
-    for (const [tableId, change] of Object.entries(decorations.tables)) {
+    for (const [tableId, entry] of Object.entries(decorations.tables)) {
         mergePreviewByTableId.set(tableId, [
-            { entityKind: 'table', entityId: tableId, change },
+            {
+                entityKind: 'table',
+                entityId: tableId,
+                change: entry.change,
+                operationId: entry.operationId,
+            },
         ]);
     }
 
-    for (const [fieldId, change] of Object.entries(decorations.fields)) {
+    for (const [fieldId, entry] of Object.entries(decorations.fields)) {
         const parentTable = (diagram.tables ?? []).find((table) =>
             table.fields.some((field) => field.id === fieldId)
         );
@@ -48,14 +54,40 @@ export const buildMergePreviewFlowDecorationMaps = (
         const existing = mergePreviewByTableId.get(parentTable.id) ?? [];
         mergePreviewByTableId.set(parentTable.id, [
             ...existing,
-            { entityKind: 'field', entityId: fieldId, change },
+            {
+                entityKind: 'field',
+                entityId: fieldId,
+                change: entry.change,
+                operationId: entry.operationId,
+            },
         ]);
     }
 
-    for (const [relationshipId, change] of Object.entries(
+    for (const [relationshipId, entry] of Object.entries(
         decorations.relationships
     )) {
-        mergePreviewByRelationshipId.set(relationshipId, { change });
+        mergePreviewByRelationshipId.set(relationshipId, {
+            change: entry.change,
+            operationId: entry.operationId,
+        });
+    }
+
+    const indicatorLanes = assignRelationshipIndicatorLanes(
+        diagram,
+        Object.keys(decorations.relationships)
+    );
+
+    for (const [relationshipId, lane] of indicatorLanes) {
+        const existing = mergePreviewByRelationshipId.get(relationshipId);
+
+        if (!existing) {
+            continue;
+        }
+
+        mergePreviewByRelationshipId.set(relationshipId, {
+            ...existing,
+            indicatorLane: lane,
+        });
     }
 
     return { mergePreviewByTableId, mergePreviewByRelationshipId };
@@ -102,6 +134,7 @@ export const buildMergePreviewHoverMaps = (
             involvedTableIds.add(relationship.targetTableId);
             mergePreviewHoverByRelationshipId.set(highlight.relationshipId, {
                 focused: true,
+                foreground: true,
             });
         }
     }

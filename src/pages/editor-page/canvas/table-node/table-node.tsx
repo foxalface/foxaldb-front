@@ -42,8 +42,11 @@ import type { MergePreviewNodeDecoration } from '../diagram-flow-elements';
 import { MergePreviewChangeIndicator } from '../merge-preview-change-indicator';
 import {
     buildFieldMergeChangeById,
+    buildFieldMergeOperationIdById,
     resolveTableMergeChange,
+    resolveTableMergeOperationId,
 } from '../merge-preview-node-utils';
+import { useMergePreviewHighlight } from '@/dialogs/merge-wizard/use-merge-preview-highlight';
 import {
     getMergePreviewTableClasses,
     MERGE_PREVIEW_TABLE_DIM_CLASS,
@@ -183,6 +186,15 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             () => buildFieldMergeChangeById(mergePreview),
             [mergePreview]
         );
+        const fieldMergeOperationIds = useMemo(
+            () => buildFieldMergeOperationIdById(mergePreview),
+            [mergePreview]
+        );
+        const tableMergeOperationId = useMemo(
+            () => resolveTableMergeOperationId(mergePreview),
+            [mergePreview]
+        );
+        const mergePreviewHighlight = useMergePreviewHighlight();
         const mergePreviewTableClasses = useMemo(
             () => getMergePreviewTableClasses(tableMergeChange),
             [tableMergeChange]
@@ -650,9 +662,26 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     </TooltipContent>
                                 </Tooltip>
                             ) : tableMergeChange ? (
-                                <MergePreviewChangeIndicator
-                                    change={tableMergeChange}
-                                />
+                                <span
+                                    className="inline-flex"
+                                    data-merge-preview-operation-id={
+                                        tableMergeOperationId ?? undefined
+                                    }
+                                    onMouseEnter={() => {
+                                        if (tableMergeOperationId) {
+                                            mergePreviewHighlight?.onHighlightOperation(
+                                                tableMergeOperationId
+                                            );
+                                        }
+                                    }}
+                                    onMouseLeave={() => {
+                                        mergePreviewHighlight?.onClearHighlight();
+                                    }}
+                                >
+                                    <MergePreviewChangeIndicator
+                                        change={tableMergeChange}
+                                    />
+                                </span>
                             ) : table.isView ? (
                                 <View className="size-3.5 shrink-0 text-gray-600 dark:text-primary" />
                             ) : (
@@ -770,6 +799,11 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                 mergePreviewFieldFocused={
                                     mergePreviewHover?.fieldFocusedId ===
                                     field.id
+                                }
+                                mergePreviewOperationId={
+                                    suppressFieldMergePreview
+                                        ? undefined
+                                        : fieldMergeOperationIds.get(field.id)
                                 }
                             />
                         ))}
