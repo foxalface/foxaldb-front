@@ -22,8 +22,10 @@ vi.mock('@/context/diff-context/use-diff', () => ({
     }),
 }));
 
+const localConfig = { showCardinality: false };
+
 vi.mock('@/hooks/use-local-config', () => ({
-    useLocalConfig: () => ({ showCardinality: false }),
+    useLocalConfig: () => localConfig,
 }));
 
 vi.mock('@/hooks/use-canvas', () => ({
@@ -46,6 +48,7 @@ vi.mock('@xyflow/react', () => ({
         getInternalNode: () => ({ measured: { width: 200 } }),
         getEdge: () => ({ sourceHandle: 'left_rel_f1' }),
     }),
+    useViewport: () => ({ x: 0, y: 0, zoom: 1 }),
 }));
 
 vi.mock('react-i18next', () => ({
@@ -55,7 +58,6 @@ vi.mock('react-i18next', () => ({
 import { RelationshipEdge } from '../relationship-edge';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
 import { MergePreviewHighlightProvider } from '@/dialogs/merge-wizard/merge-preview-highlight-provider';
-import { MERGE_PREVIEW_EDGE_FOREGROUND_CLASS } from '@/lib/schema-merge/preview/merge-preview-visual';
 
 const renderEdge = (change?: 'add' | 'modify' | 'delete') => {
     const props = {
@@ -135,9 +137,132 @@ describe('RelationshipEdge merge preview', () => {
         ) as SVGPathElement;
         expect(path).toBeTruthy();
         expect(path.getAttribute('stroke-dasharray')).toBe('8 6');
+        expect(path.className).toContain('!stroke-2');
+        expect(path.className).toContain('cursor-pointer');
+        expect(path).toHaveStyle({ pointerEvents: 'stroke' });
+        const interaction = document.querySelector(
+            '.react-flow__edge-interaction'
+        ) as SVGPathElement;
+        expect(interaction).toHaveStyle({ pointerEvents: 'stroke' });
+        expect(interaction.getAttribute('stroke-width')).toBe('16');
         expect(
             screen.getByLabelText('merge_wizard.result.change.delete')
         ).toBeInTheDocument();
+    });
+
+    it('uses semantic merge cardinality markers for add', () => {
+        localConfig.showCardinality = true;
+        renderEdge('add');
+        const path = document.querySelector(
+            '.react-flow__edge-path'
+        ) as SVGPathElement;
+        expect(
+            path.getAttribute('data-merge-cardinality-source-marker')
+        ).toMatch(/^cardinality_merge_add_one_(left|right)$/);
+        expect(
+            path.getAttribute('data-merge-cardinality-target-marker')
+        ).toMatch(/^cardinality_merge_add_many_(left|right)$/);
+        expect(path.getAttribute('marker-start')).toMatch(
+            /cardinality_merge_add_one_/
+        );
+        expect(path.getAttribute('marker-end')).toMatch(
+            /cardinality_merge_add_many_/
+        );
+        localConfig.showCardinality = false;
+    });
+
+    it('uses semantic merge cardinality markers for modify and delete', () => {
+        localConfig.showCardinality = true;
+        renderEdge('modify');
+        let path = document.querySelector(
+            '.react-flow__edge-path'
+        ) as SVGPathElement;
+        expect(path.getAttribute('marker-start')).toContain(
+            'cardinality_merge_modify'
+        );
+
+        cleanup();
+        renderEdge('delete');
+        path = document.querySelector(
+            '.react-flow__edge-path'
+        ) as SVGPathElement;
+        expect(path.getAttribute('marker-end')).toContain(
+            'cardinality_merge_delete'
+        );
+        localConfig.showCardinality = false;
+    });
+
+    it('keeps neutral cardinality markers without merge metadata', () => {
+        localConfig.showCardinality = true;
+        renderEdge();
+        const path = document.querySelector(
+            '.react-flow__edge-path'
+        ) as SVGPathElement;
+        expect(path.getAttribute('marker-start')).toContain(
+            'cardinality_not_selected'
+        );
+        expect(path.getAttribute('marker-start')).not.toContain(
+            'cardinality_merge'
+        );
+        localConfig.showCardinality = false;
+    });
+
+    it('does not mount relationship merge tooltips', () => {
+        renderEdge('add');
+        expect(
+            screen.queryByText('merge_wizard.result.change.add')
+        ).not.toBeInTheDocument();
+    });
+
+    it('marks foreground metadata without switching cardinality to selected pink', () => {
+        localConfig.showCardinality = true;
+        const props = {
+            id: 'rel-1',
+            source: 't1',
+            target: 't2',
+            sourceX: 0,
+            sourceY: 0,
+            targetX: 200,
+            targetY: 0,
+            selected: false,
+            data: {
+                relationship: {
+                    id: 'rel-1',
+                    name: 'rel',
+                    sourceTableId: 't1',
+                    targetTableId: 't2',
+                    sourceFieldId: 'f1',
+                    targetFieldId: 'f2',
+                    sourceCardinality: 'one',
+                    targetCardinality: 'many',
+                    createdAt: 0,
+                },
+                mergePreview: {
+                    change: 'add' as const,
+                    operationId: 'op-rel',
+                    indicatorLane: 0,
+                },
+                mergePreviewHover: {
+                    foreground: true,
+                },
+            },
+        } as EdgeProps<RelationshipEdgeType>;
+
+        render(
+            <TooltipProvider>
+                <RelationshipEdge {...props} />
+            </TooltipProvider>
+        );
+
+        const path = document.querySelector(
+            '.react-flow__edge-path'
+        ) as SVGPathElement;
+        expect(path.getAttribute('data-merge-preview-foreground')).toBe('true');
+        expect(path.getAttribute('marker-start')).toContain(
+            'cardinality_merge_add'
+        );
+        expect(path.getAttribute('marker-start')).not.toContain('selected');
+        localConfig.showCardinality = false;
     });
 
     it('applies foreground styling when merge preview hover requests it', () => {
@@ -181,7 +306,10 @@ describe('RelationshipEdge merge preview', () => {
         );
 
         const path = document.querySelector('.react-flow__edge-path');
-        expect(path?.className).toContain(MERGE_PREVIEW_EDGE_FOREGROUND_CLASS);
+        expect(path?.getAttribute('data-merge-preview-foreground')).toBe(
+            'true'
+        );
+        expect(path?.className).not.toContain('drop-shadow');
     });
 
     it('calls highlight handler on preview hover without opening popover', () => {

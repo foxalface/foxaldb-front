@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
-import { assignRelationshipIndicatorLanes } from '../merge-preview-relationship-indicator-lanes';
+import {
+    assignRelationshipIndicatorLanes,
+    computeMergePreviewIndicatorPosition,
+    MERGE_PREVIEW_CARDINALITY_CLEARANCE,
+} from '../merge-preview-relationship-indicator-lanes';
 
 const diagram: Diagram = {
     id: 'd1',
@@ -90,5 +94,73 @@ describe('assignRelationshipIndicatorLanes', () => {
             'r3',
         ]);
         expect(again).toEqual(lanes);
+    });
+});
+
+describe('computeMergePreviewIndicatorPosition', () => {
+    it('pushes the indicator along the normal when too close to cardinality anchors', () => {
+        const baseline = computeMergePreviewIndicatorPosition({
+            edgeMidpoint: { x: 150, y: 100 },
+            sourceAnchor: { x: 100, y: 100 },
+            targetAnchor: { x: 200, y: 100 },
+            sourceX: 100,
+            sourceY: 100,
+            targetX: 200,
+            targetY: 100,
+            indicatorLane: 0,
+            minCardinalityClearance: MERGE_PREVIEW_CARDINALITY_CLEARANCE,
+        });
+
+        const centerBaseline = {
+            x: baseline.x + 10,
+            y: baseline.y + 10,
+        };
+        const distSourceBaseline = Math.hypot(
+            centerBaseline.x - 100,
+            centerBaseline.y - 100
+        );
+        expect(distSourceBaseline).toBeGreaterThanOrEqual(
+            MERGE_PREVIEW_CARDINALITY_CLEARANCE
+        );
+
+        const again = computeMergePreviewIndicatorPosition({
+            edgeMidpoint: { x: 150, y: 100 },
+            sourceAnchor: { x: 100, y: 100 },
+            targetAnchor: { x: 200, y: 100 },
+            sourceX: 100,
+            sourceY: 100,
+            targetX: 200,
+            targetY: 100,
+            indicatorLane: 0,
+            minCardinalityClearance: MERGE_PREVIEW_CARDINALITY_CLEARANCE,
+        });
+        expect(again).toEqual(baseline);
+    });
+
+    it('keeps lane offset when clearance is already satisfied', () => {
+        const position = computeMergePreviewIndicatorPosition({
+            edgeMidpoint: { x: 200, y: 200 },
+            sourceAnchor: { x: 0, y: 0 },
+            targetAnchor: { x: 400, y: 400 },
+            sourceX: 0,
+            sourceY: 0,
+            targetX: 400,
+            targetY: 400,
+            indicatorLane: 2,
+        });
+
+        const withoutLane = computeMergePreviewIndicatorPosition({
+            edgeMidpoint: { x: 200, y: 200 },
+            sourceAnchor: { x: 0, y: 0 },
+            targetAnchor: { x: 400, y: 400 },
+            sourceX: 0,
+            sourceY: 0,
+            targetX: 400,
+            targetY: 400,
+            indicatorLane: 0,
+        });
+
+        expect(position.x).not.toBe(withoutLane.x);
+        expect(position.y).not.toBe(withoutLane.y);
     });
 });

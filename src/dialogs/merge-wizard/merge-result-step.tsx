@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Alert, AlertDescription } from '@/components/alert/alert';
 import { Button } from '@/components/button/button';
 import { Accordion } from '@/components/accordion/accordion';
@@ -25,6 +25,83 @@ import { selectedOperationIdsInCompareOrder } from '@/lib/schema-merge/operation
 import { mergeApplyBlocksRetry, mergeApplyErrorKey } from './merge-apply-error';
 import type { MergeWizardApplyContext } from './merge-wizard-apply-context';
 import { useMergeOperationSelection } from './use-merge-operation-selection';
+
+const MERGE_PREVIEW_OPERATION_ATTR = 'data-merge-preview-operation-id';
+const MERGE_PREVIEW_HIT_PATH_SELECTOR = `path.react-flow__edge-interaction[${MERGE_PREVIEW_OPERATION_ATTR}]`;
+
+const operationIdAlongRelationshipStroke = (
+    clientX: number,
+    clientY: number,
+    preferredOperationId: string | null
+): string | null => {
+    const paths = document.querySelectorAll<SVGGeometryElement>(
+        MERGE_PREVIEW_HIT_PATH_SELECTOR
+    );
+    let fallback: string | null = null;
+
+    for (const path of paths) {
+        const matrix = path.getScreenCTM();
+        if (!matrix) {
+            continue;
+        }
+
+        const local = new DOMPoint(clientX, clientY).matrixTransform(
+            matrix.inverse()
+        );
+        if (
+            !Number.isFinite(local.x) ||
+            !Number.isFinite(local.y) ||
+            !path.isPointInStroke(local)
+        ) {
+            continue;
+        }
+
+        const operationId = path.getAttribute(MERGE_PREVIEW_OPERATION_ATTR);
+        if (!operationId) {
+            continue;
+        }
+        if (operationId === preferredOperationId) {
+            return operationId;
+        }
+        fallback ??= operationId;
+    }
+
+    return fallback;
+};
+
+const operationIdUnderPointer = (
+    clientX: number,
+    clientY: number
+): string | null => {
+    const stack = document.elementsFromPoint(clientX, clientY);
+
+    for (const element of stack) {
+        const markedId = element
+            .closest(`[${MERGE_PREVIEW_OPERATION_ATTR}]`)
+            ?.getAttribute(MERGE_PREVIEW_OPERATION_ATTR);
+        if (markedId) {
+            return markedId;
+        }
+
+        const edge = element.closest('.react-flow__edge');
+        if (edge) {
+            return (
+                edge
+                    .querySelector(`[${MERGE_PREVIEW_OPERATION_ATTR}]`)
+                    ?.getAttribute(MERGE_PREVIEW_OPERATION_ATTR) ?? null
+            );
+        }
+
+        if (
+            element.closest('.react-flow__node') ||
+            element.classList.contains('react-flow__pane')
+        ) {
+            return null;
+        }
+    }
+
+    return null;
+};
 
 export const MergeResultStep: React.FC<{
     applyContext: MergeWizardApplyContext;
@@ -55,6 +132,64 @@ export const MergeResultStep: React.FC<{
     const [highlightedOperationId, setHighlightedOperationId] = useState<
         string | null
     >(null);
+    const highlightedOperationIdRef = useRef<string | null>(null);
+    highlightedOperationIdRef.current = highlightedOperationId;
+    const clearPreviewHighlight = useCallback((operationId?: string) => {
+        setHighlightedOperationId((highlighted) =>
+            operationId == null || highlighted === operationId
+                ? null
+                : highlighted
+        );
+    }, []);
+    const syncPreviewHighlightFromPointer = useCallback(
+        (event: React.PointerEvent<HTMLDivElement>) => {
+            const target =
+                event.target instanceof Element ? event.target : null;
+            const markedId =
+                target
+                    ?.closest(`[${MERGE_PREVIEW_OPERATION_ATTR}]`)
+                    ?.getAttribute(MERGE_PREVIEW_OPERATION_ATTR) ?? null;
+            const edge = target?.closest('.react-flow__edge');
+            const edgeId =
+                edge
+                    ?.querySelector(`[${MERGE_PREVIEW_OPERATION_ATTR}]`)
+                    ?.getAttribute(MERGE_PREVIEW_OPERATION_ATTR) ?? null;
+            const pointerOnTable = Boolean(
+                target?.closest('.react-flow__node')
+            );
+            let operationId = edge
+                ? (markedId ?? edgeId)
+                : operationIdUnderPointer(event.clientX, event.clientY);
+            if (!operationId && !pointerOnTable) {
+                operationId = operationIdAlongRelationshipStroke(
+                    event.clientX,
+                    event.clientY,
+                    highlightedOperationIdRef.current
+                );
+            }
+
+            if (operationId === highlightedOperationIdRef.current) {
+                return;
+            }
+
+            if (!operationId) {
+                if (highlightedOperationIdRef.current) {
+                    const relationshipPathsMounted =
+                        document.querySelectorAll(
+                            MERGE_PREVIEW_HIT_PATH_SELECTOR
+                        ).length > 0;
+                    if (!relationshipPathsMounted && !pointerOnTable) {
+                        return;
+                    }
+                    clearPreviewHighlight();
+                }
+                return;
+            }
+
+            setHighlightedOperationId(operationId);
+        },
+        [clearPreviewHighlight]
+    );
     const noDifferences = operations.length === 0;
     const retryBlocked =
         applyError !== null && mergeApplyBlocksRetry(applyError);
@@ -130,7 +265,7 @@ export const MergeResultStep: React.FC<{
                     disabled={isApplying}
                     highlightedOperationId={highlightedOperationId}
                     onHighlightOperation={setHighlightedOperationId}
-                    onClearHighlight={() => setHighlightedOperationId(null)}
+                    onClearHighlight={clearPreviewHighlight}
                     onToggleOperation={(operationId, next) => {
                         if (next) {
                             selection.select(operationId);
@@ -226,6 +361,7 @@ export const MergeResultStep: React.FC<{
                             <div
                                 className="relative min-h-[min(50vh,28rem)] flex-1 overflow-hidden rounded-md border border-border bg-background lg:min-h-0"
                                 data-testid="merge-result-preview-surface"
+                                onPointerMove={syncPreviewHighlightFromPointer}
                             >
                                 <MergePreviewCanvas
                                     diagram={previewProjection.diagram}
@@ -235,9 +371,7 @@ export const MergeResultStep: React.FC<{
                                     onHighlightOperation={
                                         setHighlightedOperationId
                                     }
-                                    onClearHighlight={() =>
-                                        setHighlightedOperationId(null)
-                                    }
+                                    onClearHighlight={clearPreviewHighlight}
                                     className="absolute inset-0"
                                 />
                             </div>

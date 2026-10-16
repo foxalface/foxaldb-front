@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+    getMergePreviewCardinalityMarkerClasses,
     getMergePreviewEdgeClasses,
     getMergePreviewFieldClasses,
+    getMergePreviewRelationshipOverlayClasses,
     getMergePreviewTableClasses,
 } from '../merge-preview-visual';
 
@@ -33,10 +35,33 @@ describe('merge-preview-visual', () => {
         );
     });
 
-    it('marks delete edges dashed with reduced opacity', () => {
+    it('keeps delete edges the canvas stroke weight, dashed and red', () => {
         const deleteStyle = getMergePreviewEdgeClasses('delete', false);
         expect(deleteStyle.dashed).toBe(true);
-        expect(deleteStyle.opacity).toBeLessThan(1);
+        expect(deleteStyle.opacity).toBe(1);
+        expect(deleteStyle.stroke).toContain('!stroke-2');
         expect(deleteStyle.stroke).toContain('red');
+    });
+
+    it('maps cardinality marker classes per change', () => {
+        expect(getMergePreviewCardinalityMarkerClasses('add').circle).toContain(
+            'emerald'
+        );
+        expect(
+            getMergePreviewCardinalityMarkerClasses('modify').circle
+        ).toContain('sky');
+        expect(
+            getMergePreviewCardinalityMarkerClasses('delete').circle
+        ).toContain('red');
+    });
+
+    it('keeps semantic overlay colors when foreground is requested', () => {
+        const foreground = getMergePreviewRelationshipOverlayClasses(
+            'add',
+            true
+        );
+        expect(foreground.edgeStroke).toContain('emerald');
+        expect(foreground.indicatorClassName).toContain('emerald');
+        expect(foreground.cardinalityForeground).not.toContain('pink');
     });
 });

@@ -1,4 +1,5 @@
 import type { Cardinality } from '@/lib/domain/db-relationship';
+import type { MergeChangeVisual } from '@/lib/schema-merge/preview/preview-types';
 import { type TableNodeType } from './table-node/table-node';
 import { addEdge, createGraph, removeEdge, type Graph } from '@/lib/graph';
 import {
@@ -14,12 +15,20 @@ export const getCardinalityMarkerId = ({
     cardinality,
     selected,
     side,
+    mergePreviewChange,
 }: {
     cardinality: Cardinality;
     selected: boolean;
     side: 'left' | 'right';
-}) =>
-    `cardinality_${selected ? 'selected' : 'not_selected'}_${cardinality}_${side}`;
+    /** Preview-only semantic cardinality styling (M10.5.4). */
+    mergePreviewChange?: MergeChangeVisual;
+}) => {
+    if (mergePreviewChange) {
+        return `cardinality_merge_${mergePreviewChange}_${cardinality}_${side}`;
+    }
+
+    return `cardinality_${selected ? 'selected' : 'not_selected'}_${cardinality}_${side}`;
+};
 
 const calcRect = ({
     node,

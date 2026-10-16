@@ -1,12 +1,20 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     Background,
     BackgroundVariant,
     ReactFlow,
     ReactFlowProvider,
     useEdgesState,
+    useNodesInitialized,
     useNodesState,
     useReactFlow,
+    useStore,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import type { Diagram } from '@/lib/domain/diagram';
@@ -26,7 +34,10 @@ import {
     buildMergePreviewFlowDecorationMaps,
     buildMergePreviewHoverMaps,
 } from './merge-preview-decoration-maps';
-import { MergePreviewControls } from './merge-preview-controls';
+import {
+    MERGE_PREVIEW_FIT_VIEW,
+    MergePreviewControls,
+} from './merge-preview-controls';
 import { MergePreviewHighlightProvider } from './merge-preview-highlight-provider';
 import { MergePreviewProviders } from './merge-preview-providers';
 import { useTranslation } from 'react-i18next';
@@ -42,6 +53,12 @@ export interface MergePreviewCanvasProps {
     onHighlightOperation?: (operationId: string) => void;
     onClearHighlight?: () => void;
 }
+
+/**
+ * Result dialog grows with `transition-[width,max-width] duration-300`.
+ * Fitting before that ends locks the zoom to the smaller width.
+ */
+const MERGE_PREVIEW_DIALOG_RESIZE_MS = 340;
 
 const PREVIEW_FLOW_PROPS = {
     nodesDraggable: false,
@@ -64,18 +81,30 @@ const MergePreviewCanvasFlow: React.FC<{
     decorations: MergePreviewDecorations;
     layoutGeneration?: number;
     highlightTarget?: MergePreviewHighlightTarget | null;
-    containerRef: React.RefObject<HTMLDivElement | null>;
-}> = ({
-    diagram,
-    decorations,
-    layoutGeneration,
-    highlightTarget,
-    containerRef,
-}) => {
+}> = ({ diagram, decorations, layoutGeneration, highlightTarget }) => {
     const { effectiveTheme } = useTheme();
     const { fitView } = useReactFlow();
+    const nodesInitialized = useNodesInitialized();
+    const flowWidth = useStore((state) => state.width);
+    const flowHeight = useStore((state) => state.height);
     const initialFitDoneRef = useRef(false);
-    const diagramKeyRef = useRef(diagram.id);
+    const openedAtRef = useRef(0);
+    const settleTimerRef = useRef<number | null>(null);
+    const [showAllNodesForFit, setShowAllNodesForFit] = useState(true);
+
+    const finishInitialFit = useCallback(() => {
+        if (settleTimerRef.current !== null) {
+            window.clearTimeout(settleTimerRef.current);
+            settleTimerRef.current = null;
+        }
+
+        if (initialFitDoneRef.current) {
+            return;
+        }
+
+        initialFitDoneRef.current = true;
+        setShowAllNodesForFit(false);
+    }, []);
 
     const decorationMaps = useMemo(
         () => buildMergePreviewFlowDecorationMaps(diagram, decorations),
@@ -121,60 +150,87 @@ const MergePreviewCanvasFlow: React.FC<{
     }, [flowElements.edges, flowElements.nodes, setEdges, setNodes]);
 
     useEffect(() => {
-        if (diagramKeyRef.current !== diagram.id) {
-            diagramKeyRef.current = diagram.id;
-            initialFitDoneRef.current = false;
-        }
-    }, [diagram.id]);
-
-    useEffect(() => {
         initialFitDoneRef.current = false;
-    }, [layoutGeneration]);
+        openedAtRef.current = performance.now();
+        setShowAllNodesForFit(true);
+
+        return () => {
+            if (settleTimerRef.current !== null) {
+                window.clearTimeout(settleTimerRef.current);
+                settleTimerRef.current = null;
+            }
+        };
+    }, [diagram.id, layoutGeneration]);
 
     useEffect(() => {
-        const container = containerRef.current;
-        if (!container) {
+        if (
+            initialFitDoneRef.current ||
+            !nodesInitialized ||
+            (flowWidth ?? 0) < 64 ||
+            (flowHeight ?? 0) < 64
+        ) {
             return;
         }
 
-        const tryFit = () => {
+        const fitOptions = {
+            ...MERGE_PREVIEW_FIT_VIEW,
+            duration: 0,
+        };
+
+        void fitView(fitOptions);
+
+        if (settleTimerRef.current !== null) {
+            window.clearTimeout(settleTimerRef.current);
+        }
+
+        const elapsed = performance.now() - openedAtRef.current;
+        const delay = Math.max(80, MERGE_PREVIEW_DIALOG_RESIZE_MS - elapsed);
+
+        settleTimerRef.current = window.setTimeout(() => {
+            settleTimerRef.current = null;
+
             if (initialFitDoneRef.current) {
                 return;
             }
 
-            const { width, height } = container.getBoundingClientRect();
-            if (width < 64 || height < 64) {
-                return;
-            }
+            void fitView(fitOptions);
+            finishInitialFit();
+        }, delay);
 
-            if (nodes.length === 0) {
-                initialFitDoneRef.current = true;
-                return;
+        return () => {
+            if (settleTimerRef.current !== null) {
+                window.clearTimeout(settleTimerRef.current);
+                settleTimerRef.current = null;
             }
-
-            fitView({ padding: 0.1, maxZoom: 0.8, duration: 200 });
-            initialFitDoneRef.current = true;
         };
-
-        const observer = new ResizeObserver(() => {
-            requestAnimationFrame(tryFit);
-        });
-
-        observer.observe(container);
-        requestAnimationFrame(tryFit);
-
-        return () => observer.disconnect();
-    }, [containerRef, fitView, nodes.length, layoutGeneration]);
+    }, [
+        diagram.id,
+        finishInitialFit,
+        fitView,
+        flowHeight,
+        flowWidth,
+        layoutGeneration,
+        nodesInitialized,
+    ]);
 
     return (
         <ReactFlow
             {...PREVIEW_FLOW_PROPS}
+            onlyRenderVisibleElements={!showAllNodesForFit}
+            id="merge-preview"
             colorMode={effectiveTheme}
             className="size-full"
+            minZoom={0.1}
+            maxZoom={5}
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
+            onMoveStart={(event) => {
+                if (event) {
+                    finishInitialFit();
+                }
+            }}
             nodeTypes={diagramFlowNodeTypes}
             edgeTypes={diagramFlowEdgeTypes}
             defaultEdgeOptions={{
@@ -183,7 +239,7 @@ const MergePreviewCanvasFlow: React.FC<{
             }}
             data-testid="merge-preview-canvas"
         >
-            <Background variant={BackgroundVariant.Dots} gap={20} size={1} />
+            <Background variant={BackgroundVariant.Dots} gap={16} size={1} />
             <MarkerDefinitions />
             <MergePreviewControls />
         </ReactFlow>
@@ -200,7 +256,6 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
     onClearHighlight,
 }) => {
     const { t } = useTranslation();
-    const containerRef = useRef<HTMLDivElement>(null);
     const highlightHandlers =
         onHighlightOperation && onClearHighlight
             ? {
@@ -212,7 +267,6 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
     return (
         <TooltipProvider>
             <div
-                ref={containerRef}
                 className={cn('relative size-full min-h-0', className)}
                 data-testid="merge-preview-canvas-root"
                 data-highlight-table-id={highlightTarget?.tableId ?? undefined}
@@ -239,7 +293,6 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
                                         decorations={decorations}
                                         layoutGeneration={layoutGeneration}
                                         highlightTarget={highlightTarget}
-                                        containerRef={containerRef}
                                     />
                                 </div>
                             </MergePreviewHighlightProvider>
@@ -250,7 +303,6 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
                                     decorations={decorations}
                                     layoutGeneration={layoutGeneration}
                                     highlightTarget={highlightTarget}
-                                    containerRef={containerRef}
                                 />
                             </div>
                         )}

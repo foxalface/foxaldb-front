@@ -220,11 +220,7 @@ export const relationshipEdgesFromDiagram = (
         const mergePreviewHover =
             options?.mergePreviewHoverByRelationshipId?.get(relationship.id);
 
-        const zIndex = mergePreviewHover?.foreground
-            ? 1000
-            : mergePreview
-              ? 20
-              : 0;
+        const zIndex = mergePreviewHover?.foreground ? 1 : 0;
 
         return {
             id: relationship.id,

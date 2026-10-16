@@ -1,7 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import type { Edge, EdgeProps } from '@xyflow/react';
-import { getSmoothStepPath, Position, useReactFlow } from '@xyflow/react';
+import {
+    getSmoothStepPath,
+    Position,
+    useReactFlow,
+    useViewport,
+} from '@xyflow/react';
 import type { MergePreviewEdgeDecoration } from '../diagram-flow-elements';
 import type { DBRelationship, Cardinality } from '@/lib/domain/db-relationship';
 import { RIGHT_HANDLE_ID_PREFIX } from '../table-node/table-node-field';
@@ -15,16 +20,17 @@ import { EditRelationshipPopover } from './edit-relationship-popover';
 import { EllipsisIcon } from 'lucide-react';
 import {
     getMergePreviewEdgeClasses,
+    getMergePreviewRelationshipOverlayClasses,
     MERGE_PREVIEW_EDGE_DIM_CLASS,
-    MERGE_PREVIEW_EDGE_FOCUS_CLASS,
-    MERGE_PREVIEW_EDGE_FOREGROUND_CLASS,
 } from '@/lib/schema-merge/preview/merge-preview-visual';
+import { computeMergePreviewIndicatorPosition } from '@/lib/schema-merge/preview/merge-preview-relationship-indicator-lanes';
 import type { MergePreviewEdgeHoverFlags } from '../diagram-flow-elements';
 import { MergePreviewChangeIndicator } from '../merge-preview-change-indicator';
 import { useMergePreviewHighlight } from '@/dialogs/merge-wizard/use-merge-preview-highlight';
 
 const MERGE_PREVIEW_INDICATOR_SIZE = 20;
-const MERGE_PREVIEW_INDICATOR_LANE_SPACING = 14;
+/** Full hit-stroke width in screen pixels, kept stable when the preview is zoomed out. */
+const MERGE_PREVIEW_RELATIONSHIP_HIT_PX = 16;
 
 export type RelationshipEdgeType = Edge<
     {
@@ -51,6 +57,7 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             data,
         }) => {
             const { getInternalNode, getEdge } = useReactFlow();
+            const { zoom } = useViewport();
             const { checkIfRelationshipRemoved, checkIfNewRelationship } =
                 useDiff();
             const { showCardinality } = useLocalConfig();
@@ -353,14 +360,14 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             ]);
 
             const mergePreviewChange = data?.mergePreview?.change;
+            const previewHitStrokeWidth =
+                MERGE_PREVIEW_RELATIONSHIP_HIT_PX /
+                (Number.isFinite(zoom) && zoom > 0 ? zoom : 1);
             const mergePreviewOperationId = data?.mergePreview?.operationId;
             const mergePreviewIndicatorLane =
                 data?.mergePreview?.indicatorLane ?? 0;
             const mergePreviewHover = data?.mergePreviewHover;
             const mergePreviewHighlight = useMergePreviewHighlight();
-
-            const previewMarkerSelected =
-                (selected ?? false) || mergePreviewHover?.foreground === true;
 
             const bindPreviewHighlight = useCallback(() => {
                 if (readonly && mergePreviewOperationId) {
@@ -370,20 +377,42 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 }
             }, [mergePreviewHighlight, mergePreviewOperationId, readonly]);
 
-            const clearPreviewHighlight = useCallback(() => {
-                mergePreviewHighlight?.onClearHighlight();
-            }, [mergePreviewHighlight]);
+            const clearPreviewHighlight = useCallback(
+                (event: React.MouseEvent) => {
+                    const next = event.relatedTarget;
+                    const edgeRoot =
+                        event.currentTarget.closest('.react-flow__edge');
+                    const stayedInside =
+                        next instanceof Element &&
+                        Boolean(edgeRoot?.contains(next));
+                    if (stayedInside) {
+                        return;
+                    }
+
+                    mergePreviewHighlight?.onClearHighlight(
+                        mergePreviewOperationId
+                    );
+                },
+                [mergePreviewHighlight, mergePreviewOperationId]
+            );
+
+            const mergePreviewPointer =
+                mergePreviewChange === 'add' || mergePreviewChange === 'delete';
 
             const sourceMarker = useMemo(
                 () =>
                     getCardinalityMarkerId({
                         cardinality: relationship?.sourceCardinality ?? 'one',
-                        selected: previewMarkerSelected,
+                        selected: mergePreviewChange
+                            ? false
+                            : (selected ?? false),
                         side: sourceSide as 'left' | 'right',
+                        mergePreviewChange,
                     }),
                 [
                     relationship?.sourceCardinality,
-                    previewMarkerSelected,
+                    mergePreviewChange,
+                    selected,
                     sourceSide,
                 ]
             );
@@ -391,14 +420,27 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                 () =>
                     getCardinalityMarkerId({
                         cardinality: relationship?.targetCardinality ?? 'one',
-                        selected: previewMarkerSelected,
+                        selected: mergePreviewChange
+                            ? false
+                            : (selected ?? false),
                         side: targetSide as 'left' | 'right',
+                        mergePreviewChange,
                     }),
                 [
                     relationship?.targetCardinality,
-                    previewMarkerSelected,
+                    mergePreviewChange,
+                    selected,
                     targetSide,
                 ]
+            );
+
+            const mergePreviewOverlayClasses = useMemo(
+                () =>
+                    getMergePreviewRelationshipOverlayClasses(
+                        mergePreviewChange,
+                        mergePreviewHover?.foreground === true
+                    ),
+                [mergePreviewChange, mergePreviewHover?.foreground]
             );
 
             const isDiffNewRelationship = useMemo(
@@ -452,29 +494,30 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             ]);
 
             const indicatorPosition = useMemo(() => {
-                const dx = targetX - sourceX;
-                const dy = targetY - sourceY;
-                const length = Math.hypot(dx, dy) || 1;
-                const normalX = -dy / length;
-                const normalY = dx / length;
-                const laneOffset =
-                    mergePreviewIndicatorLane *
-                    MERGE_PREVIEW_INDICATOR_LANE_SPACING;
+                const sourceXPos =
+                    sourceSide === 'left' ? sourceLeftX : sourceRightX;
+                const targetXPos =
+                    targetSide === 'left' ? targetLeftX : targetRightX;
 
-                return {
-                    x:
-                        edgeMidpoint.x +
-                        normalX * laneOffset -
-                        MERGE_PREVIEW_INDICATOR_SIZE / 2,
-                    y:
-                        edgeMidpoint.y +
-                        normalY * laneOffset -
-                        MERGE_PREVIEW_INDICATOR_SIZE / 2,
-                };
+                return computeMergePreviewIndicatorPosition({
+                    edgeMidpoint,
+                    sourceAnchor: { x: sourceXPos, y: sourceY },
+                    targetAnchor: { x: targetXPos, y: targetY },
+                    sourceX,
+                    sourceY,
+                    targetX,
+                    targetY,
+                    indicatorLane: mergePreviewIndicatorLane,
+                });
             }, [
-                edgeMidpoint.x,
-                edgeMidpoint.y,
+                edgeMidpoint,
                 mergePreviewIndicatorLane,
+                sourceLeftX,
+                sourceRightX,
+                targetLeftX,
+                targetRightX,
+                sourceSide,
+                targetSide,
                 sourceX,
                 sourceY,
                 targetX,
@@ -493,23 +536,26 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                         data-merge-preview-operation-id={
                             mergePreviewOperationId ?? undefined
                         }
+                        data-merge-preview-foreground={
+                            mergePreviewHover?.foreground ? 'true' : undefined
+                        }
+                        data-merge-cardinality-source-marker={sourceMarker}
+                        data-merge-cardinality-target-marker={targetMarker}
                         strokeDasharray={
                             mergePreviewEdgeStyle.dashed ? '8 6' : undefined
                         }
                         style={{
                             strokeOpacity: mergePreviewEdgeStyle.opacity,
+                            pointerEvents: mergePreviewChange
+                                ? 'stroke'
+                                : undefined,
                         }}
                         className={cn([
                             'react-flow__edge-path',
+                            mergePreviewPointer ? 'cursor-pointer' : '',
                             mergePreviewChange
                                 ? mergePreviewEdgeStyle.stroke
                                 : `!stroke-2 ${selected ? '!stroke-pink-600' : '!stroke-slate-400'}`,
-                            mergePreviewHover?.focused
-                                ? MERGE_PREVIEW_EDGE_FOCUS_CLASS
-                                : '',
-                            mergePreviewHover?.foreground
-                                ? MERGE_PREVIEW_EDGE_FOREGROUND_CLASS
-                                : '',
                             mergePreviewHover?.dimmed
                                 ? MERGE_PREVIEW_EDGE_DIM_CLASS
                                 : '',
@@ -530,10 +576,22 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                     <path
                         d={edgePath}
                         fill="none"
-                        strokeOpacity={0}
-                        strokeWidth={20}
-                        // eslint-disable-next-line tailwindcss/no-custom-classname
-                        className="react-flow__edge-interaction"
+                        stroke="transparent"
+                        strokeWidth={
+                            mergePreviewChange ? previewHitStrokeWidth : 20
+                        }
+                        className={cn(
+                            'react-flow__edge-interaction',
+                            mergePreviewPointer ? 'cursor-pointer' : ''
+                        )}
+                        data-merge-preview-operation-id={
+                            mergePreviewOperationId ?? undefined
+                        }
+                        style={{
+                            pointerEvents: mergePreviewChange
+                                ? 'stroke'
+                                : undefined,
+                        }}
                         onClick={handleEdgeClick}
                         onContextMenu={handleContextMenu}
                         onMouseEnter={bindPreviewHighlight}
@@ -545,7 +603,12 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                             height={MERGE_PREVIEW_INDICATOR_SIZE}
                             x={indicatorPosition.x}
                             y={indicatorPosition.y}
-                            className="overflow-visible"
+                            className={cn(
+                                'overflow-visible',
+                                mergePreviewHover?.foreground
+                                    ? 'merge-preview-rel-foreground'
+                                    : ''
+                            )}
                             style={{
                                 pointerEvents: readonly ? 'all' : 'none',
                             }}
@@ -557,13 +620,20 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                             }
                         >
                             <div
-                                className="flex size-full items-center justify-center"
+                                className={cn(
+                                    'flex size-full items-center justify-center',
+                                    mergePreviewPointer ? 'cursor-pointer' : ''
+                                )}
                                 onMouseEnter={bindPreviewHighlight}
                                 onMouseLeave={clearPreviewHighlight}
                             >
                                 <MergePreviewChangeIndicator
                                     change={mergePreviewChange}
                                     variant="bubble"
+                                    showTooltip={false}
+                                    className={
+                                        mergePreviewOverlayClasses.indicatorClassName
+                                    }
                                 />
                             </div>
                         </foreignObject>

@@ -65,6 +65,7 @@ vi.mock('@xyflow/react', () => ({
         getInternalNode: () => ({ measured: { width: 200 } }),
         getEdge: () => ({ sourceHandle: 'left_rel_field-1' }),
     }),
+    useViewport: () => ({ x: 0, y: 0, zoom: 1 }),
 }));
 
 import { RelationshipEdge } from '../relationship-edge';

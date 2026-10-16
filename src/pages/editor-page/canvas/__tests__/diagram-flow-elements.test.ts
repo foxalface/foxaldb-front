@@ -92,5 +92,47 @@ describe('diagram-flow-elements', () => {
         expect(edges[0]?.id).toBe('merge-preview-relationship-deadbeef');
         expect(edges[0]?.source).toBe('t1');
         expect(edges[0]?.target).toBe('t2');
+        expect(edges[0]?.sourceHandle).toBe('left_rel_f1');
+        expect(edges[0]?.targetHandle).toBe('target_rel_0_f2');
+        expect(edges[0]?.zIndex).toBe(0);
+    });
+
+    it('raises a merge preview relationship above tables only while hovered', () => {
+        const relationships: DBRelationship[] = [
+            {
+                id: 'rel-1',
+                name: 'rel',
+                sourceTableId: 't1',
+                targetTableId: 't2',
+                sourceFieldId: 'f1',
+                targetFieldId: 'f2',
+                sourceCardinality: 'one',
+                targetCardinality: 'many',
+                createdAt: 0,
+            },
+        ];
+        const decoration = new Map([
+            [
+                'rel-1',
+                {
+                    change: 'add' as const,
+                    operationId: 'op-rel',
+                    indicatorLane: 0,
+                },
+            ],
+        ]);
+
+        const resting = relationshipEdgesFromDiagram(relationships, {
+            mergePreviewByRelationshipId: decoration,
+        });
+        const hovered = relationshipEdgesFromDiagram(relationships, {
+            mergePreviewByRelationshipId: decoration,
+            mergePreviewHoverByRelationshipId: new Map([
+                ['rel-1', { foreground: true }],
+            ]),
+        });
+
+        expect(resting[0]?.zIndex).toBe(0);
+        expect(hovered[0]?.zIndex).toBe(1);
     });
 });

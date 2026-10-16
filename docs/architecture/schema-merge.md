@@ -391,7 +391,7 @@ Renderer metadata stays on React Flow `node.data.mergePreview` / `edge.data.merg
 
 - **Tables / views:** semantic border/ring and header badge; user `table.color` strip is preserved.
 - **Fields:** row accent via `TableNodeField` optional `mergePreviewChange`; future values come from the projected diagram.
-- **Relationships:** stroke color/weight; delete uses dashed red styling; ghosts stay rendered.
+- **Relationships:** same stroke weight as the editor (`stroke-2`); only semantic color changes. Delete ghosts stay rendered as dashed red paths.
 - **Delete ghosts:** selected table, field, and relationship deletions remain visible with reduced emphasis (opacity / strike-through on names where appropriate). Parent table delete dominates: field-level delete decorations are suppressed on that node to avoid noise.
 - **Invariant:** M10.1 maps at most one decoration per entity id (`add` | `modify` | `rename` | `delete`); rename wins when rename operations also carry attribute changes.
 
@@ -427,7 +427,17 @@ There is no preview → selection feedback and no auto-pan/zoom on highlight.
 
 Merge relationship change indicators (`+` / `−` / modify) render in a fixed `size-5` flex-centered bubble (`merge-preview-change-indicator`, `variant="bubble"`). Indicators offset along the edge normal from the path midpoint using deterministic **lanes** (`assignRelationshipIndicatorLanes()` in `merge-preview-relationship-indicator-lanes.ts`, applied in `buildMergePreviewFlowDecorationMaps()`). Relationship paths and cardinality label geometry are unchanged; only the Merge indicator moves.
 
-On list or preview hover of a relationship operation, the hovered edge receives `mergePreviewHover.foreground` (plus focus/dim on siblings): path stroke, cardinality markers (`selected` marker ids), and the Merge indicator stack above unrelated preview edges. Delete dashed red styling and other semantic colors remain primary; hover adds emphasis only.
+On list or preview hover of a relationship operation, the hovered edge receives `mergePreviewHover.foreground` (plus focus/dim on siblings). Its `zIndex` rises from 0 to 1, the same step as a highlighted edge on the drawing canvas, so it paints above tables only while hovered. At rest, modified relationships stay on the same plane as the other edges, under the tables. Semantic add/modify/delete colors stay on hover; emphasis is stroke weight / shadow only, not neutral or pink cardinality markers.
+
+### M10.5.4 relationship readability polish
+
+Merge preview relationship paths and cardinality badges keep the **same size and weight as the editor canvas** (`!stroke-2`, marker `16×16` / radius `5`, muted glyph). Only the color changes (emerald / sky / amber / red). Delete relationships stay dashed. Hovering an added or deleted relationship uses the pointer cursor and raises that edge; leaving it restores the previous z-order. Normal editor cardinalities are unchanged.
+
+Relationship **Merge indicators** (`+` / `−` / modify bubble) have **no tooltip** in preview (`showTooltip={false}` on `RelationshipEdge`); `aria-label` remains for accessibility. Table and field preview indicators keep tooltips.
+
+`computeMergePreviewIndicatorPosition()` pushes the indicator farther along the edge normal when the midpoint lane would sit within `MERGE_PREVIEW_CARDINALITY_CLEARANCE` of a cardinality anchor. Paths and cardinality placement are not rerouted.
+
+**Stability:** Merge preview must not change generic `RelationshipEdge` path routing (table-side / corner routing). Preview-only styling and indicator placement live in merge metadata and overlay helpers.
 
 ### M10.5.1 rename-aware relationship endpoints
 

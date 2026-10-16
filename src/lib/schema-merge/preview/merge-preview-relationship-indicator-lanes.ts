@@ -79,3 +79,95 @@ export const assignRelationshipIndicatorLanes = (
 
     return lanes;
 };
+
+export const MERGE_PREVIEW_INDICATOR_SIZE = 20;
+export const MERGE_PREVIEW_INDICATOR_LANE_SPACING = 14;
+/** Minimum center-to-center distance between Merge indicator and cardinality anchors. */
+export const MERGE_PREVIEW_CARDINALITY_CLEARANCE = 30;
+
+export interface MergePreviewIndicatorPositionInput {
+    readonly edgeMidpoint: { readonly x: number; readonly y: number };
+    readonly sourceAnchor: { readonly x: number; readonly y: number };
+    readonly targetAnchor: { readonly x: number; readonly y: number };
+    readonly sourceX: number;
+    readonly sourceY: number;
+    readonly targetX: number;
+    readonly targetY: number;
+    readonly indicatorLane: number;
+    readonly indicatorSize?: number;
+    readonly laneSpacing?: number;
+    readonly minCardinalityClearance?: number;
+}
+
+const indicatorCenterClearance = (
+    centerX: number,
+    centerY: number,
+    sourceAnchor: { x: number; y: number },
+    targetAnchor: { x: number; y: number },
+    minClearance: number
+): boolean => {
+    const distSource = Math.hypot(
+        centerX - sourceAnchor.x,
+        centerY - sourceAnchor.y
+    );
+    const distTarget = Math.hypot(
+        centerX - targetAnchor.x,
+        centerY - targetAnchor.y
+    );
+
+    return distSource >= minClearance && distTarget >= minClearance;
+};
+
+/**
+ * Places the Merge relationship indicator along the edge normal with lane offset,
+ * pushing farther along the normal when the indicator would sit on a cardinality badge.
+ */
+export const computeMergePreviewIndicatorPosition = (
+    input: MergePreviewIndicatorPositionInput
+): { x: number; y: number } => {
+    const indicatorSize = input.indicatorSize ?? MERGE_PREVIEW_INDICATOR_SIZE;
+    const laneSpacing =
+        input.laneSpacing ?? MERGE_PREVIEW_INDICATOR_LANE_SPACING;
+    const minClearance =
+        input.minCardinalityClearance ?? MERGE_PREVIEW_CARDINALITY_CLEARANCE;
+
+    const dx = input.targetX - input.sourceX;
+    const dy = input.targetY - input.sourceY;
+    const length = Math.hypot(dx, dy) || 1;
+    const normalX = -dy / length;
+    const normalY = dx / length;
+
+    let laneOffset = input.indicatorLane * laneSpacing;
+    const step =
+        laneOffset === 0
+            ? laneSpacing
+            : laneOffset > 0
+              ? laneSpacing
+              : -laneSpacing;
+
+    let centerX = input.edgeMidpoint.x + normalX * laneOffset;
+    let centerY = input.edgeMidpoint.y + normalY * laneOffset;
+
+    for (let attempt = 0; attempt < 12; attempt++) {
+        if (
+            indicatorCenterClearance(
+                centerX,
+                centerY,
+                input.sourceAnchor,
+                input.targetAnchor,
+                minClearance
+            )
+        ) {
+            break;
+        }
+
+        laneOffset += step;
+        centerX = input.edgeMidpoint.x + normalX * laneOffset;
+        centerY = input.edgeMidpoint.y + normalY * laneOffset;
+    }
+
+    return {
+        x: centerX - indicatorSize / 2,
+        y: centerY - indicatorSize / 2,
+    };
+};

@@ -11,11 +11,16 @@ import { useTranslation } from 'react-i18next';
 
 const toPercentage = (value: number): string => `${Math.round(value * 100)}%`;
 
+export const MERGE_PREVIEW_FIT_VIEW = {
+    padding: 0.1,
+    maxZoom: 0.8,
+    duration: 200,
+} as const;
+
 export const MergePreviewControls: React.FC = () => {
     const { t } = useTranslation();
     const { zoomIn, zoomOut, fitView, getZoom } = useReactFlow();
     const [zoomLabel, setZoomLabel] = useState(() => toPercentage(getZoom()));
-    const zoomDuration = 200;
 
     useOnViewportChange({
         onChange: ({ zoom }) => {
@@ -24,15 +29,15 @@ export const MergePreviewControls: React.FC = () => {
     });
 
     const handleZoomIn = useCallback(() => {
-        zoomIn({ duration: zoomDuration });
+        zoomIn({ duration: MERGE_PREVIEW_FIT_VIEW.duration });
     }, [zoomIn]);
 
     const handleZoomOut = useCallback(() => {
-        zoomOut({ duration: zoomDuration });
+        zoomOut({ duration: MERGE_PREVIEW_FIT_VIEW.duration });
     }, [zoomOut]);
 
     const handleFitView = useCallback(() => {
-        fitView({ padding: 0.1, maxZoom: 0.8, duration: zoomDuration });
+        fitView(MERGE_PREVIEW_FIT_VIEW);
     }, [fitView]);
 
     return (

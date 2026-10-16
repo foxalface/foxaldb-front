@@ -16,6 +16,8 @@ export const MERGE_CHANGE_VISUAL: Record<
         readonly fieldNameClassName: string;
         readonly edgeStrokeClassName: string;
         readonly edgeDashed: boolean;
+        readonly cardinalityMarkerCircleClassName: string;
+        readonly cardinalityMarkerTextClassName: string;
     }
 > = {
     add: {
@@ -31,6 +33,9 @@ export const MERGE_CHANGE_VISUAL: Record<
         fieldNameClassName: 'text-emerald-900 dark:text-emerald-200',
         edgeStrokeClassName: '!stroke-emerald-500 dark:!stroke-emerald-400',
         edgeDashed: false,
+        cardinalityMarkerCircleClassName:
+            'fill-emerald-500 dark:fill-emerald-400 stroke-background stroke-[0.5]',
+        cardinalityMarkerTextClassName: 'fill-muted',
     },
     modify: {
         icon: Pencil,
@@ -45,6 +50,9 @@ export const MERGE_CHANGE_VISUAL: Record<
         fieldNameClassName: 'text-sky-900 dark:text-sky-200',
         edgeStrokeClassName: '!stroke-sky-500 dark:!stroke-sky-400',
         edgeDashed: false,
+        cardinalityMarkerCircleClassName:
+            'fill-sky-500 dark:fill-sky-400 stroke-background stroke-[0.5]',
+        cardinalityMarkerTextClassName: 'fill-muted',
     },
     rename: {
         icon: ArrowRight,
@@ -59,6 +67,9 @@ export const MERGE_CHANGE_VISUAL: Record<
         fieldNameClassName: 'text-amber-900 dark:text-amber-200',
         edgeStrokeClassName: '!stroke-amber-500 dark:!stroke-amber-400',
         edgeDashed: false,
+        cardinalityMarkerCircleClassName:
+            'fill-amber-500 dark:fill-amber-400 stroke-background stroke-[0.5]',
+        cardinalityMarkerTextClassName: 'fill-muted',
     },
     delete: {
         icon: Minus,
@@ -73,6 +84,9 @@ export const MERGE_CHANGE_VISUAL: Record<
         fieldNameClassName: 'text-red-900 line-through dark:text-red-200',
         edgeStrokeClassName: '!stroke-red-500 dark:!stroke-red-400',
         edgeDashed: true,
+        cardinalityMarkerCircleClassName:
+            'fill-red-500 dark:fill-red-400 stroke-background stroke-[0.5]',
+        cardinalityMarkerTextClassName: 'fill-muted',
     },
 };
 
@@ -121,12 +135,53 @@ export const MERGE_PREVIEW_FIELD_FOCUS_CLASS =
     'ring-1 ring-inset ring-primary/80 bg-primary/10 dark:bg-primary/15';
 
 export const MERGE_PREVIEW_EDGE_FOCUS_CLASS =
-    '!stroke-[4px] !drop-shadow-[0_0_6px_rgba(59,130,246,0.45)]';
+    '!drop-shadow-[0_0_6px_rgba(59,130,246,0.45)]';
 
 export const MERGE_PREVIEW_EDGE_DIM_CLASS = 'opacity-45';
 
-export const MERGE_PREVIEW_EDGE_FOREGROUND_CLASS =
-    '!stroke-[3px] drop-shadow-sm';
+export const MERGE_PREVIEW_EDGE_FOREGROUND_CLASS = 'drop-shadow-sm';
+
+export const MERGE_PREVIEW_CARDINALITY_FOREGROUND_CLASS =
+    '[&_circle]:stroke-[1px] [&_circle]:drop-shadow-sm';
+
+export const getMergePreviewCardinalityMarkerClasses = (
+    change: MergeChangeVisual
+): { circle: string; text: string } => {
+    const visual = MERGE_CHANGE_VISUAL[change];
+    return {
+        circle: visual.cardinalityMarkerCircleClassName,
+        text: visual.cardinalityMarkerTextClassName,
+    };
+};
+
+export const getMergePreviewRelationshipOverlayClasses = (
+    change: MergeChangeVisual | undefined,
+    foreground: boolean
+): {
+    edgeStroke: string;
+    cardinalityForeground: string;
+    indicatorClassName: string;
+} => {
+    if (!change) {
+        return {
+            edgeStroke: '',
+            cardinalityForeground: '',
+            indicatorClassName: '',
+        };
+    }
+
+    const visual = MERGE_CHANGE_VISUAL[change];
+    return {
+        edgeStroke: visual.edgeStrokeClassName,
+        cardinalityForeground: foreground
+            ? MERGE_PREVIEW_CARDINALITY_FOREGROUND_CLASS
+            : '',
+        indicatorClassName: cn(
+            visual.textClassName,
+            foreground ? 'shadow-md ring-1 ring-background/80' : ''
+        ),
+    };
+};
 
 export const getMergePreviewEdgeClasses = (
     change: MergeChangeVisual | undefined,
@@ -142,8 +197,8 @@ export const getMergePreviewEdgeClasses = (
 
     const visual = MERGE_CHANGE_VISUAL[change];
     return {
-        stroke: cn('!stroke-[3px]', visual.edgeStrokeClassName),
+        stroke: cn('!stroke-2', visual.edgeStrokeClassName),
         dashed: visual.edgeDashed,
-        opacity: change === 'delete' ? 0.85 : 1,
+        opacity: 1,
     };
 };
