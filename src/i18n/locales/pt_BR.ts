@@ -2051,9 +2051,13 @@ export const pt_BR: LanguageTranslation = {
             },
             result: {
                 summary: 'Revise as alterações antes de mesclar.',
+                change_legend_aria: 'Legenda dos ícones de alteração',
+                change_legend_title: 'Legenda',
+                operation_detail_aria: 'Detalhes da alteração',
                 changes: 'Alterações',
                 preview: 'Pré-visualização',
                 no_differences: 'Nenhuma diferença encontrada',
+                done: 'Concluir',
                 views_not_compared:
                     'Este formato de origem não permite comparar visões de forma confiável.',
                 analysis_error: 'Não foi possível revisar esta comparação.',

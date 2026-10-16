@@ -2023,9 +2023,13 @@ export const ru: LanguageTranslation = {
             },
             result: {
                 summary: 'Проверьте изменения перед объединением.',
+                change_legend_aria: 'Обозначения значков изменений',
+                change_legend_title: 'Обозначения',
+                operation_detail_aria: 'Подробности изменения',
                 changes: 'Изменения',
                 preview: 'Предпросмотр',
                 no_differences: 'Различий не найдено',
+                done: 'Готово',
                 views_not_compared:
                     'Этот формат источника не позволяет надёжно сравнивать представления.',
                 analysis_error: 'Не удалось просмотреть это сравнение.',

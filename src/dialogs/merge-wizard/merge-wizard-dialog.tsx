@@ -581,6 +581,10 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         ]
     );
 
+    const resultEmpty =
+        step === MergeWizardStep.RESULT &&
+        applyContext !== null &&
+        applyContext.response.operations.length === 0;
     const resultWithPreviewWorkspace =
         step === MergeWizardStep.RESULT &&
         applyContext !== null &&
@@ -602,7 +606,8 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
             <DialogContent
                 className={mergeWizardDialogContentClassName(
                     step === MergeWizardStep.RESULT ? 'result' : 'source',
-                    resultWithPreviewWorkspace
+                    resultWithPreviewWorkspace,
+                    resultEmpty
                 )}
                 data-merge-wizard-step={step}
                 data-merge-result-workspace={
@@ -621,6 +626,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                                 defaultSchemas[currentDatabaseType] ?? null
                             }
                             onBack={handleBackToSource}
+                            onDone={closeMergeWizardDialog}
                             onMerge={handleApply}
                             isApplying={isApplying}
                             applyError={applyError}

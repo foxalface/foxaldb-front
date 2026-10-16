@@ -42,6 +42,25 @@ describe('diagram-flow-elements', () => {
         expect(node.id).toBe('t1');
         expect(node.position).toEqual({ x: 42, y: 99 });
         expect(node.data.table.name).toBe('users');
+        expect(node.style?.pointerEvents).toBeUndefined();
+    });
+
+    it('keeps pointer events on a merge preview table so hover can reach it', () => {
+        const node = tableToTableNode(table('t1', 'users'), {
+            databaseType: DatabaseType.POSTGRESQL,
+            filterLoading: false,
+            forceShow: true,
+            mergePreview: [
+                {
+                    entityKind: 'field',
+                    entityId: 'f1',
+                    change: 'add',
+                    operationId: 'op-field',
+                },
+            ],
+        });
+
+        expect(node.style?.pointerEvents).toBe('all');
     });
 
     it('maps a view through table node data', () => {

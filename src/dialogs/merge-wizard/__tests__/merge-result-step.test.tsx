@@ -72,7 +72,8 @@ const table = (
 const renderResult = (
     operations: DiffOperation[],
     viewsCompared = true,
-    onBack = vi.fn()
+    onBack = vi.fn(),
+    onDone = vi.fn()
 ) => {
     const applyContext: MergeWizardApplyContext = {
         baseDiagram,
@@ -97,6 +98,7 @@ const renderResult = (
                             applyContext={applyContext}
                             defaultSchema="public"
                             onBack={onBack}
+                            onDone={onDone}
                             onMerge={vi.fn()}
                             isApplying={false}
                             applyError={null}
@@ -108,7 +110,7 @@ const renderResult = (
         </ThemeProvider>
     );
 
-    return { ...view, onBack };
+    return { ...view, onBack, onDone };
 };
 
 const mixed = (): DiffOperation[] => [
@@ -303,7 +305,7 @@ describe('Merge result step', () => {
     });
 
     it('renders a no-differences state without checkboxes or preview', async () => {
-        const { onBack } = renderResult([], false);
+        const { onBack, onDone } = renderResult([], false);
 
         expect(
             screen.getByText('merge_wizard.result.no_differences')
@@ -322,9 +324,15 @@ describe('Merge result step', () => {
             'data-preview-workspace',
             'false'
         );
+        expect(screen.getByTestId('merge-result-empty')).toBeInTheDocument();
         expect(
-            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
-        ).toBeDisabled();
+            screen.queryByRole('button', { name: /merge_wizard.result.merge/ })
+        ).not.toBeInTheDocument();
+
+        await userEvent.click(
+            screen.getByRole('button', { name: 'merge_wizard.result.done' })
+        );
+        expect(onDone).toHaveBeenCalledTimes(1);
 
         await userEvent.click(
             screen.getByRole('button', { name: 'new_diagram_dialog.back' })
@@ -334,15 +342,24 @@ describe('Merge result step', () => {
 
     it('renders add, modify, rename, and delete rows without internal ids', () => {
         renderResult(mixed());
-        const text = document.body.textContent ?? '';
 
         expect(
             screen.getByText('merge_wizard.result.entity.table name:invoices')
         ).toBeInTheDocument();
         expect(screen.getByText('users.email')).toBeInTheDocument();
+
+        const emailRow = screen.getByTestId(
+            'merge-result-row-opaque-field-modify'
+        );
         expect(
-            screen.getByText('varchar(100) → varchar(255)')
+            within(emailRow).queryByText('varchar(100) → varchar(255)')
+        ).not.toBeInTheDocument();
+        expect(
+            within(emailRow).getByLabelText(
+                'merge_wizard.result.operation_detail_aria'
+            )
         ).toBeInTheDocument();
+
         expect(screen.getByText('users → accounts')).toBeInTheDocument();
         expect(screen.getByText('users.name → full_name')).toBeInTheDocument();
         expect(
@@ -354,30 +371,48 @@ describe('Merge result step', () => {
             )
         ).toBeInTheDocument();
         expect(screen.getByText('posts.legacy_code')).toBeInTheDocument();
-        expect(text).toContain('merge_wizard.result.attributes.indexes');
-        expect(text).toContain('merge_wizard.result.attributes.checks');
-        expect(text).not.toContain('posts_legacy_idx');
-        expect(text).not.toContain('legacy_code is not null');
-        expect(text).not.toContain('opaque-table-add');
-        expect(text).not.toContain('opaque-field-entity');
-        expect(text).not.toContain('opaque-relationship-entity');
-        expect(text).not.toContain('{');
+
+        const tableModifyRow = screen.getByTestId(
+            'merge-result-row-opaque-table-modify'
+        );
+        expect(
+            within(tableModifyRow).getByLabelText(
+                'merge_wizard.result.operation_detail_aria'
+            )
+        ).toBeInTheDocument();
+        const tableModifyText = within(tableModifyRow).textContent ?? '';
+        expect(tableModifyText).not.toContain(
+            'merge_wizard.result.attributes.indexes'
+        );
+        expect(tableModifyText).not.toContain(
+            'merge_wizard.result.attributes.checks'
+        );
+        const changesViewport = screen
+            .getByTestId('merge-result-changes-scroll')
+            .querySelector('[data-radix-scroll-area-viewport]');
+        const changesText = changesViewport?.textContent ?? '';
+        expect(changesText).not.toContain('posts_legacy_idx');
+        expect(changesText).not.toContain('legacy_code is not null');
+        expect(changesText).not.toContain('opaque-table-add');
+        expect(changesText).not.toContain('opaque-field-entity');
+        expect(changesText).not.toContain('opaque-relationship-entity');
+        expect(changesText).not.toContain('{');
         expect(
             screen.getByRole('checkbox', {
                 name: /from:users.name to:full_name/,
             })
         ).toBeInTheDocument();
         expect(
-            screen.getAllByText('merge_wizard.result.change.add').length
+            screen.getAllByLabelText('merge_wizard.result.change.add').length
         ).toBeGreaterThan(0);
         expect(
-            screen.getAllByText('merge_wizard.result.change.modify').length
+            screen.getAllByLabelText('merge_wizard.result.change.modify').length
         ).toBeGreaterThan(0);
         expect(
-            screen.getAllByText('merge_wizard.result.change.rename').length
+            screen.getAllByLabelText('merge_wizard.result.change.rename').length
         ).toBeGreaterThan(0);
         expect(
-            screen.getAllByText('merge_wizard.result.change.delete').length
+            screen.getAllByLabelText('merge_wizard.result.change.delete').length
         ).toBeGreaterThan(0);
     });
 
@@ -521,6 +556,7 @@ describe('Merge result step', () => {
                                 applyContext={applyContext}
                                 defaultSchema="public"
                                 onBack={vi.fn()}
+                                onDone={vi.fn()}
                                 onMerge={vi.fn()}
                                 isApplying
                                 applyError={null}

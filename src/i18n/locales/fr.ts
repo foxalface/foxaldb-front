@@ -2057,9 +2057,13 @@ export const fr: LanguageTranslation = {
             },
             result: {
                 summary: 'Vérifiez les modifications avant de fusionner.',
+                change_legend_aria: 'Légende des icônes de modification',
+                change_legend_title: 'Légendes',
+                operation_detail_aria: 'Détails de la modification',
                 changes: 'Modifications',
                 preview: 'Aperçu',
                 no_differences: 'Aucune différence trouvée',
+                done: 'Terminer',
                 views_not_compared:
                     'Ce format de source ne permet pas une comparaison fiable des vues.',
                 analysis_error: 'Impossible d’examiner cette comparaison.',

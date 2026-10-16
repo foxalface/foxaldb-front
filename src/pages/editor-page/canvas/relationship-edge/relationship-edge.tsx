@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import type { Edge, EdgeProps } from '@xyflow/react';
 import {
@@ -26,6 +26,7 @@ import {
 import { computeMergePreviewIndicatorPosition } from '@/lib/schema-merge/preview/merge-preview-relationship-indicator-lanes';
 import type { MergePreviewEdgeHoverFlags } from '../diagram-flow-elements';
 import { MergePreviewChangeIndicator } from '../merge-preview-change-indicator';
+import { resolveRelationshipPreviewHover } from '@/dialogs/merge-wizard/merge-preview-decoration-maps';
 import { useMergePreviewHighlight } from '@/dialogs/merge-wizard/use-merge-preview-highlight';
 
 const MERGE_PREVIEW_INDICATOR_SIZE = 20;
@@ -366,8 +367,27 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
             const mergePreviewOperationId = data?.mergePreview?.operationId;
             const mergePreviewIndicatorLane =
                 data?.mergePreview?.indicatorLane ?? 0;
-            const mergePreviewHover = data?.mergePreviewHover;
             const mergePreviewHighlight = useMergePreviewHighlight();
+            const mergePreviewHover =
+                data?.mergePreviewHover ??
+                resolveRelationshipPreviewHover(
+                    relationship?.id ?? '',
+                    mergePreviewHighlight?.highlightTarget
+                );
+
+            useEffect(() => {
+                if (!mergePreviewChange) {
+                    return;
+                }
+
+                const path = document.getElementById(id);
+                const edge = path?.closest('.react-flow__edge');
+                if (!(edge instanceof HTMLElement)) {
+                    return;
+                }
+
+                edge.style.zIndex = mergePreviewHover?.foreground ? '1' : '0';
+            }, [id, mergePreviewChange, mergePreviewHover?.foreground]);
 
             const bindPreviewHighlight = useCallback(() => {
                 if (readonly && mergePreviewOperationId) {
@@ -607,6 +627,9 @@ export const RelationshipEdge: React.FC<EdgeProps<RelationshipEdgeType>> =
                                 'overflow-visible',
                                 mergePreviewHover?.foreground
                                     ? 'merge-preview-rel-foreground'
+                                    : '',
+                                mergePreviewHover?.dimmed
+                                    ? MERGE_PREVIEW_EDGE_DIM_CLASS
                                     : ''
                             )}
                             style={{

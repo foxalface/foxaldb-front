@@ -57,78 +57,105 @@ export const MergeResultSection: React.FC<{
     return (
         <AccordionItem
             value={category}
+            className="border-none"
             data-testid={`merge-result-section-${category}`}
         >
-            <div className="flex items-center gap-2">
-                {selectable ? (
-                    <Checkbox
-                        checked={sectionState}
-                        disabled={disabled}
-                        aria-label={text(
-                            'merge_wizard.result.select_all_section',
-                            { section: title }
+            <div className="w-full rounded-md border border-border">
+                <div className="relative w-full hover:bg-accent">
+                    <div className="w-full min-w-0 [&>h3]:w-full [&>h3]:min-w-0">
+                        <AccordionTrigger className="w-full justify-start gap-3 py-2 pl-10 pr-2 hover:bg-transparent hover:no-underline data-[state=open]:rounded-b-none">
+                            <div className="flex min-w-0 flex-1 items-center gap-2">
+                                <span className="min-w-0 flex-1 text-left text-sm font-medium">
+                                    {title}
+                                </span>
+                                <span className="shrink-0 tabular-nums text-muted-foreground">
+                                    {text('merge_wizard.result.counter', {
+                                        selected: operations.filter(
+                                            (operation) =>
+                                                selected.has(operation.id)
+                                        ).length,
+                                        total: operations.length,
+                                    })}
+                                </span>
+                            </div>
+                        </AccordionTrigger>
+                    </div>
+                    <div className="pointer-events-none absolute inset-y-0 left-0 z-10 flex items-center pl-2">
+                        {selectable ? (
+                            <Checkbox
+                                className="pointer-events-auto shrink-0"
+                                checked={sectionState}
+                                disabled={disabled}
+                                aria-label={text(
+                                    'merge_wizard.result.select_all_section',
+                                    { section: title }
+                                )}
+                                onPointerDown={(event) => {
+                                    event.stopPropagation();
+                                }}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                }}
+                                onKeyDown={(event) => {
+                                    event.stopPropagation();
+                                }}
+                                onCheckedChange={() => {
+                                    onToggleSection();
+                                }}
+                            />
+                        ) : (
+                            <span className="size-4 shrink-0" />
                         )}
-                        onCheckedChange={() => {
-                            onToggleSection();
-                        }}
-                    />
-                ) : (
-                    <span className="size-4 shrink-0" aria-hidden />
-                )}
-                <AccordionTrigger className="py-2 hover:no-underline">
-                    <span className="flex min-w-0 flex-1 items-center justify-between gap-3">
-                        <span>{title}</span>
-                        <span className="shrink-0 tabular-nums text-muted-foreground">
-                            {text('merge_wizard.result.counter', {
-                                selected: operations.filter((operation) =>
-                                    selected.has(operation.id)
-                                ).length,
-                                total: operations.length,
-                            })}
-                        </span>
-                    </span>
-                </AccordionTrigger>
+                    </div>
+                </div>
+                <AccordionContent className="px-2 pb-2 pt-0">
+                    {operations.length > 0 ? (
+                        <ul className="flex flex-col pl-6">
+                            {operations.map((operation) => (
+                                <li key={operation.id}>
+                                    <MergeResultRow
+                                        operation={operation}
+                                        selected={selected.has(operation.id)}
+                                        highlighted={
+                                            highlightedOperationId ===
+                                            operation.id
+                                        }
+                                        labelContext={labelContext}
+                                        text={text}
+                                        disabled={disabled}
+                                        onHighlight={() =>
+                                            onHighlightOperation?.(operation.id)
+                                        }
+                                        onClearHighlight={() =>
+                                            onClearHighlight?.()
+                                        }
+                                        onSelect={() =>
+                                            onToggleOperation(
+                                                operation.id,
+                                                true
+                                            )
+                                        }
+                                        onDeselect={() =>
+                                            onToggleOperation(
+                                                operation.id,
+                                                false
+                                            )
+                                        }
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="py-1 pl-6 text-sm text-muted-foreground">
+                            {text(
+                                viewsNotCompared
+                                    ? 'merge_wizard.result.views_not_compared'
+                                    : 'merge_wizard.result.empty_section'
+                            )}
+                        </p>
+                    )}
+                </AccordionContent>
             </div>
-            <AccordionContent className="pb-2 pl-6">
-                {operations.length > 0 ? (
-                    <ul className="flex flex-col">
-                        {operations.map((operation) => (
-                            <li key={operation.id}>
-                                <MergeResultRow
-                                    operation={operation}
-                                    selected={selected.has(operation.id)}
-                                    highlighted={
-                                        highlightedOperationId === operation.id
-                                    }
-                                    labelContext={labelContext}
-                                    text={text}
-                                    disabled={disabled}
-                                    onHighlight={() =>
-                                        onHighlightOperation?.(operation.id)
-                                    }
-                                    onClearHighlight={() =>
-                                        onClearHighlight?.()
-                                    }
-                                    onSelect={() =>
-                                        onToggleOperation(operation.id, true)
-                                    }
-                                    onDeselect={() =>
-                                        onToggleOperation(operation.id, false)
-                                    }
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p className="py-1 text-sm text-muted-foreground">
-                        {text(
-                            viewsNotCompared
-                                ? 'merge_wizard.result.views_not_compared'
-                                : 'merge_wizard.result.empty_section'
-                        )}
-                    </p>
-                )}
-            </AccordionContent>
         </AccordionItem>
     );
 };

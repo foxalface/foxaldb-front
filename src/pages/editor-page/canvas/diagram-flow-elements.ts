@@ -118,6 +118,9 @@ export const tableToTableNode = (
         },
         width: table.width ?? MIN_TABLE_SIZE,
         hidden,
+        // Preview nodes are not selectable or draggable, so React Flow sets
+        // pointer-events: none. Decorated tables must still receive hover.
+        ...(mergePreview ? { style: { pointerEvents: 'all' as const } } : {}),
     };
 };
 

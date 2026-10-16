@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import {
     WIZARD_DIALOG_CONTENT_BASE_CLASS,
+    WIZARD_DIALOG_NARROW_CLASS,
     WIZARD_DIALOG_SIZE_TRANSITION_CLASS,
     WIZARD_DIALOG_WIDE_CLASS,
 } from '@/dialogs/common/wizard-dialog-size';
@@ -11,12 +12,15 @@ export const MERGE_WIZARD_RESULT_WORKSPACE_CLASS =
 
 export const mergeWizardDialogContentClassName = (
     step: 'source' | 'result',
-    resultWithPreviewWorkspace: boolean
+    resultWithPreviewWorkspace: boolean,
+    resultEmpty = false
 ): string =>
     cn(
         WIZARD_DIALOG_CONTENT_BASE_CLASS,
         WIZARD_DIALOG_SIZE_TRANSITION_CLASS,
         step === 'result' && resultWithPreviewWorkspace
             ? MERGE_WIZARD_RESULT_WORKSPACE_CLASS
-            : WIZARD_DIALOG_WIDE_CLASS
+            : step === 'result' && resultEmpty
+              ? WIZARD_DIALOG_NARROW_CLASS
+              : WIZARD_DIALOG_WIDE_CLASS
     );

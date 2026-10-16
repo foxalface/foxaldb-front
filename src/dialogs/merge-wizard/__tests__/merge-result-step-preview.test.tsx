@@ -33,6 +33,7 @@ const renderResultStep = (
                             applyContext={applyContext}
                             defaultSchema="public"
                             onBack={vi.fn()}
+                            onDone={vi.fn()}
                             onMerge={onMerge}
                             isApplying={false}
                             applyError={null}
@@ -328,6 +329,7 @@ describe('MergeResultStep preview integration', () => {
             `merge-result-row-${operationIds.renameField}`
         );
         expect(row).toHaveAttribute('data-highlighted', 'true');
+        expect(row).toHaveClass('bg-muted/50');
         expect(screen.getByTestId('merge-wizard-result-step')).toHaveAttribute(
             'data-selected-count',
             String(applyContext.response.operations.length)
@@ -392,6 +394,7 @@ describe('MergeResultStep preview integration', () => {
                                 applyContext={applyContext}
                                 defaultSchema="public"
                                 onBack={vi.fn()}
+                                onDone={vi.fn()}
                                 onMerge={vi.fn()}
                                 isApplying
                                 applyError={null}

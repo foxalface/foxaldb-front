@@ -4,6 +4,7 @@ import type { Diagram } from '@/lib/domain/diagram';
 import {
     buildMergePreviewFlowDecorationMaps,
     buildMergePreviewHoverMaps,
+    resolveRelationshipPreviewHover,
 } from '../merge-preview-decoration-maps';
 
 const diagram: Diagram = {
@@ -100,6 +101,27 @@ describe('buildMergePreviewHoverMaps', () => {
             tableFocused: true,
             fieldFocusedId: 'f1',
         });
+    });
+
+    it('dims relationships when a table or field is highlighted', () => {
+        const maps = buildMergePreviewHoverMaps(diagram, {
+            tableId: 't1',
+            fieldId: 'f1',
+        });
+
+        expect(maps.mergePreviewHoverByRelationshipId.get('r1')).toEqual({
+            dimmed: true,
+        });
+        expect(
+            resolveRelationshipPreviewHover('r1', {
+                tableId: 't1',
+            })
+        ).toEqual({ dimmed: true });
+        expect(
+            resolveRelationshipPreviewHover('r1', {
+                relationshipId: 'r1',
+            })
+        ).toEqual({ focused: true, foreground: true });
     });
 
     it('focuses relationship edge and dims other edges', () => {

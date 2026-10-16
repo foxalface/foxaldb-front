@@ -2055,9 +2055,13 @@ export const ja: LanguageTranslation = {
             },
             result: {
                 summary: 'マージする前に変更内容を確認します。',
+                change_legend_aria: '変更アイコンの説明',
+                change_legend_title: '凡例',
+                operation_detail_aria: '変更の詳細',
                 changes: '変更',
                 preview: 'プレビュー',
                 no_differences: '差分はありません',
+                done: '完了',
                 views_not_compared:
                     'このソース形式ではビューを確実に比較できません。',
                 analysis_error: 'この比較を確認できませんでした。',

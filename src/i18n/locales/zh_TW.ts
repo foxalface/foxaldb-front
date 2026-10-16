@@ -1880,9 +1880,13 @@ export const zh_TW: LanguageTranslation = {
             },
             result: {
                 summary: '合併前請檢查這些變更。',
+                change_legend_aria: '變更圖示說明',
+                change_legend_title: '圖例',
+                operation_detail_aria: '變更詳情',
                 changes: '變更',
                 preview: '預覽',
                 no_differences: '未發現差異',
+                done: '完成',
                 views_not_compared: '此來源格式無法可靠地比較檢視。',
                 analysis_error: '無法檢視這次比較。',
                 empty_section: '沒有變更',

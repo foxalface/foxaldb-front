@@ -2020,9 +2020,13 @@ export const hr: LanguageTranslation = {
             },
             result: {
                 summary: 'Pregledajte promjene prije spajanja.',
+                change_legend_aria: 'Legenda simbola promjena',
+                change_legend_title: 'Legenda',
+                operation_detail_aria: 'Detalji promjene',
                 changes: 'Promjene',
                 preview: 'Pregled',
                 no_differences: 'Nema pronađenih razlika',
+                done: 'Završi',
                 views_not_compared:
                     'Ovaj oblik izvora ne omogućuje pouzdanu usporedbu pogleda.',
                 analysis_error: 'Ovu usporedbu nije moguće pregledati.',

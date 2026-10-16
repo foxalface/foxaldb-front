@@ -1997,9 +1997,13 @@ export const gu: LanguageTranslation = {
             },
             result: {
                 summary: 'મર્જ કરતા પહેલાં ફેરફારો તપાસો.',
+                change_legend_aria: 'ફેરફારના ચિહ્નોની માહિતી',
+                change_legend_title: 'સંકેતો',
+                operation_detail_aria: 'ફેરફારની વિગતો',
                 changes: 'ફેરફારો',
                 preview: 'પૂર્વાવલોકન',
                 no_differences: 'કોઈ તફાવત મળ્યો નથી',
+                done: 'પૂર્ણ કરો',
                 views_not_compared:
                     'આ સ્રોત ફોર્મેટ વ્યૂની વિશ્વસનીય તુલના કરી શકતું નથી.',
                 analysis_error: 'આ તુલના તપાસી શકાઈ નથી.',

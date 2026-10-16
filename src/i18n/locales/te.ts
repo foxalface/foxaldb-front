@@ -2036,9 +2036,13 @@ export const te: LanguageTranslation = {
             },
             result: {
                 summary: 'విలీనం చేయడానికి ముందు మార్పులను సమీక్షించండి.',
+                change_legend_aria: 'మార్పు చిహ్నాల వివరణ',
+                change_legend_title: 'సూచికలు',
+                operation_detail_aria: 'మార్పు వివరాలు',
                 changes: 'మార్పులు',
                 preview: 'ప్రివ్యూ',
                 no_differences: 'తేడాలు కనుగొనబడలేదు',
+                done: 'పూర్తి చేయండి',
                 views_not_compared: 'ఈ మూల ఆకృతి వీక్షణలను నమ్మకంగా పోల్చలేదు.',
                 analysis_error: 'ఈ పోలికను సమీక్షించలేకపోయాం.',
                 empty_section: 'మార్పులు లేవు',

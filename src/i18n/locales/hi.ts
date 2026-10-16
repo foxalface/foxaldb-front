@@ -2017,9 +2017,13 @@ export const hi: LanguageTranslation = {
             },
             result: {
                 summary: 'मर्ज करने से पहले बदलाव देखें।',
+                change_legend_aria: 'परिवर्तन चिह्नों की व्याख्या',
+                change_legend_title: 'चिह्न',
+                operation_detail_aria: 'परिवर्तन का विवरण',
                 changes: 'परिवर्तन',
                 preview: 'पूर्वावलोकन',
                 no_differences: 'कोई अंतर नहीं मिला',
+                done: 'समाप्त करें',
                 views_not_compared:
                     'यह स्रोत प्रारूप दृश्यों की विश्वसनीय तुलना नहीं कर सकता।',
                 analysis_error: 'इस तुलना की समीक्षा नहीं हो सकी।',

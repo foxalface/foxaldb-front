@@ -2017,9 +2017,13 @@ export const mr: LanguageTranslation = {
             },
             result: {
                 summary: 'विलीन करण्यापूर्वी बदल तपासा.',
+                change_legend_aria: 'बदल चिन्हांचे स्पष्टीकरण',
+                change_legend_title: 'सूची',
+                operation_detail_aria: 'बदलाचे तपशील',
                 changes: 'बदल',
                 preview: 'पूर्वावलोकन',
                 no_differences: 'कोणताही फरक आढळला नाही',
+                done: 'पूर्ण करा',
                 views_not_compared:
                     'या स्रोत स्वरूपात दृश्यांची विश्वसनीय तुलना होऊ शकत नाही.',
                 analysis_error: 'ही तुलना तपासता आली नाही.',

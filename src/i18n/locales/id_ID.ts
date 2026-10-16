@@ -2024,9 +2024,13 @@ export const id_ID: LanguageTranslation = {
             },
             result: {
                 summary: 'Tinjau perubahan sebelum menggabungkan.',
+                change_legend_aria: 'Keterangan ikon perubahan',
+                change_legend_title: 'Legenda',
+                operation_detail_aria: 'Detail perubahan',
                 changes: 'Perubahan',
                 preview: 'Pratinjau',
                 no_differences: 'Tidak ada perbedaan',
+                done: 'Selesai',
                 views_not_compared:
                     'Format sumber ini tidak dapat membandingkan tampilan secara andal.',
                 analysis_error: 'Perbandingan ini tidak dapat ditinjau.',

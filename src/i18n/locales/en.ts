@@ -2015,9 +2015,13 @@ export const en = {
             },
             result: {
                 summary: 'Review the changes before merging.',
+                change_legend_aria: 'Change icon legend',
+                change_legend_title: 'Legend',
+                operation_detail_aria: 'Change details',
                 changes: 'Changes',
                 preview: 'Preview',
                 no_differences: 'No differences found',
+                done: 'Done',
                 views_not_compared:
                     'This source format does not support reliable view comparison.',
                 analysis_error: 'This comparison could not be reviewed.',

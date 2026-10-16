@@ -5,6 +5,7 @@ import type { DiffOperation } from '@/lib/schema-merge/diff-types';
 import { formatMergeOperationDetail } from './format-merge-change';
 import type { MergeText } from './format-merge-change';
 import { MergeChangeBadge } from './merge-change-badge';
+import { MergeOperationDetailInfo } from './merge-operation-detail-info';
 import {
     mergeOperationLabel,
     mergeOperationSelectLabel,
@@ -40,10 +41,8 @@ export const MergeResultRow: React.FC<{
     return (
         <div
             className={cn(
-                'flex items-start gap-2 rounded-sm py-1.5 pr-1 -mr-1 outline-none transition-colors',
-                highlighted && !selected
-                    ? 'bg-muted/70'
-                    : 'hover:bg-muted/50 focus-within:bg-muted/50'
+                'flex items-start gap-2 rounded-sm py-1.5 pr-1 -mr-1 outline-none transition-colors hover:bg-muted/50 focus-within:bg-muted/50',
+                highlighted && 'bg-muted/50'
             )}
             data-testid={`merge-result-row-${operation.id}`}
             data-highlighted={highlighted ? 'true' : 'false'}
@@ -77,14 +76,15 @@ export const MergeResultRow: React.FC<{
                 }}
             />
             <MergeChangeBadge type={operation.type} text={text} />
-            <div className="min-w-0 flex-1">
-                <p className="break-words text-sm leading-5" title={label}>
+            <div className="flex min-w-0 flex-1 items-center gap-1">
+                <p
+                    className="min-w-0 flex-1 break-words text-sm leading-5"
+                    title={label}
+                >
                     {label}
                 </p>
-                {detail ? (
-                    <p className="break-words text-xs leading-4 text-muted-foreground">
-                        {detail}
-                    </p>
+                {operation.type === 'modify' && detail ? (
+                    <MergeOperationDetailInfo detail={detail} text={text} />
                 ) : null}
             </div>
         </div>

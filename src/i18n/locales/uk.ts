@@ -2023,9 +2023,13 @@ export const uk: LanguageTranslation = {
             },
             result: {
                 summary: 'Перевірте зміни перед об’єднанням.',
+                change_legend_aria: 'Пояснення значків змін',
+                change_legend_title: 'Позначення',
+                operation_detail_aria: 'Деталі зміни',
                 changes: 'Зміни',
                 preview: 'Попередній перегляд',
                 no_differences: 'Відмінностей не знайдено',
+                done: 'Завершити',
                 views_not_compared:
                     'Цей формат джерела не дає надійно порівняти подання.',
                 analysis_error: 'Не вдалося переглянути це порівняння.',

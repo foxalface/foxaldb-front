@@ -2080,9 +2080,13 @@ export const de: LanguageTranslation = {
             },
             result: {
                 summary: 'Prüfe die Änderungen vor dem Zusammenführen.',
+                change_legend_aria: 'Legende der Änderungssymbole',
+                change_legend_title: 'Legende',
+                operation_detail_aria: 'Änderungsdetails',
                 changes: 'Änderungen',
                 preview: 'Vorschau',
                 no_differences: 'Keine Unterschiede gefunden',
+                done: 'Fertig',
                 views_not_compared:
                     'Dieses Quellformat erlaubt keinen verlässlichen Vergleich von Ansichten.',
                 analysis_error: 'Dieser Vergleich konnte nicht geprüft werden.',

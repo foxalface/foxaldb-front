@@ -1986,9 +1986,13 @@ export const ar: LanguageTranslation = {
             },
             result: {
                 summary: 'راجع التغييرات قبل الدمج.',
+                change_legend_aria: 'شرح رموز التغيير',
+                change_legend_title: 'المفتاح',
+                operation_detail_aria: 'تفاصيل التغيير',
                 changes: 'التغييرات',
                 preview: 'معاينة',
                 no_differences: 'لم يُعثر على أي اختلاف',
+                done: 'إنهاء',
                 views_not_compared:
                     'تنسيق المصدر هذا لا يسمح بمقارنة موثوقة للعروض.',
                 analysis_error: 'تعذر مراجعة هذه المقارنة.',

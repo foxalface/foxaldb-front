@@ -2007,9 +2007,13 @@ export const tr: LanguageTranslation = {
             },
             result: {
                 summary: 'Birleştirmeden önce değişiklikleri gözden geçirin.',
+                change_legend_aria: 'Değişiklik simgeleri açıklaması',
+                change_legend_title: 'Gösterge',
+                operation_detail_aria: 'Değişiklik ayrıntıları',
                 changes: 'Değişiklikler',
                 preview: 'Önizleme',
                 no_differences: 'Fark bulunamadı',
+                done: 'Bitir',
                 views_not_compared:
                     'Bu kaynak biçimi görünümleri güvenilir şekilde karşılaştıramaz.',
                 analysis_error: 'Bu karşılaştırma incelenemedi.',

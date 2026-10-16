@@ -2016,9 +2016,13 @@ export const ko_KR: LanguageTranslation = {
             },
             result: {
                 summary: '병합하기 전에 변경 내용을 검토하세요.',
+                change_legend_aria: '변경 아이콘 안내',
+                change_legend_title: '범례',
+                operation_detail_aria: '변경 세부 정보',
                 changes: '변경',
                 preview: '미리보기',
                 no_differences: '차이점이 없습니다',
+                done: '완료',
                 views_not_compared:
                     '이 원본 형식은 뷰를 안정적으로 비교할 수 없습니다.',
                 analysis_error: '이 비교를 검토할 수 없습니다.',

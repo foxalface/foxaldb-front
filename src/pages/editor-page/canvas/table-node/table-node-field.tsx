@@ -380,6 +380,7 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                 className={cn(
                     'group relative flex h-8 items-center justify-between gap-1 border-t px-3 text-sm last:rounded-b-[6px] hover:bg-slate-100 dark:hover:bg-slate-800',
                     'transition-all duration-200 ease-in-out',
+                    mergePreviewOperationId && 'cursor-pointer',
                     mergePreviewFieldClasses.row,
                     mergePreviewFieldFocused
                         ? MERGE_PREVIEW_FIELD_FOCUS_CLASS
@@ -413,8 +414,24 @@ export const TableNodeField: React.FC<TableNodeFieldProps> = React.memo(
                         );
                     }
                 }}
-                onMouseLeave={() => {
-                    mergePreviewHighlight?.onClearHighlight();
+                onMouseLeave={(event) => {
+                    if (!mergePreviewOperationId) {
+                        return;
+                    }
+
+                    const next = event.relatedTarget;
+                    const stayedOnModification =
+                        next instanceof Element &&
+                        Boolean(
+                            next.closest('[data-merge-preview-operation-id]')
+                        );
+                    if (stayedOnModification) {
+                        return;
+                    }
+
+                    mergePreviewHighlight?.onClearHighlight(
+                        mergePreviewOperationId
+                    );
                 }}
             >
                 {isConnectable ? (

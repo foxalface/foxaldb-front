@@ -2013,9 +2013,13 @@ export const bn: LanguageTranslation = {
             },
             result: {
                 summary: 'মার্জ করার আগে পরিবর্তনগুলো দেখে নিন।',
+                change_legend_aria: 'পরিবর্তনের চিহ্নের ব্যাখ্যা',
+                change_legend_title: 'চিহ্নিত ব্যাখ্যা',
+                operation_detail_aria: 'পরিবর্তনের বিবরণ',
                 changes: 'পরিবর্তন',
                 preview: 'প্রিভিউ',
                 no_differences: 'কোনো পার্থক্য পাওয়া যায়নি',
+                done: 'শেষ',
                 views_not_compared:
                     'এই উৎস ফরম্যাটে ভিউ নির্ভরযোগ্যভাবে তুলনা করা যায় না।',
                 analysis_error: 'এই তুলনাটি পর্যালোচনা করা যায়নি।',

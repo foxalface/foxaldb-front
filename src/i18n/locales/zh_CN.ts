@@ -1882,9 +1882,13 @@ export const zh_CN: LanguageTranslation = {
             },
             result: {
                 summary: '合并前请检查这些更改。',
+                change_legend_aria: '变更图标说明',
+                change_legend_title: '图例',
+                operation_detail_aria: '变更详情',
                 changes: '变更',
                 preview: '预览',
                 no_differences: '未发现差异',
+                done: '完成',
                 views_not_compared: '此源格式无法可靠地比较视图。',
                 analysis_error: '无法审阅此次比较。',
                 empty_section: '无更改',

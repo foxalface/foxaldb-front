@@ -46,6 +46,7 @@ import {
     resolveTableMergeChange,
     resolveTableMergeOperationId,
 } from '../merge-preview-node-utils';
+import { resolveTablePreviewHover } from '@/dialogs/merge-wizard/merge-preview-decoration-maps';
 import { useMergePreviewHighlight } from '@/dialogs/merge-wizard/use-merge-preview-highlight';
 import {
     getMergePreviewTableClasses,
@@ -112,10 +113,18 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             isRelationshipCreatingTarget,
             targetEdgeCounts,
             mergePreview,
-            mergePreviewHover,
+            mergePreviewHover: mergePreviewHoverFromNode,
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
+        const mergePreviewHighlight = useMergePreviewHighlight();
+        const mergePreviewHover =
+            mergePreviewHoverFromNode ??
+            resolveTablePreviewHover(
+                table.id,
+                mergePreviewHighlight?.highlightTarget,
+                relationships
+            );
         const edges = useStore((store) => store.edges);
         const {
             openTableFromSidebar,
@@ -194,7 +203,6 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             () => resolveTableMergeOperationId(mergePreview),
             [mergePreview]
         );
-        const mergePreviewHighlight = useMergePreviewHighlight();
         const mergePreviewTableClasses = useMemo(
             () => getMergePreviewTableClasses(tableMergeChange),
             [tableMergeChange]
@@ -534,8 +542,15 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     />
                 ) : null}
                 <div
-                    className={cn(tableClassName, 'relative')}
+                    className={cn(
+                        tableClassName,
+                        'relative',
+                        tableMergeOperationId && 'cursor-pointer'
+                    )}
                     data-merge-change={tableMergeChange ?? undefined}
+                    data-merge-preview-operation-id={
+                        tableMergeOperationId ?? undefined
+                    }
                     onClick={(e) => {
                         if (e.detail === 2 && !readonly) {
                             e.stopPropagation();
@@ -560,10 +575,28 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     onMouseEnter={() => {
                         setIsHovering(true);
                         setHoveringTableId(table.id);
+                        if (tableMergeOperationId) {
+                            mergePreviewHighlight?.onHighlightOperation(
+                                tableMergeOperationId
+                            );
+                        }
                     }}
-                    onMouseLeave={() => {
+                    onMouseLeave={(event) => {
                         setIsHovering(false);
                         setHoveringTableId(null);
+                        const next = event.relatedTarget;
+                        const stayedOnModification =
+                            next instanceof Element &&
+                            Boolean(
+                                next.closest(
+                                    '[data-merge-preview-operation-id]'
+                                )
+                            );
+                        if (!stayedOnModification && tableMergeOperationId) {
+                            mergePreviewHighlight?.onClearHighlight(
+                                tableMergeOperationId
+                            );
+                        }
                     }}
                 >
                     {hasRemoteSelection && !visualExportCaptureActive ? (
@@ -662,22 +695,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     </TooltipContent>
                                 </Tooltip>
                             ) : tableMergeChange ? (
-                                <span
-                                    className="inline-flex"
-                                    data-merge-preview-operation-id={
-                                        tableMergeOperationId ?? undefined
-                                    }
-                                    onMouseEnter={() => {
-                                        if (tableMergeOperationId) {
-                                            mergePreviewHighlight?.onHighlightOperation(
-                                                tableMergeOperationId
-                                            );
-                                        }
-                                    }}
-                                    onMouseLeave={() => {
-                                        mergePreviewHighlight?.onClearHighlight();
-                                    }}
-                                >
+                                <span className="inline-flex">
                                     <MergePreviewChangeIndicator
                                         change={tableMergeChange}
                                     />
@@ -756,21 +774,23 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                                     buttonClassName="p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
                                 />
                             ) : null}
-                            <Button
-                                variant="ghost"
-                                className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-                                onClick={
-                                    table.width !== MAX_TABLE_SIZE
-                                        ? expandTable
-                                        : shrinkTable
-                                }
-                            >
-                                {table.width !== MAX_TABLE_SIZE ? (
-                                    <ChevronsLeftRight className="size-4" />
-                                ) : (
-                                    <ChevronsRightLeft className="size-4" />
-                                )}
-                            </Button>
+                            {mergePreviewHighlight ? null : (
+                                <Button
+                                    variant="ghost"
+                                    className="size-6 p-0 text-slate-500 hover:bg-primary-foreground hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                                    onClick={
+                                        table.width !== MAX_TABLE_SIZE
+                                            ? expandTable
+                                            : shrinkTable
+                                    }
+                                >
+                                    {table.width !== MAX_TABLE_SIZE ? (
+                                        <ChevronsLeftRight className="size-4" />
+                                    ) : (
+                                        <ChevronsRightLeft className="size-4" />
+                                    )}
+                                </Button>
+                            )}
                         </div>
                     </div>
                     <div

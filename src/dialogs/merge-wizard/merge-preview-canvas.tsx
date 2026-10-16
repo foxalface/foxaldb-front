@@ -30,10 +30,7 @@ import {
     type DiagramFlowNodeType,
 } from '@/pages/editor-page/canvas/diagram-flow-elements';
 import { MarkerDefinitions } from '@/pages/editor-page/canvas/marker-definitions';
-import {
-    buildMergePreviewFlowDecorationMaps,
-    buildMergePreviewHoverMaps,
-} from './merge-preview-decoration-maps';
+import { buildMergePreviewFlowDecorationMaps } from './merge-preview-decoration-maps';
 import {
     MERGE_PREVIEW_FIT_VIEW,
     MergePreviewControls,
@@ -80,8 +77,7 @@ const MergePreviewCanvasFlow: React.FC<{
     diagram: Diagram;
     decorations: MergePreviewDecorations;
     layoutGeneration?: number;
-    highlightTarget?: MergePreviewHighlightTarget | null;
-}> = ({ diagram, decorations, layoutGeneration, highlightTarget }) => {
+}> = ({ diagram, decorations, layoutGeneration }) => {
     const { effectiveTheme } = useTheme();
     const { fitView } = useReactFlow();
     const nodesInitialized = useNodesInitialized();
@@ -111,11 +107,6 @@ const MergePreviewCanvasFlow: React.FC<{
         [diagram, decorations]
     );
 
-    const hoverMaps = useMemo(
-        () => buildMergePreviewHoverMaps(diagram, highlightTarget),
-        [diagram, highlightTarget]
-    );
-
     const flowElements = useMemo(
         () =>
             diagramToFlowElements(diagram, {
@@ -129,12 +120,8 @@ const MergePreviewCanvasFlow: React.FC<{
                 mergePreviewByTableId: decorationMaps.mergePreviewByTableId,
                 mergePreviewByRelationshipId:
                     decorationMaps.mergePreviewByRelationshipId,
-                mergePreviewHoverByTableId:
-                    hoverMaps.mergePreviewHoverByTableId,
-                mergePreviewHoverByRelationshipId:
-                    hoverMaps.mergePreviewHoverByRelationshipId,
             }),
-        [diagram, decorationMaps, hoverMaps]
+        [diagram, decorationMaps]
     );
 
     const [nodes, setNodes, onNodesChange] = useNodesState<DiagramFlowNodeType>(
@@ -286,13 +273,13 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
                                 onClearHighlight={
                                     highlightHandlers.onClearHighlight
                                 }
+                                highlightTarget={highlightTarget}
                             >
                                 <div className="size-full min-h-48">
                                     <MergePreviewCanvasFlow
                                         diagram={diagram}
                                         decorations={decorations}
                                         layoutGeneration={layoutGeneration}
-                                        highlightTarget={highlightTarget}
                                     />
                                 </div>
                             </MergePreviewHighlightProvider>
@@ -302,7 +289,6 @@ export const MergePreviewCanvas: React.FC<MergePreviewCanvasProps> = ({
                                     diagram={diagram}
                                     decorations={decorations}
                                     layoutGeneration={layoutGeneration}
-                                    highlightTarget={highlightTarget}
                                 />
                             </div>
                         )}

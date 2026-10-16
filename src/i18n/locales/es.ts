@@ -2055,9 +2055,13 @@ export const es: LanguageTranslation = {
             },
             result: {
                 summary: 'Revisa los cambios antes de fusionar.',
+                change_legend_aria: 'Leyenda de los iconos de cambio',
+                change_legend_title: 'Leyenda',
+                operation_detail_aria: 'Detalles del cambio',
                 changes: 'Cambios',
                 preview: 'Vista previa',
                 no_differences: 'No se encontraron diferencias',
+                done: 'Terminar',
                 views_not_compared:
                     'Este formato de origen no permite comparar vistas de forma fiable.',
                 analysis_error: 'No se pudo revisar esta comparación.',

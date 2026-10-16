@@ -1,10 +1,18 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { Alert, AlertDescription } from '@/components/alert/alert';
 import { Button } from '@/components/button/button';
+import { EmptyState } from '@/components/empty-state/empty-state';
+import { sidePanelEmptyStateIcon } from '@/components/side-panel-empty-state/side-panel-empty-state';
 import { Accordion } from '@/components/accordion/accordion';
+import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { Spinner } from '@/components/spinner/spinner';
 import {
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -18,6 +26,7 @@ import { resolvePreviewHighlightTarget } from '@/lib/schema-merge/preview/resolv
 import { useTranslation } from 'react-i18next';
 import type { MergeText } from './format-merge-change';
 import { buildMergeLabelContext } from './merge-operation-label';
+import { MergeChangeLegend } from './merge-change-legend';
 import { MergePreviewCanvas } from './merge-preview-canvas';
 import { MergeResultSection } from './merge-result-section';
 import type { SchemaMergeApplyFailure } from '@/lib/api/schema-merge-apply';
@@ -27,6 +36,41 @@ import type { MergeWizardApplyContext } from './merge-wizard-apply-context';
 import { useMergeOperationSelection } from './use-merge-operation-selection';
 
 const MERGE_PREVIEW_OPERATION_ATTR = 'data-merge-preview-operation-id';
+
+const scrollHighlightedMergeRowIntoView = (operationId: string): void => {
+    const row = document.querySelector(
+        `[data-testid="merge-result-row-${CSS.escape(operationId)}"]`
+    );
+    const scrollRoot = row?.closest(
+        '[data-testid="merge-result-changes-scroll"]'
+    );
+    const scroll =
+        scrollRoot instanceof HTMLElement
+            ? (scrollRoot.querySelector('[data-radix-scroll-area-viewport]') ??
+              scrollRoot)
+            : null;
+
+    if (
+        !(row instanceof HTMLElement) ||
+        !(scroll instanceof HTMLElement) ||
+        row.matches(':hover')
+    ) {
+        return;
+    }
+
+    const rowRect = row.getBoundingClientRect();
+    const scrollRect = scroll.getBoundingClientRect();
+
+    if (rowRect.height === 0 || scrollRect.height === 0) {
+        return;
+    }
+
+    if (rowRect.top < scrollRect.top) {
+        scroll.scrollTop -= scrollRect.top - rowRect.top;
+    } else if (rowRect.bottom > scrollRect.bottom) {
+        scroll.scrollTop += rowRect.bottom - scrollRect.bottom;
+    }
+};
 const MERGE_PREVIEW_HIT_PATH_SELECTOR = `path.react-flow__edge-interaction[${MERGE_PREVIEW_OPERATION_ATTR}]`;
 
 const operationIdAlongRelationshipStroke = (
@@ -107,6 +151,7 @@ export const MergeResultStep: React.FC<{
     applyContext: MergeWizardApplyContext;
     defaultSchema: string | null;
     onBack: () => void;
+    onDone: () => void;
     onMerge: (selectedOperationIds: readonly string[]) => void;
     isApplying: boolean;
     applyError: SchemaMergeApplyFailure | null;
@@ -115,6 +160,7 @@ export const MergeResultStep: React.FC<{
     applyContext,
     defaultSchema,
     onBack,
+    onDone,
     onMerge,
     isApplying,
     applyError,
@@ -159,7 +205,8 @@ export const MergeResultStep: React.FC<{
             );
             let operationId = edge
                 ? (markedId ?? edgeId)
-                : operationIdUnderPointer(event.clientX, event.clientY);
+                : (markedId ??
+                  operationIdUnderPointer(event.clientX, event.clientY));
             if (!operationId && !pointerOnTable) {
                 operationId = operationIdAlongRelationshipStroke(
                     event.clientX,
@@ -244,11 +291,19 @@ export const MergeResultStep: React.FC<{
         );
     }, [highlightedOperationId, operations, previewProjection]);
 
+    useEffect(() => {
+        if (!highlightedOperationId) {
+            return;
+        }
+
+        scrollHighlightedMergeRowIntoView(highlightedOperationId);
+    }, [highlightedOperationId]);
+
     const changesList = (
         <Accordion
             type="multiple"
             defaultValue={[...MERGE_RESULT_SECTION_ORDER]}
-            className="w-full"
+            className="flex w-full flex-col gap-1"
         >
             {MERGE_RESULT_SECTION_ORDER.map((category) => (
                 <MergeResultSection
@@ -288,13 +343,6 @@ export const MergeResultStep: React.FC<{
         <>
             <DialogHeader className="shrink-0">
                 <DialogTitle>{text('merge_wizard.title')}</DialogTitle>
-                <DialogDescription>
-                    {text(
-                        noDifferences
-                            ? 'merge_wizard.result.no_differences'
-                            : 'merge_wizard.result.summary'
-                    )}
-                </DialogDescription>
             </DialogHeader>
 
             <div
@@ -317,12 +365,19 @@ export const MergeResultStep: React.FC<{
                         {text('merge_wizard.result.analysis_error')}
                     </p>
                 ) : noDifferences ? (
-                    <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-                        {applyContext.response.viewsCompared ? null : (
-                            <p className="text-sm text-muted-foreground">
-                                {text('merge_wizard.result.views_not_compared')}
-                            </p>
-                        )}
+                    <div data-testid="merge-result-empty">
+                        <EmptyState
+                            className="py-6"
+                            icon={sidePanelEmptyStateIcon}
+                            title={text('merge_wizard.result.no_differences')}
+                            description={
+                                applyContext.response.viewsCompared
+                                    ? undefined
+                                    : text(
+                                          'merge_wizard.result.views_not_compared'
+                                      )
+                            }
+                        />
                     </div>
                 ) : showPreviewWorkspace && previewProjection ? (
                     <div
@@ -334,17 +389,22 @@ export const MergeResultStep: React.FC<{
                             className="flex min-h-0 min-w-0 flex-col gap-2"
                             data-testid="merge-result-changes-panel"
                         >
-                            <h3
-                                id="merge-result-changes-heading"
-                                className="shrink-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-                            >
-                                {text('merge_wizard.result.changes')}
-                            </h3>
-                            <div
-                                className="max-h-[min(40vh,20rem)] min-h-0 flex-1 overflow-y-auto overflow-x-hidden pr-1 max-lg:max-h-[min(40vh,20rem)] lg:max-h-none"
-                                data-testid="merge-result-changes-scroll"
-                            >
-                                {changesList}
+                            <div className="flex shrink-0 items-center gap-1">
+                                <h3
+                                    id="merge-result-changes-heading"
+                                    className="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                                >
+                                    {text('merge_wizard.result.changes')}
+                                </h3>
+                                <MergeChangeLegend text={text} />
+                            </div>
+                            <div className="min-h-0 flex-1 overflow-hidden max-lg:max-h-[min(40vh,20rem)] lg:min-h-0">
+                                <ScrollArea
+                                    className="h-full max-h-[min(40vh,20rem)] lg:max-h-none"
+                                    data-testid="merge-result-changes-scroll"
+                                >
+                                    {changesList}
+                                </ScrollArea>
                             </div>
                         </section>
                         <section
@@ -378,8 +438,13 @@ export const MergeResultStep: React.FC<{
                         </section>
                     </div>
                 ) : (
-                    <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-                        {changesList}
+                    <div className="min-h-0 flex-1 overflow-hidden">
+                        <ScrollArea
+                            className="h-full"
+                            data-testid="merge-result-changes-scroll"
+                        >
+                            {changesList}
+                        </ScrollArea>
                     </div>
                 )}
                 {applyError ? (
@@ -400,28 +465,34 @@ export const MergeResultStep: React.FC<{
                 >
                     {text('new_diagram_dialog.back')}
                 </Button>
-                <Button
-                    type="button"
-                    disabled={!canMerge}
-                    aria-busy={isApplying}
-                    onClick={() => {
-                        onMerge(
-                            selectedOperationIdsInCompareOrder(
-                                selection.selected,
-                                operations
-                            )
-                        );
-                    }}
-                >
-                    {isApplying ? (
-                        <Spinner className="mr-1 size-5 text-primary-foreground" />
-                    ) : null}
-                    {isApplying
-                        ? text('merge_wizard.applying')
-                        : text('merge_wizard.result.merge', {
-                              count: selection.selectedCount,
-                          })}
-                </Button>
+                {noDifferences ? (
+                    <Button type="button" onClick={onDone}>
+                        {text('merge_wizard.result.done')}
+                    </Button>
+                ) : (
+                    <Button
+                        type="button"
+                        disabled={!canMerge}
+                        aria-busy={isApplying}
+                        onClick={() => {
+                            onMerge(
+                                selectedOperationIdsInCompareOrder(
+                                    selection.selected,
+                                    operations
+                                )
+                            );
+                        }}
+                    >
+                        {isApplying ? (
+                            <Spinner className="mr-1 size-5 text-primary-foreground" />
+                        ) : null}
+                        {isApplying
+                            ? text('merge_wizard.applying')
+                            : text('merge_wizard.result.merge', {
+                                  count: selection.selectedCount,
+                              })}
+                    </Button>
+                )}
             </DialogFooter>
         </>
     );

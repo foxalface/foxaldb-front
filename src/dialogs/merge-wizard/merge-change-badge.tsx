@@ -7,19 +7,27 @@ import type { MergeText } from './format-merge-change';
 export const MergeChangeBadge: React.FC<{
     type: ChangeType;
     text: MergeText;
-}> = ({ type, text }) => {
+    /** When true, the visible label is provided beside the badge (legend rows). */
+    decorative?: boolean;
+}> = ({ type, text, decorative = false }) => {
     const visual = MERGE_CHANGE_VISUAL[type];
     const Icon = visual.icon;
 
     return (
         <span
             className={cn(
-                'inline-flex shrink-0 items-center gap-1 text-xs font-medium',
+                'inline-flex shrink-0 items-center',
                 visual.textClassName
             )}
+            aria-hidden={decorative ? true : undefined}
+            aria-label={
+                decorative
+                    ? undefined
+                    : text(`merge_wizard.result.change.${type}`)
+            }
+            data-testid={`merge-change-badge-${type}`}
         >
             <Icon className="size-3.5" aria-hidden />
-            {text(`merge_wizard.result.change.${type}`)}
         </span>
     );
 };

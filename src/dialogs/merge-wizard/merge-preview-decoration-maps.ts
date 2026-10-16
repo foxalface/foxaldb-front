@@ -144,7 +144,11 @@ export const buildMergePreviewHoverMaps = (
             continue;
         }
 
-        if (highlight.relationshipId) {
+        if (
+            highlight.relationshipId ||
+            highlight.tableId ||
+            highlight.fieldId
+        ) {
             mergePreviewHoverByRelationshipId.set(relationship.id, {
                 dimmed: true,
             });
@@ -175,4 +179,63 @@ export const buildMergePreviewHoverMaps = (
         mergePreviewHoverByTableId,
         mergePreviewHoverByRelationshipId,
     };
+};
+
+export const resolveTablePreviewHover = (
+    tableId: string,
+    highlight: MergePreviewHighlightTarget | null | undefined,
+    relationships: readonly {
+        id: string;
+        sourceTableId: string;
+        targetTableId: string;
+    }[]
+): MergePreviewHoverFlags | undefined => {
+    if (!highlight) {
+        return undefined;
+    }
+
+    if (highlight.tableId === tableId) {
+        return {
+            tableFocused: true,
+            fieldFocusedId: highlight.fieldId ?? null,
+        };
+    }
+
+    const involved =
+        highlight.relationshipId !== undefined &&
+        relationships.some(
+            (relationship) =>
+                relationship.id === highlight.relationshipId &&
+                (relationship.sourceTableId === tableId ||
+                    relationship.targetTableId === tableId)
+        );
+
+    if (highlight.relationshipId || highlight.tableId || highlight.fieldId) {
+        return { dimmed: !involved };
+    }
+
+    return undefined;
+};
+
+export const resolveRelationshipPreviewHover = (
+    relationshipId: string,
+    highlight: MergePreviewHighlightTarget | null | undefined
+): MergePreviewEdgeHoverFlags | undefined => {
+    if (!highlight) {
+        return undefined;
+    }
+
+    if (highlight.relationshipId) {
+        if (highlight.relationshipId === relationshipId) {
+            return { focused: true, foreground: true };
+        }
+
+        return { dimmed: true };
+    }
+
+    if (highlight.tableId || highlight.fieldId) {
+        return { dimmed: true };
+    }
+
+    return undefined;
 };

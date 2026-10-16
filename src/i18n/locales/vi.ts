@@ -2007,9 +2007,13 @@ export const vi: LanguageTranslation = {
             },
             result: {
                 summary: 'Xem lại các thay đổi trước khi hợp nhất.',
+                change_legend_aria: 'Giải thích biểu tượng thay đổi',
+                change_legend_title: 'Chú giải',
+                operation_detail_aria: 'Chi tiết thay đổi',
                 changes: 'Thay đổi',
                 preview: 'Xem trước',
                 no_differences: 'Không có khác biệt',
+                done: 'Hoàn tất',
                 views_not_compared:
                     'Định dạng nguồn này không so sánh khung nhìn một cách đáng tin cậy.',
                 analysis_error: 'Không thể xem lại phép so sánh này.',

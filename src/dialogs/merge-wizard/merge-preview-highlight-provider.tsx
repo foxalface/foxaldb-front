@@ -6,9 +6,9 @@ import {
 
 export const MergePreviewHighlightProvider: React.FC<
     React.PropsWithChildren<MergePreviewHighlightHandlers>
-> = ({ onHighlightOperation, onClearHighlight, children }) => (
+> = ({ onHighlightOperation, onClearHighlight, highlightTarget, children }) => (
     <MergePreviewHighlightContext.Provider
-        value={{ onHighlightOperation, onClearHighlight }}
+        value={{ onHighlightOperation, onClearHighlight, highlightTarget }}
     >
         {children}
     </MergePreviewHighlightContext.Provider>
