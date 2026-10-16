@@ -29,18 +29,18 @@ export const CustomTypeListItem = React.forwardRef<
     return (
         <AccordionItem value={customType.id} className="border-none" ref={ref}>
             <div
-                className="w-full rounded-md border-b"
+                className="w-full rounded-md border border-border"
                 ref={setNodeRef}
                 style={style}
                 {...attributes}
             >
                 <AccordionTrigger
-                    className="w-full rounded-md bg-slate-50 px-2 py-0 hover:bg-accent hover:no-underline data-[state=open]:rounded-b-none dark:bg-slate-900"
+                    className="w-full rounded-md px-2 py-0 hover:bg-accent hover:no-underline data-[state=open]:rounded-b-none"
                     asChild
                 >
                     <CustomTypeListItemHeader customType={customType} />
                 </AccordionTrigger>
-                <AccordionContent className="border-x border-slate-100 p-1 pb-0 dark:border-slate-800">
+                <AccordionContent className="p-1 pb-0">
                     <CustomTypeListItemContent customType={customType} />
                 </AccordionContent>
             </div>
