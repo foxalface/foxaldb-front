@@ -7,7 +7,7 @@ export const bn: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'নতুন',
-            browse: 'খুলুন',
+            open: 'খুলুন...',
             tables: 'টেবিল',
             refs: 'রেফস',
             dependencies: 'নির্ভরতা',
@@ -20,15 +20,13 @@ export const bn: LanguageTranslation = {
         },
         menu: {
             actions: {
-                actions: 'কার্য',
+                diagram: 'ডায়াগ্রাম',
                 new: 'নতুন...',
-                browse: 'সমস্ত ডেটাবেস...',
+                open: 'খুলুন...',
                 save: 'সংরক্ষণ করুন',
                 import: 'ডাটাবেস আমদানি করুন',
                 export: 'রপ্তানি করুন...',
                 export_laravel_migrations: 'Laravel migrations',
-                import_laravel_migrations: 'Import Laravel migrations',
-                compare_laravel_migrations: 'Sync from Laravel migrations',
                 export_sql: 'SQL রপ্তানি করুন',
                 export_as: 'রূপে রপ্তানি করুন',
                 merge: 'মার্জ...',
@@ -1566,118 +1564,6 @@ export const bn: LanguageTranslation = {
             },
         },
 
-        import_laravel_migrations_dialog: {
-            title: 'Import Laravel migrations',
-            description:
-                'Upload a ZIP archive of Laravel migration files to preview the parsed schema snapshot.',
-            upload: 'Upload',
-            uploading: 'Uploading...',
-            close: 'Close',
-            upload_another: 'Upload another',
-            no_file_selected: 'No file selected.',
-            errors: {
-                upload_failed: 'Could not import Laravel migrations.',
-                file_required: 'Please select a ZIP file to upload.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                tables: 'Tables',
-                columns: 'Columns',
-                indexes: 'Indexes',
-                foreign_keys: 'Foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                title: 'Tables',
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            foreign_keys: {
-                title: 'Foreign keys',
-            },
-            warnings: {
-                title: 'Warnings',
-                none: 'No warnings.',
-            },
-            source_files: {
-                title: 'Source files',
-            },
-        },
-
-        compare_laravel_migrations_dialog: {
-            title: 'Sync from Laravel migrations',
-            description:
-                'Compare the open diagram with a Laravel migration archive.',
-            archive_label: 'Laravel migrations archive',
-            compare: 'Compare',
-            comparing: 'Comparing...',
-            close: 'Close',
-            compare_another: 'Compare another',
-            no_archive_selected: 'No archive selected.',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Include explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Include separate foreign key migration definitions.',
-            errors: {
-                compare_failed: 'Could not compare Laravel migrations.',
-                archive_required:
-                    'Please select a Laravel migrations archive ZIP file.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            sections: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            changed_tables: {
-                added_columns: 'Added columns',
-                removed_columns: 'Removed columns',
-                changed_columns: 'Changed columns',
-                added_indexes: 'Added indexes',
-                removed_indexes: 'Removed indexes',
-                changed_indexes: 'Changed indexes',
-            },
-            changed_foreign_keys: {
-                before: 'Before',
-            },
-            attribute_change: {
-                arrow: '→',
-            },
-            warnings: {
-                none: 'No warnings.',
-            },
-            apply: {
-                apply: 'Apply changes',
-                applying: 'Applying...',
-                apply_success: 'Changes applied successfully.',
-                apply_failed: 'Could not apply migration changes.',
-                apply_blocked: 'Fix validation issues before applying changes.',
-                ready_to_apply: 'Ready to apply',
-                validation_issues: 'Validation issues',
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-            },
-        },
         create_relationship_dialog: {
             title: 'সম্পর্ক তৈরি করুন',
             primary_table: 'প্রাথমিক টেবিল',
@@ -1695,11 +1581,7 @@ export const bn: LanguageTranslation = {
         },
 
         import_database_dialog: {
-            title: 'বর্তমান চিত্রে আমদানি করুন',
             import_schema: {
-                title: 'স্কিমা আমদানি করুন',
-                import: 'আমদানি',
-                cancel: 'বাতিল',
                 mismatch: {
                     title: 'এই স্কিমাটি {{detected}}-এর মতো দেখাচ্ছে, কিন্তু এই ডায়াগ্রামটি {{selected}}।',
                     description: 'ক্রস-ডাটাবেস আমদানি এখনও সমর্থিত নয়।',
@@ -1710,23 +1592,7 @@ export const bn: LanguageTranslation = {
                         'SQL ডায়ালেক্ট স্বয়ংক্রিয়ভাবে চিহ্নিত করা যায়নি। বর্তমান {{selected}} ডায়াগ্রামের জন্য এই স্কিমা কীভাবে ব্যাখ্যা করবেন তা নিশ্চিত করুন।',
                 },
             },
-            override_alert: {
-                title: 'ডাটাবেস আমদানি করুন',
-                content: {
-                    alert: 'এই চিত্র আমদানির ফলে বিদ্যমান টেবিল ও সম্পর্ক প্রভাবিত হবে।',
-                    new_tables:
-                        '<bold>{{newTablesNumber}}</bold> নতুন টেবিল যোগ করা হবে।',
-                    new_relationships:
-                        '<bold>{{newRelationshipsNumber}}</bold> নতুন সম্পর্ক তৈরি করা হবে।',
-                    tables_override:
-                        '<bold>{{tablesOverrideNumber}}</bold> টেবিল ওভাররাইট করা হবে।',
-                    proceed: 'আপনি কি এগিয়ে যেতে চান?',
-                },
-                import: 'আমদানি করুন',
-                cancel: 'বাতিল করুন',
-            },
         },
-
         new_table_schema_dialog: {
             title: 'স্কিমা নির্বাচন করুন',
             description:
@@ -1761,14 +1627,15 @@ export const bn: LanguageTranslation = {
         },
 
         import_diagram_dialog: {
-            title: 'চিত্র আমদানি করুন',
-            description: 'নীচে ডায়াগ্রাম JSON পেস্ট করুন:',
+            title: 'Restore Diagram',
+            description:
+                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
             cancel: 'বাতিল করুন',
-            import: 'আমদানি করুন',
+            import: 'Restore',
             error: {
-                title: 'চিত্র আমদানিতে ত্রুটি',
+                title: 'Could not restore diagram',
                 description:
-                    'ডায়াগ্রাম JSON অবৈধ। অনুগ্রহ করে JSON পরীক্ষা করুন এবং আবার চেষ্টা করুন। সাহায্যের প্রয়োজন? support@chartdb.io-এ যোগাযোগ করুন।',
+                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
             },
         },
         // TODO: Translate

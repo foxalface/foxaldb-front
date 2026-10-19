@@ -56,13 +56,10 @@ vi.mock('@/hooks/use-dialog', () => ({
         openCreateDiagramDialog: vi.fn(),
         openOpenDiagramDialog: vi.fn(),
         openExportSQLDialog: vi.fn(),
-        openImportDatabaseDialog: vi.fn(),
         openExportDiagramDialog: vi.fn(),
         openExportWizardDialog: vi.fn(),
         openMergeWizardDialog: vi.fn(),
         openImportDiagramDialog: vi.fn(),
-        openLaravelMigrationImportDialog: vi.fn(),
-        openLaravelMigrationDiffDialog: vi.fn(),
     }),
 }));
 
@@ -142,11 +139,11 @@ describe('Menu guest active diagram deletion', () => {
         render(<Menu onActiveDiagramDeleted={onActiveDiagramDeleted} />);
 
         await userEvent.click(
-            screen.getByRole('menuitem', { name: 'menu.actions.actions' })
+            screen.getByRole('menuitem', { name: 'menu.actions.diagram' })
         );
         await userEvent.click(
             screen.getByRole('menuitem', {
-                name: 'menu.actions.delete_diagram',
+                name: /menu\.actions\.delete_diagram/,
             })
         );
 
@@ -200,11 +197,11 @@ describe('Menu guest active diagram deletion', () => {
         render(<Menu />);
 
         await userEvent.click(
-            screen.getByRole('menuitem', { name: 'menu.actions.actions' })
+            screen.getByRole('menuitem', { name: 'menu.actions.diagram' })
         );
         await userEvent.click(
             screen.getByRole('menuitem', {
-                name: 'menu.actions.delete_diagram',
+                name: /menu\.actions\.delete_diagram/,
             })
         );
 

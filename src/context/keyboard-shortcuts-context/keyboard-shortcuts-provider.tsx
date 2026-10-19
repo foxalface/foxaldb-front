@@ -6,61 +6,95 @@ import {
     keyboardShortcutsForOS,
 } from './keyboard-shortcuts';
 import { useHistory } from '@/hooks/use-history';
-import { useDialog } from '@/hooks/use-dialog';
-import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { useReactFlow } from '@xyflow/react';
+import { useDiagramMenuActions } from '@/pages/editor-page/use-diagram-menu-actions';
 
 export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { redo, undo } = useHistory();
-    const { openOpenDiagramDialog } = useDialog();
-    const { updateDiagramUpdatedAt } = useChartDB();
     const { toggleSidePanel } = useLayout();
     const { fitView } = useReactFlow();
+    const {
+        canMergeDiagram,
+        createNewDiagram,
+        openDiagram,
+        handleSaveDiagram,
+        openExportWizard,
+        openMergeWizard,
+        confirmDeleteDiagram,
+    } = useDiagramMenuActions();
+
+    const hotkeyOptions = {
+        preventDefault: true,
+        enableOnFormTags: false,
+    } as const;
 
     useHotkeys(
         keyboardShortcutsForOS[KeyboardShortcutAction.REDO].keyCombination,
         redo,
-        {
-            preventDefault: true,
-        },
+        hotkeyOptions,
         [redo]
     );
     useHotkeys(
         keyboardShortcutsForOS[KeyboardShortcutAction.UNDO].keyCombination,
         undo,
-        {
-            preventDefault: true,
-        },
+        hotkeyOptions,
         [undo]
+    );
+    useHotkeys(
+        keyboardShortcutsForOS[KeyboardShortcutAction.NEW_DIAGRAM]
+            .keyCombination,
+        createNewDiagram,
+        hotkeyOptions,
+        [createNewDiagram]
     );
     useHotkeys(
         keyboardShortcutsForOS[KeyboardShortcutAction.OPEN_DIAGRAM]
             .keyCombination,
-        () => openOpenDiagramDialog(),
-        {
-            preventDefault: true,
-        },
-        [openOpenDiagramDialog]
+        openDiagram,
+        hotkeyOptions,
+        [openDiagram]
     );
     useHotkeys(
         keyboardShortcutsForOS[KeyboardShortcutAction.SAVE_DIAGRAM]
             .keyCombination,
-        updateDiagramUpdatedAt,
-        {
-            preventDefault: true,
+        () => {
+            void handleSaveDiagram();
         },
-        [updateDiagramUpdatedAt]
+        hotkeyOptions,
+        [handleSaveDiagram]
+    );
+    useHotkeys(
+        keyboardShortcutsForOS[KeyboardShortcutAction.EXPORT_DIAGRAM]
+            .keyCombination,
+        openExportWizard,
+        hotkeyOptions,
+        [openExportWizard]
+    );
+    useHotkeys(
+        keyboardShortcutsForOS[KeyboardShortcutAction.MERGE_DIAGRAM]
+            .keyCombination,
+        openMergeWizard,
+        {
+            ...hotkeyOptions,
+            enabled: canMergeDiagram,
+        },
+        [openMergeWizard, canMergeDiagram]
+    );
+    useHotkeys(
+        keyboardShortcutsForOS[KeyboardShortcutAction.DELETE_DIAGRAM]
+            .keyCombination,
+        confirmDeleteDiagram,
+        hotkeyOptions,
+        [confirmDeleteDiagram]
     );
     useHotkeys(
         keyboardShortcutsForOS[KeyboardShortcutAction.TOGGLE_SIDE_PANEL]
             .keyCombination,
         toggleSidePanel,
-        {
-            preventDefault: true,
-        },
+        hotkeyOptions,
         [toggleSidePanel]
     );
     useHotkeys(
@@ -72,9 +106,7 @@ export const KeyboardShortcutsProvider: React.FC<React.PropsWithChildren> = ({
                 maxZoom: 0.8,
             });
         },
-        {
-            preventDefault: true,
-        },
+        hotkeyOptions,
         [fitView]
     );
 

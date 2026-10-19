@@ -33,18 +33,6 @@ vi.mock('@/dialogs/user-settings-dialog/user-settings-dialog', () => ({
     UserSettingsDialog: () => null,
 }));
 vi.mock(
-    '@/dialogs/laravel-migration-import-dialog/laravel-migration-import-dialog',
-    () => ({
-        LaravelMigrationImportDialog: () => null,
-    })
-);
-vi.mock(
-    '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog',
-    () => ({
-        LaravelMigrationDiffDialog: () => null,
-    })
-);
-vi.mock(
     '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog',
     () => ({
         GuestDiagramMigrationDialog: () => null,

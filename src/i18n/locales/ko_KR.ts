@@ -7,7 +7,7 @@ export const ko_KR: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: '새로 만들기',
-            browse: '열기',
+            open: '열기...',
             tables: '테이블',
             refs: 'Refs',
             dependencies: '종속성',
@@ -20,15 +20,13 @@ export const ko_KR: LanguageTranslation = {
         },
         menu: {
             actions: {
-                actions: '작업',
+                diagram: '다이어그램',
                 new: '새로 만들기...',
-                browse: '모든 데이터베이스...',
+                open: '열기...',
                 save: '저장',
                 import: '데이터베이스 가져오기',
                 export: '내보내기...',
                 export_laravel_migrations: 'Laravel migrations',
-                import_laravel_migrations: 'Import Laravel migrations',
-                compare_laravel_migrations: 'Sync from Laravel migrations',
                 export_sql: 'SQL로 저장',
                 export_as: '다른 형식으로 저장',
                 merge: '병합...',
@@ -1566,118 +1564,6 @@ export const ko_KR: LanguageTranslation = {
             },
         },
 
-        import_laravel_migrations_dialog: {
-            title: 'Import Laravel migrations',
-            description:
-                'Upload a ZIP archive of Laravel migration files to preview the parsed schema snapshot.',
-            upload: 'Upload',
-            uploading: 'Uploading...',
-            close: 'Close',
-            upload_another: 'Upload another',
-            no_file_selected: 'No file selected.',
-            errors: {
-                upload_failed: 'Could not import Laravel migrations.',
-                file_required: 'Please select a ZIP file to upload.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                tables: 'Tables',
-                columns: 'Columns',
-                indexes: 'Indexes',
-                foreign_keys: 'Foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                title: 'Tables',
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            foreign_keys: {
-                title: 'Foreign keys',
-            },
-            warnings: {
-                title: 'Warnings',
-                none: 'No warnings.',
-            },
-            source_files: {
-                title: 'Source files',
-            },
-        },
-
-        compare_laravel_migrations_dialog: {
-            title: 'Sync from Laravel migrations',
-            description:
-                'Compare the open diagram with a Laravel migration archive.',
-            archive_label: 'Laravel migrations archive',
-            compare: 'Compare',
-            comparing: 'Comparing...',
-            close: 'Close',
-            compare_another: 'Compare another',
-            no_archive_selected: 'No archive selected.',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Include explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Include separate foreign key migration definitions.',
-            errors: {
-                compare_failed: 'Could not compare Laravel migrations.',
-                archive_required:
-                    'Please select a Laravel migrations archive ZIP file.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            sections: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            changed_tables: {
-                added_columns: 'Added columns',
-                removed_columns: 'Removed columns',
-                changed_columns: 'Changed columns',
-                added_indexes: 'Added indexes',
-                removed_indexes: 'Removed indexes',
-                changed_indexes: 'Changed indexes',
-            },
-            changed_foreign_keys: {
-                before: 'Before',
-            },
-            attribute_change: {
-                arrow: '→',
-            },
-            warnings: {
-                none: 'No warnings.',
-            },
-            apply: {
-                apply: 'Apply changes',
-                applying: 'Applying...',
-                apply_success: 'Changes applied successfully.',
-                apply_failed: 'Could not apply migration changes.',
-                apply_blocked: 'Fix validation issues before applying changes.',
-                ready_to_apply: 'Ready to apply',
-                validation_issues: 'Validation issues',
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-            },
-        },
         create_relationship_dialog: {
             title: '연관 관계 생성',
             primary_table: '주 테이블',
@@ -1695,11 +1581,7 @@ export const ko_KR: LanguageTranslation = {
         },
 
         import_database_dialog: {
-            title: '현재 다이어그램 가져오기',
             import_schema: {
-                title: '스키마 가져오기',
-                import: '가져오기',
-                cancel: '취소',
                 mismatch: {
                     title: '이 스키마는 {{detected}}처럼 보이지만, 이 다이어그램은 {{selected}}입니다.',
                     description:
@@ -1711,23 +1593,7 @@ export const ko_KR: LanguageTranslation = {
                         'SQL 방언을 자동으로 식별할 수 없습니다. 현재 {{selected}} 다이어그램에 이 스키마를 어떻게 해석할지 확인하세요.',
                 },
             },
-            override_alert: {
-                title: '데이터베이스 가져오기',
-                content: {
-                    alert: '이 다이어그램을 가져오면 기존 테이블 및 연관 관계에 영향을 미칩니다.',
-                    new_tables:
-                        '<bold>{{newTablesNumber}}</bold>개의 신규 테이블 생성됨',
-                    new_relationships:
-                        '<bold>{{newRelationshipsNumber}}</bold>개의 신규 연관 관계 생성됨',
-                    tables_override:
-                        '<bold>{{tablesOverrideNumber}}</bold>개의 테이블이 덮어씌워짐',
-                    proceed: '정말로 가져오시겠습니까?',
-                },
-                import: '가져오기',
-                cancel: '취소',
-            },
         },
-
         new_table_schema_dialog: {
             title: '스키마 선택',
             description:
@@ -1762,14 +1628,15 @@ export const ko_KR: LanguageTranslation = {
             },
         },
         import_diagram_dialog: {
-            title: '다이어그램 가져오기',
-            description: '아래에 다이어그램 JSON을 첨부해주세요:',
+            title: 'Restore Diagram',
+            description:
+                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
             cancel: '취소',
-            import: '가져오기',
+            import: 'Restore',
             error: {
-                title: '다이어그램 가져오기 오류',
+                title: 'Could not restore diagram',
                 description:
-                    '다이어그램 JSON이 유효하지 않습니다. JSON이 올바른 형식인지 확인해주세요. 도움이 필요하신 경우 support@chartdb.io으로 연락해주세요.',
+                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
             },
         },
         // TODO: Translate

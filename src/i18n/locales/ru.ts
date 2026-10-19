@@ -7,7 +7,7 @@ export const ru: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'Новая',
-            browse: 'Открыть',
+            open: 'Открыть...',
             tables: 'Таблицы',
             refs: 'Ссылки',
             dependencies: 'Зависимости',
@@ -21,15 +21,13 @@ export const ru: LanguageTranslation = {
         },
         menu: {
             actions: {
-                actions: 'Действия',
+                diagram: 'Диаграмма',
                 new: 'Новая...',
-                browse: 'Все базы данных...',
+                open: 'Открыть...',
                 save: 'Сохранить',
                 import: 'Импортировать базу данных',
                 export: 'Экспортировать...',
                 export_laravel_migrations: 'Laravel migrations',
-                import_laravel_migrations: 'Import Laravel migrations',
-                compare_laravel_migrations: 'Sync from Laravel migrations',
                 export_sql: 'Экспорт SQL',
                 export_as: 'Экспортировать как',
                 merge: 'Объединить...',
@@ -1571,118 +1569,6 @@ export const ru: LanguageTranslation = {
             },
         },
 
-        import_laravel_migrations_dialog: {
-            title: 'Import Laravel migrations',
-            description:
-                'Upload a ZIP archive of Laravel migration files to preview the parsed schema snapshot.',
-            upload: 'Upload',
-            uploading: 'Uploading...',
-            close: 'Close',
-            upload_another: 'Upload another',
-            no_file_selected: 'No file selected.',
-            errors: {
-                upload_failed: 'Could not import Laravel migrations.',
-                file_required: 'Please select a ZIP file to upload.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                tables: 'Tables',
-                columns: 'Columns',
-                indexes: 'Indexes',
-                foreign_keys: 'Foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                title: 'Tables',
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            foreign_keys: {
-                title: 'Foreign keys',
-            },
-            warnings: {
-                title: 'Warnings',
-                none: 'No warnings.',
-            },
-            source_files: {
-                title: 'Source files',
-            },
-        },
-
-        compare_laravel_migrations_dialog: {
-            title: 'Sync from Laravel migrations',
-            description:
-                'Compare the open diagram with a Laravel migration archive.',
-            archive_label: 'Laravel migrations archive',
-            compare: 'Compare',
-            comparing: 'Comparing...',
-            close: 'Close',
-            compare_another: 'Compare another',
-            no_archive_selected: 'No archive selected.',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Include explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Include separate foreign key migration definitions.',
-            errors: {
-                compare_failed: 'Could not compare Laravel migrations.',
-                archive_required:
-                    'Please select a Laravel migrations archive ZIP file.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            sections: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            changed_tables: {
-                added_columns: 'Added columns',
-                removed_columns: 'Removed columns',
-                changed_columns: 'Changed columns',
-                added_indexes: 'Added indexes',
-                removed_indexes: 'Removed indexes',
-                changed_indexes: 'Changed indexes',
-            },
-            changed_foreign_keys: {
-                before: 'Before',
-            },
-            attribute_change: {
-                arrow: '→',
-            },
-            warnings: {
-                none: 'No warnings.',
-            },
-            apply: {
-                apply: 'Apply changes',
-                applying: 'Applying...',
-                apply_success: 'Changes applied successfully.',
-                apply_failed: 'Could not apply migration changes.',
-                apply_blocked: 'Fix validation issues before applying changes.',
-                ready_to_apply: 'Ready to apply',
-                validation_issues: 'Validation issues',
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-            },
-        },
         create_relationship_dialog: {
             title: 'Создать отношениe',
             primary_table: 'Основная таблица',
@@ -1700,11 +1586,7 @@ export const ru: LanguageTranslation = {
         },
 
         import_database_dialog: {
-            title: 'Импорт в текущую диаграмму',
             import_schema: {
-                title: 'Импорт схемы',
-                import: 'Импорт',
-                cancel: 'Отмена',
                 mismatch: {
                     title: 'Эта схема похожа на {{detected}}, но эта диаграмма — {{selected}}.',
                     description:
@@ -1716,23 +1598,7 @@ export const ru: LanguageTranslation = {
                         'Не удалось автоматически определить диалект SQL. Подтвердите, как интерпретировать эту схему для текущей диаграммы {{selected}}.',
                 },
             },
-            override_alert: {
-                title: 'Импортировать базу данных',
-                content: {
-                    alert: 'Импорт этой диаграммы повлияет на существующие таблицы и связи.',
-                    new_tables:
-                        '<bold>{{newTablesNumber}}</bold> будут добавлены новые таблицы.',
-                    new_relationships:
-                        '<bold>{{newRelationshipsNumber}}</bold> будут созданы новые отношения.',
-                    tables_override:
-                        '<bold>{{tablesOverrideNumber}}</bold> таблицы будут перезаписаны.',
-                    proceed: 'Хотите продолжить?',
-                },
-                import: 'Импорт',
-                cancel: 'Отмена',
-            },
         },
-
         new_table_schema_dialog: {
             title: 'Выбрать схему',
             description:
@@ -1767,14 +1633,15 @@ export const ru: LanguageTranslation = {
             },
         },
         import_diagram_dialog: {
-            title: 'Импорт кода диаграммы',
-            description: 'Вставьте JSON код диаграммы ниже:',
+            title: 'Restore Diagram',
+            description:
+                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
             cancel: 'Отменить',
-            import: 'Импортировать',
+            import: 'Restore',
             error: {
-                title: 'Ошибка при импорте диаграммы',
+                title: 'Could not restore diagram',
                 description:
-                    'Код JSON диаграммы некорректен. Проверьте, пожалуйста, код и попробуйте снова. Проблема не решается? Напишите нам: support@chartdb.io',
+                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
             },
         },
         import_dbml_dialog: {

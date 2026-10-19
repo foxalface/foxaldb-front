@@ -16,9 +16,15 @@ import { useTranslation } from 'react-i18next';
 import { FileUploader } from '@/components/file-uploader/file-uploader';
 import { useStorage } from '@/hooks/use-storage';
 import { useNavigate } from 'react-router-dom';
-import { diagramFromJSONInput } from '@/lib/export-import-utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/alert/alert';
 import { AlertCircle } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { useConfig } from '@/hooks/use-config';
+import {
+    RestoreDiagramJsonParseError,
+    persistRestoredDiagramFromJson,
+} from '@/lib/diagram-restore/restore-diagram-from-json-backup';
 
 export interface ImportDiagramDialogProps extends BaseDialogProps {}
 
@@ -28,8 +34,12 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
     const { t } = useTranslation();
     const [file, setFile] = useState<File | null>(null);
     const { addDiagram } = useStorage();
+    const { loadDiagramFromData } = useChartDB();
+    const { isAuthenticated } = useAuth();
+    const { updateConfig } = useConfig();
     const navigate = useNavigate();
     const [error, setError] = useState(false);
+    const [isRestoring, setIsRestoring] = useState(false);
 
     const onFileChange = useCallback((files: File[]) => {
         if (files.length === 0) {
@@ -44,39 +54,67 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
         if (!dialog.open) return;
         setError(false);
         setFile(null);
+        setIsRestoring(false);
     }, [dialog.open]);
+
     const { closeImportDiagramDialog, closeCreateDiagramDialog } = useDialog();
 
-    const handleImport = useCallback(() => {
-        if (!file) return;
+    const handleRestore = useCallback(() => {
+        if (!file || isRestoring) return;
 
         const reader = new FileReader();
         reader.onload = async (e) => {
             const json = e.target?.result;
             if (typeof json !== 'string') return;
 
-            try {
-                const diagram = diagramFromJSONInput(json);
+            setIsRestoring(true);
+            setError(false);
 
-                await addDiagram({ diagram });
+            try {
+                const diagramId = await persistRestoredDiagramFromJson(json, {
+                    isAuthenticated,
+                    guest: {
+                        addDiagram,
+                        loadDiagramFromData,
+                    },
+                });
 
                 closeImportDiagramDialog();
                 closeCreateDiagramDialog();
 
-                navigate(`/diagrams/${diagram.id}`);
-            } catch (e) {
-                setError(true);
+                if (isAuthenticated) {
+                    await updateConfig({
+                        config: { defaultDiagramId: diagramId },
+                    });
+                }
 
-                throw e;
+                navigate(`/diagrams/${diagramId}`);
+            } catch (caught: unknown) {
+                if (caught instanceof RestoreDiagramJsonParseError) {
+                    setError(true);
+                    return;
+                }
+
+                setError(true);
+            } finally {
+                setIsRestoring(false);
             }
+        };
+        reader.onerror = () => {
+            setError(true);
+            setIsRestoring(false);
         };
         reader.readAsText(file);
     }, [
         file,
+        isRestoring,
+        isAuthenticated,
         addDiagram,
+        loadDiagramFromData,
         navigate,
         closeImportDiagramDialog,
         closeCreateDiagramDialog,
+        updateConfig,
     ]);
 
     return (
@@ -120,11 +158,14 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
                 </DialogInternalContent>
                 <DialogFooter className="flex gap-1 md:justify-between">
                     <DialogClose asChild>
-                        <Button variant="secondary">
+                        <Button variant="secondary" disabled={isRestoring}>
                             {t('import_diagram_dialog.cancel')}
                         </Button>
                     </DialogClose>
-                    <Button onClick={handleImport} disabled={file === null}>
+                    <Button
+                        onClick={handleRestore}
+                        disabled={file === null || isRestoring}
+                    >
                         {t('import_diagram_dialog.import')}
                     </Button>
                 </DialogFooter>

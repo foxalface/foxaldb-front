@@ -3,18 +3,21 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Menu } from '../menu';
+import {
+    KeyboardShortcutAction,
+    keyboardShortcutsForOS,
+} from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 
 const dialogMocks = {
     openCreateDiagramDialog: vi.fn(),
     openOpenDiagramDialog: vi.fn(),
-    openImportDatabaseDialog: vi.fn(),
     openImportDiagramDialog: vi.fn(),
     openExportWizardDialog: vi.fn(),
     openExportDiagramDialog: vi.fn(),
     openMergeWizardDialog: vi.fn(),
-    openLaravelMigrationImportDialog: vi.fn(),
-    openLaravelMigrationDiffDialog: vi.fn(),
 };
+
+const showAlertMock = vi.fn();
 
 const authState = {
     isAuthenticated: false,
@@ -104,7 +107,7 @@ vi.mock('@/hooks/use-local-config', () => ({
 
 vi.mock('@/context/alert-context/alert-context', () => ({
     useAlert: () => ({
-        showAlert: vi.fn(),
+        showAlert: showAlertMock,
     }),
 }));
 
@@ -114,7 +117,24 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
-describe('Menu export navigation', () => {
+const diagramActionKeys = [
+    'menu.actions.new',
+    'menu.actions.open',
+    'menu.actions.save',
+    'menu.actions.export',
+    'menu.actions.merge',
+    'menu.actions.delete_diagram',
+] as const;
+
+const getDiagramMenuItems = () =>
+    screen
+        .getAllByRole('menuitem')
+        .map((item) => item.textContent?.replace(/\s+/g, ' ').trim() ?? '')
+        .filter((label) =>
+            diagramActionKeys.some((key) => label.startsWith(key))
+        );
+
+describe('Diagram menu', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         authState.isAuthenticated = false;
@@ -126,102 +146,180 @@ describe('Menu export navigation', () => {
         chartDbState.diagramAccess = null;
     });
 
-    const openActionsMenu = async () => {
+    const openDiagramMenu = async () => {
         const view = render(<Menu />);
         await userEvent.click(
-            screen.getByRole('menuitem', { name: 'menu.actions.actions' })
+            screen.getByRole('menuitem', { name: 'menu.actions.diagram' })
         );
         return view;
     };
 
-    it('opens the export wizard from Actions', async () => {
-        await openActionsMenu();
+    it('uses Diagram as the top-level label', async () => {
+        render(<Menu />);
+        expect(
+            screen.getByRole('menuitem', { name: 'menu.actions.diagram' })
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('menuitem', { name: 'menu.actions.actions' })
+        ).not.toBeInTheDocument();
+    });
 
+    it('does not expose an Import submenu or legacy import entries', async () => {
+        await openDiagramMenu();
+
+        expect(
+            screen.queryByRole('menuitem', { name: 'menu.actions.import' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('menuitem', { name: '.json' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('menuitem', {
+                name: 'menu.actions.import_laravel_migrations',
+            })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('menuitem', {
+                name: 'menu.actions.compare_laravel_migrations',
+            })
+        ).not.toBeInTheDocument();
+    });
+
+    it('orders items with two separator groups', async () => {
+        authState.isAuthenticated = true;
+        chartDbState.currentDiagram = { id: '42', name: 'Saved' };
+        chartDbState.diagramAccess = { can_edit: true };
+        await openDiagramMenu();
+
+        const items = getDiagramMenuItems();
+        expect(items).toEqual([
+            `menu.actions.new${keyboardShortcutsForOS[KeyboardShortcutAction.NEW_DIAGRAM].keyCombinationLabel}`,
+            `menu.actions.open${keyboardShortcutsForOS[KeyboardShortcutAction.OPEN_DIAGRAM].keyCombinationLabel}`,
+            `menu.actions.save${keyboardShortcutsForOS[KeyboardShortcutAction.SAVE_DIAGRAM].keyCombinationLabel}`,
+            `menu.actions.export${keyboardShortcutsForOS[KeyboardShortcutAction.EXPORT_DIAGRAM].keyCombinationLabel}`,
+            `menu.actions.merge${keyboardShortcutsForOS[KeyboardShortcutAction.MERGE_DIAGRAM].keyCombinationLabel}`,
+            `menu.actions.delete_diagram${keyboardShortcutsForOS[KeyboardShortcutAction.DELETE_DIAGRAM].keyCombinationLabel}`,
+        ]);
+
+        const deleteItem = screen.getByRole('menuitem', {
+            name: /menu\.actions\.delete_diagram/,
+        });
+        const menuPanel = deleteItem.parentElement;
+        expect(menuPanel).not.toBeNull();
+        const separators =
+            menuPanel?.querySelectorAll('[role="separator"]') ?? [];
+        expect(separators.length).toBe(2);
+    });
+
+    it('opens the export wizard from Export', async () => {
+        await openDiagramMenu();
         await userEvent.click(
-            screen.getByRole('menuitem', { name: 'menu.actions.export' })
+            screen.getByRole('menuitem', { name: /menu\.actions\.export/ })
         );
-
         expect(dialogMocks.openExportWizardDialog).toHaveBeenCalledTimes(1);
     });
 
-    it('does not expose fragmented export SQL or export-as submenus', async () => {
-        await openActionsMenu();
+    it('opens the new diagram wizard from New', async () => {
+        await openDiagramMenu();
+        await userEvent.click(
+            screen.getByRole('menuitem', { name: /menu\.actions\.new/ })
+        );
+        expect(dialogMocks.openCreateDiagramDialog).toHaveBeenCalledTimes(1);
+    });
 
-        expect(
-            screen.queryByRole('menuitem', { name: 'menu.actions.export_sql' })
-        ).not.toBeInTheDocument();
-        expect(
-            screen.queryByRole('menuitem', { name: 'menu.actions.export_as' })
-        ).not.toBeInTheDocument();
+    it('opens the browse dialog from Open', async () => {
+        await openDiagramMenu();
+        await userEvent.click(
+            screen.getByRole('menuitem', { name: /menu\.actions\.open/ })
+        );
+        expect(dialogMocks.openOpenDiagramDialog).toHaveBeenCalledTimes(1);
+    });
+
+    it('shows delete confirmation instead of deleting immediately', async () => {
+        await openDiagramMenu();
+        await userEvent.click(
+            screen.getByRole('menuitem', {
+                name: /menu\.actions\.delete_diagram/,
+            })
+        );
+        expect(showAlertMock).toHaveBeenCalledTimes(1);
+        expect(showAlertMock.mock.calls[0][0]).toMatchObject({
+            title: 'delete_diagram_alert.title',
+            onAction: expect.any(Function),
+        });
     });
 
     it('keeps backup export diagram entry for backup workflow', async () => {
         render(<Menu />);
-
         await userEvent.click(
             screen.getByRole('menuitem', { name: 'menu.backup.backup' })
         );
-
         await userEvent.click(
             screen.getByRole('menuitem', { name: 'menu.backup.export_diagram' })
         );
-
         expect(dialogMocks.openExportDiagramDialog).toHaveBeenCalledTimes(1);
     });
 
     it('hides Merge for a guest or local-only diagram', async () => {
-        await openActionsMenu();
-
+        await openDiagramMenu();
         expect(
-            screen.queryByRole('menuitem', { name: 'menu.actions.merge' })
+            screen.queryByRole('menuitem', { name: /menu\.actions\.merge/ })
         ).not.toBeInTheDocument();
     });
 
-    it('shows Merge after Export and before Delete for an owner', async () => {
+    it('shows Merge after Export and before Delete for an editor', async () => {
         authState.isAuthenticated = true;
-        chartDbState.currentDiagram = {
-            id: '42',
-            name: 'Saved',
-        };
+        chartDbState.currentDiagram = { id: '42', name: 'Saved' };
         chartDbState.diagramAccess = { can_edit: true };
-        await openActionsMenu();
+        await openDiagramMenu();
 
-        const items = screen
-            .getAllByRole('menuitem')
-            .map((item) => item.textContent);
-        const exportIndex = items.indexOf('menu.actions.export');
-        const mergeIndex = items.indexOf('menu.actions.merge');
-        const deleteIndex = items.indexOf('menu.actions.delete_diagram');
+        const items = getDiagramMenuItems();
+        const exportIndex = items.findIndex((item) =>
+            item.startsWith('menu.actions.export')
+        );
+        const mergeIndex = items.findIndex((item) =>
+            item.startsWith('menu.actions.merge')
+        );
+        const deleteIndex = items.findIndex((item) =>
+            item.startsWith('menu.actions.delete_diagram')
+        );
 
         expect(exportIndex).toBeGreaterThanOrEqual(0);
         expect(mergeIndex).toBeGreaterThan(exportIndex);
         expect(deleteIndex).toBeGreaterThan(mergeIndex);
 
         await userEvent.click(
-            screen.getByRole('menuitem', { name: 'menu.actions.merge' })
+            screen.getByRole('menuitem', { name: /menu\.actions\.merge/ })
         );
         expect(dialogMocks.openMergeWizardDialog).toHaveBeenCalledTimes(1);
     });
 
     it('shows Merge for an editor and hides it for a readonly viewer', async () => {
         authState.isAuthenticated = true;
-        chartDbState.currentDiagram = {
-            id: '42',
-            name: 'Saved',
-        };
+        chartDbState.currentDiagram = { id: '42', name: 'Saved' };
         chartDbState.diagramAccess = { can_edit: true };
         chartDbState.readonly = false;
-        const editorView = await openActionsMenu();
+        const editorView = await openDiagramMenu();
         expect(
-            screen.getByRole('menuitem', { name: 'menu.actions.merge' })
+            screen.getByRole('menuitem', { name: /menu\.actions\.merge/ })
         ).toBeInTheDocument();
         editorView.unmount();
 
         chartDbState.readonly = true;
         chartDbState.diagramAccess = { can_edit: false };
-        await openActionsMenu();
+        await openDiagramMenu();
         expect(
-            screen.queryByRole('menuitem', { name: 'menu.actions.merge' })
+            screen.queryByRole('menuitem', { name: /menu\.actions\.merge/ })
+        ).not.toBeInTheDocument();
+    });
+
+    it('does not expose fragmented export SQL or export-as submenus', async () => {
+        await openDiagramMenu();
+        expect(
+            screen.queryByRole('menuitem', { name: 'menu.actions.export_sql' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('menuitem', { name: 'menu.actions.export_as' })
         ).not.toBeInTheDocument();
     });
 });

@@ -7,7 +7,7 @@ export const mr: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'नवीन',
-            browse: 'उघडा',
+            open: 'उघडा...',
             tables: 'टेबल',
             refs: 'Refs',
             dependencies: 'अवलंबने',
@@ -21,15 +21,13 @@ export const mr: LanguageTranslation = {
         },
         menu: {
             actions: {
-                actions: 'क्रिया',
+                diagram: 'आकृती',
                 new: 'नवीन...',
-                browse: 'सर्व डेटाबेस...',
+                open: 'उघडा...',
                 save: 'जतन करा',
                 import: 'डेटाबेस इम्पोर्ट करा',
                 export: 'निर्यात करा...',
                 export_laravel_migrations: 'Laravel migrations',
-                import_laravel_migrations: 'Import Laravel migrations',
-                compare_laravel_migrations: 'Sync from Laravel migrations',
                 export_sql: 'SQL एक्स्पोर्ट करा',
                 export_as: 'म्हणून एक्स्पोर्ट करा',
                 merge: 'विलीन करा...',
@@ -1561,118 +1559,6 @@ export const mr: LanguageTranslation = {
             },
         },
 
-        import_laravel_migrations_dialog: {
-            title: 'Import Laravel migrations',
-            description:
-                'Upload a ZIP archive of Laravel migration files to preview the parsed schema snapshot.',
-            upload: 'Upload',
-            uploading: 'Uploading...',
-            close: 'Close',
-            upload_another: 'Upload another',
-            no_file_selected: 'No file selected.',
-            errors: {
-                upload_failed: 'Could not import Laravel migrations.',
-                file_required: 'Please select a ZIP file to upload.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                tables: 'Tables',
-                columns: 'Columns',
-                indexes: 'Indexes',
-                foreign_keys: 'Foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                title: 'Tables',
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            foreign_keys: {
-                title: 'Foreign keys',
-            },
-            warnings: {
-                title: 'Warnings',
-                none: 'No warnings.',
-            },
-            source_files: {
-                title: 'Source files',
-            },
-        },
-
-        compare_laravel_migrations_dialog: {
-            title: 'Sync from Laravel migrations',
-            description:
-                'Compare the open diagram with a Laravel migration archive.',
-            archive_label: 'Laravel migrations archive',
-            compare: 'Compare',
-            comparing: 'Comparing...',
-            close: 'Close',
-            compare_another: 'Compare another',
-            no_archive_selected: 'No archive selected.',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Include explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Include separate foreign key migration definitions.',
-            errors: {
-                compare_failed: 'Could not compare Laravel migrations.',
-                archive_required:
-                    'Please select a Laravel migrations archive ZIP file.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            sections: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            changed_tables: {
-                added_columns: 'Added columns',
-                removed_columns: 'Removed columns',
-                changed_columns: 'Changed columns',
-                added_indexes: 'Added indexes',
-                removed_indexes: 'Removed indexes',
-                changed_indexes: 'Changed indexes',
-            },
-            changed_foreign_keys: {
-                before: 'Before',
-            },
-            attribute_change: {
-                arrow: '→',
-            },
-            warnings: {
-                none: 'No warnings.',
-            },
-            apply: {
-                apply: 'Apply changes',
-                applying: 'Applying...',
-                apply_success: 'Changes applied successfully.',
-                apply_failed: 'Could not apply migration changes.',
-                apply_blocked: 'Fix validation issues before applying changes.',
-                ready_to_apply: 'Ready to apply',
-                validation_issues: 'Validation issues',
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-            },
-        },
         create_relationship_dialog: {
             title: 'रिलेशनशिप तयार करा',
             primary_table: 'प्राथमिक टेबल',
@@ -1690,11 +1576,7 @@ export const mr: LanguageTranslation = {
         },
 
         import_database_dialog: {
-            title: 'सध्याच्या आरेखात आयात करा',
             import_schema: {
-                title: 'स्कीमा आयात करा',
-                import: 'आयात',
-                cancel: 'रद्द करा',
                 mismatch: {
                     title: 'ही स्कीमा {{detected}} सारखी दिसते, पण हा आकृती {{selected}} आहे.',
                     description: 'क्रॉस-डेटाबेस आयात अद्याप समर्थित नाही.',
@@ -1705,23 +1587,7 @@ export const mr: LanguageTranslation = {
                         'SQL बोली स्वयंचलितपणे ओळखता आली नाही. सध्याच्या {{selected}} आकृतीसाठी ही स्कीमा कशी समजावायची ते निश्चित करा.',
                 },
             },
-            override_alert: {
-                title: 'डेटाबेस आयात करा',
-                content: {
-                    alert: 'हा आरेख आयात केल्याने सध्याचे टेबल्स आणि रिलेशनशिप वर फरक पडेल.',
-                    new_tables:
-                        '<bold>{{newTablesNumber}}</bold> नवीन टेबल्स जोडले जातील.',
-                    new_relationships:
-                        '<bold>{{newRelationshipsNumber}}</bold> नवीन रिलेशनशिप तयार केले जातील.',
-                    tables_override:
-                        '<bold>{{tablesOverrideNumber}}</bold> टेबल्स अधिलिखित केले जातील.',
-                    proceed: 'तुम्हाला पुढे जायचे आहे का?',
-                },
-                import: 'आयात करा',
-                cancel: 'रद्द करा',
-            },
         },
-
         new_table_schema_dialog: {
             title: 'स्कीमा निवडा',
             description:
@@ -1760,14 +1626,15 @@ export const mr: LanguageTranslation = {
 
         // TO
         import_diagram_dialog: {
-            title: 'Import Diagram',
-            description: 'Paste the diagram JSON below:',
+            title: 'Restore Diagram',
+            description:
+                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
             cancel: 'Cancel',
-            import: 'Import',
+            import: 'Restore',
             error: {
-                title: 'Error importing diagram',
+                title: 'Could not restore diagram',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
+                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
             },
         },
         // TODO: Translate

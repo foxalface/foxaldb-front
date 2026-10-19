@@ -1,12 +1,12 @@
 # Schema merge
 
-Product architecture for Schema Merge. M1–M9 (V1) are complete; M10 visual preview is in progress: shared contract, source adapter, two-step wizard (Source → Result), dependency-aware selection, Compare/Apply clients, autosave flush before Compare, authoritative Apply replacement with one local undo, M8.1 full-document optimistic concurrency (`content_hash` / `baseContentHash`, 409 `stale_content`), and peer refresh on `apply_schema_merge`. Actions → Merge is available for an authenticated editor of a persisted backend diagram.
+Product architecture for Schema Merge. M1–M9 (V1) are complete; M10 visual preview is in progress: shared contract, source adapter, two-step wizard (Source → Result), dependency-aware selection, Compare/Apply clients, autosave flush before Compare, authoritative Apply replacement with one local undo, M8.1 full-document optimistic concurrency (`content_hash` / `baseContentHash`, 409 `stale_content`), and peer refresh on `apply_schema_merge`. Diagram → Merge is available for an authenticated editor of a persisted backend diagram.
 
 The backend contract, operation ids, and error codes are specified in [`backend/docs/schema-merge.md`](../../../backend/docs/schema-merge.md). This document does not repeat that specification. Frontend types in `frontend/src/lib/schema-merge/diff-types.ts` mirror the JSON contract. They do not compute operation ids and they do not diff diagrams.
 
 ## Flow
 
-Merge continues the schema lifecycle:
+Merge continues the schema lifecycle for an **existing** diagram. It is the product action for SQL, DBML, metadata, diagram JSON, and project ZIP against an open diagram — not Actions → Import into current diagram (removed in M11.1A).
 
 ```
 external source
@@ -274,7 +274,7 @@ Back returns to SOURCE and keeps the pasted text or file, dialect, project, and 
 
 ### Actions
 
-Actions → Merge is shown after Export and before Delete. The label is `menu.actions.merge` (“Merge...” / “Fusionner...”). It is visible when the user is authenticated, the diagram id is a persisted backend id, the editor is not readonly, and `diagramAccess.can_edit` is not false. Guests, local-only diagrams, and viewers stay hidden. The menu uses that existing frontend permission state and does not call the backend to decide visibility. The click runs `openMergeWizardDialog()`.
+Diagram → Merge is shown after Export and before Delete. The label is `menu.actions.merge` (“Merge...” / “Fusionner...”). It is visible when the user is authenticated, the diagram id is a persisted backend id, the editor is not readonly, and `diagramAccess.can_edit` is not false. Guests, local-only diagrams, and viewers stay hidden. The menu uses that existing frontend permission state and does not call the backend to decide visibility. The click runs `openMergeWizardDialog()`.
 
 ## M8 apply integration
 

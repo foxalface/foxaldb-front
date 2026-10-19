@@ -7,7 +7,7 @@ export const zh_CN: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: '新建',
-            browse: '打开',
+            open: '打开...',
             tables: '表',
             refs: '引用',
             dependencies: '依赖关系',
@@ -20,15 +20,13 @@ export const zh_CN: LanguageTranslation = {
         },
         menu: {
             actions: {
-                actions: '操作',
+                diagram: '图表',
                 new: '新建...',
-                browse: '所有数据库...',
+                open: '打开...',
                 save: '保存',
                 import: '导入数据库',
                 export: '导出...',
                 export_laravel_migrations: 'Laravel migrations',
-                import_laravel_migrations: 'Import Laravel migrations',
-                compare_laravel_migrations: 'Sync from Laravel migrations',
                 export_sql: '导出 SQL 语句',
                 export_as: '导出为',
                 merge: '合并...',
@@ -1449,118 +1447,6 @@ export const zh_CN: LanguageTranslation = {
             },
         },
 
-        import_laravel_migrations_dialog: {
-            title: 'Import Laravel migrations',
-            description:
-                'Upload a ZIP archive of Laravel migration files to preview the parsed schema snapshot.',
-            upload: 'Upload',
-            uploading: 'Uploading...',
-            close: 'Close',
-            upload_another: 'Upload another',
-            no_file_selected: 'No file selected.',
-            errors: {
-                upload_failed: 'Could not import Laravel migrations.',
-                file_required: 'Please select a ZIP file to upload.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                tables: 'Tables',
-                columns: 'Columns',
-                indexes: 'Indexes',
-                foreign_keys: 'Foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                title: 'Tables',
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            foreign_keys: {
-                title: 'Foreign keys',
-            },
-            warnings: {
-                title: 'Warnings',
-                none: 'No warnings.',
-            },
-            source_files: {
-                title: 'Source files',
-            },
-        },
-
-        compare_laravel_migrations_dialog: {
-            title: 'Sync from Laravel migrations',
-            description:
-                'Compare the open diagram with a Laravel migration archive.',
-            archive_label: 'Laravel migrations archive',
-            compare: 'Compare',
-            comparing: 'Comparing...',
-            close: 'Close',
-            compare_another: 'Compare another',
-            no_archive_selected: 'No archive selected.',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Include explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Include separate foreign key migration definitions.',
-            errors: {
-                compare_failed: 'Could not compare Laravel migrations.',
-                archive_required:
-                    'Please select a Laravel migrations archive ZIP file.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            sections: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            changed_tables: {
-                added_columns: 'Added columns',
-                removed_columns: 'Removed columns',
-                changed_columns: 'Changed columns',
-                added_indexes: 'Added indexes',
-                removed_indexes: 'Removed indexes',
-                changed_indexes: 'Changed indexes',
-            },
-            changed_foreign_keys: {
-                before: 'Before',
-            },
-            attribute_change: {
-                arrow: '→',
-            },
-            warnings: {
-                none: 'No warnings.',
-            },
-            apply: {
-                apply: 'Apply changes',
-                applying: 'Applying...',
-                apply_success: 'Changes applied successfully.',
-                apply_failed: 'Could not apply migration changes.',
-                apply_blocked: 'Fix validation issues before applying changes.',
-                ready_to_apply: 'Ready to apply',
-                validation_issues: 'Validation issues',
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-            },
-        },
         create_relationship_dialog: {
             title: '创建关系',
             primary_table: '主表',
@@ -1578,11 +1464,7 @@ export const zh_CN: LanguageTranslation = {
         },
 
         import_database_dialog: {
-            title: '导入到当前关系图',
             import_schema: {
-                title: '导入架构',
-                import: '导入',
-                cancel: '取消',
                 mismatch: {
                     title: '此架构看起来像 {{detected}}，但此图表是 {{selected}}。',
                     description: '尚不支持跨数据库导入。',
@@ -1593,23 +1475,7 @@ export const zh_CN: LanguageTranslation = {
                         '无法自动识别 SQL 方言。请确认如何为当前 {{selected}} 图表解释此架构。',
                 },
             },
-            override_alert: {
-                title: '导入数据库',
-                content: {
-                    alert: '导入此关系图将影响现有的表和关系。',
-                    new_tables:
-                        '将添加 <bold>{{newTablesNumber}}</bold> 个新表。',
-                    new_relationships:
-                        '将创建 <bold>{{newRelationshipsNumber}}</bold> 个新关系。',
-                    tables_override:
-                        '将覆盖 <bold>{{tablesOverrideNumber}}</bold> 个表。',
-                    proceed: '您是否要继续操作？',
-                },
-                import: '导入',
-                cancel: '取消',
-            },
         },
-
         new_table_schema_dialog: {
             title: '选择模式',
             description: '当前显示多个模式。请选择一个用于新表。',
@@ -1644,14 +1510,15 @@ export const zh_CN: LanguageTranslation = {
         },
 
         import_diagram_dialog: {
-            title: '导入关系图',
-            description: '在下方粘贴关系图的 JSON：',
+            title: 'Restore Diagram',
+            description:
+                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
             cancel: '取消',
-            import: '导入',
+            import: 'Restore',
             error: {
-                title: '导入关系图时出错',
+                title: 'Could not restore diagram',
                 description:
-                    '关系图 JSON 无效，请检查 JSON 后重试。需要帮助？ 联系 support@chartdb.io',
+                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
             },
         },
         // TODO: Translate

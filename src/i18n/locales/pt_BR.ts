@@ -7,7 +7,7 @@ export const pt_BR: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'Novo',
-            browse: 'Abrir',
+            open: 'Abrir...',
             tables: 'Tabelas',
             refs: 'Refs',
             dependencies: 'Dependências',
@@ -21,15 +21,13 @@ export const pt_BR: LanguageTranslation = {
         },
         menu: {
             actions: {
-                actions: 'Ações',
+                diagram: 'Diagrama',
                 new: 'Novo...',
-                browse: 'Todos os bancos de dados...',
+                open: 'Abrir...',
                 save: 'Salvar',
                 import: 'Importar Banco de Dados',
                 export: 'Exportar...',
                 export_laravel_migrations: 'Laravel migrations',
-                import_laravel_migrations: 'Import Laravel migrations',
-                compare_laravel_migrations: 'Sync from Laravel migrations',
                 export_sql: 'Exportar SQL',
                 export_as: 'Exportar como',
                 merge: 'Mesclar...',
@@ -1595,118 +1593,6 @@ export const pt_BR: LanguageTranslation = {
             },
         },
 
-        import_laravel_migrations_dialog: {
-            title: 'Import Laravel migrations',
-            description:
-                'Upload a ZIP archive of Laravel migration files to preview the parsed schema snapshot.',
-            upload: 'Upload',
-            uploading: 'Uploading...',
-            close: 'Close',
-            upload_another: 'Upload another',
-            no_file_selected: 'No file selected.',
-            errors: {
-                upload_failed: 'Could not import Laravel migrations.',
-                file_required: 'Please select a ZIP file to upload.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                tables: 'Tables',
-                columns: 'Columns',
-                indexes: 'Indexes',
-                foreign_keys: 'Foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                title: 'Tables',
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            foreign_keys: {
-                title: 'Foreign keys',
-            },
-            warnings: {
-                title: 'Warnings',
-                none: 'No warnings.',
-            },
-            source_files: {
-                title: 'Source files',
-            },
-        },
-
-        compare_laravel_migrations_dialog: {
-            title: 'Sync from Laravel migrations',
-            description:
-                'Compare the open diagram with a Laravel migration archive.',
-            archive_label: 'Laravel migrations archive',
-            compare: 'Compare',
-            comparing: 'Comparing...',
-            close: 'Close',
-            compare_another: 'Compare another',
-            no_archive_selected: 'No archive selected.',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Include explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Include separate foreign key migration definitions.',
-            errors: {
-                compare_failed: 'Could not compare Laravel migrations.',
-                archive_required:
-                    'Please select a Laravel migrations archive ZIP file.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            sections: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            changed_tables: {
-                added_columns: 'Added columns',
-                removed_columns: 'Removed columns',
-                changed_columns: 'Changed columns',
-                added_indexes: 'Added indexes',
-                removed_indexes: 'Removed indexes',
-                changed_indexes: 'Changed indexes',
-            },
-            changed_foreign_keys: {
-                before: 'Before',
-            },
-            attribute_change: {
-                arrow: '→',
-            },
-            warnings: {
-                none: 'No warnings.',
-            },
-            apply: {
-                apply: 'Apply changes',
-                applying: 'Applying...',
-                apply_success: 'Changes applied successfully.',
-                apply_failed: 'Could not apply migration changes.',
-                apply_blocked: 'Fix validation issues before applying changes.',
-                ready_to_apply: 'Ready to apply',
-                validation_issues: 'Validation issues',
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-            },
-        },
         create_relationship_dialog: {
             title: 'Criar Relacionamento',
             primary_table: 'Tabela Primária',
@@ -1724,11 +1610,7 @@ export const pt_BR: LanguageTranslation = {
         },
 
         import_database_dialog: {
-            title: 'Importar para o Diagrama Atual',
             import_schema: {
-                title: 'Importar esquema',
-                import: 'Importar',
-                cancel: 'Cancelar',
                 mismatch: {
                     title: 'Este esquema parece {{detected}}, mas este diagrama é {{selected}}.',
                     description:
@@ -1740,23 +1622,7 @@ export const pt_BR: LanguageTranslation = {
                         'Não foi possível identificar o dialeto SQL automaticamente. Confirme como interpretar este esquema para o diagrama {{selected}} atual.',
                 },
             },
-            override_alert: {
-                title: 'Importar Banco de Dados',
-                content: {
-                    alert: 'A importação deste diagrama afetará tabelas e relacionamentos existentes.',
-                    new_tables:
-                        '<bold>{{newTablesNumber}}</bold> novas tabelas serão adicionadas.',
-                    new_relationships:
-                        '<bold>{{newRelationshipsNumber}}</bold> novos relacionamentos serão criados.',
-                    tables_override:
-                        '<bold>{{tablesOverrideNumber}}</bold> tabelas serão sobrescritas.',
-                    proceed: 'Você deseja continuar?',
-                },
-                import: 'Importar',
-                cancel: 'Cancelar',
-            },
         },
-
         new_table_schema_dialog: {
             title: 'Selecionar Esquema',
             description:
@@ -1793,14 +1659,15 @@ export const pt_BR: LanguageTranslation = {
         },
         // TODO: Translate
         import_diagram_dialog: {
-            title: 'Import Diagram',
-            description: 'Paste the diagram JSON below:',
+            title: 'Restaurar diagrama',
+            description:
+                'Envie um arquivo JSON de backup do diagrama. Isso cria um diagrama novo; não substitui nem mescla com o diagrama aberto.',
             cancel: 'Cancel',
-            import: 'Import',
+            import: 'Restaurar',
             error: {
-                title: 'Error importing diagram',
+                title: 'Não foi possível restaurar o diagrama',
                 description:
-                    'The diagram JSON is invalid. Please check the JSON and try again. Need help? support@chartdb.io',
+                    'O JSON do diagrama é inválido. Verifique o arquivo e tente novamente. Ajuda? support@chartdb.io',
             },
         },
         // TODO: Translate

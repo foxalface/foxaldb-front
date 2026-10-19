@@ -22,42 +22,27 @@ import { useHistory } from '@/hooks/use-history';
 import { useTranslation } from 'react-i18next';
 import { useLayout } from '@/hooks/use-layout';
 import { useTheme } from '@/hooks/use-theme';
-import { deleteDiagram as deleteDiagramApi } from '@/lib/api/diagrams';
-import { flushDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { useLocalConfig } from '@/hooks/use-local-config';
-import { useNavigate } from 'react-router-dom';
 import { useAlert } from '@/context/alert-context/alert-context';
-import { useAuth } from '@/hooks/use-auth';
-import { useDiagramAccess } from '@/hooks/use-diagram-access';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
+import { useDiagramMenuActions } from '@/pages/editor-page/use-diagram-menu-actions';
 
 export interface MenuProps {
     onActiveDiagramDeleted?: () => void;
 }
 
 export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
-    const {
-        clearDiagramData,
-        updateDiagramUpdatedAt,
-        databaseType,
-        currentDiagram,
-        readonly,
-        deleteDiagram: deleteLocalDiagram,
-    } = useChartDB();
-    const { diagramAccess } = useDiagramAccess();
-    const {
-        openCreateDiagramDialog,
-        openOpenDiagramDialog,
-        openImportDatabaseDialog,
-        openImportDiagramDialog,
-        openExportWizardDialog,
-        openExportDiagramDialog,
-        openMergeWizardDialog,
-        openLaravelMigrationImportDialog,
-        openLaravelMigrationDiffDialog,
-    } = useDialog();
-    const { isAuthenticated } = useAuth();
+    const { clearDiagramData } = useChartDB();
+    const { openImportDiagramDialog, openExportDiagramDialog } = useDialog();
     const { showAlert } = useAlert();
+    const {
+        canMergeDiagram,
+        createNewDiagram,
+        openDiagram,
+        handleSaveDiagram,
+        openExportWizard,
+        openMergeWizard,
+        confirmDeleteDiagram,
+    } = useDiagramMenuActions({ onActiveDiagramDeleted });
     const { setTheme, theme } = useTheme();
     const { hideSidePanel, isSidePanelShowed, showSidePanel } = useLayout();
     const {
@@ -74,44 +59,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
     } = useLocalConfig();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
-    const navigate = useNavigate();
-
-    const handleDeleteDiagramAction = useCallback(async () => {
-        if (!currentDiagram?.id) {
-            return;
-        }
-
-        if (isAuthenticated && isValidBackendDiagramId(currentDiagram.id)) {
-            await deleteDiagramApi(String(currentDiagram.id));
-            navigate('/');
-            return;
-        }
-
-        if (isAuthenticated) {
-            return;
-        }
-
-        try {
-            await deleteLocalDiagram();
-            onActiveDiagramDeleted?.();
-        } catch {
-            // Deletion failure must not transition entry flow to creatingDiagram.
-        }
-    }, [
-        currentDiagram?.id,
-        isAuthenticated,
-        deleteLocalDiagram,
-        onActiveDiagramDeleted,
-        navigate,
-    ]);
-
-    const createNewDiagram = () => {
-        openCreateDiagramDialog();
-    };
-
-    const openDiagram = () => {
-        openOpenDiagramDialog();
-    };
 
     const openChartDBDocs = useCallback(() => {
         window.open('https://docs.chartdb.io', '_blank');
@@ -141,54 +88,23 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
         setShowMiniMapOnCanvas(!showMiniMapOnCanvas);
     }, [showMiniMapOnCanvas, setShowMiniMapOnCanvas]);
 
-    const handleSaveDiagram = useCallback(async () => {
-        updateDiagramUpdatedAt();
-
-        if (!currentDiagram || !isValidBackendDiagramId(currentDiagram.id)) {
-            return;
-        }
-
-        await flushDiagramAutosave();
-    }, [currentDiagram, updateDiagramUpdatedAt]);
-
-    const canExportLaravelMigrations =
-        isAuthenticated &&
-        currentDiagram?.id &&
-        isValidBackendDiagramId(currentDiagram.id);
-
-    const canMergeDiagram =
-        isAuthenticated &&
-        !!currentDiagram?.id &&
-        isValidBackendDiagramId(currentDiagram.id) &&
-        readonly !== true &&
-        diagramAccess?.can_edit !== false;
-
-    const openLaravelMigrationsDiff = useCallback(() => {
-        if (!canExportLaravelMigrations || !currentDiagram?.id) {
-            return;
-        }
-
-        openLaravelMigrationDiffDialog({
-            diagramId: String(currentDiagram.id),
-            diagramName: currentDiagram.name ?? 'diagram',
-        });
-    }, [
-        canExportLaravelMigrations,
-        currentDiagram?.id,
-        currentDiagram?.name,
-        openLaravelMigrationDiffDialog,
-    ]);
-
     return (
         <Menubar className="h-8 border-none bg-transparent p-0 shadow-none [&_[data-radix-menubar-trigger]]:h-8 [&_[data-radix-menubar-trigger]]:px-2.5">
             <MenubarMenu>
-                <MenubarTrigger>{t('menu.actions.actions')}</MenubarTrigger>
+                <MenubarTrigger>{t('menu.actions.diagram')}</MenubarTrigger>
                 <MenubarContent>
                     <MenubarItem onClick={createNewDiagram}>
                         {t('menu.actions.new')}
+                        <MenubarShortcut>
+                            {
+                                keyboardShortcutsForOS[
+                                    KeyboardShortcutAction.NEW_DIAGRAM
+                                ].keyCombinationLabel
+                            }
+                        </MenubarShortcut>
                     </MenubarItem>
                     <MenubarItem onClick={openDiagram}>
-                        {t('menu.actions.browse')}
+                        {t('menu.actions.open')}
                         <MenubarShortcut>
                             {
                                 keyboardShortcutsForOS[
@@ -197,7 +113,11 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                             }
                         </MenubarShortcut>
                     </MenubarItem>
-                    <MenubarItem onClick={handleSaveDiagram}>
+                    <MenubarItem
+                        onClick={() => {
+                            void handleSaveDiagram();
+                        }}
+                    >
                         {t('menu.actions.save')}
                         <MenubarShortcut>
                             {
@@ -208,82 +128,38 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                         </MenubarShortcut>
                     </MenubarItem>
                     <MenubarSeparator />
-                    <MenubarSub>
-                        <MenubarSubTrigger>
-                            {t('menu.actions.import')}
-                        </MenubarSubTrigger>
-                        <MenubarSubContent>
-                            <MenubarItem onClick={openImportDiagramDialog}>
-                                .json
-                            </MenubarItem>
-                            <MenubarSeparator />
-                            <MenubarItem
-                                onClick={() =>
-                                    openImportDatabaseDialog({
-                                        databaseType,
-                                    })
-                                }
-                            >
-                                SQL
-                            </MenubarItem>
-                            <MenubarItem
-                                onClick={() =>
-                                    openImportDatabaseDialog({
-                                        databaseType,
-                                    })
-                                }
-                            >
-                                DBML
-                            </MenubarItem>
-                            {isAuthenticated ? (
-                                <>
-                                    <MenubarSeparator />
-                                    <MenubarItem
-                                        onClick={
-                                            openLaravelMigrationImportDialog
-                                        }
-                                    >
-                                        {t(
-                                            'menu.actions.import_laravel_migrations'
-                                        )}
-                                    </MenubarItem>
-                                    {canExportLaravelMigrations ? (
-                                        <MenubarItem
-                                            onClick={openLaravelMigrationsDiff}
-                                        >
-                                            {t(
-                                                'menu.actions.compare_laravel_migrations'
-                                            )}
-                                        </MenubarItem>
-                                    ) : null}
-                                </>
-                            ) : null}
-                        </MenubarSubContent>
-                    </MenubarSub>
-                    <MenubarSeparator />
-                    <MenubarItem onClick={openExportWizardDialog}>
+                    <MenubarItem onClick={openExportWizard}>
                         {t('menu.actions.export')}
+                        <MenubarShortcut>
+                            {
+                                keyboardShortcutsForOS[
+                                    KeyboardShortcutAction.EXPORT_DIAGRAM
+                                ].keyCombinationLabel
+                            }
+                        </MenubarShortcut>
                     </MenubarItem>
                     {canMergeDiagram ? (
-                        <MenubarItem onClick={openMergeWizardDialog}>
+                        <MenubarItem onClick={openMergeWizard}>
                             {t('menu.actions.merge')}
+                            <MenubarShortcut>
+                                {
+                                    keyboardShortcutsForOS[
+                                        KeyboardShortcutAction.MERGE_DIAGRAM
+                                    ].keyCombinationLabel
+                                }
+                            </MenubarShortcut>
                         </MenubarItem>
                     ) : null}
                     <MenubarSeparator />
-                    <MenubarItem
-                        onClick={() =>
-                            showAlert({
-                                title: t('delete_diagram_alert.title'),
-                                description: t(
-                                    'delete_diagram_alert.description'
-                                ),
-                                actionLabel: t('delete_diagram_alert.delete'),
-                                closeLabel: t('delete_diagram_alert.cancel'),
-                                onAction: handleDeleteDiagramAction,
-                            })
-                        }
-                    >
+                    <MenubarItem onClick={confirmDeleteDiagram}>
                         {t('menu.actions.delete_diagram')}
+                        <MenubarShortcut>
+                            {
+                                keyboardShortcutsForOS[
+                                    KeyboardShortcutAction.DELETE_DIAGRAM
+                                ].keyCombinationLabel
+                            }
+                        </MenubarShortcut>
                     </MenubarItem>
                 </MenubarContent>
             </MenubarMenu>

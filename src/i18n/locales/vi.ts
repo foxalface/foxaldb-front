@@ -7,7 +7,7 @@ export const vi: LanguageTranslation = {
     translation: {
         editor_sidebar: {
             new_diagram: 'Mới',
-            browse: 'Mở',
+            open: 'Mở...',
             tables: 'Bảng',
             refs: 'Refs',
             dependencies: 'Phụ thuộc',
@@ -21,15 +21,13 @@ export const vi: LanguageTranslation = {
         },
         menu: {
             actions: {
-                actions: 'Hành động',
+                diagram: 'Sơ đồ',
                 new: 'Mới...',
-                browse: 'Tất cả cơ sở dữ liệu...',
+                open: 'Mở...',
                 save: 'Lưu',
                 import: 'Nhập cơ sở dữ liệu',
                 export: 'Xuất...',
                 export_laravel_migrations: 'Laravel migrations',
-                import_laravel_migrations: 'Import Laravel migrations',
-                compare_laravel_migrations: 'Sync from Laravel migrations',
                 export_sql: 'Xuất SQL',
                 export_as: 'Xuất thành',
                 merge: 'Hợp nhất...',
@@ -1559,118 +1557,6 @@ export const vi: LanguageTranslation = {
             },
         },
 
-        import_laravel_migrations_dialog: {
-            title: 'Import Laravel migrations',
-            description:
-                'Upload a ZIP archive of Laravel migration files to preview the parsed schema snapshot.',
-            upload: 'Upload',
-            uploading: 'Uploading...',
-            close: 'Close',
-            upload_another: 'Upload another',
-            no_file_selected: 'No file selected.',
-            errors: {
-                upload_failed: 'Could not import Laravel migrations.',
-                file_required: 'Please select a ZIP file to upload.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                tables: 'Tables',
-                columns: 'Columns',
-                indexes: 'Indexes',
-                foreign_keys: 'Foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                title: 'Tables',
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            foreign_keys: {
-                title: 'Foreign keys',
-            },
-            warnings: {
-                title: 'Warnings',
-                none: 'No warnings.',
-            },
-            source_files: {
-                title: 'Source files',
-            },
-        },
-
-        compare_laravel_migrations_dialog: {
-            title: 'Sync from Laravel migrations',
-            description:
-                'Compare the open diagram with a Laravel migration archive.',
-            archive_label: 'Laravel migrations archive',
-            compare: 'Compare',
-            comparing: 'Comparing...',
-            close: 'Close',
-            compare_another: 'Compare another',
-            no_archive_selected: 'No archive selected.',
-            include_table_indexes: 'Include table indexes',
-            include_table_indexes_description:
-                'Include explicit table index definitions. Field-level unique constraints are always included.',
-            include_foreign_keys: 'Include foreign keys',
-            include_foreign_keys_description:
-                'Include separate foreign key migration definitions.',
-            errors: {
-                compare_failed: 'Could not compare Laravel migrations.',
-                archive_required:
-                    'Please select a Laravel migrations archive ZIP file.',
-                file_too_large: 'File must be 5 MB or smaller.',
-            },
-            summary: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            sections: {
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-                added_foreign_keys: 'Added foreign keys',
-                removed_foreign_keys: 'Removed foreign keys',
-                changed_foreign_keys: 'Changed foreign keys',
-                warnings: 'Warnings',
-            },
-            tables: {
-                columns_count: '{{count}} columns',
-                indexes_count: '{{count}} indexes',
-            },
-            changed_tables: {
-                added_columns: 'Added columns',
-                removed_columns: 'Removed columns',
-                changed_columns: 'Changed columns',
-                added_indexes: 'Added indexes',
-                removed_indexes: 'Removed indexes',
-                changed_indexes: 'Changed indexes',
-            },
-            changed_foreign_keys: {
-                before: 'Before',
-            },
-            attribute_change: {
-                arrow: '→',
-            },
-            warnings: {
-                none: 'No warnings.',
-            },
-            apply: {
-                apply: 'Apply changes',
-                applying: 'Applying...',
-                apply_success: 'Changes applied successfully.',
-                apply_failed: 'Could not apply migration changes.',
-                apply_blocked: 'Fix validation issues before applying changes.',
-                ready_to_apply: 'Ready to apply',
-                validation_issues: 'Validation issues',
-                added_tables: 'Added tables',
-                removed_tables: 'Removed tables',
-                changed_tables: 'Changed tables',
-            },
-        },
         create_relationship_dialog: {
             title: 'Tạo quan hệ',
             primary_table: 'Bảng chính',
@@ -1688,11 +1574,7 @@ export const vi: LanguageTranslation = {
         },
 
         import_database_dialog: {
-            title: 'Nhập vào sơ đồ hiện tại',
             import_schema: {
-                title: 'Nhập lược đồ',
-                import: 'Nhập',
-                cancel: 'Hủy',
                 mismatch: {
                     title: 'Lược đồ này trông giống {{detected}}, nhưng sơ đồ này là {{selected}}.',
                     description:
@@ -1704,23 +1586,7 @@ export const vi: LanguageTranslation = {
                         'Không thể tự động xác định phương ngữ SQL. Xác nhận cách diễn giải lược đồ này cho sơ đồ {{selected}} hiện tại.',
                 },
             },
-            override_alert: {
-                title: 'Nhập cơ sở dữ liệu',
-                content: {
-                    alert: 'Việc nhập sơ đồ này sẽ ảnh hưởng đến các bảng và mối quan hệ hiện có.',
-                    new_tables:
-                        '<bold>{{newTablesNumber}}</bold> bảng mới sẽ được thêm vào.',
-                    new_relationships:
-                        '<bold>{{newRelationshipsNumber}}</bold> quan hệ mới sẽ được tạo.',
-                    tables_override:
-                        '<bold>{{tablesOverrideNumber}}</bold> bảng sẽ bị ghi đè.',
-                    proceed: 'Bạn có muốn tiếp tục không?',
-                },
-                import: 'Nhập',
-                cancel: 'Hủy',
-            },
         },
-
         new_table_schema_dialog: {
             title: 'Chọn lược đồ',
             description:
@@ -1756,14 +1622,15 @@ export const vi: LanguageTranslation = {
         },
 
         import_diagram_dialog: {
-            title: 'Nhập sơ đồ',
-            description: 'Dán sơ đồ ở dạng JSON bên dưới:',
+            title: 'Restore Diagram',
+            description:
+                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
             cancel: 'Hủy',
-            import: 'Nhập',
+            import: 'Restore',
             error: {
-                title: 'Lỗi khi nhập sơ đồ',
+                title: 'Could not restore diagram',
                 description:
-                    'Sơ đồ ở dạng JSON không hợp lệ. Vui lòng kiểm tra JSON và thử lại. Bạn cần trợ giúp? support@chartdb.io',
+                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
             },
         },
         // TODO: Translate

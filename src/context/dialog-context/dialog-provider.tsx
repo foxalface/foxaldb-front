@@ -8,7 +8,6 @@ import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sq
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import { CreateRelationshipDialog } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
-import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog/import-database-dialog';
 import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { TableSchemaDialog } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import { emptyFn } from '@/lib/utils';
@@ -17,9 +16,6 @@ import { ExportWizardDialog } from '@/dialogs/export-wizard/export-wizard-dialog
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 import { UserSettingsDialog } from '@/dialogs/user-settings-dialog/user-settings-dialog';
-import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
-import { LaravelMigrationImportDialog } from '@/dialogs/laravel-migration-import-dialog/laravel-migration-import-dialog';
-import { LaravelMigrationDiffDialog } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
 import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
 import type { EntryFlowGuestMigrationActions } from '@/pages/editor-page/entry-flow-guest-migration-actions';
@@ -45,14 +41,6 @@ const MergeWizardDialogLazy = lazy(() =>
     import('@/dialogs/merge-wizard/merge-wizard-dialog').then((module) => ({
         default: module.MergeWizardDialog,
     }))
-);
-
-const ImportDatabaseDialogLazy = lazy(() =>
-    import('@/dialogs/import-database-dialog/import-database-dialog').then(
-        (module) => ({
-            default: module.ImportDatabaseDialog,
-        })
-    )
 );
 
 export const DialogProvider: React.FC<
@@ -134,24 +122,6 @@ export const DialogProvider: React.FC<
             [setOpenExportSQLDialog]
         );
 
-    // Import database dialog
-    const [openImportDatabaseDialog, setOpenImportDatabaseDialog] =
-        useState(false);
-    const [importDatabaseDialogParams, setImportDatabaseDialogParams] =
-        useState<Omit<ImportDatabaseDialogProps, 'dialog'>>({
-            databaseType: DatabaseType.GENERIC,
-        });
-    const openImportDatabaseDialogHandler: DialogContext['openImportDatabaseDialog'] =
-        useCallback(
-            ({ databaseType }) => {
-                setImportDatabaseDialogParams({
-                    databaseType,
-                });
-                setOpenImportDatabaseDialog(true);
-            },
-            [setOpenImportDatabaseDialog]
-        );
-
     // Table schema dialog
     const [openTableSchemaDialog, setOpenTableSchemaDialog] = useState(false);
     const [tableSchemaDialogParams, setTableSchemaDialogParams] = useState<
@@ -185,9 +155,6 @@ export const DialogProvider: React.FC<
     const [createDiagramDialogMounted, setCreateDiagramDialogMounted] =
         useState(false);
     const [exportSQLDialogMounted, setExportSQLDialogMounted] = useState(false);
-    const [importDatabaseDialogMounted, setImportDatabaseDialogMounted] =
-        useState(false);
-
     useEffect(() => {
         if (openNewDiagramDialog) {
             setCreateDiagramDialogMounted(true);
@@ -201,34 +168,10 @@ export const DialogProvider: React.FC<
     }, [openExportSQLDialog]);
 
     useEffect(() => {
-        if (openImportDatabaseDialog) {
-            setImportDatabaseDialogMounted(true);
-        }
-    }, [openImportDatabaseDialog]);
-
-    useEffect(() => {
         if (openMergeWizardDialog) {
             setMergeWizardMounted(true);
         }
     }, [openMergeWizardDialog]);
-
-    const [
-        openLaravelMigrationImportDialog,
-        setOpenLaravelMigrationImportDialog,
-    ] = useState(false);
-
-    const [openLaravelMigrationDiffDialog, setOpenLaravelMigrationDiffDialog] =
-        useState(false);
-    const [
-        laravelMigrationDiffDialogParams,
-        setLaravelMigrationDiffDialogParams,
-    ] = useState<Omit<LaravelMigrationDiffDialogProps, 'dialog'>>();
-
-    const openLaravelMigrationDiffDialogHandler: DialogContext['openLaravelMigrationDiffDialog'] =
-        useCallback((params) => {
-            setLaravelMigrationDiffDialogParams(params);
-            setOpenLaravelMigrationDiffDialog(true);
-        }, []);
 
     return (
         <dialogContext.Provider
@@ -241,24 +184,12 @@ export const DialogProvider: React.FC<
                 closeExportWizardDialog: () => setOpenExportWizardDialog(false),
                 openMergeWizardDialog: () => setOpenMergeWizardDialog(true),
                 closeMergeWizardDialog: () => setOpenMergeWizardDialog(false),
-                openLaravelMigrationImportDialog: () =>
-                    setOpenLaravelMigrationImportDialog(true),
-                closeLaravelMigrationImportDialog: () =>
-                    setOpenLaravelMigrationImportDialog(false),
-                openLaravelMigrationDiffDialog:
-                    openLaravelMigrationDiffDialogHandler,
-                closeLaravelMigrationDiffDialog: () =>
-                    setOpenLaravelMigrationDiffDialog(false),
                 openExportSQLDialog: openExportSQLDialogHandler,
                 closeExportSQLDialog: () => setOpenExportSQLDialog(false),
                 openCreateRelationshipDialog:
                     openCreateRelationshipDialogHandler,
                 closeCreateRelationshipDialog: () =>
                     setOpenCreateRelationshipDialog(false),
-                openImportDatabaseDialog: openImportDatabaseDialogHandler,
-                closeImportDatabaseDialog: () => {
-                    setOpenImportDatabaseDialog(false);
-                },
                 openTableSchemaDialog: openTableSchemaDialogHandler,
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
                 openAuthDialog: () => setOpenAuthDialog(true),
@@ -306,14 +237,6 @@ export const DialogProvider: React.FC<
                 dialog={{ open: openCreateRelationshipDialog }}
                 {...createRelationshipDialogParams}
             />
-            {importDatabaseDialogMounted ? (
-                <Suspense fallback={null}>
-                    <ImportDatabaseDialogLazy
-                        dialog={{ open: openImportDatabaseDialog }}
-                        {...importDatabaseDialogParams}
-                    />
-                </Suspense>
-            ) : null}
             <TableSchemaDialog
                 dialog={{ open: openTableSchemaDialog }}
                 {...tableSchemaDialogParams}
@@ -339,15 +262,6 @@ export const DialogProvider: React.FC<
             ) : null}
             <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
             <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
-            <LaravelMigrationImportDialog
-                dialog={{ open: openLaravelMigrationImportDialog }}
-            />
-            {laravelMigrationDiffDialogParams ? (
-                <LaravelMigrationDiffDialog
-                    dialog={{ open: openLaravelMigrationDiffDialog }}
-                    {...laravelMigrationDiffDialogParams}
-                />
-            ) : null}
         </dialogContext.Provider>
     );
 };

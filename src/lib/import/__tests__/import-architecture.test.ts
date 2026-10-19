@@ -61,18 +61,9 @@ describe('import architecture regression', () => {
         expect(createDialog).not.toMatch(/dialogs\/common\/import-database/);
     });
 
-    it('routes existing-diagram import through ImportSchemaStep', () => {
-        const importDialog = readFileSync(
-            join(
-                SRC_ROOT,
-                'dialogs/import-database-dialog/import-database-dialog.tsx'
-            ),
-            'utf8'
-        );
-
-        expect(importDialog).toContain('ImportSchemaStep');
-        expect(importDialog).not.toMatch(
-            /from ['"]@\/dialogs\/common\/import-database/
-        );
+    it('does not register ImportDatabaseDialog in the editor shell', () => {
+        expect(productionSource).not.toMatch(/\bImportDatabaseDialog\b/);
+        expect(productionSource).not.toMatch(/\bopenImportDatabaseDialog\b/);
+        expect(productionSource).not.toMatch(/\bmergeImportIntoDiagram\b/);
     });
 });

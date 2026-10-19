@@ -64,20 +64,10 @@ interface ImportSchemaStepBaseProps {
     backLabel?: string;
 }
 
-export interface ImportSchemaStepCreateProps extends ImportSchemaStepBaseProps {
-    mode?: 'create';
+export interface ImportSchemaStepProps extends ImportSchemaStepBaseProps {
     setDatabaseType: React.Dispatch<React.SetStateAction<DatabaseType>>;
     onBack: () => void;
 }
-
-export interface ImportSchemaStepExistingProps extends ImportSchemaStepBaseProps {
-    mode: 'existing';
-    onBack: () => void;
-}
-
-export type ImportSchemaStepProps =
-    | ImportSchemaStepCreateProps
-    | ImportSchemaStepExistingProps;
 
 const releaseArchiveReader = (archive: ArchiveReader | null): void => {
     archive?.close();
@@ -97,11 +87,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         backLabel,
     } = props;
 
-    const mode = props.mode ?? 'create';
-    const setDatabaseType =
-        mode === 'create' && 'setDatabaseType' in props
-            ? props.setDatabaseType
-            : undefined;
+    const { setDatabaseType } = props;
 
     const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
@@ -266,9 +252,9 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
     const baseAnalysis = useMemo(
         () =>
             analyzeImportContent(scriptResult, databaseType, {
-                importContext: mode,
+                importContext: 'create',
             }),
-        [scriptResult, databaseType, mode]
+        [scriptResult, databaseType]
     );
 
     const effectiveResolvedSourceDialect = useMemo(() => {
@@ -318,10 +304,6 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         }
 
         if (baseAnalysis.resolutionState === 'mismatch') {
-            if (mode === 'existing') {
-                return false;
-            }
-
             return (
                 userResolvedSourceDialect !== null &&
                 userResolvedSourceDialect === baseAnalysis.detectedDatabaseType
@@ -337,10 +319,6 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         }
 
         if (baseAnalysis.importMethod === 'diagram') {
-            if (mode === 'existing') {
-                return false;
-            }
-
             if (baseAnalysis.resolutionState === 'ambiguous') {
                 return userResolvedSourceDialect !== null;
             }
@@ -357,7 +335,6 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         effectiveResolvedSourceDialect,
         isAnalyzingDatabaseGroups,
         isAuthenticated,
-        mode,
         projectAnalysis,
         userResolvedSourceDialect,
     ]);
@@ -427,17 +404,13 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
     ]);
 
     const handleSwitchDatabase = useCallback(() => {
-        if (mode !== 'create' || !setDatabaseType) {
-            return;
-        }
-
         if (!baseAnalysis.detectedDatabaseType) {
             return;
         }
 
         setDatabaseType(baseAnalysis.detectedDatabaseType);
         setUserResolvedSourceDialect(baseAnalysis.detectedDatabaseType);
-    }, [baseAnalysis.detectedDatabaseType, mode, setDatabaseType]);
+    }, [baseAnalysis.detectedDatabaseType, setDatabaseType]);
 
     const handleResolveAmbiguousDialect = useCallback(
         (resolvedDialect: DatabaseType) => {
@@ -580,23 +553,13 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         [resetProjectArchiveState, setScriptResult]
     );
 
-    const resolvedTitle =
-        title ??
-        (mode === 'existing'
-            ? t('import_database_dialog.import_schema.title')
-            : t('new_diagram_dialog.import_schema.title'));
+    const resolvedTitle = title ?? t('new_diagram_dialog.import_schema.title');
 
     const resolvedBackLabel =
-        backLabel ??
-        (mode === 'existing'
-            ? t('import_database_dialog.import_schema.cancel')
-            : t('new_diagram_dialog.import_schema.back'));
+        backLabel ?? t('new_diagram_dialog.import_schema.back');
 
     const resolvedContinueLabel =
-        continueLabel ??
-        (mode === 'existing'
-            ? t('import_database_dialog.import_schema.import')
-            : t('new_diagram_dialog.import_schema.import'));
+        continueLabel ?? t('new_diagram_dialog.import_schema.import');
 
     const showTextImportPanels =
         !projectAnalysis && !isAnalyzingProject && scriptResult.length > 0;
@@ -705,23 +668,19 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     baseAnalysis.displayKind === 'dialect_mismatch' &&
                     baseAnalysis.detectedDatabaseType ? (
                         <DialectMismatchPanel
-                            variant={mode}
+                            variant="create"
                             selectedDatabaseType={databaseType}
                             detectedDatabaseType={
                                 baseAnalysis.detectedDatabaseType
                             }
-                            onSwitchDatabase={
-                                mode === 'create'
-                                    ? handleSwitchDatabase
-                                    : undefined
-                            }
+                            onSwitchDatabase={handleSwitchDatabase}
                         />
                     ) : null}
 
                     {showTextImportPanels &&
                     baseAnalysis.resolutionState === 'ambiguous' ? (
                         <DialectResolutionPanel
-                            variant={mode}
+                            variant="create"
                             copyVariant={
                                 baseAnalysis.displayKind ===
                                 'diagram_json_mismatch'

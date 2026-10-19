@@ -22,7 +22,6 @@ import {
     Group,
     View,
     StickyNote,
-    Import,
     LayoutGrid,
     Plus,
     SquareArrowOutUpRight,
@@ -55,8 +54,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         updateTablesState,
     } = useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
-    const { openCreateRelationshipDialog, openImportDatabaseDialog } =
-        useDialog();
+    const { openCreateRelationshipDialog } = useDialog();
     const { screenToFlowPosition, getNodes } = useReactFlow();
     const { t } = useTranslation();
     const { showDBViews } = useLocalConfig();
@@ -204,14 +202,6 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             onAction: reorderTables,
         });
     }, [t, showAlert, reorderTables]);
-
-    const importSqlDbmlHandler = useCallback(() => {
-        queueMicrotask(() => {
-            openImportDatabaseDialog({
-                databaseType,
-            });
-        });
-    }, [openImportDatabaseDialog, databaseType]);
 
     // Arrange selected tables into an area
     const moveSelectedToArea = useCallback(
@@ -381,13 +371,6 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                         <ContextMenuSeparator />
                     </>
                 ) : null}
-                <ContextMenuItem
-                    onClick={importSqlDbmlHandler}
-                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
-                >
-                    <Import className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
-                    Import SQL/DBML
-                </ContextMenuItem>
                 {hasSelectedTables && (
                     <>
                         <ContextMenuSeparator />

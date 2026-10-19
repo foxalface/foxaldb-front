@@ -2,6 +2,16 @@
 
 Developer reference for FoxalDB v1 schema and metadata import.
 
+## Product rule (M11.1A)
+
+| Action | Scope |
+|--------|--------|
+| **Import** | **New diagram only** — create-diagram wizard (`ImportSchemaStep`) and metadata extraction step |
+| **Restore** | **New diagram from backup JSON** — `ImportDiagramDialog` (Backup → Restore; also linked from New Diagram database step) |
+| **Merge** | **Existing diagram evolution** — Schema Merge wizard (`Diagram → Merge`) |
+
+SQL, DBML, metadata JSON, diagram JSON, and project ZIP sources applied to an **open** diagram are **not** direct import. They go through Schema Merge (compare → apply), not `ImportDatabaseDialog` or additive client merge.
+
 ## Canonical model
 
 `Diagram` is the single in-memory representation. All import paths produce a temporary `Diagram` before any persistence or editor mutation.
@@ -14,8 +24,6 @@ Developer reference for FoxalDB v1 schema and metadata import.
 | Diagram JSON file | `diagramFromJSONInput()` via create wizard `ImportSchemaStep` or standalone `ImportDiagramDialog` |
 
 `importSchema()` is a deterministic dispatch boundary only. It does not persist, navigate, or mutate the open editor.
-
-`mergeImportIntoDiagram()` owns additive merge into an existing diagram (tables, relationships, positioning). Used only by `ImportDatabaseDialog`.
 
 ## Detection
 
@@ -36,13 +44,15 @@ No AI or network calls in import paths.
 - DBML → mapped to `selectedDatabaseType`.
 - Metadata → script and diagram use `selectedDatabaseType` (+ optional `databaseEdition`).
 
-### Existing diagram
+### Existing diagram (Schema Merge only)
 
-- `currentDiagram.databaseType` is immutable target.
-- SQL dialect mismatch → block; never switch diagram DBMS or convert silently.
+Schema evolution on an open diagram uses **Schema Merge**, not import-into-current-diagram.
+
+- `currentDiagram.databaseType` is the immutable target for merge.
+- SQL dialect mismatch → block in merge source step; never switch diagram DBMS or convert silently.
 - Ambiguous SQL → explicit resolution; current diagram DBMS preferred as hint.
 
-Schema Merge source preparation reuses these detectors through `prepareSchemaMergeSource()`. It does not merge into the open diagram. Diagram JSON is accepted there when the embedded database type is compatible with the current diagram. This existing-diagram dialog still rejects diagram JSON.
+Schema Merge source preparation reuses these detectors through `prepareSchemaMergeSource()`. It does not merge into the open diagram on the client. Diagram JSON is accepted when the embedded database type is compatible with the current diagram.
 
 ## User flows
 
@@ -52,15 +62,24 @@ Schema Merge source preparation reuses these detectors through `prepareSchemaMer
 SELECT_DATABASE → CHOOSE_INTENT
   ├─ Create empty → persist
   ├─ Import schema → IMPORT_DATABASE (ImportSchemaStep) → [SELECT_TABLES?] → persist
-  │    Supports SQL, DBML, metadata JSON, and diagram JSON (with DBMS mismatch resolution)
+  │    Supports SQL, DBML, metadata JSON, diagram JSON, and project ZIP (with DBMS mismatch resolution)
   └─ Import from existing database → IMPORT_FROM_DATABASE → [SELECT_TABLES?] → persist
 ```
 
 `SELECT_TABLES` back navigation is origin-aware (`schema` | `from_database`).
 
-### Import into current diagram
+### Diagram JSON restore (backup)
 
-Editor → `ImportDatabaseDialog` → `ImportSchemaStep` (mode `existing`) → `importSchema()` → `mergeImportIntoDiagram()`.
+`ImportDiagramDialog` — uploads a diagram backup `.json` file and creates a **new** diagram. It does **not** replace or merge into the open diagram.
+
+| Audience | Persistence | Navigation |
+|----------|-------------|------------|
+| Guest | Dexie `addDiagram` + in-memory load | `/diagrams/{localId}` |
+| Authenticated | `POST /diagrams` (`createDiagram`) + autosave `content_hash` seed from `GET /diagrams/{id}` | `/diagrams/{backendId}` |
+
+Entry points: **Backup → Restore diagram**; optional shortcut from the New Diagram database step. Not in the Diagram menu.
+
+Parsing uses `parseDiagramJsonContent()` (new diagram id via `generateDiagramId()`; table/relationship ids from `cloneDiagram`).
 
 ### Advanced metadata extraction
 
@@ -134,7 +153,7 @@ Users may upload a full project ZIP, a project subfolder ZIP, or a minimal relev
 
 When a single archive contains **multiple logical database schemas** (for example Laravel `database/migrations/catalog/` and `database/migrations/tenant/`, or multiple EF Core `DbContext` snapshots), FoxalDB detects the groups and asks which schema to import. One selected group produces one new diagram. Shared root migrations may be included as supporting files when framework semantics require them.
 
-Project ZIP import still creates a new diagram. Schema Merge source preparation reuses `importProject()` and does not merge into the open diagram. See [schema merge](./schema-merge.md).
+Project ZIP import still creates a new diagram. Schema Merge source preparation reuses `importProject()` and does not merge into the open diagram on the client. See [schema merge](./schema-merge.md).
 
 ### Known limitations (summary)
 
@@ -147,9 +166,9 @@ Project ZIP import still creates a new diagram. Schema Merge source preparation 
 
 ### Legacy Laravel endpoints (separate from project import)
 
-These remain for Compare/Sync and the editor Laravel migration import dialog:
+These remain for export round-trip QA and optional backend tooling (M11.1B removed the editor Laravel import/sync dialogs):
 
-- `POST /api/laravel-migrations/import` — legacy ZIP snapshot import (editor menu)
+- `POST /api/laravel-migrations/import` — legacy ZIP snapshot import (**no active editor UI**; M11.4 cleanup candidate)
 - `POST /api/laravel-migrations/diff` — migration diff without diagram context
 - `POST /api/diagrams/{diagram}/laravel-migrations/diff` — diagram-aware diff
 - `POST /api/diagrams/{diagram}/export/laravel-migrations` — export
@@ -160,7 +179,7 @@ Generic project import uses `POST /api/project-import/parse` only.
 
 - `lib/import/import-schema.ts` — dispatcher
 - `lib/import/detect-format.ts`, `detect-sql-dialect.ts`
-- `dialogs/common/import-schema/` — shared paste/file UI
+- `dialogs/common/import-schema/` — shared paste/file UI (create wizard + merge source reuse)
 - `dialogs/create-diagram-dialog/import-from-database/` — metadata extraction step
 - `lib/data/sql-import/` — dialect parsers
 - `lib/data/import-metadata/` — metadata scripts and loader

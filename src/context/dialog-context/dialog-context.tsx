@@ -1,7 +1,6 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
 import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
-import type { ImportDatabaseDialogProps } from '@/dialogs/import-database-dialog/import-database-dialog';
 import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import type { ExportDiagramDialogProps } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
@@ -10,7 +9,6 @@ import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 import type { ExportWizardDialogProps } from '@/dialogs/export-wizard/export-wizard-dialog';
 import type { MergeWizardDialogProps } from '@/dialogs/merge-wizard/merge-wizard-dialog';
-import type { LaravelMigrationDiffDialogProps } from '@/dialogs/laravel-migration-diff-dialog/laravel-migration-diff-dialog';
 import type { GuestDiagramMigrationDialogProps } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
 
 export interface DialogContext {
@@ -38,16 +36,6 @@ export interface DialogContext {
     ) => void;
     closeMergeWizardDialog: () => void;
 
-    // Import Laravel migrations dialog
-    openLaravelMigrationImportDialog: () => void;
-    closeLaravelMigrationImportDialog: () => void;
-
-    // Compare Laravel migrations dialog
-    openLaravelMigrationDiffDialog: (
-        params: Omit<LaravelMigrationDiffDialogProps, 'dialog'>
-    ) => void;
-    closeLaravelMigrationDiffDialog: () => void;
-
     // Export SQL dialog
     openExportSQLDialog: (params: Omit<ExportSQLDialogProps, 'dialog'>) => void;
     closeExportSQLDialog: () => void;
@@ -57,12 +45,6 @@ export interface DialogContext {
         params?: Omit<CreateRelationshipDialogProps, 'dialog'>
     ) => void;
     closeCreateRelationshipDialog: () => void;
-
-    // Import database dialog
-    openImportDatabaseDialog: (
-        params: Omit<ImportDatabaseDialogProps, 'dialog'>
-    ) => void;
-    closeImportDatabaseDialog: () => void;
 
     // Change table schema dialog
     openTableSchemaDialog: (
@@ -106,16 +88,10 @@ export const dialogContext = createContext<DialogContext>({
     closeExportWizardDialog: emptyFn,
     openMergeWizardDialog: emptyFn,
     closeMergeWizardDialog: emptyFn,
-    openLaravelMigrationImportDialog: emptyFn,
-    closeLaravelMigrationImportDialog: emptyFn,
-    openLaravelMigrationDiffDialog: emptyFn,
-    closeLaravelMigrationDiffDialog: emptyFn,
     openExportSQLDialog: emptyFn,
     closeExportSQLDialog: emptyFn,
     closeCreateRelationshipDialog: emptyFn,
     openCreateRelationshipDialog: emptyFn,
-    openImportDatabaseDialog: emptyFn,
-    closeImportDatabaseDialog: emptyFn,
     openTableSchemaDialog: emptyFn,
     closeTableSchemaDialog: emptyFn,
     openAuthDialog: emptyFn,
