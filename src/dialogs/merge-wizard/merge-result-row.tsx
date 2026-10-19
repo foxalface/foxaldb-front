@@ -41,7 +41,7 @@ export const MergeResultRow: React.FC<{
     return (
         <div
             className={cn(
-                'flex items-start gap-2 rounded-sm py-1.5 pr-1 -mr-1 outline-none transition-colors hover:bg-muted/50 focus-within:bg-muted/50',
+                'flex items-center gap-2 rounded-sm py-1.5 pr-1 -mr-1 outline-none transition-colors hover:bg-muted/50 focus-within:bg-muted/50',
                 highlighted && 'bg-muted/50'
             )}
             data-testid={`merge-result-row-${operation.id}`}
@@ -58,7 +58,6 @@ export const MergeResultRow: React.FC<{
             }}
         >
             <Checkbox
-                className="mt-0.5"
                 checked={selected}
                 disabled={disabled}
                 aria-label={mergeOperationSelectLabel(

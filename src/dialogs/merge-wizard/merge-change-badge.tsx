@@ -16,7 +16,7 @@ export const MergeChangeBadge: React.FC<{
     return (
         <span
             className={cn(
-                'inline-flex shrink-0 items-center',
+                'inline-flex size-5 shrink-0 items-center justify-center',
                 visual.textClassName
             )}
             aria-hidden={decorative ? true : undefined}
