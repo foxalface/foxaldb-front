@@ -229,6 +229,23 @@ Goldens for M11.2+ use `lib/import/test-support/diagram-semantic-projection.ts` 
 
 **Raw `DBRelationship` orientation:** SQL and metadata importers historically store **referenced → FK holder** on `source`/`target`. DBML import stores **FK holder → referenced**. Semantic goldens always assert **referencing FK → referenced key** via `projectDiagramSemantics()`. Application code must not infer FK meaning from raw `source`/`target` alone without importer context.
 
+#### M11.3 framework project semantic goldens
+
+| Framework | Parser location | Authoritative source | Semantic tests |
+|-----------|-----------------|----------------------|----------------|
+| Prisma | local (`parsePrismaProject`) | `prisma/schema.prisma` | `project-import/__tests__/semantic/semantic-golden-local-frameworks.test.ts` |
+| Rails | local (`parseRailsProject`) | `db/schema.rb` | same |
+| Drizzle | local (`parseDrizzleProject`) | ordered `drizzle/*.sql` + journal/config | same (+ cumulative `varchar(32)` / ALTER replay) |
+| Laravel | remote (`POST /api/project-import/parse`) | `database/migrations/*.php` | backend `FrameworkSemanticGoldenTest` + `ProjectDiagramSemantics` |
+| EF Core | remote | `*ModelSnapshot.cs` | backend semantic goldens (M7.2 aggregation, `HasColumnName`) |
+| Django | remote | `**/migrations/*.py` | backend semantic goldens (M9.1 cumulative `catalog_products`) |
+
+**Auth / guest:** local frameworks parse as guest or authenticated; remote frameworks detect for guests but require auth to parse (`canExecuteProjectImport`).
+
+**Enum / custom types:** Prisma enums → Diagram custom types; Laravel migration `enum()` when parsed; Drizzle via SQL; Rails/Django choices generally **not** custom DB types (P2).
+
+**Relationship semantics:** goldens assert **referencing FK → referenced key** via `projectDiagramSemantics()` (frontend) or `Tests\Support\ProjectImport\ProjectDiagramSemantics` (backend). Django default table names (`users_user`, `posts_post`) and EF PascalCase PK columns (`Id`) are preserved in Diagram field names.
+
 **Documented limitations (P2/P3, not fixed in M11.2):**
 
 - PostgreSQL `COMMENT ON` → field/table comments not mapped from SQL DDL.
