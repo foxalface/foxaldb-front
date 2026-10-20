@@ -55,9 +55,9 @@ Transforms the canonical `Diagram` into framework-native schema/code artifacts:
 - Laravel migrations (ZIP) — **implemented**
 - Prisma (`schema.prisma`) — **implemented**
 - EF Core (model project ZIP) — **implemented**
-- Rails (Rails 8.1 package ZIP) — **implemented** (wizard + browser ZIP; Ruby runtime QA still pending)
-- Django (Django 6.1 drop-in app ZIP) — **implemented** (wizard + browser ZIP; runtime QA deferred; manual browser/ZIP QA still required)
-- Drizzle (drizzle-orm ^0.45 schema package ZIP) — **implemented** (wizard + browser ZIP; runtime drizzle-kit QA deferred; manual browser/ZIP QA still required)
+- Rails (Rails 8.1 package ZIP) — **implemented** (wizard + browser ZIP; Ruby runtime QA green — U3.4 / Full Regression #9)
+- Django (Django 6.1 drop-in app ZIP) — **implemented** (wizard + browser ZIP; Django runtime QA green — U3.5 / Full Regression #9)
+- Drizzle (drizzle-orm ^0.45 schema package ZIP) — **implemented** (wizard + browser ZIP; drizzle-kit runtime QA green — U3.6 / Full Regression #9)
 
 Framework import parsers are **not** inverted into exporters. Each framework export receives its own implementation milestone with independent tests and QA.
 
@@ -84,7 +84,7 @@ Visual export is technically independent. It uses DOM/React Flow capture (`html-
 
 ## Export Wizard (UX entry)
 
-**Implemented:** `frontend/src/dialogs/export-wizard/` — single user-facing Export entry (Actions → Export).
+**Implemented:** `frontend/src/dialogs/export-wizard/` — single user-facing Export entry (Diagram menu → **Export**).
 
 The wizard is **product/orchestration UX only**. It does not imply a universal exporter implementation, generic `Exporter` interface, or shared backend export router.
 
@@ -115,7 +115,7 @@ The wizard is **product/orchestration UX only**. It does not imply a universal e
 | **Auth**         | None (guest OK)                                                                                                                                                       |
 | **Generators**   | `frontend/src/lib/data/sql-export/export-sql-script.ts` (`exportBaseSQL`, `exportSQL`), `export-per-type/*`, `cross-dialect/*`                                        |
 | **Output**       | SQL DDL string; wizard preview via `CodeSnippet` (copy + `.sql` download)                                                                                             |
-| **Entry points** | Actions → Export wizard → SQL (`export-wizard-dialog.tsx`, `export-wizard/sql/*`); legacy `export-sql-dialog.tsx` (no user-facing entry; retained in dialog provider) |
+| **Entry points** | Diagram → Export wizard → SQL (`export-wizard-dialog.tsx`, `export-wizard/sql/*`); legacy `export-sql-dialog.tsx` (no user-facing entry; retained in dialog provider) |
 | **Tests**        | `frontend/src/lib/data/sql-export/__tests__/`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-sql.test.tsx`                                              |
 
 **Routing (`exportBaseSQL`):**
@@ -291,7 +291,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | **Entry points**        | Export wizard → Rails (`RAILS_RESULT`; no version or options step)                                                                                                                                                                                                                                                                         |
 | **Tests**               | `frontend/src/lib/api/__tests__/rails-export.test.ts`; `frontend/src/lib/export/__tests__/rails-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-rails.test.tsx`; backend PHPUnit under `backend/tests/Feature/RailsExportTest.php` and `backend/tests/Unit/Services/RailsExport/`                           |
 
-**Rails 8.1 only.** There is no version selector and no version request field. Wizard flow is `TARGET_PICKER` → `RAILS_RESULT`. Selecting Rails starts generation immediately. Ruby/`rails` runtime QA is **R6** and is not done.
+**Rails 8.1 only.** There is no version selector and no version request field. Wizard flow is `TARGET_PICKER` → `RAILS_RESULT`. Selecting Rails starts generation immediately. Ruby/`rails` runtime QA is green (U3.4; included in Full Regression #9 on `ubuntu-26.04`, 54/54).
 
 **Provider inference:** `diagram.databaseType` only. No provider override and no connection string.
 
@@ -323,7 +323,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | **Entry points**        | Export wizard → Django (`DJANGO_RESULT`; no version, provider, or options step)                                                                                                                                                                                                                                                                                                               |
 | **Tests**               | `frontend/src/lib/api/__tests__/django-export.test.ts`; `frontend/src/lib/export/__tests__/django-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-django.test.tsx`; `frontend/src/i18n/__tests__/django-export-locale-consistency.test.ts`; backend PHPUnit under `backend/tests/Feature/DjangoExportTest.php` and `backend/tests/Unit/Services/DjangoExport/` |
 
-**Django 6.1 only.** There is no version selector, no Python version selector, and no provider selector. Wizard flow is `TARGET_PICKER` → `DJANGO_RESULT`. Selecting Django starts generation immediately. Runtime Django QA is deferred to unified Framework Export QA and is not done. Manual browser/ZIP QA is still required.
+**Django 6.1 only.** There is no version selector, no Python version selector, and no provider selector. Wizard flow is `TARGET_PICKER` → `DJANGO_RESULT`. Selecting Django starts generation immediately. Runtime Django QA is green (U3.5; Full Regression #9 on `ubuntu-26.04`, 54/54).
 
 **Provider inference:** `diagram.databaseType` only. No provider override and no connection string. Unsupported types are **not** aliased to SQLite.
 
@@ -355,7 +355,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | **Entry points**        | Export wizard → Drizzle (`DRIZZLE_RESULT`; no version, provider, or options step)                                                                                                                                                                                                                                                                                                                   |
 | **Tests**               | `frontend/src/lib/api/__tests__/drizzle-export.test.ts`; `frontend/src/lib/export/__tests__/drizzle-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-drizzle.test.tsx`; `frontend/src/i18n/__tests__/drizzle-export-locale-consistency.test.ts`; backend PHPUnit under `backend/tests/Feature/DrizzleExportTest.php` and `backend/tests/Unit/Services/DrizzleExport/` |
 
-**drizzle-orm ^0.45 / drizzle-kit ^0.31 only.** There is no version selector, no provider selector, and no options step. Wizard flow is `TARGET_PICKER` → `DRIZZLE_RESULT`. Selecting Drizzle starts generation immediately. D5 automated frontend QA passed (Drizzle API/ZIP/capability/notes/wizard tests, export-wizard Django/Rails/EF Core/Prisma/SQL/DBML/JSON/visual regressions, locale consistency, Drizzle importer tests, TypeScript, ESLint, Prettier). Manual browser/ZIP QA is still required. Runtime `drizzle-kit` QA is deferred to unified Framework Export QA and is not done.
+**drizzle-orm ^0.45 / drizzle-kit ^0.31 only.** There is no version selector, no provider selector, and no options step. Wizard flow is `TARGET_PICKER` → `DRIZZLE_RESULT`. Selecting Drizzle starts generation immediately. D5 automated frontend QA passed. Runtime `drizzle-kit` QA is green (U3.6; drizzle-kit `0.31.11`; Full Regression #9 on `ubuntu-26.04`, 54/54).
 
 **Provider inference:** `diagram.databaseType` only. No provider override and no connection string. Unsupported types are **not** aliased to PostgreSQL or SQLite.
 
@@ -462,14 +462,9 @@ Cross-dialect PG targets show a Deterministic/AI toggle. Other cross-dialect pai
 
 ---
 
-## DBML
+## DBML (wizard + side panel)
 
-DBML generation is **substantially implemented and tested** but not yet a first-class file export.
-
-- **Generator:** `generateDBMLFromDiagram()` — see pipeline above.
-- **Current UX:** DBML side panel (view, copy, inline edit, apply-back via `importDBMLToDiagram`).
-- **Indirect pipeline:** Diagram → SQL (`isDBMLFlow`) → `@dbml/core` → post-process fixes. Lossy; many restore passes compensate.
-- **Planned V1:** expose as Export target (menu + download) reusing existing generator without redesigning the pipeline.
+DBML is **first-class** in the Export wizard (`TARGET_PICKER` → `DBML_PREVIEW`: copy + `.dbml` download). The side panel remains the live developer view (inline/relationships variants; not exposed in the wizard).
 
 ---
 
@@ -532,14 +527,7 @@ POST /api/diagrams/{diagram}/export/laravel-migrations
 
 Participates in Export V1 as a **specialized target**. Do not generalize `LaravelMigrationExportController` into a generic export router.
 
-### Legacy Laravel diff endpoints (not generic Sync)
-
-Separate from Export V1 architecture; specialized Compare/Sync legacy:
-
-- `POST /api/laravel-migrations/diff` — compare two ZIP archives
-- `POST /api/diagrams/{diagram}/laravel-migrations/diff` — compare submitted diagram JSON vs ZIP
-
-These are **not** the future generic Schema Diff/Sync/Merge design.
+**M11.4:** Legacy Laravel migration import/diff HTTP APIs were removed. Only `POST /api/diagrams/{diagram}/export/laravel-migrations` remains for Laravel export.
 
 ---
 
@@ -555,9 +543,9 @@ These are **not** the future generic Schema Diff/Sync/Merge design.
 - Existing Laravel migration ZIP export (auth-gated)
 - Prisma schema export (auth-gated)
 - EF Core model project export (auth-gated; browser ZIP)
-- Rails 8.1 package export (auth-gated; browser ZIP; Ruby runtime QA pending)
-- Django 6.1 drop-in app export (auth-gated; browser ZIP; runtime QA deferred; manual browser/ZIP QA still required)
-- Drizzle 0.45 schema package export (auth-gated; browser ZIP; runtime drizzle-kit QA deferred; manual browser/ZIP QA still required)
+- Rails 8.1 package export (auth-gated; browser ZIP; runtime QA green)
+- Django 6.1 drop-in app export (auth-gated; browser ZIP; runtime QA green)
+- Drizzle 0.45 schema package export (auth-gated; browser ZIP; runtime QA green)
 
 ### Strategic framework targets (separate milestones each)
 
@@ -565,9 +553,9 @@ Each remaining target receives its own implementation, automated tests, manual Q
 
 - Prisma export — **implemented**
 - EF Core export — **implemented** (EF Core 10 / .NET 10 model project; MariaDB deferred; no Laravel `dotnet` execution; frontend ZIP; EF6 real restore/build/model QA passed)
-- Rails export — **implemented** (Rails 8.1; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; no version selector; Ruby runtime QA pending)
-- Django export — **implemented** (Django 6.1; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; no version selector; runtime QA deferred; manual browser/ZIP QA still required)
-- Drizzle export — **implemented** (drizzle-orm ^0.45; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; no version selector; runtime drizzle-kit QA deferred; manual browser/ZIP QA still required)
+- Rails export — **implemented** (Rails 8.1; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; runtime QA green)
+- Django export — **implemented** (Django 6.1; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; runtime QA green)
+- Drizzle export — **implemented** (drizzle-orm ^0.45; PostgreSQL / MySQL / MariaDB / SQLite; wizard + browser ZIP; runtime QA green)
 
 Import support for these frameworks does **not** imply export is implemented. Framework import parsers are **not** inverted into exporters.
 
@@ -659,11 +647,84 @@ Verified in current code:
 - **Laravel export** — requires an authenticated backend diagram ID; generation remains backend-owned
 - **Prisma export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required)
 - **EF Core export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; MariaDB is deferred; real `dotnet` restore/build/model QA passed (EF6); `dotnet ef` needs a startup project or design-time factory
-- **Rails export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; Ruby/`rails` runtime QA (R6) is still pending
-- **Django export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; `0001_initial.py` is a current-schema baseline, not history; runtime Django QA is deferred to unified Framework Export QA; manual browser/ZIP QA is still required
-- **Drizzle export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; frontend does not generate `schema.ts`; runtime drizzle-kit QA is deferred to unified Framework Export QA; manual browser/ZIP QA is still required
+- **Rails export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; Ruby/`rails` runtime QA is green (U3.4)
+- **Django export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; `0001_initial.py` is a current-schema baseline, not history; runtime Django QA is green (U3.5)
+- **Drizzle export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; frontend does not generate `schema.ts`; runtime drizzle-kit QA is green (U3.6; kit pin `0.31.11`)
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML full diagram; images follow rendered canvas (filters/hidden nodes respected)
 - **SVG portability** — visual SVG remains html-to-image `foreignObject` HTML, not a native vector engine
+
+---
+
+## Export V1 Stable (product closure)
+
+**Status:** EXPORT V1 STABLE — implementation complete; unified Framework Export Runtime QA complete; product/docs closure milestone passed.
+
+### Wizard targets (12)
+
+| Section | Targets |
+| ------- | ------- |
+| Database | SQL |
+| Framework | Laravel, Prisma, EF Core, Rails, Django, Drizzle |
+| Portable / Schema | DBML, Diagram JSON |
+| Visual | PNG, JPG, SVG |
+
+Entry: Diagram menu → **Export** (`openExportWizard`). Backup → Export diagram still uses `ExportDiagramDialog` (same Diagram JSON serializer).
+
+### Auth / guest matrix
+
+| Target | Guest | Authenticated |
+| ------ | ----- | ------------- |
+| SQL, DBML, Diagram JSON, PNG, JPG, SVG | Available | Available |
+| Laravel | Hidden | Available when diagram has numeric backend ID (`isValidBackendDiagramId`) |
+| Prisma, EF Core, Rails, Django, Drizzle | Hidden | Available when `databaseType` is supported; otherwise disabled with localized reason |
+
+Framework exports use Sanctum. They are **not** paid-plan gated. Laravel sends ephemeral `content: currentDiagram` to `POST /api/diagrams/{diagram}/export/laravel-migrations`. Other frameworks POST stateless `{ diagram }` to `/api/exports/*` (no backend diagram ID required).
+
+### Execution split
+
+| Family | Where it runs |
+| ------ | ------------- |
+| SQL, DBML, Diagram JSON, PNG/JPG/SVG | Browser only |
+| Laravel migrations ZIP | Backend generates; browser downloads ZIP |
+| Prisma | Backend generates `schema.prisma`; wizard preview/copy/download |
+| EF Core, Rails, Django, Drizzle | Backend returns `files[]`; browser builds ZIP (`fflate`) |
+
+### Framework versions (product)
+
+| Framework | Version contract | Selector |
+| --------- | ---------------- | -------- |
+| Laravel | 10–13 (default 13) | Yes |
+| Prisma | 6 / 7 (default 7) | Yes |
+| EF Core | 10 / .NET 10 | No |
+| Rails | 8.1 | No |
+| Django | 6.1 | No |
+| Drizzle | drizzle-orm ^0.45, drizzle-kit ^0.31 | No |
+
+Provider inference is always `diagram.databaseType` (no provider override in V1). See per-target sections above for supported DB types.
+
+### Runtime QA baseline
+
+- **U4** — version completeness: complete
+- **U4.1** — provider completeness: complete (no `validate_only` / deferred provider rows)
+- **U4.3** — pin refresh on main: complete
+- **Full Regression #9** — green, **54/54** runtime cells, explicit **`ubuntu-26.04`**, commit **`93c9cf5`**, GitHub run **`39315880211`**, branch **`main`** (7m 16s)
+
+Authoritative reference: [`backend/docs/export-runtime-qa.md`](../../../backend/docs/export-runtime-qa.md).
+
+### Known intentional limitations (not V1 blockers)
+
+- Composite FK omission/degradation on some framework exporters (documented per framework notes)
+- EF Core: MariaDB not supported; no migrations in ZIP; `dotnet ef` needs host/factory
+- Rails/Django/Drizzle: SQL Server, Oracle, CockroachDB, ClickHouse, GENERIC disabled
+- MariaDB SQL export shares MySQL exporter; MariaDB Drizzle uses MySQL dialect APIs
+- Legacy **AI** cross-dialect SQL (`exportSQL`) — ChartDB debt; **not** reachable from Export wizard (deterministic `exportBaseSQL` only)
+- Visual SVG: `html-to-image` `foreignObject` snapshot, not native editable vector
+- Diagram JSON: portable backup; **Restore** creates a new diagram (not restore-in-place)
+- Schema-filter asymmetry: SQL filtered; DBML/JSON full diagram; images follow rendered canvas
+
+### Manual operator smoke (closure milestone)
+
+Re-run Diagram → Export smoke before major releases: SQL + DBML + Diagram JSON download; PNG/SVG capture; authenticated Prisma + Drizzle ZIP (and optionally Laravel or Django). Record date/outcome in release notes when performed.
 
 ---
 
@@ -674,7 +735,7 @@ This document and implementation milestones do **not**:
 - implement a generic `Exporter` interface
 - remove legacy AI SQL code
 - add Oracle/CockroachDB/ClickHouse dedicated SQL exporters
-- implement Drizzle framework exporter (D5 wizard implemented; V1 not complete until manual + runtime QA)
+- reopen Export V1 implementation (closed — see Export V1 Stable below)
 - modify Import
 - implement Sync/Diff/Merge
 - introduce `ChangeSet`

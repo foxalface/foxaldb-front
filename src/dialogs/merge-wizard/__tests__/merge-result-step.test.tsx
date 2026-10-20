@@ -380,7 +380,7 @@ describe('Merge result step', () => {
                 'merge_wizard.result.operation_detail_aria'
             )
         ).toBeInTheDocument();
-        const tableModifyText = within(tableModifyRow).textContent ?? '';
+        const tableModifyText = tableModifyRow.textContent ?? '';
         expect(tableModifyText).not.toContain(
             'merge_wizard.result.attributes.indexes'
         );

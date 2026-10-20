@@ -17,7 +17,7 @@ const baseReady = (
         createdAt: new Date(0),
         updatedAt: new Date(0),
     } as Diagram,
-    source: { kind: 'ddl' },
+    source: { kind: 'sql' },
     detectedFormat: 'sql',
     detectedFramework: null,
     detectedDatabaseType: DatabaseType.POSTGRESQL,

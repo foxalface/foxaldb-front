@@ -21,7 +21,7 @@ describe('mergeUnsupportedDetectionAnalysis', () => {
                 {
                     status: 'ready',
                     incomingDiagram: {} as never,
-                    source: { kind: 'ddl' },
+                    source: { kind: 'sql' },
                     detectedFormat: 'sql',
                     detectedFramework: null,
                     detectedDatabaseType: DatabaseType.POSTGRESQL,

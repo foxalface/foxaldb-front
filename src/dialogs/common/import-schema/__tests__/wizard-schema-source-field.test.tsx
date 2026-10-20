@@ -30,7 +30,16 @@ vi.mock('@/components/code-snippet/code-snippet', () => ({
             aria-label={editorProps?.options?.ariaLabel}
             value={code}
             onChange={(event) => {
-                editorProps?.onChange?.(event.target.value, undefined);
+                editorProps?.onChange?.(event.target.value, {
+                    isFlush: false,
+                    changes: [],
+                    eol: '\n',
+                    versionId: 0,
+                    isRedoing: false,
+                    isUndoing: false,
+                    isEolChange: false,
+                    detailedReasonsChangeLengths: [],
+                });
             }}
             onFocus={() => {
                 editorProps?.onMount?.(

@@ -2,6 +2,63 @@
 
 Developer reference for FoxalDB v1 schema and metadata import.
 
+## Import V1 — stable (M11.5 closure)
+
+**Status: IMPORT V1 STABLE** (M11.1A–M11.5). No unresolved P0/P1 import defects in automated closure.
+
+| Product action | Creates | Entry |
+|----------------|---------|--------|
+| **Import** | New diagram | New Diagram wizard → Import schema / project ZIP / from database |
+| **Restore** | New diagram | Backup → Restore diagram (`ImportDiagramDialog`) |
+| **Merge** | Evolves open diagram | Diagram → Merge (authenticated backend diagram only) |
+
+Diagram menu: **Export** and **Merge** only — no direct Import into the open diagram.
+
+### Supported sources (V1)
+
+| Family | Engines / frameworks | Parser |
+|--------|----------------------|--------|
+| SQL DDL | PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, SQL Server, Oracle | Local `sqlImportToDiagram` |
+| PostgreSQL dump | Same as SQL | Local |
+| DBML | Target DBMS from wizard | Local |
+| Metadata JSON | Wizard target DBMS | Local |
+| Diagram JSON | Embedded / detected type | Local (new diagram or Restore) |
+| Project ZIP | Prisma, Rails, Drizzle (local); Laravel, EF Core, Django (remote) | See M11.3 matrix |
+
+### Auth / guest
+
+| Framework | Guest | Authenticated |
+|-----------|-------|---------------|
+| Prisma, Rails, Drizzle | Parse | Parse |
+| Laravel, EF Core, Django | Detect only | Remote parse |
+| SQL / DBML / metadata / diagram JSON | Parse (guest Dexie or auth API) | Parse |
+
+### QA strategy (M11.2–M11.5)
+
+- **Semantic goldens:** `projectDiagramSemantics()` — SQL/DBML/metadata/diagram JSON (`lib/import/__tests__/semantic/`) and six frameworks (local FE + remote BE).
+- **Security:** path/bundle limits, no uploaded code execution, legacy Laravel import HTTP APIs removed (M11.4); Laravel **export** retained.
+- **Persistence:** Restore unit tests (`lib/diagram-restore/`); create-wizard persistence covered by existing integration tests; reload is standard diagram load after `createDiagram` / Dexie.
+- **Manual interactive matrix:** operator checklist below; MariaDB composite unique index and SQLite semantics closed via M11.2 semantic goldens; full browser visual/dark-mode pass recommended before major releases but not blocking V1 stable.
+
+### Manual QA closure matrix (M11.5)
+
+| Area | Closure evidence |
+|------|------------------|
+| SQL dialects (7) + pg_dump | M11.2 `semantic-golden-sql-dialects` |
+| MariaDB index regression | M11.2 `mariadb-baseline` composite unique index assertion |
+| SQLite smoke | M11.2 baseline + quoted-identifier edge case |
+| DBML / metadata / diagram JSON | M11.2 `semantic-golden-formats` |
+| Prisma / Rails / Drizzle | M11.3 local semantic goldens + M10.1 realistic tests |
+| Laravel / EF / Django | M11.3 backend `FrameworkSemanticGoldenTest` + M11.4 HTTP contract |
+| Ambiguity / multi-group | M10 `framework-detection`, `m10-3-database-groups` automated tests |
+| Malformed / limits | M11.2 edge cases, M11.4 bundle + path tests, Merge error mapping tests |
+| Restore guest/auth | `restore-diagram-from-json-backup.test.ts` |
+| Legacy Laravel import UI | Removed M11.1B; routes removed M11.4 |
+
+### Known P2/P3 (non-blocking)
+
+See sections below (SQL comments, DBML views, tolerant malformed SQL, cross-family ON UPDATE strings, Merge generic fallback for unknown backend codes).
+
 ## Product rule (M11.1A)
 
 | Action | Scope |

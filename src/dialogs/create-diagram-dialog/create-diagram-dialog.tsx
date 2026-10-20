@@ -303,9 +303,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
                 if (nextImportMethod === 'diagram') {
                     if (!nextResolvedSourceDialect) {
-                        throw new ImportDiagramJsonError(
-                            'Diagram DBMS must be resolved before import'
-                        );
+                        throw new ImportDiagramJsonError({
+                            code: 'invalid_diagram_json',
+                            path: null,
+                            issueCode: 'dialect_unresolved',
+                        });
                     }
 
                     const diagram = importDiagramFromJson(
