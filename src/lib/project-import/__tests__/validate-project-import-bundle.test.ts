@@ -46,6 +46,34 @@ describe('validateProjectImportBundle', () => {
         );
     });
 
+    it('rejects path length with unsafe_path', () => {
+        expect(() =>
+            validateProjectImportBundle(
+                bundle([
+                    {
+                        relativePath: 'x'.repeat(21),
+                        content: 'a',
+                    },
+                ]),
+                limits
+            )
+        ).toThrowError(expect.objectContaining({ code: 'unsafe_path' }));
+    });
+
+    it('rejects path depth with unsafe_path', () => {
+        expect(() =>
+            validateProjectImportBundle(
+                bundle([
+                    {
+                        relativePath: 'a/b/c/d/file.php',
+                        content: 'a',
+                    },
+                ]),
+                limits
+            )
+        ).toThrowError(expect.objectContaining({ code: 'unsafe_path' }));
+    });
+
     it('rejects total size with bundle_total_too_large', () => {
         expect(() =>
             validateProjectImportBundle(

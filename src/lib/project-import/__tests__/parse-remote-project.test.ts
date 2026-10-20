@@ -212,6 +212,24 @@ describe('parseRemoteProject', () => {
         ).toThrow(ProjectImportRemoteFailureError);
     });
 
+    it('maps 403 and 429 to remote failure without exposing response body', () => {
+        expect(() =>
+            mapRemoteProjectImportError(
+                new ApiError('<html>Forbidden</html>', 403, {
+                    message: 'Forbidden',
+                })
+            )
+        ).toThrow(ProjectImportRemoteFailureError);
+
+        expect(() =>
+            mapRemoteProjectImportError(
+                new ApiError('Too Many Attempts', 429, {
+                    message: 'Too Many Attempts',
+                })
+            )
+        ).toThrow(ProjectImportRemoteFailureError);
+    });
+
     it('never exposes project source content in thrown errors', async () => {
         apiRequestMock.mockRejectedValueOnce(
             new ApiError('Unsafe path.', 422, {

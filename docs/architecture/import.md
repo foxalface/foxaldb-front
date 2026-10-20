@@ -168,10 +168,8 @@ Project ZIP import still creates a new diagram. Schema Merge source preparation 
 
 These remain for export round-trip QA and optional backend tooling (M11.1B removed the editor Laravel import/sync dialogs):
 
-- `POST /api/laravel-migrations/import` — legacy ZIP snapshot import (**no active editor UI**; M11.4 cleanup candidate)
-- `POST /api/laravel-migrations/diff` — migration diff without diagram context
-- `POST /api/diagrams/{diagram}/laravel-migrations/diff` — diagram-aware diff
-- `POST /api/diagrams/{diagram}/export/laravel-migrations` — export
+- `POST /api/diagrams/{diagram}/export/laravel-migrations` — Laravel migration **export** (active)
+- **Removed in M11.4** (no production callers): `POST /api/laravel-migrations/import`, `POST /api/laravel-migrations/diff`, `POST /api/diagrams/{diagram}/laravel-migrations/diff`. Laravel project import uses `POST /api/project-import/parse` only.
 
 Generic project import uses `POST /api/project-import/parse` only.
 
@@ -245,6 +243,14 @@ Goldens for M11.2+ use `lib/import/test-support/diagram-semantic-projection.ts` 
 **Enum / custom types:** Prisma enums → Diagram custom types; Laravel migration `enum()` when parsed; Drizzle via SQL; Rails/Django choices generally **not** custom DB types (P2).
 
 **Relationship semantics:** goldens assert **referencing FK → referenced key** via `projectDiagramSemantics()` (frontend) or `Tests\Support\ProjectImport\ProjectDiagramSemantics` (backend). Django default table names (`users_user`, `posts_post`) and EF PascalCase PK columns (`Id`) are preserved in Diagram field names.
+
+#### M11.4 security and error hardening
+
+- **Static parsing only** for all active importers; no execution of uploaded project code.
+- **Remote ProjectImport** sends filtered `{ path, content }` text bundles; backend revalidates paths, sizes, evidence, and framework file policies (`ProjectImportBundleValidator`).
+- **Limits:** `GET /api/capabilities/uploads` → `projectImport.*` and archive limits; frontend `validateProjectImportBundle()` mirrors concepts; backend `config/uploads.php` is authoritative.
+- **Stable error codes** (`unsafe_path`, `duplicate_path`, `bundle_*`, `project_import_parse_failed`, …) map to i18n via `resolveProjectImportErrorKey()` and Merge reuses `resolveProjectImportFailureKey()` for the same backend codes.
+- **Legacy Laravel ZIP import/diff HTTP APIs removed** (M11.4); export endpoint retained.
 
 **Documented limitations (P2/P3, not fixed in M11.2):**
 

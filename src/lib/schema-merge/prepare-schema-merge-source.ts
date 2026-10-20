@@ -246,11 +246,14 @@ const mapProjectError = (
             parserLocation: getParserLocation(framework),
         };
 
-        if (
-            error instanceof ProjectImportValidationRejectedError &&
-            error.path
-        ) {
-            failure.path = error.path;
+        if (error instanceof ProjectImportValidationRejectedError) {
+            if (error.path) {
+                failure.path = error.path;
+            }
+
+            if (error.backendCode) {
+                failure.backendCode = error.backendCode;
+            }
         }
 
         return failure;

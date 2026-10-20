@@ -141,6 +141,7 @@ export interface SchemaMergeProjectParseFailure {
     code: ProjectImportErrorCode;
     parserLocation: 'local' | 'remote';
     path?: string;
+    backendCode?: string;
 }
 
 export type SchemaMergeSourcePreparationResult =

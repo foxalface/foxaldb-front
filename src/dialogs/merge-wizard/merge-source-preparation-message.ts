@@ -1,4 +1,5 @@
 import type { SchemaMergeSourcePreparationResult } from '@/lib/schema-merge/source-adapter-types';
+import { resolveProjectImportFailureKey } from '@/lib/project-import/project-import-error-i18n';
 
 export const mergeSourcePreparationErrorKey = (
     result: SchemaMergeSourcePreparationResult | null
@@ -44,12 +45,25 @@ export const mergeSourcePreparationErrorKey = (
             return 'merge_wizard.errors.malformed_source';
         case 'file_too_large':
             return 'merge_wizard.errors.file_too_large';
-        case 'project_parse_failure':
+        case 'project_parse_failure': {
             if (result.code === 'project_import_unauthenticated') {
                 return 'merge_wizard.errors.unauthenticated';
             }
 
+            const mappedKey = resolveProjectImportFailureKey({
+                code: result.code,
+                backendCode: result.backendCode,
+            });
+
+            if (
+                mappedKey !==
+                'new_diagram_dialog.import_schema.errors.import_failed'
+            ) {
+                return mappedKey;
+            }
+
             return 'merge_wizard.errors.project_unreadable';
+        }
         default: {
             const unreachable: never = result;
             return unreachable;
