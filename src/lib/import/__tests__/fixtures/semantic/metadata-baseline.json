@@ -1,0 +1,116 @@
+{
+    "database_name": "golden_db",
+    "version": "1.0",
+    "tables": [
+        { "schema": "public", "table": "users", "comment": "app users" },
+        { "schema": "public", "table": "posts" },
+        { "schema": "public", "table": "active_users", "type": "VIEW" }
+    ],
+    "columns": [
+        {
+            "schema": "public",
+            "table": "users",
+            "name": "id",
+            "type": "bigint",
+            "ordinal_position": 1,
+            "nullable": false,
+            "is_identity": true,
+            "comment": "surrogate key"
+        },
+        {
+            "schema": "public",
+            "table": "users",
+            "name": "email",
+            "type": "varchar",
+            "ordinal_position": 2,
+            "nullable": false,
+            "character_maximum_length": "255"
+        },
+        {
+            "schema": "public",
+            "table": "posts",
+            "name": "id",
+            "type": "bigint",
+            "ordinal_position": 1,
+            "nullable": false,
+            "is_identity": true
+        },
+        {
+            "schema": "public",
+            "table": "posts",
+            "name": "user_id",
+            "type": "bigint",
+            "ordinal_position": 2,
+            "nullable": false
+        },
+        {
+            "schema": "public",
+            "table": "posts",
+            "name": "title",
+            "type": "varchar",
+            "ordinal_position": 3,
+            "nullable": false,
+            "character_maximum_length": "200"
+        },
+        {
+            "schema": "public",
+            "table": "active_users",
+            "name": "id",
+            "type": "bigint",
+            "ordinal_position": 1,
+            "nullable": true
+        },
+        {
+            "schema": "public",
+            "table": "active_users",
+            "name": "email",
+            "type": "varchar",
+            "ordinal_position": 2,
+            "nullable": true
+        }
+    ],
+    "pk_info": [
+        {
+            "schema": "public",
+            "table": "users",
+            "field_count": 1,
+            "column": "id",
+            "pk_def": "PRIMARY KEY (id)"
+        },
+        {
+            "schema": "public",
+            "table": "posts",
+            "field_count": 1,
+            "column": "id",
+            "pk_def": "PRIMARY KEY (id)"
+        }
+    ],
+    "indexes": [],
+    "fk_info": [
+        {
+            "schema": "public",
+            "table": "posts",
+            "column": "user_id",
+            "foreign_key_name": "fk_posts_user",
+            "reference_schema": "public",
+            "reference_table": "users",
+            "reference_column": "id",
+            "fk_def": "FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE"
+        }
+    ],
+    "views": [
+        {
+            "schema": "public",
+            "view_name": "active_users",
+            "view_definition": "U0VMRUNUIGlkLCBlbWFpbCBGUk9NIHB1YmxpYy51c2Vycw=="
+        }
+    ],
+    "custom_types": [
+        {
+            "schema": "public",
+            "type": "status_enum",
+            "kind": "enum",
+            "values": ["open", "closed"]
+        }
+    ]
+}

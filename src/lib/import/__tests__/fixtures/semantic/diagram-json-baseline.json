@@ -1,0 +1,144 @@
+{
+    "id": "diagram-golden",
+    "name": "Semantic Golden",
+    "databaseType": "postgresql",
+    "schemaVersion": 1,
+    "tables": [
+        {
+            "id": "t-users",
+            "name": "users",
+            "schema": "public",
+            "x": 100,
+            "y": 200,
+            "fields": [
+                {
+                    "id": "f-users-id",
+                    "name": "id",
+                    "type": { "id": "int", "name": "int" },
+                    "primaryKey": true,
+                    "unique": true,
+                    "nullable": false,
+                    "increment": true,
+                    "createdAt": 1
+                },
+                {
+                    "id": "f-users-email",
+                    "name": "email",
+                    "type": { "id": "varchar", "name": "varchar" },
+                    "primaryKey": false,
+                    "unique": true,
+                    "nullable": false,
+                    "characterMaximumLength": "255",
+                    "createdAt": 1
+                }
+            ],
+            "indexes": [],
+            "color": "#ffffff",
+            "isView": false,
+            "createdAt": 1,
+            "comments": "users table"
+        },
+        {
+            "id": "t-audit-users",
+            "name": "users",
+            "schema": "audit",
+            "x": 0,
+            "y": 0,
+            "fields": [
+                {
+                    "id": "f-audit-id",
+                    "name": "id",
+                    "type": { "id": "bigint", "name": "bigint" },
+                    "primaryKey": true,
+                    "unique": true,
+                    "nullable": false,
+                    "createdAt": 1
+                }
+            ],
+            "indexes": [],
+            "color": "#ffffff",
+            "isView": false,
+            "createdAt": 1
+        },
+        {
+            "id": "t-posts",
+            "name": "posts",
+            "schema": "public",
+            "x": 0,
+            "y": 0,
+            "fields": [
+                {
+                    "id": "f-posts-id",
+                    "name": "id",
+                    "type": { "id": "int", "name": "int" },
+                    "primaryKey": true,
+                    "unique": true,
+                    "nullable": false,
+                    "createdAt": 1
+                },
+                {
+                    "id": "f-posts-user",
+                    "name": "user_id",
+                    "type": { "id": "int", "name": "int" },
+                    "primaryKey": false,
+                    "unique": false,
+                    "nullable": false,
+                    "createdAt": 1
+                }
+            ],
+            "indexes": [],
+            "color": "#ffffff",
+            "isView": false,
+            "createdAt": 1
+        },
+        {
+            "id": "t-view",
+            "name": "active_users",
+            "schema": "public",
+            "x": 0,
+            "y": 0,
+            "fields": [
+                {
+                    "id": "f-view-id",
+                    "name": "id",
+                    "type": { "id": "int", "name": "int" },
+                    "primaryKey": false,
+                    "unique": false,
+                    "nullable": true,
+                    "createdAt": 1
+                }
+            ],
+            "indexes": [],
+            "color": "#ffffff",
+            "isView": true,
+            "createdAt": 1
+        }
+    ],
+    "relationships": [
+        {
+            "id": "rel-1",
+            "name": "fk_posts_user",
+            "sourceSchema": "public",
+            "sourceTableId": "t-users",
+            "sourceFieldId": "f-users-id",
+            "targetSchema": "public",
+            "targetTableId": "t-posts",
+            "targetFieldId": "f-posts-user",
+            "sourceCardinality": "one",
+            "targetCardinality": "many",
+            "onDelete": "cascade",
+            "createdAt": 1
+        }
+    ],
+    "customTypes": [
+        {
+            "id": "ct-1",
+            "schema": "public",
+            "name": "status_enum",
+            "kind": "enum",
+            "values": ["open", "closed"]
+        }
+    ],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+}

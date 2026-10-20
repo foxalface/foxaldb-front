@@ -207,7 +207,34 @@ After `collectFileBundle()`, the wizard may precheck `projectImport.*` limits fr
 
 Goldens for M11.2+ use `lib/import/test-support/diagram-semantic-projection.ts` (`projectDiagramSemantics()`). It strips diagram/table/field/relationship ids and layout, sorts deterministically, and expresses relationships as **referencing FK column → referenced column**. It does not normalize `null` vs `undefined` vs `false`.
 
-**Fixture convention:** SQL/DBML/JSON goldens → `lib/import/__tests__/semantic/` and existing `lib/import/__tests__/fixtures/`. Framework project goldens (M11.3) → `lib/project-import/__tests__/fixtures/` and realistic `m10-realistic-*` tests.
+**Fixture convention:** reusable sources → `lib/import/__tests__/fixtures/semantic/`; tests → `lib/import/__tests__/semantic/`. Framework project goldens (M11.3) → `lib/project-import/__tests__/fixtures/` and realistic `m10-realistic-*` tests.
+
+#### M11.2 semantic golden matrix
+
+| Source family | Entry point | Dialect / notes |
+|---------------|-------------|-----------------|
+| SQL DDL | `importSchema()` → `sqlImportToDiagram()` | PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, SQL Server, Oracle |
+| PostgreSQL dump | same SQL path (`format: postgres_dump` detection) | Dump noise + `ALTER TABLE` constraints |
+| DBML | `importSchema()` → `importDBMLToDiagram()` | Multi-schema, enums, refs |
+| Metadata JSON | `importSchema()` → `loadFromDatabaseMetadata()` | Views (`view_name`), base64 `view_definition`, custom types |
+| Diagram JSON | `importDiagramFromJson()` / parse path | Canonical diagram restore semantics |
+
+**Default schema (importer output, not normalized in tests):**
+
+| Engine | Unqualified table `schema` |
+|--------|------------------------------|
+| PostgreSQL, CockroachDB | `public` |
+| SQL Server | `dbo` |
+| MySQL, MariaDB, SQLite, Oracle (baseline fixtures) | `''` or `undefined` (no `public` injection) |
+
+**Raw `DBRelationship` orientation:** SQL and metadata importers historically store **referenced → FK holder** on `source`/`target`. DBML import stores **FK holder → referenced**. Semantic goldens always assert **referencing FK → referenced key** via `projectDiagramSemantics()`. Application code must not infer FK meaning from raw `source`/`target` alone without importer context.
+
+**Documented limitations (P2/P3, not fixed in M11.2):**
+
+- PostgreSQL `COMMENT ON` → field/table comments not mapped from SQL DDL.
+- DBML has no view construct in current importer (`isView` stays false for DBML tables).
+- Some malformed SQL DDL is still parsed instead of failing (`semantic-golden-edge-cases` documents one case).
+- Referential `ON UPDATE` / `ON DELETE` may differ between SQL and DBML for the same semantic FK; endpoint goldens compare referencing/referenced columns, not necessarily every action string across families.
 
 ## Related files
 

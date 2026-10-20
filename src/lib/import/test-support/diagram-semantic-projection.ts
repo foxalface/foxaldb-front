@@ -9,6 +9,13 @@ export interface SemanticFieldType {
     name: string;
 }
 
+export interface SemanticIndex {
+    name: string;
+    unique: boolean;
+    fieldNames: string[];
+    isPrimaryKey?: boolean;
+}
+
 export interface SemanticField {
     name: string;
     type: SemanticFieldType;
@@ -18,6 +25,9 @@ export interface SemanticField {
     increment?: boolean | null;
     default?: string | null;
     comments?: string | null;
+    characterMaximumLength?: string | null;
+    precision?: number | null;
+    scale?: number | null;
 }
 
 export interface SemanticTable {
@@ -25,6 +35,8 @@ export interface SemanticTable {
     name: string;
     isView?: boolean;
     fields: SemanticField[];
+    indexes?: SemanticIndex[];
+    comments?: string | null;
 }
 
 export interface SemanticRelationshipEndpoint {
@@ -150,7 +162,34 @@ const projectField = (field: DBField): SemanticField => ({
     increment: field.increment,
     default: field.default,
     comments: field.comments,
+    characterMaximumLength: field.characterMaximumLength,
+    precision: field.precision,
+    scale: field.scale,
 });
+
+const projectTableIndexes = (table: DBTable): SemanticIndex[] | undefined => {
+    if (table.indexes.length === 0) {
+        return undefined;
+    }
+
+    const fieldNameById = new Map(
+        table.fields.map((field) => [field.id, field.name])
+    );
+
+    const indexes = table.indexes.map((index) => ({
+        name: index.name,
+        unique: index.unique,
+        fieldNames: index.fieldIds
+            .map((fieldId) => fieldNameById.get(fieldId))
+            .filter((name): name is string => typeof name === 'string')
+            .sort((left, right) => left.localeCompare(right)),
+        isPrimaryKey: index.isPrimaryKey ?? undefined,
+    }));
+
+    indexes.sort((left, right) => left.name.localeCompare(right.name));
+
+    return indexes;
+};
 
 const compareNullableString = (
     left: string | null | undefined,
@@ -170,6 +209,8 @@ const projectTable = (table: DBTable): SemanticTable => ({
     name: table.name,
     isView: table.isView,
     fields: sortFields(table.fields.map(projectField)),
+    indexes: projectTableIndexes(table),
+    comments: table.comments,
 });
 
 const sortTables = (tables: DBTable[]): SemanticTable[] => {
