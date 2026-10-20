@@ -12,19 +12,27 @@
 
 ---
 
-## FoxalDB import workflow (v1)
+## FoxalDB schema workflow (v1)
 
-### Create a new diagram
+### Import → new diagram
+
+Use the **New Diagram** wizard (not the editor menu):
 
 1. Choose a target database type (PostgreSQL, MySQL, MariaDB, SQLite, SQL Server, Oracle, CockroachDB, or ClickHouse).
 2. Choose an intent:
    - **Create an empty diagram**
-   - **Import an existing schema** — paste or upload SQL or DBML; format and SQL dialect are detected automatically
+   - **Import an existing schema** — paste or upload SQL, DBML, diagram JSON, or a project ZIP; format and SQL dialect are detected automatically
    - **Import from an existing database** (advanced) — copy a metadata extraction query, run it in your database client, paste the JSON result
 
-### Import into an open diagram
+Import always creates a **new** diagram.
 
-Use **Import schema** from the editor menu. Imported tables and relationships are merged into the current diagram. The diagram database type cannot be changed by import.
+### Merge → evolve open diagram (authenticated)
+
+On a persisted backend diagram, use **Diagram → Merge** to compare an external source and apply selected schema changes. The diagram database type is immutable.
+
+### Restore → new diagram from backup
+
+Use **Backup → Restore diagram** (backup JSON) to create a **new** diagram from a portable export. This does not overwrite the diagram you have open.
 
 ### Supported import by database
 
