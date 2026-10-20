@@ -971,6 +971,32 @@ export const ko_KR: LanguageTranslation = {
                         '다이어그램 JSON이 유효하지 않습니다. 파일을 확인한 후 다시 시도하세요.',
                     invalid_diagram_json_hint:
                         '파일을 확인한 후 다시 시도하세요.',
+                    project_import: {
+                        unauthenticated:
+                            '이 프로젝트 프레임워크를 가져오려면 로그인하세요.',
+                        parser_unavailable:
+                            '이 프로젝트 프레임워크는 지금 가져올 수 없습니다. 나중에 다시 시도하세요.',
+                        unsafe_path:
+                            '이 프로젝트 번들의 파일 경로가 허용되지 않습니다.',
+                        duplicate_path:
+                            '이 프로젝트 번들에 중복된 파일 경로가 있습니다.',
+                        disallowed_file:
+                            '선택한 프레임워크에 허용되지 않는 파일이 번들에 포함되어 있습니다.',
+                        missing_evidence:
+                            '선택한 프레임워크에 필요한 스키마 파일이 번들에 충분하지 않습니다.',
+                        bundle_too_many_files:
+                            '프로젝트 번들에 파일이 너무 많습니다.',
+                        bundle_file_too_large:
+                            '프로젝트 번들의 파일이 너무 큽니다.',
+                        bundle_total_too_large:
+                            '프로젝트 번들의 전체 크기가 너무 큽니다.',
+                        parse_failed:
+                            '프로젝트 스키마를 구문 분석할 수 없습니다. 아카이브를 확인하고 다시 시도하세요.',
+                        network_failure:
+                            '프로젝트 가져오기 요청을 완료할 수 없습니다. 연결을 확인하고 다시 시도하세요.',
+                        remote_failure:
+                            '프로젝트 가져오기 서비스가 예기치 않은 오류를 반환했습니다. 나중에 다시 시도하세요.',
+                    },
                 },
             },
 

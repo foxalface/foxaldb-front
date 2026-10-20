@@ -953,6 +953,32 @@ export const tr: LanguageTranslation = {
                         'Diyagram JSON geçersiz. Dosyayı kontrol edip tekrar deneyin.',
                     invalid_diagram_json_hint:
                         'Dosyayı kontrol edip tekrar deneyin.',
+                    project_import: {
+                        unauthenticated:
+                            'Bu proje çerçevesini içe aktarmak için oturum açın.',
+                        parser_unavailable:
+                            'Bu proje çerçevesi şu anda içe aktarılamıyor. Daha sonra tekrar deneyin.',
+                        unsafe_path:
+                            'Bu proje paketindeki bir dosya yolu izin verilmiyor.',
+                        duplicate_path:
+                            'Bu proje paketi yinelenen dosya yolları içeriyor.',
+                        disallowed_file:
+                            'Paket, seçilen çerçeve için izin verilmeyen bir dosya içeriyor.',
+                        missing_evidence:
+                            'Paket, seçilen çerçeve için yeterli şema dosyası içermiyor.',
+                        bundle_too_many_files:
+                            'Proje paketi çok fazla dosya içeriyor.',
+                        bundle_file_too_large:
+                            'Proje paketindeki bir dosya çok büyük.',
+                        bundle_total_too_large:
+                            'Proje paketi toplamda çok büyük.',
+                        parse_failed:
+                            'Proje şeması ayrıştırılamadı. Arşivi kontrol edip tekrar deneyin.',
+                        network_failure:
+                            'Proje içe aktarma isteği tamamlanamadı. Bağlantınızı kontrol edip tekrar deneyin.',
+                        remote_failure:
+                            'Proje içe aktarma hizmeti beklenmeyen bir hata döndürdü. Daha sonra tekrar deneyin.',
+                    },
                 },
             },
 

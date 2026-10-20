@@ -13,6 +13,12 @@ import type {
     ProjectDetectionCandidate,
     ProjectDatabaseGroup,
 } from './project-types';
+import type { UploadCapabilities } from '@/lib/upload-capabilities/types';
+import {
+    ProjectImportBundlePrecheckError,
+    validateProjectImportBundle,
+} from './bundle/validate-project-import-bundle';
+import { ProjectImportValidationRejectedError } from './project-import-errors';
 import { isProjectImportParserAvailable } from './project-import-capability';
 import { ProjectImportParserUnavailableError } from './project-import-errors';
 import {
@@ -26,6 +32,7 @@ export interface ImportProjectParams {
     targetDatabaseType: DatabaseType;
     archiveFileName?: string;
     databaseGroup?: ProjectDatabaseGroup;
+    projectImportLimits?: UploadCapabilities['projectImport'];
 }
 
 const applyDiagramNameHint = (
@@ -54,6 +61,7 @@ export const importProject = async (
         targetDatabaseType,
         archiveFileName,
         databaseGroup,
+        projectImportLimits,
     } = params;
 
     if (!isProjectImportParserAvailable(candidate.framework)) {
@@ -77,6 +85,20 @@ export const importProject = async (
         : await collectFileBundle(archive, candidate, {
               diagramNameHint,
           });
+
+    if (projectImportLimits) {
+        try {
+            validateProjectImportBundle(bundle, projectImportLimits);
+        } catch (caught) {
+            if (caught instanceof ProjectImportBundlePrecheckError) {
+                throw new ProjectImportValidationRejectedError(caught.message, {
+                    backendCode: caught.code,
+                });
+            }
+
+            throw caught;
+        }
+    }
 
     const input: ProjectImportInput = {
         candidate,

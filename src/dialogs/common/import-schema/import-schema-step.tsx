@@ -29,6 +29,7 @@ import {
 import type { ArchiveLimits } from '@/lib/project-import/archive/archive-limits';
 import { resolveUploadCapabilities } from '@/lib/upload-capabilities';
 import { canExecuteProjectImport } from '@/lib/project-import/project-import-capability';
+import { resolveProjectImportErrorKey } from '@/lib/project-import/resolve-project-import-error-key';
 import type {
     ProjectArchiveAnalysis,
     ProjectDatabaseGroup,
@@ -353,12 +354,15 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
             setProjectImportErrorKey(null);
 
             try {
+                const capabilities = await resolveUploadCapabilities();
+
                 const result = await importProject({
                     archive: archiveReaderRef.current,
                     candidate: activeProjectCandidate,
                     targetDatabaseType: databaseType,
                     archiveFileName: selectedFileName ?? undefined,
                     databaseGroup: activeDatabaseGroup ?? undefined,
+                    projectImportLimits: capabilities.projectImport,
                 });
 
                 resetProjectArchiveState();
@@ -367,10 +371,8 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                     importMethod: 'project',
                     importedDiagram: result.diagram,
                 });
-            } catch {
-                setProjectImportErrorKey(
-                    'new_diagram_dialog.import_schema.errors.import_failed'
-                );
+            } catch (error) {
+                setProjectImportErrorKey(resolveProjectImportErrorKey(error));
             } finally {
                 setIsProjectImporting(false);
             }

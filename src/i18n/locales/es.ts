@@ -984,6 +984,32 @@ export const es: LanguageTranslation = {
                         'El JSON del diagrama no es válido. Compruebe el archivo e inténtelo de nuevo.',
                     invalid_diagram_json_hint:
                         'Comprueba el archivo e inténtalo de nuevo.',
+                    project_import: {
+                        unauthenticated:
+                            'Inicia sesión para importar este framework de proyecto.',
+                        parser_unavailable:
+                            'Este framework de proyecto no se puede importar ahora. Inténtalo más tarde.',
+                        unsafe_path:
+                            'Una ruta de archivo de este paquete de proyecto no está permitida.',
+                        duplicate_path:
+                            'Este paquete de proyecto contiene rutas de archivo duplicadas.',
+                        disallowed_file:
+                            'Este paquete incluye un archivo no permitido para el framework seleccionado.',
+                        missing_evidence:
+                            'Este paquete no incluye suficientes archivos de esquema para el framework seleccionado.',
+                        bundle_too_many_files:
+                            'Este paquete de proyecto contiene demasiados archivos.',
+                        bundle_file_too_large:
+                            'Un archivo de este paquete de proyecto es demasiado grande.',
+                        bundle_total_too_large:
+                            'Este paquete de proyecto es demasiado grande en total.',
+                        parse_failed:
+                            'No se pudo analizar el esquema del proyecto. Revisa el archivo e inténtalo de nuevo.',
+                        network_failure:
+                            'No se pudo completar la solicitud de importación del proyecto. Comprueba tu conexión e inténtalo de nuevo.',
+                        remote_failure:
+                            'El servicio de importación del proyecto devolvió un error inesperado. Inténtalo más tarde.',
+                    },
                 },
             },
 

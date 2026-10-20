@@ -173,6 +173,7 @@ describe('parseRemoteProject', () => {
         ).rejects.toMatchObject({
             code: 'project_import_validation_rejected',
             path: '../secret.php',
+            backendCode: 'unsafe_path',
         } satisfies Partial<ProjectImportValidationRejectedError>);
     });
 

@@ -37,11 +37,16 @@ export class ProjectImportUnauthenticatedError extends ProjectImportError {
 
 export class ProjectImportValidationRejectedError extends ProjectImportError {
     readonly path?: string;
+    readonly backendCode?: string;
 
-    constructor(message: string, path?: string) {
+    constructor(
+        message: string,
+        options?: { path?: string; backendCode?: string }
+    ) {
         super(message, 'project_import_validation_rejected');
         this.name = 'ProjectImportValidationRejectedError';
-        this.path = path;
+        this.path = options?.path;
+        this.backendCode = options?.backendCode;
     }
 }
 

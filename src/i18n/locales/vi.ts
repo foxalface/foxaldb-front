@@ -969,6 +969,30 @@ export const vi: LanguageTranslation = {
                     invalid_diagram_json:
                         'JSON sơ đồ không hợp lệ. Kiểm tra tệp và thử lại.',
                     invalid_diagram_json_hint: 'Kiểm tra tệp và thử lại.',
+                    project_import: {
+                        unauthenticated: 'Đăng nhập để nhập khung dự án này.',
+                        parser_unavailable:
+                            'Khung dự án này hiện không thể nhập. Thử lại sau.',
+                        unsafe_path:
+                            'Đường dẫn tệp trong gói dự án này không được phép.',
+                        duplicate_path:
+                            'Gói dự án này chứa đường dẫn tệp trùng lặp.',
+                        disallowed_file:
+                            'Gói chứa tệp không được phép cho khung đã chọn.',
+                        missing_evidence:
+                            'Gói không có đủ tệp lược đồ cho khung đã chọn.',
+                        bundle_too_many_files: 'Gói dự án chứa quá nhiều tệp.',
+                        bundle_file_too_large:
+                            'Một tệp trong gói dự án quá lớn.',
+                        bundle_total_too_large:
+                            'Gói dự án quá lớn trong tổng thể.',
+                        parse_failed:
+                            'Không thể phân tích lược đồ dự án. Kiểm tra kho lưu trữ và thử lại.',
+                        network_failure:
+                            'Không thể hoàn tất yêu cầu nhập dự án. Kiểm tra kết nối và thử lại.',
+                        remote_failure:
+                            'Dịch vụ nhập dự án trả về lỗi không mong đợi. Thử lại sau.',
+                    },
                 },
             },
 

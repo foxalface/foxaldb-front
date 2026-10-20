@@ -972,6 +972,32 @@ export const id_ID: LanguageTranslation = {
                     invalid_diagram_json:
                         'JSON diagram tidak valid. Periksa file dan coba lagi.',
                     invalid_diagram_json_hint: 'Periksa file dan coba lagi.',
+                    project_import: {
+                        unauthenticated:
+                            'Masuk untuk mengimpor kerangka proyek ini.',
+                        parser_unavailable:
+                            'Kerangka proyek ini tidak dapat diimpor sekarang. Coba lagi nanti.',
+                        unsafe_path:
+                            'Path file dalam bundel proyek ini tidak diizinkan.',
+                        duplicate_path:
+                            'Bundel proyek ini berisi path file duplikat.',
+                        disallowed_file:
+                            'Bundel menyertakan file yang tidak diizinkan untuk kerangka yang dipilih.',
+                        missing_evidence:
+                            'Bundel tidak memuat cukup file skema untuk kerangka yang dipilih.',
+                        bundle_too_many_files:
+                            'Bundel proyek berisi terlalu banyak file.',
+                        bundle_file_too_large:
+                            'Sebuah file dalam bundel proyek terlalu besar.',
+                        bundle_total_too_large:
+                            'Bundel proyek secara keseluruhan terlalu besar.',
+                        parse_failed:
+                            'Skema proyek tidak dapat diurai. Periksa arsip dan coba lagi.',
+                        network_failure:
+                            'Permintaan impor proyek tidak dapat diselesaikan. Periksa koneksi dan coba lagi.',
+                        remote_failure:
+                            'Layanan impor proyek mengembalikan kesalahan tak terduga. Coba lagi nanti.',
+                    },
                 },
             },
 

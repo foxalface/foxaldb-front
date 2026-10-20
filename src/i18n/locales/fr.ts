@@ -992,6 +992,32 @@ export const fr: LanguageTranslation = {
                         "Le JSON de diagramme n'est pas valide. Vérifiez le fichier et réessayez.",
                     invalid_diagram_json_hint:
                         'Vérifiez le fichier et réessayez.',
+                    project_import: {
+                        unauthenticated:
+                            'Connectez-vous pour importer ce type de projet.',
+                        parser_unavailable:
+                            'Ce framework de projet ne peut pas être importé pour le moment. Réessayez plus tard.',
+                        unsafe_path:
+                            "Un chemin de fichier de ce bundle de projet n'est pas autorisé.",
+                        duplicate_path:
+                            'Ce bundle de projet contient des chemins de fichier en double.',
+                        disallowed_file:
+                            'Ce bundle inclut un fichier non autorisé pour le framework sélectionné.',
+                        missing_evidence:
+                            'Ce bundle ne contient pas assez de fichiers de schéma pour le framework sélectionné.',
+                        bundle_too_many_files:
+                            'Ce bundle de projet contient trop de fichiers.',
+                        bundle_file_too_large:
+                            'Un fichier de ce bundle de projet est trop volumineux.',
+                        bundle_total_too_large:
+                            'Ce bundle de projet est trop volumineux au total.',
+                        parse_failed:
+                            "Le schéma du projet n'a pas pu être analysé. Vérifiez l'archive et réessayez.",
+                        network_failure:
+                            "La requête d'import de projet n'a pas pu aboutir. Vérifiez votre connexion et réessayez.",
+                        remote_failure:
+                            "Le service d'import de projet a renvoyé une erreur inattendue. Réessayez plus tard.",
+                    },
                 },
             },
 

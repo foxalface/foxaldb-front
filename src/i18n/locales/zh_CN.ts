@@ -903,6 +903,24 @@ export const zh_CN: LanguageTranslation = {
                     import_failed: '无法导入架构。请检查内容后重试。',
                     invalid_diagram_json: '图表 JSON 无效。请检查文件后重试。',
                     invalid_diagram_json_hint: '请检查文件后重试。',
+                    project_import: {
+                        unauthenticated: '请登录以导入此项目框架。',
+                        parser_unavailable:
+                            '此项目框架目前无法导入。请稍后重试。',
+                        unsafe_path: '此项目包中的文件路径不被允许。',
+                        duplicate_path: '此项目包包含重复的文件路径。',
+                        disallowed_file: '项目包包含所选框架不允许的文件。',
+                        missing_evidence:
+                            '项目包未包含所选框架所需的足够架构文件。',
+                        bundle_too_many_files: '项目包包含过多文件。',
+                        bundle_file_too_large: '项目包中的某个文件过大。',
+                        bundle_total_too_large: '项目包总体过大。',
+                        parse_failed: '无法解析项目架构。请检查归档后重试。',
+                        network_failure:
+                            '无法完成项目导入请求。请检查网络连接后重试。',
+                        remote_failure:
+                            '项目导入服务返回意外错误。请稍后重试。',
+                    },
                 },
             },
 

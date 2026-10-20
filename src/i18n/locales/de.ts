@@ -995,6 +995,32 @@ export const de: LanguageTranslation = {
                         'Das Diagramm-JSON ist ungültig. Prüfen Sie die Datei und versuchen Sie es erneut.',
                     invalid_diagram_json_hint:
                         'Überprüfen Sie die Datei und versuchen Sie es erneut.',
+                    project_import: {
+                        unauthenticated:
+                            'Melden Sie sich an, um dieses Projektframework zu importieren.',
+                        parser_unavailable:
+                            'Dieses Projektframework kann derzeit nicht importiert werden. Versuchen Sie es später erneut.',
+                        unsafe_path:
+                            'Ein Dateipfad in diesem Projektbundle ist nicht zulässig.',
+                        duplicate_path:
+                            'Dieses Projektbundle enthält doppelte Dateipfade.',
+                        disallowed_file:
+                            'Dieses Projektbundle enthält eine für das gewählte Framework nicht zulässige Datei.',
+                        missing_evidence:
+                            'Dieses Projektbundle enthält nicht genügend Schemadateien für das gewählte Framework.',
+                        bundle_too_many_files:
+                            'Dieses Projektbundle enthält zu viele Dateien.',
+                        bundle_file_too_large:
+                            'Eine Datei in diesem Projektbundle ist zu groß.',
+                        bundle_total_too_large:
+                            'Dieses Projektbundle ist insgesamt zu groß.',
+                        parse_failed:
+                            'Das Projektschema konnte nicht analysiert werden. Prüfen Sie das Archiv und versuchen Sie es erneut.',
+                        network_failure:
+                            'Die Importanfrage konnte nicht abgeschlossen werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
+                        remote_failure:
+                            'Der Importdienst hat einen unerwarteten Fehler zurückgegeben. Versuchen Sie es später erneut.',
+                    },
                 },
             },
 

@@ -175,6 +175,40 @@ These remain for export round-trip QA and optional backend tooling (M11.1B remov
 
 Generic project import uses `POST /api/project-import/parse` only.
 
+## M11.1C — contracts and semantic QA foundation
+
+### Canonical project framework identifiers
+
+| Location | Identifiers |
+|----------|-------------|
+| **Local parsers (browser)** | `prisma`, `drizzle`, `rails` |
+| **Remote parsers (`POST /api/project-import/parse`)** | `laravel`, `entity_framework_core`, `django` |
+
+Aliases such as `ef_core` or `laravel_migrations` are **not** accepted. The frontend must never send local-only framework names to the remote API (`InvalidRemoteProjectFrameworkError` before any network call).
+
+### Remote project import request (v1)
+
+Authenticated `POST /api/project-import/parse` JSON body:
+
+- `framework` — remote identifier (required)
+- `files` — `{ path, content }[]` logical project-relative paths (required)
+- `targetDatabaseType` — diagram target DBMS (required)
+- `rootPath` — optional project root inside the archive
+
+Success: `{ data: { apiVersion: "1", framework, diagram, diagnostics } }`. The frontend normalizes `diagram` via `normalizeProjectImportPayload()`.
+
+422 errors: `{ message, code, path?, framework? }` with stable `code` values (`unsafe_path`, `bundle_total_too_large`, `project_import_parse_failed`, …). UI maps known codes to `new_diagram_dialog.import_schema.errors.project_import.*` keys; unknown failures use generic `import_failed`.
+
+### Project bundle prechecks
+
+After `collectFileBundle()`, the wizard may precheck `projectImport.*` limits from `GET /api/capabilities/uploads` (file count, per-file bytes, total bytes, path length, depth). Backend bundle validation remains authoritative.
+
+### Semantic import QA (test-only)
+
+Goldens for M11.2+ use `lib/import/test-support/diagram-semantic-projection.ts` (`projectDiagramSemantics()`). It strips diagram/table/field/relationship ids and layout, sorts deterministically, and expresses relationships as **referencing FK column → referenced column**. It does not normalize `null` vs `undefined` vs `false`.
+
+**Fixture convention:** SQL/DBML/JSON goldens → `lib/import/__tests__/semantic/` and existing `lib/import/__tests__/fixtures/`. Framework project goldens (M11.3) → `lib/project-import/__tests__/fixtures/` and realistic `m10-realistic-*` tests.
+
 ## Related files
 
 - `lib/import/import-schema.ts` — dispatcher

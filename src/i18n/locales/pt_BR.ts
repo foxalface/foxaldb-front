@@ -982,6 +982,32 @@ export const pt_BR: LanguageTranslation = {
                         'O JSON do diagrama é inválido. Verifique o arquivo e tente novamente.',
                     invalid_diagram_json_hint:
                         'Verifique o arquivo e tente novamente.',
+                    project_import: {
+                        unauthenticated:
+                            'Entre para importar este framework de projeto.',
+                        parser_unavailable:
+                            'Este framework de projeto não pode ser importado agora. Tente novamente mais tarde.',
+                        unsafe_path:
+                            'Um caminho de arquivo neste pacote de projeto não é permitido.',
+                        duplicate_path:
+                            'Este pacote de projeto contém caminhos de arquivo duplicados.',
+                        disallowed_file:
+                            'O pacote inclui um arquivo não permitido para o framework selecionado.',
+                        missing_evidence:
+                            'O pacote não inclui arquivos de esquema suficientes para o framework selecionado.',
+                        bundle_too_many_files:
+                            'Este pacote de projeto contém arquivos em excesso.',
+                        bundle_file_too_large:
+                            'Um arquivo neste pacote de projeto é grande demais.',
+                        bundle_total_too_large:
+                            'Este pacote de projeto é grande demais no total.',
+                        parse_failed:
+                            'Não foi possível analisar o esquema do projeto. Verifique o arquivo e tente novamente.',
+                        network_failure:
+                            'Não foi possível concluir a solicitação de importação do projeto. Verifique sua conexão e tente novamente.',
+                        remote_failure:
+                            'O serviço de importação do projeto retornou um erro inesperado. Tente novamente mais tarde.',
+                    },
                 },
             },
 

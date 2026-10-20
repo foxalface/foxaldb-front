@@ -903,6 +903,25 @@ export const zh_TW: LanguageTranslation = {
                     import_failed: '無法匯入結構描述。請檢查內容後再試一次。',
                     invalid_diagram_json: '圖表 JSON 無效。請檢查檔案後重試。',
                     invalid_diagram_json_hint: '請檢查檔案後再試一次。',
+                    project_import: {
+                        unauthenticated: '請登入以匯入此專案框架。',
+                        parser_unavailable:
+                            '此專案框架目前無法匯入。請稍後再試。',
+                        unsafe_path: '此專案套件中的檔案路徑不被允許。',
+                        duplicate_path: '此專案套件包含重複的檔案路徑。',
+                        disallowed_file: '套件包含所選框架不允許的檔案。',
+                        missing_evidence:
+                            '套件未包含所選框架所需的足夠結構描述檔。',
+                        bundle_too_many_files: '專案套件包含過多檔案。',
+                        bundle_file_too_large: '專案套件中的某個檔案過大。',
+                        bundle_total_too_large: '專案套件總體過大。',
+                        parse_failed:
+                            '無法解析專案結構描述。請檢查封存後再試。',
+                        network_failure:
+                            '無法完成專案匯入要求。請檢查連線後再試。',
+                        remote_failure:
+                            '專案匯入服務傳回意外錯誤。請稍後再試。',
+                    },
                 },
             },
 

@@ -74,10 +74,10 @@ export const mapRemoteProjectImportError = (error: unknown): never => {
         }
 
         if (error.status === 422) {
-            throw new ProjectImportValidationRejectedError(
-                error.message,
-                getApiErrorPath(error.payload)
-            );
+            throw new ProjectImportValidationRejectedError(error.message, {
+                path: getApiErrorPath(error.payload),
+                backendCode: code ?? undefined,
+            });
         }
 
         if (error.status === 501 && code === 'project_parser_unavailable') {

@@ -967,6 +967,32 @@ export const en = {
                     invalid_diagram_json:
                         'The diagram JSON is invalid. Check the file and try again.',
                     invalid_diagram_json_hint: 'Check the file and try again.',
+                    project_import: {
+                        unauthenticated:
+                            'Sign in to import this project framework.',
+                        parser_unavailable:
+                            'This project framework cannot be imported right now. Try again later.',
+                        unsafe_path:
+                            'A file path in this project bundle is not allowed.',
+                        duplicate_path:
+                            'This project bundle contains duplicate file paths.',
+                        disallowed_file:
+                            'This project bundle includes a file that is not allowed for the selected framework.',
+                        missing_evidence:
+                            'This project bundle does not include enough schema files for the selected framework.',
+                        bundle_too_many_files:
+                            'This project bundle contains too many files.',
+                        bundle_file_too_large:
+                            'A file in this project bundle is too large.',
+                        bundle_total_too_large:
+                            'This project bundle is too large overall.',
+                        parse_failed:
+                            'The project schema could not be parsed. Check the archive and try again.',
+                        network_failure:
+                            'The project import request could not be completed. Check your connection and try again.',
+                        remote_failure:
+                            'The project import service returned an unexpected error. Try again later.',
+                    },
                 },
             },
 

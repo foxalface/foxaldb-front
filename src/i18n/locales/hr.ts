@@ -970,6 +970,32 @@ export const hr: LanguageTranslation = {
                         'JSON dijagrama nije valjan. Provjerite datoteku i pokušajte ponovno.',
                     invalid_diagram_json_hint:
                         'Provjerite datoteku i pokušajte ponovno.',
+                    project_import: {
+                        unauthenticated:
+                            'Prijavite se za uvoz ovog projektnog okvira.',
+                        parser_unavailable:
+                            'Ovaj projektni okvir trenutačno se ne može uvesti. Pokušajte ponovno kasnije.',
+                        unsafe_path:
+                            'Putanja datoteke u ovom projektnom paketu nije dopuštena.',
+                        duplicate_path:
+                            'Ovaj projektni paket sadrži duplicirane putanje datoteka.',
+                        disallowed_file:
+                            'Paket uključuje datoteku koja nije dopuštena za odabrani okvir.',
+                        missing_evidence:
+                            'Paket ne sadrži dovoljno datoteka sheme za odabrani okvir.',
+                        bundle_too_many_files:
+                            'Projektni paket sadrži previše datoteka.',
+                        bundle_file_too_large:
+                            'Jedna datoteka u projektnom paketu je prevelika.',
+                        bundle_total_too_large:
+                            'Projektni paket je ukupno prevelik.',
+                        parse_failed:
+                            'Shema projekta nije se mogla analizirati. Provjerite arhivu i pokušajte ponovno.',
+                        network_failure:
+                            'Zahtjev za uvoz projekta nije se mogao dovršiti. Provjerite vezu i pokušajte ponovno.',
+                        remote_failure:
+                            'Usluga uvoza projekta vratila je neočekivanu pogrešku. Pokušajte ponovno kasnije.',
+                    },
                 },
             },
 
