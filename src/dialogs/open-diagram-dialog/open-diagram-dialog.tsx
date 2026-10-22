@@ -1,5 +1,4 @@
 import { Button } from '@/components/button/button';
-import { DiagramIcon } from '@/components/diagram-icon/diagram-icon';
 import {
     Dialog,
     DialogClose,
@@ -11,36 +10,38 @@ import {
     DialogTitle,
 } from '@/components/dialog/dialog';
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/table/table';
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from '@/components/tabs/tabs';
+import { useAuth } from '@/hooks/use-auth';
+import { useChartDB } from '@/hooks/use-chartdb';
 import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
-import { getDiagrams, type DiagramApiResource } from '@/lib/api/diagrams';
-import type { Diagram } from '@/lib/domain/diagram';
-import type { RemoteDiagramSummary } from '@/lib/entry-flow';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import { useStorage } from '@/hooks/use-storage';
+import { getDiagrams } from '@/lib/api/diagrams';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Lock } from 'lucide-react';
 import type { BaseDialogProps } from '../common/base-dialog-props';
-import { useDebounce } from '@/hooks/use-debounce';
-import { DiagramRowActionsMenu } from './diagram-row-actions-menu/diagram-row-actions-menu';
 import type { EntryFlowOpenDiagramActions } from '@/pages/editor-page/entry-flow-open-diagram-actions';
-
-const remoteSummaryToDiagram = (summary: RemoteDiagramSummary): Diagram =>
-    ({
-        id: summary.id,
-        name: summary.name,
-        createdAt: new Date(summary.createdAt || 0),
-        updatedAt: new Date(summary.updatedAt || 0),
-        tables: Array.from({ length: summary.tablesCount }),
-        databaseType: summary.databaseType,
-        databaseEdition: summary.databaseEdition,
-    }) as Diagram;
+import {
+    DEFAULT_OPEN_DIAGRAM_SORT,
+    type OpenDiagramDeviceRow,
+    type OpenDiagramOnlineRow,
+    type OpenDiagramSortState,
+    type OpenDiagramTab,
+} from './open-diagram-list-types';
+import {
+    apiDiagramToOnlineRow,
+    diagramToDeviceRow,
+    remoteSummaryToOnlineRow,
+} from './open-diagram-mappers';
+import { sortOpenDiagramRows } from './open-diagram-sort';
+import { OpenDiagramTable } from './open-diagram-table';
 
 export interface OpenDiagramDialogProps extends BaseDialogProps {
     canClose?: boolean;
@@ -55,43 +56,63 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     const { closeOpenDiagramDialog, openCreateDiagramDialog } = useDialog();
     const { t } = useTranslation();
     const { updateConfig } = useConfig();
+    const { isAuthenticated } = useAuth();
+    const { listDiagrams, listTables } = useStorage();
+    const { loadDiagram } = useChartDB();
+    const { clearDiagramAccess } = useDiagramAccess();
     const navigate = useNavigate();
-    const [diagrams, setDiagrams] = useState<Diagram[]>([]);
+
+    const [deviceRows, setDeviceRows] = useState<OpenDiagramDeviceRow[]>([]);
+    const [onlineRows, setOnlineRows] = useState<OpenDiagramOnlineRow[]>([]);
     const [selectedDiagramId, setSelectedDiagramId] = useState<
         string | undefined
     >();
+    const [activeTab, setActiveTab] = useState<OpenDiagramTab>(
+        isAuthenticated ? 'online' : 'device'
+    );
+    const [deviceSort, setDeviceSort] = useState<OpenDiagramSortState>(
+        DEFAULT_OPEN_DIAGRAM_SORT
+    );
+    const [onlineSort, setOnlineSort] = useState<OpenDiagramSortState>(
+        DEFAULT_OPEN_DIAGRAM_SORT
+    );
 
     const isEntryFlowOwned = entryOpenDiagramActions !== undefined;
     const effectiveCanClose = isEntryFlowOwned
         ? entryOpenDiagramActions.canClose
         : canClose;
 
-    const entryDiagrams = useMemo(
-        () =>
-            entryOpenDiagramActions?.diagrams.map(remoteSummaryToDiagram) ?? [],
-        [entryOpenDiagramActions?.diagrams]
-    );
-
-    const fetchDiagrams = useCallback(async () => {
-        const diagramsFromApi = await getDiagrams();
-
-        const backendDiagrams = diagramsFromApi.map(
-            (diagram: DiagramApiResource): Diagram =>
-                ({
-                    id: String(diagram.id),
-                    name: diagram.name,
-                    createdAt: new Date(diagram.created_at ?? 0),
-                    updatedAt: new Date(diagram.updated_at ?? 0),
-                    tables: Array.from({
-                        length: diagram.tables_count ?? 0,
-                    }),
-                    databaseType: diagram.database_type,
-                    databaseEdition: diagram.database_edition,
-                }) as Diagram
+    const fetchDeviceDiagrams = useCallback(async () => {
+        const diagrams = await listDiagrams();
+        const rows = await Promise.all(
+            diagrams.map(async (diagram) => {
+                const tables = await listTables(diagram.id);
+                return diagramToDeviceRow(diagram, tables.length);
+            })
         );
+        setDeviceRows(rows);
+    }, [listDiagrams, listTables]);
 
-        setDiagrams(backendDiagrams);
-    }, []);
+    const fetchOnlineDiagrams = useCallback(async () => {
+        if (entryOpenDiagramActions) {
+            setOnlineRows(
+                entryOpenDiagramActions.diagrams.map(remoteSummaryToOnlineRow)
+            );
+            return;
+        }
+
+        if (!isAuthenticated) {
+            setOnlineRows([]);
+            return;
+        }
+
+        const diagramsFromApi = await getDiagrams();
+        setOnlineRows(diagramsFromApi.map(apiDiagramToOnlineRow));
+    }, [entryOpenDiagramActions, isAuthenticated]);
+
+    const refreshLists = useCallback(async () => {
+        await Promise.all([fetchDeviceDiagrams(), fetchOnlineDiagrams()]);
+    }, [fetchDeviceDiagrams, fetchOnlineDiagrams]);
 
     useEffect(() => {
         if (!dialog.open) {
@@ -99,16 +120,24 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         }
 
         setSelectedDiagramId(undefined);
+        setActiveTab(isAuthenticated ? 'online' : 'device');
+        setDeviceSort(DEFAULT_OPEN_DIAGRAM_SORT);
+        setOnlineSort(DEFAULT_OPEN_DIAGRAM_SORT);
 
-        if (isEntryFlowOwned) {
-            setDiagrams(entryDiagrams);
-            return;
-        }
+        void refreshLists();
+    }, [dialog.open, isAuthenticated, refreshLists]);
 
-        fetchDiagrams();
-    }, [dialog.open, fetchDiagrams, isEntryFlowOwned, entryDiagrams]);
+    const sortedDeviceRows = useMemo(
+        () => sortOpenDiagramRows(deviceRows, deviceSort),
+        [deviceRows, deviceSort]
+    );
 
-    const openDiagram = useCallback(
+    const sortedOnlineRows = useMemo(
+        () => sortOpenDiagramRows(onlineRows, onlineSort),
+        [onlineRows, onlineSort]
+    );
+
+    const openOnlineDiagram = useCallback(
         (diagramId: string) => {
             if (!diagramId) {
                 return;
@@ -125,15 +154,43 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         [entryOpenDiagramActions, updateConfig, navigate]
     );
 
+    const openLocalDiagram = useCallback(
+        async (diagramId: string) => {
+            if (!diagramId) {
+                return;
+            }
+
+            clearDiagramAccess();
+            const diagram = await loadDiagram(diagramId);
+
+            if (!diagram) {
+                return;
+            }
+
+            await updateConfig({ config: { defaultDiagramId: diagramId } });
+            navigate(`/diagrams/${diagramId}`);
+        },
+        [clearDiagramAccess, loadDiagram, updateConfig, navigate]
+    );
+
     const handleOpenConfirmed = useCallback(
-        (diagramId: string) => {
-            openDiagram(diagramId);
+        (diagramId: string, storage: OpenDiagramTab) => {
+            if (storage === 'online') {
+                openOnlineDiagram(diagramId);
+            } else {
+                void openLocalDiagram(diagramId);
+            }
 
             if (!entryOpenDiagramActions) {
                 closeOpenDiagramDialog();
             }
         },
-        [openDiagram, entryOpenDiagramActions, closeOpenDiagramDialog]
+        [
+            openOnlineDiagram,
+            openLocalDiagram,
+            entryOpenDiagramActions,
+            closeOpenDiagramDialog,
+        ]
     );
 
     const handleRequestCreateDiagram = useCallback(() => {
@@ -150,53 +207,13 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         openCreateDiagramDialog,
     ]);
 
-    const handleRowKeyDown = useCallback(
-        (e: React.KeyboardEvent<HTMLTableRowElement>) => {
-            const element = e.target as HTMLElement;
-            const diagramId = element.getAttribute('data-diagram-id');
-            const selectionIndexAttr = element.getAttribute(
-                'data-selection-index'
-            );
-
-            if (!diagramId || !selectionIndexAttr) return;
-
-            const selectionIndex = parseInt(selectionIndexAttr, 10);
-
-            switch (e.key) {
-                case 'Enter':
-                case ' ':
-                    e.preventDefault();
-                    handleOpenConfirmed(diagramId);
-                    break;
-                case 'ArrowDown': {
-                    e.preventDefault();
-
-                    (
-                        document.querySelector(
-                            `[data-selection-index="${selectionIndex + 1}"]`
-                        ) as HTMLElement
-                    )?.focus();
-                    break;
-                }
-                case 'ArrowUp': {
-                    e.preventDefault();
-
-                    (
-                        document.querySelector(
-                            `[data-selection-index="${selectionIndex - 1}"]`
-                        ) as HTMLElement
-                    )?.focus();
-                    break;
-                }
-            }
-        },
-        [handleOpenConfirmed]
-    );
-
-    const onFocusHandler = useDebounce(
-        (diagramId: string) => setSelectedDiagramId(diagramId),
-        50
-    );
+    const footerOpenDisabled =
+        !selectedDiagramId ||
+        (activeTab === 'online' && !isAuthenticated) ||
+        (activeTab === 'online' &&
+            !onlineRows.some((row) => row.id === selectedDiagramId)) ||
+        (activeTab === 'device' &&
+            !deviceRows.some((row) => row.id === selectedDiagramId));
 
     return (
         <Dialog
@@ -222,111 +239,87 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                         {t('open_diagram_dialog.description')}
                     </DialogDescription>
                 </DialogHeader>
-                <DialogInternalContent>
-                    <div className="flex flex-1 items-center justify-center">
-                        <Table>
-                            <TableHeader className="sticky top-0 bg-background">
-                                <TableRow>
-                                    <TableHead />
-                                    <TableHead>
-                                        {t(
-                                            'open_diagram_dialog.table_columns.name'
-                                        )}
-                                    </TableHead>
-                                    <TableHead className="hidden items-center sm:inline-flex">
-                                        {t(
-                                            'open_diagram_dialog.table_columns.created_at'
-                                        )}
-                                    </TableHead>
-                                    <TableHead>
-                                        {t(
-                                            'open_diagram_dialog.table_columns.last_modified'
-                                        )}
-                                    </TableHead>
-                                    <TableHead className="text-center">
-                                        {t(
-                                            'open_diagram_dialog.table_columns.tables_count'
-                                        )}
-                                    </TableHead>
-                                    <TableHead />
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {diagrams.map((diagram, index) => (
-                                    <TableRow
-                                        key={diagram.id}
-                                        data-state={`${selectedDiagramId === diagram.id ? 'selected' : ''}`}
-                                        data-diagram-id={diagram.id}
-                                        data-selection-index={index}
-                                        tabIndex={0}
-                                        onFocus={() =>
-                                            onFocusHandler(diagram.id)
-                                        }
-                                        className="focus:bg-accent focus:outline-none"
-                                        onClick={(e) => {
-                                            switch (e.detail) {
-                                                case 1:
-                                                    setSelectedDiagramId(
-                                                        diagram.id
-                                                    );
-                                                    break;
-                                                case 2:
-                                                    handleOpenConfirmed(
-                                                        diagram.id
-                                                    );
-                                                    break;
-                                                default:
-                                                    setSelectedDiagramId(
-                                                        diagram.id
-                                                    );
-                                            }
-                                        }}
-                                        onKeyDown={handleRowKeyDown}
-                                    >
-                                        <TableCell className="table-cell">
-                                            <div className="flex justify-center">
-                                                <DiagramIcon
-                                                    databaseType={
-                                                        diagram.databaseType
-                                                    }
-                                                    databaseEdition={
-                                                        diagram.databaseEdition
-                                                    }
-                                                />
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>{diagram.name}</TableCell>
-                                        <TableCell className="hidden items-center sm:table-cell">
-                                            {diagram.createdAt.toLocaleString()}
-                                        </TableCell>
-                                        <TableCell>
-                                            {diagram.updatedAt.toLocaleString()}
-                                        </TableCell>
-                                        <TableCell className="text-center">
-                                            {diagram.tables?.length}
-                                        </TableCell>
-                                        <TableCell className="items-center p-0 pr-1 text-right">
-                                            <DiagramRowActionsMenu
-                                                diagram={diagram}
-                                                onOpen={() => {
-                                                    handleOpenConfirmed(
-                                                        diagram.id
-                                                    );
-                                                }}
-                                                onDuplicate={() => {
-                                                    closeOpenDiagramDialog();
-                                                }}
-                                                numberOfDiagrams={
-                                                    diagrams.length
-                                                }
-                                                refetch={fetchDiagrams}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </div>
+                <DialogInternalContent className="flex min-h-0 flex-1 flex-col">
+                    <Tabs
+                        value={activeTab}
+                        onValueChange={(value) =>
+                            setActiveTab(value as OpenDiagramTab)
+                        }
+                        className="flex min-h-0 flex-1 flex-col"
+                    >
+                        <TabsList className="w-full justify-start">
+                            <TabsTrigger value="device">
+                                {t('open_diagram_dialog.tabs.device')}
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value="online"
+                                disabled={!isAuthenticated}
+                                className="gap-1.5"
+                            >
+                                {!isAuthenticated ? (
+                                    <Lock
+                                        className="size-3.5 shrink-0"
+                                        aria-hidden
+                                    />
+                                ) : null}
+                                {t('open_diagram_dialog.tabs.online')}
+                            </TabsTrigger>
+                        </TabsList>
+
+                        <TabsContent
+                            value="device"
+                            className="mt-3 min-h-0 flex-1 overflow-y-auto"
+                        >
+                            <OpenDiagramTable
+                                tab="device"
+                                rows={sortedDeviceRows}
+                                sort={deviceSort}
+                                onSortChange={setDeviceSort}
+                                selectedDiagramId={selectedDiagramId}
+                                onSelectDiagramId={setSelectedDiagramId}
+                                onOpenDiagram={handleOpenConfirmed}
+                                onLocalListChanged={fetchDeviceDiagrams}
+                                onOnlineListChanged={fetchOnlineDiagrams}
+                                localDiagramCount={deviceRows.length}
+                                onlineDiagramCount={onlineRows.length}
+                                isAuthenticated={isAuthenticated}
+                                emptyMessage={t(
+                                    'open_diagram_dialog.empty.device'
+                                )}
+                            />
+                        </TabsContent>
+
+                        <TabsContent
+                            value="online"
+                            className="mt-3 min-h-0 flex-1 overflow-y-auto"
+                        >
+                            {!isAuthenticated ? (
+                                <p className="text-center text-sm text-muted-foreground">
+                                    {t(
+                                        'open_diagram_dialog.guest_online_disabled'
+                                    )}
+                                </p>
+                            ) : (
+                                <OpenDiagramTable
+                                    tab="online"
+                                    rows={sortedOnlineRows}
+                                    sort={onlineSort}
+                                    onSortChange={setOnlineSort}
+                                    selectedDiagramId={selectedDiagramId}
+                                    onSelectDiagramId={setSelectedDiagramId}
+                                    onOpenDiagram={handleOpenConfirmed}
+                                    onLocalListChanged={fetchDeviceDiagrams}
+                                    onOnlineListChanged={fetchOnlineDiagrams}
+                                    localDiagramCount={deviceRows.length}
+                                    onlineDiagramCount={onlineRows.length}
+                                    isAuthenticated={isAuthenticated}
+                                    emptyMessage={t(
+                                        'open_diagram_dialog.empty.online'
+                                    )}
+                                />
+                            )}
+                        </TabsContent>
+                    </Tabs>
                 </DialogInternalContent>
 
                 <DialogFooter className="flex !justify-between gap-2">
@@ -345,15 +338,26 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                             variant="secondary"
                             onClick={handleRequestCreateDiagram}
                         >
-                            {t('open_diagram_dialog.new_database')}
+                            {t('open_diagram_dialog.new_diagram')}
                         </Button>
                         <DialogClose asChild>
                             <Button
                                 type="submit"
-                                disabled={!selectedDiagramId}
-                                onClick={() =>
-                                    handleOpenConfirmed(selectedDiagramId ?? '')
-                                }
+                                disabled={footerOpenDisabled}
+                                onClick={() => {
+                                    if (!selectedDiagramId) {
+                                        return;
+                                    }
+
+                                    const storage =
+                                        activeTab === 'device'
+                                            ? 'device'
+                                            : 'online';
+                                    handleOpenConfirmed(
+                                        selectedDiagramId,
+                                        storage
+                                    );
+                                }}
                             >
                                 {t('open_diagram_dialog.open')}
                             </Button>

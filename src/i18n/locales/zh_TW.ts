@@ -971,18 +971,39 @@ export const zh_TW: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: '開啟資料庫',
-            description: '請從以下列表中選擇一個圖表。',
+            title: '開啟圖表',
+            description: '請從下方清單中選擇要開啟的圖表。',
+            tabs: {
+                device: '此裝置',
+                online: '線上',
+            },
+            empty: {
+                device: '此裝置上沒有圖表。',
+                online: '沒有線上圖表。',
+            },
+            guest_online_disabled: '登入以存取您的線上圖表。',
             table_columns: {
-                name: '名稱',
-                created_at: '創建時間',
-                last_modified: '最後修改時間',
-                tables_count: '表格數',
+                database: '資料庫',
+                name: '圖表',
+                role: '角色',
+                created_at: '建立時間',
+                last_modified: '修改時間',
+                tables_count: '資料表',
+                actions: '操作',
             },
             cancel: '取消',
             open: '開啟',
-            new_database: '新建資料庫',
-
+            new_diagram: '新增圖表',
+            put_online: {
+                label: '上線',
+                copy: '複製',
+                move: '移動',
+                sign_in_required: '登入以將此圖表上線',
+            },
+            errors: {
+                put_online_failed: '無法將圖表上線。',
+                duplicate_failed: '無法複製圖表。',
+            },
             diagram_actions: {
                 open: '開啟',
                 duplicate: '複製',

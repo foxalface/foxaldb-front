@@ -1060,19 +1060,42 @@ export const ja: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'データベースを開く',
-            description:
-                '新しいダイアグラムのデータベースシステムを選択してください。',
+            title: 'ダイアグラムを開く',
+            description: '下の一覧から開くダイアグラムを選択してください。',
+            tabs: {
+                device: 'このデバイス',
+                online: 'オンライン',
+            },
+            empty: {
+                device: 'このデバイスにダイアグラムはありません。',
+                online: 'オンラインのダイアグラムはありません。',
+            },
+            guest_online_disabled:
+                'オンラインのダイアグラムにアクセスするにはサインインしてください。',
             table_columns: {
-                name: '名前',
+                database: 'データベース',
+                name: 'ダイアグラム',
+                role: '役割',
                 created_at: '作成日',
-                last_modified: '最終更新日',
-                tables_count: 'テーブル数',
+                last_modified: '更新日',
+                tables_count: 'テーブル',
+                actions: '操作',
             },
             cancel: 'キャンセル',
             open: '開く',
-            new_database: '新しいデータベース',
-
+            new_diagram: '新しいダイアグラム',
+            put_online: {
+                label: 'オンラインにする',
+                copy: 'コピー',
+                move: '移動',
+                sign_in_required:
+                    'このダイアグラムをオンラインにするにはサインインしてください',
+            },
+            errors: {
+                put_online_failed:
+                    'ダイアグラムをオンラインにできませんでした。',
+                duplicate_failed: 'ダイアグラムを複製できませんでした。',
+            },
             diagram_actions: {
                 open: '開く',
                 duplicate: '複製',

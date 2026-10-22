@@ -1072,19 +1072,42 @@ export const de: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Datenbank öffnen',
-            description:
-                'Wählen Sie das Datenbanksystem für Ihr neues Diagramm.',
+            title: 'Diagramm öffnen',
+            description: 'Wählen Sie unten ein Diagramm zum Öffnen aus.',
+            tabs: {
+                device: 'Auf diesem Gerät',
+                online: 'Online',
+            },
+            empty: {
+                device: 'Keine Diagramme auf diesem Gerät.',
+                online: 'Keine Online-Diagramme.',
+            },
+            guest_online_disabled:
+                'Melden Sie sich an, um auf Ihre Online-Diagramme zuzugreifen.',
             table_columns: {
-                name: 'Name',
-                created_at: 'Erstellt am',
-                last_modified: 'Zuletzt geändert',
+                database: 'Datenbank',
+                name: 'Diagramm',
+                role: 'Rolle',
+                created_at: 'Erstellt',
+                last_modified: 'Geändert',
                 tables_count: 'Tabellen',
+                actions: 'Aktionen',
             },
             cancel: 'Abbrechen',
             open: 'Öffnen',
-            new_database: 'Neue Datenbank',
-
+            new_diagram: 'Neues Diagramm',
+            put_online: {
+                label: 'Online stellen',
+                copy: 'Kopieren',
+                move: 'Verschieben',
+                sign_in_required:
+                    'Melden Sie sich an, um dieses Diagramm online zu stellen',
+            },
+            errors: {
+                put_online_failed:
+                    'Diagramm konnte nicht online gestellt werden.',
+                duplicate_failed: 'Diagramm konnte nicht dupliziert werden.',
+            },
             diagram_actions: {
                 open: 'Öffnen',
                 duplicate: 'Duplizieren',

@@ -1038,22 +1038,45 @@ export const hi: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'डेटाबेस खोलें',
-            description: 'अपने नए डायग्राम के लिए डेटाबेस सिस्टम चुनें।',
+            title: 'डायग्राम खोलें',
+            description: 'नीचे की सूची से खोलने के लिए एक डायग्राम चुनें।',
+            tabs: {
+                device: 'इस डिवाइस पर',
+                online: 'ऑनलाइन',
+            },
+            empty: {
+                device: 'इस डिवाइस पर कोई डायग्राम नहीं है।',
+                online: 'कोई ऑनलाइन डायग्राम नहीं है।',
+            },
+            guest_online_disabled:
+                'अपने ऑनलाइन डायग्राम तक पहुँचने के लिए साइन इन करें।',
             table_columns: {
-                name: 'नाम',
-                created_at: 'निर्माण तिथि',
-                last_modified: 'अंतिम संशोधन',
+                database: 'डेटाबेस',
+                name: 'डायग्राम',
+                role: 'भूमिका',
+                created_at: 'बनाया गया',
+                last_modified: 'संशोधित',
                 tables_count: 'तालिकाएँ',
+                actions: 'क्रियाएँ',
             },
             cancel: 'रद्द करें',
             open: 'खोलें',
-            new_database: 'नया डेटाबेस',
-
+            new_diagram: 'नया डायग्राम',
+            put_online: {
+                label: 'ऑनलाइन करें',
+                copy: 'कॉपी',
+                move: 'स्थानांतरित',
+                sign_in_required:
+                    'इस डायग्राम को ऑनलाइन करने के लिए साइन इन करें',
+            },
+            errors: {
+                put_online_failed: 'डायग्राम ऑनलाइन नहीं किया जा सका।',
+                duplicate_failed: 'डायग्राम की प्रतिलिपि नहीं बनाई जा सकी।',
+            },
             diagram_actions: {
                 open: 'खोलें',
                 duplicate: 'डुप्लिकेट',
-                delete: 'हटाएं',
+                delete: 'हटाएँ',
             },
         },
 

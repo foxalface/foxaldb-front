@@ -1026,21 +1026,43 @@ export const gu: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'ડેટાબેસ ખોલો',
-            description: 'તમારા નવા ડાયાગ્રામ માટે ડેટાબેઝ સિસ્ટમ પસંદ કરો.',
+            title: 'ડાયાગ્રામ ખોલો',
+            description: 'નીચેની યાદીમાંથી ખોલવા માટે ડાયાગ્રામ પસંદ કરો.',
+            tabs: {
+                device: 'આ ઉપકરણ પર',
+                online: 'ઓનલાઇન',
+            },
+            empty: {
+                device: 'આ ઉપકરણ પર કોઈ ડાયાગ્રામ નથી.',
+                online: 'કોઈ ઓનલાઇન ડાયાગ્રામ નથી.',
+            },
+            guest_online_disabled:
+                'તમારા ઓનલાઇન ડાયાગ્રામ ઍક્સેસ કરવા સાઇન ઇન કરો.',
             table_columns: {
-                name: 'નામ',
-                created_at: 'બનાવાની તારીખ',
-                last_modified: 'છેલ્લું સુધારેલું',
-                tables_count: 'ટેબલ્સ',
+                database: 'ડેટાબેસ',
+                name: 'ડાયાગ્રામ',
+                role: 'ભૂમિકા',
+                created_at: 'બનાવ્યું',
+                last_modified: 'બદલાયું',
+                tables_count: 'ટેબલ',
+                actions: 'ક્રિયાઓ',
             },
             cancel: 'રદ કરો',
             open: 'ખોલો',
-            new_database: 'નવું ડેટાબેસ',
-
+            new_diagram: 'નવું ડાયાગ્રામ',
+            put_online: {
+                label: 'ઓનલાઇન મૂકો',
+                copy: 'કૉપિ',
+                move: 'ખસેડો',
+                sign_in_required: 'આ ડાયાગ્રામ ઓનલાઇન મૂકવા સાઇન ઇન કરો',
+            },
+            errors: {
+                put_online_failed: 'ડાયાગ્રામ ઓનલાઇન મૂકી શકાયું નહીં.',
+                duplicate_failed: 'ડાયાગ્રામની નકલ થઈ શકી નહીં.',
+            },
             diagram_actions: {
                 open: 'ખોલો',
-                duplicate: 'ડુપ્લિકેટ',
+                duplicate: 'નકલ',
                 delete: 'કાઢી નાખો',
             },
         },

@@ -1043,19 +1043,40 @@ export const vi: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Mở cơ sở dữ liệu',
-            description:
-                'Chọn hệ quản trị cơ sở dữ liệu cho sơ đồ mới của bạn.',
+            title: 'Mở sơ đồ',
+            description: 'Chọn một sơ đồ để mở trong danh sách bên dưới.',
+            tabs: {
+                device: 'Trên thiết bị này',
+                online: 'Trực tuyến',
+            },
+            empty: {
+                device: 'Không có sơ đồ trên thiết bị này.',
+                online: 'Không có sơ đồ trực tuyến.',
+            },
+            guest_online_disabled:
+                'Đăng nhập để truy cập sơ đồ trực tuyến của bạn.',
             table_columns: {
-                name: 'Tên',
-                created_at: 'Tạo vào lúc',
-                last_modified: 'Lần cuối chỉnh sửa',
-                tables_count: 'Số bảng',
+                database: 'Cơ sở dữ liệu',
+                name: 'Sơ đồ',
+                role: 'Vai trò',
+                created_at: 'Đã tạo',
+                last_modified: 'Đã sửa',
+                tables_count: 'Bảng',
+                actions: 'Thao tác',
             },
             cancel: 'Hủy',
             open: 'Mở',
-            new_database: 'Cơ sở dữ liệu mới',
-
+            new_diagram: 'Sơ đồ mới',
+            put_online: {
+                label: 'Đưa lên trực tuyến',
+                copy: 'Sao chép',
+                move: 'Di chuyển',
+                sign_in_required: 'Đăng nhập để đưa sơ đồ này lên trực tuyến',
+            },
+            errors: {
+                put_online_failed: 'Không thể đưa sơ đồ lên trực tuyến.',
+                duplicate_failed: 'Không thể nhân bản sơ đồ.',
+            },
             diagram_actions: {
                 open: 'Mở',
                 duplicate: 'Nhân bản',

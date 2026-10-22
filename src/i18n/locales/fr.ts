@@ -1068,19 +1068,43 @@ export const fr: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Ouvrir Base de Données',
+            title: 'Ouvrir un diagramme',
             description:
                 'Sélectionnez un diagramme à ouvrir dans la liste ci-dessous.',
+            tabs: {
+                device: 'Sur cet appareil',
+                online: 'En ligne',
+            },
+            empty: {
+                device: 'Aucun diagramme sur cet appareil.',
+                online: 'Aucun diagramme en ligne.',
+            },
+            guest_online_disabled:
+                'Connectez-vous pour accéder à vos diagrammes en ligne.',
             table_columns: {
-                name: 'Nom',
+                database: 'SGBD',
+                name: 'Diagramme',
+                role: 'Rôle',
                 created_at: 'Créé le',
-                last_modified: 'Dernière modification',
+                last_modified: 'Modifié le',
                 tables_count: 'Tables',
+                actions: 'Actions',
             },
             cancel: 'Annuler',
             open: 'Ouvrir',
-            new_database: 'Nouvelle Base de Données',
-
+            new_diagram: 'Nouveau diagramme',
+            put_online: {
+                label: 'Mettre en ligne',
+                copy: 'Copier',
+                move: 'Déplacer',
+                sign_in_required:
+                    'Connectez-vous pour mettre ce diagramme en ligne',
+            },
+            errors: {
+                put_online_failed:
+                    'Impossible de mettre le diagramme en ligne.',
+                duplicate_failed: 'Impossible de dupliquer le diagramme.',
+            },
             diagram_actions: {
                 open: 'Ouvrir',
                 duplicate: 'Dupliquer',

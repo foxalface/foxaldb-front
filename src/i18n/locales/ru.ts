@@ -1042,19 +1042,41 @@ export const ru: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Открыть базу данных',
-            description:
-                'Выберите диаграмму, которую нужно открыть, из списка ниже.',
+            title: 'Открыть диаграмму',
+            description: 'Выберите диаграмму для открытия из списка ниже.',
+            tabs: {
+                device: 'На этом устройстве',
+                online: 'В сети',
+            },
+            empty: {
+                device: 'На этом устройстве нет диаграмм.',
+                online: 'Нет диаграмм в сети.',
+            },
+            guest_online_disabled:
+                'Войдите, чтобы получить доступ к диаграммам в сети.',
             table_columns: {
-                name: 'Имя',
-                created_at: 'Создано в',
-                last_modified: 'Последнее изменение',
+                database: 'СУБД',
+                name: 'Диаграмма',
+                role: 'Роль',
+                created_at: 'Создано',
+                last_modified: 'Изменено',
                 tables_count: 'Таблицы',
+                actions: 'Действия',
             },
             cancel: 'Отмена',
             open: 'Открыть',
-            new_database: 'Новая база данных',
-
+            new_diagram: 'Новая диаграмма',
+            put_online: {
+                label: 'Выложить в сеть',
+                copy: 'Копировать',
+                move: 'Переместить',
+                sign_in_required:
+                    'Войдите, чтобы выложить эту диаграмму в сеть',
+            },
+            errors: {
+                put_online_failed: 'Не удалось выложить диаграмму в сеть.',
+                duplicate_failed: 'Не удалось дублировать диаграмму.',
+            },
             diagram_actions: {
                 open: 'Открыть',
                 duplicate: 'Дублировать',

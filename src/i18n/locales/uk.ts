@@ -1046,19 +1046,41 @@ export const uk: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Відкрити базу даних',
-            description:
-                'Виберіть діаграму, яку потрібно відкрити, зі списку нижче.',
+            title: 'Відкрити діаграму',
+            description: 'Виберіть діаграму для відкриття зі списку нижче.',
+            tabs: {
+                device: 'На цьому пристрої',
+                online: 'Онлайн',
+            },
+            empty: {
+                device: 'Немає діаграм на цьому пристрої.',
+                online: 'Немає онлайн-діаграм.',
+            },
+            guest_online_disabled:
+                'Увійдіть, щоб отримати доступ до ваших онлайн-діаграм.',
             table_columns: {
-                name: 'Назва',
-                created_at: 'Створено0',
-                last_modified: 'Востаннє змінено',
+                database: 'СУБД',
+                name: 'Діаграма',
+                role: 'Роль',
+                created_at: 'Створено',
+                last_modified: 'Змінено',
                 tables_count: 'Таблиці',
+                actions: 'Дії',
             },
             cancel: 'Скасувати',
             open: 'Відкрити',
-            new_database: 'Нова база даних',
-
+            new_diagram: 'Нова діаграма',
+            put_online: {
+                label: 'Опублікувати онлайн',
+                copy: 'Копіювати',
+                move: 'Перемістити',
+                sign_in_required:
+                    'Увійдіть, щоб опублікувати цю діаграму онлайн',
+            },
+            errors: {
+                put_online_failed: 'Не вдалося опублікувати діаграму онлайн.',
+                duplicate_failed: 'Не вдалося дублювати діаграму.',
+            },
             diagram_actions: {
                 open: 'Відкрити',
                 duplicate: 'Дублювати',

@@ -1043,18 +1043,39 @@ export const en = {
         },
 
         open_diagram_dialog: {
-            title: 'Open Database',
+            title: 'Open diagram',
             description: 'Select a diagram to open from the list below.',
+            tabs: {
+                device: 'On this device',
+                online: 'Online',
+            },
+            empty: {
+                device: 'No diagrams on this device.',
+                online: 'No online diagrams.',
+            },
+            guest_online_disabled: 'Sign in to access your online diagrams.',
             table_columns: {
-                name: 'Name',
-                created_at: 'Created at',
-                last_modified: 'Last modified',
+                database: 'Database',
+                name: 'Diagram',
+                role: 'Role',
+                created_at: 'Created',
+                last_modified: 'Modified',
                 tables_count: 'Tables',
+                actions: 'Actions',
             },
             cancel: 'Cancel',
             open: 'Open',
-            new_database: 'New Database',
-
+            new_diagram: 'New diagram',
+            put_online: {
+                label: 'Put online',
+                copy: 'Copy',
+                move: 'Move',
+                sign_in_required: 'Sign in to put this diagram online',
+            },
+            errors: {
+                put_online_failed: 'Could not put the diagram online.',
+                duplicate_failed: 'Could not duplicate the diagram.',
+            },
             diagram_actions: {
                 open: 'Open',
                 duplicate: 'Duplicate',

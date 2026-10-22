@@ -971,18 +971,39 @@ export const zh_CN: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: '打开数据库',
-            description: '从下面的列表中选择一个图表打开。',
+            title: '打开图表',
+            description: '请从下方列表中选择要打开的图表。',
+            tabs: {
+                device: '此设备',
+                online: '在线',
+            },
+            empty: {
+                device: '此设备上没有图表。',
+                online: '没有在线图表。',
+            },
+            guest_online_disabled: '登录以访问您的在线图表。',
             table_columns: {
-                name: '名称',
-                created_at: '创建于',
-                last_modified: '最后修改于',
-                tables_count: '表数量',
+                database: '数据库',
+                name: '图表',
+                role: '角色',
+                created_at: '创建时间',
+                last_modified: '修改时间',
+                tables_count: '表',
+                actions: '操作',
             },
             cancel: '取消',
             open: '打开',
-            new_database: '新建数据库',
-
+            new_diagram: '新建图表',
+            put_online: {
+                label: '上线',
+                copy: '复制',
+                move: '移动',
+                sign_in_required: '登录以将此图表上线',
+            },
+            errors: {
+                put_online_failed: '无法将图表上线。',
+                duplicate_failed: '无法复制图表。',
+            },
             diagram_actions: {
                 open: '打开',
                 duplicate: '复制',

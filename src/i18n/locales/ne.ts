@@ -1038,22 +1038,43 @@ export const ne: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'डाटाबेस खोल्नुहोस्',
-            description:
-                'तलको सूचीबाट खोल्नका लागि एक डायाग्राम चयन गर्नुहोस्।',
-            table_columns: {
-                name: 'नाम',
-                created_at: 'मा सिर्जना',
-                last_modified: 'अन्तिम परिवर्तन',
-                tables_count: 'तालिकाहरू',
+            title: 'डायाग्राम खोल्नुहोस्',
+            description: 'तलको सूचीबाट खोल्न डायाग्राम छान्नुहोस्।',
+            tabs: {
+                device: 'यो उपकरणमा',
+                online: 'अनलाइन',
             },
-            cancel: 'रद्द गर्नुहोस्',
+            empty: {
+                device: 'यो उपकरणमा कुनै डायाग्राम छैन।',
+                online: 'कुनै अनलाइन डायाग्राम छैन।',
+            },
+            guest_online_disabled:
+                'आफ्ना अनलाइन डायाग्रामहरू पहुँच गर्न साइन इन गर्नुहोस्।',
+            table_columns: {
+                database: 'डाटाबेस',
+                name: 'डायाग्राम',
+                role: 'भूमिका',
+                created_at: 'सिर्जना',
+                last_modified: 'परिवर्तन',
+                tables_count: 'तालिकाहरू',
+                actions: 'कार्यहरू',
+            },
+            cancel: 'रद्द',
             open: 'खोल्नुहोस्',
-            new_database: 'नयाँ डाटाबेस',
-
+            new_diagram: 'नयाँ डायाग्राम',
+            put_online: {
+                label: 'अनलाइन राख्नुहोस्',
+                copy: 'प्रतिलिपि',
+                move: 'सार्नुहोस्',
+                sign_in_required: 'यो डायाग्राम अनलाइन राख्न साइन इन गर्नुहोस्',
+            },
+            errors: {
+                put_online_failed: 'डायाग्राम अनलाइन राख्न सकिएन।',
+                duplicate_failed: 'डायाग्राम प्रतिलिपि गर्न सकिएन।',
+            },
             diagram_actions: {
                 open: 'खोल्नुहोस्',
-                duplicate: 'डुप्लिकेट',
+                duplicate: 'प्रतिलिपि',
                 delete: 'मेटाउनुहोस्',
             },
         },

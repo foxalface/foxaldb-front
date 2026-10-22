@@ -54,6 +54,7 @@ export interface RemoteDiagramSummary {
     databaseEdition?: string | null;
     createdAt: string;
     updatedAt: string;
+    role?: 'owner' | 'editor' | 'viewer';
 }
 
 export type EntryFlowState =

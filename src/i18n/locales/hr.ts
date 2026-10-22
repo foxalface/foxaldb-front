@@ -1046,22 +1046,45 @@ export const hr: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Otvori bazu podataka',
-            description: 'Odaberite sustav baze podataka za novi dijagram.',
+            title: 'Otvori dijagram',
+            description: 'Odaberite dijagram za otvaranje s popisa u nastavku.',
+            tabs: {
+                device: 'Na ovom uređaju',
+                online: 'Na mreži',
+            },
+            empty: {
+                device: 'Nema dijagrama na ovom uređaju.',
+                online: 'Nema mrežnih dijagrama.',
+            },
+            guest_online_disabled:
+                'Prijavite se za pristup mrežnim dijagramima.',
             table_columns: {
-                name: 'Naziv',
+                database: 'Baza podataka',
+                name: 'Dijagram',
+                role: 'Uloga',
                 created_at: 'Stvoreno',
-                last_modified: 'Zadnje izmijenjeno',
+                last_modified: 'Izmijenjeno',
                 tables_count: 'Tablice',
+                actions: 'Radnje',
             },
             cancel: 'Odustani',
             open: 'Otvori',
-            new_database: 'Nova baza podataka',
-
+            new_diagram: 'Novi dijagram',
+            put_online: {
+                label: 'Stavi na mrežu',
+                copy: 'Kopiraj',
+                move: 'Premjesti',
+                sign_in_required:
+                    'Prijavite se da biste stavili ovaj dijagram na mrežu',
+            },
+            errors: {
+                put_online_failed: 'Nije moguće staviti dijagram na mrežu.',
+                duplicate_failed: 'Nije moguće duplicirati dijagram.',
+            },
             diagram_actions: {
                 open: 'Otvori',
                 duplicate: 'Dupliciraj',
-                delete: 'Obriši',
+                delete: 'Izbriši',
             },
         },
 

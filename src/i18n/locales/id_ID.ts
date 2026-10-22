@@ -1048,18 +1048,41 @@ export const id_ID: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Buka Database',
-            description: 'Pilih sistem basis data untuk diagram baru Anda.',
+            title: 'Buka diagram',
+            description: 'Pilih diagram untuk dibuka dari daftar di bawah.',
+            tabs: {
+                device: 'Di perangkat ini',
+                online: 'Daring',
+            },
+            empty: {
+                device: 'Tidak ada diagram di perangkat ini.',
+                online: 'Tidak ada diagram daring.',
+            },
+            guest_online_disabled: 'Masuk untuk mengakses diagram daring Anda.',
             table_columns: {
-                name: 'Name',
-                created_at: 'Dibuat pada',
-                last_modified: 'Terakhir diubah',
+                database: 'Basis data',
+                name: 'Diagram',
+                role: 'Peran',
+                created_at: 'Dibuat',
+                last_modified: 'Diubah',
                 tables_count: 'Tabel',
+                actions: 'Tindakan',
             },
             cancel: 'Batal',
             open: 'Buka',
-            new_database: 'Database Baru',
-
+            new_diagram: 'Diagram baru',
+            put_online: {
+                label: 'Unggah daring',
+                copy: 'Salin',
+                move: 'Pindahkan',
+                sign_in_required:
+                    'Masuk untuk mengunggah diagram ini secara daring',
+            },
+            errors: {
+                put_online_failed:
+                    'Tidak dapat mengunggah diagram secara daring.',
+                duplicate_failed: 'Tidak dapat menduplikasi diagram.',
+            },
             diagram_actions: {
                 open: 'Buka',
                 duplicate: 'Duplikat',

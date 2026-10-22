@@ -1047,19 +1047,41 @@ export const ko_KR: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: '데이터베이스 열기',
-            description:
-                '새 다이어그램에 사용할 데이터베이스 시스템을 선택하세요.',
+            title: '다이어그램 열기',
+            description: '아래 목록에서 열 다이어그램을 선택하세요.',
+            tabs: {
+                device: '이 기기',
+                online: '온라인',
+            },
+            empty: {
+                device: '이 기기에 다이어그램이 없습니다.',
+                online: '온라인 다이어그램이 없습니다.',
+            },
+            guest_online_disabled:
+                '온라인 다이어그램에 액세스하려면 로그인하세요.',
             table_columns: {
-                name: '이름',
-                created_at: '생성일시',
-                last_modified: '최근 수정일시',
-                tables_count: '테이블 갯수',
+                database: '데이터베이스',
+                name: '다이어그램',
+                role: '역할',
+                created_at: '생성됨',
+                last_modified: '수정됨',
+                tables_count: '테이블',
+                actions: '작업',
             },
             cancel: '취소',
             open: '열기',
-            new_database: '새 데이터베이스',
-
+            new_diagram: '새 다이어그램',
+            put_online: {
+                label: '온라인으로 올리기',
+                copy: '복사',
+                move: '이동',
+                sign_in_required:
+                    '이 다이어그램을 온라인으로 올리려면 로그인하세요',
+            },
+            errors: {
+                put_online_failed: '다이어그램을 온라인으로 올릴 수 없습니다.',
+                duplicate_failed: '다이어그램을 복제할 수 없습니다.',
+            },
             diagram_actions: {
                 open: '열기',
                 duplicate: '복제',

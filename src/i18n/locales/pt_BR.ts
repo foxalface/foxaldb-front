@@ -1058,19 +1058,40 @@ export const pt_BR: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Abrir Banco de Dados',
-            description:
-                'Selecione o sistema de banco de dados para o seu novo diagrama.',
+            title: 'Abrir diagrama',
+            description: 'Selecione um diagrama para abrir na lista abaixo.',
+            tabs: {
+                device: 'Neste dispositivo',
+                online: 'Online',
+            },
+            empty: {
+                device: 'Nenhum diagrama neste dispositivo.',
+                online: 'Nenhum diagrama online.',
+            },
+            guest_online_disabled: 'Entre para acessar seus diagramas online.',
             table_columns: {
-                name: 'Nome',
-                created_at: 'Criado em',
-                last_modified: 'Última Modificação',
+                database: 'Banco de dados',
+                name: 'Diagrama',
+                role: 'Função',
+                created_at: 'Criado',
+                last_modified: 'Modificado',
                 tables_count: 'Tabelas',
+                actions: 'Ações',
             },
             cancel: 'Cancelar',
             open: 'Abrir',
-            new_database: 'Novo Banco de Dados',
-
+            new_diagram: 'Novo diagrama',
+            put_online: {
+                label: 'Colocar online',
+                copy: 'Copiar',
+                move: 'Mover',
+                sign_in_required: 'Entre para colocar este diagrama online',
+            },
+            errors: {
+                put_online_failed:
+                    'Não foi possível colocar o diagrama online.',
+                duplicate_failed: 'Não foi possível duplicar o diagrama.',
+            },
             diagram_actions: {
                 open: 'Abrir',
                 duplicate: 'Duplicar',

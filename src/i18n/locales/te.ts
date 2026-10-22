@@ -1046,21 +1046,43 @@ export const te: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'డేటాబేస్ తెరవండి',
-            description:
-                'మీ కొత్త డయాగ్రామ్ కోసం డేటాబేస్ సిస్టమ్‌ను ఎంచుకోండి.',
+            title: 'డయాగ్రామ్ తెరవండి',
+            description: 'క్రింది జాబితా నుండి తెరవడానికి డయాగ్రామ్ ఎంచుకోండి.',
+            tabs: {
+                device: 'ఈ పరికరంలో',
+                online: 'ఆన్‌లైన్',
+            },
+            empty: {
+                device: 'ఈ పరికరంలో డయాగ్రామ్‌లు లేవు.',
+                online: 'ఆన్‌లైన్ డయాగ్రామ్‌లు లేవు.',
+            },
+            guest_online_disabled:
+                'మీ ఆన్‌లైన్ డయాగ్రామ్‌లను యాక్సెస్ చేయడానికి సైన్ ఇన్ చేయండి.',
             table_columns: {
-                name: 'పేరు',
-                created_at: 'రచించబడిన తేదీ',
-                last_modified: 'చివరి సవరణ',
+                database: 'డేటాబేస్',
+                name: 'డయాగ్రామ్',
+                role: 'పాత్ర',
+                created_at: 'సృష్టించబడింది',
+                last_modified: 'మార్చబడింది',
                 tables_count: 'పట్టికలు',
+                actions: 'చర్యలు',
             },
             cancel: 'రద్దు',
-            open: 'తెరవు',
-            new_database: 'కొత్త డేటాబేస్',
-
+            open: 'తెరవండి',
+            new_diagram: 'కొత్త డయాగ్రామ్',
+            put_online: {
+                label: 'ఆన్‌లైన్‌కి పెట్టండి',
+                copy: 'కాపీ',
+                move: 'తరలించు',
+                sign_in_required:
+                    'ఈ డయాగ్రామ్‌ను ఆన్‌లైన్‌కి పెట్టడానికి సైన్ ఇన్ చేయండి',
+            },
+            errors: {
+                put_online_failed: 'డయాగ్రామ్‌ను ఆన్‌లైన్‌కి పెట్టలేకపోయాం.',
+                duplicate_failed: 'డయాగ్రామ్‌ను నకలు చేయలేకపోయాం.',
+            },
             diagram_actions: {
-                open: 'తెరవు',
+                open: 'తెరవండి',
                 duplicate: 'నకలు',
                 delete: 'తొలగించు',
             },

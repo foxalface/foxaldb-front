@@ -11,6 +11,7 @@ export const toRemoteDiagramSummary = (
     databaseEdition: diagram.database_edition,
     createdAt: diagram.created_at ?? diagram.createdAt ?? '',
     updatedAt: diagram.updated_at ?? diagram.updatedAt ?? '',
+    role: diagram.access?.role ?? 'owner',
 });
 
 export const toRemoteDiagramSummaries = (

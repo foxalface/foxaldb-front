@@ -1038,19 +1038,41 @@ export const bn: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'ডেটাবেস খুলুন',
+            title: 'ডায়াগ্রাম খুলুন',
             description:
-                'আপনার নতুন ডায়াগ্রামের জন্য ডাটাবেস সিস্টেম নির্বাচন করুন।',
-            table_columns: {
-                name: 'নাম',
-                created_at: 'তৈরির তারিখ',
-                last_modified: 'সর্বশেষ পরিবর্তিত',
-                tables_count: 'টেবিল',
+                'নিচের তালিকা থেকে খোলার জন্য একটি ডায়াগ্রাম নির্বাচন করুন।',
+            tabs: {
+                device: 'এই ডিভাইসে',
+                online: 'অনলাইন',
             },
-            cancel: 'বাতিল করুন',
+            empty: {
+                device: 'এই ডিভাইসে কোনো ডায়াগ্রাম নেই।',
+                online: 'কোনো অনলাইন ডায়াগ্রাম নেই।',
+            },
+            guest_online_disabled:
+                'আপনার অনলাইন ডায়াগ্রামে প্রবেশ করতে সাইন ইন করুন।',
+            table_columns: {
+                database: 'ডেটাবেস',
+                name: 'ডায়াগ্রাম',
+                role: 'ভূমিকা',
+                created_at: 'তৈরি',
+                last_modified: 'পরিবর্তিত',
+                tables_count: 'টেবিল',
+                actions: 'ক্রিয়া',
+            },
+            cancel: 'বাতিল',
             open: 'খুলুন',
-            new_database: 'নতুন ডেটাবেস',
-
+            new_diagram: 'নতুন ডায়াগ্রাম',
+            put_online: {
+                label: 'অনলাইনে রাখুন',
+                copy: 'কপি',
+                move: 'সরান',
+                sign_in_required: 'এই ডায়াগ্রাম অনলাইনে রাখতে সাইন ইন করুন',
+            },
+            errors: {
+                put_online_failed: 'ডায়াগ্রাম অনলাইনে রাখা যায়নি।',
+                duplicate_failed: 'ডায়াগ্রাম ডুপ্লিকেট করা যায়নি।',
+            },
             diagram_actions: {
                 open: 'খুলুন',
                 duplicate: 'ডুপ্লিকেট',

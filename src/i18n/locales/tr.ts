@@ -1027,18 +1027,41 @@ export const tr: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Veritabanı Aç',
-            description: 'Yeni diyagramınız için veritabanı sistemini seçin.',
+            title: 'Diyagram aç',
+            description: 'Açmak için listeden bir diyagram seçin.',
+            tabs: {
+                device: 'Bu cihazda',
+                online: 'Çevrimiçi',
+            },
+            empty: {
+                device: 'Bu cihazda diyagram yok.',
+                online: 'Çevrimiçi diyagram yok.',
+            },
+            guest_online_disabled:
+                'Çevrimiçi diyagramlarınıza erişmek için giriş yapın.',
             table_columns: {
-                name: 'Ad',
-                created_at: 'Oluşturulma Tarihi',
-                last_modified: 'Son Değiştirme',
+                database: 'Veritabanı',
+                name: 'Diyagram',
+                role: 'Rol',
+                created_at: 'Oluşturuldu',
+                last_modified: 'Değiştirildi',
                 tables_count: 'Tablolar',
+                actions: 'İşlemler',
             },
             cancel: 'İptal',
             open: 'Aç',
-            new_database: 'Yeni Veritabanı',
-
+            new_diagram: 'Yeni diyagram',
+            put_online: {
+                label: 'Çevrimiçi yap',
+                copy: 'Kopyala',
+                move: 'Taşı',
+                sign_in_required:
+                    'Bu diyagramı çevrimiçi yapmak için giriş yapın',
+            },
+            errors: {
+                put_online_failed: 'Diyagram çevrimiçi yapılamadı.',
+                duplicate_failed: 'Diyagram kopyalanamadı.',
+            },
             diagram_actions: {
                 open: 'Aç',
                 duplicate: 'Kopyala',

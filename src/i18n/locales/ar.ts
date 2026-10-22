@@ -1031,21 +1031,43 @@ export const ar: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'فتح قاعدة بيانات',
-            description: 'حدد نظام قاعدة البيانات للمخطط الجديد.',
+            title: 'فتح مخطط',
+            description: 'اختر مخططًا لفتحه من القائمة أدناه.',
+            tabs: {
+                device: 'على هذا الجهاز',
+                online: 'عبر الإنترنت',
+            },
+            empty: {
+                device: 'لا توجد مخططات على هذا الجهاز.',
+                online: 'لا توجد مخططات عبر الإنترنت.',
+            },
+            guest_online_disabled:
+                'سجّل الدخول للوصول إلى مخططاتك عبر الإنترنت.',
             table_columns: {
-                name: 'الإسم',
+                database: 'قاعدة البيانات',
+                name: 'المخطط',
+                role: 'الدور',
                 created_at: 'تاريخ الإنشاء',
-                last_modified: 'آخر تعديل',
+                last_modified: 'تاريخ التعديل',
                 tables_count: 'الجداول',
+                actions: 'إجراءات',
             },
             cancel: 'إلغاء',
             open: 'فتح',
-            new_database: 'قاعدة بيانات جديدة',
-
+            new_diagram: 'مخطط جديد',
+            put_online: {
+                label: 'نشر عبر الإنترنت',
+                copy: 'نسخ',
+                move: 'نقل',
+                sign_in_required: 'سجّل الدخول لنشر هذا المخطط عبر الإنترنت',
+            },
+            errors: {
+                put_online_failed: 'تعذر نشر المخطط عبر الإنترنت.',
+                duplicate_failed: 'تعذر نسخ المخطط.',
+            },
             diagram_actions: {
                 open: 'فتح',
-                duplicate: 'تكرار',
+                duplicate: 'نسخ',
                 delete: 'حذف',
             },
         },

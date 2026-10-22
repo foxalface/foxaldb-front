@@ -1061,19 +1061,42 @@ export const es: LanguageTranslation = {
         },
 
         open_diagram_dialog: {
-            title: 'Abrir Base de Datos',
+            title: 'Abrir diagrama',
             description:
-                'Selecciona un diagrama para abrir de la lista a continuación.',
+                'Seleccione un diagrama para abrir en la lista siguiente.',
+            tabs: {
+                device: 'En este dispositivo',
+                online: 'En línea',
+            },
+            empty: {
+                device: 'No hay diagramas en este dispositivo.',
+                online: 'No hay diagramas en línea.',
+            },
+            guest_online_disabled:
+                'Inicie sesión para acceder a sus diagramas en línea.',
             table_columns: {
-                name: 'Nombre',
-                created_at: 'Creado en',
-                last_modified: 'Última modificación',
+                database: 'Base de datos',
+                name: 'Diagrama',
+                role: 'Rol',
+                created_at: 'Creado',
+                last_modified: 'Modificado',
                 tables_count: 'Tablas',
+                actions: 'Acciones',
             },
             cancel: 'Cancelar',
             open: 'Abrir',
-            new_database: 'Nueva Base de Datos',
-
+            new_diagram: 'Nuevo diagrama',
+            put_online: {
+                label: 'Poner en línea',
+                copy: 'Copiar',
+                move: 'Mover',
+                sign_in_required:
+                    'Inicie sesión para poner este diagrama en línea',
+            },
+            errors: {
+                put_online_failed: 'No se pudo poner el diagrama en línea.',
+                duplicate_failed: 'No se pudo duplicar el diagrama.',
+            },
             diagram_actions: {
                 open: 'Abrir',
                 duplicate: 'Duplicar',
