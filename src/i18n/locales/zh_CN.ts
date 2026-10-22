@@ -980,6 +980,13 @@ export const zh_CN: LanguageTranslation = {
             empty: {
                 device: '此设备上没有图表。',
                 online: '没有在线图表。',
+                online_role_filter: '该角色没有在线图表。',
+            },
+            role_filter: {
+                all: '所有角色',
+                popover_title: '按角色筛选',
+                filter_button_aria: '打开角色筛选',
+                clear: '清除筛选',
             },
             guest_online_disabled: '登录以访问您的在线图表。',
             table_columns: {

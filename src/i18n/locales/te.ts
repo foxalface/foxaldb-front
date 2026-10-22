@@ -1055,6 +1055,13 @@ export const te: LanguageTranslation = {
             empty: {
                 device: 'ఈ పరికరంలో డయాగ్రామ్‌లు లేవు.',
                 online: 'ఆన్‌లైన్ డయాగ్రామ్‌లు లేవు.',
+                online_role_filter: 'ఈ పాత్రకు ఆన్‌లైన్ డయాగ్రామ్‌లు లేవు.',
+            },
+            role_filter: {
+                all: 'అన్ని పాత్రలు',
+                popover_title: 'పాత్ర ద్వారా ఫిల్టర్',
+                filter_button_aria: 'పాత్ర ఫిల్టర్ తెరవండి',
+                clear: 'ఫిల్టర్ తొలగించండి',
             },
             guest_online_disabled:
                 'మీ ఆన్‌లైన్ డయాగ్రామ్‌లను యాక్సెస్ చేయడానికి సైన్ ఇన్ చేయండి.',

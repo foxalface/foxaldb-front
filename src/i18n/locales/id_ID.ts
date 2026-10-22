@@ -1057,6 +1057,13 @@ export const id_ID: LanguageTranslation = {
             empty: {
                 device: 'Tidak ada diagram di perangkat ini.',
                 online: 'Tidak ada diagram daring.',
+                online_role_filter: 'Tidak ada diagram daring untuk peran ini.',
+            },
+            role_filter: {
+                all: 'Semua peran',
+                popover_title: 'Filter menurut peran',
+                filter_button_aria: 'Buka filter peran',
+                clear: 'Hapus filter',
             },
             guest_online_disabled: 'Masuk untuk mengakses diagram daring Anda.',
             table_columns: {

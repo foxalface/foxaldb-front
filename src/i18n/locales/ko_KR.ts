@@ -1056,6 +1056,13 @@ export const ko_KR: LanguageTranslation = {
             empty: {
                 device: '이 기기에 다이어그램이 없습니다.',
                 online: '온라인 다이어그램이 없습니다.',
+                online_role_filter: '이 역할의 온라인 다이어그램이 없습니다.',
+            },
+            role_filter: {
+                all: '모든 역할',
+                popover_title: '역할별 필터',
+                filter_button_aria: '역할 필터 열기',
+                clear: '필터 지우기',
             },
             guest_online_disabled:
                 '온라인 다이어그램에 액세스하려면 로그인하세요.',

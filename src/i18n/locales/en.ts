@@ -1052,6 +1052,13 @@ export const en = {
             empty: {
                 device: 'No diagrams on this device.',
                 online: 'No online diagrams.',
+                online_role_filter: 'No online diagrams for this role.',
+            },
+            role_filter: {
+                all: 'All roles',
+                popover_title: 'Filter by role',
+                filter_button_aria: 'Open role filter',
+                clear: 'Clear filter',
             },
             guest_online_disabled: 'Sign in to access your online diagrams.',
             table_columns: {

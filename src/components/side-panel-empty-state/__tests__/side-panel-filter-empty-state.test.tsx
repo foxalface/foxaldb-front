@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+import { sidePanelFilterClearButtonClassName } from '../side-panel-filter-clear-action';
 import { SidePanelFilterEmptyState } from '../side-panel-filter-empty-state';
 
 describe('SidePanelFilterEmptyState', () => {
@@ -37,5 +38,23 @@ describe('SidePanelFilterEmptyState', () => {
 
         await user.click(screen.getByRole('button', { name: 'Clear Filter' }));
         expect(onClearFilter).toHaveBeenCalledTimes(1);
+    });
+
+    it('uses the shared destructive outline clear-filter button', () => {
+        render(
+            <SidePanelFilterEmptyState
+                title="No results"
+                clearLabel="Clear Filter"
+                onClearFilter={vi.fn()}
+            />
+        );
+
+        const clearButton = screen.getByRole('button', {
+            name: 'Clear Filter',
+        });
+        expect(clearButton).toHaveClass('border-destructive');
+        expect(clearButton.className).toContain(
+            sidePanelFilterClearButtonClassName.split(' ')[0]
+        );
     });
 });

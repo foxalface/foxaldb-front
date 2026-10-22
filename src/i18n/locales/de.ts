@@ -1081,6 +1081,13 @@ export const de: LanguageTranslation = {
             empty: {
                 device: 'Keine Diagramme auf diesem Gerät.',
                 online: 'Keine Online-Diagramme.',
+                online_role_filter: 'Keine Online-Diagramme für diese Rolle.',
+            },
+            role_filter: {
+                all: 'Alle Rollen',
+                popover_title: 'Nach Rolle filtern',
+                filter_button_aria: 'Rollenfilter öffnen',
+                clear: 'Filter löschen',
             },
             guest_online_disabled:
                 'Melden Sie sich an, um auf Ihre Online-Diagramme zuzugreifen.',

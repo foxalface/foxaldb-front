@@ -1055,6 +1055,13 @@ export const hr: LanguageTranslation = {
             empty: {
                 device: 'Nema dijagrama na ovom uređaju.',
                 online: 'Nema mrežnih dijagrama.',
+                online_role_filter: 'Nema mrežnih dijagrama za ovu ulogu.',
+            },
+            role_filter: {
+                all: 'Sve uloge',
+                popover_title: 'Filtriraj po ulozi',
+                filter_button_aria: 'Otvori filtar uloga',
+                clear: 'Očisti filtar',
             },
             guest_online_disabled:
                 'Prijavite se za pristup mrežnim dijagramima.',

@@ -1036,6 +1036,13 @@ export const tr: LanguageTranslation = {
             empty: {
                 device: 'Bu cihazda diyagram yok.',
                 online: 'Çevrimiçi diyagram yok.',
+                online_role_filter: 'Bu rol için çevrimiçi diyagram yok.',
+            },
+            role_filter: {
+                all: 'Tüm roller',
+                popover_title: 'Role göre filtrele',
+                filter_button_aria: 'Rol filtresini aç',
+                clear: 'Filtreyi temizle',
             },
             guest_online_disabled:
                 'Çevrimiçi diyagramlarınıza erişmek için giriş yapın.',

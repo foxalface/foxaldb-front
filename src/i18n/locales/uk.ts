@@ -1055,6 +1055,13 @@ export const uk: LanguageTranslation = {
             empty: {
                 device: 'Немає діаграм на цьому пристрої.',
                 online: 'Немає онлайн-діаграм.',
+                online_role_filter: 'Немає онлайн-діаграм для цієї ролі.',
+            },
+            role_filter: {
+                all: 'Усі ролі',
+                popover_title: 'Фільтр за роллю',
+                filter_button_aria: 'Відкрити фільтр ролей',
+                clear: 'Очистити фільтр',
             },
             guest_online_disabled:
                 'Увійдіть, щоб отримати доступ до ваших онлайн-діаграм.',

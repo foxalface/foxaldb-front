@@ -1,14 +1,17 @@
 import React from 'react';
-import { X } from 'lucide-react';
 import {
     SidePanelEmptyState,
     sidePanelEmptyStateIcon,
     type SidePanelEmptyStateProps,
 } from './side-panel-empty-state';
+import {
+    sidePanelFilterClearButtonClassName,
+    sidePanelFilterClearButtonIcon,
+} from './side-panel-filter-clear-action';
 
 export interface SidePanelFilterEmptyStateProps extends Pick<
     SidePanelEmptyStateProps,
-    'title' | 'description' | 'className'
+    'title' | 'description' | 'className' | 'titleClassName' | 'icon'
 > {
     clearLabel: string;
     onClearFilter: () => void;
@@ -16,16 +19,27 @@ export interface SidePanelFilterEmptyStateProps extends Pick<
 
 export const SidePanelFilterEmptyState: React.FC<
     SidePanelFilterEmptyStateProps
-> = ({ title, description, clearLabel, onClearFilter, className }) => (
+> = ({
+    title,
+    description,
+    clearLabel,
+    onClearFilter,
+    className,
+    titleClassName,
+    icon = sidePanelEmptyStateIcon,
+}) => (
     <SidePanelEmptyState
         title={title}
         description={description}
         className={className}
-        icon={sidePanelEmptyStateIcon}
+        titleClassName={titleClassName}
+        icon={icon}
         secondaryAction={{
             label: clearLabel,
             onClick: onClearFilter,
-            icon: <X className="size-3.5" aria-hidden="true" />,
+            icon: sidePanelFilterClearButtonIcon,
+            variant: 'outline',
+            className: sidePanelFilterClearButtonClassName,
         }}
     />
 );

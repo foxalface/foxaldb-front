@@ -1035,6 +1035,13 @@ export const gu: LanguageTranslation = {
             empty: {
                 device: 'આ ઉપકરણ પર કોઈ ડાયાગ્રામ નથી.',
                 online: 'કોઈ ઓનલાઇન ડાયાગ્રામ નથી.',
+                online_role_filter: 'આ ભૂમિકા માટે કોઈ ઓનલાઇન ડાયાગ્રામ નથી.',
+            },
+            role_filter: {
+                all: 'બધી ભૂમિકાઓ',
+                popover_title: 'ભૂમિકા દ્વારા ફિલ્ટર',
+                filter_button_aria: 'ભૂમિકા ફિલ્ટર ખોલો',
+                clear: 'ફિલ્ટર સાફ કરો',
             },
             guest_online_disabled:
                 'તમારા ઓનલાઇન ડાયાગ્રામ ઍક્સેસ કરવા સાઇન ઇન કરો.',

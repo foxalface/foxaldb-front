@@ -6,15 +6,14 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
-    DialogInternalContent,
     DialogTitle,
 } from '@/components/dialog/dialog';
 import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
-} from '@/components/tabs/tabs';
+    SidePanelSectionTabsList,
+    SidePanelSectionTabsTrigger,
+} from '@/components/side-panel-section-tabs/side-panel-section-tabs';
+import { Tabs, TabsContent } from '@/components/tabs/tabs';
+import { OPEN_DIAGRAM_DIALOG_CONTENT_CLASS } from './open-diagram-dialog-layout';
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useConfig } from '@/hooks/use-config';
@@ -25,7 +24,7 @@ import { getDiagrams } from '@/lib/api/diagrams';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Lock } from 'lucide-react';
+import { Cloud, Laptop, Lock } from 'lucide-react';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import type { EntryFlowOpenDiagramActions } from '@/pages/editor-page/entry-flow-open-diagram-actions';
 import {
@@ -40,6 +39,14 @@ import {
     diagramToDeviceRow,
     remoteSummaryToOnlineRow,
 } from './open-diagram-mappers';
+import type { DiagramAccessRole } from '@/lib/api/diagrams';
+import {
+    DEFAULT_OPEN_DIAGRAM_ROLE_FILTER,
+    filterOnlineRowsByRole,
+    isOpenDiagramRoleFilterActive,
+    setOpenDiagramRoleFilterRole,
+    type OpenDiagramRoleFilterState,
+} from './open-diagram-role-filter';
 import { sortOpenDiagramRows } from './open-diagram-sort';
 import { OpenDiagramTable } from './open-diagram-table';
 
@@ -76,6 +83,8 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     const [onlineSort, setOnlineSort] = useState<OpenDiagramSortState>(
         DEFAULT_OPEN_DIAGRAM_SORT
     );
+    const [onlineRoleFilter, setOnlineRoleFilter] =
+        useState<OpenDiagramRoleFilterState>(DEFAULT_OPEN_DIAGRAM_ROLE_FILTER);
 
     const isEntryFlowOwned = entryOpenDiagramActions !== undefined;
     const effectiveCanClose = isEntryFlowOwned
@@ -123,6 +132,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         setActiveTab(isAuthenticated ? 'online' : 'device');
         setDeviceSort(DEFAULT_OPEN_DIAGRAM_SORT);
         setOnlineSort(DEFAULT_OPEN_DIAGRAM_SORT);
+        setOnlineRoleFilter(DEFAULT_OPEN_DIAGRAM_ROLE_FILTER);
 
         void refreshLists();
     }, [dialog.open, isAuthenticated, refreshLists]);
@@ -132,9 +142,35 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         [deviceRows, deviceSort]
     );
 
+    const filteredOnlineRows = useMemo(
+        () => filterOnlineRowsByRole(onlineRows, onlineRoleFilter),
+        [onlineRows, onlineRoleFilter]
+    );
+
     const sortedOnlineRows = useMemo(
-        () => sortOpenDiagramRows(onlineRows, onlineSort),
-        [onlineRows, onlineSort]
+        () => sortOpenDiagramRows(filteredOnlineRows, onlineSort),
+        [filteredOnlineRows, onlineSort]
+    );
+
+    const handleOnlineRoleFilterChange = useCallback(
+        (role: DiagramAccessRole, checked: boolean) => {
+            setOnlineRoleFilter((current) => {
+                const next = setOpenDiagramRoleFilterRole(
+                    current,
+                    role,
+                    checked
+                );
+                const nextRows = filterOnlineRowsByRole(onlineRows, next);
+                if (
+                    selectedDiagramId !== undefined &&
+                    !nextRows.some((row) => row.id === selectedDiagramId)
+                ) {
+                    setSelectedDiagramId(undefined);
+                }
+                return next;
+            });
+        },
+        [onlineRows, selectedDiagramId]
     );
 
     const openOnlineDiagram = useCallback(
@@ -211,7 +247,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         !selectedDiagramId ||
         (activeTab === 'online' && !isAuthenticated) ||
         (activeTab === 'online' &&
-            !onlineRows.some((row) => row.id === selectedDiagramId)) ||
+            !sortedOnlineRows.some((row) => row.id === selectedDiagramId)) ||
         (activeTab === 'device' &&
             !deviceRows.some((row) => row.id === selectedDiagramId));
 
@@ -230,45 +266,52 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             }}
         >
             <DialogContent
-                className="flex h-[30rem] max-h-screen flex-col overflow-y-auto md:min-w-[80vw] xl:min-w-[55vw]"
+                className={OPEN_DIAGRAM_DIALOG_CONTENT_CLASS}
                 showClose={effectiveCanClose}
             >
-                <DialogHeader>
+                <DialogHeader className="shrink-0">
                     <DialogTitle>{t('open_diagram_dialog.title')}</DialogTitle>
                     <DialogDescription>
                         {t('open_diagram_dialog.description')}
                     </DialogDescription>
                 </DialogHeader>
-                <DialogInternalContent className="flex min-h-0 flex-1 flex-col">
+                <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden p-1">
                     <Tabs
                         value={activeTab}
                         onValueChange={(value) =>
                             setActiveTab(value as OpenDiagramTab)
                         }
-                        className="flex min-h-0 flex-1 flex-col"
+                        className="flex min-h-0 flex-1 flex-col overflow-hidden"
                     >
-                        <TabsList className="w-full justify-start">
-                            <TabsTrigger value="device">
+                        <SidePanelSectionTabsList className="shrink-0">
+                            <SidePanelSectionTabsTrigger value="device">
+                                <Laptop
+                                    className="size-3.5 shrink-0"
+                                    aria-hidden="true"
+                                />
                                 {t('open_diagram_dialog.tabs.device')}
-                            </TabsTrigger>
-                            <TabsTrigger
+                            </SidePanelSectionTabsTrigger>
+                            <SidePanelSectionTabsTrigger
                                 value="online"
                                 disabled={!isAuthenticated}
-                                className="gap-1.5"
                             >
+                                <Cloud
+                                    className="size-3.5 shrink-0"
+                                    aria-hidden="true"
+                                />
                                 {!isAuthenticated ? (
                                     <Lock
                                         className="size-3.5 shrink-0"
-                                        aria-hidden
+                                        aria-hidden="true"
                                     />
                                 ) : null}
                                 {t('open_diagram_dialog.tabs.online')}
-                            </TabsTrigger>
-                        </TabsList>
+                            </SidePanelSectionTabsTrigger>
+                        </SidePanelSectionTabsList>
 
                         <TabsContent
                             value="device"
-                            className="mt-3 min-h-0 flex-1 overflow-y-auto"
+                            className="mt-3 flex min-h-0 flex-1 flex-col overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=inactive]:hidden"
                         >
                             <OpenDiagramTable
                                 tab="device"
@@ -283,7 +326,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                 localDiagramCount={deviceRows.length}
                                 onlineDiagramCount={onlineRows.length}
                                 isAuthenticated={isAuthenticated}
-                                emptyMessage={t(
+                                emptyTitle={t(
                                     'open_diagram_dialog.empty.device'
                                 )}
                             />
@@ -291,20 +334,24 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
 
                         <TabsContent
                             value="online"
-                            className="mt-3 min-h-0 flex-1 overflow-y-auto"
+                            className="mt-3 flex min-h-0 flex-1 flex-col overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=inactive]:hidden"
                         >
                             {!isAuthenticated ? (
-                                <p className="text-center text-sm text-muted-foreground">
+                                <div className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-md border border-border bg-background px-4 py-10 text-center text-sm text-muted-foreground">
                                     {t(
                                         'open_diagram_dialog.guest_online_disabled'
                                     )}
-                                </p>
+                                </div>
                             ) : (
                                 <OpenDiagramTable
                                     tab="online"
                                     rows={sortedOnlineRows}
                                     sort={onlineSort}
                                     onSortChange={setOnlineSort}
+                                    roleFilter={onlineRoleFilter}
+                                    onRoleFilterChange={
+                                        handleOnlineRoleFilterChange
+                                    }
                                     selectedDiagramId={selectedDiagramId}
                                     onSelectDiagramId={setSelectedDiagramId}
                                     onOpenDiagram={handleOpenConfirmed}
@@ -313,16 +360,38 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                     localDiagramCount={deviceRows.length}
                                     onlineDiagramCount={onlineRows.length}
                                     isAuthenticated={isAuthenticated}
-                                    emptyMessage={t(
-                                        'open_diagram_dialog.empty.online'
-                                    )}
+                                    emptyTitle={
+                                        onlineRows.length > 0 &&
+                                        isOpenDiagramRoleFilterActive(
+                                            onlineRoleFilter
+                                        ) &&
+                                        sortedOnlineRows.length === 0
+                                            ? t(
+                                                  'open_diagram_dialog.empty.online_role_filter'
+                                              )
+                                            : t(
+                                                  'open_diagram_dialog.empty.online'
+                                              )
+                                    }
+                                    emptyFilterActive={
+                                        onlineRows.length > 0 &&
+                                        isOpenDiagramRoleFilterActive(
+                                            onlineRoleFilter
+                                        ) &&
+                                        sortedOnlineRows.length === 0
+                                    }
+                                    onClearRoleFilter={() =>
+                                        setOnlineRoleFilter(
+                                            DEFAULT_OPEN_DIAGRAM_ROLE_FILTER
+                                        )
+                                    }
                                 />
                             )}
                         </TabsContent>
                     </Tabs>
-                </DialogInternalContent>
+                </div>
 
-                <DialogFooter className="flex !justify-between gap-2">
+                <DialogFooter className="flex shrink-0 !justify-between gap-2">
                     {effectiveCanClose ? (
                         <DialogClose asChild>
                             <Button type="button" variant="secondary">

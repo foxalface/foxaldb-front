@@ -1052,6 +1052,14 @@ export const vi: LanguageTranslation = {
             empty: {
                 device: 'Không có sơ đồ trên thiết bị này.',
                 online: 'Không có sơ đồ trực tuyến.',
+                online_role_filter:
+                    'Không có sơ đồ trực tuyến cho vai trò này.',
+            },
+            role_filter: {
+                all: 'Tất cả vai trò',
+                popover_title: 'Lọc theo vai trò',
+                filter_button_aria: 'Mở bộ lọc vai trò',
+                clear: 'Xóa bộ lọc',
             },
             guest_online_disabled:
                 'Đăng nhập để truy cập sơ đồ trực tuyến của bạn.',

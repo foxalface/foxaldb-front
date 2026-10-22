@@ -1040,6 +1040,13 @@ export const ar: LanguageTranslation = {
             empty: {
                 device: 'لا توجد مخططات على هذا الجهاز.',
                 online: 'لا توجد مخططات عبر الإنترنت.',
+                online_role_filter: 'لا توجد مخططات عبر الإنترنت لهذا الدور.',
+            },
+            role_filter: {
+                all: 'كل الأدوار',
+                popover_title: 'تصفية حسب الدور',
+                filter_button_aria: 'فتح تصفية الأدوار',
+                clear: 'مسح التصفية',
             },
             guest_online_disabled:
                 'سجّل الدخول للوصول إلى مخططاتك عبر الإنترنت.',

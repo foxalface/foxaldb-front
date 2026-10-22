@@ -1067,6 +1067,13 @@ export const pt_BR: LanguageTranslation = {
             empty: {
                 device: 'Nenhum diagrama neste dispositivo.',
                 online: 'Nenhum diagrama online.',
+                online_role_filter: 'Nenhum diagrama online para esta função.',
+            },
+            role_filter: {
+                all: 'Todas as funções',
+                popover_title: 'Filtrar por função',
+                filter_button_aria: 'Abrir filtro de função',
+                clear: 'Limpar filtro',
             },
             guest_online_disabled: 'Entre para acessar seus diagramas online.',
             table_columns: {

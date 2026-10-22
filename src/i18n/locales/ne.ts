@@ -1047,6 +1047,14 @@ export const ne: LanguageTranslation = {
             empty: {
                 device: 'यो उपकरणमा कुनै डायाग्राम छैन।',
                 online: 'कुनै अनलाइन डायाग्राम छैन।',
+                online_role_filter:
+                    'यो भूमिकाका लागि कुनै अनलाइन डायाग्राम छैन।',
+            },
+            role_filter: {
+                all: 'सबै भूमिकाहरू',
+                popover_title: 'भूमिका अनुसार फिल्टर',
+                filter_button_aria: 'भूमिका फिल्टर खोल्नुहोस्',
+                clear: 'फिल्टर हटाउनुहोस्',
             },
             guest_online_disabled:
                 'आफ्ना अनलाइन डायाग्रामहरू पहुँच गर्न साइन इन गर्नुहोस्।',

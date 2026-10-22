@@ -1047,6 +1047,14 @@ export const hi: LanguageTranslation = {
             empty: {
                 device: 'इस डिवाइस पर कोई डायग्राम नहीं है।',
                 online: 'कोई ऑनलाइन डायग्राम नहीं है।',
+                online_role_filter:
+                    'इस भूमिका के लिए कोई ऑनलाइन डायग्राम नहीं।',
+            },
+            role_filter: {
+                all: 'सभी भूमिकाएँ',
+                popover_title: 'भूमिका से फ़िल्टर करें',
+                filter_button_aria: 'भूमिका फ़िल्टर खोलें',
+                clear: 'फ़िल्टर साफ करें',
             },
             guest_online_disabled:
                 'अपने ऑनलाइन डायग्राम तक पहुँचने के लिए साइन इन करें।',

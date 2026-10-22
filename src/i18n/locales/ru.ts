@@ -1051,6 +1051,13 @@ export const ru: LanguageTranslation = {
             empty: {
                 device: 'На этом устройстве нет диаграмм.',
                 online: 'Нет диаграмм в сети.',
+                online_role_filter: 'Нет диаграмм в сети для этой роли.',
+            },
+            role_filter: {
+                all: 'Все роли',
+                popover_title: 'Фильтр по роли',
+                filter_button_aria: 'Открыть фильтр ролей',
+                clear: 'Сбросить фильтр',
             },
             guest_online_disabled:
                 'Войдите, чтобы получить доступ к диаграммам в сети.',

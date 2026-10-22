@@ -1048,6 +1048,14 @@ export const bn: LanguageTranslation = {
             empty: {
                 device: 'এই ডিভাইসে কোনো ডায়াগ্রাম নেই।',
                 online: 'কোনো অনলাইন ডায়াগ্রাম নেই।',
+                online_role_filter:
+                    'এই ভূমিকার জন্য কোনো অনলাইন ডায়াগ্রাম নেই।',
+            },
+            role_filter: {
+                all: 'সব ভূমিকা',
+                popover_title: 'ভূমিকা অনুযায়ী ফিল্টার',
+                filter_button_aria: 'ভূমিকা ফিল্টার খুলুন',
+                clear: 'ফিল্টার সাফ করুন',
             },
             guest_online_disabled:
                 'আপনার অনলাইন ডায়াগ্রামে প্রবেশ করতে সাইন ইন করুন।',

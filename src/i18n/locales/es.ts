@@ -1071,6 +1071,13 @@ export const es: LanguageTranslation = {
             empty: {
                 device: 'No hay diagramas en este dispositivo.',
                 online: 'No hay diagramas en línea.',
+                online_role_filter: 'No hay diagramas en línea para este rol.',
+            },
+            role_filter: {
+                all: 'Todos los roles',
+                popover_title: 'Filtrar por rol',
+                filter_button_aria: 'Abrir filtro de rol',
+                clear: 'Borrar filtro',
             },
             guest_online_disabled:
                 'Inicie sesión para acceder a sus diagramas en línea.',

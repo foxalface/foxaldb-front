@@ -1078,6 +1078,13 @@ export const fr: LanguageTranslation = {
             empty: {
                 device: 'Aucun diagramme sur cet appareil.',
                 online: 'Aucun diagramme en ligne.',
+                online_role_filter: 'Aucun diagramme en ligne pour ce rôle.',
+            },
+            role_filter: {
+                all: 'Tous les rôles',
+                popover_title: 'Filtrer par rôle',
+                filter_button_aria: 'Ouvrir le filtre par rôle',
+                clear: 'Effacer le filtre',
             },
             guest_online_disabled:
                 'Connectez-vous pour accéder à vos diagrammes en ligne.',

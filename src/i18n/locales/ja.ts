@@ -1069,6 +1069,14 @@ export const ja: LanguageTranslation = {
             empty: {
                 device: 'このデバイスにダイアグラムはありません。',
                 online: 'オンラインのダイアグラムはありません。',
+                online_role_filter:
+                    'この役割のオンラインダイアグラムはありません。',
+            },
+            role_filter: {
+                all: 'すべての役割',
+                popover_title: '役割で絞り込み',
+                filter_button_aria: '役割フィルターを開く',
+                clear: 'フィルターを解除',
             },
             guest_online_disabled:
                 'オンラインのダイアグラムにアクセスするにはサインインしてください。',

@@ -11,13 +11,15 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '../empty/empty';
-import { Button } from '../button/button';
+import { Button, type ButtonProps } from '../button/button';
 
 export interface EmptyStateActionButton {
     label: string;
     onClick?: () => void;
     icon?: React.ReactNode;
     disabled?: boolean;
+    variant?: ButtonProps['variant'];
+    className?: string;
 }
 
 export interface EmptyStateFooterAction {
@@ -113,9 +115,15 @@ export const EmptyState = forwardRef<
                             <div className="flex gap-2">
                                 {primaryAction && (
                                     <Button
+                                        variant={
+                                            primaryAction.variant ?? 'default'
+                                        }
                                         onClick={primaryAction.onClick}
                                         disabled={primaryAction.disabled}
-                                        className="h-8 gap-1 font-normal"
+                                        className={cn(
+                                            'h-8 gap-1.5 font-normal',
+                                            primaryAction.className
+                                        )}
                                     >
                                         {primaryAction.icon}
                                         {primaryAction.label}
@@ -123,10 +131,15 @@ export const EmptyState = forwardRef<
                                 )}
                                 {secondaryAction && (
                                     <Button
-                                        variant="outline"
+                                        variant={
+                                            secondaryAction.variant ?? 'outline'
+                                        }
                                         onClick={secondaryAction.onClick}
                                         disabled={secondaryAction.disabled}
-                                        className="h-8 gap-1 font-normal"
+                                        className={cn(
+                                            'h-8 gap-1.5 font-normal',
+                                            secondaryAction.className
+                                        )}
                                     >
                                         {secondaryAction.icon}
                                         {secondaryAction.label}

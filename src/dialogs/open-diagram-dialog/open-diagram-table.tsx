@@ -25,6 +25,27 @@ import {
 } from './open-diagram-sort';
 import { LocalDiagramRowActionsMenu } from './diagram-row-actions-menu/local-diagram-row-actions-menu';
 import { OnlineDiagramRowActionsMenu } from './diagram-row-actions-menu/online-diagram-row-actions-menu';
+import { OpenDiagramTableEmptyState } from './open-diagram-empty-state';
+import {
+    OPEN_DIAGRAM_COL_ACTIONS_CLASS,
+    OPEN_DIAGRAM_COL_DATABASE_CLASS,
+    OPEN_DIAGRAM_COL_DATE_CLASS,
+    OPEN_DIAGRAM_COL_ROLE_CLASS,
+    OPEN_DIAGRAM_COL_TABLES_CLASS,
+    OPEN_DIAGRAM_TABLE_CELL_CLASS,
+    OPEN_DIAGRAM_TABLE_CLASS,
+    OPEN_DIAGRAM_TABLE_HEAD_CLASS,
+    OPEN_DIAGRAM_TABLE_HEADER_ROW_CLASS,
+    OPEN_DIAGRAM_TABLE_HEADER_WRAPPER_CLASS,
+    OPEN_DIAGRAM_TABLE_PANEL_CLASS,
+    OPEN_DIAGRAM_TABLE_SCROLL_CLASS,
+    openDiagramTableColumnCount,
+} from './open-diagram-dialog-layout';
+import { OpenDiagramTableColGroup } from './open-diagram-table-col-group';
+import { OpenDiagramDateCell } from './open-diagram-date-cell';
+import { OpenDiagramRoleFilterHeader } from './open-diagram-role-filter-header';
+import type { DiagramAccessRole } from '@/lib/api/diagrams';
+import type { OpenDiagramRoleFilterState } from './open-diagram-role-filter';
 
 export interface OpenDiagramTableProps {
     tab: OpenDiagramTab;
@@ -39,7 +60,11 @@ export interface OpenDiagramTableProps {
     localDiagramCount: number;
     onlineDiagramCount: number;
     isAuthenticated: boolean;
-    emptyMessage: string;
+    emptyTitle: string;
+    emptyFilterActive?: boolean;
+    onClearRoleFilter?: () => void;
+    roleFilter?: OpenDiagramRoleFilterState;
+    onRoleFilterChange?: (role: DiagramAccessRole, checked: boolean) => void;
 }
 
 const SortableHeader: React.FC<{
@@ -47,8 +72,9 @@ const SortableHeader: React.FC<{
     label: string;
     sort: OpenDiagramSortState;
     onSortChange: (sort: OpenDiagramSortState) => void;
+    align?: 'start' | 'center';
     className?: string;
-}> = ({ column, label, sort, onSortChange, className }) => {
+}> = ({ column, label, sort, onSortChange, align = 'start', className }) => {
     const direction = sortDirectionForColumn(sort, column);
 
     const handleClick = () => {
@@ -56,23 +82,39 @@ const SortableHeader: React.FC<{
     };
 
     return (
-        <TableHead className={className}>
-            <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="-ml-3 h-8 gap-1 px-2 font-medium"
-                onClick={handleClick}
-            >
-                {label}
-                {direction === 'asc' ? (
-                    <ArrowUp className="size-3.5" aria-hidden />
-                ) : direction === 'desc' ? (
-                    <ArrowDown className="size-3.5" aria-hidden />
-                ) : (
-                    <ArrowUpDown className="size-3.5 opacity-50" aria-hidden />
+        <TableHead
+            className={cn(
+                'align-middle',
+                align === 'center' && 'text-center',
+                className
+            )}
+        >
+            <div
+                className={cn(
+                    'flex',
+                    align === 'center' ? 'justify-center' : 'justify-start'
                 )}
-            </Button>
+            >
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-auto shrink-0 gap-1 whitespace-nowrap px-1 text-xs font-medium text-muted-foreground hover:text-foreground"
+                    onClick={handleClick}
+                >
+                    <span className="whitespace-nowrap">{label}</span>
+                    {direction === 'asc' ? (
+                        <ArrowUp className="size-3.5" aria-hidden />
+                    ) : direction === 'desc' ? (
+                        <ArrowDown className="size-3.5" aria-hidden />
+                    ) : (
+                        <ArrowUpDown
+                            className="size-3.5 opacity-50"
+                            aria-hidden
+                        />
+                    )}
+                </Button>
+            </div>
         </TableHead>
     );
 };
@@ -90,10 +132,17 @@ export const OpenDiagramTable: React.FC<OpenDiagramTableProps> = ({
     localDiagramCount,
     onlineDiagramCount,
     isAuthenticated,
-    emptyMessage,
+    emptyTitle,
+    emptyFilterActive = false,
+    onClearRoleFilter,
+    roleFilter,
+    onRoleFilterChange,
 }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const dateLocale = i18n?.resolvedLanguage ?? i18n?.language ?? 'en';
     const showRoleColumn = tab === 'online';
+    const isEmpty = rows.length === 0;
+    const columnCount = openDiagramTableColumnCount(showRoleColumn);
 
     const handleRowKeyDown = useCallback(
         (
@@ -133,158 +182,282 @@ export const OpenDiagramTable: React.FC<OpenDiagramTableProps> = ({
         [onOpenDiagram]
     );
 
-    if (rows.length === 0) {
-        return (
-            <p className="text-center text-sm text-muted-foreground">
-                {emptyMessage}
-            </p>
-        );
-    }
+    const tableHeaderRow = (
+        <tr className={OPEN_DIAGRAM_TABLE_HEADER_ROW_CLASS}>
+            <SortableHeader
+                column="database"
+                label={t('open_diagram_dialog.table_columns.database')}
+                sort={sort}
+                onSortChange={onSortChange}
+                align="center"
+                className={OPEN_DIAGRAM_COL_DATABASE_CLASS}
+            />
+            <SortableHeader
+                column="name"
+                label={t('open_diagram_dialog.table_columns.name')}
+                sort={sort}
+                onSortChange={onSortChange}
+            />
+            {showRoleColumn && roleFilter && onRoleFilterChange ? (
+                <OpenDiagramRoleFilterHeader
+                    roleFilter={roleFilter}
+                    onRoleCheckedChange={onRoleFilterChange}
+                />
+            ) : showRoleColumn ? (
+                <TableHead
+                    className={cn(
+                        OPEN_DIAGRAM_COL_ROLE_CLASS,
+                        'text-center text-xs font-medium text-muted-foreground'
+                    )}
+                >
+                    {t('open_diagram_dialog.table_columns.role')}
+                </TableHead>
+            ) : null}
+            <SortableHeader
+                column="createdAt"
+                label={t('open_diagram_dialog.table_columns.created_at')}
+                sort={sort}
+                onSortChange={onSortChange}
+                className={cn(
+                    OPEN_DIAGRAM_COL_DATE_CLASS,
+                    'hidden sm:table-cell'
+                )}
+            />
+            <SortableHeader
+                column="updatedAt"
+                label={t('open_diagram_dialog.table_columns.last_modified')}
+                sort={sort}
+                onSortChange={onSortChange}
+                className={OPEN_DIAGRAM_COL_DATE_CLASS}
+            />
+            <SortableHeader
+                column="tablesCount"
+                label={t('open_diagram_dialog.table_columns.tables_count')}
+                sort={sort}
+                onSortChange={onSortChange}
+                align="center"
+                className={cn(OPEN_DIAGRAM_COL_TABLES_CLASS, 'px-1')}
+            />
+            <TableHead
+                className={cn(OPEN_DIAGRAM_COL_ACTIONS_CLASS, 'p-0')}
+                aria-hidden="true"
+            />
+        </tr>
+    );
 
     return (
-        <Table>
-            <TableHeader className="sticky top-0 bg-background">
-                <TableRow>
-                    <SortableHeader
-                        column="database"
-                        label={t('open_diagram_dialog.table_columns.database')}
-                        sort={sort}
-                        onSortChange={onSortChange}
-                        className="w-[4.5rem]"
-                    />
-                    <SortableHeader
-                        column="name"
-                        label={t('open_diagram_dialog.table_columns.name')}
-                        sort={sort}
-                        onSortChange={onSortChange}
-                    />
-                    {showRoleColumn ? (
-                        <TableHead>
-                            {t('open_diagram_dialog.table_columns.role')}
-                        </TableHead>
-                    ) : null}
-                    <SortableHeader
-                        column="createdAt"
-                        label={t(
-                            'open_diagram_dialog.table_columns.created_at'
-                        )}
-                        sort={sort}
-                        onSortChange={onSortChange}
-                        className="hidden sm:table-cell"
-                    />
-                    <SortableHeader
-                        column="updatedAt"
-                        label={t(
-                            'open_diagram_dialog.table_columns.last_modified'
-                        )}
-                        sort={sort}
-                        onSortChange={onSortChange}
-                    />
-                    <SortableHeader
-                        column="tablesCount"
-                        label={t(
-                            'open_diagram_dialog.table_columns.tables_count'
-                        )}
-                        sort={sort}
-                        onSortChange={onSortChange}
-                        className="text-center"
-                    />
-                    <TableHead className="w-12 text-right">
-                        {t('open_diagram_dialog.table_columns.actions')}
-                    </TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {rows.map((row, index) => {
-                    const storage =
-                        row.storage === 'device' ? 'device' : 'online';
-
-                    return (
-                        <TableRow
-                            key={`${row.storage}-${row.id}`}
-                            data-state={
-                                selectedDiagramId === row.id
-                                    ? 'selected'
-                                    : undefined
-                            }
-                            data-open-diagram-id={row.id}
-                            data-open-diagram-index={index}
-                            tabIndex={0}
-                            className="focus:bg-accent focus:outline-none"
-                            onFocus={() => onSelectDiagramId(row.id)}
-                            onClick={(e) => {
-                                if (e.detail === 2) {
-                                    onOpenDiagram(row.id, storage);
-                                    return;
-                                }
-
-                                if (e.detail === 1) {
-                                    onSelectDiagramId(row.id);
-                                }
-                            }}
-                            onKeyDown={(e) =>
-                                handleRowKeyDown(e, row.id, storage, index)
-                            }
-                        >
-                            <TableCell>
-                                <div className="flex justify-center">
-                                    <DiagramIcon
-                                        databaseType={row.databaseType}
-                                        databaseEdition={
-                                            row.databaseEdition ?? undefined
-                                        }
-                                    />
-                                </div>
-                            </TableCell>
-                            <TableCell>{row.name}</TableCell>
-                            {showRoleColumn && row.storage === 'online' ? (
-                                <TableCell>
-                                    <DiagramRoleIcon role={row.role} />
-                                </TableCell>
-                            ) : null}
-                            <TableCell className="hidden sm:table-cell">
-                                {row.createdAt.toLocaleString()}
-                            </TableCell>
-                            <TableCell>
-                                {row.updatedAt.toLocaleString()}
-                            </TableCell>
-                            <TableCell className="text-center">
-                                {row.tablesCount}
-                            </TableCell>
-                            <TableCell
-                                className={cn('p-0 pr-1 text-right')}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                {row.storage === 'device' ? (
-                                    <LocalDiagramRowActionsMenu
-                                        diagramId={row.id}
-                                        isAuthenticated={isAuthenticated}
-                                        numberOfLocalDiagrams={
-                                            localDiagramCount
-                                        }
-                                        onOpen={() =>
-                                            onOpenDiagram(row.id, 'device')
-                                        }
-                                        onListChanged={onLocalListChanged}
-                                    />
-                                ) : (
-                                    <OnlineDiagramRowActionsMenu
-                                        diagramId={row.id}
-                                        role={row.role}
-                                        numberOfOnlineDiagrams={
-                                            onlineDiagramCount
-                                        }
-                                        onOpen={() =>
-                                            onOpenDiagram(row.id, 'online')
-                                        }
-                                        onListChanged={onOnlineListChanged}
-                                    />
+        <div
+            className={cn(
+                OPEN_DIAGRAM_TABLE_PANEL_CLASS,
+                'flex min-h-0 flex-1 flex-col'
+            )}
+        >
+            <div className={OPEN_DIAGRAM_TABLE_HEADER_WRAPPER_CLASS}>
+                <Table className={OPEN_DIAGRAM_TABLE_CLASS}>
+                    <OpenDiagramTableColGroup showRoleColumn={showRoleColumn} />
+                    <TableHeader className={OPEN_DIAGRAM_TABLE_HEAD_CLASS}>
+                        {tableHeaderRow}
+                    </TableHeader>
+                </Table>
+            </div>
+            <div className={OPEN_DIAGRAM_TABLE_SCROLL_CLASS}>
+                <Table className={OPEN_DIAGRAM_TABLE_CLASS}>
+                    <OpenDiagramTableColGroup showRoleColumn={showRoleColumn} />
+                    <TableBody>
+                        {isEmpty ? (
+                            <tr
+                                className={cn(
+                                    OPEN_DIAGRAM_TABLE_HEADER_ROW_CLASS,
+                                    'hover:!bg-transparent'
                                 )}
-                            </TableCell>
-                        </TableRow>
-                    );
-                })}
-            </TableBody>
-        </Table>
+                            >
+                                <TableCell
+                                    colSpan={columnCount}
+                                    className="h-full border-0 p-0"
+                                >
+                                    <OpenDiagramTableEmptyState
+                                        title={emptyTitle}
+                                        filterActive={emptyFilterActive}
+                                        clearFilterLabel={t(
+                                            'open_diagram_dialog.role_filter.clear'
+                                        )}
+                                        onClearFilter={onClearRoleFilter}
+                                    />
+                                </TableCell>
+                            </tr>
+                        ) : (
+                            rows.map((row, index) => {
+                                const storage =
+                                    row.storage === 'device'
+                                        ? 'device'
+                                        : 'online';
+
+                                return (
+                                    <TableRow
+                                        key={`${row.storage}-${row.id}`}
+                                        data-state={
+                                            selectedDiagramId === row.id
+                                                ? 'selected'
+                                                : undefined
+                                        }
+                                        data-open-diagram-id={row.id}
+                                        data-open-diagram-index={index}
+                                        tabIndex={0}
+                                        className="focus:bg-accent focus:outline-none [&>td]:align-middle"
+                                        onFocus={() =>
+                                            onSelectDiagramId(row.id)
+                                        }
+                                        onClick={(e) => {
+                                            if (e.detail === 2) {
+                                                onOpenDiagram(row.id, storage);
+                                                return;
+                                            }
+
+                                            if (e.detail === 1) {
+                                                onSelectDiagramId(row.id);
+                                            }
+                                        }}
+                                        onKeyDown={(e) =>
+                                            handleRowKeyDown(
+                                                e,
+                                                row.id,
+                                                storage,
+                                                index
+                                            )
+                                        }
+                                    >
+                                        <TableCell
+                                            className={cn(
+                                                OPEN_DIAGRAM_TABLE_CELL_CLASS,
+                                                OPEN_DIAGRAM_COL_DATABASE_CLASS
+                                            )}
+                                        >
+                                            <div className="flex items-center justify-center">
+                                                <DiagramIcon
+                                                    databaseType={
+                                                        row.databaseType
+                                                    }
+                                                    databaseEdition={
+                                                        row.databaseEdition ??
+                                                        undefined
+                                                    }
+                                                />
+                                            </div>
+                                        </TableCell>
+                                        <TableCell
+                                            className={cn(
+                                                OPEN_DIAGRAM_TABLE_CELL_CLASS,
+                                                'max-w-[9rem] min-w-[4.5rem] font-medium'
+                                            )}
+                                            title={row.name}
+                                        >
+                                            <span className="line-clamp-2 break-words text-sm leading-snug">
+                                                {row.name}
+                                            </span>
+                                        </TableCell>
+                                        {showRoleColumn &&
+                                        row.storage === 'online' ? (
+                                            <TableCell
+                                                className={cn(
+                                                    OPEN_DIAGRAM_TABLE_CELL_CLASS,
+                                                    OPEN_DIAGRAM_COL_ROLE_CLASS,
+                                                    'text-center'
+                                                )}
+                                            >
+                                                <div className="flex items-center justify-center">
+                                                    <DiagramRoleIcon
+                                                        role={row.role}
+                                                    />
+                                                </div>
+                                            </TableCell>
+                                        ) : null}
+                                        <TableCell
+                                            className={cn(
+                                                OPEN_DIAGRAM_TABLE_CELL_CLASS,
+                                                OPEN_DIAGRAM_COL_DATE_CLASS,
+                                                'hidden sm:table-cell'
+                                            )}
+                                        >
+                                            <OpenDiagramDateCell
+                                                value={row.createdAt}
+                                                locale={dateLocale}
+                                            />
+                                        </TableCell>
+                                        <TableCell
+                                            className={cn(
+                                                OPEN_DIAGRAM_TABLE_CELL_CLASS,
+                                                OPEN_DIAGRAM_COL_DATE_CLASS
+                                            )}
+                                        >
+                                            <OpenDiagramDateCell
+                                                value={row.updatedAt}
+                                                locale={dateLocale}
+                                            />
+                                        </TableCell>
+                                        <TableCell
+                                            className={cn(
+                                                OPEN_DIAGRAM_TABLE_CELL_CLASS,
+                                                OPEN_DIAGRAM_COL_TABLES_CLASS,
+                                                'text-center tabular-nums'
+                                            )}
+                                        >
+                                            {row.tablesCount}
+                                        </TableCell>
+                                        <TableCell
+                                            className={cn(
+                                                OPEN_DIAGRAM_TABLE_CELL_CLASS,
+                                                OPEN_DIAGRAM_COL_ACTIONS_CLASS,
+                                                'p-0'
+                                            )}
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <div className="flex items-center justify-center">
+                                                {row.storage === 'device' ? (
+                                                    <LocalDiagramRowActionsMenu
+                                                        diagramId={row.id}
+                                                        isAuthenticated={
+                                                            isAuthenticated
+                                                        }
+                                                        numberOfLocalDiagrams={
+                                                            localDiagramCount
+                                                        }
+                                                        onOpen={() =>
+                                                            onOpenDiagram(
+                                                                row.id,
+                                                                'device'
+                                                            )
+                                                        }
+                                                        onListChanged={
+                                                            onLocalListChanged
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <OnlineDiagramRowActionsMenu
+                                                        diagramId={row.id}
+                                                        role={row.role}
+                                                        numberOfOnlineDiagrams={
+                                                            onlineDiagramCount
+                                                        }
+                                                        onOpen={() =>
+                                                            onOpenDiagram(
+                                                                row.id,
+                                                                'online'
+                                                            )
+                                                        }
+                                                        onListChanged={
+                                                            onOnlineListChanged
+                                                        }
+                                                    />
+                                                )}
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+        </div>
     );
 };
