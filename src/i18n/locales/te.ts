@@ -6,8 +6,6 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/te';
 export const te: LanguageTranslation = {
     translation: {
         editor_sidebar: {
-            new_diagram: 'కొత్తది',
-            open: 'తెరవండి...',
             tables: 'టేబల్లు',
             refs: 'సంబంధాలు',
             dependencies: 'ఆధారతలు',

@@ -6,8 +6,6 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/ko_KR';
 export const ko_KR: LanguageTranslation = {
     translation: {
         editor_sidebar: {
-            new_diagram: '새로 만들기',
-            open: '열기...',
             tables: '테이블',
             refs: 'Refs',
             dependencies: '종속성',

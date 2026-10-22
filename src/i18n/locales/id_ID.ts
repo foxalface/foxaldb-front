@@ -6,8 +6,6 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/id_ID';
 export const id_ID: LanguageTranslation = {
     translation: {
         editor_sidebar: {
-            new_diagram: 'Baru',
-            open: 'Buka...',
             tables: 'Tabel',
             refs: 'Refs',
             dependencies: 'Ketergantungan',

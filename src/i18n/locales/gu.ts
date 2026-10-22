@@ -6,8 +6,6 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/gu';
 export const gu: LanguageTranslation = {
     translation: {
         editor_sidebar: {
-            new_diagram: 'નવું',
-            open: 'ખોલો...',
             tables: 'ટેબલો',
             refs: 'રેફ્સ',
             dependencies: 'નિર્ભરતાઓ',

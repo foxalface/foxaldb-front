@@ -59,13 +59,6 @@ vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => ({ databaseType: DatabaseType.POSTGRESQL }),
 }));
 
-vi.mock('@/hooks/use-dialog', () => ({
-    useDialog: () => ({
-        openCreateDiagramDialog: vi.fn(),
-        openOpenDiagramDialog: vi.fn(),
-    }),
-}));
-
 const { diagramConversationsState } = vi.hoisted(() => ({
     diagramConversationsState: {
         totalUnreadCount: 0,
@@ -104,6 +97,42 @@ const renderSidebar = () =>
             <EditorSidebar />
         </SidebarProvider>
     );
+
+describe('EditorSidebar primary tools', () => {
+    beforeEach(() => {
+        conversationsAvailabilityState.isAvailable = false;
+        activitiesAvailabilityState.isAvailable = false;
+        shareAvailabilityState.isAvailable = false;
+    });
+
+    it('does not render obsolete New, Open, or DBML shortcuts', () => {
+        renderSidebar();
+
+        expect(
+            screen.queryByRole('button', { name: 'New' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: /open/i })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: 'DBML' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', { name: 'editor_sidebar.browse' })
+        ).not.toBeInTheDocument();
+    });
+
+    it('still renders Tables and Refs', () => {
+        renderSidebar();
+
+        expect(
+            screen.getByRole('button', { name: 'Tables' })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Refs' })
+        ).toBeInTheDocument();
+    });
+});
 
 describe('EditorSidebar conversations entry', () => {
     beforeEach(() => {

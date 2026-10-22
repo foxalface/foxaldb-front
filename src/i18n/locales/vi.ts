@@ -6,8 +6,6 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/vi';
 export const vi: LanguageTranslation = {
     translation: {
         editor_sidebar: {
-            new_diagram: 'Mới',
-            open: 'Mở...',
             tables: 'Bảng',
             refs: 'Refs',
             dependencies: 'Phụ thuộc',

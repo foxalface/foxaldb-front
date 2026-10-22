@@ -10,16 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/sidebar/sidebar';
-import {
-    BookOpen,
-    Group,
-    FileType,
-    Plus,
-    FolderOpen,
-    CodeXml,
-    History,
-    Share2,
-} from 'lucide-react';
+import { BookOpen, Group, FileType, History, Share2 } from 'lucide-react';
 import { SlBubbles } from 'react-icons/sl';
 import { Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
@@ -28,8 +19,6 @@ import { DiscordLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { SiteBrand } from '@/pages/editor-page/top-navbar/site-brand';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useDialog } from '@/hooks/use-dialog';
-import { Separator } from '@/components/separator/separator';
 import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 import { useActivitiesAvailability } from '@/hooks/use-activities-availability';
 import { useShareAvailability } from '@/hooks/use-share-availability';
@@ -60,33 +49,10 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
     const { t } = useTranslation();
     const { isMd: isDesktop } = useBreakpoint('md');
     const { databaseType } = useChartDB();
-    const { openCreateDiagramDialog, openOpenDiagramDialog } = useDialog();
     const conversationsAvailable = useConversationsAvailability();
     const activitiesAvailable = useActivitiesAvailability();
     const shareAvailable = useShareAvailability();
     const { totalUnreadCount } = useDiagramConversations();
-
-    const diagramItems: SidebarItem[] = useMemo(
-        () => [
-            {
-                title: t('editor_sidebar.new_diagram'),
-                icon: Plus,
-                onClick: () => {
-                    openCreateDiagramDialog();
-                },
-                active: false,
-            },
-            {
-                title: t('editor_sidebar.browse'),
-                icon: FolderOpen,
-                onClick: () => {
-                    openOpenDiagramDialog();
-                },
-                active: false,
-            },
-        ],
-        [t, openCreateDiagramDialog, openOpenDiagramDialog]
-    );
 
     const baseItems: SidebarItem[] = useMemo(
         () => [
@@ -98,14 +64,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active:
                     selectedSidebarSection === 'tables' && isSidePanelShowed,
-            },
-            {
-                title: 'DBML',
-                icon: CodeXml,
-                onClick: () => {
-                    toggleSidebarSection('dbml');
-                },
-                active: selectedSidebarSection === 'dbml' && isSidePanelShowed,
             },
             {
                 title: t('editor_sidebar.refs'),
@@ -247,31 +205,6 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 <SidebarGroup>
                     {/* <SidebarGroupLabel /> */}
                     <SidebarGroupContent>
-                        <SidebarMenu>
-                            {diagramItems.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton
-                                        className="justify-center space-y-0.5 !px-0 hover:bg-gray-200 data-[active=true]:bg-gray-100 data-[active=true]:text-pink-600 data-[active=true]:hover:bg-pink-100 dark:hover:bg-gray-800 dark:data-[active=true]:bg-gray-900 dark:data-[active=true]:text-pink-400 dark:data-[active=true]:hover:bg-pink-950"
-                                        isActive={item.active}
-                                        asChild
-                                    >
-                                        <button onClick={item.onClick}>
-                                            <item.icon />
-                                            <span>
-                                                {item.title
-                                                    .split(' ')
-                                                    .map((word, index) => (
-                                                        <div key={index}>
-                                                            {word}
-                                                        </div>
-                                                    ))}
-                                            </span>
-                                        </button>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                        <Separator className="my-2" />
                         <SidebarMenu>
                             {baseItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>

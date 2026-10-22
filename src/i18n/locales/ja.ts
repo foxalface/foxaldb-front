@@ -6,8 +6,6 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/ja';
 export const ja: LanguageTranslation = {
     translation: {
         editor_sidebar: {
-            new_diagram: '新規',
-            open: '開く...',
             tables: 'テーブル',
             refs: '参照',
             dependencies: '依存関係',

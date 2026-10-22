@@ -6,8 +6,6 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/zh_CN';
 export const zh_CN: LanguageTranslation = {
     translation: {
         editor_sidebar: {
-            new_diagram: '新建',
-            open: '打开...',
             tables: '表',
             refs: '引用',
             dependencies: '依赖关系',

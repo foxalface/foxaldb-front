@@ -6,8 +6,6 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/uk';
 export const uk: LanguageTranslation = {
     translation: {
         editor_sidebar: {
-            new_diagram: 'Нова',
-            open: 'Відкрити...',
             tables: 'Таблиці',
             refs: 'Зв’язки',
             dependencies: 'Залежності',
