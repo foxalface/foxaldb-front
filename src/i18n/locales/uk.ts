@@ -55,11 +55,6 @@ export const uk: LanguageTranslation = {
                 show_minimap: 'Показати мінімапу',
                 hide_minimap: 'Приховати мінімапу',
             },
-            backup: {
-                backup: 'Резервне копіювання',
-                export_diagram: 'Експорт діаграми',
-                restore_diagram: 'Відновити діаграму',
-            },
             help: {
                 help: 'Довідка',
                 docs_website: 'Документація',

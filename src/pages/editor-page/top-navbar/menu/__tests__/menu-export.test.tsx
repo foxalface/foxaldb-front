@@ -11,9 +11,7 @@ import {
 const dialogMocks = {
     openCreateDiagramDialog: vi.fn(),
     openOpenDiagramDialog: vi.fn(),
-    openImportDiagramDialog: vi.fn(),
     openExportWizardDialog: vi.fn(),
-    openExportDiagramDialog: vi.fn(),
     openMergeWizardDialog: vi.fn(),
 };
 
@@ -249,15 +247,37 @@ describe('Diagram menu', () => {
         });
     });
 
-    it('keeps backup export diagram entry for backup workflow', async () => {
+    it('does not expose the obsolete Backup top-level menu', () => {
         render(<Menu />);
-        await userEvent.click(
-            screen.getByRole('menuitem', { name: 'menu.backup.backup' })
-        );
-        await userEvent.click(
-            screen.getByRole('menuitem', { name: 'menu.backup.export_diagram' })
-        );
-        expect(dialogMocks.openExportDiagramDialog).toHaveBeenCalledTimes(1);
+        expect(
+            screen.queryByRole('menuitem', { name: 'menu.backup.backup' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('menuitem', {
+                name: 'menu.backup.export_diagram',
+            })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole('menuitem', {
+                name: 'menu.backup.restore_diagram',
+            })
+        ).not.toBeInTheDocument();
+    });
+
+    it('keeps Diagram, Edit, View, and Help top-level menus', () => {
+        render(<Menu />);
+        expect(
+            screen.getByRole('menuitem', { name: 'menu.actions.diagram' })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('menuitem', { name: 'menu.edit.edit' })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('menuitem', { name: 'menu.view.view' })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('menuitem', { name: 'menu.help.help' })
+        ).toBeInTheDocument();
     });
 
     it('hides Merge for a guest or local-only diagram', async () => {

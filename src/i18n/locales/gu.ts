@@ -57,11 +57,6 @@ export const gu: LanguageTranslation = {
                 hide_minimap: 'Hide Mini Map',
             },
 
-            backup: {
-                backup: 'બેકઅપ',
-                export_diagram: 'ડાયાગ્રામ નિકાસ કરો',
-                restore_diagram: 'ડાયાગ્રામ પુનઃસ્થાપિત કરો',
-            },
             help: {
                 help: 'મદદ',
                 docs_website: 'દસ્તાવેજીકરણ',

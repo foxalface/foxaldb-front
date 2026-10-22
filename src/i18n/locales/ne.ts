@@ -55,12 +55,6 @@ export const ne: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            // TODO: Translate
-            backup: {
-                backup: 'Backup',
-                export_diagram: 'Export Diagram',
-                restore_diagram: 'Restore Diagram',
-            },
             help: {
                 help: 'मद्दत',
                 docs_website: 'कागजात',

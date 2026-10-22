@@ -16,7 +16,10 @@ interface PrivateChannelLike {
     stopListening: ReturnType<typeof vi.fn>;
 }
 
-const connectionHandlers = new Map<string, Set<() => void>>();
+const connectionHandlers = new Map<
+    string,
+    Set<(payload?: { previous: string; current: string }) => void>
+>();
 let connection: ConnectionLike;
 let privateChannels: PrivateChannelLike[];
 let echoInstance: {
@@ -27,15 +30,22 @@ let echoInstance: {
     connector: { pusher: { connection: ConnectionLike } };
 };
 
-const fireConnectionEvent = (event: string): void => {
+const fireConnectionEvent = (
+    event: string,
+    payload?: { previous: string; current: string }
+): void => {
     const handlers = connectionHandlers.get(event);
     if (handlers === undefined) {
         return;
     }
 
     for (const handler of handlers) {
-        handler();
+        handler(payload);
     }
+};
+
+const fireState = (previous: string, current: string): void => {
+    fireConnectionEvent('state_change', { previous, current });
 };
 
 const createPresenceChannelMock = () => ({
@@ -80,24 +90,40 @@ const resetEchoHarness = (): void => {
     privateChannels = [];
 
     connection = {
-        bind: vi.fn((event: string, handler: () => void) => {
-            const handlers = connectionHandlers.get(event) ?? new Set();
-            handlers.add(handler);
-            connectionHandlers.set(event, handlers);
-        }),
-        unbind: vi.fn((event: string, handler?: () => void) => {
-            const handlers = connectionHandlers.get(event);
-            if (handlers === undefined) {
-                return;
+        bind: vi.fn(
+            (
+                event: string,
+                handler: (payload?: {
+                    previous: string;
+                    current: string;
+                }) => void
+            ) => {
+                const handlers = connectionHandlers.get(event) ?? new Set();
+                handlers.add(handler);
+                connectionHandlers.set(event, handlers);
             }
+        ),
+        unbind: vi.fn(
+            (
+                event: string,
+                handler?: (payload?: {
+                    previous: string;
+                    current: string;
+                }) => void
+            ) => {
+                const handlers = connectionHandlers.get(event);
+                if (handlers === undefined) {
+                    return;
+                }
 
-            if (handler === undefined) {
-                connectionHandlers.delete(event);
-                return;
+                if (handler === undefined) {
+                    connectionHandlers.delete(event);
+                    return;
+                }
+
+                handlers.delete(handler);
             }
-
-            handlers.delete(handler);
-        }),
+        ),
     };
 
     echoInstance = {
@@ -126,14 +152,16 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 
 const simulateReconnect = (): void => {
     act(() => {
-        fireConnectionEvent('connected');
-        fireConnectionEvent('disconnected');
-        fireConnectionEvent('connected');
+        fireState('connecting', 'connected');
+        fireState('connected', 'connecting');
+        fireState('connecting', 'unavailable');
+        fireState('unavailable', 'connected');
     });
 };
 
-const countConnectedBinds = (): number =>
-    connection.bind.mock.calls.filter((call) => call[0] === 'connected').length;
+const countStateBinds = (): number =>
+    connection.bind.mock.calls.filter((call) => call[0] === 'state_change')
+        .length;
 
 describe('RealtimeContext managed private channel and onReconnect', () => {
     beforeEach(() => {
@@ -177,7 +205,7 @@ describe('RealtimeContext managed private channel and onReconnect', () => {
 
         await waitFor(() => {
             expect(connection.bind).toHaveBeenCalledWith(
-                'connected',
+                'state_change',
                 expect.any(Function)
             );
         });
@@ -288,7 +316,7 @@ describe('RealtimeContext managed private channel and onReconnect', () => {
 
         await waitFor(() => {
             expect(connection.bind).toHaveBeenCalledWith(
-                'connected',
+                'state_change',
                 expect.any(Function)
             );
             expect(api.joinDiagram).not.toBeNull();
@@ -349,7 +377,7 @@ describe('RealtimeContext managed private channel and onReconnect', () => {
 
         await waitFor(() => {
             expect(connection.bind).toHaveBeenCalledWith(
-                'connected',
+                'state_change',
                 expect.any(Function)
             );
             expect(api.joinDiagram).not.toBeNull();
@@ -383,12 +411,12 @@ describe('RealtimeContext managed private channel and onReconnect', () => {
 
         await waitFor(() => {
             expect(connection.bind).toHaveBeenCalledWith(
-                'connected',
+                'state_change',
                 expect.any(Function)
             );
         });
 
-        const connectedBindCount = countConnectedBinds();
+        const connectedBindCount = countStateBinds();
 
         act(() => {
             result.current.onReconnect(() => undefined);
@@ -396,7 +424,7 @@ describe('RealtimeContext managed private channel and onReconnect', () => {
             result.current.onReconnect(() => undefined);
         });
 
-        expect(countConnectedBinds()).toBe(connectedBindCount);
+        expect(countStateBinds()).toBe(connectedBindCount);
         expect(connectedBindCount).toBe(1);
     });
 
@@ -435,7 +463,7 @@ describe('RealtimeContext managed private channel and onReconnect', () => {
 
         expect(consumerA).toHaveBeenCalledTimes(1);
         expect(consumerB).toHaveBeenCalledTimes(1);
-        expect(countConnectedBinds()).toBe(1);
+        expect(countStateBinds()).toBe(1);
 
         onReconnectSpy.mockRestore();
     });

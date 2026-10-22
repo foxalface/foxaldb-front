@@ -55,11 +55,6 @@ export const hi: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            backup: {
-                backup: 'बैकअप',
-                export_diagram: 'आरेख निर्यात करें',
-                restore_diagram: 'आरेख पुनर्स्थापित करें',
-            },
             help: {
                 help: 'मदद',
                 docs_website: 'દસ્તાવેજીકરણ',

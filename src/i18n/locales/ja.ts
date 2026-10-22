@@ -56,11 +56,6 @@ export const ja: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            backup: {
-                backup: 'バックアップ',
-                export_diagram: 'ダイアグラムをエクスポート',
-                restore_diagram: 'ダイアグラムを復元',
-            },
             help: {
                 help: 'ヘルプ',
                 docs_website: 'ドキュメント',

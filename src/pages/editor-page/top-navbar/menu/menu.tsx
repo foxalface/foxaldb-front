@@ -13,7 +13,6 @@ import {
     MenubarTrigger,
 } from '@/components/menubar/menubar';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useDialog } from '@/hooks/use-dialog';
 import {
     KeyboardShortcutAction,
     keyboardShortcutsForOS,
@@ -32,7 +31,6 @@ export interface MenuProps {
 
 export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
     const { clearDiagramData } = useChartDB();
-    const { openImportDiagramDialog, openExportDiagramDialog } = useDialog();
     const { showAlert } = useAlert();
     const {
         canMergeDiagram,
@@ -309,18 +307,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                             </MenubarCheckboxItem>
                         </MenubarSubContent>
                     </MenubarSub>
-                </MenubarContent>
-            </MenubarMenu>
-
-            <MenubarMenu>
-                <MenubarTrigger>{t('menu.backup.backup')}</MenubarTrigger>
-                <MenubarContent>
-                    <MenubarItem onClick={openExportDiagramDialog}>
-                        {t('menu.backup.export_diagram')}
-                    </MenubarItem>
-                    <MenubarItem onClick={openImportDiagramDialog}>
-                        {t('menu.backup.restore_diagram')}
-                    </MenubarItem>
                 </MenubarContent>
             </MenubarMenu>
 

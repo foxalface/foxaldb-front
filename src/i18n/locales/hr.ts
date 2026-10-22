@@ -55,11 +55,6 @@ export const hr: LanguageTranslation = {
                 show_minimap: 'Prikaži mini kartu',
                 hide_minimap: 'Sakrij mini kartu',
             },
-            backup: {
-                backup: 'Sigurnosna kopija',
-                export_diagram: 'Izvezi dijagram',
-                restore_diagram: 'Vrati dijagram',
-            },
             help: {
                 help: 'Pomoć',
                 docs_website: 'Dokumentacija',

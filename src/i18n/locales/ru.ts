@@ -55,11 +55,6 @@ export const ru: LanguageTranslation = {
                 show_minimap: 'Показать мини-карту',
                 hide_minimap: 'Скрыть мини-карту',
             },
-            backup: {
-                backup: 'Бэкап',
-                export_diagram: 'Экспорт диаграммы',
-                restore_diagram: 'Восстановить диаграмму',
-            },
             help: {
                 help: 'Помощь',
                 docs_website: 'Документация',

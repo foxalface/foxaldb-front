@@ -56,11 +56,6 @@ export const id_ID: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            backup: {
-                backup: 'Cadangan',
-                export_diagram: 'Ekspor Diagram',
-                restore_diagram: 'Pulihkan Diagram',
-            },
             help: {
                 help: 'Bantuan',
                 docs_website: 'Dokumentasi',

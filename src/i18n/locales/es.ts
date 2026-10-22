@@ -56,11 +56,6 @@ export const es: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            backup: {
-                backup: 'Respaldo',
-                export_diagram: 'Exportar Diagrama',
-                restore_diagram: 'Restaurar Diagrama',
-            },
             help: {
                 help: 'Ayuda',
                 docs_website: 'Documentación',

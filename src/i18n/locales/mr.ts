@@ -56,12 +56,6 @@ export const mr: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            backup: {
-                // TODO: Add translations
-                backup: 'Backup',
-                export_diagram: 'Export Diagram',
-                restore_diagram: 'Restore Diagram',
-            },
             help: {
                 help: 'मदत',
                 docs_website: 'दस्तऐवजीकरण',

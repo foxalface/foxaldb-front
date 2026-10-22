@@ -55,11 +55,6 @@ export const zh_TW: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            backup: {
-                backup: '備份',
-                export_diagram: '匯出圖表',
-                restore_diagram: '恢復圖表',
-            },
             help: {
                 help: '幫助',
                 docs_website: '文件',

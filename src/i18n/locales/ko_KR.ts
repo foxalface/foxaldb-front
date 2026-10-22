@@ -55,11 +55,6 @@ export const ko_KR: LanguageTranslation = {
                 show_minimap: 'Show Mini Map',
                 hide_minimap: 'Hide Mini Map',
             },
-            backup: {
-                backup: '백업',
-                export_diagram: '다이어그램 내보내기',
-                restore_diagram: '다이어그램 복구',
-            },
             help: {
                 help: '도움말',
                 docs_website: '선적 서류 비치',

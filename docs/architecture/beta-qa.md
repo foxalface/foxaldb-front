@@ -43,7 +43,7 @@ Beta validates real-browser product flows before roadmap features (Notes, Teams,
 |----|--------|--------|
 | **B1** | Readiness audit + QA matrices | **COMPLETE** |
 | **B2** | Local Docker smoke — guest + auth create/import/edit/save/reload | **COMPLETE** (LAN origin) |
-| **B3** | Two-browser collaboration, conflict/LWW, reconnect | NOT STARTED |
+| **B3** | Two-browser collaboration, conflict/LWW, reconnect | **MANUAL COMPLETION REQUIRED** (B3.1 partial; see checklist) |
 | **B4** | Realistic fixture — Merge, Export, Restore depth | NOT STARTED |
 | **B5** | Staging deploy smoke + Beta sign-off | NOT STARTED |
 
@@ -179,15 +179,79 @@ Switch language: Account → Langue. Full ja spot check remains B4/B5.
 
 ---
 
-## B3 placeholder (do not start until B2 has no open P0/P1)
+## B3 checklist — collaboration (LAN)
 
-- Two browsers, two users (owner + editor)
-- Presence, cursors, selection, table movement overlays
-- Editing awareness + conflict warnings (soft; LWW)
-- Persistent ops via DiagramOperation (not whispers)
-- Reconnect + network loss
-- Logout / presence cleanup
-- Peer visibility after remote edits
+**Environment:** `http://192.168.1.168:5173` + `:8000` + Reverb `:8080` (Docker stack up). **Diagram:** `77` (B2 PostgreSQL import). **Sessions:** User A = Cursor browser (`foxalface@gmail.com`, owner, existing B2 session). User B = isolated Playwright Chromium (`alexis.renart@gmail.com`, editor, API login). **Run:** 2026-10-20.
+
+| ID | Step | Expected | B3 status | Notes |
+|----|------|----------|-----------|-------|
+| B3-0 | Reverb up | ws channel available | **PASS** | `foxaldb-reverb-1` Up; presence works when both clients connected |
+| B3-1 | Two isolated sessions | Distinct cookies/users | **PASS** | MCP cookie jar ≠ Playwright context |
+| B3-2 | Share / editor invite | B can open + edit | **PASS** | A added `alexis.renart@gmail.com` as editor; `diagram_members` id 2 role `editor` |
+| B3-3 | Presence A→B | A sees B | **PASS** | Popover: `FF You` + `AR Alexis Renart` while B connected |
+| B3-4 | Presence B→A | B sees A | **PASS** | Playwright presence: `AR You` + `FF Foxal Face` |
+| B3-5 | No duplicate presence | Single entry per user | **PASS** | No duplicate `AR` rows in popover during single B session |
+| B3-6 | Remote cursor A→B | B sees A cursor | **MANUAL REQUIRED** | Synthetic DOM/canvas mouse events did not surface `[data-remote-cursor-user-id]` on peer |
+| B3-7 | Remote cursor B→A | A sees B cursor | **MANUAL REQUIRED** | Same automation gap; presence proves channel alive |
+| B3-8 | Remote selection | Peer ring on select | **NOT RUN** | Blocked on reliable canvas select automation |
+| B3-9 | Selection cleanup | Stale clears | **NOT RUN** | — |
+| B3-10 | Table drag / persisted position | LWW position on reload | **NOT RUN** | React Flow drag not scriptable via MCP `browser_drag` on nodes |
+| B3-11 | Remote table create | B sees without reload | **MANUAL REQUIRED** | A created `table_6`; backend JSON includes `table_6`; B `wait_table` failed without reload while offline — live broadcast not confirmed in automation |
+| B3-12 | Remote field create/edit | Peer + backend | **PARTIAL** | Backend fields `id,b3_field` on `table_6`; live peer field sync **not** confirmed |
+| B3-13 | Relationship | Peer + reload | **NOT RUN** | Time/automation; defer spot in B4 or manual |
+| B3-14 | Editing awareness | Soft conflict copy | **NOT RUN** | — |
+| B3-15 | Table rename LWW | Converge + reload | **NOT RUN** | — |
+| B3-16 | Field rename LWW | Converge + reload | **NOT RUN** | — |
+| B3-17 | Relationship conflict | Converge | **NOT RUN** | — |
+| B3-18 | Delete vs edit | No corrupt UI | **NOT RUN** | — |
+| B3-19 | Simultaneous move | Converge | **NOT RUN** | — |
+| B3-20 | Autosave / realtime loop | No PUT storm | **NOT RUN** | — |
+| B3-21 | Reconnect / offline | Peer edit reconciles | **NOT RUN** | — |
+| B3-22 | Logout presence cleanup | Ghost clears | **NOT RUN** | — |
+| B3-23 | Re-login / rejoin | No duplicate ghost | **NOT RUN** | — |
+| B3-24 | Final reload convergence | A=B=backend | **NOT RUN** | Backend authoritative snapshot includes `table_6` + `b3_field` |
+
+**B3.1 run (2026-10-20):** User A = Cursor **headed** browser (owner session). User B = **isolated** Playwright Chromium (UI login unreliable in agent; **API Sanctum fallback** after guest `/diagrams/77` — not a second headed profile). Cookie isolation **confirmed** (distinct users; presence bidirectional).
+
+| ID | Step | B3.1 status | Notes |
+|----|------|-------------|-------|
+| B3-6 | Cursor A→B | **MANUAL REQUIRED** | MCP cannot drive real canvas `mousemove`; no `[data-remote-cursor-user-id]` on B |
+| B3-7 | Cursor B→A | **MANUAL REQUIRED** | Playwright `mouse.move` on B; no remote cursor on A |
+| B3-8 | Remote selection | **MANUAL REQUIRED** | Canvas click on A; B `remoteSelection` false (automation) |
+| B3-9 | Selection cleanup | **NOT RUN** | — |
+| B3-10 | Table drag overlay | **NOT RUN** | React Flow node drag not automatable in MCP |
+| B3-11 | Live table create | **PASS** | A added `table_7`; B peer body showed `table_7` **without reload** (~4s) |
+| B3-12 | Live field A→B | **PASS** | A added `b3_live_field` on `table_7`; B body showed it **without reload** |
+| B3-12b | Live field B→A | **NOT RUN** | Needs B-side edit automation while A observes |
+| B3-13–B3-24 | LWW, reconnect, logout, convergence | **NOT RUN** | Requires manual dual-headed operator |
+
+**B3 gate:** **BLOCKED on browser retest of B3-P1-001.** Manual two-profile Chrome (diagram 77) passed cursor, selection, drag, table/field LWW, delete-vs-edit, logout, and rejoin ephemeral cleanup. **Reconnect failed:** while A was offline, B’s persisted table rename did not appear on A after websocket reconnect (full reload did). Selection not resurrecting on rejoin is **expected** (ephemeral) and is **PASS**.
+
+### B3-P1-001 — missed persistent op after reconnect
+
+| | |
+|--|--|
+| Reproduction | A+B on diagram 77; disconnect A; B renames a table (persists); reconnect A without reload |
+| Expected | A converges to backend diagram |
+| Actual (manual) | A stayed on the pre-disconnect table name |
+| First fix retest | **FAIL** (2026-10-21). `onReconnect` still did not refetch. Reload of A showed the new name, so backend JSON was already correct. **Case 1:** no authoritative GET on restore. |
+| Actual cause | Pusher does not emit `disconnected` on browser/network loss. It emits `state_change` `connected → connecting → unavailable → connected`. `ConnectionManager` only called `onReconnect` after `disconnected`, so the refresh never started. Channel can still resubscribe when status returns to `connected`. Events are not replayed. |
+| Current code | `ConnectionManager` treats that `state_change` sequence as one interruption and then notifies `onReconnect` once. Refresh still uses `getDiagram` + `replaceDiagram({ authoritative: true })`. Console: `[realtime]` / `[reconnect-refresh]`. |
+| Automated | `connection-manager.test.ts` (unavailable path, no `disconnected`); existing reconnect provider + refresh tests updated to the same sequence |
+| Browser retest of this change | **NOT RUN** — B3-P1-001 stays **OPEN** |
+
+### B3 manual operator checklist (minimal)
+
+1. Chrome profile **A**: `http://192.168.1.168:5173` → owner → `/diagrams/77`.
+2. Chrome profile **B** (incognito or second user): same URL → `alexis.renart@gmail.com` → `/diagrams/77`.
+3. **Presence:** Diagram viewers shows each user once.
+4. **Cursor:** move mouse over canvas A → B sees labeled cursor; repeat B→A.
+5. **Selection:** select table on canvas → peer ring; deselect → clears.
+6. **Drag:** drag `table_7` slowly → peer overlay + persisted position after reload.
+7. **LWW:** rename same table/field from both; last writer wins after reload.
+8. **Reconnect:** offline A ~45s while B edits → reconnect → converge.
+9. **Logout B:** A loses B presence/cursor/selection/editing within stale timeout.
+10. **Re-login B:** single presence entry; no ghost ephemeral state.
 
 ---
 
@@ -218,6 +282,8 @@ Switch language: Account → Langue. Full ja spot check remains B4/B5.
 | B2-P2-001 | B2 | P2 | Guest import UX | Guest with entry blank diagram → Nouveau → Import SQL | Import creates diagram | Guest limit toast unless Dexie has 0 diagrams (product: 1 guest diagram) | **Open** | QA workaround: delete local diagrams or import as first diagram |
 | B2-P2-002 | B2 | P3 | i18n | FR UI, sidebar | Translated labels | Raw key `editor_sidebar.browse` | **Open** | — |
 | B2-P2-003 | B2 | P3 | i18n | Restore / file uploader | FR hints | EN “Drag and drop…” on restore overlay from create wizard | **Open** | — |
+| B3-QA-001 | B3 | — | Beta QA automation | Agent could not finish the full matrix | — | Superseded by manual two-profile results | **Closed** | Manual PASS except reconnect |
+| B3-P1-001 | B3 | **P1** | Reconnect | A offline while B renames a table; A reconnects without reload | A shows B’s persisted rename | Retest of first fix: still stale until full reload. Pusher offline path is `unavailable`, not `disconnected`, so `onReconnect` did not run (no GET). Code now listens to `state_change`. | **OPEN** — browser retest of `state_change` trigger not done | `connection-manager.ts` |
 
 ---
 
@@ -227,7 +293,7 @@ Switch language: Account → Langue. Full ja spot check remains B4/B5.
 |-----------|-------|------|----|----|--------|
 | B1 | — | 2026-03-20 | 0 | 0 | Complete (audit) |
 | B2 | — | 2026-10-20 | 0 | 0 | **PASS** (guest + auth on LAN origin; B2-ENV-001 localhost-only P2) |
-| B3 | — | | | | Not started |
+| B3 | — | 2026-10-21 | 0 | 1 | **BLOCKED** — B3-P1-001 open (first reconnect fix failed manual retest) |
 | B4 | — | | | | Not started |
 | B5 | — | | | | Not started |
 

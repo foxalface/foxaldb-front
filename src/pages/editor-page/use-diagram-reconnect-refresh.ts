@@ -3,16 +3,15 @@ import { useAlert } from '@/context/alert-context/alert-context';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
+import { useRealtime } from '@/hooks/use-realtime';
 import { readDiagramContentHashFromApi } from '@/lib/api/diagram-content-hash';
 import { getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
-import { setDiagramAutosaveContentHash } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
     isDiagramAccessDenied,
     kickOutOfDiagram,
 } from '@/lib/realtime/kick-out-of-diagram';
-import { getEcho } from '@/lib/realtime/echo';
 import {
     isOutboundReplayActive,
     isRemoteSyncActive,
@@ -25,34 +24,12 @@ import { useNavigate } from 'react-router-dom';
 
 const HIDDEN_THRESHOLD_MS = 30_000;
 const REFRESH_COOLDOWN_MS = 5_000;
-
-type ConnectionHandler = () => void;
-
-interface PusherConnectionLike {
-    bind: (event: string, handler: ConnectionHandler) => void;
-    unbind: (event: string, handler?: ConnectionHandler) => void;
-}
-
-interface EchoPusherConnector {
-    pusher?: {
-        connection: PusherConnectionLike;
-    };
-}
-
-const getPusherConnection = (
-    echo: ReturnType<typeof getEcho>
-): PusherConnectionLike | null => {
-    if (echo === null) {
-        return null;
-    }
-
-    const connector = echo.connector as EchoPusherConnector;
-    return connector.pusher?.connection ?? null;
-};
+const SYNC_RETRY_MS = 300;
 
 export const useDiagramReconnectRefresh = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram, updateDiagramData, loadDiagramFromData } =
+    const { onReconnect } = useRealtime();
+    const { currentDiagram, replaceDiagram, loadDiagramFromData } =
         useChartDB();
     const { setDiagramAccess, clearDiagramAccess } = useDiagramAccess();
     const { showAlert } = useAlert();
@@ -63,8 +40,9 @@ export const useDiagramReconnectRefresh = (): void => {
     const refreshInFlightRef = useRef(false);
     const lastRefreshAtRef = useRef(0);
     const hiddenAtRef = useRef<number | null>(null);
-    const hasConnectedOnceRef = useRef(false);
-    const wasDisconnectedRef = useRef(false);
+    const syncRetryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+        null
+    );
 
     const diagramId =
         currentDiagram && isValidBackendDiagramId(currentDiagram.id)
@@ -73,19 +51,30 @@ export const useDiagramReconnectRefresh = (): void => {
 
     const refreshDiagramFromBackend = useCallback(async (): Promise<void> => {
         if (diagramId === null) {
+            console.info('[reconnect-refresh] skipped: no backend diagram');
             return;
         }
 
         if (refreshInFlightRef.current) {
+            console.info('[reconnect-refresh] skipped: in flight');
             return;
         }
 
         if (isRemoteSyncActive() || isOutboundReplayActive()) {
+            console.info('[reconnect-refresh] skipped: remote sync in flight');
+            if (syncRetryTimerRef.current === null) {
+                syncRetryTimerRef.current = setTimeout(() => {
+                    syncRetryTimerRef.current = null;
+                    void refreshDiagramFromBackend();
+                }, SYNC_RETRY_MS);
+            }
+
             return;
         }
 
         const now = Date.now();
         if (now - lastRefreshAtRef.current < REFRESH_COOLDOWN_MS) {
+            console.info('[reconnect-refresh] skipped: cooldown');
             return;
         }
 
@@ -95,17 +84,25 @@ export const useDiagramReconnectRefresh = (): void => {
         remoteSyncDepthRef.current += 1;
         syncRemoteApplyState();
 
+        console.info(`[reconnect-refresh] fetching diagram ${diagramId}`);
+
         try {
             const raw = await getDiagram(diagramId);
             const contentHash = readDiagramContentHashFromApi(raw);
-
-            if (contentHash !== null) {
-                setDiagramAutosaveContentHash(diagramId, contentHash);
-            }
+            console.info(
+                `[reconnect-refresh] fetched hash ${contentHash ?? 'none'}`
+            );
 
             const diagram = normalizeDiagramFromApi(raw, diagramId);
             setDiagramAccess(raw.access ?? null);
-            await updateDiagramData(diagram, { forceUpdateStorage: true });
+            console.info('[reconnect-refresh] applying authoritative diagram');
+            await replaceDiagram(diagram, {
+                updateHistory: false,
+                authoritative: true,
+                resetHistory: true,
+                authoritativeContentHash: contentHash ?? undefined,
+            });
+            console.info('[reconnect-refresh] complete');
         } catch (error: unknown) {
             if (isDiagramAccessDenied(error)) {
                 kickOutOfDiagram({
@@ -136,7 +133,7 @@ export const useDiagramReconnectRefresh = (): void => {
     }, [
         diagramId,
         setDiagramAccess,
-        updateDiagramData,
+        replaceDiagram,
         clearDiagramAccess,
         loadDiagramFromData,
         navigate,
@@ -150,34 +147,25 @@ export const useDiagramReconnectRefresh = (): void => {
             return;
         }
 
-        const echo = getEcho();
-        const connection = getPusherConnection(echo);
+        return onReconnect(() => {
+            void refreshDiagramFromBackend();
+        });
+    }, [
+        isLoading,
+        isAuthenticated,
+        diagramId,
+        onReconnect,
+        refreshDiagramFromBackend,
+    ]);
 
-        if (connection === null) {
-            return;
-        }
-
-        const handleConnected: ConnectionHandler = () => {
-            if (hasConnectedOnceRef.current && wasDisconnectedRef.current) {
-                wasDisconnectedRef.current = false;
-                void refreshDiagramFromBackend();
-            } else {
-                hasConnectedOnceRef.current = true;
+    useEffect(() => {
+        return () => {
+            if (syncRetryTimerRef.current !== null) {
+                clearTimeout(syncRetryTimerRef.current);
+                syncRetryTimerRef.current = null;
             }
         };
-
-        const handleDisconnected: ConnectionHandler = () => {
-            wasDisconnectedRef.current = true;
-        };
-
-        connection.bind('connected', handleConnected);
-        connection.bind('disconnected', handleDisconnected);
-
-        return () => {
-            connection.unbind('connected', handleConnected);
-            connection.unbind('disconnected', handleDisconnected);
-        };
-    }, [isLoading, isAuthenticated, diagramId, refreshDiagramFromBackend]);
+    }, []);
 
     useEffect(() => {
         if (isLoading || !isAuthenticated || diagramId === null) {
