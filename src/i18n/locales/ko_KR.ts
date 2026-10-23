@@ -1088,10 +1088,13 @@ export const ko_KR: LanguageTranslation = {
             errors: {
                 put_online_failed: '다이어그램을 온라인으로 올릴 수 없습니다.',
                 duplicate_failed: '다이어그램을 복제할 수 없습니다.',
+                copy_to_device_failed:
+                    '다이어그램을 이 기기에 복사할 수 없습니다.',
             },
             diagram_actions: {
                 open: '열기',
                 duplicate: '복제',
+                copy_to_device: '이 기기에 복사',
                 delete: '삭제',
             },
         },

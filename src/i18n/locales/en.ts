@@ -1082,10 +1082,13 @@ export const en = {
             errors: {
                 put_online_failed: 'Could not put the diagram online.',
                 duplicate_failed: 'Could not duplicate the diagram.',
+                copy_to_device_failed:
+                    'Could not copy the diagram to this device.',
             },
             diagram_actions: {
                 open: 'Open',
                 duplicate: 'Duplicate',
+                copy_to_device: 'Copy to this device',
                 delete: 'Delete',
             },
         },

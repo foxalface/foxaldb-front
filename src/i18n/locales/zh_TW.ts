@@ -1010,10 +1010,12 @@ export const zh_TW: LanguageTranslation = {
             errors: {
                 put_online_failed: '無法將圖表上線。',
                 duplicate_failed: '無法複製圖表。',
+                copy_to_device_failed: '無法將圖表複製到此裝置。',
             },
             diagram_actions: {
                 open: '開啟',
                 duplicate: '複製',
+                copy_to_device: '複製到此裝置',
                 delete: '刪除',
             },
         },

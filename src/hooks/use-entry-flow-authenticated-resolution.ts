@@ -15,6 +15,7 @@ import {
     isDiagramAccessDenied,
     kickOutOfDiagram,
 } from '@/lib/realtime/kick-out-of-diagram';
+import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { EntryFlowEvent, EntryFlowState } from '@/lib/entry-flow';
 import { toRemoteDiagramSummaries } from '@/lib/entry-flow';
 
@@ -46,7 +47,7 @@ export const useEntryFlowAuthenticatedResolution = ({
     authenticatedInitialDiagram: Diagram | undefined;
 } => {
     const { config, updateConfig } = useConfig();
-    const { currentDiagram, loadDiagramFromData } = useChartDB();
+    const { currentDiagram, loadDiagram, loadDiagramFromData } = useChartDB();
     const { diagramAccess, setDiagramAccess, clearDiagramAccess } =
         useDiagramAccess();
     const { resetRedoStack, resetUndoStack } = useRedoUndoStack();
@@ -187,6 +188,14 @@ export const useEntryFlowAuthenticatedResolution = ({
             return;
         }
 
+        if (!isValidBackendDiagramId(routeDiagramId)) {
+            if (diagramAccess !== null) {
+                clearDiagramAccess();
+            }
+
+            return;
+        }
+
         if (diagramAccess !== null) {
             return;
         }
@@ -275,6 +284,40 @@ export const useEntryFlowAuthenticatedResolution = ({
             resetUndoStack();
 
             try {
+                if (!isValidBackendDiagramId(diagramId)) {
+                    clearDiagramAccess();
+                    const localDiagram =
+                        alreadyLoadedDiagram ?? (await loadDiagram(diagramId));
+
+                    if (!isResolutionCurrent(token)) {
+                        return;
+                    }
+
+                    if (!localDiagram) {
+                        hideLoader();
+                        dispatchEvent({ type: 'DIAGRAM_OPEN_FAILED' });
+                        return;
+                    }
+
+                    setAuthenticatedInitialDiagram(localDiagram);
+
+                    await updateConfig({
+                        config: { defaultDiagramId: diagramId },
+                    });
+
+                    if (!isResolutionCurrent(token)) {
+                        return;
+                    }
+
+                    if (routeDiagramId !== diagramId) {
+                        navigate(`/diagrams/${diagramId}`);
+                    }
+
+                    hideLoader();
+                    dispatchEvent({ type: 'DIAGRAM_OPENED' });
+                    return;
+                }
+
                 if (alreadyLoadedDiagram && diagramSource !== 'created') {
                     const diagram = await getDiagram(diagramId);
 
@@ -363,6 +406,7 @@ export const useEntryFlowAuthenticatedResolution = ({
         isResolutionCurrent,
         dispatchEvent,
         clearDiagramAccess,
+        loadDiagram,
         loadDiagramFromData,
         setDiagramAccess,
         updateConfig,

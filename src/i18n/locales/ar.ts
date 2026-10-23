@@ -1071,10 +1071,12 @@ export const ar: LanguageTranslation = {
             errors: {
                 put_online_failed: 'تعذر نشر المخطط عبر الإنترنت.',
                 duplicate_failed: 'تعذر نسخ المخطط.',
+                copy_to_device_failed: 'تعذر نسخ المخطط إلى هذا الجهاز.',
             },
             diagram_actions: {
                 open: 'فتح',
                 duplicate: 'نسخ',
+                copy_to_device: 'نسخ إلى هذا الجهاز',
                 delete: 'حذف',
             },
         },

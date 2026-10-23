@@ -1103,10 +1103,13 @@ export const ja: LanguageTranslation = {
                 put_online_failed:
                     'ダイアグラムをオンラインにできませんでした。',
                 duplicate_failed: 'ダイアグラムを複製できませんでした。',
+                copy_to_device_failed:
+                    'ダイアグラムをこの端末にコピーできませんでした。',
             },
             diagram_actions: {
                 open: '開く',
                 duplicate: '複製',
+                copy_to_device: 'この端末にコピー',
                 delete: '削除',
             },
         },

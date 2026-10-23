@@ -7,11 +7,13 @@ import {
 } from '../put-local-diagram-online';
 
 const createDiagram = vi.fn();
+const getDiagrams = vi.fn();
 const getDiagram = vi.fn();
 const deleteDiagram = vi.fn();
 
 vi.mock('@/lib/api/diagrams', () => ({
     createDiagram: (...args: unknown[]) => createDiagram(...args),
+    getDiagrams: (...args: unknown[]) => getDiagrams(...args),
 }));
 
 const sampleDiagram = (): Diagram => ({
@@ -26,9 +28,14 @@ const sampleDiagram = (): Diagram => ({
 describe('put-local-diagram-online', () => {
     beforeEach(() => {
         createDiagram.mockReset();
+        getDiagrams.mockReset();
         getDiagram.mockReset();
         deleteDiagram.mockReset();
         getDiagram.mockResolvedValue(sampleDiagram());
+        getDiagrams.mockResolvedValue([
+            { name: 'Local' },
+            { name: 'Local (1)' },
+        ]);
     });
 
     it('copy creates backend diagram and keeps local diagram', async () => {
@@ -38,6 +45,7 @@ describe('put-local-diagram-online', () => {
 
         expect(remoteId).toBe('42');
         expect(createDiagram).toHaveBeenCalledTimes(1);
+        expect(createDiagram.mock.calls[0][0].name).toBe('Local (2)');
         expect(deleteDiagram).not.toHaveBeenCalled();
     });
 
@@ -59,6 +67,7 @@ describe('put-local-diagram-online', () => {
 
         expect(remoteId).toBe('99');
         expect(order).toEqual(['create', 'delete']);
+        expect(createDiagram.mock.calls[0][0].name).toBe('Local');
     });
 
     it('move preserves local diagram when backend creation fails', async () => {

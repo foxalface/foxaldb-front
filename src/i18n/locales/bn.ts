@@ -1080,10 +1080,12 @@ export const bn: LanguageTranslation = {
             errors: {
                 put_online_failed: 'ডায়াগ্রাম অনলাইনে রাখা যায়নি।',
                 duplicate_failed: 'ডায়াগ্রাম ডুপ্লিকেট করা যায়নি।',
+                copy_to_device_failed: 'ডায়াগ্রাম এই ডিভাইসে কপি করা যায়নি।',
             },
             diagram_actions: {
                 open: 'খুলুন',
                 duplicate: 'ডুপ্লিকেট',
+                copy_to_device: 'এই ডিভাইসে কপি করুন',
                 delete: 'মুছুন',
             },
         },

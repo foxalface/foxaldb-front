@@ -1083,10 +1083,13 @@ export const ru: LanguageTranslation = {
             errors: {
                 put_online_failed: 'Не удалось выложить диаграмму в сеть.',
                 duplicate_failed: 'Не удалось дублировать диаграмму.',
+                copy_to_device_failed:
+                    'Не удалось скопировать диаграмму на это устройство.',
             },
             diagram_actions: {
                 open: 'Открыть',
                 duplicate: 'Дублировать',
+                copy_to_device: 'Копировать на это устройство',
                 delete: 'Удалить',
             },
         },

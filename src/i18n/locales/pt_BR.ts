@@ -1098,10 +1098,13 @@ export const pt_BR: LanguageTranslation = {
                 put_online_failed:
                     'Não foi possível colocar o diagrama online.',
                 duplicate_failed: 'Não foi possível duplicar o diagrama.',
+                copy_to_device_failed:
+                    'Não foi possível copiar o diagrama para este dispositivo.',
             },
             diagram_actions: {
                 open: 'Abrir',
                 duplicate: 'Duplicar',
+                copy_to_device: 'Copiar para este dispositivo',
                 delete: 'Excluir',
             },
         },

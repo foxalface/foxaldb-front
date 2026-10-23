@@ -3,11 +3,11 @@ import type { Diagram } from '@/lib/domain/diagram';
 import type { StorageContext } from '@/context/storage-context/storage-context';
 import { generateDiagramId } from '@/lib/utils';
 import { loadFullLocalDiagram } from './put-local-diagram-online';
-
-const DUPLICATE_NAME_SUFFIX = ' Copy';
+import { nextDiagramCopyName } from './next-diagram-copy-name';
 
 export const duplicateLocalDiagram = async (
     getDiagram: StorageContext['getDiagram'],
+    listDiagrams: StorageContext['listDiagrams'],
     addDiagram: StorageContext['addDiagram'],
     sourceDiagramId: string
 ): Promise<string> => {
@@ -17,13 +17,17 @@ export const duplicateLocalDiagram = async (
         throw new Error('Local diagram not found');
     }
 
+    const existing = await listDiagrams();
     const { diagram: cloned } = cloneDiagram(full);
     const now = new Date();
 
     const duplicate: Diagram = {
         ...cloned,
         id: generateDiagramId(),
-        name: `${full.name}${DUPLICATE_NAME_SUFFIX}`,
+        name: nextDiagramCopyName(
+            full.name,
+            existing.map((diagram) => diagram.name)
+        ),
         createdAt: now,
         updatedAt: now,
     };

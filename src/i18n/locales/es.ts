@@ -1103,10 +1103,13 @@ export const es: LanguageTranslation = {
             errors: {
                 put_online_failed: 'No se pudo poner el diagrama en línea.',
                 duplicate_failed: 'No se pudo duplicar el diagrama.',
+                copy_to_device_failed:
+                    'No se pudo copiar el diagrama a este dispositivo.',
             },
             diagram_actions: {
                 open: 'Abrir',
                 duplicate: 'Duplicar',
+                copy_to_device: 'Copiar a este dispositivo',
                 delete: 'Eliminar',
             },
         },

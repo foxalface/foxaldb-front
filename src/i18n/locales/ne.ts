@@ -1079,10 +1079,13 @@ export const ne: LanguageTranslation = {
             errors: {
                 put_online_failed: 'डायाग्राम अनलाइन राख्न सकिएन।',
                 duplicate_failed: 'डायाग्राम प्रतिलिपि गर्न सकिएन।',
+                copy_to_device_failed:
+                    'डायाग्राम यो उपकरणमा प्रतिलिपि गर्न सकिएन।',
             },
             diagram_actions: {
                 open: 'खोल्नुहोस्',
                 duplicate: 'प्रतिलिपि',
+                copy_to_device: 'यो उपकरणमा प्रतिलिपि गर्नुहोस्',
                 delete: 'मेटाउनुहोस्',
             },
         },

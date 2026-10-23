@@ -1087,10 +1087,13 @@ export const te: LanguageTranslation = {
             errors: {
                 put_online_failed: 'డయాగ్రామ్‌ను ఆన్‌లైన్‌కి పెట్టలేకపోయాం.',
                 duplicate_failed: 'డయాగ్రామ్‌ను నకలు చేయలేకపోయాం.',
+                copy_to_device_failed:
+                    'డయాగ్రామ్‌ను ఈ పరికరానికి కాపీ చేయలేకపోయాం.',
             },
             diagram_actions: {
                 open: 'తెరవండి',
                 duplicate: 'నకలు',
+                copy_to_device: 'ఈ పరికరానికి కాపీ చేయండి',
                 delete: 'తొలగించు',
             },
         },

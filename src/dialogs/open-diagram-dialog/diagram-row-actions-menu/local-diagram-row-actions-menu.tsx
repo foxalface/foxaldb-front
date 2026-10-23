@@ -54,7 +54,8 @@ export const LocalDiagramRowActionsMenu: React.FC<
 }) => {
     const { diagramId: activeDiagramId, deleteDiagram: deleteLocalDiagram } =
         useChartDB();
-    const { getDiagram, addDiagram, deleteDiagram } = useStorage();
+    const { getDiagram, listDiagrams, addDiagram, deleteDiagram } =
+        useStorage();
     const { updateConfig } = useConfig();
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -104,6 +105,7 @@ export const LocalDiagramRowActionsMenu: React.FC<
         try {
             const duplicateId = await duplicateLocalDiagram(
                 getDiagram,
+                listDiagrams,
                 addDiagram,
                 diagramId
             );
@@ -115,7 +117,16 @@ export const LocalDiagramRowActionsMenu: React.FC<
                 variant: 'destructive',
             });
         }
-    }, [getDiagram, addDiagram, diagramId, onListChanged, navigate, toast, t]);
+    }, [
+        getDiagram,
+        listDiagrams,
+        addDiagram,
+        diagramId,
+        onListChanged,
+        navigate,
+        toast,
+        t,
+    ]);
 
     const handlePutOnlineCopy = useCallback(async () => {
         try {

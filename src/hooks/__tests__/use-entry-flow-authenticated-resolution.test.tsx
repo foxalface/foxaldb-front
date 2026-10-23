@@ -15,6 +15,7 @@ const chartDbState = {
 
 const getDiagrams = vi.fn();
 const getDiagram = vi.fn();
+const loadDiagram = vi.fn();
 const loadDiagramFromData = vi.fn();
 const setDiagramAccess = vi.fn();
 const clearDiagramAccess = vi.fn();
@@ -50,6 +51,7 @@ vi.mock('@/hooks/use-config', () => ({
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => ({
         currentDiagram: chartDbState.currentDiagram,
+        loadDiagram,
         loadDiagramFromData,
     }),
 }));
@@ -128,6 +130,7 @@ describe('useEntryFlowAuthenticatedResolution', () => {
         resolutionGeneration = 0;
         getDiagrams.mockReset();
         getDiagram.mockReset();
+        loadDiagram.mockReset();
         loadDiagramFromData.mockReset();
         setDiagramAccess.mockReset();
         clearDiagramAccess.mockReset();
@@ -265,6 +268,53 @@ describe('useEntryFlowAuthenticatedResolution', () => {
             expect.objectContaining({ can_edit: true })
         );
         expect(loadDiagramFromData).not.toHaveBeenCalled();
+    });
+
+    it('opens a local copy without fetching backend access', async () => {
+        const localDiagram = {
+            id: 'workspaceabcd1234',
+            name: 'Main Copy',
+        };
+        loadDiagram.mockResolvedValue(localDiagram);
+
+        renderResolution(
+            {
+                kind: 'openingDiagram',
+                diagramId: 'workspaceabcd1234',
+                diagramSource: 'directRoute',
+                entrySource: 'startup',
+            },
+            'workspaceabcd1234'
+        );
+
+        await waitFor(() => {
+            expect(dispatchEvent).toHaveBeenCalledWith({
+                type: 'DIAGRAM_OPENED',
+            });
+        });
+
+        expect(getDiagram).not.toHaveBeenCalled();
+        expect(loadDiagram).toHaveBeenCalledWith('workspaceabcd1234');
+        expect(setDiagramAccess).not.toHaveBeenCalled();
+        expect(clearDiagramAccess).toHaveBeenCalled();
+    });
+
+    it('does not restore remote access for a local diagram that is already loaded', async () => {
+        chartDbState.currentDiagram = { id: 'workspaceabcd1234' };
+        diagramAccessState.value = {
+            role: 'viewer',
+            can_edit: false,
+            can_manage_members: false,
+        };
+
+        renderResolution({ kind: 'ready' }, 'workspaceabcd1234');
+
+        await waitFor(() => {
+            expect(clearDiagramAccess).toHaveBeenCalled();
+        });
+
+        expect(getDiagram).not.toHaveBeenCalled();
+        expect(setDiagramAccess).not.toHaveBeenCalled();
     });
 
     it('recovers from access denied via ACCESS_DENIED_RECOVERY', async () => {

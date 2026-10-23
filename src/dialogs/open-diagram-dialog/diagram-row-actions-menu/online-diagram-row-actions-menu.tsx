@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/button/button';
 import {
     EllipsisVertical,
+    Laptop,
     Layers2,
     SquareArrowOutUpRight,
     Trash2,
@@ -21,7 +22,10 @@ import {
     type DiagramAccessRole,
 } from '@/lib/api/diagrams';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useStorage } from '@/hooks/use-storage';
 import { useAlert } from '@/context/alert-context/alert-context';
+import { useToast } from '@/components/toast/use-toast';
+import { copyOnlineDiagramToDevice } from '@/lib/diagram/copy-online-diagram-to-device';
 import {
     SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
     SIDE_PANEL_ACTION_MENU_ICON_CLASS,
@@ -32,17 +36,29 @@ interface OnlineDiagramRowActionsMenuProps {
     diagramId: string;
     role: DiagramAccessRole;
     onOpen: () => void;
+    onOpenLocal: (localDiagramId: string) => void;
+    onLocalListChanged: () => void;
     onListChanged: () => void;
     numberOfOnlineDiagrams: number;
 }
 
 export const OnlineDiagramRowActionsMenu: React.FC<
     OnlineDiagramRowActionsMenuProps
-> = ({ diagramId, role, onOpen, onListChanged, numberOfOnlineDiagrams }) => {
+> = ({
+    diagramId,
+    role,
+    onOpen,
+    onOpenLocal,
+    onLocalListChanged,
+    onListChanged,
+    numberOfOnlineDiagrams,
+}) => {
     const { diagramId: activeDiagramId } = useChartDB();
+    const { addDiagram, listDiagrams } = useStorage();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { showAlert } = useAlert();
+    const { toast } = useToast();
 
     const canDelete = role === 'owner';
 
@@ -79,6 +95,31 @@ export const OnlineDiagramRowActionsMenu: React.FC<
         navigate(`/diagrams/${duplicatedDiagramId}`);
     }, [diagramId, onListChanged, navigate]);
 
+    const handleCopyToDevice = useCallback(async () => {
+        try {
+            const localDiagramId = await copyOnlineDiagramToDevice(
+                listDiagrams,
+                addDiagram,
+                diagramId
+            );
+            await onLocalListChanged();
+            onOpenLocal(localDiagramId);
+        } catch {
+            toast({
+                title: t('open_diagram_dialog.errors.copy_to_device_failed'),
+                variant: 'destructive',
+            });
+        }
+    }, [
+        listDiagrams,
+        addDiagram,
+        diagramId,
+        onLocalListChanged,
+        onOpenLocal,
+        toast,
+        t,
+    ]);
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -108,6 +149,14 @@ export const OnlineDiagramRowActionsMenu: React.FC<
                 >
                     <Layers2 className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     {t('open_diagram_dialog.diagram_actions.duplicate')}
+                </DropdownMenuItem>
+
+                <DropdownMenuItem
+                    onClick={handleCopyToDevice}
+                    className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
+                >
+                    <Laptop className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
+                    {t('open_diagram_dialog.diagram_actions.copy_to_device')}
                 </DropdownMenuItem>
 
                 {canDelete ? (

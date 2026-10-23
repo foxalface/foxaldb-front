@@ -1087,10 +1087,13 @@ export const hr: LanguageTranslation = {
             errors: {
                 put_online_failed: 'Nije moguće staviti dijagram na mrežu.',
                 duplicate_failed: 'Nije moguće duplicirati dijagram.',
+                copy_to_device_failed:
+                    'Nije moguće kopirati dijagram na ovaj uređaj.',
             },
             diagram_actions: {
                 open: 'Otvori',
                 duplicate: 'Dupliciraj',
+                copy_to_device: 'Kopiraj na ovaj uređaj',
                 delete: 'Izbriši',
             },
         },

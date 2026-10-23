@@ -1114,10 +1114,13 @@ export const de: LanguageTranslation = {
                 put_online_failed:
                     'Diagramm konnte nicht online gestellt werden.',
                 duplicate_failed: 'Diagramm konnte nicht dupliziert werden.',
+                copy_to_device_failed:
+                    'Diagramm konnte nicht auf dieses Gerät kopiert werden.',
             },
             diagram_actions: {
                 open: 'Öffnen',
                 duplicate: 'Duplizieren',
+                copy_to_device: 'Auf dieses Gerät kopieren',
                 delete: 'Löschen',
             },
         },

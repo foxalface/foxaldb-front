@@ -1087,10 +1087,13 @@ export const uk: LanguageTranslation = {
             errors: {
                 put_online_failed: 'Не вдалося опублікувати діаграму онлайн.',
                 duplicate_failed: 'Не вдалося дублювати діаграму.',
+                copy_to_device_failed:
+                    'Не вдалося скопіювати діаграму на цей пристрій.',
             },
             diagram_actions: {
                 open: 'Відкрити',
                 duplicate: 'Дублювати',
+                copy_to_device: 'Копіювати на цей пристрій',
                 delete: 'Видалити',
             },
         },

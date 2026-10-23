@@ -197,16 +197,25 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             }
 
             clearDiagramAccess();
-            const diagram = await loadDiagram(diagramId);
 
-            if (!diagram) {
-                return;
+            if (!isAuthenticated) {
+                const diagram = await loadDiagram(diagramId);
+
+                if (!diagram) {
+                    return;
+                }
             }
 
             await updateConfig({ config: { defaultDiagramId: diagramId } });
             navigate(`/diagrams/${diagramId}`);
         },
-        [clearDiagramAccess, loadDiagram, updateConfig, navigate]
+        [
+            clearDiagramAccess,
+            isAuthenticated,
+            loadDiagram,
+            updateConfig,
+            navigate,
+        ]
     );
 
     const handleOpenConfirmed = useCallback(

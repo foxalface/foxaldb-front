@@ -1077,10 +1077,13 @@ export const mr: LanguageTranslation = {
             errors: {
                 put_online_failed: 'डायग्राम ऑनलाइन करता आला नाही.',
                 duplicate_failed: 'डायग्रामची प्रतिलिपी करता आली नाही.',
+                copy_to_device_failed:
+                    'डायग्राम या डिव्हाइसवर कॉपी करता आला नाही.',
             },
             diagram_actions: {
                 open: 'उघडा',
                 duplicate: 'प्रतिलिपी',
+                copy_to_device: 'या डिव्हाइसवर कॉपी करा',
                 delete: 'हटवा',
             },
         },

@@ -1111,10 +1111,13 @@ export const fr: LanguageTranslation = {
                 put_online_failed:
                     'Impossible de mettre le diagramme en ligne.',
                 duplicate_failed: 'Impossible de dupliquer le diagramme.',
+                copy_to_device_failed:
+                    'Impossible de copier le diagramme sur cet appareil.',
             },
             diagram_actions: {
                 open: 'Ouvrir',
                 duplicate: 'Dupliquer',
+                copy_to_device: 'Copier sur cet appareil',
                 delete: 'Supprimer',
             },
         },

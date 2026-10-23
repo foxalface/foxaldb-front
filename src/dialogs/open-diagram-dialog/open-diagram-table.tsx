@@ -444,6 +444,17 @@ export const OpenDiagramTable: React.FC<OpenDiagramTableProps> = ({
                                                                 'online'
                                                             )
                                                         }
+                                                        onOpenLocal={(
+                                                            localDiagramId
+                                                        ) =>
+                                                            onOpenDiagram(
+                                                                localDiagramId,
+                                                                'device'
+                                                            )
+                                                        }
+                                                        onLocalListChanged={
+                                                            onLocalListChanged
+                                                        }
                                                         onListChanged={
                                                             onOnlineListChanged
                                                         }

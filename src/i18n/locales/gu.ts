@@ -1066,10 +1066,13 @@ export const gu: LanguageTranslation = {
             errors: {
                 put_online_failed: 'ડાયાગ્રામ ઓનલાઇન મૂકી શકાયું નહીં.',
                 duplicate_failed: 'ડાયાગ્રામની નકલ થઈ શકી નહીં.',
+                copy_to_device_failed:
+                    'ડાયાગ્રામ આ ઉપકરણ પર કૉપિ થઈ શક્યો નહીં.',
             },
             diagram_actions: {
                 open: 'ખોલો',
                 duplicate: 'નકલ',
+                copy_to_device: 'આ ઉપકરણ પર કૉપિ કરો',
                 delete: 'કાઢી નાખો',
             },
         },

@@ -1068,10 +1068,12 @@ export const tr: LanguageTranslation = {
             errors: {
                 put_online_failed: 'Diyagram çevrimiçi yapılamadı.',
                 duplicate_failed: 'Diyagram kopyalanamadı.',
+                copy_to_device_failed: 'Diyagram bu cihaza kopyalanamadı.',
             },
             diagram_actions: {
                 open: 'Aç',
                 duplicate: 'Kopyala',
+                copy_to_device: 'Bu cihaza kopyala',
                 delete: 'Sil',
             },
         },

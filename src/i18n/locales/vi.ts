@@ -1084,10 +1084,13 @@ export const vi: LanguageTranslation = {
             errors: {
                 put_online_failed: 'Không thể đưa sơ đồ lên trực tuyến.',
                 duplicate_failed: 'Không thể nhân bản sơ đồ.',
+                copy_to_device_failed:
+                    'Không thể sao chép sơ đồ vào thiết bị này.',
             },
             diagram_actions: {
                 open: 'Mở',
                 duplicate: 'Nhân bản',
+                copy_to_device: 'Sao chép vào thiết bị này',
                 delete: 'Xóa',
             },
         },

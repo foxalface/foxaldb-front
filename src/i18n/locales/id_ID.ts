@@ -1089,10 +1089,13 @@ export const id_ID: LanguageTranslation = {
                 put_online_failed:
                     'Tidak dapat mengunggah diagram secara daring.',
                 duplicate_failed: 'Tidak dapat menduplikasi diagram.',
+                copy_to_device_failed:
+                    'Tidak dapat menyalin diagram ke perangkat ini.',
             },
             diagram_actions: {
                 open: 'Buka',
                 duplicate: 'Duplikat',
+                copy_to_device: 'Salin ke perangkat ini',
                 delete: 'Hapus',
             },
         },
