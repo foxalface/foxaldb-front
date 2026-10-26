@@ -1052,6 +1052,10 @@ export const te: LanguageTranslation = {
                 device: 'ఈ పరికరంలో',
                 online: 'ఆన్‌లైన్',
             },
+            local_storage_indicator: {
+                description:
+                    'ఈ డయాగ్రామ్ ఈ బ్రౌజర్‌లో మాత్రమే నిల్వ చేయబడుతుంది.',
+            },
             empty: {
                 device: 'ఈ పరికరంలో డయాగ్రామ్‌లు లేవు.',
                 online: 'ఆన్‌లైన్ డయాగ్రామ్‌లు లేవు.',

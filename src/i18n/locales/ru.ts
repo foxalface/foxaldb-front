@@ -1048,6 +1048,9 @@ export const ru: LanguageTranslation = {
                 device: 'На этом устройстве',
                 online: 'В сети',
             },
+            local_storage_indicator: {
+                description: 'Эта диаграмма сохранена только в этом браузере.',
+            },
             empty: {
                 device: 'На этом устройстве нет диаграмм.',
                 online: 'Нет диаграмм в сети.',

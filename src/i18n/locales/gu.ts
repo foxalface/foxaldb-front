@@ -1032,6 +1032,9 @@ export const gu: LanguageTranslation = {
                 device: 'આ ઉપકરણ પર',
                 online: 'ઓનલાઇન',
             },
+            local_storage_indicator: {
+                description: 'આ ડાયાગ્રામ ફક્ત આ બ્રાઉઝરમાં સંગ્રહિત છે.',
+            },
             empty: {
                 device: 'આ ઉપકરણ પર કોઈ ડાયાગ્રામ નથી.',
                 online: 'કોઈ ઓનલાઇન ડાયાગ્રામ નથી.',

@@ -1049,6 +1049,9 @@ export const en = {
                 device: 'On this device',
                 online: 'Online',
             },
+            local_storage_indicator: {
+                description: 'This diagram is stored only in this browser.',
+            },
             empty: {
                 device: 'No diagrams on this device.',
                 online: 'No online diagrams.',

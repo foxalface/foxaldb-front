@@ -1052,6 +1052,10 @@ export const hr: LanguageTranslation = {
                 device: 'Na ovom uređaju',
                 online: 'Na mreži',
             },
+            local_storage_indicator: {
+                description:
+                    'Ovaj dijagram pohranjen je samo u ovom pregledniku.',
+            },
             empty: {
                 device: 'Nema dijagrama na ovom uređaju.',
                 online: 'Nema mrežnih dijagrama.',

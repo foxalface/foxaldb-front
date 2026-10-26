@@ -1044,6 +1044,9 @@ export const hi: LanguageTranslation = {
                 device: 'इस डिवाइस पर',
                 online: 'ऑनलाइन',
             },
+            local_storage_indicator: {
+                description: 'यह डायाग्राम केवल इस ब्राउज़र में संग्रहीत है।',
+            },
             empty: {
                 device: 'इस डिवाइस पर कोई डायग्राम नहीं है।',
                 online: 'कोई ऑनलाइन डायग्राम नहीं है।',

@@ -1052,6 +1052,9 @@ export const uk: LanguageTranslation = {
                 device: 'На цьому пристрої',
                 online: 'Онлайн',
             },
+            local_storage_indicator: {
+                description: 'Ця діаграма зберігається лише в цьому браузері.',
+            },
             empty: {
                 device: 'Немає діаграм на цьому пристрої.',
                 online: 'Немає онлайн-діаграм.',

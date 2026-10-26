@@ -1054,6 +1054,9 @@ export const id_ID: LanguageTranslation = {
                 device: 'Di perangkat ini',
                 online: 'Daring',
             },
+            local_storage_indicator: {
+                description: 'Diagram ini hanya disimpan di browser ini.',
+            },
             empty: {
                 device: 'Tidak ada diagram di perangkat ini.',
                 online: 'Tidak ada diagram daring.',

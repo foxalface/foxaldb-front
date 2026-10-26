@@ -1066,6 +1066,10 @@ export const ja: LanguageTranslation = {
                 device: 'このデバイス',
                 online: 'オンライン',
             },
+            local_storage_indicator: {
+                description:
+                    'このダイアグラムはこのブラウザにのみ保存されます。',
+            },
             empty: {
                 device: 'このデバイスにダイアグラムはありません。',
                 online: 'オンラインのダイアグラムはありません。',

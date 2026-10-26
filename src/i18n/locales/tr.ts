@@ -1033,6 +1033,9 @@ export const tr: LanguageTranslation = {
                 device: 'Bu cihazda',
                 online: 'Çevrimiçi',
             },
+            local_storage_indicator: {
+                description: 'Bu diyagram yalnızca bu tarayıcıda saklanır.',
+            },
             empty: {
                 device: 'Bu cihazda diyagram yok.',
                 online: 'Çevrimiçi diyagram yok.',

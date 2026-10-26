@@ -977,6 +977,9 @@ export const zh_TW: LanguageTranslation = {
                 device: '此裝置',
                 online: '線上',
             },
+            local_storage_indicator: {
+                description: '此圖表僅儲存在此瀏覽器中。',
+            },
             empty: {
                 device: '此裝置上沒有圖表。',
                 online: '沒有線上圖表。',

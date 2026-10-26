@@ -1049,6 +1049,9 @@ export const vi: LanguageTranslation = {
                 device: 'Trên thiết bị này',
                 online: 'Trực tuyến',
             },
+            local_storage_indicator: {
+                description: 'Sơ đồ này chỉ được lưu trong trình duyệt này.',
+            },
             empty: {
                 device: 'Không có sơ đồ trên thiết bị này.',
                 online: 'Không có sơ đồ trực tuyến.',

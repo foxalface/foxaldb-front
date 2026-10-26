@@ -1075,6 +1075,10 @@ export const fr: LanguageTranslation = {
                 device: 'Sur cet appareil',
                 online: 'En ligne',
             },
+            local_storage_indicator: {
+                description:
+                    'Ce diagramme est enregistré uniquement dans ce navigateur.',
+            },
             empty: {
                 device: 'Aucun diagramme sur cet appareil.',
                 online: 'Aucun diagramme en ligne.',

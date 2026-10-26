@@ -1053,6 +1053,9 @@ export const ko_KR: LanguageTranslation = {
                 device: '이 기기',
                 online: '온라인',
             },
+            local_storage_indicator: {
+                description: '이 다이어그램은 이 브라우저에만 저장됩니다.',
+            },
             empty: {
                 device: '이 기기에 다이어그램이 없습니다.',
                 online: '온라인 다이어그램이 없습니다.',

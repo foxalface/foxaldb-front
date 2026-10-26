@@ -1078,6 +1078,10 @@ export const de: LanguageTranslation = {
                 device: 'Auf diesem Gerät',
                 online: 'Online',
             },
+            local_storage_indicator: {
+                description:
+                    'Dieses Diagramm ist nur in diesem Browser gespeichert.',
+            },
             empty: {
                 device: 'Keine Diagramme auf diesem Gerät.',
                 online: 'Keine Online-Diagramme.',

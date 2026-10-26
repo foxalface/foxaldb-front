@@ -977,6 +977,9 @@ export const zh_CN: LanguageTranslation = {
                 device: '此设备',
                 online: '在线',
             },
+            local_storage_indicator: {
+                description: '此图表仅保存在此浏览器中。',
+            },
             empty: {
                 device: '此设备上没有图表。',
                 online: '没有在线图表。',

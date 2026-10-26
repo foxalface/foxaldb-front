@@ -1045,6 +1045,9 @@ export const bn: LanguageTranslation = {
                 device: 'এই ডিভাইসে',
                 online: 'অনলাইন',
             },
+            local_storage_indicator: {
+                description: 'এই ডায়াগ্রামটি শুধু এই ব্রাউজারে সংরক্ষিত।',
+            },
             empty: {
                 device: 'এই ডিভাইসে কোনো ডায়াগ্রাম নেই।',
                 online: 'কোনো অনলাইন ডায়াগ্রাম নেই।',

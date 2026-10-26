@@ -1037,6 +1037,9 @@ export const ar: LanguageTranslation = {
                 device: 'على هذا الجهاز',
                 online: 'عبر الإنترنت',
             },
+            local_storage_indicator: {
+                description: 'يُخزَّن هذا المخطط في هذا المتصفح فقط.',
+            },
             empty: {
                 device: 'لا توجد مخططات على هذا الجهاز.',
                 online: 'لا توجد مخططات عبر الإنترنت.',

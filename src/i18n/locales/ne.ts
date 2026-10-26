@@ -1044,6 +1044,9 @@ export const ne: LanguageTranslation = {
                 device: 'यो उपकरणमा',
                 online: 'अनलाइन',
             },
+            local_storage_indicator: {
+                description: 'यो डायाग्राम यो ब्राउजरमा मात्र सुरक्षित छ।',
+            },
             empty: {
                 device: 'यो उपकरणमा कुनै डायाग्राम छैन।',
                 online: 'कुनै अनलाइन डायाग्राम छैन।',
