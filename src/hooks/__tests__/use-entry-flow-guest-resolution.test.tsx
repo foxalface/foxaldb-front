@@ -9,6 +9,7 @@ const listDiagrams = vi.fn();
 const loadDiagram = vi.fn();
 const clearDiagramAccess = vi.fn();
 const dispatchEvent = vi.fn();
+const setDiagramLocation = vi.fn();
 
 let currentDiagram: Diagram | null = null;
 let config: Record<string, unknown> | undefined = { defaultDiagramId: null };
@@ -32,6 +33,13 @@ vi.mock('@/hooks/use-diagram-access', () => ({
     useDiagramAccess: () => ({ clearDiagramAccess }),
 }));
 
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useDiagramLocation: () => ({
+        location: null,
+        setDiagramLocation,
+    }),
+}));
+
 const beginResolution = vi.fn(() => 1);
 const isResolutionCurrent = vi.fn((token: number) => token === 1);
 
@@ -53,6 +61,7 @@ describe('useEntryFlowGuestResolution', () => {
         loadDiagram.mockReset();
         clearDiagramAccess.mockReset();
         dispatchEvent.mockReset();
+        setDiagramLocation.mockReset();
         beginResolution.mockClear();
         isResolutionCurrent.mockImplementation((token: number) => token === 1);
         currentDiagram = null;
@@ -137,7 +146,29 @@ describe('useEntryFlowGuestResolution', () => {
         });
 
         expect(loadDiagram).toHaveBeenCalledWith('local-1');
+        expect(setDiagramLocation).toHaveBeenCalledWith({
+            type: 'device',
+            localId: 'local-1',
+        });
         expect(result.current.guestInitialDiagram).toEqual(diagram);
+    });
+
+    it('does not set device location for legacy numeric Dexie shadow ids', async () => {
+        renderGuestResolution({
+            kind: 'openingDiagram',
+            diagramId: '42',
+            diagramSource: 'local',
+            entrySource: 'guestContinuation',
+        });
+
+        await waitFor(() => {
+            expect(dispatchEvent).toHaveBeenCalledWith({
+                type: 'DIAGRAM_OPEN_FAILED',
+            });
+        });
+
+        expect(loadDiagram).not.toHaveBeenCalled();
+        expect(setDiagramLocation).not.toHaveBeenCalled();
     });
 
     it('dispatches DIAGRAM_OPEN_FAILED when local load returns undefined', async () => {

@@ -13,6 +13,7 @@ const setDiagramAccess = vi.fn();
 const updateConfig = vi.fn();
 const navigate = vi.fn();
 const toast = vi.fn();
+const setDiagramLocation = vi.fn();
 
 vi.mock('@/hooks/use-config', () => ({
     useConfig: () => ({
@@ -32,6 +33,13 @@ vi.mock('@/hooks/use-storage', () => ({
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => ({
         loadDiagramFromData,
+    }),
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useDiagramLocation: () => ({
+        location: null,
+        setDiagramLocation,
     }),
 }));
 
@@ -83,6 +91,7 @@ describe('useEntryFlowGuestMigration', () => {
         navigate.mockReset();
         toast.mockReset();
         dispatchEvent.mockReset();
+        setDiagramLocation.mockReset();
         resolutionGeneration = 0;
     });
 
@@ -175,6 +184,10 @@ describe('useEntryFlowGuestMigration', () => {
 
         expect(deleteDiagram).toHaveBeenCalledWith('guest-abc');
         expect(loadDiagramFromData).toHaveBeenCalled();
+        expect(setDiagramLocation).toHaveBeenCalledWith({
+            type: 'online',
+            diagramId: '42',
+        });
         expect(navigate).toHaveBeenCalledWith('/diagrams/42');
         expect(dispatchEvent).toHaveBeenCalledWith({
             type: 'GUEST_MIGRATION_REMOTE_CREATED',

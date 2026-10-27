@@ -36,7 +36,9 @@ vi.mock('@/hooks/use-realtime', () => ({
     useRealtime: () => ({ presence, subscribeToEditingActions }),
 }));
 
-import React from 'react';
+import React, { type ReactNode } from 'react';
+import { DiagramLocationProvider } from '@/context/diagram-location-context/diagram-location-provider';
+import { onlineDiagramLocation } from '@/lib/diagram/diagram-location';
 import {
     EMPTY_REMOTE_EDITORS,
     useEntityRemoteEditing,
@@ -62,6 +64,12 @@ const dispatch = (action: EditingAction): void => {
     });
 };
 
+const onlineEditingWrapper = ({ children }: { children: ReactNode }) => (
+    <DiagramLocationProvider initialLocation={onlineDiagramLocation('42')}>
+        {children}
+    </DiagramLocationProvider>
+);
+
 describe('useRemoteEditing', () => {
     beforeEach(() => {
         authValue = {
@@ -83,7 +91,9 @@ describe('useRemoteEditing', () => {
     });
 
     it('derives a map keyed by entity across multiple users and entities', () => {
-        const { result } = renderHook(() => useRemoteEditing());
+        const { result } = renderHook(() => useRemoteEditing(), {
+            wrapper: onlineEditingWrapper,
+        });
 
         expect(result.current.isEditingActive).toBe(true);
 
@@ -115,7 +125,9 @@ describe('useRemoteEditing', () => {
     });
 
     it('filters self and unknown presence users', () => {
-        const { result } = renderHook(() => useRemoteEditing());
+        const { result } = renderHook(() => useRemoteEditing(), {
+            wrapper: onlineEditingWrapper,
+        });
 
         dispatch({
             type: 'UPDATE',
@@ -137,7 +149,9 @@ describe('useRemoteEditing', () => {
         vi.useFakeTimers();
         vi.setSystemTime(0);
 
-        const { result } = renderHook(() => useRemoteEditing());
+        const { result } = renderHook(() => useRemoteEditing(), {
+            wrapper: onlineEditingWrapper,
+        });
 
         dispatch({
             type: 'UPDATE',
@@ -166,7 +180,9 @@ describe('useRemoteEditing', () => {
             isLoading: false,
         };
 
-        const { result, rerender } = renderHook(() => useRemoteEditing());
+        const { result, rerender } = renderHook(() => useRemoteEditing(), {
+            wrapper: onlineEditingWrapper,
+        });
 
         expect(result.current.isEditingActive).toBe(false);
         const first = result.current.editingByEntity;

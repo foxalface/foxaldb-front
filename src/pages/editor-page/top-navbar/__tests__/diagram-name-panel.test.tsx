@@ -3,6 +3,11 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
+import { DiagramLocationProvider } from '@/context/diagram-location-context/diagram-location-provider';
+import {
+    deviceDiagramLocation,
+    onlineDiagramLocation,
+} from '@/lib/diagram/diagram-location';
 import { DiagramNamePanel } from '../diagram-name-panel';
 
 const chartDbState = {
@@ -24,17 +29,29 @@ vi.mock('@/hooks/use-chartdb', () => ({
     }),
 }));
 
+vi.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key: string) => key,
+    }),
+}));
+
 vi.mock('@/hooks/use-dialog', () => ({
     useDialog: () => ({
         openOpenDiagramDialog: vi.fn(),
     }),
 }));
 
-const renderPanel = () =>
+const renderPanel = (
+    location:
+        | ReturnType<typeof deviceDiagramLocation>
+        | ReturnType<typeof onlineDiagramLocation>
+) =>
     render(
-        <TooltipProvider>
-            <DiagramNamePanel />
-        </TooltipProvider>
+        <DiagramLocationProvider initialLocation={location}>
+            <TooltipProvider>
+                <DiagramNamePanel />
+            </TooltipProvider>
+        </DiagramLocationProvider>
     );
 
 describe('DiagramNamePanel', () => {
@@ -48,8 +65,8 @@ describe('DiagramNamePanel', () => {
         updateDiagramName.mockClear();
     });
 
-    it('shows local storage indicator beside the title for local diagrams', () => {
-        renderPanel();
+    it('shows local storage indicator beside the title for device diagrams', () => {
+        renderPanel(deviceDiagramLocation('local-diagram-1'));
 
         expect(
             screen.getByRole('heading', { name: 'My diagram' })
@@ -60,22 +77,16 @@ describe('DiagramNamePanel', () => {
     });
 
     it('hides local storage indicator for online diagrams', () => {
-        chartDbState.currentDiagram = {
-            id: '99',
-            name: 'My diagram',
-            databaseType: 'generic',
-        };
-
-        renderPanel();
+        renderPanel(onlineDiagramLocation('99'));
 
         expect(
             screen.queryByLabelText('open_diagram_dialog.tabs.device')
         ).not.toBeInTheDocument();
     });
 
-    it('keeps title edit control available for local diagrams', async () => {
+    it('keeps title edit control available for device diagrams', async () => {
         const user = userEvent.setup();
-        renderPanel();
+        renderPanel(deviceDiagramLocation('local-diagram-1'));
 
         const pencilButtons = screen
             .getAllByRole('button')

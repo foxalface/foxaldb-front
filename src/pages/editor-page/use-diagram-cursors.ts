@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
 import {
     resetCursorSendState,
@@ -7,7 +7,6 @@ import {
     trySendCursorUpdate,
 } from '@/lib/realtime/cursor-send-state';
 import { isTouchPrimaryDevice } from '@/lib/realtime/cursor-send-utils';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { CursorWhisperPayload } from '@/lib/realtime/cursor-types';
 import { useReactFlow } from '@xyflow/react';
 import { useEffect, useRef, type RefObject } from 'react';
@@ -23,13 +22,8 @@ export const useDiagramCursors = (
 ): void => {
     const { screenToFlowPosition } = useReactFlow();
     const { user, isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { sendCursor } = useRealtime();
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     const isActive =
         !isLoading && isAuthenticated && diagramId !== null && user !== null;

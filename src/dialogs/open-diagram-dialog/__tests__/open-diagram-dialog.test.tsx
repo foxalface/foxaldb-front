@@ -5,6 +5,8 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { OpenDiagramDialog } from '../open-diagram-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
+import { DiagramLocationProvider } from '@/context/diagram-location-context/diagram-location-provider';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
 
 const authState = { isAuthenticated: false };
 const listDiagrams = vi.fn();
@@ -54,8 +56,10 @@ vi.mock('@/hooks/use-dialog', () => ({
     }),
 }));
 
+const navigate = vi.fn();
+
 vi.mock('react-router-dom', () => ({
-    useNavigate: () => vi.fn(),
+    useNavigate: () => navigate,
 }));
 
 vi.mock('@/lib/api/diagrams', () => ({
@@ -98,6 +102,7 @@ const renderDialog = () =>
 describe('OpenDiagramDialog', () => {
     beforeEach(() => {
         authState.isAuthenticated = false;
+        navigate.mockReset();
         listDiagrams.mockReset();
         listTables.mockReset();
         getDiagrams.mockReset();
@@ -135,6 +140,22 @@ describe('OpenDiagramDialog', () => {
         expect(
             screen.queryByText('Ouvrir une base de données')
         ).not.toBeInTheDocument();
+    });
+
+    it('hides legacy numeric Dexie shadows from the device tab', async () => {
+        listDiagrams.mockResolvedValue([
+            localDiagram,
+            {
+                ...localDiagram,
+                id: '42',
+                name: 'Numeric shadow',
+            },
+        ]);
+
+        renderDialog();
+
+        expect(await screen.findByText('Guest diagram')).toBeInTheDocument();
+        expect(screen.queryByText('Numeric shadow')).not.toBeInTheDocument();
     });
 
     it('shows only local diagrams on device tab', async () => {
@@ -206,5 +227,74 @@ describe('OpenDiagramDialog', () => {
         expect(
             screen.queryByText('open_diagram_dialog.diagram_actions.delete')
         ).not.toBeInTheDocument();
+    });
+
+    it('sets device location from the device tab and online location from the online tab', async () => {
+        loadDiagram.mockResolvedValue(localDiagram);
+        const user = userEvent.setup();
+
+        const LocationProbe = () => {
+            const { location } = useDiagramLocation();
+
+            return (
+                <div data-testid="diagram-location">
+                    {location === null
+                        ? 'none'
+                        : `${location.type}:${
+                              location.type === 'device'
+                                  ? location.localId
+                                  : location.diagramId
+                          }`}
+                </div>
+            );
+        };
+
+        const { unmount } = render(
+            <DiagramLocationProvider>
+                <TooltipProvider>
+                    <LocationProbe />
+                    <OpenDiagramDialog
+                        dialog={{ open: true, onOpenChange: vi.fn() }}
+                    />
+                </TooltipProvider>
+            </DiagramLocationProvider>
+        );
+
+        expect(await screen.findByText('Guest diagram')).toBeInTheDocument();
+        await user.click(screen.getByText('Guest diagram'));
+        await user.click(
+            screen.getByRole('button', { name: 'open_diagram_dialog.open' })
+        );
+
+        expect(screen.getByTestId('diagram-location')).toHaveTextContent(
+            'device:workspaceabcd'
+        );
+        expect(loadDiagram).toHaveBeenCalledWith('workspaceabcd');
+        expect(navigate).toHaveBeenCalledWith('/diagrams/workspaceabcd');
+
+        unmount();
+        authState.isAuthenticated = true;
+
+        render(
+            <DiagramLocationProvider>
+                <TooltipProvider>
+                    <LocationProbe />
+                    <OpenDiagramDialog
+                        dialog={{ open: true, onOpenChange: vi.fn() }}
+                    />
+                </TooltipProvider>
+            </DiagramLocationProvider>
+        );
+
+        expect(await screen.findByText('Cloud diagram')).toBeInTheDocument();
+        await user.click(screen.getByText('Cloud diagram'));
+        await user.click(
+            screen.getByRole('button', { name: 'open_diagram_dialog.open' })
+        );
+
+        expect(screen.getByTestId('diagram-location')).toHaveTextContent(
+            'online:12'
+        );
+        expect(navigate).toHaveBeenCalledWith('/diagrams/12');
     });
 });

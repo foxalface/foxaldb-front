@@ -1,5 +1,11 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+    deviceDiagramLocation,
+    onlineDiagramLocation,
+    readOnlineDiagramId,
+    type DiagramLocation,
+} from '@/lib/diagram/diagram-location';
 import { useDiagramReconnectRefresh } from '@/pages/editor-page/use-diagram-reconnect-refresh';
 import { remoteSyncDepthRef } from '@/lib/realtime/diagram-sync-state';
 
@@ -13,6 +19,10 @@ const chartDbState = {
         id: '77',
         name: 'SQL Import',
     } as { id: string; name: string } | null,
+};
+
+const locationState: { location: DiagramLocation | null } = {
+    location: onlineDiagramLocation('77'),
 };
 
 const replaceDiagram = vi.fn();
@@ -31,6 +41,14 @@ vi.mock('@/hooks/use-chartdb', () => ({
         replaceDiagram,
         loadDiagramFromData,
     }),
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useOnlineDiagramId: () =>
+        readOnlineDiagramId(
+            locationState.location,
+            chartDbState.currentDiagram?.id
+        ),
 }));
 
 vi.mock('@/hooks/use-diagram-access', () => ({
@@ -104,6 +122,7 @@ describe('useDiagramReconnectRefresh', () => {
             access: { can_edit: true },
         });
         chartDbState.currentDiagram = { id: '77', name: 'SQL Import' };
+        locationState.location = onlineDiagramLocation('77');
         authState.isAuthenticated = true;
         authState.isLoading = false;
         remoteSyncDepthRef.current = 0;
@@ -166,5 +185,21 @@ describe('useDiagramReconnectRefresh', () => {
 
         expect(getDiagram).toHaveBeenCalledTimes(1);
         expect(replaceDiagram).toHaveBeenCalledTimes(1);
+    });
+
+    it('skips refresh for a device location even when the id is numeric', async () => {
+        chartDbState.currentDiagram = { id: '77', name: 'Shadow' };
+        locationState.location = deviceDiagramLocation('77');
+
+        renderHook(() => useDiagramReconnectRefresh());
+
+        await act(async () => {
+            reconnectListener?.();
+            await Promise.resolve();
+        });
+
+        expect(reconnectListener).toBeNull();
+        expect(getDiagram).not.toHaveBeenCalled();
+        expect(replaceDiagram).not.toHaveBeenCalled();
     });
 });

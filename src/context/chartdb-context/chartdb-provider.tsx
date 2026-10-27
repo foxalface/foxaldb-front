@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import type { DBTable } from '@/lib/domain/db-table';
 import { deepCopy, generateId } from '@/lib/utils';
 import { defaultTableColor, randomColor, viewColor } from '@/lib/colors';
@@ -13,6 +13,9 @@ import {
 import type { DBCheckConstraint } from '@/lib/domain/db-check-constraint';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useStorage } from '@/hooks/use-storage';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
+import { isOnlineDiagramLocation } from '@/lib/diagram/diagram-location';
+import { withDiagramLocationPersistence } from '@/lib/diagram/diagram-persistence-gate';
 import { useRedoUndoStack } from '@/hooks/use-redo-undo-stack';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
@@ -51,6 +54,9 @@ export const ChartDBProvider: React.FC<
 > = ({ children, diagram, readonly: readonlyProp }) => {
     const { hasDiff } = useDiff();
     const storageDB = useStorage();
+    const { location } = useDiagramLocation();
+    const locationRef = useRef(location);
+    locationRef.current = location;
     const events = useEventEmitter<ChartDBEvent>();
     const { addUndoAction, resetRedoStack, resetUndoStack } =
         useRedoUndoStack();
@@ -77,6 +83,10 @@ export const ChartDBProvider: React.FC<
         diagram?.customTypes ?? []
     );
     const [notes, setNotes] = useState<Note[]>(diagram?.notes ?? []);
+    const tablesRef = useRef(tables);
+    tablesRef.current = tables;
+    const diagramIdRef = useRef(diagramId);
+    diagramIdRef.current = diagramId;
 
     const { events: diffEvents } = useDiff();
 
@@ -142,7 +152,15 @@ export const ChartDBProvider: React.FC<
     );
 
     const db = useMemo(
-        () => (readonly ? storageInitialValue : storageDB),
+        () =>
+            readonly
+                ? storageInitialValue
+                : withDiagramLocationPersistence(
+                      storageDB,
+                      () => locationRef.current,
+                      () => tablesRef.current,
+                      () => diagramIdRef.current
+                  ),
         [storageDB, readonly]
     );
 
@@ -2082,8 +2100,17 @@ export const ChartDBProvider: React.FC<
                 cancelPendingDiagramAutosave();
             }
 
-            await storageDB.deleteDiagram(diagram.id);
-            await storageDB.addDiagram({ diagram });
+            // Online snapshots stay in memory and on the autosave baseline.
+            // They must not be copied into Dexie under the backend id.
+            const location = locationRef.current;
+            const replacesOnlineDiagram =
+                isOnlineDiagramLocation(location) &&
+                diagram.id === location.diagramId;
+
+            if (!replacesOnlineDiagram) {
+                await storageDB.deleteDiagram(diagram.id);
+                await storageDB.addDiagram({ diagram });
+            }
 
             if (authoritative) {
                 acceptAuthoritativeDiagram(
@@ -2114,6 +2141,16 @@ export const ChartDBProvider: React.FC<
 
     const updateDiagramData: ChartDBContext['updateDiagramData'] = useCallback(
         async (diagram, options) => {
+            const location = locationRef.current;
+
+            if (
+                isOnlineDiagramLocation(location) &&
+                diagram.id === location.diagramId
+            ) {
+                loadDiagramFromData(diagram);
+                return;
+            }
+
             const st = options?.forceUpdateStorage ? storageDB : db;
             await st.deleteDiagram(diagram.id);
             await st.addDiagram({ diagram });

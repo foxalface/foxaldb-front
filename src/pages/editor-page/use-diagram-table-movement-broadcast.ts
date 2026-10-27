@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
 import {
     publishLocalDraggingTableIds,
@@ -10,7 +10,6 @@ import {
     buildDraggingTableSnapshot,
     buildTablePositionsForIds,
 } from '@/lib/realtime/movement-broadcast-utils';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { areMovementSnapshotsEqual } from '@/lib/realtime/movement-send-utils';
 import type { MovementWhisperPayload } from '@/lib/realtime/movement-types';
 import { useStore, useStoreApi } from '@xyflow/react';
@@ -36,18 +35,13 @@ const selectDraggingTableSnapshot = (state: {
 
 export const useDiagramTableMovementBroadcast = (): void => {
     const { user, isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { sendMovement } = useRealtime();
     const storeApi = useStoreApi();
     const draggingSnapshot = useStore(
         selectDraggingTableSnapshot,
         areMovementSnapshotsEqual
     );
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     const isActive =
         !isLoading && isAuthenticated && diagramId !== null && user !== null;

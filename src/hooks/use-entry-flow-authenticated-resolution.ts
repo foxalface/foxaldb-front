@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
 import { useConfig } from '@/hooks/use-config';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useFullScreenLoader } from '@/hooks/use-full-screen-spinner';
@@ -15,6 +16,10 @@ import {
     isDiagramAccessDenied,
     kickOutOfDiagram,
 } from '@/lib/realtime/kick-out-of-diagram';
+import {
+    deviceDiagramLocation,
+    onlineDiagramLocation,
+} from '@/lib/diagram/diagram-location';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { EntryFlowEvent, EntryFlowState } from '@/lib/entry-flow';
 import { toRemoteDiagramSummaries } from '@/lib/entry-flow';
@@ -47,6 +52,7 @@ export const useEntryFlowAuthenticatedResolution = ({
     authenticatedInitialDiagram: Diagram | undefined;
 } => {
     const { config, updateConfig } = useConfig();
+    const { setDiagramLocation } = useDiagramLocation();
     const { currentDiagram, loadDiagram, loadDiagramFromData } = useChartDB();
     const { diagramAccess, setDiagramAccess, clearDiagramAccess } =
         useDiagramAccess();
@@ -284,6 +290,8 @@ export const useEntryFlowAuthenticatedResolution = ({
             resetUndoStack();
 
             try {
+                // Initial resolution may branch on id shape. The location set
+                // below is what later persistence and realtime read.
                 if (!isValidBackendDiagramId(diagramId)) {
                     clearDiagramAccess();
                     const localDiagram =
@@ -299,6 +307,7 @@ export const useEntryFlowAuthenticatedResolution = ({
                         return;
                     }
 
+                    setDiagramLocation(deviceDiagramLocation(diagramId));
                     setAuthenticatedInitialDiagram(localDiagram);
 
                     await updateConfig({
@@ -319,6 +328,7 @@ export const useEntryFlowAuthenticatedResolution = ({
                 }
 
                 if (alreadyLoadedDiagram && diagramSource !== 'created') {
+                    setDiagramLocation(onlineDiagramLocation(diagramId));
                     const diagram = await getDiagram(diagramId);
 
                     if (!isResolutionCurrent(token)) {
@@ -345,6 +355,7 @@ export const useEntryFlowAuthenticatedResolution = ({
                     diagramId
                 );
 
+                setDiagramLocation(onlineDiagramLocation(diagramId));
                 loadDiagramFromData(normalizedDiagram);
                 setDiagramAccess(diagram.access ?? null);
                 setAuthenticatedInitialDiagram(normalizedDiagram);
@@ -408,6 +419,7 @@ export const useEntryFlowAuthenticatedResolution = ({
         clearDiagramAccess,
         loadDiagram,
         loadDiagramFromData,
+        setDiagramLocation,
         setDiagramAccess,
         updateConfig,
         navigate,

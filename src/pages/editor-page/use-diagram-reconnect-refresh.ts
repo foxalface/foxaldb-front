@@ -2,12 +2,12 @@ import { useAuth } from '@/hooks/use-auth';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useDialog } from '@/hooks/use-dialog';
 import { useRealtime } from '@/hooks/use-realtime';
 import { readDiagramContentHashFromApi } from '@/lib/api/diagram-content-hash';
 import { getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
     isDiagramAccessDenied,
     kickOutOfDiagram,
@@ -29,8 +29,8 @@ const SYNC_RETRY_MS = 300;
 export const useDiagramReconnectRefresh = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
     const { onReconnect } = useRealtime();
-    const { currentDiagram, replaceDiagram, loadDiagramFromData } =
-        useChartDB();
+    const { replaceDiagram, loadDiagramFromData } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { setDiagramAccess, clearDiagramAccess } = useDiagramAccess();
     const { showAlert } = useAlert();
     const { openOpenDiagramDialog } = useDialog();
@@ -43,11 +43,6 @@ export const useDiagramReconnectRefresh = (): void => {
     const syncRetryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
         null
     );
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     const refreshDiagramFromBackend = useCallback(async (): Promise<void> => {
         if (diagramId === null) {

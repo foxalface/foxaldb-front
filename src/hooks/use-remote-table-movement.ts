@@ -1,8 +1,7 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
 import type { FlowPoint } from '@/lib/realtime/cursor-utils';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { MovementAction } from '@/lib/realtime/movement-reducer';
 import {
     initialRemoteMovementsState,
@@ -49,7 +48,7 @@ const movementStateReducer = (
 
 export const useRemoteTableMovement = (): UseRemoteTableMovementResult => {
     const { user, isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { presence, subscribeToMovementActions } = useRealtime();
     const [movements, dispatch] = useReducer(
         movementStateReducer,
@@ -67,11 +66,6 @@ export const useRemoteTableMovement = (): UseRemoteTableMovementResult => {
     movementsRef.current = movements;
     const pendingSyncRef = useRef(pendingSync);
     pendingSyncRef.current = pendingSync;
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     const isMovementActive =
         !isLoading &&

@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
 import {
     computeDragSyncedCursorPosition,
@@ -12,7 +12,6 @@ import {
 } from '@/lib/realtime/cursor-send-state';
 import { isTouchPrimaryDevice } from '@/lib/realtime/cursor-send-utils';
 import type { CursorWhisperPayload } from '@/lib/realtime/cursor-types';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { buildDraggingTableSnapshot } from '@/lib/realtime/movement-broadcast-utils';
 import { areMovementSnapshotsEqual } from '@/lib/realtime/movement-send-utils';
 import type { MovementTablePosition } from '@/lib/realtime/movement-types';
@@ -39,17 +38,12 @@ const selectDraggingTableSnapshot = (state: {
 
 export const useDiagramCursorDragSync = (): void => {
     const { user, isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { sendCursor } = useRealtime();
     const draggingSnapshot = useStore(
         selectDraggingTableSnapshot,
         areMovementSnapshotsEqual
     );
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     const isActive =
         !isLoading &&

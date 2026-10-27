@@ -1,7 +1,6 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { getPresenceColorClass } from '@/lib/realtime/presence-utils';
 import { getUserInitials, userIdentityFromAuthUser } from '@/lib/user';
 import { useMemo } from 'react';
@@ -23,12 +22,7 @@ export interface DiagramPresenceState {
 export const useDiagramPresence = (): DiagramPresenceState => {
     const { user, isAuthenticated, isLoading } = useAuth();
     const { presence } = useRealtime();
-    const { currentDiagram } = useChartDB();
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
+    const diagramId = useOnlineDiagramId();
 
     return useMemo(() => {
         if (

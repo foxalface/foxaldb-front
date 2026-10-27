@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
 import { useConfig } from '@/hooks/use-config';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useStorage } from '@/hooks/use-storage';
 import { findGuestLocalDiagramId } from '@/lib/diagram/find-guest-local-diagram-id';
+import {
+    deviceDiagramLocation,
+    isLegacyNumericDexieShadowId,
+} from '@/lib/diagram/diagram-location';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { EntryFlowEvent, EntryFlowState } from '@/lib/entry-flow';
 
@@ -28,6 +33,7 @@ export const useEntryFlowGuestResolution = ({
 } => {
     const { config } = useConfig();
     const { listDiagrams } = useStorage();
+    const { setDiagramLocation } = useDiagramLocation();
     const { currentDiagram, loadDiagram } = useChartDB();
     const { clearDiagramAccess } = useDiagramAccess();
     const [guestInitialDiagram, setGuestInitialDiagram] = useState<
@@ -125,6 +131,15 @@ export const useEntryFlowGuestResolution = ({
 
         void (async () => {
             try {
+                if (isLegacyNumericDexieShadowId(diagramId)) {
+                    if (!isResolutionCurrent(token)) {
+                        return;
+                    }
+
+                    dispatchEvent({ type: 'DIAGRAM_OPEN_FAILED' });
+                    return;
+                }
+
                 clearDiagramAccess();
 
                 if (alreadyLoadedDiagram) {
@@ -132,6 +147,7 @@ export const useEntryFlowGuestResolution = ({
                         return;
                     }
 
+                    setDiagramLocation(deviceDiagramLocation(diagramId));
                     setGuestInitialDiagram(alreadyLoadedDiagram);
                     dispatchEvent({ type: 'DIAGRAM_OPENED' });
                     return;
@@ -144,6 +160,7 @@ export const useEntryFlowGuestResolution = ({
                 }
 
                 if (diagram) {
+                    setDiagramLocation(deviceDiagramLocation(diagramId));
                     setGuestInitialDiagram(diagram);
                     dispatchEvent({ type: 'DIAGRAM_OPENED' });
                     return;
@@ -174,6 +191,7 @@ export const useEntryFlowGuestResolution = ({
         dispatchEvent,
         clearDiagramAccess,
         loadDiagram,
+        setDiagramLocation,
     ]);
 
     return { guestInitialDiagram };

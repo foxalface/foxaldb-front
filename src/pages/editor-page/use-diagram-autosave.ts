@@ -1,6 +1,7 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { readDiagramContentHashFromApi } from '@/lib/api/diagram-content-hash';
 import { getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
@@ -12,7 +13,6 @@ import {
     setDiagramAutosaveContentHash,
     setDiagramAutosaveEnabled,
 } from '@/lib/diagram-autosave/diagram-autosave-controller';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { isRemoteSyncActive } from '@/lib/realtime/diagram-sync-state';
 import { useEffect } from 'react';
 
@@ -20,12 +20,13 @@ export const useDiagramAutosave = (): void => {
     const { isAuthenticated } = useAuth();
     const { diagramAccess } = useDiagramAccess();
     const { currentDiagram, replaceDiagram } = useChartDB();
+    const onlineDiagramId = useOnlineDiagramId();
 
     const canSave =
         isAuthenticated &&
         currentDiagram !== undefined &&
         currentDiagram !== null &&
-        isValidBackendDiagramId(currentDiagram.id) &&
+        onlineDiagramId !== null &&
         !(diagramAccess !== null && diagramAccess.can_edit === false);
 
     useEffect(() => {

@@ -1,8 +1,7 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
 import { RemoteSelectionsContext } from '@/context/remote-selections-context/remote-selections-context';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
     initialRemoteSelectionsState,
     selectionReducer,
@@ -29,18 +28,13 @@ export interface UseRemoteSelectionsResult {
 
 export const useRemoteSelections = (): UseRemoteSelectionsResult => {
     const { user, isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { presence, subscribeToSelectionActions } = useRealtime();
     const [remoteSelections, dispatch] = useReducer(
         selectionReducer,
         undefined,
         initialRemoteSelectionsState
     );
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     const isSelectionActive =
         !isLoading &&

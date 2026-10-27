@@ -1,83 +1,51 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
+import { DiagramLocationProvider } from '@/context/diagram-location-context/diagram-location-provider';
+import {
+    deviceDiagramLocation,
+    onlineDiagramLocation,
+    type DiagramLocation,
+} from '@/lib/diagram/diagram-location';
 import { LocalDiagramStorageIndicator } from '../local-diagram-storage-indicator';
 
-const chartDbState = {
-    currentDiagram: {
-        id: 'local-diagram-abc',
-        name: 'Local diagram',
-        databaseType: 'generic' as const,
-    },
-};
-
-vi.mock('@/hooks/use-chartdb', () => ({
-    useChartDB: () => ({
-        currentDiagram: chartDbState.currentDiagram,
-    }),
-}));
-
-const renderIndicator = () =>
+const renderIndicator = (location: DiagramLocation | null) =>
     render(
-        <TooltipProvider>
-            <LocalDiagramStorageIndicator />
-        </TooltipProvider>
+        <DiagramLocationProvider initialLocation={location}>
+            <TooltipProvider>
+                <LocalDiagramStorageIndicator />
+            </TooltipProvider>
+        </DiagramLocationProvider>
     );
 
 describe('LocalDiagramStorageIndicator', () => {
-    beforeEach(() => {
-        chartDbState.currentDiagram = {
-            id: 'local-diagram-abc',
-            name: 'Local diagram',
-            databaseType: 'generic',
-        };
-    });
-
-    it('renders device indicator for local diagram ids', () => {
-        renderIndicator();
+    it('shows On this device for an explicit device location', () => {
+        renderIndicator(deviceDiagramLocation('local-diagram-abc'));
 
         expect(
             screen.getByLabelText('open_diagram_dialog.tabs.device')
         ).toBeInTheDocument();
     });
 
-    it('does not render for backend diagram ids', () => {
-        chartDbState.currentDiagram = {
-            id: '42',
-            name: 'Online diagram',
-            databaseType: 'generic',
-        };
+    it('shows the device indicator even when the id is numeric', () => {
+        renderIndicator(deviceDiagramLocation('42'));
 
-        renderIndicator();
+        expect(
+            screen.getByLabelText('open_diagram_dialog.tabs.device')
+        ).toBeInTheDocument();
+    });
+
+    it('does not show the device indicator for an online location', () => {
+        renderIndicator(onlineDiagramLocation('42'));
 
         expect(
             screen.queryByLabelText('open_diagram_dialog.tabs.device')
         ).not.toBeInTheDocument();
     });
 
-    it('still renders for local diagram when user is authenticated', () => {
-        chartDbState.currentDiagram = {
-            id: 'guest-copy-1',
-            name: 'Device copy',
-            databaseType: 'generic',
-        };
-
-        renderIndicator();
-
-        expect(
-            screen.getByLabelText('open_diagram_dialog.tabs.device')
-        ).toBeInTheDocument();
-    });
-
-    it('does not render for online diagram regardless of numeric string id', () => {
-        chartDbState.currentDiagram = {
-            id: '1001',
-            name: 'Backend diagram',
-            databaseType: 'generic',
-        };
-
-        renderIndicator();
+    it('does not show the device indicator for a non-numeric online id', () => {
+        renderIndicator(onlineDiagramLocation('not-numeric'));
 
         expect(
             screen.queryByLabelText('open_diagram_dialog.tabs.device')

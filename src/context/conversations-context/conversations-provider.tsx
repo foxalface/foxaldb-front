@@ -6,7 +6,7 @@ import React, {
     useRef,
 } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
 import {
     addConversationMessageReaction,
@@ -46,7 +46,6 @@ import type {
 } from '@/lib/conversations/conversation-types';
 import { subscribeToDiagramConversationEvents } from '@/lib/realtime/conversation-subscriber';
 import { subscribeToUserConversationReadEvents } from '@/lib/realtime/user-conversation-read-subscriber';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
     adoptConversationSubscription,
     clearActiveConversationSubscription,
@@ -64,7 +63,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { user, isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const onlineDiagramId = useOnlineDiagramId();
     const {
         currentDiagramId: realtimeCurrentDiagramId,
         getDiagramPrivateChannel,
@@ -94,12 +93,7 @@ export const ConversationsProvider: React.FC<React.PropsWithChildren> = ({
     realtimeCurrentDiagramIdRef.current = realtimeCurrentDiagramId;
     messagesByConversationIdRef.current = state.messagesByConversationId;
 
-    const diagramId =
-        currentDiagram !== null &&
-        currentDiagram !== undefined &&
-        isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
+    const diagramId = onlineDiagramId;
 
     const isActive =
         !isLoading && isAuthenticated && user !== null && diagramId !== null;

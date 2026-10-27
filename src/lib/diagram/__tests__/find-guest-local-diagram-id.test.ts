@@ -18,4 +18,20 @@ describe('findGuestLocalDiagramId', () => {
 
         await expect(findGuestLocalDiagramId(listDiagrams)).resolves.toBeNull();
     });
+
+    it('skips legacy numeric Dexie shadows', async () => {
+        const listDiagrams = vi
+            .fn()
+            .mockResolvedValue([{ id: '42' }, { id: 'guest-1' }]);
+
+        await expect(findGuestLocalDiagramId(listDiagrams)).resolves.toBe(
+            'guest-1'
+        );
+    });
+
+    it('returns null when only numeric shadows exist', async () => {
+        const listDiagrams = vi.fn().mockResolvedValue([{ id: '42' }]);
+
+        await expect(findGuestLocalDiagramId(listDiagrams)).resolves.toBeNull();
+    });
 });

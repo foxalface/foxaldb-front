@@ -5,15 +5,15 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
-import { useChartDB } from '@/hooks/use-chartdb';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
+import { isDeviceDiagramLocation } from '@/lib/diagram/diagram-location';
 import { useTranslation } from 'react-i18next';
 
 export const LocalDiagramStorageIndicator: React.FC = () => {
     const { t } = useTranslation();
-    const { currentDiagram } = useChartDB();
+    const { location } = useDiagramLocation();
 
-    if (!currentDiagram?.id || isValidBackendDiagramId(currentDiagram.id)) {
+    if (!isDeviceDiagramLocation(location)) {
         return null;
     }
 

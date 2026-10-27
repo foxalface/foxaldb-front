@@ -1,7 +1,6 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
     areSelectionSnapshotsEqual,
     buildSelectionSnapshotFromFlowSelection,
@@ -58,17 +57,12 @@ const selectFlowSelectionSnapshot = (state: {
 
 export const useDiagramSelectionBroadcast = (): void => {
     const { user, isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { sendSelection } = useRealtime();
     const selectionSnapshot = useStore(
         selectFlowSelectionSnapshot,
         areSelectionSnapshotsEqual
     );
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     const isActive =
         !isLoading && isAuthenticated && diagramId !== null && user !== null;

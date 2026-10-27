@@ -1,19 +1,13 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { useEffect, useRef } from 'react';
 
 export const useDiagramPresenceActivity = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { sendPresenceActivity } = useRealtime();
     const lastActiveRef = useRef<boolean | null>(null);
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     useEffect(() => {
         if (isLoading || !isAuthenticated || diagramId === null) {

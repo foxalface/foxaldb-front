@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
 import {
     cursorReducer,
@@ -12,7 +12,6 @@ import {
     getRenderableRemoteCursors,
     shouldMarkCursorStale,
 } from '@/lib/realtime/cursor-utils';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import {
     getPresenceColorClass,
     getPresenceTextColorClass,
@@ -56,7 +55,7 @@ const toViewModels = (
 
 export const useRemoteCursors = (): UseRemoteCursorsResult => {
     const { user, isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { presence, subscribeToCursorActions } = useRealtime();
     const [cursors, dispatch] = useReducer(
         cursorReducer,
@@ -64,11 +63,6 @@ export const useRemoteCursors = (): UseRemoteCursorsResult => {
         initialRemoteCursorsState
     );
     const [now, setNow] = useState(() => Date.now());
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     const isOverlayActive =
         !isLoading &&

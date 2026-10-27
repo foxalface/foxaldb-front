@@ -1,9 +1,11 @@
 import type { Diagram } from '@/lib/domain/diagram';
+import { isLegacyNumericDexieShadowId } from '@/lib/diagram/diagram-location';
 
 type DiagramListItem = Pick<Diagram, 'id'> | { id: string };
 
 /** Guest local diagrams use non-numeric ids generated client-side. */
-export const isGuestLocalDiagramId = (id: string): boolean => !/^\d+$/.test(id);
+export const isGuestLocalDiagramId = (id: string): boolean =>
+    !isLegacyNumericDexieShadowId(id);
 
 /**
  * Returns the first local guest diagram id.
@@ -13,12 +15,11 @@ export const findGuestLocalDiagramId = async (
     listDiagrams: () => Promise<DiagramListItem[]>
 ): Promise<string | null> => {
     const diagrams = await listDiagrams();
+    const deviceDiagram = diagrams.find(
+        (diagram) => !isLegacyNumericDexieShadowId(diagram.id)
+    );
 
-    if (diagrams.length === 0) {
-        return null;
-    }
-
-    return diagrams[0].id;
+    return deviceDiagram?.id ?? null;
 };
 
 /**

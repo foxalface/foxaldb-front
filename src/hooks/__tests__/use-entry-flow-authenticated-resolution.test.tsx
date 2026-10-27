@@ -34,6 +34,7 @@ const resetRedoStack = vi.fn();
 const resetUndoStack = vi.fn();
 const showAlert = vi.fn();
 const dispatchEvent = vi.fn();
+const setDiagramLocation = vi.fn();
 
 let resolutionGeneration = 0;
 
@@ -53,6 +54,13 @@ vi.mock('@/hooks/use-chartdb', () => ({
         currentDiagram: chartDbState.currentDiagram,
         loadDiagram,
         loadDiagramFromData,
+    }),
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useDiagramLocation: () => ({
+        location: null,
+        setDiagramLocation,
     }),
 }));
 
@@ -142,6 +150,7 @@ describe('useEntryFlowAuthenticatedResolution', () => {
         resetUndoStack.mockReset();
         showAlert.mockReset();
         dispatchEvent.mockReset();
+        setDiagramLocation.mockReset();
         updateConfig.mockResolvedValue(undefined);
     });
 
@@ -217,7 +226,16 @@ describe('useEntryFlowAuthenticatedResolution', () => {
 
         expect(getDiagrams).not.toHaveBeenCalled();
         expect(loadDiagramFromData).toHaveBeenCalled();
+        expect(setDiagramLocation).toHaveBeenCalledWith({
+            type: 'online',
+            diagramId: '5',
+        });
         expect(dispatchEvent).toHaveBeenCalledWith({ type: 'DIAGRAM_OPENED' });
+        expect(showLoader).toHaveBeenCalled();
+        expect(hideLoader).toHaveBeenCalled();
+        expect(showLoader.mock.invocationCallOrder[0]).toBeLessThan(
+            hideLoader.mock.invocationCallOrder[0] ?? Number.MAX_SAFE_INTEGER
+        );
     });
 
     it('refreshes diagram access when reopening an already loaded diagram', async () => {
@@ -295,6 +313,10 @@ describe('useEntryFlowAuthenticatedResolution', () => {
 
         expect(getDiagram).not.toHaveBeenCalled();
         expect(loadDiagram).toHaveBeenCalledWith('workspaceabcd1234');
+        expect(setDiagramLocation).toHaveBeenCalledWith({
+            type: 'device',
+            localId: 'workspaceabcd1234',
+        });
         expect(setDiagramAccess).not.toHaveBeenCalled();
         expect(clearDiagramAccess).toHaveBeenCalled();
     });
@@ -315,6 +337,7 @@ describe('useEntryFlowAuthenticatedResolution', () => {
 
         expect(getDiagram).not.toHaveBeenCalled();
         expect(setDiagramAccess).not.toHaveBeenCalled();
+        expect(setDiagramLocation).not.toHaveBeenCalled();
     });
 
     it('recovers from access denied via ACCESS_DENIED_RECOVERY', async () => {

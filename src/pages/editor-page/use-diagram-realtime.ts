@@ -1,13 +1,12 @@
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useStorage } from '@/hooks/use-storage';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { readDiagramContentHashFromApi } from '@/lib/api/diagram-content-hash';
 import { getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
 import { setDiagramAutosaveContentHash } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { cancelPendingDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { getClientId } from '@/lib/realtime/client-id';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { getEcho } from '@/lib/realtime/echo';
 import {
     handleApplySchemaMergeEvent,
@@ -32,16 +31,6 @@ interface RealtimePingPayload {
     message: string;
     sentAt: string;
     userId: number;
-}
-
-interface DiagramRealtimeStorage {
-    getTableFromStorage: ReturnType<typeof useStorage>['getTable'];
-    getRelationshipFromStorage: ReturnType<
-        typeof useStorage
-    >['getRelationship'];
-    getNoteFromStorage: ReturnType<typeof useStorage>['getNote'];
-    getAreaFromStorage: ReturnType<typeof useStorage>['getArea'];
-    getDependencyFromStorage: ReturnType<typeof useStorage>['getDependency'];
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -91,15 +80,8 @@ const parseDiagramOperationPayload = (
 
 export const useDiagramRealtime = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
+    const diagramId = useOnlineDiagramId();
     const {
-        getTable: getTableFromStorage,
-        getRelationship: getRelationshipFromStorage,
-        getNote: getNoteFromStorage,
-        getArea: getAreaFromStorage,
-        getDependency: getDependencyFromStorage,
-    } = useStorage();
-    const {
-        currentDiagram,
         tables,
         relationships,
         dependencies,
@@ -156,11 +138,6 @@ export const useDiagramRealtime = (): void => {
         dependencies.map((dependency) => dependency.id)
     );
 
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
-
     const diagramIdRef = useRef<string | null>(diagramId);
     diagramIdRef.current = diagramId;
 
@@ -209,21 +186,6 @@ export const useDiagramRealtime = (): void => {
 
     const replaceDiagramRef = useRef(replaceDiagram);
     replaceDiagramRef.current = replaceDiagram;
-
-    const storageRef = useRef<DiagramRealtimeStorage>({
-        getTableFromStorage,
-        getRelationshipFromStorage,
-        getNoteFromStorage,
-        getAreaFromStorage,
-        getDependencyFromStorage,
-    });
-    storageRef.current = {
-        getTableFromStorage,
-        getRelationshipFromStorage,
-        getNoteFromStorage,
-        getAreaFromStorage,
-        getDependencyFromStorage,
-    };
 
     useEffect(() => {
         if (isLoading || !isAuthenticated || diagramId === null) {
@@ -303,43 +265,25 @@ export const useDiagramRealtime = (): void => {
                 return;
             }
 
-            const storage = storageRef.current;
-
             remoteSyncDepthRef.current += 1;
             syncRemoteApplyState();
 
+            // Online operations update editor memory through ChartDB mutators.
+            // Dexie is not consulted, so a numeric shadow cannot override them.
+            const readNothing = async () => undefined;
+
             void applyRemoteDiagramOperation(payload, mutatorsRef.current, {
                 existingTableIds: existingTableIdsRef.current,
-                getTableFromStorage: (tableId: string) =>
-                    storage.getTableFromStorage({
-                        diagramId: activeDiagramId,
-                        id: tableId,
-                    }),
+                getTableFromStorage: readNothing,
                 existingRelationshipIds: existingRelationshipIdsRef.current,
-                getRelationshipFromStorage: (relationshipId: string) =>
-                    storage.getRelationshipFromStorage({
-                        diagramId: activeDiagramId,
-                        id: relationshipId,
-                    }),
+                getRelationshipFromStorage: readNothing,
                 existingFieldIdsByTable: existingFieldIdsByTableRef.current,
                 existingNoteIds: existingNoteIdsRef.current,
-                getNoteFromStorage: (noteId: string) =>
-                    storage.getNoteFromStorage({
-                        diagramId: activeDiagramId,
-                        id: noteId,
-                    }),
+                getNoteFromStorage: readNothing,
                 existingAreaIds: existingAreaIdsRef.current,
-                getAreaFromStorage: (areaId: string) =>
-                    storage.getAreaFromStorage({
-                        diagramId: activeDiagramId,
-                        id: areaId,
-                    }),
+                getAreaFromStorage: readNothing,
                 existingDependencyIds: existingDependencyIdsRef.current,
-                getDependencyFromStorage: (dependencyId: string) =>
-                    storage.getDependencyFromStorage({
-                        diagramId: activeDiagramId,
-                        id: dependencyId,
-                    }),
+                getDependencyFromStorage: readNothing,
             })
                 .catch((error: unknown) => {
                     console.warn(

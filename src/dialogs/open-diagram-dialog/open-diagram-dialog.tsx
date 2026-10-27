@@ -16,11 +16,17 @@ import { Tabs, TabsContent } from '@/components/tabs/tabs';
 import { OPEN_DIAGRAM_DIALOG_CONTENT_CLASS } from './open-diagram-dialog-layout';
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
 import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useStorage } from '@/hooks/use-storage';
 import { getDiagrams } from '@/lib/api/diagrams';
+import {
+    deviceDiagramLocation,
+    isLegacyNumericDexieShadowId,
+    onlineDiagramLocation,
+} from '@/lib/diagram/diagram-location';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -65,6 +71,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     const { updateConfig } = useConfig();
     const { isAuthenticated } = useAuth();
     const { listDiagrams, listTables } = useStorage();
+    const { setDiagramLocation } = useDiagramLocation();
     const { loadDiagram } = useChartDB();
     const { clearDiagramAccess } = useDiagramAccess();
     const navigate = useNavigate();
@@ -93,8 +100,11 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
 
     const fetchDeviceDiagrams = useCallback(async () => {
         const diagrams = await listDiagrams();
+        const deviceDiagrams = diagrams.filter(
+            (diagram) => !isLegacyNumericDexieShadowId(diagram.id)
+        );
         const rows = await Promise.all(
-            diagrams.map(async (diagram) => {
+            deviceDiagrams.map(async (diagram) => {
                 const tables = await listTables(diagram.id);
                 return diagramToDeviceRow(diagram, tables.length);
             })
@@ -179,6 +189,8 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                 return;
             }
 
+            setDiagramLocation(onlineDiagramLocation(diagramId));
+
             if (entryOpenDiagramActions) {
                 entryOpenDiagramActions.onRemoteDiagramSelected(diagramId);
                 return;
@@ -187,15 +199,16 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             updateConfig({ config: { defaultDiagramId: diagramId } });
             navigate(`/diagrams/${diagramId}`);
         },
-        [entryOpenDiagramActions, updateConfig, navigate]
+        [entryOpenDiagramActions, setDiagramLocation, updateConfig, navigate]
     );
 
     const openLocalDiagram = useCallback(
         async (diagramId: string) => {
-            if (!diagramId) {
+            if (!diagramId || isLegacyNumericDexieShadowId(diagramId)) {
                 return;
             }
 
+            setDiagramLocation(deviceDiagramLocation(diagramId));
             clearDiagramAccess();
 
             if (!isAuthenticated) {
@@ -210,6 +223,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
             navigate(`/diagrams/${diagramId}`);
         },
         [
+            setDiagramLocation,
             clearDiagramAccess,
             isAuthenticated,
             loadDiagram,

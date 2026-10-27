@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
 import { useConfig } from '@/hooks/use-config';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useStorage } from '@/hooks/use-storage';
@@ -9,6 +10,7 @@ import { createDiagram, getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
 import { syncDiagramAutosaveFromApiLoad } from '@/lib/diagram-autosave/sync-diagram-autosave-from-api';
 import { findGuestLocalDiagramIdForMigration } from '@/lib/diagram/find-guest-local-diagram-id';
+import { onlineDiagramLocation } from '@/lib/diagram/diagram-location';
 import type { EntryFlowEvent, EntryFlowState } from '@/lib/entry-flow';
 import { useTranslation } from 'react-i18next';
 
@@ -36,6 +38,7 @@ export const useEntryFlowGuestMigration = ({
         deleteDiagram,
     } = useStorage();
     const { loadDiagramFromData } = useChartDB();
+    const { setDiagramLocation } = useDiagramLocation();
     const { setDiagramAccess } = useDiagramAccess();
     const navigate = useNavigate();
     const { toast } = useToast();
@@ -217,6 +220,9 @@ export const useEntryFlowGuestMigration = ({
                     remoteDiagramId
                 );
 
+                // Guest migration still moves this diagram online. A3 removes
+                // that behavior. Record the transition explicitly here.
+                setDiagramLocation(onlineDiagramLocation(remoteDiagramId));
                 loadDiagramFromData(normalizedDiagram);
                 setDiagramAccess(remoteDiagram.access ?? null);
                 await updateConfig({
@@ -281,6 +287,7 @@ export const useEntryFlowGuestMigration = ({
         getLocalDiagram,
         deleteDiagram,
         loadDiagramFromData,
+        setDiagramLocation,
         setDiagramAccess,
         updateConfig,
         navigate,

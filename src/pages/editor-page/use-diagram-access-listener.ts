@@ -3,10 +3,10 @@ import { useAlert } from '@/context/alert-context/alert-context';
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useDialog } from '@/hooks/use-dialog';
 import type { DiagramAccess } from '@/lib/api/diagrams';
 import { parseDiagramAccessChangedPayload } from '@/lib/realtime/diagram-access-changed';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { getEcho } from '@/lib/realtime/echo';
 import { kickOutOfDiagram } from '@/lib/realtime/kick-out-of-diagram';
 import { clearPendingDiagramOperationSyncTimers } from '@/lib/realtime/diagram-sync-state';
@@ -37,7 +37,8 @@ const getRoleChangeToast = (
 
 export const useDiagramAccessListener = (): void => {
     const { isAuthenticated, isLoading, user } = useAuth();
-    const { currentDiagram, loadDiagramFromData } = useChartDB();
+    const { loadDiagramFromData } = useChartDB();
+    const onlineDiagramId = useOnlineDiagramId();
     const { setDiagramAccess, clearDiagramAccess } = useDiagramAccess();
     const { showAlert } = useAlert();
     const { openOpenDiagramDialog } = useDialog();
@@ -45,9 +46,7 @@ export const useDiagramAccessListener = (): void => {
     const { t } = useTranslation();
 
     const currentDiagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? Number(currentDiagram.id)
-            : null;
+        onlineDiagramId !== null ? Number(onlineDiagramId) : null;
 
     const userId = user?.id ?? null;
 

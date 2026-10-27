@@ -6,6 +6,7 @@ import { FullScreenLoaderProvider } from '@/context/full-screen-spinner-context/
 import { LayoutProvider } from '@/context/layout-context/layout-provider';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
 import { StorageProvider } from '@/context/storage-context/storage-provider';
+import { DiagramLocationProvider } from '@/context/diagram-location-context/diagram-location-provider';
 import { ConfigProvider } from '@/context/config-context/config-provider';
 import { RedoUndoStackProvider } from '@/context/history-context/redo-undo-stack-provider';
 import { ChartDBEditorProvider } from './chartdb-editor-provider';
@@ -220,37 +221,39 @@ export const EditorPage: React.FC = () => (
         <ThemeProvider>
             <FullScreenLoaderProvider>
                 <StorageProvider>
-                    <ConfigProvider>
-                        <RedoUndoStackProvider>
-                            <DiffProvider>
-                                <DiagramAccessProvider>
-                                    <ChartDBEditorProvider>
-                                        {/*
+                    <DiagramLocationProvider>
+                        <ConfigProvider>
+                            <RedoUndoStackProvider>
+                                <DiffProvider>
+                                    <DiagramAccessProvider>
+                                        <ChartDBEditorProvider>
+                                            {/*
                                           LayoutProvider sits under ChartDB so
                                           discussion navigation can reset on
                                           diagram identity changes without a
                                           provider cycle.
                                         */}
-                                        <LayoutProvider>
-                                            <DiagramFilterProvider>
-                                                <HistoryProvider>
-                                                    <ReactFlowProvider>
-                                                        <CanvasProvider>
-                                                            <ExportImageProvider>
-                                                                <AlertProvider>
-                                                                    <EditorPageComponent />
-                                                                </AlertProvider>
-                                                            </ExportImageProvider>
-                                                        </CanvasProvider>
-                                                    </ReactFlowProvider>
-                                                </HistoryProvider>
-                                            </DiagramFilterProvider>
-                                        </LayoutProvider>
-                                    </ChartDBEditorProvider>
-                                </DiagramAccessProvider>
-                            </DiffProvider>
-                        </RedoUndoStackProvider>
-                    </ConfigProvider>
+                                            <LayoutProvider>
+                                                <DiagramFilterProvider>
+                                                    <HistoryProvider>
+                                                        <ReactFlowProvider>
+                                                            <CanvasProvider>
+                                                                <ExportImageProvider>
+                                                                    <AlertProvider>
+                                                                        <EditorPageComponent />
+                                                                    </AlertProvider>
+                                                                </ExportImageProvider>
+                                                            </CanvasProvider>
+                                                        </ReactFlowProvider>
+                                                    </HistoryProvider>
+                                                </DiagramFilterProvider>
+                                            </LayoutProvider>
+                                        </ChartDBEditorProvider>
+                                    </DiagramAccessProvider>
+                                </DiffProvider>
+                            </RedoUndoStackProvider>
+                        </ConfigProvider>
+                    </DiagramLocationProvider>
                 </StorageProvider>
             </FullScreenLoaderProvider>
         </ThemeProvider>

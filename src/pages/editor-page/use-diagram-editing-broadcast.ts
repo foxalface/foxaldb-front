@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { EditingBroadcastController } from '@/lib/realtime/editing-broadcast-controller';
 import type {
     EditingItem,
@@ -30,13 +29,8 @@ const logEditingSend = (payload: EditingWhisperPayload): void => {
  */
 export const useDiagramEditingBroadcast = (): DiagramEditingBroadcast => {
     const { user, isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { sendEditing, presence } = useRealtime();
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     const isActive =
         !isLoading &&

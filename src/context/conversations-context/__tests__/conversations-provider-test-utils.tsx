@@ -2,6 +2,8 @@
 import React from 'react';
 import type { DiagramConversation } from '@/lib/conversations/conversation-types';
 import type { DiagramPrivateEventChannel } from '@/lib/realtime/diagram-private-channel';
+import { DiagramLocationProvider } from '@/context/diagram-location-context/diagram-location-provider';
+import { onlineDiagramLocation } from '@/lib/diagram/diagram-location';
 import { ConversationsProvider } from '../conversations-provider';
 import { aliceAuthor, testAuthAlice } from '@/test/user-identity-fixtures';
 
@@ -140,4 +142,8 @@ export const ConversationsProviderTestWrapper = ({
     children,
 }: {
     children: React.ReactNode;
-}) => <ConversationsProvider>{children}</ConversationsProvider>;
+}) => (
+    <DiagramLocationProvider initialLocation={onlineDiagramLocation('42')}>
+        <ConversationsProvider>{children}</ConversationsProvider>
+    </DiagramLocationProvider>
+);

@@ -2,9 +2,9 @@ import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
 import { useAuth } from '@/hooks/use-auth';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { postDiagramOperation } from '@/lib/api/diagrams';
 import { getClientId } from '@/lib/realtime/client-id';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { DiagramOperationRequest } from '@/lib/realtime/diagram-operations';
 import {
     isOutboundReplayActive,
@@ -129,13 +129,13 @@ const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
 export const useDiagramOperationSync = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
     const { diagramAccess } = useDiagramAccess();
-    const { currentDiagram, events } = useChartDB();
+    const { events } = useChartDB();
+    const onlineDiagramId = useOnlineDiagramId();
 
     const handleChartDBEvent = useCallback(
         (event: ChartDBEvent) => {
             if (isLoading || !isAuthenticated) return;
-            if (!currentDiagram) return;
-            if (!isValidBackendDiagramId(currentDiagram.id)) return;
+            if (onlineDiagramId === null) return;
             if (diagramAccess !== null && diagramAccess.can_edit === false) {
                 return;
             }
@@ -144,7 +144,7 @@ export const useDiagramOperationSync = (): void => {
             }
             if (!shouldPostDiagramSyncEvent(event)) return;
 
-            const diagramId = String(currentDiagram.id);
+            const diagramId = onlineDiagramId;
 
             const postOperation = (body: DiagramOperationRequest): void => {
                 void postDiagramOperation(diagramId, body).catch(
@@ -409,7 +409,7 @@ export const useDiagramOperationSync = (): void => {
                 return;
             }
         },
-        [currentDiagram, diagramAccess, isAuthenticated, isLoading]
+        [onlineDiagramId, diagramAccess, isAuthenticated, isLoading]
     );
 
     events.useSubscription(handleChartDBEvent);

@@ -1,18 +1,12 @@
 import { useAuth } from '@/hooks/use-auth';
-import { useChartDB } from '@/hooks/use-chartdb';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useRealtime } from '@/hooks/use-realtime';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { useEffect } from 'react';
 
 export const useDiagramChannelLifecycle = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
-    const { currentDiagram } = useChartDB();
+    const diagramId = useOnlineDiagramId();
     const { joinDiagram, leaveDiagram, connectionStatus } = useRealtime();
-
-    const diagramId =
-        currentDiagram && isValidBackendDiagramId(currentDiagram.id)
-            ? String(currentDiagram.id)
-            : null;
 
     useEffect(() => {
         if (isLoading || !isAuthenticated || diagramId === null) {

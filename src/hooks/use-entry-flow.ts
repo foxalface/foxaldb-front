@@ -64,6 +64,10 @@ export interface UseEntryFlowResult {
 /**
  * Single entry-flow orchestrator for editor startup.
  * Owns the pure reducer; side effects live in guest/authenticated resolution hooks.
+ *
+ * Current diagram location is not stored here. Resolution hooks write
+ * DiagramLocationProvider, which is the only location state. Login and logout
+ * events must not recompute device vs online from auth.
  */
 export const useEntryFlow = (): UseEntryFlowResult => {
     const [state, dispatch] = useReducer(
