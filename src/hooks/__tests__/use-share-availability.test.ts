@@ -1,17 +1,17 @@
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DiagramLocation } from '@/lib/diagram/diagram-location';
+import { readOnlineDiagramId } from '@/lib/diagram/diagram-location';
 
-const { authState, diagramAccessState, routeState, locationState } = vi.hoisted(
-    () => ({
+const { authState, diagramAccessState, locationState, chartDbState } =
+    vi.hoisted(() => ({
         authState: { isAuthenticated: false },
         diagramAccessState: {
             diagramAccess: null as { can_manage_members: boolean } | null,
         },
-        routeState: { diagramId: undefined as string | undefined },
         locationState: { location: null as DiagramLocation | null },
-    })
-);
+        chartDbState: { currentDiagramId: undefined as string | undefined },
+    }));
 
 vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => authState,
@@ -21,8 +21,12 @@ vi.mock('@/hooks/use-diagram-access', () => ({
     useDiagramAccess: () => diagramAccessState,
 }));
 
-vi.mock('react-router-dom', () => ({
-    useParams: () => ({ diagramId: routeState.diagramId }),
+vi.mock('@/hooks/use-chartdb', () => ({
+    useChartDB: () => ({
+        currentDiagram: chartDbState.currentDiagramId
+            ? { id: chartDbState.currentDiagramId }
+            : null,
+    }),
 }));
 
 vi.mock('@/hooks/use-diagram-location', () => ({
@@ -30,10 +34,11 @@ vi.mock('@/hooks/use-diagram-location', () => ({
         location: locationState.location,
         setDiagramLocation: vi.fn(),
     }),
-}));
-
-vi.mock('@/lib/realtime/diagram-id', () => ({
-    isValidBackendDiagramId: (id: string) => /^\d+$/.test(id),
+    useOnlineDiagramId: () =>
+        readOnlineDiagramId(
+            locationState.location,
+            chartDbState.currentDiagramId
+        ),
 }));
 
 import { useShareAvailability } from '@/hooks/use-share-availability';
@@ -41,7 +46,7 @@ import { useShareAvailability } from '@/hooks/use-share-availability';
 describe('useShareAvailability', () => {
     beforeEach(() => {
         authState.isAuthenticated = false;
-        routeState.diagramId = undefined;
+        chartDbState.currentDiagramId = undefined;
         diagramAccessState.diagramAccess = null;
         locationState.location = null;
     });
@@ -53,7 +58,7 @@ describe('useShareAvailability', () => {
 
     it('returns false for local diagram ids', () => {
         authState.isAuthenticated = true;
-        routeState.diagramId = 'local-diagram';
+        chartDbState.currentDiagramId = 'local-diagram';
         locationState.location = { type: 'device', localId: 'local-diagram' };
         diagramAccessState.diagramAccess = { can_manage_members: true };
 
@@ -63,7 +68,7 @@ describe('useShareAvailability', () => {
 
     it('returns false when user cannot manage members', () => {
         authState.isAuthenticated = true;
-        routeState.diagramId = '42';
+        chartDbState.currentDiagramId = '42';
         locationState.location = { type: 'online', diagramId: '42' };
         diagramAccessState.diagramAccess = { can_manage_members: false };
 
@@ -73,8 +78,18 @@ describe('useShareAvailability', () => {
 
     it('returns false when a numeric id is still a device diagram', () => {
         authState.isAuthenticated = true;
-        routeState.diagramId = '42';
+        chartDbState.currentDiagramId = '42';
         locationState.location = { type: 'device', localId: '42' };
+        diagramAccessState.diagramAccess = { can_manage_members: true };
+
+        const { result } = renderHook(() => useShareAvailability());
+        expect(result.current).toBe(false);
+    });
+
+    it('returns false when online location does not match the open diagram', () => {
+        authState.isAuthenticated = true;
+        chartDbState.currentDiagramId = '456';
+        locationState.location = { type: 'online', diagramId: '123' };
         diagramAccessState.diagramAccess = { can_manage_members: true };
 
         const { result } = renderHook(() => useShareAvailability());
@@ -83,7 +98,7 @@ describe('useShareAvailability', () => {
 
     it('returns true for authenticated managers on backend diagrams', () => {
         authState.isAuthenticated = true;
-        routeState.diagramId = '42';
+        chartDbState.currentDiagramId = '42';
         locationState.location = { type: 'online', diagramId: '42' };
         diagramAccessState.diagramAccess = { can_manage_members: true };
 

@@ -4,6 +4,12 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ExportWizardDialog } from '../export-wizard-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
+import {
+    deviceDiagramLocation,
+    onlineDiagramLocation,
+    readOnlineDiagramId,
+    type DiagramLocation,
+} from '@/lib/diagram/diagram-location';
 import { ApiError } from '@/lib/api/client';
 import { downloadBlob } from '@/lib/download-blob';
 import { exportLaravelMigrations } from '@/lib/api/diagram-laravel-export';
@@ -49,6 +55,10 @@ const chartDbState = {
     currentDiagram,
 };
 
+const locationState = {
+    location: onlineDiagramLocation('42') as DiagramLocation,
+};
+
 vi.mock('@/hooks/use-dialog', () => ({
     useDialog: () => dialogMocks,
 }));
@@ -59,6 +69,14 @@ vi.mock('@/hooks/use-auth', () => ({
 
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartDbState,
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useOnlineDiagramId: () =>
+        readOnlineDiagramId(
+            locationState.location,
+            chartDbState.currentDiagram?.id
+        ),
 }));
 
 vi.mock('@/hooks/use-export-image', () => ({
@@ -115,6 +133,7 @@ describe('ExportWizardDialog Laravel branch', () => {
         vi.clearAllMocks();
         authState.isAuthenticated = true;
         chartDbState.currentDiagram = currentDiagram;
+        locationState.location = onlineDiagramLocation('42');
         mockedExportLaravelMigrations.mockResolvedValue(
             new Blob(['zip'], { type: 'application/zip' })
         );
@@ -155,6 +174,21 @@ describe('ExportWizardDialog Laravel branch', () => {
             ...currentDiagram,
             id: 'local-diagram',
         };
+        locationState.location = deviceDiagramLocation('local-diagram');
+
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        expect(
+            screen.queryByText('export_wizard.targets.laravel.title')
+        ).not.toBeInTheDocument();
+    });
+
+    it('hides Laravel for numeric-looking device diagrams', () => {
+        chartDbState.currentDiagram = {
+            ...currentDiagram,
+            id: '42',
+        };
+        locationState.location = deviceDiagramLocation('42');
 
         render(<ExportWizardDialog dialog={{ open: true }} />);
 

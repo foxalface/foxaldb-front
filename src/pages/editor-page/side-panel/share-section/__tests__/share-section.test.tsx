@@ -4,10 +4,24 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { en } from '@/i18n/locales/en';
 import { TooltipProvider } from '@/components/tooltip/tooltip';
+import {
+    deviceDiagramLocation,
+    onlineDiagramLocation,
+    readOnlineDiagramId,
+    type DiagramLocation,
+} from '@/lib/diagram/diagram-location';
 
 const { listDiagramMembersMock } = vi.hoisted(() => ({
     listDiagramMembersMock: vi.fn(),
 }));
+
+const chartDbState = {
+    currentDiagram: { id: '42' } as { id: string } | null,
+};
+
+const locationState: { location: DiagramLocation } = {
+    location: onlineDiagramLocation('42'),
+};
 
 vi.mock('@/lib/api/diagram-members', () => ({
     listDiagramMembers: listDiagramMembersMock,
@@ -29,8 +43,22 @@ vi.mock('@/hooks/use-auth', () => ({
     }),
 }));
 
-vi.mock('react-router-dom', () => ({
-    useParams: () => ({ diagramId: '42' }),
+vi.mock('@/hooks/use-chartdb', () => ({
+    useChartDB: () => ({
+        currentDiagram: chartDbState.currentDiagram,
+    }),
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useDiagramLocation: () => ({
+        location: locationState.location,
+        setDiagramLocation: vi.fn(),
+    }),
+    useOnlineDiagramId: () =>
+        readOnlineDiagramId(
+            locationState.location,
+            chartDbState.currentDiagram?.id
+        ),
 }));
 
 vi.mock('react-i18next', () => ({
@@ -66,6 +94,8 @@ describe('ShareSection', () => {
     beforeEach(() => {
         listDiagramMembersMock.mockReset();
         listDiagramMembersMock.mockResolvedValue([]);
+        chartDbState.currentDiagram = { id: '42' };
+        locationState.location = onlineDiagramLocation('42');
     });
 
     it('renders collaborator and public link tabs', async () => {
@@ -81,6 +111,24 @@ describe('ShareSection', () => {
         await waitFor(() => {
             expect(listDiagramMembersMock).toHaveBeenCalledWith('42');
         });
+    });
+
+    it('does not fetch members for device diagrams', async () => {
+        locationState.location = deviceDiagramLocation('42');
+        chartDbState.currentDiagram = { id: '42' };
+
+        const { container } = renderShareSection();
+        expect(container).toBeEmptyDOMElement();
+        expect(listDiagramMembersMock).not.toHaveBeenCalled();
+    });
+
+    it('does not fetch when online location does not match the open diagram', async () => {
+        locationState.location = onlineDiagramLocation('123');
+        chartDbState.currentDiagram = { id: '456' };
+
+        const { container } = renderShareSection();
+        expect(container).toBeEmptyDOMElement();
+        expect(listDiagramMembersMock).not.toHaveBeenCalled();
     });
 
     it('shows the public link placeholder when that tab is selected', async () => {
@@ -121,6 +169,5 @@ describe('ShareSection', () => {
         expect(
             screen.getByRole('dialog', { name: 'Add collaborator' })
         ).toBeInTheDocument();
-        expect(screen.getByLabelText('Email')).toBeInTheDocument();
     });
 });

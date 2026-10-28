@@ -17,8 +17,8 @@ import { LanguageFlag } from '@/components/language-flag/language-flag';
 import { useAuth } from '@/hooks/use-auth';
 import { useDialog } from '@/hooks/use-dialog';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { getUserInitials } from '@/lib/user';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { getLanguageByCode, languages } from '@/i18n/languages';
 import {
     SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
@@ -27,7 +27,6 @@ import {
 import { cn } from '@/lib/utils';
 import { LogOut, Settings, User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 export interface UserNavMenuProps {
     className?: string;
@@ -35,9 +34,9 @@ export interface UserNavMenuProps {
 
 export const UserNavMenu: React.FC<UserNavMenuProps> = ({ className }) => {
     const { t, i18n } = useTranslation();
-    const { diagramId } = useParams<{ diagramId: string }>();
     const { user, isAuthenticated, isLoading, logout } = useAuth();
     const { diagramAccess } = useDiagramAccess();
+    const onlineDiagramId = useOnlineDiagramId();
     const { openAuthDialog, openUserSettingsDialog } = useDialog();
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
@@ -55,10 +54,7 @@ export const UserNavMenu: React.FC<UserNavMenuProps> = ({ className }) => {
     const currentLanguage = getLanguageByCode(currentLanguageCode);
 
     const showRoleBadge =
-        isAuthenticated &&
-        diagramId &&
-        isValidBackendDiagramId(diagramId) &&
-        diagramAccess?.role;
+        isAuthenticated && onlineDiagramId !== null && diagramAccess?.role;
 
     const initials = useMemo(() => {
         if (!user) {

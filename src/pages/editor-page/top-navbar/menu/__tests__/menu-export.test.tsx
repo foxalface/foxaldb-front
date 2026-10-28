@@ -7,6 +7,8 @@ import {
     KeyboardShortcutAction,
     keyboardShortcutsForOS,
 } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
+import { readOnlineDiagramId } from '@/lib/diagram/diagram-location';
+import type { DiagramLocation } from '@/lib/diagram/diagram-location';
 
 const dialogMocks = {
     openCreateDiagramDialog: vi.fn(),
@@ -21,9 +23,9 @@ const authState = {
     isAuthenticated: false,
 };
 
-const locationState = {
+const locationState: { location: DiagramLocation | null } = {
     location: {
-        type: 'device' as const,
+        type: 'device',
         localId: 'guest-diagram-1',
     },
 };
@@ -34,7 +36,10 @@ const chartDbState = {
         name: 'Guest diagram',
     } as { id: string; name: string } | null,
     readonly: false,
-    diagramAccess: null as { can_edit: boolean } | null,
+    diagramAccess: null as {
+        can_edit: boolean;
+        role?: 'owner' | 'editor' | 'viewer';
+    } | null,
 };
 
 vi.mock('@/lib/api/diagrams', () => ({
@@ -77,7 +82,11 @@ vi.mock('@/hooks/use-diagram-location', () => ({
         location: locationState.location,
         setDiagramLocation: vi.fn(),
     }),
-    useOnlineDiagramId: () => null,
+    useOnlineDiagramId: () =>
+        readOnlineDiagramId(
+            locationState.location,
+            chartDbState.currentDiagram?.id
+        ),
 }));
 
 vi.mock('@/hooks/use-history', () => ({
@@ -206,7 +215,8 @@ describe('Diagram menu', () => {
     it('orders items with two separator groups', async () => {
         authState.isAuthenticated = true;
         chartDbState.currentDiagram = { id: '42', name: 'Saved' };
-        chartDbState.diagramAccess = { can_edit: true };
+        chartDbState.diagramAccess = { can_edit: true, role: 'owner' };
+        locationState.location = { type: 'online', diagramId: '42' };
         await openDiagramMenu();
 
         const items = getDiagramMenuItems();
@@ -310,7 +320,8 @@ describe('Diagram menu', () => {
     it('shows Merge after Export and before Delete for an editor', async () => {
         authState.isAuthenticated = true;
         chartDbState.currentDiagram = { id: '42', name: 'Saved' };
-        chartDbState.diagramAccess = { can_edit: true };
+        chartDbState.diagramAccess = { can_edit: true, role: 'owner' };
+        locationState.location = { type: 'online', diagramId: '42' };
         await openDiagramMenu();
 
         const items = getDiagramMenuItems();
@@ -339,6 +350,7 @@ describe('Diagram menu', () => {
         chartDbState.currentDiagram = { id: '42', name: 'Saved' };
         chartDbState.diagramAccess = { can_edit: true };
         chartDbState.readonly = false;
+        locationState.location = { type: 'online', diagramId: '42' };
         const editorView = await openDiagramMenu();
         expect(
             screen.getByRole('menuitem', { name: /menu\.actions\.merge/ })

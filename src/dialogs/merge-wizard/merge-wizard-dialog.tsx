@@ -6,6 +6,7 @@ import type { BaseDialogProps } from '@/dialogs/common/base-dialog-props';
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import {
     applySchemaMerge,
     mapSchemaMergeApplyError,
@@ -21,7 +22,6 @@ import type { DatabaseType } from '@/lib/domain/database-type';
 import { isImportSchemaFileNameAllowed } from '@/dialogs/common/import-schema/constants';
 import { isZipArchiveFile } from '@/lib/project-import/is-zip-archive-file';
 import { resolveUploadCapabilities } from '@/lib/upload-capabilities';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { noteSchemaMergeAuthoritativeHash } from '@/lib/realtime/schema-merge-refresh';
 import { isSelectionDependencyClosed } from '@/lib/schema-merge/operation-selection';
 import { prepareSchemaMergeSource } from '@/lib/schema-merge/prepare-schema-merge-source';
@@ -87,6 +87,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
     const { toast } = useToast();
     const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
+    const onlineDiagramId = useOnlineDiagramId();
     const {
         currentDiagram,
         databaseType: chartDatabaseType,
@@ -132,11 +133,10 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
     const preparationRef = useRef(preparation);
     preparationRef.current = preparation;
 
-    const diagramId = currentDiagram?.id;
     const currentDatabaseType =
         currentDiagram?.databaseType ?? chartDatabaseType;
     const databaseEdition = currentDiagram?.databaseEdition;
-    const unavailable = !isValidBackendDiagramId(diagramId);
+    const unavailable = onlineDiagramId === null;
 
     const resetWizardState = useCallback(() => {
         sessionRef.current += 1;
@@ -364,14 +364,14 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         !isAnalyzing &&
         !isComparing &&
         preparation?.status === 'ready' &&
-        isValidBackendDiagramId(diagramId);
+        onlineDiagramId !== null;
 
     const handleCompare = useCallback(() => {
         if (
             compareInFlightRef.current ||
             isAnalyzing ||
             preparation?.status !== 'ready' ||
-            !isValidBackendDiagramId(diagramId)
+            onlineDiagramId === null
         ) {
             return;
         }
@@ -400,14 +400,14 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
 
             if (
                 preparationRef.current?.status !== 'ready' ||
-                !isValidBackendDiagramId(diagramId)
+                onlineDiagramId === null
             ) {
                 return;
             }
 
             const baseDiagram = snapshotMergeBaseDiagram(currentDiagram);
 
-            const response = await compareSchemaMerge(diagramId, {
+            const response = await compareSchemaMerge(onlineDiagramId, {
                 incomingDiagram: ready.incomingDiagram,
                 includeDeletions,
                 source: {
@@ -448,7 +448,13 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                 compareInFlightRef.current = false;
                 setIsComparing(false);
             });
-    }, [currentDiagram, diagramId, includeDeletions, isAnalyzing, preparation]);
+    }, [
+        currentDiagram,
+        includeDeletions,
+        isAnalyzing,
+        onlineDiagramId,
+        preparation,
+    ]);
 
     const handleResolveDialect = useCallback((dialect: DatabaseType) => {
         setSourceDialect(dialect);
@@ -480,7 +486,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                 applyInFlightRef.current ||
                 isApplying ||
                 applyContext === null ||
-                !isValidBackendDiagramId(diagramId)
+                onlineDiagramId === null
             ) {
                 return;
             }
@@ -506,7 +512,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
             setIsApplying(true);
             setApplyError(null);
 
-            void applySchemaMerge(diagramId, {
+            void applySchemaMerge(onlineDiagramId, {
                 baseContentHash: context.response.baseContentHash,
                 incomingDiagram: context.incomingDiagram,
                 includeDeletions: context.includeDeletions,
@@ -529,7 +535,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                     }
 
                     noteSchemaMergeAuthoritativeHash(
-                        String(diagramId),
+                        String(onlineDiagramId),
                         response.resultContentHash
                     );
                     toast({
@@ -573,8 +579,8 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
         [
             applyContext,
             closeMergeWizardDialog,
-            diagramId,
             isApplying,
+            onlineDiagramId,
             replaceDiagram,
             t,
             toast,
@@ -630,7 +636,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                             onMerge={handleApply}
                             isApplying={isApplying}
                             applyError={applyError}
-                            canApply={isValidBackendDiagramId(diagramId)}
+                            canApply={onlineDiagramId !== null}
                         />
                     ) : (
                         <MergeSourceStep

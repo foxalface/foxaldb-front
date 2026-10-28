@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useDialog } from '@/hooks/use-dialog';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useAuth } from '@/hooks/use-auth';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useExportImage } from '@/hooks/use-export-image';
 import {
     DEFAULT_LARAVEL_VERSION,
@@ -125,6 +126,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const { databaseType, currentDiagram } = useChartDB();
     const { filter } = useDiagramFilter();
     const { isAuthenticated } = useAuth();
+    const onlineDiagramId = useOnlineDiagramId();
     const { exportImage } = useExportImage();
     const { closeExportWizardDialog } = useDialog();
 
@@ -342,10 +344,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const availabilityContext = useMemo<ExportAvailabilityContext>(
         () => ({
             isAuthenticated,
-            diagramId: currentDiagram?.id,
+            onlineDiagramId,
             databaseType,
         }),
-        [databaseType, isAuthenticated, currentDiagram?.id]
+        [databaseType, isAuthenticated, onlineDiagramId]
     );
 
     const sqlExportTargets = useMemo(

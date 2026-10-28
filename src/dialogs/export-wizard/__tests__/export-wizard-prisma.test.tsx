@@ -296,13 +296,13 @@ const expectActivePrismaVersion = (version: '6' | '7') => {
 describe('Prisma export target availability', () => {
     const guestContext = (databaseType: DatabaseType) => ({
         isAuthenticated: false,
-        diagramId: 'guest-diagram-1',
+        onlineDiagramId: null,
         databaseType,
     });
 
     const authenticatedContext = (databaseType: DatabaseType) => ({
         isAuthenticated: true,
-        diagramId: 'guest-diagram-1',
+        onlineDiagramId: null,
         databaseType,
     });
 
@@ -374,7 +374,7 @@ describe('Prisma export target availability', () => {
         expect(
             getExportTargetAvailability('prisma', {
                 isAuthenticated: true,
-                diagramId: 'guest-diagram-1',
+                onlineDiagramId: null,
                 databaseType: DatabaseType.POSTGRESQL,
             })
         ).toEqual({ status: 'available' });
@@ -393,7 +393,7 @@ describe('Prisma export target availability', () => {
         expect(
             getExportTargetAvailability('laravel', {
                 isAuthenticated: true,
-                diagramId: '42',
+                onlineDiagramId: '42',
                 databaseType: DatabaseType.POSTGRESQL,
             })
         ).toEqual({ status: 'available' });

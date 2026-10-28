@@ -21,7 +21,6 @@ import {
 } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { clearPendingDiagramOperationSyncTimers } from '@/lib/realtime/diagram-sync-state';
 import { createBlankDiagramView } from '@/lib/realtime/kick-out-of-diagram';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 
 export interface UseDiagramMenuActionsOptions {
     onActiveDiagramDeleted?: () => void;
@@ -54,8 +53,7 @@ export const useDiagramMenuActions = (
 
     const canMergeDiagram =
         isAuthenticated &&
-        !!currentDiagram?.id &&
-        isValidBackendDiagramId(currentDiagram.id) &&
+        onlineDiagramId !== null &&
         readonly !== true &&
         diagramAccess?.can_edit !== false;
 

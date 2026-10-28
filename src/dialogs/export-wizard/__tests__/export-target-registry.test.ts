@@ -8,13 +8,19 @@ import {
 
 const guestContext = {
     isAuthenticated: false,
-    diagramId: 'guest-diagram-1',
+    onlineDiagramId: null,
     databaseType: DatabaseType.POSTGRESQL,
 };
 
 const authenticatedBackendContext = {
     isAuthenticated: true,
-    diagramId: '42',
+    onlineDiagramId: '42',
+    databaseType: DatabaseType.POSTGRESQL,
+};
+
+const authenticatedDeviceContext = {
+    isAuthenticated: true,
+    onlineDiagramId: null,
     databaseType: DatabaseType.POSTGRESQL,
 };
 
@@ -37,12 +43,25 @@ describe('export target availability', () => {
         });
     });
 
-    it('marks Laravel as available for authenticated backend diagrams', () => {
+    it('marks Laravel as available for authenticated online diagrams', () => {
         expect(
             getExportTargetAvailability('laravel', authenticatedBackendContext)
         ).toEqual({
             status: 'available',
         });
+    });
+
+    it('hides Laravel for authenticated device diagrams, including numeric local ids', () => {
+        expect(
+            getExportTargetAvailability('laravel', authenticatedDeviceContext)
+        ).toEqual({ status: 'hidden' });
+        expect(
+            getExportTargetAvailability('laravel', {
+                isAuthenticated: true,
+                onlineDiagramId: null,
+                databaseType: DatabaseType.POSTGRESQL,
+            })
+        ).toEqual({ status: 'hidden' });
     });
 
     it('hides Prisma for guests', () => {
@@ -101,7 +120,7 @@ describe('export target availability', () => {
         expect(
             getExportTargetAvailability('rails', {
                 isAuthenticated: true,
-                diagramId: 'guest-diagram-1',
+                onlineDiagramId: null,
                 databaseType: DatabaseType.POSTGRESQL,
             })
         ).toEqual({
@@ -207,16 +226,16 @@ describe('export target registry', () => {
 describe('Rails export target availability', () => {
     const guestContextFor = (databaseType: DatabaseType) => ({
         isAuthenticated: false,
-        diagramId: 'guest-diagram-1',
+        onlineDiagramId: null,
         databaseType,
     });
 
     const authenticatedContextFor = (
         databaseType: DatabaseType,
-        diagramId: unknown = '42'
+        onlineDiagramId: string | null = '42'
     ) => ({
         isAuthenticated: true,
-        diagramId,
+        onlineDiagramId,
         databaseType,
     });
 
@@ -320,16 +339,16 @@ describe('Rails export target availability', () => {
 describe('Django export target availability', () => {
     const guestContextFor = (databaseType: DatabaseType) => ({
         isAuthenticated: false,
-        diagramId: 'guest-diagram-1',
+        onlineDiagramId: null,
         databaseType,
     });
 
     const authenticatedContextFor = (
         databaseType: DatabaseType,
-        diagramId: unknown = '42'
+        onlineDiagramId: string | null = '42'
     ) => ({
         isAuthenticated: true,
-        diagramId,
+        onlineDiagramId,
         databaseType,
     });
 
@@ -409,16 +428,16 @@ describe('Django export target availability', () => {
 describe('Drizzle export target availability', () => {
     const guestContextFor = (databaseType: DatabaseType) => ({
         isAuthenticated: false,
-        diagramId: 'guest-diagram-1',
+        onlineDiagramId: null,
         databaseType,
     });
 
     const authenticatedContextFor = (
         databaseType: DatabaseType,
-        diagramId: unknown = '42'
+        onlineDiagramId: string | null = '42'
     ) => ({
         isAuthenticated: true,
-        diagramId,
+        onlineDiagramId,
         databaseType,
     });
 

@@ -4,14 +4,14 @@ import { isPrismaExportSupported } from '@/lib/export/prisma-export-capability';
 import { isDjangoExportSupported } from '@/lib/export/django-export-capability';
 import { isDrizzleExportSupported } from '@/lib/export/drizzle-export-capability';
 import { isRailsExportSupported } from '@/lib/export/rails-export-capability';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import type { ExportTargetId } from './export-target-id';
 
 export type ExportAvailabilityStatus = 'available' | 'disabled' | 'hidden';
 
 export interface ExportAvailabilityContext {
     isAuthenticated: boolean;
-    diagramId: unknown;
+    /** Current online diagram id from DiagramLocation, or null when not online. */
+    onlineDiagramId: string | null;
     databaseType: DatabaseType;
 }
 
@@ -21,11 +21,7 @@ export interface ExportTargetAvailability {
 }
 
 const isLaravelExportAvailable = (ctx: ExportAvailabilityContext): boolean =>
-    Boolean(
-        ctx.isAuthenticated &&
-        ctx.diagramId &&
-        isValidBackendDiagramId(ctx.diagramId)
-    );
+    Boolean(ctx.isAuthenticated && ctx.onlineDiagramId !== null);
 
 export const getExportTargetAvailability = (
     targetId: ExportTargetId,

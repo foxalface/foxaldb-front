@@ -16,6 +16,12 @@ import type {
 } from '@/lib/schema-merge/source-adapter-types';
 import { ApiError } from '@/lib/api/client';
 import {
+    deviceDiagramLocation,
+    onlineDiagramLocation,
+    readOnlineDiagramId,
+    type DiagramLocation,
+} from '@/lib/diagram/diagram-location';
+import {
     initializeDiagramAutosaveFromServer,
     observeDiagramForAutosave,
     resetDiagramAutosaveForTests,
@@ -42,6 +48,10 @@ const chartState = {
     } as Diagram,
 };
 
+const locationState = {
+    location: onlineDiagramLocation('42') as DiagramLocation,
+};
+
 const control = vi.hoisted(() => ({
     prepare: vi.fn(),
     apiRequest: vi.fn(),
@@ -58,6 +68,18 @@ vi.mock('@/hooks/use-auth', () => ({
 
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartState,
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useDiagramLocation: () => ({
+        location: locationState.location,
+        setDiagramLocation: vi.fn(),
+    }),
+    useOnlineDiagramId: () =>
+        readOnlineDiagramId(
+            locationState.location,
+            chartState.currentDiagram?.id
+        ),
 }));
 
 vi.mock('@/components/code-snippet/code-snippet', () => ({
@@ -210,6 +232,7 @@ describe('Merge wizard shell', () => {
             createdAt: new Date(0),
             updatedAt: new Date(0),
         } as Diagram;
+        locationState.location = onlineDiagramLocation('42');
         control.prepare.mockImplementation(
             async (
                 _input: unknown,
@@ -556,6 +579,7 @@ describe('Merge wizard shell', () => {
             ...chartState.currentDiagram,
             id: 'guest-diagram-1',
         };
+        locationState.location = deviceDiagramLocation('guest-diagram-1');
         renderWizard();
 
         expect(

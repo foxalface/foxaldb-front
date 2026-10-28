@@ -177,16 +177,16 @@ const openRailsBranch = async () => {
 describe('Rails export target availability', () => {
     const guestContext = (databaseType: DatabaseType) => ({
         isAuthenticated: false,
-        diagramId: 'guest-diagram-1',
+        onlineDiagramId: null,
         databaseType,
     });
 
     const authenticatedContext = (
         databaseType: DatabaseType,
-        diagramId: unknown = 'guest-diagram-1'
+        onlineDiagramId: string | null = null
     ) => ({
         isAuthenticated: true,
-        diagramId,
+        onlineDiagramId,
         databaseType,
     });
 

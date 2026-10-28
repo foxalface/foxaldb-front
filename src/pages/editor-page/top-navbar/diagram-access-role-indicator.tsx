@@ -2,9 +2,8 @@ import React from 'react';
 import { DiagramRoleIcon } from '@/components/diagram-role-icon/diagram-role-icon';
 import { useAuth } from '@/hooks/use-auth';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 export interface DiagramAccessRoleIndicatorProps {
     compact?: boolean;
@@ -14,16 +13,11 @@ export const DiagramAccessRoleIndicator: React.FC<
     DiagramAccessRoleIndicatorProps
 > = ({ compact = false }) => {
     const { t } = useTranslation();
-    const { diagramId } = useParams<{ diagramId: string }>();
     const { isAuthenticated } = useAuth();
     const { diagramAccess } = useDiagramAccess();
+    const onlineDiagramId = useOnlineDiagramId();
 
-    if (
-        !isAuthenticated ||
-        !diagramId ||
-        !isValidBackendDiagramId(diagramId) ||
-        !diagramAccess?.role
-    ) {
+    if (!isAuthenticated || onlineDiagramId === null || !diagramAccess?.role) {
         return null;
     }
 

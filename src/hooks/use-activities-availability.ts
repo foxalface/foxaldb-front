@@ -1,17 +1,12 @@
 import { useAuth } from '@/hooks/use-auth';
-import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
-import { useParams } from 'react-router-dom';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 
 /**
  * Returns whether diagram activity history is available for the current editor scope.
  */
 export const useActivitiesAvailability = (): boolean => {
-    const { diagramId } = useParams<{ diagramId: string }>();
     const { isAuthenticated } = useAuth();
+    const onlineDiagramId = useOnlineDiagramId();
 
-    return (
-        isAuthenticated &&
-        diagramId !== undefined &&
-        isValidBackendDiagramId(diagramId)
-    );
+    return isAuthenticated && onlineDiagramId !== null;
 };

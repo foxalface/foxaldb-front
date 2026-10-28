@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { History } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Input } from '@/components/input/input';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { Spinner } from '@/components/spinner/spinner';
@@ -9,6 +8,7 @@ import { Button } from '@/components/button/button';
 import { SidePanelEmptyState } from '@/components/side-panel-empty-state/side-panel-empty-state';
 import { SidePanelFilterEmptyState } from '@/components/side-panel-empty-state/side-panel-filter-empty-state';
 import { useAuth } from '@/hooks/use-auth';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { ActivityListItem } from './activity-list-item';
 import {
     filterActivities,
@@ -23,15 +23,16 @@ export interface ActivitiesSectionProps {}
 
 export const ActivitiesSection: React.FC<ActivitiesSectionProps> = () => {
     const { t } = useTranslation();
-    const { diagramId } = useParams<{ diagramId: string }>();
+    const onlineDiagramId = useOnlineDiagramId();
     const { user } = useAuth();
     const [filterText, setFilterText] = useState('');
     const [selectedEntityTypes, setSelectedEntityTypes] = useState<
         ActivityEntityType[]
     >(DEFAULT_SELECTED_ACTIVITY_ENTITY_TYPES);
     const filterInputRef = useRef<HTMLInputElement>(null);
-    const { activities, status, isRetrying, handleRetry } =
-        useActivitiesPanel(diagramId);
+    const { activities, status, isRetrying, handleRetry } = useActivitiesPanel(
+        onlineDiagramId ?? undefined
+    );
 
     const filterOptions = useMemo(
         () => ({

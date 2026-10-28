@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Share2, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import { Tabs, TabsContent } from '@/components/tabs/tabs';
 import { ScrollArea } from '@/components/scroll-area/scroll-area';
 import { Spinner } from '@/components/spinner/spinner';
@@ -12,6 +11,7 @@ import {
     SidePanelSectionTabsTrigger,
 } from '@/components/side-panel-section-tabs/side-panel-section-tabs';
 import { useAuth } from '@/hooks/use-auth';
+import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useSharePanel } from './use-share-panel';
 import { ShareCollaboratorsTab } from './share-collaborators-tab';
 import { SharePublicLinkTab } from './share-public-link-tab';
@@ -20,7 +20,7 @@ export interface ShareSectionProps {}
 
 export const ShareSection: React.FC<ShareSectionProps> = () => {
     const { t } = useTranslation();
-    const { diagramId } = useParams<{ diagramId: string }>();
+    const onlineDiagramId = useOnlineDiagramId();
     const { user } = useAuth();
     const [selectedTab, setSelectedTab] = useState<
         'collaborators' | 'public_link'
@@ -32,12 +32,12 @@ export const ShareSection: React.FC<ShareSectionProps> = () => {
         handleRetry,
         handleMemberAdded,
         handleMembersChange,
-    } = useSharePanel(diagramId);
+    } = useSharePanel(onlineDiagramId ?? undefined);
 
     const isInitialLoading = status === 'loading' || status === 'idle';
     const isLoadError = status === 'error';
 
-    if (!user || diagramId === undefined) {
+    if (!user || onlineDiagramId === null) {
         return null;
     }
 
@@ -105,7 +105,7 @@ export const ShareSection: React.FC<ShareSectionProps> = () => {
                         ) : (
                             <ScrollArea className="h-full">
                                 <ShareCollaboratorsTab
-                                    diagramId={diagramId}
+                                    diagramId={onlineDiagramId}
                                     members={members}
                                     onMembersChange={handleMembersChange}
                                     onMemberAdded={handleMemberAdded}
