@@ -6,6 +6,26 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { ImportSchemaContinueParams } from '@/dialogs/common/import-schema/import-schema-step';
 import { CreateDiagramDialog } from '../create-diagram-dialog';
+import { CreateDiagramSessionDestinationProvider } from '../create-diagram-session-destination-context';
+
+const requestAuthentication = vi.fn();
+const registerProtectedActionResume = vi.fn();
+
+vi.mock('@/hooks/use-request-authentication', () => ({
+    useRequestAuthentication: () => requestAuthentication,
+}));
+
+vi.mock('@/lib/auth-intent', async () => {
+    const actual = (await vi.importActual('@/lib/auth-intent')) as Record<
+        string,
+        unknown
+    >;
+    return {
+        ...actual,
+        registerProtectedActionResume: (...args: unknown[]) =>
+            registerProtectedActionResume(...args),
+    };
+});
 
 const closeCreateDiagramDialog = vi.fn();
 const addDiagram = vi.fn().mockResolvedValue(undefined);
@@ -21,6 +41,27 @@ const importSchema = vi.fn();
 const importDiagramFromJson = vi.fn();
 
 let isAuthenticated = false;
+
+const CreateSessionHarness: React.FC<{
+    createDialogOpen: boolean;
+    dialogOpen: boolean;
+    auth: boolean;
+    entryCreateDiagramActions?: React.ComponentProps<
+        typeof CreateDiagramDialog
+    >['entryCreateDiagramActions'];
+}> = ({ createDialogOpen, dialogOpen, auth, entryCreateDiagramActions }) => {
+    isAuthenticated = auth;
+    return (
+        <CreateDiagramSessionDestinationProvider
+            createDialogOpen={createDialogOpen}
+        >
+            <CreateDiagramDialog
+                dialog={{ open: dialogOpen }}
+                entryCreateDiagramActions={entryCreateDiagramActions}
+            />
+        </CreateDiagramSessionDestinationProvider>
+    );
+};
 
 const importedDiagram: Diagram = {
     id: 'imported-1',
@@ -209,6 +250,29 @@ const createEmpty = async (user: ReturnType<typeof userEvent.setup>) => {
     );
 };
 
+const renderCreateDialog = (
+    options: {
+        auth?: boolean;
+        entryCreateDiagramActions?: React.ComponentProps<
+            typeof CreateDiagramDialog
+        >['entryCreateDiagramActions'];
+    } = {}
+) =>
+    render(
+        <CreateSessionHarness
+            createDialogOpen
+            dialogOpen
+            auth={options.auth ?? isAuthenticated}
+            entryCreateDiagramActions={options.entryCreateDiagramActions}
+        />
+    );
+
+const onlineTab = () =>
+    screen.getByRole('tab', { name: /open_diagram_dialog\.tabs\.online/i });
+
+const deviceTab = () =>
+    screen.getByRole('tab', { name: /open_diagram_dialog\.tabs\.device/i });
+
 describe('CreateDiagramDialog destination', () => {
     beforeEach(() => {
         isAuthenticated = false;
@@ -226,6 +290,8 @@ describe('CreateDiagramDialog destination', () => {
         toast.mockClear();
         importSchema.mockClear();
         importDiagramFromJson.mockClear();
+        requestAuthentication.mockClear();
+        registerProtectedActionResume.mockClear();
     });
 
     const expectDeviceOpen = () => {
@@ -245,7 +311,7 @@ describe('CreateDiagramDialog destination', () => {
 
     it('keeps a guest SQL import on device storage', async () => {
         const user = userEvent.setup();
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        renderCreateDialog();
 
         await openFileImport(user);
         await user.click(screen.getByRole('button', { name: 'Continue SQL' }));
@@ -260,7 +326,7 @@ describe('CreateDiagramDialog destination', () => {
 
     it('keeps a guest DBML import on device storage', async () => {
         const user = userEvent.setup();
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        renderCreateDialog();
 
         await openFileImport(user);
         await user.click(screen.getByRole('button', { name: 'Continue DBML' }));
@@ -275,7 +341,7 @@ describe('CreateDiagramDialog destination', () => {
 
     it('keeps a guest metadata import on device storage', async () => {
         const user = userEvent.setup();
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        renderCreateDialog();
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -302,7 +368,7 @@ describe('CreateDiagramDialog destination', () => {
 
     it('keeps a guest diagram JSON import on device storage', async () => {
         const user = userEvent.setup();
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        renderCreateDialog();
 
         await openFileImport(user);
         await user.click(
@@ -319,7 +385,7 @@ describe('CreateDiagramDialog destination', () => {
 
     it('stores a project import on device when the session destination is device', async () => {
         const user = userEvent.setup();
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        renderCreateDialog();
 
         await openFileImport(user);
         await user.click(
@@ -344,7 +410,7 @@ describe('CreateDiagramDialog destination', () => {
     it('creates an authenticated import online without loading it in the dialog', async () => {
         isAuthenticated = true;
         const user = userEvent.setup();
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        renderCreateDialog({ auth: true });
 
         await openFileImport(user);
         await user.click(screen.getByRole('button', { name: 'Continue SQL' }));
@@ -363,11 +429,12 @@ describe('CreateDiagramDialog destination', () => {
         listDiagrams.mockResolvedValue([{ id: 'existing' }]);
         const user = userEvent.setup();
         const { rerender } = render(
-            <CreateDiagramDialog dialog={{ open: true }} />
+            <CreateSessionHarness createDialogOpen dialogOpen auth={false} />
         );
 
-        isAuthenticated = true;
-        rerender(<CreateDiagramDialog dialog={{ open: true }} />);
+        rerender(
+            <CreateSessionHarness createDialogOpen dialogOpen auth={true} />
+        );
 
         await createEmpty(user);
 
@@ -391,12 +458,19 @@ describe('CreateDiagramDialog destination', () => {
     it('latches online when a new authenticated session opens', async () => {
         const user = userEvent.setup();
         const { rerender } = render(
-            <CreateDiagramDialog dialog={{ open: true }} />
+            <CreateSessionHarness createDialogOpen dialogOpen auth={false} />
         );
 
-        rerender(<CreateDiagramDialog dialog={{ open: false }} />);
-        isAuthenticated = true;
-        rerender(<CreateDiagramDialog dialog={{ open: true }} />);
+        rerender(
+            <CreateSessionHarness
+                createDialogOpen={false}
+                dialogOpen={false}
+                auth={false}
+            />
+        );
+        rerender(
+            <CreateSessionHarness createDialogOpen dialogOpen auth={true} />
+        );
 
         await createEmpty(user);
 
@@ -412,7 +486,7 @@ describe('CreateDiagramDialog destination', () => {
     it('applies the guest limit only to an unauthenticated device create', async () => {
         listDiagrams.mockResolvedValue([{ id: 'existing' }]);
         const user = userEvent.setup();
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        renderCreateDialog();
 
         await createEmpty(user);
 
@@ -427,9 +501,8 @@ describe('CreateDiagramDialog destination', () => {
     });
 
     it('does not persist when the wizard is cancelled', async () => {
-        isAuthenticated = true;
         const user = userEvent.setup();
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        renderCreateDialog({ auth: true });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -449,12 +522,7 @@ describe('CreateDiagramDialog destination', () => {
     it('hands an entry-owned device id to entry flow without opening it here', async () => {
         const onDiagramCreated = vi.fn();
         const user = userEvent.setup();
-        render(
-            <CreateDiagramDialog
-                dialog={{ open: true }}
-                entryCreateDiagramActions={{ onDiagramCreated }}
-            />
-        );
+        renderCreateDialog({ entryCreateDiagramActions: { onDiagramCreated } });
 
         await createEmpty(user);
 
@@ -473,15 +541,12 @@ describe('CreateDiagramDialog destination', () => {
     });
 
     it('hands an entry-owned online id to entry flow without hydrating it here', async () => {
-        isAuthenticated = true;
         const onDiagramCreated = vi.fn();
         const user = userEvent.setup();
-        render(
-            <CreateDiagramDialog
-                dialog={{ open: true }}
-                entryCreateDiagramActions={{ onDiagramCreated }}
-            />
-        );
+        renderCreateDialog({
+            auth: true,
+            entryCreateDiagramActions: { onDiagramCreated },
+        });
 
         await createEmpty(user);
 
@@ -494,5 +559,55 @@ describe('CreateDiagramDialog destination', () => {
         expect(setDiagramLocation).not.toHaveBeenCalled();
         expect(loadDiagramFromData).not.toHaveBeenCalled();
         expect(navigate).not.toHaveBeenCalled();
+    });
+
+    it('opens with Online selected for authenticated users', () => {
+        renderCreateDialog({ auth: true });
+        expect(onlineTab()).toHaveAttribute('aria-selected', 'true');
+        expect(deviceTab()).toHaveAttribute('aria-selected', 'false');
+    });
+
+    it('opens with Device selected for guests', () => {
+        renderCreateDialog({ auth: false });
+        expect(deviceTab()).toHaveAttribute('aria-selected', 'true');
+        expect(onlineTab()).toHaveAttribute('aria-selected', 'false');
+    });
+
+    it('lets authenticated users switch to Device and persist locally', async () => {
+        const user = userEvent.setup();
+        renderCreateDialog({ auth: true });
+        await user.click(deviceTab());
+        await createEmpty(user);
+        await waitFor(() => {
+            expect(addDiagram).toHaveBeenCalledTimes(1);
+        });
+        expect(createDiagram).not.toHaveBeenCalled();
+    });
+
+    it('requests auth when a guest selects Online without changing destination', async () => {
+        const user = userEvent.setup();
+        renderCreateDialog({ auth: false });
+        await user.click(onlineTab());
+        expect(deviceTab()).toHaveAttribute('aria-selected', 'true');
+        expect(requestAuthentication).toHaveBeenCalledWith({
+            type: 'protected-action',
+            action: 'create-online-diagram',
+        });
+        expect(registerProtectedActionResume).toHaveBeenCalled();
+    });
+
+    it('applies create-online resume to Online without resetting wizard step', async () => {
+        const user = userEvent.setup();
+        renderCreateDialog({ auth: false });
+        await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
+        await user.click(onlineTab());
+        registerProtectedActionResume.mock.calls[0]?.[0]?.();
+        await user.click(
+            screen.getByRole('button', {
+                name: /new_diagram_dialog\.choose_intent\.import/,
+            })
+        );
+        expect(screen.getByTestId('choose-import-method')).toBeInTheDocument();
+        expect(onlineTab()).toHaveAttribute('aria-selected', 'true');
     });
 });

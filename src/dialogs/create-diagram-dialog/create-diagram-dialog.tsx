@@ -41,16 +41,16 @@ import { useToast } from '@/components/toast/use-toast';
 import { ToastAction } from '@/components/toast/toast';
 import { ImportFromDatabaseStep } from './import-from-database/import-from-database-step';
 import { ChooseImportMethod } from './choose-import-method/choose-import-method';
-import {
-    appliesGuestDeviceDiagramLimit,
-    defaultDiagramCreationDestination,
-    type DiagramCreationDestination,
-} from '@/lib/diagram/diagram-creation-destination';
+import { CreateDiagramDestinationSelector } from './create-diagram-destination-selector';
+import { useCreateDiagramSessionDestinationRequired } from './create-diagram-session-destination-context';
+import { appliesGuestDeviceDiagramLimit } from '@/lib/diagram/diagram-creation-destination';
 import {
     openPersistedNewDiagram,
     persistNewDiagram,
     persistedNewDiagramId,
 } from '@/lib/diagram/persist-new-diagram';
+import { registerProtectedActionResume } from '@/lib/auth-intent';
+import { useRequestAuthentication } from '@/hooks/use-request-authentication';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {
     entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
@@ -66,21 +66,9 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const { clearDiagramAccess } = useDiagramAccess();
     const { toast } = useToast();
     const { t } = useTranslation();
-    const sessionIsOpen = dialog.open === true;
-    const [destinationSessionOpen, setDestinationSessionOpen] =
-        useState(sessionIsOpen);
-    const [destination, setDestination] = useState<DiagramCreationDestination>(
-        () => defaultDiagramCreationDestination(isAuthenticated)
-    );
-
-    // Latch the default only when a new create session opens. An auth change
-    // while this wizard stays open must not retarget the session.
-    if (sessionIsOpen !== destinationSessionOpen) {
-        setDestinationSessionOpen(sessionIsOpen);
-        if (sessionIsOpen) {
-            setDestination(defaultDiagramCreationDestination(isAuthenticated));
-        }
-    }
+    const requestAuthentication = useRequestAuthentication();
+    const { destination, setDestination } =
+        useCreateDiagramSessionDestinationRequired();
 
     const isEntryFlowOwned = entryCreateDiagramActions !== undefined;
     const canClose = useMemo(
@@ -151,16 +139,29 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
     const showGuestLimitToast = useCallback(() => {
         toast({
-            title: 'Guest mode limit reached',
-            description: 'Sign in to create and save more diagrams.',
+            title: t('new_diagram_dialog.guest_limit.title'),
+            description: t('new_diagram_dialog.guest_limit.description'),
             layout: 'column',
             action: (
-                <ToastAction altText="Sign in" onClick={handleGuestLimitSignIn}>
-                    Sign in
+                <ToastAction
+                    altText={t('new_diagram_dialog.guest_limit.sign_in')}
+                    onClick={handleGuestLimitSignIn}
+                >
+                    {t('new_diagram_dialog.guest_limit.sign_in')}
                 </ToastAction>
             ),
         });
-    }, [handleGuestLimitSignIn, toast]);
+    }, [handleGuestLimitSignIn, t, toast]);
+
+    const handleGuestRequestOnlineDestination = useCallback(() => {
+        registerProtectedActionResume(() => {
+            setDestination('online');
+        });
+        requestAuthentication({
+            type: 'protected-action',
+            action: 'create-online-diagram',
+        });
+    }, [requestAuthentication, setDestination]);
 
     const finishCreatedDiagram = useCallback(
         async (diagram: Diagram) => {
@@ -502,76 +503,88 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     }
                 }}
             >
-                {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
-                    <SelectDatabase
-                        key={dialog.open ? 'open' : 'closed'}
-                        databaseType={databaseType}
-                        hasExistingDiagram={canClose}
-                        setDatabaseType={setDatabaseType}
-                        onDatabaseSelected={() =>
-                            setStep(CreateDiagramDialogStep.CHOOSE_INTENT)
-                        }
-                    />
-                ) : step === CreateDiagramDialogStep.CHOOSE_INTENT ? (
-                    <ChooseIntent
-                        databaseType={databaseType}
-                        onBack={() => {
-                            setDatabaseType(DatabaseType.GENERIC);
-                            setStep(CreateDiagramDialogStep.SELECT_DATABASE);
-                        }}
-                        onCreateEmpty={createEmptyDiagram}
-                        onImport={() =>
-                            setStep(
-                                CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD
-                            )
-                        }
-                    />
-                ) : step === CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD ? (
-                    <ChooseImportMethod
-                        databaseType={databaseType}
-                        onBack={() =>
-                            setStep(CreateDiagramDialogStep.CHOOSE_INTENT)
-                        }
-                        onImportFromFile={() =>
-                            setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
-                        }
-                        onImportFromDatabase={() =>
-                            setStep(
-                                CreateDiagramDialogStep.IMPORT_FROM_DATABASE
-                            )
-                        }
-                    />
-                ) : step === CreateDiagramDialogStep.IMPORT_FROM_DATABASE ? (
-                    <ImportFromDatabaseStep
-                        databaseType={databaseType}
-                        databaseEdition={databaseEdition}
-                        setDatabaseEdition={setDatabaseEdition}
-                        metadataResult={metadataResult}
-                        setMetadataResult={setMetadataResult}
-                        onContinue={handleImportFromDatabaseContinue}
-                        onBack={handleImportFromDatabaseBack}
-                        importError={importError}
-                        isImporting={isImporting}
-                    />
-                ) : step === CreateDiagramDialogStep.IMPORT_DATABASE ? (
-                    <ImportSchemaStep
-                        databaseType={databaseType}
-                        setDatabaseType={setDatabaseType}
-                        scriptResult={scriptResult}
-                        setScriptResult={setScriptResult}
-                        onContinue={handleImportSchemaContinue}
-                        onBack={handleImportBack}
-                        importError={importError}
-                        isImporting={isImporting}
-                    />
-                ) : step === CreateDiagramDialogStep.SELECT_TABLES ? (
-                    <SelectTables
-                        isLoading={isImporting || !parsedMetadata}
-                        databaseMetadata={parsedMetadata}
-                        onImport={importNewDiagram}
-                        onBack={handleSelectTablesBack}
-                    />
-                ) : null}
+                <CreateDiagramDestinationSelector
+                    destination={destination}
+                    onDestinationChange={setDestination}
+                    onGuestRequestOnline={handleGuestRequestOnlineDestination}
+                    isAuthenticated={isAuthenticated}
+                />
+                <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+                    {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
+                        <SelectDatabase
+                            key={dialog.open ? 'open' : 'closed'}
+                            databaseType={databaseType}
+                            hasExistingDiagram={canClose}
+                            setDatabaseType={setDatabaseType}
+                            onDatabaseSelected={() =>
+                                setStep(CreateDiagramDialogStep.CHOOSE_INTENT)
+                            }
+                        />
+                    ) : step === CreateDiagramDialogStep.CHOOSE_INTENT ? (
+                        <ChooseIntent
+                            databaseType={databaseType}
+                            onBack={() => {
+                                setDatabaseType(DatabaseType.GENERIC);
+                                setStep(
+                                    CreateDiagramDialogStep.SELECT_DATABASE
+                                );
+                            }}
+                            onCreateEmpty={createEmptyDiagram}
+                            onImport={() =>
+                                setStep(
+                                    CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD
+                                )
+                            }
+                        />
+                    ) : step ===
+                      CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD ? (
+                        <ChooseImportMethod
+                            databaseType={databaseType}
+                            onBack={() =>
+                                setStep(CreateDiagramDialogStep.CHOOSE_INTENT)
+                            }
+                            onImportFromFile={() =>
+                                setStep(CreateDiagramDialogStep.IMPORT_DATABASE)
+                            }
+                            onImportFromDatabase={() =>
+                                setStep(
+                                    CreateDiagramDialogStep.IMPORT_FROM_DATABASE
+                                )
+                            }
+                        />
+                    ) : step ===
+                      CreateDiagramDialogStep.IMPORT_FROM_DATABASE ? (
+                        <ImportFromDatabaseStep
+                            databaseType={databaseType}
+                            databaseEdition={databaseEdition}
+                            setDatabaseEdition={setDatabaseEdition}
+                            metadataResult={metadataResult}
+                            setMetadataResult={setMetadataResult}
+                            onContinue={handleImportFromDatabaseContinue}
+                            onBack={handleImportFromDatabaseBack}
+                            importError={importError}
+                            isImporting={isImporting}
+                        />
+                    ) : step === CreateDiagramDialogStep.IMPORT_DATABASE ? (
+                        <ImportSchemaStep
+                            databaseType={databaseType}
+                            setDatabaseType={setDatabaseType}
+                            scriptResult={scriptResult}
+                            setScriptResult={setScriptResult}
+                            onContinue={handleImportSchemaContinue}
+                            onBack={handleImportBack}
+                            importError={importError}
+                            isImporting={isImporting}
+                        />
+                    ) : step === CreateDiagramDialogStep.SELECT_TABLES ? (
+                        <SelectTables
+                            isLoading={isImporting || !parsedMetadata}
+                            databaseMetadata={parsedMetadata}
+                            onImport={importNewDiagram}
+                            onBack={handleSelectTablesBack}
+                        />
+                    ) : null}
+                </div>
             </DialogContent>
         </Dialog>
     );

@@ -14,6 +14,7 @@ import { emptyFn } from '@/lib/utils';
 import { ExportDiagramDialog } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
 import { ExportWizardDialog } from '@/dialogs/export-wizard/export-wizard-dialog';
 import { ImportDiagramDialog } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
+import { CreateDiagramSessionDestinationProvider } from '@/dialogs/create-diagram-dialog/create-diagram-session-destination-context';
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 import { UserSettingsDialog } from '@/dialogs/user-settings-dialog/user-settings-dialog';
 import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
@@ -159,82 +160,102 @@ export const DialogProvider: React.FC<
     }, [openMergeWizardDialog]);
 
     return (
-        <dialogContext.Provider
-            value={{
-                openCreateDiagramDialog: openNewDiagramDialogHandler,
-                closeCreateDiagramDialog: () => setOpenNewDiagramDialog(false),
-                openOpenDiagramDialog: openOpenDiagramDialogHandler,
-                closeOpenDiagramDialog: () => setOpenOpenDiagramDialog(false),
-                openExportWizardDialog: () => setOpenExportWizardDialog(true),
-                closeExportWizardDialog: () => setOpenExportWizardDialog(false),
-                openMergeWizardDialog: () => setOpenMergeWizardDialog(true),
-                closeMergeWizardDialog: () => setOpenMergeWizardDialog(false),
-                openExportSQLDialog: openExportSQLDialogHandler,
-                closeExportSQLDialog: () => setOpenExportSQLDialog(false),
-                openCreateRelationshipDialog:
-                    openCreateRelationshipDialogHandler,
-                closeCreateRelationshipDialog: () =>
-                    setOpenCreateRelationshipDialog(false),
-                openTableSchemaDialog: openTableSchemaDialogHandler,
-                closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
-                openAuthDialog: () => setOpenAuthDialog(true),
-                closeAuthDialog: () => setOpenAuthDialog(false),
-                openUserSettingsDialog: () => setOpenUserSettingsDialog(true),
-                closeUserSettingsDialog: () => setOpenUserSettingsDialog(false),
-                openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
-                closeExportDiagramDialog: () =>
-                    setOpenExportDiagramDialog(false),
-                openImportDiagramDialog: () => setOpenImportDiagramDialog(true),
-                closeImportDiagramDialog: () =>
-                    setOpenImportDiagramDialog(false),
-            }}
+        <CreateDiagramSessionDestinationProvider
+            createDialogOpen={openNewDiagramDialog}
         >
-            {children}
-            {createDiagramDialogMounted ? (
-                <Suspense fallback={null}>
-                    <CreateDiagramDialogLazy
-                        dialog={{ open: openNewDiagramDialog }}
-                        entryCreateDiagramActions={entryCreateDiagramActions}
-                        {...newDiagramDialogParams}
-                    />
-                </Suspense>
-            ) : null}
-            <OpenDiagramDialog
-                dialog={{ open: openOpenDiagramDialog }}
-                entryOpenDiagramActions={entryOpenDiagramActions}
-                {...openDiagramDialogParams}
-            />
-            {exportSQLDialogMounted ? (
-                <Suspense fallback={null}>
-                    <ExportSQLDialogLazy
-                        dialog={{ open: openExportSQLDialog }}
-                        {...exportSQLDialogParams}
-                    />
-                </Suspense>
-            ) : null}
-            <CreateRelationshipDialog
-                dialog={{ open: openCreateRelationshipDialog }}
-                {...createRelationshipDialogParams}
-            />
-            <TableSchemaDialog
-                dialog={{ open: openTableSchemaDialog }}
-                {...tableSchemaDialogParams}
-            />
-            <AuthDialog
-                dialog={{ open: openAuthDialog }}
-                entryAuthActions={entryAuthActions}
-            />
-            <UserSettingsDialog dialog={{ open: openUserSettingsDialog }} />
-            <ExportWizardDialog dialog={{ open: openExportWizardDialog }} />
-            {mergeWizardMounted ? (
-                <Suspense fallback={null}>
-                    <MergeWizardDialogLazy
-                        dialog={{ open: openMergeWizardDialog }}
-                    />
-                </Suspense>
-            ) : null}
-            <ExportDiagramDialog dialog={{ open: openExportDiagramDialog }} />
-            <ImportDiagramDialog dialog={{ open: openImportDiagramDialog }} />
-        </dialogContext.Provider>
+            <dialogContext.Provider
+                value={{
+                    openCreateDiagramDialog: openNewDiagramDialogHandler,
+                    closeCreateDiagramDialog: () =>
+                        setOpenNewDiagramDialog(false),
+                    openOpenDiagramDialog: openOpenDiagramDialogHandler,
+                    closeOpenDiagramDialog: () =>
+                        setOpenOpenDiagramDialog(false),
+                    openExportWizardDialog: () =>
+                        setOpenExportWizardDialog(true),
+                    closeExportWizardDialog: () =>
+                        setOpenExportWizardDialog(false),
+                    openMergeWizardDialog: () => setOpenMergeWizardDialog(true),
+                    closeMergeWizardDialog: () =>
+                        setOpenMergeWizardDialog(false),
+                    openExportSQLDialog: openExportSQLDialogHandler,
+                    closeExportSQLDialog: () => setOpenExportSQLDialog(false),
+                    openCreateRelationshipDialog:
+                        openCreateRelationshipDialogHandler,
+                    closeCreateRelationshipDialog: () =>
+                        setOpenCreateRelationshipDialog(false),
+                    openTableSchemaDialog: openTableSchemaDialogHandler,
+                    closeTableSchemaDialog: () =>
+                        setOpenTableSchemaDialog(false),
+                    openAuthDialog: () => setOpenAuthDialog(true),
+                    closeAuthDialog: () => setOpenAuthDialog(false),
+                    openUserSettingsDialog: () =>
+                        setOpenUserSettingsDialog(true),
+                    closeUserSettingsDialog: () =>
+                        setOpenUserSettingsDialog(false),
+                    openExportDiagramDialog: () =>
+                        setOpenExportDiagramDialog(true),
+                    closeExportDiagramDialog: () =>
+                        setOpenExportDiagramDialog(false),
+                    openImportDiagramDialog: () =>
+                        setOpenImportDiagramDialog(true),
+                    closeImportDiagramDialog: () =>
+                        setOpenImportDiagramDialog(false),
+                }}
+            >
+                {children}
+                {createDiagramDialogMounted ? (
+                    <Suspense fallback={null}>
+                        <CreateDiagramDialogLazy
+                            dialog={{ open: openNewDiagramDialog }}
+                            entryCreateDiagramActions={
+                                entryCreateDiagramActions
+                            }
+                            {...newDiagramDialogParams}
+                        />
+                    </Suspense>
+                ) : null}
+                <OpenDiagramDialog
+                    dialog={{ open: openOpenDiagramDialog }}
+                    entryOpenDiagramActions={entryOpenDiagramActions}
+                    {...openDiagramDialogParams}
+                />
+                {exportSQLDialogMounted ? (
+                    <Suspense fallback={null}>
+                        <ExportSQLDialogLazy
+                            dialog={{ open: openExportSQLDialog }}
+                            {...exportSQLDialogParams}
+                        />
+                    </Suspense>
+                ) : null}
+                <CreateRelationshipDialog
+                    dialog={{ open: openCreateRelationshipDialog }}
+                    {...createRelationshipDialogParams}
+                />
+                <TableSchemaDialog
+                    dialog={{ open: openTableSchemaDialog }}
+                    {...tableSchemaDialogParams}
+                />
+                <AuthDialog
+                    dialog={{ open: openAuthDialog }}
+                    entryAuthActions={entryAuthActions}
+                />
+                <UserSettingsDialog dialog={{ open: openUserSettingsDialog }} />
+                <ExportWizardDialog dialog={{ open: openExportWizardDialog }} />
+                {mergeWizardMounted ? (
+                    <Suspense fallback={null}>
+                        <MergeWizardDialogLazy
+                            dialog={{ open: openMergeWizardDialog }}
+                        />
+                    </Suspense>
+                ) : null}
+                <ExportDiagramDialog
+                    dialog={{ open: openExportDiagramDialog }}
+                />
+                <ImportDiagramDialog
+                    dialog={{ open: openImportDiagramDialog }}
+                />
+            </dialogContext.Provider>
+        </CreateDiagramSessionDestinationProvider>
     );
 };

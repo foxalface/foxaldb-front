@@ -693,6 +693,17 @@ export const tr: LanguageTranslation = {
                 other_group: 'Diğer veritabanları',
             },
 
+            guest_limit: {
+                title: 'Misafir modu sınırına ulaşıldı',
+                description:
+                    'Daha fazla diyagram oluşturmak ve kaydetmek için oturum açın.',
+                sign_in: 'Oturum aç',
+            },
+
+            destination: {
+                aria_label: 'Yeni diyagramın kaydedileceği yer',
+            },
+
             choose_intent: {
                 title: 'Ne yapmak istersiniz?',
                 description: '{{database}} için yeni bir diyagram oluşturun.',

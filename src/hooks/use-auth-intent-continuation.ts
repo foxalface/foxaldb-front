@@ -116,6 +116,24 @@ export const useAuthIntentContinuation = ({
             return;
         }
 
+        if (
+            intent.type === 'protected-action' &&
+            intent.action === 'create-online-diagram'
+        ) {
+            const resume = takeProtectedActionResume();
+
+            try {
+                resume?.();
+            } catch {
+                toast({
+                    title: t('auth.errors.generic'),
+                    variant: 'destructive',
+                });
+            }
+
+            return;
+        }
+
         const resume = takeProtectedActionResume();
 
         try {

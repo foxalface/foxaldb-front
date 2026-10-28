@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { CreateDiagramDialog } from '../create-diagram-dialog';
+import { withCreateDiagramSessionDestination } from './create-diagram-session-test-wrapper';
 
 const closeCreateDiagramDialog = vi.fn();
 
@@ -61,7 +62,8 @@ describe('CreateDiagramDialog entry-flow ownership', () => {
                 entryCreateDiagramActions={{
                     onDiagramCreated: vi.fn(),
                 }}
-            />
+            />,
+            { wrapper: withCreateDiagramSessionDestination(true) }
         );
 
         const event = new KeyboardEvent('keydown', {

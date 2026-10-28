@@ -708,6 +708,17 @@ export const id_ID: LanguageTranslation = {
                 other_group: 'Basis data lainnya',
             },
 
+            guest_limit: {
+                title: 'Batas mode tamu tercapai',
+                description:
+                    'Masuk untuk membuat dan menyimpan lebih banyak diagram.',
+                sign_in: 'Masuk',
+            },
+
+            destination: {
+                aria_label: 'Tempat menyimpan diagram baru',
+            },
+
             choose_intent: {
                 title: 'Apa yang ingin Anda lakukan?',
                 description: 'Buat diagram baru untuk {{database}}.',

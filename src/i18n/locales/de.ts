@@ -726,6 +726,17 @@ export const de: LanguageTranslation = {
                 other_group: 'Weitere Datenbanken',
             },
 
+            guest_limit: {
+                title: 'Gastmodus-Limit erreicht',
+                description:
+                    'Melden Sie sich an, um weitere Diagramme zu erstellen und zu speichern.',
+                sign_in: 'Anmelden',
+            },
+
+            destination: {
+                aria_label: 'Speicherort für das neue Diagramm',
+            },
+
             choose_intent: {
                 title: 'Was möchten Sie tun?',
                 description:

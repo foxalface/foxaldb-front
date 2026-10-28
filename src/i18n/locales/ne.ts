@@ -706,6 +706,16 @@ export const ne: LanguageTranslation = {
                 other_group: 'अन्य डाटाबेसहरू',
             },
 
+            guest_limit: {
+                title: 'अतिथि मोड सीमा पुग्यो',
+                description: 'थप डायग्राम बनाउन र बचत गर्न साइन इन गर्नुहोस्।',
+                sign_in: 'साइन इन',
+            },
+
+            destination: {
+                aria_label: 'नयाँ डायग्राम कहाँ बचत गर्ने',
+            },
+
             choose_intent: {
                 title: 'तपाईं के गर्न चाहनुहुन्छ?',
                 description:

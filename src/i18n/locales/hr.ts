@@ -702,6 +702,17 @@ export const hr: LanguageTranslation = {
                 other_group: 'Ostale baze podataka',
             },
 
+            guest_limit: {
+                title: 'Dosegnuto ograničenje gost načina',
+                description:
+                    'Prijavite se za stvaranje i spremanje više dijagrama.',
+                sign_in: 'Prijava',
+            },
+
+            destination: {
+                aria_label: 'Gdje spremiti novi dijagram',
+            },
+
             choose_intent: {
                 title: 'Što želite učiniti?',
                 description: 'Stvorite novi dijagram za {{database}}.',

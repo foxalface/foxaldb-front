@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Diagram } from '@/lib/domain/diagram';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { ImportDiagramDialog } from '../import-diagram-dialog';
+import { CreateDiagramSessionDestinationProvider } from '@/dialogs/create-diagram-dialog/create-diagram-session-destination-context';
 
 const persistRestoredDiagramFromJson = vi.fn();
 const navigate = vi.fn();
@@ -85,12 +86,16 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
-const uploadAndRestore = async () => {
+const uploadAndRestore = async (createOpen = false) => {
     const file = new File(['{}'], 'backup.json', {
         type: 'application/json',
     });
 
-    render(<ImportDiagramDialog dialog={{ open: true }} />);
+    render(
+        <CreateDiagramSessionDestinationProvider createDialogOpen={createOpen}>
+            <ImportDiagramDialog dialog={{ open: true }} />
+        </CreateDiagramSessionDestinationProvider>
+    );
 
     const input = document.querySelector(
         'input[type="file"]'
@@ -164,5 +169,28 @@ describe('ImportDiagramDialog', () => {
         expect(updateConfig).not.toHaveBeenCalled();
         expect(closeImportDiagramDialog).toHaveBeenCalled();
         expect(closeCreateDiagramDialog).toHaveBeenCalled();
+    });
+
+    it('uses the parent create session destination when restore opens during create', async () => {
+        isAuthenticated = false;
+        persistRestoredDiagramFromJson.mockResolvedValue({
+            destination: 'device',
+            localId: deviceDiagram.id,
+            diagram: deviceDiagram,
+        });
+
+        await uploadAndRestore(true);
+
+        await waitFor(() => {
+            expect(persistRestoredDiagramFromJson).toHaveBeenCalledTimes(1);
+        });
+
+        expect(persistRestoredDiagramFromJson).toHaveBeenCalledWith(
+            expect.any(String),
+            expect.objectContaining({
+                destination: 'device',
+                isAuthenticated: false,
+            })
+        );
     });
 });

@@ -697,6 +697,16 @@ export const en = {
                 other_group: 'Other databases',
             },
 
+            guest_limit: {
+                title: 'Guest mode limit reached',
+                description: 'Sign in to create and save more diagrams.',
+                sign_in: 'Sign in',
+            },
+
+            destination: {
+                aria_label: 'Where to save the new diagram',
+            },
+
             choose_intent: {
                 title: 'What would you like to do?',
                 description: 'Create a new diagram for {{database}}.',

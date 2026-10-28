@@ -2,7 +2,8 @@ export type ProtectedAuthAction =
     | 'share'
     | 'framework-export'
     | 'project-import'
-    | 'merge';
+    | 'merge'
+    | 'create-online-diagram';
 
 export type AuthIntent =
     | { type: 'none' }

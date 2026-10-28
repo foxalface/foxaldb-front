@@ -701,6 +701,16 @@ export const bn: LanguageTranslation = {
                 other_group: 'অন্যান্য ডাটাবেস',
             },
 
+            guest_limit: {
+                title: 'অতিথি মোডের সীমায় পৌঁছেছে',
+                description: 'আরও ডায়াগ্রাম তৈরি ও সংরক্ষণ করতে সাইন ইন করুন।',
+                sign_in: 'সাইন ইন',
+            },
+
+            destination: {
+                aria_label: 'নতুন ডায়াগ্রাম কোথায় সংরক্ষণ হবে',
+            },
+
             choose_intent: {
                 title: 'আপনি কী করতে চান?',
                 description:

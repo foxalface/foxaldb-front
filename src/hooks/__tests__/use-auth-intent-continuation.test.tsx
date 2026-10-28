@@ -316,6 +316,24 @@ describe('useAuthIntentContinuation', () => {
         expect(resume).toHaveBeenCalledTimes(1);
     });
 
+    it('create-online-diagram resumes without startup migration', () => {
+        const resume = vi.fn();
+        registerProtectedActionResume(resume);
+        holder.stateKind = 'awaitingGuestChoice';
+        const { rerender } = renderContinuation();
+
+        consume({
+            type: 'protected-action',
+            action: 'create-online-diagram',
+        });
+        rerender();
+
+        expect(resume).toHaveBeenCalledTimes(1);
+        expect(showOnlineList).not.toHaveBeenCalled();
+        expect(openOpenDiagramDialog).not.toHaveBeenCalled();
+        expect(setDiagramLocation).not.toHaveBeenCalled();
+    });
+
     it('does not execute a continuation when auth was canceled or has not succeeded', () => {
         const { rerender } = renderContinuation();
 

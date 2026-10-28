@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { CreateDiagramDialog } from '../create-diagram-dialog';
+import { withCreateDiagramSessionDestination } from './create-diagram-session-test-wrapper';
 
 const closeCreateDiagramDialog = vi.fn();
 
@@ -63,7 +64,9 @@ vi.mock('react-i18next', () => ({
 
 describe('CreateDiagramDialog close control', () => {
     it('shows the dialog close button when another diagram is already open', () => {
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         expect(
             screen.getByRole('button', { name: 'Close' })

@@ -701,6 +701,17 @@ export const te: LanguageTranslation = {
                 other_group: 'ఇతర డేటాబేస్‌లు',
             },
 
+            guest_limit: {
+                title: 'అతిథి మోడ్ పరిమితి చేరుకుంది',
+                description:
+                    'మరిన్ని డయాగ్రామ్‌లు సృష్టించి సేవ్ చేయడానికి సైన్ ఇన్ చేయండి.',
+                sign_in: 'సైన్ ఇన్',
+            },
+
+            destination: {
+                aria_label: 'కొత్త డయాగ్రామ్ ఎక్కడ సేవ్ చేయాలి',
+            },
+
             choose_intent: {
                 title: 'మీరు ఏమి చేయాలనుకుంటున్నారు?',
                 description:

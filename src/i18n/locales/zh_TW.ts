@@ -668,6 +668,16 @@ export const zh_TW: LanguageTranslation = {
                 other_group: '其他資料庫',
             },
 
+            guest_limit: {
+                title: '已達訪客模式上限',
+                description: '登入以建立並儲存更多圖表。',
+                sign_in: '登入',
+            },
+
+            destination: {
+                aria_label: '新圖表的儲存位置',
+            },
+
             choose_intent: {
                 title: '您想做什麼？',
                 description: '為 {{database}} 建立新圖表。',

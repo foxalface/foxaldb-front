@@ -705,6 +705,17 @@ export const ru: LanguageTranslation = {
                 other_group: 'Другие базы данных',
             },
 
+            guest_limit: {
+                title: 'Достигнут лимит гостевого режима',
+                description:
+                    'Войдите, чтобы создавать и сохранять больше диаграмм.',
+                sign_in: 'Войти',
+            },
+
+            destination: {
+                aria_label: 'Куда сохранить новую диаграмму',
+            },
+
             choose_intent: {
                 title: 'Что вы хотите сделать?',
                 description: 'Создайте новую диаграмму для {{database}}.',

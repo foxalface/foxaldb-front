@@ -23,10 +23,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useConfig } from '@/hooks/use-config';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useDiagramLocation } from '@/hooks/use-diagram-location';
-import {
-    defaultDiagramCreationDestination,
-    type DiagramCreationDestination,
-} from '@/lib/diagram/diagram-creation-destination';
+import { useCreateDiagramRestoreDestination } from '@/dialogs/create-diagram-dialog/create-diagram-session-destination-context';
 import { openPersistedNewDiagram } from '@/lib/diagram/persist-new-diagram';
 import {
     RestoreDiagramJsonParseError,
@@ -49,21 +46,9 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
     const navigate = useNavigate();
     const [error, setError] = useState(false);
     const [isRestoring, setIsRestoring] = useState(false);
-    const sessionIsOpen = dialog.open === true;
-    const [destinationSessionOpen, setDestinationSessionOpen] =
-        useState(sessionIsOpen);
-    const [destination, setDestination] = useState<DiagramCreationDestination>(
-        () => defaultDiagramCreationDestination(isAuthenticated)
+    const destination = useCreateDiagramRestoreDestination(
+        dialog.open === true
     );
-
-    // Same latch as create: a new restore session takes the current default,
-    // and auth changes while the dialog stays open do not retarget it.
-    if (sessionIsOpen !== destinationSessionOpen) {
-        setDestinationSessionOpen(sessionIsOpen);
-        if (sessionIsOpen) {
-            setDestination(defaultDiagramCreationDestination(isAuthenticated));
-        }
-    }
 
     const onFileChange = useCallback((files: File[]) => {
         if (files.length === 0) {

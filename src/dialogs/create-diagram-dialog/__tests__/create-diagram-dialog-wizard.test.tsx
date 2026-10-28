@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { CreateDiagramDialog } from '../create-diagram-dialog';
+import { withCreateDiagramSessionDestination } from './create-diagram-session-test-wrapper';
 import { CreateDiagramDialogStep } from '../create-diagram-dialog-step';
 
 const closeCreateDiagramDialog = vi.fn();
@@ -142,7 +143,9 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('advances to CHOOSE_INTENT when PostgreSQL is selected without persisting', async () => {
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
 
@@ -161,7 +164,9 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('advances to CHOOSE_INTENT when MySQL is selected', async () => {
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'MySQL' }));
 
@@ -173,7 +178,9 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('returns to SELECT_DATABASE from CHOOSE_INTENT and clears the selection', async () => {
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -195,7 +202,9 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('creates an empty diagram through the existing path when requested', async () => {
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -224,7 +233,9 @@ describe('CreateDiagramDialog wizard flow', () => {
         listDiagrams.mockResolvedValue([]);
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -253,7 +264,9 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('advances to import method selection when import is selected', async () => {
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -268,7 +281,9 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('advances to IMPORT_DATABASE from import method selection', async () => {
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -289,7 +304,9 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('returns from IMPORT_DATABASE to CHOOSE_IMPORT_METHOD', async () => {
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -310,7 +327,9 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('advances to IMPORT_FROM_DATABASE from import method selection', async () => {
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -335,7 +354,9 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('returns from IMPORT_FROM_DATABASE to CHOOSE_IMPORT_METHOD', async () => {
         const user = userEvent.setup();
 
-        render(<CreateDiagramDialog dialog={{ open: true }} />);
+        render(<CreateDiagramDialog dialog={{ open: true }} />, {
+            wrapper: withCreateDiagramSessionDestination(true),
+        });
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));
         await user.click(
@@ -356,7 +377,8 @@ describe('CreateDiagramDialog wizard flow', () => {
     it('resets to SELECT_DATABASE when the dialog reopens', async () => {
         const user = userEvent.setup();
         const { rerender } = render(
-            <CreateDiagramDialog dialog={{ open: true }} />
+            <CreateDiagramDialog dialog={{ open: true }} />,
+            { wrapper: withCreateDiagramSessionDestination(true) }
         );
 
         await user.click(screen.getByRole('radio', { name: 'PostgreSQL' }));

@@ -710,6 +710,17 @@ export const fr: LanguageTranslation = {
                 other_group: 'Autres bases de données',
             },
 
+            guest_limit: {
+                title: 'Limite du mode invité atteinte',
+                description:
+                    'Connectez-vous pour créer et enregistrer plus de diagrammes.',
+                sign_in: 'Se connecter',
+            },
+
+            destination: {
+                aria_label: 'Où enregistrer le nouveau diagramme',
+            },
+
             choose_intent: {
                 title: 'Que souhaitez-vous faire ?',
                 description: 'Créez un nouveau diagramme pour {{database}}.',

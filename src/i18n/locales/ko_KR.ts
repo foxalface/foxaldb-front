@@ -700,6 +700,17 @@ export const ko_KR: LanguageTranslation = {
                 other_group: '기타 데이터베이스',
             },
 
+            guest_limit: {
+                title: '게스트 모드 한도에 도달했습니다',
+                description:
+                    '로그인하여 더 많은 다이어그램을 만들고 저장하세요.',
+                sign_in: '로그인',
+            },
+
+            destination: {
+                aria_label: '새 다이어그램 저장 위치',
+            },
+
             choose_intent: {
                 title: '무엇을 하시겠습니까?',
                 description: '{{database}}용 새 다이어그램을 만듭니다.',

@@ -706,6 +706,17 @@ export const ja: LanguageTranslation = {
                 other_group: 'その他のデータベース',
             },
 
+            guest_limit: {
+                title: 'ゲストモードの上限に達しました',
+                description:
+                    'サインインして、さらにダイアグラムを作成・保存してください。',
+                sign_in: 'サインイン',
+            },
+
+            destination: {
+                aria_label: '新しいダイアグラムの保存先',
+            },
+
             choose_intent: {
                 title: '何をしますか？',
                 description: '{{database}} の新しいダイアグラムを作成します。',
