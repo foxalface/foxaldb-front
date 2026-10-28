@@ -161,4 +161,133 @@ describe('AuthIntentProvider', () => {
             });
         });
     });
+
+    it('keeps a prepared reopen intent across logout and does not consume it', async () => {
+        const { result, rerender } = renderHook(() => useAuthIntent(), {
+            wrapper,
+        });
+
+        await act(async () => {
+            authState.isLoading = false;
+            authState.isAuthenticated = true;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.lastConsumedIntent).toEqual({ type: 'none' });
+        });
+
+        act(() => {
+            result.current.setAuthIntent({
+                type: 'protected-action',
+                action: 'share',
+            });
+            result.current.applySessionEndIntent({
+                type: 'open-online-diagram',
+                diagramId: '42',
+            });
+            authState.isAuthenticated = false;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.pendingIntent).toEqual({
+                type: 'open-online-diagram',
+                diagramId: '42',
+            });
+        });
+
+        expect(result.current.lastConsumedIntent).toEqual({ type: 'none' });
+    });
+
+    it('clears stale intent on logout when session end did not prepare one', async () => {
+        const { result, rerender } = renderHook(() => useAuthIntent(), {
+            wrapper,
+        });
+
+        await act(async () => {
+            authState.isLoading = false;
+            authState.isAuthenticated = true;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.consumedIntentEpoch).toBeGreaterThan(0);
+        });
+
+        act(() => {
+            result.current.setAuthIntent({ type: 'open-online-tab' });
+            authState.isAuthenticated = false;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.pendingIntent).toEqual({ type: 'none' });
+        });
+    });
+
+    it('consumes the prepared reopen intent once on the next login', async () => {
+        const { result, rerender } = renderHook(() => useAuthIntent(), {
+            wrapper,
+        });
+
+        await act(async () => {
+            authState.isLoading = false;
+            authState.isAuthenticated = true;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.consumedIntentEpoch).toBeGreaterThan(0);
+        });
+
+        const epochAfterStartup = result.current.consumedIntentEpoch;
+
+        act(() => {
+            result.current.applySessionEndIntent({
+                type: 'open-online-diagram',
+                diagramId: '42',
+            });
+            authState.isAuthenticated = false;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.pendingIntent).toEqual({
+                type: 'open-online-diagram',
+                diagramId: '42',
+            });
+        });
+
+        expect(result.current.consumedIntentEpoch).toBe(epochAfterStartup);
+
+        act(() => {
+            authState.isAuthenticated = true;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.lastConsumedIntent).toEqual({
+                type: 'open-online-diagram',
+                diagramId: '42',
+            });
+            expect(result.current.pendingIntent).toEqual({ type: 'none' });
+        });
+
+        expect(result.current.consumedIntentEpoch).toBe(epochAfterStartup + 1);
+
+        act(() => {
+            authState.isAuthenticated = false;
+        });
+        rerender();
+
+        act(() => {
+            authState.isAuthenticated = true;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.lastConsumedIntent).toEqual({ type: 'none' });
+        });
+    });
 });

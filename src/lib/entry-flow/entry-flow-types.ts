@@ -11,6 +11,9 @@
  *   the states that continuation asks for.
  * - Dialog visibility derived from selectEntryFlowDialog; opened via
  *   useEntryFlowDialogSync
+ * - Session end is not decided from auth alone. useSessionEndOrchestrator
+ *   branches on DiagramLocation. Device session end stays ready. Online and
+ *   unscoped session end enter guest resolution without the startup auth gate.
  *
  * Authentication does not choose storage. A device diagram is never migrated
  * because the user logged in or registered.
@@ -113,7 +116,9 @@ export type EntryFlowEvent =
     | { type: 'AUTH_CONTINUATION_SHOW_ONLINE_LIST' }
     | { type: 'AUTH_CONTINUATION_OPEN_ONLINE_DIAGRAM'; diagramId: string }
     | { type: 'AUTH_CONTINUATION_OPEN_DEVICE_DIAGRAM'; diagramId: string }
-    | { type: 'LOGGED_OUT' }
+    | { type: 'DEVICE_SESSION_ENDED' }
+    | { type: 'ONLINE_SESSION_ENDED' }
+    | { type: 'UNSCOPED_SESSION_ENDED' }
     | { type: 'REMOTE_DIAGRAMS_FOUND'; diagrams: RemoteDiagramSummary[] }
     | { type: 'NO_REMOTE_DIAGRAMS' }
     | { type: 'REMOTE_DIAGRAMS_LOAD_FAILED'; messageKey?: string }

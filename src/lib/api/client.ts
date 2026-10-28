@@ -8,6 +8,8 @@ const PUBLIC_AUTH_PATHS = new Set([
     '/register',
     '/session',
     '/capabilities/uploads',
+    // Explicit logout owns session end. A 401 on this call is not an unexpected expiry.
+    '/logout',
 ]);
 
 const shouldNotifySessionExpired = (path: string, status: number): boolean => {

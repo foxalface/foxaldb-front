@@ -17,6 +17,11 @@ import { AuthIntentContext } from './auth-intent-context';
 /**
  * Single owner for authentication continuation intent.
  * Consumes pending intent once on guest → authenticated transition only.
+ *
+ * Session end does not consume. The session-end orchestrator calls
+ * applySessionEndIntent before the user is cleared so a deliberate reopen
+ * intent replaces stale intents without racing this effect. If that
+ * preparation did not run, stale intent is cleared when auth ends.
  */
 export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -24,6 +29,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
     const { isAuthenticated, isLoading } = useAuth();
     const storeRef = useRef(createAuthIntentStore());
     const wasAuthenticatedRef = useRef(false);
+    const sessionEndIntentPreparedRef = useRef(false);
 
     const [pendingIntent, setPendingIntent] =
         useState<AuthIntent>(noneAuthIntent());
@@ -51,21 +57,39 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
         syncPendingFromStore();
     }, [syncPendingFromStore]);
 
+    const applySessionEndIntent = useCallback(
+        (intent: AuthIntent) => {
+            storeRef.current.set(intent);
+            clearProtectedActionResume();
+            sessionEndIntentPreparedRef.current = true;
+            syncPendingFromStore();
+        },
+        [syncPendingFromStore]
+    );
+
     useEffect(() => {
         if (isLoading) {
             return;
         }
 
         if (!isAuthenticated) {
-            if (wasAuthenticatedRef.current) {
-                wasAuthenticatedRef.current = false;
+            if (!wasAuthenticatedRef.current) {
+                return;
+            }
+
+            wasAuthenticatedRef.current = false;
+
+            if (!sessionEndIntentPreparedRef.current) {
                 storeRef.current.clear();
                 clearProtectedActionResume();
-                syncPendingFromStore();
-                setLastConsumedIntent(noneAuthIntent());
             }
+
+            syncPendingFromStore();
+            setLastConsumedIntent(noneAuthIntent());
             return;
         }
+
+        sessionEndIntentPreparedRef.current = false;
 
         if (wasAuthenticatedRef.current) {
             return;
@@ -84,6 +108,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
             setAuthIntent,
             peekAuthIntent,
             clearAuthIntent,
+            applySessionEndIntent,
             lastConsumedIntent,
             consumedIntentEpoch,
         }),
@@ -92,6 +117,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
             setAuthIntent,
             peekAuthIntent,
             clearAuthIntent,
+            applySessionEndIntent,
             lastConsumedIntent,
             consumedIntentEpoch,
         ]

@@ -69,11 +69,26 @@ export const entryFlowReducer = (
             return initialEntryFlowState();
 
         /**
-         * A4 still owns logout and session-expiry routing. This only returns
-         * to the guest auth gate, which is the current logout behavior.
+         * Device diagram stays the open editor. No auth gate and no navigation.
          */
-        case 'LOGGED_OUT':
-            return toAwaitingGuestChoice();
+        case 'DEVICE_SESSION_ENDED':
+            if (state.kind === 'ready') {
+                return state;
+            }
+
+            return { kind: 'ready' };
+
+        /**
+         * Leave the online diagram and resolve the guest/device entry path.
+         * This does not open the startup auth dialog.
+         */
+        case 'ONLINE_SESSION_ENDED':
+        case 'UNSCOPED_SESSION_ENDED':
+            if (state.kind === 'checkingLocalDiagram') {
+                return state;
+            }
+
+            return { kind: 'checkingLocalDiagram' };
 
         case 'SESSION_AUTHENTICATED':
             if (state.kind !== 'restoringSession') {

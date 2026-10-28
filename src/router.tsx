@@ -14,8 +14,12 @@ const loadTemplatesAndAllTags = async (options?: {
 };
 
 const routes: RouteObject[] = [
-    ...['', 'diagrams/:diagramId'].map((path) => ({
-        path,
+    {
+        // One editor instance for `/` and `/diagrams/:diagramId` so leaving an
+        // online diagram for `/` does not remount the editor or restart the
+        // guest auth gate.
+        path: '/',
+        children: [{ index: true }, { path: 'diagrams/:diagramId' }],
         async lazy() {
             const { EditorPage } =
                 await import('./pages/editor-page/editor-page');
@@ -24,7 +28,7 @@ const routes: RouteObject[] = [
                 element: <EditorPage />,
             };
         },
-    })),
+    },
     {
         path: 'login',
         async lazy() {

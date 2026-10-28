@@ -11,6 +11,7 @@ vi.mock('@/lib/api/diagrams', () => ({
 
 import {
     AUTOSAVE_DEBOUNCE_MS,
+    abandonDiagramAutosave,
     acceptAuthoritativeDiagram,
     cancelPendingDiagramAutosave,
     configureDiagramAutosaveStaleHandlers,
@@ -186,6 +187,43 @@ describe('diagram autosave flush', () => {
             diagramAutosavePayload(merged)
         );
         expect(readDiagramAutosaveContentHash()).toBe(hashB);
+    });
+
+    it('does not PUT a scheduled save after session end abandons it', async () => {
+        observeDiagramForAutosave(diagram('Saved'), { schedule: false });
+        observeDiagramForAutosave(diagram('Edited'), { schedule: true });
+
+        abandonDiagramAutosave();
+
+        await vi.advanceTimersByTimeAsync(AUTOSAVE_DEBOUNCE_MS);
+        await flushDiagramAutosave();
+
+        expect(updateDiagram).not.toHaveBeenCalled();
+        expect(readDiagramAutosaveBaseline()).toBeNull();
+    });
+
+    it('ignores an in-flight save that finishes after session end', async () => {
+        let resolveSave: (value: unknown) => void = () => undefined;
+        updateDiagram.mockImplementation(
+            () =>
+                new Promise((resolve) => {
+                    resolveSave = resolve;
+                })
+        );
+        observeDiagramForAutosave(diagram('Saved'), { schedule: false });
+        observeDiagramForAutosave(diagram('Edited'), { schedule: true });
+
+        await vi.advanceTimersByTimeAsync(AUTOSAVE_DEBOUNCE_MS);
+        await flushMicrotasks();
+        expect(updateDiagram).toHaveBeenCalledTimes(1);
+
+        abandonDiagramAutosave();
+        resolveSave({ id: 42, content_hash: hashB });
+        await flushMicrotasks();
+        await flushDiagramAutosave();
+
+        expect(updateDiagram).toHaveBeenCalledTimes(1);
+        expect(readDiagramAutosaveBaseline()).toBeNull();
     });
 
     it('does not let a stale pending save fire after an authoritative replacement', async () => {

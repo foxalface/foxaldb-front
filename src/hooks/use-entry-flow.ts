@@ -63,7 +63,9 @@ export interface UseEntryFlowResult {
     openDeviceDiagramFromAuthContinuation: (diagramId: string) => void;
     retry: () => void;
     reset: () => void;
-    notifyLoggedOut: () => void;
+    notifyDeviceSessionEnded: () => void;
+    notifyOnlineSessionEnded: () => void;
+    notifyUnscopedSessionEnded: () => void;
 }
 
 /**
@@ -77,7 +79,12 @@ export interface UseEntryFlowResult {
  * Post-auth behavior is not executed here. AuthIntentProvider exposes
  * lastConsumedIntent; useAuthIntentContinuation is the only continuation owner.
  * A guest → authenticated transition while the editor is already ready does
- * not change this state machine. Logout routing remains the A4 scope.
+ * not change this state machine.
+ *
+ * Auth loss does not dispatch from here. useSessionEndOrchestrator is the
+ * only owner of logout and session-expiry diagram and navigation effects.
+ * It calls notifyDeviceSessionEnded, notifyOnlineSessionEnded, or
+ * notifyUnscopedSessionEnded after branching on DiagramLocation.
  */
 export const useEntryFlow = (): UseEntryFlowResult => {
     const [state, dispatch] = useReducer(
@@ -92,7 +99,6 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     const routeDiagramId = normalizeRouteDiagramId(routeDiagramIdParam);
 
     const sessionResolvedRef = useRef(false);
-    const previousUserIdRef = useRef<number | null | undefined>(undefined);
     const previousRouteDiagramIdRef = useRef<string | undefined>(undefined);
     const resolutionGenerationRef = useRef(0);
 
@@ -124,66 +130,40 @@ export const useEntryFlow = (): UseEntryFlowResult => {
 
     /**
      * Initial session restoration runs once per mount after auth loading completes.
-     * Later logout uses LOGGED_OUT. A guest who logs in while a diagram is
-     * already open does not dispatch here: storage stays put, and
-     * useAuthIntentContinuation applies the consumed intent.
-     * Startup login still calls notifyAuthenticationSucceeded, which only
-     * leaves the guest gate.
+     * Later logout and session expiry are owned by useSessionEndOrchestrator.
+     * A guest who logs in while a diagram is already open does not dispatch
+     * here: storage stays put, and useAuthIntentContinuation applies the
+     * consumed intent. Startup login still calls notifyAuthenticationSucceeded,
+     * which only leaves the guest gate.
      */
     useEffect(() => {
-        if (isLoading) {
+        if (isLoading || sessionResolvedRef.current) {
             return;
         }
 
-        const userId = user?.id ?? null;
+        sessionResolvedRef.current = true;
+        previousRouteDiagramIdRef.current = routeDiagramId;
 
-        if (!sessionResolvedRef.current) {
-            sessionResolvedRef.current = true;
-            previousUserIdRef.current = userId;
-            previousRouteDiagramIdRef.current = routeDiagramId;
-
-            if (isAuthenticated) {
-                dispatchEvent({
-                    type: 'SESSION_AUTHENTICATED',
-                    routeDiagramId,
-                });
-            } else {
-                const requestedDeviceDiagramId =
-                    routeDiagramId !== undefined &&
-                    !isValidBackendDiagramId(routeDiagramId)
-                        ? routeDiagramId
-                        : undefined;
-
-                dispatchEvent({
-                    type: 'SESSION_UNAUTHENTICATED',
-                    routeDiagramId,
-                    requestedDeviceDiagramId,
-                });
-            }
-
+        if (isAuthenticated) {
+            dispatchEvent({
+                type: 'SESSION_AUTHENTICATED',
+                routeDiagramId,
+            });
             return;
         }
 
-        const previousUserId = previousUserIdRef.current;
+        const requestedDeviceDiagramId =
+            routeDiagramId !== undefined &&
+            !isValidBackendDiagramId(routeDiagramId)
+                ? routeDiagramId
+                : undefined;
 
-        if (
-            previousUserId !== null &&
-            previousUserId !== undefined &&
-            userId === null
-        ) {
-            invalidateResolution();
-            dispatchEvent({ type: 'LOGGED_OUT' });
-        }
-
-        previousUserIdRef.current = userId;
-    }, [
-        isLoading,
-        isAuthenticated,
-        user?.id,
-        routeDiagramId,
-        dispatchEvent,
-        invalidateResolution,
-    ]);
+        dispatchEvent({
+            type: 'SESSION_UNAUTHENTICATED',
+            routeDiagramId,
+            requestedDeviceDiagramId,
+        });
+    }, [isLoading, isAuthenticated, user?.id, routeDiagramId, dispatchEvent]);
 
     /** Invalidate stale opening work when the route diagram identity changes. */
     useEffect(() => {
@@ -215,27 +195,30 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     );
 
     const showOnlineListFromAuthContinuation = useCallback(() => {
+        invalidateResolution();
         dispatchEvent({ type: 'AUTH_CONTINUATION_SHOW_ONLINE_LIST' });
-    }, [dispatchEvent]);
+    }, [dispatchEvent, invalidateResolution]);
 
     const openOnlineDiagramFromAuthContinuation = useCallback(
         (diagramId: string) => {
+            invalidateResolution();
             dispatchEvent({
                 type: 'AUTH_CONTINUATION_OPEN_ONLINE_DIAGRAM',
                 diagramId,
             });
         },
-        [dispatchEvent]
+        [dispatchEvent, invalidateResolution]
     );
 
     const openDeviceDiagramFromAuthContinuation = useCallback(
         (diagramId: string) => {
+            invalidateResolution();
             dispatchEvent({
                 type: 'AUTH_CONTINUATION_OPEN_DEVICE_DIAGRAM',
                 diagramId,
             });
         },
-        [dispatchEvent]
+        [dispatchEvent, invalidateResolution]
     );
 
     const notifyLocalDiagramFound = useCallback(
@@ -327,9 +310,19 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         dispatchEvent({ type: 'RESET' });
     }, [dispatchEvent, invalidateResolution]);
 
-    const notifyLoggedOut = useCallback(() => {
+    const notifyDeviceSessionEnded = useCallback(() => {
         invalidateResolution();
-        dispatchEvent({ type: 'LOGGED_OUT' });
+        dispatchEvent({ type: 'DEVICE_SESSION_ENDED' });
+    }, [dispatchEvent, invalidateResolution]);
+
+    const notifyOnlineSessionEnded = useCallback(() => {
+        invalidateResolution();
+        dispatchEvent({ type: 'ONLINE_SESSION_ENDED' });
+    }, [dispatchEvent, invalidateResolution]);
+
+    const notifyUnscopedSessionEnded = useCallback(() => {
+        invalidateResolution();
+        dispatchEvent({ type: 'UNSCOPED_SESSION_ENDED' });
     }, [dispatchEvent, invalidateResolution]);
 
     const dialog = selectEntryFlowDialog(state);
@@ -399,6 +392,8 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         openDeviceDiagramFromAuthContinuation,
         retry,
         reset,
-        notifyLoggedOut,
+        notifyDeviceSessionEnded,
+        notifyOnlineSessionEnded,
+        notifyUnscopedSessionEnded,
     };
 };

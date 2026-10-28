@@ -1,4 +1,5 @@
 import React, { Suspense, useCallback, useMemo } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { Toaster } from '@/components/toast/toaster';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -29,6 +30,7 @@ import { useDiagramRealtime } from './use-diagram-realtime';
 import { useDiagramReconnectRefresh } from './use-diagram-reconnect-refresh';
 import { useEntryFlow, type UseEntryFlowResult } from '@/hooks/use-entry-flow';
 import { AuthIntentContinuationMount } from '@/hooks/use-auth-intent-continuation';
+import { SessionEndOrchestratorMount } from './session-end-orchestrator-mount';
 import { EntryFlowDialogSyncMount } from './entry-flow-dialog-sync-mount';
 import type { EntryFlowActiveDiagramDeletionActions } from './entry-flow-active-diagram-deletion-actions';
 import type { EntryFlowCreateDiagramActions } from './entry-flow-create-diagram-actions';
@@ -193,6 +195,11 @@ const EditorPageComponent: React.FC = () => {
               Sole continuation owner. Auth dialog, /login, and /register
               do not execute AuthIntent.
             */}
+            <SessionEndOrchestratorMount
+                onDeviceSessionEnded={entryFlow.notifyDeviceSessionEnded}
+                onOnlineSessionEnded={entryFlow.notifyOnlineSessionEnded}
+                onUnscopedSessionEnded={entryFlow.notifyUnscopedSessionEnded}
+            />
             <AuthIntentContinuationMount
                 stateKind={entryFlow.state.kind}
                 requestedDeviceDiagramId={requestedDeviceDiagramId}
@@ -205,6 +212,7 @@ const EditorPageComponent: React.FC = () => {
                 }
             />
             <EntryFlowDialogSyncMount entryFlowDialog={entryFlow.dialog} />
+            <Outlet />
             <KeyboardShortcutsProvider>
                 <EditingBroadcastProvider>
                     <RemoteEditingProvider>

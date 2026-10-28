@@ -69,4 +69,26 @@ describe('useDiagramChannelLifecycle location gate', () => {
 
         expect(joinDiagram).not.toHaveBeenCalled();
     });
+
+    it('leaves the diagram channel when authentication ends', () => {
+        const { rerender } = renderLifecycle(onlineDiagramLocation('42'));
+
+        expect(joinDiagram).toHaveBeenCalledWith('42');
+
+        authState.isAuthenticated = false;
+        rerender();
+
+        expect(leaveDiagram).toHaveBeenCalled();
+    });
+
+    it('does not join or leave a diagram channel when a device session ends', () => {
+        chartDbState.currentDiagram = { id: 'local-1' };
+        const { rerender } = renderLifecycle(deviceDiagramLocation('local-1'));
+
+        authState.isAuthenticated = false;
+        rerender();
+
+        expect(joinDiagram).not.toHaveBeenCalled();
+        expect(leaveDiagram).not.toHaveBeenCalled();
+    });
 });

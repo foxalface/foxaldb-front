@@ -172,4 +172,30 @@ describe('ConversationsProvider HTTP lifecycle', () => {
         expect(result.current.status).toBe('idle');
         expect(result.current.activeConversations).toBe(EMPTY_CONVERSATIONS);
     });
+
+    it('resets when the open diagram is no longer the online diagram', async () => {
+        listDiagramConversations.mockResolvedValue({
+            data: [createConversationFixture({ id: 1 })],
+            nextCursor: null,
+            totalUnreadCount: 0,
+        });
+
+        const { result, rerender } = renderHook(
+            () => useDiagramConversations(),
+            {
+                wrapper: ConversationsProviderTestWrapper,
+            }
+        );
+
+        await waitFor(() => {
+            expect(result.current.status).toBe('ready');
+        });
+
+        env.currentDiagram = { id: 'local-1' };
+        rerender();
+
+        expect(result.current.isActive).toBe(false);
+        expect(result.current.status).toBe('idle');
+        expect(result.current.activeConversations).toBe(EMPTY_CONVERSATIONS);
+    });
 });

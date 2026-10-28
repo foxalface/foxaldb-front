@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { entryFlowReducer, initialEntryFlowState } from '../entry-flow-reducer';
+import { selectEntryFlowDialog } from '../entry-flow-selectors';
 import type {
     EntryFlowEvent,
     EntryFlowState,
@@ -551,8 +552,8 @@ describe('entryFlowReducer — recoverableError entrySource', () => {
     });
 });
 
-describe('entryFlowReducer — logout', () => {
-    const logoutFromStates: EntryFlowState[] = [
+describe('entryFlowReducer — session end', () => {
+    const onlineLeaveStates: EntryFlowState[] = [
         { kind: 'loadingRemoteDiagrams', entrySource: 'startup' },
         {
             kind: 'selectingRemoteDiagram',
@@ -574,57 +575,92 @@ describe('entryFlowReducer — logout', () => {
         },
     ];
 
-    it.each(logoutFromStates)(
-        'logout from %o → awaitingGuestChoice',
+    it.each(onlineLeaveStates)(
+        'online session end from %o → checkingLocalDiagram',
         (fromState) => {
-            const state = reduce(fromState, { type: 'LOGGED_OUT' });
+            const state = reduce(fromState, { type: 'ONLINE_SESSION_ENDED' });
 
-            expect(state).toEqual({ kind: 'awaitingGuestChoice' });
+            expect(state).toEqual({ kind: 'checkingLocalDiagram' });
+            expect(selectEntryFlowDialog(state)).toBeNull();
         }
     );
 
-    it('stale remote result after logout is ignored', () => {
-        const afterLogout = reduce(
-            { kind: 'loadingRemoteDiagrams', entrySource: 'startup' },
-            { type: 'LOGGED_OUT' }
+    it('device session end from ready stays ready without an auth dialog', () => {
+        const ready: EntryFlowState = { kind: 'ready' };
+        const state = reduce(ready, { type: 'DEVICE_SESSION_ENDED' });
+
+        expect(state).toBe(ready);
+        expect(selectEntryFlowDialog(state)).toBeNull();
+    });
+
+    it('device session end from an in-progress open becomes ready', () => {
+        const state = reduce(
+            {
+                kind: 'openingDiagram',
+                diagramId: 'local-1',
+                diagramSource: 'local',
+                entrySource: 'guestContinuation',
+            },
+            { type: 'DEVICE_SESSION_ENDED' }
         );
 
-        const state = reduce(afterLogout, {
+        expect(state).toEqual({ kind: 'ready' });
+    });
+
+    it('stale remote result after online session end is ignored', () => {
+        const afterEnd = reduce(
+            { kind: 'loadingRemoteDiagrams', entrySource: 'startup' },
+            { type: 'ONLINE_SESSION_ENDED' }
+        );
+
+        const state = reduce(afterEnd, {
             type: 'REMOTE_DIAGRAMS_FOUND',
             diagrams: remoteSummaries(['1']),
         });
 
-        expect(state).toEqual({ kind: 'awaitingGuestChoice' });
+        expect(state).toEqual({ kind: 'checkingLocalDiagram' });
     });
 
-    it('stale local result after logout is ignored', () => {
-        const afterLogout = reduce(
+    it('stale local result after device session end is ignored', () => {
+        const afterEnd = reduce(
             { kind: 'checkingLocalDiagram' },
-            { type: 'LOGGED_OUT' }
+            { type: 'DEVICE_SESSION_ENDED' }
         );
 
-        const state = reduce(afterLogout, {
+        const state = reduce(afterEnd, {
             type: 'LOCAL_DIAGRAM_FOUND',
             diagramId: 'local-1',
         });
 
-        expect(state).toEqual({ kind: 'awaitingGuestChoice' });
+        expect(state).toEqual({ kind: 'ready' });
     });
 
-    it('stale open-complete event after logout is ignored', () => {
-        const afterLogout = reduce(
+    it('stale open-complete event after online session end is ignored', () => {
+        const afterEnd = reduce(
             {
                 kind: 'openingDiagram',
                 diagramId: '3',
                 diagramSource: 'remote',
                 entrySource: 'startup',
             },
-            { type: 'LOGGED_OUT' }
+            { type: 'ONLINE_SESSION_ENDED' }
         );
 
-        const state = reduce(afterLogout, { type: 'DIAGRAM_OPENED' });
+        const state = reduce(afterEnd, { type: 'DIAGRAM_OPENED' });
 
-        expect(state).toEqual({ kind: 'awaitingGuestChoice' });
+        expect(state).toEqual({ kind: 'checkingLocalDiagram' });
+    });
+
+    it('online session end then a missing device diagram reaches guest create', () => {
+        const state = reduce(
+            reduce({ kind: 'ready' }, { type: 'ONLINE_SESSION_ENDED' }),
+            { type: 'LOCAL_DIAGRAM_NOT_FOUND' }
+        );
+
+        expect(state).toEqual({
+            kind: 'creatingDiagram',
+            entrySource: 'guestContinuation',
+        });
     });
 });
 

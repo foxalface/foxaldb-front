@@ -174,6 +174,21 @@ class DiagramAutosaveController {
         this.discardPayload = this.latest?.payload ?? null;
     }
 
+    /**
+     * Session end: cancel the debounce and forget the online snapshot so it
+     * cannot be flushed or retried. A request already awaiting the network
+     * can still complete; its result is ignored and is not written to Dexie.
+     */
+    abandon(): void {
+        this.epoch += 1;
+        this.clearTimer();
+        this.enabled = false;
+        this.activeDiagramId = null;
+        this.latest = null;
+        this.lastSavedPayload = null;
+        this.discardPayload = null;
+    }
+
     acceptAuthoritative(diagram: Diagram, contentHash?: string): void {
         this.epoch += 1;
         this.clearTimer();
@@ -369,6 +384,10 @@ export const clearScheduledDiagramAutosave = (): void => {
 
 export const cancelPendingDiagramAutosave = (): void => {
     controller.cancelPending();
+};
+
+export const abandonDiagramAutosave = (): void => {
+    controller.abandon();
 };
 
 export const acceptAuthoritativeDiagram = (

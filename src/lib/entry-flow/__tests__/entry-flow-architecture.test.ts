@@ -63,6 +63,33 @@ describe('entry-flow architecture validation', () => {
         expect(dialog).toContain('continuation owner');
     });
 
+    it('owns session end in one orchestrator', () => {
+        const editorPage = readSrcFile('pages/editor-page/editor-page.tsx');
+        const orchestrator = readSrcFile(
+            'hooks/use-session-end-orchestrator.ts'
+        );
+        const entryFlow = readSrcFile('hooks/use-entry-flow.ts');
+        const authProvider = readSrcFile(
+            'context/auth-context/auth-provider.tsx'
+        );
+
+        expect(editorPage.match(/<SessionEndOrchestratorMount/g)).toHaveLength(
+            1
+        );
+        expect(orchestrator).toContain('planSessionEnd');
+        expect(orchestrator).toContain('abandonDiagramAutosave');
+        expect(orchestrator).toContain('loadDiagramFromData');
+        expect(orchestrator).not.toContain('addDiagram');
+        expect(orchestrator).not.toContain('deleteDiagram');
+        expect(orchestrator).not.toContain('clearDiagramData');
+        expect(orchestrator).not.toContain('putLocalDiagramOnline');
+        expect(orchestrator).not.toContain('createDiagram');
+        expect(entryFlow).not.toContain("type: 'LOGGED_OUT'");
+        expect(authProvider).toContain("endSession('explicit-logout')");
+        expect(authProvider).toContain('beginSessionEnd(reason)');
+        expect(authProvider).toContain("endSession('session-expired')");
+    });
+
     it('owns post-auth continuation in one hook', () => {
         const editorPage = readSrcFile('pages/editor-page/editor-page.tsx');
         const continuation = readSrcFile(
@@ -71,6 +98,9 @@ describe('entry-flow architecture validation', () => {
         const reducer = readSrcFile('lib/entry-flow/entry-flow-reducer.ts');
 
         expect(editorPage.match(/<AuthIntentContinuationMount/g)).toHaveLength(
+            1
+        );
+        expect(editorPage.match(/<SessionEndOrchestratorMount/g)).toHaveLength(
             1
         );
         expect(continuation).toContain('Sole post-authentication continuation');

@@ -17,6 +17,7 @@ import {
     updateProfile as apiUpdateProfile,
 } from '@/lib/api/auth';
 import { registerSessionExpiredHandler } from '@/lib/api/session-expired';
+import { beginSessionEnd, type SessionEndReason } from '@/lib/session-end';
 
 const SESSION_REVALIDATION_THRESHOLD_MS = 30_000;
 
@@ -28,6 +29,17 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
     const didCheckSessionRef = useRef(false);
     const userRef = useRef<AuthUser | null>(null);
     const hiddenAtRef = useRef<number | null>(null);
+    const logoutInProgressRef = useRef(false);
+
+    const endSession = useCallback((reason: SessionEndReason) => {
+        if (userRef.current === null) {
+            return;
+        }
+
+        userRef.current = null;
+        beginSessionEnd(reason);
+        setUser(null);
+    }, []);
 
     useEffect(() => {
         if (didCheckSessionRef.current) {
@@ -40,6 +52,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
             try {
                 await initCsrf();
                 const currentUser = await fetchSessionUser();
+                userRef.current = currentUser;
                 setUser(currentUser);
             } catch {
                 setUser(null);
@@ -57,11 +70,13 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
 
     useEffect(() => {
         return registerSessionExpiredHandler(() => {
-            if (userRef.current !== null) {
-                setUser(null);
+            if (logoutInProgressRef.current) {
+                return;
             }
+
+            endSession('session-expired');
         });
-    }, []);
+    }, [endSession]);
 
     useEffect(() => {
         if (user === null) {
@@ -72,10 +87,14 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
             try {
                 const currentUser = await fetchSessionUser();
                 if (currentUser === null) {
-                    setUser(null);
+                    endSession('session-expired');
+                    return;
                 }
+
+                userRef.current = currentUser;
+                setUser(currentUser);
             } catch {
-                setUser(null);
+                endSession('session-expired');
             }
         };
 
@@ -107,12 +126,13 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
                 handleVisibilityChange
             );
         };
-    }, [user]);
+    }, [user, endSession]);
 
     const login = useCallback(
         async (email: string, password: string): Promise<void> => {
             await initCsrf();
             const loggedInUser = await apiLogin(email, password);
+            userRef.current = loggedInUser;
             setUser(loggedInUser);
         },
         []
@@ -134,31 +154,40 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
                 password,
                 passwordConfirmation
             );
+            userRef.current = registeredUser;
             setUser(registeredUser);
         },
         []
     );
 
     const logout = useCallback(async (): Promise<void> => {
+        logoutInProgressRef.current = true;
+
         try {
             await apiLogout();
         } finally {
-            setUser(null);
+            try {
+                endSession('explicit-logout');
+            } finally {
+                logoutInProgressRef.current = false;
+            }
         }
-    }, []);
+    }, [endSession]);
 
     const fetchUser = useCallback(async (): Promise<void> => {
         try {
             const currentUser = await fetchCurrentUser();
+            userRef.current = currentUser;
             setUser(currentUser);
         } catch {
-            setUser(null);
+            endSession('session-expired');
         }
-    }, []);
+    }, [endSession]);
 
     const updateProfile = useCallback(
         async (payload: UpdateProfilePayload): Promise<void> => {
             const updatedUser = await apiUpdateProfile(payload);
+            userRef.current = updatedUser;
             setUser(updatedUser);
         },
         []

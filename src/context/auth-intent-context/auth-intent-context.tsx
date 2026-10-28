@@ -9,6 +9,11 @@ export interface AuthIntentContextValue {
     peekAuthIntent: () => AuthIntent;
     clearAuthIntent: () => void;
     /**
+     * Replaces pending intent as part of session end, before the user becomes
+     * a guest. The logout transition keeps this value and does not consume it.
+     */
+    applySessionEndIntent: (intent: AuthIntent) => void;
+    /**
      * Intent consumed exactly once after the latest guest → authenticated transition.
      * useAuthIntentContinuation is the only executor of this value.
      */
@@ -28,6 +33,7 @@ export const AuthIntentContext = createContext<AuthIntentContextValue>({
     setAuthIntent: emptyFn,
     peekAuthIntent: () => noneAuthIntent(),
     clearAuthIntent: emptyFn,
+    applySessionEndIntent: emptyFn,
     lastConsumedIntent: noneAuthIntent(),
     consumedIntentEpoch: 0,
 });

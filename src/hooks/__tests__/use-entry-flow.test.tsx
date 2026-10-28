@@ -338,7 +338,7 @@ describe('useEntryFlow', () => {
         expect(result.current.state).toEqual({ kind: 'awaitingGuestChoice' });
     });
 
-    it('authenticated → unauthenticated transition dispatches logout semantics', async () => {
+    it('authenticated → unauthenticated does not change entry state', async () => {
         const { result, rerender } = renderHook(() => useEntryFlow());
 
         completeAuthAsUser();
@@ -348,15 +348,18 @@ describe('useEntryFlow', () => {
             expect(result.current.state.kind).toBe('loadingRemoteDiagrams');
         });
 
+        const token = result.current.beginResolution();
+
         authState.user = null;
         authState.isAuthenticated = false;
         rerender();
 
-        await waitFor(() => {
-            expect(result.current.state).toEqual({
-                kind: 'awaitingGuestChoice',
-            });
+        expect(result.current.state).toEqual({
+            kind: 'loadingRemoteDiagrams',
+            entrySource: 'startup',
         });
+        expect(result.current.isResolutionCurrent(token)).toBe(true);
+        expect(result.current.dialog).toBeNull();
     });
 
     it('initial unauthenticated restoration is not treated as logout', async () => {
@@ -464,7 +467,7 @@ describe('useEntryFlow', () => {
         expect(result.current.isResolutionCurrent(token)).toBe(false);
     });
 
-    it('logout invalidates prior async generation', async () => {
+    it('online session end invalidates prior async generation and starts guest resolution', async () => {
         const { result, rerender } = renderHook(() => useEntryFlow());
 
         completeAuthAsUser();
@@ -476,14 +479,12 @@ describe('useEntryFlow', () => {
 
         const token = result.current.beginResolution();
 
-        authState.user = null;
-        authState.isAuthenticated = false;
-        rerender();
-
-        await waitFor(() => {
-            expect(result.current.state.kind).toBe('awaitingGuestChoice');
+        act(() => {
+            result.current.notifyOnlineSessionEnded();
         });
 
+        expect(result.current.state).toEqual({ kind: 'checkingLocalDiagram' });
+        expect(result.current.dialog).toBeNull();
         expect(result.current.isResolutionCurrent(token)).toBe(false);
     });
 
@@ -559,7 +560,7 @@ describe('useEntryFlow', () => {
             expect(result.current.isResolutionCurrent(token)).toBe(false);
         });
 
-        it('notifyLoggedOut invalidates the latest token', async () => {
+        it('notifyDeviceSessionEnded invalidates the latest token and stays ready', async () => {
             const { result, rerender } = renderHook(() => useEntryFlow());
 
             completeAuthAsGuest();
@@ -569,12 +570,22 @@ describe('useEntryFlow', () => {
                 expect(result.current.state.kind).toBe('awaitingGuestChoice');
             });
 
+            act(() => {
+                result.current.continueAsGuest();
+                result.current.notifyLocalDiagramFound('local-1');
+                result.current.notifyDiagramOpened();
+            });
+
+            expect(result.current.state).toEqual({ kind: 'ready' });
+
             const token = result.current.beginResolution();
 
             act(() => {
-                result.current.notifyLoggedOut();
+                result.current.notifyDeviceSessionEnded();
             });
 
+            expect(result.current.state).toEqual({ kind: 'ready' });
+            expect(result.current.dialog).toBeNull();
             expect(result.current.isResolutionCurrent(token)).toBe(false);
         });
 
@@ -683,9 +694,26 @@ describe('useEntryFlow', () => {
         expect(result.current.state.kind).toBe('openingDiagram');
 
         act(() => {
-            result.current.notifyLoggedOut();
+            result.current.notifyDiagramOpened();
         });
-        expect(result.current.state).toEqual({ kind: 'awaitingGuestChoice' });
+        expect(result.current.state).toEqual({ kind: 'ready' });
+
+        act(() => {
+            result.current.notifyUnscopedSessionEnded();
+        });
+        expect(result.current.state).toEqual({ kind: 'checkingLocalDiagram' });
+        expect(result.current.dialog).toBeNull();
+    });
+
+    it('startup login continuation still leaves the guest gate', async () => {
+        const { result, rerender } = renderHook(() => useEntryFlow());
+
+        completeAuthAsGuest();
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.state.kind).toBe('awaitingGuestChoice');
+        });
 
         act(() => {
             result.current.notifyAuthenticationSucceeded('login');
@@ -720,9 +748,10 @@ describe('useEntryFlow', () => {
         expect(result.current.state).toEqual({ kind: 'ready' });
 
         act(() => {
-            result.current.notifyLoggedOut();
+            result.current.notifyDeviceSessionEnded();
         });
-        expect(result.current.state).toEqual({ kind: 'awaitingGuestChoice' });
+        expect(result.current.state).toEqual({ kind: 'ready' });
+        expect(result.current.dialog).toBeNull();
     });
 
     it('exposes selector-derived dialog, blocking and ready flags', async () => {
