@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
-import { createDiagram } from '@/lib/api/diagrams';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useAuth } from '@/hooks/use-auth';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
 import { useStorage } from '@/hooks/use-storage';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { SelectedTable } from '@/lib/data/import-metadata/filter-metadata';
@@ -40,6 +41,16 @@ import { useToast } from '@/components/toast/use-toast';
 import { ToastAction } from '@/components/toast/toast';
 import { ImportFromDatabaseStep } from './import-from-database/import-from-database-step';
 import { ChooseImportMethod } from './choose-import-method/choose-import-method';
+import {
+    appliesGuestDeviceDiagramLimit,
+    defaultDiagramCreationDestination,
+    type DiagramCreationDestination,
+} from '@/lib/diagram/diagram-creation-destination';
+import {
+    openPersistedNewDiagram,
+    persistNewDiagram,
+    persistedNewDiagramId,
+} from '@/lib/diagram/persist-new-diagram';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {
     entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
@@ -51,8 +62,25 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 }) => {
     const { isAuthenticated } = useAuth();
     const { currentDiagram, loadDiagramFromData } = useChartDB();
+    const { setDiagramLocation } = useDiagramLocation();
+    const { clearDiagramAccess } = useDiagramAccess();
     const { toast } = useToast();
     const { t } = useTranslation();
+    const sessionIsOpen = dialog.open === true;
+    const [destinationSessionOpen, setDestinationSessionOpen] =
+        useState(sessionIsOpen);
+    const [destination, setDestination] = useState<DiagramCreationDestination>(
+        () => defaultDiagramCreationDestination(isAuthenticated)
+    );
+
+    // Latch the default only when a new create session opens. An auth change
+    // while this wizard stays open must not retarget the session.
+    if (sessionIsOpen !== destinationSessionOpen) {
+        setDestinationSessionOpen(sessionIsOpen);
+        if (sessionIsOpen) {
+            setDestination(defaultDiagramCreationDestination(isAuthenticated));
+        }
+    }
 
     const isEntryFlowOwned = entryCreateDiagramActions !== undefined;
     const canClose = useMemo(
@@ -134,27 +162,9 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         });
     }, [handleGuestLimitSignIn, toast]);
 
-    const persistDiagram = useCallback(
+    const finishCreatedDiagram = useCallback(
         async (diagram: Diagram) => {
-            if (!isAuthenticated) {
-                await addDiagram({ diagram });
-                loadDiagramFromData(diagram);
-                return diagram.id;
-            }
-
-            const result = await createDiagram({
-                name: diagram.name,
-                content: diagram,
-            });
-
-            return String(result.diagram.id);
-        },
-        [isAuthenticated, addDiagram, loadDiagramFromData]
-    );
-
-    const finalizeImportedDiagram = useCallback(
-        async (diagram: Diagram) => {
-            if (!isAuthenticated) {
+            if (appliesGuestDeviceDiagramLimit(destination, isAuthenticated)) {
                 const diagrams = await listDiagrams();
                 if (diagrams.length >= 1) {
                     showGuestLimitToast();
@@ -162,31 +172,50 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 }
             }
 
-            const id = await persistDiagram(diagram);
+            const persisted = await persistNewDiagram(diagram, destination, {
+                addDiagram,
+                isAuthenticated,
+            });
 
             if (entryCreateDiagramActions) {
-                entryCreateDiagramActions.onDiagramCreated(id);
+                entryCreateDiagramActions.onDiagramCreated(
+                    persistedNewDiagramId(persisted)
+                );
                 return;
             }
 
             closeCreateDiagramDialog();
 
-            if (isAuthenticated) {
-                await updateConfig({
-                    config: { defaultDiagramId: id },
-                });
-                navigate(`/diagrams/${id}`);
-            }
+            await openPersistedNewDiagram(persisted, {
+                setDiagramLocation,
+                clearDiagramAccess,
+                loadDiagramFromData,
+                navigate: (path) => {
+                    navigate(path);
+                },
+                updateDefaultDiagramId: isAuthenticated
+                    ? async (diagramId) => {
+                          await updateConfig({
+                              config: { defaultDiagramId: diagramId },
+                          });
+                      }
+                    : undefined,
+                navigateAfterDeviceOpen: isAuthenticated,
+            });
         },
         [
-            closeCreateDiagramDialog,
-            navigate,
-            updateConfig,
-            persistDiagram,
+            destination,
             isAuthenticated,
             listDiagrams,
             showGuestLimitToast,
+            addDiagram,
             entryCreateDiagramActions,
+            closeCreateDiagramDialog,
+            setDiagramLocation,
+            clearDiagramAccess,
+            loadDiagramFromData,
+            navigate,
+            updateConfig,
         ]
     );
 
@@ -216,7 +245,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 selectedTables,
             });
 
-            await finalizeImportedDiagram(diagram);
+            await finishCreatedDiagram(diagram);
         },
         [
             scriptResult,
@@ -226,7 +255,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             resolvedSourceDialect,
             databaseEdition,
             diagramNumber,
-            finalizeImportedDiagram,
+            finishCreatedDiagram,
         ]
     );
 
@@ -297,7 +326,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         setDatabaseType(importedDiagram.databaseType);
                     }
 
-                    await finalizeImportedDiagram(importedDiagram);
+                    await finishCreatedDiagram(importedDiagram);
                     return;
                 }
 
@@ -319,7 +348,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         setDatabaseType(diagram.databaseType);
                     }
 
-                    await finalizeImportedDiagram(diagram);
+                    await finishCreatedDiagram(diagram);
                     return;
                 }
 
@@ -357,7 +386,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         databaseMetadata: metadata,
                     });
 
-                    await finalizeImportedDiagram(diagram);
+                    await finishCreatedDiagram(diagram);
                     return;
                 }
 
@@ -369,7 +398,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     diagramNumber,
                 });
 
-                await finalizeImportedDiagram(diagram);
+                await finishCreatedDiagram(diagram);
             } catch (error: unknown) {
                 let message = t(
                     'new_diagram_dialog.import_schema.errors.import_failed'
@@ -399,20 +428,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             databaseType,
             databaseEdition,
             diagramNumber,
-            finalizeImportedDiagram,
+            finishCreatedDiagram,
             t,
         ]
     );
 
     const createEmptyDiagram = useCallback(async () => {
-        if (!isAuthenticated) {
-            const diagrams = await listDiagrams();
-            if (diagrams.length >= 1) {
-                showGuestLimitToast();
-                return;
-            }
-        }
-
         const diagram: Diagram = {
             id: generateDiagramId(),
             name: `Diagram ${diagramNumber}`,
@@ -425,34 +446,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updatedAt: new Date(),
         };
 
-        const id = await persistDiagram(diagram);
-
-        if (entryCreateDiagramActions) {
-            entryCreateDiagramActions.onDiagramCreated(id);
-            return;
-        }
-
-        closeCreateDiagramDialog();
-
-        if (isAuthenticated) {
-            await updateConfig({
-                config: { defaultDiagramId: id },
-            });
-            navigate(`/diagrams/${id}`);
-        }
-    }, [
-        databaseType,
-        databaseEdition,
-        closeCreateDiagramDialog,
-        navigate,
-        updateConfig,
-        diagramNumber,
-        persistDiagram,
-        isAuthenticated,
-        listDiagrams,
-        showGuestLimitToast,
-        entryCreateDiagramActions,
-    ]);
+        await finishCreatedDiagram(diagram);
+    }, [databaseType, databaseEdition, diagramNumber, finishCreatedDiagram]);
 
     const handleImportBack = useCallback(() => {
         setScriptResult('');

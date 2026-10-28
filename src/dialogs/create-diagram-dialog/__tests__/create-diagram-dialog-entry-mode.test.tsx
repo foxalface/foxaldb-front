@@ -59,7 +59,6 @@ describe('CreateDiagramDialog entry-flow ownership', () => {
             <CreateDiagramDialog
                 dialog={{ open: true }}
                 entryCreateDiagramActions={{
-                    target: 'guest',
                     onDiagramCreated: vi.fn(),
                 }}
             />

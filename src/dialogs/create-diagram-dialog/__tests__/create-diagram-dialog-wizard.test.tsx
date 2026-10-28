@@ -12,6 +12,7 @@ const navigate = vi.fn();
 const updateConfig = vi.fn().mockResolvedValue(undefined);
 const loadDiagramFromData = vi.fn();
 const listDiagrams = vi.fn().mockResolvedValue([{ id: '42' }]);
+const setDiagramLocation = vi.fn();
 
 let isAuthenticated = true;
 
@@ -31,6 +32,13 @@ vi.mock('@/hooks/use-chartdb', () => ({
             updatedAt: new Date(),
         },
         loadDiagramFromData,
+    }),
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useDiagramLocation: () => ({
+        location: null,
+        setDiagramLocation,
     }),
 }));
 
@@ -126,6 +134,7 @@ describe('CreateDiagramDialog wizard flow', () => {
         navigate.mockClear();
         updateConfig.mockClear();
         loadDiagramFromData.mockClear();
+        setDiagramLocation.mockClear();
         importSchemaPropsSpy.mockClear();
         importFromDatabasePropsSpy.mockClear();
     });
@@ -203,6 +212,9 @@ describe('CreateDiagramDialog wizard flow', () => {
             content: { databaseType: string };
         };
         expect(payload.content.databaseType).toBe('postgresql');
+        expect(addDiagram).not.toHaveBeenCalled();
+        expect(loadDiagramFromData).not.toHaveBeenCalled();
+        expect(setDiagramLocation).not.toHaveBeenCalled();
         expect(closeCreateDiagramDialog).toHaveBeenCalledTimes(1);
         expect(navigate).toHaveBeenCalledWith('/diagrams/99');
     });
@@ -226,11 +238,16 @@ describe('CreateDiagramDialog wizard flow', () => {
         });
 
         const payload = addDiagram.mock.calls[0]?.[0] as {
-            diagram: { databaseType: string };
+            diagram: { id: string; databaseType: string };
         };
         expect(payload.diagram.databaseType).toBe('postgresql');
         expect(createDiagram).not.toHaveBeenCalled();
         expect(loadDiagramFromData).toHaveBeenCalledTimes(1);
+        expect(setDiagramLocation).toHaveBeenCalledWith({
+            type: 'device',
+            localId: payload.diagram.id,
+        });
+        expect(navigate).not.toHaveBeenCalled();
     });
 
     it('advances to import method selection when import is selected', async () => {

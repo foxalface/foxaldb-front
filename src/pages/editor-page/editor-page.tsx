@@ -145,11 +145,6 @@ const EditorPageComponent: React.FC = () => {
         (): EntryFlowCreateDiagramActions | undefined =>
             entryFlow.dialog === 'createDiagram'
                 ? {
-                      target:
-                          entryFlow.state.kind === 'creatingDiagram' &&
-                          entryFlow.state.entrySource === 'guestContinuation'
-                              ? 'guest'
-                              : 'remote',
                       onDiagramCreated: (diagramId) =>
                           entryFlow.notifyDiagramCreated(diagramId),
                   }

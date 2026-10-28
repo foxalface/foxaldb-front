@@ -1,6 +1,9 @@
-import { createDiagram, getDiagram } from '@/lib/api/diagrams';
-import { syncDiagramAutosaveFromApiLoad } from '@/lib/diagram-autosave/sync-diagram-autosave-from-api';
-import type { Diagram } from '@/lib/domain/diagram';
+import type { StorageContext } from '@/context/storage-context/storage-context';
+import type { DiagramCreationDestination } from '@/lib/diagram/diagram-creation-destination';
+import {
+    persistNewDiagram,
+    type PersistedNewDiagram,
+} from '@/lib/diagram/persist-new-diagram';
 import {
     parseDiagramJsonContent,
     type DiagramJsonParseFailure,
@@ -16,44 +19,27 @@ export class RestoreDiagramJsonParseError extends Error {
     }
 }
 
-export interface PersistRestoredDiagramGuestDeps {
-    addDiagram: (params: { diagram: Diagram }) => Promise<void>;
-    loadDiagramFromData: (diagram: Diagram) => void;
-}
-
 /**
- * Restores a diagram backup JSON into a new diagram.
- * Guest: Dexie only. Authenticated: backend createDiagram only (no Dexie).
+ * Parses a diagram backup and persists it for the given creation destination.
+ * Opening the result is separate: device open sets location and loads memory;
+ * online open navigates so the existing GET resolution can hydrate it.
  */
 export const persistRestoredDiagramFromJson = async (
     json: string,
     options: {
+        destination: DiagramCreationDestination;
         isAuthenticated: boolean;
-        guest: PersistRestoredDiagramGuestDeps;
+        addDiagram: StorageContext['addDiagram'];
     }
-): Promise<string> => {
+): Promise<PersistedNewDiagram> => {
     const parsed = parseDiagramJsonContent(json);
 
     if (!parsed.ok) {
         throw new RestoreDiagramJsonParseError(parsed.failure);
     }
 
-    const diagram = parsed.diagram;
-
-    if (!options.isAuthenticated) {
-        await options.guest.addDiagram({ diagram });
-        options.guest.loadDiagramFromData(diagram);
-        return diagram.id;
-    }
-
-    const result = await createDiagram({
-        name: diagram.name,
-        content: diagram,
+    return persistNewDiagram(parsed.diagram, options.destination, {
+        addDiagram: options.addDiagram,
+        isAuthenticated: options.isAuthenticated,
     });
-
-    const diagramId = String(result.diagram.id);
-    const remote = await getDiagram(diagramId);
-    syncDiagramAutosaveFromApiLoad(diagramId, remote);
-
-    return diagramId;
 };

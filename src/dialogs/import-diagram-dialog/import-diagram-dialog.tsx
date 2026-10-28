@@ -21,6 +21,13 @@ import { AlertCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useConfig } from '@/hooks/use-config';
+import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
+import {
+    defaultDiagramCreationDestination,
+    type DiagramCreationDestination,
+} from '@/lib/diagram/diagram-creation-destination';
+import { openPersistedNewDiagram } from '@/lib/diagram/persist-new-diagram';
 import {
     RestoreDiagramJsonParseError,
     persistRestoredDiagramFromJson,
@@ -35,11 +42,28 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
     const [file, setFile] = useState<File | null>(null);
     const { addDiagram } = useStorage();
     const { loadDiagramFromData } = useChartDB();
+    const { setDiagramLocation } = useDiagramLocation();
+    const { clearDiagramAccess } = useDiagramAccess();
     const { isAuthenticated } = useAuth();
     const { updateConfig } = useConfig();
     const navigate = useNavigate();
     const [error, setError] = useState(false);
     const [isRestoring, setIsRestoring] = useState(false);
+    const sessionIsOpen = dialog.open === true;
+    const [destinationSessionOpen, setDestinationSessionOpen] =
+        useState(sessionIsOpen);
+    const [destination, setDestination] = useState<DiagramCreationDestination>(
+        () => defaultDiagramCreationDestination(isAuthenticated)
+    );
+
+    // Same latch as create: a new restore session takes the current default,
+    // and auth changes while the dialog stays open do not retarget it.
+    if (sessionIsOpen !== destinationSessionOpen) {
+        setDestinationSessionOpen(sessionIsOpen);
+        if (sessionIsOpen) {
+            setDestination(defaultDiagramCreationDestination(isAuthenticated));
+        }
+    }
 
     const onFileChange = useCallback((files: File[]) => {
         if (files.length === 0) {
@@ -71,24 +95,31 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
             setError(false);
 
             try {
-                const diagramId = await persistRestoredDiagramFromJson(json, {
+                const persisted = await persistRestoredDiagramFromJson(json, {
+                    destination,
                     isAuthenticated,
-                    guest: {
-                        addDiagram,
-                        loadDiagramFromData,
-                    },
+                    addDiagram,
                 });
 
                 closeImportDiagramDialog();
                 closeCreateDiagramDialog();
 
-                if (isAuthenticated) {
-                    await updateConfig({
-                        config: { defaultDiagramId: diagramId },
-                    });
-                }
-
-                navigate(`/diagrams/${diagramId}`);
+                await openPersistedNewDiagram(persisted, {
+                    setDiagramLocation,
+                    clearDiagramAccess,
+                    loadDiagramFromData,
+                    navigate: (path) => {
+                        navigate(path);
+                    },
+                    updateDefaultDiagramId: isAuthenticated
+                        ? async (diagramId) => {
+                              await updateConfig({
+                                  config: { defaultDiagramId: diagramId },
+                              });
+                          }
+                        : undefined,
+                    navigateAfterDeviceOpen: true,
+                });
             } catch (caught: unknown) {
                 if (caught instanceof RestoreDiagramJsonParseError) {
                     setError(true);
@@ -109,7 +140,10 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
         file,
         isRestoring,
         isAuthenticated,
+        destination,
         addDiagram,
+        setDiagramLocation,
+        clearDiagramAccess,
         loadDiagramFromData,
         navigate,
         closeImportDiagramDialog,
