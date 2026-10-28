@@ -63,6 +63,10 @@ vi.mock('@/hooks/use-auth', () => ({
     }),
 }));
 
+vi.mock('@/hooks/use-request-authentication', () => ({
+    useRequestAuthentication: () => vi.fn(),
+}));
+
 vi.mock('@/components/code-snippet/code-snippet', () => ({
     CodeSnippet: ({
         code,

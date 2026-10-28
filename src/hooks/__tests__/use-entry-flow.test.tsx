@@ -82,10 +82,6 @@ vi.mock('@/hooks/use-entry-flow-guest-resolution', () => ({
     useEntryFlowGuestResolution: () => ({ guestInitialDiagram: undefined }),
 }));
 
-vi.mock('@/hooks/use-entry-flow-guest-migration', () => ({
-    useEntryFlowGuestMigration: () => undefined,
-}));
-
 vi.mock('@/hooks/use-entry-flow-authenticated-resolution', () => ({
     useEntryFlowAuthenticatedResolution: () => ({
         authenticatedInitialDiagram: undefined,
@@ -146,6 +142,105 @@ describe('useEntryFlow', () => {
         rerender();
 
         expect(result.current.state).toEqual({ kind: 'restoringSession' });
+    });
+
+    it('guest device route preserves the requested local id for continue-as-guest', async () => {
+        routeState.diagramId = 'local-abc';
+        const { result, rerender } = renderHook(() => useEntryFlow());
+
+        completeAuthAsGuest();
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.state).toEqual({
+                kind: 'awaitingGuestChoice',
+                requestedDeviceDiagramId: 'local-abc',
+            });
+        });
+
+        act(() => {
+            result.current.continueAsGuest();
+        });
+
+        expect(result.current.state).toEqual({
+            kind: 'openingDiagram',
+            diagramId: 'local-abc',
+            diagramSource: 'local',
+            entrySource: 'guestContinuation',
+        });
+    });
+
+    it('guest numeric route is not treated as a device diagram', async () => {
+        routeState.diagramId = '123';
+        const { result, rerender } = renderHook(() => useEntryFlow());
+
+        completeAuthAsGuest();
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.state).toEqual({
+                kind: 'awaitingGuestChoice',
+            });
+        });
+    });
+
+    it('login from a device route keeps that id for continuation', async () => {
+        routeState.diagramId = 'local-abc';
+        const { result, rerender } = renderHook(() => useEntryFlow());
+
+        completeAuthAsGuest();
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.state.kind).toBe('awaitingGuestChoice');
+        });
+
+        act(() => {
+            result.current.notifyAuthenticationSucceeded('login');
+        });
+
+        expect(result.current.state).toEqual({
+            kind: 'resolvingAuthContinuation',
+            entrySource: 'login',
+            requestedDeviceDiagramId: 'local-abc',
+        });
+
+        act(() => {
+            result.current.openDeviceDiagramFromAuthContinuation('local-abc');
+        });
+
+        expect(result.current.state).toEqual({
+            kind: 'openingDiagram',
+            diagramId: 'local-abc',
+            diagramSource: 'directRoute',
+            entrySource: 'login',
+        });
+    });
+
+    it('authentication while ready does not change entry state', async () => {
+        const { result, rerender } = renderHook(() => useEntryFlow());
+
+        completeAuthAsGuest();
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.state.kind).toBe('awaitingGuestChoice');
+        });
+
+        act(() => {
+            result.current.continueAsGuest();
+            result.current.notifyLocalDiagramFound('local-1');
+            result.current.notifyDiagramOpened();
+        });
+
+        expect(result.current.state).toEqual({ kind: 'ready' });
+
+        completeAuthAsUser();
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.state).toEqual({ kind: 'ready' });
+        });
     });
 
     it('restored unauthenticated session → awaitingGuestChoice', async () => {
@@ -304,7 +399,7 @@ describe('useEntryFlow', () => {
         });
 
         expect(result.current.state).toEqual({
-            kind: 'checkingGuestMigration',
+            kind: 'resolvingAuthContinuation',
             entrySource: 'login',
         });
     });
@@ -324,7 +419,7 @@ describe('useEntryFlow', () => {
         });
 
         expect(result.current.state).toEqual({
-            kind: 'checkingGuestMigration',
+            kind: 'resolvingAuthContinuation',
             entrySource: 'login',
         });
     });
@@ -344,7 +439,7 @@ describe('useEntryFlow', () => {
         });
 
         expect(result.current.state).toEqual({
-            kind: 'checkingGuestMigration',
+            kind: 'resolvingAuthContinuation',
             entrySource: 'registration',
         });
     });
@@ -594,7 +689,7 @@ describe('useEntryFlow', () => {
 
         act(() => {
             result.current.notifyAuthenticationSucceeded('login');
-            result.current.notifyGuestMigrationLocalNotFound();
+            result.current.showOnlineListFromAuthContinuation();
         });
         expect(result.current.state).toEqual({
             kind: 'loadingRemoteDiagrams',

@@ -1826,24 +1826,6 @@ export const tr: LanguageTranslation = {
             },
         },
 
-        guest_migration_dialog: {
-            title: 'Yerel diyagramı içe aktar?',
-            description:
-                'Bu cihazda kayıtlı bir diyagram var. Her yerden erişmek için hesabınıza aktarın.',
-            import: 'Hesaba aktar',
-            continue_without_import: 'Aktarmadan devam et',
-        },
-
-        guest_migration_errors: {
-            import_failed:
-                'Yerel diyagram içe aktarılamadı. Yerel kopya korundu.',
-            activation_failed:
-                'Diyagram oluşturuldu ancak açılamadı. Yerel kopya korundu.',
-            cleanup_failed:
-                'Diyagram aktarıldı ancak yerel kopya kaldırılamadı. Manuel olarak silebilirsiniz.',
-            check_failed: 'Yerel diyagram okunamadı.',
-        },
-
         dbml: {
             ref_format: {
                 label: 'Referans stili',

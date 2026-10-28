@@ -28,10 +28,10 @@ import { useDiagramPresenceActivity } from './use-diagram-presence-activity';
 import { useDiagramRealtime } from './use-diagram-realtime';
 import { useDiagramReconnectRefresh } from './use-diagram-reconnect-refresh';
 import { useEntryFlow, type UseEntryFlowResult } from '@/hooks/use-entry-flow';
+import { AuthIntentContinuationMount } from '@/hooks/use-auth-intent-continuation';
 import { EntryFlowDialogSyncMount } from './entry-flow-dialog-sync-mount';
 import type { EntryFlowActiveDiagramDeletionActions } from './entry-flow-active-diagram-deletion-actions';
 import type { EntryFlowCreateDiagramActions } from './entry-flow-create-diagram-actions';
-import type { EntryFlowGuestMigrationActions } from './entry-flow-guest-migration-actions';
 import type { EntryFlowOpenDiagramActions } from './entry-flow-open-diagram-actions';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
@@ -173,19 +173,11 @@ const EditorPageComponent: React.FC = () => {
         [entryFlow]
     );
 
-    const entryGuestMigrationActions = useMemo(
-        (): EntryFlowGuestMigrationActions | undefined =>
-            entryFlow.dialog === 'guestMigration'
-                ? {
-                      onAcceptMigration: entryFlow.acceptGuestMigration,
-                      onDeclineMigration: entryFlow.declineGuestMigration,
-                  }
-                : undefined,
-        [entryFlow]
-    );
-
-    const isGuestMigrationInProgress =
-        entryFlow.state.kind === 'migratingGuestDiagram';
+    const requestedDeviceDiagramId =
+        entryFlow.state.kind === 'resolvingAuthContinuation' ||
+        entryFlow.state.kind === 'awaitingGuestChoice'
+            ? entryFlow.state.requestedDeviceDiagramId
+            : undefined;
 
     const onActiveDiagramDeleted = useCallback(() => {
         entryFlow.notifyGuestActiveDiagramDeleted();
@@ -196,9 +188,22 @@ const EditorPageComponent: React.FC = () => {
             entryAuthActions={entryAuthActions}
             entryCreateDiagramActions={entryCreateDiagramActions}
             entryOpenDiagramActions={entryOpenDiagramActions}
-            entryGuestMigrationActions={entryGuestMigrationActions}
-            isGuestMigrationInProgress={isGuestMigrationInProgress}
         >
+            {/*
+              Sole continuation owner. Auth dialog, /login, and /register
+              do not execute AuthIntent.
+            */}
+            <AuthIntentContinuationMount
+                stateKind={entryFlow.state.kind}
+                requestedDeviceDiagramId={requestedDeviceDiagramId}
+                showOnlineList={entryFlow.showOnlineListFromAuthContinuation}
+                openOnlineDiagram={
+                    entryFlow.openOnlineDiagramFromAuthContinuation
+                }
+                openDeviceDiagram={
+                    entryFlow.openDeviceDiagramFromAuthContinuation
+                }
+            />
             <EntryFlowDialogSyncMount entryFlowDialog={entryFlow.dialog} />
             <KeyboardShortcutsProvider>
                 <EditingBroadcastProvider>

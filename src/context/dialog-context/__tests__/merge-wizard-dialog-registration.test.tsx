@@ -32,12 +32,6 @@ vi.mock('@/dialogs/auth-dialog/auth-dialog', () => ({
 vi.mock('@/dialogs/user-settings-dialog/user-settings-dialog', () => ({
     UserSettingsDialog: () => null,
 }));
-vi.mock(
-    '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog',
-    () => ({
-        GuestDiagramMigrationDialog: () => null,
-    })
-);
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({

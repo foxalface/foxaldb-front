@@ -61,6 +61,8 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     }, []);
 
     const handleLoginSuccess = useCallback(() => {
+        // Do not execute AuthIntent here. Entry mode only leaves the guest
+        // gate. useAuthIntentContinuation is the continuation owner.
         markAuthSuccessClose();
         if (isEntryMode) {
             entryAuthActions.onLoginSuccess();
@@ -76,6 +78,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     ]);
 
     const handleRegisterSuccess = useCallback(() => {
+        // Same continuation owner as login. Registration must not migrate.
         markAuthSuccessClose();
         if (isEntryMode) {
             entryAuthActions.onRegistrationSuccess();

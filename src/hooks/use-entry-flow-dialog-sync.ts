@@ -3,8 +3,9 @@ import { useDialog } from '@/hooks/use-dialog';
 import type { EntryFlowDialog } from '@/lib/entry-flow';
 
 /**
- * Opens and closes entry-flow-owned dialogs (auth, open diagram, create diagram, guest migration).
+ * Opens and closes entry-flow-owned dialogs (auth, open diagram, create diagram).
  * Manual navbar opens while entry flow does not own a dialog are unaffected.
+ * Post-auth continuation opens the online tab itself; this sync does not.
  */
 export const useEntryFlowDialogSync = (
     entryFlowDialog: EntryFlowDialog
@@ -16,13 +17,10 @@ export const useEntryFlowDialogSync = (
         closeCreateDiagramDialog,
         openOpenDiagramDialog,
         closeOpenDiagramDialog,
-        openGuestDiagramMigrationDialog,
-        closeGuestDiagramMigrationDialog,
     } = useDialog();
     const entryFlowOwnsAuthRef = useRef(false);
     const entryFlowOwnsCreateDiagramRef = useRef(false);
     const entryFlowOwnsOpenDiagramRef = useRef(false);
-    const entryFlowOwnsGuestMigrationRef = useRef(false);
     const previousEntryDialogRef = useRef<EntryFlowDialog>(null);
 
     useEffect(() => {
@@ -38,20 +36,6 @@ export const useEntryFlowDialogSync = (
         if (entryFlowOwnsAuthRef.current && previousEntryDialog === 'auth') {
             entryFlowOwnsAuthRef.current = false;
             closeAuthDialog();
-        }
-
-        if (entryFlowDialog === 'guestMigration') {
-            entryFlowOwnsGuestMigrationRef.current = true;
-            openGuestDiagramMigrationDialog();
-            return;
-        }
-
-        if (
-            entryFlowOwnsGuestMigrationRef.current &&
-            previousEntryDialog === 'guestMigration'
-        ) {
-            entryFlowOwnsGuestMigrationRef.current = false;
-            closeGuestDiagramMigrationDialog();
         }
 
         if (entryFlowDialog === 'openDiagram') {
@@ -89,7 +73,5 @@ export const useEntryFlowDialogSync = (
         closeCreateDiagramDialog,
         openOpenDiagramDialog,
         closeOpenDiagramDialog,
-        openGuestDiagramMigrationDialog,
-        closeGuestDiagramMigrationDialog,
     ]);
 };

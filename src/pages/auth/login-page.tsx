@@ -13,6 +13,8 @@ const LoginPageContent: React.FC = () => {
     const navigate = useNavigate();
 
     const navigateHome = useCallback(() => {
+        // Pending AuthIntent is consumed by AuthIntentProvider. The editor's
+        // useAuthIntentContinuation executes it once. This page does not.
         navigate('/');
     }, [navigate]);
 

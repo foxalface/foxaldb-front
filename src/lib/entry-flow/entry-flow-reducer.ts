@@ -30,6 +30,31 @@ const toLoadingRemoteDiagrams = (entrySource: EntrySource): EntryFlowState => ({
     entrySource,
 });
 
+const continuationEntrySource = (state: EntryFlowState): EntrySource => {
+    if (
+        state.kind === 'resolvingAuthContinuation' ||
+        state.kind === 'loadingRemoteDiagrams' ||
+        state.kind === 'selectingRemoteDiagram' ||
+        state.kind === 'openingDiagram' ||
+        state.kind === 'creatingDiagram' ||
+        state.kind === 'recoverableError'
+    ) {
+        return state.entrySource;
+    }
+
+    return 'login';
+};
+
+const canOpenOnlineDiagramFromContinuation = (state: EntryFlowState): boolean =>
+    state.kind === 'resolvingAuthContinuation' ||
+    state.kind === 'awaitingGuestChoice' ||
+    state.kind === 'ready' ||
+    state.kind === 'loadingRemoteDiagrams' ||
+    state.kind === 'selectingRemoteDiagram' ||
+    state.kind === 'openingDiagram' ||
+    state.kind === 'creatingDiagram' ||
+    state.kind === 'recoverableError';
+
 export const entryFlowReducer = (
     state: EntryFlowState,
     event: EntryFlowEvent
@@ -43,6 +68,10 @@ export const entryFlowReducer = (
         case 'RESET':
             return initialEntryFlowState();
 
+        /**
+         * A4 still owns logout and session-expiry routing. This only returns
+         * to the guest auth gate, which is the current logout behavior.
+         */
         case 'LOGGED_OUT':
             return toAwaitingGuestChoice();
 
@@ -70,6 +99,16 @@ export const entryFlowReducer = (
                 return state;
             }
 
+            if (
+                event.requestedDeviceDiagramId !== undefined &&
+                event.requestedDeviceDiagramId !== ''
+            ) {
+                return {
+                    kind: 'awaitingGuestChoice',
+                    requestedDeviceDiagramId: event.requestedDeviceDiagramId,
+                };
+            }
+
             return toAwaitingGuestChoice();
 
         case 'SESSION_RESTORE_FAILED':
@@ -90,113 +129,80 @@ export const entryFlowReducer = (
                 return state;
             }
 
+            if (state.requestedDeviceDiagramId !== undefined) {
+                return {
+                    kind: 'openingDiagram',
+                    diagramId: state.requestedDeviceDiagramId,
+                    diagramSource: 'local',
+                    entrySource: 'guestContinuation',
+                };
+            }
+
             return { kind: 'checkingLocalDiagram' };
 
+        /**
+         * Leaves the startup auth gate. Does not migrate, create, or delete
+         * a diagram. useAuthIntentContinuation chooses the next state.
+         */
         case 'AUTHENTICATION_SUCCEEDED':
             if (state.kind !== 'awaitingGuestChoice') {
                 return state;
             }
 
             return {
-                kind: 'checkingGuestMigration',
+                kind: 'resolvingAuthContinuation',
                 entrySource: event.entrySource,
+                ...(state.requestedDeviceDiagramId !== undefined
+                    ? {
+                          requestedDeviceDiagramId:
+                              state.requestedDeviceDiagramId,
+                      }
+                    : {}),
             };
 
-        case 'GUEST_SESSION_AUTHENTICATED':
-            if (state.kind !== 'ready') {
+        case 'AUTH_CONTINUATION_SHOW_ONLINE_LIST':
+            if (
+                state.kind !== 'resolvingAuthContinuation' &&
+                state.kind !== 'awaitingGuestChoice'
+            ) {
                 return state;
             }
 
-            return {
-                kind: 'checkingGuestMigration',
-                entrySource: event.entrySource,
-            };
+            return toLoadingRemoteDiagrams(continuationEntrySource(state));
 
-        case 'GUEST_MIGRATION_LOCAL_FOUND':
-            if (state.kind !== 'checkingGuestMigration') {
-                return state;
-            }
-
-            return {
-                kind: 'askingGuestMigration',
-                entrySource: state.entrySource,
-                localDiagramId: event.diagramId,
-            };
-
-        case 'GUEST_MIGRATION_LOCAL_NOT_FOUND':
-            if (state.kind !== 'checkingGuestMigration') {
-                return state;
-            }
-
-            return toLoadingRemoteDiagrams(state.entrySource);
-
-        case 'GUEST_MIGRATION_CHECK_FAILED':
-            if (state.kind !== 'checkingGuestMigration') {
-                return state;
-            }
-
-            return toRecoverableError(
-                {
-                    kind: 'guestMigrationCheck',
-                    messageKey: event.messageKey,
-                },
-                state.entrySource
-            );
-
-        case 'GUEST_MIGRATION_ACCEPTED':
-            if (state.kind !== 'askingGuestMigration') {
-                return state;
-            }
-
-            return {
-                kind: 'migratingGuestDiagram',
-                entrySource: state.entrySource,
-                localDiagramId: state.localDiagramId,
-            };
-
-        case 'GUEST_MIGRATION_DECLINED':
-            if (state.kind !== 'askingGuestMigration') {
-                return state;
-            }
-
-            return toLoadingRemoteDiagrams(state.entrySource);
-
-        case 'GUEST_MIGRATION_REMOTE_CREATED':
-            if (state.kind !== 'migratingGuestDiagram') {
-                return state;
-            }
-
-            return {
-                ...state,
-                remoteDiagramId: event.remoteDiagramId,
-            };
-
-        case 'GUEST_MIGRATION_SUCCEEDED':
-            if (state.kind !== 'migratingGuestDiagram') {
+        case 'AUTH_CONTINUATION_OPEN_DEVICE_DIAGRAM':
+            if (
+                state.kind !== 'resolvingAuthContinuation' &&
+                state.kind !== 'awaitingGuestChoice'
+            ) {
                 return state;
             }
 
             return {
                 kind: 'openingDiagram',
-                diagramId: event.remoteDiagramId,
-                diagramSource: 'migrated',
-                entrySource: state.entrySource,
+                diagramId: event.diagramId,
+                diagramSource: 'directRoute',
+                entrySource: continuationEntrySource(state),
             };
 
-        case 'GUEST_MIGRATION_FAILED':
-            if (state.kind !== 'migratingGuestDiagram') {
+        case 'AUTH_CONTINUATION_OPEN_ONLINE_DIAGRAM':
+            if (!canOpenOnlineDiagramFromContinuation(state)) {
                 return state;
             }
 
-            return toLoadingRemoteDiagrams(state.entrySource);
-
-        case 'GUEST_MIGRATION_CLEANUP_FAILED':
-            if (state.kind !== 'migratingGuestDiagram') {
+            if (
+                state.kind === 'openingDiagram' &&
+                state.diagramId === event.diagramId
+            ) {
                 return state;
             }
 
-            // Remote diagram is already active; local cleanup failed only.
-            return { kind: 'ready' };
+            return {
+                kind: 'openingDiagram',
+                diagramId: event.diagramId,
+                diagramSource: 'directRoute',
+                entrySource: continuationEntrySource(state),
+            };
 
         case 'LOCAL_DIAGRAM_FOUND':
             if (state.kind !== 'checkingLocalDiagram') {
@@ -375,25 +381,6 @@ export const entryFlowReducer = (
 
                 case 'localDiagramCheck':
                     return { kind: 'checkingLocalDiagram' };
-
-                case 'guestMigrationCheck':
-                    if (
-                        state.entrySource !== 'login' &&
-                        state.entrySource !== 'registration'
-                    ) {
-                        return state;
-                    }
-
-                    return {
-                        kind: 'checkingGuestMigration',
-                        entrySource: state.entrySource,
-                    };
-
-                case 'guestMigration':
-                    return toLoadingRemoteDiagrams(state.entrySource);
-
-                case 'guestMigrationCleanup':
-                    return toLoadingRemoteDiagrams(state.entrySource);
 
                 case 'remoteDiagramLoad':
                     return toLoadingRemoteDiagrams(state.entrySource);

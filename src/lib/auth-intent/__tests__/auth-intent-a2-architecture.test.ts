@@ -10,14 +10,14 @@ describe('auth intent A2 architecture', () => {
         ).toContain('lastConsumedIntent');
     });
 
-    it('documents legacy guest migration branch A3 must replace', () => {
-        const legacyBranches = [
-            'entryFlowReducer AUTHENTICATION_SUCCEEDED → checkingGuestMigration',
-            'entryFlowReducer GUEST_SESSION_AUTHENTICATED → checkingGuestMigration',
-            'useEntryFlowGuestMigration accept/decline migration flow',
+    it('documents that A3 replaced automatic guest migration', () => {
+        const removed = [
+            'AUTHENTICATION_SUCCEEDED no longer enters checkingGuestMigration',
+            'GUEST_SESSION_AUTHENTICATED removed',
+            'useAuthIntentContinuation is the continuation owner',
         ];
 
-        expect(legacyBranches).toHaveLength(3);
+        expect(removed).toHaveLength(3);
     });
 
     it('documents intended A3 continuations without executing them in A2', () => {

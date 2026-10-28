@@ -9,7 +9,6 @@ import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 import type { ExportWizardDialogProps } from '@/dialogs/export-wizard/export-wizard-dialog';
 import type { MergeWizardDialogProps } from '@/dialogs/merge-wizard/merge-wizard-dialog';
-import type { GuestDiagramMigrationDialogProps } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -60,12 +59,6 @@ export interface DialogContext {
     openUserSettingsDialog: () => void;
     closeUserSettingsDialog: () => void;
 
-    // Guest diagram migration dialog
-    openGuestDiagramMigrationDialog: (
-        params?: Omit<GuestDiagramMigrationDialogProps, 'dialog'>
-    ) => void;
-    closeGuestDiagramMigrationDialog: () => void;
-
     // Export diagram dialog
     openExportDiagramDialog: (
         params: Omit<ExportDiagramDialogProps, 'dialog'>
@@ -98,8 +91,6 @@ export const dialogContext = createContext<DialogContext>({
     closeAuthDialog: emptyFn,
     openUserSettingsDialog: emptyFn,
     closeUserSettingsDialog: emptyFn,
-    openGuestDiagramMigrationDialog: emptyFn,
-    closeGuestDiagramMigrationDialog: emptyFn,
     openExportDiagramDialog: emptyFn,
     closeExportDiagramDialog: emptyFn,
     openImportDiagramDialog: emptyFn,

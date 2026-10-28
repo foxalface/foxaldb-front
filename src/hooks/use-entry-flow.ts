@@ -16,8 +16,8 @@ import {
     type EntryFlowState,
     type RemoteDiagramSummary,
 } from '@/lib/entry-flow';
-import { useEntryFlowGuestMigration } from '@/hooks/use-entry-flow-guest-migration';
 import { useEntryFlowRouteAuthIntent } from '@/hooks/use-entry-flow-route-auth-intent';
+import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 
 const normalizeRouteDiagramId = (
     diagramId: string | undefined
@@ -54,9 +54,13 @@ export interface UseEntryFlowResult {
     notifyDiagramOpened: () => void;
     notifyDiagramOpenFailed: (messageKey?: string) => void;
     notifyGuestActiveDiagramDeleted: () => void;
-    notifyGuestMigrationLocalNotFound: () => void;
-    acceptGuestMigration: () => void;
-    declineGuestMigration: () => void;
+    /**
+     * Continuation-owner transitions. Production calls come only from
+     * useAuthIntentContinuation. They do not themselves change DiagramLocation.
+     */
+    showOnlineListFromAuthContinuation: () => void;
+    openOnlineDiagramFromAuthContinuation: (diagramId: string) => void;
+    openDeviceDiagramFromAuthContinuation: (diagramId: string) => void;
     retry: () => void;
     reset: () => void;
     notifyLoggedOut: () => void;
@@ -69,6 +73,11 @@ export interface UseEntryFlowResult {
  * Current diagram location is not stored here. Resolution hooks write
  * DiagramLocationProvider, which is the only location state. Login and logout
  * events must not recompute device vs online from auth.
+ *
+ * Post-auth behavior is not executed here. AuthIntentProvider exposes
+ * lastConsumedIntent; useAuthIntentContinuation is the only continuation owner.
+ * A guest → authenticated transition while the editor is already ready does
+ * not change this state machine. Logout routing remains the A4 scope.
  */
 export const useEntryFlow = (): UseEntryFlowResult => {
     const [state, dispatch] = useReducer(
@@ -115,7 +124,11 @@ export const useEntryFlow = (): UseEntryFlowResult => {
 
     /**
      * Initial session restoration runs once per mount after auth loading completes.
-     * Later auth transitions use LOGGED_OUT or explicit notifyAuthenticationSucceeded.
+     * Later logout uses LOGGED_OUT. A guest who logs in while a diagram is
+     * already open does not dispatch here: storage stays put, and
+     * useAuthIntentContinuation applies the consumed intent.
+     * Startup login still calls notifyAuthenticationSucceeded, which only
+     * leaves the guest gate.
      */
     useEffect(() => {
         if (isLoading) {
@@ -135,9 +148,16 @@ export const useEntryFlow = (): UseEntryFlowResult => {
                     routeDiagramId,
                 });
             } else {
+                const requestedDeviceDiagramId =
+                    routeDiagramId !== undefined &&
+                    !isValidBackendDiagramId(routeDiagramId)
+                        ? routeDiagramId
+                        : undefined;
+
                 dispatchEvent({
                     type: 'SESSION_UNAUTHENTICATED',
                     routeDiagramId,
+                    requestedDeviceDiagramId,
                 });
             }
 
@@ -145,18 +165,6 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         }
 
         const previousUserId = previousUserIdRef.current;
-
-        if (
-            previousUserId === null &&
-            userId !== null &&
-            sessionResolvedRef.current
-        ) {
-            invalidateResolution();
-            dispatchEvent({
-                type: 'GUEST_SESSION_AUTHENTICATED',
-                entrySource: 'login',
-            });
-        }
 
         if (
             previousUserId !== null &&
@@ -204,6 +212,30 @@ export const useEntryFlow = (): UseEntryFlowResult => {
             });
         },
         [dispatchEvent, invalidateResolution]
+    );
+
+    const showOnlineListFromAuthContinuation = useCallback(() => {
+        dispatchEvent({ type: 'AUTH_CONTINUATION_SHOW_ONLINE_LIST' });
+    }, [dispatchEvent]);
+
+    const openOnlineDiagramFromAuthContinuation = useCallback(
+        (diagramId: string) => {
+            dispatchEvent({
+                type: 'AUTH_CONTINUATION_OPEN_ONLINE_DIAGRAM',
+                diagramId,
+            });
+        },
+        [dispatchEvent]
+    );
+
+    const openDeviceDiagramFromAuthContinuation = useCallback(
+        (diagramId: string) => {
+            dispatchEvent({
+                type: 'AUTH_CONTINUATION_OPEN_DEVICE_DIAGRAM',
+                diagramId,
+            });
+        },
+        [dispatchEvent]
     );
 
     const notifyLocalDiagramFound = useCallback(
@@ -286,18 +318,6 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         dispatchEvent({ type: 'GUEST_ACTIVE_DIAGRAM_DELETED' });
     }, [dispatchEvent, invalidateResolution]);
 
-    const notifyGuestMigrationLocalNotFound = useCallback(() => {
-        dispatchEvent({ type: 'GUEST_MIGRATION_LOCAL_NOT_FOUND' });
-    }, [dispatchEvent]);
-
-    const acceptGuestMigration = useCallback(() => {
-        dispatchEvent({ type: 'GUEST_MIGRATION_ACCEPTED' });
-    }, [dispatchEvent]);
-
-    const declineGuestMigration = useCallback(() => {
-        dispatchEvent({ type: 'GUEST_MIGRATION_DECLINED' });
-    }, [dispatchEvent]);
-
     const retry = useCallback(() => {
         dispatchEvent({ type: 'RETRY' });
     }, [dispatchEvent]);
@@ -325,15 +345,6 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     );
 
     const { guestInitialDiagram } = useEntryFlowGuestResolution({
-        state,
-        isAuthenticated,
-        isAuthLoading: isLoading,
-        beginResolution,
-        isResolutionCurrent,
-        dispatchEvent,
-    });
-
-    useEntryFlowGuestMigration({
         state,
         isAuthenticated,
         isAuthLoading: isLoading,
@@ -383,9 +394,9 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         notifyDiagramOpened,
         notifyDiagramOpenFailed,
         notifyGuestActiveDiagramDeleted,
-        notifyGuestMigrationLocalNotFound,
-        acceptGuestMigration,
-        declineGuestMigration,
+        showOnlineListFromAuthContinuation,
+        openOnlineDiagramFromAuthContinuation,
+        openDeviceDiagramFromAuthContinuation,
         retry,
         reset,
         notifyLoggedOut,

@@ -9,8 +9,6 @@ const openCreateDiagramDialog = vi.fn();
 const closeCreateDiagramDialog = vi.fn();
 const openOpenDiagramDialog = vi.fn();
 const closeOpenDiagramDialog = vi.fn();
-const openGuestDiagramMigrationDialog = vi.fn();
-const closeGuestDiagramMigrationDialog = vi.fn();
 
 vi.mock('@/hooks/use-dialog', () => ({
     useDialog: () => ({
@@ -20,8 +18,6 @@ vi.mock('@/hooks/use-dialog', () => ({
         closeCreateDiagramDialog,
         openOpenDiagramDialog,
         closeOpenDiagramDialog,
-        openGuestDiagramMigrationDialog,
-        closeGuestDiagramMigrationDialog,
     }),
 }));
 
@@ -33,15 +29,14 @@ describe('useEntryFlowDialogSync', () => {
         closeCreateDiagramDialog.mockClear();
         openOpenDiagramDialog.mockClear();
         closeOpenDiagramDialog.mockClear();
-        openGuestDiagramMigrationDialog.mockClear();
-        closeGuestDiagramMigrationDialog.mockClear();
     });
 
-    it('opens guest migration dialog when entry flow requests guestMigration', () => {
-        renderHook(() => useEntryFlowDialogSync('guestMigration'));
+    it('does not treat a null dialog as a migration prompt', () => {
+        renderHook(() => useEntryFlowDialogSync(null));
 
-        expect(openGuestDiagramMigrationDialog).toHaveBeenCalledTimes(1);
-        expect(closeGuestDiagramMigrationDialog).not.toHaveBeenCalled();
+        expect(openAuthDialog).not.toHaveBeenCalled();
+        expect(openOpenDiagramDialog).not.toHaveBeenCalled();
+        expect(openCreateDiagramDialog).not.toHaveBeenCalled();
     });
 
     it('opens auth dialog when entry flow requests auth', () => {

@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import {
+    clearProtectedActionResume,
     createAuthIntentStore,
     noneAuthIntent,
     type AuthIntent,
@@ -28,6 +29,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
         useState<AuthIntent>(noneAuthIntent());
     const [lastConsumedIntent, setLastConsumedIntent] =
         useState<AuthIntent>(noneAuthIntent());
+    const [consumedIntentEpoch, setConsumedIntentEpoch] = useState(0);
 
     const syncPendingFromStore = useCallback(() => {
         setPendingIntent(storeRef.current.peek());
@@ -45,6 +47,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
 
     const clearAuthIntent = useCallback(() => {
         storeRef.current.clear();
+        clearProtectedActionResume();
         syncPendingFromStore();
     }, [syncPendingFromStore]);
 
@@ -57,6 +60,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
             if (wasAuthenticatedRef.current) {
                 wasAuthenticatedRef.current = false;
                 storeRef.current.clear();
+                clearProtectedActionResume();
                 syncPendingFromStore();
                 setLastConsumedIntent(noneAuthIntent());
             }
@@ -71,6 +75,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
         const consumed = storeRef.current.consume();
         syncPendingFromStore();
         setLastConsumedIntent(consumed);
+        setConsumedIntentEpoch((epoch) => epoch + 1);
     }, [isAuthenticated, isLoading, syncPendingFromStore]);
 
     const value = useMemo(
@@ -80,6 +85,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
             peekAuthIntent,
             clearAuthIntent,
             lastConsumedIntent,
+            consumedIntentEpoch,
         }),
         [
             pendingIntent,
@@ -87,6 +93,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
             peekAuthIntent,
             clearAuthIntent,
             lastConsumedIntent,
+            consumedIntentEpoch,
         ]
     );
 

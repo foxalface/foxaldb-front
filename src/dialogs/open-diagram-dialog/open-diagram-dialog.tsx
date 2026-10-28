@@ -59,12 +59,14 @@ import { OpenDiagramTable } from './open-diagram-table';
 
 export interface OpenDiagramDialogProps extends BaseDialogProps {
     canClose?: boolean;
+    initialTab?: OpenDiagramTab;
     entryOpenDiagramActions?: EntryFlowOpenDiagramActions;
 }
 
 export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     dialog,
     canClose = true,
+    initialTab,
     entryOpenDiagramActions,
 }) => {
     const { closeOpenDiagramDialog, openCreateDiagramDialog } = useDialog();
@@ -84,7 +86,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         string | undefined
     >();
     const [activeTab, setActiveTab] = useState<OpenDiagramTab>(
-        isAuthenticated ? 'online' : 'device'
+        initialTab ?? (isAuthenticated ? 'online' : 'device')
     );
     const [deviceSort, setDeviceSort] = useState<OpenDiagramSortState>(
         DEFAULT_OPEN_DIAGRAM_SORT
@@ -157,13 +159,13 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         }
 
         setSelectedDiagramId(undefined);
-        setActiveTab(isAuthenticated ? 'online' : 'device');
+        setActiveTab(initialTab ?? (isAuthenticated ? 'online' : 'device'));
         setDeviceSort(DEFAULT_OPEN_DIAGRAM_SORT);
         setOnlineSort(DEFAULT_OPEN_DIAGRAM_SORT);
         setOnlineRoleFilter(DEFAULT_OPEN_DIAGRAM_ROLE_FILTER);
 
         void refreshLists();
-    }, [dialog.open, isAuthenticated, refreshLists]);
+    }, [dialog.open, initialTab, isAuthenticated, refreshLists]);
 
     const sortedDeviceRows = useMemo(
         () => sortOpenDiagramRows(deviceRows, deviceSort),

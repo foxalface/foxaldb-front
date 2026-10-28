@@ -18,10 +18,7 @@ import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 import { UserSettingsDialog } from '@/dialogs/user-settings-dialog/user-settings-dialog';
 import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
 import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
-import type { EntryFlowGuestMigrationActions } from '@/pages/editor-page/entry-flow-guest-migration-actions';
 import type { EntryFlowOpenDiagramActions } from '@/pages/editor-page/entry-flow-open-diagram-actions';
-import { GuestDiagramMigrationDialog } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
-import type { GuestDiagramMigrationDialogProps } from '@/dialogs/guest-diagram-migration-dialog/guest-diagram-migration-dialog';
 
 const CreateDiagramDialogLazy = lazy(() =>
     import('@/dialogs/create-diagram-dialog/create-diagram-dialog').then(
@@ -48,16 +45,12 @@ export const DialogProvider: React.FC<
         entryAuthActions?: EntryFlowAuthActions;
         entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
         entryOpenDiagramActions?: EntryFlowOpenDiagramActions;
-        entryGuestMigrationActions?: EntryFlowGuestMigrationActions;
-        isGuestMigrationInProgress?: boolean;
     }>
 > = ({
     children,
     entryAuthActions,
     entryCreateDiagramActions,
     entryOpenDiagramActions,
-    entryGuestMigrationActions,
-    isGuestMigrationInProgress = false,
 }) => {
     const [openNewDiagramDialog, setOpenNewDiagramDialog] = useState(false);
     const [newDiagramDialogParams, setNewDiagramDialogParams] =
@@ -99,14 +92,6 @@ export const DialogProvider: React.FC<
 
     const [openAuthDialog, setOpenAuthDialog] = useState(false);
     const [openUserSettingsDialog, setOpenUserSettingsDialog] = useState(false);
-    const [
-        openGuestDiagramMigrationDialog,
-        setOpenGuestDiagramMigrationDialog,
-    ] = useState(false);
-    const [
-        guestDiagramMigrationDialogParams,
-        setGuestDiagramMigrationDialogParams,
-    ] = useState<Omit<GuestDiagramMigrationDialogProps, 'dialog'>>();
 
     // Export SQL dialog
     const [openExportSQLDialog, setOpenExportSQLDialog] = useState(false);
@@ -196,12 +181,6 @@ export const DialogProvider: React.FC<
                 closeAuthDialog: () => setOpenAuthDialog(false),
                 openUserSettingsDialog: () => setOpenUserSettingsDialog(true),
                 closeUserSettingsDialog: () => setOpenUserSettingsDialog(false),
-                openGuestDiagramMigrationDialog: (params) => {
-                    setGuestDiagramMigrationDialogParams(params);
-                    setOpenGuestDiagramMigrationDialog(true);
-                },
-                closeGuestDiagramMigrationDialog: () =>
-                    setOpenGuestDiagramMigrationDialog(false),
                 openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
                 closeExportDiagramDialog: () =>
                     setOpenExportDiagramDialog(false),
@@ -246,12 +225,6 @@ export const DialogProvider: React.FC<
                 entryAuthActions={entryAuthActions}
             />
             <UserSettingsDialog dialog={{ open: openUserSettingsDialog }} />
-            <GuestDiagramMigrationDialog
-                dialog={{ open: openGuestDiagramMigrationDialog }}
-                entryGuestMigrationActions={entryGuestMigrationActions}
-                isMigrating={isGuestMigrationInProgress}
-                {...guestDiagramMigrationDialogParams}
-            />
             <ExportWizardDialog dialog={{ open: openExportWizardDialog }} />
             {mergeWizardMounted ? (
                 <Suspense fallback={null}>

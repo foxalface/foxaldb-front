@@ -4,10 +4,16 @@
  *
  * Startup architecture (single owner: useEntryFlow in EditorPageComponent):
  * - Pure reducer + selectors in this module
- * - Side effects in useEntryFlowGuestResolution, useEntryFlowGuestMigration,
+ * - Side effects in useEntryFlowGuestResolution and
  *   useEntryFlowAuthenticatedResolution
+ * - Post-auth continuation is NOT decided here. useAuthIntentContinuation
+ *   is the only executor of a consumed AuthIntent. This reducer only exposes
+ *   the states that continuation asks for.
  * - Dialog visibility derived from selectEntryFlowDialog; opened via
  *   useEntryFlowDialogSync
+ *
+ * Authentication does not choose storage. A device diagram is never migrated
+ * because the user logged in or registered.
  */
 
 /** Why the current branch was entered. */
@@ -18,21 +24,13 @@ export type EntrySource =
     | 'guestContinuation';
 
 /** Origin of the diagram being opened. */
-export type DiagramSource =
-    | 'local'
-    | 'remote'
-    | 'created'
-    | 'directRoute'
-    | 'migrated';
+export type DiagramSource = 'local' | 'remote' | 'created' | 'directRoute';
 
 export type EntryFlowErrorKind =
     | 'sessionRestore'
     | 'localDiagramCheck'
     | 'remoteDiagramLoad'
-    | 'diagramOpen'
-    | 'guestMigrationCheck'
-    | 'guestMigration'
-    | 'guestMigrationCleanup';
+    | 'diagramOpen';
 
 /** Serializable domain error — no raw Error instances or translated text. */
 export interface EntryFlowError {
@@ -59,22 +57,21 @@ export interface RemoteDiagramSummary {
 
 export type EntryFlowState =
     | { kind: 'restoringSession' }
-    | { kind: 'awaitingGuestChoice' }
+    | {
+          kind: 'awaitingGuestChoice';
+          /** Guest reload of a non-numeric /diagrams/{id} route. */
+          requestedDeviceDiagramId?: string;
+      }
     | { kind: 'checkingLocalDiagram' }
     | {
-          kind: 'checkingGuestMigration';
+          /**
+           * Login or registration left the guest gate. The continuation owner
+           * chooses the next state from the consumed AuthIntent. This state
+           * does not read Dexie or create a backend diagram.
+           */
+          kind: 'resolvingAuthContinuation';
           entrySource: 'login' | 'registration';
-      }
-    | {
-          kind: 'askingGuestMigration';
-          entrySource: EntrySource;
-          localDiagramId: string;
-      }
-    | {
-          kind: 'migratingGuestDiagram';
-          entrySource: EntrySource;
-          localDiagramId: string;
-          remoteDiagramId?: string;
+          requestedDeviceDiagramId?: string;
       }
     | { kind: 'loadingRemoteDiagrams'; entrySource: EntrySource }
     | {
@@ -99,7 +96,11 @@ export type EntryFlowState =
 
 export type EntryFlowEvent =
     | { type: 'SESSION_AUTHENTICATED'; routeDiagramId?: string }
-    | { type: 'SESSION_UNAUTHENTICATED'; routeDiagramId?: string }
+    | {
+          type: 'SESSION_UNAUTHENTICATED';
+          routeDiagramId?: string;
+          requestedDeviceDiagramId?: string;
+      }
     | { type: 'SESSION_RESTORE_FAILED'; messageKey?: string }
     | { type: 'CONTINUE_AS_GUEST' }
     | { type: 'LOCAL_DIAGRAM_FOUND'; diagramId: string }
@@ -109,19 +110,9 @@ export type EntryFlowEvent =
           type: 'AUTHENTICATION_SUCCEEDED';
           entrySource: 'login' | 'registration';
       }
-    | {
-          type: 'GUEST_SESSION_AUTHENTICATED';
-          entrySource: 'login' | 'registration';
-      }
-    | { type: 'GUEST_MIGRATION_LOCAL_FOUND'; diagramId: string }
-    | { type: 'GUEST_MIGRATION_LOCAL_NOT_FOUND' }
-    | { type: 'GUEST_MIGRATION_CHECK_FAILED'; messageKey?: string }
-    | { type: 'GUEST_MIGRATION_ACCEPTED' }
-    | { type: 'GUEST_MIGRATION_DECLINED' }
-    | { type: 'GUEST_MIGRATION_REMOTE_CREATED'; remoteDiagramId: string }
-    | { type: 'GUEST_MIGRATION_SUCCEEDED'; remoteDiagramId: string }
-    | { type: 'GUEST_MIGRATION_FAILED'; messageKey?: string }
-    | { type: 'GUEST_MIGRATION_CLEANUP_FAILED'; remoteDiagramId: string }
+    | { type: 'AUTH_CONTINUATION_SHOW_ONLINE_LIST' }
+    | { type: 'AUTH_CONTINUATION_OPEN_ONLINE_DIAGRAM'; diagramId: string }
+    | { type: 'AUTH_CONTINUATION_OPEN_DEVICE_DIAGRAM'; diagramId: string }
     | { type: 'LOGGED_OUT' }
     | { type: 'REMOTE_DIAGRAMS_FOUND'; diagrams: RemoteDiagramSummary[] }
     | { type: 'NO_REMOTE_DIAGRAMS' }
@@ -138,9 +129,4 @@ export type EntryFlowEvent =
     | { type: 'RETRY' }
     | { type: 'RESET' };
 
-export type EntryFlowDialog =
-    | 'auth'
-    | 'openDiagram'
-    | 'createDiagram'
-    | 'guestMigration'
-    | null;
+export type EntryFlowDialog = 'auth' | 'openDiagram' | 'createDiagram' | null;

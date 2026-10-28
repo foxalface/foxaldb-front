@@ -204,15 +204,114 @@ describe('entryFlowReducer — guest', () => {
 describe('entryFlowReducer — authenticated', () => {
     const awaitingGuest: EntryFlowState = { kind: 'awaitingGuestChoice' };
 
-    it('authentication success → checkingGuestMigration', () => {
+    it('login success leaves the guest gate without migrating', () => {
         const state = reduce(awaitingGuest, {
             type: 'AUTHENTICATION_SUCCEEDED',
             entrySource: 'login',
         });
 
         expect(state).toEqual({
-            kind: 'checkingGuestMigration',
+            kind: 'resolvingAuthContinuation',
             entrySource: 'login',
+        });
+    });
+
+    it('registration success uses the same non-migrating gate', () => {
+        const state = reduce(awaitingGuest, {
+            type: 'AUTHENTICATION_SUCCEEDED',
+            entrySource: 'registration',
+        });
+
+        expect(state).toEqual({
+            kind: 'resolvingAuthContinuation',
+            entrySource: 'registration',
+        });
+    });
+
+    it('ready login does not change entry state by itself', () => {
+        const state = reduce(
+            { kind: 'ready' },
+            {
+                type: 'AUTHENTICATION_SUCCEEDED',
+                entrySource: 'login',
+            }
+        );
+
+        expect(state).toEqual({ kind: 'ready' });
+    });
+
+    it('open-online-diagram continuation opens that id from ready', () => {
+        const state = reduce(
+            { kind: 'ready' },
+            {
+                type: 'AUTH_CONTINUATION_OPEN_ONLINE_DIAGRAM',
+                diagramId: '123',
+            }
+        );
+
+        expect(state).toEqual({
+            kind: 'openingDiagram',
+            diagramId: '123',
+            diagramSource: 'directRoute',
+            entrySource: 'login',
+        });
+    });
+
+    it('startup continuation without a device route loads the online list', () => {
+        const resolving = reduce(awaitingGuest, {
+            type: 'AUTHENTICATION_SUCCEEDED',
+            entrySource: 'registration',
+        });
+
+        expect(
+            reduce(resolving, { type: 'AUTH_CONTINUATION_SHOW_ONLINE_LIST' })
+        ).toEqual({
+            kind: 'loadingRemoteDiagrams',
+            entrySource: 'registration',
+        });
+    });
+
+    it('device route login keeps the local id until continuation opens it', () => {
+        const awaiting = reduce(initialEntryFlowState(), {
+            type: 'SESSION_UNAUTHENTICATED',
+            requestedDeviceDiagramId: 'local-abc',
+        });
+
+        const resolving = reduce(awaiting, {
+            type: 'AUTHENTICATION_SUCCEEDED',
+            entrySource: 'login',
+        });
+
+        expect(resolving).toEqual({
+            kind: 'resolvingAuthContinuation',
+            entrySource: 'login',
+            requestedDeviceDiagramId: 'local-abc',
+        });
+
+        expect(
+            reduce(resolving, {
+                type: 'AUTH_CONTINUATION_OPEN_DEVICE_DIAGRAM',
+                diagramId: 'local-abc',
+            })
+        ).toEqual({
+            kind: 'openingDiagram',
+            diagramId: 'local-abc',
+            diagramSource: 'directRoute',
+            entrySource: 'login',
+        });
+    });
+
+    it('continue as guest opens the requested device route, not the first diagram', () => {
+        const awaiting = reduce(initialEntryFlowState(), {
+            type: 'SESSION_UNAUTHENTICATED',
+            requestedDeviceDiagramId: 'local-keep',
+        });
+
+        expect(reduce(awaiting, { type: 'CONTINUE_AS_GUEST' })).toEqual({
+            kind: 'openingDiagram',
+            diagramId: 'local-keep',
+            diagramSource: 'local',
+            entrySource: 'guestContinuation',
         });
     });
 

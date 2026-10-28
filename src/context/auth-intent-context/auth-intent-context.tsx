@@ -10,9 +10,17 @@ export interface AuthIntentContextValue {
     clearAuthIntent: () => void;
     /**
      * Intent consumed exactly once after the latest guest → authenticated transition.
-     * A3 executes continuation from this value.
+     * useAuthIntentContinuation is the only executor of this value.
      */
     lastConsumedIntent: AuthIntent;
+    /**
+     * Increments once per consume, including a consumed `none` intent.
+     * 0 means this provider has not consumed an intent yet.
+     * The continuation owner keys one-shot execution on this counter so a
+     * consumed `none` is distinct from the initial value and Strict Mode
+     * cannot run the continuation twice.
+     */
+    consumedIntentEpoch: number;
 }
 
 export const AuthIntentContext = createContext<AuthIntentContextValue>({
@@ -21,4 +29,5 @@ export const AuthIntentContext = createContext<AuthIntentContextValue>({
     peekAuthIntent: () => noneAuthIntent(),
     clearAuthIntent: emptyFn,
     lastConsumedIntent: noneAuthIntent(),
+    consumedIntentEpoch: 0,
 });

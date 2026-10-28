@@ -15,6 +15,8 @@ import type { DatabaseType } from '@/lib/domain/database-type';
 import type { ImportMethod } from '@/lib/import-method/import-method';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/use-auth';
+import { useRequestAuthentication } from '@/hooks/use-request-authentication';
+import { registerProtectedActionResume } from '@/lib/auth-intent';
 import type { Diagram } from '@/lib/domain/diagram';
 import {
     ArchiveError,
@@ -92,6 +94,8 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
 
     const { t } = useTranslation();
     const { isAuthenticated } = useAuth();
+    const requestAuthentication = useRequestAuthentication();
+    const projectImportResumeRef = useRef<() => void>(() => undefined);
     const archiveReaderRef = useRef<ArchiveReader | null>(null);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(
         null
@@ -340,6 +344,16 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         userResolvedSourceDialect,
     ]);
 
+    const handleRequestProjectImportAuth = useCallback(() => {
+        registerProtectedActionResume(() => {
+            projectImportResumeRef.current();
+        });
+        requestAuthentication({
+            type: 'protected-action',
+            action: 'project-import',
+        });
+    }, [requestAuthentication]);
+
     const handleContinue = useCallback(async () => {
         if (!canContinue) {
             return;
@@ -404,6 +418,10 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
         resetProjectArchiveState,
         selectedFileName,
     ]);
+
+    projectImportResumeRef.current = () => {
+        void handleContinue();
+    };
 
     const handleSwitchDatabase = useCallback(() => {
         if (!baseAnalysis.detectedDatabaseType) {
@@ -658,6 +676,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
                         <ProjectDetectionSummary
                             candidate={activeProjectCandidate}
                             isAuthenticated={isAuthenticated}
+                            onSignIn={handleRequestProjectImportAuth}
                         />
                     ) : null}
 

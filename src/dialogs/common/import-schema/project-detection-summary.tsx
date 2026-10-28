@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@/components/button/button';
 import type { ProjectDetectionCandidate } from '@/lib/project-import/project-types';
 import { PROJECT_FRAMEWORK_LABEL_KEYS } from '@/lib/project-import/framework-labels';
 import { ProjectFrameworkIcon } from '@/lib/project-import/project-framework-icon';
@@ -13,11 +14,12 @@ interface ProjectDetectionSummaryProps {
     candidate: ProjectDetectionCandidate;
     isAuthenticated: boolean;
     variant?: 'full' | 'detected-only';
+    onSignIn?: () => void;
 }
 
 export const ProjectDetectionSummary: React.FC<
     ProjectDetectionSummaryProps
-> = ({ candidate, isAuthenticated, variant = 'full' }) => {
+> = ({ candidate, isAuthenticated, variant = 'full', onSignIn }) => {
     const { t } = useTranslation();
     const frameworkLabel = t(PROJECT_FRAMEWORK_LABEL_KEYS[candidate.framework]);
     const metrics = getProjectSummaryMetrics(candidate);
@@ -60,13 +62,23 @@ export const ProjectDetectionSummary: React.FC<
             {variant === 'full' &&
             isRemoteParserFramework(candidate.framework) &&
             !isAuthenticated ? (
-                <div className="border-t border-border pt-2 text-xs text-muted-foreground">
+                <div className="flex flex-col items-start gap-2 border-t border-border pt-2 text-xs text-muted-foreground">
                     <p className="text-foreground">
                         {t(
                             'new_diagram_dialog.import_schema.project.sign_in_to_import_framework',
                             { framework: frameworkLabel }
                         )}
                     </p>
+                    {onSignIn ? (
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            size="sm"
+                            onClick={onSignIn}
+                        >
+                            {t('auth.nav.sign_in')}
+                        </Button>
+                    ) : null}
                 </div>
             ) : null}
         </div>

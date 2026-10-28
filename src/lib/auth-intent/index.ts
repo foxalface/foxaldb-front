@@ -4,3 +4,8 @@ export {
     createAuthIntentStore,
     type AuthIntentStore,
 } from './auth-intent-store';
+export {
+    clearProtectedActionResume,
+    registerProtectedActionResume,
+    takeProtectedActionResume,
+} from './protected-action-resume';

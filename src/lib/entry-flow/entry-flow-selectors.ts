@@ -14,8 +14,6 @@ export const selectEntryFlowDialog = (
     switch (state.kind) {
         case 'awaitingGuestChoice':
             return 'auth';
-        case 'askingGuestMigration':
-            return 'guestMigration';
         case 'selectingRemoteDiagram':
             return 'openDiagram';
         case 'creatingDiagram':
@@ -28,17 +26,19 @@ export const selectEntryFlowDialog = (
 /**
  * True while the entry flow performs a blocking async operation.
  * False when an entry dialog intentionally awaits user input
- * (awaitingGuestChoice, askingGuestMigration, selectingRemoteDiagram, creatingDiagram).
+ * (awaitingGuestChoice, selectingRemoteDiagram, creatingDiagram).
  *
  * recoverableError returns false — the user chooses retry or logout;
  * the hook may still show a non-blocking error affordance.
+ *
+ * resolvingAuthContinuation is blocking only in the sense that continuation
+ * has not chosen a destination yet. It does not replace the open editor.
  */
 export const selectEntryFlowBlocking = (state: EntryFlowState): boolean => {
     switch (state.kind) {
         case 'restoringSession':
         case 'checkingLocalDiagram':
-        case 'checkingGuestMigration':
-        case 'migratingGuestDiagram':
+        case 'resolvingAuthContinuation':
         case 'loadingRemoteDiagrams':
         case 'openingDiagram':
             return true;

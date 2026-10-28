@@ -49,8 +49,6 @@ vi.mock('@/hooks/use-dialog', () => ({
         closeCreateDiagramDialog,
         openOpenDiagramDialog,
         closeOpenDiagramDialog,
-        openGuestDiagramMigrationDialog: vi.fn(),
-        closeGuestDiagramMigrationDialog: vi.fn(),
     }),
 }));
 
@@ -84,10 +82,6 @@ vi.mock('@/hooks/use-diagram-access', () => ({
 
 vi.mock('@/hooks/use-entry-flow-guest-resolution', () => ({
     useEntryFlowGuestResolution: () => ({ guestInitialDiagram: undefined }),
-}));
-
-vi.mock('@/hooks/use-entry-flow-guest-migration', () => ({
-    useEntryFlowGuestMigration: () => undefined,
 }));
 
 vi.mock('@/hooks/use-entry-flow-authenticated-resolution', () => ({

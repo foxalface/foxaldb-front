@@ -16,6 +16,7 @@ const RegisterPageContent: React.FC = () => {
     const navigate = useNavigate();
 
     const navigateHome = useCallback(() => {
+        // Same continuation owner as the auth dialog and /login.
         navigate('/');
     }, [navigate]);
 

@@ -50,13 +50,33 @@ describe('entry-flow architecture validation', () => {
         expect(hookSource).toContain('guestContinuation');
     });
 
-    it('routes guest migration through guest migration hook only', () => {
-        const hookSource = readSrcFile(
-            'hooks/use-entry-flow-guest-migration.ts'
-        );
+    it('does not execute continuation from auth pages or the auth dialog', () => {
+        const login = readSrcFile('pages/auth/login-page.tsx');
+        const register = readSrcFile('pages/auth/register-page.tsx');
+        const dialog = readSrcFile('dialogs/auth-dialog/auth-dialog.tsx');
 
-        expect(hookSource).toContain('checkingGuestMigration');
-        expect(hookSource).toContain('migratingGuestDiagram');
+        expect(login).not.toContain('useAuthIntentContinuation(');
+        expect(register).not.toContain('useAuthIntentContinuation(');
+        expect(dialog).not.toContain('useAuthIntentContinuation(');
+        expect(login).toContain("navigate('/')");
+        expect(register).toContain("navigate('/')");
+        expect(dialog).toContain('continuation owner');
+    });
+
+    it('owns post-auth continuation in one hook', () => {
+        const editorPage = readSrcFile('pages/editor-page/editor-page.tsx');
+        const continuation = readSrcFile(
+            'hooks/use-auth-intent-continuation.ts'
+        );
+        const reducer = readSrcFile('lib/entry-flow/entry-flow-reducer.ts');
+
+        expect(editorPage.match(/<AuthIntentContinuationMount/g)).toHaveLength(
+            1
+        );
+        expect(continuation).toContain('Sole post-authentication continuation');
+        expect(reducer).not.toContain('checkingGuestMigration');
+        expect(reducer).not.toContain('GUEST_SESSION_AUTHENTICATED');
+        expect(reducer).not.toContain('GUEST_MIGRATION_');
     });
 
     it('syncs entry dialogs only through useEntryFlowDialogSync', () => {
@@ -64,7 +84,7 @@ describe('entry-flow architecture validation', () => {
 
         expect(syncSource).toContain('openDiagram');
         expect(syncSource).toContain('createDiagram');
-        expect(syncSource).toContain('guestMigration');
+        expect(syncSource).not.toContain('guestMigration');
         expect(syncSource).toContain('auth');
     });
 });
