@@ -57,9 +57,14 @@ vi.mock('@/hooks/use-dialog', () => ({
 }));
 
 const navigate = vi.fn();
+const requestAuthentication = vi.fn();
 
 vi.mock('react-router-dom', () => ({
     useNavigate: () => navigate,
+}));
+
+vi.mock('@/hooks/use-request-authentication', () => ({
+    useRequestAuthentication: () => requestAuthentication,
 }));
 
 vi.mock('@/lib/api/diagrams', () => ({
@@ -107,12 +112,13 @@ describe('OpenDiagramDialog', () => {
         listTables.mockReset();
         getDiagrams.mockReset();
         loadDiagram.mockReset();
+        requestAuthentication.mockReset();
         listDiagrams.mockResolvedValue([localDiagram]);
         listTables.mockResolvedValue([{ id: 't1' }, { id: 't2' }]);
         getDiagrams.mockResolvedValue([onlineDiagram]);
     });
 
-    it('defaults guest to device tab and disables online tab', async () => {
+    it('defaults guest to device tab and requests auth for online access', async () => {
         renderDialog();
 
         await waitFor(() => {
@@ -123,11 +129,17 @@ describe('OpenDiagramDialog', () => {
             ).toHaveAttribute('data-state', 'active');
         });
 
-        expect(
+        const user = userEvent.setup();
+        await user.click(
             screen.getByRole('tab', {
                 name: 'open_diagram_dialog.tabs.online',
             })
-        ).toBeDisabled();
+        );
+
+        expect(requestAuthentication).toHaveBeenCalledWith({
+            type: 'open-online-tab',
+        });
+        expect(getDiagrams).not.toHaveBeenCalled();
     });
 
     it('does not use Open database terminology in title', async () => {

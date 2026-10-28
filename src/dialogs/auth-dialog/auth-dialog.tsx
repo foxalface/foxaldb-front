@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     Dialog,
     DialogContent,
@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/button/button';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useAuth } from '@/hooks/use-auth';
+import { useAuthIntent } from '@/hooks/use-auth-intent';
 import { useDialog } from '@/hooks/use-dialog';
 import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
 import {
@@ -30,9 +31,11 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
 }) => {
     const { t } = useTranslation();
     const { isAuthenticated, isLoading } = useAuth();
+    const { clearAuthIntent } = useAuthIntent();
     const { closeAuthDialog } = useDialog();
     const [mode, setMode] = useState<AuthDialogMode>('login');
     const isEntryMode = entryAuthActions !== undefined;
+    const skipIntentClearOnCloseRef = useRef(false);
 
     useEffect(() => {
         if (dialog.open) {
@@ -40,32 +43,57 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
         }
     }, [dialog.open]);
 
-    const closeDialog = useCallback(() => {
+    const closeAuthDialogOnly = useCallback(() => {
         closeAuthDialog();
         setMode('login');
     }, [closeAuthDialog]);
 
+    const dismissAuthDialog = useCallback(() => {
+        if (!skipIntentClearOnCloseRef.current && !isAuthenticated) {
+            clearAuthIntent();
+        }
+        skipIntentClearOnCloseRef.current = false;
+        closeAuthDialogOnly();
+    }, [closeAuthDialogOnly, clearAuthIntent, isAuthenticated]);
+
+    const markAuthSuccessClose = useCallback(() => {
+        skipIntentClearOnCloseRef.current = true;
+    }, []);
+
     const handleLoginSuccess = useCallback(() => {
+        markAuthSuccessClose();
         if (isEntryMode) {
             entryAuthActions.onLoginSuccess();
             return;
         }
 
-        closeDialog();
-    }, [isEntryMode, entryAuthActions, closeDialog]);
+        closeAuthDialogOnly();
+    }, [
+        isEntryMode,
+        entryAuthActions,
+        closeAuthDialogOnly,
+        markAuthSuccessClose,
+    ]);
 
     const handleRegisterSuccess = useCallback(() => {
+        markAuthSuccessClose();
         if (isEntryMode) {
             entryAuthActions.onRegistrationSuccess();
             return;
         }
 
-        closeDialog();
-    }, [isEntryMode, entryAuthActions, closeDialog]);
+        closeAuthDialogOnly();
+    }, [
+        isEntryMode,
+        entryAuthActions,
+        closeAuthDialogOnly,
+        markAuthSuccessClose,
+    ]);
 
     const handleContinueWithoutAccount = useCallback(() => {
+        clearAuthIntent();
         entryAuthActions?.onContinueAsGuest();
-    }, [entryAuthActions]);
+    }, [entryAuthActions, clearAuthIntent]);
 
     const showContinueWithoutAccount =
         isEntryMode && !isLoading && !isAuthenticated;
@@ -75,7 +103,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
             {...dialog}
             onOpenChange={(open) => {
                 if (!open) {
-                    closeDialog();
+                    dismissAuthDialog();
                 }
             }}
         >
@@ -102,7 +130,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                         {t('auth.dialog.checking_session')}
                     </p>
                 ) : isAuthenticated ? (
-                    <AuthenticatedAccountPanel onBack={closeDialog} />
+                    <AuthenticatedAccountPanel onBack={closeAuthDialogOnly} />
                 ) : mode === 'login' ? (
                     <LoginFormPanel
                         onSuccess={handleLoginSuccess}

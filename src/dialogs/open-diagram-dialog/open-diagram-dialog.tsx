@@ -19,6 +19,7 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useDiagramLocation } from '@/hooks/use-diagram-location';
 import { useConfig } from '@/hooks/use-config';
 import { useDialog } from '@/hooks/use-dialog';
+import { useRequestAuthentication } from '@/hooks/use-request-authentication';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useStorage } from '@/hooks/use-storage';
 import { getDiagrams } from '@/lib/api/diagrams';
@@ -67,6 +68,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
     entryOpenDiagramActions,
 }) => {
     const { closeOpenDiagramDialog, openCreateDiagramDialog } = useDialog();
+    const requestAuthentication = useRequestAuthentication();
     const { t } = useTranslation();
     const { updateConfig } = useConfig();
     const { isAuthenticated } = useAuth();
@@ -111,6 +113,22 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
         );
         setDeviceRows(rows);
     }, [listDiagrams, listTables]);
+
+    const handleGuestRequestOnlineAccess = useCallback(() => {
+        requestAuthentication({ type: 'open-online-tab' });
+    }, [requestAuthentication]);
+
+    const handleOpenDiagramTabChange = useCallback(
+        (value: string) => {
+            if (value === 'online' && !isAuthenticated) {
+                handleGuestRequestOnlineAccess();
+                return;
+            }
+
+            setActiveTab(value as OpenDiagramTab);
+        },
+        [isAuthenticated, handleGuestRequestOnlineAccess]
+    );
 
     const fetchOnlineDiagrams = useCallback(async () => {
         if (entryOpenDiagramActions) {
@@ -301,9 +319,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                 <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden p-1">
                     <Tabs
                         value={activeTab}
-                        onValueChange={(value) =>
-                            setActiveTab(value as OpenDiagramTab)
-                        }
+                        onValueChange={handleOpenDiagramTabChange}
                         className="flex min-h-0 flex-1 flex-col overflow-hidden"
                     >
                         <SidePanelSectionTabsList className="shrink-0">
@@ -314,10 +330,7 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                                 />
                                 {t('open_diagram_dialog.tabs.device')}
                             </SidePanelSectionTabsTrigger>
-                            <SidePanelSectionTabsTrigger
-                                value="online"
-                                disabled={!isAuthenticated}
-                            >
+                            <SidePanelSectionTabsTrigger value="online">
                                 <Cloud
                                     className="size-3.5 shrink-0"
                                     aria-hidden="true"
@@ -360,10 +373,19 @@ export const OpenDiagramDialog: React.FC<OpenDiagramDialogProps> = ({
                             className="mt-3 flex min-h-0 flex-1 flex-col overflow-hidden focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=inactive]:hidden"
                         >
                             {!isAuthenticated ? (
-                                <div className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-md border border-border bg-background px-4 py-10 text-center text-sm text-muted-foreground">
-                                    {t(
-                                        'open_diagram_dialog.guest_online_disabled'
-                                    )}
+                                <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 rounded-md border border-border bg-background px-4 py-10 text-center text-sm text-muted-foreground">
+                                    <p>
+                                        {t(
+                                            'open_diagram_dialog.guest_online_disabled'
+                                        )}
+                                    </p>
+                                    <Button
+                                        type="button"
+                                        variant="secondary"
+                                        onClick={handleGuestRequestOnlineAccess}
+                                    >
+                                        {t('auth.nav.sign_in')}
+                                    </Button>
                                 </div>
                             ) : (
                                 <OpenDiagramTable

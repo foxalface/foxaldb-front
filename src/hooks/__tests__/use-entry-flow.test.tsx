@@ -27,6 +27,10 @@ vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => authState,
 }));
 
+vi.mock('@/hooks/use-entry-flow-route-auth-intent', () => ({
+    useEntryFlowRouteAuthIntent: () => undefined,
+}));
+
 vi.mock('react-router-dom', async (importOriginal) => {
     const actual = await importOriginal();
     return {

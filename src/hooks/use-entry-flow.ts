@@ -17,6 +17,7 @@ import {
     type RemoteDiagramSummary,
 } from '@/lib/entry-flow';
 import { useEntryFlowGuestMigration } from '@/hooks/use-entry-flow-guest-migration';
+import { useEntryFlowRouteAuthIntent } from '@/hooks/use-entry-flow-route-auth-intent';
 
 const normalizeRouteDiagramId = (
     diagramId: string | undefined
@@ -315,6 +316,13 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     const isBlocking = selectEntryFlowBlocking(state);
     const isReady = selectEntryFlowReady(state);
     const remoteDiagramSummaries = selectEntryFlowRemoteDiagramSummaries(state);
+
+    useEntryFlowRouteAuthIntent(
+        routeDiagramId,
+        isAuthenticated,
+        isLoading,
+        state.kind
+    );
 
     const { guestInitialDiagram } = useEntryFlowGuestResolution({
         state,

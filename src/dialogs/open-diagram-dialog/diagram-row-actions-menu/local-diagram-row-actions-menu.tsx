@@ -17,6 +17,7 @@ import {
     SquareArrowOutUpRight,
     Trash2,
 } from 'lucide-react';
+import { useRequestAuthentication } from '@/hooks/use-request-authentication';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -61,6 +62,7 @@ export const LocalDiagramRowActionsMenu: React.FC<
     const navigate = useNavigate();
     const { showAlert } = useAlert();
     const { toast } = useToast();
+    const requestAuthentication = useRequestAuthentication();
 
     const showPutOnlineFailed = useCallback(() => {
         toast({
@@ -127,6 +129,17 @@ export const LocalDiagramRowActionsMenu: React.FC<
         toast,
         t,
     ]);
+
+    const handlePutOnlineSignIn = useCallback(
+        (mode: 'copy' | 'move') => {
+            requestAuthentication({
+                type: 'put-online',
+                localId: diagramId,
+                mode,
+            });
+        },
+        [diagramId, requestAuthentication]
+    );
 
     const handlePutOnlineCopy = useCallback(async () => {
         try {
@@ -228,15 +241,30 @@ export const LocalDiagramRowActionsMenu: React.FC<
                         </DropdownMenuSubContent>
                     </DropdownMenuSub>
                 ) : (
-                    <DropdownMenuItem
-                        disabled
-                        className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
-                    >
-                        <CloudUpload
-                            className={SIDE_PANEL_ACTION_MENU_ICON_CLASS}
-                        />
-                        {t('open_diagram_dialog.put_online.sign_in_required')}
-                    </DropdownMenuItem>
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger
+                            className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
+                        >
+                            <CloudUpload
+                                className={SIDE_PANEL_ACTION_MENU_ICON_CLASS}
+                            />
+                            {t('open_diagram_dialog.put_online.label')}
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                            <DropdownMenuItem
+                                onClick={() => handlePutOnlineSignIn('copy')}
+                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
+                            >
+                                {t('open_diagram_dialog.put_online.copy')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => handlePutOnlineSignIn('move')}
+                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
+                            >
+                                {t('open_diagram_dialog.put_online.move')}
+                            </DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                    </DropdownMenuSub>
                 )}
 
                 <DropdownMenuSeparator />
