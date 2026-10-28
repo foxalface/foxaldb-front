@@ -34,6 +34,7 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
     const { showAlert } = useAlert();
     const {
         canMergeDiagram,
+        canDeleteDiagram,
         createNewDiagram,
         openDiagram,
         handleSaveDiagram,
@@ -148,17 +149,22 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                             </MenubarShortcut>
                         </MenubarItem>
                     ) : null}
-                    <MenubarSeparator />
-                    <MenubarItem onClick={confirmDeleteDiagram}>
-                        {t('menu.actions.delete_diagram')}
-                        <MenubarShortcut>
-                            {
-                                keyboardShortcutsForOS[
-                                    KeyboardShortcutAction.DELETE_DIAGRAM
-                                ].keyCombinationLabel
-                            }
-                        </MenubarShortcut>
-                    </MenubarItem>
+                    {canDeleteDiagram ? (
+                        <>
+                            <MenubarSeparator />
+                            <MenubarItem onClick={confirmDeleteDiagram}>
+                                {t('menu.actions.delete_diagram')}
+                                <MenubarShortcut>
+                                    {
+                                        keyboardShortcutsForOS[
+                                            KeyboardShortcutAction
+                                                .DELETE_DIAGRAM
+                                        ].keyCombinationLabel
+                                    }
+                                </MenubarShortcut>
+                            </MenubarItem>
+                        </>
+                    ) : null}
                 </MenubarContent>
             </MenubarMenu>
             <MenubarMenu>

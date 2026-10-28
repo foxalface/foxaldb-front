@@ -91,14 +91,29 @@ class DiagramAutosaveController {
     }
 
     setEnabled(enabled: boolean): void {
-        this.enabled = enabled;
+        if (this.enabled === enabled) {
+            if (!enabled) {
+                this.clearTimer();
+            }
+
+            return;
+        }
 
         if (!enabled) {
-            this.clearTimer();
+            this.invalidateInFlight();
         }
+
+        this.enabled = enabled;
     }
 
     initializeFromServer(diagramId: string, contentHash: string): void {
+        if (
+            this.activeDiagramId !== null &&
+            this.activeDiagramId !== diagramId
+        ) {
+            this.invalidateInFlight();
+        }
+
         this.serverInitializedDiagramId = diagramId;
         this.authoritativeContentHash = contentHash;
     }
@@ -118,6 +133,14 @@ class DiagramAutosaveController {
     observe(diagram: Diagram, schedule: boolean): void {
         const diagramId = String(diagram.id);
         const payload = diagramAutosavePayload(diagram);
+
+        if (
+            this.activeDiagramId !== null &&
+            this.activeDiagramId !== diagramId
+        ) {
+            this.invalidateInFlight();
+        }
+
         this.latest = { diagramId, payload, diagram };
 
         if (this.activeDiagramId !== diagramId) {
@@ -165,12 +188,19 @@ class DiagramAutosaveController {
     }
 
     /**
+     * Ignores an in-flight completion. The HTTP request is not aborted.
+     */
+    private invalidateInFlight(): void {
+        this.epoch += 1;
+        this.clearTimer();
+    }
+
+    /**
      * Drops a not-yet-started save. An in-flight request cannot be aborted;
      * its completion will not move the clean baseline or start another save.
      */
     cancelPending(): void {
-        this.epoch += 1;
-        this.clearTimer();
+        this.invalidateInFlight();
         this.discardPayload = this.latest?.payload ?? null;
     }
 
@@ -180,8 +210,7 @@ class DiagramAutosaveController {
      * can still complete; its result is ignored and is not written to Dexie.
      */
     abandon(): void {
-        this.epoch += 1;
-        this.clearTimer();
+        this.invalidateInFlight();
         this.enabled = false;
         this.activeDiagramId = null;
         this.latest = null;
@@ -190,8 +219,7 @@ class DiagramAutosaveController {
     }
 
     acceptAuthoritative(diagram: Diagram, contentHash?: string): void {
-        this.epoch += 1;
-        this.clearTimer();
+        this.invalidateInFlight();
         this.discardPayload = null;
         const diagramId = String(diagram.id);
         const payload = diagramAutosavePayload(diagram);
@@ -223,10 +251,9 @@ class DiagramAutosaveController {
     }
 
     reset(): void {
-        this.clearTimer();
+        this.invalidateInFlight();
         this.tail = Promise.resolve();
         this.depth = 0;
-        this.epoch += 1;
         this.enabled = false;
         this.activeDiagramId = null;
         this.authoritativeContentHash = null;
@@ -315,6 +342,10 @@ class DiagramAutosaveController {
                 });
 
                 if (epoch !== this.epoch) {
+                    return;
+                }
+
+                if (state.diagramId !== this.activeDiagramId) {
                     return;
                 }
 

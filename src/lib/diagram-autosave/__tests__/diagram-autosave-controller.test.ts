@@ -299,6 +299,107 @@ describe('diagram autosave flush', () => {
         expect(readDiagramAutosaveContentHash()).toBe(hashC);
     });
 
+    it('does not let an in-flight save for diagram A refresh diagram B', async () => {
+        let resolveSave: (value: unknown) => void = () => undefined;
+        updateDiagram.mockImplementation(
+            () =>
+                new Promise((resolve) => {
+                    resolveSave = resolve;
+                })
+        );
+
+        const diagramA = diagram('Saved', 'table-1', '42');
+        const diagramB = diagram('Other', 'table-b', '99');
+        observeDiagramForAutosave(diagramA, { schedule: false });
+        observeDiagramForAutosave(diagram('Edited', 'table-1', '42'), {
+            schedule: true,
+        });
+        await vi.advanceTimersByTimeAsync(AUTOSAVE_DEBOUNCE_MS);
+        await flushMicrotasks();
+        expect(updateDiagram).toHaveBeenCalledTimes(1);
+
+        initializeDiagramAutosaveFromServer('99', hashC);
+        observeDiagramForAutosave(diagramB, { schedule: true });
+        expect(readDiagramAutosaveContentHash()).toBe(hashC);
+
+        resolveSave({ id: 42, content_hash: hashB });
+        await flushMicrotasks();
+
+        expect(updateDiagram).toHaveBeenCalledTimes(1);
+        expect(readDiagramAutosaveContentHash()).toBe(hashC);
+        expect(readDiagramAutosaveBaseline()).toBe(
+            diagramAutosavePayload(diagramB)
+        );
+    });
+
+    it('does not refresh the baseline when an in-flight save finishes after disable', async () => {
+        let resolveSave: (value: unknown) => void = () => undefined;
+        updateDiagram.mockImplementation(
+            () =>
+                new Promise((resolve) => {
+                    resolveSave = resolve;
+                })
+        );
+
+        const saved = diagram('Saved');
+        observeDiagramForAutosave(saved, { schedule: false });
+        observeDiagramForAutosave(diagram('Edited'), { schedule: true });
+        await vi.advanceTimersByTimeAsync(AUTOSAVE_DEBOUNCE_MS);
+        await flushMicrotasks();
+
+        setDiagramAutosaveEnabled(false);
+        resolveSave({ id: 42, content_hash: hashB });
+        await flushMicrotasks();
+
+        expect(readDiagramAutosaveContentHash()).toBe(hashA);
+        expect(readDiagramAutosaveBaseline()).toBe(
+            diagramAutosavePayload(saved)
+        );
+        expect(updateDiagram).toHaveBeenCalledTimes(1);
+    });
+
+    it('updates the content hash after a successful save of the same diagram', async () => {
+        const saved = diagram('Saved');
+        const edited = diagram('Edited');
+        observeDiagramForAutosave(saved, { schedule: false });
+        observeDiagramForAutosave(edited, { schedule: true });
+
+        await flushDiagramAutosave();
+
+        expect(updateDiagram).toHaveBeenCalledTimes(1);
+        expect(readDiagramAutosaveContentHash()).toBe(hashB);
+        expect(readDiagramAutosaveBaseline()).toBe(
+            diagramAutosavePayload(edited)
+        );
+    });
+
+    it('keeps the authoritative hash when an in-flight save resolves afterward', async () => {
+        let resolveSave: (value: unknown) => void = () => undefined;
+        updateDiagram.mockImplementation(
+            () =>
+                new Promise((resolve) => {
+                    resolveSave = resolve;
+                })
+        );
+
+        observeDiagramForAutosave(diagram('Saved'), { schedule: false });
+        observeDiagramForAutosave(diagram('Edited'), { schedule: true });
+        await vi.advanceTimersByTimeAsync(AUTOSAVE_DEBOUNCE_MS);
+        await flushMicrotasks();
+
+        const merged = diagram('Merged', 'table-merged', '42');
+        acceptAuthoritativeDiagram(merged, hashC);
+        resolveSave({ id: 42, content_hash: hashB });
+        await flushMicrotasks();
+        await flushDiagramAutosave();
+
+        expect(updateDiagram).toHaveBeenCalledTimes(1);
+        expect(readDiagramAutosaveContentHash()).toBe(hashC);
+        expect(readDiagramAutosaveBaseline()).toBe(
+            diagramAutosavePayload(merged)
+        );
+    });
+
     it('skips save without a server hash', async () => {
         resetDiagramAutosaveForTests();
         setDiagramAutosaveEnabled(true);

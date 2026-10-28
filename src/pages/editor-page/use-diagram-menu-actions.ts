@@ -6,8 +6,21 @@ import { useAuth } from '@/hooks/use-auth';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDialog } from '@/hooks/use-dialog';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
+import {
+    useDiagramLocation,
+    useOnlineDiagramId,
+} from '@/hooks/use-diagram-location';
 import { deleteDiagram as deleteDiagramApi } from '@/lib/api/diagrams';
-import { flushDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
+import {
+    isDeviceDiagramLocation,
+    isOnlineDiagramLocation,
+} from '@/lib/diagram/diagram-location';
+import {
+    abandonDiagramAutosave,
+    flushDiagramAutosave,
+} from '@/lib/diagram-autosave/diagram-autosave-controller';
+import { clearPendingDiagramOperationSyncTimers } from '@/lib/realtime/diagram-sync-state';
+import { createBlankDiagramView } from '@/lib/realtime/kick-out-of-diagram';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 
 export interface UseDiagramMenuActionsOptions {
@@ -23,8 +36,11 @@ export const useDiagramMenuActions = (
         currentDiagram,
         readonly,
         deleteDiagram: deleteLocalDiagram,
+        loadDiagramFromData,
     } = useChartDB();
-    const { diagramAccess } = useDiagramAccess();
+    const { diagramAccess, clearDiagramAccess } = useDiagramAccess();
+    const { location, setDiagramLocation } = useDiagramLocation();
+    const onlineDiagramId = useOnlineDiagramId();
     const {
         openCreateDiagramDialog,
         openOpenDiagramDialog,
@@ -43,31 +59,73 @@ export const useDiagramMenuActions = (
         readonly !== true &&
         diagramAccess?.can_edit !== false;
 
+    const canDeleteDiagram = Boolean(
+        currentDiagram?.id &&
+        (isDeviceDiagramLocation(location) ||
+            (isOnlineDiagramLocation(location) &&
+                currentDiagram.id === location.diagramId &&
+                diagramAccess?.role === 'owner'))
+    );
+
     const handleDeleteDiagramAction = useCallback(async () => {
         if (!currentDiagram?.id) {
             return;
         }
 
-        if (isAuthenticated && isValidBackendDiagramId(currentDiagram.id)) {
-            await deleteDiagramApi(String(currentDiagram.id));
+        if (isOnlineDiagramLocation(location)) {
+            if (
+                diagramAccess?.role !== 'owner' ||
+                currentDiagram.id !== location.diagramId
+            ) {
+                return;
+            }
+
+            try {
+                await deleteDiagramApi(location.diagramId);
+            } catch {
+                return;
+            }
+
+            abandonDiagramAutosave();
+            clearPendingDiagramOperationSyncTimers();
+            loadDiagramFromData(createBlankDiagramView());
+            clearDiagramAccess();
+            setDiagramLocation(null);
             navigate('/');
             return;
         }
 
-        if (isAuthenticated) {
+        if (!isDeviceDiagramLocation(location)) {
+            return;
+        }
+
+        if (currentDiagram.id !== location.localId) {
             return;
         }
 
         try {
             await deleteLocalDiagram();
-            onActiveDiagramDeleted?.();
         } catch {
-            // Deletion failure must not transition entry flow to creatingDiagram.
+            return;
         }
+
+        setDiagramLocation(null);
+
+        if (!isAuthenticated) {
+            onActiveDiagramDeleted?.();
+            return;
+        }
+
+        navigate('/');
     }, [
         currentDiagram?.id,
+        location,
+        diagramAccess?.role,
         isAuthenticated,
         deleteLocalDiagram,
+        loadDiagramFromData,
+        clearDiagramAccess,
+        setDiagramLocation,
         onActiveDiagramDeleted,
         navigate,
     ]);
@@ -83,12 +141,12 @@ export const useDiagramMenuActions = (
     const handleSaveDiagram = useCallback(async () => {
         updateDiagramUpdatedAt();
 
-        if (!currentDiagram || !isValidBackendDiagramId(currentDiagram.id)) {
+        if (onlineDiagramId === null) {
             return;
         }
 
         await flushDiagramAutosave();
-    }, [currentDiagram, updateDiagramUpdatedAt]);
+    }, [onlineDiagramId, updateDiagramUpdatedAt]);
 
     const openExportWizard = useCallback(() => {
         openExportWizardDialog();
@@ -103,6 +161,10 @@ export const useDiagramMenuActions = (
     }, [canMergeDiagram, openMergeWizardDialog]);
 
     const confirmDeleteDiagram = useCallback(() => {
+        if (!canDeleteDiagram) {
+            return;
+        }
+
         showAlert({
             title: t('delete_diagram_alert.title'),
             description: t('delete_diagram_alert.description'),
@@ -110,10 +172,11 @@ export const useDiagramMenuActions = (
             closeLabel: t('delete_diagram_alert.cancel'),
             onAction: handleDeleteDiagramAction,
         });
-    }, [showAlert, t, handleDeleteDiagramAction]);
+    }, [canDeleteDiagram, showAlert, t, handleDeleteDiagramAction]);
 
     return {
         canMergeDiagram,
+        canDeleteDiagram,
         createNewDiagram,
         openDiagram,
         handleSaveDiagram,

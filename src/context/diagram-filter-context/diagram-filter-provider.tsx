@@ -17,6 +17,8 @@ import {
 } from '@/lib/domain/diagram-filter/diagram-filter';
 import { useStorage } from '@/hooks/use-storage';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
+import { isOnlineDiagramLocation } from '@/lib/diagram/diagram-location';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { databasesWithSchemas, schemaNameToSchemaId } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
@@ -26,7 +28,10 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { diagramId, tables, schemas, databaseType, events } = useChartDB();
+    const { location } = useDiagramLocation();
     const { getDiagramFilter, updateDiagramFilter } = useStorage();
+    const skipDexieFilterPersistence =
+        isOnlineDiagramLocation(location) && location.diagramId === diagramId;
     const [filter, setFilter] = useState<DiagramFilter>({});
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -51,10 +56,14 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
     const diagramIdOfLoadedFilter = useRef<string | null>(null);
 
     useEffect(() => {
+        if (skipDexieFilterPersistence) {
+            return;
+        }
+
         if (diagramId && diagramId === diagramIdOfLoadedFilter.current) {
             updateDiagramFilter(diagramId, filter);
         }
-    }, [diagramId, filter, updateDiagramFilter]);
+    }, [diagramId, filter, skipDexieFilterPersistence, updateDiagramFilter]);
 
     // Reset filter when diagram changes
     useEffect(() => {
@@ -87,11 +96,20 @@ export const DiagramFilterProvider: React.FC<React.PropsWithChildren> = ({
 
         setFilter({});
 
-        if (diagramId) {
-            loadFilterFromStorage(diagramId);
-            diagramIdOfLoadedFilter.current = diagramId;
+        if (!diagramId) {
+            return;
         }
-    }, [diagramId, getDiagramFilter, schemas]);
+
+        diagramIdOfLoadedFilter.current = diagramId;
+
+        if (skipDexieFilterPersistence) {
+            setFilter(schemas.length > 1 ? { schemaIds: [schemas[0].id] } : {});
+            setLoading(false);
+            return;
+        }
+
+        void loadFilterFromStorage(diagramId);
+    }, [diagramId, getDiagramFilter, schemas, skipDexieFilterPersistence]);
 
     const clearSchemaIds: DiagramFilterContext['clearSchemaIdsFilter'] =
         useCallback(() => {

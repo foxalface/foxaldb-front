@@ -21,6 +21,13 @@ const authState = {
     isAuthenticated: false,
 };
 
+const locationState = {
+    location: {
+        type: 'device' as const,
+        localId: 'guest-diagram-1',
+    },
+};
+
 const chartDbState = {
     currentDiagram: {
         id: 'guest-diagram-1',
@@ -61,7 +68,16 @@ vi.mock('@/hooks/use-dialog', () => ({
 vi.mock('@/hooks/use-diagram-access', () => ({
     useDiagramAccess: () => ({
         diagramAccess: chartDbState.diagramAccess,
+        clearDiagramAccess: vi.fn(),
     }),
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useDiagramLocation: () => ({
+        location: locationState.location,
+        setDiagramLocation: vi.fn(),
+    }),
+    useOnlineDiagramId: () => null,
 }));
 
 vi.mock('@/hooks/use-history', () => ({
@@ -142,6 +158,10 @@ describe('Diagram menu', () => {
         };
         chartDbState.readonly = false;
         chartDbState.diagramAccess = null;
+        locationState.location = {
+            type: 'device',
+            localId: 'guest-diagram-1',
+        };
     });
 
     const openDiagramMenu = async () => {

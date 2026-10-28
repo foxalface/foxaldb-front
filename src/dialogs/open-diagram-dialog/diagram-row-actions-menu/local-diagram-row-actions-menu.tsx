@@ -21,11 +21,13 @@ import { useRequestAuthentication } from '@/hooks/use-request-authentication';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useChartDB } from '@/hooks/use-chartdb';
+import { useDiagramLocation } from '@/hooks/use-diagram-location';
 import { useStorage } from '@/hooks/use-storage';
 import { useConfig } from '@/hooks/use-config';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useToast } from '@/components/toast/use-toast';
 import { duplicateLocalDiagram } from '@/lib/diagram/duplicate-local-diagram';
+import { isDeviceDiagramLocation } from '@/lib/diagram/diagram-location';
 import {
     putLocalDiagramOnlineCopy,
     putLocalDiagramOnlineMove,
@@ -55,6 +57,7 @@ export const LocalDiagramRowActionsMenu: React.FC<
 }) => {
     const { diagramId: activeDiagramId, deleteDiagram: deleteLocalDiagram } =
         useChartDB();
+    const { location, setDiagramLocation } = useDiagramLocation();
     const { getDiagram, listDiagrams, addDiagram, deleteDiagram } =
         useStorage();
     const { updateConfig } = useConfig();
@@ -72,10 +75,19 @@ export const LocalDiagramRowActionsMenu: React.FC<
     }, [toast, t]);
 
     const onDeleteConfirmed = useCallback(async () => {
+        const deletesCurrentDeviceDiagram =
+            isDeviceDiagramLocation(location) &&
+            location.localId === diagramId &&
+            diagramId === activeDiagramId;
+
         if (diagramId === activeDiagramId) {
             await deleteLocalDiagram();
         } else {
             await deleteDiagram(diagramId);
+        }
+
+        if (deletesCurrentDeviceDiagram) {
+            setDiagramLocation(null);
         }
 
         await onListChanged();
@@ -85,8 +97,10 @@ export const LocalDiagramRowActionsMenu: React.FC<
         }
     }, [
         diagramId,
+        location,
         deleteDiagram,
         deleteLocalDiagram,
+        setDiagramLocation,
         onListChanged,
         activeDiagramId,
         numberOfLocalDiagrams,
