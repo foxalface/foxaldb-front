@@ -22,11 +22,21 @@ import {
     type DiagramLocation,
 } from '@/lib/diagram/diagram-location';
 import {
+    flushDiagramAutosave,
     initializeDiagramAutosaveFromServer,
     observeDiagramForAutosave,
+    readDiagramAutosaveContentHash,
     resetDiagramAutosaveForTests,
     setDiagramAutosaveEnabled,
 } from '@/lib/diagram-autosave/diagram-autosave-controller';
+import {
+    b4MergeCatalogFixture,
+    b4ServerResultAfterAddingTags,
+} from '@/lib/schema-merge/__tests__/b4-merge-fixture';
+import {
+    handleApplySchemaMergeEvent,
+    resetSchemaMergeRefresh,
+} from '@/lib/realtime/schema-merge-refresh';
 
 const autosaveServerHash = 'f'.repeat(64);
 import { MergeWizardDialog } from '../merge-wizard-dialog';
@@ -37,6 +47,9 @@ const chartState = {
     isAuthenticated: true,
     databaseType: DatabaseType.POSTGRESQL,
     replaceDiagram: vi.fn(),
+    updateTable: vi.fn(),
+    readonly: false,
+    relationships: [] as NonNullable<Diagram['relationships']>,
     currentDiagram: {
         id: '42',
         name: 'Saved',
@@ -216,6 +229,7 @@ describe('Merge wizard shell', () => {
         chartState.replaceDiagram.mockReset();
         chartState.replaceDiagram.mockResolvedValue(undefined);
         resetDiagramAutosaveForTests();
+        resetSchemaMergeRefresh();
         initializeDiagramAutosaveFromServer('42', autosaveServerHash);
         control.prepare.mockReset();
         control.apiRequest.mockReset();
@@ -232,6 +246,7 @@ describe('Merge wizard shell', () => {
             createdAt: new Date(0),
             updatedAt: new Date(0),
         } as Diagram;
+        chartState.relationships = [];
         locationState.location = onlineDiagramLocation('42');
         control.prepare.mockImplementation(
             async (
@@ -574,12 +589,13 @@ describe('Merge wizard shell', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('does not compare a guest diagram', () => {
+    it('does not compare an authenticated device diagram', () => {
+        chartState.isAuthenticated = true;
         chartState.currentDiagram = {
             ...chartState.currentDiagram,
-            id: 'guest-diagram-1',
+            id: 'local-catalog',
         };
-        locationState.location = deviceDiagramLocation('guest-diagram-1');
+        locationState.location = deviceDiagramLocation('local-catalog');
         renderWizard();
 
         expect(
@@ -591,6 +607,50 @@ describe('Merge wizard shell', () => {
         expect(screen.getByRole('textbox')).toBeDisabled();
         expect(control.prepare).not.toHaveBeenCalled();
         expect(control.apiRequest).not.toHaveBeenCalled();
+    });
+
+    it('does not compare or apply a guest device diagram', () => {
+        chartState.isAuthenticated = false;
+        chartState.currentDiagram = {
+            ...chartState.currentDiagram,
+            id: 'guest-diagram-1',
+        };
+        locationState.location = deviceDiagramLocation('guest-diagram-1');
+        renderWizard();
+        paste('select 1');
+
+        expect(
+            screen.getByText('merge_wizard.unavailable')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'merge_wizard.compare' })
+        ).toBeDisabled();
+        expect(control.prepare).not.toHaveBeenCalled();
+        expect(control.apiRequest).not.toHaveBeenCalled();
+    });
+
+    it('does not compare or apply an authenticated device diagram with a numeric id', () => {
+        chartState.isAuthenticated = true;
+        chartState.currentDiagram = {
+            ...chartState.currentDiagram,
+            id: '123',
+        };
+        locationState.location = deviceDiagramLocation('123');
+        renderWizard();
+        paste('select 1');
+
+        expect(
+            screen.getByText('merge_wizard.unavailable')
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'merge_wizard.compare' })
+        ).toBeDisabled();
+        expect(control.prepare).not.toHaveBeenCalled();
+        expect(
+            control.apiRequest.mock.calls.some((call) =>
+                String(call[0]).includes('/merge/')
+            )
+        ).toBe(false);
     });
 
     it('keeps Compare disabled until a project candidate is chosen', async () => {
@@ -874,6 +934,13 @@ describe('Merge wizard shell', () => {
         expect(control.apiRequest.mock.calls[0]?.[1]).toEqual(
             expect.objectContaining({ method: 'PUT' })
         );
+        expect(
+            control.apiRequest.mock.calls.some((call) =>
+                String(call[0]).includes('/merge/')
+            )
+        ).toBe(false);
+        expect(chartState.currentDiagram.name).toBe('Saved');
+        expect(chartState.replaceDiagram).not.toHaveBeenCalled();
         expect(
             screen.getByTestId('merge-wizard-source-step')
         ).toBeInTheDocument();
@@ -1367,5 +1434,364 @@ describe('Merge wizard shell', () => {
             screen.getByRole('button', { name: 'merge_wizard.cancel' })
         );
         expect(closeMergeWizardDialog).toHaveBeenCalledTimes(1);
+    });
+});
+
+const sparseOperation = (
+    id: string,
+    category: 'table' | 'field' | 'relationship',
+    type: 'add' | 'modify' | 'rename' | 'delete',
+    name: string
+) => {
+    const identity =
+        category === 'field'
+            ? { kind: 'field' as const, schema: null, table: 'users', name }
+            : category === 'relationship'
+              ? {
+                    kind: 'relationship' as const,
+                    source: { schema: null, table: 'users', field: 'id' },
+                    target: { schema: null, table: 'posts', field: name },
+                }
+              : { kind: 'table' as const, schema: null, name };
+    const renameTo =
+        type === 'rename'
+            ? category === 'field'
+                ? {
+                      kind: 'field' as const,
+                      schema: null,
+                      table: 'users',
+                      name: `${name}_renamed`,
+                  }
+                : {
+                      kind: 'table' as const,
+                      schema: null,
+                      name: `${name}_renamed`,
+                  }
+            : null;
+
+    return {
+        id,
+        category,
+        type,
+        entityId: type === 'add' ? null : `${id}-entity`,
+        renameTo,
+        identity,
+        before: null,
+        after: null,
+        changes: [],
+        dependsOn: [],
+    };
+};
+
+const representativeOperations = [
+    sparseOperation('add-table', 'table', 'add', 'tags'),
+    sparseOperation('remove-table', 'table', 'delete', 'comments'),
+    sparseOperation('rename-table', 'table', 'rename', 'posts'),
+    sparseOperation('add-field', 'field', 'add', 'nickname'),
+    sparseOperation('remove-field', 'field', 'delete', 'name'),
+    sparseOperation('rename-field', 'field', 'rename', 'email'),
+    sparseOperation('type-change', 'field', 'modify', 'status'),
+    sparseOperation('null-default', 'field', 'modify', 'name'),
+    sparseOperation('relationship-change', 'relationship', 'modify', 'user_id'),
+    sparseOperation('index-check', 'table', 'modify', 'posts'),
+];
+
+const applySummary = {
+    selected: representativeOperations.length,
+    categories: { table: 4, field: 5, relationship: 1, view: 0 },
+    types: { add: 2, modify: 4, rename: 2, delete: 2 },
+};
+
+describe('B4 merge online invariants', () => {
+    const preMergeHash = 'a'.repeat(64);
+    const resultHash = 'b'.repeat(64);
+
+    beforeEach(() => {
+        closeMergeWizardDialog.mockReset();
+        chartState.replaceDiagram.mockReset();
+        chartState.replaceDiagram.mockResolvedValue(undefined);
+        resetDiagramAutosaveForTests();
+        resetSchemaMergeRefresh();
+        setDiagramAutosaveEnabled(true);
+        initializeDiagramAutosaveFromServer('42', preMergeHash);
+        control.prepare.mockReset();
+        control.apiRequest.mockReset();
+        control.capabilities = null;
+        scenario = 'ready';
+        chartState.isAuthenticated = true;
+        chartState.databaseType = DatabaseType.POSTGRESQL;
+        chartState.currentDiagram = {
+            ...b4MergeCatalogFixture(),
+            tables: [],
+            relationships: [],
+        };
+        chartState.relationships = [];
+        locationState.location = onlineDiagramLocation('42');
+        control.prepare.mockResolvedValue(readySql);
+    });
+
+    const compareBody = {
+        baseContentHash: preMergeHash,
+        baseUpdatedAt: '2026-01-01T00:00:00.000000Z',
+        viewsCompared: false,
+        operations: representativeOperations,
+    };
+
+    it('applies the online diagram id, accepts the result hash, and keeps current areas and notes', async () => {
+        const user = userEvent.setup();
+        const merged = b4ServerResultAfterAddingTags();
+        const fetchDiagram = vi.fn();
+        control.apiRequest.mockImplementation((path: string) => {
+            if (String(path).endsWith('/merge/compare')) {
+                return Promise.resolve(compareBody);
+            }
+
+            return Promise.resolve({
+                resultContentHash: resultHash,
+                updatedAt: '2026-01-02T00:00:00.000Z',
+                content: merged,
+                appliedOperationIds: representativeOperations.map(
+                    (operation) => operation.id
+                ),
+                summary: applySummary,
+            });
+        });
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        await user.click(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        );
+        await waitFor(() =>
+            expect(chartState.replaceDiagram).toHaveBeenCalledTimes(1)
+        );
+
+        const compareCall = control.apiRequest.mock.calls.find((call) =>
+            String(call[0]).includes('/merge/compare')
+        );
+        const applyCall = control.apiRequest.mock.calls.find((call) =>
+            String(call[0]).includes('/merge/apply')
+        );
+        expect(compareCall?.[0]).toBe('/diagrams/42/merge/compare');
+        expect(applyCall?.[0]).toBe('/diagrams/42/merge/apply');
+        expect(applyCall?.[1].data.baseContentHash).toBe(preMergeHash);
+        expect(applyCall?.[1].data.selectedOperationIds).toEqual(
+            representativeOperations.map((operation) => operation.id)
+        );
+        expect(chartState.replaceDiagram).toHaveBeenCalledWith(
+            expect.objectContaining({
+                id: '42',
+                name: 'Catalog',
+            }),
+            {
+                updateHistory: true,
+                authoritative: true,
+                authoritativeContentHash: resultHash,
+            }
+        );
+        const replaced = chartState.replaceDiagram.mock.calls[0]?.[0] as {
+            areas?: { name: string }[];
+            notes?: { content: string }[];
+            customTypes?: { name: string }[];
+            tables?: { name: string }[];
+        };
+        expect(replaced.areas?.map((item) => item.name)).toEqual(['Billing']);
+        expect(replaced.notes?.map((item) => item.content)).toEqual([
+            'Account status is an enum.',
+        ]);
+        expect(replaced.customTypes?.map((item) => item.name)).toEqual([
+            'account_status',
+        ]);
+        expect(replaced.tables?.some((item) => item.name === 'tags')).toBe(
+            true
+        );
+
+        const handlers = {
+            fetchDiagram,
+            replaceDiagram: vi.fn(),
+            cancelPendingAutosave: vi.fn(),
+        };
+        await handleApplySchemaMergeEvent(
+            {
+                action: 'apply_schema_merge',
+                resultContentHash: resultHash,
+                updatedAt: '2026-01-02T00:00:00.000Z',
+                userId: 7,
+                clientId: 'client-1',
+                sentAt: '2026-01-02T00:00:00.000Z',
+            },
+            '42',
+            handlers
+        );
+        await handleApplySchemaMergeEvent(
+            {
+                action: 'apply_schema_merge',
+                resultContentHash: resultHash,
+                updatedAt: '2026-01-02T00:00:00.000Z',
+                userId: 8,
+                clientId: 'peer-client',
+                sentAt: '2026-01-02T00:00:00.000Z',
+            },
+            '42',
+            handlers
+        );
+        expect(fetchDiagram).not.toHaveBeenCalled();
+    });
+
+    it('does not replace the diagram when compare validation or the network fails', async () => {
+        const user = userEvent.setup();
+        control.apiRequest.mockRejectedValue(
+            new ApiError('mismatch', 422, { code: 'database_type_mismatch' })
+        );
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByText('merge_wizard.errors.database_type_mismatch');
+        expect(chartState.replaceDiagram).not.toHaveBeenCalled();
+        expect(chartState.currentDiagram.name).toBe('Catalog');
+        expect(
+            control.apiRequest.mock.calls.some((call) =>
+                String(call[0]).includes('/merge/apply')
+            )
+        ).toBe(false);
+    });
+
+    it('does not replace the diagram when compare fails unexpectedly', async () => {
+        const user = userEvent.setup();
+        control.apiRequest.mockRejectedValue(new Error('offline'));
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByText('merge_wizard.errors.unexpected');
+        expect(chartState.replaceDiagram).not.toHaveBeenCalled();
+        expect(chartState.currentDiagram.name).toBe('Catalog');
+        expect(readDiagramAutosaveContentHash()).toBe(preMergeHash);
+    });
+
+    it('does not accept a merge hash when apply fails on the server', async () => {
+        const user = userEvent.setup();
+        control.apiRequest.mockImplementation((path: string) => {
+            if (String(path).endsWith('/merge/compare')) {
+                return Promise.resolve(compareBody);
+            }
+
+            return Promise.reject(new Error('apply failed'));
+        });
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        await user.click(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        );
+        await screen.findByText('merge_wizard.apply_errors.unexpected');
+        expect(chartState.replaceDiagram).not.toHaveBeenCalled();
+        expect(readDiagramAutosaveContentHash()).toBe(preMergeHash);
+        expect(
+            screen.getByTestId('merge-wizard-result-step')
+        ).toBeInTheDocument();
+    });
+
+    it('does not autosave the pre-merge body with the result hash when replaceDiagram throws', async () => {
+        const user = userEvent.setup();
+        chartState.replaceDiagram.mockRejectedValue(
+            new Error('replace failed')
+        );
+        control.apiRequest.mockImplementation(
+            (path: string, init?: { method?: string }) => {
+                if (String(path).endsWith('/merge/compare')) {
+                    return Promise.resolve({
+                        ...compareBody,
+                        operations: [representativeOperations[0]],
+                    });
+                }
+
+                if (String(path).endsWith('/merge/apply')) {
+                    return Promise.resolve({
+                        resultContentHash: resultHash,
+                        updatedAt: '2026-01-02T00:00:00.000Z',
+                        content: b4ServerResultAfterAddingTags(),
+                        appliedOperationIds: ['add-table'],
+                        summary: {
+                            selected: 1,
+                            categories: {
+                                table: 1,
+                                field: 0,
+                                relationship: 0,
+                                view: 0,
+                            },
+                            types: { add: 1, modify: 0, rename: 0, delete: 0 },
+                        },
+                    });
+                }
+
+                if (init?.method === 'PUT') {
+                    return Promise.reject(
+                        new ApiError('stale', 409, { code: 'stale_content' })
+                    );
+                }
+
+                return Promise.reject(new Error(`unexpected ${String(path)}`));
+            }
+        );
+        renderWizard();
+        paste('select 1');
+        const compare = await screen.findByRole('button', {
+            name: 'merge_wizard.compare',
+        });
+        await waitFor(() => expect(compare).toBeEnabled());
+        await user.click(compare);
+        await screen.findByTestId('merge-wizard-result-step');
+        await user.click(
+            screen.getByRole('button', { name: /merge_wizard.result.merge/ })
+        );
+        await screen.findByText('merge_wizard.apply_errors.unexpected');
+        expect(readDiagramAutosaveContentHash()).toBe(preMergeHash);
+        expect(chartState.currentDiagram.name).toBe('Catalog');
+        expect(
+            chartState.currentDiagram.tables?.some(
+                (item) => item.name === 'tags'
+            )
+        ).toBe(false);
+
+        const dirty = {
+            ...chartState.currentDiagram,
+            name: 'Local overwrite',
+        };
+        observeDiagramForAutosave(chartState.currentDiagram, {
+            schedule: false,
+        });
+        observeDiagramForAutosave(dirty, { schedule: true });
+        await expect(flushDiagramAutosave()).rejects.toBeInstanceOf(ApiError);
+
+        const put = control.apiRequest.mock.calls.find(
+            (call) => call[1]?.method === 'PUT'
+        );
+        expect(put?.[0]).toBe('/diagrams/42');
+        expect(put?.[1].data.baseContentHash).toBe(preMergeHash);
+        expect(put?.[1].data.baseContentHash).not.toBe(resultHash);
+        expect(put?.[1].data.content.name).toBe('Local overwrite');
+        expect(
+            control.apiRequest.mock.calls.filter((call) =>
+                String(call[0]).includes('/merge/apply')
+            )
+        ).toHaveLength(1);
     });
 });

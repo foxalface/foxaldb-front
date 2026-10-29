@@ -29,6 +29,9 @@ describe('schema merge wizard boundaries', () => {
         const compareClient = read('src/lib/api/schema-merge-compare.ts');
         const applyClient = read('src/lib/api/schema-merge-apply.ts');
         const menu = read('src/pages/editor-page/top-navbar/menu/menu.tsx');
+        const menuActions = read(
+            'src/pages/editor-page/use-diagram-menu-actions.ts'
+        );
 
         expect(autosave).toContain('export const flushDiagramAutosave');
         expect(autosave).toContain('AUTOSAVE_DEBOUNCE_MS = 900');
@@ -44,7 +47,10 @@ describe('schema merge wizard boundaries', () => {
         expect(compareClient).not.toContain('/merge/apply');
         expect(applyClient).toContain('/merge/apply');
         expect(applyClient).toContain('getClientId');
-        expect(menu).toContain('openMergeWizardDialog');
+        expect(menu).toContain('openMergeWizard');
+        expect(menu).not.toContain('openMergeWizardDialog');
+        expect(menuActions).toContain('openMergeWizardDialog');
+        expect(menuActions).toContain('canMergeDiagram');
         expect(menu).toContain('menu.actions.merge');
 
         for (const source of [wizard, sourceStep, resultStep, applyClient]) {

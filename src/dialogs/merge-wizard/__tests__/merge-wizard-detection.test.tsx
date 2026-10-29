@@ -6,6 +6,11 @@ import type * as UploadCapabilitiesModule from '@/lib/upload-capabilities';
 import { DatabaseType } from '@/lib/domain/database-type';
 import type { Diagram } from '@/lib/domain/diagram';
 import {
+    onlineDiagramLocation,
+    readOnlineDiagramId,
+    type DiagramLocation,
+} from '@/lib/diagram/diagram-location';
+import {
     dbmlSample,
     mysqlDistinctiveSql,
     postgresDistinctiveSql,
@@ -28,6 +33,10 @@ const chartState = {
     } as Diagram,
 };
 
+const locationState = {
+    location: onlineDiagramLocation('42') as DiagramLocation,
+};
+
 const control = vi.hoisted(() => ({
     resolveUploadCapabilities: vi.fn(),
 }));
@@ -42,6 +51,18 @@ vi.mock('@/hooks/use-auth', () => ({
 
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartState,
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useDiagramLocation: () => ({
+        location: locationState.location,
+        setDiagramLocation: vi.fn(),
+    }),
+    useOnlineDiagramId: () =>
+        readOnlineDiagramId(
+            locationState.location,
+            chartState.currentDiagram?.id
+        ),
 }));
 
 vi.mock('@/components/code-snippet/code-snippet', () => ({
@@ -149,6 +170,7 @@ const paste = (value: string) => {
 describe('Merge wizard source detection', () => {
     beforeEach(() => {
         control.resolveUploadCapabilities.mockClear();
+        locationState.location = onlineDiagramLocation('42');
         chartState.databaseType = DatabaseType.POSTGRESQL;
         chartState.currentDiagram = {
             id: '42',

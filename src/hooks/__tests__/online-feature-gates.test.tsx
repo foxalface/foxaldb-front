@@ -13,8 +13,8 @@ import { useActivitiesAvailability } from '@/hooks/use-activities-availability';
 import { useShareAvailability } from '@/hooks/use-share-availability';
 import { useDiagramMenuActions } from '@/pages/editor-page/use-diagram-menu-actions';
 
-const { authState, locationState, chartDbState, accessState } = vi.hoisted(
-    () => ({
+const { authState, locationState, chartDbState, accessState, dialogMocks } =
+    vi.hoisted(() => ({
         authState: { isAuthenticated: false },
         locationState: { location: null as DiagramLocation | null },
         chartDbState: {
@@ -22,8 +22,10 @@ const { authState, locationState, chartDbState, accessState } = vi.hoisted(
             readonly: false,
         },
         accessState: { diagramAccess: null as DiagramAccess | null },
-    })
-);
+        dialogMocks: {
+            openMergeWizardDialog: vi.fn(),
+        },
+    }));
 
 vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => authState,
@@ -63,7 +65,7 @@ vi.mock('@/hooks/use-dialog', () => ({
         openCreateDiagramDialog: vi.fn(),
         openOpenDiagramDialog: vi.fn(),
         openExportWizardDialog: vi.fn(),
-        openMergeWizardDialog: vi.fn(),
+        openMergeWizardDialog: dialogMocks.openMergeWizardDialog,
     }),
 }));
 
@@ -113,6 +115,7 @@ describe('Online feature gates with numeric-looking device diagrams', () => {
         chartDbState.currentDiagram = { id: '123', name: 'Numeric device' };
         chartDbState.readonly = false;
         accessState.diagramAccess = ownerAccess;
+        dialogMocks.openMergeWizardDialog.mockClear();
     });
 
     it('keeps merge, Laravel, activities, share, and role gates offline', () => {
@@ -121,6 +124,8 @@ describe('Online feature gates with numeric-looking device diagrams', () => {
         );
 
         expect(menuActions.current.canMergeDiagram).toBe(false);
+        menuActions.current.openMergeWizard();
+        expect(dialogMocks.openMergeWizardDialog).not.toHaveBeenCalled();
         expect(
             getExportTargetAvailability('laravel', {
                 isAuthenticated: true,
@@ -154,6 +159,7 @@ describe('Online feature gates with mismatched location and editor id', () => {
         chartDbState.currentDiagram = { id: '456', name: 'Stale editor' };
         chartDbState.readonly = false;
         accessState.diagramAccess = ownerAccess;
+        dialogMocks.openMergeWizardDialog.mockClear();
     });
 
     it('treats the diagram as not currently online', () => {
@@ -169,6 +175,8 @@ describe('Online feature gates with mismatched location and editor id', () => {
         );
 
         expect(menuActions.current.canMergeDiagram).toBe(false);
+        menuActions.current.openMergeWizard();
+        expect(dialogMocks.openMergeWizardDialog).not.toHaveBeenCalled();
         expect(
             renderHook(() => useActivitiesAvailability()).result.current
         ).toBe(false);
@@ -184,20 +192,76 @@ describe('Online feature gates for editors and viewers', () => {
         locationState.location = onlineDiagramLocation('42');
         chartDbState.currentDiagram = { id: '42', name: 'Shared' };
         chartDbState.readonly = false;
+        dialogMocks.openMergeWizardDialog.mockClear();
     });
 
-    it('allows merge for editors and hides it for viewers', () => {
-        accessState.diagramAccess = editorAccess;
-        expect(
-            renderHook(() => useDiagramMenuActions()).result.current
-                .canMergeDiagram
-        ).toBe(true);
+    it('allows merge for owners and editors and opens the dialog', () => {
+        accessState.diagramAccess = ownerAccess;
+        const owner = renderHook(() => useDiagramMenuActions());
+        expect(owner.result.current.canMergeDiagram).toBe(true);
+        owner.result.current.openMergeWizard();
+        expect(dialogMocks.openMergeWizardDialog).toHaveBeenCalledTimes(1);
 
+        dialogMocks.openMergeWizardDialog.mockClear();
+        accessState.diagramAccess = editorAccess;
+        const editor = renderHook(() => useDiagramMenuActions());
+        expect(editor.result.current.canMergeDiagram).toBe(true);
+        editor.result.current.openMergeWizard();
+        expect(dialogMocks.openMergeWizardDialog).toHaveBeenCalledTimes(1);
+    });
+
+    it('hides merge for viewers even when the editor is not marked readonly', () => {
+        accessState.diagramAccess = viewerAccess;
+        chartDbState.readonly = false;
+        const viewer = renderHook(() => useDiagramMenuActions());
+        expect(viewer.result.current.canMergeDiagram).toBe(false);
+        viewer.result.current.openMergeWizard();
+        expect(dialogMocks.openMergeWizardDialog).not.toHaveBeenCalled();
+    });
+
+    it('hides merge for viewers when the editor is readonly', () => {
         accessState.diagramAccess = viewerAccess;
         chartDbState.readonly = true;
-        expect(
-            renderHook(() => useDiagramMenuActions()).result.current
-                .canMergeDiagram
-        ).toBe(false);
+        const viewer = renderHook(() => useDiagramMenuActions());
+        expect(viewer.result.current.canMergeDiagram).toBe(false);
+        viewer.result.current.openMergeWizard();
+        expect(dialogMocks.openMergeWizardDialog).not.toHaveBeenCalled();
+    });
+});
+
+describe('Online feature gates for guests and non-numeric device diagrams', () => {
+    beforeEach(() => {
+        dialogMocks.openMergeWizardDialog.mockClear();
+        chartDbState.readonly = false;
+        accessState.diagramAccess = ownerAccess;
+    });
+
+    it('keeps merge unavailable for a guest device diagram', () => {
+        authState.isAuthenticated = false;
+        locationState.location = deviceDiagramLocation('guest-diagram-1');
+        chartDbState.currentDiagram = {
+            id: 'guest-diagram-1',
+            name: 'Guest',
+        };
+        accessState.diagramAccess = null;
+
+        const { result } = renderHook(() => useDiagramMenuActions());
+        expect(result.current.canMergeDiagram).toBe(false);
+        result.current.openMergeWizard();
+        expect(dialogMocks.openMergeWizardDialog).not.toHaveBeenCalled();
+    });
+
+    it('keeps merge unavailable for an authenticated device diagram whose id is not numeric', () => {
+        authState.isAuthenticated = true;
+        locationState.location = deviceDiagramLocation('local-catalog');
+        chartDbState.currentDiagram = {
+            id: 'local-catalog',
+            name: 'Device',
+        };
+
+        const { result } = renderHook(() => useDiagramMenuActions());
+        expect(result.current.canMergeDiagram).toBe(false);
+        result.current.openMergeWizard();
+        expect(dialogMocks.openMergeWizardDialog).not.toHaveBeenCalled();
     });
 });
