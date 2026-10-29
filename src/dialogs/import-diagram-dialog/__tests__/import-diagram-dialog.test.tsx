@@ -1,11 +1,16 @@
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import React, { useEffect } from 'react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Diagram } from '@/lib/domain/diagram';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { ImportDiagramDialog } from '../import-diagram-dialog';
-import { CreateDiagramSessionDestinationProvider } from '@/dialogs/create-diagram-dialog/create-diagram-session-destination-context';
+import {
+    CreateDiagramSessionDestinationProvider,
+    useCreateDiagramSessionDestinationRequired,
+} from '@/dialogs/create-diagram-dialog/create-diagram-session-destination-context';
+import { RestoreDiagramJsonParseError } from '@/lib/diagram-restore/restore-diagram-from-json-backup';
+import { ApiError } from '@/lib/api/client';
 
 const persistRestoredDiagramFromJson = vi.fn();
 const navigate = vi.fn();
@@ -171,26 +176,176 @@ describe('ImportDiagramDialog', () => {
         expect(closeCreateDiagramDialog).toHaveBeenCalled();
     });
 
-    it('uses the parent create session destination when restore opens during create', async () => {
-        isAuthenticated = false;
+    it('lets an authenticated create session keep Device over the standalone Online default', async () => {
+        isAuthenticated = true;
         persistRestoredDiagramFromJson.mockResolvedValue({
             destination: 'device',
             localId: deviceDiagram.id,
             diagram: deviceDiagram,
         });
 
-        await uploadAndRestore(true);
+        const ChooseDevice: React.FC = () => {
+            const { isCreateSessionActive, setDestination } =
+                useCreateDiagramSessionDestinationRequired();
+
+            useEffect(() => {
+                if (!isCreateSessionActive) {
+                    return;
+                }
+
+                setDestination('device');
+            }, [isCreateSessionActive, setDestination]);
+
+            return <ImportDiagramDialog dialog={{ open: true }} />;
+        };
+
+        const file = new File(['{}'], 'backup.json', {
+            type: 'application/json',
+        });
+        render(
+            <CreateDiagramSessionDestinationProvider createDialogOpen>
+                <ChooseDevice />
+            </CreateDiagramSessionDestinationProvider>
+        );
+        const input = document.querySelector(
+            'input[type="file"]'
+        ) as HTMLInputElement;
+        await userEvent.upload(input, file);
+        await userEvent.click(
+            screen.getByRole('button', { name: 'import_diagram_dialog.import' })
+        );
+
+        await waitFor(() => {
+            expect(persistRestoredDiagramFromJson).toHaveBeenCalledWith(
+                expect.any(String),
+                expect.objectContaining({
+                    destination: 'device',
+                    isAuthenticated: true,
+                })
+            );
+        });
+    });
+
+    it('shows the error and does not open when parsing or creation fails', async () => {
+        persistRestoredDiagramFromJson.mockRejectedValue(
+            new RestoreDiagramJsonParseError({
+                code: 'invalid_diagram_json',
+                path: null,
+                issueCode: 'invalid_json',
+            })
+        );
+
+        await uploadAndRestore();
+
+        expect(
+            await screen.findByText('import_diagram_dialog.error.title')
+        ).toBeInTheDocument();
+        expect(navigate).not.toHaveBeenCalled();
+        expect(setDiagramLocation).not.toHaveBeenCalled();
+        expect(clearDiagramAccess).not.toHaveBeenCalled();
+        expect(loadDiagramFromData).not.toHaveBeenCalled();
+
+        persistRestoredDiagramFromJson.mockRejectedValue(
+            new ApiError('Unauthenticated', 401, null)
+        );
+        await userEvent.click(
+            screen.getByRole('button', { name: 'import_diagram_dialog.import' })
+        );
+
+        await waitFor(() => {
+            expect(persistRestoredDiagramFromJson).toHaveBeenCalledTimes(2);
+        });
+        expect(navigate).not.toHaveBeenCalled();
+        expect(setDiagramLocation).not.toHaveBeenCalled();
+    });
+
+    it('ignores a file read that finishes after the dialog closes', async () => {
+        let finishRead: (() => void) | undefined;
+        class DeferredFileReader {
+            result: string | ArrayBuffer | null = '{}';
+            onload: ((event: ProgressEvent<FileReader>) => void) | null = null;
+            onerror: (() => void) | null = null;
+
+            readAsText(): void {
+                finishRead = () => {
+                    this.onload?.({
+                        target: this,
+                    } as unknown as ProgressEvent<FileReader>);
+                };
+            }
+        }
+        const view = render(
+            <CreateDiagramSessionDestinationProvider createDialogOpen={false}>
+                <ImportDiagramDialog dialog={{ open: true }} />
+            </CreateDiagramSessionDestinationProvider>
+        );
+        const input = document.querySelector(
+            'input[type="file"]'
+        ) as HTMLInputElement;
+        await userEvent.upload(
+            input,
+            new File(['{}'], 'backup.json', { type: 'application/json' })
+        );
+        vi.stubGlobal('FileReader', DeferredFileReader);
+        await userEvent.click(
+            screen.getByRole('button', { name: 'import_diagram_dialog.import' })
+        );
+        view.rerender(
+            <CreateDiagramSessionDestinationProvider createDialogOpen={false}>
+                <ImportDiagramDialog dialog={{ open: false }} />
+            </CreateDiagramSessionDestinationProvider>
+        );
+        finishRead?.();
+
+        await waitFor(() => {
+            expect(finishRead).toBeTypeOf('function');
+        });
+        expect(persistRestoredDiagramFromJson).not.toHaveBeenCalled();
+        expect(navigate).not.toHaveBeenCalled();
+        vi.unstubAllGlobals();
+    });
+
+    it('does not navigate when the dialog closes while creation is still pending', async () => {
+        let finishPersist: ((value: unknown) => void) | undefined;
+        persistRestoredDiagramFromJson.mockImplementation(
+            () =>
+                new Promise((resolve) => {
+                    finishPersist = resolve;
+                })
+        );
+
+        const view = render(
+            <CreateDiagramSessionDestinationProvider createDialogOpen={false}>
+                <ImportDiagramDialog dialog={{ open: true }} />
+            </CreateDiagramSessionDestinationProvider>
+        );
+        const input = document.querySelector(
+            'input[type="file"]'
+        ) as HTMLInputElement;
+        await userEvent.upload(
+            input,
+            new File(['{}'], 'backup.json', { type: 'application/json' })
+        );
+        await userEvent.click(
+            screen.getByRole('button', { name: 'import_diagram_dialog.import' })
+        );
 
         await waitFor(() => {
             expect(persistRestoredDiagramFromJson).toHaveBeenCalledTimes(1);
         });
 
-        expect(persistRestoredDiagramFromJson).toHaveBeenCalledWith(
-            expect.any(String),
-            expect.objectContaining({
-                destination: 'device',
-                isAuthenticated: false,
-            })
+        view.rerender(
+            <CreateDiagramSessionDestinationProvider createDialogOpen={false}>
+                <ImportDiagramDialog dialog={{ open: false }} />
+            </CreateDiagramSessionDestinationProvider>
         );
+        await act(async () => {
+            finishPersist?.({ destination: 'online', diagramId: '42' });
+        });
+
+        expect(navigate).not.toHaveBeenCalled();
+        expect(setDiagramLocation).not.toHaveBeenCalled();
+        expect(loadDiagramFromData).not.toHaveBeenCalled();
+        expect(closeImportDiagramDialog).not.toHaveBeenCalled();
     });
 });

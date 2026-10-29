@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useEntryFlowAuthenticatedResolution } from '@/hooks/use-entry-flow-authenticated-resolution';
 import type { EntryFlowState } from '@/lib/entry-flow';
 import { ApiError } from '@/lib/api/client';
+import * as autosaveController from '@/lib/diagram-autosave/diagram-autosave-controller';
 
 const authState = {
     isAuthenticated: true,
@@ -204,9 +205,15 @@ describe('useEntryFlowAuthenticatedResolution', () => {
     });
 
     it('opens a remote diagram without listing when in openingDiagram', async () => {
+        const contentHash = 'a'.repeat(64);
+        const initializeAutosave = vi
+            .spyOn(autosaveController, 'initializeDiagramAutosaveFromServer')
+            .mockImplementation(() => undefined);
         getDiagram.mockResolvedValue({
             id: 5,
             name: 'Remote',
+            content: { id: '5', name: 'Remote', databaseType: 'postgresql' },
+            content_hash: contentHash,
             access: { role: 'owner', can_edit: true, can_manage_members: true },
         });
 
@@ -224,8 +231,22 @@ describe('useEntryFlowAuthenticatedResolution', () => {
             expect(getDiagram).toHaveBeenCalledWith('5');
         });
 
+        expect(getDiagram).toHaveBeenCalledTimes(1);
         expect(getDiagrams).not.toHaveBeenCalled();
-        expect(loadDiagramFromData).toHaveBeenCalled();
+        expect(loadDiagramFromData).toHaveBeenCalledWith(
+            expect.objectContaining({
+                id: '5',
+                name: 'Remote',
+                databaseType: 'postgresql',
+            })
+        );
+        expect(initializeAutosave).toHaveBeenCalledWith('5', contentHash);
+        initializeAutosave.mockRestore();
+        expect(setDiagramAccess).toHaveBeenCalledWith({
+            role: 'owner',
+            can_edit: true,
+            can_manage_members: true,
+        });
         expect(setDiagramLocation).toHaveBeenCalledWith({
             type: 'online',
             diagramId: '5',

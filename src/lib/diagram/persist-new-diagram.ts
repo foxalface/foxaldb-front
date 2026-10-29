@@ -106,35 +106,38 @@ export const persistNewDiagram = async (
 /**
  * Opens a diagram that was just persisted.
  *
- * Device location is set here, before the diagram is loaded, because a later
- * route change must not be the thing that discovers a device diagram.
+ * Device memory is loaded before location is set. A failed load leaves the
+ * current location alone. Location is still set before navigation, so the
+ * route change is not what discovers the device diagram.
  * Online location is left for the existing open resolution, which loads the
- * diagram with GET /diagrams/{id}.
+ * diagram with GET /diagrams/{id}. Navigation happens before the optional
+ * default-diagram config write so a config failure does not hide the new id.
  */
 export const openPersistedNewDiagram = async (
     persisted: PersistedNewDiagram,
     deps: OpenPersistedNewDiagramDeps
 ): Promise<void> => {
     if (persisted.destination === 'device') {
+        deps.loadDiagramFromData(persisted.diagram);
         deps.setDiagramLocation(deviceDiagramLocation(persisted.localId));
         deps.clearDiagramAccess();
-        deps.loadDiagramFromData(persisted.diagram);
 
         if (!deps.navigateAfterDeviceOpen) {
             return;
         }
 
+        deps.navigate(`/diagrams/${persisted.localId}`);
+
         if (deps.updateDefaultDiagramId) {
             await deps.updateDefaultDiagramId(persisted.localId);
         }
 
-        deps.navigate(`/diagrams/${persisted.localId}`);
         return;
     }
+
+    deps.navigate(`/diagrams/${persisted.diagramId}`);
 
     if (deps.updateDefaultDiagramId) {
         await deps.updateDefaultDiagramId(persisted.diagramId);
     }
-
-    deps.navigate(`/diagrams/${persisted.diagramId}`);
 };

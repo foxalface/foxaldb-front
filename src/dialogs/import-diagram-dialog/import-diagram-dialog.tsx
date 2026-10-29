@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDialog } from '@/hooks/use-dialog';
 import {
     Dialog,
@@ -49,6 +49,7 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
     const destination = useCreateDiagramRestoreDestination(
         dialog.open === true
     );
+    const restoreSessionActiveRef = useRef(dialog.open === true);
 
     const onFileChange = useCallback((files: File[]) => {
         if (files.length === 0) {
@@ -60,6 +61,8 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
     }, []);
 
     useEffect(() => {
+        restoreSessionActiveRef.current = dialog.open === true;
+
         if (!dialog.open) return;
         setError(false);
         setFile(null);
@@ -73,6 +76,10 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
 
         const reader = new FileReader();
         reader.onload = async (e) => {
+            if (!restoreSessionActiveRef.current) {
+                return;
+            }
+
             const json = e.target?.result;
             if (typeof json !== 'string') return;
 
@@ -85,6 +92,10 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
                     isAuthenticated,
                     addDiagram,
                 });
+
+                if (!restoreSessionActiveRef.current) {
+                    return;
+                }
 
                 closeImportDiagramDialog();
                 closeCreateDiagramDialog();

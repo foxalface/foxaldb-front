@@ -129,6 +129,9 @@ describe('openPersistedNewDiagram', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
+        loadDiagramFromData.mockReset();
+        updateDefaultDiagramId.mockReset();
+        updateDefaultDiagramId.mockResolvedValue(undefined);
     });
 
     it('sets device location and loads memory without navigating for an in-session guest', async () => {
@@ -149,7 +152,7 @@ describe('openPersistedNewDiagram', () => {
         expect(navigate).not.toHaveBeenCalled();
     });
 
-    it('navigates an authenticated device diagram after location is set', async () => {
+    it('loads device memory before setting location and navigating', async () => {
         await openPersistedNewDiagram(devicePersisted, {
             setDiagramLocation,
             clearDiagramAccess,
@@ -159,16 +162,44 @@ describe('openPersistedNewDiagram', () => {
             navigateAfterDeviceOpen: true,
         });
 
+        expect(loadDiagramFromData).toHaveBeenCalledWith(diagram);
         expect(setDiagramLocation).toHaveBeenCalledWith({
             type: 'device',
             localId: 'local-1',
         });
-        expect(loadDiagramFromData).toHaveBeenCalledWith(diagram);
-        expect(updateDefaultDiagramId).toHaveBeenCalledWith('local-1');
         expect(navigate).toHaveBeenCalledWith('/diagrams/local-1');
-        expect(setDiagramLocation.mock.invocationCallOrder[0]).toBeLessThan(
-            loadDiagramFromData.mock.invocationCallOrder[0]
+        expect(updateDefaultDiagramId).toHaveBeenCalledWith('local-1');
+        expect(loadDiagramFromData.mock.invocationCallOrder[0]).toBeLessThan(
+            setDiagramLocation.mock.invocationCallOrder[0]
         );
+        expect(setDiagramLocation.mock.invocationCallOrder[0]).toBeLessThan(
+            navigate.mock.invocationCallOrder[0]
+        );
+        expect(navigate.mock.invocationCallOrder[0]).toBeLessThan(
+            updateDefaultDiagramId.mock.invocationCallOrder[0]
+        );
+    });
+
+    it('leaves location and access unchanged when device load fails', async () => {
+        loadDiagramFromData.mockImplementation(() => {
+            throw new Error('load failed');
+        });
+
+        await expect(
+            openPersistedNewDiagram(devicePersisted, {
+                setDiagramLocation,
+                clearDiagramAccess,
+                loadDiagramFromData,
+                navigate,
+                updateDefaultDiagramId,
+                navigateAfterDeviceOpen: true,
+            })
+        ).rejects.toThrow('load failed');
+
+        expect(setDiagramLocation).not.toHaveBeenCalled();
+        expect(clearDiagramAccess).not.toHaveBeenCalled();
+        expect(navigate).not.toHaveBeenCalled();
+        expect(updateDefaultDiagramId).not.toHaveBeenCalled();
     });
 
     it('navigates an online diagram without loading it or setting location', async () => {
@@ -186,8 +217,33 @@ describe('openPersistedNewDiagram', () => {
 
         expect(navigate).toHaveBeenCalledWith('/diagrams/99');
         expect(updateDefaultDiagramId).toHaveBeenCalledWith('99');
+        expect(navigate.mock.invocationCallOrder[0]).toBeLessThan(
+            updateDefaultDiagramId.mock.invocationCallOrder[0]
+        );
         expect(setDiagramLocation).not.toHaveBeenCalled();
         expect(clearDiagramAccess).not.toHaveBeenCalled();
+        expect(loadDiagramFromData).not.toHaveBeenCalled();
+    });
+
+    it('still navigates when the default diagram id write fails', async () => {
+        updateDefaultDiagramId.mockRejectedValue(new Error('config failed'));
+
+        await expect(
+            openPersistedNewDiagram(
+                { destination: 'online', diagramId: '99' },
+                {
+                    setDiagramLocation,
+                    clearDiagramAccess,
+                    loadDiagramFromData,
+                    navigate,
+                    updateDefaultDiagramId,
+                    navigateAfterDeviceOpen: true,
+                }
+            )
+        ).rejects.toThrow('config failed');
+
+        expect(navigate).toHaveBeenCalledWith('/diagrams/99');
+        expect(setDiagramLocation).not.toHaveBeenCalled();
         expect(loadDiagramFromData).not.toHaveBeenCalled();
     });
 });
