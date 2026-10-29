@@ -168,6 +168,9 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
     const { user, isAuthenticated, isLoading } = useAuth();
+    const userRef = useRef(user);
+    userRef.current = user;
+    const userId = user?.id ?? null;
     const [connectionStatus, setConnectionStatus] =
         useState<ConnectionStatus>('idle');
     const [currentDiagramId, setCurrentDiagramId] = useState<string | null>(
@@ -294,8 +297,9 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         const connectionManager = connectionManagerRef.current;
         const channelManager = channelManagerRef.current;
         const dispatcher = dispatcherRef.current;
+        const activeUser = userRef.current;
 
-        if (!isAuthenticated || user === null) {
+        if (!isAuthenticated || userId === null || activeUser === null) {
             dispatchPresence({ type: 'RESET' });
             requestedDiagramIdRef.current = null;
             channelManager.clearAll();
@@ -313,7 +317,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
 
         setEchoInstance(echo);
         connectionManager.attach();
-        channelManager.joinUserChannel(user.id);
+        channelManager.joinUserChannel(userId);
 
         const requestedDiagramId = requestedDiagramIdRef.current;
         if (requestedDiagramId !== null) {
@@ -331,7 +335,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             clearEchoInstance();
             setCurrentDiagramId(null);
         };
-    }, [isAuthenticated, isLoading, user]);
+    }, [isAuthenticated, isLoading, userId]);
 
     const joinDiagram = useCallback((diagramId: string) => {
         if (!isValidBackendDiagramId(diagramId)) {

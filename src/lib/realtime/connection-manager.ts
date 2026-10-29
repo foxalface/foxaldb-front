@@ -26,7 +26,15 @@ interface PusherConnectionLike {
         event: string,
         handler?: (payload?: PusherStateChange) => void
     ) => void;
+    state?: string;
 }
+
+const INTERRUPTION_STATES = new Set([
+    'connecting',
+    'unavailable',
+    'disconnected',
+    'failed',
+]);
 
 interface EchoPusherConnector {
     pusher?: {
@@ -48,6 +56,7 @@ export class ConnectionManager {
     private status: ConnectionStatus = 'idle';
     private hasConnectedOnce = false;
     private wasInterrupted = false;
+    private ignoreTransportEvents = false;
     private statusListeners = new Set<ConnectionStatusListener>();
     private reconnectListeners = new Set<ReconnectListener>();
     private boundConnection: PusherConnectionLike | null = null;
@@ -83,6 +92,9 @@ export class ConnectionManager {
     }
 
     disconnect(): void {
+        // Logout and other intentional teardowns must not look like a
+        // transport reconnect, even if unbind misses the closing event.
+        this.ignoreTransportEvents = true;
         this.unbindConnectionEvents();
 
         const echo = getEcho();
@@ -97,6 +109,7 @@ export class ConnectionManager {
         clearEchoInstance();
         this.hasConnectedOnce = false;
         this.wasInterrupted = false;
+        this.ignoreTransportEvents = false;
         this.setStatus('idle');
     }
 
@@ -110,52 +123,85 @@ export class ConnectionManager {
         this.boundConnection = connection;
 
         this.handleStateChange = (payload) => {
-            if (payload === undefined) {
-                return;
-            }
+            this.applyTransportState(payload?.current);
+        };
 
-            const { current } = payload;
+        connection.bind('state_change', this.handleStateChange);
+        this.applyObservedState(connection.state);
+    }
 
-            if (current === 'connected') {
-                if (this.hasConnectedOnce && this.wasInterrupted) {
-                    this.wasInterrupted = false;
-                    this.setStatus('connected');
-                    console.info('[realtime] reconnect detected');
-                    this.notifyReconnect();
-                    return;
-                }
+    /**
+     * Reconnect means a connected state after the transport left connected,
+     * once the session has already connected once.
+     * The first connected state is not a reconnect.
+     * A repeated connected notification is not another reconnect.
+     */
+    private applyTransportState(current: string | undefined): void {
+        if (this.ignoreTransportEvents || current === undefined) {
+            return;
+        }
 
-                this.hasConnectedOnce = true;
+        if (current === 'connected') {
+            if (this.hasConnectedOnce && this.wasInterrupted) {
+                this.wasInterrupted = false;
                 this.setStatus('connected');
-                console.info('[realtime] connected');
+                console.info('[realtime] reconnect detected');
+                this.notifyReconnect();
                 return;
             }
 
             if (!this.hasConnectedOnce) {
-                if (current === 'connecting') {
-                    this.setStatus('connecting');
-                } else if (current === 'failed') {
-                    this.setStatus('failed');
-                }
-
-                return;
+                this.hasConnectedOnce = true;
+                this.setStatus('connected');
+                console.info('[realtime] connected');
             }
 
-            if (
-                current === 'connecting' ||
-                current === 'unavailable' ||
-                current === 'disconnected' ||
-                current === 'failed'
-            ) {
-                this.wasInterrupted = true;
-                this.setStatus(
-                    current === 'failed' ? 'failed' : 'reconnecting'
-                );
-                console.info(`[realtime] ${current}`);
-            }
-        };
+            return;
+        }
 
-        connection.bind('state_change', this.handleStateChange);
+        if (!this.hasConnectedOnce) {
+            if (current === 'connecting') {
+                this.setStatus('connecting');
+            } else if (current === 'failed') {
+                this.setStatus('failed');
+            }
+
+            return;
+        }
+
+        if (INTERRUPTION_STATES.has(current)) {
+            this.wasInterrupted = true;
+            this.setStatus(current === 'failed' ? 'failed' : 'reconnecting');
+            console.info(`[realtime] ${current}`);
+        }
+    }
+
+    private applyObservedState(state: string | undefined): void {
+        if (state === undefined || state === 'initialized') {
+            return;
+        }
+
+        // Binding after the socket is already up must not treat that as a
+        // fresh session, and must not drop an interruption we already saw.
+        if (
+            state === 'connected' &&
+            this.hasConnectedOnce &&
+            this.wasInterrupted
+        ) {
+            this.applyTransportState('connected');
+            return;
+        }
+
+        if (state === 'connected' && !this.hasConnectedOnce) {
+            this.hasConnectedOnce = true;
+            this.setStatus('connected');
+            return;
+        }
+
+        if (this.hasConnectedOnce && INTERRUPTION_STATES.has(state)) {
+            this.wasInterrupted = true;
+            this.setStatus(state === 'failed' ? 'failed' : 'reconnecting');
+        }
     }
 
     private unbindConnectionEvents(): void {

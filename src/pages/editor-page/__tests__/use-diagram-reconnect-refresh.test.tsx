@@ -198,7 +198,6 @@ describe('useDiagramReconnectRefresh', () => {
             await Promise.resolve();
         });
 
-        expect(reconnectListener).toBeNull();
         expect(getDiagram).not.toHaveBeenCalled();
         expect(replaceDiagram).not.toHaveBeenCalled();
     });

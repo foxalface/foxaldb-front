@@ -72,7 +72,9 @@ export const getDiagrams = async (): Promise<DiagramApiResource[]> =>
     flattenDiagramsList(await getDiagramsGrouped());
 
 export const getDiagram = async (id: string): Promise<DiagramApiResource> => {
-    return apiRequest<DiagramApiResource>(`/diagrams/${id}`);
+    return apiRequest<DiagramApiResource>(`/diagrams/${id}`, {
+        cache: 'no-store',
+    });
 };
 
 export const createDiagram = async (

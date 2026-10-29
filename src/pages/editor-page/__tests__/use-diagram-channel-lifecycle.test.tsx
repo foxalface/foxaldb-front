@@ -20,6 +20,9 @@ const chartDbState = {
 
 const joinDiagram = vi.fn();
 const leaveDiagram = vi.fn();
+const realtimeState: { connectionStatus: 'connected' | 'reconnecting' } = {
+    connectionStatus: 'connected',
+};
 
 vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => authState,
@@ -35,7 +38,7 @@ vi.mock('@/hooks/use-realtime', () => ({
     useRealtime: () => ({
         joinDiagram,
         leaveDiagram,
-        connectionStatus: 'connected',
+        connectionStatus: realtimeState.connectionStatus,
     }),
 }));
 
@@ -55,6 +58,7 @@ describe('useDiagramChannelLifecycle location gate', () => {
         chartDbState.currentDiagram = { id: '42' };
         joinDiagram.mockReset();
         leaveDiagram.mockReset();
+        realtimeState.connectionStatus = 'connected';
     });
 
     it('joins the diagram channel for an authenticated online diagram', () => {
@@ -90,5 +94,24 @@ describe('useDiagramChannelLifecycle location gate', () => {
 
         expect(joinDiagram).not.toHaveBeenCalled();
         expect(leaveDiagram).not.toHaveBeenCalled();
+    });
+
+    it('keeps the diagram id across a transport reconnect', () => {
+        const { rerender } = renderLifecycle(onlineDiagramLocation('42'));
+
+        expect(joinDiagram).toHaveBeenCalledTimes(1);
+        expect(leaveDiagram).not.toHaveBeenCalled();
+
+        realtimeState.connectionStatus = 'reconnecting';
+        rerender();
+
+        expect(leaveDiagram).not.toHaveBeenCalled();
+        expect(joinDiagram).toHaveBeenCalledTimes(2);
+
+        realtimeState.connectionStatus = 'connected';
+        rerender();
+
+        expect(leaveDiagram).not.toHaveBeenCalled();
+        expect(joinDiagram).toHaveBeenCalledTimes(3);
     });
 });

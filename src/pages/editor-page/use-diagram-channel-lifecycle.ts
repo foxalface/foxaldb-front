@@ -13,21 +13,26 @@ export const useDiagramChannelLifecycle = (): void => {
             return;
         }
 
-        if (connectionStatus !== 'connected') {
+        return () => {
+            leaveDiagram();
+        };
+    }, [isLoading, isAuthenticated, diagramId, leaveDiagram]);
+
+    useEffect(() => {
+        if (isLoading || !isAuthenticated || diagramId === null) {
+            return;
+        }
+
+        // Stay joined across a transport drop so rejoinAll still has this id.
+        // Join again when the socket is up, including after the id changes
+        // while the transport is reconnecting.
+        if (
+            connectionStatus !== 'connected' &&
+            connectionStatus !== 'reconnecting'
+        ) {
             return;
         }
 
         joinDiagram(diagramId);
-
-        return () => {
-            leaveDiagram();
-        };
-    }, [
-        isLoading,
-        isAuthenticated,
-        diagramId,
-        connectionStatus,
-        joinDiagram,
-        leaveDiagram,
-    ]);
+    }, [isLoading, isAuthenticated, diagramId, connectionStatus, joinDiagram]);
 };

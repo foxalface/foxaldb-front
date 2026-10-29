@@ -23,7 +23,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 const HIDDEN_THRESHOLD_MS = 30_000;
-const REFRESH_COOLDOWN_MS = 5_000;
 const SYNC_RETRY_MS = 300;
 
 export const useDiagramReconnectRefresh = (): void => {
@@ -37,20 +36,26 @@ export const useDiagramReconnectRefresh = (): void => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
+    const diagramIdRef = useRef(diagramId);
+    diagramIdRef.current = diagramId;
+
     const refreshInFlightRef = useRef(false);
-    const lastRefreshAtRef = useRef(0);
+    const refreshQueuedRef = useRef(false);
     const hiddenAtRef = useRef<number | null>(null);
     const syncRetryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
         null
     );
 
     const refreshDiagramFromBackend = useCallback(async (): Promise<void> => {
-        if (diagramId === null) {
+        const activeDiagramId = diagramIdRef.current;
+
+        if (activeDiagramId === null) {
             console.info('[reconnect-refresh] skipped: no backend diagram');
             return;
         }
 
         if (refreshInFlightRef.current) {
+            refreshQueuedRef.current = true;
             console.info('[reconnect-refresh] skipped: in flight');
             return;
         }
@@ -67,28 +72,27 @@ export const useDiagramReconnectRefresh = (): void => {
             return;
         }
 
-        const now = Date.now();
-        if (now - lastRefreshAtRef.current < REFRESH_COOLDOWN_MS) {
-            console.info('[reconnect-refresh] skipped: cooldown');
-            return;
-        }
-
         refreshInFlightRef.current = true;
-        lastRefreshAtRef.current = now;
 
         remoteSyncDepthRef.current += 1;
         syncRemoteApplyState();
 
-        console.info(`[reconnect-refresh] fetching diagram ${diagramId}`);
+        console.info(`[reconnect-refresh] fetching diagram ${activeDiagramId}`);
 
         try {
-            const raw = await getDiagram(diagramId);
+            const raw = await getDiagram(activeDiagramId);
+
+            if (diagramIdRef.current !== activeDiagramId) {
+                console.info('[reconnect-refresh] skipped: diagram changed');
+                return;
+            }
+
             const contentHash = readDiagramContentHashFromApi(raw);
             console.info(
                 `[reconnect-refresh] fetched hash ${contentHash ?? 'none'}`
             );
 
-            const diagram = normalizeDiagramFromApi(raw, diagramId);
+            const diagram = normalizeDiagramFromApi(raw, activeDiagramId);
             setDiagramAccess(raw.access ?? null);
             console.info('[reconnect-refresh] applying authoritative diagram');
             await replaceDiagram(diagram, {
@@ -103,7 +107,7 @@ export const useDiagramReconnectRefresh = (): void => {
                 kickOutOfDiagram({
                     title: t('diagram_access.removed.title'),
                     message: t('diagram_access.removed.description'),
-                    dedupeKey: `reconnect:${diagramId}`,
+                    dedupeKey: `reconnect:${activeDiagramId}`,
                     clearDiagramAccess,
                     loadDiagramFromData,
                     navigate,
@@ -124,9 +128,13 @@ export const useDiagramReconnectRefresh = (): void => {
             );
             syncRemoteApplyState();
             refreshInFlightRef.current = false;
+
+            if (refreshQueuedRef.current) {
+                refreshQueuedRef.current = false;
+                void refreshDiagramFromBackend();
+            }
         }
     }, [
-        diagramId,
         setDiagramAccess,
         replaceDiagram,
         clearDiagramAccess,
@@ -137,21 +145,18 @@ export const useDiagramReconnectRefresh = (): void => {
         t,
     ]);
 
+    const refreshRef = useRef(refreshDiagramFromBackend);
+    refreshRef.current = refreshDiagramFromBackend;
+
     useEffect(() => {
-        if (isLoading || !isAuthenticated || diagramId === null) {
+        if (isLoading || !isAuthenticated) {
             return;
         }
 
         return onReconnect(() => {
-            void refreshDiagramFromBackend();
+            void refreshRef.current();
         });
-    }, [
-        isLoading,
-        isAuthenticated,
-        diagramId,
-        onReconnect,
-        refreshDiagramFromBackend,
-    ]);
+    }, [isLoading, isAuthenticated, onReconnect]);
 
     useEffect(() => {
         return () => {
@@ -163,7 +168,7 @@ export const useDiagramReconnectRefresh = (): void => {
     }, []);
 
     useEffect(() => {
-        if (isLoading || !isAuthenticated || diagramId === null) {
+        if (isLoading || !isAuthenticated) {
             return;
         }
 
@@ -188,7 +193,7 @@ export const useDiagramReconnectRefresh = (): void => {
                 return;
             }
 
-            void refreshDiagramFromBackend();
+            void refreshRef.current();
         };
 
         document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -199,5 +204,5 @@ export const useDiagramReconnectRefresh = (): void => {
                 handleVisibilityChange
             );
         };
-    }, [isLoading, isAuthenticated, diagramId, refreshDiagramFromBackend]);
+    }, [isLoading, isAuthenticated]);
 };
