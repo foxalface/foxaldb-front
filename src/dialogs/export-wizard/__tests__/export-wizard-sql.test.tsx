@@ -371,5 +371,31 @@ describe('ExportWizardDialog SQL branch by source database', () => {
         ).toBeInTheDocument();
         expect(screen.queryByText('Oracle')).not.toBeInTheDocument();
         expect(dialogMocks.openExportSQLDialog).not.toHaveBeenCalled();
+        expect(mockedExportBaseSQL).not.toHaveBeenCalled();
     });
+
+    it.each([
+        DatabaseType.COCKROACHDB,
+        DatabaseType.CLICKHOUSE,
+        DatabaseType.GENERIC,
+    ])(
+        'shows unsupported SQL UX for %s without generating SQL',
+        async (databaseType) => {
+            chartDbState.databaseType = databaseType;
+            chartDbState.currentDiagram = {
+                ...chartDbState.currentDiagram,
+                databaseType,
+            };
+
+            await openSqlBranch();
+
+            expect(
+                screen.getByRole('heading', {
+                    name: 'export_wizard.sql.unsupported_source.title',
+                })
+            ).toBeInTheDocument();
+            expect(mockedExportBaseSQL).not.toHaveBeenCalled();
+            expect(dialogMocks.openExportSQLDialog).not.toHaveBeenCalled();
+        }
+    );
 });

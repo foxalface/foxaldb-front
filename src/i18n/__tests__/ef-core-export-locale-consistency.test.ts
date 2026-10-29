@@ -99,10 +99,24 @@ describe('EF Core export locale consistency', () => {
         }
     });
 
+    it('keeps the EF Core version badge identical in every locale', () => {
+        for (const locale of locales) {
+            expect(
+                locale.translation.export_wizard.ef_core.options_step
+                    .description
+            ).toBe('{{provider}} · EF Core 10 (.NET 10)');
+            expect(
+                locale.translation.export_wizard.ef_core.options_step.ef_core_10
+            ).toBe('EF Core 10 (.NET 10)');
+            expect(
+                locale.translation.export_wizard.ef_core.result_step.ef_core_10
+            ).toBe('EF Core 10 (.NET 10)');
+        }
+    });
+
     it('does not leave English sentence placeholders in non-English locales', () => {
         const englishSentences = [
             en.translation.export_wizard.ef_core.unsupported_database,
-            en.translation.export_wizard.ef_core.options_step.description,
             en.translation.export_wizard.ef_core.options_step.explanation,
             en.translation.export_wizard.ef_core.options_step
                 .migrations_not_generated,
@@ -130,7 +144,6 @@ describe('EF Core export locale consistency', () => {
             const section = locale.translation.export_wizard.ef_core;
             const localizedSentences = [
                 section.unsupported_database,
-                section.options_step.description,
                 section.options_step.explanation,
                 section.options_step.migrations_not_generated,
                 section.options_step.namespace_help,

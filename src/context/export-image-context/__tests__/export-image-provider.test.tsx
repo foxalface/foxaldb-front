@@ -267,6 +267,51 @@ describe('ExportImageProvider visual capture', () => {
         expect(setVisualExportCaptureActive).toHaveBeenLastCalledWith(false);
     });
 
+    it('restores node and edge selection after a successful capture', async () => {
+        await mountExport('png');
+
+        const restoreNodes = setNodes.mock.calls.at(-1)?.[0] as (
+            nodes: Array<{
+                id: string;
+                selected?: boolean;
+            }>
+        ) => Array<{ id: string; selected?: boolean }>;
+        expect(restoreNodes([{ id: 'table-1', selected: false }])).toEqual([
+            { id: 'table-1', selected: true },
+        ]);
+
+        const restoreEdges = setEdges.mock.calls.at(-1)?.[0] as (
+            edges: Array<{
+                id: string;
+                selected?: boolean;
+                animated?: boolean;
+            }>
+        ) => Array<{ id: string; selected?: boolean; animated?: boolean }>;
+        expect(
+            restoreEdges([{ id: 'rel-1', selected: false, animated: false }])
+        ).toEqual([{ id: 'rel-1', selected: true, animated: true }]);
+    });
+
+    it('restores node and edge selection after generation fails', async () => {
+        toPng.mockRejectedValue(new Error('capture failed'));
+
+        const error = await mountExport('png');
+
+        expect(error).toBeInstanceOf(VisualExportError);
+        expect((error as VisualExportError).code).toBe('generation_failed');
+
+        const restoreNodes = setNodes.mock.calls.at(-1)?.[0] as (
+            nodes: Array<{
+                id: string;
+                selected?: boolean;
+            }>
+        ) => Array<{ id: string; selected?: boolean }>;
+        expect(restoreNodes([{ id: 'table-1', selected: false }])[0]).toEqual(
+            expect.objectContaining({ id: 'table-1', selected: true })
+        );
+        expect(setVisualExportCaptureActive).toHaveBeenLastCalledWith(false);
+    });
+
     it('does not apply a watermark canvas after raster capture', async () => {
         const toDataURL = vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL');
 

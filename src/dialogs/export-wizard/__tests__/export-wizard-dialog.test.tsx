@@ -4,6 +4,12 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ExportWizardDialog } from '../export-wizard-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
+import {
+    deviceDiagramLocation,
+    onlineDiagramLocation,
+    readOnlineDiagramId,
+    type DiagramLocation,
+} from '@/lib/diagram/diagram-location';
 
 const dialogMocks = {
     closeExportWizardDialog: vi.fn(),
@@ -25,6 +31,10 @@ const chartDbState = {
 
 const exportImageMock = vi.fn();
 
+const locationState = {
+    location: null as DiagramLocation | null,
+};
+
 vi.mock('@/hooks/use-dialog', () => ({
     useDialog: () => dialogMocks,
 }));
@@ -35,6 +45,14 @@ vi.mock('@/hooks/use-auth', () => ({
 
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => chartDbState,
+}));
+
+vi.mock('@/hooks/use-diagram-location', () => ({
+    useOnlineDiagramId: () =>
+        readOnlineDiagramId(
+            locationState.location,
+            chartDbState.currentDiagram?.id
+        ),
 }));
 
 vi.mock('@/hooks/use-export-image', () => ({
@@ -108,6 +126,7 @@ describe('ExportWizardDialog', () => {
             id: 'guest-diagram-1',
             name: 'Guest diagram',
         };
+        locationState.location = deviceDiagramLocation('guest-diagram-1');
     });
 
     it('renders guest-visible export groups', () => {
@@ -335,12 +354,35 @@ describe('ExportWizardDialog', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('shows Laravel export for authenticated backend diagrams', async () => {
+    it('hides Laravel for an authenticated device diagram even when its id is 42', () => {
+        authState.isAuthenticated = true;
+        chartDbState.currentDiagram = {
+            id: '42',
+            name: 'Device diagram',
+        };
+        locationState.location = deviceDiagramLocation('42');
+
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        expect(
+            screen.queryByRole('button', {
+                name: 'export_wizard.targets.laravel.title',
+            })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.prisma.title',
+            })
+        ).toBeInTheDocument();
+    });
+
+    it('shows Laravel when the online location matches the current diagram', async () => {
         authState.isAuthenticated = true;
         chartDbState.currentDiagram = {
             id: '42',
             name: 'Remote diagram',
         };
+        locationState.location = onlineDiagramLocation('42');
 
         render(<ExportWizardDialog dialog={{ open: true }} />);
 
@@ -364,6 +406,28 @@ describe('ExportWizardDialog', () => {
         expect(dialogMocks.closeExportWizardDialog).not.toHaveBeenCalled();
         expect(
             screen.getByTestId('export-laravel-options-step')
+        ).toBeInTheDocument();
+    });
+
+    it('hides Laravel when the online id does not match the current diagram', () => {
+        authState.isAuthenticated = true;
+        chartDbState.currentDiagram = {
+            id: '43',
+            name: 'Other diagram',
+        };
+        locationState.location = onlineDiagramLocation('42');
+
+        render(<ExportWizardDialog dialog={{ open: true }} />);
+
+        expect(
+            screen.queryByRole('button', {
+                name: 'export_wizard.targets.laravel.title',
+            })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.sql.title',
+            })
         ).toBeInTheDocument();
     });
 

@@ -13,6 +13,7 @@ import {
 import { ApiError } from '@/lib/api/client';
 import { downloadBlob } from '@/lib/download-blob';
 import { exportLaravelMigrations } from '@/lib/api/diagram-laravel-export';
+import { flushDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import type { Diagram } from '@/lib/domain/diagram';
 
 const dialogMocks = {
@@ -107,6 +108,10 @@ vi.mock('@/lib/api/diagram-laravel-export', () => ({
     LARAVEL_VERSIONS: ['10', '11', '12', '13'],
     DEFAULT_LARAVEL_VERSION: '13',
     exportLaravelMigrations: vi.fn(),
+}));
+
+vi.mock('@/lib/diagram-autosave/diagram-autosave-controller', () => ({
+    flushDiagramAutosave: vi.fn(),
 }));
 
 vi.mock('react-i18next', () => ({
@@ -281,6 +286,28 @@ describe('ExportWizardDialog Laravel branch', () => {
             includeForeignKeys: true,
             content: currentDiagram,
         });
+    });
+
+    it('sends unsaved editor content and does not flush autosave', async () => {
+        const unsaved = {
+            ...currentDiagram,
+            name: 'Unsaved catalog',
+        };
+        chartDbState.currentDiagram = unsaved;
+        const locationBefore = locationState.location;
+
+        await openLaravelBranch();
+        await userEvent.click(screen.getByTestId('export-laravel-submit'));
+
+        expect(mockedExportLaravelMigrations).toHaveBeenCalledWith('42', {
+            laravelVersion: '13',
+            includeIndexes: true,
+            includeForeignKeys: true,
+            content: unsaved,
+        });
+        expect(flushDiagramAutosave).not.toHaveBeenCalled();
+        expect(locationState.location).toBe(locationBefore);
+        expect(chartDbState.currentDiagram).toBe(unsaved);
     });
 
     it('downloads the zip with a deterministic filename and stays open', async () => {
