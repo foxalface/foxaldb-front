@@ -6,8 +6,9 @@ import { getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
 import { setDiagramAutosaveContentHash } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { cancelPendingDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
+import { useRealtime } from '@/hooks/use-realtime';
 import { getClientId } from '@/lib/realtime/client-id';
-import { getEcho } from '@/lib/realtime/echo';
+import type { DiagramPrivateEventChannel } from '@/lib/realtime/diagram-private-channel';
 import {
     handleApplySchemaMergeEvent,
     isApplySchemaMergeAction,
@@ -26,12 +27,6 @@ import {
     syncRemoteApplyState,
 } from '@/lib/realtime/diagram-sync-state';
 import { useEffect, useRef } from 'react';
-
-interface RealtimePingPayload {
-    message: string;
-    sentAt: string;
-    userId: number;
-}
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
     typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -81,6 +76,12 @@ const parseDiagramOperationPayload = (
 export const useDiagramRealtime = (): void => {
     const { isAuthenticated, isLoading } = useAuth();
     const diagramId = useOnlineDiagramId();
+    const {
+        connectionStatus,
+        currentDiagramId: joinedDiagramId,
+        getDiagramPrivateChannel,
+        onReconnect,
+    } = useRealtime();
     const {
         tables,
         relationships,
@@ -187,24 +188,50 @@ export const useDiagramRealtime = (): void => {
     const replaceDiagramRef = useRef(replaceDiagram);
     replaceDiagramRef.current = replaceDiagram;
 
+    const bindRef = useRef<() => void>(() => undefined);
+
     useEffect(() => {
-        if (isLoading || !isAuthenticated || diagramId === null) {
+        return () => {
+            resetSchemaMergeRefresh();
+        };
+    }, [isAuthenticated, diagramId]);
+
+    // Registered before the reconnect refresh hook, and not torn down when
+    // connection status changes, so rebind stays ahead of the authoritative GET.
+    useEffect(() => {
+        if (isLoading || !isAuthenticated) {
             return;
         }
 
-        const echo = getEcho();
+        return onReconnect(() => {
+            bindRef.current();
+        });
+    }, [isLoading, isAuthenticated, onReconnect]);
 
-        if (echo === null) {
+    useEffect(() => {
+        if (
+            isLoading ||
+            !isAuthenticated ||
+            diagramId === null ||
+            connectionStatus === 'idle' ||
+            joinedDiagramId !== diagramId
+        ) {
+            bindRef.current = () => undefined;
             return;
         }
 
-        let channel: ReturnType<typeof echo.private> | null = null;
+        const boundDiagramId = diagramId;
+        let activeChannel: DiagramPrivateEventChannel | null = null;
 
-        const handleRealtimePing = (payload: RealtimePingPayload): void => {
+        const handleRealtimePing = (payload: unknown): void => {
             console.log('[Realtime.Ping]', payload);
         };
 
         const handleDiagramOperation = (value: unknown): void => {
+            if (diagramIdRef.current !== boundDiagramId) {
+                return;
+            }
+
             if (isApplySchemaMergeAction(value)) {
                 const mergeEvent = parseApplySchemaMergeEvent(value);
 
@@ -300,42 +327,64 @@ export const useDiagramRealtime = (): void => {
                 });
         };
 
-        try {
-            channel = echo.private(`diagram.${diagramId}`);
+        const unbind = (): void => {
+            if (activeChannel === null) {
+                return;
+            }
 
-            channel
-                .listen('.Realtime.Ping', handleRealtimePing)
-                .listen('.DiagramOperation', handleDiagramOperation)
-                .error((error: unknown) => {
-                    console.warn(
-                        `[DiagramRealtime] channel error (diagram.${diagramId})`,
-                        error
-                    );
-                });
-        } catch (error) {
-            console.warn(
-                `[DiagramRealtime] failed to subscribe (diagram.${diagramId})`,
-                error
-            );
-            return;
-        }
-
-        return () => {
-            resetSchemaMergeRefresh();
+            const channel = activeChannel;
+            activeChannel = null;
 
             try {
-                channel?.stopListening('.Realtime.Ping', handleRealtimePing);
-                channel?.stopListening(
+                channel.stopListening('.Realtime.Ping', handleRealtimePing);
+                channel.stopListening(
                     '.DiagramOperation',
                     handleDiagramOperation
                 );
-                echo.leaveChannel(`private-diagram.${diagramId}`);
             } catch (error) {
                 console.warn(
-                    `[DiagramRealtime] failed to cleanup (diagram.${diagramId})`,
+                    `[DiagramRealtime] failed to remove listeners (diagram.${boundDiagramId})`,
                     error
                 );
             }
         };
-    }, [isLoading, isAuthenticated, diagramId]);
+
+        const bind = (): void => {
+            unbind();
+
+            const channel = getDiagramPrivateChannel();
+            if (channel === null) {
+                return;
+            }
+
+            try {
+                channel
+                    .listen('.Realtime.Ping', handleRealtimePing)
+                    .listen('.DiagramOperation', handleDiagramOperation);
+                activeChannel = channel;
+            } catch (error) {
+                console.warn(
+                    `[DiagramRealtime] failed to subscribe (diagram.${boundDiagramId})`,
+                    error
+                );
+            }
+        };
+
+        bindRef.current = bind;
+        bind();
+
+        return () => {
+            unbind();
+            if (bindRef.current === bind) {
+                bindRef.current = () => undefined;
+            }
+        };
+    }, [
+        isLoading,
+        isAuthenticated,
+        diagramId,
+        joinedDiagramId,
+        connectionStatus,
+        getDiagramPrivateChannel,
+    ]);
 };

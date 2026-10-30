@@ -5,9 +5,10 @@ import { useChartDB } from '@/hooks/use-chartdb';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useOnlineDiagramId } from '@/hooks/use-diagram-location';
 import { useDialog } from '@/hooks/use-dialog';
+import { useRealtime } from '@/hooks/use-realtime';
 import type { DiagramAccess } from '@/lib/api/diagrams';
 import { parseDiagramAccessChangedPayload } from '@/lib/realtime/diagram-access-changed';
-import { getEcho } from '@/lib/realtime/echo';
+import type { DiagramPrivateEventChannel } from '@/lib/realtime/diagram-private-channel';
 import { kickOutOfDiagram } from '@/lib/realtime/kick-out-of-diagram';
 import { clearPendingDiagramOperationSyncTimers } from '@/lib/realtime/diagram-sync-state';
 import { useEffect, useRef } from 'react';
@@ -49,6 +50,8 @@ export const useDiagramAccessListener = (): void => {
         onlineDiagramId !== null ? Number(onlineDiagramId) : null;
 
     const userId = user?.id ?? null;
+    const { connectionStatus, getUserPrivateChannel, onReconnect } =
+        useRealtime();
 
     const setDiagramAccessRef = useRef(setDiagramAccess);
     setDiagramAccessRef.current = setDiagramAccess;
@@ -74,18 +77,32 @@ export const useDiagramAccessListener = (): void => {
     const currentDiagramIdRef = useRef(currentDiagramId);
     currentDiagramIdRef.current = currentDiagramId;
 
+    const bindRef = useRef<() => void>(() => undefined);
+
+    // Stays registered across diagram switches and status changes so the
+    // access listener rebinds before the authoritative reconnect GET.
     useEffect(() => {
         if (isLoading || !isAuthenticated || userId === null) {
             return;
         }
 
-        const echo = getEcho();
+        return onReconnect(() => {
+            bindRef.current();
+        });
+    }, [isLoading, isAuthenticated, userId, onReconnect]);
 
-        if (echo === null) {
+    useEffect(() => {
+        if (
+            isLoading ||
+            !isAuthenticated ||
+            userId === null ||
+            connectionStatus === 'idle'
+        ) {
+            bindRef.current = () => undefined;
             return;
         }
 
-        let channel: ReturnType<typeof echo.private> | null = null;
+        let activeChannel: DiagramPrivateEventChannel | null = null;
 
         const handleDiagramAccessChanged = (value: unknown): void => {
             const payload = parseDiagramAccessChangedPayload(value);
@@ -135,38 +152,63 @@ export const useDiagramAccessListener = (): void => {
             }
         };
 
-        try {
-            channel = echo.private(`user.${userId}`);
+        const unbind = (): void => {
+            if (activeChannel === null) {
+                return;
+            }
 
-            channel
-                .listen('.DiagramAccessChanged', handleDiagramAccessChanged)
-                .error((error: unknown) => {
-                    console.warn(
-                        `[DiagramAccessChanged] channel error (user.${userId})`,
-                        error
-                    );
-                });
-        } catch (error) {
-            console.warn(
-                `[DiagramAccessChanged] failed to subscribe (user.${userId})`,
-                error
-            );
-            return;
-        }
+            const channel = activeChannel;
+            activeChannel = null;
 
-        return () => {
             try {
-                channel?.stopListening(
+                channel.stopListening(
                     '.DiagramAccessChanged',
                     handleDiagramAccessChanged
                 );
-                echo.leaveChannel(`private-user.${userId}`);
             } catch (error) {
                 console.warn(
-                    `[DiagramAccessChanged] failed to cleanup (user.${userId})`,
+                    `[DiagramAccessChanged] failed to remove listener (user.${userId})`,
                     error
                 );
             }
         };
-    }, [isLoading, isAuthenticated, userId, currentDiagramId]);
+
+        const bind = (): void => {
+            unbind();
+
+            const channel = getUserPrivateChannel();
+            if (channel === null) {
+                return;
+            }
+
+            try {
+                channel.listen(
+                    '.DiagramAccessChanged',
+                    handleDiagramAccessChanged
+                );
+                activeChannel = channel;
+            } catch (error) {
+                console.warn(
+                    `[DiagramAccessChanged] failed to subscribe (user.${userId})`,
+                    error
+                );
+            }
+        };
+
+        bindRef.current = bind;
+        bind();
+
+        return () => {
+            unbind();
+            if (bindRef.current === bind) {
+                bindRef.current = () => undefined;
+            }
+        };
+    }, [
+        isLoading,
+        isAuthenticated,
+        userId,
+        connectionStatus,
+        getUserPrivateChannel,
+    ]);
 };
