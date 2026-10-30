@@ -67,6 +67,7 @@ export const ja: LanguageTranslation = {
                 'この操作は元に戻せません。ダイアグラムは完全に削除されます。',
             cancel: 'キャンセル',
             delete: '削除',
+            delete_failed: 'ダイアグラムを削除できませんでした。',
         },
 
         clear_diagram_alert: {
@@ -75,6 +76,10 @@ export const ja: LanguageTranslation = {
                 'この操作は元に戻せません。これによりダイアグラム内のすべてのデータが永久に削除されます。',
             cancel: 'キャンセル',
             clear: 'クリア',
+        },
+
+        diagram_save: {
+            failed: '変更を保存できませんでした。',
         },
 
         diagram_access: {

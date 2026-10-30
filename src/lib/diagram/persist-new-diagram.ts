@@ -6,6 +6,7 @@ import {
     deviceDiagramLocation,
     type DiagramLocation,
 } from '@/lib/diagram/diagram-location';
+import { assertGuestDeviceDiagramWriteAllowed } from '@/lib/diagram/guest-device-diagram-limit';
 
 /**
  * Online persistence requires an authenticated session. Authentication does
@@ -22,6 +23,7 @@ export class OnlineCreationRequiresAuthenticationError extends Error {
 
 export interface PersistNewDiagramDeps {
     addDiagram: StorageContext['addDiagram'];
+    listDiagrams: StorageContext['listDiagrams'];
     isAuthenticated: boolean;
 }
 
@@ -79,6 +81,12 @@ export const persistNewDiagram = async (
     deps: PersistNewDiagramDeps
 ): Promise<PersistedNewDiagram> => {
     if (destination === 'device') {
+        await assertGuestDeviceDiagramWriteAllowed(
+            destination,
+            deps.isAuthenticated,
+            deps.listDiagrams
+        );
+
         await deps.addDiagram({ diagram });
 
         return {

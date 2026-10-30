@@ -7,6 +7,7 @@ import { getDiagram } from '@/lib/api/diagrams';
 import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
 import {
     clearScheduledDiagramAutosave,
+    configureDiagramAutosaveFailureNotifier,
     configureDiagramAutosaveStaleHandlers,
     observeDiagramForAutosave,
     readDiagramAutosaveContentHash,
@@ -15,12 +16,16 @@ import {
 } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { isRemoteSyncActive } from '@/lib/realtime/diagram-sync-state';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useToast } from '@/components/toast/use-toast';
 
 export const useDiagramAutosave = (): void => {
     const { isAuthenticated } = useAuth();
     const { diagramAccess } = useDiagramAccess();
     const { currentDiagram, replaceDiagram } = useChartDB();
     const onlineDiagramId = useOnlineDiagramId();
+    const { toast } = useToast();
+    const { t } = useTranslation();
 
     const canSave =
         isAuthenticated &&
@@ -28,6 +33,19 @@ export const useDiagramAutosave = (): void => {
         currentDiagram !== null &&
         onlineDiagramId !== null &&
         !(diagramAccess !== null && diagramAccess.can_edit === false);
+
+    useEffect(() => {
+        configureDiagramAutosaveFailureNotifier(() => {
+            toast({
+                title: t('diagram_save.failed'),
+                variant: 'destructive',
+            });
+        });
+
+        return () => {
+            configureDiagramAutosaveFailureNotifier(null);
+        };
+    }, [toast, t]);
 
     useEffect(() => {
         configureDiagramAutosaveStaleHandlers({

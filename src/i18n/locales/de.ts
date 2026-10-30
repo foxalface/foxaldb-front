@@ -67,6 +67,7 @@ export const de: LanguageTranslation = {
                 'Diese Aktion kann nicht rückgängig gemacht werden. Das Diagramm wird dauerhaft gelöscht.',
             cancel: 'Abbrechen',
             delete: 'Löschen',
+            delete_failed: 'Diagramm konnte nicht gelöscht werden.',
         },
 
         clear_diagram_alert: {
@@ -75,6 +76,10 @@ export const de: LanguageTranslation = {
                 'Diese Aktion kann nicht rückgängig gemacht werden. Alle Daten im Diagramm werden dauerhaft gelöscht.',
             cancel: 'Abbrechen',
             clear: 'Leeren',
+        },
+
+        diagram_save: {
+            failed: 'Änderungen konnten nicht gespeichert werden.',
         },
 
         diagram_access: {

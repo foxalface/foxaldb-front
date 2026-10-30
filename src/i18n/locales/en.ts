@@ -66,6 +66,11 @@ export const en = {
                 'This action cannot be undone. This will permanently delete the diagram.',
             cancel: 'Cancel',
             delete: 'Delete',
+            delete_failed: 'Could not delete the diagram.',
+        },
+
+        diagram_save: {
+            failed: 'Could not save your changes.',
         },
 
         clear_diagram_alert: {

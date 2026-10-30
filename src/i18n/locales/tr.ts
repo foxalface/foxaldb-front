@@ -66,6 +66,7 @@ export const tr: LanguageTranslation = {
                 'Bu işlem geri alınamaz. Diyagram kalıcı olarak silinecektir.',
             cancel: 'İptal',
             delete: 'Sil',
+            delete_failed: 'Diyagram silinemedi.',
         },
 
         clear_diagram_alert: {
@@ -74,6 +75,10 @@ export const tr: LanguageTranslation = {
                 'Bu işlem geri alınamaz. Diyagramdaki tüm veriler kalıcı olarak silinecektir.',
             cancel: 'İptal',
             clear: 'Temizle',
+        },
+
+        diagram_save: {
+            failed: 'Değişiklikler kaydedilemedi.',
         },
 
         diagram_access: {

@@ -66,6 +66,7 @@ export const ne: LanguageTranslation = {
                 'यो कार्य पूर्ववत गर्न सकिँदैन। यो डायाग्राम स्थायी रूपमा हटाउनेछ।',
             cancel: 'रद्द गर्नुहोस्',
             delete: 'हटाउनुहोस्',
+            delete_failed: 'डायग्राम मेटाउन सकिएन।',
         },
 
         clear_diagram_alert: {
@@ -74,6 +75,10 @@ export const ne: LanguageTranslation = {
                 'यो कार्य पूर्ववत गर्न सकिँदैन। यो डायाग्राम स्थायी रूपमा हटाउनेछ।',
             cancel: 'रद्द गर्नुहोस्',
             clear: 'स्पष्ट गर्नुहोस्',
+        },
+
+        diagram_save: {
+            failed: 'तपाईंका परिवर्तनहरू सुरक्षित गर्न सकिएन।',
         },
 
         diagram_access: {

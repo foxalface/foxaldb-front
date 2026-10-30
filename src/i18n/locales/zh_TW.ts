@@ -65,6 +65,7 @@ export const zh_TW: LanguageTranslation = {
             description: '此操作無法復原，圖表將被永久刪除。',
             cancel: '取消',
             delete: '刪除',
+            delete_failed: '無法刪除此圖表。',
         },
 
         clear_diagram_alert: {
@@ -72,6 +73,10 @@ export const zh_TW: LanguageTranslation = {
             description: '此操作無法復原，圖表中的所有資料將被永久刪除。',
             cancel: '取消',
             clear: '清除',
+        },
+
+        diagram_save: {
+            failed: '無法儲存您的變更。',
         },
 
         diagram_access: {

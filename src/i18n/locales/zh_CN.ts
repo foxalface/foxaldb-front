@@ -65,6 +65,7 @@ export const zh_CN: LanguageTranslation = {
             description: '此操作无法撤销。这将永久删除该关系图。',
             cancel: '取消',
             delete: '删除',
+            delete_failed: '无法删除该图表。',
         },
 
         clear_diagram_alert: {
@@ -72,6 +73,10 @@ export const zh_CN: LanguageTranslation = {
             description: '此操作无法撤销。这将永久删除关系图中的所有数据。',
             cancel: '取消',
             clear: '清空',
+        },
+
+        diagram_save: {
+            failed: '无法保存您的更改。',
         },
 
         diagram_access: {

@@ -66,6 +66,7 @@ export const fr: LanguageTranslation = {
                 'Cette action est irréversible. Cela supprimera définitivement le diagramme.',
             cancel: 'Annuler',
             delete: 'Supprimer',
+            delete_failed: 'Impossible de supprimer le diagramme.',
         },
 
         clear_diagram_alert: {
@@ -74,6 +75,10 @@ export const fr: LanguageTranslation = {
                 'Cette action est irréversible. Cela supprimera définitivement toutes les données dans le diagramme.',
             cancel: 'Annuler',
             clear: 'Effacer',
+        },
+
+        diagram_save: {
+            failed: 'Impossible d’enregistrer vos modifications.',
         },
 
         diagram_access: {

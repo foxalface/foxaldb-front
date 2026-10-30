@@ -66,6 +66,7 @@ export const ru: LanguageTranslation = {
                 'Это действие нельзя отменить. Диаграмма будет удалена навсегда.',
             cancel: 'Отменить',
             delete: 'Удалить',
+            delete_failed: 'Не удалось удалить диаграмму.',
         },
 
         clear_diagram_alert: {
@@ -74,6 +75,10 @@ export const ru: LanguageTranslation = {
                 'Это действие нельзя отменить. Это навсегда удалит все данные в диаграмме.',
             cancel: 'Отменить',
             clear: 'Очистить',
+        },
+
+        diagram_save: {
+            failed: 'Не удалось сохранить изменения.',
         },
 
         diagram_access: {

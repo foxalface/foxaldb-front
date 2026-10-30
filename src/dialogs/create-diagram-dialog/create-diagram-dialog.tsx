@@ -37,20 +37,19 @@ import type { BaseDialogProps } from '../common/base-dialog-props';
 import { wizardDialogContentClassName } from '../common/wizard-dialog-size';
 import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
-import { useToast } from '@/components/toast/use-toast';
-import { ToastAction } from '@/components/toast/toast';
 import { ImportFromDatabaseStep } from './import-from-database/import-from-database-step';
 import { ChooseImportMethod } from './choose-import-method/choose-import-method';
 import { CreateDiagramDestinationSelector } from './create-diagram-destination-selector';
 import { useCreateDiagramSessionDestinationRequired } from './create-diagram-session-destination-context';
-import { appliesGuestDeviceDiagramLimit } from '@/lib/diagram/diagram-creation-destination';
 import {
     openPersistedNewDiagram,
     persistNewDiagram,
     persistedNewDiagramId,
 } from '@/lib/diagram/persist-new-diagram';
+import { GuestDeviceDiagramLimitError } from '@/lib/diagram/guest-device-diagram-limit';
 import { registerProtectedActionResume } from '@/lib/auth-intent';
 import { useRequestAuthentication } from '@/hooks/use-request-authentication';
+import { useGuestDeviceDiagramLimitToast } from '@/hooks/use-guest-device-diagram-limit-toast';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {
     entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
@@ -64,9 +63,10 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const { currentDiagram, loadDiagramFromData } = useChartDB();
     const { setDiagramLocation } = useDiagramLocation();
     const { clearDiagramAccess } = useDiagramAccess();
-    const { toast } = useToast();
     const { t } = useTranslation();
     const requestAuthentication = useRequestAuthentication();
+    const { notifyGuestDeviceDiagramLimitReached } =
+        useGuestDeviceDiagramLimitToast();
     const { destination, setDestination } =
         useCreateDiagramSessionDestinationRequired();
 
@@ -82,7 +82,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const [databaseType, setDatabaseType] = useState<DatabaseType>(
         DatabaseType.GENERIC
     );
-    const { closeCreateDiagramDialog, openAuthDialog } = useDialog();
+    const { closeCreateDiagramDialog } = useDialog();
     const { updateConfig } = useConfig();
     const [scriptResult, setScriptResult] = useState('');
     const [metadataResult, setMetadataResult] = useState('');
@@ -132,27 +132,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setSelectTablesOrigin('schema');
     }, [dialog.open]);
 
-    const handleGuestLimitSignIn = useCallback(() => {
-        closeCreateDiagramDialog();
-        openAuthDialog();
-    }, [closeCreateDiagramDialog, openAuthDialog]);
-
-    const showGuestLimitToast = useCallback(() => {
-        toast({
-            title: t('new_diagram_dialog.guest_limit.title'),
-            description: t('new_diagram_dialog.guest_limit.description'),
-            layout: 'column',
-            action: (
-                <ToastAction
-                    altText={t('new_diagram_dialog.guest_limit.sign_in')}
-                    onClick={handleGuestLimitSignIn}
-                >
-                    {t('new_diagram_dialog.guest_limit.sign_in')}
-                </ToastAction>
-            ),
-        });
-    }, [handleGuestLimitSignIn, t, toast]);
-
     const handleGuestRequestOnlineDestination = useCallback(() => {
         registerProtectedActionResume(() => {
             setDestination('online');
@@ -165,50 +144,56 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
     const finishCreatedDiagram = useCallback(
         async (diagram: Diagram) => {
-            if (appliesGuestDeviceDiagramLimit(destination, isAuthenticated)) {
-                const diagrams = await listDiagrams();
-                if (diagrams.length >= 1) {
-                    showGuestLimitToast();
+            try {
+                const persisted = await persistNewDiagram(
+                    diagram,
+                    destination,
+                    {
+                        addDiagram,
+                        listDiagrams,
+                        isAuthenticated,
+                    }
+                );
+
+                if (entryCreateDiagramActions) {
+                    entryCreateDiagramActions.onDiagramCreated(
+                        persistedNewDiagramId(persisted)
+                    );
                     return;
                 }
+
+                closeCreateDiagramDialog();
+
+                await openPersistedNewDiagram(persisted, {
+                    setDiagramLocation,
+                    clearDiagramAccess,
+                    loadDiagramFromData,
+                    navigate: (path) => {
+                        navigate(path);
+                    },
+                    updateDefaultDiagramId: isAuthenticated
+                        ? async (diagramId) => {
+                              await updateConfig({
+                                  config: { defaultDiagramId: diagramId },
+                              });
+                          }
+                        : undefined,
+                    navigateAfterDeviceOpen: isAuthenticated,
+                });
+            } catch (caught: unknown) {
+                if (caught instanceof GuestDeviceDiagramLimitError) {
+                    notifyGuestDeviceDiagramLimitReached();
+                    return;
+                }
+
+                throw caught;
             }
-
-            const persisted = await persistNewDiagram(diagram, destination, {
-                addDiagram,
-                isAuthenticated,
-            });
-
-            if (entryCreateDiagramActions) {
-                entryCreateDiagramActions.onDiagramCreated(
-                    persistedNewDiagramId(persisted)
-                );
-                return;
-            }
-
-            closeCreateDiagramDialog();
-
-            await openPersistedNewDiagram(persisted, {
-                setDiagramLocation,
-                clearDiagramAccess,
-                loadDiagramFromData,
-                navigate: (path) => {
-                    navigate(path);
-                },
-                updateDefaultDiagramId: isAuthenticated
-                    ? async (diagramId) => {
-                          await updateConfig({
-                              config: { defaultDiagramId: diagramId },
-                          });
-                      }
-                    : undefined,
-                navigateAfterDeviceOpen: isAuthenticated,
-            });
         },
         [
             destination,
             isAuthenticated,
             listDiagrams,
-            showGuestLimitToast,
+            notifyGuestDeviceDiagramLimitReached,
             addDiagram,
             entryCreateDiagramActions,
             closeCreateDiagramDialog,

@@ -66,6 +66,7 @@ export const uk: LanguageTranslation = {
                 'Цю дію не можна скасувати. Діаграму буде видалено назавжди.',
             cancel: 'Скасувати',
             delete: 'Видалити',
+            delete_failed: 'Не вдалося видалити діаграму.',
         },
 
         clear_diagram_alert: {
@@ -74,6 +75,10 @@ export const uk: LanguageTranslation = {
                 'Цю дію не можна скасувати. Це назавжди видалить усі дані на діаграмі.',
             cancel: 'Скасувати',
             clear: 'Очистити',
+        },
+
+        diagram_save: {
+            failed: 'Не вдалося зберегти зміни.',
         },
 
         diagram_access: {

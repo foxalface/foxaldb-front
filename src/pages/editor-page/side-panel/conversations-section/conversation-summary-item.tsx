@@ -303,8 +303,12 @@ export const ConversationSummaryItem: React.FC<
                     canDelete={capabilities.canDelete}
                     disabled={isMutationPending}
                     onOpen={handleOpen}
-                    onArchive={handleArchive}
-                    onReopen={handleReopen}
+                    onArchive={
+                        capabilities.canArchive ? handleArchive : undefined
+                    }
+                    onReopen={
+                        capabilities.canArchive ? handleReopen : undefined
+                    }
                     onDelete={handleDeleteRequest}
                     onCloseAutoFocus={restoreActionsFocus}
                 />

@@ -27,6 +27,8 @@ import { useConfig } from '@/hooks/use-config';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useToast } from '@/components/toast/use-toast';
 import { duplicateLocalDiagram } from '@/lib/diagram/duplicate-local-diagram';
+import { GuestDeviceDiagramLimitError } from '@/lib/diagram/guest-device-diagram-limit';
+import { useGuestDeviceDiagramLimitToast } from '@/hooks/use-guest-device-diagram-limit-toast';
 import { isDeviceDiagramLocation } from '@/lib/diagram/diagram-location';
 import {
     putLocalDiagramOnlineCopy,
@@ -66,6 +68,8 @@ export const LocalDiagramRowActionsMenu: React.FC<
     const { showAlert } = useAlert();
     const { toast } = useToast();
     const requestAuthentication = useRequestAuthentication();
+    const { notifyGuestDeviceDiagramLimitReached } =
+        useGuestDeviceDiagramLimitToast();
 
     const showPutOnlineFailed = useCallback(() => {
         toast({
@@ -123,11 +127,17 @@ export const LocalDiagramRowActionsMenu: React.FC<
                 getDiagram,
                 listDiagrams,
                 addDiagram,
-                diagramId
+                diagramId,
+                isAuthenticated
             );
             await onListChanged();
             navigate(`/diagrams/${duplicateId}`);
-        } catch {
+        } catch (caught: unknown) {
+            if (caught instanceof GuestDeviceDiagramLimitError) {
+                notifyGuestDeviceDiagramLimitReached();
+                return;
+            }
+
             toast({
                 title: t('open_diagram_dialog.errors.duplicate_failed'),
                 variant: 'destructive',
@@ -138,10 +148,12 @@ export const LocalDiagramRowActionsMenu: React.FC<
         listDiagrams,
         addDiagram,
         diagramId,
+        isAuthenticated,
         onListChanged,
         navigate,
         toast,
         t,
+        notifyGuestDeviceDiagramLimitReached,
     ]);
 
     const handlePutOnlineSignIn = useCallback(

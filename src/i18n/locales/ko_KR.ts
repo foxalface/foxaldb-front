@@ -66,6 +66,7 @@ export const ko_KR: LanguageTranslation = {
                 '이 작업은 되돌릴 수 없습니다. 다이어그램이 영구적으로 삭제됩니다.',
             cancel: '취소',
             delete: '삭제',
+            delete_failed: '다이어그램을 삭제할 수 없습니다.',
         },
 
         clear_diagram_alert: {
@@ -74,6 +75,10 @@ export const ko_KR: LanguageTranslation = {
                 '이 작업은 되돌릴 수 없으며 다이어그램의 모든 데이터가 지워집니다.',
             cancel: '취소',
             clear: '지우기',
+        },
+
+        diagram_save: {
+            failed: '변경 사항을 저장할 수 없습니다.',
         },
 
         diagram_access: {

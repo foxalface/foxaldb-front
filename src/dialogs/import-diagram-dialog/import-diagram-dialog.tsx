@@ -29,6 +29,8 @@ import {
     RestoreDiagramJsonParseError,
     persistRestoredDiagramFromJson,
 } from '@/lib/diagram-restore/restore-diagram-from-json-backup';
+import { GuestDeviceDiagramLimitError } from '@/lib/diagram/guest-device-diagram-limit';
+import { useGuestDeviceDiagramLimitToast } from '@/hooks/use-guest-device-diagram-limit-toast';
 
 export interface ImportDiagramDialogProps extends BaseDialogProps {}
 
@@ -37,7 +39,7 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
 }) => {
     const { t } = useTranslation();
     const [file, setFile] = useState<File | null>(null);
-    const { addDiagram } = useStorage();
+    const { addDiagram, listDiagrams } = useStorage();
     const { loadDiagramFromData } = useChartDB();
     const { setDiagramLocation } = useDiagramLocation();
     const { clearDiagramAccess } = useDiagramAccess();
@@ -70,6 +72,8 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
     }, [dialog.open]);
 
     const { closeImportDiagramDialog, closeCreateDiagramDialog } = useDialog();
+    const { notifyGuestDeviceDiagramLimitReached } =
+        useGuestDeviceDiagramLimitToast();
 
     const handleRestore = useCallback(() => {
         if (!file || isRestoring) return;
@@ -91,6 +95,7 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
                     destination,
                     isAuthenticated,
                     addDiagram,
+                    listDiagrams,
                 });
 
                 if (!restoreSessionActiveRef.current) {
@@ -122,6 +127,11 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
                     return;
                 }
 
+                if (caught instanceof GuestDeviceDiagramLimitError) {
+                    notifyGuestDeviceDiagramLimitReached();
+                    return;
+                }
+
                 setError(true);
             } finally {
                 setIsRestoring(false);
@@ -138,6 +148,8 @@ export const ImportDiagramDialog: React.FC<ImportDiagramDialogProps> = ({
         isAuthenticated,
         destination,
         addDiagram,
+        listDiagrams,
+        notifyGuestDeviceDiagramLimitReached,
         setDiagramLocation,
         clearDiagramAccess,
         loadDiagramFromData,

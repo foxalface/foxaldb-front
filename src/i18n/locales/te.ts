@@ -66,6 +66,7 @@ export const te: LanguageTranslation = {
                 'ఈ చర్యను తిరిగి చేయలేరు. ఇది డయాగ్రామ్‌ను శాశ్వతంగా తొలగిస్తుంది.',
             cancel: 'రద్దు',
             delete: 'తొలగించు',
+            delete_failed: 'డయాగ్రామ్‌ను తొలగించలేకపోయాం.',
         },
 
         clear_diagram_alert: {
@@ -74,6 +75,10 @@ export const te: LanguageTranslation = {
                 'ఈ చర్యను తిరిగి చేయలేరు. ఇది చిత్రంలో ఉన్న అన్ని డేటాను శాశ్వతంగా తొలగిస్తుంది.',
             cancel: 'రద్దు',
             clear: 'తొలగించు',
+        },
+
+        diagram_save: {
+            failed: 'మీ మార్పులను సేవ్ చేయలేకపోయాం.',
         },
 
         diagram_access: {

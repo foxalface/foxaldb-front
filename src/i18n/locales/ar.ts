@@ -67,6 +67,7 @@ export const ar: LanguageTranslation = {
                 'لا يمكن التراجع عن هذا الإجراء. سيتم حذف المخطط نهائيًا.',
             cancel: 'إلغاء',
             delete: 'حذف',
+            delete_failed: 'تعذر حذف المخطط.',
         },
 
         clear_diagram_alert: {
@@ -75,6 +76,10 @@ export const ar: LanguageTranslation = {
                 '.لا يمكن التراجع عن هذا الاجراء. سيتم حذف جميع البيانات في الرسم البياني بشكل دائم',
             cancel: 'إلغاء',
             clear: 'مسح',
+        },
+
+        diagram_save: {
+            failed: 'تعذر حفظ التغييرات.',
         },
 
         diagram_access: {

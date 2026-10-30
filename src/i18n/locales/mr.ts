@@ -67,6 +67,7 @@ export const mr: LanguageTranslation = {
                 'ही क्रिया पूर्ववत केली जाऊ शकत नाही. हे आरेख कायमचे हटवेल.',
             cancel: 'रद्द करा',
             delete: 'हटवा',
+            delete_failed: 'डायग्राम हटवता आले नाही.',
         },
 
         clear_diagram_alert: {
@@ -75,6 +76,10 @@ export const mr: LanguageTranslation = {
                 'ही क्रिया पूर्ववत केली जाऊ शकत नाही. हे आरेखातील सर्व डेटा कायमचे हटवेल.',
             cancel: 'रद्द करा',
             clear: 'साफ करा',
+        },
+
+        diagram_save: {
+            failed: 'आपले बदल जतन करता आले नाहीत.',
         },
 
         diagram_access: {

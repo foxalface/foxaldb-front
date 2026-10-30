@@ -66,6 +66,7 @@ export const hr: LanguageTranslation = {
                 'Ova radnja se ne može poništiti. Dijagram će biti trajno izbrisan.',
             cancel: 'Odustani',
             delete: 'Izbriši',
+            delete_failed: 'Dijagram nije moguće izbrisati.',
         },
 
         clear_diagram_alert: {
@@ -74,6 +75,10 @@ export const hr: LanguageTranslation = {
                 'Ova radnja se ne može poništiti. Ovo će trajno izbrisati sve podatke u dijagramu.',
             cancel: 'Odustani',
             clear: 'Očisti',
+        },
+
+        diagram_save: {
+            failed: 'Promjene nije moguće spremiti.',
         },
 
         diagram_access: {

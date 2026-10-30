@@ -67,6 +67,7 @@ export const pt_BR: LanguageTranslation = {
                 'Esta ação não pode ser desfeita. Isso excluirá permanentemente o diagrama.',
             cancel: 'Cancelar',
             delete: 'Excluir',
+            delete_failed: 'Não foi possível excluir o diagrama.',
         },
 
         clear_diagram_alert: {
@@ -75,6 +76,10 @@ export const pt_BR: LanguageTranslation = {
                 'Esta ação não pode ser desfeita. Isso excluirá permanentemente todos os dados do diagrama.',
             cancel: 'Cancelar',
             clear: 'Limpar',
+        },
+
+        diagram_save: {
+            failed: 'Não foi possível salvar suas alterações.',
         },
 
         diagram_access: {

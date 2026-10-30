@@ -68,6 +68,7 @@ export const gu: LanguageTranslation = {
                 'આ ક્રિયા પરત નહીં લઈ શકાય. આ ડાયાગ્રામ કાયમ માટે કાઢી નાખશે.',
             cancel: 'રદ કરો',
             delete: 'કાઢી નાખો',
+            delete_failed: 'ડાયગ્રામ કાઢી શકાયું નહીં.',
         },
 
         clear_diagram_alert: {
@@ -76,6 +77,10 @@ export const gu: LanguageTranslation = {
                 'આ ક્રિયા પરત નહીં લઇ શકાય. આ ડાયાગ્રામમાં બધા ડેટા કાયમ માટે કાઢી નાખશે.',
             cancel: 'રદ કરો',
             clear: 'સાફ કરો',
+        },
+
+        diagram_save: {
+            failed: 'તમારા ફેરફારો સાચવી શકાયા નહીં.',
         },
 
         diagram_access: {

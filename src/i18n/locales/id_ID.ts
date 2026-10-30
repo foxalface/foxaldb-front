@@ -67,6 +67,7 @@ export const id_ID: LanguageTranslation = {
                 'Tindakan ini tidak dapat dibatalkan. Diagram akan dihapus secara permanen.',
             cancel: 'Batal',
             delete: 'Hapus',
+            delete_failed: 'Diagram tidak dapat dihapus.',
         },
 
         clear_diagram_alert: {
@@ -75,6 +76,10 @@ export const id_ID: LanguageTranslation = {
                 'Tindakan ini tidak dapat dibatalkan. Semua data di diagram akan dihapus secara permanen.',
             cancel: 'Batal',
             clear: 'Bersihkan',
+        },
+
+        diagram_save: {
+            failed: 'Perubahan Anda tidak dapat disimpan.',
         },
 
         diagram_access: {

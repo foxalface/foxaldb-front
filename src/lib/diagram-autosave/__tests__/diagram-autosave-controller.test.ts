@@ -14,6 +14,7 @@ import {
     abandonDiagramAutosave,
     acceptAuthoritativeDiagram,
     cancelPendingDiagramAutosave,
+    configureDiagramAutosaveFailureNotifier,
     configureDiagramAutosaveStaleHandlers,
     diagramAutosavePayload,
     flushDiagramAutosave,
@@ -408,5 +409,30 @@ describe('diagram autosave flush', () => {
         await flushDiagramAutosave();
 
         expect(updateDiagram).not.toHaveBeenCalled();
+    });
+
+    it('notifies save failure once per episode until success', async () => {
+        const notify = vi.fn();
+        configureDiagramAutosaveFailureNotifier(notify);
+        updateDiagram.mockRejectedValue(new Error('network'));
+
+        observeDiagramForAutosave(diagram('Saved'), { schedule: false });
+        observeDiagramForAutosave(diagram('Edited'), { schedule: true });
+
+        await vi.advanceTimersByTimeAsync(AUTOSAVE_DEBOUNCE_MS);
+        await flushMicrotasks();
+        await vi.advanceTimersByTimeAsync(AUTOSAVE_DEBOUNCE_MS);
+        await flushMicrotasks();
+
+        expect(notify).toHaveBeenCalledTimes(1);
+
+        updateDiagram.mockResolvedValue({ id: 42, content_hash: hashB });
+        await flushDiagramAutosave();
+        observeDiagramForAutosave(diagram('Edited again'), { schedule: true });
+        updateDiagram.mockRejectedValue(new Error('network again'));
+        await vi.advanceTimersByTimeAsync(AUTOSAVE_DEBOUNCE_MS);
+        await flushMicrotasks();
+
+        expect(notify).toHaveBeenCalledTimes(2);
     });
 });

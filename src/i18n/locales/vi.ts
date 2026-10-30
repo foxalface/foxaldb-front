@@ -67,6 +67,7 @@ export const vi: LanguageTranslation = {
                 'Không thể hoàn tác hành động này. Sơ đồ sẽ bị xóa vĩnh viễn.',
             cancel: 'Hủy',
             delete: 'Xóa',
+            delete_failed: 'Không thể xóa sơ đồ.',
         },
 
         clear_diagram_alert: {
@@ -75,6 +76,10 @@ export const vi: LanguageTranslation = {
                 'Không thể hoàn tác hành động này. Thao tác này sẽ xóa vĩnh viễn mọi dữ liệu trong sơ đồ.',
             cancel: 'Hủy',
             clear: 'Xóa',
+        },
+
+        diagram_save: {
+            failed: 'Không thể lưu thay đổi của bạn.',
         },
 
         diagram_access: {

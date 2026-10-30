@@ -86,6 +86,27 @@ class DiagramAutosaveController {
 
     private staleHandlers: DiagramAutosaveStaleHandlers | null = null;
 
+    private failureNotifier: (() => void) | null = null;
+
+    private failureNotifiedForEpisode = false;
+
+    setFailureNotifier(notifier: (() => void) | null): void {
+        this.failureNotifier = notifier;
+    }
+
+    private notifySaveFailure(): void {
+        if (this.failureNotifiedForEpisode || this.failureNotifier === null) {
+            return;
+        }
+
+        this.failureNotifiedForEpisode = true;
+        this.failureNotifier();
+    }
+
+    private clearSaveFailureEpisode(): void {
+        this.failureNotifiedForEpisode = false;
+    }
+
     setStaleHandlers(handlers: DiagramAutosaveStaleHandlers | null): void {
         this.staleHandlers = handlers;
     }
@@ -174,6 +195,7 @@ class DiagramAutosaveController {
                         return;
                     }
 
+                    this.notifySaveFailure();
                     console.error('Failed to autosave diagram', error);
                 }
             );
@@ -193,6 +215,7 @@ class DiagramAutosaveController {
     private invalidateInFlight(): void {
         this.epoch += 1;
         this.clearTimer();
+        this.clearSaveFailureEpisode();
     }
 
     /**
@@ -356,6 +379,7 @@ class DiagramAutosaveController {
                 }
 
                 this.lastSavedPayload = state.payload;
+                this.clearSaveFailureEpisode();
             } catch (error: unknown) {
                 if (isStaleDiagramContentError(error)) {
                     await this.handleStaleSave(state.diagramId, failedPayload);
@@ -367,6 +391,7 @@ class DiagramAutosaveController {
                     throw error;
                 }
 
+                this.notifySaveFailure();
                 throw error;
             }
         }
@@ -383,6 +408,12 @@ export const configureDiagramAutosaveStaleHandlers = (
     handlers: DiagramAutosaveStaleHandlers | null
 ): void => {
     controller.setStaleHandlers(handlers);
+};
+
+export const configureDiagramAutosaveFailureNotifier = (
+    notifier: (() => void) | null
+): void => {
+    controller.setFailureNotifier(notifier);
 };
 
 export const initializeDiagramAutosaveFromServer = (

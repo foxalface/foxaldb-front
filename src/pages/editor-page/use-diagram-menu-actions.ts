@@ -21,6 +21,7 @@ import {
 } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { clearPendingDiagramOperationSyncTimers } from '@/lib/realtime/diagram-sync-state';
 import { createBlankDiagramView } from '@/lib/realtime/kick-out-of-diagram';
+import { useToast } from '@/components/toast/use-toast';
 
 export interface UseDiagramMenuActionsOptions {
     onActiveDiagramDeleted?: () => void;
@@ -48,8 +49,16 @@ export const useDiagramMenuActions = (
     } = useDialog();
     const { isAuthenticated } = useAuth();
     const { showAlert } = useAlert();
+    const { toast } = useToast();
     const { t } = useTranslation();
     const navigate = useNavigate();
+
+    const showDeleteFailedToast = useCallback(() => {
+        toast({
+            title: t('delete_diagram_alert.delete_failed'),
+            variant: 'destructive',
+        });
+    }, [toast, t]);
 
     const canMergeDiagram =
         isAuthenticated &&
@@ -81,6 +90,7 @@ export const useDiagramMenuActions = (
             try {
                 await deleteDiagramApi(location.diagramId);
             } catch {
+                showDeleteFailedToast();
                 return;
             }
 
@@ -104,6 +114,7 @@ export const useDiagramMenuActions = (
         try {
             await deleteLocalDiagram();
         } catch {
+            showDeleteFailedToast();
             return;
         }
 
@@ -126,6 +137,7 @@ export const useDiagramMenuActions = (
         setDiagramLocation,
         onActiveDiagramDeleted,
         navigate,
+        showDeleteFailedToast,
     ]);
 
     const createNewDiagram = useCallback(() => {
@@ -143,7 +155,11 @@ export const useDiagramMenuActions = (
             return;
         }
 
-        await flushDiagramAutosave();
+        try {
+            await flushDiagramAutosave();
+        } catch {
+            // Autosave failure toast is owned by configureDiagramAutosaveFailureNotifier.
+        }
     }, [onlineDiagramId, updateDiagramUpdatedAt]);
 
     const openExportWizard = useCallback(() => {

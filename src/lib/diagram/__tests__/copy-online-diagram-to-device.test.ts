@@ -32,7 +32,8 @@ describe('copyOnlineDiagramToDevice', () => {
         const localId = await copyOnlineDiagramToDevice(
             listDiagrams,
             addDiagram,
-            '42'
+            '42',
+            true
         );
 
         expect(getDiagram).toHaveBeenCalledWith('42');

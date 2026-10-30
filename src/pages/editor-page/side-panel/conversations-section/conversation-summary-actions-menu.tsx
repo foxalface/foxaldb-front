@@ -108,23 +108,27 @@ export const ConversationSummaryActionsMenu = React.forwardRef<
                         )}
                     </DropdownMenuItem>
                     {isArchived ? (
-                        <DropdownMenuItem
-                            disabled={disabled}
-                            className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
-                            onSelect={(event) => {
-                                event.preventDefault();
-                                onReopen?.();
-                            }}
-                        >
-                            <ArchiveRestore
-                                className={SIDE_PANEL_ACTION_MENU_ICON_CLASS}
-                                aria-hidden="true"
-                            />
-                            {t(
-                                'side_panel.conversations_section.actions.reopen'
-                            )}
-                        </DropdownMenuItem>
-                    ) : (
+                        onReopen ? (
+                            <DropdownMenuItem
+                                disabled={disabled}
+                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
+                                onSelect={(event) => {
+                                    event.preventDefault();
+                                    onReopen?.();
+                                }}
+                            >
+                                <ArchiveRestore
+                                    className={
+                                        SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                    }
+                                    aria-hidden="true"
+                                />
+                                {t(
+                                    'side_panel.conversations_section.actions.reopen'
+                                )}
+                            </DropdownMenuItem>
+                        ) : null
+                    ) : onArchive ? (
                         <DropdownMenuItem
                             disabled={disabled}
                             className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
@@ -141,7 +145,7 @@ export const ConversationSummaryActionsMenu = React.forwardRef<
                                 'side_panel.conversations_section.actions.archive'
                             )}
                         </DropdownMenuItem>
-                    )}
+                    ) : null}
                     {canDelete ? (
                         <>
                             <DropdownMenuSeparator />

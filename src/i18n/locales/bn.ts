@@ -67,6 +67,7 @@ export const bn: LanguageTranslation = {
                 'এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না। এটি ডায়াগ্রামটি স্থায়ীভাবে মুছে ফেলবে।',
             cancel: 'বাতিল করুন',
             delete: 'মুছুন',
+            delete_failed: 'ডায়াগ্রাম মুছে ফেলা যায়নি।',
         },
 
         clear_diagram_alert: {
@@ -75,6 +76,10 @@ export const bn: LanguageTranslation = {
                 'এই কাজটি পূর্বাবস্থায় ফিরিয়ে আনা যাবে না। এই ডায়াগ্রামের সমস্ত তথ্য স্থায়ীভাবে মুছে যাবে।',
             cancel: 'বাতিল করুন',
             clear: 'পরিষ্কার করুন',
+        },
+
+        diagram_save: {
+            failed: 'আপনার পরিবর্তনগুলি সংরক্ষণ করা যায়নি।',
         },
 
         diagram_access: {

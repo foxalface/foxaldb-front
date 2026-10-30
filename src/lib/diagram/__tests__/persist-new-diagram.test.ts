@@ -26,16 +26,19 @@ const diagram: Diagram = {
 
 describe('persistNewDiagram', () => {
     const addDiagram = vi.fn();
+    const listDiagrams = vi.fn().mockResolvedValue([]);
 
     beforeEach(() => {
         vi.clearAllMocks();
         addDiagram.mockResolvedValue(undefined);
+        listDiagrams.mockResolvedValue([]);
         createDiagram.mockResolvedValue({ diagram: { id: 99 } });
     });
 
     it('writes a guest device diagram to Dexie only', async () => {
         const persisted = await persistNewDiagram(diagram, 'device', {
             addDiagram,
+            listDiagrams,
             isAuthenticated: false,
         });
 
@@ -51,6 +54,7 @@ describe('persistNewDiagram', () => {
     it('writes an authenticated device diagram to Dexie and does not POST', async () => {
         const persisted = await persistNewDiagram(diagram, 'device', {
             addDiagram,
+            listDiagrams,
             isAuthenticated: true,
         });
 
@@ -62,6 +66,7 @@ describe('persistNewDiagram', () => {
     it('creates an authenticated online diagram without Dexie or memory load', async () => {
         const persisted = await persistNewDiagram(diagram, 'online', {
             addDiagram,
+            listDiagrams,
             isAuthenticated: true,
         });
 
@@ -80,6 +85,7 @@ describe('persistNewDiagram', () => {
         await expect(
             persistNewDiagram(diagram, 'online', {
                 addDiagram,
+                listDiagrams,
                 isAuthenticated: false,
             })
         ).rejects.toBeInstanceOf(OnlineCreationRequiresAuthenticationError);
@@ -94,6 +100,7 @@ describe('persistNewDiagram', () => {
         await expect(
             persistNewDiagram(diagram, 'online', {
                 addDiagram,
+                listDiagrams,
                 isAuthenticated: true,
             })
         ).rejects.toThrow('network');
@@ -106,11 +113,26 @@ describe('persistNewDiagram', () => {
 
         await persistNewDiagram(diagram, 'device', {
             addDiagram,
+            listDiagrams,
             isAuthenticated: true,
         });
 
         expect(addDiagram).toHaveBeenCalledWith({ diagram });
         expect(createDiagram).not.toHaveBeenCalled();
+    });
+
+    it('refuses a second guest device diagram at the persistence boundary', async () => {
+        listDiagrams.mockResolvedValue([{ id: 'existing' }]);
+
+        await expect(
+            persistNewDiagram(diagram, 'device', {
+                addDiagram,
+                listDiagrams,
+                isAuthenticated: false,
+            })
+        ).rejects.toMatchObject({ name: 'GuestDeviceDiagramLimitError' });
+
+        expect(addDiagram).not.toHaveBeenCalled();
     });
 });
 
