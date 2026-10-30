@@ -1680,6 +1680,21 @@ export const hi: LanguageTranslation = {
             cancel: 'रद्द करें',
         },
         // TODO: Translate
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'यह आरेख नहीं खोला जा सका। अपना कनेक्शन जांचें और पुनः प्रयास करें।',
+                load_local_failed:
+                    'इस डिवाइस पर आरेख लोड नहीं हो सका। कृपया पुनः प्रयास करें।',
+                load_remote_failed:
+                    'आपके ऑनलाइन आरेख लोड नहीं हो सके। कृपया पुनः प्रयास करें।',
+                session_restore_failed:
+                    'आपका सत्र पुनर्स्थापित नहीं हो सका। कृपया पुनः प्रयास करें।',
+            },
+            recovery: {
+                retry: 'पुनः प्रयास करें',
+            },
+        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

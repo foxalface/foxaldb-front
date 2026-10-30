@@ -1709,6 +1709,21 @@ export const pt_BR: LanguageTranslation = {
             cancel: 'Cancelar',
         },
         // TODO: Translate
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Não foi possível abrir este diagrama. Verifique sua conexão e tente novamente.',
+                load_local_failed:
+                    'Não foi possível carregar o diagrama neste dispositivo. Tente novamente.',
+                load_remote_failed:
+                    'Não foi possível carregar seus diagramas online. Tente novamente.',
+                session_restore_failed:
+                    'Não foi possível restaurar sua sessão. Tente novamente.',
+            },
+            recovery: {
+                retry: 'Tentar novamente',
+            },
+        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

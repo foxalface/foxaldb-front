@@ -1549,6 +1549,17 @@ export const zh_TW: LanguageTranslation = {
             create: '建立',
             cancel: '取消',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed: '無法開啟此圖表。請檢查連線後再試一次。',
+                load_local_failed: '無法載入此裝置上的圖表。請再試一次。',
+                load_remote_failed: '無法載入您的線上圖表。請再試一次。',
+                session_restore_failed: '無法還原您的工作階段。請再試一次。',
+            },
+            recovery: {
+                retry: '重試',
+            },
+        },
         export_diagram_dialog: {
             title: '匯出圖表',
             description: '選擇匯出格式：',

@@ -1695,6 +1695,21 @@ export const te: LanguageTranslation = {
         },
 
         // TODO: Translate
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'ఈ డయాగ్రామ్‌ను తెరవలేకపోయాము. కనెక్షన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+                load_local_failed:
+                    'ఈ పరికరంలో డయాగ్రామ్‌ను లోడ్ చేయలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                load_remote_failed:
+                    'మీ ఆన్‌లైన్ డయాగ్రామ్‌లను లోడ్ చేయలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.',
+                session_restore_failed:
+                    'మీ సెషన్‌ను పునరుద్ధరించలేకపోయాము. దయచేసి మళ్లీ ప్రయత్నించండి.',
+            },
+            recovery: {
+                retry: 'మళ్లీ ప్రయత్నించండి',
+            },
+        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

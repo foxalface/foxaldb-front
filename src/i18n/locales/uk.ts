@@ -1686,6 +1686,21 @@ export const uk: LanguageTranslation = {
             create: 'Створити',
             cancel: 'Скасувати',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Не вдалося відкрити цю діаграму. Перевірте з’єднання та спробуйте ще раз.',
+                load_local_failed:
+                    'Не вдалося завантажити діаграму на цьому пристрої. Спробуйте ще раз.',
+                load_remote_failed:
+                    'Не вдалося завантажити ваші онлайн-діаграми. Спробуйте ще раз.',
+                session_restore_failed:
+                    'Не вдалося відновити сеанс. Спробуйте ще раз.',
+            },
+            recovery: {
+                retry: 'Повторити',
+            },
+        },
         export_diagram_dialog: {
             title: 'Експорт Діаграми',
             description: 'Оберіть формат експорту:',

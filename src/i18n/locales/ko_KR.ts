@@ -1681,6 +1681,21 @@ export const ko_KR: LanguageTranslation = {
             create: '생성',
             cancel: '취소',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    '이 다이어그램을 열 수 없습니다. 연결을 확인하고 다시 시도하세요.',
+                load_local_failed:
+                    '이 기기의 다이어그램을 불러올 수 없습니다. 다시 시도하세요.',
+                load_remote_failed:
+                    '온라인 다이어그램을 불러올 수 없습니다. 다시 시도하세요.',
+                session_restore_failed:
+                    '세션을 복원할 수 없습니다. 다시 시도하세요.',
+            },
+            recovery: {
+                retry: '다시 시도',
+            },
+        },
         export_diagram_dialog: {
             title: '다이어그램 내보내기',
             description: '내보낼 형식을 선택해주세요:',

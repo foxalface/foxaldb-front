@@ -189,6 +189,14 @@ describe('AuthDialog entry mode', () => {
         expect(onRegistrationSuccess).toHaveBeenCalledTimes(1);
         expect(closeAuthDialog).not.toHaveBeenCalled();
     });
+
+    it('does not show a dismiss control while entry choice is required', () => {
+        renderAuthDialog({ entryAuthActions });
+
+        expect(
+            screen.queryByRole('button', { name: 'Close' })
+        ).not.toBeInTheDocument();
+    });
 });
 
 describe('AuthDialog manual mode', () => {
@@ -229,5 +237,13 @@ describe('AuthDialog manual mode', () => {
         );
 
         expect(closeAuthDialog).toHaveBeenCalledTimes(1);
+    });
+
+    it('shows a dismiss control outside entry mode', () => {
+        renderAuthDialog();
+
+        expect(
+            screen.getByRole('button', { name: 'Close' })
+        ).toBeInTheDocument();
     });
 });

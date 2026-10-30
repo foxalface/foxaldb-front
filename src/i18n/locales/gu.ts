@@ -1660,6 +1660,21 @@ export const gu: LanguageTranslation = {
             create: 'બનાવો',
             cancel: 'રદ કરો',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'આ આલેખ ખોલી શકાયો નહીં. તમારું કનેક્શન તપાસો અને ફરી પ્રયાસ કરો.',
+                load_local_failed:
+                    'આ ઉપકરણ પર આલેખ લોડ થઈ શક્યો નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                load_remote_failed:
+                    'તમારા ઑનલાઇન આલેખ લોડ થઈ શક્યા નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+                session_restore_failed:
+                    'તમારું સત્ર પુનઃસ્થાપિત થઈ શક્યું નહીં. કૃપા કરીને ફરી પ્રયાસ કરો.',
+            },
+            recovery: {
+                retry: 'ફરી પ્રયાસ કરો',
+            },
+        },
         export_diagram_dialog: {
             title: 'ડાયાગ્રામ નિકાસ કરો',
             description: 'નિકાસ માટે ફોર્મેટ પસંદ કરો:',

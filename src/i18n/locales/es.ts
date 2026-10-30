@@ -1716,6 +1716,21 @@ export const es: LanguageTranslation = {
         },
 
         // TODO: Translate
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'No se pudo abrir este diagrama. Comprueba tu conexión e inténtalo de nuevo.',
+                load_local_failed:
+                    'No se pudo cargar el diagrama en este dispositivo. Inténtalo de nuevo.',
+                load_remote_failed:
+                    'No se pudieron cargar tus diagramas en línea. Inténtalo de nuevo.',
+                session_restore_failed:
+                    'No se pudo restaurar tu sesión. Inténtalo de nuevo.',
+            },
+            recovery: {
+                retry: 'Reintentar',
+            },
+        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

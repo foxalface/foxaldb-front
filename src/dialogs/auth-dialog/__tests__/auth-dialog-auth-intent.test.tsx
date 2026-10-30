@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthDialog } from '../auth-dialog';
 import { AuthIntentProvider } from '@/context/auth-intent-context/auth-intent-provider';
 import { useAuthIntent } from '@/hooks/use-auth-intent';
+import type { AuthIntent } from '@/lib/auth-intent';
 
 const authState = {
     isAuthenticated: false,
@@ -39,8 +40,7 @@ vi.mock('@/pages/auth/auth-form-panels', () => ({
     AuthenticatedAccountPanel: () => null,
 }));
 
-let setAuthIntentRef: ((intent: { type: 'open-online-tab' }) => void) | null =
-    null;
+let setAuthIntentRef: ((intent: AuthIntent) => void) | null = null;
 
 const IntentCapture: React.FC = () => {
     const { setAuthIntent, pendingIntent } = useAuthIntent();
@@ -120,5 +120,37 @@ describe('AuthDialog auth intent', () => {
         expect(screen.getByTestId('pending-intent')).toHaveTextContent(
             'open-online-tab'
         );
+    });
+
+    it('does not clear pending intent when entry auth dismiss is blocked', async () => {
+        const user = userEvent.setup();
+
+        renderAuthDialog({
+            onContinueAsGuest: vi.fn(),
+            onLoginSuccess: vi.fn(),
+            onRegistrationSuccess: vi.fn(),
+        });
+
+        act(() => {
+            setAuthIntentRef?.({
+                type: 'open-online-diagram',
+                diagramId: '77',
+            });
+        });
+
+        expect(screen.getByTestId('pending-intent')).toHaveTextContent(
+            'open-online-diagram'
+        );
+
+        expect(
+            screen.queryByRole('button', { name: 'Close' })
+        ).not.toBeInTheDocument();
+
+        await user.keyboard('{Escape}');
+
+        expect(screen.getByTestId('pending-intent')).toHaveTextContent(
+            'open-online-diagram'
+        );
+        expect(closeAuthDialog).not.toHaveBeenCalled();
     });
 });

@@ -1680,6 +1680,21 @@ export const en = {
             create: 'Create',
             cancel: 'Cancel',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Could not open this diagram. Check your connection and try again.',
+                load_local_failed:
+                    'Could not load the diagram on this device. Please try again.',
+                load_remote_failed:
+                    'Could not load your online diagrams. Please try again.',
+                session_restore_failed:
+                    'Could not restore your session. Please try again.',
+            },
+            recovery: {
+                retry: 'Retry',
+            },
+        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

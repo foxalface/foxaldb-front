@@ -303,7 +303,10 @@ export const useEntryFlowAuthenticatedResolution = ({
 
                     if (!localDiagram) {
                         hideLoader();
-                        dispatchEvent({ type: 'DIAGRAM_OPEN_FAILED' });
+                        dispatchEvent({
+                            type: 'DIAGRAM_OPEN_FAILED',
+                            messageKey: 'entry_flow.errors.open_diagram_failed',
+                        });
                         return;
                     }
 
@@ -403,6 +406,7 @@ export const useEntryFlowAuthenticatedResolution = ({
                 clearDiagramAccess();
                 dispatchEvent({
                     type: 'DIAGRAM_OPEN_FAILED',
+                    messageKey: 'entry_flow.errors.open_diagram_failed',
                 });
             }
         })();

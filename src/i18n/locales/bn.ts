@@ -1676,6 +1676,21 @@ export const bn: LanguageTranslation = {
             create: 'তৈরি করুন',
             cancel: 'বাতিল করুন',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'এই ডায়াগ্রাম খোলা যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।',
+                load_local_failed:
+                    'এই ডিভাইসে ডায়াগ্রাম লোড করা যায়নি। আবার চেষ্টা করুন।',
+                load_remote_failed:
+                    'আপনার অনলাইন ডায়াগ্রাম লোড করা যায়নি। আবার চেষ্টা করুন।',
+                session_restore_failed:
+                    'আপনার সেশন পুনরুদ্ধার করা যায়নি। আবার চেষ্টা করুন।',
+            },
+            recovery: {
+                retry: 'আবার চেষ্টা করুন',
+            },
+        },
         export_diagram_dialog: {
             title: 'চিত্র রপ্তানি করুন',
             description: 'রপ্তানির জন্য ফরম্যাট নির্বাচন করুন:',

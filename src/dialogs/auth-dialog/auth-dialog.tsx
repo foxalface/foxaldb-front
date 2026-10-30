@@ -101,16 +101,35 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     const showContinueWithoutAccount =
         isEntryMode && !isLoading && !isAuthenticated;
 
+    const isEntryChoiceRequired = isEntryMode;
+
     return (
         <Dialog
             {...dialog}
             onOpenChange={(open) => {
                 if (!open) {
+                    if (isEntryChoiceRequired) {
+                        return;
+                    }
+
                     dismissAuthDialog();
                 }
             }}
         >
-            <DialogContent className="flex max-w-md flex-col" showClose>
+            <DialogContent
+                className="flex max-w-md flex-col"
+                showClose={!isEntryChoiceRequired}
+                onInteractOutside={(event) => {
+                    if (isEntryChoiceRequired) {
+                        event.preventDefault();
+                    }
+                }}
+                onEscapeKeyDown={(event) => {
+                    if (isEntryChoiceRequired) {
+                        event.preventDefault();
+                    }
+                }}
+            >
                 <DialogHeader>
                     <DialogTitle>
                         {isAuthenticated

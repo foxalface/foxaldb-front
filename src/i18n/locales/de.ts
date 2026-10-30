@@ -1733,6 +1733,21 @@ export const de: LanguageTranslation = {
             cancel: 'Abbrechen',
         },
         // TODO: Translate
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Dieses Diagramm konnte nicht geöffnet werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
+                load_local_failed:
+                    'Das Diagramm auf diesem Gerät konnte nicht geladen werden. Bitte erneut versuchen.',
+                load_remote_failed:
+                    'Ihre Online-Diagramme konnten nicht geladen werden. Bitte erneut versuchen.',
+                session_restore_failed:
+                    'Ihre Sitzung konnte nicht wiederhergestellt werden. Bitte erneut versuchen.',
+            },
+            recovery: {
+                retry: 'Erneut versuchen',
+            },
+        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

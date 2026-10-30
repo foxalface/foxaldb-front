@@ -1686,6 +1686,21 @@ export const id_ID: LanguageTranslation = {
             create: 'Buat',
             cancel: 'Batal',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Diagram ini tidak dapat dibuka. Periksa koneksi Anda dan coba lagi.',
+                load_local_failed:
+                    'Diagram di perangkat ini tidak dapat dimuat. Silakan coba lagi.',
+                load_remote_failed:
+                    'Diagram online Anda tidak dapat dimuat. Silakan coba lagi.',
+                session_restore_failed:
+                    'Sesi Anda tidak dapat dipulihkan. Silakan coba lagi.',
+            },
+            recovery: {
+                retry: 'Coba lagi',
+            },
+        },
         export_diagram_dialog: {
             title: 'Ekspor Diagram',
             description: 'Pilih format untuk ekspor:',

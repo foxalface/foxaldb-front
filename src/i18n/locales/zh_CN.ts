@@ -1550,6 +1550,17 @@ export const zh_CN: LanguageTranslation = {
             create: '创建',
             cancel: '取消',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed: '无法打开此图表。请检查网络连接后重试。',
+                load_local_failed: '无法加载此设备上的图表。请重试。',
+                load_remote_failed: '无法加载您的在线图表。请重试。',
+                session_restore_failed: '无法恢复您的会话。请重试。',
+            },
+            recovery: {
+                retry: '重试',
+            },
+        },
         export_diagram_dialog: {
             title: '导出关系图',
             description: '选择导出格式：',

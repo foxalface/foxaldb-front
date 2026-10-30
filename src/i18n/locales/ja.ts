@@ -1720,6 +1720,21 @@ export const ja: LanguageTranslation = {
             cancel: 'キャンセル',
         },
         // TODO: Translate
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'このダイアグラムを開けませんでした。接続を確認して再試行してください。',
+                load_local_failed:
+                    'このデバイスのダイアグラムを読み込めませんでした。もう一度お試しください。',
+                load_remote_failed:
+                    'オンラインダイアグラムを読み込めませんでした。もう一度お試しください。',
+                session_restore_failed:
+                    'セッションを復元できませんでした。もう一度お試しください。',
+            },
+            recovery: {
+                retry: '再試行',
+            },
+        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

@@ -1685,6 +1685,21 @@ export const hr: LanguageTranslation = {
             create: 'Stvori',
             cancel: 'Odustani',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Ovaj dijagram nije moguće otvoriti. Provjerite vezu i pokušajte ponovno.',
+                load_local_failed:
+                    'Dijagram na ovom uređaju nije moguće učitati. Pokušajte ponovno.',
+                load_remote_failed:
+                    'Vaši online dijagrami nisu učitani. Pokušajte ponovno.',
+                session_restore_failed:
+                    'Vaša sesija nije mogla biti vraćena. Pokušajte ponovno.',
+            },
+            recovery: {
+                retry: 'Pokušaj ponovno',
+            },
+        },
         export_diagram_dialog: {
             title: 'Izvezi dijagram',
             description: 'Odaberite format za izvoz:',

@@ -1674,6 +1674,21 @@ export const mr: LanguageTranslation = {
         },
 
         // TODO: Add translations
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'हा आलेख उघडता आला नाही. कनेक्शन तपासा आणि पुन्हा प्रयत्न करा.',
+                load_local_failed:
+                    'या डिव्हाइसवरील आलेख लोड होऊ शकला नाही. कृपया पुन्हा प्रयत्न करा.',
+                load_remote_failed:
+                    'तुमचे ऑनलाइन आलेख लोड होऊ शकले नाहीत. कृपया पुन्हा प्रयत्न करा.',
+                session_restore_failed:
+                    'तुमचे सत्र पुनर्स्थापित होऊ शकले नाही. कृपया पुन्हा प्रयत्न करा.',
+            },
+            recovery: {
+                retry: 'पुन्हा प्रयत्न करा',
+            },
+        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

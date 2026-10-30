@@ -1717,6 +1717,21 @@ export const fr: LanguageTranslation = {
                 },
             },
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Impossible d’ouvrir ce diagramme. Vérifiez votre connexion et réessayez.',
+                load_local_failed:
+                    'Impossible de charger le diagramme sur cet appareil. Veuillez réessayer.',
+                load_remote_failed:
+                    'Impossible de charger vos diagrammes en ligne. Veuillez réessayer.',
+                session_restore_failed:
+                    'Impossible de restaurer votre session. Veuillez réessayer.',
+            },
+            recovery: {
+                retry: 'Réessayer',
+            },
+        },
         export_diagram_dialog: {
             title: 'Exporter le Diagramme',
             description: "Sélectionner le format d'exportation :",

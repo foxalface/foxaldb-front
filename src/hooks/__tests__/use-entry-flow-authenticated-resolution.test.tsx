@@ -118,16 +118,18 @@ const beginResolution = () => {
 const isResolutionCurrent = (token: number) => token === resolutionGeneration;
 
 const renderResolution = (state: EntryFlowState, routeDiagramId?: string) =>
-    renderHook(() =>
-        useEntryFlowAuthenticatedResolution({
-            state,
-            isAuthenticated: authState.isAuthenticated,
-            isAuthLoading: authState.isLoading,
-            routeDiagramId,
-            beginResolution,
-            isResolutionCurrent,
-            dispatchEvent,
-        })
+    renderHook(
+        (props: { state: EntryFlowState; routeDiagramId?: string }) =>
+            useEntryFlowAuthenticatedResolution({
+                state: props.state,
+                isAuthenticated: authState.isAuthenticated,
+                isAuthLoading: authState.isLoading,
+                routeDiagramId: props.routeDiagramId,
+                beginResolution,
+                isResolutionCurrent,
+                dispatchEvent,
+            }),
+        { initialProps: { state, routeDiagramId } }
     );
 
 describe('useEntryFlowAuthenticatedResolution', () => {
@@ -381,6 +383,177 @@ describe('useEntryFlowAuthenticatedResolution', () => {
         });
 
         expect(navigate).toHaveBeenCalledWith('/');
+        expect(dispatchEvent).not.toHaveBeenCalledWith(
+            expect.objectContaining({ type: 'DIAGRAM_OPEN_FAILED' })
+        );
+    });
+
+    it('maps 404 to access denied recovery, not recoverable retry', async () => {
+        getDiagram.mockRejectedValue(new ApiError('Not Found', 404, null));
+
+        renderResolution(
+            {
+                kind: 'openingDiagram',
+                diagramId: '9',
+                diagramSource: 'directRoute',
+                entrySource: 'startup',
+            },
+            '9'
+        );
+
+        await waitFor(() => {
+            expect(dispatchEvent).toHaveBeenCalledWith({
+                type: 'ACCESS_DENIED_RECOVERY',
+            });
+        });
+
+        expect(dispatchEvent).not.toHaveBeenCalledWith(
+            expect.objectContaining({ type: 'DIAGRAM_OPEN_FAILED' })
+        );
+    });
+
+    it('enters recoverableError on server failure and succeeds after reopening', async () => {
+        getDiagram
+            .mockRejectedValueOnce(new ApiError('Server Error', 500, null))
+            .mockResolvedValueOnce({
+                id: 9,
+                name: 'Orders',
+                content_hash: 'a'.repeat(64),
+                access: {
+                    role: 'editor',
+                    can_edit: true,
+                    can_manage_members: false,
+                },
+                content: {
+                    id: '9',
+                    name: 'Orders',
+                    databaseType: 'generic',
+                    tables: [],
+                },
+            });
+
+        const { rerender } = renderResolution(
+            {
+                kind: 'openingDiagram',
+                diagramId: '9',
+                diagramSource: 'directRoute',
+                entrySource: 'startup',
+            },
+            '9'
+        );
+
+        await waitFor(() => {
+            expect(dispatchEvent).toHaveBeenCalledWith({
+                type: 'DIAGRAM_OPEN_FAILED',
+                messageKey: 'entry_flow.errors.open_diagram_failed',
+            });
+        });
+
+        dispatchEvent.mockClear();
+
+        rerender({
+            state: {
+                kind: 'recoverableError',
+                error: {
+                    kind: 'diagramOpen',
+                    messageKey: 'entry_flow.errors.open_diagram_failed',
+                },
+                entrySource: 'startup',
+                openingContext: {
+                    diagramId: '9',
+                    diagramSource: 'directRoute',
+                },
+            },
+            routeDiagramId: '9',
+        });
+
+        rerender({
+            state: {
+                kind: 'openingDiagram',
+                diagramId: '9',
+                diagramSource: 'directRoute',
+                entrySource: 'startup',
+            },
+            routeDiagramId: '9',
+        });
+
+        await waitFor(() => {
+            expect(setDiagramLocation).toHaveBeenCalledWith({
+                type: 'online',
+                diagramId: '9',
+            });
+        });
+
+        expect(getDiagram).toHaveBeenCalledTimes(2);
+        expect(dispatchEvent).toHaveBeenCalledWith({ type: 'DIAGRAM_OPENED' });
+    });
+
+    it('remains recoverable when retry fails again', async () => {
+        getDiagram.mockRejectedValue(new ApiError('Server Error', 500, null));
+
+        const openingState: EntryFlowState = {
+            kind: 'openingDiagram',
+            diagramId: '9',
+            diagramSource: 'directRoute',
+            entrySource: 'startup',
+        };
+
+        const recoverableState: EntryFlowState = {
+            kind: 'recoverableError',
+            error: {
+                kind: 'diagramOpen',
+                messageKey: 'entry_flow.errors.open_diagram_failed',
+            },
+            entrySource: 'startup',
+            openingContext: {
+                diagramId: '9',
+                diagramSource: 'directRoute',
+            },
+        };
+
+        const { rerender } = renderResolution(openingState, '9');
+
+        await waitFor(() => {
+            expect(dispatchEvent).toHaveBeenCalledWith({
+                type: 'DIAGRAM_OPEN_FAILED',
+                messageKey: 'entry_flow.errors.open_diagram_failed',
+            });
+        });
+
+        dispatchEvent.mockClear();
+
+        rerender({ state: recoverableState, routeDiagramId: '9' });
+        rerender({ state: openingState, routeDiagramId: '9' });
+
+        await waitFor(() => {
+            expect(dispatchEvent).toHaveBeenCalledWith({
+                type: 'DIAGRAM_OPEN_FAILED',
+                messageKey: 'entry_flow.errors.open_diagram_failed',
+            });
+        });
+
+        expect(getDiagram).toHaveBeenCalledTimes(2);
+    });
+
+    it('maps network failures to recoverable diagram open errors', async () => {
+        getDiagram.mockRejectedValue(new TypeError('Failed to fetch'));
+
+        renderResolution(
+            {
+                kind: 'openingDiagram',
+                diagramId: '9',
+                diagramSource: 'directRoute',
+                entrySource: 'startup',
+            },
+            '9'
+        );
+
+        await waitFor(() => {
+            expect(dispatchEvent).toHaveBeenCalledWith({
+                type: 'DIAGRAM_OPEN_FAILED',
+                messageKey: 'entry_flow.errors.open_diagram_failed',
+            });
+        });
     });
 
     it('ignores stale completions after logout invalidates resolution', async () => {

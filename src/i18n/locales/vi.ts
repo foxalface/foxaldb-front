@@ -1671,6 +1671,21 @@ export const vi: LanguageTranslation = {
             create: 'Tạo',
             cancel: 'Hủy',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Không thể mở sơ đồ này. Kiểm tra kết nối và thử lại.',
+                load_local_failed:
+                    'Không thể tải sơ đồ trên thiết bị này. Vui lòng thử lại.',
+                load_remote_failed:
+                    'Không thể tải sơ đồ trực tuyến của bạn. Vui lòng thử lại.',
+                session_restore_failed:
+                    'Không thể khôi phục phiên của bạn. Vui lòng thử lại.',
+            },
+            recovery: {
+                retry: 'Thử lại',
+            },
+        },
         export_diagram_dialog: {
             title: 'Xuất sơ đồ',
             description: 'Chọn định dạng để xuất:',

@@ -21,6 +21,7 @@ import { Spinner } from '@/components/spinner/spinner';
 import { Helmet } from 'react-helmet-async';
 import { AlertProvider } from '@/context/alert-context/alert-provider';
 import { CanvasProvider } from '@/context/canvas-context/canvas-provider';
+import { EntryFlowRecoverableError } from './entry-flow-recoverable-error';
 import { useDiagramAccessListener } from './use-diagram-access-listener';
 import { useDiagramAutosave } from './use-diagram-autosave';
 import { useDiagramOperationSync } from './use-diagram-operation-sync';
@@ -90,8 +91,13 @@ const EditorPageContent: React.FC<
                 </section>
             ) : (
                 <section
-                    className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex select-none flex-col overflow-x-hidden`}
+                    className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} relative flex select-none flex-col overflow-x-hidden`}
                 >
+                    <EntryFlowRecoverableError
+                        state={entryFlow.state}
+                        isBlocking={entryFlow.isBlocking}
+                        onRetry={entryFlow.retry}
+                    />
                     <Suspense
                         fallback={
                             <>

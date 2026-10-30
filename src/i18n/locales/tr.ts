@@ -1668,6 +1668,21 @@ export const tr: LanguageTranslation = {
             cancel: 'İptal',
         },
         // TODO: Translate
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Bu diyagram açılamadı. Bağlantınızı kontrol edip yeniden deneyin.',
+                load_local_failed:
+                    'Bu cihazdaki diyagram yüklenemedi. Lütfen yeniden deneyin.',
+                load_remote_failed:
+                    'Çevrimiçi diyagramlarınız yüklenemedi. Lütfen yeniden deneyin.',
+                session_restore_failed:
+                    'Oturumunuz geri yüklenemedi. Lütfen yeniden deneyin.',
+            },
+            recovery: {
+                retry: 'Yeniden dene',
+            },
+        },
         export_diagram_dialog: {
             title: 'Export Diagram',
             description: 'Choose the format for export:',

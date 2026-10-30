@@ -1654,6 +1654,21 @@ export const ar: LanguageTranslation = {
             create: 'إنشاء',
             cancel: 'إلغاء',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'تعذر فتح هذا المخطط. تحقق من اتصالك وحاول مرة أخرى.',
+                load_local_failed:
+                    'تعذر تحميل المخطط على هذا الجهاز. يرجى المحاولة مرة أخرى.',
+                load_remote_failed:
+                    'تعذر تحميل مخططاتك عبر الإنترنت. يرجى المحاولة مرة أخرى.',
+                session_restore_failed:
+                    'تعذر استعادة جلستك. يرجى المحاولة مرة أخرى.',
+            },
+            recovery: {
+                retry: 'إعادة المحاولة',
+            },
+        },
         export_diagram_dialog: {
             title: 'تصدير المخطط',
             description: ':اختر التنسيق للتصدير',

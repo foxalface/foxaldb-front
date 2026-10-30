@@ -19,4 +19,6 @@ export {
     selectEntryFlowRemoteDiagramSummaries,
 } from './entry-flow-selectors';
 
+export { resolveEntryFlowErrorMessageKey } from './entry-flow-error-message-key';
+
 export { toRemoteDiagramSummaries } from './remote-diagram-summaries';

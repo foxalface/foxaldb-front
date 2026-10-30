@@ -1686,6 +1686,21 @@ export const ru: LanguageTranslation = {
             create: 'Создать',
             cancel: 'Отменить',
         },
+        entry_flow: {
+            errors: {
+                open_diagram_failed:
+                    'Не удалось открыть эту диаграмму. Проверьте подключение и повторите попытку.',
+                load_local_failed:
+                    'Не удалось загрузить диаграмму на этом устройстве. Повторите попытку.',
+                load_remote_failed:
+                    'Не удалось загрузить ваши онлайн-диаграммы. Повторите попытку.',
+                session_restore_failed:
+                    'Не удалось восстановить сеанс. Повторите попытку.',
+            },
+            recovery: {
+                retry: 'Повторить',
+            },
+        },
         export_diagram_dialog: {
             title: 'Экспорт кода диаграммы',
             description: 'Выберите формат экспорта:',
