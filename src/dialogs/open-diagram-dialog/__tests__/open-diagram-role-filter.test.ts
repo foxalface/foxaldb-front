@@ -16,8 +16,8 @@ const onlineRow = (
     id: role,
     name: role,
     databaseType: DatabaseType.GENERIC,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-03-01'),
     tablesCount: 1,
     role,
 });
