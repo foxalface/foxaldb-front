@@ -81,7 +81,7 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                         variant="ghost"
                         onClick={openImportDiagramDialog}
                     >
-                        {t('new_diagram_dialog.import_from_file')}
+                        {t('new_diagram_dialog.restore_from_backup')}
                     </Button>
                 </DialogFooter>
             ) : null}

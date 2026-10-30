@@ -1020,7 +1020,7 @@ export const id_ID: LanguageTranslation = {
             },
 
             cancel: 'Batal',
-            import_from_file: 'Impor dari file',
+            restore_from_backup: 'Pulihkan dari cadangan',
             back: 'Kembali',
             empty_diagram: 'Database Kosong',
             continue: 'Lanjutkan',
@@ -1060,7 +1060,7 @@ export const id_ID: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'Hanya lihat',
         },
 
         open_diagram_dialog: {
@@ -1719,15 +1719,15 @@ export const id_ID: LanguageTranslation = {
         },
 
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'Pulihkan diagram',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
+                'Unggah file JSON cadangan diagram. Ini membuat diagram baru; tidak mengganti atau menggabungkan diagram yang terbuka.',
             cancel: 'Batal',
-            import: 'Restore',
+            import: 'Pulihkan',
             error: {
-                title: 'Could not restore diagram',
+                title: 'Diagram tidak dapat dipulihkan',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'JSON diagram tidak valid. Periksa file dan coba lagi. Bantuan? support@chartdb.io',
             },
         },
         // TODO: Translate

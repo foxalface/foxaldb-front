@@ -1030,7 +1030,7 @@ export const pt_BR: LanguageTranslation = {
             cancel: 'Cancelar',
             back: 'Voltar',
             // TODO: Translate
-            import_from_file: 'Import from File',
+            restore_from_backup: 'Restaurar do backup',
             empty_diagram: 'Banco de dados vazio',
             continue: 'Continuar',
             import: 'Importar',
@@ -1069,7 +1069,7 @@ export const pt_BR: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'Somente leitura',
         },
 
         open_diagram_dialog: {
@@ -1740,12 +1740,11 @@ export const pt_BR: LanguageTranslation = {
                 description: 'Algo deu errado. Tente novamente.',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
             title: 'Restaurar diagrama',
             description:
                 'Envie um arquivo JSON de backup do diagrama. Isso cria um diagrama novo; não substitui nem mescla com o diagrama aberto.',
-            cancel: 'Cancel',
+            cancel: 'Cancelar',
             import: 'Restaurar',
             error: {
                 title: 'Não foi possível restaurar o diagrama',

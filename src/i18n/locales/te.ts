@@ -1018,7 +1018,7 @@ export const te: LanguageTranslation = {
 
             cancel: 'రద్దు',
             // TODO: Translate
-            import_from_file: 'Import from File',
+            restore_from_backup: 'బ్యాకప్ నుండి పునరుద్ధరించు',
             back: 'తిరుగు',
             empty_diagram: 'ఖాళీ డేటాబేస్',
             continue: 'కొనసాగించు',
@@ -1058,7 +1058,7 @@ export const te: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'చూడడం మాత్రమే',
         },
 
         open_diagram_dialog: {
@@ -1726,18 +1726,16 @@ export const te: LanguageTranslation = {
                 description: 'ఏదో తప్పు జరిగింది. దయచేసి మళ్లీ ప్రయత్నించండి.',
             },
         },
-
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'డయాగ్రామ్‌ను పునరుద్ధరించు',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
-            cancel: 'Cancel',
-            import: 'Restore',
+                'డయాగ్రామ్ బ్యాకప్ JSON ఫైల్‌ను అప్‌లోడ్ చేయండి. ఇది కొత్త డయాగ్రామ్‌ను సృష్టిస్తుంది; తెరిచిన దానిని భర్తీ చేయదు లేదా విలీనం చేయదు.',
+            cancel: 'రద్దు',
+            import: 'పునరుద్ధరించు',
             error: {
-                title: 'Could not restore diagram',
+                title: 'డయాగ్రామ్‌ను పునరుద్ధరించలేకపోయాం',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'డయాగ్రామ్ JSON చెల్లదు. ఫైల్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి. సహాయం? support@chartdb.io',
             },
         },
         // TODO: Translate

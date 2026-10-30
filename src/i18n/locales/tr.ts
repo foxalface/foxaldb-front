@@ -999,7 +999,7 @@ export const tr: LanguageTranslation = {
                 },
             },
             // TODO: Translate
-            import_from_file: 'Import from File',
+            restore_from_backup: 'Yedekten geri yükle',
             cancel: 'İptal',
             back: 'Geri',
             empty_diagram: 'Boş veritabanı',
@@ -1039,7 +1039,7 @@ export const tr: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'Yalnızca görüntüleme',
         },
 
         open_diagram_dialog: {
@@ -1699,17 +1699,16 @@ export const tr: LanguageTranslation = {
                 description: 'Bir şeyler ters gitti. Lütfen tekrar deneyin.',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'Diyagramı geri yükle',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
-            cancel: 'Cancel',
-            import: 'Restore',
+                'Diyagram yedek JSON dosyasını yükleyin. Yeni bir diyagram oluşturur; açık diyagramın yerini almaz ve birleştirmez.',
+            cancel: 'İptal',
+            import: 'Geri yükle',
             error: {
-                title: 'Could not restore diagram',
+                title: 'Diyagram geri yüklenemedi',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'Diyagram JSON geçersiz. Dosyayı kontrol edip tekrar deneyin. Yardım? support@chartdb.io',
             },
         },
         // TODO: Translate

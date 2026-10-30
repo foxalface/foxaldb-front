@@ -1045,7 +1045,7 @@ export const de: LanguageTranslation = {
             cancel: 'Abbrechen',
             back: 'Zurück',
             // TODO: Translate
-            import_from_file: 'Import from File',
+            restore_from_backup: 'Aus Sicherung wiederherstellen',
             empty_diagram: 'Leere Datenbank',
             continue: 'Weiter',
             import: 'Importieren',
@@ -1084,7 +1084,7 @@ export const de: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'Nur Ansicht',
         },
 
         open_diagram_dialog: {
@@ -1765,17 +1765,16 @@ export const de: LanguageTranslation = {
                     'Beim Export ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
             title: 'Diagramm wiederherstellen',
             description:
-                'Laden Sie eine Diagramm-Backup-JSON-Datei hoch. Dabei wird ein neues Diagramm erstellt; das geöffnete Diagramm wird nicht ersetzt oder zusammengeführt.',
-            cancel: 'Cancel',
+                'Laden Sie eine JSON-Sicherungsdatei des Diagramms hoch. Es wird ein neues Diagramm erstellt; das geöffnete Diagramm wird nicht ersetzt oder zusammengeführt.',
+            cancel: 'Abbrechen',
             import: 'Wiederherstellen',
             error: {
                 title: 'Diagramm konnte nicht wiederhergestellt werden',
                 description:
-                    'Die Diagramm-JSON ist ungültig. Bitte prüfen Sie die Datei und versuchen Sie es erneut. Hilfe? support@chartdb.io',
+                    'Das Diagramm-JSON ist ungültig. Prüfen Sie die Datei und versuchen Sie es erneut. Hilfe? support@chartdb.io',
             },
         },
         // TODO: Translate

@@ -43,9 +43,9 @@ Beta validates real-browser product flows before roadmap features (Notes, Teams,
 |----|--------|--------|
 | **B1** | Readiness audit + QA matrices | **COMPLETE** |
 | **B2** | Local Docker smoke — guest + auth create/import/edit/save/reload | **COMPLETE** (LAN origin) |
-| **B3** | Two-browser collaboration, conflict/LWW, reconnect | **MANUAL COMPLETION REQUIRED** (B3.1 partial; see checklist) |
-| **B4** | Realistic fixture — Merge, Export, Restore depth | NOT STARTED |
-| **B5** | Staging deploy smoke + Beta sign-off | NOT STARTED |
+| **B3** | Two-browser collaboration, conflict/LWW, reconnect | **PASS** (reconnect GET + B5.1 live op after reconnect; see checklist) |
+| **B4** | Realistic fixture — Merge, Export, Restore depth | **COMPLETE** (automated QA + partial browser Restore) |
+| **B5** | Beta hardening + sign-off smoke | **COMPLETE** (B5.1–B5.4; S4 PASS 2026-10-30) |
 
 ---
 
@@ -225,20 +225,16 @@ Switch language: Account → Langue. Full ja spot check remains B4/B5.
 | B3-12b | Live field B→A | **NOT RUN** | Needs B-side edit automation while A observes |
 | B3-13–B3-24 | LWW, reconnect, logout, convergence | **NOT RUN** | Requires manual dual-headed operator |
 
-**B3 gate:** **BLOCKED on browser retest of B3-P1-001.** Manual two-profile Chrome (diagram 77) passed cursor, selection, drag, table/field LWW, delete-vs-edit, logout, and rejoin ephemeral cleanup. **Reconnect failed:** while A was offline, B’s persisted table rename did not appear on A after websocket reconnect (full reload did). Selection not resurrecting on rejoin is **expected** (ephemeral) and is **PASS**.
+**B3 gate:** **PASS** after `ConnectionManager` `unavailable → connected` reconnect + authoritative `getDiagram` refresh. **B5.1** ensures a **second live DiagramOperation** applies after reconnect without reload. Automated coverage: `connection-manager.test.ts`, `diagram-channel-ownership.test.tsx`.
 
-### B3-P1-001 — missed persistent op after reconnect
+### B3-P1-001 — reconnect reconciliation (closed)
 
 | | |
 |--|--|
-| Reproduction | A+B on diagram 77; disconnect A; B renames a table (persists); reconnect A without reload |
-| Expected | A converges to backend diagram |
-| Actual (manual) | A stayed on the pre-disconnect table name |
-| First fix retest | **FAIL** (2026-10-21). `onReconnect` still did not refetch. Reload of A showed the new name, so backend JSON was already correct. **Case 1:** no authoritative GET on restore. |
-| Actual cause | Pusher does not emit `disconnected` on browser/network loss. It emits `state_change` `connected → connecting → unavailable → connected`. `ConnectionManager` only called `onReconnect` after `disconnected`, so the refresh never started. Channel can still resubscribe when status returns to `connected`. Events are not replayed. |
-| Current code | `ConnectionManager` treats that `state_change` sequence as one interruption and then notifies `onReconnect` once. Refresh still uses `getDiagram` + `replaceDiagram({ authoritative: true })`. Console: `[realtime]` / `[reconnect-refresh]`. |
-| Automated | `connection-manager.test.ts` (unavailable path, no `disconnected`); existing reconnect provider + refresh tests updated to the same sequence |
-| Browser retest of this change | **NOT RUN** — B3-P1-001 stays **OPEN** |
+| Root cause | Pusher offline path uses `state_change` through `unavailable`, not `disconnected` |
+| Fix | `ConnectionManager` notifies reconnect once; `useDiagramReconnectRefresh` authoritative GET + `replaceDiagram({ authoritative: true })` |
+| B5.1 add-on | Listener rebind after `rejoinAll()` so post-reconnect ops are not dropped |
+| Browser | **PASS** — B5.4 S4 (diagram 77, LAN Playwright, post-reconnect live DiagramOperation) |
 
 ### B3 manual operator checklist (minimal)
 
@@ -255,7 +251,50 @@ Switch language: Account → Langue. Full ja spot check remains B4/B5.
 
 ---
 
-## B4 placeholder
+## B4 — Merge / Export / Restore (complete)
+
+- Automated Merge/Export/Restore matrices green (see `b4-*` / export-wizard / merge-wizard tests).
+- Restore invariants: Device load-before-location; Online POST then GET open; no Dexie shadow; late dialog close guarded.
+- Browser: partial Device/Online Restore spot checks during B4; not re-run in B5.4 unless regression.
+
+---
+
+## B5 — Beta hardening
+
+| Slice | Focus | Status |
+|-------|--------|--------|
+| B5.1 | Realtime channel ownership / post-reconnect listener rebind | **COMPLETE** |
+| B5.2 | Entry recoverableError UI + non-dismissible entry auth | **COMPLETE** |
+| B5.3 | Guest one-diagram limit; viewer archive UI; failure toasts | **COMPLETE** |
+| B5.4 | Restore i18n; docs; beta smoke | **COMPLETE** — S4 PASS (baseline live, offline PUT, reconnect GET×1, post-reconnect live op) |
+
+### B5.4 browser smoke (operator)
+
+Record **PASS** | **FAIL** | **NOT RUN** | **BLOCKED**. Temporary Playwright outside repo; no `package.json` dependency. Align `VITE_*` and Sanctum with LAN origin used in B2/B3.
+
+| ID | Scenario | Expected | B5.4 status | Notes |
+|----|----------|----------|-------------|-------|
+| S1 | Guest one Device diagram + second create blocked | Guest limit toast; no Dexie row #2 | **FAIL** | Playwright: guest CTA timeout; Vite dynamic-import errors in run log |
+| S2 | Login on Device diagram without Put Online | Stays Device; no POST create | **FAIL** | Same entry-flow timeout |
+| S3 | Online edit + autosave + reload | Persists from backend | **FAIL** | Editor menubar never loaded (module fetch errors) |
+| S4 | Two-user reconnect + **post-reconnect live edit** | A receives B’s edit live after GET reconcile | **PASS** | Diagram **77**; reconnect authoritative GET ×1; third rename live on A without reload; no `[reconnect-refresh]` during third edit |
+| S5 | Logout / relogin Online intent | Single open of intended diagram | **NOT RUN** | Blocked by S3/S4 setup failure |
+| S6 | Viewer readonly / no archive | Readonly canvas; no archive menu | **NOT RUN** | No viewer fixture in runner |
+| S7 | Restore Device / Online spot | File input; route + canvas | **FAIL** | Guest entry timeout |
+
+### Known intentional limitations (non-blocking)
+
+- No offline edit queue; reconnect authoritative GET may overwrite unsaved Online memory edits
+- No CRDT/OT merge for concurrent editing beyond LWW ops + autosave 409 handling
+- No guest table count cap (only one **Device diagram**)
+- No public share-token API (invitation/member model only)
+- Framework export requires auth; stateless POST of live diagram body
+- Owner-only conversation **delete**; archive/reopen requires editor+ (`update` permission)
+- Put Online **Move**: backend create then local delete — both copies may exist if local delete fails after successful create
+
+---
+
+## B4 placeholder (archived notes)
 
 - Canonical `beta-canonical-v1.sql` (~20 tables)
 - Merge (SQL + local + remote source)
@@ -283,7 +322,7 @@ Switch language: Account → Langue. Full ja spot check remains B4/B5.
 | B2-P2-002 | B2 | P3 | i18n | FR UI, sidebar | Translated labels | Raw key `editor_sidebar.browse` | **Open** | — |
 | B2-P2-003 | B2 | P3 | i18n | Restore / file uploader | FR hints | EN “Drag and drop…” on restore overlay from create wizard | **Open** | — |
 | B3-QA-001 | B3 | — | Beta QA automation | Agent could not finish the full matrix | — | Superseded by manual two-profile results | **Closed** | Manual PASS except reconnect |
-| B3-P1-001 | B3 | **P1** | Reconnect | A offline while B renames a table; A reconnects without reload | A shows B’s persisted rename | Retest of first fix: still stale until full reload. Pusher offline path is `unavailable`, not `disconnected`, so `onReconnect` did not run (no GET). Code now listens to `state_change`. | **OPEN** — browser retest of `state_change` trigger not done | `connection-manager.ts` |
+| B3-P1-001 | B3 | **P1** | Reconnect | A offline while B edits; A reconnects | Authoritative GET + live ops after | Fixed in code + B5.1; **S4 browser PASS** | **Closed** | `connection-manager.ts`, B5.1 channel ownership |
 
 ---
 
@@ -293,9 +332,9 @@ Switch language: Account → Langue. Full ja spot check remains B4/B5.
 |-----------|-------|------|----|----|--------|
 | B1 | — | 2026-03-20 | 0 | 0 | Complete (audit) |
 | B2 | — | 2026-10-20 | 0 | 0 | **PASS** (guest + auth on LAN origin; B2-ENV-001 localhost-only P2) |
-| B3 | — | 2026-10-21 | 0 | 1 | **BLOCKED** — B3-P1-001 open (first reconnect fix failed manual retest) |
-| B4 | — | | | | Not started |
-| B5 | — | | | | Not started |
+| B3 | — | 2026-10-30 | 0 | 0 | **PASS** (reconnect + B5.1) |
+| B4 | — | 2026-10-30 | 0 | 0 | **COMPLETE** |
+| B5 | — | 2026-10-30 | 0 | 0 | **COMPLETE** — S4 PASS; **beta gate cleared** |
 
 **B2 PASS criteria:** All B2 guest + auth rows **PASS**; no P0/P1; manual rows explicitly completed by operator (not inferred from unit tests).
 

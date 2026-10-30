@@ -1020,7 +1020,7 @@ export const ko_KR: LanguageTranslation = {
 
             cancel: '취소',
             back: '뒤로가기',
-            import_from_file: '파일에서 가져오기',
+            restore_from_backup: '백업에서 복원',
             empty_diagram: '빈 데이터베이스',
             continue: '계속',
             import: '가져오기',
@@ -1059,7 +1059,7 @@ export const ko_KR: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: '보기 전용',
         },
 
         open_diagram_dialog: {
@@ -1713,15 +1713,15 @@ export const ko_KR: LanguageTranslation = {
             },
         },
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: '다이어그램 복원',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
+                '다이어그램 백업 JSON 파일을 업로드하세요. 새 다이어그램을 만들며, 열린 다이어그램을 대체하거나 병합하지 않습니다.',
             cancel: '취소',
-            import: 'Restore',
+            import: '복원',
             error: {
-                title: 'Could not restore diagram',
+                title: '다이어그램을 복원할 수 없습니다',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    '다이어그램 JSON이 유효하지 않습니다. 파일을 확인하고 다시 시도하세요. 도움말: support@chartdb.io',
             },
         },
         // TODO: Translate

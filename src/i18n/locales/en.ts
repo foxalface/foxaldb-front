@@ -1014,7 +1014,7 @@ export const en = {
             },
 
             cancel: 'Cancel',
-            import_from_file: 'Import from File',
+            restore_from_backup: 'Restore from backup',
             back: 'Back',
             empty_diagram: 'Empty database',
             continue: 'Continue',

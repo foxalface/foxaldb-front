@@ -1033,7 +1033,7 @@ export const ja: LanguageTranslation = {
             cancel: 'キャンセル',
             back: '戻る',
             // TODO: Translate
-            import_from_file: 'Import from File',
+            restore_from_backup: 'バックアップから復元',
             empty_diagram: '空のデータベース',
             continue: '続行',
             import: 'インポート',
@@ -1072,7 +1072,7 @@ export const ja: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: '閲覧のみ',
         },
 
         open_diagram_dialog: {
@@ -1751,17 +1751,16 @@ export const ja: LanguageTranslation = {
                 description: 'エラーが発生しました。もう一度お試しください。',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'ダイアグラムを復元',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
-            cancel: 'Cancel',
-            import: 'Restore',
+                'ダイアグラムのバックアップ JSON をアップロードします。新しいダイアグラムを作成し、開いているダイアグラムを置き換えたりマージしたりしません。',
+            cancel: 'キャンセル',
+            import: '復元',
             error: {
-                title: 'Could not restore diagram',
+                title: 'ダイアグラムを復元できませんでした',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'ダイアグラム JSON が無効です。ファイルを確認して再試行してください。サポート: support@chartdb.io',
             },
         },
         // TODO: Translate

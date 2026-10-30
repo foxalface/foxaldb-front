@@ -1019,7 +1019,7 @@ export const uk: LanguageTranslation = {
 
             cancel: 'Скасувати',
             back: 'Назад',
-            import_from_file: 'Імпортувати з файлу',
+            restore_from_backup: 'Відновити з резервної копії',
             empty_diagram: 'Порожня база даних',
             continue: 'Продовжити',
             import: 'Імпорт',
@@ -1058,7 +1058,7 @@ export const uk: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'Лише перегляд',
         },
 
         open_diagram_dialog: {
@@ -1718,15 +1718,15 @@ export const uk: LanguageTranslation = {
             },
         },
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'Відновити діаграму',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
+                'Завантажте JSON-файл резервної копії діаграми. Створюється нова діаграма; відкриту не замінює і не зливає.',
             cancel: 'Скасувати',
-            import: 'Restore',
+            import: 'Відновити',
             error: {
-                title: 'Could not restore diagram',
+                title: 'Не вдалося відновити діаграму',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'JSON діаграми недійсний. Перевірте файл і спробуйте знову. Допомога: support@chartdb.io',
             },
         },
         // TODO: Translate

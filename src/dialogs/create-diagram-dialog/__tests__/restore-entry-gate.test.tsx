@@ -38,7 +38,7 @@ describe('Restore entry gate', () => {
 
         expect(
             screen.getByRole('button', {
-                name: 'new_diagram_dialog.import_from_file',
+                name: 'new_diagram_dialog.restore_from_backup',
             })
         ).toBeInTheDocument();
 
@@ -57,7 +57,7 @@ describe('Restore entry gate', () => {
 
         expect(
             screen.queryByRole('button', {
-                name: 'new_diagram_dialog.import_from_file',
+                name: 'new_diagram_dialog.restore_from_backup',
             })
         ).not.toBeInTheDocument();
     });

@@ -1034,7 +1034,7 @@ export const es: LanguageTranslation = {
             cancel: 'Cancelar',
             back: 'Atrás',
             // TODO: Translate
-            import_from_file: 'Import from File',
+            restore_from_backup: 'Restaurar desde copia de seguridad',
             empty_diagram: 'Base de datos vacía',
             continue: 'Continuar',
             import: 'Importar',
@@ -1073,7 +1073,7 @@ export const es: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'Solo lectura',
         },
 
         open_diagram_dialog: {
@@ -1747,17 +1747,16 @@ export const es: LanguageTranslation = {
                 description: 'Ha ocurrido un error. Inténtalo de nuevo.',
             },
         },
-        // TODO: Translate
         import_diagram_dialog: {
             title: 'Restaurar diagrama',
             description:
-                'Sube un archivo JSON de copia de seguridad del diagrama. Esto crea un diagrama nuevo; no reemplaza ni fusiona con el diagrama abierto.',
-            cancel: 'Cancel',
+                'Suba un archivo JSON de copia de seguridad del diagrama. Crea un diagrama nuevo; no reemplaza ni fusiona con el diagrama abierto.',
+            cancel: 'Cancelar',
             import: 'Restaurar',
             error: {
                 title: 'No se pudo restaurar el diagrama',
                 description:
-                    'El JSON del diagrama no es válido. Comprueba el archivo e inténtalo de nuevo. ¿Ayuda? support@chartdb.io',
+                    'El JSON del diagrama no es válido. Compruebe el archivo e inténtelo de nuevo. ¿Ayuda? support@chartdb.io',
             },
         },
         // TODO: Translate

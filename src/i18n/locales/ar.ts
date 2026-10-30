@@ -1002,7 +1002,7 @@ export const ar: LanguageTranslation = {
             },
 
             cancel: 'إلغاء',
-            import_from_file: 'استيراد من ملف',
+            restore_from_backup: 'استعادة من نسخة احتياطية',
             back: 'رجوع',
             empty_diagram: 'قاعدة بيانات فارغة',
             continue: 'متابعة',
@@ -1042,7 +1042,7 @@ export const ar: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'عرض فقط',
         },
 
         open_diagram_dialog: {
@@ -1686,15 +1686,15 @@ export const ar: LanguageTranslation = {
             },
         },
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'استعادة المخطط',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
+                'ارفع ملف JSON لنسخة احتياطية من المخطط. يُنشئ ذلك مخططًا جديدًا ولا يستبدل المخطط المفتوح ولا يدمج فيه.',
             cancel: 'إلغاء',
-            import: 'Restore',
+            import: 'استعادة',
             error: {
-                title: 'Could not restore diagram',
+                title: 'تعذر استعادة المخطط',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'JSON المخطط غير صالح. تحقق من الملف وحاول مرة أخرى. مساعدة؟ support@chartdb.io',
             },
         },
         import_dbml_dialog: {

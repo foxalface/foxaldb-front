@@ -943,7 +943,7 @@ export const zh_TW: LanguageTranslation = {
             },
 
             cancel: '取消',
-            import_from_file: '從檔案匯入',
+            restore_from_backup: '從備份還原',
             back: '返回',
             empty_diagram: '空資料庫',
             continue: '繼續',
@@ -982,7 +982,7 @@ export const zh_TW: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: '僅檢視',
         },
 
         open_diagram_dialog: {
@@ -1579,15 +1579,15 @@ export const zh_TW: LanguageTranslation = {
         },
 
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: '還原圖表',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
+                '上傳圖表備份 JSON 檔案。會建立新圖表，不會取代或合併到目前開啟的圖表。',
             cancel: '取消',
-            import: 'Restore',
+            import: '還原',
             error: {
-                title: 'Could not restore diagram',
+                title: '無法還原圖表',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    '圖表 JSON 無效。請檢查檔案後再試。需要協助？ support@chartdb.io',
             },
         },
         // TODO: Translate

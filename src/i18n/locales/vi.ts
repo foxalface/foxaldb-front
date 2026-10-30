@@ -1014,7 +1014,7 @@ export const vi: LanguageTranslation = {
             },
 
             cancel: 'Hủy',
-            import_from_file: 'Nhập từ tệp',
+            restore_from_backup: 'Khôi phục từ bản sao lưu',
             back: 'Trở lại',
             empty_diagram: 'Cơ sở dữ liệu trống',
             continue: 'Tiếp tục',
@@ -1054,7 +1054,7 @@ export const vi: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'Chỉ xem',
         },
 
         open_diagram_dialog: {
@@ -1704,15 +1704,15 @@ export const vi: LanguageTranslation = {
         },
 
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'Khôi phục sơ đồ',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
+                'Tải lên tệp JSON sao lưu sơ đồ. Thao tác này tạo sơ đồ mới; không thay thế hoặc hợp nhất với sơ đồ đang mở.',
             cancel: 'Hủy',
-            import: 'Restore',
+            import: 'Khôi phục',
             error: {
-                title: 'Could not restore diagram',
+                title: 'Không thể khôi phục sơ đồ',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'JSON sơ đồ không hợp lệ. Kiểm tra tệp và thử lại. Trợ giúp? support@chartdb.io',
             },
         },
         // TODO: Translate

@@ -1009,7 +1009,7 @@ export const mr: LanguageTranslation = {
 
             cancel: 'रद्द करा',
             // TODO: Add translations
-            import_from_file: 'Import from File',
+            restore_from_backup: 'बॅकअपमधून पुनर्स्थापित करा',
             back: 'मागे',
             empty_diagram: 'रिक्त डेटाबेस',
             continue: 'सुरू ठेवा',
@@ -1049,7 +1049,7 @@ export const mr: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'फक्त पाहणे',
         },
 
         open_diagram_dialog: {
@@ -1708,15 +1708,15 @@ export const mr: LanguageTranslation = {
 
         // TO
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'डायग्राम पुनर्स्थापित करा',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
-            cancel: 'Cancel',
-            import: 'Restore',
+                'डायग्राम बॅकअप JSON फाइल अपलोड करा. हे नवीन डायग्राम तयार करते; उघडलेले डायग्राम बदलत नाही किंवा विलीन करत नाही.',
+            cancel: 'रद्द करा',
+            import: 'पुनर्स्थापित करा',
             error: {
-                title: 'Could not restore diagram',
+                title: 'डायग्राम पुनर्स्थापित करता आले नाही',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'डायग्राम JSON अवैध आहे. फाइल तपासा आणि पुन्हा प्रयत्न करा. मदत? support@chartdb.io',
             },
         },
         // TODO: Translate

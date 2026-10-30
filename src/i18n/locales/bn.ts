@@ -1010,7 +1010,7 @@ export const bn: LanguageTranslation = {
 
             cancel: 'বাতিল করুন',
             back: 'ফিরে যান',
-            import_from_file: 'ফাইল থেকে আমদানি করুন',
+            restore_from_backup: 'ব্যাকআপ থেকে পুনরুদ্ধার',
             empty_diagram: 'খালি ডাটাবেস',
             continue: 'চালিয়ে যান',
             import: 'আমদানি করুন',
@@ -1049,7 +1049,7 @@ export const bn: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'শুধু দেখুন',
         },
 
         open_diagram_dialog: {
@@ -1709,15 +1709,15 @@ export const bn: LanguageTranslation = {
         },
 
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'ডায়াগ্রাম পুনরুদ্ধার',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
-            cancel: 'বাতিল করুন',
-            import: 'Restore',
+                'ডায়াগ্রাম ব্যাকআপ JSON ফাইল আপলোড করুন। এটি একটি নতুন ডায়াগ্রাম তৈরি করে; খোলা ডায়াগ্রাম প্রতিস্থাপন বা মার্জ করে না।',
+            cancel: 'বাতিল',
+            import: 'পুনরুদ্ধার',
             error: {
-                title: 'Could not restore diagram',
+                title: 'ডায়াগ্রাম পুনরুদ্ধার করা যায়নি',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'ডায়াগ্রাম JSON অবৈধ। ফাইল পরীক্ষা করে আবার চেষ্টা করুন। সাহায্য? support@chartdb.io',
             },
         },
         // TODO: Translate

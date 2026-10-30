@@ -1041,7 +1041,7 @@ export const fr: LanguageTranslation = {
 
             cancel: 'Annuler',
             back: 'Retour',
-            import_from_file: "Importer à partir d'un fichier",
+            restore_from_backup: 'Restaurer depuis une sauvegarde',
             empty_diagram: 'Base de données vide',
             continue: 'Continuer',
             import: 'Importer',
@@ -1080,7 +1080,7 @@ export const fr: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'Lecture seule',
         },
 
         open_diagram_dialog: {

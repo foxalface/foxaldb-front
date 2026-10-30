@@ -1018,7 +1018,7 @@ export const hr: LanguageTranslation = {
             },
 
             cancel: 'Odustani',
-            import_from_file: 'Uvezi iz datoteke',
+            restore_from_backup: 'Vrati iz sigurnosne kopije',
             back: 'Natrag',
             empty_diagram: 'Prazna baza podataka',
             continue: 'Nastavi',
@@ -1058,7 +1058,7 @@ export const hr: LanguageTranslation = {
         },
 
         editor_role: {
-            view_only: 'View only',
+            view_only: 'Samo pregled',
         },
 
         open_diagram_dialog: {
@@ -1718,15 +1718,15 @@ export const hr: LanguageTranslation = {
         },
 
         import_diagram_dialog: {
-            title: 'Restore Diagram',
+            title: 'Vrati dijagram',
             description:
-                'Upload a diagram backup JSON file. This creates a new diagram; it does not replace or merge into the diagram you have open.',
+                'Učitajte JSON sigurnosnu kopiju dijagrama. Stvara novi dijagram; ne zamjenjuje niti spaja s otvorenim dijagramom.',
             cancel: 'Odustani',
-            import: 'Restore',
+            import: 'Vrati',
             error: {
-                title: 'Could not restore diagram',
+                title: 'Dijagram nije moguće vratiti',
                 description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                    'JSON dijagrama nije valjan. Provjerite datoteku i pokušajte ponovno. Pomoć? support@chartdb.io',
             },
         },
 
