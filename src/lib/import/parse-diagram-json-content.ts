@@ -19,7 +19,7 @@ const cloneDiagramWithIds = (diagram: Diagram): Diagram => ({
     id: generateDiagramId(),
 });
 
-export const formatDiagramJsonZodPath = (path: (string | number)[]): string => {
+export const formatDiagramJsonZodPath = (path: PropertyKey[]): string => {
     if (path.length === 0) {
         return '';
     }
@@ -29,7 +29,11 @@ export const formatDiagramJsonZodPath = (path: (string | number)[]): string => {
             return `${acc}[${segment}]`;
         }
 
-        return acc.length === 0 ? segment : `${acc}.${segment}`;
+        if (typeof segment === 'string') {
+            return acc.length === 0 ? segment : `${acc}.${segment}`;
+        }
+
+        return acc;
     }, '');
 };
 
