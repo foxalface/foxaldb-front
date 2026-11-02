@@ -150,6 +150,16 @@ const routes: RouteObject[] = [
         },
     },
     {
+        path: 'dev/benchmarks/liquid-glass',
+        async lazy() {
+            const { default: LiquidGlassBenchmarkPage } =
+                await import('./pages/dev/liquid-glass-benchmark-page');
+            return {
+                element: <LiquidGlassBenchmarkPage />,
+            };
+        },
+    },
+    {
         path: '*',
         async lazy() {
             const { NotFoundPage } =
