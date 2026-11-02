@@ -73,11 +73,15 @@ const diagramPrivateJoins = (diagramId = '77'): number =>
     ).length;
 
 vi.mock('pusher-js', () => ({
-    default: vi.fn(),
+    default: vi.fn(function PusherMock(this: unknown) {
+        return {};
+    }),
 }));
 
 vi.mock('laravel-echo', () => ({
-    default: vi.fn(() => echoInstance),
+    default: vi.fn(function LaravelEchoMock(this: unknown) {
+        return echoInstance;
+    }),
 }));
 
 vi.mock('@/hooks/use-auth', () => ({

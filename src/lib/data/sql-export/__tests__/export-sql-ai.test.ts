@@ -62,7 +62,7 @@ describe('exportSQL AI SDK integration', () => {
             ...overrides,
         }) as DBTable;
 
-    const createDiagram = (overrides: Partial<Diagram>): Diagram =>
+    const createDiagram = (overrides: Partial<Diagram> = {}): Diagram =>
         ({
             id: testId(),
             name: 'diagram',

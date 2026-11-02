@@ -789,7 +789,7 @@ describe('Conversation message mutations (M10)', () => {
 
         it('prevents repeated deletion while pending', async () => {
             const user = userEvent.setup();
-            const pending = deferred<void>();
+            const pending = deferred<undefined>();
             mutationsState.deleteMessage = vi.fn(() => pending.promise);
 
             await openActiveConversation(user);
@@ -805,7 +805,7 @@ describe('Conversation message mutations (M10)', () => {
             ).toBeDisabled();
 
             await act(async () => {
-                pending.resolve();
+                pending.resolve(undefined);
             });
         });
 
