@@ -5,16 +5,12 @@ import type { Diagram } from '@/lib/domain/diagram';
 import type { StorageContext } from '@/context/storage-context/storage-context';
 import { generateDiagramId } from '@/lib/utils';
 import { nextDiagramCopyName } from './next-diagram-copy-name';
-import { assertGuestDeviceOnlyWriteAllowed } from './guest-device-diagram-limit';
 
 export const copyOnlineDiagramToDevice = async (
     listDiagrams: StorageContext['listDiagrams'],
     addDiagram: StorageContext['addDiagram'],
-    onlineDiagramId: string,
-    isAuthenticated: boolean
+    onlineDiagramId: string
 ): Promise<string> => {
-    await assertGuestDeviceOnlyWriteAllowed(isAuthenticated, listDiagrams);
-
     const raw = await getDiagram(onlineDiagramId);
     const source = normalizeDiagramFromApi(raw, onlineDiagramId);
     const existing = await listDiagrams();

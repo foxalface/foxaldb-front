@@ -712,13 +712,6 @@ export const uk: LanguageTranslation = {
                 other_group: 'Інші бази даних',
             },
 
-            guest_limit: {
-                title: 'Досягнуто ліміт гостового режиму',
-                description:
-                    'Увійдіть, щоб створювати та зберігати більше діаграм.',
-                sign_in: 'Увійти',
-            },
-
             destination: {
                 aria_label: 'Куди зберегти нову діаграму',
             },

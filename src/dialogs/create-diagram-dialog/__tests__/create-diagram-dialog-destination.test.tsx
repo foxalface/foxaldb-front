@@ -535,7 +535,7 @@ describe('CreateDiagramDialog destination', () => {
         expect(setDiagramLocation).not.toHaveBeenCalled();
     });
 
-    it('applies the guest limit only to an unauthenticated device create', async () => {
+    it('lets a guest create a second device diagram when one already exists locally', async () => {
         listDiagrams.mockResolvedValue([{ id: 'existing' }]);
         const user = userEvent.setup();
         renderCreateDialog();
@@ -543,13 +543,12 @@ describe('CreateDiagramDialog destination', () => {
         await createEmpty(user);
 
         await waitFor(() => {
-            expect(toast).toHaveBeenCalled();
+            expect(addDiagram).toHaveBeenCalledTimes(1);
         });
 
-        expect(addDiagram).not.toHaveBeenCalled();
+        expect(toast).not.toHaveBeenCalled();
         expect(createDiagram).not.toHaveBeenCalled();
-        expect(setDiagramLocation).not.toHaveBeenCalled();
-        expect(loadDiagramFromData).not.toHaveBeenCalled();
+        expectDeviceOpen();
     });
 
     it('does not persist when the wizard is cancelled', async () => {

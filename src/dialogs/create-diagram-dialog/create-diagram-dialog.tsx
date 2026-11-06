@@ -46,8 +46,6 @@ import {
     persistedNewDiagramId,
 } from '@/lib/diagram/persist-new-diagram';
 import type { DiagramCreationDestination } from '@/lib/diagram/diagram-creation-destination';
-import { GuestDeviceDiagramLimitError } from '@/lib/diagram/guest-device-diagram-limit';
-import { useGuestDeviceDiagramLimitToast } from '@/hooks/use-guest-device-diagram-limit-toast';
 import { ChooseCreationDestinationStep } from './choose-creation-destination/choose-creation-destination-step';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {
@@ -65,8 +63,6 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     const { clearDiagramAccess } = useDiagramAccess();
     const { t } = useTranslation();
     const { toast } = useToast();
-    const { notifyGuestDeviceDiagramLimitReached } =
-        useGuestDeviceDiagramLimitToast();
 
     const isEntryFlowOwned = entryCreateDiagramActions !== undefined;
     const canClose = useMemo(
@@ -145,56 +141,40 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
     const persistAndOpenNewDiagram = useCallback(
         async (diagram: Diagram, destination: DiagramCreationDestination) => {
-            try {
-                const persisted = await persistNewDiagram(
-                    diagram,
-                    destination,
-                    {
-                        addDiagram,
-                        listDiagrams,
-                        isAuthenticated,
-                    }
+            const persisted = await persistNewDiagram(diagram, destination, {
+                addDiagram,
+                isAuthenticated,
+            });
+
+            if (entryCreateDiagramActions) {
+                entryCreateDiagramActions.onDiagramCreated(
+                    persistedNewDiagramId(persisted)
                 );
-
-                if (entryCreateDiagramActions) {
-                    entryCreateDiagramActions.onDiagramCreated(
-                        persistedNewDiagramId(persisted)
-                    );
-                    resetWizardBody();
-                    return;
-                }
-
-                closeCreateDiagramDialog();
-
-                await openPersistedNewDiagram(persisted, {
-                    setDiagramLocation,
-                    clearDiagramAccess,
-                    loadDiagramFromData,
-                    navigate: (path) => {
-                        navigate(path);
-                    },
-                    updateDefaultDiagramId: isAuthenticated
-                        ? async (diagramId) => {
-                              await updateConfig({
-                                  config: { defaultDiagramId: diagramId },
-                              });
-                          }
-                        : undefined,
-                    navigateAfterDeviceOpen: isAuthenticated,
-                });
-            } catch (caught: unknown) {
-                if (caught instanceof GuestDeviceDiagramLimitError) {
-                    notifyGuestDeviceDiagramLimitReached();
-                    return;
-                }
-
-                throw caught;
+                resetWizardBody();
+                return;
             }
+
+            closeCreateDiagramDialog();
+
+            await openPersistedNewDiagram(persisted, {
+                setDiagramLocation,
+                clearDiagramAccess,
+                loadDiagramFromData,
+                navigate: (path) => {
+                    navigate(path);
+                },
+                updateDefaultDiagramId: isAuthenticated
+                    ? async (diagramId) => {
+                          await updateConfig({
+                              config: { defaultDiagramId: diagramId },
+                          });
+                      }
+                    : undefined,
+                navigateAfterDeviceOpen: isAuthenticated,
+            });
         },
         [
             isAuthenticated,
-            listDiagrams,
-            notifyGuestDeviceDiagramLimitReached,
             addDiagram,
             entryCreateDiagramActions,
             resetWizardBody,

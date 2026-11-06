@@ -710,12 +710,6 @@ export const hi: LanguageTranslation = {
                 other_group: 'अन्य डेटाबेस',
             },
 
-            guest_limit: {
-                title: 'अतिथि मोड की सीमा पूरी',
-                description: 'अधिक आरेख बनाने और सहेजने के लिए साइन इन करें।',
-                sign_in: 'साइन इन',
-            },
-
             destination: {
                 aria_label: 'नया आरेख कहाँ सहेजना है',
             },

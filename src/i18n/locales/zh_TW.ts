@@ -673,12 +673,6 @@ export const zh_TW: LanguageTranslation = {
                 other_group: '其他資料庫',
             },
 
-            guest_limit: {
-                title: '已達訪客模式上限',
-                description: '登入以建立並儲存更多圖表。',
-                sign_in: '登入',
-            },
-
             destination: {
                 aria_label: '新圖表的儲存位置',
             },

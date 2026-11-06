@@ -713,12 +713,6 @@ export const vi: LanguageTranslation = {
                 other_group: 'Cơ sở dữ liệu khác',
             },
 
-            guest_limit: {
-                title: 'Đã đạt giới hạn chế độ khách',
-                description: 'Đăng nhập để tạo và lưu thêm sơ đồ.',
-                sign_in: 'Đăng nhập',
-            },
-
             destination: {
                 aria_label: 'Nơi lưu sơ đồ mới',
             },

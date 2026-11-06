@@ -719,13 +719,6 @@ export const es: LanguageTranslation = {
                 other_group: 'Otras bases de datos',
             },
 
-            guest_limit: {
-                title: 'Límite del modo invitado alcanzado',
-                description:
-                    'Inicia sesión para crear y guardar más diagramas.',
-                sign_in: 'Iniciar sesión',
-            },
-
             destination: {
                 aria_label: 'Dónde guardar el nuevo diagrama',
             },

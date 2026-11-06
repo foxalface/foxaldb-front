@@ -22,7 +22,6 @@ import {
     type DiagramAccessRole,
 } from '@/lib/api/diagrams';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useAuth } from '@/hooks/use-auth';
 import { useStorage } from '@/hooks/use-storage';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useToast } from '@/components/toast/use-toast';
@@ -55,7 +54,6 @@ export const OnlineDiagramRowActionsMenu: React.FC<
     numberOfOnlineDiagrams,
 }) => {
     const { diagramId: activeDiagramId } = useChartDB();
-    const { isAuthenticated } = useAuth();
     const { addDiagram, listDiagrams } = useStorage();
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -109,8 +107,7 @@ export const OnlineDiagramRowActionsMenu: React.FC<
             const localDiagramId = await copyOnlineDiagramToDevice(
                 listDiagrams,
                 addDiagram,
-                diagramId,
-                isAuthenticated
+                diagramId
             );
             await onLocalListChanged();
             onOpenLocal(localDiagramId);
@@ -124,7 +121,6 @@ export const OnlineDiagramRowActionsMenu: React.FC<
         listDiagrams,
         addDiagram,
         diagramId,
-        isAuthenticated,
         onLocalListChanged,
         onOpenLocal,
         toast,

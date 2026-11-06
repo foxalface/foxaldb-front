@@ -265,7 +265,7 @@ Switch language: Account → Langue. Full ja spot check remains B4/B5.
 |-------|--------|--------|
 | B5.1 | Realtime channel ownership / post-reconnect listener rebind | **COMPLETE** |
 | B5.2 | Entry recoverableError UI + non-dismissible entry auth | **COMPLETE** |
-| B5.3 | Guest one-diagram limit; viewer archive UI; failure toasts | **COMPLETE** |
+| B5.3 | Viewer archive UI; failure toasts | **COMPLETE** |
 | B5.4 | Restore i18n; docs; beta smoke | **COMPLETE** — S4 PASS (baseline live, offline PUT, reconnect GET×1, post-reconnect live op) |
 
 ### B5.4 browser smoke (operator)
@@ -274,7 +274,7 @@ Record **PASS** | **FAIL** | **NOT RUN** | **BLOCKED**. Temporary Playwright out
 
 | ID | Scenario | Expected | B5.4 status | Notes |
 |----|----------|----------|-------------|-------|
-| S1 | Guest one Device diagram + second create blocked | Guest limit toast; no Dexie row #2 | **FAIL** | Playwright: guest CTA timeout; Vite dynamic-import errors in run log |
+| S1 | Guest second blank create (Device) | Second diagram in Dexie; no erroneous limit toast | **NOT RUN** | Historical run **FAIL** was automation timeout; product no longer caps guest local diagram count — re-record when runner is stable |
 | S2 | Login on Device diagram without Put Online | Stays Device; no POST create | **FAIL** | Same entry-flow timeout |
 | S3 | Online edit + autosave + reload | Persists from backend | **FAIL** | Editor menubar never loaded (module fetch errors) |
 | S4 | Two-user reconnect + **post-reconnect live edit** | A receives B’s edit live after GET reconcile | **PASS** | Diagram **77**; reconnect authoritative GET ×1; third rename live on A without reload; no `[reconnect-refresh]` during third edit |
@@ -286,7 +286,7 @@ Record **PASS** | **FAIL** | **NOT RUN** | **BLOCKED**. Temporary Playwright out
 
 - No offline edit queue; reconnect authoritative GET may overwrite unsaved Online memory edits
 - No CRDT/OT merge for concurrent editing beyond LWW ops + autosave 409 handling
-- No guest table count cap (only one **Device diagram**)
+- No guest table count cap; **multiple local (Device) diagrams** allowed in Dexie
 - No public share-token API (invitation/member model only)
 - Framework export requires auth; stateless POST of live diagram body
 - Owner-only conversation **delete**; archive/reopen requires editor+ (`update` permission)
@@ -318,7 +318,7 @@ Record **PASS** | **FAIL** | **NOT RUN** | **BLOCKED**. Temporary Playwright out
 | ID | Milestone | Severity | Area | Steps | Expected | Actual | Status | Commit/Fix |
 |----|-----------|----------|------|-------|----------|--------|--------|------------|
 | B2-ENV-001 | B2 | **P2** | Local auth / Sanctum | Open `http://localhost:5173`, login with valid user | Login succeeds | Alert **CSRF token mismatch**; API cookies target `192.168.1.168:8000` per `frontend/.env` | **Open** | Auth smoke **PASS** on `http://192.168.1.168:5173`; align URLs or document LAN origin for local QA |
-| B2-P2-001 | B2 | P2 | Guest import UX | Guest with entry blank diagram → Nouveau → Import SQL | Import creates diagram | Guest limit toast unless Dexie has 0 diagrams (product: 1 guest diagram) | **Open** | QA workaround: delete local diagrams or import as first diagram |
+| B2-P2-001 | B2 | P2 | Guest import UX | Guest with entry blank diagram → Nouveau → Import SQL | Import creates diagram | **Closed** — product allows multiple local diagrams; no guest diagram-count toast | **Closed** | Superseded: Dexie no longer blocked after one Device diagram |
 | B2-P2-002 | B2 | P3 | i18n | FR UI, sidebar | Translated labels | Raw key `editor_sidebar.browse` | **Open** | — |
 | B2-P2-003 | B2 | P3 | i18n | Restore / file uploader | FR hints | EN “Drag and drop…” on restore overlay from create wizard | **Open** | — |
 | B3-QA-001 | B3 | — | Beta QA automation | Agent could not finish the full matrix | — | Superseded by manual two-profile results | **Closed** | Manual PASS except reconnect |

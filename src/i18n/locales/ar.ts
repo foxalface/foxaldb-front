@@ -698,12 +698,6 @@ export const ar: LanguageTranslation = {
                 other_group: 'قواعد بيانات أخرى',
             },
 
-            guest_limit: {
-                title: 'تم بلوغ حد وضع الضيف',
-                description: 'سجّل الدخول لإنشاء وحفظ المزيد من المخططات.',
-                sign_in: 'تسجيل الدخول',
-            },
-
             destination: {
                 aria_label: 'مكان حفظ المخطط الجديد',
             },

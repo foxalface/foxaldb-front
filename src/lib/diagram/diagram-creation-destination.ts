@@ -16,12 +16,3 @@ export type DiagramCreationDestination = 'device' | 'online';
 export const defaultDiagramCreationDestination = (
     isAuthenticated: boolean
 ): DiagramCreationDestination => (isAuthenticated ? 'online' : 'device');
-
-/**
- * The guest one-diagram limit is a device-storage rule for unauthenticated
- * users. Authenticated device creation is not guest storage.
- */
-export const appliesGuestDeviceDiagramLimit = (
-    destination: DiagramCreationDestination,
-    isAuthenticated: boolean
-): boolean => destination === 'device' && !isAuthenticated;

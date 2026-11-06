@@ -710,13 +710,6 @@ export const mr: LanguageTranslation = {
                 other_group: 'इतर डेटाबेस',
             },
 
-            guest_limit: {
-                title: 'अतिथी मोड मर्यादा गाठली',
-                description:
-                    'अधिक डायग्राम तयार आणि जतन करण्यासाठी साइन इन करा.',
-                sign_in: 'साइन इन',
-            },
-
             destination: {
                 aria_label: 'नवीन डायग्राम कुठे जतन करायचे',
             },

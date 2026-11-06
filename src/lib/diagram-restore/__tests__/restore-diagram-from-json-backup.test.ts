@@ -34,12 +34,10 @@ const validDiagramJson = JSON.stringify({
 
 describe('persistRestoredDiagramFromJson', () => {
     const addDiagram = vi.fn();
-    const listDiagrams = vi.fn().mockResolvedValue([]);
 
     beforeEach(() => {
         vi.clearAllMocks();
         addDiagram.mockResolvedValue(undefined);
-        listDiagrams.mockResolvedValue([]);
         createDiagram.mockResolvedValue({ diagram: { id: 99 } });
         getDiagram.mockRejectedValue(
             new Error('restore must not GET the created diagram')
@@ -52,7 +50,6 @@ describe('persistRestoredDiagramFromJson', () => {
                 destination: 'device',
                 isAuthenticated: false,
                 addDiagram,
-                listDiagrams,
             })
         ).rejects.toBeInstanceOf(RestoreDiagramJsonParseError);
 
@@ -68,7 +65,6 @@ describe('persistRestoredDiagramFromJson', () => {
                 destination: 'device',
                 isAuthenticated: false,
                 addDiagram,
-                listDiagrams,
             }
         );
 
@@ -90,7 +86,6 @@ describe('persistRestoredDiagramFromJson', () => {
                 destination: 'device',
                 isAuthenticated: true,
                 addDiagram,
-                listDiagrams,
             }
         );
 
@@ -107,7 +102,6 @@ describe('persistRestoredDiagramFromJson', () => {
                 destination: 'online',
                 isAuthenticated: true,
                 addDiagram,
-                listDiagrams,
             }
         );
 
@@ -129,26 +123,10 @@ describe('persistRestoredDiagramFromJson', () => {
                 destination: 'online',
                 isAuthenticated: true,
                 addDiagram,
-                listDiagrams,
             })
         ).rejects.toThrow('network');
 
         expect(addDiagram).not.toHaveBeenCalled();
         expect(getDiagram).not.toHaveBeenCalled();
-    });
-
-    it('blocks guest device restore when a device diagram already exists', async () => {
-        listDiagrams.mockResolvedValue([{ id: 'existing' }]);
-
-        await expect(
-            persistRestoredDiagramFromJson(validDiagramJson, {
-                destination: 'device',
-                isAuthenticated: false,
-                addDiagram,
-                listDiagrams,
-            })
-        ).rejects.toMatchObject({ name: 'GuestDeviceDiagramLimitError' });
-
-        expect(addDiagram).not.toHaveBeenCalled();
     });
 });

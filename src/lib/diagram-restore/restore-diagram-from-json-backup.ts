@@ -30,7 +30,6 @@ export const persistRestoredDiagramFromJson = async (
         destination: DiagramCreationDestination;
         isAuthenticated: boolean;
         addDiagram: StorageContext['addDiagram'];
-        listDiagrams: StorageContext['listDiagrams'];
     }
 ): Promise<PersistedNewDiagram> => {
     const parsed = parseDiagramJsonContent(json);
@@ -41,7 +40,6 @@ export const persistRestoredDiagramFromJson = async (
 
     return persistNewDiagram(parsed.diagram, options.destination, {
         addDiagram: options.addDiagram,
-        listDiagrams: options.listDiagrams,
         isAuthenticated: options.isAuthenticated,
     });
 };

@@ -59,7 +59,6 @@ const catalogBackup = (): { diagram: Diagram; json: string } => {
 
 describe('B4 restore catalog', () => {
     const addDiagram = vi.fn();
-    const listDiagrams = vi.fn().mockResolvedValue([]);
     const setDiagramLocation = vi.fn();
     const clearDiagramAccess = vi.fn();
     const loadDiagramFromData = vi.fn();
@@ -68,7 +67,6 @@ describe('B4 restore catalog', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         addDiagram.mockResolvedValue(undefined);
-        listDiagrams.mockResolvedValue([]);
         createDiagram.mockResolvedValue({
             diagram: { id: 77, name: 'Catalog' },
         });
@@ -230,7 +228,6 @@ describe('B4 restore catalog', () => {
             destination: 'device',
             isAuthenticated: false,
             addDiagram,
-            listDiagrams,
         }).catch((error: unknown) => error);
         expect(malformed).toBeInstanceOf(RestoreDiagramJsonParseError);
         if (malformed instanceof RestoreDiagramJsonParseError) {
@@ -252,7 +249,6 @@ describe('B4 restore catalog', () => {
                 destination: 'device',
                 isAuthenticated: false,
                 addDiagram,
-                listDiagrams,
             }
         ).catch((error: unknown) => error);
         expect(invalidTables).toBeInstanceOf(RestoreDiagramJsonParseError);
@@ -267,7 +263,6 @@ describe('B4 restore catalog', () => {
                     destination: 'device',
                     isAuthenticated: true,
                     addDiagram,
-                    listDiagrams,
                 })
             ).rejects.toMatchObject({
                 name: 'RestoreDiagramJsonParseError',
@@ -281,7 +276,6 @@ describe('B4 restore catalog', () => {
                 destination: 'online',
                 isAuthenticated: true,
                 addDiagram,
-                listDiagrams,
             }
         ).catch((error: unknown) => error);
         expect(missingName).toBeInstanceOf(RestoreDiagramJsonParseError);
@@ -299,7 +293,6 @@ describe('B4 restore catalog', () => {
                 destination: 'device',
                 isAuthenticated: false,
                 addDiagram,
-                listDiagrams,
             }
         ).catch((error: unknown) => error);
         expect(unknownType).toBeInstanceOf(RestoreDiagramJsonParseError);
@@ -352,7 +345,6 @@ describe('B4 restore catalog', () => {
                 destination: 'device',
                 isAuthenticated,
                 addDiagram,
-                listDiagrams,
             });
 
             expect(persisted.destination).toBe('device');
@@ -377,7 +369,6 @@ describe('B4 restore catalog', () => {
             destination: 'online',
             isAuthenticated: true,
             addDiagram,
-            listDiagrams,
         });
 
         expect(persisted).toEqual({ destination: 'online', diagramId: '77' });
@@ -418,7 +409,6 @@ describe('B4 restore catalog', () => {
                 destination: 'device',
                 isAuthenticated: true,
                 addDiagram,
-                listDiagrams,
             })
         ).rejects.toThrow('dexie failed');
 
@@ -442,7 +432,6 @@ describe('B4 restore catalog', () => {
                 destination: 'online',
                 isAuthenticated: true,
                 addDiagram,
-                listDiagrams,
             })
         ).rejects.toMatchObject({ status: 401 });
 
@@ -461,7 +450,6 @@ describe('B4 restore catalog', () => {
                 destination: 'online',
                 isAuthenticated: true,
                 addDiagram,
-                listDiagrams,
             })
         ).rejects.toThrow('unauthorized');
 
@@ -479,7 +467,6 @@ describe('B4 restore catalog', () => {
                 destination: 'device',
                 isAuthenticated: false,
                 addDiagram,
-                listDiagrams,
             }
         );
         loadDiagramFromData.mockImplementation(() => {

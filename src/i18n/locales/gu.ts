@@ -703,12 +703,6 @@ export const gu: LanguageTranslation = {
                 other_group: 'અન્ય ડેટાબેઝ',
             },
 
-            guest_limit: {
-                title: 'ગેસ્ટ મોડ મર્યાદા પહોંચી',
-                description: 'વધુ ડાયાગ્રામ બનાવવા અને સાચવવા સાઇન ઇન કરો.',
-                sign_in: 'સાઇન ઇન',
-            },
-
             destination: {
                 aria_label: 'નવું ડાયાગ્રામ ક્યાં સાચવવું',
             },

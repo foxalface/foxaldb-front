@@ -4,17 +4,13 @@ import type { StorageContext } from '@/context/storage-context/storage-context';
 import { generateDiagramId } from '@/lib/utils';
 import { loadFullLocalDiagram } from './put-local-diagram-online';
 import { nextDiagramCopyName } from './next-diagram-copy-name';
-import { assertGuestDeviceOnlyWriteAllowed } from './guest-device-diagram-limit';
 
 export const duplicateLocalDiagram = async (
     getDiagram: StorageContext['getDiagram'],
     listDiagrams: StorageContext['listDiagrams'],
     addDiagram: StorageContext['addDiagram'],
-    sourceDiagramId: string,
-    isAuthenticated: boolean
+    sourceDiagramId: string
 ): Promise<string> => {
-    await assertGuestDeviceOnlyWriteAllowed(isAuthenticated, listDiagrams);
-
     const full = await loadFullLocalDiagram(getDiagram, sourceDiagramId);
 
     if (!full) {

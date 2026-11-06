@@ -717,12 +717,6 @@ export const pt_BR: LanguageTranslation = {
                 other_group: 'Outros bancos de dados',
             },
 
-            guest_limit: {
-                title: 'Limite do modo convidado atingido',
-                description: 'Entre para criar e salvar mais diagramas.',
-                sign_in: 'Entrar',
-            },
-
             destination: {
                 aria_label: 'Onde salvar o novo diagrama',
             },
