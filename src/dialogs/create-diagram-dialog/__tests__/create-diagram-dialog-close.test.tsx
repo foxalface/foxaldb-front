@@ -9,6 +9,8 @@ const closeCreateDiagramDialog = vi.fn();
 vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => ({
         isAuthenticated: true,
+        user: { default_diagram_creation_destination: 'online' as const },
+        updateDiagramCreationPreference: vi.fn(),
     }),
 }));
 
@@ -29,7 +31,6 @@ vi.mock('@/hooks/use-dialog', () => ({
     useDialog: () => ({
         closeCreateDiagramDialog,
         openAuthDialog: vi.fn(),
-        openImportDiagramDialog: vi.fn(),
     }),
 }));
 

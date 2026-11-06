@@ -1,5 +1,5 @@
 /**
- * One-off B5.4: Restore dialog + create-wizard restore entry + view_only (non-EN).
+ * One-off B5.4: Restore dialog + view_only (non-EN).
  * Run: node scripts/b54-restore-i18n.mjs
  */
 import fs from 'fs';
@@ -210,31 +210,6 @@ const restoreDialog = {
     },
 };
 
-const restoreFromBackup = {
-    en: 'Restore from backup',
-    fr: 'Restaurer depuis une sauvegarde',
-    de: 'Aus Sicherung wiederherstellen',
-    es: 'Restaurar desde copia de seguridad',
-    pt_BR: 'Restaurar do backup',
-    ja: 'バックアップから復元',
-    ko_KR: '백업에서 복원',
-    zh_CN: '从备份恢复',
-    zh_TW: '從備份還原',
-    vi: 'Khôi phục từ bản sao lưu',
-    ar: 'استعادة من نسخة احتياطية',
-    uk: 'Відновити з резервної копії',
-    tr: 'Yedekten geri yükle',
-    ru: 'Восстановить из резервной копии',
-    hi: 'बैकअप से पुनर्स्थापित करें',
-    bn: 'ব্যাকআপ থেকে পুনরুদ্ধার',
-    gu: 'બેકઅપમાંથી પુનઃસ્થાપિત કરો',
-    mr: 'बॅकअपमधून पुनर्स्थापित करा',
-    ne: 'ब्याकअपबाट पुनर्स्थापना',
-    te: 'బ్యాకప్ నుండి పునరుద్ధరించు',
-    id_ID: 'Pulihkan dari cadangan',
-    hr: 'Vrati iz sigurnosne kopije',
-};
-
 const viewOnly = {
     en: 'View only',
     fr: 'Lecture seule',
@@ -291,21 +266,6 @@ for (const file of fs.readdirSync(localesDir)) {
             /\n\s*\/\/ TODO: Translate\n\s*import_diagram_dialog:/g,
             '\n        import_diagram_dialog:'
         );
-    }
-
-    if (restoreFromBackup[key]) {
-        const label = restoreFromBackup[key].replace(/'/g, "\\'");
-        if (src.includes('restore_from_backup:')) {
-            src = src.replace(
-                /restore_from_backup: '[^']*'/,
-                `restore_from_backup: '${label}'`
-            );
-        } else if (src.includes('import_from_file:')) {
-            src = src.replace(
-                /import_from_file: '[^']*'/,
-                `restore_from_backup: '${label}'`
-            );
-        }
     }
 
     if (viewOnly[key]) {

@@ -742,6 +742,22 @@ export const de: LanguageTranslation = {
                 aria_label: 'Speicherort für das neue Diagramm',
             },
 
+            choose_creation_destination: {
+                title: 'Wo soll dieses Diagramm gespeichert werden?',
+                description:
+                    'Wählen Sie, ob es nur auf diesem Gerät bleibt oder mit Ihrem FoxalDB-Konto synchronisiert wird.',
+                device_description:
+                    'Nur in diesem Browser gespeichert. Gut für schnelle Entwürfe offline.',
+                online_description:
+                    'In Ihrem Konto gespeichert und verfügbar, wenn Sie sich auf anderen Geräten anmelden.',
+                remember_choice: 'Meine Auswahl für das nächste Mal merken',
+                back: 'Zurück',
+                create: 'Diagramm erstellen',
+                save_preference_error_title: 'Einstellung nicht gespeichert',
+                save_preference_error_description:
+                    'Ihr Diagramm wurde erstellt, aber das Standardziel konnte nicht gespeichert werden. Sie können dies in den Einstellungen ändern.',
+            },
+
             choose_intent: {
                 title: 'Was möchten Sie tun?',
                 description:
@@ -1045,7 +1061,6 @@ export const de: LanguageTranslation = {
             cancel: 'Abbrechen',
             back: 'Zurück',
             // TODO: Translate
-            restore_from_backup: 'Aus Sicherung wiederherstellen',
             empty_diagram: 'Leere Datenbank',
             continue: 'Weiter',
             import: 'Importieren',
@@ -1903,6 +1918,21 @@ export const de: LanguageTranslation = {
                 submitting: 'Speichern...',
                 success_title: 'Profil aktualisiert',
                 success_description: 'Ihr Profil wurde gespeichert.',
+                diagram_creation: {
+                    heading: 'Neue Diagramme',
+                    description:
+                        'Wenn Sie angemeldet ein Diagramm erstellen, kann FoxalDB einen Standardspeicherort verwenden oder jedes Mal nachfragen.',
+                    ask_each_time: 'Jedes Mal fragen',
+                    prefer_device: 'Standard: Dieses Gerät (Browser)',
+                    prefer_online: 'Standard: Mein FoxalDB-Konto (online)',
+                    saving: 'Einstellung wird gespeichert…',
+                    reset_success_title: 'Einstellung aktualisiert',
+                    reset_success_description:
+                        'Beim nächsten Erstellen eines Diagramms werden Sie erneut gefragt.',
+                    save_error_title: 'Einstellung nicht gespeichert',
+                    save_error_description:
+                        'Die Einstellung konnte nicht aktualisiert werden. Bitte erneut versuchen.',
+                },
             },
             nav: {
                 sign_in: 'Anmelden',

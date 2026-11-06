@@ -1,33 +1,27 @@
 import React, { useState } from 'react';
 import { Search, X } from 'lucide-react';
-import { Button } from '@/components/button/button';
 import {
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { Input } from '@/components/input/input';
 import { useTranslation } from 'react-i18next';
 import { SelectDatabaseContent } from './select-database-content';
-import { useDialog } from '@/hooks/use-dialog';
 import type { DatabaseType } from '@/lib/domain/database-type';
 
 export interface SelectDatabaseProps {
     onDatabaseSelected: () => void;
     databaseType: DatabaseType;
     setDatabaseType: React.Dispatch<React.SetStateAction<DatabaseType>>;
-    hasExistingDiagram: boolean;
 }
 
 export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
     onDatabaseSelected,
     databaseType,
     setDatabaseType,
-    hasExistingDiagram,
 }) => {
     const { t } = useTranslation();
-    const { openImportDiagramDialog } = useDialog();
     const [searchTerm, setSearchTerm] = useState('');
 
     return (
@@ -74,17 +68,6 @@ export const SelectDatabase: React.FC<SelectDatabaseProps> = ({
                     setDatabaseType={setDatabaseType}
                 />
             </div>
-            {!hasExistingDiagram ? (
-                <DialogFooter className="mt-4 flex !justify-start gap-2">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={openImportDiagramDialog}
-                    >
-                        {t('new_diagram_dialog.restore_from_backup')}
-                    </Button>
-                </DialogFooter>
-            ) : null}
         </>
     );
 };

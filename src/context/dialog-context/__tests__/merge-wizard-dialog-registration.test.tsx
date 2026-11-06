@@ -23,9 +23,6 @@ vi.mock('@/dialogs/export-diagram-dialog/export-diagram-dialog', () => ({
 vi.mock('@/dialogs/export-wizard/export-wizard-dialog', () => ({
     ExportWizardDialog: () => null,
 }));
-vi.mock('@/dialogs/import-diagram-dialog/import-diagram-dialog', () => ({
-    ImportDiagramDialog: () => null,
-}));
 vi.mock('@/dialogs/auth-dialog/auth-dialog', () => ({
     AuthDialog: () => null,
 }));

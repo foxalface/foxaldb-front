@@ -14,12 +14,15 @@ import { useTranslation } from 'react-i18next';
 import { DatabaseType as DatabaseTypeEnum } from '@/lib/domain/database-type';
 import { SSMSInfo } from './ssms-info';
 import { getMetadataQuery } from './get-metadata-query';
+import { cn } from '@/lib/utils';
 
 export interface MetadataQueryInstructionsProps {
     databaseType: DatabaseType;
     databaseEdition?: DatabaseEdition;
     showSSMSInfoDialog: boolean;
     setShowSSMSInfoDialog: (show: boolean) => void;
+    /** Query block grows with the column (e.g. side-by-side with paste area). */
+    fillHeight?: boolean;
 }
 
 export const MetadataQueryInstructions: React.FC<
@@ -29,6 +32,7 @@ export const MetadataQueryInstructions: React.FC<
     databaseEdition,
     showSSMSInfoDialog,
     setShowSSMSInfoDialog,
+    fillHeight = false,
 }) => {
     const { t } = useTranslation();
     const databaseClients = useMemo(
@@ -55,7 +59,12 @@ export const MetadataQueryInstructions: React.FC<
     );
 
     const querySnippet = (
-        <div className="h-20 w-full shrink-0 md:h-[100px]">
+        <div
+            className={cn(
+                'h-20 w-full shrink-0 md:h-[100px]',
+                fillHeight && 'h-auto min-h-[12rem] flex-1 md:min-h-[14rem]'
+            )}
+        >
             <CodeSnippet
                 className="size-full flex-none"
                 code={minimizeQuery(code)}
@@ -74,7 +83,12 @@ export const MetadataQueryInstructions: React.FC<
     );
 
     return (
-        <div className="flex flex-col gap-2">
+        <div
+            className={cn(
+                'flex flex-col gap-2',
+                fillHeight && 'min-h-0 flex-1'
+            )}
+        >
             <div className="flex flex-col gap-1">
                 <p className="text-sm font-medium">
                     {t('new_diagram_dialog.import_from_database.run_query')}
@@ -96,8 +110,12 @@ export const MetadataQueryInstructions: React.FC<
                                 : (value as DatabaseClient)
                         );
                     }}
+                    className={cn(
+                        'flex flex-col gap-0',
+                        fillHeight && 'min-h-0 flex-1'
+                    )}
                 >
-                    <TabsList className="h-8 justify-start rounded-none rounded-t-sm">
+                    <TabsList className="h-8 shrink-0 justify-start rounded-none rounded-t-sm">
                         <TabsTrigger value="sql" className="h-6 w-20">
                             {t(
                                 'new_diagram_dialog.import_from_database.client_sql'
@@ -113,7 +131,14 @@ export const MetadataQueryInstructions: React.FC<
                             </TabsTrigger>
                         ))}
                     </TabsList>
-                    {querySnippet}
+                    <div
+                        className={cn(
+                            'flex flex-col',
+                            fillHeight && 'min-h-0 flex-1'
+                        )}
+                    >
+                        {querySnippet}
+                    </div>
                 </Tabs>
             ) : (
                 querySnippet

@@ -712,6 +712,22 @@ export const en = {
                 aria_label: 'Where to save the new diagram',
             },
 
+            choose_creation_destination: {
+                title: 'Where should this diagram be saved?',
+                description:
+                    'Choose whether to keep it on this device only or sync it to your FoxalDB account.',
+                device_description:
+                    'Stored in this browser only. Best for quick drafts offline.',
+                online_description:
+                    'Saved to your account and available when you sign in on other devices.',
+                remember_choice: 'Remember my choice for next time',
+                back: 'Back',
+                create: 'Create diagram',
+                save_preference_error_title: 'Preference not saved',
+                save_preference_error_description:
+                    'Your diagram was created, but we could not save the default destination. You can change this in Settings.',
+            },
+
             choose_intent: {
                 title: 'What would you like to do?',
                 description: 'Create a new diagram for {{database}}.',
@@ -1014,7 +1030,6 @@ export const en = {
             },
 
             cancel: 'Cancel',
-            restore_from_backup: 'Restore from backup',
             back: 'Back',
             empty_diagram: 'Empty database',
             continue: 'Continue',
@@ -1846,6 +1861,21 @@ export const en = {
                 submitting: 'Saving...',
                 success_title: 'Profile updated',
                 success_description: 'Your profile has been saved.',
+                diagram_creation: {
+                    heading: 'New diagrams',
+                    description:
+                        'When you create a diagram while signed in, FoxalDB can use a default save location or ask you each time.',
+                    ask_each_time: 'Ask me each time',
+                    prefer_device: 'This device (browser) by default',
+                    prefer_online: 'My FoxalDB account (online) by default',
+                    saving: 'Saving preference…',
+                    reset_success_title: 'Preference updated',
+                    reset_success_description:
+                        'You will be asked where to save the next time you create a diagram.',
+                    save_error_title: 'Could not save preference',
+                    save_error_description:
+                        'We could not update your preference. Try again.',
+                },
             },
             nav: {
                 sign_in: 'Sign in',

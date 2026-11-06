@@ -722,6 +722,22 @@ export const ja: LanguageTranslation = {
                 aria_label: '新しいダイアグラムの保存先',
             },
 
+            choose_creation_destination: {
+                title: 'このダイアグラムはどこに保存しますか？',
+                description:
+                    'このデバイスのみに保持するか、FoxalDB アカウントに同期するかを選びます。',
+                device_description:
+                    'このブラウザーにのみ保存。オフラインでの素早い下書き向けです。',
+                online_description:
+                    'アカウントに保存され、他のデバイスでサインインすると利用できます。',
+                remember_choice: '次回もこの選択を覚えておく',
+                back: '戻る',
+                create: 'ダイアグラムを作成',
+                save_preference_error_title: '設定を保存できませんでした',
+                save_preference_error_description:
+                    'ダイアグラムは作成できましたが、既定の保存先を保存できませんでした。設定から変更できます。',
+            },
+
             choose_intent: {
                 title: '何をしますか？',
                 description: '{{database}} の新しいダイアグラムを作成します。',
@@ -1033,7 +1049,6 @@ export const ja: LanguageTranslation = {
             cancel: 'キャンセル',
             back: '戻る',
             // TODO: Translate
-            restore_from_backup: 'バックアップから復元',
             empty_diagram: '空のデータベース',
             continue: '続行',
             import: 'インポート',
@@ -1886,6 +1901,21 @@ export const ja: LanguageTranslation = {
                 submitting: '保存中...',
                 success_title: 'プロフィールを更新しました',
                 success_description: 'プロフィールを保存しました。',
+                diagram_creation: {
+                    heading: '新しいダイアグラム',
+                    description:
+                        'サインイン中にダイアグラムを作成するとき、FoxalDB は既定の保存場所を使うか、毎回確認できます。',
+                    ask_each_time: '毎回確認する',
+                    prefer_device: '既定：このデバイス（ブラウザー）',
+                    prefer_online: '既定：FoxalDB アカウント（オンライン）',
+                    saving: '設定を保存しています…',
+                    reset_success_title: '設定を更新しました',
+                    reset_success_description:
+                        '次にダイアグラムを作成するとき、保存先を聞きます。',
+                    save_error_title: '設定を保存できませんでした',
+                    save_error_description:
+                        '設定を更新できませんでした。もう一度お試しください。',
+                },
             },
             nav: {
                 sign_in: 'サインイン',

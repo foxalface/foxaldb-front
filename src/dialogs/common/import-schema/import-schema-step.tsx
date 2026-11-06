@@ -593,7 +593,7 @@ export const ImportSchemaStep: React.FC<ImportSchemaStepProps> = (props) => {
             <div className="min-h-0 flex-1 overflow-y-auto">
                 <div className={WIZARD_DIALOG_BODY_CLASS}>
                     <WizardSchemaSourceField
-                        label={t(
+                        editorAccessibilityLabel={t(
                             'new_diagram_dialog.import_schema.textarea_label'
                         )}
                         placeholder={t(

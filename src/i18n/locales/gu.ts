@@ -713,6 +713,22 @@ export const gu: LanguageTranslation = {
                 aria_label: 'નવું ડાયાગ્રામ ક્યાં સાચવવું',
             },
 
+            choose_creation_destination: {
+                title: 'આ આકૃતિ ક્યાં સાચવવી છે?',
+                description:
+                    'તે ફક્ત આ ઉપકરણ પર રાખવી કે FoxalDB એકાઉન્ટ સાથે સમન્વયિત કરવી તે પસંદ કરો।',
+                device_description:
+                    'ફક્ત આ બ્રાઉઝરમાં સાચવેલી. ઝડપી ઑફલાઇન મસૌદા માટે સારી.',
+                online_description:
+                    'તમારા એકાઉન્ટમાં સાચવાયેલી; અન્ય ઉપકરણો પર સાઇન ઇન કરતી વખતે ઉપલબ્ધ.',
+                remember_choice: 'આગલી વાર મારી પસંદગી યાદ રાખો',
+                back: 'પાછા',
+                create: 'આકૃતિ બનાવો',
+                save_preference_error_title: 'પસંદગી સાચવાઈ નથી',
+                save_preference_error_description:
+                    'આકૃતિ બનાવાઈ, પરંતુ ડિફોલ્ટ ગંતવ્ય સાચવી શકાયું નહીં. સેટિંગ્સમાં બદલી શકો છો.',
+            },
+
             choose_intent: {
                 title: 'તમે શું કરવા માંગો છો?',
                 description: '{{database}} માટે નવું ડાયાગ્રામ બનાવો.',
@@ -998,7 +1014,6 @@ export const gu: LanguageTranslation = {
 
             cancel: 'રદ કરો',
             back: 'પાછા',
-            restore_from_backup: 'બેકઅપમાંથી પુનઃસ્થાપિત કરો',
             empty_diagram: 'ખાલી ડેટાબેસ',
             continue: 'ચાલુ રાખો',
             import: 'આયાત કરો',
@@ -1828,6 +1843,21 @@ export const gu: LanguageTranslation = {
                 submitting: 'સાચવી રહ્યા છીએ...',
                 success_title: 'પ્રોફાઇલ અપડેટ થઈ',
                 success_description: 'તમારી પ્રોફાઇલ સાચવવામાં આવી.',
+                diagram_creation: {
+                    heading: 'નવી આકૃતિઓ',
+                    description:
+                        'સાઇન ઇન હોય ત્યારે આકૃતિ બનાવતી વખતે FoxalDB ડિફોલ્ટ સ્થાન વાપરી શકે અથવા દર વખતે પૂછી શકે.',
+                    ask_each_time: 'દર વખતે મને પૂછો',
+                    prefer_device: 'ડિફોલ્ટ: આ ઉપકરણ (બ્રાઉઝર)',
+                    prefer_online: 'ડિફોલ્ટ: મારું FoxalDB એકાઉન્ટ (ઓનલાઇન)',
+                    saving: 'પસંદગી સાચવી રહ્યા છીએ…',
+                    reset_success_title: 'પસંદગી અપડેટ થઈ',
+                    reset_success_description:
+                        'આગલી વખતે આકૃતિ બનાવતી વખતે ક્યાં સાચવવું તે પૂછાશે.',
+                    save_error_title: 'પસંદગી સાચવી શકાઈ નહીં',
+                    save_error_description:
+                        'પસંદગી અપડેટ કરી શક્યાં નહીં. ફરી પ્રયાસ કરો.',
+                },
             },
             nav: {
                 sign_in: 'સાઇન ઇન',

@@ -720,6 +720,22 @@ export const hi: LanguageTranslation = {
                 aria_label: 'नया आरेख कहाँ सहेजना है',
             },
 
+            choose_creation_destination: {
+                title: 'यह आरेख कहाँ सहेजना है?',
+                description:
+                    'चुनें कि इसे केवल इस डिवाइस पर रखना है या अपने FoxalDB खाते के साथ सिंक करना है।',
+                device_description:
+                    'केवल इस ब्राउज़र में सहेजा गया। त्वरित ऑफ़लाइन मसौदों के लिए उपयुक्त।',
+                online_description:
+                    'आपके खाते में सहेजा गया; अन्य डिवाइस पर साइन इन करने पर उपलब्ध।',
+                remember_choice: 'अगली बार मेरी पसंद याद रखें',
+                back: 'वापस',
+                create: 'आरेख बनाएँ',
+                save_preference_error_title: 'पसंद सहेजी नहीं गई',
+                save_preference_error_description:
+                    'आरेख बन गया, लेकिन डिफ़ॉल्ट गंतव्य सहेजा नहीं जा सका। इसे सेटिंग्स में बदल सकते हैं।',
+            },
+
             choose_intent: {
                 title: 'आप क्या करना चाहते हैं?',
                 description: '{{database}} के लिए एक नया डायग्राम बनाएं।',
@@ -1010,7 +1026,6 @@ export const hi: LanguageTranslation = {
             cancel: 'रद्द करें',
             back: 'वापस',
             // TODO: Translate
-            restore_from_backup: 'बैकअप से पुनर्स्थापित करें',
             empty_diagram: 'खाली डेटाबेस',
             continue: 'जारी रखें',
             import: 'आयात करें',
@@ -1848,6 +1863,21 @@ export const hi: LanguageTranslation = {
                 submitting: 'सहेजा जा रहा है...',
                 success_title: 'प्रोफ़ाइल अपडेट की गई',
                 success_description: 'आपकी प्रोफ़ाइल सहेज ली गई है।',
+                diagram_creation: {
+                    heading: 'नए आरेख',
+                    description:
+                        'साइन इन होने पर आरेख बनाते समय FoxalDB डिफ़ॉल्ट सहेज स्थान उपयोग कर सकता है या हर बार पूछ सकता है।',
+                    ask_each_time: 'हर बार मुझसे पूछें',
+                    prefer_device: 'डिफ़ॉल्ट: यह डिवाइस (ब्राउज़र)',
+                    prefer_online: 'डिफ़ॉल्ट: मेरा FoxalDB खाता (ऑनलाइन)',
+                    saving: 'पसंद सहेजी जा रही है…',
+                    reset_success_title: 'पसंद अपडेट हुई',
+                    reset_success_description:
+                        'अगली बार आरेख बनाते समय पूछा जाएगा कि कहाँ सहेजना है।',
+                    save_error_title: 'पसंद सहेजी नहीं जा सकी',
+                    save_error_description:
+                        'पसंद अपडेट नहीं हो सकी। पुनः प्रयास करें।',
+                },
             },
             nav: {
                 sign_in: 'साइन इन',

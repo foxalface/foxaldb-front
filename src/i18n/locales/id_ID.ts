@@ -724,6 +724,22 @@ export const id_ID: LanguageTranslation = {
                 aria_label: 'Tempat menyimpan diagram baru',
             },
 
+            choose_creation_destination: {
+                title: 'Di mana diagram ini disimpan?',
+                description:
+                    'Pilih tetap di perangkat ini saja atau sinkronkan dengan akun FoxalDB Anda.',
+                device_description:
+                    'Hanya disimpan di browser ini. Cocok untuk draf cepat offline.',
+                online_description:
+                    'Disimpan ke akun Anda dan tersedia saat masuk di perangkat lain.',
+                remember_choice: 'Ingat pilihan saya untuk lain kali',
+                back: 'Kembali',
+                create: 'Buat diagram',
+                save_preference_error_title: 'Preferensi tidak disimpan',
+                save_preference_error_description:
+                    'Diagram sudah dibuat, tetapi tujuan default tidak dapat disimpan. Anda dapat mengubahnya di Pengaturan.',
+            },
+
             choose_intent: {
                 title: 'Apa yang ingin Anda lakukan?',
                 description: 'Buat diagram baru untuk {{database}}.',
@@ -1020,7 +1036,6 @@ export const id_ID: LanguageTranslation = {
             },
 
             cancel: 'Batal',
-            restore_from_backup: 'Pulihkan dari cadangan',
             back: 'Kembali',
             empty_diagram: 'Database Kosong',
             continue: 'Lanjutkan',
@@ -1854,6 +1869,21 @@ export const id_ID: LanguageTranslation = {
                 submitting: 'Menyimpan...',
                 success_title: 'Profil diperbarui',
                 success_description: 'Profil Anda telah disimpan.',
+                diagram_creation: {
+                    heading: 'Diagram baru',
+                    description:
+                        'Saat Anda masuk dan membuat diagram, FoxalDB dapat memakai lokasi simpan default atau bertanya setiap kali.',
+                    ask_each_time: 'Tanyakan setiap kali',
+                    prefer_device: 'Default: perangkat ini (browser)',
+                    prefer_online: 'Default: akun FoxalDB saya (online)',
+                    saving: 'Menyimpan preferensi…',
+                    reset_success_title: 'Preferensi diperbarui',
+                    reset_success_description:
+                        'Lain kali Anda membuat diagram, kami akan bertanya di mana menyimpannya.',
+                    save_error_title: 'Tidak dapat menyimpan preferensi',
+                    save_error_description:
+                        'Tidak dapat memperbarui preferensi. Coba lagi.',
+                },
             },
             nav: {
                 sign_in: 'Masuk',

@@ -723,6 +723,22 @@ export const vi: LanguageTranslation = {
                 aria_label: 'Nơi lưu sơ đồ mới',
             },
 
+            choose_creation_destination: {
+                title: 'Lưu sơ đồ này ở đâu?',
+                description:
+                    'Chọn chỉ giữ trên thiết bị này hay đồng bộ với tài khoản FoxalDB của bạn.',
+                device_description:
+                    'Chỉ lưu trong trình duyệt này. Phù hợp bản nháp nhanh khi ngoại tuyến.',
+                online_description:
+                    'Lưu vào tài khoản và dùng được khi đăng nhập trên thiết bị khác.',
+                remember_choice: 'Ghi nhớ lựa chọn cho lần sau',
+                back: 'Quay lại',
+                create: 'Tạo sơ đồ',
+                save_preference_error_title: 'Chưa lưu tùy chọn',
+                save_preference_error_description:
+                    'Sơ đồ đã được tạo nhưng không lưu được vị trí mặc định. Bạn có thể đổi trong Cài đặt.',
+            },
+
             choose_intent: {
                 title: 'Bạn muốn làm gì?',
                 description: 'Tạo sơ đồ mới cho {{database}}.',
@@ -1014,7 +1030,6 @@ export const vi: LanguageTranslation = {
             },
 
             cancel: 'Hủy',
-            restore_from_backup: 'Khôi phục từ bản sao lưu',
             back: 'Trở lại',
             empty_diagram: 'Cơ sở dữ liệu trống',
             continue: 'Tiếp tục',
@@ -1838,6 +1853,22 @@ export const vi: LanguageTranslation = {
                 submitting: 'Đang lưu...',
                 success_title: 'Đã cập nhật hồ sơ',
                 success_description: 'Hồ sơ của bạn đã được lưu.',
+                diagram_creation: {
+                    heading: 'Sơ đồ mới',
+                    description:
+                        'Khi đã đăng nhập và tạo sơ đồ, FoxalDB có thể dùng vị trí lưu mặc định hoặc hỏi mỗi lần.',
+                    ask_each_time: 'Hỏi tôi mỗi lần',
+                    prefer_device: 'Mặc định: thiết bị này (trình duyệt)',
+                    prefer_online:
+                        'Mặc định: tài khoản FoxalDB của tôi (trực tuyến)',
+                    saving: 'Đang lưu tùy chọn…',
+                    reset_success_title: 'Đã cập nhật tùy chọn',
+                    reset_success_description:
+                        'Lần sau khi tạo sơ đồ, chúng tôi sẽ hỏi nơi lưu.',
+                    save_error_title: 'Không thể lưu tùy chọn',
+                    save_error_description:
+                        'Không thể cập nhật tùy chọn. Thử lại.',
+                },
             },
             nav: {
                 sign_in: 'Đăng nhập',

@@ -111,7 +111,6 @@ vi.mock('@/hooks/use-dialog', () => ({
         openExportDiagramDialog: vi.fn(),
         openExportWizardDialog: vi.fn(),
         openMergeWizardDialog: vi.fn(),
-        openImportDiagramDialog: vi.fn(),
     }),
 }));
 

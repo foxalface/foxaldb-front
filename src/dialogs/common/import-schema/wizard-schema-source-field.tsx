@@ -26,7 +26,10 @@ const hasFileDrag = (event: React.DragEvent): boolean =>
     event.dataTransfer.types.includes('Files');
 
 export interface WizardSchemaSourceFieldProps {
-    label: string;
+    /** Visible label above the editor. Omit to use top spacing only (e.g. create wizard paste step). */
+    label?: string;
+    /** Used for aria-label on the editor when `label` is not shown. */
+    editorAccessibilityLabel: string;
     placeholder: string;
     value: string;
     onValueChange: (value: string) => void;
@@ -45,6 +48,7 @@ export const WizardSchemaSourceField: React.FC<
     WizardSchemaSourceFieldProps
 > = ({
     label,
+    editorAccessibilityLabel,
     placeholder,
     value,
     onValueChange,
@@ -181,6 +185,8 @@ export const WizardSchemaSourceField: React.FC<
         [disabled, pickFile]
     );
 
+    const resolvedAriaLabel = label ?? editorAccessibilityLabel;
+
     const editorProps = useMemo((): CodeSnippetProps['editorProps'] => {
         return {
             height: EDITOR_MIN_HEIGHT_PX,
@@ -196,7 +202,7 @@ export const WizardSchemaSourceField: React.FC<
                 });
             },
             options: {
-                ariaLabel: label,
+                ariaLabel: resolvedAriaLabel,
                 readOnly: disabled,
                 wordWrap: 'off',
                 automaticLayout: true,
@@ -218,21 +224,31 @@ export const WizardSchemaSourceField: React.FC<
                 },
             },
         };
-    }, [disabled, label, onValueChange]);
+    }, [disabled, onValueChange, resolvedAriaLabel]);
 
     return (
         <>
             <div
-                className="flex flex-col gap-2"
+                className={cn(
+                    'flex flex-col gap-2',
+                    label === undefined && 'mt-4'
+                )}
                 data-testid="wizard-schema-source-field"
             >
-                <span id={labelId} className="text-sm font-medium">
-                    {label}
-                </span>
+                {label !== undefined ? (
+                    <span id={labelId} className="text-sm font-medium">
+                        {label}
+                    </span>
+                ) : null}
 
                 <div
                     className="group relative min-h-64 w-full min-w-0"
-                    aria-labelledby={labelId}
+                    aria-labelledby={label !== undefined ? labelId : undefined}
+                    aria-label={
+                        label === undefined
+                            ? editorAccessibilityLabel
+                            : undefined
+                    }
                     data-testid="wizard-schema-source-editor"
                     data-editor-language={language}
                     onDragEnter={handleDragEnter}

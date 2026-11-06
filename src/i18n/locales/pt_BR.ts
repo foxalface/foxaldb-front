@@ -727,6 +727,22 @@ export const pt_BR: LanguageTranslation = {
                 aria_label: 'Onde salvar o novo diagrama',
             },
 
+            choose_creation_destination: {
+                title: 'Onde salvar este diagrama?',
+                description:
+                    'Escolha mantê-lo apenas neste dispositivo ou sincronizá-lo com sua conta FoxalDB.',
+                device_description:
+                    'Armazenado apenas neste navegador. Ideal para rascunhos rápidos offline.',
+                online_description:
+                    'Salvo na sua conta e disponível quando você entrar em outros dispositivos.',
+                remember_choice: 'Lembrar minha escolha da próxima vez',
+                back: 'Voltar',
+                create: 'Criar diagrama',
+                save_preference_error_title: 'Preferência não salva',
+                save_preference_error_description:
+                    'O diagrama foi criado, mas não foi possível salvar o destino padrão. Você pode alterar isso em Configurações.',
+            },
+
             choose_intent: {
                 title: 'O que você gostaria de fazer?',
                 description: 'Crie um novo diagrama para {{database}}.',
@@ -1030,7 +1046,6 @@ export const pt_BR: LanguageTranslation = {
             cancel: 'Cancelar',
             back: 'Voltar',
             // TODO: Translate
-            restore_from_backup: 'Restaurar do backup',
             empty_diagram: 'Banco de dados vazio',
             continue: 'Continuar',
             import: 'Importar',
@@ -1875,6 +1890,21 @@ export const pt_BR: LanguageTranslation = {
                 submitting: 'Salvando...',
                 success_title: 'Perfil atualizado',
                 success_description: 'Seu perfil foi salvo.',
+                diagram_creation: {
+                    heading: 'Novos diagramas',
+                    description:
+                        'Ao criar um diagrama logado, o FoxalDB pode usar um local padrão ou perguntar sempre.',
+                    ask_each_time: 'Perguntar sempre',
+                    prefer_device: 'Este dispositivo (navegador) por padrão',
+                    prefer_online: 'Minha conta FoxalDB (online) por padrão',
+                    saving: 'Salvando preferência…',
+                    reset_success_title: 'Preferência atualizada',
+                    reset_success_description:
+                        'Na próxima criação de um diagrama, perguntaremos onde salvar.',
+                    save_error_title: 'Não foi possível salvar a preferência',
+                    save_error_description:
+                        'Não foi possível atualizar a preferência. Tente novamente.',
+                },
             },
             nav: {
                 sign_in: 'Entrar',

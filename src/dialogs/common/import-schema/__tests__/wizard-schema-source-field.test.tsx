@@ -70,6 +70,7 @@ const renderField = (
 
 const defaultProps = {
     label: 'Schema content',
+    editorAccessibilityLabel: 'Schema content',
     placeholder: 'Paste here…',
     value: '',
     onValueChange: vi.fn(),

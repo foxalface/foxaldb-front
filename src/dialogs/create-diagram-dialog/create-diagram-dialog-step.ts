@@ -5,6 +5,7 @@ export enum CreateDiagramDialogStep {
     IMPORT_DATABASE = 'IMPORT_DATABASE',
     IMPORT_FROM_DATABASE = 'IMPORT_FROM_DATABASE',
     SELECT_TABLES = 'SELECT_TABLES',
+    CHOOSE_CREATION_DESTINATION = 'CHOOSE_CREATION_DESTINATION',
 }
 
 export type SelectTablesOrigin = 'schema' | 'from_database';

@@ -683,6 +683,19 @@ export const zh_TW: LanguageTranslation = {
                 aria_label: '新圖表的儲存位置',
             },
 
+            choose_creation_destination: {
+                title: '要將圖表儲存在哪裡？',
+                description: '選擇只保留在此裝置，或同步到您的 FoxalDB 帳戶。',
+                device_description: '僅儲存在此瀏覽器。適合離線快速草稿。',
+                online_description: '儲存到帳戶；在其他裝置登入後即可使用。',
+                remember_choice: '下次記住我的選擇',
+                back: '返回',
+                create: '建立圖表',
+                save_preference_error_title: '無法儲存偏好設定',
+                save_preference_error_description:
+                    '圖表已建立，但無法儲存預設儲存位置。可在設定中變更。',
+            },
+
             choose_intent: {
                 title: '您想做什麼？',
                 description: '為 {{database}} 建立新圖表。',
@@ -943,7 +956,6 @@ export const zh_TW: LanguageTranslation = {
             },
 
             cancel: '取消',
-            restore_from_backup: '從備份還原',
             back: '返回',
             empty_diagram: '空資料庫',
             continue: '繼續',
@@ -1709,6 +1721,19 @@ export const zh_TW: LanguageTranslation = {
                 submitting: '儲存中...',
                 success_title: '個人資料已更新',
                 success_description: '您的個人資料已儲存。',
+                diagram_creation: {
+                    heading: '新增圖表',
+                    description:
+                        '在已登入狀態下建立圖表時，FoxalDB 可使用預設儲存位置或每次詢問。',
+                    ask_each_time: '每次詢問我',
+                    prefer_device: '預設：此裝置（瀏覽器）',
+                    prefer_online: '預設：我的 FoxalDB 帳戶（線上）',
+                    saving: '正在儲存偏好設定…',
+                    reset_success_title: '偏好設定已更新',
+                    reset_success_description: '下次建立圖表時會詢問儲存位置。',
+                    save_error_title: '無法儲存偏好設定',
+                    save_error_description: '無法更新偏好設定，請再試一次。',
+                },
             },
             nav: {
                 sign_in: '登入',

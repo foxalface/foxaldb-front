@@ -9,7 +9,7 @@ Developer reference for FoxalDB v1 schema and metadata import.
 | Product action | Creates | Entry |
 |----------------|---------|--------|
 | **Import** | New diagram | New Diagram wizard → Import schema / project ZIP / from database |
-| **Restore** | New diagram | Backup → Restore diagram (`ImportDiagramDialog`) |
+| **Restore** | New diagram | Backup → Restore diagram (opens **New diagram** wizard → import diagram JSON via `ImportSchemaStep`) |
 | **Merge** | Evolves open diagram | Diagram → Merge (authenticated backend diagram only) |
 
 Diagram menu: **Export** and **Merge** only — no direct Import into the open diagram.
@@ -64,7 +64,7 @@ See sections below (SQL comments, DBML views, tolerant malformed SQL, cross-fami
 | Action | Scope |
 |--------|--------|
 | **Import** | **New diagram only** — create-diagram wizard (`ImportSchemaStep`) and metadata extraction step |
-| **Restore** | **New diagram from backup JSON** — `ImportDiagramDialog` (Backup → Restore; also linked from New Diagram database step) |
+| **Restore** | **New diagram from backup JSON** — same entry as **Import**: New Diagram wizard → `ImportSchemaStep` with diagram JSON (no separate restore dialog) |
 | **Merge** | **Existing diagram evolution** — Schema Merge wizard (`Diagram → Merge`) |
 
 SQL, DBML, metadata JSON, diagram JSON, and project ZIP sources applied to an **open** diagram are **not** direct import. They go through Schema Merge (compare → apply), not `ImportDatabaseDialog` or additive client merge.
@@ -78,7 +78,7 @@ SQL, DBML, metadata JSON, diagram JSON, and project ZIP sources applied to an **
 | SQL DDL / pg_dump | `sqlImportToDiagram()` |
 | DBML | `importDBMLToDiagram()` |
 | Metadata JSON | `loadFromDatabaseMetadata()` |
-| Diagram JSON file | `diagramFromJSONInput()` via create wizard `ImportSchemaStep` or standalone `ImportDiagramDialog` |
+| Diagram JSON file | `diagramFromJSONInput()` via create wizard `ImportSchemaStep` |
 
 `importSchema()` is a deterministic dispatch boundary only. It does not persist, navigate, or mutate the open editor.
 
@@ -127,14 +127,14 @@ SELECT_DATABASE → CHOOSE_INTENT
 
 ### Diagram JSON restore (backup)
 
-`ImportDiagramDialog` — uploads a diagram backup `.json` file and creates a **new** diagram. It does **not** replace or merge into the open diagram.
+Restore uses the **New diagram** wizard: choose **Import** → **File or pasted text** → `ImportSchemaStep` with diagram JSON. It creates a **new** diagram and does **not** replace or merge into the open diagram.
 
 | Audience | Persistence | Navigation |
 |----------|-------------|------------|
 | Guest | Dexie `addDiagram` + in-memory load | `/diagrams/{localId}` |
 | Authenticated | `POST /diagrams` (`createDiagram`) + autosave `content_hash` seed from `GET /diagrams/{id}` | `/diagrams/{backendId}` |
 
-Entry points: **Backup → Restore diagram**; optional shortcut from the New Diagram database step. Not in the Diagram menu.
+Entry points: **Backup → Restore diagram** (opens the wizard). Not in the Diagram menu.
 
 Parsing uses `parseDiagramJsonContent()` (new diagram id via `generateDiagramId()`; table/relationship ids from `cloneDiagram`).
 

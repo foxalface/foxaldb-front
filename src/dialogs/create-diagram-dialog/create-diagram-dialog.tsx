@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { useAuth } from '@/hooks/use-auth';
+import { useToast } from '@/components/toast/use-toast';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useDiagramLocation } from '@/hooks/use-diagram-location';
 import { useStorage } from '@/hooks/use-storage';
@@ -39,17 +40,15 @@ import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-fl
 import { MAX_TABLES_WITHOUT_SHOWING_FILTER } from '../common/select-tables/constants';
 import { ImportFromDatabaseStep } from './import-from-database/import-from-database-step';
 import { ChooseImportMethod } from './choose-import-method/choose-import-method';
-import { CreateDiagramDestinationSelector } from './create-diagram-destination-selector';
-import { useCreateDiagramSessionDestinationRequired } from './create-diagram-session-destination-context';
 import {
     openPersistedNewDiagram,
     persistNewDiagram,
     persistedNewDiagramId,
 } from '@/lib/diagram/persist-new-diagram';
+import type { DiagramCreationDestination } from '@/lib/diagram/diagram-creation-destination';
 import { GuestDeviceDiagramLimitError } from '@/lib/diagram/guest-device-diagram-limit';
-import { registerProtectedActionResume } from '@/lib/auth-intent';
-import { useRequestAuthentication } from '@/hooks/use-request-authentication';
 import { useGuestDeviceDiagramLimitToast } from '@/hooks/use-guest-device-diagram-limit-toast';
+import { ChooseCreationDestinationStep } from './choose-creation-destination/choose-creation-destination-step';
 
 export interface CreateDiagramDialogProps extends BaseDialogProps {
     entryCreateDiagramActions?: EntryFlowCreateDiagramActions;
@@ -59,16 +58,15 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
     dialog,
     entryCreateDiagramActions,
 }) => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user, updateDiagramCreationPreference } =
+        useAuth();
     const { currentDiagram, loadDiagramFromData } = useChartDB();
     const { setDiagramLocation } = useDiagramLocation();
     const { clearDiagramAccess } = useDiagramAccess();
     const { t } = useTranslation();
-    const requestAuthentication = useRequestAuthentication();
+    const { toast } = useToast();
     const { notifyGuestDeviceDiagramLimitReached } =
         useGuestDeviceDiagramLimitToast();
-    const { destination, setDestination } =
-        useCreateDiagramSessionDestinationRequired();
 
     const isEntryFlowOwned = entryCreateDiagramActions !== undefined;
     const canClose = useMemo(
@@ -104,6 +102,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         DatabaseType | undefined
     >();
 
+    const [diagramPendingCreation, setDiagramPendingCreation] =
+        useState<Diagram | null>(null);
+    const [destinationReturnStep, setDestinationReturnStep] =
+        useState<CreateDiagramDialogStep | null>(null);
+    const [destinationSubmitting, setDestinationSubmitting] = useState(false);
+
     useEffect(() => {
         setDatabaseEdition(undefined);
     }, [databaseType]);
@@ -116,11 +120,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         fetchDiagrams();
     }, [listDiagrams, dialog.open]);
 
-    useEffect(() => {
-        if (!dialog.open) {
-            return;
-        }
-
+    const resetWizardBody = useCallback(() => {
         setStep(CreateDiagramDialogStep.SELECT_DATABASE);
         setDatabaseType(DatabaseType.GENERIC);
         setDatabaseEdition(undefined);
@@ -130,20 +130,21 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
         setImportError(null);
         setResolvedSourceDialect(undefined);
         setSelectTablesOrigin('schema');
-    }, [dialog.open]);
+        setDiagramPendingCreation(null);
+        setDestinationReturnStep(null);
+        setDestinationSubmitting(false);
+    }, []);
 
-    const handleGuestRequestOnlineDestination = useCallback(() => {
-        registerProtectedActionResume(() => {
-            setDestination('online');
-        });
-        requestAuthentication({
-            type: 'protected-action',
-            action: 'create-online-diagram',
-        });
-    }, [requestAuthentication, setDestination]);
+    useEffect(() => {
+        if (!dialog.open) {
+            return;
+        }
 
-    const finishCreatedDiagram = useCallback(
-        async (diagram: Diagram) => {
+        resetWizardBody();
+    }, [dialog.open, resetWizardBody]);
+
+    const persistAndOpenNewDiagram = useCallback(
+        async (diagram: Diagram, destination: DiagramCreationDestination) => {
             try {
                 const persisted = await persistNewDiagram(
                     diagram,
@@ -159,6 +160,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     entryCreateDiagramActions.onDiagramCreated(
                         persistedNewDiagramId(persisted)
                     );
+                    resetWizardBody();
                     return;
                 }
 
@@ -190,12 +192,12 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             }
         },
         [
-            destination,
             isAuthenticated,
             listDiagrams,
             notifyGuestDeviceDiagramLimitReached,
             addDiagram,
             entryCreateDiagramActions,
+            resetWizardBody,
             closeCreateDiagramDialog,
             setDiagramLocation,
             clearDiagramAccess,
@@ -204,6 +206,80 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updateConfig,
         ]
     );
+
+    const beginDiagramCreation = useCallback(
+        async (diagram: Diagram, originStep: CreateDiagramDialogStep) => {
+            if (!isAuthenticated) {
+                await persistAndOpenNewDiagram(diagram, 'device');
+                return;
+            }
+
+            const pref = user?.default_diagram_creation_destination ?? null;
+            if (pref === 'device' || pref === 'online') {
+                await persistAndOpenNewDiagram(diagram, pref);
+                return;
+            }
+
+            setDiagramPendingCreation(diagram);
+            setDestinationReturnStep(originStep);
+            setStep(CreateDiagramDialogStep.CHOOSE_CREATION_DESTINATION);
+        },
+        [isAuthenticated, persistAndOpenNewDiagram, user]
+    );
+
+    const handleDestinationConfirm = useCallback(
+        async ({
+            destination,
+            rememberChoice,
+        }: {
+            destination: DiagramCreationDestination;
+            rememberChoice: boolean;
+        }) => {
+            if (!diagramPendingCreation) {
+                return;
+            }
+
+            const diagramToCreate = diagramPendingCreation;
+            setDestinationSubmitting(true);
+
+            try {
+                await persistAndOpenNewDiagram(diagramToCreate, destination);
+
+                if (rememberChoice) {
+                    try {
+                        await updateDiagramCreationPreference({
+                            default_diagram_creation_destination: destination,
+                        });
+                    } catch {
+                        toast({
+                            variant: 'destructive',
+                            title: t(
+                                'new_diagram_dialog.choose_creation_destination.save_preference_error_title'
+                            ),
+                            description: t(
+                                'new_diagram_dialog.choose_creation_destination.save_preference_error_description'
+                            ),
+                        });
+                    }
+                }
+            } finally {
+                setDestinationSubmitting(false);
+            }
+        },
+        [
+            diagramPendingCreation,
+            persistAndOpenNewDiagram,
+            toast,
+            t,
+            updateDiagramCreationPreference,
+        ]
+    );
+
+    const handleDestinationBack = useCallback(() => {
+        setDiagramPendingCreation(null);
+        setStep(destinationReturnStep ?? CreateDiagramDialogStep.CHOOSE_INTENT);
+        setDestinationReturnStep(null);
+    }, [destinationReturnStep]);
 
     const importNewDiagram = useCallback(
         async ({
@@ -231,7 +307,14 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                 selectedTables,
             });
 
-            await finishCreatedDiagram(diagram);
+            const originStep =
+                step === CreateDiagramDialogStep.SELECT_TABLES
+                    ? CreateDiagramDialogStep.SELECT_TABLES
+                    : selectTablesOrigin === 'from_database'
+                      ? CreateDiagramDialogStep.IMPORT_FROM_DATABASE
+                      : CreateDiagramDialogStep.IMPORT_DATABASE;
+
+            await beginDiagramCreation(diagram, originStep);
         },
         [
             scriptResult,
@@ -241,7 +324,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             resolvedSourceDialect,
             databaseEdition,
             diagramNumber,
-            finishCreatedDiagram,
+            beginDiagramCreation,
+            step,
         ]
     );
 
@@ -300,6 +384,8 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             setIsImporting(true);
             setResolvedSourceDialect(nextResolvedSourceDialect);
 
+            const schemaStep = CreateDiagramDialogStep.IMPORT_DATABASE;
+
             try {
                 if (nextImportMethod === 'project') {
                     if (!importedDiagram) {
@@ -312,7 +398,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         setDatabaseType(importedDiagram.databaseType);
                     }
 
-                    await finishCreatedDiagram(importedDiagram);
+                    await beginDiagramCreation(importedDiagram, schemaStep);
                     return;
                 }
 
@@ -334,7 +420,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         setDatabaseType(diagram.databaseType);
                     }
 
-                    await finishCreatedDiagram(diagram);
+                    await beginDiagramCreation(diagram, schemaStep);
                     return;
                 }
 
@@ -372,7 +458,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         databaseMetadata: metadata,
                     });
 
-                    await finishCreatedDiagram(diagram);
+                    await beginDiagramCreation(diagram, schemaStep);
                     return;
                 }
 
@@ -384,7 +470,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     diagramNumber,
                 });
 
-                await finishCreatedDiagram(diagram);
+                await beginDiagramCreation(diagram, schemaStep);
             } catch (error: unknown) {
                 let message = t(
                     'new_diagram_dialog.import_schema.errors.import_failed'
@@ -414,7 +500,7 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             databaseType,
             databaseEdition,
             diagramNumber,
-            finishCreatedDiagram,
+            beginDiagramCreation,
             t,
         ]
     );
@@ -432,8 +518,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
             updatedAt: new Date(),
         };
 
-        await finishCreatedDiagram(diagram);
-    }, [databaseType, databaseEdition, diagramNumber, finishCreatedDiagram]);
+        await beginDiagramCreation(
+            diagram,
+            CreateDiagramDialogStep.CHOOSE_INTENT
+        );
+    }, [databaseType, databaseEdition, diagramNumber, beginDiagramCreation]);
 
     const handleImportBack = useCallback(() => {
         setScriptResult('');
@@ -458,7 +547,14 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
 
     const isWideDialog =
         step === CreateDiagramDialogStep.IMPORT_DATABASE ||
+        step === CreateDiagramDialogStep.IMPORT_FROM_DATABASE ||
         step === CreateDiagramDialogStep.SELECT_TABLES;
+
+    const destinationInitialChoice: DiagramCreationDestination =
+        user?.default_diagram_creation_destination === 'device' ||
+        user?.default_diagram_creation_destination === 'online'
+            ? user.default_diagram_creation_destination
+            : 'online';
 
     return (
         <Dialog
@@ -488,18 +584,11 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                     }
                 }}
             >
-                <CreateDiagramDestinationSelector
-                    destination={destination}
-                    onDestinationChange={setDestination}
-                    onGuestRequestOnline={handleGuestRequestOnlineDestination}
-                    isAuthenticated={isAuthenticated}
-                />
                 <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                     {step === CreateDiagramDialogStep.SELECT_DATABASE ? (
                         <SelectDatabase
                             key={dialog.open ? 'open' : 'closed'}
                             databaseType={databaseType}
-                            hasExistingDiagram={canClose}
                             setDatabaseType={setDatabaseType}
                             onDatabaseSelected={() =>
                                 setStep(CreateDiagramDialogStep.CHOOSE_INTENT)
@@ -521,6 +610,17 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                                 )
                             }
                         />
+                    ) : step ===
+                      CreateDiagramDialogStep.CHOOSE_CREATION_DESTINATION ? (
+                        diagramPendingCreation ? (
+                            <ChooseCreationDestinationStep
+                                key={diagramPendingCreation.id}
+                                initialChoice={destinationInitialChoice}
+                                onConfirm={handleDestinationConfirm}
+                                onBack={handleDestinationBack}
+                                isSubmitting={destinationSubmitting}
+                            />
+                        ) : null
                     ) : step ===
                       CreateDiagramDialogStep.CHOOSE_IMPORT_METHOD ? (
                         <ChooseImportMethod

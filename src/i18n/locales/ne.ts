@@ -721,6 +721,22 @@ export const ne: LanguageTranslation = {
                 aria_label: 'नयाँ डायग्राम कहाँ बचत गर्ने',
             },
 
+            choose_creation_destination: {
+                title: 'यो डायाग्राम कहाँ बचत गर्ने?',
+                description:
+                    'यो मात्र यो उपकरणमा राख्ने वा FoxalDB खातामा सिङ्क गर्ने छान्नुहोस्.',
+                device_description:
+                    'यो ब्राउजरमामात्र बचत। छिटो अफलाइन मस्यौदाका लागि उपयुक्त.',
+                online_description:
+                    'तपाईंको खातामा बचत; अन्य उपकरणमा साइन इन गर्दा उपलब्ध.',
+                remember_choice: 'अर्को पटक मेरो छनोट सम्झनुहोस्',
+                back: 'पछाडि',
+                create: 'डायाग्राम बनाउनुहोस्',
+                save_preference_error_title: 'प्राथमिकता बचत भएन',
+                save_preference_error_description:
+                    'डायाग्राम बनियो, तर पूर्वनिर्धारित गन्तव्य बचत गर्न सकिएन। सेटिङ्गमा परिवर्तन गर्न सक्नुहुन्छ.',
+            },
+
             choose_intent: {
                 title: 'तपाईं के गर्न चाहनुहुन्छ?',
                 description:
@@ -1009,7 +1025,6 @@ export const ne: LanguageTranslation = {
             },
 
             cancel: 'रद्द गर्नुहोस्',
-            restore_from_backup: 'ब्याकअपबाट पुनर्स्थापना',
             back: 'फर्क',
             empty_diagram: 'खाली डाटाबेस',
             continue: 'जारी राख्नुहोस्',
@@ -1852,6 +1867,21 @@ export const ne: LanguageTranslation = {
                 submitting: 'सुरक्षित गर्दै...',
                 success_title: 'प्रोफाइल अद्यावधिक भयो',
                 success_description: 'तपाईंको प्रोफाइल सुरक्षित गरियो।',
+                diagram_creation: {
+                    heading: 'नयाँ डायाग्राम',
+                    description:
+                        'साइन इन गरेर डायाग्राम बनाउँदा FoxalDB ले पूर्वनिर्धारित बचत स्थान प्रयोग गर्न वा हरेक पटक सोध्न सक्छ.',
+                    ask_each_time: 'हरेक पटक सोध्नुहोस्',
+                    prefer_device: 'पूर्वनिर्धारित: यो उपकरण (ब्राउजर)',
+                    prefer_online: 'पूर्वनिर्धारित: मेरो FoxalDB खाता (अनलाइन)',
+                    saving: 'प्राथमिकता बचत गर्दै…',
+                    reset_success_title: 'प्राथमिकता अद्यावधिक भयो',
+                    reset_success_description:
+                        'अर्को पटक डायाग्राम बनाउँदा कहाँ बचत गर्ने सोधिनेछ.',
+                    save_error_title: 'प्राथमिकता बचत गर्न सकिएन',
+                    save_error_description:
+                        'प्राथमिकता अद्यावधिक गर्न सकिएन। फेरि प्रयास गर्नुहोस्.',
+                },
             },
             nav: {
                 sign_in: 'साइन इन',

@@ -716,6 +716,22 @@ export const ko_KR: LanguageTranslation = {
                 aria_label: '새 다이어그램 저장 위치',
             },
 
+            choose_creation_destination: {
+                title: '이 다이어그램을 어디에 저장할까요?',
+                description:
+                    '이 기기에만 둘지 FoxalDB 계정과 동기화할지 선택하세요.',
+                device_description:
+                    '이 브라우저에만 저장됩니다. 오프라인에서 빠르게 초안을 작성할 때 적합합니다.',
+                online_description:
+                    '계정에 저장되어 다른 기기에서 로그인하면 사용할 수 있습니다.',
+                remember_choice: '다음에도 내 선택을 기억하기',
+                back: '뒤로',
+                create: '다이어그램 만들기',
+                save_preference_error_title: '기본 설정이 저장되지 않았습니다',
+                save_preference_error_description:
+                    '다이어그램은 만들어졌지만 기본 저장 위치를 저장하지 못했습니다. 설정에서 변경할 수 있습니다.',
+            },
+
             choose_intent: {
                 title: '무엇을 하시겠습니까?',
                 description: '{{database}}용 새 다이어그램을 만듭니다.',
@@ -1020,7 +1036,6 @@ export const ko_KR: LanguageTranslation = {
 
             cancel: '취소',
             back: '뒤로가기',
-            restore_from_backup: '백업에서 복원',
             empty_diagram: '빈 데이터베이스',
             continue: '계속',
             import: '가져오기',
@@ -1846,6 +1861,21 @@ export const ko_KR: LanguageTranslation = {
                 submitting: '저장 중...',
                 success_title: '프로필이 업데이트되었습니다',
                 success_description: '프로필이 저장되었습니다.',
+                diagram_creation: {
+                    heading: '새 다이어그램',
+                    description:
+                        '로그인한 상태에서 다이어그램을 만들 때 FoxalDB는 기본 저장 위치를 사용하거나 매번 물을 수 있습니다.',
+                    ask_each_time: '매번 물어보기',
+                    prefer_device: '기본값: 이 기기(브라우저)',
+                    prefer_online: '기본값: 내 FoxalDB 계정(온라인)',
+                    saving: '기본 설정 저장 중…',
+                    reset_success_title: '기본 설정이 업데이트되었습니다',
+                    reset_success_description:
+                        '다음에 다이어그램을 만들 때 저장 위치를 묻습니다.',
+                    save_error_title: '기본 설정을 저장할 수 없습니다',
+                    save_error_description:
+                        '기본 설정을 업데이트할 수 없습니다. 다시 시도하세요.',
+                },
             },
             nav: {
                 sign_in: '로그인',

@@ -708,6 +708,22 @@ export const ar: LanguageTranslation = {
                 aria_label: 'مكان حفظ المخطط الجديد',
             },
 
+            choose_creation_destination: {
+                title: 'أين يجب حفظ هذا المخطط؟',
+                description:
+                    'اختر ما إذا كنت تريد الإبقاء عليه على هذا الجهاز فقط أو مزامنته مع حساب FoxalDB.',
+                device_description:
+                    'يُخزَّن في هذا المتصفح فقط. مناسب للمسودات السريعة دون اتصال.',
+                online_description:
+                    'يُحفظ في حسابك ويُتاح عند تسجيل الدخول من أجهزة أخرى.',
+                remember_choice: 'تذكّر اختياري في المرة القادمة',
+                back: 'رجوع',
+                create: 'إنشاء المخطط',
+                save_preference_error_title: 'لم تُحفَظ التفضيلات',
+                save_preference_error_description:
+                    'تم إنشاء المخطط، لكن لم نتمكن من حفظ الوجهة الافتراضية. يمكنك تغيير ذلك في الإعدادات.',
+            },
+
             choose_intent: {
                 title: 'ماذا تريد أن تفعل؟',
                 description: 'أنشئ مخططًا جديدًا لـ {{database}}.',
@@ -1002,7 +1018,6 @@ export const ar: LanguageTranslation = {
             },
 
             cancel: 'إلغاء',
-            restore_from_backup: 'استعادة من نسخة احتياطية',
             back: 'رجوع',
             empty_diagram: 'قاعدة بيانات فارغة',
             continue: 'متابعة',
@@ -1819,6 +1834,21 @@ export const ar: LanguageTranslation = {
                 submitting: 'جارٍ الحفظ...',
                 success_title: 'تم تحديث الملف الشخصي',
                 success_description: 'تم حفظ ملفك الشخصي.',
+                diagram_creation: {
+                    heading: 'مخططات جديدة',
+                    description:
+                        'عند إنشاء مخطط وأنت مسجّل الدخول، يمكن لـ FoxalDB استخدام موقع حفظ افتراضي أو السؤال في كل مرة.',
+                    ask_each_time: 'اسألني في كل مرة',
+                    prefer_device: 'هذا الجهاز (المتصفح) افتراضيًا',
+                    prefer_online: 'حسابي على FoxalDB (عبر الإنترنت) افتراضيًا',
+                    saving: 'جاري حفظ التفضيل…',
+                    reset_success_title: 'تم تحديث التفضيل',
+                    reset_success_description:
+                        'سيُسألُك أين تريد الحفظ في المرة القادمة التي تنشئ فيها مخططًا.',
+                    save_error_title: 'تعذّر حفظ التفضيل',
+                    save_error_description:
+                        'تعذّر تحديث التفضيل. حاول مرة أخرى.',
+                },
             },
             nav: {
                 sign_in: 'تسجيل الدخول',

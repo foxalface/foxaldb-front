@@ -36,10 +36,7 @@ export const DatabaseEditionPicker: React.FC<DatabaseEditionPickerProps> = ({
     }
 
     return (
-        <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium">
-                {t('new_diagram_dialog.import_from_database.database_edition')}
-            </p>
+        <div className="mt-4">
             <ToggleGroup
                 type="single"
                 className="flex-wrap justify-start gap-2"

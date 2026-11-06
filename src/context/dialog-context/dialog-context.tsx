@@ -3,7 +3,6 @@ import { emptyFn } from '@/lib/utils';
 import type { TableSchemaDialogProps } from '@/dialogs/table-schema-dialog/table-schema-dialog';
 import type { ExportSQLDialogProps } from '@/dialogs/export-sql-dialog/export-sql-dialog';
 import type { ExportDiagramDialogProps } from '@/dialogs/export-diagram-dialog/export-diagram-dialog';
-import type { ImportDiagramDialogProps } from '@/dialogs/import-diagram-dialog/import-diagram-dialog';
 import type { CreateRelationshipDialogProps } from '@/dialogs/create-relationship-dialog/create-relationship-dialog';
 import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-diagram-dialog';
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
@@ -64,12 +63,6 @@ export interface DialogContext {
         params: Omit<ExportDiagramDialogProps, 'dialog'>
     ) => void;
     closeExportDiagramDialog: () => void;
-
-    // Import diagram dialog
-    openImportDiagramDialog: (
-        params: Omit<ImportDiagramDialogProps, 'dialog'>
-    ) => void;
-    closeImportDiagramDialog: () => void;
 }
 
 export const dialogContext = createContext<DialogContext>({
@@ -93,6 +86,4 @@ export const dialogContext = createContext<DialogContext>({
     closeUserSettingsDialog: emptyFn,
     openExportDiagramDialog: emptyFn,
     closeExportDiagramDialog: emptyFn,
-    openImportDiagramDialog: emptyFn,
-    closeImportDiagramDialog: emptyFn,
 });

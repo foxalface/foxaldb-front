@@ -721,6 +721,22 @@ export const mr: LanguageTranslation = {
                 aria_label: 'नवीन डायग्राम कुठे जतन करायचे',
             },
 
+            choose_creation_destination: {
+                title: 'हा आरेख कुठे जतन करायचा?',
+                description:
+                    'फक्त या डिव्हाइसवर ठेवायचा की FoxalDB खात्याशी सिंक करायचा ते निवडा.',
+                device_description:
+                    'फक्त या ब्राउझरमध्ये जतन. ऑफलाइन जलद मसुद्यांसाठी चांगले.',
+                online_description:
+                    'तुमच्या खात्यात जतन; इतर डिव्हाइसवर साइन इन केल्यावर उपलब्ध.',
+                remember_choice: 'पुढच्यावेळी माझी निवड लक्षात ठेवा',
+                back: 'मागे',
+                create: 'आरेख तयार करा',
+                save_preference_error_title: 'प्राधान्य जतन झाले नाही',
+                save_preference_error_description:
+                    'आरेख तयार झाला, पण डिफॉल्ट ठिकाण जतन करता आले नाही. सेटिंग्समध्ये बदलू शकता.',
+            },
+
             choose_intent: {
                 title: 'तुम्हाला काय करायचे आहे?',
                 description: '{{database}} साठी नवीन डायग्राम तयार करा.',
@@ -1009,7 +1025,6 @@ export const mr: LanguageTranslation = {
 
             cancel: 'रद्द करा',
             // TODO: Add translations
-            restore_from_backup: 'बॅकअपमधून पुनर्स्थापित करा',
             back: 'मागे',
             empty_diagram: 'रिक्त डेटाबेस',
             continue: 'सुरू ठेवा',
@@ -1846,6 +1861,21 @@ export const mr: LanguageTranslation = {
                 submitting: 'जतन करत आहे...',
                 success_title: 'प्रोफाइल अद्यतनित केले',
                 success_description: 'तुमचे प्रोफाइल जतन केले.',
+                diagram_creation: {
+                    heading: 'नवीन आरेख',
+                    description:
+                        'साइन इन करताना आरेख तयार करताना FoxalDB डिफॉल्ट जतन ठिकाण वापरू शकते किंवा प्रत्येक वेळी विचारू शकते.',
+                    ask_each_time: 'प्रत्येक वेळी मला विचारा',
+                    prefer_device: 'डिफॉल्ट: हे डिव्हाइस (ब्राउझर)',
+                    prefer_online: 'डिफॉल्ट: माझे FoxalDB खाते (ऑनलाइन)',
+                    saving: 'प्राधान्य जतन करत आहे…',
+                    reset_success_title: 'प्राधान्य अपडेट झाले',
+                    reset_success_description:
+                        'पुढच्यावेळी आरेख तयार करताना कुठे जतन करायचे ते विचारले जाईल.',
+                    save_error_title: 'प्राधान्य जतन करता आले नाही',
+                    save_error_description:
+                        'प्राधान्य अपडेट करता आले नाही. पुन्हा प्रयत्न करा.',
+                },
             },
             nav: {
                 sign_in: 'साइन इन',

@@ -13,7 +13,10 @@ import { useToast } from '@/components/toast/use-toast';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useAuth } from '@/hooks/use-auth';
 import { useDialog } from '@/hooks/use-dialog';
-import type { UpdateProfilePayload } from '@/lib/api/auth';
+import type {
+    DiagramCreationDestinationPreference,
+    UpdateProfilePayload,
+} from '@/lib/api/auth';
 import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +36,7 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
     dialog,
 }) => {
     const { t } = useTranslation();
-    const { user, updateProfile } = useAuth();
+    const { user, updateProfile, updateDiagramCreationPreference } = useAuth();
     const { closeUserSettingsDialog } = useDialog();
     const { toast } = useToast();
     const [firstName, setFirstName] = useState('');
@@ -47,6 +50,10 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
     >({});
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [
+        diagramCreationPreferenceSaving,
+        setDiagramCreationPreferenceSaving,
+    ] = useState(false);
 
     useEffect(() => {
         if (!dialog.open || !user) {
@@ -61,11 +68,53 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
         setPasswordConfirmation('');
         setFieldErrors({});
         setErrorMessage(null);
+        setDiagramCreationPreferenceSaving(false);
     }, [dialog.open, user]);
 
     const closeDialog = useCallback(() => {
         closeUserSettingsDialog();
     }, [closeUserSettingsDialog]);
+
+    const handleDiagramCreationPreferenceChange = useCallback(
+        async (
+            next: DiagramCreationDestinationPreference | null
+        ): Promise<void> => {
+            if (
+                user !== null &&
+                user.default_diagram_creation_destination === next
+            ) {
+                return;
+            }
+
+            setDiagramCreationPreferenceSaving(true);
+            try {
+                await updateDiagramCreationPreference({
+                    default_diagram_creation_destination: next,
+                });
+                if (next === null) {
+                    toast({
+                        title: t(
+                            'auth.settings.diagram_creation.reset_success_title'
+                        ),
+                        description: t(
+                            'auth.settings.diagram_creation.reset_success_description'
+                        ),
+                    });
+                }
+            } catch {
+                toast({
+                    variant: 'destructive',
+                    title: t('auth.settings.diagram_creation.save_error_title'),
+                    description: t(
+                        'auth.settings.diagram_creation.save_error_description'
+                    ),
+                });
+            } finally {
+                setDiagramCreationPreferenceSaving(false);
+            }
+        },
+        [t, toast, updateDiagramCreationPreference, user]
+    );
 
     const handleSubmit = useCallback(
         async (event: React.FormEvent<HTMLFormElement>) => {
@@ -216,6 +265,112 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                             </span>
                         ) : null}
                     </label>
+
+                    <Separator className="my-1" />
+
+                    <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-1">
+                            <p className="text-sm font-medium">
+                                {t('auth.settings.diagram_creation.heading')}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                                {t(
+                                    'auth.settings.diagram_creation.description'
+                                )}
+                            </p>
+                        </div>
+                        <div
+                            className="flex flex-col gap-2"
+                            role="radiogroup"
+                            aria-label={t(
+                                'auth.settings.diagram_creation.heading'
+                            )}
+                        >
+                            <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm">
+                                <input
+                                    checked={
+                                        user.default_diagram_creation_destination ===
+                                        null
+                                    }
+                                    className="mt-1"
+                                    disabled={
+                                        isSubmitting ||
+                                        diagramCreationPreferenceSaving
+                                    }
+                                    name="diagram_creation_destination"
+                                    onChange={() => {
+                                        void handleDiagramCreationPreferenceChange(
+                                            null
+                                        );
+                                    }}
+                                    type="radio"
+                                    value="ask"
+                                />
+                                <span>
+                                    {t(
+                                        'auth.settings.diagram_creation.ask_each_time'
+                                    )}
+                                </span>
+                            </label>
+                            <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm">
+                                <input
+                                    checked={
+                                        user.default_diagram_creation_destination ===
+                                        'device'
+                                    }
+                                    className="mt-1"
+                                    disabled={
+                                        isSubmitting ||
+                                        diagramCreationPreferenceSaving
+                                    }
+                                    name="diagram_creation_destination"
+                                    onChange={() => {
+                                        void handleDiagramCreationPreferenceChange(
+                                            'device'
+                                        );
+                                    }}
+                                    type="radio"
+                                    value="device"
+                                />
+                                <span>
+                                    {t(
+                                        'auth.settings.diagram_creation.prefer_device'
+                                    )}
+                                </span>
+                            </label>
+                            <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm">
+                                <input
+                                    checked={
+                                        user.default_diagram_creation_destination ===
+                                        'online'
+                                    }
+                                    className="mt-1"
+                                    disabled={
+                                        isSubmitting ||
+                                        diagramCreationPreferenceSaving
+                                    }
+                                    name="diagram_creation_destination"
+                                    onChange={() => {
+                                        void handleDiagramCreationPreferenceChange(
+                                            'online'
+                                        );
+                                    }}
+                                    type="radio"
+                                    value="online"
+                                />
+                                <span>
+                                    {t(
+                                        'auth.settings.diagram_creation.prefer_online'
+                                    )}
+                                </span>
+                            </label>
+                        </div>
+                        {diagramCreationPreferenceSaving ? (
+                            <p className="text-xs text-muted-foreground">
+                                {t('auth.settings.diagram_creation.saving')}
+                            </p>
+                        ) : null}
+                    </div>
 
                     <Separator className="my-1" />
 

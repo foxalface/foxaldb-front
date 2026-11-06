@@ -723,6 +723,22 @@ export const uk: LanguageTranslation = {
                 aria_label: 'Куди зберегти нову діаграму',
             },
 
+            choose_creation_destination: {
+                title: 'Де зберегти цю діаграму?',
+                description:
+                    'Оберіть: лише на цьому пристрої чи синхронізувати з обліковим записом FoxalDB.',
+                device_description:
+                    'Лише в цьому браузері. Підходить для швидких чернеток офлайн.',
+                online_description:
+                    'Зберігається в обліковому записі та доступна після входу на інших пристроях.',
+                remember_choice: 'Запам’ятати вибір наступного разу',
+                back: 'Назад',
+                create: 'Створити діаграму',
+                save_preference_error_title: 'Налаштування не збережено',
+                save_preference_error_description:
+                    'Діаграму створено, але не вдалося зберегти місце за замовчуванням. Змініть це в Налаштуваннях.',
+            },
+
             choose_intent: {
                 title: 'Що ви хочете зробити?',
                 description: 'Створіть нову діаграму для {{database}}.',
@@ -1019,7 +1035,6 @@ export const uk: LanguageTranslation = {
 
             cancel: 'Скасувати',
             back: 'Назад',
-            restore_from_backup: 'Відновити з резервної копії',
             empty_diagram: 'Порожня база даних',
             continue: 'Продовжити',
             import: 'Імпорт',
@@ -1852,6 +1867,22 @@ export const uk: LanguageTranslation = {
                 submitting: 'Збереження...',
                 success_title: 'Профіль оновлено',
                 success_description: 'Ваш профіль збережено.',
+                diagram_creation: {
+                    heading: 'Нові діаграми',
+                    description:
+                        'Під час створення діаграми в обліковому записі FoxalDB може використовувати місце збереження за замовчуванням або питати щоразу.',
+                    ask_each_time: 'Питати щоразу',
+                    prefer_device: 'За замовчуванням: цей пристрій (браузер)',
+                    prefer_online:
+                        'За замовчуванням: мій обліковий запис FoxalDB (онлайн)',
+                    saving: 'Збереження налаштування…',
+                    reset_success_title: 'Налаштування оновлено',
+                    reset_success_description:
+                        'Наступного разу під час створення діаграми буде запитано, куди зберігати.',
+                    save_error_title: 'Не вдалося зберегти налаштування',
+                    save_error_description:
+                        'Не вдалося оновити налаштування. Спробуйте ще раз.',
+                },
             },
             nav: {
                 sign_in: 'Увійти',

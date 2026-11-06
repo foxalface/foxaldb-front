@@ -716,6 +716,22 @@ export const bn: LanguageTranslation = {
                 aria_label: 'নতুন ডায়াগ্রাম কোথায় সংরক্ষণ হবে',
             },
 
+            choose_creation_destination: {
+                title: 'এই ডায়াগ্রামটি কোথায় সংরক্ষণ করবেন?',
+                description:
+                    'শুধুমাত্র এই ডিভাইসে রাখবেন নাকি আপনার FoxalDB অ্যাকাউন্টে সিঙ্ক করবেন তা বেছে নিন।',
+                device_description:
+                    'শুধু এই ব্রাউজারে সংরক্ষিত। দ্রুত অফলাইন খসড়ার জন্য উপযুক্ত।',
+                online_description:
+                    'আপনার অ্যাকাউন্টে সংরক্ষিত; অন্য ডিভাইসে সাইন ইন করলে পাওয়া যাবে।',
+                remember_choice: 'পরের বার আমার পছন্দ মনে রাখুন',
+                back: 'পিছনে',
+                create: 'ডায়াগ্রাম তৈরি করুন',
+                save_preference_error_title: 'পছন্দ সংরক্ষণ হয়নি',
+                save_preference_error_description:
+                    'ডায়াগ্রাম তৈরি হয়েছে, কিন্তু ডিফল্ট গন্তব্য সংরক্ষণ করা যায়নি। সেটিংসে এটি পরিবর্তন করতে পারেন।',
+            },
+
             choose_intent: {
                 title: 'আপনি কী করতে চান?',
                 description:
@@ -1010,7 +1026,6 @@ export const bn: LanguageTranslation = {
 
             cancel: 'বাতিল করুন',
             back: 'ফিরে যান',
-            restore_from_backup: 'ব্যাকআপ থেকে পুনরুদ্ধার',
             empty_diagram: 'খালি ডাটাবেস',
             continue: 'চালিয়ে যান',
             import: 'আমদানি করুন',
@@ -1843,6 +1858,21 @@ export const bn: LanguageTranslation = {
                 submitting: 'সংরক্ষণ করা হচ্ছে...',
                 success_title: 'প্রোফাইল আপডেট হয়েছে',
                 success_description: 'আপনার প্রোফাইল সংরক্ষিত হয়েছে।',
+                diagram_creation: {
+                    heading: 'নতুন ডায়াগ্রাম',
+                    description:
+                        'সাইন ইন থাকা অবস্থায় ডায়াগ্রাম তৈরি করলে FoxalDB ডিফল্ট সংরক্ষণ স্থান ব্যবহার করতে পারে বা প্রতিবার জিজ্ঞাসা করতে পারে।',
+                    ask_each_time: 'প্রতিবার আমাকে জিজ্ঞাসা করুন',
+                    prefer_device: 'ডিফল্ট: এই ডিভাইস (ব্রাউজার)',
+                    prefer_online: 'ডিফল্ট: আমার FoxalDB অ্যাকাউন্ট (অনলাইন)',
+                    saving: 'পছন্দ সংরক্ষণ হচ্ছে…',
+                    reset_success_title: 'পছন্দ আপডেট হয়েছে',
+                    reset_success_description:
+                        'পরবার ডায়াগ্রাম তৈরি করলে কোথায় সংরক্ষণ করবেন তা জিজ্ঞাসা করা হবে।',
+                    save_error_title: 'পছন্দ সংরক্ষণ করা যায়নি',
+                    save_error_description:
+                        'পছন্দ আপডেট করা যায়নি। আবার চেষ্টা করুন।',
+                },
             },
             nav: {
                 sign_in: 'সাইন ইন',

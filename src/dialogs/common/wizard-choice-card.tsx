@@ -6,6 +6,7 @@ export interface WizardChoiceCardProps {
     title: string;
     description: string;
     onClick: () => void;
+    selected?: boolean;
 }
 
 export const WizardChoiceCard: React.FC<WizardChoiceCardProps> = ({
@@ -13,13 +14,16 @@ export const WizardChoiceCard: React.FC<WizardChoiceCardProps> = ({
     title,
     description,
     onClick,
+    selected = false,
 }) => (
     <button
         type="button"
         onClick={onClick}
         className={cn(
             'flex min-w-0 flex-1 flex-col items-center gap-3 rounded-xl border bg-card p-4 text-center shadow',
-            'transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+            'transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+            selected &&
+                'border-primary ring-1 ring-primary/30 ring-offset-2 ring-offset-background'
         )}
     >
         <span className="text-muted-foreground" aria-hidden>
@@ -38,7 +42,7 @@ export const WizardChoiceCard: React.FC<WizardChoiceCardProps> = ({
 
 export const WizardChoiceGrid: React.FC<React.PropsWithChildren> = ({
     children,
-}) => <div className="grid w-full grid-cols-2 gap-3">{children}</div>;
+}) => <div className="mt-4 grid w-full grid-cols-2 gap-3">{children}</div>;
 
 export const WizardChoiceList: React.FC<React.PropsWithChildren> = ({
     children,

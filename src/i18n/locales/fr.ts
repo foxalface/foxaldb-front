@@ -726,6 +726,22 @@ export const fr: LanguageTranslation = {
                 aria_label: 'Où enregistrer le nouveau diagramme',
             },
 
+            choose_creation_destination: {
+                title: 'Où enregistrer ce diagramme ?',
+                description:
+                    'Choisissez de le garder uniquement sur cet appareil ou de le synchroniser avec votre compte FoxalDB.',
+                device_description:
+                    'Stocké uniquement dans ce navigateur. Idéal pour des brouillons rapides hors ligne.',
+                online_description:
+                    "Enregistré sur votre compte et disponible lorsque vous vous connectez sur d'autres appareils.",
+                remember_choice: 'Mémoriser mon choix pour la prochaine fois',
+                back: 'Retour',
+                create: 'Créer le diagramme',
+                save_preference_error_title: 'Préférence non enregistrée',
+                save_preference_error_description:
+                    "Le diagramme a été créé, mais la destination par défaut n'a pas pu être enregistrée. Vous pouvez la modifier dans les paramètres.",
+            },
+
             choose_intent: {
                 title: 'Que souhaitez-vous faire ?',
                 description: 'Créez un nouveau diagramme pour {{database}}.',
@@ -1041,7 +1057,6 @@ export const fr: LanguageTranslation = {
 
             cancel: 'Annuler',
             back: 'Retour',
-            restore_from_backup: 'Restaurer depuis une sauvegarde',
             empty_diagram: 'Base de données vide',
             continue: 'Continuer',
             import: 'Importer',
@@ -1887,6 +1902,21 @@ export const fr: LanguageTranslation = {
                 submitting: 'Enregistrement...',
                 success_title: 'Profil mis à jour',
                 success_description: 'Votre profil a été enregistré.',
+                diagram_creation: {
+                    heading: 'Nouveaux diagrammes',
+                    description:
+                        'Lorsque vous créez un diagramme connecté, FoxalDB peut utiliser un emplacement par défaut ou vous demander à chaque fois.',
+                    ask_each_time: 'Me demander à chaque fois',
+                    prefer_device: 'Cet appareil (navigateur) par défaut',
+                    prefer_online: 'Mon compte FoxalDB (en ligne) par défaut',
+                    saving: 'Enregistrement…',
+                    reset_success_title: 'Préférence mise à jour',
+                    reset_success_description:
+                        'On vous demandera où enregistrer lors de la prochaine création de diagramme.',
+                    save_error_title: "Impossible d'enregistrer la préférence",
+                    save_error_description:
+                        'Impossible de mettre à jour la préférence. Réessayez.',
+                },
             },
             nav: {
                 sign_in: 'Se connecter',

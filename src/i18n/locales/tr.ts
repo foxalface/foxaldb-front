@@ -709,6 +709,22 @@ export const tr: LanguageTranslation = {
                 aria_label: 'Yeni diyagramın kaydedileceği yer',
             },
 
+            choose_creation_destination: {
+                title: 'Bu diyagram nerede kaydedilsin?',
+                description:
+                    'Yalnızca bu cihazda tutmak mı yoksa FoxalDB hesabınızla senkronize etmek mi istediğinizi seçin.',
+                device_description:
+                    'Yalnızca bu tarayıcıda saklanır. Hızlı çevrimdışı taslaklar için uygundur.',
+                online_description:
+                    'Hesabınıza kaydedilir; diğer cihazlarda oturum açtığınızda kullanılabilir.',
+                remember_choice: 'Seçimimi bir sonraki sefer için hatırla',
+                back: 'Geri',
+                create: 'Diyagram oluştur',
+                save_preference_error_title: 'Tercih kaydedilemedi',
+                save_preference_error_description:
+                    'Diyagram oluşturuldu ancak varsayılan konum kaydedilemedi. Bunu Ayarlar’dan değiştirebilirsiniz.',
+            },
+
             choose_intent: {
                 title: 'Ne yapmak istersiniz?',
                 description: '{{database}} için yeni bir diyagram oluşturun.',
@@ -999,7 +1015,6 @@ export const tr: LanguageTranslation = {
                 },
             },
             // TODO: Translate
-            restore_from_backup: 'Yedekten geri yükle',
             cancel: 'İptal',
             back: 'Geri',
             empty_diagram: 'Boş veritabanı',
@@ -1835,6 +1850,21 @@ export const tr: LanguageTranslation = {
                 submitting: 'Kaydediliyor...',
                 success_title: 'Profil güncellendi',
                 success_description: 'Profiliniz kaydedildi.',
+                diagram_creation: {
+                    heading: 'Yeni diyagramlar',
+                    description:
+                        'Oturum açıkken diyagram oluştururken FoxalDB varsayılan kayıt konumunu kullanabilir veya her seferinde sorabilir.',
+                    ask_each_time: 'Her seferinde sor',
+                    prefer_device: 'Varsayılan: bu cihaz (tarayıcı)',
+                    prefer_online: 'Varsayılan: FoxalDB hesabım (çevrimiçi)',
+                    saving: 'Tercih kaydediliyor…',
+                    reset_success_title: 'Tercih güncellendi',
+                    reset_success_description:
+                        'Bir sonraki diyagram oluşturmanızda nereye kaydedileceği sorulacak.',
+                    save_error_title: 'Tercih kaydedilemedi',
+                    save_error_description:
+                        'Tercih güncellenemedi. Tekrar deneyin.',
+                },
             },
             nav: {
                 sign_in: 'Giriş yap',

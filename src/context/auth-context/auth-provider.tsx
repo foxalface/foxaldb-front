@@ -6,7 +6,11 @@ import React, {
     useState,
 } from 'react';
 import { AuthContext } from './auth-context';
-import type { AuthUser, UpdateProfilePayload } from '@/lib/api/auth';
+import type {
+    AuthUser,
+    UpdateDiagramCreationPreferencePayload,
+    UpdateProfilePayload,
+} from '@/lib/api/auth';
 import {
     initCsrf,
     login as apiLogin,
@@ -15,6 +19,7 @@ import {
     fetchSessionUser,
     fetchCurrentUser,
     updateProfile as apiUpdateProfile,
+    updateDiagramCreationPreference as apiUpdateDiagramCreationPreference,
 } from '@/lib/api/auth';
 import { registerSessionExpiredHandler } from '@/lib/api/session-expired';
 import { beginSessionEnd, type SessionEndReason } from '@/lib/session-end';
@@ -193,6 +198,18 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const updateDiagramCreationPreference = useCallback(
+        async (
+            payload: UpdateDiagramCreationPreferencePayload
+        ): Promise<void> => {
+            const updatedUser =
+                await apiUpdateDiagramCreationPreference(payload);
+            userRef.current = updatedUser;
+            setUser(updatedUser);
+        },
+        []
+    );
+
     const value = useMemo(
         () => ({
             user,
@@ -203,8 +220,18 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
             logout,
             fetchUser,
             updateProfile,
+            updateDiagramCreationPreference,
         }),
-        [user, isLoading, login, register, logout, fetchUser, updateProfile]
+        [
+            user,
+            isLoading,
+            login,
+            register,
+            logout,
+            fetchUser,
+            updateProfile,
+            updateDiagramCreationPreference,
+        ]
     );
 
     return (

@@ -730,6 +730,22 @@ export const es: LanguageTranslation = {
                 aria_label: 'Dónde guardar el nuevo diagrama',
             },
 
+            choose_creation_destination: {
+                title: '¿Dónde quieres guardar este diagrama?',
+                description:
+                    'Elige mantenerlo solo en este dispositivo o sincronizarlo con tu cuenta de FoxalDB.',
+                device_description:
+                    'Guardado solo en este navegador. Ideal para borradores rápidos sin conexión.',
+                online_description:
+                    'Guardado en tu cuenta y disponible al iniciar sesión en otros dispositivos.',
+                remember_choice: 'Recordar mi elección la próxima vez',
+                back: 'Atrás',
+                create: 'Crear diagrama',
+                save_preference_error_title: 'No se guardó la preferencia',
+                save_preference_error_description:
+                    'El diagrama se creó, pero no pudimos guardar el destino predeterminado. Puedes cambiarlo en Ajustes.',
+            },
+
             choose_intent: {
                 title: '¿Qué le gustaría hacer?',
                 description: 'Cree un nuevo diagrama para {{database}}.',
@@ -1034,7 +1050,6 @@ export const es: LanguageTranslation = {
             cancel: 'Cancelar',
             back: 'Atrás',
             // TODO: Translate
-            restore_from_backup: 'Restaurar desde copia de seguridad',
             empty_diagram: 'Base de datos vacía',
             continue: 'Continuar',
             import: 'Importar',
@@ -1883,6 +1898,21 @@ export const es: LanguageTranslation = {
                 submitting: 'Guardando...',
                 success_title: 'Perfil actualizado',
                 success_description: 'Tu perfil se ha guardado.',
+                diagram_creation: {
+                    heading: 'Diagramas nuevos',
+                    description:
+                        'Al crear un diagrama con la sesión iniciada, FoxalDB puede usar una ubicación predeterminada o preguntarte cada vez.',
+                    ask_each_time: 'Preguntarme cada vez',
+                    prefer_device: 'Este dispositivo (navegador) por defecto',
+                    prefer_online: 'Mi cuenta FoxalDB (en línea) por defecto',
+                    saving: 'Guardando preferencia…',
+                    reset_success_title: 'Preferencia actualizada',
+                    reset_success_description:
+                        'La próxima vez que crees un diagrama te preguntaremos dónde guardarlo.',
+                    save_error_title: 'No se pudo guardar la preferencia',
+                    save_error_description:
+                        'No se pudo actualizar la preferencia. Inténtalo de nuevo.',
+                },
             },
             nav: {
                 sign_in: 'Iniciar sesión',

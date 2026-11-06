@@ -17,9 +17,17 @@ const setDiagramLocation = vi.fn();
 
 let isAuthenticated = true;
 
+const authUserForWizardTests = {
+    default_diagram_creation_destination: 'online' as const,
+};
+
+const updateDiagramCreationPreference = vi.fn();
+
 vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => ({
         isAuthenticated,
+        user: isAuthenticated ? authUserForWizardTests : null,
+        updateDiagramCreationPreference,
     }),
 }));
 
@@ -47,7 +55,6 @@ vi.mock('@/hooks/use-dialog', () => ({
     useDialog: () => ({
         closeCreateDiagramDialog,
         openAuthDialog: vi.fn(),
-        openImportDiagramDialog: vi.fn(),
     }),
 }));
 
@@ -138,6 +145,7 @@ describe('CreateDiagramDialog wizard flow', () => {
         setDiagramLocation.mockClear();
         importSchemaPropsSpy.mockClear();
         importFromDatabasePropsSpy.mockClear();
+        updateDiagramCreationPreference.mockClear();
     });
 
     it('advances to CHOOSE_INTENT when PostgreSQL is selected without persisting', async () => {

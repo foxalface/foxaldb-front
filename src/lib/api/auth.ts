@@ -10,12 +10,19 @@ export interface UpdateProfilePayload {
     password_confirmation?: string;
 }
 
+export type DiagramCreationDestinationPreference = 'device' | 'online';
+
+export interface UpdateDiagramCreationPreferencePayload {
+    default_diagram_creation_destination: DiagramCreationDestinationPreference | null;
+}
+
 export interface AuthUser {
     id: number;
     first_name: string;
     last_name: string;
     full_name: string;
     email: string;
+    default_diagram_creation_destination: DiagramCreationDestinationPreference | null;
 }
 
 interface AuthUserResponse {
@@ -121,6 +128,25 @@ export const updateProfile = async (
     const user = parseAuthUser(response.user);
     if (user === null) {
         throw new Error('Invalid profile update response');
+    }
+
+    return user;
+};
+
+export const updateDiagramCreationPreference = async (
+    payload: UpdateDiagramCreationPreferencePayload
+): Promise<AuthUser> => {
+    const response = await apiRequest<AuthUserResponse>(
+        '/me/diagram-creation-preference',
+        {
+            method: 'PATCH',
+            data: payload,
+        }
+    );
+
+    const user = parseAuthUser(response.user);
+    if (user === null) {
+        throw new Error('Invalid diagram creation preference response');
     }
 
     return user;

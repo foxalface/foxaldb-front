@@ -17,8 +17,8 @@ describe('DialogProvider legacy import UI', () => {
         expect(providerSource).not.toContain('openLaravelMigrationDiffDialog');
     });
 
-    it('still registers diagram JSON restore dialog', () => {
-        expect(providerSource).toContain('ImportDiagramDialog');
-        expect(providerSource).toContain('openImportDiagramDialog');
+    it('does not register the removed standalone restore-json dialog', () => {
+        expect(providerSource).not.toContain('ImportDiagramDialog');
+        expect(providerSource).not.toContain('openImportDiagramDialog');
     });
 });

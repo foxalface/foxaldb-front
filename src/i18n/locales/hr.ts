@@ -718,6 +718,22 @@ export const hr: LanguageTranslation = {
                 aria_label: 'Gdje spremiti novi dijagram',
             },
 
+            choose_creation_destination: {
+                title: 'Gdje spremiti ovaj dijagram?',
+                description:
+                    'Odaberite želite li ga zadržati samo na ovom uređaju ili sinkronizirati s FoxalDB računom.',
+                device_description:
+                    'Spremljeno samo u ovom pregledniku. Dobro za brze skice izvan mreže.',
+                online_description:
+                    'Spremljeno na vaš račun i dostupno kad se prijavite na drugim uređajima.',
+                remember_choice: 'Zapamti moj izbor za sljedeći put',
+                back: 'Natrag',
+                create: 'Stvori dijagram',
+                save_preference_error_title: 'Postavka nije spremljena',
+                save_preference_error_description:
+                    'Dijagram je stvoren, ali zadano odredište nije bilo moguće spremiti. Možete to promijeniti u Postavkama.',
+            },
+
             choose_intent: {
                 title: 'Što želite učiniti?',
                 description: 'Stvorite novi dijagram za {{database}}.',
@@ -1018,7 +1034,6 @@ export const hr: LanguageTranslation = {
             },
 
             cancel: 'Odustani',
-            restore_from_backup: 'Vrati iz sigurnosne kopije',
             back: 'Natrag',
             empty_diagram: 'Prazna baza podataka',
             continue: 'Nastavi',
@@ -1852,6 +1867,21 @@ export const hr: LanguageTranslation = {
                 submitting: 'Spremanje...',
                 success_title: 'Profil ažuriran',
                 success_description: 'Vaš profil je spremljen.',
+                diagram_creation: {
+                    heading: 'Novi dijagrami',
+                    description:
+                        'Kada ste prijavljeni i stvarate dijagram, FoxalDB može upotrijebiti zadano mjesto spremanja ili pitati svaki put.',
+                    ask_each_time: 'Pitaj me svaki put',
+                    prefer_device: 'Zadano: ovaj uređaj (preglednik)',
+                    prefer_online: 'Zadano: moj FoxalDB račun (online)',
+                    saving: 'Spremanje postavke…',
+                    reset_success_title: 'Postavka ažurirana',
+                    reset_success_description:
+                        'Pri sljedećem stvaranju dijagrama pitat ćemo vas gdje ga spremiti.',
+                    save_error_title: 'Postavka nije spremljena',
+                    save_error_description:
+                        'Nije bilo moguće ažurirati postavku. Pokušajte ponovo.',
+                },
             },
             nav: {
                 sign_in: 'Prijava',

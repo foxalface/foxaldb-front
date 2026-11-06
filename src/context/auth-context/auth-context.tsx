@@ -1,6 +1,10 @@
 import { createContext } from 'react';
 import { emptyFn } from '@/lib/utils';
-import type { AuthUser, UpdateProfilePayload } from '@/lib/api/auth';
+import type {
+    AuthUser,
+    UpdateDiagramCreationPreferencePayload,
+    UpdateProfilePayload,
+} from '@/lib/api/auth';
 
 export interface AuthContextValue {
     user: AuthUser | null;
@@ -17,6 +21,9 @@ export interface AuthContextValue {
     logout: () => Promise<void>;
     fetchUser: () => Promise<void>;
     updateProfile: (payload: UpdateProfilePayload) => Promise<void>;
+    updateDiagramCreationPreference: (
+        payload: UpdateDiagramCreationPreferencePayload
+    ) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextValue>({
@@ -28,4 +35,5 @@ export const AuthContext = createContext<AuthContextValue>({
     logout: emptyFn,
     fetchUser: emptyFn,
     updateProfile: emptyFn,
+    updateDiagramCreationPreference: emptyFn,
 });

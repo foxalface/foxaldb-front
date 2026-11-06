@@ -717,6 +717,22 @@ export const te: LanguageTranslation = {
                 aria_label: 'కొత్త డయాగ్రామ్ ఎక్కడ సేవ్ చేయాలి',
             },
 
+            choose_creation_destination: {
+                title: 'ఈ రేఖాపటాన్ని ఎక్కడ సేవ్ చేయాలి?',
+                description:
+                    'దీన్ని ఈ పరికరంలో మాత్రమే ఉంచాలా లేదా FoxalDB ఖాతాతో సమకాలీకరించాలా ఎంచుకోండి.',
+                device_description:
+                    'ఈ బ్రౌజర్‌లో మాత్రమే సేవ్. ఆఫ్‌లైన్‌లో త్వరగా ముసాయిదాలకు అనువైనది.',
+                online_description:
+                    'మీ ఖాతాలో సేవ్; ఇతర పరికరాలలో సైన్ ఇన్ చేసినప్పుడు అందుబాటులో ఉంటుంది.',
+                remember_choice: 'తరువాత సారి నా ఎంపికను గుర్తుంచుకోండి',
+                back: 'వెనుకకు',
+                create: 'రేఖాపటం సృష్టించు',
+                save_preference_error_title: 'ప్రాధాన్యత సేవ్ కాలేదు',
+                save_preference_error_description:
+                    'రేఖాపటం సృష్టించబడింది, కానీ డిఫాల్ట్ గమ్యాన్ని సేవ్ చేయలేకపోయాము. సెట్టింగ్‌లలో మార్చుకోండి.',
+            },
+
             choose_intent: {
                 title: 'మీరు ఏమి చేయాలనుకుంటున్నారు?',
                 description:
@@ -1018,7 +1034,6 @@ export const te: LanguageTranslation = {
 
             cancel: 'రద్దు',
             // TODO: Translate
-            restore_from_backup: 'బ్యాకప్ నుండి పునరుద్ధరించు',
             back: 'తిరుగు',
             empty_diagram: 'ఖాళీ డేటాబేస్',
             continue: 'కొనసాగించు',
@@ -1866,6 +1881,21 @@ export const te: LanguageTranslation = {
                 submitting: 'సేవ్ చేస్తోంది...',
                 success_title: 'ప్రొఫైల్ నవీకరించబడింది',
                 success_description: 'మీ ప్రొఫైల్ సేవ్ చేయబడింది.',
+                diagram_creation: {
+                    heading: 'కొత్త రేఖాపటాలు',
+                    description:
+                        'సైన్ ఇన్ చేసి రేఖాపటం సృష్టించేటప్పుడు FoxalDB డిఫాల్ట్ సేవ్ స్థలాన్ని వాడవచ్చు లేదా ప్రతిసారీ అడగవచ్చు.',
+                    ask_each_time: 'ప్రతిసారీ నన్ను అడగండి',
+                    prefer_device: 'డిఫాల్ట్: ఈ పరికరం (బ్రౌజర్)',
+                    prefer_online: 'డిఫాల్ట్: నా FoxalDB ఖాతా (ఆన్‌లైన్)',
+                    saving: 'ప్రాధాన్యత సేవ్ చేస్తోంది…',
+                    reset_success_title: 'ప్రాధాన్యత నవీకరించబడింది',
+                    reset_success_description:
+                        'తదుపరి రేఖాపటం సృష్టించేటప్పుడు ఎక్కడ సేవ్ చేయాలో అడుగుతాము.',
+                    save_error_title: 'ప్రాధాన్యతను సేవ్ చేయలేకపోయాము',
+                    save_error_description:
+                        'ప్రాధాన్యతను నవీకరించలేకపోయాము. మళ్లీ ప్రయత్నించండి.',
+                },
             },
             nav: {
                 sign_in: 'సైన్ ఇన్',

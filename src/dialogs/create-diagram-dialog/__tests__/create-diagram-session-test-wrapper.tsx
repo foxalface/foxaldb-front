@@ -1,15 +1,13 @@
 import React from 'react';
-import { CreateDiagramSessionDestinationProvider } from '../create-diagram-session-destination-context';
 
-export const withCreateDiagramSessionDestination = (createDialogOpen = true) =>
-    function CreateDiagramSessionDestinationTestWrapper({
+/** @deprecated No longer wraps session destination — kept to minimize test churn. */
+export const withCreateDiagramSessionDestination = (
+    _legacyCreateDialogOpen?: boolean
+) => {
+    void _legacyCreateDialogOpen;
+    return function CreateDiagramSessionDestinationTestWrapper({
         children,
     }: React.PropsWithChildren) {
-        return (
-            <CreateDiagramSessionDestinationProvider
-                createDialogOpen={createDialogOpen}
-            >
-                {children}
-            </CreateDiagramSessionDestinationProvider>
-        );
+        return <>{children}</>;
     };
+};

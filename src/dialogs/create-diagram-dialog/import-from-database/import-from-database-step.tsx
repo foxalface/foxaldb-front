@@ -2,11 +2,14 @@ import React, { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import {
+    CodeSnippet,
+    type CodeSnippetProps,
+} from '@/components/code-snippet/code-snippet';
+import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
 } from '@/components/dialog/dialog';
-import { Textarea } from '@/components/textarea/textarea';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { DatabaseType as DatabaseTypeEnum } from '@/lib/domain/database-type';
@@ -20,6 +23,9 @@ import {
     validateMetadataResult,
 } from './validate-metadata-result';
 import { SSMS_TRUNCATION_LENGTH } from './constants';
+
+/** Match schema import editor min height (~min-h-64) so the panel fills the split layout. */
+const METADATA_RESULT_EDITOR_MIN_HEIGHT_PX = 256;
 
 export interface ImportFromDatabaseStepProps {
     databaseType: DatabaseType;
@@ -47,7 +53,7 @@ export const ImportFromDatabaseStep: React.FC<ImportFromDatabaseStepProps> = ({
     isImporting = false,
 }) => {
     const { t } = useTranslation();
-    const textareaId = useId();
+    const pasteResultLabelId = useId();
     const [showSSMSInfoDialog, setShowSSMSInfoDialog] = useState(false);
     const [repairAttempts, setRepairAttempts] = useState(0);
     const [isRepairing, setIsRepairing] = useState(false);
@@ -67,9 +73,8 @@ export const ImportFromDatabaseStep: React.FC<ImportFromDatabaseStepProps> = ({
         [metadataResult, databaseType, repairAttempts]
     );
 
-    const handleMetadataChange = useCallback(
-        (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-            const value = event.target.value;
+    const handleMetadataValueChange = useCallback(
+        (value: string) => {
             setMetadataResult(value);
 
             if (
@@ -80,6 +85,43 @@ export const ImportFromDatabaseStep: React.FC<ImportFromDatabaseStepProps> = ({
             }
         },
         [databaseType, setMetadataResult]
+    );
+
+    const metadataResultEditorProps = useMemo(
+        (): CodeSnippetProps['editorProps'] => ({
+            height: METADATA_RESULT_EDITOR_MIN_HEIGHT_PX,
+            onChange: (nextValue) => {
+                handleMetadataValueChange(nextValue ?? '');
+            },
+            options: {
+                ariaLabel: t(
+                    'new_diagram_dialog.import_from_database.paste_result'
+                ),
+                readOnly: isImporting,
+                placeholder: t(
+                    'new_diagram_dialog.import_from_database.paste_result_placeholder'
+                ),
+                wordWrap: 'on',
+                automaticLayout: true,
+                scrollBeyondLastLine: false,
+                renderValidationDecorations: 'off',
+                lineDecorationsWidth: 0,
+                overviewRulerBorder: false,
+                overviewRulerLanes: 0,
+                hideCursorInOverviewRuler: true,
+                contextmenu: true,
+                guides: {
+                    indentation: false,
+                },
+                minimap: { enabled: false },
+                scrollbar: {
+                    vertical: 'auto',
+                    horizontal: 'auto',
+                    alwaysConsumeMouseWheel: false,
+                },
+            },
+        }),
+        [handleMetadataValueChange, isImporting, t]
     );
 
     const handleCheckResult = useCallback(async () => {
@@ -187,39 +229,49 @@ export const ImportFromDatabaseStep: React.FC<ImportFromDatabaseStepProps> = ({
             </DialogHeader>
 
             <div className="min-h-0 flex-1 overflow-y-auto p-0.5">
-                <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-4">
+                <div className="mx-auto flex w-full max-w-none flex-col gap-4">
                     <DatabaseEditionPicker
                         databaseType={databaseType}
                         databaseEdition={databaseEdition}
                         setDatabaseEdition={setDatabaseEdition}
                     />
 
-                    <MetadataQueryInstructions
-                        databaseType={databaseType}
-                        databaseEdition={databaseEdition}
-                        showSSMSInfoDialog={showSSMSInfoDialog}
-                        setShowSSMSInfoDialog={setShowSSMSInfoDialog}
-                    />
+                    <div className="flex min-h-0 flex-col gap-4 md:min-h-[min(22rem,calc(50vh-12rem))] md:flex-row md:items-stretch">
+                        <div className="flex min-h-56 min-w-0 flex-1 flex-col md:min-h-0">
+                            <MetadataQueryInstructions
+                                databaseType={databaseType}
+                                databaseEdition={databaseEdition}
+                                showSSMSInfoDialog={showSSMSInfoDialog}
+                                setShowSSMSInfoDialog={setShowSSMSInfoDialog}
+                                fillHeight
+                            />
+                        </div>
 
-                    <div className="flex flex-col gap-2">
-                        <label
-                            htmlFor={textareaId}
-                            className="text-sm font-medium"
+                        <div
+                            className="flex min-h-56 min-w-0 flex-1 flex-col gap-2 md:min-h-0"
+                            aria-labelledby={pasteResultLabelId}
                         >
-                            {t(
-                                'new_diagram_dialog.import_from_database.paste_result'
-                            )}
-                        </label>
-                        <Textarea
-                            id={textareaId}
-                            value={metadataResult}
-                            onChange={handleMetadataChange}
-                            placeholder={t(
-                                'new_diagram_dialog.import_from_database.paste_result_placeholder'
-                            )}
-                            className="max-h-48 min-h-40 resize-none overflow-y-auto font-mono text-xs"
-                            disabled={isImporting}
-                        />
+                            <span
+                                id={pasteResultLabelId}
+                                className="text-sm font-medium"
+                            >
+                                {t(
+                                    'new_diagram_dialog.import_from_database.paste_result'
+                                )}
+                            </span>
+                            <div className="relative flex min-h-0 flex-1 flex-col">
+                                <CodeSnippet
+                                    className={cn(
+                                        'h-full min-h-64 w-full flex-1',
+                                        isImporting && 'opacity-70'
+                                    )}
+                                    code={metadataResult}
+                                    language="json"
+                                    allowCopy={false}
+                                    editorProps={metadataResultEditorProps}
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     {validationMessage ? (

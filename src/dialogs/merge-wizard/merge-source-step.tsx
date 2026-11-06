@@ -156,6 +156,9 @@ export const MergeSourceStep: React.FC<MergeSourceStepProps> = ({
 
                     <WizardSchemaSourceField
                         label={t('merge_wizard.source_label')}
+                        editorAccessibilityLabel={t(
+                            'merge_wizard.source_label'
+                        )}
                         placeholder={t(
                             'new_diagram_dialog.import_schema.source_placeholder'
                         )}
