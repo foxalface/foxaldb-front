@@ -8,6 +8,10 @@ vi.mock('@/lib/api/diagram-members', () => ({
     listDiagramMembers: (...args: unknown[]) => listDiagramMembers(...args),
 }));
 
+vi.mock('@/lib/api/diagram-invitations', () => ({
+    listDiagramInvitations: vi.fn().mockResolvedValue([]),
+}));
+
 describe('useSharePanel session end', () => {
     beforeEach(() => {
         listDiagramMembers.mockReset();

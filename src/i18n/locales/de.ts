@@ -1078,7 +1078,25 @@ export const de: LanguageTranslation = {
                 add: 'Hinzufügen',
                 adding: 'Wird hinzugefügt…',
                 cancel: 'Abbrechen',
-                success: 'Mitglied hinzugefügt.',
+                success: 'Freigabe aktualisiert.',
+                helper: 'Bestehende FoxalDB-Nutzer erhalten sofort Zugriff. Andernfalls erstellen wir eine Einladung für diese E-Mail-Adresse. Rollen lassen sich im Freigabebereich ändern.',
+            },
+            invitations: {
+                heading: 'Ausstehende Einladungen',
+                pending: 'Ausstehend',
+                expired: 'Abgelaufen',
+                expires: 'Läuft ab am {{date}}',
+                resend: 'Erneut senden',
+                resending: 'Wird erneut gesendet…',
+                renewed: 'Einladung erneuert.',
+                revoke: 'Einladung widerrufen',
+                role_failed:
+                    'Die Rolle der Einladung konnte nicht geändert werden.',
+                resend_failed: 'Die Einladung konnte nicht erneuert werden.',
+                resend_limited:
+                    'Bitte warten Sie, bevor Sie diese Einladung erneut senden.',
+                revoke_failed: 'Die Einladung konnte nicht widerrufen werden.',
+                load_failed: 'Einladungen konnten nicht geladen werden.',
             },
             errors: {
                 load_failed: 'Mitarbeitende konnten nicht geladen werden.',

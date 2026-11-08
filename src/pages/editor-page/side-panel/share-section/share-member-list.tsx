@@ -13,6 +13,8 @@ import { ShareMemberActionsPopover } from './share-member-actions-popover';
 import { ShareMemberRoleFilter } from './share-member-role-filter';
 import { ShareMembersFilterEmptyState } from './share-members-filter-empty-state';
 import { ShareAddMemberDialog } from './share-add-member-dialog';
+import { ShareInvitationList } from './share-invitation-list';
+import type { DiagramInvitationResource } from '@/lib/api/diagram-invitations';
 import {
     DEFAULT_SELECTED_MEMBER_ROLES,
     filterShareMembers,
@@ -23,14 +25,20 @@ export interface ShareMemberListProps {
     diagramId: string;
     members: DiagramMemberResource[];
     onMembersChange: (members: DiagramMemberResource[]) => void;
-    onMemberAdded: (member: DiagramMemberResource) => void;
+    invitations: DiagramInvitationResource[];
+    invitationsStatus: 'idle' | 'loading' | 'error' | 'success';
+    onInvitationsChange: (invitations: DiagramInvitationResource[]) => void;
+    onShared: () => void;
 }
 
 export const ShareMemberList: React.FC<ShareMemberListProps> = ({
     diagramId,
     members,
     onMembersChange,
-    onMemberAdded,
+    invitations,
+    invitationsStatus,
+    onInvitationsChange,
+    onShared,
 }) => {
     const { t } = useTranslation();
     const [busyMemberId, setBusyMemberId] = useState<number | null>(null);
@@ -165,11 +173,18 @@ export const ShareMemberList: React.FC<ShareMemberListProps> = ({
                 ))
             )}
 
+            <ShareInvitationList
+                diagramId={diagramId}
+                invitations={invitations}
+                invitationsStatus={invitationsStatus}
+                onInvitationsChange={onInvitationsChange}
+            />
+
             <ShareAddMemberDialog
                 diagramId={diagramId}
                 open={isAddDialogOpen}
                 onOpenChange={setIsAddDialogOpen}
-                onMemberAdded={onMemberAdded}
+                onShared={onShared}
             />
         </div>
     );

@@ -644,7 +644,7 @@ export const en = {
                 },
                 collaborators: {
                     description:
-                        'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
+                        'Existing FoxalDB users get access immediately. Otherwise, an invitation is created for the email address.',
                     filter: 'Filter',
                     clear: 'Clear filter',
                     no_results_title: 'No results',
@@ -1033,7 +1033,7 @@ export const en = {
         share_diagram_dialog: {
             title: 'Share diagram',
             description:
-                'Invite collaborators with editor or viewer access. They must already have a FoxalDB account.',
+                'Existing FoxalDB users get access immediately. Otherwise, an invitation is created for the email address.',
             share_button: 'Share',
             empty_members: 'No collaborators yet.',
             remove: 'Remove',
@@ -1049,7 +1049,23 @@ export const en = {
                 add: 'Add',
                 adding: 'Adding...',
                 cancel: 'Cancel',
-                success: 'Member added.',
+                success: 'Sharing updated.',
+                helper: 'Existing FoxalDB users get access immediately. Otherwise, we will create an invitation for this email address. Roles can be changed from the sharing panel.',
+            },
+            invitations: {
+                heading: 'Pending invitations',
+                pending: 'Pending',
+                expired: 'Expired',
+                expires: 'Expires {{date}}',
+                resend: 'Resend',
+                resending: 'Resending…',
+                renewed: 'Invitation renewed.',
+                revoke: 'Revoke invitation',
+                role_failed: 'Could not update the invitation role.',
+                resend_failed: 'Could not renew the invitation.',
+                resend_limited: 'Please wait before resending this invitation.',
+                revoke_failed: 'Could not revoke the invitation.',
+                load_failed: 'Could not load invitations.',
             },
             errors: {
                 load_failed: 'Could not load collaborators.',

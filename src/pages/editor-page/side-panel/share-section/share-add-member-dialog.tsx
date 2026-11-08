@@ -17,11 +17,10 @@ import {
     SelectValue,
 } from '@/components/select/select';
 import {
-    addDiagramMember,
     DIAGRAM_MEMBER_ROLE_EDITOR,
-    type DiagramMemberResource,
     type DiagramMemberRole,
 } from '@/lib/api/diagram-members';
+import { shareDiagram } from '@/lib/api/diagram-invitations';
 import { useToast } from '@/components/toast/use-toast';
 import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
 import { useTranslation } from 'react-i18next';
@@ -31,14 +30,14 @@ export interface ShareAddMemberDialogProps {
     diagramId: string;
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    onMemberAdded: (member: DiagramMemberResource) => void;
+    onShared: () => void;
 }
 
 export const ShareAddMemberDialog: React.FC<ShareAddMemberDialogProps> = ({
     diagramId,
     open,
     onOpenChange,
-    onMemberAdded,
+    onShared,
 }) => {
     const { t } = useTranslation();
     const { toast } = useToast();
@@ -67,11 +66,11 @@ export const ShareAddMemberDialog: React.FC<ShareAddMemberDialogProps> = ({
             setIsSubmitting(true);
 
             try {
-                const member = await addDiagramMember(diagramId, {
+                await shareDiagram(diagramId, {
                     email: email.trim(),
                     role,
                 });
-                onMemberAdded(member);
+                onShared();
                 toast({
                     title: t('share_diagram_dialog.add_member.success'),
                 });
@@ -92,7 +91,7 @@ export const ShareAddMemberDialog: React.FC<ShareAddMemberDialogProps> = ({
                 setIsSubmitting(false);
             }
         },
-        [diagramId, email, onMemberAdded, onOpenChange, role, t, toast]
+        [diagramId, email, onOpenChange, onShared, role, t, toast]
     );
 
     return (
@@ -111,9 +110,7 @@ export const ShareAddMemberDialog: React.FC<ShareAddMemberDialogProps> = ({
                             {t('share_diagram_dialog.add_member.title')}
                         </DialogTitle>
                         <DialogDescription>
-                            {t(
-                                'side_panel.share_section.collaborators.description'
-                            )}
+                            {t('share_diagram_dialog.add_member.helper')}
                         </DialogDescription>
                     </DialogHeader>
 

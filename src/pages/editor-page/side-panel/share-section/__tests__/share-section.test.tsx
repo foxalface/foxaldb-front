@@ -11,9 +11,12 @@ import {
     type DiagramLocation,
 } from '@/lib/diagram/diagram-location';
 
-const { listDiagramMembersMock } = vi.hoisted(() => ({
-    listDiagramMembersMock: vi.fn(),
-}));
+const { listDiagramMembersMock, listDiagramInvitationsMock } = vi.hoisted(
+    () => ({
+        listDiagramMembersMock: vi.fn(),
+        listDiagramInvitationsMock: vi.fn(),
+    })
+);
 
 const chartDbState = {
     currentDiagram: { id: '42' } as { id: string } | null,
@@ -28,9 +31,16 @@ vi.mock('@/lib/api/diagram-members', () => ({
     DIAGRAM_MEMBER_ROLE_EDITOR: 'editor',
     DIAGRAM_MEMBER_ROLE_VIEWER: 'viewer',
     DIAGRAM_MEMBER_ROLES: ['editor', 'viewer'],
-    addDiagramMember: vi.fn(),
     updateDiagramMember: vi.fn(),
     removeDiagramMember: vi.fn(),
+}));
+
+vi.mock('@/lib/api/diagram-invitations', () => ({
+    listDiagramInvitations: listDiagramInvitationsMock,
+    shareDiagram: vi.fn(),
+    updateDiagramInvitationRole: vi.fn(),
+    resendDiagramInvitation: vi.fn(),
+    revokeDiagramInvitation: vi.fn(),
 }));
 
 vi.mock('@/hooks/use-auth', () => ({
@@ -78,6 +88,7 @@ vi.mock('react-i18next', () => ({
             }
             return typeof current === 'string' ? current : key;
         },
+        i18n: { language: 'en' },
     }),
 }));
 
@@ -93,7 +104,9 @@ const renderShareSection = () =>
 describe('ShareSection', () => {
     beforeEach(() => {
         listDiagramMembersMock.mockReset();
+        listDiagramInvitationsMock.mockReset();
         listDiagramMembersMock.mockResolvedValue([]);
+        listDiagramInvitationsMock.mockResolvedValue([]);
         chartDbState.currentDiagram = { id: '42' };
         locationState.location = onlineDiagramLocation('42');
     });

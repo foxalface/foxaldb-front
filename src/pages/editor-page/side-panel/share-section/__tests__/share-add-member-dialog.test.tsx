@@ -4,10 +4,9 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { en } from '@/i18n/locales/en';
 import type * as DiagramMembersApi from '@/lib/api/diagram-members';
-import type { DiagramMemberResource } from '@/lib/api/diagram-members';
 
-const { addDiagramMemberMock, toastMock } = vi.hoisted(() => ({
-    addDiagramMemberMock: vi.fn(),
+const { shareDiagramMock, toastMock } = vi.hoisted(() => ({
+    shareDiagramMock: vi.fn(),
     toastMock: vi.fn(),
 }));
 
@@ -19,11 +18,14 @@ vi.mock('@/lib/api/diagram-members', async (importOriginal) => {
     const actual = await importOriginal<typeof DiagramMembersApi>();
     return {
         ...actual,
-        addDiagramMember: addDiagramMemberMock,
         updateDiagramMember: vi.fn(),
         removeDiagramMember: vi.fn(),
     };
 });
+
+vi.mock('@/lib/api/diagram-invitations', () => ({
+    shareDiagram: shareDiagramMock,
+}));
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
@@ -47,30 +49,16 @@ vi.mock('react-i18next', () => ({
 
 import { ShareAddMemberDialog } from '../share-add-member-dialog';
 
-const member: DiagramMemberResource = {
-    id: 1,
-    role: 'editor',
-    user: {
-        id: 2,
-        firstName: 'Alexis',
-        lastName: 'Renart',
-        fullName: 'Alexis Renart',
-        email: 'alexis@example.com',
-    },
-    createdAt: '2026-01-01T00:00:00Z',
-    updatedAt: '2026-01-01T00:00:00Z',
-};
-
 describe('ShareAddMemberDialog', () => {
     beforeEach(() => {
-        addDiagramMemberMock.mockReset();
+        shareDiagramMock.mockReset();
         toastMock.mockReset();
-        addDiagramMemberMock.mockResolvedValue(member);
+        shareDiagramMock.mockResolvedValue({ message: 'Sharing updated.' });
     });
 
     it('submits the collaborator email and role', async () => {
         const user = userEvent.setup();
-        const onMemberAdded = vi.fn();
+        const onShared = vi.fn();
         const onOpenChange = vi.fn();
 
         render(
@@ -78,7 +66,7 @@ describe('ShareAddMemberDialog', () => {
                 diagramId="42"
                 open
                 onOpenChange={onOpenChange}
-                onMemberAdded={onMemberAdded}
+                onShared={onShared}
             />
         );
 
@@ -86,17 +74,17 @@ describe('ShareAddMemberDialog', () => {
         await user.click(screen.getByRole('button', { name: 'Add' }));
 
         await waitFor(() => {
-            expect(addDiagramMemberMock).toHaveBeenCalledWith('42', {
+            expect(shareDiagramMock).toHaveBeenCalledWith('42', {
                 email: 'alexis@example.com',
                 role: 'editor',
             });
         });
-        expect(onMemberAdded).toHaveBeenCalledWith(member);
+        expect(onShared).toHaveBeenCalled();
         expect(toastMock).toHaveBeenCalledWith({
             title: en.translation.share_diagram_dialog.add_member.success,
         });
         expect(en.translation.share_diagram_dialog.add_member.success).toBe(
-            'Member added.'
+            'Sharing updated.'
         );
         expect(
             en.translation.share_diagram_dialog.add_member.success
@@ -106,14 +94,14 @@ describe('ShareAddMemberDialog', () => {
 
     it('does not show success toast when add fails', async () => {
         const user = userEvent.setup();
-        addDiagramMemberMock.mockRejectedValueOnce(new Error('failed'));
+        shareDiagramMock.mockRejectedValueOnce(new Error('failed'));
 
         render(
             <ShareAddMemberDialog
                 diagramId="42"
                 open
                 onOpenChange={vi.fn()}
-                onMemberAdded={vi.fn()}
+                onShared={vi.fn()}
             />
         );
 
@@ -121,7 +109,7 @@ describe('ShareAddMemberDialog', () => {
         await user.click(screen.getByRole('button', { name: 'Add' }));
 
         await waitFor(() => {
-            expect(addDiagramMemberMock).toHaveBeenCalled();
+            expect(shareDiagramMock).toHaveBeenCalled();
         });
         expect(toastMock).not.toHaveBeenCalled();
         expect(

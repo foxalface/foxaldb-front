@@ -29,9 +29,12 @@ export const ShareSection: React.FC<ShareSectionProps> = () => {
         members,
         status,
         isRetrying,
+        invitations,
+        invitationsStatus,
         handleRetry,
-        handleMemberAdded,
+        refreshSharing,
         handleMembersChange,
+        handleInvitationsChange,
     } = useSharePanel(onlineDiagramId ?? undefined);
 
     const isInitialLoading = status === 'loading' || status === 'idle';
@@ -107,8 +110,15 @@ export const ShareSection: React.FC<ShareSectionProps> = () => {
                                 <ShareCollaboratorsTab
                                     diagramId={onlineDiagramId}
                                     members={members}
+                                    invitations={invitations}
+                                    invitationsStatus={invitationsStatus}
                                     onMembersChange={handleMembersChange}
-                                    onMemberAdded={handleMemberAdded}
+                                    onInvitationsChange={
+                                        handleInvitationsChange
+                                    }
+                                    onShared={() => {
+                                        void refreshSharing();
+                                    }}
                                 />
                             </ScrollArea>
                         )}

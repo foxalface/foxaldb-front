@@ -58,21 +58,6 @@ export const listDiagramMembers = async (
     return response.data.map(normalizeDiagramMemberFromApi);
 };
 
-export const addDiagramMember = async (
-    diagramId: string,
-    body: { email: string; role: DiagramMemberRole }
-): Promise<DiagramMemberResource> => {
-    const dto = await apiRequest<DiagramMemberResourceDto>(
-        `/diagrams/${diagramId}/members`,
-        {
-            method: 'POST',
-            data: body,
-        }
-    );
-
-    return normalizeDiagramMemberFromApi(dto);
-};
-
 export const updateDiagramMember = async (
     diagramId: string,
     memberId: number,
