@@ -159,6 +159,29 @@ export const entryFlowReducer = (
          * Leaves the startup auth gate. Does not migrate, create, or delete
          * a diagram. useAuthIntentContinuation chooses the next state.
          */
+        case 'EMAIL_VERIFICATION_REQUIRED':
+            if (state.kind === 'awaitingEmailVerification') {
+                return state;
+            }
+
+            return {
+                kind: 'awaitingEmailVerification',
+                entrySource: event.entrySource,
+            };
+
+        case 'EMAIL_VERIFIED':
+            if (state.kind !== 'awaitingEmailVerification') {
+                return state;
+            }
+
+            return {
+                kind: 'resolvingAuthContinuation',
+                entrySource:
+                    state.entrySource === 'registration'
+                        ? 'registration'
+                        : 'login',
+            };
+
         case 'AUTHENTICATION_SUCCEEDED':
             if (state.kind !== 'awaitingGuestChoice') {
                 return state;

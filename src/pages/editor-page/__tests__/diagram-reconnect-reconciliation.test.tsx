@@ -18,10 +18,12 @@ const HASH_B = 'b'.repeat(64);
 const authState: {
     user: { id: number; name: string; email: string } | null;
     isAuthenticated: boolean;
+    isEmailVerified: boolean;
     isLoading: boolean;
 } = {
     user: { id: 1, name: 'A', email: 'a@example.com' },
     isAuthenticated: true,
+    isEmailVerified: true,
     isLoading: false,
 };
 

@@ -1883,6 +1883,28 @@ export const ko_KR: LanguageTranslation = {
                 register_title: 'FoxalDB — 회원가입',
                 checking_session: '세션 확인 중…',
             },
+            verify: {
+                page_title: 'FoxalDB — 이메일 확인',
+                title: '이메일을 확인하세요',
+                description:
+                    'FoxalDB 온라인 기능을 사용하기 전에 이메일 주소를 확인하세요. 다시 보내거나 로그아웃할 수 있도록 로그인 상태가 유지됩니다.',
+                email_label: '이메일',
+                resend: '이메일 다시 보내기',
+                sending: '보내는 중…',
+                sent: '확인 이메일을 보냈습니다.',
+                resend_failure:
+                    '확인 이메일을 보내지 못했습니다. 다시 시도하세요.',
+                cooldown: '{{seconds}}초 후에 다시 보낼 수 있습니다.',
+                verified_title: '이메일이 확인되었습니다',
+                verified_description:
+                    '이메일 주소가 확인되었습니다. FoxalDB 온라인 기능을 사용할 수 있습니다.',
+                verified_continue: '계속',
+                invalid_title: '확인 링크가 유효하지 않습니다',
+                invalid_description:
+                    '이 링크는 유효하지 않거나 만료되었습니다. 로그인 상태라면 새 이메일을 요청하세요.',
+                sign_in: '로그인',
+                logout: '로그아웃',
+            },
             errors: {
                 first_name_required: '이름은 필수입니다.',
                 last_name_required: '성은 필수입니다.',

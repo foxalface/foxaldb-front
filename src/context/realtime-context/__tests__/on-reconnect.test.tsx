@@ -77,6 +77,7 @@ vi.mock('@/hooks/use-auth', () => {
         useAuth: () => ({
             user,
             isAuthenticated: true,
+            isEmailVerified: true,
             isLoading: false,
             login: () => undefined,
             register: () => undefined,

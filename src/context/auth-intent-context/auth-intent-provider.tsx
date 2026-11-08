@@ -26,9 +26,10 @@ import { AuthIntentContext } from './auth-intent-context';
 export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isEmailVerified, isLoading } = useAuth();
     const storeRef = useRef(createAuthIntentStore());
     const wasAuthenticatedRef = useRef(false);
+    const wasVerifiedRef = useRef(false);
     const sessionEndIntentPreparedRef = useRef(false);
 
     const [pendingIntent, setPendingIntent] =
@@ -78,6 +79,7 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
             }
 
             wasAuthenticatedRef.current = false;
+            wasVerifiedRef.current = false;
 
             if (!sessionEndIntentPreparedRef.current) {
                 storeRef.current.clear();
@@ -90,17 +92,22 @@ export const AuthIntentProvider: React.FC<React.PropsWithChildren> = ({
         }
 
         sessionEndIntentPreparedRef.current = false;
+        wasAuthenticatedRef.current = true;
 
-        if (wasAuthenticatedRef.current) {
+        if (!isEmailVerified) {
             return;
         }
 
-        wasAuthenticatedRef.current = true;
+        if (wasVerifiedRef.current) {
+            return;
+        }
+
+        wasVerifiedRef.current = true;
         const consumed = storeRef.current.consume();
         syncPendingFromStore();
         setLastConsumedIntent(consumed);
         setConsumedIntentEpoch((epoch) => epoch + 1);
-    }, [isAuthenticated, isLoading, syncPendingFromStore]);
+    }, [isAuthenticated, isEmailVerified, isLoading, syncPendingFromStore]);
 
     const value = useMemo(
         () => ({

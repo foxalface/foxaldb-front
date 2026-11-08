@@ -43,6 +43,7 @@ const user = {
     last_name: 'Lovelace',
     full_name: 'Ada Lovelace',
     email: 'ada@example.com',
+    email_verified_at: '2026-01-01T00:00:00.000000Z',
 };
 
 const chartState = vi.hoisted(() => ({

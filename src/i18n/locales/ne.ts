@@ -1890,6 +1890,28 @@ export const ne: LanguageTranslation = {
                 register_title: 'FoxalDB — दर्ता',
                 checking_session: 'सत्र जाँच गर्दै…',
             },
+            verify: {
+                page_title: 'FoxalDB — इमेल प्रमाणित गर्नुहोस्',
+                title: 'आफ्नो इमेल प्रमाणित गर्नुहोस्',
+                description:
+                    'FoxalDB का अनलाइन सुविधा प्रयोग गर्नुअघि इमेल ठेगाना पुष्टि गर्नुहोस्। फेरि पठाउन वा लग आउट गर्न तपाईं साइन इन रहनुहुन्छ।',
+                email_label: 'इमेल',
+                resend: 'इमेल फेरि पठाउनुहोस्',
+                sending: 'पठाउँदै…',
+                sent: 'प्रमाणीकरण इमेल पठाइयो।',
+                resend_failure:
+                    'प्रमाणीकरण इमेल पठाउन सकिएन। फेरि प्रयास गर्नुहोस्।',
+                cooldown: '{{seconds}} सेकेन्डपछि फेरि पठाउन सकिन्छ।',
+                verified_title: 'इमेल प्रमाणित भयो',
+                verified_description:
+                    'तपाईंको इमेल प्रमाणित भयो। अब FoxalDB का अनलाइन सुविधा प्रयोग गर्न सक्नुहुन्छ।',
+                verified_continue: 'जारी राख्नुहोस्',
+                invalid_title: 'प्रमाणीकरण लिंक अमान्य',
+                invalid_description:
+                    'यो लिंक अमान्य छ वा म्याद सकियो। साइन इन हुनुहुन्छ भने नयाँ इमेल माग्नुहोस्।',
+                sign_in: 'साइन इन',
+                logout: 'लग आउट',
+            },
             errors: {
                 first_name_required: 'पहिलो नाम आवश्यक छ।',
                 last_name_required: 'थर आवश्यक छ।',

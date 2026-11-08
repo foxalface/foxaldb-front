@@ -1891,6 +1891,28 @@ export const id_ID: LanguageTranslation = {
                 register_title: 'FoxalDB — Daftar',
                 checking_session: 'Memeriksa sesi…',
             },
+            verify: {
+                page_title: 'FoxalDB — Verifikasi email',
+                title: 'Verifikasi email Anda',
+                description:
+                    'Konfirmasi alamat email sebelum memakai fitur daring FoxalDB. Anda tetap masuk agar dapat mengirim ulang email atau keluar.',
+                email_label: 'Email',
+                resend: 'Kirim ulang email',
+                sending: 'Mengirim…',
+                sent: 'Email verifikasi terkirim.',
+                resend_failure:
+                    'Email verifikasi tidak dapat dikirim. Coba lagi.',
+                cooldown: 'Anda dapat mengirim ulang dalam {{seconds}} detik.',
+                verified_title: 'Email terverifikasi',
+                verified_description:
+                    'Alamat email Anda sudah terverifikasi. Fitur daring FoxalDB kini dapat dipakai.',
+                verified_continue: 'Lanjutkan',
+                invalid_title: 'Tautan verifikasi tidak valid',
+                invalid_description:
+                    'Tautan ini tidak valid atau sudah kedaluwarsa. Minta email baru jika Anda masih masuk.',
+                sign_in: 'Masuk',
+                logout: 'Keluar',
+            },
             errors: {
                 first_name_required: 'Nama depan wajib diisi.',
                 last_name_required: 'Nama belakang wajib diisi.',

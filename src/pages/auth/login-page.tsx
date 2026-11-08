@@ -5,11 +5,12 @@ import { LocalConfigProvider } from '@/context/local-config-context/local-config
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useAuth } from '@/hooks/use-auth';
 import { AuthenticatedAccountPanel, LoginFormPanel } from './auth-form-panels';
+import { VerifyEmailScreen } from './verify-email-screen';
 import { useTranslation } from 'react-i18next';
 
 const LoginPageContent: React.FC = () => {
     const { t } = useTranslation();
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isEmailVerified, isLoading } = useAuth();
     const navigate = useNavigate();
 
     const navigateHome = useCallback(() => {
@@ -28,6 +29,10 @@ const LoginPageContent: React.FC = () => {
                 {t('auth.pages.checking_session')}
             </p>
         );
+    }
+
+    if (isAuthenticated && !isEmailVerified) {
+        return <VerifyEmailScreen />;
     }
 
     if (isAuthenticated) {

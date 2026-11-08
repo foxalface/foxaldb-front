@@ -1883,6 +1883,28 @@ export const mr: LanguageTranslation = {
                 register_title: 'FoxalDB — नोंदणी',
                 checking_session: 'सत्र तपासत आहे…',
             },
+            verify: {
+                page_title: 'FoxalDB — ईमेल पडताळणी',
+                title: 'तुमचा ईमेल पडताळा',
+                description:
+                    'FoxalDBची ऑनलाइन वैशिष्ट्ये वापरण्यापूर्वी ईमेल पत्ता निश्चित करा. पुन्हा पाठवण्यासाठी किंवा लॉग आउट करण्यासाठी तुम्ही साइन इन राहता.',
+                email_label: 'ईमेल',
+                resend: 'ईमेल पुन्हा पाठवा',
+                sending: 'पाठवत आहे…',
+                sent: 'पडताळणी ईमेल पाठवला.',
+                resend_failure:
+                    'पडताळणी ईमेल पाठवता आला नाही. पुन्हा प्रयत्न करा.',
+                cooldown: '{{seconds}} सेकंदांनी पुन्हा पाठवू शकता.',
+                verified_title: 'ईमेल पडताळला',
+                verified_description:
+                    'तुमचा ईमेल पडताळला आहे. आता FoxalDBची ऑनलाइन वैशिष्ट्ये वापरू शकता.',
+                verified_continue: 'पुढे चला',
+                invalid_title: 'पडताळणी दुवा अवैध',
+                invalid_description:
+                    'हा दुवा अवैध आहे किंवा कालबाह्य झाला आहे. साइन इन असाल तर नवीन ईमेल मागा.',
+                sign_in: 'साइन इन',
+                logout: 'लॉग आउट',
+            },
             errors: {
                 first_name_required: 'पहिले नाव आवश्यक आहे.',
                 last_name_required: 'आडनाव आवश्यक आहे.',

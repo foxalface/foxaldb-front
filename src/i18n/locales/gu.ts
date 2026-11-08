@@ -1866,6 +1866,28 @@ export const gu: LanguageTranslation = {
                 register_title: 'FoxalDB — નોંધણી',
                 checking_session: 'સત્ર તપાસી રહ્યા છીએ…',
             },
+            verify: {
+                page_title: 'FoxalDB — ઇમેઇલ ચકાસો',
+                title: 'તમારું ઇમેઇલ ચકાસો',
+                description:
+                    'FoxalDBની ઑનલાઇન સુવિધાઓ વાપરતા પહેલાં ઇમેઇલ પુષ્ટિ કરો. ફરી મોકલવા અથવા લૉગ આઉટ કરવા તમે સાઇન ઇન રહો છો.',
+                email_label: 'ઇમેઇલ',
+                resend: 'ઇમેઇલ ફરી મોકલો',
+                sending: 'મોકલાઈ રહ્યો છે…',
+                sent: 'ચકાસણી ઇમેઇલ મોકલાયો.',
+                resend_failure:
+                    'ચકાસણી ઇમેઇલ મોકલી શકાયો નહીં. ફરી પ્રયાસ કરો.',
+                cooldown: '{{seconds}} સેકન્ડ પછી ફરી મોકલી શકાશે.',
+                verified_title: 'ઇમેઇલ ચકાસાયું',
+                verified_description:
+                    'તમારું ઇમેઇલ ચકાસાયું છે. હવે FoxalDBની ઑનલાઇન સુવિધાઓ વાપરી શકો છો.',
+                verified_continue: 'ચાલુ રાખો',
+                invalid_title: 'ચકાસણી લિંક અમાન્ય',
+                invalid_description:
+                    'આ લિંક અમાન્ય છે અથવા સમયમર્યાદા પૂરી થઈ છે. સાઇન ઇન હો તો નવો ઇમેઇલ માંગો.',
+                sign_in: 'સાઇન ઇન',
+                logout: 'લૉગ આઉટ',
+            },
             errors: {
                 first_name_required: 'પ્રથમ નામ જરૂરી છે.',
                 last_name_required: 'અટક જરૂરી છે.',

@@ -1886,6 +1886,28 @@ export const hi: LanguageTranslation = {
                 register_title: 'FoxalDB — पंजीकरण',
                 checking_session: 'सत्र की जाँच हो रही है…',
             },
+            verify: {
+                page_title: 'FoxalDB — ईमेल सत्यापित करें',
+                title: 'अपना ईमेल सत्यापित करें',
+                description:
+                    'FoxalDB की ऑनलाइन सुविधाएँ इस्तेमाल करने से पहले अपना ईमेल पक्का करें। दोबारा भेजने या लॉग आउट करने के लिए आप साइन इन रहेंगे।',
+                email_label: 'ईमेल',
+                resend: 'ईमेल फिर भेजें',
+                sending: 'भेजा जा रहा है…',
+                sent: 'सत्यापन ईमेल भेज दिया गया।',
+                resend_failure:
+                    'सत्यापन ईमेल नहीं भेजा जा सका। फिर कोशिश करें।',
+                cooldown: '{{seconds}} सेकंड बाद फिर भेज सकते हैं।',
+                verified_title: 'ईमेल सत्यापित हो गया',
+                verified_description:
+                    'आपका ईमेल सत्यापित है। अब FoxalDB की ऑनलाइन सुविधाएँ इस्तेमाल कर सकते हैं।',
+                verified_continue: 'जारी रखें',
+                invalid_title: 'सत्यापन लिंक अमान्य है',
+                invalid_description:
+                    'यह लिंक अमान्य है या इसकी अवधि समाप्त हो गई है। साइन इन हों तो नया ईमेल माँगें।',
+                sign_in: 'साइन इन',
+                logout: 'लॉग आउट',
+            },
             errors: {
                 first_name_required: 'पहला नाम आवश्यक है।',
                 last_name_required: 'अंतिम नाम आवश्यक है।',

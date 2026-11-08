@@ -1857,6 +1857,27 @@ export const ar: LanguageTranslation = {
                 register_title: 'FoxalDB — إنشاء حساب',
                 checking_session: 'جارٍ التحقق من الجلسة…',
             },
+            verify: {
+                page_title: 'FoxalDB — تأكيد البريد',
+                title: 'أكّد بريدك الإلكتروني',
+                description:
+                    'أكّد عنوان بريدك قبل استخدام ميزات FoxalDB عبر الإنترنت. يبقى حسابك مسجّل الدخول حتى تعيد إرسال الرسالة أو تسجّل الخروج.',
+                email_label: 'البريد',
+                resend: 'إعادة إرسال الرسالة',
+                sending: 'جارٍ الإرسال…',
+                sent: 'أُرسلت رسالة التأكيد.',
+                resend_failure: 'تعذّر إرسال رسالة التأكيد. حاول مرة أخرى.',
+                cooldown: 'يمكنك إعادة الإرسال بعد {{seconds}} ثانية.',
+                verified_title: 'تم تأكيد البريد',
+                verified_description:
+                    'تم تأكيد بريدك. يمكنك استخدام ميزات FoxalDB عبر الإنترنت.',
+                verified_continue: 'متابعة',
+                invalid_title: 'رابط التأكيد غير صالح',
+                invalid_description:
+                    'رابط التأكيد غير صالح أو انتهت صلاحيته. اطلب رسالة جديدة إذا كنت ما زلت مسجّل الدخول.',
+                sign_in: 'تسجيل الدخول',
+                logout: 'تسجيل الخروج',
+            },
             errors: {
                 first_name_required: 'الاسم الأول مطلوب.',
                 last_name_required: 'اسم العائلة مطلوب.',

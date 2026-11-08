@@ -1889,6 +1889,28 @@ export const hr: LanguageTranslation = {
                 register_title: 'FoxalDB — Registracija',
                 checking_session: 'Provjera sesije…',
             },
+            verify: {
+                page_title: 'FoxalDB — Potvrda e-pošte',
+                title: 'Potvrdite e-poštu',
+                description:
+                    'Potvrdite adresu e-pošte prije korištenja FoxalDB online značajki. Ostajete prijavljeni kako biste ponovno poslali poruku ili se odjavili.',
+                email_label: 'E-pošta',
+                resend: 'Ponovno pošalji e-poštu',
+                sending: 'Slanje…',
+                sent: 'Poruka za potvrdu je poslana.',
+                resend_failure:
+                    'Poruku za potvrdu nije moguće poslati. Pokušajte ponovno.',
+                cooldown: 'Ponovno slanje moguće je za {{seconds}} sekundi.',
+                verified_title: 'E-pošta je potvrđena',
+                verified_description:
+                    'Vaša je adresa potvrđena. Možete koristiti FoxalDB online značajke.',
+                verified_continue: 'Nastavi',
+                invalid_title: 'Poveznica za potvrdu nije valjana',
+                invalid_description:
+                    'Poveznica nije valjana ili je istekla. Zatražite novu poruku ako ste još prijavljeni.',
+                sign_in: 'Prijava',
+                logout: 'Odjava',
+            },
             errors: {
                 first_name_required: 'Ime je obavezno.',
                 last_name_required: 'Prezime je obavezno.',

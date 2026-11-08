@@ -35,6 +35,7 @@ export const parseAuthUser = (value: unknown): AuthUser | null => {
         last_name,
         full_name,
         email,
+        email_verified_at,
         default_diagram_creation_destination,
     } = value;
 
@@ -53,6 +54,7 @@ export const parseAuthUser = (value: unknown): AuthUser | null => {
         !isNonEmptyString(last_name) ||
         !isNonEmptyString(full_name) ||
         !isNonEmptyString(email) ||
+        (email_verified_at !== null && !isNonEmptyString(email_verified_at)) ||
         destination === undefined
     ) {
         return null;
@@ -64,6 +66,7 @@ export const parseAuthUser = (value: unknown): AuthUser | null => {
         last_name,
         full_name,
         email,
+        email_verified_at,
         default_diagram_creation_destination: destination,
     };
 };

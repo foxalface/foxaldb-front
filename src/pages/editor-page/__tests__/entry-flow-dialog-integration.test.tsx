@@ -20,6 +20,7 @@ const authState = {
         last_name: string;
         full_name: string;
         email: string;
+        email_verified_at?: string | null;
     } | null,
     isAuthenticated: false,
     isLoading: true,
@@ -166,6 +167,7 @@ const completeAuthAsUser = () => {
         last_name: 'Renart',
         full_name: 'Alexis Renart',
         email: 'alexis@example.com',
+        email_verified_at: '2026-01-01T00:00:00.000000Z',
     };
     authState.isAuthenticated = true;
     authState.isLoading = false;

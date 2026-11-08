@@ -39,6 +39,16 @@ const routes: RouteObject[] = [
         },
     },
     {
+        path: 'verify-email',
+        async lazy() {
+            const { VerifyEmailPage } =
+                await import('./pages/auth/verify-email-page');
+            return {
+                element: <VerifyEmailPage />,
+            };
+        },
+    },
+    {
         path: 'register',
         async lazy() {
             const { RegisterPage } = await import('./pages/auth/register-page');

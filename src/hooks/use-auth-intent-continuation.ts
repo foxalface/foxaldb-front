@@ -35,6 +35,7 @@ import { useTranslation } from 'react-i18next';
 const WAITING_KINDS = new Set<EntryFlowState['kind']>([
     'restoringSession',
     'checkingLocalDiagram',
+    'awaitingEmailVerification',
 ]);
 
 const isStartupAuthGate = (kind: EntryFlowState['kind']): boolean =>

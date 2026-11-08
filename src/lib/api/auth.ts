@@ -22,6 +22,7 @@ export interface AuthUser {
     last_name: string;
     full_name: string;
     email: string;
+    email_verified_at: string | null;
     default_diagram_creation_destination: DiagramCreationDestinationPreference | null;
 }
 
@@ -90,6 +91,12 @@ export const register = async (
     }
 
     return user;
+};
+
+export const resendVerificationEmail = async (): Promise<void> => {
+    await apiRequest<{ message: string }>('/email/verification-notification', {
+        method: 'POST',
+    });
 };
 
 export const logout = async (): Promise<void> => {

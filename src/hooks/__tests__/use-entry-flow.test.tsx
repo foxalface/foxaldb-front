@@ -10,6 +10,7 @@ const authState = {
         last_name: string;
         full_name: string;
         email: string;
+        email_verified_at?: string | null;
     } | null,
     isAuthenticated: false,
     isLoading: true,
@@ -118,6 +119,7 @@ const completeAuthAsUser = (id = 1) => {
         last_name: 'Renart',
         full_name: 'Alexis Renart',
         email: 'alexis@example.com',
+        email_verified_at: '2026-01-01T00:00:00.000000Z',
     };
     authState.isAuthenticated = true;
     authState.isLoading = false;
@@ -167,6 +169,30 @@ describe('useEntryFlow', () => {
             diagramId: 'local-abc',
             diagramSource: 'local',
             entrySource: 'guestContinuation',
+        });
+    });
+
+    it('authenticated unverified session does not open an online route', async () => {
+        routeState.diagramId = '77';
+        const { result, rerender } = renderHook(() => useEntryFlow());
+
+        authState.user = {
+            id: 4,
+            first_name: 'Alexis',
+            last_name: 'Renart',
+            full_name: 'Alexis Renart',
+            email: 'alexis@example.com',
+            email_verified_at: null,
+        };
+        authState.isAuthenticated = true;
+        authState.isLoading = false;
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.state).toEqual({
+                kind: 'awaitingEmailVerification',
+                entrySource: 'startup',
+            });
         });
     });
 
@@ -391,6 +417,7 @@ describe('useEntryFlow', () => {
             last_name: 'Renart',
             full_name: 'Alexis Renart',
             email: 'alexis@example.com',
+            email_verified_at: '2026-01-01T00:00:00.000000Z',
         };
         authState.isAuthenticated = true;
         rerender();

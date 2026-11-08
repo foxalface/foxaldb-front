@@ -179,6 +179,23 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
         }
     }, [endSession]);
 
+    const refreshSession = useCallback(async (): Promise<void> => {
+        try {
+            const currentUser = await fetchSessionUser();
+            if (currentUser === null) {
+                if (userRef.current !== null) {
+                    endSession('session-expired');
+                }
+                return;
+            }
+
+            userRef.current = currentUser;
+            setUser(currentUser);
+        } catch {
+            // A transient session read must not log the user out.
+        }
+    }, [endSession]);
+
     const fetchUser = useCallback(async (): Promise<void> => {
         try {
             const currentUser = await fetchCurrentUser();
@@ -214,17 +231,22 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
         () => ({
             user,
             isAuthenticated: user !== null,
+            isEmailVerified:
+                typeof user?.email_verified_at === 'string' &&
+                user.email_verified_at.length > 0,
             isLoading,
             login,
             register,
             logout,
             fetchUser,
+            refreshSession,
             updateProfile,
             updateDiagramCreationPreference,
         }),
         [
             user,
             isLoading,
+            refreshSession,
             login,
             register,
             logout,

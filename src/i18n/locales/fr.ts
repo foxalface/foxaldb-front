@@ -1924,6 +1924,28 @@ export const fr: LanguageTranslation = {
                 register_title: 'FoxalDB — Inscription',
                 checking_session: 'Vérification de la session…',
             },
+            verify: {
+                page_title: 'FoxalDB — Vérifier l’e-mail',
+                title: 'Vérifiez votre e-mail',
+                description:
+                    'Confirmez votre adresse e-mail avant d’utiliser les fonctions en ligne de FoxalDB. Vous restez connecté pour renvoyer le message ou vous déconnecter.',
+                email_label: 'E-mail',
+                resend: 'Renvoyer l’e-mail',
+                sending: 'Envoi…',
+                sent: 'E-mail de vérification envoyé.',
+                resend_failure:
+                    'Impossible d’envoyer l’e-mail de vérification. Réessayez.',
+                cooldown: 'Vous pourrez renvoyer dans {{seconds}} secondes.',
+                verified_title: 'E-mail vérifié',
+                verified_description:
+                    'Votre adresse e-mail est vérifiée. Vous pouvez utiliser les fonctions en ligne de FoxalDB.',
+                verified_continue: 'Continuer',
+                invalid_title: 'Lien de vérification invalide',
+                invalid_description:
+                    'Ce lien est invalide ou a expiré. Demandez un nouvel e-mail si vous êtes encore connecté.',
+                sign_in: 'Se connecter',
+                logout: 'Se déconnecter',
+            },
             errors: {
                 first_name_required: 'Le prénom est obligatoire.',
                 last_name_required: 'Le nom est obligatoire.',

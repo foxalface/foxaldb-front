@@ -9,7 +9,9 @@ import type {
 export interface AuthContextValue {
     user: AuthUser | null;
     isAuthenticated: boolean;
+    isEmailVerified: boolean;
     isLoading: boolean;
+    refreshSession: () => Promise<void>;
     login: (email: string, password: string) => Promise<void>;
     register: (
         firstName: string,
@@ -29,7 +31,9 @@ export interface AuthContextValue {
 export const AuthContext = createContext<AuthContextValue>({
     user: null,
     isAuthenticated: false,
+    isEmailVerified: false,
     isLoading: true,
+    refreshSession: emptyFn,
     login: emptyFn,
     register: emptyFn,
     logout: emptyFn,

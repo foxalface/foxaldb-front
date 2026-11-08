@@ -22,6 +22,8 @@ const sampleUser = {
     last_name: 'Renart',
     full_name: 'Alexis Renart',
     email: 'alexis@example.com',
+    email_verified_at: null,
+    default_diagram_creation_destination: null,
 };
 
 describe('auth API', () => {

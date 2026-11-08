@@ -1890,6 +1890,28 @@ export const ru: LanguageTranslation = {
                 register_title: 'FoxalDB — Регистрация',
                 checking_session: 'Проверка сессии…',
             },
+            verify: {
+                page_title: 'FoxalDB — Подтверждение почты',
+                title: 'Подтвердите почту',
+                description:
+                    'Подтвердите адрес почты, прежде чем пользоваться онлайн-возможностями FoxalDB. Вы остаётесь в системе, чтобы отправить письмо снова или выйти.',
+                email_label: 'Почта',
+                resend: 'Отправить письмо снова',
+                sending: 'Отправка…',
+                sent: 'Письмо для подтверждения отправлено.',
+                resend_failure:
+                    'Не удалось отправить письмо. Попробуйте ещё раз.',
+                cooldown: 'Повторная отправка через {{seconds}} с.',
+                verified_title: 'Почта подтверждена',
+                verified_description:
+                    'Адрес подтверждён. Можно пользоваться онлайн-возможностями FoxalDB.',
+                verified_continue: 'Продолжить',
+                invalid_title: 'Ссылка подтверждения недействительна',
+                invalid_description:
+                    'Ссылка недействительна или устарела. Запросите новое письмо, если вы ещё вошли в систему.',
+                sign_in: 'Войти',
+                logout: 'Выйти',
+            },
             errors: {
                 first_name_required: 'Имя обязательно.',
                 last_name_required: 'Фамилия обязательна.',

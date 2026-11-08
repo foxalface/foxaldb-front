@@ -38,6 +38,7 @@ import type { EntryFlowCreateDiagramActions } from './entry-flow-create-diagram-
 import type { EntryFlowOpenDiagramActions } from './entry-flow-open-diagram-actions';
 import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
+import { VerifyEmailScreen } from '@/pages/auth/verify-email-screen';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
 import { DiagramAccessProvider } from '@/context/diagram-access-context/diagram-access-provider';
 import { EditingBroadcastProvider } from '@/context/editing-broadcast-context/editing-broadcast-provider';
@@ -88,6 +89,12 @@ const EditorPageContent: React.FC<
                     <div className="flex flex-1 items-center justify-center">
                         <Spinner size={isDesktop ? 'large' : 'medium'} />
                     </div>
+                </section>
+            ) : entryFlow.state.kind === 'awaitingEmailVerification' ? (
+                <section
+                    className={`bg-background ${isDesktop ? 'h-screen w-screen' : 'h-dvh w-dvw'} flex select-none flex-col overflow-x-hidden`}
+                >
+                    <VerifyEmailScreen />
                 </section>
             ) : (
                 <section

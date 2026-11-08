@@ -18,10 +18,12 @@ const connectionHandlers = new Map<
 const authState: {
     user: { id: number; name: string; email: string } | null;
     isAuthenticated: boolean;
+    isEmailVerified: boolean;
     isLoading: boolean;
 } = {
     user: { id: 1, name: 'A', email: 'a@example.com' },
     isAuthenticated: true,
+    isEmailVerified: true,
     isLoading: false,
 };
 
@@ -125,6 +127,7 @@ describe('RealtimeProvider auth lifecycle', () => {
         EchoConstructor.mockClear();
         authState.user = { id: 1, name: 'A', email: 'a@example.com' };
         authState.isAuthenticated = true;
+        authState.isEmailVerified = true;
         authState.isLoading = false;
     });
 
@@ -211,6 +214,18 @@ describe('RealtimeProvider auth lifecycle', () => {
         await waitFor(() => {
             expect(echoInstance.disconnect).toHaveBeenCalled();
         });
+    });
+
+    it('does not connect Echo before the email is verified', async () => {
+        authState.isEmailVerified = false;
+
+        render(<ProviderTree>{null}</ProviderTree>);
+
+        await act(async () => {
+            await Promise.resolve();
+        });
+
+        expect(EchoConstructor).not.toHaveBeenCalled();
     });
 
     it('disconnects Echo when the session ends', async () => {

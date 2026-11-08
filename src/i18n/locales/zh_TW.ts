@@ -1742,6 +1742,27 @@ export const zh_TW: LanguageTranslation = {
                 register_title: 'FoxalDB — 註冊',
                 checking_session: '正在檢查工作階段…',
             },
+            verify: {
+                page_title: 'FoxalDB — 驗證電子郵件',
+                title: '驗證你的電子郵件',
+                description:
+                    '使用 FoxalDB 線上功能前，請先確認電子郵件地址。你仍保持登入，可以重寄信件或登出。',
+                email_label: '電子郵件',
+                resend: '重新寄送',
+                sending: '正在寄送…',
+                sent: '已寄出驗證信。',
+                resend_failure: '無法寄出驗證信。請再試一次。',
+                cooldown: '{{seconds}} 秒後可以再次寄送。',
+                verified_title: '電子郵件已驗證',
+                verified_description:
+                    '你的電子郵件已驗證。可以使用 FoxalDB 線上功能。',
+                verified_continue: '繼續',
+                invalid_title: '驗證連結無效',
+                invalid_description:
+                    '此連結無效或已過期。若仍登入，請重新要求信件。',
+                sign_in: '登入',
+                logout: '登出',
+            },
             errors: {
                 first_name_required: '名字為必填項。',
                 last_name_required: '姓氏為必填項。',

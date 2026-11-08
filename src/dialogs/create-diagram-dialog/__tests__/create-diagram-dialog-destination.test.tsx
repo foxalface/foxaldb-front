@@ -197,6 +197,7 @@ const baseUser = (over: Partial<AuthUser> = {}): AuthUser => ({
     last_name: 'B',
     full_name: 'A B',
     email: 'a@b.com',
+    email_verified_at: null,
     default_diagram_creation_destination: null,
     ...over,
 });

@@ -1890,6 +1890,27 @@ export const uk: LanguageTranslation = {
                 register_title: 'FoxalDB — Реєстрація',
                 checking_session: 'Перевірка сесії…',
             },
+            verify: {
+                page_title: 'FoxalDB — Підтвердження пошти',
+                title: 'Підтвердьте пошту',
+                description:
+                    'Підтвердьте адресу пошти, перш ніж користуватися онлайн-можливостями FoxalDB. Ви залишаєтесь у системі, щоб надіслати лист знову або вийти.',
+                email_label: 'Пошта',
+                resend: 'Надіслати лист знову',
+                sending: 'Надсилання…',
+                sent: 'Лист для підтвердження надіслано.',
+                resend_failure: 'Не вдалося надіслати лист. Спробуйте ще раз.',
+                cooldown: 'Повторне надсилання через {{seconds}} с.',
+                verified_title: 'Пошту підтверджено',
+                verified_description:
+                    'Адресу підтверджено. Можна користуватися онлайн-можливостями FoxalDB.',
+                verified_continue: 'Продовжити',
+                invalid_title: 'Посилання підтвердження недійсне',
+                invalid_description:
+                    'Посилання недійсне або прострочене. Запитайте новий лист, якщо ви ще в системі.',
+                sign_in: 'Увійти',
+                logout: 'Вийти',
+            },
             errors: {
                 first_name_required: "Ім'я є обов'язковим.",
                 last_name_required: "Прізвище є обов'язковим.",

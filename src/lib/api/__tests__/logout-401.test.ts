@@ -57,4 +57,28 @@ describe('logout 401', () => {
 
         unregister();
     });
+
+    it('does not treat a verified-middleware 403 as session expiry', async () => {
+        const handler = vi.fn();
+        const unregister = registerSessionExpiredHandler(handler);
+
+        vi.stubGlobal(
+            'fetch',
+            vi.fn().mockResolvedValue({
+                ok: false,
+                status: 403,
+                text: async () =>
+                    JSON.stringify({
+                        message: 'Your email address is not verified.',
+                    }),
+            })
+        );
+
+        const { apiRequest } = await import('@/lib/api/client');
+
+        await expect(apiRequest('/diagrams')).rejects.toThrow(/not verified/);
+        expect(handler).not.toHaveBeenCalled();
+
+        unregister();
+    });
 });

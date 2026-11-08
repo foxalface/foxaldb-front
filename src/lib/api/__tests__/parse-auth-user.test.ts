@@ -10,6 +10,7 @@ describe('parseAuthUser', () => {
                 last_name: 'Renart',
                 full_name: 'Alexis Renart',
                 email: 'alexis@example.com',
+                email_verified_at: null,
             })
         ).toEqual({
             id: 1,
@@ -17,6 +18,8 @@ describe('parseAuthUser', () => {
             last_name: 'Renart',
             full_name: 'Alexis Renart',
             email: 'alexis@example.com',
+            email_verified_at: null,
+            default_diagram_creation_destination: null,
         });
     });
 
@@ -28,6 +31,7 @@ describe('parseAuthUser', () => {
                 last_name: 'Nguyễn',
                 full_name: 'Élodie Nguyễn',
                 email: 'elodie@example.com',
+                email_verified_at: '2026-01-01T00:00:00.000000Z',
             })
         )?.toMatchObject({
             first_name: 'Élodie',

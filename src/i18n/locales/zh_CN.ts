@@ -1744,6 +1744,27 @@ export const zh_CN: LanguageTranslation = {
                 register_title: 'FoxalDB — 注册',
                 checking_session: '正在检查会话…',
             },
+            verify: {
+                page_title: 'FoxalDB — 验证邮箱',
+                title: '验证你的邮箱',
+                description:
+                    '使用 FoxalDB 在线功能前，请先确认邮箱地址。你仍保持登录，可以重发邮件或退出。',
+                email_label: '邮箱',
+                resend: '重新发送邮件',
+                sending: '正在发送…',
+                sent: '验证邮件已发送。',
+                resend_failure: '无法发送验证邮件。请重试。',
+                cooldown: '{{seconds}} 秒后可再次发送。',
+                verified_title: '邮箱已验证',
+                verified_description:
+                    '你的邮箱已验证。可以使用 FoxalDB 在线功能。',
+                verified_continue: '继续',
+                invalid_title: '验证链接无效',
+                invalid_description:
+                    '此链接无效或已过期。如果仍处于登录状态，请重新请求邮件。',
+                sign_in: '登录',
+                logout: '退出',
+            },
             errors: {
                 first_name_required: '名为必填项。',
                 last_name_required: '姓为必填项。',

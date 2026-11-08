@@ -9,6 +9,7 @@ import { useAuthIntent } from '@/hooks/use-auth-intent';
 
 const authState = {
     isAuthenticated: false,
+    isEmailVerified: false,
     isLoading: false,
 };
 
@@ -29,6 +30,7 @@ const wrapper: React.FC<React.PropsWithChildren> = ({ children }) => (
 describe('AuthIntent DiagramLocation invariant (A1 regression)', () => {
     beforeEach(() => {
         authState.isAuthenticated = false;
+        authState.isEmailVerified = false;
         authState.isLoading = false;
     });
 
@@ -51,6 +53,7 @@ describe('AuthIntent DiagramLocation invariant (A1 regression)', () => {
 
         act(() => {
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 

@@ -1903,6 +1903,28 @@ export const te: LanguageTranslation = {
                 register_title: 'FoxalDB — నమోదు',
                 checking_session: 'సెషన్ తనిఖీ చేస్తోంది…',
             },
+            verify: {
+                page_title: 'FoxalDB — ఇమెయిల్ ధృవీకరణ',
+                title: 'మీ ఇమెయిల్‌ను ధృవీకరించండి',
+                description:
+                    'FoxalDB ఆన్‌లైన్ సౌకర్యాలు వాడే ముందు ఇమెయిల్ చిరునామాను నిర్ధారించండి. మళ్లీ పంపడానికి లేదా లాగ్ అవుట్ కావడానికి మీరు సైన్ ఇన్‌లోనే ఉంటారు.',
+                email_label: 'ఇమెయిల్',
+                resend: 'ఇమెయిల్ మళ్లీ పంపండి',
+                sending: 'పంపుతోంది…',
+                sent: 'ధృవీకరణ ఇమెయిల్ పంపబడింది.',
+                resend_failure:
+                    'ధృవీకరణ ఇమెయిల్ పంపలేకపోయాం. మళ్లీ ప్రయత్నించండి.',
+                cooldown: '{{seconds}} సెకన్ల తర్వాత మళ్లీ పంపవచ్చు.',
+                verified_title: 'ఇమెయిల్ ధృవీకరించబడింది',
+                verified_description:
+                    'మీ ఇమెయిల్ ధృవీకరించబడింది. ఇప్పుడు FoxalDB ఆన్‌లైన్ సౌకర్యాలు వాడవచ్చు.',
+                verified_continue: 'కొనసాగించండి',
+                invalid_title: 'ధృవీకరణ లింక్ చెల్లదు',
+                invalid_description:
+                    'ఈ లింక్ చెల్లదు లేదా గడువు ముగిసింది. సైన్ ఇన్‌లో ఉంటే కొత్త ఇమెయిల్ అడగండి.',
+                sign_in: 'సైన్ ఇన్',
+                logout: 'లాగ్ అవుట్',
+            },
             errors: {
                 first_name_required: 'మొదటి పేరు అవసరం.',
                 last_name_required: 'చివరి పేరు అవసరం.',

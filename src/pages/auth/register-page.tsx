@@ -8,11 +8,12 @@ import {
     AuthenticatedAccountPanel,
     RegisterFormPanel,
 } from './auth-form-panels';
+import { VerifyEmailScreen } from './verify-email-screen';
 import { useTranslation } from 'react-i18next';
 
 const RegisterPageContent: React.FC = () => {
     const { t } = useTranslation();
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isEmailVerified, isLoading } = useAuth();
     const navigate = useNavigate();
 
     const navigateHome = useCallback(() => {
@@ -30,6 +31,10 @@ const RegisterPageContent: React.FC = () => {
                 {t('auth.pages.checking_session')}
             </p>
         );
+    }
+
+    if (isAuthenticated && !isEmailVerified) {
+        return <VerifyEmailScreen />;
     }
 
     if (isAuthenticated) {

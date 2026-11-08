@@ -1884,6 +1884,28 @@ export const en = {
                 register_title: 'FoxalDB — Register',
                 checking_session: 'Checking session…',
             },
+            verify: {
+                page_title: 'FoxalDB — Verify email',
+                title: 'Verify your email',
+                description:
+                    'Confirm your email address before using FoxalDB Online features. Your account stays signed in so you can resend the email or log out.',
+                email_label: 'Email',
+                resend: 'Resend email',
+                sending: 'Sending…',
+                sent: 'Verification email sent.',
+                resend_failure:
+                    'Could not send the verification email. Try again.',
+                cooldown: 'You can resend in {{seconds}} seconds.',
+                verified_title: 'Email verified',
+                verified_description:
+                    'Your email address is verified. You can use FoxalDB Online features.',
+                verified_continue: 'Continue',
+                invalid_title: 'Verification link invalid',
+                invalid_description:
+                    'This verification link is invalid or has expired. Request a new email if you are still signed in.',
+                sign_in: 'Sign in',
+                logout: 'Log out',
+            },
             errors: {
                 first_name_required: 'First name is required.',
                 last_name_required: 'Last name is required.',

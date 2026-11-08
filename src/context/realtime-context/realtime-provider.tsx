@@ -167,7 +167,7 @@ const createEchoInstance = (): Echo<'reverb'> | null => {
 export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
     children,
 }) => {
-    const { user, isAuthenticated, isLoading } = useAuth();
+    const { user, isAuthenticated, isEmailVerified, isLoading } = useAuth();
     const userRef = useRef(user);
     userRef.current = user;
     const userId = user?.id ?? null;
@@ -299,7 +299,12 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
         const dispatcher = dispatcherRef.current;
         const activeUser = userRef.current;
 
-        if (!isAuthenticated || userId === null || activeUser === null) {
+        if (
+            !isAuthenticated ||
+            !isEmailVerified ||
+            userId === null ||
+            activeUser === null
+        ) {
             dispatchPresence({ type: 'RESET' });
             requestedDiagramIdRef.current = null;
             channelManager.clearAll();
@@ -335,7 +340,7 @@ export const RealtimeProvider: React.FC<React.PropsWithChildren> = ({
             clearEchoInstance();
             setCurrentDiagramId(null);
         };
-    }, [isAuthenticated, isLoading, userId]);
+    }, [isAuthenticated, isEmailVerified, isLoading, userId]);
 
     const joinDiagram = useCallback((diagramId: string) => {
         if (!isValidBackendDiagramId(diagramId)) {

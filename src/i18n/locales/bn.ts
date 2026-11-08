@@ -1881,6 +1881,28 @@ export const bn: LanguageTranslation = {
                 register_title: 'FoxalDB — নিবন্ধন',
                 checking_session: 'সেশন পরীক্ষা করা হচ্ছে…',
             },
+            verify: {
+                page_title: 'FoxalDB — ইমেল যাচাই',
+                title: 'আপনার ইমেল যাচাই করুন',
+                description:
+                    'FoxalDB-এর অনলাইন সুবিধা ব্যবহারের আগে ইমেল ঠিকানা নিশ্চিত করুন। আবার পাঠাতে বা লগ আউট করতে আপনি সাইন ইন থাকবেন।',
+                email_label: 'ইমেল',
+                resend: 'ইমেল আবার পাঠান',
+                sending: 'পাঠানো হচ্ছে…',
+                sent: 'যাচাইকরণ ইমেল পাঠানো হয়েছে।',
+                resend_failure:
+                    'যাচাইকরণ ইমেল পাঠানো যায়নি। আবার চেষ্টা করুন।',
+                cooldown: '{{seconds}} সেকেন্ড পরে আবার পাঠাতে পারবেন।',
+                verified_title: 'ইমেল যাচাই হয়েছে',
+                verified_description:
+                    'আপনার ইমেল যাচাই হয়েছে। এখন FoxalDB-এর অনলাইন সুবিধা ব্যবহার করতে পারবেন।',
+                verified_continue: 'চালিয়ে যান',
+                invalid_title: 'যাচাইকরণ লিঙ্কটি অবৈধ',
+                invalid_description:
+                    'এই লিঙ্কটি অবৈধ বা মেয়াদ শেষ। সাইন ইন থাকলে নতুন ইমেল চান।',
+                sign_in: 'সাইন ইন',
+                logout: 'লগ আউট',
+            },
             errors: {
                 first_name_required: 'নামের প্রথম অংশ প্রয়োজন।',
                 last_name_required: 'নামের শেষ অংশ প্রয়োজন।',

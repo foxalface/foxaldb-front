@@ -1872,6 +1872,28 @@ export const tr: LanguageTranslation = {
                 register_title: 'FoxalDB — Kayıt ol',
                 checking_session: 'Oturum kontrol ediliyor…',
             },
+            verify: {
+                page_title: 'FoxalDB — E-postayı doğrula',
+                title: 'E-postanızı doğrulayın',
+                description:
+                    'FoxalDB çevrimiçi özelliklerini kullanmadan önce e-posta adresinizi doğrulayın. Yeniden göndermek veya çıkmak için oturumunuz açık kalır.',
+                email_label: 'E-posta',
+                resend: 'E-postayı yeniden gönder',
+                sending: 'Gönderiliyor…',
+                sent: 'Doğrulama e-postası gönderildi.',
+                resend_failure:
+                    'Doğrulama e-postası gönderilemedi. Yeniden deneyin.',
+                cooldown: '{{seconds}} saniye sonra yeniden gönderebilirsiniz.',
+                verified_title: 'E-posta doğrulandı',
+                verified_description:
+                    'E-posta adresiniz doğrulandı. FoxalDB çevrimiçi özelliklerini kullanabilirsiniz.',
+                verified_continue: 'Devam et',
+                invalid_title: 'Doğrulama bağlantısı geçersiz',
+                invalid_description:
+                    'Bu bağlantı geçersiz veya süresi dolmuş. Hâlâ oturum açıksa yeni bir e-posta isteyin.',
+                sign_in: 'Giriş yap',
+                logout: 'Çıkış yap',
+            },
             errors: {
                 first_name_required: 'Ad gereklidir.',
                 last_name_required: 'Soyad gereklidir.',

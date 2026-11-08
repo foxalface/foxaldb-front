@@ -6,6 +6,7 @@ import { useAuthIntent } from '@/hooks/use-auth-intent';
 
 const authState = {
     isAuthenticated: false,
+    isEmailVerified: false,
     isLoading: true,
 };
 
@@ -20,6 +21,7 @@ const wrapper: React.FC<React.PropsWithChildren> = ({ children }) => (
 describe('AuthIntentProvider', () => {
     beforeEach(() => {
         authState.isAuthenticated = false;
+        authState.isEmailVerified = false;
         authState.isLoading = true;
     });
 
@@ -58,6 +60,7 @@ describe('AuthIntentProvider', () => {
 
         act(() => {
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 
@@ -92,6 +95,7 @@ describe('AuthIntentProvider', () => {
 
         act(() => {
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 
@@ -104,6 +108,7 @@ describe('AuthIntentProvider', () => {
 
         await act(async () => {
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
 
         expect(result.current.lastConsumedIntent).toEqual({
@@ -130,6 +135,7 @@ describe('AuthIntentProvider', () => {
 
         act(() => {
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 
@@ -151,6 +157,7 @@ describe('AuthIntentProvider', () => {
 
         act(() => {
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 
@@ -170,6 +177,7 @@ describe('AuthIntentProvider', () => {
         await act(async () => {
             authState.isLoading = false;
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 
@@ -208,6 +216,7 @@ describe('AuthIntentProvider', () => {
         await act(async () => {
             authState.isLoading = false;
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 
@@ -234,6 +243,7 @@ describe('AuthIntentProvider', () => {
         await act(async () => {
             authState.isLoading = false;
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 
@@ -263,6 +273,7 @@ describe('AuthIntentProvider', () => {
 
         act(() => {
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 
@@ -283,11 +294,58 @@ describe('AuthIntentProvider', () => {
 
         act(() => {
             authState.isAuthenticated = true;
+            authState.isEmailVerified = true;
         });
         rerender();
 
         await waitFor(() => {
             expect(result.current.lastConsumedIntent).toEqual({ type: 'none' });
+        });
+    });
+
+    it('keeps a pending intent until the account is verified, then consumes once', async () => {
+        const { result, rerender } = renderHook(() => useAuthIntent(), {
+            wrapper,
+        });
+
+        act(() => {
+            authState.isLoading = false;
+        });
+        rerender();
+
+        act(() => {
+            result.current.setAuthIntent({
+                type: 'open-online-diagram',
+                diagramId: '77',
+            });
+        });
+
+        act(() => {
+            authState.isAuthenticated = true;
+            authState.isEmailVerified = false;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.pendingIntent).toEqual({
+                type: 'open-online-diagram',
+                diagramId: '77',
+            });
+            expect(result.current.consumedIntentEpoch).toBe(0);
+        });
+
+        act(() => {
+            authState.isEmailVerified = true;
+        });
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.lastConsumedIntent).toEqual({
+                type: 'open-online-diagram',
+                diagramId: '77',
+            });
+            expect(result.current.pendingIntent).toEqual({ type: 'none' });
+            expect(result.current.consumedIntentEpoch).toBe(1);
         });
     });
 });

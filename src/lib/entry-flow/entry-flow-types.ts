@@ -89,6 +89,14 @@ export type EntryFlowState =
           diagramSource: DiagramSource;
           entrySource: EntrySource;
       }
+    | {
+          /**
+           * Authenticated session whose email is not verified.
+           * Online diagram loading must not start from this state.
+           */
+          kind: 'awaitingEmailVerification';
+          entrySource: EntrySource;
+      }
     | { kind: 'ready' }
     | {
           kind: 'recoverableError';
@@ -113,6 +121,11 @@ export type EntryFlowEvent =
           type: 'AUTHENTICATION_SUCCEEDED';
           entrySource: 'login' | 'registration';
       }
+    | {
+          type: 'EMAIL_VERIFICATION_REQUIRED';
+          entrySource: EntrySource;
+      }
+    | { type: 'EMAIL_VERIFIED' }
     | { type: 'AUTH_CONTINUATION_SHOW_ONLINE_LIST' }
     | { type: 'AUTH_CONTINUATION_OPEN_ONLINE_DIAGRAM'; diagramId: string }
     | { type: 'AUTH_CONTINUATION_OPEN_DEVICE_DIAGRAM'; diagramId: string }

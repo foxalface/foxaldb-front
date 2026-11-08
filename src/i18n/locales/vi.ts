@@ -1877,6 +1877,27 @@ export const vi: LanguageTranslation = {
                 register_title: 'FoxalDB — Đăng ký',
                 checking_session: 'Đang kiểm tra phiên…',
             },
+            verify: {
+                page_title: 'FoxalDB — Xác minh email',
+                title: 'Xác minh email của bạn',
+                description:
+                    'Xác nhận địa chỉ email trước khi dùng các tính năng trực tuyến của FoxalDB. Bạn vẫn đăng nhập để gửi lại thư hoặc đăng xuất.',
+                email_label: 'Email',
+                resend: 'Gửi lại email',
+                sending: 'Đang gửi…',
+                sent: 'Đã gửi email xác minh.',
+                resend_failure: 'Không gửi được email xác minh. Hãy thử lại.',
+                cooldown: 'Bạn có thể gửi lại sau {{seconds}} giây.',
+                verified_title: 'Đã xác minh email',
+                verified_description:
+                    'Email của bạn đã được xác minh. Bạn có thể dùng các tính năng trực tuyến của FoxalDB.',
+                verified_continue: 'Tiếp tục',
+                invalid_title: 'Liên kết xác minh không hợp lệ',
+                invalid_description:
+                    'Liên kết này không hợp lệ hoặc đã hết hạn. Hãy yêu cầu email mới nếu bạn vẫn đăng nhập.',
+                sign_in: 'Đăng nhập',
+                logout: 'Đăng xuất',
+            },
             errors: {
                 first_name_required: 'Tên là bắt buộc.',
                 last_name_required: 'Họ là bắt buộc.',

@@ -1940,6 +1940,28 @@ export const de: LanguageTranslation = {
                 register_title: 'FoxalDB — Registrieren',
                 checking_session: 'Sitzung wird geprüft…',
             },
+            verify: {
+                page_title: 'FoxalDB — E-Mail bestätigen',
+                title: 'E-Mail bestätigen',
+                description:
+                    'Bestätigen Sie Ihre E-Mail-Adresse, bevor Sie FoxalDB-Online-Funktionen nutzen. Sie bleiben angemeldet und können die E-Mail erneut senden oder sich abmelden.',
+                email_label: 'E-Mail',
+                resend: 'E-Mail erneut senden',
+                sending: 'Wird gesendet…',
+                sent: 'Bestätigungs-E-Mail gesendet.',
+                resend_failure:
+                    'Die Bestätigungs-E-Mail konnte nicht gesendet werden. Versuchen Sie es erneut.',
+                cooldown: 'Erneutes Senden in {{seconds}} Sekunden möglich.',
+                verified_title: 'E-Mail bestätigt',
+                verified_description:
+                    'Ihre E-Mail-Adresse ist bestätigt. Sie können die FoxalDB-Online-Funktionen nutzen.',
+                verified_continue: 'Weiter',
+                invalid_title: 'Bestätigungslink ungültig',
+                invalid_description:
+                    'Dieser Link ist ungültig oder abgelaufen. Fordern Sie eine neue E-Mail an, wenn Sie noch angemeldet sind.',
+                sign_in: 'Anmelden',
+                logout: 'Abmelden',
+            },
             errors: {
                 first_name_required: 'Der Vorname ist erforderlich.',
                 last_name_required: 'Der Nachname ist erforderlich.',

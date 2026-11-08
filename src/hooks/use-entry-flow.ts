@@ -93,6 +93,9 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         initialEntryFlowState
     );
     const { user, isAuthenticated, isLoading } = useAuth();
+    const isEmailVerified =
+        typeof user?.email_verified_at === 'string' &&
+        user.email_verified_at.length > 0;
     const { diagramId: routeDiagramIdParam } = useParams<{
         diagramId?: string;
     }>();
@@ -144,6 +147,14 @@ export const useEntryFlow = (): UseEntryFlowResult => {
         sessionResolvedRef.current = true;
         previousRouteDiagramIdRef.current = routeDiagramId;
 
+        if (isAuthenticated && !isEmailVerified) {
+            dispatchEvent({
+                type: 'EMAIL_VERIFICATION_REQUIRED',
+                entrySource: 'startup',
+            });
+            return;
+        }
+
         if (isAuthenticated) {
             dispatchEvent({
                 type: 'SESSION_AUTHENTICATED',
@@ -163,7 +174,32 @@ export const useEntryFlow = (): UseEntryFlowResult => {
             routeDiagramId,
             requestedDeviceDiagramId,
         });
-    }, [isLoading, isAuthenticated, user?.id, routeDiagramId, dispatchEvent]);
+    }, [
+        isLoading,
+        isAuthenticated,
+        isEmailVerified,
+        user?.id,
+        routeDiagramId,
+        dispatchEvent,
+    ]);
+
+    useEffect(() => {
+        if (isLoading || !sessionResolvedRef.current) {
+            return;
+        }
+
+        if (isAuthenticated && !isEmailVerified) {
+            dispatchEvent({
+                type: 'EMAIL_VERIFICATION_REQUIRED',
+                entrySource: 'login',
+            });
+            return;
+        }
+
+        if (isAuthenticated && isEmailVerified) {
+            dispatchEvent({ type: 'EMAIL_VERIFIED' });
+        }
+    }, [isLoading, isAuthenticated, isEmailVerified, dispatchEvent]);
 
     /** Invalidate stale opening work when the route diagram identity changes. */
     useEffect(() => {
@@ -349,7 +385,7 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     const { authenticatedInitialDiagram } = useEntryFlowAuthenticatedResolution(
         {
             state,
-            isAuthenticated,
+            isAuthenticated: isAuthenticated && isEmailVerified,
             isAuthLoading: isLoading,
             routeDiagramId,
             beginResolution,

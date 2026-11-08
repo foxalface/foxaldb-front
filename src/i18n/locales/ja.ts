@@ -1923,6 +1923,28 @@ export const ja: LanguageTranslation = {
                 register_title: 'FoxalDB — 登録',
                 checking_session: 'セッションを確認中…',
             },
+            verify: {
+                page_title: 'FoxalDB — メール確認',
+                title: 'メールアドレスを確認',
+                description:
+                    'FoxalDBのオンライン機能を使う前にメールアドレスを確認してください。再送またはログアウトできるよう、サインインしたままです。',
+                email_label: 'メール',
+                resend: 'メールを再送',
+                sending: '送信中…',
+                sent: '確認メールを送信しました。',
+                resend_failure:
+                    '確認メールを送信できませんでした。もう一度お試しください。',
+                cooldown: '{{seconds}}秒後に再送できます。',
+                verified_title: 'メールを確認しました',
+                verified_description:
+                    'メールアドレスは確認済みです。FoxalDBのオンライン機能を使えます。',
+                verified_continue: '続ける',
+                invalid_title: '確認リンクが無効です',
+                invalid_description:
+                    'このリンクは無効か、期限が切れています。サインイン中なら新しいメールを依頼してください。',
+                sign_in: 'サインイン',
+                logout: 'ログアウト',
+            },
             errors: {
                 first_name_required: '名は必須です。',
                 last_name_required: '姓は必須です。',
