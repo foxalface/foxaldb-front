@@ -1060,6 +1060,31 @@ export const uk: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Запрошення до діаграми',
+            loading: 'Завантаження запрошення…',
+            invited_by: 'Запросив',
+            diagram: 'Діаграма',
+            role: 'Роль',
+            sent_to: 'Надіслано',
+            expires: 'Діє до',
+            create_account: 'Створити обліковий запис',
+            sign_in: 'Увійти',
+            back: 'Назад',
+            wrong_account:
+                'Це запрошення надіслано на {{invitedEmail}}. Ви ввійшли як {{currentEmail}}.',
+            switch_account: 'Вийти і змінити обліковий запис',
+            accept: 'Прийняти запрошення',
+            accepting: 'Прийняття…',
+            accepted: 'Це запрошення вже прийнято.',
+            open_diagram: 'Відкрити діаграму',
+            expired: 'Термін цього запрошення минув.',
+            revoked: 'Це запрошення відкликано.',
+            invalid: 'Це посилання запрошення недійсне.',
+            retry: 'Спробувати знову',
+            generic_error: 'Щось пішло не так. Спробуйте ще раз.',
+        },
+
         diagram_role: {
             owner: 'Власник',
             editor: 'Редактор',

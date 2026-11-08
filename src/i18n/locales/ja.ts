@@ -1074,6 +1074,31 @@ export const ja: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'ダイアグラムへの招待',
+            loading: '招待を読み込んでいます…',
+            invited_by: '招待者',
+            diagram: 'ダイアグラム',
+            role: '役割',
+            sent_to: '送信先',
+            expires: '有効期限',
+            create_account: 'アカウントを作成',
+            sign_in: 'ログイン',
+            back: '戻る',
+            wrong_account:
+                'この招待は {{invitedEmail}} 宛です。現在 {{currentEmail}} でログインしています。',
+            switch_account: 'ログアウトしてアカウントを切り替える',
+            accept: '招待を承諾',
+            accepting: '承諾しています…',
+            accepted: 'この招待はすでに承諾されています。',
+            open_diagram: 'ダイアグラムを開く',
+            expired: 'この招待の有効期限が切れています。',
+            revoked: 'この招待は取り消されました。',
+            invalid: 'この招待リンクは無効です。',
+            retry: '再試行',
+            generic_error: '問題が発生しました。もう一度お試しください。',
+        },
+
         diagram_role: {
             owner: '所有者',
             editor: '編集者',

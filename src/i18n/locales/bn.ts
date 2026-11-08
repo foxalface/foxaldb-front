@@ -1052,6 +1052,31 @@ export const bn: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'ডায়াগ্রামের আমন্ত্রণ',
+            loading: 'আমন্ত্রণ লোড হচ্ছে…',
+            invited_by: 'আমন্ত্রণকারী',
+            diagram: 'ডায়াগ্রাম',
+            role: 'ভূমিকা',
+            sent_to: 'পাঠানো হয়েছে',
+            expires: 'মেয়াদ',
+            create_account: 'অ্যাকাউন্ট তৈরি করুন',
+            sign_in: 'সাইন ইন',
+            back: 'ফিরে যান',
+            wrong_account:
+                'এই আমন্ত্রণ {{invitedEmail}}-কে পাঠানো হয়েছে। আপনি {{currentEmail}} হিসেবে সাইন ইন আছেন।',
+            switch_account: 'সাইন আউট করে অ্যাকাউন্ট বদলান',
+            accept: 'আমন্ত্রণ গ্রহণ করুন',
+            accepting: 'গ্রহণ করা হচ্ছে…',
+            accepted: 'এই আমন্ত্রণ ইতিমধ্যে গ্রহণ করা হয়েছে।',
+            open_diagram: 'ডায়াগ্রাম খুলুন',
+            expired: 'এই আমন্ত্রণের মেয়াদ শেষ।',
+            revoked: 'এই আমন্ত্রণ বাতিল করা হয়েছে।',
+            invalid: 'এই আমন্ত্রণ লিঙ্কটি বৈধ নয়।',
+            retry: 'আবার চেষ্টা করুন',
+            generic_error: 'কিছু ভুল হয়েছে। আবার চেষ্টা করুন।',
+        },
+
         diagram_role: {
             owner: 'মালিক',
             editor: 'সম্পাদক',

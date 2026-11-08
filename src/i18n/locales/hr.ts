@@ -1060,6 +1060,31 @@ export const hr: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Pozivnica za dijagram',
+            loading: 'Učitavanje pozivnice…',
+            invited_by: 'Pozvao',
+            diagram: 'Dijagram',
+            role: 'Uloga',
+            sent_to: 'Poslano na',
+            expires: 'Istječe',
+            create_account: 'Stvori račun',
+            sign_in: 'Prijava',
+            back: 'Natrag',
+            wrong_account:
+                'Ova pozivnica poslana je na {{invitedEmail}}. Prijavljeni ste kao {{currentEmail}}.',
+            switch_account: 'Odjavi se i promijeni račun',
+            accept: 'Prihvati pozivnicu',
+            accepting: 'Prihvaćanje…',
+            accepted: 'Ova pozivnica je već prihvaćena.',
+            open_diagram: 'Otvori dijagram',
+            expired: 'Ova pozivnica je istekla.',
+            revoked: 'Ova pozivnica je opozvana.',
+            invalid: 'Ova poveznica pozivnice nije valjana.',
+            retry: 'Pokušaj ponovno',
+            generic_error: 'Nešto je pošlo po krivu. Pokušajte ponovno.',
+        },
+
         diagram_role: {
             owner: 'Vlasnik',
             editor: 'Uređivač',

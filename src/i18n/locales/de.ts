@@ -1086,6 +1086,32 @@ export const de: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Diagrammeinladung',
+            loading: 'Einladung wird geladen…',
+            invited_by: 'Eingeladen von',
+            diagram: 'Diagramm',
+            role: 'Rolle',
+            sent_to: 'Gesendet an',
+            expires: 'Läuft ab',
+            create_account: 'Konto erstellen',
+            sign_in: 'Anmelden',
+            back: 'Zurück',
+            wrong_account:
+                'Diese Einladung wurde an {{invitedEmail}} gesendet. Sie sind als {{currentEmail}} angemeldet.',
+            switch_account: 'Abmelden und Konto wechseln',
+            accept: 'Einladung annehmen',
+            accepting: 'Wird angenommen…',
+            accepted: 'Diese Einladung wurde bereits angenommen.',
+            open_diagram: 'Diagramm öffnen',
+            expired: 'Diese Einladung ist abgelaufen.',
+            revoked: 'Diese Einladung wurde widerrufen.',
+            invalid: 'Dieser Einladungslink ist ungültig.',
+            retry: 'Erneut versuchen',
+            generic_error:
+                'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
+        },
+
         diagram_role: {
             owner: 'Inhaber',
             editor: 'Bearbeiter',

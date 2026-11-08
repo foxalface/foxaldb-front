@@ -982,6 +982,31 @@ export const zh_TW: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: '圖表邀請',
+            loading: '正在載入邀請…',
+            invited_by: '邀請人',
+            diagram: '圖表',
+            role: '角色',
+            sent_to: '寄送至',
+            expires: '到期時間',
+            create_account: '建立帳戶',
+            sign_in: '登入',
+            back: '返回',
+            wrong_account:
+                '此邀請是寄給 {{invitedEmail}} 的。你目前以 {{currentEmail}} 登入。',
+            switch_account: '登出並切換帳戶',
+            accept: '接受邀請',
+            accepting: '正在接受…',
+            accepted: '此邀請已被接受。',
+            open_diagram: '開啟圖表',
+            expired: '此邀請已過期。',
+            revoked: '此邀請已被撤銷。',
+            invalid: '此邀請連結無效。',
+            retry: '再試一次',
+            generic_error: '發生問題。請再試一次。',
+        },
+
         diagram_role: {
             owner: '擁有者',
             editor: '編輯者',

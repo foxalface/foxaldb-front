@@ -123,17 +123,21 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
 export interface RegisterFormPanelProps {
     onSuccess: () => void;
     onSwitchToLogin: () => void;
+    lockedEmail?: string;
+    invitationToken?: string;
 }
 
 export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
     onSuccess,
     onSwitchToLogin,
+    lockedEmail,
+    invitationToken,
 }) => {
     const { t } = useTranslation();
     const { register } = useAuth();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(lockedEmail ?? '');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({});
@@ -211,13 +215,24 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
             setIsSubmitting(true);
 
             try {
-                await register(
-                    trimmedFirstName,
-                    trimmedLastName,
-                    email,
-                    password,
-                    passwordConfirmation
-                );
+                if (invitationToken) {
+                    await register(
+                        trimmedFirstName,
+                        trimmedLastName,
+                        lockedEmail ?? email,
+                        password,
+                        passwordConfirmation,
+                        invitationToken
+                    );
+                } else {
+                    await register(
+                        trimmedFirstName,
+                        trimmedLastName,
+                        lockedEmail ?? email,
+                        password,
+                        passwordConfirmation
+                    );
+                }
                 onSuccess();
             } catch (error: unknown) {
                 const validationErrors = parseLaravelValidationErrors(error);
@@ -248,7 +263,9 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
         [
             email,
             firstName,
+            invitationToken,
             lastName,
+            lockedEmail,
             onSuccess,
             password,
             passwordConfirmation,
@@ -325,12 +342,13 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                         className={cn(
                             fieldErrors.email && 'border-destructive'
                         )}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || lockedEmail !== undefined}
                         name="email"
                         onChange={handleEmailChange}
+                        readOnly={lockedEmail !== undefined}
                         required
                         type="email"
-                        value={email}
+                        value={lockedEmail ?? email}
                     />
                     {fieldErrors.email ? (
                         <p className="text-xs text-destructive" role="alert">

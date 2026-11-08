@@ -1060,6 +1060,31 @@ export const te: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'రేఖాచిత్ర ఆహ్వానం',
+            loading: 'ఆహ్వానం లోడ్ అవుతోంది…',
+            invited_by: 'ఆహ్వానించినవారు',
+            diagram: 'రేఖాచిత్రం',
+            role: 'పాత్ర',
+            sent_to: 'పంపిన చిరునామా',
+            expires: 'గడువు',
+            create_account: 'ఖాతా సృష్టించండి',
+            sign_in: 'సైన్ ఇన్',
+            back: 'వెనక్కి',
+            wrong_account:
+                'ఈ ఆహ్వానం {{invitedEmail}} కు పంపబడింది. మీరు {{currentEmail}} గా సైన్ ఇన్ అయి ఉన్నారు.',
+            switch_account: 'సైన్ అవుట్ చేసి ఖాతా మార్చండి',
+            accept: 'ఆహ్వానం అంగీకరించండి',
+            accepting: 'అంగీకరిస్తోంది…',
+            accepted: 'ఈ ఆహ్వానం ఇప్పటికే అంగీకరించబడింది.',
+            open_diagram: 'రేఖాచిత్రం తెరవండి',
+            expired: 'ఈ ఆహ్వానం గడువు ముగిసింది.',
+            revoked: 'ఈ ఆహ్వానం రద్దు చేయబడింది.',
+            invalid: 'ఈ ఆహ్వాన లింక్ చెల్లదు.',
+            retry: 'మళ్లీ ప్రయత్నించండి',
+            generic_error: 'ఏదో తప్పు జరిగింది. మళ్లీ ప్రయత్నించండి.',
+        },
+
         diagram_role: {
             owner: 'అధిపతి',
             editor: 'సంపాదకుడు',

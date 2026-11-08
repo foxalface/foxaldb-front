@@ -18,7 +18,8 @@ export interface AuthContextValue {
         lastName: string,
         email: string,
         password: string,
-        passwordConfirmation: string
+        passwordConfirmation: string,
+        invitationToken?: string
     ) => Promise<void>;
     logout: () => Promise<void>;
     fetchUser: () => Promise<void>;

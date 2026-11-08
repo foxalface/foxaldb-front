@@ -1052,6 +1052,31 @@ export const hi: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'आरेख निमंत्रण',
+            loading: 'निमंत्रण लोड हो रहा है…',
+            invited_by: 'आमंत्रित करने वाले',
+            diagram: 'आरेख',
+            role: 'भूमिका',
+            sent_to: 'भेजा गया',
+            expires: 'समाप्ति',
+            create_account: 'खाता बनाएँ',
+            sign_in: 'साइन इन',
+            back: 'वापस',
+            wrong_account:
+                'यह निमंत्रण {{invitedEmail}} को भेजा गया था। आप {{currentEmail}} से साइन इन हैं।',
+            switch_account: 'साइन आउट करें और खाता बदलें',
+            accept: 'निमंत्रण स्वीकार करें',
+            accepting: 'स्वीकार हो रहा है…',
+            accepted: 'यह निमंत्रण पहले ही स्वीकार हो चुका है।',
+            open_diagram: 'आरेख खोलें',
+            expired: 'यह निमंत्रण समाप्त हो गया है।',
+            revoked: 'यह निमंत्रण रद्द कर दिया गया है।',
+            invalid: 'यह निमंत्रण लिंक मान्य नहीं है।',
+            retry: 'फिर कोशिश करें',
+            generic_error: 'कुछ गलत हो गया। कृपया फिर कोशिश करें।',
+        },
+
         diagram_role: {
             owner: 'स्वामी',
             editor: 'संपादक',

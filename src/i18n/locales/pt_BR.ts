@@ -1072,6 +1072,31 @@ export const pt_BR: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Convite para o diagrama',
+            loading: 'Carregando o convite…',
+            invited_by: 'Convidado por',
+            diagram: 'Diagrama',
+            role: 'Função',
+            sent_to: 'Enviado para',
+            expires: 'Expira em',
+            create_account: 'Criar conta',
+            sign_in: 'Entrar',
+            back: 'Voltar',
+            wrong_account:
+                'Este convite foi enviado para {{invitedEmail}}. Você está conectado como {{currentEmail}}.',
+            switch_account: 'Sair e trocar de conta',
+            accept: 'Aceitar convite',
+            accepting: 'Aceitando…',
+            accepted: 'Este convite já foi aceito.',
+            open_diagram: 'Abrir diagrama',
+            expired: 'Este convite expirou.',
+            revoked: 'Este convite foi revogado.',
+            invalid: 'Este link de convite não é válido.',
+            retry: 'Tentar novamente',
+            generic_error: 'Algo deu errado. Tente novamente.',
+        },
+
         diagram_role: {
             owner: 'Proprietário',
             editor: 'Editor',

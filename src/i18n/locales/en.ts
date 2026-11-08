@@ -1057,6 +1057,31 @@ export const en = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Diagram invitation',
+            loading: 'Loading invitation...',
+            invited_by: 'Invited by',
+            diagram: 'Diagram',
+            role: 'Role',
+            sent_to: 'Sent to',
+            expires: 'Expires',
+            create_account: 'Create account',
+            sign_in: 'Sign in',
+            back: 'Back',
+            wrong_account:
+                'This invitation was sent to {{invitedEmail}}. You are currently signed in as {{currentEmail}}.',
+            switch_account: 'Sign out and switch account',
+            accept: 'Accept invitation',
+            accepting: 'Accepting...',
+            accepted: 'This invitation has already been accepted.',
+            open_diagram: 'Open diagram',
+            expired: 'This invitation has expired.',
+            revoked: 'This invitation has been revoked.',
+            invalid: 'This invitation link is not valid.',
+            retry: 'Try again',
+            generic_error: 'Something went wrong. Please try again.',
+        },
+
         diagram_role: {
             owner: 'Owner',
             editor: 'Editor',

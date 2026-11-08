@@ -149,7 +149,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
             lastName: string,
             email: string,
             password: string,
-            passwordConfirmation: string
+            passwordConfirmation: string,
+            invitationToken?: string
         ): Promise<void> => {
             await initCsrf();
             const registeredUser = await apiRegister(
@@ -157,7 +158,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
                 lastName,
                 email,
                 password,
-                passwordConfirmation
+                passwordConfirmation,
+                invitationToken
             );
             userRef.current = registeredUser;
             setUser(registeredUser);

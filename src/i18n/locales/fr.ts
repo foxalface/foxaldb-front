@@ -1082,6 +1082,31 @@ export const fr: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Invitation à un diagramme',
+            loading: 'Chargement de l’invitation…',
+            invited_by: 'Invité par',
+            diagram: 'Diagramme',
+            role: 'Rôle',
+            sent_to: 'Envoyée à',
+            expires: 'Expire le',
+            create_account: 'Créer un compte',
+            sign_in: 'Se connecter',
+            back: 'Retour',
+            wrong_account:
+                'Cette invitation a été envoyée à {{invitedEmail}}. Vous êtes connecté en tant que {{currentEmail}}.',
+            switch_account: 'Se déconnecter et changer de compte',
+            accept: 'Accepter l’invitation',
+            accepting: 'Acceptation…',
+            accepted: 'Cette invitation a déjà été acceptée.',
+            open_diagram: 'Ouvrir le diagramme',
+            expired: 'Cette invitation a expiré.',
+            revoked: 'Cette invitation a été révoquée.',
+            invalid: 'Ce lien d’invitation n’est pas valide.',
+            retry: 'Réessayer',
+            generic_error: 'Une erreur s’est produite. Veuillez réessayer.',
+        },
+
         diagram_role: {
             owner: 'Propriétaire',
             editor: 'Éditeur',

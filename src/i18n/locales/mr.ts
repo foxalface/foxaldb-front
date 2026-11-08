@@ -1051,6 +1051,31 @@ export const mr: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'आकृती आमंत्रण',
+            loading: 'आमंत्रण लोड होत आहे…',
+            invited_by: 'आमंत्रित करणारे',
+            diagram: 'आकृती',
+            role: 'भूमिका',
+            sent_to: 'पाठवले',
+            expires: 'कालबाह्य',
+            create_account: 'खाते तयार करा',
+            sign_in: 'साइन इन',
+            back: 'मागे',
+            wrong_account:
+                'हे आमंत्रण {{invitedEmail}} ला पाठवले आहे. तुम्ही {{currentEmail}} म्हणून साइन इन आहात.',
+            switch_account: 'साइन आउट करून खाते बदला',
+            accept: 'आमंत्रण स्वीकारा',
+            accepting: 'स्वीकारत आहे…',
+            accepted: 'हे आमंत्रण आधीच स्वीकारले आहे.',
+            open_diagram: 'आकृती उघडा',
+            expired: 'या आमंत्रणाची मुदत संपली आहे.',
+            revoked: 'हे आमंत्रण रद्द केले आहे.',
+            invalid: 'ही आमंत्रण लिंक वैध नाही.',
+            retry: 'पुन्हा प्रयत्न करा',
+            generic_error: 'काहीतरी चुकले. पुन्हा प्रयत्न करा.',
+        },
+
         diagram_role: {
             owner: 'मालक',
             editor: 'संपादक',

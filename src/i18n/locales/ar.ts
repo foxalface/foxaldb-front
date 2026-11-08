@@ -1045,6 +1045,31 @@ export const ar: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'دعوة إلى مخطط',
+            loading: 'جارٍ تحميل الدعوة…',
+            invited_by: 'الدعوة من',
+            diagram: 'المخطط',
+            role: 'الدور',
+            sent_to: 'أُرسلت إلى',
+            expires: 'تنتهي في',
+            create_account: 'إنشاء حساب',
+            sign_in: 'تسجيل الدخول',
+            back: 'رجوع',
+            wrong_account:
+                'أُرسلت هذه الدعوة إلى {{invitedEmail}}. أنت مسجّل الدخول باسم {{currentEmail}}.',
+            switch_account: 'تسجيل الخروج وتبديل الحساب',
+            accept: 'قبول الدعوة',
+            accepting: 'جارٍ القبول…',
+            accepted: 'تم قبول هذه الدعوة بالفعل.',
+            open_diagram: 'فتح المخطط',
+            expired: 'انتهت صلاحية هذه الدعوة.',
+            revoked: 'تم إلغاء هذه الدعوة.',
+            invalid: 'رابط الدعوة هذا غير صالح.',
+            retry: 'إعادة المحاولة',
+            generic_error: 'حدث خطأ. يرجى المحاولة مرة أخرى.',
+        },
+
         diagram_role: {
             owner: 'المالك',
             editor: 'المحرر',

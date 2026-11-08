@@ -72,7 +72,8 @@ export const register = async (
     lastName: string,
     email: string,
     password: string,
-    passwordConfirmation: string
+    passwordConfirmation: string,
+    invitationToken?: string
 ): Promise<AuthUser> => {
     const response = await apiRequest<AuthUserResponse>('/register', {
         method: 'POST',
@@ -82,6 +83,7 @@ export const register = async (
             email,
             password,
             password_confirmation: passwordConfirmation,
+            ...(invitationToken ? { invitation_token: invitationToken } : {}),
         },
     });
 

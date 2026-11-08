@@ -1056,6 +1056,31 @@ export const ru: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Приглашение к диаграмме',
+            loading: 'Загрузка приглашения…',
+            invited_by: 'Пригласил',
+            diagram: 'Диаграмма',
+            role: 'Роль',
+            sent_to: 'Отправлено',
+            expires: 'Истекает',
+            create_account: 'Создать аккаунт',
+            sign_in: 'Войти',
+            back: 'Назад',
+            wrong_account:
+                'Это приглашение отправлено на {{invitedEmail}}. Вы вошли как {{currentEmail}}.',
+            switch_account: 'Выйти и сменить аккаунт',
+            accept: 'Принять приглашение',
+            accepting: 'Принятие…',
+            accepted: 'Это приглашение уже принято.',
+            open_diagram: 'Открыть диаграмму',
+            expired: 'Срок этого приглашения истёк.',
+            revoked: 'Это приглашение отозвано.',
+            invalid: 'Эта ссылка приглашения недействительна.',
+            retry: 'Повторить',
+            generic_error: 'Что-то пошло не так. Попробуйте ещё раз.',
+        },
+
         diagram_role: {
             owner: 'Владелец',
             editor: 'Редактор',

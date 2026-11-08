@@ -983,6 +983,31 @@ export const zh_CN: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: '图表邀请',
+            loading: '正在加载邀请…',
+            invited_by: '邀请人',
+            diagram: '图表',
+            role: '角色',
+            sent_to: '发送至',
+            expires: '到期时间',
+            create_account: '创建账户',
+            sign_in: '登录',
+            back: '返回',
+            wrong_account:
+                '此邀请发送给 {{invitedEmail}}。你当前登录的是 {{currentEmail}}。',
+            switch_account: '退出并切换账户',
+            accept: '接受邀请',
+            accepting: '正在接受…',
+            accepted: '此邀请已被接受。',
+            open_diagram: '打开图表',
+            expired: '此邀请已过期。',
+            revoked: '此邀请已被撤销。',
+            invalid: '此邀请链接无效。',
+            retry: '重试',
+            generic_error: '出了点问题。请重试。',
+        },
+
         diagram_role: {
             owner: '所有者',
             editor: '编辑者',

@@ -1062,6 +1062,31 @@ export const id_ID: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Undangan diagram',
+            loading: 'Memuat undangan…',
+            invited_by: 'Diundang oleh',
+            diagram: 'Diagram',
+            role: 'Peran',
+            sent_to: 'Dikirim ke',
+            expires: 'Kedaluwarsa',
+            create_account: 'Buat akun',
+            sign_in: 'Masuk',
+            back: 'Kembali',
+            wrong_account:
+                'Undangan ini dikirim ke {{invitedEmail}}. Anda masuk sebagai {{currentEmail}}.',
+            switch_account: 'Keluar dan ganti akun',
+            accept: 'Terima undangan',
+            accepting: 'Menerima…',
+            accepted: 'Undangan ini sudah diterima.',
+            open_diagram: 'Buka diagram',
+            expired: 'Undangan ini sudah kedaluwarsa.',
+            revoked: 'Undangan ini telah dicabut.',
+            invalid: 'Tautan undangan ini tidak valid.',
+            retry: 'Coba lagi',
+            generic_error: 'Terjadi kesalahan. Silakan coba lagi.',
+        },
+
         diagram_role: {
             owner: 'Pemilik',
             editor: 'Editor',

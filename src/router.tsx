@@ -69,6 +69,16 @@ const routes: RouteObject[] = [
         },
     },
     {
+        path: 'invitations/:token',
+        async lazy() {
+            const { InvitationPage } =
+                await import('./pages/invitation-page/invitation-page');
+            return {
+                element: <InvitationPage />,
+            };
+        },
+    },
+    {
         path: 'register',
         async lazy() {
             const { RegisterPage } = await import('./pages/auth/register-page');

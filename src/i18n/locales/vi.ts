@@ -1057,6 +1057,31 @@ export const vi: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Lời mời sơ đồ',
+            loading: 'Đang tải lời mời…',
+            invited_by: 'Người mời',
+            diagram: 'Sơ đồ',
+            role: 'Vai trò',
+            sent_to: 'Gửi tới',
+            expires: 'Hết hạn',
+            create_account: 'Tạo tài khoản',
+            sign_in: 'Đăng nhập',
+            back: 'Quay lại',
+            wrong_account:
+                'Lời mời này được gửi tới {{invitedEmail}}. Bạn đang đăng nhập bằng {{currentEmail}}.',
+            switch_account: 'Đăng xuất và đổi tài khoản',
+            accept: 'Chấp nhận lời mời',
+            accepting: 'Đang chấp nhận…',
+            accepted: 'Lời mời này đã được chấp nhận.',
+            open_diagram: 'Mở sơ đồ',
+            expired: 'Lời mời này đã hết hạn.',
+            revoked: 'Lời mời này đã bị thu hồi.',
+            invalid: 'Liên kết lời mời này không hợp lệ.',
+            retry: 'Thử lại',
+            generic_error: 'Đã xảy ra lỗi. Vui lòng thử lại.',
+        },
+
         diagram_role: {
             owner: 'Chủ sở hữu',
             editor: 'Biên tập viên',

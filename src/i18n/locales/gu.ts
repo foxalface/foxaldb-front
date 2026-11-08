@@ -1040,6 +1040,31 @@ export const gu: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'આકૃતિ આમંત્રણ',
+            loading: 'આમંત્રણ લોડ થઈ રહ્યું છે…',
+            invited_by: 'આમંત્રણ આપનાર',
+            diagram: 'આકૃતિ',
+            role: 'ભૂમિકા',
+            sent_to: 'મોકલ્યું',
+            expires: 'સમાપ્તિ',
+            create_account: 'ખાતું બનાવો',
+            sign_in: 'સાઇન ઇન',
+            back: 'પાછળ',
+            wrong_account:
+                'આ આમંત્રણ {{invitedEmail}} ને મોકલાયું છે. તમે {{currentEmail}} તરીકે સાઇન ઇન છો.',
+            switch_account: 'સાઇન આઉટ કરીને ખાતું બદલો',
+            accept: 'આમંત્રણ સ્વીકારો',
+            accepting: 'સ્વીકારી રહ્યા છીએ…',
+            accepted: 'આ આમંત્રણ પહેલેથી સ્વીકારાયું છે.',
+            open_diagram: 'આકૃતિ ખોલો',
+            expired: 'આ આમંત્રણ સમાપ્ત થઈ ગયું છે.',
+            revoked: 'આ આમંત્રણ રદ કરાયું છે.',
+            invalid: 'આ આમંત્રણ લિંક માન્ય નથી.',
+            retry: 'ફરી પ્રયાસ કરો',
+            generic_error: 'કંઈક ખોટું થયું. ફરી પ્રયાસ કરો.',
+        },
+
         diagram_role: {
             owner: 'માલિક',
             editor: 'સંપાદક',

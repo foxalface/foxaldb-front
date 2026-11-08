@@ -1052,6 +1052,31 @@ export const ne: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'रेखाचित्र निमन्त्रणा',
+            loading: 'निमन्त्रणा लोड हुँदैछ…',
+            invited_by: 'निमन्त्रणा गर्ने',
+            diagram: 'रेखाचित्र',
+            role: 'भूमिका',
+            sent_to: 'पठाइएको',
+            expires: 'म्याद',
+            create_account: 'खाता बनाउनुहोस्',
+            sign_in: 'साइन इन',
+            back: 'पछाडि',
+            wrong_account:
+                'यो निमन्त्रणा {{invitedEmail}} लाई पठाइएको हो। तपाईं {{currentEmail}} का रूपमा साइन इन हुनुहुन्छ।',
+            switch_account: 'साइन आउट गरेर खाता बदल्नुहोस्',
+            accept: 'निमन्त्रणा स्वीकार गर्नुहोस्',
+            accepting: 'स्वीकार गर्दै…',
+            accepted: 'यो निमन्त्रणा पहिले नै स्वीकार भइसकेको छ।',
+            open_diagram: 'रेखाचित्र खोल्नुहोस्',
+            expired: 'यो निमन्त्रणाको म्याद सकियो।',
+            revoked: 'यो निमन्त्रणा रद्द गरियो।',
+            invalid: 'यो निमन्त्रणा लिंक मान्य छैन।',
+            retry: 'फेरि प्रयास गर्नुहोस्',
+            generic_error: 'केही गडबड भयो। फेरि प्रयास गर्नुहोस्।',
+        },
+
         diagram_role: {
             owner: 'मालिक',
             editor: 'सम्पादक',

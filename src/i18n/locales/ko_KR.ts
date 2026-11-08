@@ -1061,6 +1061,31 @@ export const ko_KR: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: '다이어그램 초대',
+            loading: '초대를 불러오는 중…',
+            invited_by: '초대한 사람',
+            diagram: '다이어그램',
+            role: '역할',
+            sent_to: '받는 사람',
+            expires: '만료',
+            create_account: '계정 만들기',
+            sign_in: '로그인',
+            back: '뒤로',
+            wrong_account:
+                '이 초대는 {{invitedEmail}} 주소로 보냈습니다. 현재 {{currentEmail}} 계정으로 로그인되어 있습니다.',
+            switch_account: '로그아웃하고 계정 전환',
+            accept: '초대 수락',
+            accepting: '수락하는 중…',
+            accepted: '이 초대는 이미 수락되었습니다.',
+            open_diagram: '다이어그램 열기',
+            expired: '이 초대는 만료되었습니다.',
+            revoked: '이 초대는 취소되었습니다.',
+            invalid: '이 초대 링크는 유효하지 않습니다.',
+            retry: '다시 시도',
+            generic_error: '문제가 발생했습니다. 다시 시도해 주세요.',
+        },
+
         diagram_role: {
             owner: '소유자',
             editor: '편집자',

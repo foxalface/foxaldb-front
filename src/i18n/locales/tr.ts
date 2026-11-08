@@ -1041,6 +1041,31 @@ export const tr: LanguageTranslation = {
             },
         },
 
+        diagram_invitation: {
+            title: 'Diyagram daveti',
+            loading: 'Davet yükleniyor…',
+            invited_by: 'Davet eden',
+            diagram: 'Diyagram',
+            role: 'Rol',
+            sent_to: 'Gönderilen',
+            expires: 'Sona erme',
+            create_account: 'Hesap oluştur',
+            sign_in: 'Giriş yap',
+            back: 'Geri',
+            wrong_account:
+                'Bu davet {{invitedEmail}} adresine gönderildi. Şu anda {{currentEmail}} olarak giriş yaptınız.',
+            switch_account: 'Çıkış yap ve hesap değiştir',
+            accept: 'Daveti kabul et',
+            accepting: 'Kabul ediliyor…',
+            accepted: 'Bu davet zaten kabul edildi.',
+            open_diagram: 'Diyagramı aç',
+            expired: 'Bu davetin süresi doldu.',
+            revoked: 'Bu davet iptal edildi.',
+            invalid: 'Bu davet bağlantısı geçersiz.',
+            retry: 'Yeniden dene',
+            generic_error: 'Bir şeyler ters gitti. Lütfen yeniden deneyin.',
+        },
+
         diagram_role: {
             owner: 'Sahip',
             editor: 'Düzenleyici',
