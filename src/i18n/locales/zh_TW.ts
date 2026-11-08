@@ -1682,6 +1682,7 @@ export const zh_TW: LanguageTranslation = {
                 submit: '登入',
                 submitting: '正在登入...',
                 switch_to_register: '註冊',
+                forgot_password: '忘記密碼？',
                 no_account: '沒有帳戶？',
             },
             register: {
@@ -1762,6 +1763,38 @@ export const zh_TW: LanguageTranslation = {
                     '此連結無效或已過期。若仍登入，請重新要求信件。',
                 sign_in: '登入',
                 logout: '登出',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — 忘記密碼',
+                    title: '忘記密碼？',
+                    description:
+                        '請輸入 FoxalDB 帳戶的電子郵件地址。若帳戶存在，我們會傳送重設連結。',
+                    email_label: '電子郵件',
+                    send: '傳送重設連結',
+                    sending: '傳送中…',
+                    sent: '若此電子郵件有對應帳戶，我們已傳送重設連結。',
+                    back_to_sign_in: '返回登入',
+                },
+                reset: {
+                    page_title: 'FoxalDB — 重設密碼',
+                    title: '重設密碼',
+                    email_label: '電子郵件',
+                    password_label: '新密碼',
+                    password_confirmation_label: '確認新密碼',
+                    submit: '重設密碼',
+                    submitting: '重設中…',
+                    success_title: '密碼已更新',
+                    success_description: '您的密碼已重設。請使用新密碼登入。',
+                    invalid_title: '連結無效',
+                    invalid_description:
+                        '此重設連結無效或已過期。請申請新的連結以繼續。',
+                    sign_in: '登入',
+                },
+                errors: {
+                    rate_limit: '請求過多。請稍後再試。',
+                    server: '無法完成此請求。請重試。',
+                },
             },
             errors: {
                 first_name_required: '名字為必填項。',

@@ -1824,6 +1824,7 @@ export const hi: LanguageTranslation = {
                 submit: 'साइन इन करें',
                 submitting: 'साइन इन हो रहा है...',
                 switch_to_register: 'पंजीकरण',
+                forgot_password: 'पासवर्ड भूल गए?',
                 no_account: 'खाता नहीं है?',
             },
             register: {
@@ -1907,6 +1908,40 @@ export const hi: LanguageTranslation = {
                     'यह लिंक अमान्य है या इसकी अवधि समाप्त हो गई है। साइन इन हों तो नया ईमेल माँगें।',
                 sign_in: 'साइन इन',
                 logout: 'लॉग आउट',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — पासवर्ड भूल गए',
+                    title: 'पासवर्ड भूल गए?',
+                    description:
+                        'अपने FoxalDB खाते का ईमेल दर्ज करें। यदि खाता मौजूद है, हम रीसेट लिंक भेजेंगे।',
+                    email_label: 'ईमेल',
+                    send: 'लिंक भेजें',
+                    sending: 'भेजा जा रहा है…',
+                    sent: 'यदि इस ईमेल का खाता है, तो रीसेट लिंक भेज दिया गया है।',
+                    back_to_sign_in: 'साइन इन पर वापस',
+                },
+                reset: {
+                    page_title: 'FoxalDB — पासवर्ड रीसेट',
+                    title: 'पासवर्ड रीसेट करें',
+                    email_label: 'ईमेल',
+                    password_label: 'नया पासवर्ड',
+                    password_confirmation_label: 'नए पासवर्ड की पुष्टि',
+                    submit: 'पासवर्ड रीसेट',
+                    submitting: 'रीसेट हो रहा है…',
+                    success_title: 'पासवर्ड अपडेट हुआ',
+                    success_description:
+                        'आपका पासवर्ड रीसेट हो गया। नए पासवर्ड से साइन इन करें।',
+                    invalid_title: 'लिंक अमान्य',
+                    invalid_description:
+                        'यह रीसेट लिंक अमान्य या समाप्त है। जारी रखने के लिए नया लिंक मांगें।',
+                    sign_in: 'साइन इन',
+                },
+                errors: {
+                    rate_limit:
+                        'बहुत अधिक अनुरोध। प्रतीक्षा करें और पुनः प्रयास करें।',
+                    server: 'अनुरोध पूरा नहीं हो सका। पुनः प्रयास करें।',
+                },
             },
             errors: {
                 first_name_required: 'पहला नाम आवश्यक है।',

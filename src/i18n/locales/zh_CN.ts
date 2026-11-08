@@ -1684,6 +1684,7 @@ export const zh_CN: LanguageTranslation = {
                 submit: '登录',
                 submitting: '正在登录...',
                 switch_to_register: '注册',
+                forgot_password: '忘记密码？',
                 no_account: '没有账户？',
             },
             register: {
@@ -1764,6 +1765,38 @@ export const zh_CN: LanguageTranslation = {
                     '此链接无效或已过期。如果仍处于登录状态，请重新请求邮件。',
                 sign_in: '登录',
                 logout: '退出',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — 忘记密码',
+                    title: '忘记密码？',
+                    description:
+                        '请输入 FoxalDB 账户的电子邮件地址。如果账户存在，我们将发送重置链接。',
+                    email_label: '电子邮件',
+                    send: '发送重置链接',
+                    sending: '发送中…',
+                    sent: '如果该电子邮件存在账户，我们已发送重置链接。',
+                    back_to_sign_in: '返回登录',
+                },
+                reset: {
+                    page_title: 'FoxalDB — 重置密码',
+                    title: '重置密码',
+                    email_label: '电子邮件',
+                    password_label: '新密码',
+                    password_confirmation_label: '确认新密码',
+                    submit: '重置密码',
+                    submitting: '重置中…',
+                    success_title: '密码已更新',
+                    success_description: '您的密码已重置。请使用新密码登录。',
+                    invalid_title: '链接无效',
+                    invalid_description:
+                        '此重置链接无效或已过期。请请求新的链接以继续。',
+                    sign_in: '登录',
+                },
+                errors: {
+                    rate_limit: '请求过多。请稍后再试。',
+                    server: '无法完成此请求。请重试。',
+                },
             },
             errors: {
                 first_name_required: '名为必填项。',

@@ -1877,6 +1877,7 @@ export const de: LanguageTranslation = {
                 submit: 'Anmelden',
                 submitting: 'Anmeldung...',
                 switch_to_register: 'Registrieren',
+                forgot_password: 'Passwort vergessen?',
                 no_account: 'Noch kein Konto?',
             },
             register: {
@@ -1961,6 +1962,40 @@ export const de: LanguageTranslation = {
                     'Dieser Link ist ungültig oder abgelaufen. Fordern Sie eine neue E-Mail an, wenn Sie noch angemeldet sind.',
                 sign_in: 'Anmelden',
                 logout: 'Abmelden',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Passwort vergessen',
+                    title: 'Passwort vergessen?',
+                    description:
+                        'Geben Sie die E-Mail-Adresse Ihres FoxalDB-Kontos ein. Wenn ein Konto existiert, senden wir einen Link zum Zurücksetzen.',
+                    email_label: 'E-Mail',
+                    send: 'Link senden',
+                    sending: 'Wird gesendet…',
+                    sent: 'Wenn ein Konto für diese E-Mail-Adresse existiert, wurde ein Link zum Zurücksetzen gesendet.',
+                    back_to_sign_in: 'Zurück zur Anmeldung',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Passwort zurücksetzen',
+                    title: 'Passwort zurücksetzen',
+                    email_label: 'E-Mail',
+                    password_label: 'Neues Passwort',
+                    password_confirmation_label: 'Neues Passwort bestätigen',
+                    submit: 'Passwort zurücksetzen',
+                    submitting: 'Wird zurückgesetzt…',
+                    success_title: 'Passwort aktualisiert',
+                    success_description:
+                        'Ihr Passwort wurde zurückgesetzt. Melden Sie sich mit Ihrem neuen Passwort an.',
+                    invalid_title: 'Link ungültig',
+                    invalid_description:
+                        'Dieser Link zum Zurücksetzen ist ungültig oder abgelaufen. Fordern Sie einen neuen Link an.',
+                    sign_in: 'Anmelden',
+                },
+                errors: {
+                    rate_limit:
+                        'Zu viele Anfragen. Bitte warten Sie und versuchen Sie es erneut.',
+                    server: 'Anfrage konnte nicht abgeschlossen werden. Bitte erneut versuchen.',
+                },
             },
             errors: {
                 first_name_required: 'Der Vorname ist erforderlich.',

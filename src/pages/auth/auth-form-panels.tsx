@@ -22,11 +22,13 @@ const REGISTER_FIELDS: RegisterField[] = [
 export interface LoginFormPanelProps {
     onSuccess: () => void;
     onSwitchToRegister: () => void;
+    onForgotPassword?: () => void;
 }
 
 export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
     onSuccess,
     onSwitchToRegister,
+    onForgotPassword,
 }) => {
     const { t } = useTranslation();
     const { login } = useAuth();
@@ -82,6 +84,16 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
                         value={password}
                     />
                 </label>
+                {onForgotPassword ? (
+                    <button
+                        className="w-fit text-sm text-muted-foreground underline underline-offset-4"
+                        disabled={isSubmitting}
+                        onClick={onForgotPassword}
+                        type="button"
+                    >
+                        {t('auth.login.forgot_password')}
+                    </button>
+                ) : null}
                 {errorMessage !== null ? (
                     <p className="text-sm text-destructive" role="alert">
                         {errorMessage}

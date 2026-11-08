@@ -99,6 +99,31 @@ export const resendVerificationEmail = async (): Promise<void> => {
     });
 };
 
+export const requestPasswordReset = async (email: string): Promise<void> => {
+    await initCsrf();
+    await apiRequest<{ message: string }>('/forgot-password', {
+        method: 'POST',
+        data: { email },
+    });
+};
+
+export interface ResetPasswordPayload {
+    token: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+}
+
+export const resetPassword = async (
+    payload: ResetPasswordPayload
+): Promise<void> => {
+    await initCsrf();
+    await apiRequest<{ message: string }>('/reset-password', {
+        method: 'POST',
+        data: payload,
+    });
+};
+
 export const logout = async (): Promise<void> => {
     await apiRequest<LogoutResponse>('/logout', { method: 'POST' });
 };

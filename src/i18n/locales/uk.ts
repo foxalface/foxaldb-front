@@ -1827,6 +1827,7 @@ export const uk: LanguageTranslation = {
                 submit: 'Увійти',
                 submitting: 'Вхід...',
                 switch_to_register: 'Реєстрація',
+                forgot_password: 'Забули пароль?',
                 no_account: 'Немає облікового запису?',
             },
             register: {
@@ -1910,6 +1911,39 @@ export const uk: LanguageTranslation = {
                     'Посилання недійсне або прострочене. Запитайте новий лист, якщо ви ще в системі.',
                 sign_in: 'Увійти',
                 logout: 'Вийти',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Забули пароль',
+                    title: 'Забули пароль?',
+                    description:
+                        'Введіть email облікового запису FoxalDB. Якщо обліковий запис існує, ми надішлемо посилання для скидання.',
+                    email_label: 'Email',
+                    send: 'Надіслати посилання',
+                    sending: 'Надсилання…',
+                    sent: 'Якщо для цього email є обліковий запис, посилання для скидання надіслано.',
+                    back_to_sign_in: 'Повернутися до входу',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Скидання пароля',
+                    title: 'Скиньте пароль',
+                    email_label: 'Email',
+                    password_label: 'Новий пароль',
+                    password_confirmation_label: 'Підтвердьте новий пароль',
+                    submit: 'Скинути пароль',
+                    submitting: 'Скидання…',
+                    success_title: 'Пароль оновлено',
+                    success_description:
+                        'Пароль скинуто. Увійдіть з новим паролем.',
+                    invalid_title: 'Посилання недійсне',
+                    invalid_description:
+                        'Посилання для скидання недійсне або прострочене. Запитайте нове, щоб продовжити.',
+                    sign_in: 'Увійти',
+                },
+                errors: {
+                    rate_limit: 'Забагато запитів. Зачекайте та повторіть.',
+                    server: 'Не вдалося виконати запит. Спробуйте знову.',
+                },
             },
             errors: {
                 first_name_required: "Ім'я є обов'язковим.",

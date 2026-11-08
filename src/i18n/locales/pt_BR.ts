@@ -1851,6 +1851,7 @@ export const pt_BR: LanguageTranslation = {
                 submit: 'Entrar',
                 submitting: 'Entrando...',
                 switch_to_register: 'Cadastrar',
+                forgot_password: 'Esqueceu a senha?',
                 no_account: 'Não tem conta?',
             },
             register: {
@@ -1934,6 +1935,40 @@ export const pt_BR: LanguageTranslation = {
                     'Este link é inválido ou expirou. Peça outro e-mail se ainda estiver conectado.',
                 sign_in: 'Entrar',
                 logout: 'Sair',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Esqueci a senha',
+                    title: 'Esqueceu a senha?',
+                    description:
+                        'Informe o e-mail da sua conta FoxalDB. Se existir uma conta, enviaremos um link de redefinição.',
+                    email_label: 'E-mail',
+                    send: 'Enviar link',
+                    sending: 'Enviando…',
+                    sent: 'Se existir uma conta para este e-mail, um link de redefinição foi enviado.',
+                    back_to_sign_in: 'Voltar para entrar',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Redefinir senha',
+                    title: 'Redefinir sua senha',
+                    email_label: 'E-mail',
+                    password_label: 'Nova senha',
+                    password_confirmation_label: 'Confirmar nova senha',
+                    submit: 'Redefinir senha',
+                    submitting: 'Redefinindo…',
+                    success_title: 'Senha atualizada',
+                    success_description:
+                        'Sua senha foi redefinida. Entre com a nova senha.',
+                    invalid_title: 'Link inválido',
+                    invalid_description:
+                        'Este link de redefinição é inválido ou expirou. Solicite um novo link para continuar.',
+                    sign_in: 'Entrar',
+                },
+                errors: {
+                    rate_limit:
+                        'Muitas solicitações. Aguarde e tente novamente.',
+                    server: 'Não foi possível concluir a solicitação. Tente novamente.',
+                },
             },
             errors: {
                 first_name_required: 'O nome é obrigatório.',

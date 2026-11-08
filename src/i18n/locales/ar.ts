@@ -1795,6 +1795,7 @@ export const ar: LanguageTranslation = {
                 submit: 'تسجيل الدخول',
                 submitting: 'جارٍ تسجيل الدخول...',
                 switch_to_register: 'إنشاء حساب',
+                forgot_password: 'هل نسيت كلمة المرور؟',
                 no_account: 'ليس لديك حساب؟',
             },
             register: {
@@ -1877,6 +1878,39 @@ export const ar: LanguageTranslation = {
                     'رابط التأكيد غير صالح أو انتهت صلاحيته. اطلب رسالة جديدة إذا كنت ما زلت مسجّل الدخول.',
                 sign_in: 'تسجيل الدخول',
                 logout: 'تسجيل الخروج',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — نسيت كلمة المرور',
+                    title: 'هل نسيت كلمة المرور؟',
+                    description:
+                        'أدخل البريد الإلكتروني لحساب FoxalDB. إذا وُجد حساب، سنرسل رابط إعادة التعيين.',
+                    email_label: 'البريد الإلكتروني',
+                    send: 'إرسال الرابط',
+                    sending: 'جارٍ الإرسال…',
+                    sent: 'إذا وُجد حساب لهذا البريد الإلكتروني، تم إرسال رابط إعادة التعيين.',
+                    back_to_sign_in: 'العودة لتسجيل الدخول',
+                },
+                reset: {
+                    page_title: 'FoxalDB — إعادة تعيين كلمة المرور',
+                    title: 'إعادة تعيين كلمة المرور',
+                    email_label: 'البريد الإلكتروني',
+                    password_label: 'كلمة مرور جديدة',
+                    password_confirmation_label: 'تأكيد كلمة المرور الجديدة',
+                    submit: 'إعادة تعيين كلمة المرور',
+                    submitting: 'جارٍ إعادة التعيين…',
+                    success_title: 'تم تحديث كلمة المرور',
+                    success_description:
+                        'تمت إعادة تعيين كلمة المرور. سجّل الدخول بكلمة المرور الجديدة.',
+                    invalid_title: 'الرابط غير صالح',
+                    invalid_description:
+                        'رابط إعادة التعيين غير صالح أو منتهٍ. اطلب رابطًا جديدًا للمتابعة.',
+                    sign_in: 'تسجيل الدخول',
+                },
+                errors: {
+                    rate_limit: 'طلبات كثيرة جدًا. انتظر ثم أعد المحاولة.',
+                    server: 'تعذر إكمال الطلب. أعد المحاولة.',
+                },
             },
             errors: {
                 first_name_required: 'الاسم الأول مطلوب.',

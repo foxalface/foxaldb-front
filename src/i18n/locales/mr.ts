@@ -1821,6 +1821,7 @@ export const mr: LanguageTranslation = {
                 submit: 'साइन इन करा',
                 submitting: 'साइन इन होत आहे...',
                 switch_to_register: 'नोंदणी',
+                forgot_password: 'पासवर्ड विसरलात?',
                 no_account: 'खाते नाही?',
             },
             register: {
@@ -1904,6 +1905,39 @@ export const mr: LanguageTranslation = {
                     'हा दुवा अवैध आहे किंवा कालबाह्य झाला आहे. साइन इन असाल तर नवीन ईमेल मागा.',
                 sign_in: 'साइन इन',
                 logout: 'लॉग आउट',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — पासवर्ड विसरलात',
+                    title: 'पासवर्ड विसरलात?',
+                    description:
+                        'आपल्या FoxalDB खात्याचा ईमेल प्रविष्ट करा. खाते असल्यास रीसेट दुवा पाठवू.',
+                    email_label: 'ईमेल',
+                    send: 'दुवा पाठवा',
+                    sending: 'पाठवत आहे…',
+                    sent: 'या ईमेलसाठी खाते असल्यास रीसेट दुवा पाठवला आहे.',
+                    back_to_sign_in: 'साइन इनवर परत',
+                },
+                reset: {
+                    page_title: 'FoxalDB — पासवर्ड रीसेट',
+                    title: 'पासवर्ड रीसेट करा',
+                    email_label: 'ईमेल',
+                    password_label: 'नवीन पासवर्ड',
+                    password_confirmation_label: 'नवीन पासवर्ड निश्चित करा',
+                    submit: 'पासवर्ड रीसेट',
+                    submitting: 'रीसेट होत आहे…',
+                    success_title: 'पासवर्ड अद्यतनित',
+                    success_description:
+                        'पासवर्ड रीसेट झाला. नवीन पासवर्डने साइन इन करा.',
+                    invalid_title: 'दुवा अवैध',
+                    invalid_description:
+                        'रीसेट दुवा अवैध किंवा कालबाह्य. पुढे जाण्यासाठी नवा दुवा मागा.',
+                    sign_in: 'साइन इन',
+                },
+                errors: {
+                    rate_limit: 'खूप विनंत्या. थांबा आणि पुन्हा प्रयत्न करा.',
+                    server: 'विनंती पूर्ण होऊ शकली नाही. पुन्हा प्रयत्न करा.',
+                },
             },
             errors: {
                 first_name_required: 'पहिले नाव आवश्यक आहे.',

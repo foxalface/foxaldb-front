@@ -1828,6 +1828,7 @@ export const ru: LanguageTranslation = {
                 submit: 'Войти',
                 submitting: 'Вход...',
                 switch_to_register: 'Регистрация',
+                forgot_password: 'Забыли пароль?',
                 no_account: 'Нет аккаунта?',
             },
             register: {
@@ -1911,6 +1912,40 @@ export const ru: LanguageTranslation = {
                     'Ссылка недействительна или устарела. Запросите новое письмо, если вы ещё вошли в систему.',
                 sign_in: 'Войти',
                 logout: 'Выйти',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Забыли пароль',
+                    title: 'Забыли пароль?',
+                    description:
+                        'Введите email учётной записи FoxalDB. Если аккаунт существует, мы отправим ссылку для сброса.',
+                    email_label: 'Email',
+                    send: 'Отправить ссылку',
+                    sending: 'Отправка…',
+                    sent: 'Если для этого email есть учётная запись, ссылка для сброса отправлена.',
+                    back_to_sign_in: 'Назад ко входу',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Сброс пароля',
+                    title: 'Сброс пароля',
+                    email_label: 'Email',
+                    password_label: 'Новый пароль',
+                    password_confirmation_label: 'Подтвердите новый пароль',
+                    submit: 'Сбросить пароль',
+                    submitting: 'Сброс…',
+                    success_title: 'Пароль обновлён',
+                    success_description:
+                        'Пароль сброшен. Войдите с новым паролем.',
+                    invalid_title: 'Ссылка недействительна',
+                    invalid_description:
+                        'Ссылка для сброса недействительна или истекла. Запросите новую, чтобы продолжить.',
+                    sign_in: 'Войти',
+                },
+                errors: {
+                    rate_limit:
+                        'Слишком много запросов. Подождите и повторите.',
+                    server: 'Не удалось выполнить запрос. Повторите попытку.',
+                },
             },
             errors: {
                 first_name_required: 'Имя обязательно.',

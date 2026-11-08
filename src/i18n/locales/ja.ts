@@ -1861,6 +1861,7 @@ export const ja: LanguageTranslation = {
                 submit: 'サインイン',
                 submitting: 'サインイン中...',
                 switch_to_register: '登録',
+                forgot_password: 'パスワードをお忘れですか？',
                 no_account: 'アカウントをお持ちでないですか？',
             },
             register: {
@@ -1944,6 +1945,40 @@ export const ja: LanguageTranslation = {
                     'このリンクは無効か、期限が切れています。サインイン中なら新しいメールを依頼してください。',
                 sign_in: 'サインイン',
                 logout: 'ログアウト',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — パスワードをお忘れの方',
+                    title: 'パスワードをお忘れですか？',
+                    description:
+                        'FoxalDBアカウントのメールアドレスを入力してください。アカウントが存在する場合、リセットリンクを送信します。',
+                    email_label: 'メール',
+                    send: 'リンクを送信',
+                    sending: '送信中…',
+                    sent: 'このメールアドレスにアカウントが存在する場合、リセットリンクを送信しました。',
+                    back_to_sign_in: 'サインインに戻る',
+                },
+                reset: {
+                    page_title: 'FoxalDB — パスワードのリセット',
+                    title: 'パスワードをリセット',
+                    email_label: 'メール',
+                    password_label: '新しいパスワード',
+                    password_confirmation_label: '新しいパスワード（確認）',
+                    submit: 'パスワードをリセット',
+                    submitting: 'リセット中…',
+                    success_title: 'パスワードを更新しました',
+                    success_description:
+                        'パスワードをリセットしました。新しいパスワードでサインインしてください。',
+                    invalid_title: 'リンクが無効です',
+                    invalid_description:
+                        'このリセットリンクは無効か期限切れです。新しいリンクをリクエストしてください。',
+                    sign_in: 'サインイン',
+                },
+                errors: {
+                    rate_limit:
+                        'リクエストが多すぎます。しばらく待ってから再試行してください。',
+                    server: 'リクエストを完了できませんでした。もう一度お試しください。',
+                },
             },
             errors: {
                 first_name_required: '名は必須です。',

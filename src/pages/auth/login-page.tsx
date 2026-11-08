@@ -23,6 +23,10 @@ const LoginPageContent: React.FC = () => {
         navigate('/register');
     }, [navigate]);
 
+    const navigateToForgotPassword = useCallback(() => {
+        navigate('/forgot-password');
+    }, [navigate]);
+
     if (isLoading) {
         return (
             <p className="text-sm text-muted-foreground">
@@ -41,6 +45,7 @@ const LoginPageContent: React.FC = () => {
 
     return (
         <LoginFormPanel
+            onForgotPassword={navigateToForgotPassword}
             onSuccess={navigateHome}
             onSwitchToRegister={navigateToRegister}
         />

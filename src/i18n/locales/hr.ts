@@ -1827,6 +1827,7 @@ export const hr: LanguageTranslation = {
                 submit: 'Prijavi se',
                 submitting: 'Prijava...',
                 switch_to_register: 'Registracija',
+                forgot_password: 'Zaboravili ste lozinku?',
                 no_account: 'Nemate račun?',
             },
             register: {
@@ -1910,6 +1911,40 @@ export const hr: LanguageTranslation = {
                     'Poveznica nije valjana ili je istekla. Zatražite novu poruku ako ste još prijavljeni.',
                 sign_in: 'Prijava',
                 logout: 'Odjava',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Zaboravljena lozinka',
+                    title: 'Zaboravili ste lozinku?',
+                    description:
+                        'Unesite e-mail vašeg FoxalDB računa. Ako račun postoji, poslat ćemo poveznicu za reset.',
+                    email_label: 'E-mail',
+                    send: 'Pošalji poveznicu',
+                    sending: 'Slanje…',
+                    sent: 'Ako postoji račun za ovaj e-mail, poveznica za reset je poslana.',
+                    back_to_sign_in: 'Natrag na prijavu',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Reset lozinke',
+                    title: 'Resetirajte lozinku',
+                    email_label: 'E-mail',
+                    password_label: 'Nova lozinka',
+                    password_confirmation_label: 'Potvrdite novu lozinku',
+                    submit: 'Resetiraj lozinku',
+                    submitting: 'Resetiranje…',
+                    success_title: 'Lozinka ažurirana',
+                    success_description:
+                        'Lozinka je resetirana. Prijavite se novom lozinkom.',
+                    invalid_title: 'Poveznica nije valjana',
+                    invalid_description:
+                        'Poveznica za reset nije valjana ili je istekla. Zatražite novu za nastavak.',
+                    sign_in: 'Prijava',
+                },
+                errors: {
+                    rate_limit:
+                        'Previše zahtjeva. Pričekajte i pokušajte ponovno.',
+                    server: 'Zahtjev nije dovršen. Pokušajte ponovno.',
+                },
             },
             errors: {
                 first_name_required: 'Ime je obavezno.',

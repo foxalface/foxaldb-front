@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Dialog,
     DialogContent,
@@ -30,6 +31,7 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     entryAuthActions,
 }) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const { isAuthenticated, isLoading } = useAuth();
     const { clearAuthIntent } = useAuthIntent();
     const { closeAuthDialog } = useDialog();
@@ -155,6 +157,10 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                     <AuthenticatedAccountPanel onBack={closeAuthDialogOnly} />
                 ) : mode === 'login' ? (
                     <LoginFormPanel
+                        onForgotPassword={() => {
+                            dismissAuthDialog();
+                            navigate('/forgot-password');
+                        }}
                         onSuccess={handleLoginSuccess}
                         onSwitchToRegister={() => setMode('register')}
                     />

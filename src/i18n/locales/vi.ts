@@ -1814,6 +1814,7 @@ export const vi: LanguageTranslation = {
                 submit: 'Đăng nhập',
                 submitting: 'Đang đăng nhập...',
                 switch_to_register: 'Đăng ký',
+                forgot_password: 'Quên mật khẩu?',
                 no_account: 'Chưa có tài khoản?',
             },
             register: {
@@ -1897,6 +1898,39 @@ export const vi: LanguageTranslation = {
                     'Liên kết này không hợp lệ hoặc đã hết hạn. Hãy yêu cầu email mới nếu bạn vẫn đăng nhập.',
                 sign_in: 'Đăng nhập',
                 logout: 'Đăng xuất',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Quên mật khẩu',
+                    title: 'Quên mật khẩu?',
+                    description:
+                        'Nhập email tài khoản FoxalDB. Nếu tài khoản tồn tại, chúng tôi sẽ gửi liên kết đặt lại.',
+                    email_label: 'Email',
+                    send: 'Gửi liên kết',
+                    sending: 'Đang gửi…',
+                    sent: 'Nếu có tài khoản cho email này, liên kết đặt lại đã được gửi.',
+                    back_to_sign_in: 'Quay lại đăng nhập',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Đặt lại mật khẩu',
+                    title: 'Đặt lại mật khẩu',
+                    email_label: 'Email',
+                    password_label: 'Mật khẩu mới',
+                    password_confirmation_label: 'Xác nhận mật khẩu mới',
+                    submit: 'Đặt lại mật khẩu',
+                    submitting: 'Đang đặt lại…',
+                    success_title: 'Đã cập nhật mật khẩu',
+                    success_description:
+                        'Mật khẩu đã được đặt lại. Đăng nhập bằng mật khẩu mới.',
+                    invalid_title: 'Liên kết không hợp lệ',
+                    invalid_description:
+                        'Liên kết đặt lại không hợp lệ hoặc đã hết hạn. Yêu cầu liên kết mới để tiếp tục.',
+                    sign_in: 'Đăng nhập',
+                },
+                errors: {
+                    rate_limit: 'Quá nhiều yêu cầu. Vui lòng đợi và thử lại.',
+                    server: 'Không thể hoàn tất yêu cầu. Thử lại.',
+                },
             },
             errors: {
                 first_name_required: 'Tên là bắt buộc.',

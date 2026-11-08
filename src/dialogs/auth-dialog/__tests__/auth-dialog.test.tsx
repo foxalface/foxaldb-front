@@ -1,4 +1,5 @@
 import React from 'react';
+import type * as ReactRouterDom from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -21,6 +22,15 @@ const authState = {
     isAuthenticated: false,
     isLoading: false,
 };
+
+vi.mock('react-router-dom', async (importOriginal) => {
+    const actual = await importOriginal<typeof ReactRouterDom>();
+
+    return {
+        ...actual,
+        useNavigate: () => vi.fn(),
+    };
+});
 
 vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => authState,

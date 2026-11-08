@@ -1821,6 +1821,7 @@ export const ko_KR: LanguageTranslation = {
                 submit: '로그인',
                 submitting: '로그인 중...',
                 switch_to_register: '회원가입',
+                forgot_password: '비밀번호를 잊으셨나요?',
                 no_account: '계정이 없으신가요?',
             },
             register: {
@@ -1904,6 +1905,40 @@ export const ko_KR: LanguageTranslation = {
                     '이 링크는 유효하지 않거나 만료되었습니다. 로그인 상태라면 새 이메일을 요청하세요.',
                 sign_in: '로그인',
                 logout: '로그아웃',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — 비밀번호 찾기',
+                    title: '비밀번호를 잊으셨나요?',
+                    description:
+                        'FoxalDB 계정 이메일을 입력하세요. 계정이 있으면 재설정 링크를 보냅니다.',
+                    email_label: '이메일',
+                    send: '링크 보내기',
+                    sending: '보내는 중…',
+                    sent: '해당 이메일에 계정이 있으면 재설정 링크를 보냈습니다.',
+                    back_to_sign_in: '로그인으로 돌아가기',
+                },
+                reset: {
+                    page_title: 'FoxalDB — 비밀번호 재설정',
+                    title: '비밀번호 재설정',
+                    email_label: '이메일',
+                    password_label: '새 비밀번호',
+                    password_confirmation_label: '새 비밀번호 확인',
+                    submit: '비밀번호 재설정',
+                    submitting: '재설정 중…',
+                    success_title: '비밀번호 업데이트됨',
+                    success_description:
+                        '비밀번호가 재설정되었습니다. 새 비밀번호로 로그인하세요.',
+                    invalid_title: '링크가 유효하지 않음',
+                    invalid_description:
+                        '재설정 링크가 유효하지 않거나 만료되었습니다. 새 링크를 요청하세요.',
+                    sign_in: '로그인',
+                },
+                errors: {
+                    rate_limit:
+                        '요청이 너무 많습니다. 잠시 후 다시 시도하세요.',
+                    server: '요청을 완료할 수 없습니다. 다시 시도하세요.',
+                },
             },
             errors: {
                 first_name_required: '이름은 필수입니다.',

@@ -1860,6 +1860,7 @@ export const fr: LanguageTranslation = {
                 submit: 'Se connecter',
                 submitting: 'Connexion...',
                 switch_to_register: "S'inscrire",
+                forgot_password: 'Mot de passe oublié ?',
                 no_account: 'Pas de compte ?',
             },
             register: {
@@ -1945,6 +1946,41 @@ export const fr: LanguageTranslation = {
                     'Ce lien est invalide ou a expiré. Demandez un nouvel e-mail si vous êtes encore connecté.',
                 sign_in: 'Se connecter',
                 logout: 'Se déconnecter',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Mot de passe oublié',
+                    title: 'Mot de passe oublié ?',
+                    description:
+                        "Saisissez l'adresse e-mail de votre compte FoxalDB. Si un compte existe, nous enverrons un lien de réinitialisation.",
+                    email_label: 'E-mail',
+                    send: 'Envoyer le lien',
+                    sending: 'Envoi…',
+                    sent: 'Si un compte existe pour cette adresse e-mail, un lien de réinitialisation a été envoyé.',
+                    back_to_sign_in: 'Retour à la connexion',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Réinitialiser le mot de passe',
+                    title: 'Réinitialiser votre mot de passe',
+                    email_label: 'E-mail',
+                    password_label: 'Nouveau mot de passe',
+                    password_confirmation_label:
+                        'Confirmer le nouveau mot de passe',
+                    submit: 'Réinitialiser le mot de passe',
+                    submitting: 'Réinitialisation…',
+                    success_title: 'Mot de passe mis à jour',
+                    success_description:
+                        'Votre mot de passe a été réinitialisé. Connectez-vous avec votre nouveau mot de passe.',
+                    invalid_title: 'Lien de réinitialisation invalide',
+                    invalid_description:
+                        'Ce lien de réinitialisation est invalide ou a expiré. Demandez un nouveau lien pour continuer.',
+                    sign_in: 'Se connecter',
+                },
+                errors: {
+                    rate_limit:
+                        'Trop de requêtes. Veuillez patienter puis réessayer.',
+                    server: 'Impossible de terminer cette requête. Réessayez.',
+                },
             },
             errors: {
                 first_name_required: 'Le prénom est obligatoire.',

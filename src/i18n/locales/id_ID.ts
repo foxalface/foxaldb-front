@@ -1829,6 +1829,7 @@ export const id_ID: LanguageTranslation = {
                 submit: 'Masuk',
                 submitting: 'Sedang masuk...',
                 switch_to_register: 'Daftar',
+                forgot_password: 'Lupa kata sandi?',
                 no_account: 'Belum punya akun?',
             },
             register: {
@@ -1912,6 +1913,40 @@ export const id_ID: LanguageTranslation = {
                     'Tautan ini tidak valid atau sudah kedaluwarsa. Minta email baru jika Anda masih masuk.',
                 sign_in: 'Masuk',
                 logout: 'Keluar',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Lupa kata sandi',
+                    title: 'Lupa kata sandi?',
+                    description:
+                        'Masukkan email akun FoxalDB Anda. Jika akun ada, kami akan mengirim tautan reset.',
+                    email_label: 'Email',
+                    send: 'Kirim tautan',
+                    sending: 'Mengirim…',
+                    sent: 'Jika akun untuk email ini ada, tautan reset telah dikirim.',
+                    back_to_sign_in: 'Kembali ke masuk',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Reset kata sandi',
+                    title: 'Reset kata sandi',
+                    email_label: 'Email',
+                    password_label: 'Kata sandi baru',
+                    password_confirmation_label: 'Konfirmasi kata sandi baru',
+                    submit: 'Reset kata sandi',
+                    submitting: 'Mereset…',
+                    success_title: 'Kata sandi diperbarui',
+                    success_description:
+                        'Kata sandi Anda direset. Masuk dengan kata sandi baru.',
+                    invalid_title: 'Tautan tidak valid',
+                    invalid_description:
+                        'Tautan reset tidak valid atau kedaluwarsa. Minta tautan baru untuk melanjutkan.',
+                    sign_in: 'Masuk',
+                },
+                errors: {
+                    rate_limit:
+                        'Terlalu banyak permintaan. Tunggu dan coba lagi.',
+                    server: 'Permintaan tidak dapat diselesaikan. Coba lagi.',
+                },
             },
             errors: {
                 first_name_required: 'Nama depan wajib diisi.',

@@ -1823,6 +1823,7 @@ export const en = {
                 submitting: 'Signing in...',
                 switch_to_register: 'Register',
                 no_account: 'No account?',
+                forgot_password: 'Forgot password?',
             },
             register: {
                 title: 'Register',
@@ -1905,6 +1906,39 @@ export const en = {
                     'This verification link is invalid or has expired. Request a new email if you are still signed in.',
                 sign_in: 'Sign in',
                 logout: 'Log out',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Forgot password',
+                    title: 'Forgot your password?',
+                    description:
+                        'Enter the email address for your FoxalDB account. If an account exists, we will send a reset link.',
+                    email_label: 'Email',
+                    send: 'Send reset link',
+                    sending: 'Sending…',
+                    sent: 'If an account exists for this email address, a reset link has been sent.',
+                    back_to_sign_in: 'Back to Sign in',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Reset password',
+                    title: 'Reset your password',
+                    email_label: 'Email',
+                    password_label: 'New password',
+                    password_confirmation_label: 'Confirm new password',
+                    submit: 'Reset password',
+                    submitting: 'Resetting…',
+                    success_title: 'Password updated',
+                    success_description:
+                        'Your password has been reset. Sign in with your new password.',
+                    invalid_title: 'Reset link invalid',
+                    invalid_description:
+                        'This password reset link is invalid or has expired. Request a new link to continue.',
+                    sign_in: 'Sign in',
+                },
+                errors: {
+                    rate_limit: 'Too many requests. Please wait and try again.',
+                    server: 'Could not complete this request. Try again.',
+                },
             },
             errors: {
                 first_name_required: 'First name is required.',

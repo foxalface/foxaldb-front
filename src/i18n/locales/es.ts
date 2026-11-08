@@ -1857,6 +1857,7 @@ export const es: LanguageTranslation = {
                 submit: 'Iniciar sesión',
                 submitting: 'Iniciando sesión...',
                 switch_to_register: 'Registrarse',
+                forgot_password: '¿Olvidaste tu contraseña?',
                 no_account: '¿No tienes cuenta?',
             },
             register: {
@@ -1941,6 +1942,40 @@ export const es: LanguageTranslation = {
                     'Este enlace no es válido o ha caducado. Pide otro correo si sigues con la sesión iniciada.',
                 sign_in: 'Iniciar sesión',
                 logout: 'Cerrar sesión',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Contraseña olvidada',
+                    title: '¿Olvidaste tu contraseña?',
+                    description:
+                        'Introduce el correo de tu cuenta FoxalDB. Si existe una cuenta, enviaremos un enlace de restablecimiento.',
+                    email_label: 'Correo electrónico',
+                    send: 'Enviar enlace',
+                    sending: 'Enviando…',
+                    sent: 'Si existe una cuenta para este correo, se ha enviado un enlace de restablecimiento.',
+                    back_to_sign_in: 'Volver a iniciar sesión',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Restablecer contraseña',
+                    title: 'Restablece tu contraseña',
+                    email_label: 'Correo electrónico',
+                    password_label: 'Nueva contraseña',
+                    password_confirmation_label: 'Confirmar nueva contraseña',
+                    submit: 'Restablecer contraseña',
+                    submitting: 'Restableciendo…',
+                    success_title: 'Contraseña actualizada',
+                    success_description:
+                        'Tu contraseña se ha restablecido. Inicia sesión con la nueva contraseña.',
+                    invalid_title: 'Enlace no válido',
+                    invalid_description:
+                        'Este enlace de restablecimiento no es válido o ha caducado. Solicita un nuevo enlace para continuar.',
+                    sign_in: 'Iniciar sesión',
+                },
+                errors: {
+                    rate_limit:
+                        'Demasiadas solicitudes. Espera e inténtalo de nuevo.',
+                    server: 'No se pudo completar la solicitud. Inténtalo de nuevo.',
+                },
             },
             errors: {
                 first_name_required: 'El nombre es obligatorio.',

@@ -1819,6 +1819,7 @@ export const bn: LanguageTranslation = {
                 submit: 'সাইন ইন',
                 submitting: 'সাইন ইন হচ্ছে...',
                 switch_to_register: 'নিবন্ধন',
+                forgot_password: 'পাসওয়ার্ড ভুলে গেছেন?',
                 no_account: 'অ্যাকাউন্ট নেই?',
             },
             register: {
@@ -1902,6 +1903,39 @@ export const bn: LanguageTranslation = {
                     'এই লিঙ্কটি অবৈধ বা মেয়াদ শেষ। সাইন ইন থাকলে নতুন ইমেল চান।',
                 sign_in: 'সাইন ইন',
                 logout: 'লগ আউট',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — পাসওয়ার্ড ভুলে গেছেন',
+                    title: 'পাসওয়ার্ড ভুলে গেছেন?',
+                    description:
+                        'আপনার FoxalDB অ্যাকাউন্টের ইমেল লিখুন। অ্যাকাউন্ট থাকলে রিসেট লিঙ্ক পাঠাব।',
+                    email_label: 'ইমেল',
+                    send: 'লিঙ্ক পাঠান',
+                    sending: 'পাঠানো হচ্ছে…',
+                    sent: 'এই ইমেলের অ্যাকাউন্ট থাকলে রিসেট লিঙ্ক পাঠানো হয়েছে।',
+                    back_to_sign_in: 'সাইন ইনে ফিরুন',
+                },
+                reset: {
+                    page_title: 'FoxalDB — পাসওয়ার্ড রিসেট',
+                    title: 'পাসওয়ার্ড রিসেট করুন',
+                    email_label: 'ইমেল',
+                    password_label: 'নতুন পাসওয়ার্ড',
+                    password_confirmation_label: 'নতুন পাসওয়ার্ড নিশ্চিত করুন',
+                    submit: 'পাসওয়ার্ড রিসেট',
+                    submitting: 'রিসেট হচ্ছে…',
+                    success_title: 'পাসওয়ার্ড আপডেট হয়েছে',
+                    success_description:
+                        'পাসওয়ার্ড রিসেট হয়েছে। নতুন পাসওয়ার্ড দিয়ে সাইন ইন করুন।',
+                    invalid_title: 'লিঙ্ক অবৈধ',
+                    invalid_description:
+                        'রিসেট লিঙ্ক অবৈধ বা মেয়াদোত্তীর্ণ। চালিয়ে যেতে নতুন লিঙ্ক চান।',
+                    sign_in: 'সাইন ইন',
+                },
+                errors: {
+                    rate_limit: 'অনেক অনুরোধ। অপেক্ষা করে আবার চেষ্টা করুন।',
+                    server: 'অনুরোধ সম্পন্ন করা যায়নি। আবার চেষ্টা করুন।',
+                },
             },
             errors: {
                 first_name_required: 'নামের প্রথম অংশ প্রয়োজন।',

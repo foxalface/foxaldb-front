@@ -1804,6 +1804,7 @@ export const gu: LanguageTranslation = {
                 submit: 'સાઇન ઇન',
                 submitting: 'સાઇન ઇન થઈ રહ્યું છે...',
                 switch_to_register: 'નોંધણી',
+                forgot_password: 'પાસવર્ડ ભૂલી ગયા?',
                 no_account: 'એકાઉન્ટ નથી?',
             },
             register: {
@@ -1887,6 +1888,39 @@ export const gu: LanguageTranslation = {
                     'આ લિંક અમાન્ય છે અથવા સમયમર્યાદા પૂરી થઈ છે. સાઇન ઇન હો તો નવો ઇમેઇલ માંગો.',
                 sign_in: 'સાઇન ઇન',
                 logout: 'લૉગ આઉટ',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — પાસવર્ડ ભૂલી ગયા',
+                    title: 'પાસવર્ડ ભૂલી ગયા?',
+                    description:
+                        'તમારા FoxalDB એકાઉન્ટનો ઇમેઇલ દાખલ કરો. એકાઉન્ટ હોય તો રીસેટ લિંક મોકલીશું.',
+                    email_label: 'ઇમેઇલ',
+                    send: 'લિંક મોકલો',
+                    sending: 'મોકલી રહ્યાં છીએ…',
+                    sent: 'આ ઇમેઇલ માટે એકાઉન્ટ હોય તો રીસેટ લિંક મોકલાઈ છે.',
+                    back_to_sign_in: 'સાઇન ઇન પર પાછા',
+                },
+                reset: {
+                    page_title: 'FoxalDB — પાસવર્ડ રીસેટ',
+                    title: 'પાસવર્ડ રીસેટ કરો',
+                    email_label: 'ઇમેઇલ',
+                    password_label: 'નવો પાસવર્ડ',
+                    password_confirmation_label: 'નવા પાસવર્ડની પુષ્ટિ',
+                    submit: 'પાસવર્ડ રીસેટ',
+                    submitting: 'રીસેટ થઈ રહ્યું છે…',
+                    success_title: 'પાસવર્ડ અપડેટ થયો',
+                    success_description:
+                        'તમારો પાસવર્ડ રીસેટ થયો. નવા પાસવર્ડથી સાઇન ઇન કરો.',
+                    invalid_title: 'લિંક અમાન્ય',
+                    invalid_description:
+                        'રીસેટ લિંક અમાન્ય અથવા સમાપ્ત. ચાલુ રાખવા નવી લિંક માગો.',
+                    sign_in: 'સાઇન ઇન',
+                },
+                errors: {
+                    rate_limit: 'ઘણી વિનંતીઓ. રાહ જુઓ અને ફરી પ્રયાસ કરો.',
+                    server: 'વિનંતી પૂર્ણ થઈ શકી નહીં. ફરી પ્રયાસ કરો.',
+                },
             },
             errors: {
                 first_name_required: 'પ્રથમ નામ જરૂરી છે.',

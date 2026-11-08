@@ -1840,6 +1840,7 @@ export const te: LanguageTranslation = {
                 submit: 'సైన్ ఇన్',
                 submitting: 'సైన్ ఇన్ అవుతోంది...',
                 switch_to_register: 'నమోదు',
+                forgot_password: 'పాస్‌వర్డ్ మర్చిపోయారా?',
                 no_account: 'ఖాతా లేదా?',
             },
             register: {
@@ -1924,6 +1925,40 @@ export const te: LanguageTranslation = {
                     'ఈ లింక్ చెల్లదు లేదా గడువు ముగిసింది. సైన్ ఇన్‌లో ఉంటే కొత్త ఇమెయిల్ అడగండి.',
                 sign_in: 'సైన్ ఇన్',
                 logout: 'లాగ్ అవుట్',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — పాస్‌వర్డ్ మర్చిపోయారా',
+                    title: 'పాస్‌వర్డ్ మర్చిపోయారా?',
+                    description:
+                        'మీ FoxalDB ఖాతా ఇమెయిల్‌ను నమోదు చేయండి. ఖాతా ఉంటే రీసెట్ లింక్ పంపుతాం.',
+                    email_label: 'ఇమెయిల్',
+                    send: 'లింక్ పంపు',
+                    sending: 'పంపుతోంది…',
+                    sent: 'ఈ ఇమెయిల్‌కు ఖాతా ఉంటే రీసెట్ లింక్ పంపబడింది.',
+                    back_to_sign_in: 'సైన్ ఇన్‌కు తిరిగి',
+                },
+                reset: {
+                    page_title: 'FoxalDB — పాస్‌వర్డ్ రీసెట్',
+                    title: 'పాస్‌వర్డ్ రీసెట్ చేయండి',
+                    email_label: 'ఇమెయిల్',
+                    password_label: 'కొత్త పాస్‌వర్డ్',
+                    password_confirmation_label:
+                        'కొత్త పాస్‌వర్డ్ నిర్ధారించండి',
+                    submit: 'పాస్‌వర్డ్ రీసెట్',
+                    submitting: 'రీసెట్ అవుతోంది…',
+                    success_title: 'పాస్‌వర్డ్ నవీకరించబడింది',
+                    success_description:
+                        'మీ పాస్‌వర్డ్ రీసెట్ అయింది. కొత్త పాస్‌వర్డ్‌తో సైన్ ఇన్ చేయండి.',
+                    invalid_title: 'లింక్ చెల్లదు',
+                    invalid_description:
+                        'రీసెట్ లింక్ చెల్లదు లేదా గడువు ముగిసింది. కొనసాగడానికి కొత్త లింక్ అడగండి.',
+                    sign_in: 'సైన్ ఇన్',
+                },
+                errors: {
+                    rate_limit: 'చాలా అభ్యర్థనలు. వేచి మళ్లీ ప్రయత్నించండి.',
+                    server: 'అభ్యర్థన పూర్తి కాలేదు. మళ్లీ ప్రయత్నించండి.',
+                },
             },
             errors: {
                 first_name_required: 'మొదటి పేరు అవసరం.',

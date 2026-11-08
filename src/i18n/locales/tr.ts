@@ -1810,6 +1810,7 @@ export const tr: LanguageTranslation = {
                 submit: 'Giriş yap',
                 submitting: 'Giriş yapılıyor...',
                 switch_to_register: 'Kayıt ol',
+                forgot_password: 'Şifrenizi mi unuttunuz?',
                 no_account: 'Hesabınız yok mu?',
             },
             register: {
@@ -1893,6 +1894,39 @@ export const tr: LanguageTranslation = {
                     'Bu bağlantı geçersiz veya süresi dolmuş. Hâlâ oturum açıksa yeni bir e-posta isteyin.',
                 sign_in: 'Giriş yap',
                 logout: 'Çıkış yap',
+            },
+            password_reset: {
+                forgot: {
+                    page_title: 'FoxalDB — Şifremi unuttum',
+                    title: 'Şifrenizi mi unuttunuz?',
+                    description:
+                        'FoxalDB hesabınızın e-postasını girin. Hesap varsa sıfırlama bağlantısı göndeririz.',
+                    email_label: 'E-posta',
+                    send: 'Bağlantı gönder',
+                    sending: 'Gönderiliyor…',
+                    sent: 'Bu e-posta için bir hesap varsa sıfırlama bağlantısı gönderildi.',
+                    back_to_sign_in: 'Girişe dön',
+                },
+                reset: {
+                    page_title: 'FoxalDB — Şifre sıfırlama',
+                    title: 'Şifrenizi sıfırlayın',
+                    email_label: 'E-posta',
+                    password_label: 'Yeni şifre',
+                    password_confirmation_label: 'Yeni şifreyi onayla',
+                    submit: 'Şifreyi sıfırla',
+                    submitting: 'Sıfırlanıyor…',
+                    success_title: 'Şifre güncellendi',
+                    success_description:
+                        'Şifreniz sıfırlandı. Yeni şifreyle giriş yapın.',
+                    invalid_title: 'Bağlantı geçersiz',
+                    invalid_description:
+                        'Sıfırlama bağlantısı geçersiz veya süresi dolmuş. Devam etmek için yeni bağlantı isteyin.',
+                    sign_in: 'Giriş yap',
+                },
+                errors: {
+                    rate_limit: 'Çok fazla istek. Bekleyip tekrar deneyin.',
+                    server: 'İstek tamamlanamadı. Tekrar deneyin.',
+                },
             },
             errors: {
                 first_name_required: 'Ad gereklidir.',
