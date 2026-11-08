@@ -1043,6 +1043,7 @@ export const mr: LanguageTranslation = {
                 add: 'जोडा',
                 adding: 'जोडले जात आहे…',
                 cancel: 'रद्द करा',
+                success: 'सदस्य जोडला.',
             },
             errors: {
                 load_failed: 'सहकारी लोड करता आले नाहीत.',

@@ -1049,6 +1049,7 @@ export const vi: LanguageTranslation = {
                 add: 'Thêm',
                 adding: 'Đang thêm…',
                 cancel: 'Hủy',
+                success: 'Đã thêm thành viên.',
             },
             errors: {
                 load_failed: 'Không thể tải cộng tác viên.',

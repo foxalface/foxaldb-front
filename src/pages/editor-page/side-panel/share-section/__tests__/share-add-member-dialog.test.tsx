@@ -6,8 +6,13 @@ import { en } from '@/i18n/locales/en';
 import type * as DiagramMembersApi from '@/lib/api/diagram-members';
 import type { DiagramMemberResource } from '@/lib/api/diagram-members';
 
-const { addDiagramMemberMock } = vi.hoisted(() => ({
+const { addDiagramMemberMock, toastMock } = vi.hoisted(() => ({
     addDiagramMemberMock: vi.fn(),
+    toastMock: vi.fn(),
+}));
+
+vi.mock('@/components/toast/use-toast', () => ({
+    useToast: () => ({ toast: toastMock }),
 }));
 
 vi.mock('@/lib/api/diagram-members', async (importOriginal) => {
@@ -59,6 +64,7 @@ const member: DiagramMemberResource = {
 describe('ShareAddMemberDialog', () => {
     beforeEach(() => {
         addDiagramMemberMock.mockReset();
+        toastMock.mockReset();
         addDiagramMemberMock.mockResolvedValue(member);
     });
 
@@ -86,6 +92,42 @@ describe('ShareAddMemberDialog', () => {
             });
         });
         expect(onMemberAdded).toHaveBeenCalledWith(member);
+        expect(toastMock).toHaveBeenCalledWith({
+            title: en.translation.share_diagram_dialog.add_member.success,
+        });
+        expect(en.translation.share_diagram_dialog.add_member.success).toBe(
+            'Member added.'
+        );
+        expect(
+            en.translation.share_diagram_dialog.add_member.success
+        ).not.toMatch(/email/i);
         expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('does not show success toast when add fails', async () => {
+        const user = userEvent.setup();
+        addDiagramMemberMock.mockRejectedValueOnce(new Error('failed'));
+
+        render(
+            <ShareAddMemberDialog
+                diagramId="42"
+                open
+                onOpenChange={vi.fn()}
+                onMemberAdded={vi.fn()}
+            />
+        );
+
+        await user.type(screen.getByLabelText('Email'), 'alexis@example.com');
+        await user.click(screen.getByRole('button', { name: 'Add' }));
+
+        await waitFor(() => {
+            expect(addDiagramMemberMock).toHaveBeenCalled();
+        });
+        expect(toastMock).not.toHaveBeenCalled();
+        expect(
+            screen.getByText(
+                en.translation.share_diagram_dialog.errors.add_failed
+            )
+        ).toBeInTheDocument();
     });
 });

@@ -1049,6 +1049,7 @@ export const en = {
                 add: 'Add',
                 adding: 'Adding...',
                 cancel: 'Cancel',
+                success: 'Member added.',
             },
             errors: {
                 load_failed: 'Could not load collaborators.',

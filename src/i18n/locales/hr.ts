@@ -1052,6 +1052,7 @@ export const hr: LanguageTranslation = {
                 add: 'Dodaj',
                 adding: 'Dodavanje…',
                 cancel: 'Odustani',
+                success: 'Član je dodan.',
             },
             errors: {
                 load_failed: 'Suradnici se nisu mogli učitati.',

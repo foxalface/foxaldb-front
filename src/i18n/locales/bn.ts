@@ -1044,6 +1044,7 @@ export const bn: LanguageTranslation = {
                 add: 'যোগ করুন',
                 adding: 'যোগ করা হচ্ছে…',
                 cancel: 'বাতিল',
+                success: 'সদস্য যোগ করা হয়েছে।',
             },
             errors: {
                 load_failed: 'সহযোগীদের লোড করা যায়নি।',

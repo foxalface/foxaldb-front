@@ -1052,6 +1052,7 @@ export const uk: LanguageTranslation = {
                 add: 'Додати',
                 adding: 'Додавання…',
                 cancel: 'Скасувати',
+                success: 'Учасника додано.',
             },
             errors: {
                 load_failed: 'Не вдалося завантажити учасників.',

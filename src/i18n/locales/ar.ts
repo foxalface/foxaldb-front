@@ -1037,6 +1037,7 @@ export const ar: LanguageTranslation = {
                 add: 'إضافة',
                 adding: 'جارٍ الإضافة…',
                 cancel: 'إلغاء',
+                success: 'تمت إضافة العضو.',
             },
             errors: {
                 load_failed: 'تعذر تحميل المتعاونين.',

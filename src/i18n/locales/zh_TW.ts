@@ -974,6 +974,7 @@ export const zh_TW: LanguageTranslation = {
                 add: '新增',
                 adding: '新增中…',
                 cancel: '取消',
+                success: '已新增成員。',
             },
             errors: {
                 load_failed: '無法載入協作者。',

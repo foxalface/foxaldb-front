@@ -1032,6 +1032,7 @@ export const gu: LanguageTranslation = {
                 add: 'ઉમેરો',
                 adding: 'ઉમેરાઈ રહ્યું છે…',
                 cancel: 'રદ કરો',
+                success: 'સભ્ય ઉમેર્યો.',
             },
             errors: {
                 load_failed: 'સહયોગીઓ લોડ કરી શકાયા નહીં.',

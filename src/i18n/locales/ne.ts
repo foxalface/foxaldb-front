@@ -1044,6 +1044,7 @@ export const ne: LanguageTranslation = {
                 add: 'थप्नुहोस्',
                 adding: 'थपिँदै…',
                 cancel: 'रद्द गर्नुहोस्',
+                success: 'सदस्य थपियो।',
             },
             errors: {
                 load_failed: 'सहकारीहरू लोड गर्न सकिएन।',

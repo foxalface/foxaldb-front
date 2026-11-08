@@ -1066,6 +1066,7 @@ export const ja: LanguageTranslation = {
                 add: '追加',
                 adding: '追加中…',
                 cancel: 'キャンセル',
+                success: 'メンバーを追加しました。',
             },
             errors: {
                 load_failed: '共同編集者を読み込めませんでした。',

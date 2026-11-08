@@ -1044,6 +1044,7 @@ export const hi: LanguageTranslation = {
                 add: 'जोड़ें',
                 adding: 'जोड़ा जा रहा है…',
                 cancel: 'रद्द करें',
+                success: 'सदस्य जोड़ा गया।',
             },
             errors: {
                 load_failed: 'सहयोगियों को लोड नहीं किया जा सका।',

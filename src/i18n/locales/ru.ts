@@ -1048,6 +1048,7 @@ export const ru: LanguageTranslation = {
                 add: 'Добавить',
                 adding: 'Добавление…',
                 cancel: 'Отмена',
+                success: 'Участник добавлен.',
             },
             errors: {
                 load_failed: 'Не удалось загрузить участников.',

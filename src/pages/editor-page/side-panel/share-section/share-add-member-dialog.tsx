@@ -22,6 +22,7 @@ import {
     type DiagramMemberResource,
     type DiagramMemberRole,
 } from '@/lib/api/diagram-members';
+import { useToast } from '@/components/toast/use-toast';
 import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
 import { useTranslation } from 'react-i18next';
 import { ShareMemberRoleSelectItems } from './share-member-role-select-items';
@@ -40,6 +41,7 @@ export const ShareAddMemberDialog: React.FC<ShareAddMemberDialogProps> = ({
     onMemberAdded,
 }) => {
     const { t } = useTranslation();
+    const { toast } = useToast();
     const [email, setEmail] = useState('');
     const [role, setRole] = useState<DiagramMemberRole>(
         DIAGRAM_MEMBER_ROLE_EDITOR
@@ -70,6 +72,9 @@ export const ShareAddMemberDialog: React.FC<ShareAddMemberDialogProps> = ({
                     role,
                 });
                 onMemberAdded(member);
+                toast({
+                    title: t('share_diagram_dialog.add_member.success'),
+                });
                 onOpenChange(false);
             } catch (error: unknown) {
                 const validationErrors = parseLaravelValidationErrors(error);
@@ -87,7 +92,7 @@ export const ShareAddMemberDialog: React.FC<ShareAddMemberDialogProps> = ({
                 setIsSubmitting(false);
             }
         },
-        [diagramId, email, onMemberAdded, onOpenChange, role, t]
+        [diagramId, email, onMemberAdded, onOpenChange, role, t, toast]
     );
 
     return (

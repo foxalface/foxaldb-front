@@ -1064,6 +1064,7 @@ export const pt_BR: LanguageTranslation = {
                 add: 'Adicionar',
                 adding: 'Adicionando…',
                 cancel: 'Cancelar',
+                success: 'Membro adicionado.',
             },
             errors: {
                 load_failed: 'Não foi possível carregar os colaboradores.',

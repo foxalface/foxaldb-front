@@ -1052,6 +1052,7 @@ export const te: LanguageTranslation = {
                 add: 'జోడించండి',
                 adding: 'జోడిస్తోంది…',
                 cancel: 'రద్దు చేయి',
+                success: 'సభ్యుడిని జోడించాం.',
             },
             errors: {
                 load_failed: 'సహకారులను లోడ్ చేయలేకపోయాం.',

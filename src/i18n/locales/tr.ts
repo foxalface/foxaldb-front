@@ -1033,6 +1033,7 @@ export const tr: LanguageTranslation = {
                 add: 'Ekle',
                 adding: 'Ekleniyor…',
                 cancel: 'İptal',
+                success: 'Üye eklendi.',
             },
             errors: {
                 load_failed: 'İşbirlikçiler yüklenemedi.',

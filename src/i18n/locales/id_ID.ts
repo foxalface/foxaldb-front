@@ -1054,6 +1054,7 @@ export const id_ID: LanguageTranslation = {
                 add: 'Tambah',
                 adding: 'Menambahkan…',
                 cancel: 'Batal',
+                success: 'Anggota ditambahkan.',
             },
             errors: {
                 load_failed: 'Tidak dapat memuat kolaborator.',

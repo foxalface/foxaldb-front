@@ -975,6 +975,7 @@ export const zh_CN: LanguageTranslation = {
                 add: '添加',
                 adding: '正在添加…',
                 cancel: '取消',
+                success: '已添加成员。',
             },
             errors: {
                 load_failed: '无法加载协作者。',

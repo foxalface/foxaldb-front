@@ -1074,6 +1074,7 @@ export const fr: LanguageTranslation = {
                 add: 'Ajouter',
                 adding: 'Ajout en cours…',
                 cancel: 'Annuler',
+                success: 'Collaborateur ajouté.',
             },
             errors: {
                 load_failed: 'Impossible de charger les collaborateurs.',

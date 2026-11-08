@@ -1053,6 +1053,7 @@ export const ko_KR: LanguageTranslation = {
                 add: '추가',
                 adding: '추가 중…',
                 cancel: '취소',
+                success: '멤버를 추가했습니다.',
             },
             errors: {
                 load_failed: '협업자를 불러올 수 없습니다.',

@@ -1078,6 +1078,7 @@ export const de: LanguageTranslation = {
                 add: 'Hinzufügen',
                 adding: 'Wird hinzugefügt…',
                 cancel: 'Abbrechen',
+                success: 'Mitglied hinzugefügt.',
             },
             errors: {
                 load_failed: 'Mitarbeitende konnten nicht geladen werden.',

@@ -1067,6 +1067,7 @@ export const es: LanguageTranslation = {
                 add: 'Añadir',
                 adding: 'Añadiendo…',
                 cancel: 'Cancelar',
+                success: 'Colaborador añadido.',
             },
             errors: {
                 load_failed: 'No se pudieron cargar los colaboradores.',
