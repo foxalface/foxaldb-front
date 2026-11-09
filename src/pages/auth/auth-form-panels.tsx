@@ -23,12 +23,15 @@ export interface LoginFormPanelProps {
     onSuccess: () => void;
     onSwitchToRegister: () => void;
     onForgotPassword?: () => void;
+    /** False when AuthCard already renders the surface title. */
+    showHeading?: boolean;
 }
 
 export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
     onSuccess,
     onSwitchToRegister,
     onForgotPassword,
+    showHeading = true,
 }) => {
     const { t } = useTranslation();
     const { login } = useAuth();
@@ -57,7 +60,11 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
 
     return (
         <div className="flex max-w-md flex-col gap-4">
-            <h1 className="text-lg font-semibold">{t('auth.login.title')}</h1>
+            {showHeading ? (
+                <h1 className="text-lg font-semibold">
+                    {t('auth.login.title')}
+                </h1>
+            ) : null}
             <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
                 <label className="flex flex-col gap-1 text-sm">
                     <span>{t('auth.login.email_label')}</span>
@@ -125,6 +132,8 @@ export interface RegisterFormPanelProps {
     onSwitchToLogin: () => void;
     lockedEmail?: string;
     invitationToken?: string;
+    /** False when AuthCard already renders the surface title. */
+    showHeading?: boolean;
 }
 
 export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
@@ -132,6 +141,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
     onSwitchToLogin,
     lockedEmail,
     invitationToken,
+    showHeading = true,
 }) => {
     const { t } = useTranslation();
     const { register } = useAuth();
@@ -276,9 +286,11 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
 
     return (
         <div className="flex max-w-md flex-col gap-4">
-            <h1 className="text-lg font-semibold">
-                {t('auth.register.title')}
-            </h1>
+            {showHeading ? (
+                <h1 className="text-lg font-semibold">
+                    {t('auth.register.title')}
+                </h1>
+            ) : null}
             <form
                 className="flex flex-col gap-3"
                 noValidate

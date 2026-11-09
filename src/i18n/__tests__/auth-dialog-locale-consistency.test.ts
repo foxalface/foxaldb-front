@@ -47,6 +47,38 @@ const locales = [
     zh_TW,
 ];
 
+describe('auth.welcome locale consistency', () => {
+    it('exposes welcome copy in every supported locale', () => {
+        const proseKeys = [
+            'lead',
+            'support',
+            'guest_note',
+            'online_diagram',
+        ] as const;
+
+        for (const locale of locales) {
+            const welcome = locale.translation.auth.welcome;
+
+            expect(welcome.brand).toBe('FoxalDB');
+
+            for (const key of proseKeys) {
+                const value = welcome[key];
+
+                expect(typeof value).toBe('string');
+                expect(value.length).toBeGreaterThan(0);
+
+                if (locale !== en) {
+                    expect(value).not.toBe(en.translation.auth.welcome[key]);
+                }
+            }
+
+            expect(locale.translation.auth.dialog.back.length).toBeGreaterThan(
+                0
+            );
+        }
+    });
+});
+
 describe('auth.dialog locale consistency', () => {
     it('exposes continue_without_account in every supported locale', () => {
         const englishValue =

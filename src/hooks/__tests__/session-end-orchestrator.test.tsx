@@ -564,6 +564,7 @@ describe('session-end orchestrator', () => {
         expect(putOnline.copy).not.toHaveBeenCalled();
         expect(realtime.leaveDiagram).toHaveBeenCalled();
         expect(dialog.openAuthDialog).toHaveBeenCalledTimes(1);
+        expect(dialog.openAuthDialog).toHaveBeenCalledWith('session-recovery');
         expect(dialog.openOpenDiagramDialog).not.toHaveBeenCalled();
         expect(openOnlineIds).toEqual([]);
 

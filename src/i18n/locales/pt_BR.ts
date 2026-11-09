@@ -1874,6 +1874,15 @@ export const pt_BR: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'Projete, visualize e compartilhe seus diagramas de banco de dados.',
+                support:
+                    'Comece direto no navegador, ou entre para salvar seus diagramas online e colaborar.',
+                guest_note:
+                    'Sem uma conta, seus diagramas ficam neste navegador.',
+                online_diagram: 'Entre para abrir este diagrama online.',
+            },
             dialog: {
                 account_title: 'Conta',
                 login_title: 'Entrar no FoxalDB',
@@ -1885,6 +1894,7 @@ export const pt_BR: LanguageTranslation = {
                     'Crie uma conta para salvar mais diagramas.',
                 checking_session: 'Verificando sessão...',
                 continue_without_account: 'Continuar sem conta',
+                back: 'Voltar',
             },
             login: {
                 title: 'Entrar',

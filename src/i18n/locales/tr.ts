@@ -1833,6 +1833,14 @@ export const tr: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'Veritabanı şemalarınızı tasarlayın, görselleştirin ve paylaşın.',
+                support:
+                    'Doğrudan tarayıcıda başlayın veya çevrimiçi kaydetmek ve birlikte çalışmak için oturum açın.',
+                guest_note: 'Hesap olmadan şemalarınız bu tarayıcıda kalır.',
+                online_diagram: 'Bu çevrimiçi şemayı açmak için oturum açın.',
+            },
             dialog: {
                 account_title: 'Hesap',
                 login_title: "FoxalDB'ye giriş yap",
@@ -1844,6 +1852,7 @@ export const tr: LanguageTranslation = {
                     'Daha fazla diyagram kaydetmek için bir hesap oluşturun.',
                 checking_session: 'Oturum kontrol ediliyor...',
                 continue_without_account: 'Hesap olmadan devam et',
+                back: 'Geri',
             },
             login: {
                 title: 'Giriş yap',

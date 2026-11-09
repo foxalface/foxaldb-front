@@ -18,6 +18,7 @@ import { UserSettingsDialog } from '@/dialogs/user-settings-dialog/user-settings
 import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
 import type { EntryFlowCreateDiagramActions } from '@/pages/editor-page/entry-flow-create-diagram-actions';
 import type { EntryFlowOpenDiagramActions } from '@/pages/editor-page/entry-flow-open-diagram-actions';
+import type { AuthOrigin } from '@/dialogs/auth-dialog/auth-origin';
 
 const CreateDiagramDialogLazy = lazy(() =>
     import('@/dialogs/create-diagram-dialog/create-diagram-dialog').then(
@@ -90,6 +91,17 @@ export const DialogProvider: React.FC<
         );
 
     const [openAuthDialog, setOpenAuthDialog] = useState(false);
+    const [authOrigin, setAuthOrigin] = useState<AuthOrigin>('navbar');
+    const openAuthDialogHandler = useCallback(
+        (origin: AuthOrigin = 'navbar') => {
+            setAuthOrigin(origin);
+            setOpenAuthDialog(true);
+        },
+        []
+    );
+    const closeAuthDialogHandler = useCallback(() => {
+        setOpenAuthDialog(false);
+    }, []);
     const [openUserSettingsDialog, setOpenUserSettingsDialog] = useState(false);
 
     // Export SQL dialog
@@ -172,8 +184,8 @@ export const DialogProvider: React.FC<
                     setOpenCreateRelationshipDialog(false),
                 openTableSchemaDialog: openTableSchemaDialogHandler,
                 closeTableSchemaDialog: () => setOpenTableSchemaDialog(false),
-                openAuthDialog: () => setOpenAuthDialog(true),
-                closeAuthDialog: () => setOpenAuthDialog(false),
+                openAuthDialog: openAuthDialogHandler,
+                closeAuthDialog: closeAuthDialogHandler,
                 openUserSettingsDialog: () => setOpenUserSettingsDialog(true),
                 closeUserSettingsDialog: () => setOpenUserSettingsDialog(false),
                 openExportDiagramDialog: () => setOpenExportDiagramDialog(true),
@@ -215,6 +227,7 @@ export const DialogProvider: React.FC<
             <AuthDialog
                 dialog={{ open: openAuthDialog }}
                 entryAuthActions={entryAuthActions}
+                origin={authOrigin}
             />
             <UserSettingsDialog dialog={{ open: openUserSettingsDialog }} />
             <ExportWizardDialog dialog={{ open: openExportWizardDialog }} />

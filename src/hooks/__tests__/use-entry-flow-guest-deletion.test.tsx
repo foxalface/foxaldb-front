@@ -23,6 +23,7 @@ vi.mock('react-router-dom', async (importOriginal) => {
     return {
         ...(actual as object),
         useParams: () => ({ diagramId: undefined }),
+        useNavigate: () => vi.fn(),
     };
 });
 

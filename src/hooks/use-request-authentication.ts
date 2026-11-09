@@ -13,12 +13,12 @@ export const useRequestAuthentication = () => {
     return useCallback(
         (intent: AuthIntent) => {
             if (isNoneAuthIntent(intent)) {
-                openAuthDialog();
+                openAuthDialog('protected-action');
                 return;
             }
 
             setAuthIntent(intent);
-            openAuthDialog();
+            openAuthDialog('protected-action');
         },
         [setAuthIntent, openAuthDialog]
     );

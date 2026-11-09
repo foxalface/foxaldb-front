@@ -1845,6 +1845,15 @@ export const ko_KR: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: '데이터베이스 다이어그램을 설계하고, 시각화하고, 공유하세요.',
+                support:
+                    '브라우저에서 바로 시작하거나, 로그인하여 다이어그램을 온라인에 저장하고 협업하세요.',
+                guest_note:
+                    '계정이 없으면 다이어그램은 이 브라우저에 남습니다.',
+                online_diagram: '이 온라인 다이어그램을 열려면 로그인하세요.',
+            },
             dialog: {
                 account_title: '계정',
                 login_title: 'FoxalDB에 로그인',
@@ -1856,6 +1865,7 @@ export const ko_KR: LanguageTranslation = {
                     '계정을 만들어 더 많은 다이어그램을 저장하세요.',
                 checking_session: '세션 확인 중...',
                 continue_without_account: '계정 없이 계속',
+                back: '뒤로',
             },
             login: {
                 title: '로그인',

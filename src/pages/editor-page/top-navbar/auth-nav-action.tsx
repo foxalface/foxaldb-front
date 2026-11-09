@@ -41,7 +41,7 @@ export const AuthNavAction: React.FC<AuthNavActionProps> = ({ compact }) => {
                 className="font-medium"
                 size="sm"
                 type="button"
-                onClick={openAuthDialog}
+                onClick={() => openAuthDialog('navbar')}
             >
                 {t('auth.nav.sign_in')}
             </Button>

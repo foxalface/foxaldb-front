@@ -29,7 +29,7 @@ export const useEntryFlowDialogSync = (
 
         if (entryFlowDialog === 'auth') {
             entryFlowOwnsAuthRef.current = true;
-            openAuthDialog();
+            openAuthDialog('entry');
             return;
         }
 

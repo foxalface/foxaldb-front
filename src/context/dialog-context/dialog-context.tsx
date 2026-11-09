@@ -8,6 +8,7 @@ import type { OpenDiagramDialogProps } from '@/dialogs/open-diagram-dialog/open-
 import type { CreateDiagramDialogProps } from '@/dialogs/create-diagram-dialog/create-diagram-dialog';
 import type { ExportWizardDialogProps } from '@/dialogs/export-wizard/export-wizard-dialog';
 import type { MergeWizardDialogProps } from '@/dialogs/merge-wizard/merge-wizard-dialog';
+import type { AuthOrigin } from '@/dialogs/auth-dialog/auth-origin';
 
 export interface DialogContext {
     // Create diagram dialog
@@ -50,8 +51,8 @@ export interface DialogContext {
     ) => void;
     closeTableSchemaDialog: () => void;
 
-    // Auth dialog
-    openAuthDialog: () => void;
+    // Auth dialog. Origin is presentation only; it is not an AuthIntent.
+    openAuthDialog: (origin?: AuthOrigin) => void;
     closeAuthDialog: () => void;
 
     // User settings dialog

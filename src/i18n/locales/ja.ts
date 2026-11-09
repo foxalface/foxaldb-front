@@ -1885,6 +1885,16 @@ export const ja: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'データベースの図を設計し、可視化し、共有できます。',
+                support:
+                    'ブラウザですぐに始めるか、サインインして図をオンラインに保存し、共同で作業できます。',
+                guest_note:
+                    'アカウントがない場合、図はこのブラウザに残ります。',
+                online_diagram:
+                    'このオンラインの図を開くにはサインインしてください。',
+            },
             dialog: {
                 account_title: 'アカウント',
                 login_title: 'FoxalDBにサインイン',
@@ -1896,6 +1906,7 @@ export const ja: LanguageTranslation = {
                     'アカウントを作成して、より多くのダイアグラムを保存しましょう。',
                 checking_session: 'セッションを確認中...',
                 continue_without_account: 'アカウントなしで続行',
+                back: '戻る',
             },
             login: {
                 title: 'ログイン',

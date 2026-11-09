@@ -1851,6 +1851,15 @@ export const hr: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'Osmislite, vizualizirajte i dijelite dijagrame baza podataka.',
+                support:
+                    'Započnite izravno u pregledniku ili se prijavite da biste dijagrame spremili online i surađivali.',
+                guest_note: 'Bez računa dijagrami ostaju u ovom pregledniku.',
+                online_diagram:
+                    'Prijavite se da biste otvorili ovaj online dijagram.',
+            },
             dialog: {
                 account_title: 'Račun',
                 login_title: 'Prijava u FoxalDB',
@@ -1862,6 +1871,7 @@ export const hr: LanguageTranslation = {
                     'Stvorite račun kako biste spremili više dijagrama.',
                 checking_session: 'Provjera sesije...',
                 continue_without_account: 'Nastavi bez računa',
+                back: 'Natrag',
             },
             login: {
                 title: 'Prijava',

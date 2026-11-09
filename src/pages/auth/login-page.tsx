@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useAuth } from '@/hooks/use-auth';
+import { AuthCard } from '@/dialogs/auth-dialog/auth-card';
 import { AuthenticatedAccountPanel, LoginFormPanel } from './auth-form-panels';
 import { VerifyEmailScreen } from './verify-email-screen';
 import { useTranslation } from 'react-i18next';
@@ -44,11 +45,14 @@ const LoginPageContent: React.FC = () => {
     }
 
     return (
-        <LoginFormPanel
-            onForgotPassword={navigateToForgotPassword}
-            onSuccess={navigateHome}
-            onSwitchToRegister={navigateToRegister}
-        />
+        <AuthCard title={t('auth.login.title')}>
+            <LoginFormPanel
+                onForgotPassword={navigateToForgotPassword}
+                onSuccess={navigateHome}
+                onSwitchToRegister={navigateToRegister}
+                showHeading={false}
+            />
+        </AuthCard>
     );
 };
 

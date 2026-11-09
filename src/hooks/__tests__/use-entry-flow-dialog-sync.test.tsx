@@ -43,6 +43,7 @@ describe('useEntryFlowDialogSync', () => {
         renderHook(() => useEntryFlowDialogSync('auth'));
 
         expect(openAuthDialog).toHaveBeenCalledTimes(1);
+        expect(openAuthDialog).toHaveBeenCalledWith('entry');
         expect(closeAuthDialog).not.toHaveBeenCalled();
     });
 

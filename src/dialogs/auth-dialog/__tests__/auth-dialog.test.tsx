@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { en } from '@/i18n/locales/en';
 import { AuthDialog } from '@/dialogs/auth-dialog/auth-dialog';
 import type { EntryFlowAuthActions } from '@/pages/editor-page/entry-flow-auth-actions';
+import type { AuthOrigin } from '@/dialogs/auth-dialog/auth-origin';
 
 const onContinueAsGuest = vi.fn();
 const onLoginSuccess = vi.fn();
@@ -23,12 +24,15 @@ const authState = {
     isLoading: false,
 };
 
+const routeParams: { diagramId?: string } = {};
+
 vi.mock('react-router-dom', async (importOriginal) => {
     const actual = await importOriginal<typeof ReactRouterDom>();
 
     return {
         ...actual,
         useNavigate: () => vi.fn(),
+        useParams: () => routeParams,
     };
 });
 
@@ -106,12 +110,14 @@ const renderAuthDialog = (
     props: {
         open?: boolean;
         entryAuthActions?: EntryFlowAuthActions;
+        origin?: AuthOrigin;
     } = {}
 ) =>
     render(
         <AuthDialog
             dialog={{ open: props.open ?? true }}
             entryAuthActions={props.entryAuthActions}
+            origin={props.origin}
         />
     );
 
@@ -119,28 +125,94 @@ describe('AuthDialog entry mode', () => {
     beforeEach(() => {
         authState.isAuthenticated = false;
         authState.isLoading = false;
+        routeParams.diagramId = undefined;
         onContinueAsGuest.mockClear();
         onLoginSuccess.mockClear();
         onRegistrationSuccess.mockClear();
         closeAuthDialog.mockClear();
     });
 
-    it('shows Continue without an account for guest login mode', () => {
-        renderAuthDialog({ entryAuthActions });
+    it('opens Welcome without auth fields', () => {
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
 
         expect(
+            screen.getByRole('heading', {
+                name: en.translation.auth.welcome.brand,
+            })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(en.translation.auth.welcome.lead)
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(en.translation.auth.welcome.support)
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(en.translation.auth.welcome.guest_note)
+        ).toBeInTheDocument();
+        expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+        expect(screen.queryByLabelText(/password/i)).not.toBeInTheDocument();
+        expect(
+            screen.queryByText(en.translation.auth.welcome.online_diagram)
+        ).not.toBeInTheDocument();
+    });
+
+    it('shows the online deep-link note for a backend diagram id', () => {
+        routeParams.diagramId = '42';
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
+
+        expect(
+            screen.getByText(en.translation.auth.welcome.online_diagram)
+        ).toBeInTheDocument();
+    });
+
+    it('moves from Welcome to Login without the guest action', async () => {
+        const user = userEvent.setup();
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
+
+        await user.click(
             screen.getByRole('button', {
+                name: en.translation.auth.login.submit,
+            })
+        );
+
+        expect(
+            screen.getByRole('button', { name: 'login-success' })
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', {
                 name: en.translation.auth.dialog.continue_without_account,
+            })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', {
+                name: en.translation.auth.dialog.login_title,
             })
         ).toBeInTheDocument();
     });
 
-    it('shows Continue without an account in registration mode', async () => {
+    it('moves from Welcome to Register and Back returns to Welcome', async () => {
         const user = userEvent.setup();
-        renderAuthDialog({ entryAuthActions });
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
 
         await user.click(
-            screen.getByRole('button', { name: 'switch-register' })
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+
+        expect(
+            screen.getByRole('button', { name: 'register-success' })
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', {
+                name: en.translation.auth.dialog.continue_without_account,
+            })
+        ).not.toBeInTheDocument();
+
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.dialog.back,
+            })
         );
 
         expect(
@@ -150,10 +222,27 @@ describe('AuthDialog entry mode', () => {
         ).toBeInTheDocument();
     });
 
-    it('does not show Continue without an account when authenticated', () => {
-        authState.isAuthenticated = true;
-        renderAuthDialog({ entryAuthActions });
+    it('returns Register opened from Login back to Login', async () => {
+        const user = userEvent.setup();
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
 
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.login.submit,
+            })
+        );
+        await user.click(
+            screen.getByRole('button', { name: 'switch-register' })
+        );
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.dialog.back,
+            })
+        );
+
+        expect(
+            screen.getByRole('button', { name: 'login-success' })
+        ).toBeInTheDocument();
         expect(
             screen.queryByRole('button', {
                 name: en.translation.auth.dialog.continue_without_account,
@@ -161,9 +250,58 @@ describe('AuthDialog entry mode', () => {
         ).not.toBeInTheDocument();
     });
 
+    it('returns Login to Welcome on Back and Escape without closing', async () => {
+        const user = userEvent.setup();
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
+
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.login.submit,
+            })
+        );
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.dialog.back,
+            })
+        );
+
+        expect(
+            screen.getByText(en.translation.auth.welcome.lead)
+        ).toBeInTheDocument();
+
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.login.submit,
+            })
+        );
+        await user.keyboard('{Escape}');
+
+        expect(
+            screen.getByText(en.translation.auth.welcome.lead)
+        ).toBeInTheDocument();
+        expect(closeAuthDialog).not.toHaveBeenCalled();
+    });
+
+    it('does not show Continue without an account when authenticated', () => {
+        authState.isAuthenticated = true;
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
+
+        expect(
+            screen.queryByRole('button', {
+                name: en.translation.auth.dialog.continue_without_account,
+            })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText(en.translation.auth.welcome.lead)
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'account-back' })
+        ).toBeInTheDocument();
+    });
+
     it('invokes onContinueAsGuest when Continue is pressed', async () => {
         const user = userEvent.setup();
-        renderAuthDialog({ entryAuthActions });
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
 
         await user.click(
             screen.getByRole('button', {
@@ -177,8 +315,13 @@ describe('AuthDialog entry mode', () => {
 
     it('invokes onLoginSuccess without manually closing the dialog', async () => {
         const user = userEvent.setup();
-        renderAuthDialog({ entryAuthActions });
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
 
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.login.submit,
+            })
+        );
         await user.click(screen.getByRole('button', { name: 'login-success' }));
 
         expect(onLoginSuccess).toHaveBeenCalledTimes(1);
@@ -187,10 +330,12 @@ describe('AuthDialog entry mode', () => {
 
     it('invokes onRegistrationSuccess without manually closing the dialog', async () => {
         const user = userEvent.setup();
-        renderAuthDialog({ entryAuthActions });
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
 
         await user.click(
-            screen.getByRole('button', { name: 'switch-register' })
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
         );
         await user.click(
             screen.getByRole('button', { name: 'register-success' })
@@ -200,12 +345,20 @@ describe('AuthDialog entry mode', () => {
         expect(closeAuthDialog).not.toHaveBeenCalled();
     });
 
-    it('does not show a dismiss control while entry choice is required', () => {
-        renderAuthDialog({ entryAuthActions });
+    it('does not show a dismiss control while entry choice is required', async () => {
+        const user = userEvent.setup();
+        renderAuthDialog({ entryAuthActions, origin: 'entry' });
 
         expect(
             screen.queryByRole('button', { name: 'Close' })
         ).not.toBeInTheDocument();
+
+        await user.keyboard('{Escape}');
+
+        expect(closeAuthDialog).not.toHaveBeenCalled();
+        expect(
+            screen.getByText(en.translation.auth.welcome.lead)
+        ).toBeInTheDocument();
     });
 });
 
@@ -216,6 +369,28 @@ describe('AuthDialog manual mode', () => {
         closeAuthDialog.mockClear();
     });
 
+    it.each(['protected-action', 'navbar', 'session-recovery'] as const)(
+        'opens Login directly for %s',
+        (origin) => {
+            renderAuthDialog({ origin });
+
+            expect(
+                screen.getByRole('button', { name: 'login-success' })
+            ).toBeInTheDocument();
+            expect(
+                screen.queryByText(en.translation.auth.welcome.lead)
+            ).not.toBeInTheDocument();
+            expect(
+                screen.queryByRole('button', {
+                    name: en.translation.auth.dialog.continue_without_account,
+                })
+            ).not.toBeInTheDocument();
+            expect(
+                screen.getByRole('button', { name: 'Close' })
+            ).toBeInTheDocument();
+        }
+    );
+
     it('does not show Continue without an account', () => {
         renderAuthDialog();
 
@@ -223,6 +398,9 @@ describe('AuthDialog manual mode', () => {
             screen.queryByRole('button', {
                 name: en.translation.auth.dialog.continue_without_account,
             })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.queryByText(en.translation.auth.welcome.lead)
         ).not.toBeInTheDocument();
     });
 
@@ -247,6 +425,27 @@ describe('AuthDialog manual mode', () => {
         );
 
         expect(closeAuthDialog).toHaveBeenCalledTimes(1);
+    });
+
+    it('returns protected Register back to Login', async () => {
+        const user = userEvent.setup();
+        renderAuthDialog({ origin: 'protected-action' });
+
+        await user.click(
+            screen.getByRole('button', { name: 'switch-register' })
+        );
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.dialog.back,
+            })
+        );
+
+        expect(
+            screen.getByRole('button', { name: 'login-success' })
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText(en.translation.auth.welcome.lead)
+        ).not.toBeInTheDocument();
     });
 
     it('shows a dismiss control outside entry mode', () => {

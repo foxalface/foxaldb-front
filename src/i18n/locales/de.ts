@@ -1903,6 +1903,16 @@ export const de: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'Entwerfen, visualisieren und teilen Sie Ihre Datenbankdiagramme.',
+                support:
+                    'Starten Sie direkt im Browser, oder melden Sie sich an, um Diagramme online zu speichern und zusammenzuarbeiten.',
+                guest_note:
+                    'Ohne Konto bleiben Ihre Diagramme in diesem Browser.',
+                online_diagram:
+                    'Melden Sie sich an, um dieses Online-Diagramm zu öffnen.',
+            },
             dialog: {
                 account_title: 'Konto',
                 login_title: 'Bei FoxalDB anmelden',
@@ -1914,6 +1924,7 @@ export const de: LanguageTranslation = {
                     'Erstellen Sie ein Konto, um mehr Diagramme zu speichern.',
                 checking_session: 'Sitzung wird geprüft...',
                 continue_without_account: 'Ohne Konto fortfahren',
+                back: 'Zurück',
             },
             login: {
                 title: 'Anmelden',

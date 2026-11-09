@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/use-auth';
 import { useEntryFlowGuestResolution } from '@/hooks/use-entry-flow-guest-resolution';
 import { useEntryFlowAuthenticatedResolution } from '@/hooks/use-entry-flow-authenticated-resolution';
@@ -96,6 +96,7 @@ export const useEntryFlow = (): UseEntryFlowResult => {
     const isEmailVerified =
         typeof user?.email_verified_at === 'string' &&
         user.email_verified_at.length > 0;
+    const navigate = useNavigate();
     const { diagramId: routeDiagramIdParam } = useParams<{
         diagramId?: string;
     }>();
@@ -103,6 +104,7 @@ export const useEntryFlow = (): UseEntryFlowResult => {
 
     const sessionResolvedRef = useRef(false);
     const previousRouteDiagramIdRef = useRef<string | undefined>(undefined);
+    const suppressRouteInvalidationRef = useRef(false);
     const resolutionGenerationRef = useRef(0);
 
     const bumpResolutionGeneration = useCallback((): number => {
@@ -209,15 +211,35 @@ export const useEntryFlow = (): UseEntryFlowResult => {
 
         const previousRouteId = previousRouteDiagramIdRef.current;
 
-        if (previousRouteId !== routeDiagramId) {
-            invalidateResolution();
-            previousRouteDiagramIdRef.current = routeDiagramId;
+        if (previousRouteId === routeDiagramId) {
+            return;
         }
+
+        // Guest continue replaces /diagrams/{onlineId} with `/` before local
+        // resolution. That URL change must not cancel the guest resolution.
+        if (suppressRouteInvalidationRef.current) {
+            previousRouteDiagramIdRef.current = routeDiagramId;
+            if (routeDiagramId === undefined) {
+                suppressRouteInvalidationRef.current = false;
+            }
+            return;
+        }
+
+        invalidateResolution();
+        previousRouteDiagramIdRef.current = routeDiagramId;
     }, [routeDiagramId, invalidateResolution]);
 
     const continueAsGuest = useCallback(() => {
+        if (
+            routeDiagramId !== undefined &&
+            isValidBackendDiagramId(routeDiagramId)
+        ) {
+            suppressRouteInvalidationRef.current = true;
+            navigate('/', { replace: true });
+        }
+
         dispatchEvent({ type: 'CONTINUE_AS_GUEST' });
-    }, [dispatchEvent]);
+    }, [dispatchEvent, navigate, routeDiagramId]);
 
     const notifyAuthenticationSucceeded = useCallback(
         (source: 'login' | 'registration') => {

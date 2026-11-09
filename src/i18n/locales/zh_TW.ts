@@ -1707,6 +1707,13 @@ export const zh_TW: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: '設計、視覺化並分享你的資料庫圖表。',
+                support: '直接在瀏覽器中開始，或登入以線上儲存圖表並協作。',
+                guest_note: '沒有帳戶時，圖表會留在此瀏覽器中。',
+                online_diagram: '登入以開啟此線上圖表。',
+            },
             dialog: {
                 account_title: '帳戶',
                 login_title: '登入 FoxalDB',
@@ -1716,6 +1723,7 @@ export const zh_TW: LanguageTranslation = {
                 register_description: '建立帳戶以儲存更多圖表。',
                 checking_session: '正在檢查工作階段...',
                 continue_without_account: '免帳號繼續',
+                back: '返回',
             },
             login: {
                 title: '登入',

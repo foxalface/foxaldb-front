@@ -21,6 +21,7 @@ vi.mock('react-router-dom', async (importOriginal) => {
     return {
         ...actual,
         useNavigate: () => vi.fn(),
+        useParams: () => ({}),
     };
 });
 
@@ -70,6 +71,7 @@ const renderAuthDialog = (entryAuthActions?: {
             <AuthDialog
                 dialog={{ open: true, onOpenChange: vi.fn() }}
                 entryAuthActions={entryAuthActions}
+                origin={entryAuthActions ? 'entry' : 'protected-action'}
             />
         </AuthIntentProvider>
     );
@@ -123,6 +125,9 @@ describe('AuthDialog auth intent', () => {
             setAuthIntentRef?.({ type: 'open-online-tab' });
         });
         await user.click(
+            screen.getByRole('button', { name: 'auth.login.submit' })
+        );
+        await user.click(
             screen.getByRole('button', { name: 'mock-login-success' })
         );
 
@@ -162,5 +167,53 @@ describe('AuthDialog auth intent', () => {
             'open-online-diagram'
         );
         expect(closeAuthDialog).not.toHaveBeenCalled();
+    });
+
+    it('keeps open-online-diagram when signing in from Welcome', async () => {
+        const onLoginSuccess = vi.fn();
+        const user = userEvent.setup();
+
+        renderAuthDialog({
+            onContinueAsGuest: vi.fn(),
+            onLoginSuccess,
+            onRegistrationSuccess: vi.fn(),
+        });
+
+        act(() => {
+            setAuthIntentRef?.({
+                type: 'open-online-diagram',
+                diagramId: '77',
+            });
+        });
+
+        await user.click(
+            screen.getByRole('button', { name: 'auth.login.submit' })
+        );
+        await user.click(
+            screen.getByRole('button', { name: 'mock-login-success' })
+        );
+
+        expect(onLoginSuccess).toHaveBeenCalledTimes(1);
+        expect(screen.getByTestId('pending-intent')).toHaveTextContent(
+            'open-online-diagram'
+        );
+    });
+
+    it('clears a protected-action intent when Login is dismissed', async () => {
+        const user = userEvent.setup();
+
+        renderAuthDialog();
+
+        act(() => {
+            setAuthIntentRef?.({
+                type: 'protected-action',
+                action: 'share',
+            });
+        });
+
+        await user.click(screen.getByRole('button', { name: 'Close' }));
+
+        expect(screen.getByTestId('pending-intent')).toHaveTextContent('none');
+        expect(closeAuthDialog).toHaveBeenCalledTimes(1);
     });
 });

@@ -24,6 +24,10 @@ const routeState = {
     diagramId: undefined as string | undefined,
 };
 
+const { navigate } = vi.hoisted(() => ({
+    navigate: vi.fn(),
+}));
+
 vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => authState,
 }));
@@ -37,6 +41,7 @@ vi.mock('react-router-dom', async (importOriginal) => {
     return {
         ...(actual as object),
         useParams: () => routeState,
+        useNavigate: () => navigate,
     };
 });
 
@@ -129,6 +134,7 @@ describe('useEntryFlow', () => {
     beforeEach(() => {
         resetAuth();
         routeState.diagramId = undefined;
+        navigate.mockClear();
     });
 
     it('initial hook state is restoringSession while auth is loading', () => {
@@ -169,6 +175,30 @@ describe('useEntryFlow', () => {
             diagramId: 'local-abc',
             diagramSource: 'local',
             entrySource: 'guestContinuation',
+        });
+        expect(navigate).not.toHaveBeenCalled();
+    });
+
+    it('replaces an online deep link with / and stays on device resolution', async () => {
+        routeState.diagramId = '42';
+        const { result, rerender } = renderHook(() => useEntryFlow());
+
+        completeAuthAsGuest();
+        rerender();
+
+        await waitFor(() => {
+            expect(result.current.state).toEqual({
+                kind: 'awaitingGuestChoice',
+            });
+        });
+
+        act(() => {
+            result.current.continueAsGuest();
+        });
+
+        expect(navigate).toHaveBeenCalledWith('/', { replace: true });
+        expect(result.current.state).toEqual({
+            kind: 'checkingLocalDiagram',
         });
     });
 

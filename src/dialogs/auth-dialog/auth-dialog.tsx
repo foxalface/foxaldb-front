@@ -1,13 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/dialog/dialog';
-import { Button } from '@/components/button/button';
+import React, { useCallback, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useAuth } from '@/hooks/use-auth';
 import { useAuthIntent } from '@/hooks/use-auth-intent';
@@ -18,99 +11,179 @@ import {
     LoginFormPanel,
     RegisterFormPanel,
 } from '@/pages/auth/auth-form-panels';
+import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { useTranslation } from 'react-i18next';
-
-type AuthDialogMode = 'login' | 'register';
+import { AuthCard } from './auth-card';
+import type { AuthOrigin, AuthRegisterReturnTo, AuthStep } from './auth-origin';
+import { WelcomeStep } from './welcome-step';
 
 export interface AuthDialogProps extends BaseDialogProps {
     entryAuthActions?: EntryFlowAuthActions;
+    origin?: AuthOrigin;
 }
 
 export const AuthDialog: React.FC<AuthDialogProps> = ({
     dialog,
     entryAuthActions,
+    origin = 'navbar',
 }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { diagramId: routeDiagramId } = useParams<{ diagramId?: string }>();
     const { isAuthenticated, isLoading } = useAuth();
     const { clearAuthIntent } = useAuthIntent();
     const { closeAuthDialog } = useDialog();
-    const [mode, setMode] = useState<AuthDialogMode>('login');
-    const isEntryMode = entryAuthActions !== undefined;
+    const [step, setStep] = useState<AuthStep>(
+        origin === 'entry' ? 'welcome' : 'login'
+    );
+    const [registerReturnTo, setRegisterReturnTo] =
+        useState<AuthRegisterReturnTo>('login');
+    const [trackedOpen, setTrackedOpen] = useState(dialog.open);
     const skipIntentClearOnCloseRef = useRef(false);
+    const isEntryOrigin = origin === 'entry';
+    const showOnlineDiagramNote =
+        isEntryOrigin &&
+        routeDiagramId !== undefined &&
+        isValidBackendDiagramId(routeDiagramId);
 
-    useEffect(() => {
+    if (dialog.open !== trackedOpen) {
+        setTrackedOpen(dialog.open);
         if (dialog.open) {
-            setMode('login');
+            skipIntentClearOnCloseRef.current = false;
+            setStep(isEntryOrigin ? 'welcome' : 'login');
+            setRegisterReturnTo('login');
         }
-    }, [dialog.open]);
+    }
 
     const closeAuthDialogOnly = useCallback(() => {
         closeAuthDialog();
-        setMode('login');
-    }, [closeAuthDialog]);
+        setStep(isEntryOrigin ? 'welcome' : 'login');
+        setRegisterReturnTo('login');
+    }, [closeAuthDialog, isEntryOrigin]);
 
     const dismissAuthDialog = useCallback(() => {
         if (!skipIntentClearOnCloseRef.current && !isAuthenticated) {
             clearAuthIntent();
         }
+
         skipIntentClearOnCloseRef.current = false;
         closeAuthDialogOnly();
     }, [closeAuthDialogOnly, clearAuthIntent, isAuthenticated]);
 
-    const markAuthSuccessClose = useCallback(() => {
-        skipIntentClearOnCloseRef.current = true;
-    }, []);
-
     const handleLoginSuccess = useCallback(() => {
         // Do not execute AuthIntent here. Entry mode only leaves the guest
         // gate. useAuthIntentContinuation is the continuation owner.
-        markAuthSuccessClose();
-        if (isEntryMode) {
-            entryAuthActions.onLoginSuccess();
+        if (isEntryOrigin) {
+            entryAuthActions?.onLoginSuccess();
             return;
         }
 
+        skipIntentClearOnCloseRef.current = true;
         closeAuthDialogOnly();
-    }, [
-        isEntryMode,
-        entryAuthActions,
-        closeAuthDialogOnly,
-        markAuthSuccessClose,
-    ]);
+    }, [isEntryOrigin, entryAuthActions, closeAuthDialogOnly]);
 
     const handleRegisterSuccess = useCallback(() => {
         // Same continuation owner as login. Registration must not migrate.
-        markAuthSuccessClose();
-        if (isEntryMode) {
-            entryAuthActions.onRegistrationSuccess();
+        if (isEntryOrigin) {
+            entryAuthActions?.onRegistrationSuccess();
             return;
         }
 
+        skipIntentClearOnCloseRef.current = true;
         closeAuthDialogOnly();
-    }, [
-        isEntryMode,
-        entryAuthActions,
-        closeAuthDialogOnly,
-        markAuthSuccessClose,
-    ]);
+    }, [isEntryOrigin, entryAuthActions, closeAuthDialogOnly]);
 
     const handleContinueWithoutAccount = useCallback(() => {
         clearAuthIntent();
         entryAuthActions?.onContinueAsGuest();
     }, [entryAuthActions, clearAuthIntent]);
 
-    const showContinueWithoutAccount =
-        isEntryMode && !isLoading && !isAuthenticated;
+    const openLogin = useCallback(() => {
+        setStep('login');
+    }, []);
 
-    const isEntryChoiceRequired = isEntryMode;
+    const openRegisterFromWelcome = useCallback(() => {
+        setRegisterReturnTo('welcome');
+        setStep('register');
+    }, []);
+
+    const openRegisterFromLogin = useCallback(() => {
+        setRegisterReturnTo('login');
+        setStep('register');
+    }, []);
+
+    const handleBack = useCallback(() => {
+        if (step === 'register') {
+            setStep(registerReturnTo);
+            return;
+        }
+
+        if (isEntryOrigin && step === 'login') {
+            setStep('welcome');
+        }
+    }, [isEntryOrigin, registerReturnTo, step]);
+
+    const handleEscape = useCallback(
+        (event: KeyboardEvent) => {
+            if (!isEntryOrigin || isAuthenticated || isLoading) {
+                return;
+            }
+
+            event.preventDefault();
+
+            if (step === 'login') {
+                setStep('welcome');
+                return;
+            }
+
+            if (step === 'register') {
+                setStep(registerReturnTo);
+            }
+        },
+        [isAuthenticated, isEntryOrigin, isLoading, registerReturnTo, step]
+    );
+
+    const showWelcome = isEntryOrigin && step === 'welcome' && !isAuthenticated;
+    const showRegister = step === 'register' && !isAuthenticated && !isLoading;
+    const showLogin =
+        !showWelcome && !showRegister && !isAuthenticated && !isLoading;
+    const backLabel = t('auth.dialog.back');
+    const onBack =
+        !isLoading &&
+        !isAuthenticated &&
+        (showRegister || (showLogin && isEntryOrigin))
+            ? handleBack
+            : undefined;
+
+    let title = t('auth.dialog.login_title');
+    let description: string | undefined = t('auth.dialog.login_description');
+    let descriptionClassName: string | undefined;
+
+    if (isLoading) {
+        title =
+            showWelcome || isEntryOrigin
+                ? t('auth.welcome.brand')
+                : t('auth.dialog.login_title');
+        description = t('auth.dialog.checking_session');
+        descriptionClassName = undefined;
+    } else if (isAuthenticated) {
+        title = t('auth.dialog.account_title');
+        description = t('auth.dialog.account_description');
+    } else if (showWelcome) {
+        title = t('auth.welcome.brand');
+        description = t('auth.welcome.lead');
+        descriptionClassName = 'text-foreground';
+    } else if (showRegister) {
+        title = t('auth.dialog.register_title');
+        description = t('auth.dialog.register_description');
+    }
 
     return (
         <Dialog
             {...dialog}
             onOpenChange={(open) => {
                 if (!open) {
-                    if (isEntryChoiceRequired) {
+                    if (isEntryOrigin) {
                         return;
                     }
 
@@ -120,67 +193,51 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
         >
             <DialogContent
                 className="flex max-w-md flex-col"
-                showClose={!isEntryChoiceRequired}
+                showClose={!isEntryOrigin}
                 onInteractOutside={(event) => {
-                    if (isEntryChoiceRequired) {
+                    if (isEntryOrigin) {
                         event.preventDefault();
                     }
                 }}
-                onEscapeKeyDown={(event) => {
-                    if (isEntryChoiceRequired) {
-                        event.preventDefault();
-                    }
-                }}
+                onEscapeKeyDown={handleEscape}
             >
-                <DialogHeader>
-                    <DialogTitle>
-                        {isAuthenticated
-                            ? t('auth.dialog.account_title')
-                            : mode === 'login'
-                              ? t('auth.dialog.login_title')
-                              : t('auth.dialog.register_title')}
-                    </DialogTitle>
-                    <DialogDescription>
-                        {isAuthenticated
-                            ? t('auth.dialog.account_description')
-                            : mode === 'login'
-                              ? t('auth.dialog.login_description')
-                              : t('auth.dialog.register_description')}
-                    </DialogDescription>
-                </DialogHeader>
-
-                {isLoading ? (
-                    <p className="text-sm text-muted-foreground">
-                        {t('auth.dialog.checking_session')}
-                    </p>
-                ) : isAuthenticated ? (
-                    <AuthenticatedAccountPanel onBack={closeAuthDialogOnly} />
-                ) : mode === 'login' ? (
-                    <LoginFormPanel
-                        onForgotPassword={() => {
-                            dismissAuthDialog();
-                            navigate('/forgot-password');
-                        }}
-                        onSuccess={handleLoginSuccess}
-                        onSwitchToRegister={() => setMode('register')}
-                    />
-                ) : (
-                    <RegisterFormPanel
-                        onSuccess={handleRegisterSuccess}
-                        onSwitchToLogin={() => setMode('login')}
-                    />
-                )}
-
-                {showContinueWithoutAccount ? (
-                    <Button
-                        className="mt-2"
-                        type="button"
-                        variant="secondary"
-                        onClick={handleContinueWithoutAccount}
-                    >
-                        {t('auth.dialog.continue_without_account')}
-                    </Button>
-                ) : null}
+                <AuthCard
+                    backLabel={backLabel}
+                    description={description}
+                    descriptionClassName={descriptionClassName}
+                    onBack={onBack}
+                    title={title}
+                    titleAs="dialog"
+                >
+                    {isLoading ? null : isAuthenticated ? (
+                        <AuthenticatedAccountPanel
+                            onBack={closeAuthDialogOnly}
+                        />
+                    ) : showWelcome ? (
+                        <WelcomeStep
+                            onContinueAsGuest={handleContinueWithoutAccount}
+                            onCreateAccount={openRegisterFromWelcome}
+                            onSignIn={openLogin}
+                            showOnlineDiagramNote={showOnlineDiagramNote}
+                        />
+                    ) : showRegister ? (
+                        <RegisterFormPanel
+                            onSuccess={handleRegisterSuccess}
+                            onSwitchToLogin={openLogin}
+                            showHeading={false}
+                        />
+                    ) : (
+                        <LoginFormPanel
+                            onForgotPassword={() => {
+                                dismissAuthDialog();
+                                navigate('/forgot-password');
+                            }}
+                            onSuccess={handleLoginSuccess}
+                            onSwitchToRegister={openRegisterFromLogin}
+                            showHeading={false}
+                        />
+                    )}
+                </AuthCard>
             </DialogContent>
         </Dialog>
     );

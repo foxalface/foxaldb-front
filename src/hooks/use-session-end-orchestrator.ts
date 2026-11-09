@@ -110,7 +110,7 @@ export const useSessionEndOrchestrator = (
             latest.hideLoader();
 
             if (plan.requestAuth) {
-                latest.openAuthDialog();
+                latest.openAuthDialog('session-recovery');
             }
         });
     }, []);

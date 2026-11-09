@@ -1852,6 +1852,14 @@ export const id_ID: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'Rancang, visualisasikan, dan bagikan diagram basis data Anda.',
+                support:
+                    'Mulai langsung di browser, atau masuk untuk menyimpan diagram secara online dan berkolaborasi.',
+                guest_note: 'Tanpa akun, diagram tetap ada di browser ini.',
+                online_diagram: 'Masuk untuk membuka diagram online ini.',
+            },
             dialog: {
                 account_title: 'Akun',
                 login_title: 'Masuk ke FoxalDB',
@@ -1863,6 +1871,7 @@ export const id_ID: LanguageTranslation = {
                     'Buat akun untuk menyimpan lebih banyak diagram.',
                 checking_session: 'Memeriksa sesi...',
                 continue_without_account: 'Lanjutkan tanpa akun',
+                back: 'Kembali',
             },
             login: {
                 title: 'Masuk',

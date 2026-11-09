@@ -1848,6 +1848,14 @@ export const hi: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'अपने डेटाबेस आरेख डिज़ाइन करें, देखें और साझा करें।',
+                support:
+                    'सीधे ब्राउज़र में शुरू करें, या ऑनलाइन सहेजने और साथ काम करने के लिए साइन इन करें।',
+                guest_note: 'बिना खाते के आपके आरेख इसी ब्राउज़र में रहते हैं।',
+                online_diagram: 'यह ऑनलाइन आरेख खोलने के लिए साइन इन करें।',
+            },
             dialog: {
                 account_title: 'खाता',
                 login_title: 'FoxalDB में साइन इन करें',
@@ -1859,6 +1867,7 @@ export const hi: LanguageTranslation = {
                     'अधिक डायग्राम सहेजने के लिए एक खाता बनाएं।',
                 checking_session: 'सत्र की जाँच हो रही है...',
                 continue_without_account: 'खाते के बिना जारी रखें',
+                back: 'वापस',
             },
             login: {
                 title: 'लॉग इन',

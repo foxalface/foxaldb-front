@@ -1819,6 +1819,14 @@ export const ar: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'صمّم مخططات قواعد البيانات، واعرضها وشاركها.',
+                support:
+                    'ابدأ مباشرة في المتصفح، أو سجّل الدخول لحفظ مخططاتك عبر الإنترنت والتعاون.',
+                guest_note: 'بدون حساب، تبقى مخططاتك في هذا المتصفح.',
+                online_diagram: 'سجّل الدخول لفتح هذا المخطط عبر الإنترنت.',
+            },
             dialog: {
                 account_title: 'الحساب',
                 login_title: 'تسجيل الدخول إلى FoxalDB',
@@ -1829,6 +1837,7 @@ export const ar: LanguageTranslation = {
                 register_description: 'أنشئ حسابًا لحفظ المزيد من المخططات.',
                 checking_session: 'جارٍ التحقق من الجلسة...',
                 continue_without_account: 'المتابعة بدون حساب',
+                back: 'رجوع',
             },
             login: {
                 title: 'تسجيل الدخول',

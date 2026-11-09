@@ -1850,6 +1850,15 @@ export const ne: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'आफ्ना डाटाबेस रेखाचित्र डिजाइन गर्नुहोस्, हेर्नुहोस् र साझा गर्नुहोस्।',
+                support:
+                    'सिधै ब्राउजरमा सुरु गर्नुहोस्, वा अनलाइन सुरक्षित राख्न र सहकार्य गर्न साइन इन गर्नुहोस्।',
+                guest_note:
+                    'खाता बिना तपाईंका रेखाचित्र यसै ब्राउजरमा रहन्छन्।',
+                online_diagram: 'यो अनलाइन रेखाचित्र खोल्न साइन इन गर्नुहोस्।',
+            },
             dialog: {
                 account_title: 'खाता',
                 login_title: 'FoxalDB मा साइन इन गर्नुहोस्',
@@ -1861,6 +1870,7 @@ export const ne: LanguageTranslation = {
                     'थप डायाग्रामहरू बचत गर्न खाता सिर्जना गर्नुहोस्।',
                 checking_session: 'सत्र जाँच गर्दै...',
                 continue_without_account: 'खाता बिना जारी राख्नुहोस्',
+                back: 'पछाडि',
             },
             login: {
                 title: 'लग इन',

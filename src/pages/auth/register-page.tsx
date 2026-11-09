@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useAuth } from '@/hooks/use-auth';
+import { AuthCard } from '@/dialogs/auth-dialog/auth-card';
 import {
     AuthenticatedAccountPanel,
     RegisterFormPanel,
@@ -42,10 +43,13 @@ const RegisterPageContent: React.FC = () => {
     }
 
     return (
-        <RegisterFormPanel
-            onSuccess={navigateHome}
-            onSwitchToLogin={navigateToLogin}
-        />
+        <AuthCard title={t('auth.register.title')}>
+            <RegisterFormPanel
+                onSuccess={navigateHome}
+                onSwitchToLogin={navigateToLogin}
+                showHeading={false}
+            />
+        </AuthCard>
     );
 };
 

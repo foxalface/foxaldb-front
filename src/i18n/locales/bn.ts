@@ -1842,6 +1842,15 @@ export const bn: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'আপনার ডাটাবেস ডায়াগ্রাম ডিজাইন, দেখুন এবং শেয়ার করুন।',
+                support:
+                    'সরাসরি ব্রাউজারে শুরু করুন, অথবা অনলাইনে সংরক্ষণ ও সহযোগিতার জন্য সাইন ইন করুন।',
+                guest_note:
+                    'অ্যাকাউন্ট ছাড়া আপনার ডায়াগ্রাম এই ব্রাউজারেই থাকে।',
+                online_diagram: 'এই অনলাইন ডায়াগ্রাম খুলতে সাইন ইন করুন।',
+            },
             dialog: {
                 account_title: 'অ্যাকাউন্ট',
                 login_title: 'FoxalDB-তে সাইন ইন করুন',
@@ -1853,6 +1862,7 @@ export const bn: LanguageTranslation = {
                     'আরও ডায়াগ্রাম সংরক্ষণ করতে একটি অ্যাকাউন্ট তৈরি করুন।',
                 checking_session: 'সেশন পরীক্ষা করা হচ্ছে...',
                 continue_without_account: 'অ্যাকাউন্ট ছাড়াই চালিয়ে যান',
+                back: 'ফিরে যান',
             },
             login: {
                 title: 'লগ ইন',

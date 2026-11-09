@@ -1838,6 +1838,15 @@ export const vi: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'Thiết kế, trực quan hóa và chia sẻ sơ đồ cơ sở dữ liệu của bạn.',
+                support:
+                    'Bắt đầu ngay trong trình duyệt, hoặc đăng nhập để lưu sơ đồ trực tuyến và cộng tác.',
+                guest_note:
+                    'Nếu không có tài khoản, sơ đồ vẫn nằm trong trình duyệt này.',
+                online_diagram: 'Đăng nhập để mở sơ đồ trực tuyến này.',
+            },
             dialog: {
                 account_title: 'Tài khoản',
                 login_title: 'Đăng nhập vào FoxalDB',
@@ -1848,6 +1857,7 @@ export const vi: LanguageTranslation = {
                 register_description: 'Tạo tài khoản để lưu thêm sơ đồ.',
                 checking_session: 'Đang kiểm tra phiên...',
                 continue_without_account: 'Tiếp tục không cần tài khoản',
+                back: 'Quay lại',
             },
             login: {
                 title: 'Đăng nhập',

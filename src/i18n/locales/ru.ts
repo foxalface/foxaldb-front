@@ -1852,6 +1852,14 @@ export const ru: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'Проектируйте, визуализируйте и делитесь схемами баз данных.',
+                support:
+                    'Начните прямо в браузере или войдите, чтобы сохранять схемы онлайн и работать вместе.',
+                guest_note: 'Без аккаунта схемы остаются в этом браузере.',
+                online_diagram: 'Войдите, чтобы открыть эту онлайн-схему.',
+            },
             dialog: {
                 account_title: 'Аккаунт',
                 login_title: 'Войти в FoxalDB',
@@ -1863,6 +1871,7 @@ export const ru: LanguageTranslation = {
                     'Создайте аккаунт, чтобы сохранять больше диаграмм.',
                 checking_session: 'Проверка сессии...',
                 continue_without_account: 'Продолжить без аккаунта',
+                back: 'Назад',
             },
             login: {
                 title: 'Вход',

@@ -39,6 +39,7 @@ vi.mock('react-router-dom', async (importOriginal) => {
     return {
         ...(actual as object),
         useParams: () => routeState,
+        useNavigate: () => vi.fn(),
     };
 });
 
@@ -208,6 +209,7 @@ describe('entry-flow auth dialog synchronization', () => {
         });
 
         expect(openAuthDialog).toHaveBeenCalledTimes(1);
+        expect(openAuthDialog).toHaveBeenCalledWith('entry');
         expect(closeAuthDialog).not.toHaveBeenCalled();
     });
 

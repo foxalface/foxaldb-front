@@ -91,7 +91,7 @@ export const UserNavMenu: React.FC<UserNavMenuProps> = ({ className }) => {
 
     const handleOpenAuth = useCallback(() => {
         setMenuOpen(false);
-        openAuthDialog();
+        openAuthDialog('navbar');
     }, [openAuthDialog]);
 
     if (isLoading) {

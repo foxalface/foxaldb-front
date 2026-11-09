@@ -1845,6 +1845,15 @@ export const en = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'Design, visualize, and share your database diagrams.',
+                support:
+                    'Start directly in your browser, or sign in to save diagrams online and collaborate.',
+                guest_note:
+                    'Without an account, diagrams stay in this browser.',
+                online_diagram: 'Sign in to open this online diagram.',
+            },
             dialog: {
                 account_title: 'Account',
                 login_title: 'Sign in to FoxalDB',
@@ -1856,6 +1865,7 @@ export const en = {
                     'Create an account to save more diagrams.',
                 checking_session: 'Checking session...',
                 continue_without_account: 'Continue without an account',
+                back: 'Back',
             },
             login: {
                 title: 'Log in',

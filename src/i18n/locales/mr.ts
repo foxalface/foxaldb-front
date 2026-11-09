@@ -1844,6 +1844,15 @@ export const mr: LanguageTranslation = {
         },
 
         auth: {
+            welcome: {
+                brand: 'FoxalDB',
+                lead: 'तुमचे डेटाबेस आकृती डिझाइन करा, पहा आणि शेअर करा.',
+                support:
+                    'थेट ब्राउझरमध्ये सुरू करा, किंवा ऑनलाइन जतन करण्यासाठी आणि सहकार्य करण्यासाठी साइन इन करा.',
+                guest_note:
+                    'खात्याशिवाय तुमच्या आकृत्या या ब्राउझरमध्ये राहतात.',
+                online_diagram: 'हा ऑनलाइन आकृती उघडण्यासाठी साइन इन करा.',
+            },
             dialog: {
                 account_title: 'खाते',
                 login_title: 'FoxalDB मध्ये साइन इन करा',
@@ -1855,6 +1864,7 @@ export const mr: LanguageTranslation = {
                     'अधिक डायग्राम जतन करण्यासाठी खाते तयार करा.',
                 checking_session: 'सत्र तपासत आहे...',
                 continue_without_account: 'खाते न करता सुरू ठेवा',
+                back: 'मागे',
             },
             login: {
                 title: 'लॉग इन',
