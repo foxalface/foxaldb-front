@@ -36,7 +36,7 @@ describe('filterShareMembers', () => {
 
     it('sorts members by role then name', () => {
         expect(
-            sortShareMembers(members).map((member) => member.user.fullName)
+            sortShareMembers(members).map((member) => member.user?.fullName)
         ).toEqual(['Alice Editor', 'Bob Editor', 'Zoe Viewer']);
     });
 
@@ -86,6 +86,34 @@ describe('filterShareMembers', () => {
                 selectedRoles: ['editor'],
             })
         ).toBe(true);
+    });
+
+    it('keeps a deleted member in the unfiltered list and out of text search', () => {
+        const deletedMember: DiagramMemberResource = {
+            id: 9,
+            role: 'editor',
+            user: null,
+            createdAt: '2026-01-01T00:00:00Z',
+            updatedAt: '2026-01-01T00:00:00Z',
+        };
+
+        expect(
+            filterShareMembers([deletedMember], {
+                filterText: '',
+                selectedRoles: DEFAULT_SELECTED_MEMBER_ROLES,
+            }).map((member) => member.id)
+        ).toEqual([9]);
+
+        expect(
+            filterShareMembers([deletedMember], {
+                filterText: 'deleted',
+                selectedRoles: DEFAULT_SELECTED_MEMBER_ROLES,
+            })
+        ).toEqual([]);
+
+        expect(() =>
+            sortShareMembers([deletedMember, ...members])
+        ).not.toThrow();
     });
 
     it('detects active role filters', () => {

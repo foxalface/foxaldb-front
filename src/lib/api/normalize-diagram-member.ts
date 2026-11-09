@@ -7,6 +7,16 @@ import { parseUserIdentityWithEmailFromHttp } from '@/lib/user';
 export const normalizeDiagramMemberFromApi = (
     member: DiagramMemberResourceDto
 ): DiagramMemberResource => {
+    if (member.user === null) {
+        return {
+            id: member.id,
+            user: null,
+            role: member.role,
+            createdAt: member.created_at,
+            updatedAt: member.updated_at,
+        };
+    }
+
     const user = parseUserIdentityWithEmailFromHttp(member.user);
 
     if (user === null) {

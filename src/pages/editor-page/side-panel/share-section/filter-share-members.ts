@@ -41,11 +41,17 @@ export const matchesShareMemberTextFilter = (
         return true;
     }
 
+    const user = member.user;
+
+    if (user === null) {
+        return false;
+    }
+
     const searchText = filterText.toLowerCase();
 
     return (
-        member.user.fullName.toLowerCase().includes(searchText) ||
-        member.user.email.toLowerCase().includes(searchText)
+        user.fullName.toLowerCase().includes(searchText) ||
+        user.email.toLowerCase().includes(searchText)
     );
 };
 
@@ -67,7 +73,9 @@ export const sortShareMembers = (
             return roleDifference;
         }
 
-        return left.user.fullName.localeCompare(right.user.fullName);
+        return (left.user?.fullName ?? '').localeCompare(
+            right.user?.fullName ?? ''
+        );
     });
 
 export const filterShareMembers = (

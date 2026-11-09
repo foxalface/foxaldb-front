@@ -21,7 +21,7 @@ export interface DiagramMemberUserDto {
 
 export interface DiagramMemberResourceDto {
     id: number;
-    user: DiagramMemberUserDto;
+    user: DiagramMemberUserDto | null;
     role: DiagramMemberRole;
     created_at: string;
     updated_at: string;
@@ -35,7 +35,7 @@ export interface DiagramMemberResource {
         lastName: string;
         fullName: string;
         email: string;
-    };
+    } | null;
     role: DiagramMemberRole;
     createdAt: string;
     updatedAt: string;

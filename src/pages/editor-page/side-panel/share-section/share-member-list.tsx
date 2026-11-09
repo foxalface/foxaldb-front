@@ -153,11 +153,16 @@ export const ShareMemberList: React.FC<ShareMemberListProps> = ({
                         </div>
                         <div className="min-w-0 flex-1">
                             <p className="truncate font-medium">
-                                {member.user.fullName}
+                                {member.user?.fullName ??
+                                    t(
+                                        'side_panel.conversations_section.deleted_user'
+                                    )}
                             </p>
-                            <p className="truncate text-sm text-muted-foreground">
-                                {member.user.email}
-                            </p>
+                            {member.user !== null ? (
+                                <p className="truncate text-sm text-muted-foreground">
+                                    {member.user.email}
+                                </p>
+                            ) : null}
                         </div>
                         <ShareMemberActionsPopover
                             member={member}

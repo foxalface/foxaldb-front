@@ -170,6 +170,36 @@ describe('ShareSection', () => {
         ).toBeInTheDocument();
     });
 
+    it('renders a deleted collaborator without their former identity', async () => {
+        const user = userEvent.setup();
+        listDiagramMembersMock.mockResolvedValue([
+            {
+                id: 9,
+                role: 'editor',
+                user: null,
+                createdAt: '2026-01-01T00:00:00Z',
+                updatedAt: '2026-01-01T00:00:00Z',
+            },
+        ]);
+
+        renderShareSection();
+
+        expect(await screen.findByText('Deleted user')).toBeInTheDocument();
+        expect(screen.queryByText('Hidden Name')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('hidden@example.com')
+        ).not.toBeInTheDocument();
+        expect(screen.getByLabelText('Editor')).toBeInTheDocument();
+
+        await user.click(
+            screen.getByRole('button', { name: 'Collaborator actions' })
+        );
+
+        expect(
+            screen.getByRole('button', { name: 'Delete' })
+        ).toBeInTheDocument();
+    });
+
     it('opens the add collaborator dialog from the toolbar button', async () => {
         const user = userEvent.setup();
         renderShareSection();
