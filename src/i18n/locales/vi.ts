@@ -65,6 +65,8 @@ export const vi: LanguageTranslation = {
             title: 'Xóa sơ đồ',
             description:
                 'Không thể hoàn tác hành động này. Sơ đồ sẽ bị xóa vĩnh viễn.',
+            description_online:
+                'Sơ đồ này sẽ bị xóa và có thể khôi phục trong 90 ngày. Sau thời gian đó, sơ đồ sẽ bị xóa vĩnh viễn.',
             cancel: 'Hủy',
             delete: 'Xóa',
             delete_failed: 'Không thể xóa sơ đồ.',

@@ -64,6 +64,8 @@ export const en = {
             title: 'Delete Diagram',
             description:
                 'This action cannot be undone. This will permanently delete the diagram.',
+            description_online:
+                'This diagram will be deleted and can be recovered for 90 days. After that, it will be permanently deleted.',
             cancel: 'Cancel',
             delete: 'Delete',
             delete_failed: 'Could not delete the diagram.',

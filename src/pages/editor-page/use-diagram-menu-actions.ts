@@ -181,12 +181,16 @@ export const useDiagramMenuActions = (
 
         showAlert({
             title: t('delete_diagram_alert.title'),
-            description: t('delete_diagram_alert.description'),
+            description: t(
+                isOnlineDiagramLocation(location)
+                    ? 'delete_diagram_alert.description_online'
+                    : 'delete_diagram_alert.description'
+            ),
             actionLabel: t('delete_diagram_alert.delete'),
             closeLabel: t('delete_diagram_alert.cancel'),
             onAction: handleDeleteDiagramAction,
         });
-    }, [canDeleteDiagram, showAlert, t, handleDeleteDiagramAction]);
+    }, [canDeleteDiagram, location, showAlert, t, handleDeleteDiagramAction]);
 
     return {
         canMergeDiagram,

@@ -80,7 +80,7 @@ export const OnlineDiagramRowActionsMenu: React.FC<
     const handleDelete = useCallback(() => {
         showAlert({
             title: t('delete_diagram_alert.title'),
-            description: t('delete_diagram_alert.description'),
+            description: t('delete_diagram_alert.description_online'),
             actionLabel: t('delete_diagram_alert.delete'),
             closeLabel: t('delete_diagram_alert.cancel'),
             onAction: onDeleteConfirmed,

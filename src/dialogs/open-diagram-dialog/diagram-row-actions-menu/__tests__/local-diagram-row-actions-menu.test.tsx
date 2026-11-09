@@ -115,8 +115,13 @@ describe('LocalDiagramRowActionsMenu delete', () => {
         );
 
         const alertConfig = showAlert.mock.calls.at(-1)?.[0] as {
+            description: string;
             onAction: () => Promise<void>;
         };
+
+        expect(alertConfig.description).toBe(
+            'delete_diagram_alert.description'
+        );
 
         await act(async () => {
             await alertConfig.onAction();

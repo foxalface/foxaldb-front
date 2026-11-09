@@ -64,6 +64,8 @@ export const tr: LanguageTranslation = {
             title: 'Diyagramı Sil',
             description:
                 'Bu işlem geri alınamaz. Diyagram kalıcı olarak silinecektir.',
+            description_online:
+                'Bu diyagram silinecek ve 90 gün boyunca kurtarılabilecek. Bu sürenin sonunda kalıcı olarak silinecek.',
             cancel: 'İptal',
             delete: 'Sil',
             delete_failed: 'Diyagram silinemedi.',

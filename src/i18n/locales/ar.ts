@@ -65,6 +65,8 @@ export const ar: LanguageTranslation = {
             title: 'حذف المخطط',
             description:
                 'لا يمكن التراجع عن هذا الإجراء. سيتم حذف المخطط نهائيًا.',
+            description_online:
+                'سيُحذف هذا المخطط ويمكن استعادته خلال 90 يومًا. بعد ذلك سيُحذف نهائيًا.',
             cancel: 'إلغاء',
             delete: 'حذف',
             delete_failed: 'تعذر حذف المخطط.',

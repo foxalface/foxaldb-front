@@ -65,6 +65,8 @@ export const pt_BR: LanguageTranslation = {
             title: 'Excluir diagrama',
             description:
                 'Esta ação não pode ser desfeita. Isso excluirá permanentemente o diagrama.',
+            description_online:
+                'Este diagrama será excluído e poderá ser recuperado por 90 dias. Depois disso, ele será excluído permanentemente.',
             cancel: 'Cancelar',
             delete: 'Excluir',
             delete_failed: 'Não foi possível excluir o diagrama.',

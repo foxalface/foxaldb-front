@@ -263,6 +263,24 @@ describe('Diagram menu', () => {
         expect(dialogMocks.openOpenDiagramDialog).toHaveBeenCalledTimes(1);
     });
 
+    it('uses the recoverable warning for an online diagram and the permanent warning for a device diagram', async () => {
+        authState.isAuthenticated = true;
+        chartDbState.currentDiagram = { id: '42', name: 'Saved' };
+        chartDbState.diagramAccess = { can_edit: true, role: 'owner' };
+        locationState.location = { type: 'online', diagramId: '42' };
+
+        await openDiagramMenu();
+        await userEvent.click(
+            screen.getByRole('menuitem', {
+                name: /menu\.actions\.delete_diagram/,
+            })
+        );
+
+        expect(showAlertMock.mock.calls.at(-1)?.[0]).toMatchObject({
+            description: 'delete_diagram_alert.description_online',
+        });
+    });
+
     it('shows delete confirmation instead of deleting immediately', async () => {
         await openDiagramMenu();
         await userEvent.click(
@@ -273,6 +291,7 @@ describe('Diagram menu', () => {
         expect(showAlertMock).toHaveBeenCalledTimes(1);
         expect(showAlertMock.mock.calls[0][0]).toMatchObject({
             title: 'delete_diagram_alert.title',
+            description: 'delete_diagram_alert.description',
             onAction: expect.any(Function),
         });
     });

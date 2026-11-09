@@ -65,6 +65,8 @@ export const ja: LanguageTranslation = {
             title: 'ダイアグラムを削除',
             description:
                 'この操作は元に戻せません。ダイアグラムは完全に削除されます。',
+            description_online:
+                'このダイアグラムは削除され、90日間は復元できます。その後、完全に削除されます。',
             cancel: 'キャンセル',
             delete: '削除',
             delete_failed: 'ダイアグラムを削除できませんでした。',

@@ -65,6 +65,8 @@ export const id_ID: LanguageTranslation = {
             title: 'Hapus Diagram',
             description:
                 'Tindakan ini tidak dapat dibatalkan. Diagram akan dihapus secara permanen.',
+            description_online:
+                'Diagram ini akan dihapus dan dapat dipulihkan selama 90 hari. Setelah itu, diagram akan dihapus secara permanen.',
             cancel: 'Batal',
             delete: 'Hapus',
             delete_failed: 'Diagram tidak dapat dihapus.',

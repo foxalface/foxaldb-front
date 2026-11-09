@@ -64,6 +64,8 @@ export const ko_KR: LanguageTranslation = {
             title: '다이어그램 삭제',
             description:
                 '이 작업은 되돌릴 수 없습니다. 다이어그램이 영구적으로 삭제됩니다.',
+            description_online:
+                '이 다이어그램은 삭제되며 90일 동안 복구할 수 있습니다. 그 이후에는 영구적으로 삭제됩니다.',
             cancel: '취소',
             delete: '삭제',
             delete_failed: '다이어그램을 삭제할 수 없습니다.',

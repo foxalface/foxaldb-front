@@ -64,6 +64,8 @@ export const hr: LanguageTranslation = {
             title: 'Izbriši dijagram',
             description:
                 'Ova radnja se ne može poništiti. Dijagram će biti trajno izbrisan.',
+            description_online:
+                'Ovaj će dijagram biti obrisan i moći će se vratiti tijekom 90 dana. Nakon toga bit će trajno obrisan.',
             cancel: 'Odustani',
             delete: 'Izbriši',
             delete_failed: 'Dijagram nije moguće izbrisati.',

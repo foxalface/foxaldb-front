@@ -65,6 +65,8 @@ export const es: LanguageTranslation = {
             title: 'Eliminar diagrama',
             description:
                 'Esta acción no se puede deshacer. Esto eliminará permanentemente el diagrama.',
+            description_online:
+                'Este diagrama se eliminará y podrá recuperarse durante 90 días. Después, se eliminará de forma permanente.',
             cancel: 'Cancelar',
             delete: 'Eliminar',
             delete_failed: 'No se pudo eliminar el diagrama.',

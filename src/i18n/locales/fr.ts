@@ -64,6 +64,8 @@ export const fr: LanguageTranslation = {
             title: 'Supprimer le diagramme',
             description:
                 'Cette action est irréversible. Cela supprimera définitivement le diagramme.',
+            description_online:
+                'Ce diagramme sera supprimé et pourra être récupéré pendant 90 jours. Passé ce délai, il sera supprimé définitivement.',
             cancel: 'Annuler',
             delete: 'Supprimer',
             delete_failed: 'Impossible de supprimer le diagramme.',

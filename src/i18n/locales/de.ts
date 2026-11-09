@@ -65,6 +65,8 @@ export const de: LanguageTranslation = {
             title: 'Diagramm löschen',
             description:
                 'Diese Aktion kann nicht rückgängig gemacht werden. Das Diagramm wird dauerhaft gelöscht.',
+            description_online:
+                'Dieses Diagramm wird gelöscht und kann 90 Tage lang wiederhergestellt werden. Danach wird es dauerhaft gelöscht.',
             cancel: 'Abbrechen',
             delete: 'Löschen',
             delete_failed: 'Diagramm konnte nicht gelöscht werden.',

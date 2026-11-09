@@ -63,6 +63,8 @@ export const zh_TW: LanguageTranslation = {
         delete_diagram_alert: {
             title: '刪除圖表',
             description: '此操作無法復原，圖表將被永久刪除。',
+            description_online:
+                '此圖表將被刪除，並可在 90 天內還原。之後將被永久刪除。',
             cancel: '取消',
             delete: '刪除',
             delete_failed: '無法刪除此圖表。',

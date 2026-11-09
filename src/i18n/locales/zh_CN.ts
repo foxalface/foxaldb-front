@@ -63,6 +63,8 @@ export const zh_CN: LanguageTranslation = {
         delete_diagram_alert: {
             title: '删除关系图',
             description: '此操作无法撤销。这将永久删除该关系图。',
+            description_online:
+                '此图表将被删除，并可在 90 天内恢复。之后将被永久删除。',
             cancel: '取消',
             delete: '删除',
             delete_failed: '无法删除该图表。',
