@@ -1,0 +1,9 @@
+Raleway (SIL Open Font License 1.1)
+
+Upstream: https://github.com/google/fonts/tree/main/ofl/raleway
+Files:
+  - Raleway[wght].ttf
+  - Raleway-Italic[wght].ttf
+  - OFL.txt
+
+Copyright: The Raleway Project Authors (see OFL.txt).

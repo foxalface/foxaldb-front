@@ -3,6 +3,7 @@ import './polyfills';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './fonts/raleway.css';
 import './index.css';
 import './globals.css';
 import { App } from './app';
