@@ -1715,7 +1715,7 @@ export const fr: LanguageTranslation = {
             },
             error: {
                 message:
-                    'Erreur lors de la génération du script SQL. Veuillez réessayer plus tard ou <0>contactez-nous</0>.',
+                    'Erreur lors de la génération du script SQL. Veuillez réessayer plus tard.',
                 description:
                     "N'hésitez pas à utiliser votre OPENAI_TOKEN, voir le manuel <0>ici</0>.",
             },
@@ -1807,8 +1807,7 @@ export const fr: LanguageTranslation = {
             import: 'Restaurer',
             error: {
                 title: 'Impossible de restaurer le diagramme',
-                description:
-                    'Le JSON du diagramme est invalide. Vérifiez le fichier et réessayez. Besoin d’aide ? support@chartdb.io',
+                description: '.',
             },
         },
         import_dbml_dialog: {

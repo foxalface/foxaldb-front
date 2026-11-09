@@ -1668,8 +1668,7 @@ export const vi: LanguageTranslation = {
                 description: 'Việc này có thể mất khoảng 30 giây.',
             },
             error: {
-                message:
-                    'Lỗi khi tạo SQL. Vui lòng thử lại sau hoặc <0>liên hệ với chúng tôi</0>.',
+                message: 'Lỗi khi tạo SQL. Vui lòng thử lại sau.',
                 description:
                     'Bạn có thể sử dụng OPENAI_TOKEN, xem hướng dẫn <0>tại đây</0>.',
             },
@@ -1762,8 +1761,7 @@ export const vi: LanguageTranslation = {
             import: 'Khôi phục',
             error: {
                 title: 'Không thể khôi phục sơ đồ',
-                description:
-                    'JSON sơ đồ không hợp lệ. Kiểm tra tệp và thử lại. Trợ giúp? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

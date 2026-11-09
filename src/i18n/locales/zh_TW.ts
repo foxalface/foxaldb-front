@@ -1545,8 +1545,7 @@ export const zh_TW: LanguageTranslation = {
                 description: '最多需要 30 秒。',
             },
             error: {
-                message:
-                    '生成 SQL 腳本時發生錯誤。稍後再試，或<0>聯繫我們</0>。',
+                message: '生成 SQL 腳本時發生錯誤。請稍後再試。',
                 description:
                     '可以自由使用 OPENAI_TOKEN，詳細說明可參考<0>此處</0>。',
             },
@@ -1634,8 +1633,7 @@ export const zh_TW: LanguageTranslation = {
             import: '還原',
             error: {
                 title: '無法還原圖表',
-                description:
-                    '圖表 JSON 無效。請檢查檔案後再試。需要協助？ support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

@@ -197,18 +197,7 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
                 <div className="flex flex-col items-center justify-center gap-1 text-sm">
                     <Annoyed className="size-10" />
                     <Label className="text-sm">
-                        <Trans
-                            i18nKey="export_sql_dialog.error.message" // optional -> fallbacks to defaults if not provided
-                            components={[
-                                <a
-                                    key={0}
-                                    href="mailto:support@chartdb.io"
-                                    target="_blank"
-                                    className="text-pink-600 hover:underline"
-                                    rel="noreferrer"
-                                />,
-                            ]}
-                        />
+                        <Trans i18nKey="export_sql_dialog.error.message" />
                     </Label>
                     <div>
                         <Trans

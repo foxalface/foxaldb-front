@@ -1684,8 +1684,7 @@ export const uk: LanguageTranslation = {
                 description: 'Виберіть систему баз даних для нової діаграми.',
             },
             error: {
-                message:
-                    'Помилка створення сценарію SQL. Спробуйте пізніше або <0>звʼяжіться з нами</0>.',
+                message: 'Помилка створення сценарію SQL. Спробуйте пізніше.',
                 description:
                     'Не соромтеся використовувати свій OPENAI_TOKEN, дивіться посібник <0>тут</0>.',
             },
@@ -1776,8 +1775,7 @@ export const uk: LanguageTranslation = {
             import: 'Відновити',
             error: {
                 title: 'Не вдалося відновити діаграму',
-                description:
-                    'JSON діаграми недійсний. Перевірте файл і спробуйте знову. Допомога: support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

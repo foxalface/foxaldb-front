@@ -1733,7 +1733,7 @@ export const de: LanguageTranslation = {
             },
             error: {
                 message:
-                    'Fehler beim Generieren des SQL-Skripts. Bitte versuchen Sie es später erneut oder <0>kontaktieren Sie uns</0>.',
+                    'Fehler beim Generieren des SQL-Skripts. Bitte versuchen Sie es später erneut.',
                 description:
                     'Verwenden Sie Ihren OPENAI_TOKEN, siehe Anleitung <0>hier</0>.',
             },
@@ -1826,8 +1826,7 @@ export const de: LanguageTranslation = {
             import: 'Wiederherstellen',
             error: {
                 title: 'Diagramm konnte nicht wiederhergestellt werden',
-                description:
-                    'Das Diagramm-JSON ist ungültig. Prüfen Sie die Datei und versuchen Sie es erneut. Hilfe? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

@@ -1679,7 +1679,7 @@ export const hi: LanguageTranslation = {
             },
             error: {
                 message:
-                    'SQL स्क्रिप्ट उत्पन्न करने में त्रुटि। कृपया बाद में पुनः प्रयास करें या <0>हमसे संपर्क करें</0>।',
+                    'SQL स्क्रिप्ट उत्पन्न करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।.',
                 description:
                     'अपने OPENAI_TOKEN का उपयोग करने के लिए स्वतंत्र महसूस करें, मैनुअल <0>यहाँ देखें</0>।',
             },
@@ -1771,8 +1771,7 @@ export const hi: LanguageTranslation = {
             import: 'पुनर्स्थापित करें',
             error: {
                 title: 'आरेख पुनर्स्थापित नहीं हो सका',
-                description:
-                    'डायग्राम JSON अमान्य है। फ़ाइल जाँचें और पुनः प्रयास करें। सहायता? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

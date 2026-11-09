@@ -1683,7 +1683,7 @@ export const hr: LanguageTranslation = {
             },
             error: {
                 message:
-                    'Greška pri generiranju SQL skripte. Molimo pokušajte ponovno kasnije ili <0>kontaktirajte nas</0>.',
+                    'Greška pri generiranju SQL skripte. Molimo pokušajte ponovno kasnije.',
                 description:
                     'Slobodno koristite svoj OPENAI_TOKEN, pogledajte priručnik <0>ovdje</0>.',
             },
@@ -1776,8 +1776,7 @@ export const hr: LanguageTranslation = {
             import: 'Vrati',
             error: {
                 title: 'Dijagram nije moguće vratiti',
-                description:
-                    'JSON dijagrama nije valjan. Provjerite datoteku i pokušajte ponovno. Pomoć? support@chartdb.io',
+                description: '.',
             },
         },
 

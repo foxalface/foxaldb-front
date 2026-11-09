@@ -1678,8 +1678,7 @@ export const ko_KR: LanguageTranslation = {
                 description: '30초 정도 걸릴 수 있습니다.',
             },
             error: {
-                message:
-                    'SQL 생성에 실패하였습니다. 잠시후 다시 시도해주세요 계속해서 증상이 발생하는 경우 <0>우리에게 연락해주세요</0>.',
+                message: 'SQL 생성에 실패하였습니다. 잠시후 다시 시도해주세요.',
                 description:
                     '당신의 OPENAI_TOKEN가 있는 경우, <0>여기에서</0> 메뉴얼을 참고하여 사용하실 수 있습니다.',
             },
@@ -1771,8 +1770,7 @@ export const ko_KR: LanguageTranslation = {
             import: '복원',
             error: {
                 title: '다이어그램을 복원할 수 없습니다',
-                description:
-                    '다이어그램 JSON이 유효하지 않습니다. 파일을 확인하고 다시 시도하세요. 도움말: support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

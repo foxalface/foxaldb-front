@@ -1706,7 +1706,7 @@ export const pt_BR: LanguageTranslation = {
             },
             error: {
                 message:
-                    'Erro ao gerar o script SQL. Tente novamente mais tarde ou <0>entre em contato conosco</0>.',
+                    'Erro ao gerar o script SQL. Tente novamente mais tarde.',
                 description:
                     'Sinta-se à vontade para usar seu OPENAI_TOKEN, veja o manual <0>aqui</0>.',
             },
@@ -1799,8 +1799,7 @@ export const pt_BR: LanguageTranslation = {
             import: 'Restaurar',
             error: {
                 title: 'Não foi possível restaurar o diagrama',
-                description:
-                    'O JSON do diagrama é inválido. Verifique o arquivo e tente novamente. Ajuda? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

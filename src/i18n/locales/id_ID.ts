@@ -1684,7 +1684,7 @@ export const id_ID: LanguageTranslation = {
             },
             error: {
                 message:
-                    'Kesalahan saat menghasilkan skrip SQL. Silakan coba lagi nanti atau <0>hubungi kami</0>.',
+                    'Kesalahan saat menghasilkan skrip SQL. Silakan coba lagi nanti.',
                 description:
                     'Silakan gunakan OPENAI_TOKEN Anda, lihat petunjuk <0>di sini</0>.',
             },
@@ -1776,8 +1776,7 @@ export const id_ID: LanguageTranslation = {
             import: 'Pulihkan',
             error: {
                 title: 'Diagram tidak dapat dipulihkan',
-                description:
-                    'JSON diagram tidak valid. Periksa file dan coba lagi. Bantuan? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

@@ -1677,8 +1677,7 @@ export const en = {
                 description: 'This should take up to 30 seconds.',
             },
             error: {
-                message:
-                    'Error generating SQL script. Please try again later or <0>contact us</0>.',
+                message: 'Error generating SQL script. Please try again later.',
                 description:
                     'Feel free to use your OPENAI_TOKEN, see the manual <0>here</0>.',
             },
@@ -1771,8 +1770,7 @@ export const en = {
             import: 'Restore',
             error: {
                 title: 'Could not restore diagram',
-                description:
-                    'The diagram JSON is invalid. Please check the file and try again. Need help? support@chartdb.io',
+                description: '.',
             },
         },
 

@@ -1666,7 +1666,7 @@ export const tr: LanguageTranslation = {
             },
             error: {
                 message:
-                    'SQL betiği oluşturulurken hata oluştu. Lütfen daha sonra tekrar deneyin veya <0>bize ulaşın</0>.',
+                    'SQL betiği oluşturulurken hata oluştu. Lütfen daha sonra tekrar deneyin veya.',
                 description:
                     "OPENAI_TOKEN'ınızı kullanabilirsiniz, kılavuzu <0>buradan</0> görebilirsiniz.",
             },
@@ -1757,8 +1757,7 @@ export const tr: LanguageTranslation = {
             import: 'Geri yükle',
             error: {
                 title: 'Diyagram geri yüklenemedi',
-                description:
-                    'Diyagram JSON geçersiz. Dosyayı kontrol edip tekrar deneyin. Yardım? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

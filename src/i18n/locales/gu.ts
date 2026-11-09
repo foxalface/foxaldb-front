@@ -1659,7 +1659,7 @@ export const gu: LanguageTranslation = {
             },
             error: {
                 message:
-                    'SQL સ્ક્રિપ્ટ જનરેટ કરવા દરમિયાન ભૂલ થઈ. કૃપા કરીને પછીથી ફરી પ્રયત્ન કરો અથવા <0>અમારો સંપર્ક કરો</0>.',
+                    'SQL સ્ક્રિપ્ટ જનરેટ કરવા દરમિયાન ભૂલ થઈ. કૃપા કરીને પછીથી ફરી પ્રયત્ન કરો.',
                 description:
                     'તમારા OPENAI_TOKEN નો ઉપયોગ કરવા માટે મફત અનુભવો, મેન્યુઅલ <0>અહીં જુઓ</0>.',
             },
@@ -1751,8 +1751,7 @@ export const gu: LanguageTranslation = {
             import: 'પુનઃસ્થાપિત કરો',
             error: {
                 title: 'ડાયગ્રામ પુનઃસ્થાપિત કરી શકાયું નહીં',
-                description:
-                    'ડાયગ્રામ JSON અમાન્ય છે. ફાઇલ તપાસો અને ફરી પ્રયાસ કરો. મદદ? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

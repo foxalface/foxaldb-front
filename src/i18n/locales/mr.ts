@@ -1670,7 +1670,7 @@ export const mr: LanguageTranslation = {
             },
             error: {
                 message:
-                    'SQL स्क्रिप्ट तयार करताना एरर. कृपया नंतर पुन्हा प्रयत्न करा किंवा <0>आमच्याशी संपर्क साधा</0>.',
+                    'SQL स्क्रिप्ट तयार करताना एरर. कृपया नंतर पुन्हा प्रयत्न करा.',
                 description:
                     'तुमचा OPENAI_TOKEN वापरण्यास मोकळे रहा, मॅन्युअल <0>येथे</0> पहा.',
             },
@@ -1765,8 +1765,7 @@ export const mr: LanguageTranslation = {
             import: 'पुनर्स्थापित करा',
             error: {
                 title: 'डायग्राम पुनर्स्थापित करता आले नाही',
-                description:
-                    'डायग्राम JSON अवैध आहे. फाइल तपासा आणि पुन्हा प्रयत्न करा. मदत? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

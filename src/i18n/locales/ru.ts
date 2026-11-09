@@ -1684,7 +1684,7 @@ export const ru: LanguageTranslation = {
             },
             error: {
                 message:
-                    'Ошибка создания скрипта SQL. Попробуйте еще раз позже или <0>свяжитесь с нами</0>.',
+                    'Ошибка создания скрипта SQL. Попробуйте еще раз позже.',
                 description:
                     'Не стесняйтесь использовать ваш OPENAI_TOKEN, см. руководство <0>здесь</0>.',
             },
@@ -1776,8 +1776,7 @@ export const ru: LanguageTranslation = {
             import: 'Восстановить',
             error: {
                 title: 'Не удалось восстановить диаграмму',
-                description:
-                    'JSON диаграммы недействителен. Проверьте файл и повторите попытку. Помощь: support@chartdb.io',
+                description: '.',
             },
         },
         import_dbml_dialog: {

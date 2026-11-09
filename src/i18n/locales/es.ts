@@ -1712,7 +1712,7 @@ export const es: LanguageTranslation = {
             },
             error: {
                 message:
-                    'Error al generar el script SQL. Por favor, intenta nuevamente más tarde o <0>contáctanos</0>.',
+                    'Error al generar el script SQL. Por favor, intenta nuevamente más tarde o.',
                 description:
                     'Siéntete libre de usar tu OPENAI_TOKEN, consulta el manual <0>aquí</0>.',
             },
@@ -1805,8 +1805,7 @@ export const es: LanguageTranslation = {
             import: 'Restaurar',
             error: {
                 title: 'No se pudo restaurar el diagrama',
-                description:
-                    'El JSON del diagrama no es válido. Compruebe el archivo e inténtelo de nuevo. ¿Ayuda? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

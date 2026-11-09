@@ -1653,7 +1653,7 @@ export const ar: LanguageTranslation = {
             },
             error: {
                 message:
-                    'النصي. يرجى المحاولة مرة اخرى لاحقاً او <0>اتصل بنا</0> SQL خطأ في إنشاء برنامج',
+                    'حدث خطأ أثناء إنشاء سكربت SQL. يُرجى المحاولة مرة أخرى لاحقاً.',
                 description:
                     ' الخاصة بك. راجع الدليل <0>هنا</0> OPENAI_TOKEN لا تتردد في استخدام',
             },
@@ -1744,8 +1744,7 @@ export const ar: LanguageTranslation = {
             import: 'استعادة',
             error: {
                 title: 'تعذر استعادة المخطط',
-                description:
-                    'JSON المخطط غير صالح. تحقق من الملف وحاول مرة أخرى. مساعدة؟ support@chartdb.io',
+                description: '.',
             },
         },
         import_dbml_dialog: {

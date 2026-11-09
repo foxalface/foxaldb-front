@@ -1548,8 +1548,7 @@ export const zh_CN: LanguageTranslation = {
                 description: '此操作最多需要 30 秒。',
             },
             error: {
-                message:
-                    '生成 SQL 脚本时出错。请稍后再试，或者 <0>联系我们</0>。',
+                message: '生成 SQL 脚本时出错。请稍后再试。',
                 description:
                     '随时使用您的 OPENAI_TOKEN，在<0>这里</0>查看手册。',
             },
@@ -1636,8 +1635,7 @@ export const zh_CN: LanguageTranslation = {
             import: '恢复',
             error: {
                 title: '无法恢复图表',
-                description:
-                    '图表 JSON 无效。请检查文件后重试。需要帮助？ support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate

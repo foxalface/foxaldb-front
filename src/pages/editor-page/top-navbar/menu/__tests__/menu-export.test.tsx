@@ -294,7 +294,7 @@ describe('Diagram menu', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('keeps Diagram, Edit, View, and Help top-level menus', () => {
+    it('keeps Diagram, Edit, and View top-level menus', () => {
         render(<Menu />);
         expect(
             screen.getByRole('menuitem', { name: 'menu.actions.diagram' })
@@ -306,8 +306,8 @@ describe('Diagram menu', () => {
             screen.getByRole('menuitem', { name: 'menu.view.view' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('menuitem', { name: 'menu.help.help' })
-        ).toBeInTheDocument();
+            screen.queryByRole('menuitem', { name: 'menu.help.help' })
+        ).not.toBeInTheDocument();
     });
 
     it('hides Merge for a guest or local-only diagram', async () => {

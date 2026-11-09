@@ -59,14 +59,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
 
-    const openChartDBDocs = useCallback(() => {
-        window.open('https://docs.chartdb.io', '_blank');
-    }, []);
-
-    const openJoinDiscord = useCallback(() => {
-        window.open('https://discord.gg/QeFwyWSKwC', '_blank');
-    }, []);
-
     const showOrHideSidePanel = useCallback(() => {
         if (isSidePanelShowed) {
             hideSidePanel();
@@ -313,18 +305,6 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                             </MenubarCheckboxItem>
                         </MenubarSubContent>
                     </MenubarSub>
-                </MenubarContent>
-            </MenubarMenu>
-
-            <MenubarMenu>
-                <MenubarTrigger>{t('menu.help.help')}</MenubarTrigger>
-                <MenubarContent>
-                    <MenubarItem onClick={openChartDBDocs}>
-                        {t('menu.help.docs_website')}
-                    </MenubarItem>
-                    <MenubarItem onClick={openJoinDiscord}>
-                        {t('menu.help.join_discord')}
-                    </MenubarItem>
                 </MenubarContent>
             </MenubarMenu>
         </Menubar>

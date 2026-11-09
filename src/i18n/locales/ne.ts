@@ -1681,7 +1681,7 @@ export const ne: LanguageTranslation = {
             },
             error: {
                 message:
-                    'SQL स्क्रिप्ट उत्पन्न गर्नमा त्रुटि। कृपया पछि प्रयास गर्नुहोस् वा <0>हामीलाई सम्पर्क गर्नुहोस्</0>।',
+                    'SQL स्क्रिप्ट उत्पन्न गर्नमा त्रुटि। कृपया पछि प्रयास गर्नुहोस् वा।.',
                 description:
                     'तपाईंले OPENAI_TOKEN प्रयोग गर्न सक्नुहुन्छ, यहाँ <0>यहाँ</0> म्यानुअल हेर्नुहोस्।',
             },
@@ -1773,8 +1773,7 @@ export const ne: LanguageTranslation = {
             import: 'पुनर्स्थापना',
             error: {
                 title: 'डायग्राम पुनर्स्थापना गर्न सकिएन',
-                description:
-                    'डायग्राम JSON अमान्य छ। फाइल जाँच गर्नुहोस् र पुनः प्रयास गर्नुहोस्। सहायता? support@chartdb.io',
+                description: '.',
             },
         },
         // TODO: Translate
