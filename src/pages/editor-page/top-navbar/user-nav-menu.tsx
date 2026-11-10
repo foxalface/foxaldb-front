@@ -26,7 +26,9 @@ import {
 } from '@/pages/editor-page/side-panel/side-panel-action-menu';
 import { cn } from '@/lib/utils';
 import { LogOut, Settings, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { legalConfig } from '@/lib/legal/legal-config';
 
 export interface UserNavMenuProps {
     className?: string;
@@ -228,6 +230,26 @@ export const UserNavMenu: React.FC<UserNavMenuProps> = ({ className }) => {
                             {t('auth.nav.sign_in')}
                         </DropdownMenuItem>
                     )}
+
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                        <Link to="/legal">{t('legal.nav.legal')}</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link to="/privacy">{t('legal.nav.privacy')}</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link to="/terms">{t('legal.nav.terms')}</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <a
+                            href={legalConfig.sourceCodeUrl}
+                            rel="noopener noreferrer license"
+                            target="_blank"
+                        >
+                            {t('legal.nav.source')}
+                        </a>
+                    </DropdownMenuItem>
 
                     {isAuthenticated ? (
                         <>

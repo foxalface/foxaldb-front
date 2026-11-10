@@ -1748,6 +1748,9 @@ export const zh_CN: LanguageTranslation = {
                 submitting: '正在创建账户...',
                 switch_to_login: '登录',
                 already_have_account: '已有账户？',
+                accept_terms:
+                    '我接受<terms>使用条款</terms>，并确认已阅读<privacy>隐私政策</privacy>。',
+                accept_terms_required: '创建账户前请接受使用条款。',
             },
             account: {
                 signed_in_as: '已登录为',
@@ -2035,6 +2038,23 @@ export const zh_CN: LanguageTranslation = {
                     sourceFields: '源字段已更改',
                     targetFields: '目标字段已更改',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: '法律信息',
+                legal: '法律声明',
+                privacy: '隐私政策',
+                terms: '使用条款',
+                source: '源代码',
+                home: '首页',
+            },
+            last_updated: '最近更新：{{date}}',
+            pages: {
+                legal_title: 'FoxalDB 法律声明',
+                privacy_title: 'FoxalDB 隐私政策',
+                terms_title: 'FoxalDB 使用条款',
             },
         },
 

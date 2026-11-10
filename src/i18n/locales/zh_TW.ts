@@ -1746,6 +1746,9 @@ export const zh_TW: LanguageTranslation = {
                 submitting: '正在建立帳戶...',
                 switch_to_login: '登入',
                 already_have_account: '已有帳戶？',
+                accept_terms:
+                    '我接受<terms>使用條款</terms>，並確認已閱讀<privacy>隱私權政策</privacy>。',
+                accept_terms_required: '建立帳戶前請接受使用條款。',
             },
             account: {
                 signed_in_as: '已登入為',
@@ -2033,6 +2036,23 @@ export const zh_TW: LanguageTranslation = {
                     sourceFields: '來源欄位已變更',
                     targetFields: '目標欄位已變更',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: '法律資訊',
+                legal: '法律聲明',
+                privacy: '隱私權政策',
+                terms: '使用條款',
+                source: '原始碼',
+                home: '首頁',
+            },
+            last_updated: '最近更新：{{date}}',
+            pages: {
+                legal_title: 'FoxalDB 法律聲明',
+                privacy_title: 'FoxalDB 隱私權政策',
+                terms_title: 'FoxalDB 使用條款',
             },
         },
 

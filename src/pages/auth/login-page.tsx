@@ -5,6 +5,7 @@ import { LocalConfigProvider } from '@/context/local-config-context/local-config
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useAuth } from '@/hooks/use-auth';
 import { AuthCard } from '@/dialogs/auth-dialog/auth-card';
+import { LegalNav } from '@/components/legal-nav/legal-nav';
 import { AuthenticatedAccountPanel, LoginFormPanel } from './auth-form-panels';
 import { VerifyEmailScreen } from './verify-email-screen';
 import { readLoginPrefillEmail } from '@/lib/account/read-login-prefill-email';
@@ -72,6 +73,7 @@ const LoginPageComponent: React.FC = () => {
                 <div className="mx-auto w-full max-w-md">
                     <LoginPageContent />
                 </div>
+                <LegalNav className="mx-auto mt-auto w-full max-w-md px-0" />
             </section>
         </>
     );

@@ -151,6 +151,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
             email: string,
             password: string,
             passwordConfirmation: string,
+            acceptTerms: boolean,
             invitationToken?: string
         ): Promise<void> => {
             await initCsrf();
@@ -160,6 +161,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
                 email,
                 password,
                 passwordConfirmation,
+                acceptTerms,
                 invitationToken
             );
             userRef.current = registeredUser;

@@ -1876,6 +1876,10 @@ export const tr: LanguageTranslation = {
                 submitting: 'Hesap oluşturuluyor...',
                 switch_to_login: 'Giriş yap',
                 already_have_account: 'Zaten hesabınız var mı?',
+                accept_terms:
+                    '<terms>Kullanım koşullarını</terms> kabul ediyor ve <privacy>Gizlilik politikasını</privacy> okuduğumu onaylıyorum.',
+                accept_terms_required:
+                    'Hesap oluşturmak için Kullanım koşullarını kabul edin.',
             },
             account: {
                 signed_in_as: 'Giriş yapıldı:',
@@ -2185,6 +2189,23 @@ export const tr: LanguageTranslation = {
                     sourceFields: 'Kaynak alanlar değişti',
                     targetFields: 'Hedef alanlar değişti',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'Yasal bilgiler',
+                legal: 'Yasal bildirim',
+                privacy: 'Gizlilik politikası',
+                terms: 'Kullanım koşulları',
+                source: 'Kaynak kodu',
+                home: 'Ana sayfa',
+            },
+            last_updated: 'Son güncelleme: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB yasal bildirim',
+                privacy_title: 'FoxalDB gizlilik politikası',
+                terms_title: 'FoxalDB kullanım koşulları',
             },
         },
 

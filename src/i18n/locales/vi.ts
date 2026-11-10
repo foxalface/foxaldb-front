@@ -1880,6 +1880,10 @@ export const vi: LanguageTranslation = {
                 submitting: 'Đang tạo tài khoản...',
                 switch_to_login: 'Đăng nhập',
                 already_have_account: 'Đã có tài khoản?',
+                accept_terms:
+                    'Tôi chấp nhận <terms>Điều khoản sử dụng</terms> và xác nhận đã đọc <privacy>Chính sách quyền riêng tư</privacy>.',
+                accept_terms_required:
+                    'Hãy chấp nhận Điều khoản sử dụng để tạo tài khoản.',
             },
             account: {
                 signed_in_as: 'Đã đăng nhập với tư cách',
@@ -2184,6 +2188,23 @@ export const vi: LanguageTranslation = {
                     sourceFields: 'Trường nguồn đã thay đổi',
                     targetFields: 'Trường đích đã thay đổi',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'Thông tin pháp lý',
+                legal: 'Thông báo pháp lý',
+                privacy: 'Chính sách quyền riêng tư',
+                terms: 'Điều khoản sử dụng',
+                source: 'Mã nguồn',
+                home: 'Trang chủ',
+            },
+            last_updated: 'Cập nhật lần cuối: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB thông báo pháp lý',
+                privacy_title: 'FoxalDB chính sách quyền riêng tư',
+                terms_title: 'FoxalDB điều khoản sử dụng',
             },
         },
 

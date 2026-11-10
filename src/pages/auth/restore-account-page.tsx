@@ -5,6 +5,7 @@ import { Button } from '@/components/button/button';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { AuthCard } from '@/dialogs/auth-dialog/auth-card';
+import { LegalNav } from '@/components/legal-nav/legal-nav';
 import { ApiError } from '@/lib/api/client';
 import { restoreAccount } from '@/lib/api/auth';
 import { readApiErrorCode } from '@/lib/api/parse-validation-errors';
@@ -121,6 +122,7 @@ const RestoreAccountPageComponent: React.FC = () => {
                         ) : null}
                     </AuthCard>
                 </div>
+                <LegalNav className="mx-auto mt-auto w-full max-w-md px-0" />
             </section>
         </>
     );

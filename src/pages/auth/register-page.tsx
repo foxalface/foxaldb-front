@@ -5,6 +5,7 @@ import { LocalConfigProvider } from '@/context/local-config-context/local-config
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useAuth } from '@/hooks/use-auth';
 import { AuthCard } from '@/dialogs/auth-dialog/auth-card';
+import { LegalNav } from '@/components/legal-nav/legal-nav';
 import {
     AuthenticatedAccountPanel,
     RegisterFormPanel,
@@ -65,6 +66,7 @@ const RegisterPageComponent: React.FC = () => {
                 <div className="mx-auto w-full max-w-md">
                     <RegisterPageContent />
                 </div>
+                <LegalNav className="mx-auto mt-auto w-full max-w-md px-0" />
             </section>
         </>
     );

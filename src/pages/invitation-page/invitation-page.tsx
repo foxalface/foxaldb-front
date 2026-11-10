@@ -17,6 +17,7 @@ import {
     LoginFormPanel,
     RegisterFormPanel,
 } from '@/pages/auth/auth-form-panels';
+import { LegalNav } from '@/components/legal-nav/legal-nav';
 import { useTranslation } from 'react-i18next';
 
 type AuthPanel = 'details' | 'login' | 'register';
@@ -122,6 +123,7 @@ const InvitationPageContent: React.FC = () => {
                 <div className="mx-auto flex w-full max-w-md flex-col gap-4">
                     <p className="text-sm font-semibold">FoxalDB</p>
                     {children}
+                    <LegalNav className="px-0" />
                 </div>
             </section>
         </>

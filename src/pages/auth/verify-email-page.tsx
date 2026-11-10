@@ -5,6 +5,7 @@ import { LocalConfigProvider } from '@/context/local-config-context/local-config
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useTranslation } from 'react-i18next';
 import { VerifyEmailScreen } from './verify-email-screen';
+import { LegalNav } from '@/components/legal-nav/legal-nav';
 
 const VerifyEmailPageComponent: React.FC = () => {
     const { t } = useTranslation();
@@ -17,6 +18,7 @@ const VerifyEmailPageComponent: React.FC = () => {
             </Helmet>
             <section className="flex min-h-screen flex-col bg-background">
                 <VerifyEmailScreen status={searchParams.get('status')} />
+                <LegalNav className="mt-auto" />
             </section>
         </>
     );

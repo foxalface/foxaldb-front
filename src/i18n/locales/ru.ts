@@ -1895,6 +1895,10 @@ export const ru: LanguageTranslation = {
                 submitting: 'Создание аккаунта...',
                 switch_to_login: 'Войти',
                 already_have_account: 'Уже есть аккаунт?',
+                accept_terms:
+                    'Я принимаю <terms>Условия использования</terms> и подтверждаю, что ознакомился с <privacy>Политикой конфиденциальности</privacy>.',
+                accept_terms_required:
+                    'Примите Условия использования, чтобы создать аккаунт.',
             },
             account: {
                 signed_in_as: 'Вы вошли как',
@@ -2206,6 +2210,23 @@ export const ru: LanguageTranslation = {
                     sourceFields: 'Исходные поля изменены',
                     targetFields: 'Целевые поля изменены',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'Юридическая информация',
+                legal: 'Юридические сведения',
+                privacy: 'Политика конфиденциальности',
+                terms: 'Условия использования',
+                source: 'Исходный код',
+                home: 'Главная',
+            },
+            last_updated: 'Последнее обновление: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB юридические сведения',
+                privacy_title: 'FoxalDB политика конфиденциальности',
+                terms_title: 'FoxalDB условия использования',
             },
         },
 

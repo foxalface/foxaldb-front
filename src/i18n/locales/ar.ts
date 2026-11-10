@@ -1861,6 +1861,9 @@ export const ar: LanguageTranslation = {
                 submitting: 'جارٍ إنشاء الحساب...',
                 switch_to_login: 'تسجيل الدخول',
                 already_have_account: 'لديك حساب بالفعل؟',
+                accept_terms:
+                    'أقبل <terms>شروط الاستخدام</terms> وأقر بأنني اطلعت على <privacy>سياسة الخصوصية</privacy>.',
+                accept_terms_required: 'اقبل شروط الاستخدام لإنشاء حساب.',
             },
             account: {
                 signed_in_as: 'مسجّل الدخول باسم',
@@ -2158,6 +2161,23 @@ export const ar: LanguageTranslation = {
                     sourceFields: 'تغيرت حقول المصدر',
                     targetFields: 'تغيرت حقول الهدف',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'معلومات قانونية',
+                legal: 'إشعار قانوني',
+                privacy: 'سياسة الخصوصية',
+                terms: 'شروط الاستخدام',
+                source: 'شفرة المصدر',
+                home: 'الصفحة الرئيسية',
+            },
+            last_updated: 'آخر تحديث: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB إشعار قانوني',
+                privacy_title: 'FoxalDB سياسة الخصوصية',
+                terms_title: 'FoxalDB شروط الاستخدام',
             },
         },
 

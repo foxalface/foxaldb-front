@@ -1930,6 +1930,10 @@ export const ja: LanguageTranslation = {
                 submitting: 'アカウントを作成中...',
                 switch_to_login: 'ログイン',
                 already_have_account: 'すでにアカウントをお持ちですか？',
+                accept_terms:
+                    '<terms>利用規約</terms>に同意し、<privacy>プライバシーポリシー</privacy>を確認しました。',
+                accept_terms_required:
+                    'アカウントを作成するには利用規約に同意してください。',
             },
             account: {
                 signed_in_as: 'ログイン中',
@@ -2243,6 +2247,23 @@ export const ja: LanguageTranslation = {
                     sourceFields: '参照元の列が変更されました',
                     targetFields: '参照先の列が変更されました',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: '法的情報',
+                legal: '法的通知',
+                privacy: 'プライバシーポリシー',
+                terms: '利用規約',
+                source: 'ソースコード',
+                home: 'ホーム',
+            },
+            last_updated: '最終更新: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB 法的通知',
+                privacy_title: 'FoxalDB プライバシーポリシー',
+                terms_title: 'FoxalDB 利用規約',
             },
         },
 

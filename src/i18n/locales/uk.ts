@@ -1894,6 +1894,10 @@ export const uk: LanguageTranslation = {
                 submitting: 'Створення облікового запису...',
                 switch_to_login: 'Увійти',
                 already_have_account: 'Вже є обліковий запис?',
+                accept_terms:
+                    'Я приймаю <terms>Умови використання</terms> і підтверджую, що ознайомився з <privacy>Політикою конфіденційності</privacy>.',
+                accept_terms_required:
+                    'Прийміть Умови використання, щоб створити обліковий запис.',
             },
             account: {
                 signed_in_as: 'Ви увійшли як',
@@ -2205,6 +2209,23 @@ export const uk: LanguageTranslation = {
                     sourceFields: 'Вихідні поля змінено',
                     targetFields: 'Цільові поля змінено',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'Правова інформація',
+                legal: 'Юридичні відомості',
+                privacy: 'Політика конфіденційності',
+                terms: 'Умови використання',
+                source: 'Вихідний код',
+                home: 'Головна',
+            },
+            last_updated: 'Останнє оновлення: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB юридичні відомості',
+                privacy_title: 'FoxalDB політика конфіденційності',
+                terms_title: 'FoxalDB умови використання',
             },
         },
 

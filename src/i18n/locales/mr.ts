@@ -1888,6 +1888,10 @@ export const mr: LanguageTranslation = {
                 submitting: 'खाते तयार होत आहे...',
                 switch_to_login: 'लॉग इन',
                 already_have_account: 'आधीच खाते आहे?',
+                accept_terms:
+                    'मी <terms>वापराच्या अटी</terms> स्वीकारतो आणि मी <privacy>गोपनीयता धोरण</privacy> वाचले आहे हे मान्य करतो.',
+                accept_terms_required:
+                    'खाते तयार करण्यासाठी वापराच्या अटी स्वीकारा.',
             },
             account: {
                 signed_in_as: 'या रूपात साइन इन',
@@ -2194,6 +2198,23 @@ export const mr: LanguageTranslation = {
                     sourceFields: 'स्रोत फील्ड बदलली',
                     targetFields: 'लक्ष्य फील्ड बदलली',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'कायदेशीर माहिती',
+                legal: 'कायदेशीर सूचना',
+                privacy: 'गोपनीयता धोरण',
+                terms: 'वापराच्या अटी',
+                source: 'स्रोत कोड',
+                home: 'मुख्यपृष्ठ',
+            },
+            last_updated: 'शेवटचे अद्यतन: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB कायदेशीर सूचना',
+                privacy_title: 'FoxalDB गोपनीयता धोरण',
+                terms_title: 'FoxalDB वापराच्या अटी',
             },
         },
 

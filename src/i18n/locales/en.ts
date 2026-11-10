@@ -1888,6 +1888,10 @@ export const en = {
                 submitting: 'Creating account...',
                 switch_to_login: 'Log in',
                 already_have_account: 'Already have an account?',
+                accept_terms:
+                    'I accept the <terms>Terms of Use</terms> and acknowledge that I have read the <privacy>Privacy Policy</privacy>.',
+                accept_terms_required:
+                    'Accept the Terms of Use to create an account.',
             },
             account: {
                 signed_in_as: 'Signed in as',
@@ -2195,6 +2199,23 @@ export const en = {
                     sourceFields: 'Source fields changed',
                     targetFields: 'Target fields changed',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'Legal information',
+                legal: 'Legal notice',
+                privacy: 'Privacy policy',
+                terms: 'Terms of use',
+                source: 'Source code',
+                home: 'Home',
+            },
+            last_updated: 'Last updated: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB legal notice',
+                privacy_title: 'FoxalDB privacy policy',
+                terms_title: 'FoxalDB terms of use',
             },
         },
 

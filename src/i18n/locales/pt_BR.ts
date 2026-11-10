@@ -1918,6 +1918,10 @@ export const pt_BR: LanguageTranslation = {
                 submitting: 'Criando conta...',
                 switch_to_login: 'Entrar',
                 already_have_account: 'Já tem uma conta?',
+                accept_terms:
+                    'Aceito os <terms>Termos de uso</terms> e confirmo que li a <privacy>Política de privacidade</privacy>.',
+                accept_terms_required:
+                    'Aceite os Termos de uso para criar uma conta.',
             },
             account: {
                 signed_in_as: 'Conectado como',
@@ -2233,6 +2237,23 @@ export const pt_BR: LanguageTranslation = {
                     sourceFields: 'Campos de origem alterados',
                     targetFields: 'Campos de destino alterados',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'Informações legais',
+                legal: 'Aviso legal',
+                privacy: 'Política de privacidade',
+                terms: 'Termos de uso',
+                source: 'Código-fonte',
+                home: 'Início',
+            },
+            last_updated: 'Última atualização: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB aviso legal',
+                privacy_title: 'FoxalDB política de privacidade',
+                terms_title: 'FoxalDB termos de uso',
             },
         },
 

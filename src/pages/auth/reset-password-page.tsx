@@ -5,6 +5,7 @@ import { LocalConfigProvider } from '@/context/local-config-context/local-config
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useTranslation } from 'react-i18next';
 import { ResetPasswordScreen } from './reset-password-screen';
+import { LegalNav } from '@/components/legal-nav/legal-nav';
 
 const ResetPasswordPageComponent: React.FC = () => {
     const { t } = useTranslation();
@@ -20,6 +21,7 @@ const ResetPasswordPageComponent: React.FC = () => {
                     email={searchParams.get('email')}
                     token={searchParams.get('token')}
                 />
+                <LegalNav className="mt-auto" />
             </section>
         </>
     );

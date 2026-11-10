@@ -1871,6 +1871,10 @@ export const gu: LanguageTranslation = {
                 submitting: 'એકાઉન્ટ બનાવી રહ્યા છીએ...',
                 switch_to_login: 'લૉગ ઇન',
                 already_have_account: 'પહેલેથી એકાઉન્ટ છે?',
+                accept_terms:
+                    'હું <terms>ઉપયોગની શરતો</terms> સ્વીકારું છું અને પુષ્ટિ કરું છું કે મેં <privacy>ગોપનીયતા નીતિ</privacy> વાંચી છે.',
+                accept_terms_required:
+                    'એકાઉન્ટ બનાવવા માટે ઉપયોગની શરતો સ્વીકારો.',
             },
             account: {
                 signed_in_as: 'આ રૂપે સાઇન ઇન',
@@ -2175,6 +2179,23 @@ export const gu: LanguageTranslation = {
                     sourceFields: 'સ્રોત ક્ષેત્રો બદલાયા',
                     targetFields: 'લક્ષ્ય ક્ષેત્રો બદલાયા',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'કાનૂની માહિતી',
+                legal: 'કાનૂની સૂચના',
+                privacy: 'ગોપનીયતા નીતિ',
+                terms: 'ઉપયોગની શરતો',
+                source: 'સોર્સ કોડ',
+                home: 'હોમ',
+            },
+            last_updated: 'છેલ્લું અપડેટ: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB કાનૂની સૂચના',
+                privacy_title: 'FoxalDB ગોપનીયતા નીતિ',
+                terms_title: 'FoxalDB ઉપયોગની શરતો',
             },
         },
 

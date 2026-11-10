@@ -1886,6 +1886,10 @@ export const bn: LanguageTranslation = {
                 submitting: 'অ্যাকাউন্ট তৈরি হচ্ছে...',
                 switch_to_login: 'লগ ইন',
                 already_have_account: 'ইতিমধ্যে অ্যাকাউন্ট আছে?',
+                accept_terms:
+                    'আমি <terms>ব্যবহারের শর্তাবলি</terms> গ্রহণ করছি এবং নিশ্চিত করছি যে আমি <privacy>গোপনীয়তা নীতি</privacy> পড়েছি।',
+                accept_terms_required:
+                    'অ্যাকাউন্ট তৈরি করতে ব্যবহারের শর্তাবলি গ্রহণ করুন।',
             },
             account: {
                 signed_in_as: 'সাইন ইন করা হয়েছে',
@@ -2190,6 +2194,23 @@ export const bn: LanguageTranslation = {
                     sourceFields: 'উৎস ক্ষেত্র বদলেছে',
                     targetFields: 'লক্ষ্য ক্ষেত্র বদলেছে',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'আইনি তথ্য',
+                legal: 'আইনি নোটিশ',
+                privacy: 'গোপনীয়তা নীতি',
+                terms: 'ব্যবহারের শর্তাবলি',
+                source: 'সোর্স কোড',
+                home: 'হোম',
+            },
+            last_updated: 'সর্বশেষ আপডেট: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB আইনি নোটিশ',
+                privacy_title: 'FoxalDB গোপনীয়তা নীতি',
+                terms_title: 'FoxalDB ব্যবহারের শর্তাবলি',
             },
         },
 

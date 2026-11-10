@@ -4,6 +4,7 @@ import { LocalConfigProvider } from '@/context/local-config-context/local-config
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useTranslation } from 'react-i18next';
 import { ForgotPasswordScreen } from './forgot-password-screen';
+import { LegalNav } from '@/components/legal-nav/legal-nav';
 
 const ForgotPasswordPageComponent: React.FC = () => {
     const { t } = useTranslation();
@@ -15,6 +16,7 @@ const ForgotPasswordPageComponent: React.FC = () => {
             </Helmet>
             <section className="flex min-h-screen flex-col bg-background">
                 <ForgotPasswordScreen />
+                <LegalNav className="mt-auto" />
             </section>
         </>
     );

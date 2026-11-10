@@ -1895,6 +1895,10 @@ export const hr: LanguageTranslation = {
                 submitting: 'Stvaranje računa...',
                 switch_to_login: 'Prijava',
                 already_have_account: 'Već imate račun?',
+                accept_terms:
+                    'Prihvaćam <terms>Uvjete korištenja</terms> i potvrđujem da sam pročitao <privacy>Pravila privatnosti</privacy>.',
+                accept_terms_required:
+                    'Prihvatite Uvjete korištenja da biste izradili račun.',
             },
             account: {
                 signed_in_as: 'Prijavljeni kao',
@@ -2205,6 +2209,23 @@ export const hr: LanguageTranslation = {
                     sourceFields: 'Izvorna polja promijenjena',
                     targetFields: 'Ciljna polja promijenjena',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'Pravne informacije',
+                legal: 'Pravna obavijest',
+                privacy: 'Pravila privatnosti',
+                terms: 'Uvjeti korištenja',
+                source: 'Izvorni kod',
+                home: 'Početna',
+            },
+            last_updated: 'Zadnje ažuriranje: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB pravna obavijest',
+                privacy_title: 'FoxalDB pravila privatnosti',
+                terms_title: 'FoxalDB uvjeti korištenja',
             },
         },
 

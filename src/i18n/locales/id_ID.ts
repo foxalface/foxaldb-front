@@ -1895,6 +1895,10 @@ export const id_ID: LanguageTranslation = {
                 submitting: 'Membuat akun...',
                 switch_to_login: 'Masuk',
                 already_have_account: 'Sudah punya akun?',
+                accept_terms:
+                    'Saya menerima <terms>Ketentuan penggunaan</terms> dan menyatakan telah membaca <privacy>Kebijakan privasi</privacy>.',
+                accept_terms_required:
+                    'Terima Ketentuan penggunaan untuk membuat akun.',
             },
             account: {
                 signed_in_as: 'Masuk sebagai',
@@ -2205,6 +2209,23 @@ export const id_ID: LanguageTranslation = {
                     sourceFields: 'Kolom sumber berubah',
                     targetFields: 'Kolom target berubah',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'Informasi hukum',
+                legal: 'Pemberitahuan hukum',
+                privacy: 'Kebijakan privasi',
+                terms: 'Ketentuan penggunaan',
+                source: 'Kode sumber',
+                home: 'Beranda',
+            },
+            last_updated: 'Terakhir diperbarui: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB pemberitahuan hukum',
+                privacy_title: 'FoxalDB kebijakan privasi',
+                terms_title: 'FoxalDB ketentuan penggunaan',
             },
         },
 

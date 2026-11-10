@@ -19,6 +19,7 @@ export interface AuthContextValue {
         email: string,
         password: string,
         passwordConfirmation: string,
+        acceptTerms: boolean,
         invitationToken?: string
     ) => Promise<void>;
     logout: () => Promise<void>;

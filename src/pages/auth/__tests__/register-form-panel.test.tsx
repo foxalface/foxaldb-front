@@ -53,6 +53,15 @@ vi.mock('react-i18next', () => ({
 
 import { RegisterFormPanel } from '../auth-form-panels';
 
+const checkAcceptTerms = async (user: ReturnType<typeof userEvent.setup>) => {
+    const checkbox = screen.getByRole('checkbox', {
+        name: /Terms of Use/i,
+    });
+    if (checkbox.getAttribute('aria-checked') !== 'true') {
+        await user.click(checkbox);
+    }
+};
+
 describe('RegisterFormPanel', () => {
     beforeEach(() => {
         registerMock.mockReset();
@@ -78,6 +87,70 @@ describe('RegisterFormPanel', () => {
         expect(
             screen.getByLabelText(en.translation.auth.register.last_name_label)
         ).toBeInTheDocument();
+        expect(
+            screen.getByRole('checkbox', { name: /Terms of Use/i })
+        ).not.toBeChecked();
+        expect(
+            screen.getByRole('link', { name: 'Terms of Use' })
+        ).toHaveAttribute('href', '/terms');
+        expect(
+            screen.getByRole('link', { name: 'Privacy Policy' })
+        ).toHaveAttribute('href', '/privacy');
+    });
+
+    it('does not check the box when the Terms link is used', async () => {
+        const user = userEvent.setup();
+        render(
+            <RegisterFormPanel onSuccess={vi.fn()} onSwitchToLogin={vi.fn()} />
+        );
+
+        await user.click(screen.getByRole('link', { name: 'Terms of Use' }));
+
+        expect(
+            screen.getByRole('checkbox', { name: /Terms of Use/i })
+        ).not.toBeChecked();
+    });
+
+    it('blocks registration until the Terms are accepted', async () => {
+        const user = userEvent.setup();
+        render(
+            <RegisterFormPanel onSuccess={vi.fn()} onSwitchToLogin={vi.fn()} />
+        );
+
+        await user.type(
+            screen.getByLabelText(
+                en.translation.auth.register.first_name_label
+            ),
+            'Alexis'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.last_name_label),
+            'Renart'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.email_label),
+            'alexis@example.com'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.password_label),
+            'password'
+        );
+        await user.type(
+            screen.getByLabelText(
+                en.translation.auth.register.password_confirmation_label
+            ),
+            'password'
+        );
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+
+        expect(
+            screen.getByText(en.translation.auth.register.accept_terms_required)
+        ).toBeInTheDocument();
+        expect(registerMock).not.toHaveBeenCalled();
     });
 
     it('rejects whitespace-only first name without invalidating last name', async () => {
@@ -179,6 +252,7 @@ describe('RegisterFormPanel', () => {
             ),
             'password'
         );
+        await checkAcceptTerms(user);
         await user.click(
             screen.getByRole('button', {
                 name: en.translation.auth.register.submit,
@@ -191,7 +265,8 @@ describe('RegisterFormPanel', () => {
                 'Renart',
                 'alexis@example.com',
                 'password',
-                'password'
+                'password',
+                true
             );
         });
         expect(onSuccess).toHaveBeenCalled();
@@ -236,6 +311,7 @@ describe('RegisterFormPanel', () => {
             ),
             'password'
         );
+        await checkAcceptTerms(user);
         await user.click(
             screen.getByRole('button', {
                 name: en.translation.auth.register.submit,
@@ -310,6 +386,7 @@ describe('RegisterFormPanel', () => {
             ),
             'password'
         );
+        await checkAcceptTerms(user);
         await user.click(
             screen.getByRole('button', {
                 name: en.translation.auth.register.submit,
@@ -322,7 +399,8 @@ describe('RegisterFormPanel', () => {
                 'Nguyễn',
                 'elodie@example.com',
                 'password',
-                'password'
+                'password',
+                true
             );
         });
     });
@@ -359,6 +437,7 @@ describe('RegisterFormPanel', () => {
             ),
             'password'
         );
+        await checkAcceptTerms(user);
     };
 
     it('shows a recoverable account and requests restoration without leaving the page', async () => {
@@ -507,6 +586,7 @@ describe('RegisterFormPanel', () => {
             'guest@example.com',
             'password',
             'password',
+            true,
             'invite-secret'
         );
         const stored = setItem.mock.calls.map((call) => String(call[1]));

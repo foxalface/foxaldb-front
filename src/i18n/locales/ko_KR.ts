@@ -1888,6 +1888,9 @@ export const ko_KR: LanguageTranslation = {
                 submitting: '계정 생성 중...',
                 switch_to_login: '로그인',
                 already_have_account: '이미 계정이 있으신가요?',
+                accept_terms:
+                    '<terms>이용약관</terms>에 동의하며 <privacy>개인정보 처리방침</privacy>을 읽었음을 확인합니다.',
+                accept_terms_required: '계정을 만들려면 이용약관에 동의하세요.',
             },
             account: {
                 signed_in_as: '로그인됨',
@@ -2196,6 +2199,23 @@ export const ko_KR: LanguageTranslation = {
                     sourceFields: '원본 필드가 변경됨',
                     targetFields: '대상 필드가 변경됨',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: '법적 정보',
+                legal: '법적 고지',
+                privacy: '개인정보 처리방침',
+                terms: '이용약관',
+                source: '소스 코드',
+                home: '홈',
+            },
+            last_updated: '최종 업데이트: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB 법적 고지',
+                privacy_title: 'FoxalDB 개인정보 처리방침',
+                terms_title: 'FoxalDB 이용약관',
             },
         },
 

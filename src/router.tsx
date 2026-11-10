@@ -13,7 +13,7 @@ const loadTemplatesAndAllTags = async (options?: {
     return getTemplatesAndAllTags(options);
 };
 
-const routes: RouteObject[] = [
+export const routes: RouteObject[] = [
     {
         // One editor instance for `/` and `/diagrams/:diagramId` so leaving an
         // online diagram for `/` does not remount the editor or restart the
@@ -94,6 +94,33 @@ const routes: RouteObject[] = [
             const { RegisterPage } = await import('./pages/auth/register-page');
             return {
                 element: <RegisterPage />,
+            };
+        },
+    },
+    {
+        path: 'legal',
+        async lazy() {
+            const { LegalPage } = await import('./pages/legal/legal-page');
+            return {
+                element: <LegalPage documentId="notice" />,
+            };
+        },
+    },
+    {
+        path: 'privacy',
+        async lazy() {
+            const { LegalPage } = await import('./pages/legal/legal-page');
+            return {
+                element: <LegalPage documentId="privacy" />,
+            };
+        },
+    },
+    {
+        path: 'terms',
+        async lazy() {
+            const { LegalPage } = await import('./pages/legal/legal-page');
+            return {
+                element: <LegalPage documentId="terms" />,
             };
         },
     },

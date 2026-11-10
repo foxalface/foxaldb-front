@@ -40,7 +40,8 @@ describe('auth API', () => {
                 'Renart',
                 'alexis@example.com',
                 'password',
-                'password'
+                'password',
+                true
             );
 
             expect(apiRequestMock).toHaveBeenCalledWith('/register', {
@@ -51,6 +52,7 @@ describe('auth API', () => {
                     email: 'alexis@example.com',
                     password: 'password',
                     password_confirmation: 'password',
+                    accept_terms: true,
                 },
             });
         });
@@ -71,7 +73,8 @@ describe('auth API', () => {
                     'Nguyễn',
                     'elodie@example.com',
                     'password',
-                    'password'
+                    'password',
+                    true
                 )
             ).resolves.toMatchObject({
                 first_name: 'Élodie',

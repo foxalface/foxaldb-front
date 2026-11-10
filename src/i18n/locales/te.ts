@@ -1908,6 +1908,10 @@ export const te: LanguageTranslation = {
                 submitting: 'ఖాతా సృష్టిస్తోంది...',
                 switch_to_login: 'లాగిన్',
                 already_have_account: 'ఇప్పటికే ఖాతా ఉందా?',
+                accept_terms:
+                    'నేను <terms>వినియోగ నిబంధనలు</terms> అంగీకరిస్తున్నాను మరియు <privacy>గోప్యతా విధానం</privacy> చదివానని నిర్ధారిస్తున్నాను.',
+                accept_terms_required:
+                    'ఖాతా సృష్టించడానికి వినియోగ నిబంధనలను అంగీకరించండి.',
             },
             account: {
                 signed_in_as: 'ఇలా సైన్ ఇన్ అయ్యారు',
@@ -2214,6 +2218,23 @@ export const te: LanguageTranslation = {
                     sourceFields: 'మూల ఫీల్డ్‌లు మారాయి',
                     targetFields: 'లక్ష్య ఫీల్డ్‌లు మారాయి',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'చట్టపరమైన సమాచారం',
+                legal: 'చట్టపరమైన నోటీసు',
+                privacy: 'గోప్యతా విధానం',
+                terms: 'వినియోగ నిబంధనలు',
+                source: 'సోర్స్ కోడ్',
+                home: 'హోమ్',
+            },
+            last_updated: 'చివరి నవీకరణ: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB చట్టపరమైన నోటీసు',
+                privacy_title: 'FoxalDB గోప్యతా విధానం',
+                terms_title: 'FoxalDB వినియోగ నిబంధనలు',
             },
         },
 

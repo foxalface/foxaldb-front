@@ -1894,6 +1894,10 @@ export const ne: LanguageTranslation = {
                 submitting: 'खाता सिर्जना गर्दै...',
                 switch_to_login: 'लग इन',
                 already_have_account: 'पहिले नै खाता छ?',
+                accept_terms:
+                    'म <terms>प्रयोगका सर्तहरू</terms> स्वीकार गर्छु र मैले <privacy>गोपनीयता नीति</privacy> पढेको पुष्टि गर्छु।',
+                accept_terms_required:
+                    'खाता बनाउन प्रयोगका सर्तहरू स्वीकार गर्नुहोस्।',
             },
             account: {
                 signed_in_as: 'यस रूपमा साइन इन',
@@ -2200,6 +2204,23 @@ export const ne: LanguageTranslation = {
                     sourceFields: 'स्रोत फिल्ड परिवर्तन भयो',
                     targetFields: 'लक्ष्य फिल्ड परिवर्तन भयो',
                 },
+            },
+        },
+
+        legal: {
+            nav: {
+                label: 'कानुनी जानकारी',
+                legal: 'कानुनी सूचना',
+                privacy: 'गोपनीयता नीति',
+                terms: 'प्रयोगका सर्तहरू',
+                source: 'स्रोत कोड',
+                home: 'गृहपृष्ठ',
+            },
+            last_updated: 'अन्तिम अद्यावधिक: {{date}}',
+            pages: {
+                legal_title: 'FoxalDB कानुनी सूचना',
+                privacy_title: 'FoxalDB गोपनीयता नीति',
+                terms_title: 'FoxalDB प्रयोगका सर्तहरू',
             },
         },
 

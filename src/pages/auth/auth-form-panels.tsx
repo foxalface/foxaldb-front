@@ -17,6 +17,7 @@ import { formatRecoveryDeadline } from '@/lib/account/format-recovery-deadline';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { formatApiErrorMessage } from './format-api-error-message';
+import { RegisterAcceptTermsField } from './register-accept-terms-field';
 
 const REGISTER_FIELDS: RegisterField[] = [
     'first_name',
@@ -158,6 +159,10 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
     const [email, setEmail] = useState(lockedEmail ?? '');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [acceptTermsError, setAcceptTermsError] = useState<string | null>(
+        null
+    );
     const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({});
     const [formError, setFormError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -235,10 +240,21 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
 
             if (Object.keys(clientErrors).length > 0) {
                 setFieldErrors(clientErrors);
+            } else {
+                setFieldErrors({});
+            }
+
+            if (!acceptTerms) {
+                setAcceptTermsError(t('auth.register.accept_terms_required'));
                 return;
             }
 
-            setFieldErrors({});
+            setAcceptTermsError(null);
+
+            if (Object.keys(clientErrors).length > 0) {
+                return;
+            }
+
             setIsSubmitting(true);
 
             try {
@@ -249,6 +265,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                         lockedEmail ?? email,
                         password,
                         passwordConfirmation,
+                        true,
                         invitationToken
                     );
                 } else {
@@ -257,7 +274,8 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                         trimmedLastName,
                         lockedEmail ?? email,
                         password,
-                        passwordConfirmation
+                        passwordConfirmation,
+                        true
                     );
                 }
                 onSuccess();
@@ -316,6 +334,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
             password,
             passwordConfirmation,
             register,
+            acceptTerms,
             t,
         ]
     );
@@ -508,6 +527,17 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                         value={passwordConfirmation}
                     />
                 </label>
+                <RegisterAcceptTermsField
+                    checked={acceptTerms}
+                    disabled={isSubmitting}
+                    error={acceptTermsError}
+                    onCheckedChange={(next) => {
+                        setAcceptTerms(next);
+                        if (next) {
+                            setAcceptTermsError(null);
+                        }
+                    }}
+                />
                 {formError !== null ? (
                     <p className="text-sm text-destructive" role="alert">
                         {formError}
