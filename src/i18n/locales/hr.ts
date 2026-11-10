@@ -1930,6 +1930,49 @@ export const hr: LanguageTranslation = {
                     save_error_description:
                         'Nije bilo moguće ažurirati postavku. Pokušajte ponovo.',
                 },
+                danger_zone: {
+                    title: 'Opasna zona',
+                    description:
+                        'Pristup se odmah onemogućuje. Mrežni podaci računa mogu se vratiti tijekom 90 dana. Nakon toga trajno se brišu.',
+                    device_warning:
+                        'Dijagrami spremljeni samo na ovom uređaju ne brišu se kada zatvorite svoj FoxalDB račun.',
+                    delete_account: 'Izbriši račun',
+                    confirm_title: 'Izbriši račun',
+                    confirm_description:
+                        'Vaš pristup odmah prestaje. Ovaj račun i prikladne mrežne dijagrame možete vratiti tijekom 90 dana. Nakon toga račun se trajno briše. Dijagrami spremljeni samo na ovom uređaju ostaju u ovom pregledniku.',
+                    current_password_label: 'Trenutačna lozinka',
+                    current_password_invalid:
+                        'Trenutačna lozinka nije ispravna.',
+                    submit: 'Izbriši račun',
+                    submitting: 'Brisanje računa...',
+                    failure: 'Račun nije moguće izbrisati. Pokušajte ponovno.',
+                },
+            },
+            account_recovery: {
+                recoverable_description:
+                    'Ova je adresa povezana s nedavno izbrisanim računom.',
+                recoverable_until: 'Ovaj račun može se vratiti do {{date}}.',
+                restore_action: 'Vrati moj račun',
+                requesting: 'Slanje...',
+                instructions_sent:
+                    'Ako se ovaj račun može vratiti, poslali smo upute na ovu adresu e-pošte.',
+                unavailable:
+                    'Ova se adresa ne može upotrijebiti za stvaranje računa.',
+                request_error:
+                    'Upute za oporavak nije moguće poslati. Pokušajte ponovno.',
+                page_title: 'FoxalDB — Vrati račun',
+                confirm_title: 'Vratite svoj račun',
+                confirm_description:
+                    'Vraćanje ponovno aktivira račun i oporavlja prikladne mrežne dijagrame. Nakon toga se i dalje morate prijaviti.',
+                restoring: 'Vraćanje...',
+                restored_title: 'Vaš račun je vraćen.',
+                restored_description:
+                    'Prijavite se postojećom lozinkom da biste nastavili.',
+                sign_in: 'Prijava',
+                invalid_title:
+                    'Ova poveznica za vraćanje nije valjana ili je istekla.',
+                invalid_description:
+                    'Zatražite novu poruku za vraćanje na stranici za registraciju.',
             },
             nav: {
                 sign_in: 'Prijava',

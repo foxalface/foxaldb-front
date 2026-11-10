@@ -21,6 +21,7 @@ import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors'
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { formatApiErrorMessage } from '@/pages/auth/format-api-error-message';
+import { AccountDangerZone } from './account-danger-zone';
 
 type ProfileFieldName =
     | 'first_name'
@@ -193,275 +194,300 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                 }
             }}
         >
-            <DialogContent className="flex max-w-md flex-col" showClose>
-                <DialogHeader>
+            <DialogContent
+                className="flex max-h-dvh min-w-0 max-w-md flex-col overflow-hidden"
+                showClose
+            >
+                <DialogHeader className="shrink-0">
                     <DialogTitle>{t('auth.settings.title')}</DialogTitle>
                     <DialogDescription>
                         {t('auth.settings.description')}
                     </DialogDescription>
                 </DialogHeader>
 
-                <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-                    <label className="flex flex-col gap-1 text-sm">
-                        <span>{t('auth.settings.first_name_label')}</span>
-                        <Input
-                            autoComplete="given-name"
-                            autoFocus
-                            disabled={isSubmitting}
-                            name="first_name"
-                            onChange={(event) =>
-                                setFirstName(event.target.value)
-                            }
-                            required
-                            value={firstName}
-                        />
-                        {fieldErrors.first_name ? (
-                            <span
-                                className="text-xs text-destructive"
-                                role="alert"
-                            >
-                                {fieldErrors.first_name}
-                            </span>
-                        ) : null}
-                    </label>
-                    <label className="flex flex-col gap-1 text-sm">
-                        <span>{t('auth.settings.last_name_label')}</span>
-                        <Input
-                            autoComplete="family-name"
-                            disabled={isSubmitting}
-                            name="last_name"
-                            onChange={(event) =>
-                                setLastName(event.target.value)
-                            }
-                            required
-                            value={lastName}
-                        />
-                        {fieldErrors.last_name ? (
-                            <span
-                                className="text-xs text-destructive"
-                                role="alert"
-                            >
-                                {fieldErrors.last_name}
-                            </span>
-                        ) : null}
-                    </label>
-                    <label className="flex flex-col gap-1 text-sm">
-                        <span>{t('auth.settings.email_label')}</span>
-                        <Input
-                            autoComplete="email"
-                            disabled={isSubmitting}
-                            name="email"
-                            onChange={(event) => setEmail(event.target.value)}
-                            required
-                            type="email"
-                            value={email}
-                        />
-                        {fieldErrors.email ? (
-                            <span
-                                className="text-xs text-destructive"
-                                role="alert"
-                            >
-                                {fieldErrors.email}
-                            </span>
-                        ) : null}
-                    </label>
-
-                    <Separator className="my-1" />
-
-                    <div className="flex flex-col gap-3">
-                        <div className="flex flex-col gap-1">
-                            <p className="text-sm font-medium">
-                                {t('auth.settings.diagram_creation.heading')}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                {t(
-                                    'auth.settings.diagram_creation.description'
-                                )}
-                            </p>
-                        </div>
-                        <div
-                            className="flex flex-col gap-2"
-                            role="radiogroup"
-                            aria-label={t(
-                                'auth.settings.diagram_creation.heading'
-                            )}
-                        >
-                            <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm">
-                                <input
-                                    checked={
-                                        user.default_diagram_creation_destination ===
-                                        null
-                                    }
-                                    className="mt-1"
-                                    disabled={
-                                        isSubmitting ||
-                                        diagramCreationPreferenceSaving
-                                    }
-                                    name="diagram_creation_destination"
-                                    onChange={() => {
-                                        void handleDiagramCreationPreferenceChange(
-                                            null
-                                        );
-                                    }}
-                                    type="radio"
-                                    value="ask"
-                                />
-                                <span>
-                                    {t(
-                                        'auth.settings.diagram_creation.ask_each_time'
-                                    )}
-                                </span>
-                            </label>
-                            <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm">
-                                <input
-                                    checked={
-                                        user.default_diagram_creation_destination ===
-                                        'device'
-                                    }
-                                    className="mt-1"
-                                    disabled={
-                                        isSubmitting ||
-                                        diagramCreationPreferenceSaving
-                                    }
-                                    name="diagram_creation_destination"
-                                    onChange={() => {
-                                        void handleDiagramCreationPreferenceChange(
-                                            'device'
-                                        );
-                                    }}
-                                    type="radio"
-                                    value="device"
-                                />
-                                <span>
-                                    {t(
-                                        'auth.settings.diagram_creation.prefer_device'
-                                    )}
-                                </span>
-                            </label>
-                            <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm">
-                                <input
-                                    checked={
-                                        user.default_diagram_creation_destination ===
-                                        'online'
-                                    }
-                                    className="mt-1"
-                                    disabled={
-                                        isSubmitting ||
-                                        diagramCreationPreferenceSaving
-                                    }
-                                    name="diagram_creation_destination"
-                                    onChange={() => {
-                                        void handleDiagramCreationPreferenceChange(
-                                            'online'
-                                        );
-                                    }}
-                                    type="radio"
-                                    value="online"
-                                />
-                                <span>
-                                    {t(
-                                        'auth.settings.diagram_creation.prefer_online'
-                                    )}
-                                </span>
-                            </label>
-                        </div>
-                        {diagramCreationPreferenceSaving ? (
-                            <p className="text-xs text-muted-foreground">
-                                {t('auth.settings.diagram_creation.saving')}
-                            </p>
-                        ) : null}
-                    </div>
-
-                    <Separator className="my-1" />
-
-                    <div className="flex flex-col gap-3">
-                        <p className="text-sm font-medium">
-                            {t('auth.settings.change_password_heading')}
-                        </p>
-                        <label className="flex flex-col gap-1 text-sm">
-                            <span>
-                                {t('auth.settings.current_password_label')}
-                            </span>
-                            <Input
-                                autoComplete="current-password"
-                                disabled={isSubmitting}
-                                name="current_password"
-                                onChange={(event) =>
-                                    setCurrentPassword(event.target.value)
-                                }
-                                type="password"
-                                value={currentPassword}
-                            />
-                            {fieldErrors.current_password ? (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {fieldErrors.current_password}
-                                </span>
-                            ) : null}
-                        </label>
-                        <label className="flex flex-col gap-1 text-sm">
-                            <span>{t('auth.settings.new_password_label')}</span>
-                            <Input
-                                autoComplete="new-password"
-                                disabled={isSubmitting}
-                                name="password"
-                                onChange={(event) =>
-                                    setNewPassword(event.target.value)
-                                }
-                                type="password"
-                                value={newPassword}
-                            />
-                            {fieldErrors.password ? (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {fieldErrors.password}
-                                </span>
-                            ) : null}
-                        </label>
-                        <label className="flex flex-col gap-1 text-sm">
-                            <span>
-                                {t('auth.settings.password_confirmation_label')}
-                            </span>
-                            <Input
-                                autoComplete="new-password"
-                                disabled={isSubmitting}
-                                name="password_confirmation"
-                                onChange={(event) =>
-                                    setPasswordConfirmation(event.target.value)
-                                }
-                                type="password"
-                                value={passwordConfirmation}
-                            />
-                            {fieldErrors.password_confirmation ? (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {fieldErrors.password_confirmation}
-                                </span>
-                            ) : null}
-                        </label>
-                    </div>
-
-                    {errorMessage !== null ? (
-                        <p className="text-sm text-destructive" role="alert">
-                            {errorMessage}
-                        </p>
-                    ) : null}
-                    <Button
-                        className={cn('mt-1')}
-                        disabled={isSubmitting}
-                        type="submit"
+                <div
+                    className="min-h-0 min-w-0 flex-1 overflow-y-auto"
+                    data-testid="user-settings-scroll-body"
+                >
+                    <form
+                        className="flex flex-col gap-3"
+                        onSubmit={handleSubmit}
                     >
-                        {isSubmitting
-                            ? t('auth.settings.submitting')
-                            : t('auth.settings.submit')}
-                    </Button>
-                </form>
+                        <label className="flex flex-col gap-1 text-sm">
+                            <span>{t('auth.settings.first_name_label')}</span>
+                            <Input
+                                autoComplete="given-name"
+                                autoFocus
+                                disabled={isSubmitting}
+                                name="first_name"
+                                onChange={(event) =>
+                                    setFirstName(event.target.value)
+                                }
+                                required
+                                value={firstName}
+                            />
+                            {fieldErrors.first_name ? (
+                                <span
+                                    className="text-xs text-destructive"
+                                    role="alert"
+                                >
+                                    {fieldErrors.first_name}
+                                </span>
+                            ) : null}
+                        </label>
+                        <label className="flex flex-col gap-1 text-sm">
+                            <span>{t('auth.settings.last_name_label')}</span>
+                            <Input
+                                autoComplete="family-name"
+                                disabled={isSubmitting}
+                                name="last_name"
+                                onChange={(event) =>
+                                    setLastName(event.target.value)
+                                }
+                                required
+                                value={lastName}
+                            />
+                            {fieldErrors.last_name ? (
+                                <span
+                                    className="text-xs text-destructive"
+                                    role="alert"
+                                >
+                                    {fieldErrors.last_name}
+                                </span>
+                            ) : null}
+                        </label>
+                        <label className="flex flex-col gap-1 text-sm">
+                            <span>{t('auth.settings.email_label')}</span>
+                            <Input
+                                autoComplete="email"
+                                disabled={isSubmitting}
+                                name="email"
+                                onChange={(event) =>
+                                    setEmail(event.target.value)
+                                }
+                                required
+                                type="email"
+                                value={email}
+                            />
+                            {fieldErrors.email ? (
+                                <span
+                                    className="text-xs text-destructive"
+                                    role="alert"
+                                >
+                                    {fieldErrors.email}
+                                </span>
+                            ) : null}
+                        </label>
+
+                        <Separator className="my-1" />
+
+                        <div className="flex flex-col gap-3">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-sm font-medium">
+                                    {t(
+                                        'auth.settings.diagram_creation.heading'
+                                    )}
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    {t(
+                                        'auth.settings.diagram_creation.description'
+                                    )}
+                                </p>
+                            </div>
+                            <div
+                                className="flex flex-col gap-2"
+                                role="radiogroup"
+                                aria-label={t(
+                                    'auth.settings.diagram_creation.heading'
+                                )}
+                            >
+                                <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm">
+                                    <input
+                                        checked={
+                                            user.default_diagram_creation_destination ===
+                                            null
+                                        }
+                                        className="mt-1"
+                                        disabled={
+                                            isSubmitting ||
+                                            diagramCreationPreferenceSaving
+                                        }
+                                        name="diagram_creation_destination"
+                                        onChange={() => {
+                                            void handleDiagramCreationPreferenceChange(
+                                                null
+                                            );
+                                        }}
+                                        type="radio"
+                                        value="ask"
+                                    />
+                                    <span>
+                                        {t(
+                                            'auth.settings.diagram_creation.ask_each_time'
+                                        )}
+                                    </span>
+                                </label>
+                                <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm">
+                                    <input
+                                        checked={
+                                            user.default_diagram_creation_destination ===
+                                            'device'
+                                        }
+                                        className="mt-1"
+                                        disabled={
+                                            isSubmitting ||
+                                            diagramCreationPreferenceSaving
+                                        }
+                                        name="diagram_creation_destination"
+                                        onChange={() => {
+                                            void handleDiagramCreationPreferenceChange(
+                                                'device'
+                                            );
+                                        }}
+                                        type="radio"
+                                        value="device"
+                                    />
+                                    <span>
+                                        {t(
+                                            'auth.settings.diagram_creation.prefer_device'
+                                        )}
+                                    </span>
+                                </label>
+                                <label className="flex cursor-pointer items-start gap-2 rounded-md border border-border px-3 py-2 text-sm">
+                                    <input
+                                        checked={
+                                            user.default_diagram_creation_destination ===
+                                            'online'
+                                        }
+                                        className="mt-1"
+                                        disabled={
+                                            isSubmitting ||
+                                            diagramCreationPreferenceSaving
+                                        }
+                                        name="diagram_creation_destination"
+                                        onChange={() => {
+                                            void handleDiagramCreationPreferenceChange(
+                                                'online'
+                                            );
+                                        }}
+                                        type="radio"
+                                        value="online"
+                                    />
+                                    <span>
+                                        {t(
+                                            'auth.settings.diagram_creation.prefer_online'
+                                        )}
+                                    </span>
+                                </label>
+                            </div>
+                            {diagramCreationPreferenceSaving ? (
+                                <p className="text-xs text-muted-foreground">
+                                    {t('auth.settings.diagram_creation.saving')}
+                                </p>
+                            ) : null}
+                        </div>
+
+                        <Separator className="my-1" />
+
+                        <div className="flex flex-col gap-3">
+                            <p className="text-sm font-medium">
+                                {t('auth.settings.change_password_heading')}
+                            </p>
+                            <label className="flex flex-col gap-1 text-sm">
+                                <span>
+                                    {t('auth.settings.current_password_label')}
+                                </span>
+                                <Input
+                                    autoComplete="current-password"
+                                    disabled={isSubmitting}
+                                    name="current_password"
+                                    onChange={(event) =>
+                                        setCurrentPassword(event.target.value)
+                                    }
+                                    type="password"
+                                    value={currentPassword}
+                                />
+                                {fieldErrors.current_password ? (
+                                    <span
+                                        className="text-xs text-destructive"
+                                        role="alert"
+                                    >
+                                        {fieldErrors.current_password}
+                                    </span>
+                                ) : null}
+                            </label>
+                            <label className="flex flex-col gap-1 text-sm">
+                                <span>
+                                    {t('auth.settings.new_password_label')}
+                                </span>
+                                <Input
+                                    autoComplete="new-password"
+                                    disabled={isSubmitting}
+                                    name="password"
+                                    onChange={(event) =>
+                                        setNewPassword(event.target.value)
+                                    }
+                                    type="password"
+                                    value={newPassword}
+                                />
+                                {fieldErrors.password ? (
+                                    <span
+                                        className="text-xs text-destructive"
+                                        role="alert"
+                                    >
+                                        {fieldErrors.password}
+                                    </span>
+                                ) : null}
+                            </label>
+                            <label className="flex flex-col gap-1 text-sm">
+                                <span>
+                                    {t(
+                                        'auth.settings.password_confirmation_label'
+                                    )}
+                                </span>
+                                <Input
+                                    autoComplete="new-password"
+                                    disabled={isSubmitting}
+                                    name="password_confirmation"
+                                    onChange={(event) =>
+                                        setPasswordConfirmation(
+                                            event.target.value
+                                        )
+                                    }
+                                    type="password"
+                                    value={passwordConfirmation}
+                                />
+                                {fieldErrors.password_confirmation ? (
+                                    <span
+                                        className="text-xs text-destructive"
+                                        role="alert"
+                                    >
+                                        {fieldErrors.password_confirmation}
+                                    </span>
+                                ) : null}
+                            </label>
+                        </div>
+
+                        {errorMessage !== null ? (
+                            <p
+                                className="text-sm text-destructive"
+                                role="alert"
+                            >
+                                {errorMessage}
+                            </p>
+                        ) : null}
+                        <Button
+                            className={cn('mt-1')}
+                            disabled={isSubmitting}
+                            type="submit"
+                        >
+                            {isSubmitting
+                                ? t('auth.settings.submitting')
+                                : t('auth.settings.submit')}
+                        </Button>
+                    </form>
+                    <AccountDangerZone onClosed={closeUserSettingsDialog} />
+                </div>
             </DialogContent>
         </Dialog>
     );

@@ -1779,6 +1779,42 @@ export const zh_TW: LanguageTranslation = {
                     save_error_title: '無法儲存偏好設定',
                     save_error_description: '無法更新偏好設定，請再試一次。',
                 },
+                danger_zone: {
+                    title: '危險區域',
+                    description:
+                        '存取會立即停用。線上帳戶資料可在 90 天內還原。之後會永久刪除。',
+                    device_warning:
+                        '只儲存在這部裝置上的圖表，不會在你關閉 FoxalDB 帳戶時被刪除。',
+                    delete_account: '刪除帳戶',
+                    confirm_title: '刪除帳戶',
+                    confirm_description:
+                        '你的存取會立即結束。你可以在 90 天內還原此帳戶及其符合條件的線上圖表。之後帳戶會永久刪除。只儲存在這部裝置上的圖表仍會留在此瀏覽器中。',
+                    current_password_label: '目前密碼',
+                    current_password_invalid: '目前密碼不正確。',
+                    submit: '刪除帳戶',
+                    submitting: '正在刪除帳戶...',
+                    failure: '無法刪除你的帳戶。請再試一次。',
+                },
+            },
+            account_recovery: {
+                recoverable_description: '此地址與最近刪除的帳戶相關。',
+                recoverable_until: '此帳戶可還原至 {{date}}。',
+                restore_action: '還原我的帳戶',
+                requesting: '正在傳送...',
+                instructions_sent:
+                    '如果此帳戶可以還原，我們已將還原說明傳送到這個電子郵件地址。',
+                unavailable: '此地址無法用來建立帳戶。',
+                request_error: '無法傳送還原說明。請再試一次。',
+                page_title: 'FoxalDB — 還原帳戶',
+                confirm_title: '還原你的帳戶',
+                confirm_description:
+                    '還原會重新啟用你的帳戶，並找回符合條件的線上圖表。之後你仍需要登入。',
+                restoring: '正在還原...',
+                restored_title: '你的帳戶已還原。',
+                restored_description: '請使用現有密碼登入以繼續。',
+                sign_in: '登入',
+                invalid_title: '此還原連結無效或已過期。',
+                invalid_description: '請在註冊頁面重新要求還原郵件。',
             },
             nav: {
                 sign_in: '登入',

@@ -1923,6 +1923,47 @@ export const ko_KR: LanguageTranslation = {
                     save_error_description:
                         '기본 설정을 업데이트할 수 없습니다. 다시 시도하세요.',
                 },
+                danger_zone: {
+                    title: '위험 영역',
+                    description:
+                        '접근은 즉시 중단됩니다. 온라인 계정 데이터는 90일 동안 복원할 수 있습니다. 그 후에는 영구적으로 삭제됩니다.',
+                    device_warning:
+                        '이 기기에만 저장된 다이어그램은 FoxalDB 계정을 닫아도 삭제되지 않습니다.',
+                    delete_account: '계정 삭제',
+                    confirm_title: '계정 삭제',
+                    confirm_description:
+                        '접근은 즉시 종료됩니다. 이 계정과 복원 가능한 온라인 다이어그램은 90일 동안 되돌릴 수 있습니다. 그 후 계정은 영구적으로 삭제됩니다. 이 기기에만 저장된 다이어그램은 이 브라우저에 남습니다.',
+                    current_password_label: '현재 비밀번호',
+                    current_password_invalid:
+                        '현재 비밀번호가 올바르지 않습니다.',
+                    submit: '계정 삭제',
+                    submitting: '계정을 삭제하는 중...',
+                    failure: '계정을 삭제하지 못했습니다. 다시 시도하세요.',
+                },
+            },
+            account_recovery: {
+                recoverable_description:
+                    '이 주소는 최근에 삭제된 계정과 연결되어 있습니다.',
+                recoverable_until: '이 계정은 {{date}}까지 복원할 수 있습니다.',
+                restore_action: '내 계정 복원',
+                requesting: '보내는 중...',
+                instructions_sent:
+                    '이 계정을 복원할 수 있다면 복구 안내를 이 이메일 주소로 보냈습니다.',
+                unavailable: '이 주소로는 계정을 만들 수 없습니다.',
+                request_error:
+                    '복구 안내를 보내지 못했습니다. 다시 시도하세요.',
+                page_title: 'FoxalDB — 계정 복원',
+                confirm_title: '계정 복원',
+                confirm_description:
+                    '복원하면 계정이 다시 활성화되고 복원 가능한 온라인 다이어그램이 돌아옵니다. 이후에는 로그인해야 합니다.',
+                restoring: '복원하는 중...',
+                restored_title: '계정이 복원되었습니다.',
+                restored_description:
+                    '계속하려면 기존 비밀번호로 로그인하세요.',
+                sign_in: '로그인',
+                invalid_title: '이 복원 링크는 유효하지 않거나 만료되었습니다.',
+                invalid_description:
+                    '가입 페이지에서 새 복원 메일을 요청하세요.',
             },
             nav: {
                 sign_in: '로그인',

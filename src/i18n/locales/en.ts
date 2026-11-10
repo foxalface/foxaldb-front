@@ -1923,6 +1923,50 @@ export const en = {
                     save_error_description:
                         'We could not update your preference. Try again.',
                 },
+                danger_zone: {
+                    title: 'Danger zone',
+                    description:
+                        'Access is disabled immediately. Online account data can be restored for 90 days. After that, it is permanently deleted.',
+                    device_warning:
+                        'Diagrams stored only on this device are not deleted when you close your FoxalDB account.',
+                    delete_account: 'Delete account',
+                    confirm_title: 'Delete account',
+                    confirm_description:
+                        'Your access ends immediately. You can restore this account and its eligible online diagrams for 90 days. After that, the account is permanently deleted. Diagrams stored only on this device stay in this browser.',
+                    current_password_label: 'Current password',
+                    current_password_invalid:
+                        'The current password is incorrect.',
+                    submit: 'Delete account',
+                    submitting: 'Deleting account...',
+                    failure: 'We could not delete your account. Try again.',
+                },
+            },
+            account_recovery: {
+                recoverable_description:
+                    'This address is associated with a recently deleted account.',
+                recoverable_until:
+                    'This account can be restored until {{date}}.',
+                restore_action: 'Restore my account',
+                requesting: 'Sending...',
+                instructions_sent:
+                    "If this account can be restored, we've sent recovery instructions to this email address.",
+                unavailable:
+                    'This address cannot be used to create an account.',
+                request_error:
+                    'We could not send recovery instructions. Try again.',
+                page_title: 'FoxalDB — Restore account',
+                confirm_title: 'Restore your account',
+                confirm_description:
+                    'Restoring reactivates your account and recovers eligible online diagrams. You will still need to sign in afterward.',
+                restoring: 'Restoring...',
+                restored_title: 'Your account has been restored.',
+                restored_description:
+                    'Sign in with your existing password to continue.',
+                sign_in: 'Sign in',
+                invalid_title:
+                    'This restoration link is invalid or has expired.',
+                invalid_description:
+                    'Request a new restoration email from the registration page.',
             },
             nav: {
                 sign_in: 'Sign in',

@@ -50,6 +50,7 @@ export const planSessionEnd = ({
     reason,
 }: SessionEndPlanInput): SessionEndPlan => {
     const requestAuth = reason === 'session-expired';
+    const keepReopenIntent = reason !== 'account-closed';
 
     if (isDeviceDiagramLocation(location)) {
         return {
@@ -68,7 +69,9 @@ export const planSessionEnd = ({
         return {
             scope: 'online',
             reason,
-            survivingIntent: openOnlineIntent(location.diagramId),
+            survivingIntent: keepReopenIntent
+                ? openOnlineIntent(location.diagramId)
+                : noneAuthIntent(),
             clearOnlineEditor: true,
             clearDiagramAccess: true,
             clearDiagramLocation: true,
@@ -85,7 +88,9 @@ export const planSessionEnd = ({
         scope: 'unscoped',
         reason,
         survivingIntent:
-            reopenId === null ? noneAuthIntent() : openOnlineIntent(reopenId),
+            !keepReopenIntent || reopenId === null
+                ? noneAuthIntent()
+                : openOnlineIntent(reopenId),
         clearOnlineEditor: memoryId !== null,
         clearDiagramAccess: true,
         clearDiagramLocation: false,

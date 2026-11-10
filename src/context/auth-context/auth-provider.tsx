@@ -16,6 +16,7 @@ import {
     login as apiLogin,
     register as apiRegister,
     logout as apiLogout,
+    closeAccount as apiCloseAccount,
     fetchSessionUser,
     fetchCurrentUser,
     updateProfile as apiUpdateProfile,
@@ -167,6 +168,20 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
         []
     );
 
+    const closeAccount = useCallback(
+        async (currentPassword: string): Promise<void> => {
+            logoutInProgressRef.current = true;
+
+            try {
+                await apiCloseAccount(currentPassword);
+                endSession('account-closed');
+            } finally {
+                logoutInProgressRef.current = false;
+            }
+        },
+        [endSession]
+    );
+
     const logout = useCallback(async (): Promise<void> => {
         logoutInProgressRef.current = true;
 
@@ -240,6 +255,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
             login,
             register,
             logout,
+            closeAccount,
             fetchUser,
             refreshSession,
             updateProfile,
@@ -252,6 +268,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({
             login,
             register,
             logout,
+            closeAccount,
             fetchUser,
             updateProfile,
             updateDiagramCreationPreference,

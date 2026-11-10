@@ -1961,6 +1961,51 @@ export const es: LanguageTranslation = {
                     save_error_description:
                         'No se pudo actualizar la preferencia. Inténtalo de nuevo.',
                 },
+                danger_zone: {
+                    title: 'Zona de peligro',
+                    description:
+                        'El acceso se desactiva de inmediato. Los datos en línea de la cuenta se pueden restaurar durante 90 días. Después se eliminan de forma permanente.',
+                    device_warning:
+                        'Los diagramas guardados solo en este dispositivo no se eliminan cuando cierras tu cuenta de FoxalDB.',
+                    delete_account: 'Eliminar cuenta',
+                    confirm_title: 'Eliminar cuenta',
+                    confirm_description:
+                        'Tu acceso termina de inmediato. Puedes restaurar esta cuenta y sus diagramas en línea elegibles durante 90 días. Después, la cuenta se elimina de forma permanente. Los diagramas guardados solo en este dispositivo permanecen en este navegador.',
+                    current_password_label: 'Contraseña actual',
+                    current_password_invalid:
+                        'La contraseña actual es incorrecta.',
+                    submit: 'Eliminar cuenta',
+                    submitting: 'Eliminando la cuenta...',
+                    failure:
+                        'No pudimos eliminar tu cuenta. Inténtalo de nuevo.',
+                },
+            },
+            account_recovery: {
+                recoverable_description:
+                    'Esta dirección está asociada a una cuenta eliminada recientemente.',
+                recoverable_until:
+                    'Esta cuenta se puede restaurar hasta el {{date}}.',
+                restore_action: 'Restaurar mi cuenta',
+                requesting: 'Enviando...',
+                instructions_sent:
+                    'Si esta cuenta se puede restaurar, hemos enviado las instrucciones a esta dirección de correo.',
+                unavailable:
+                    'Esta dirección no se puede usar para crear una cuenta.',
+                request_error:
+                    'No pudimos enviar las instrucciones de recuperación. Inténtalo de nuevo.',
+                page_title: 'FoxalDB — Restaurar cuenta',
+                confirm_title: 'Restaurar tu cuenta',
+                confirm_description:
+                    'La restauración reactiva tu cuenta y recupera los diagramas en línea elegibles. Después tendrás que iniciar sesión.',
+                restoring: 'Restaurando...',
+                restored_title: 'Tu cuenta ha sido restaurada.',
+                restored_description:
+                    'Inicia sesión con tu contraseña actual para continuar.',
+                sign_in: 'Iniciar sesión',
+                invalid_title:
+                    'Este enlace de restauración no es válido o ha caducado.',
+                invalid_description:
+                    'Solicita un nuevo correo de restauración desde la página de registro.',
             },
             nav: {
                 sign_in: 'Iniciar sesión',

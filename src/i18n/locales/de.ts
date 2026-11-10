@@ -1984,6 +1984,51 @@ export const de: LanguageTranslation = {
                     save_error_description:
                         'Die Einstellung konnte nicht aktualisiert werden. Bitte erneut versuchen.',
                 },
+                danger_zone: {
+                    title: 'Gefahrenzone',
+                    description:
+                        'Der Zugriff wird sofort deaktiviert. Online-Kontodaten können 90 Tage lang wiederhergestellt werden. Danach werden sie endgültig gelöscht.',
+                    device_warning:
+                        'Diagramme, die nur auf diesem Gerät gespeichert sind, werden nicht gelöscht, wenn Sie Ihr FoxalDB-Konto schließen.',
+                    delete_account: 'Konto löschen',
+                    confirm_title: 'Konto löschen',
+                    confirm_description:
+                        'Ihr Zugriff endet sofort. Sie können dieses Konto und die zugehörigen Online-Diagramme 90 Tage lang wiederherstellen. Danach wird das Konto endgültig gelöscht. Diagramme, die nur auf diesem Gerät liegen, bleiben in diesem Browser.',
+                    current_password_label: 'Aktuelles Passwort',
+                    current_password_invalid:
+                        'Das aktuelle Passwort ist falsch.',
+                    submit: 'Konto löschen',
+                    submitting: 'Konto wird gelöscht...',
+                    failure:
+                        'Das Konto konnte nicht gelöscht werden. Versuchen Sie es erneut.',
+                },
+            },
+            account_recovery: {
+                recoverable_description:
+                    'Diese Adresse gehört zu einem kürzlich gelöschten Konto.',
+                recoverable_until:
+                    'Dieses Konto kann bis zum {{date}} wiederhergestellt werden.',
+                restore_action: 'Mein Konto wiederherstellen',
+                requesting: 'Wird gesendet...',
+                instructions_sent:
+                    'Wenn dieses Konto wiederhergestellt werden kann, haben wir Anweisungen an diese E-Mail-Adresse gesendet.',
+                unavailable:
+                    'Mit dieser Adresse kann kein Konto erstellt werden.',
+                request_error:
+                    'Die Wiederherstellungsanweisungen konnten nicht gesendet werden. Versuchen Sie es erneut.',
+                page_title: 'FoxalDB — Konto wiederherstellen',
+                confirm_title: 'Konto wiederherstellen',
+                confirm_description:
+                    'Die Wiederherstellung aktiviert Ihr Konto wieder und stellt geeignete Online-Diagramme wieder her. Danach müssen Sie sich anmelden.',
+                restoring: 'Wird wiederhergestellt...',
+                restored_title: 'Ihr Konto wurde wiederhergestellt.',
+                restored_description:
+                    'Melden Sie sich mit Ihrem bestehenden Passwort an, um fortzufahren.',
+                sign_in: 'Anmelden',
+                invalid_title:
+                    'Dieser Wiederherstellungslink ist ungültig oder abgelaufen.',
+                invalid_description:
+                    'Fordern Sie auf der Registrierungsseite eine neue Wiederherstellungs-E-Mail an.',
             },
             nav: {
                 sign_in: 'Anmelden',

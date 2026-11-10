@@ -1930,6 +1930,48 @@ export const id_ID: LanguageTranslation = {
                     save_error_description:
                         'Tidak dapat memperbarui preferensi. Coba lagi.',
                 },
+                danger_zone: {
+                    title: 'Zona berbahaya',
+                    description:
+                        'Akses langsung dinonaktifkan. Data akun daring dapat dipulihkan selama 90 hari. Setelah itu, data dihapus secara permanen.',
+                    device_warning:
+                        'Diagram yang hanya tersimpan di perangkat ini tidak dihapus saat Anda menutup akun FoxalDB.',
+                    delete_account: 'Hapus akun',
+                    confirm_title: 'Hapus akun',
+                    confirm_description:
+                        'Akses Anda berakhir segera. Anda dapat memulihkan akun ini dan diagram daring yang memenuhi syarat selama 90 hari. Setelah itu, akun dihapus secara permanen. Diagram yang hanya tersimpan di perangkat ini tetap ada di browser ini.',
+                    current_password_label: 'Kata sandi saat ini',
+                    current_password_invalid: 'Kata sandi saat ini salah.',
+                    submit: 'Hapus akun',
+                    submitting: 'Menghapus akun...',
+                    failure: 'Akun tidak dapat dihapus. Coba lagi.',
+                },
+            },
+            account_recovery: {
+                recoverable_description:
+                    'Alamat ini terkait dengan akun yang baru dihapus.',
+                recoverable_until: 'Akun ini dapat dipulihkan hingga {{date}}.',
+                restore_action: 'Pulihkan akun saya',
+                requesting: 'Mengirim...',
+                instructions_sent:
+                    'Jika akun ini dapat dipulihkan, kami telah mengirim petunjuk pemulihan ke alamat email ini.',
+                unavailable:
+                    'Alamat ini tidak dapat digunakan untuk membuat akun.',
+                request_error:
+                    'Petunjuk pemulihan tidak dapat dikirim. Coba lagi.',
+                page_title: 'FoxalDB — Pulihkan akun',
+                confirm_title: 'Pulihkan akun Anda',
+                confirm_description:
+                    'Pemulihan mengaktifkan kembali akun Anda dan mengembalikan diagram daring yang memenuhi syarat. Setelah itu Anda masih perlu masuk.',
+                restoring: 'Memulihkan...',
+                restored_title: 'Akun Anda telah dipulihkan.',
+                restored_description:
+                    'Masuk dengan kata sandi yang sudah ada untuk melanjutkan.',
+                sign_in: 'Masuk',
+                invalid_title:
+                    'Tautan pemulihan ini tidak valid atau sudah kedaluwarsa.',
+                invalid_description:
+                    'Minta email pemulihan baru dari halaman pendaftaran.',
             },
             nav: {
                 sign_in: 'Masuk',

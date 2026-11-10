@@ -59,6 +59,16 @@ const routes: RouteObject[] = [
         },
     },
     {
+        path: 'restore-account',
+        async lazy() {
+            const { RestoreAccountPage } =
+                await import('./pages/auth/restore-account-page');
+            return {
+                element: <RestoreAccountPage />,
+            };
+        },
+    },
+    {
         path: 'reset-password',
         async lazy() {
             const { ResetPasswordPage } =

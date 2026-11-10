@@ -1965,6 +1965,49 @@ export const ja: LanguageTranslation = {
                     save_error_description:
                         '設定を更新できませんでした。もう一度お試しください。',
                 },
+                danger_zone: {
+                    title: '危険ゾーン',
+                    description:
+                        'アクセスはすぐに無効になります。オンラインのアカウントデータは90日間復元できます。その後は完全に削除されます。',
+                    device_warning:
+                        'このデバイスだけに保存されている図は、FoxalDBアカウントを閉じても削除されません。',
+                    delete_account: 'アカウントを削除',
+                    confirm_title: 'アカウントを削除',
+                    confirm_description:
+                        'アクセスはすぐに終了します。このアカウントと対象のオンライン図は90日間復元できます。その後、アカウントは完全に削除されます。このデバイスだけに保存されている図は、このブラウザーに残ります。',
+                    current_password_label: '現在のパスワード',
+                    current_password_invalid:
+                        '現在のパスワードが正しくありません。',
+                    submit: 'アカウントを削除',
+                    submitting: 'アカウントを削除しています...',
+                    failure:
+                        'アカウントを削除できませんでした。もう一度お試しください。',
+                },
+            },
+            account_recovery: {
+                recoverable_description:
+                    'このアドレスは、最近削除されたアカウントに関連付けられています。',
+                recoverable_until: 'このアカウントは{{date}}まで復元できます。',
+                restore_action: 'アカウントを復元',
+                requesting: '送信しています...',
+                instructions_sent:
+                    'このアカウントを復元できる場合は、復旧手順をこのメールアドレスに送信しました。',
+                unavailable: 'このアドレスではアカウントを作成できません。',
+                request_error:
+                    '復旧手順を送信できませんでした。もう一度お試しください。',
+                page_title: 'FoxalDB — アカウントを復元',
+                confirm_title: 'アカウントを復元',
+                confirm_description:
+                    '復元するとアカウントが再び有効になり、対象のオンライン図が戻ります。その後、サインインが必要です。',
+                restoring: '復元しています...',
+                restored_title: 'アカウントが復元されました。',
+                restored_description:
+                    '続けるには、現在のパスワードでサインインしてください。',
+                sign_in: 'サインイン',
+                invalid_title:
+                    'この復元リンクは無効か、有効期限が切れています。',
+                invalid_description:
+                    '登録ページから新しい復元メールを依頼してください。',
             },
             nav: {
                 sign_in: 'サインイン',

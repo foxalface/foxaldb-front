@@ -113,6 +113,43 @@ describe('planSessionEnd', () => {
         });
     });
 
+    it('leaves an online diagram without reopening it when the account is closed', () => {
+        const plan = planSessionEnd({
+            location: onlineDiagramLocation('42'),
+            currentDiagramId: '42',
+            routeDiagramId: '42',
+            reason: 'account-closed',
+        });
+
+        expect(plan).toMatchObject({
+            scope: 'online',
+            clearOnlineEditor: true,
+            clearDiagramAccess: true,
+            clearDiagramLocation: true,
+            navigateHome: true,
+            requestAuth: false,
+            survivingIntent: { type: 'none' },
+        });
+    });
+
+    it('keeps a device diagram open when the account is closed', () => {
+        const plan = planSessionEnd({
+            location: deviceDiagramLocation('local-1'),
+            currentDiagramId: 'local-1',
+            routeDiagramId: 'local-1',
+            reason: 'account-closed',
+        });
+
+        expect(plan).toMatchObject({
+            scope: 'device',
+            clearOnlineEditor: false,
+            clearDiagramLocation: false,
+            navigateHome: false,
+            requestAuth: false,
+            survivingIntent: { type: 'none' },
+        });
+    });
+
     it('clears stale intent when nothing online is open', () => {
         expect(
             planSessionEnd({

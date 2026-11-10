@@ -1,18 +1,21 @@
 import React, { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { useAuth } from '@/hooks/use-auth';
 import { AuthCard } from '@/dialogs/auth-dialog/auth-card';
 import { AuthenticatedAccountPanel, LoginFormPanel } from './auth-form-panels';
 import { VerifyEmailScreen } from './verify-email-screen';
+import { readLoginPrefillEmail } from '@/lib/account/read-login-prefill-email';
 import { useTranslation } from 'react-i18next';
 
 const LoginPageContent: React.FC = () => {
     const { t } = useTranslation();
     const { isAuthenticated, isEmailVerified, isLoading } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const prefillEmail = readLoginPrefillEmail(location.state);
 
     const navigateHome = useCallback(() => {
         // Pending AuthIntent is consumed by AuthIntentProvider. The editor's
@@ -47,6 +50,7 @@ const LoginPageContent: React.FC = () => {
     return (
         <AuthCard title={t('auth.login.title')}>
             <LoginFormPanel
+                initialEmail={prefillEmail}
                 onForgotPassword={navigateToForgotPassword}
                 onSuccess={navigateHome}
                 onSwitchToRegister={navigateToRegister}

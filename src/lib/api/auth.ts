@@ -167,6 +167,56 @@ export const updateProfile = async (
     return user;
 };
 
+export const closeAccount = async (currentPassword: string): Promise<void> => {
+    await apiRequest<{ message: string }>('/me', {
+        method: 'DELETE',
+        data: { current_password: currentPassword },
+    });
+};
+
+export const requestAccountRecovery = async (email: string): Promise<void> => {
+    await initCsrf();
+    await apiRequest<{ message: string }>('/account/recovery', {
+        method: 'POST',
+        data: { email },
+    });
+};
+
+export interface RestoreAccountResult {
+    status: 'restored';
+    email: string;
+}
+
+const isRestoreAccountResult = (
+    value: unknown
+): value is RestoreAccountResult => {
+    if (typeof value !== 'object' || value === null) {
+        return false;
+    }
+
+    const candidate = value as { status?: unknown; email?: unknown };
+
+    return (
+        candidate.status === 'restored' && typeof candidate.email === 'string'
+    );
+};
+
+export const restoreAccount = async (
+    token: string
+): Promise<RestoreAccountResult> => {
+    await initCsrf();
+    const response = await apiRequest<unknown>('/account/restore', {
+        method: 'POST',
+        data: { token },
+    });
+
+    if (!isRestoreAccountResult(response)) {
+        throw new Error('Invalid account restoration response');
+    }
+
+    return response;
+};
+
 export const updateDiagramCreationPreference = async (
     payload: UpdateDiagramCreationPreferencePayload
 ): Promise<AuthUser> => {

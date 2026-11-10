@@ -1781,6 +1781,42 @@ export const zh_CN: LanguageTranslation = {
                     save_error_title: '无法保存偏好',
                     save_error_description: '无法更新偏好，请重试。',
                 },
+                danger_zone: {
+                    title: '危险区域',
+                    description:
+                        '访问会立即停用。在线账户数据可在 90 天内恢复。之后将被永久删除。',
+                    device_warning:
+                        '仅保存在此设备上的图表不会在你关闭 FoxalDB 账户时被删除。',
+                    delete_account: '删除账户',
+                    confirm_title: '删除账户',
+                    confirm_description:
+                        '你的访问会立即结束。你可以在 90 天内恢复此账户及其符合条件的在线图表。之后账户将被永久删除。仅保存在此设备上的图表仍留在此浏览器中。',
+                    current_password_label: '当前密码',
+                    current_password_invalid: '当前密码不正确。',
+                    submit: '删除账户',
+                    submitting: '正在删除账户...',
+                    failure: '无法删除你的账户。请重试。',
+                },
+            },
+            account_recovery: {
+                recoverable_description: '此地址关联着一个最近删除的账户。',
+                recoverable_until: '此账户可恢复至 {{date}}。',
+                restore_action: '恢复我的账户',
+                requesting: '正在发送...',
+                instructions_sent:
+                    '如果此账户可以恢复，我们已向此电子邮件地址发送恢复说明。',
+                unavailable: '此地址不能用于创建账户。',
+                request_error: '无法发送恢复说明。请重试。',
+                page_title: 'FoxalDB — 恢复账户',
+                confirm_title: '恢复你的账户',
+                confirm_description:
+                    '恢复会重新启用你的账户，并找回符合条件的在线图表。之后你仍需要登录。',
+                restoring: '正在恢复...',
+                restored_title: '你的账户已恢复。',
+                restored_description: '请使用现有密码登录以继续。',
+                sign_in: '登录',
+                invalid_title: '此恢复链接无效或已过期。',
+                invalid_description: '请在注册页面重新请求恢复邮件。',
             },
             nav: {
                 sign_in: '登录',

@@ -3,10 +3,16 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { en } from '@/i18n/locales/en';
+import { formatRecoveryDeadline } from '@/lib/account/format-recovery-deadline';
 import { ApiError } from '@/lib/api/client';
 
-const { registerMock } = vi.hoisted(() => ({
+const { registerMock, requestAccountRecoveryMock } = vi.hoisted(() => ({
     registerMock: vi.fn(),
+    requestAccountRecoveryMock: vi.fn(),
+}));
+
+vi.mock('@/lib/api/auth', () => ({
+    requestAccountRecovery: requestAccountRecoveryMock,
 }));
 
 vi.mock('@/hooks/use-auth', () => ({
@@ -17,7 +23,7 @@ vi.mock('@/hooks/use-auth', () => ({
 
 vi.mock('react-i18next', () => ({
     useTranslation: () => ({
-        t: (key: string) => {
+        t: (key: string, values?: Record<string, string>) => {
             const parts = key.split('.');
             let current: unknown = en.translation;
             for (const part of parts) {
@@ -30,8 +36,18 @@ vi.mock('react-i18next', () => ({
                 }
                 current = (current as Record<string, unknown>)[part];
             }
-            return typeof current === 'string' ? current : key;
+            if (typeof current !== 'string') {
+                return key;
+            }
+            if (!values) {
+                return current;
+            }
+            return current.replace(
+                /\{\{(\w+)\}\}/g,
+                (_match, name: string) => values[name] ?? ''
+            );
         },
+        i18n: { language: 'en' },
     }),
 }));
 
@@ -40,7 +56,11 @@ import { RegisterFormPanel } from '../auth-form-panels';
 describe('RegisterFormPanel', () => {
     beforeEach(() => {
         registerMock.mockReset();
+        requestAccountRecoveryMock.mockReset();
         registerMock.mockResolvedValue(undefined);
+        requestAccountRecoveryMock.mockResolvedValue(undefined);
+        localStorage.clear();
+        sessionStorage.clear();
     });
 
     afterEach(() => {
@@ -305,5 +325,193 @@ describe('RegisterFormPanel', () => {
                 'password'
             );
         });
+    });
+
+    const fillRegisterForm = async (
+        user: ReturnType<typeof userEvent.setup>,
+        email = 'recoverable@example.com'
+    ) => {
+        await user.type(
+            screen.getByLabelText(
+                en.translation.auth.register.first_name_label
+            ),
+            'Alexis'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.last_name_label),
+            'Renart'
+        );
+        if (screen.getByLabelText(en.translation.auth.register.email_label)) {
+            const emailInput = screen.getByLabelText(
+                en.translation.auth.register.email_label
+            );
+            if (!(emailInput as HTMLInputElement).disabled) {
+                await user.type(emailInput, email);
+            }
+        }
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.password_label),
+            'password'
+        );
+        await user.type(
+            screen.getByLabelText(
+                en.translation.auth.register.password_confirmation_label
+            ),
+            'password'
+        );
+    };
+
+    it('shows a recoverable account and requests restoration without leaving the page', async () => {
+        const user = userEvent.setup();
+        const until = '2026-12-01T15:04:00.000Z';
+        registerMock.mockRejectedValueOnce(
+            new ApiError('recoverable', 422, {
+                message:
+                    en.translation.auth.account_recovery
+                        .recoverable_description,
+                code: 'account_recoverable',
+                recoverable_until: until,
+                errors: {
+                    email: [
+                        en.translation.auth.account_recovery
+                            .recoverable_description,
+                    ],
+                },
+            })
+        );
+
+        render(
+            <RegisterFormPanel onSuccess={vi.fn()} onSwitchToLogin={vi.fn()} />
+        );
+        await fillRegisterForm(user);
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+
+        expect(
+            await screen.findByText(
+                en.translation.auth.account_recovery.recoverable_description
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                en.translation.auth.account_recovery.recoverable_until.replace(
+                    '{{date}}',
+                    formatRecoveryDeadline(until, 'en')
+                )
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText('The email has already been taken.')
+        ).not.toBeInTheDocument();
+
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.account_recovery.restore_action,
+            })
+        );
+
+        await waitFor(() => {
+            expect(requestAccountRecoveryMock).toHaveBeenCalledWith(
+                'recoverable@example.com'
+            );
+        });
+        expect(
+            await screen.findByText(
+                en.translation.auth.account_recovery.instructions_sent
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', {
+                name: en.translation.auth.register.title,
+            })
+        ).toBeInTheDocument();
+    });
+
+    it('shows account_unavailable without a restore action', async () => {
+        const user = userEvent.setup();
+        registerMock.mockRejectedValueOnce(
+            new ApiError('unavailable', 422, {
+                code: 'account_unavailable',
+                message: en.translation.auth.account_recovery.unavailable,
+                errors: {
+                    email: [en.translation.auth.account_recovery.unavailable],
+                },
+            })
+        );
+
+        render(
+            <RegisterFormPanel onSuccess={vi.fn()} onSwitchToLogin={vi.fn()} />
+        );
+        await fillRegisterForm(user, 'expired@example.com');
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+
+        expect(
+            await screen.findByText(
+                en.translation.auth.account_recovery.unavailable
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', {
+                name: en.translation.auth.account_recovery.restore_action,
+            })
+        ).not.toBeInTheDocument();
+        expect(requestAccountRecoveryMock).not.toHaveBeenCalled();
+    });
+
+    it('keeps an invitation token out of storage while offering recovery', async () => {
+        const user = userEvent.setup();
+        const setItem = vi.spyOn(Storage.prototype, 'setItem');
+        registerMock.mockRejectedValueOnce(
+            new ApiError('recoverable', 422, {
+                code: 'account_recoverable',
+                recoverable_until: '2026-12-01T15:04:00.000Z',
+                errors: { email: ['reserved'] },
+            })
+        );
+
+        render(
+            <RegisterFormPanel
+                invitationToken="invite-secret"
+                lockedEmail="guest@example.com"
+                onSuccess={vi.fn()}
+                onSwitchToLogin={vi.fn()}
+            />
+        );
+        await fillRegisterForm(user);
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+        await user.click(
+            await screen.findByRole('button', {
+                name: en.translation.auth.account_recovery.restore_action,
+            })
+        );
+
+        await waitFor(() => {
+            expect(requestAccountRecoveryMock).toHaveBeenCalledWith(
+                'guest@example.com'
+            );
+        });
+        expect(registerMock).toHaveBeenCalledWith(
+            'Alexis',
+            'Renart',
+            'guest@example.com',
+            'password',
+            'password',
+            'invite-secret'
+        );
+        const stored = setItem.mock.calls.map((call) => String(call[1]));
+        expect(stored.join(' ')).not.toContain('invite-secret');
+        expect(localStorage.getItem('invite-secret')).toBeNull();
+        expect(sessionStorage.getItem('invite-secret')).toBeNull();
     });
 });

@@ -86,6 +86,7 @@ describe('entry-flow architecture validation', () => {
         expect(orchestrator).not.toContain('createDiagram');
         expect(entryFlow).not.toContain("type: 'LOGGED_OUT'");
         expect(authProvider).toContain("endSession('explicit-logout')");
+        expect(authProvider).toContain("endSession('account-closed')");
         expect(authProvider).toContain('beginSessionEnd(reason)');
         expect(authProvider).toContain("endSession('session-expired')");
     });

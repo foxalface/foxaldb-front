@@ -1911,6 +1911,48 @@ export const tr: LanguageTranslation = {
                     save_error_description:
                         'Tercih güncellenemedi. Tekrar deneyin.',
                 },
+                danger_zone: {
+                    title: 'Tehlikeli bölge',
+                    description:
+                        'Erişim hemen kapatılır. Çevrimiçi hesap verileri 90 gün boyunca geri yüklenebilir. Bundan sonra kalıcı olarak silinir.',
+                    device_warning:
+                        'Yalnızca bu cihazda saklanan diyagramlar, FoxalDB hesabınızı kapattığınızda silinmez.',
+                    delete_account: 'Hesabı sil',
+                    confirm_title: 'Hesabı sil',
+                    confirm_description:
+                        'Erişiminiz hemen sona erer. Bu hesabı ve uygun çevrimiçi diyagramları 90 gün boyunca geri yükleyebilirsiniz. Bundan sonra hesap kalıcı olarak silinir. Yalnızca bu cihazda saklanan diyagramlar bu tarayıcıda kalır.',
+                    current_password_label: 'Geçerli parola',
+                    current_password_invalid: 'Geçerli parola yanlış.',
+                    submit: 'Hesabı sil',
+                    submitting: 'Hesap siliniyor...',
+                    failure: 'Hesabınız silinemedi. Yeniden deneyin.',
+                },
+            },
+            account_recovery: {
+                recoverable_description:
+                    'Bu adres yakın zamanda silinmiş bir hesapla ilişkilidir.',
+                recoverable_until:
+                    'Bu hesap {{date}} tarihine kadar geri yüklenebilir.',
+                restore_action: 'Hesabımı geri yükle',
+                requesting: 'Gönderiliyor...',
+                instructions_sent:
+                    'Bu hesap geri yüklenebiliyorsa, kurtarma talimatlarını bu e-posta adresine gönderdik.',
+                unavailable: 'Bu adres bir hesap oluşturmak için kullanılamaz.',
+                request_error:
+                    'Kurtarma talimatları gönderilemedi. Yeniden deneyin.',
+                page_title: 'FoxalDB — Hesabı geri yükle',
+                confirm_title: 'Hesabınızı geri yükleyin',
+                confirm_description:
+                    'Geri yükleme hesabınızı yeniden etkinleştirir ve uygun çevrimiçi diyagramları kurtarır. Ardından yine oturum açmanız gerekir.',
+                restoring: 'Geri yükleniyor...',
+                restored_title: 'Hesabınız geri yüklendi.',
+                restored_description:
+                    'Devam etmek için mevcut parolanızla oturum açın.',
+                sign_in: 'Oturum aç',
+                invalid_title:
+                    'Bu geri yükleme bağlantısı geçersiz veya süresi dolmuş.',
+                invalid_description:
+                    'Kayıt sayfasından yeni bir geri yükleme e-postası isteyin.',
             },
             nav: {
                 sign_in: 'Giriş yap',

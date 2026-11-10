@@ -22,6 +22,7 @@ export interface AuthContextValue {
         invitationToken?: string
     ) => Promise<void>;
     logout: () => Promise<void>;
+    closeAccount: (currentPassword: string) => Promise<void>;
     fetchUser: () => Promise<void>;
     updateProfile: (payload: UpdateProfilePayload) => Promise<void>;
     updateDiagramCreationPreference: (
@@ -38,6 +39,7 @@ export const AuthContext = createContext<AuthContextValue>({
     login: emptyFn,
     register: emptyFn,
     logout: emptyFn,
+    closeAccount: emptyFn,
     fetchUser: emptyFn,
     updateProfile: emptyFn,
     updateDiagramCreationPreference: emptyFn,

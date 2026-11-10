@@ -7,7 +7,13 @@ import {
     type RegisterField,
     type RegisterFieldErrors,
 } from '@/lib/auth/validate-register-fields';
-import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
+import { requestAccountRecovery } from '@/lib/api/auth';
+import {
+    parseLaravelValidationErrors,
+    readApiErrorCode,
+    readRecoverableUntil,
+} from '@/lib/api/parse-validation-errors';
+import { formatRecoveryDeadline } from '@/lib/account/format-recovery-deadline';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { formatApiErrorMessage } from './format-api-error-message';
@@ -25,6 +31,7 @@ export interface LoginFormPanelProps {
     onForgotPassword?: () => void;
     /** False when AuthCard already renders the surface title. */
     showHeading?: boolean;
+    initialEmail?: string;
 }
 
 export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
@@ -32,10 +39,11 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
     onSwitchToRegister,
     onForgotPassword,
     showHeading = true,
+    initialEmail = '',
 }) => {
     const { t } = useTranslation();
     const { login } = useAuth();
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(initialEmail);
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -143,7 +151,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
     invitationToken,
     showHeading = true,
 }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { register } = useAuth();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -153,6 +161,13 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
     const [fieldErrors, setFieldErrors] = useState<RegisterFieldErrors>({});
     const [formError, setFormError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isRequestingRecovery, setIsRequestingRecovery] = useState(false);
+    const [recoveryNotice, setRecoveryNotice] = useState<string | null>(null);
+    const [reservedAccount, setReservedAccount] = useState<
+        | { kind: 'recoverable'; email: string; until: string | null }
+        | { kind: 'unavailable' }
+        | null
+    >(null);
 
     const clearFieldError = useCallback((field: RegisterField) => {
         setFieldErrors((current) => {
@@ -186,6 +201,8 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
         (event: React.ChangeEvent<HTMLInputElement>) => {
             setEmail(event.target.value);
             clearFieldError('email');
+            setReservedAccount(null);
+            setRecoveryNotice(null);
         },
         [clearFieldError]
     );
@@ -245,6 +262,25 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                 }
                 onSuccess();
             } catch (error: unknown) {
+                const code = readApiErrorCode(error);
+                const submittedEmail = (lockedEmail ?? email).trim();
+
+                if (code === 'account_recoverable') {
+                    setReservedAccount({
+                        kind: 'recoverable',
+                        email: submittedEmail,
+                        until: readRecoverableUntil(error),
+                    });
+                    setRecoveryNotice(null);
+                    return;
+                }
+
+                if (code === 'account_unavailable') {
+                    setReservedAccount({ kind: 'unavailable' });
+                    setRecoveryNotice(null);
+                    return;
+                }
+
                 const validationErrors = parseLaravelValidationErrors(error);
                 const mappedErrors =
                     REGISTER_FIELDS.reduce<RegisterFieldErrors>(
@@ -284,12 +320,76 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
         ]
     );
 
+    const requestRecovery = useCallback(async () => {
+        if (reservedAccount?.kind !== 'recoverable') {
+            return;
+        }
+
+        setRecoveryNotice(null);
+        setIsRequestingRecovery(true);
+
+        try {
+            await requestAccountRecovery(reservedAccount.email);
+            setRecoveryNotice(t('auth.account_recovery.instructions_sent'));
+        } catch {
+            setRecoveryNotice(t('auth.account_recovery.request_error'));
+        } finally {
+            setIsRequestingRecovery(false);
+        }
+    }, [reservedAccount, t]);
+
     return (
         <div className="flex max-w-md flex-col gap-4">
             {showHeading ? (
                 <h1 className="text-lg font-semibold">
                     {t('auth.register.title')}
                 </h1>
+            ) : null}
+            {reservedAccount?.kind === 'recoverable' ? (
+                <div className="flex flex-col gap-3 rounded-md border p-3">
+                    <p className="text-sm">
+                        {t('auth.account_recovery.recoverable_description')}
+                    </p>
+                    {reservedAccount.until !== null ? (
+                        <p className="text-sm text-muted-foreground">
+                            {t('auth.account_recovery.recoverable_until', {
+                                date: formatRecoveryDeadline(
+                                    reservedAccount.until,
+                                    i18n.language
+                                ),
+                            })}
+                        </p>
+                    ) : null}
+                    <Button
+                        disabled={isRequestingRecovery}
+                        onClick={() => {
+                            void requestRecovery();
+                        }}
+                        type="button"
+                    >
+                        {isRequestingRecovery
+                            ? t('auth.account_recovery.requesting')
+                            : t('auth.account_recovery.restore_action')}
+                    </Button>
+                    <Button
+                        disabled={isRequestingRecovery}
+                        onClick={onSwitchToLogin}
+                        type="button"
+                        variant="secondary"
+                    >
+                        {t('auth.register.switch_to_login')}
+                    </Button>
+                    {recoveryNotice !== null ? (
+                        <p className="text-sm" role="status">
+                            {recoveryNotice}
+                        </p>
+                    ) : null}
+                </div>
+            ) : null}
+            {reservedAccount?.kind === 'unavailable' ? (
+                <p className="text-sm text-destructive" role="alert">
+                    {t('auth.account_recovery.unavailable')}
+                </p>
             ) : null}
             <form
                 className="flex flex-col gap-3"

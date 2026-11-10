@@ -1916,6 +1916,48 @@ export const vi: LanguageTranslation = {
                     save_error_description:
                         'Không thể cập nhật tùy chọn. Thử lại.',
                 },
+                danger_zone: {
+                    title: 'Vùng nguy hiểm',
+                    description:
+                        'Quyền truy cập bị tắt ngay lập tức. Dữ liệu tài khoản trực tuyến có thể được khôi phục trong 90 ngày. Sau đó, dữ liệu bị xóa vĩnh viễn.',
+                    device_warning:
+                        'Sơ đồ chỉ lưu trên thiết bị này không bị xóa khi bạn đóng tài khoản FoxalDB.',
+                    delete_account: 'Xóa tài khoản',
+                    confirm_title: 'Xóa tài khoản',
+                    confirm_description:
+                        'Quyền truy cập của bạn kết thúc ngay lập tức. Bạn có thể khôi phục tài khoản này và các sơ đồ trực tuyến đủ điều kiện trong 90 ngày. Sau đó, tài khoản bị xóa vĩnh viễn. Sơ đồ chỉ lưu trên thiết bị này vẫn ở trong trình duyệt này.',
+                    current_password_label: 'Mật khẩu hiện tại',
+                    current_password_invalid: 'Mật khẩu hiện tại không đúng.',
+                    submit: 'Xóa tài khoản',
+                    submitting: 'Đang xóa tài khoản...',
+                    failure: 'Không thể xóa tài khoản. Hãy thử lại.',
+                },
+            },
+            account_recovery: {
+                recoverable_description:
+                    'Địa chỉ này gắn với một tài khoản vừa bị xóa.',
+                recoverable_until:
+                    'Tài khoản này có thể được khôi phục đến {{date}}.',
+                restore_action: 'Khôi phục tài khoản của tôi',
+                requesting: 'Đang gửi...',
+                instructions_sent:
+                    'Nếu tài khoản này có thể được khôi phục, chúng tôi đã gửi hướng dẫn đến địa chỉ email này.',
+                unavailable: 'Không thể dùng địa chỉ này để tạo tài khoản.',
+                request_error:
+                    'Không thể gửi hướng dẫn khôi phục. Hãy thử lại.',
+                page_title: 'FoxalDB — Khôi phục tài khoản',
+                confirm_title: 'Khôi phục tài khoản của bạn',
+                confirm_description:
+                    'Việc khôi phục kích hoạt lại tài khoản và lấy lại các sơ đồ trực tuyến đủ điều kiện. Sau đó bạn vẫn cần đăng nhập.',
+                restoring: 'Đang khôi phục...',
+                restored_title: 'Tài khoản của bạn đã được khôi phục.',
+                restored_description:
+                    'Đăng nhập bằng mật khẩu hiện có để tiếp tục.',
+                sign_in: 'Đăng nhập',
+                invalid_title:
+                    'Liên kết khôi phục này không hợp lệ hoặc đã hết hạn.',
+                invalid_description:
+                    'Hãy yêu cầu email khôi phục mới từ trang đăng ký.',
             },
             nav: {
                 sign_in: 'Đăng nhập',
