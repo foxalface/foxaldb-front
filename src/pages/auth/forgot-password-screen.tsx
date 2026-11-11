@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
 import { ApiError } from '@/lib/api/client';
@@ -7,7 +6,13 @@ import { requestPasswordReset } from '@/lib/api/auth';
 import { formatApiErrorMessage } from './format-api-error-message';
 import { useTranslation } from 'react-i18next';
 
-export const ForgotPasswordScreen: React.FC = () => {
+export interface ForgotPasswordScreenProps {
+    onBackToLogin: () => void;
+}
+
+export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({
+    onBackToLogin,
+}) => {
     const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,12 +80,13 @@ export const ForgotPasswordScreen: React.FC = () => {
                 </form>
             )}
 
-            <Link
+            <button
                 className="w-fit text-sm text-muted-foreground underline underline-offset-4"
-                to="/login"
+                onClick={onBackToLogin}
+                type="button"
             >
                 {t('auth.password_reset.forgot.back_to_sign_in')}
-            </Link>
+            </button>
         </div>
     );
 };

@@ -3,7 +3,7 @@
  * Not an AuthIntent: no tokens, diagram payloads, or session secrets.
  * Invitation routes do not use this value; the invitation URL is their context.
  *
- * `forgot` is intentionally absent until ONB1B adds that step in place.
+ * Forgot password is an AuthStep, not an AuthOrigin.
  */
 export type AuthOrigin =
     | 'entry'
@@ -11,7 +11,7 @@ export type AuthOrigin =
     | 'session-recovery'
     | 'navbar';
 
-export type AuthStep = 'welcome' | 'login' | 'register';
+export type AuthStep = 'welcome' | 'login' | 'register' | 'forgot-password';
 
 /** Where Register's Back action returns. Not a history stack. */
 export type AuthRegisterReturnTo = 'welcome' | 'login';

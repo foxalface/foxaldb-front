@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@/lib/api/client';
 import { ForgotPasswordScreen } from '../forgot-password-screen';
@@ -24,36 +23,37 @@ describe('ForgotPasswordScreen', () => {
         requestPasswordReset.mockReset();
     });
 
-    it('shows the same success message for a valid submission', async () => {
-        requestPasswordReset.mockResolvedValue(undefined);
-        const user = userEvent.setup();
+    it.each(['missing@example.com', 'known@example.com'])(
+        'shows the same success message for %s',
+        async (email) => {
+            requestPasswordReset.mockResolvedValue(undefined);
+            const onBackToLogin = vi.fn();
+            const user = userEvent.setup();
 
-        render(
-            <MemoryRouter>
-                <ForgotPasswordScreen />
-            </MemoryRouter>
-        );
+            render(<ForgotPasswordScreen onBackToLogin={onBackToLogin} />);
 
-        await user.type(screen.getByRole('textbox'), 'missing@example.com');
-        await user.click(
-            screen.getByRole('button', {
-                name: 'auth.password_reset.forgot.send',
-            })
-        );
+            await user.type(screen.getByRole('textbox'), email);
+            await user.click(
+                screen.getByRole('button', {
+                    name: 'auth.password_reset.forgot.send',
+                })
+            );
 
-        expect(requestPasswordReset).toHaveBeenCalledWith(
-            'missing@example.com'
-        );
-        expect(
-            screen.getByText('auth.password_reset.forgot.sent')
-        ).toBeTruthy();
-        expect(
-            screen.getByRole('link', {
-                name: 'auth.password_reset.forgot.back_to_sign_in',
-            })
-        ).toHaveAttribute('href', '/login');
-        expect(screen.queryByRole('textbox')).toBeNull();
-    });
+            expect(requestPasswordReset).toHaveBeenCalledWith(email);
+            expect(
+                screen.getByText('auth.password_reset.forgot.sent')
+            ).toBeTruthy();
+            expect(screen.queryByRole('textbox')).toBeNull();
+
+            await user.click(
+                screen.getByRole('button', {
+                    name: 'auth.password_reset.forgot.back_to_sign_in',
+                })
+            );
+
+            expect(onBackToLogin).toHaveBeenCalledTimes(1);
+        }
+    );
 
     it('shows a rate-limit error on 429', async () => {
         requestPasswordReset.mockRejectedValue(
@@ -61,11 +61,7 @@ describe('ForgotPasswordScreen', () => {
         );
         const user = userEvent.setup();
 
-        render(
-            <MemoryRouter>
-                <ForgotPasswordScreen />
-            </MemoryRouter>
-        );
+        render(<ForgotPasswordScreen onBackToLogin={vi.fn()} />);
 
         await user.type(
             screen.getByRole('textbox', {

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 import { LocalConfigProvider } from '@/context/local-config-context/local-config-provider';
 import { ThemeProvider } from '@/context/theme-context/theme-provider';
 import { AuthCard } from '@/dialogs/auth-dialog/auth-card';
@@ -9,6 +10,10 @@ import { ForgotPasswordScreen } from './forgot-password-screen';
 
 const ForgotPasswordPageComponent: React.FC = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const backToLogin = useCallback(() => {
+        navigate('/login');
+    }, [navigate]);
 
     return (
         <>
@@ -23,7 +28,7 @@ const ForgotPasswordPageComponent: React.FC = () => {
                         )}
                         title={t('auth.password_reset.forgot.title')}
                     >
-                        <ForgotPasswordScreen />
+                        <ForgotPasswordScreen onBackToLogin={backToLogin} />
                     </AuthCard>
                 </div>
                 <LegalNav className="mx-auto mt-auto w-full max-w-md px-0" />

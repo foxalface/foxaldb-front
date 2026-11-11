@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Dialog, DialogContent } from '@/components/dialog/dialog';
 import type { BaseDialogProps } from '../common/base-dialog-props';
 import { useAuth } from '@/hooks/use-auth';
@@ -11,6 +11,7 @@ import {
     LoginFormPanel,
     RegisterFormPanel,
 } from '@/pages/auth/auth-form-panels';
+import { ForgotPasswordScreen } from '@/pages/auth/forgot-password-screen';
 import { isValidBackendDiagramId } from '@/lib/realtime/diagram-id';
 import { useTranslation } from 'react-i18next';
 import { AuthCard } from './auth-card';
@@ -28,7 +29,6 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     origin = 'navbar',
 }) => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
     const { diagramId: routeDiagramId } = useParams<{ diagramId?: string }>();
     const { isAuthenticated, isLoading } = useAuth();
     const { clearAuthIntent } = useAuthIntent();
@@ -112,7 +112,16 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
         setStep('register');
     }, []);
 
+    const openForgotPassword = useCallback(() => {
+        setStep('forgot-password');
+    }, []);
+
     const handleBack = useCallback(() => {
+        if (step === 'forgot-password') {
+            setStep('login');
+            return;
+        }
+
         if (step === 'register') {
             setStep(registerReturnTo);
             return;
@@ -131,6 +140,11 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
 
             event.preventDefault();
 
+            if (step === 'forgot-password') {
+                setStep('login');
+                return;
+            }
+
             if (step === 'login') {
                 setStep('welcome');
                 return;
@@ -145,13 +159,19 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
 
     const showWelcome = isEntryOrigin && step === 'welcome' && !isAuthenticated;
     const showRegister = step === 'register' && !isAuthenticated && !isLoading;
+    const showForgotPassword =
+        step === 'forgot-password' && !isAuthenticated && !isLoading;
     const showLogin =
-        !showWelcome && !showRegister && !isAuthenticated && !isLoading;
+        !showWelcome &&
+        !showRegister &&
+        !showForgotPassword &&
+        !isAuthenticated &&
+        !isLoading;
     const backLabel = t('auth.dialog.back');
     const onBack =
         !isLoading &&
         !isAuthenticated &&
-        (showRegister || (showLogin && isEntryOrigin))
+        (showRegister || showForgotPassword || (showLogin && isEntryOrigin))
             ? handleBack
             : undefined;
 
@@ -176,6 +196,9 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
     } else if (showRegister) {
         title = t('auth.dialog.register_title');
         description = t('auth.dialog.register_description');
+    } else if (showForgotPassword) {
+        title = t('auth.password_reset.forgot.title');
+        description = t('auth.password_reset.forgot.description');
     }
 
     return (
@@ -226,12 +249,11 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                             onSwitchToLogin={openLogin}
                             showHeading={false}
                         />
+                    ) : showForgotPassword ? (
+                        <ForgotPasswordScreen onBackToLogin={openLogin} />
                     ) : (
                         <LoginFormPanel
-                            onForgotPassword={() => {
-                                dismissAuthDialog();
-                                navigate('/forgot-password');
-                            }}
+                            onForgotPassword={openForgotPassword}
                             onSuccess={handleLoginSuccess}
                             onSwitchToRegister={openRegisterFromLogin}
                             showHeading={false}

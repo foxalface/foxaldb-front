@@ -131,7 +131,7 @@ describe('forgot password auth flow', () => {
         ).not.toBeInTheDocument();
 
         await user.click(
-            screen.getByRole('link', {
+            screen.getByRole('button', {
                 name: 'auth.password_reset.forgot.back_to_sign_in',
             })
         );
