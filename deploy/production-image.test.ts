@@ -60,4 +60,24 @@ describe('production frontend image', () => {
 
         rmSync(directory, { recursive: true, force: true });
     });
+
+    it('publishes a manual linux/amd64 candidate without secrets or latest', () => {
+        const workflow = readRepoFile('.github/workflows/publish-image.yml');
+
+        expect(workflow).toContain('workflow_dispatch:');
+        expect(workflow).toContain('contents: read');
+        expect(workflow).toContain('packages: write');
+        expect(workflow).toContain('platforms: linux/amd64');
+        expect(workflow).toContain('foxaldb-frontend');
+        expect(workflow).toContain('sha-${GITHUB_SHA}');
+        expect(workflow).toContain('secrets.GITHUB_TOKEN');
+        expect(workflow).toContain('DOMAIN is not configured');
+        expect(workflow).not.toContain('REVERB_APP_SECRET');
+        expect(workflow).not.toContain('OPENAI_API_KEY');
+        expect(workflow.replaceAll('VITE_REVERB_APP_KEY', '')).not.toContain(
+            'APP_KEY'
+        );
+        expect(workflow).not.toContain(':latest');
+        expect(workflow).not.toContain('docker compose');
+    });
 });

@@ -1,0 +1,169 @@
+name: Publish production candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: Public apex domain. Overrides the DOMAIN repository variable.
+        required: false
+        type: string
+      vite_reverb_app_key:
+        description: Public Reverb app key. Overrides the VITE_REVERB_APP_KEY variable.
+        required: false
+        type: string
+      vite_api_base_url:
+        description: Optional public API base. Defaults to https://api.DOMAIN/api.
+        required: false
+        type: string
+      vite_backend_url:
+        description: Optional public API origin. Defaults to https://api.DOMAIN.
+        required: false
+        type: string
+      vite_reverb_host:
+        description: Optional public Reverb host. Defaults to ws.DOMAIN.
+        required: false
+        type: string
+      vite_reverb_port:
+        description: Optional public Reverb port. Defaults to 443.
+        required: false
+        type: string
+      vite_reverb_scheme:
+        description: Optional public Reverb scheme. Defaults to https.
+        required: false
+        type: string
+      alias:
+        description: Optional extra image tag. The commit SHA tag is always published. latest is rejected.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/foxaldb-frontend
+
+jobs:
+  publish:
+    name: Publish linux/amd64 image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require the main branch
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "Publish production candidate only from the main branch."
+          exit 1
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test:ci
+
+      - name: Resolve public build values
+        id: public
+        env:
+          DOMAIN: ${{ inputs.domain || vars.DOMAIN }}
+          VITE_REVERB_APP_KEY: ${{ inputs.vite_reverb_app_key || vars.VITE_REVERB_APP_KEY }}
+          VITE_API_BASE_URL: ${{ inputs.vite_api_base_url || vars.VITE_API_BASE_URL }}
+          VITE_BACKEND_URL: ${{ inputs.vite_backend_url || vars.VITE_BACKEND_URL }}
+          VITE_REVERB_HOST: ${{ inputs.vite_reverb_host || vars.VITE_REVERB_HOST }}
+          VITE_REVERB_PORT: ${{ inputs.vite_reverb_port || vars.VITE_REVERB_PORT }}
+          VITE_REVERB_SCHEME: ${{ inputs.vite_reverb_scheme || vars.VITE_REVERB_SCHEME }}
+          ALIAS: ${{ inputs.alias }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DOMAIN}" ]; then
+            echo "DOMAIN is not configured. Set the repository variable DOMAIN or the workflow input. Refusing to publish a localhost image."
+            exit 1
+          fi
+          if [ -z "${VITE_REVERB_APP_KEY}" ]; then
+            echo "VITE_REVERB_APP_KEY is not configured. Set the repository variable or the workflow input."
+            exit 1
+          fi
+          api_base="${VITE_API_BASE_URL:-https://api.${DOMAIN}/api}"
+          backend="${VITE_BACKEND_URL:-https://api.${DOMAIN}}"
+          reverb_host="${VITE_REVERB_HOST:-ws.${DOMAIN}}"
+          reverb_port="${VITE_REVERB_PORT:-443}"
+          reverb_scheme="${VITE_REVERB_SCHEME:-https}"
+          {
+            echo "api_base=${api_base}"
+            echo "backend=${backend}"
+            echo "reverb_host=${reverb_host}"
+            echo "reverb_port=${reverb_port}"
+            echo "reverb_scheme=${reverb_scheme}"
+            echo "reverb_key<<EOF"
+            printf '%s\n' "${VITE_REVERB_APP_KEY}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          tags="${IMAGE}:sha-${GITHUB_SHA}"
+          if [ -n "${ALIAS}" ]; then
+            case "${ALIAS}" in
+              latest)
+                echo "The alias latest is not allowed."
+                exit 1
+                ;;
+              *[!A-Za-z0-9_.-]*)
+                echo "Alias is not a safe image tag."
+                exit 1
+                ;;
+            esac
+            tags="${tags}"$'\n'"${IMAGE}:${ALIAS}"
+          fi
+          {
+            echo "tags<<EOF"
+            printf '%s\n' "${tags}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          echo "Publishing ${IMAGE}:sha-${GITHUB_SHA} for ${DOMAIN}."
+
+      - name: Log in to GHCR
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Record image timestamp
+        id: stamp
+        run: echo "created=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.prod
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.public.outputs.tags }}
+          build-args: |
+            VITE_API_BASE_URL=${{ steps.public.outputs.api_base }}
+            VITE_BACKEND_URL=${{ steps.public.outputs.backend }}
+            VITE_REVERB_APP_KEY=${{ steps.public.outputs.reverb_key }}
+            VITE_REVERB_HOST=${{ steps.public.outputs.reverb_host }}
+            VITE_REVERB_PORT=${{ steps.public.outputs.reverb_port }}
+            VITE_REVERB_SCHEME=${{ steps.public.outputs.reverb_scheme }}
+            IMAGE_SOURCE=${{ github.server_url }}/${{ github.repository }}
+            IMAGE_REVISION=${{ github.sha }}
+            IMAGE_CREATED=${{ steps.stamp.outputs.created }}
+            IMAGE_VERSION=sha-${{ github.sha }}
+          cache-from: type=gha,scope=foxaldb-frontend
+          cache-to: type=gha,mode=max,scope=foxaldb-frontend
