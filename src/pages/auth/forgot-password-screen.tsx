@@ -40,14 +40,7 @@ export const ForgotPasswordScreen: React.FC = () => {
     );
 
     return (
-        <div className="mx-auto flex w-full max-w-md flex-col gap-4 px-4 py-10">
-            <h1 className="text-2xl font-semibold">
-                {t('auth.password_reset.forgot.title')}
-            </h1>
-            <p className="text-sm text-muted-foreground">
-                {t('auth.password_reset.forgot.description')}
-            </p>
-
+        <div className="flex max-w-md flex-col gap-4">
             {submitted ? (
                 <p className="text-sm text-foreground" role="status">
                     {t('auth.password_reset.forgot.sent')}
@@ -83,7 +76,7 @@ export const ForgotPasswordScreen: React.FC = () => {
             )}
 
             <Link
-                className="text-sm text-muted-foreground underline underline-offset-4"
+                className="w-fit text-sm text-muted-foreground underline underline-offset-4"
                 to="/login"
             >
                 {t('auth.password_reset.forgot.back_to_sign_in')}

@@ -47,6 +47,12 @@ describe('ForgotPasswordScreen', () => {
         expect(
             screen.getByText('auth.password_reset.forgot.sent')
         ).toBeTruthy();
+        expect(
+            screen.getByRole('link', {
+                name: 'auth.password_reset.forgot.back_to_sign_in',
+            })
+        ).toHaveAttribute('href', '/login');
+        expect(screen.queryByRole('textbox')).toBeNull();
     });
 
     it('shows a rate-limit error on 429', async () => {
