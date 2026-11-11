@@ -1,0 +1,44 @@
+# syntax=docker/dockerfile:1
+
+FROM node:24-alpine AS build
+
+WORKDIR /app
+
+ENV HUSKY=0
+
+COPY package.json package-lock.json ./
+
+RUN npm ci
+
+COPY . .
+
+ARG VITE_API_BASE_URL
+ARG VITE_BACKEND_URL
+ARG VITE_REVERB_APP_KEY
+ARG VITE_REVERB_HOST
+ARG VITE_REVERB_PORT
+ARG VITE_REVERB_SCHEME
+
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL} \
+    VITE_BACKEND_URL=${VITE_BACKEND_URL} \
+    VITE_REVERB_APP_KEY=${VITE_REVERB_APP_KEY} \
+    VITE_REVERB_HOST=${VITE_REVERB_HOST} \
+    VITE_REVERB_PORT=${VITE_REVERB_PORT} \
+    VITE_REVERB_SCHEME=${VITE_REVERB_SCHEME} \
+    NODE_OPTIONS=--max-old-space-size=4096
+
+RUN test -n "$VITE_API_BASE_URL" \
+    && test -n "$VITE_BACKEND_URL" \
+    && test -n "$VITE_REVERB_APP_KEY" \
+    && test -n "$VITE_REVERB_HOST" \
+    && test -n "$VITE_REVERB_PORT" \
+    && test -n "$VITE_REVERB_SCHEME" \
+    && npx vite build \
+    && sh deploy/check-dist-secrets.sh dist
+
+FROM nginx:1.28-alpine
+
+COPY deploy/nginx.prod.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
