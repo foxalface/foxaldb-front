@@ -1914,6 +1914,10 @@ export const es: LanguageTranslation = {
                 forgot_password: '¿Olvidaste tu contraseña?',
                 no_account: '¿No tienes cuenta?',
             },
+            password_visibility: {
+                show: 'Mostrar contraseña',
+                hide: 'Ocultar contraseña',
+            },
             register: {
                 title: 'Registrarse',
                 first_name_label: 'Nombre',

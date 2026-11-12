@@ -1877,6 +1877,10 @@ export const ko_KR: LanguageTranslation = {
                 forgot_password: '비밀번호를 잊으셨나요?',
                 no_account: '계정이 없으신가요?',
             },
+            password_visibility: {
+                show: '비밀번호 표시',
+                hide: '비밀번호 숨기기',
+            },
             register: {
                 title: '회원가입',
                 first_name_label: '이름',

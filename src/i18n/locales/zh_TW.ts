@@ -1735,6 +1735,10 @@ export const zh_TW: LanguageTranslation = {
                 forgot_password: '忘記密碼？',
                 no_account: '沒有帳戶？',
             },
+            password_visibility: {
+                show: '顯示密碼',
+                hide: '隱藏密碼',
+            },
             register: {
                 title: '註冊',
                 first_name_label: '名字',

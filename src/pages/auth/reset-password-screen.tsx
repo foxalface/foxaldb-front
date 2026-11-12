@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
+import { PasswordInput } from '@/components/password-input/password-input';
 import { useAuth } from '@/hooks/use-auth';
 import { ApiError } from '@/lib/api/client';
 import { resetPassword } from '@/lib/api/auth';
@@ -153,16 +154,18 @@ export const ResetPasswordScreen: React.FC<{
                     <span>{t('auth.password_reset.reset.email_label')}</span>
                     <Input disabled readOnly type="email" value={email ?? ''} />
                 </label>
-                <label className="flex flex-col gap-1 text-sm">
-                    <span>{t('auth.password_reset.reset.password_label')}</span>
-                    <Input
+                <div className="flex flex-col gap-1 text-sm">
+                    <label htmlFor="reset-password">
+                        {t('auth.password_reset.reset.password_label')}
+                    </label>
+                    <PasswordInput
+                        id="reset-password"
                         autoComplete="new-password"
                         autoFocus
                         disabled={isSubmitting}
                         name="password"
                         onChange={(event) => setPassword(event.target.value)}
                         required
-                        type="password"
                         value={password}
                     />
                     {passwordError !== null ? (
@@ -170,14 +173,15 @@ export const ResetPasswordScreen: React.FC<{
                             {passwordError}
                         </p>
                     ) : null}
-                </label>
-                <label className="flex flex-col gap-1 text-sm">
-                    <span>
+                </div>
+                <div className="flex flex-col gap-1 text-sm">
+                    <label htmlFor="reset-password-confirmation">
                         {t(
                             'auth.password_reset.reset.password_confirmation_label'
                         )}
-                    </span>
-                    <Input
+                    </label>
+                    <PasswordInput
+                        id="reset-password-confirmation"
                         autoComplete="new-password"
                         disabled={isSubmitting}
                         name="password_confirmation"
@@ -185,10 +189,9 @@ export const ResetPasswordScreen: React.FC<{
                             setPasswordConfirmation(event.target.value)
                         }
                         required
-                        type="password"
                         value={passwordConfirmation}
                     />
-                </label>
+                </div>
                 {formError !== null ? (
                     <p className="text-sm text-destructive" role="alert">
                         {formError}

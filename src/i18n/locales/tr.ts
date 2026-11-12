@@ -1865,6 +1865,10 @@ export const tr: LanguageTranslation = {
                 forgot_password: 'Şifrenizi mi unuttunuz?',
                 no_account: 'Hesabınız yok mu?',
             },
+            password_visibility: {
+                show: 'Şifreyi göster',
+                hide: 'Şifreyi gizle',
+            },
             register: {
                 title: 'Kayıt ol',
                 first_name_label: 'Ad',

@@ -61,6 +61,38 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
+describe('settings password fields', () => {
+    it('toggles current, new, and confirmation passwords independently', async () => {
+        const actor = userEvent.setup();
+        render(<UserSettingsDialog dialog={{ open: true }} />);
+
+        const current = screen.getByLabelText(
+            en.translation.auth.settings.current_password_label
+        );
+        const next = screen.getByLabelText(
+            en.translation.auth.settings.new_password_label
+        );
+        const confirmation = screen.getByLabelText(
+            en.translation.auth.settings.password_confirmation_label
+        );
+        await actor.type(current, 'current-secret');
+        await actor.type(next, 'next-secret');
+        await actor.type(confirmation, 'confirm-secret');
+
+        const toggles = screen.getAllByRole('button', {
+            name: en.translation.auth.password_visibility.show,
+        });
+        await actor.click(toggles[1]);
+
+        expect(current).toHaveAttribute('type', 'password');
+        expect(next).toHaveAttribute('type', 'text');
+        expect(next).toHaveValue('next-secret');
+        expect(confirmation).toHaveAttribute('type', 'password');
+        expect(current).toHaveValue('current-secret');
+        expect(confirmation).toHaveValue('confirm-secret');
+    });
+});
+
 describe('account danger zone', () => {
     beforeEach(() => {
         closeAccountMock.mockReset();

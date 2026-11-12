@@ -115,6 +115,25 @@ describe('LoginFormPanel forgot password link', () => {
         expect(screen.getByText('auth.login.forgot_password')).toBeTruthy();
     });
 
+    it('toggles the login password without changing its value', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <LoginFormPanel onSuccess={vi.fn()} onSwitchToRegister={vi.fn()} />
+        );
+
+        const password = screen.getByLabelText('auth.login.password_label');
+        await user.type(password, 'secret-value');
+        await user.click(
+            screen.getByRole('button', {
+                name: 'auth.password_visibility.show',
+            })
+        );
+
+        expect(password).toHaveAttribute('type', 'text');
+        expect(password).toHaveValue('secret-value');
+    });
+
     it('places wizard Back and submit in one footer', () => {
         render(
             <LoginFormPanel

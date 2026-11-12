@@ -1737,6 +1737,10 @@ export const zh_CN: LanguageTranslation = {
                 forgot_password: '忘记密码？',
                 no_account: '没有账户？',
             },
+            password_visibility: {
+                show: '显示密码',
+                hide: '隐藏密码',
+            },
             register: {
                 title: '注册',
                 first_name_label: '名',

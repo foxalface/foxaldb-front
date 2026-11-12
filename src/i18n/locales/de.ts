@@ -1937,6 +1937,10 @@ export const de: LanguageTranslation = {
                 forgot_password: 'Passwort vergessen?',
                 no_account: 'Noch kein Konto?',
             },
+            password_visibility: {
+                show: 'Passwort anzeigen',
+                hide: 'Passwort verbergen',
+            },
             register: {
                 title: 'Registrieren',
                 first_name_label: 'Vorname',

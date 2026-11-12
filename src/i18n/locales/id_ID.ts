@@ -1884,6 +1884,10 @@ export const id_ID: LanguageTranslation = {
                 forgot_password: 'Lupa kata sandi?',
                 no_account: 'Belum punya akun?',
             },
+            password_visibility: {
+                show: 'Tampilkan kata sandi',
+                hide: 'Sembunyikan kata sandi',
+            },
             register: {
                 title: 'Daftar',
                 first_name_label: 'Nama depan',

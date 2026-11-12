@@ -7,7 +7,7 @@ import {
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { Button } from '@/components/button/button';
-import { Input } from '@/components/input/input';
+import { PasswordInput } from '@/components/password-input/password-input';
 import { useAuth } from '@/hooks/use-auth';
 import {
     parseLaravelValidationErrors,
@@ -102,20 +102,20 @@ export const AccountDangerZone: React.FC<{
                         <p className="text-sm text-muted-foreground">
                             {t('auth.settings.danger_zone.device_warning')}
                         </p>
-                        <label className="flex flex-col gap-1 text-sm">
-                            <span>
+                        <div className="flex flex-col gap-1 text-sm">
+                            <label htmlFor="danger-current-password">
                                 {t(
                                     'auth.settings.danger_zone.current_password_label'
                                 )}
-                            </span>
-                            <Input
+                            </label>
+                            <PasswordInput
+                                id="danger-current-password"
                                 autoComplete="current-password"
                                 disabled={isSubmitting}
                                 name="current_password"
                                 onChange={(event) =>
                                     setPassword(event.target.value)
                                 }
-                                type="password"
                                 value={password}
                             />
                             {passwordError !== null ? (
@@ -126,7 +126,7 @@ export const AccountDangerZone: React.FC<{
                                     {passwordError}
                                 </span>
                             ) : null}
-                        </label>
+                        </div>
                         {formError !== null ? (
                             <p
                                 className="text-sm text-destructive"

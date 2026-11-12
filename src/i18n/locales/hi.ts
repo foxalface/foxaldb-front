@@ -1880,6 +1880,10 @@ export const hi: LanguageTranslation = {
                 forgot_password: 'पासवर्ड भूल गए?',
                 no_account: 'खाता नहीं है?',
             },
+            password_visibility: {
+                show: 'पासवर्ड दिखाएँ',
+                hide: 'पासवर्ड छिपाएँ',
+            },
             register: {
                 title: 'पंजीकरण',
                 first_name_label: 'पहला नाम',

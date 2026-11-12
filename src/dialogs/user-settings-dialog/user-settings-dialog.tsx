@@ -8,6 +8,7 @@ import {
 } from '@/components/dialog/dialog';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
+import { PasswordInput } from '@/components/password-input/password-input';
 import { Separator } from '@/components/separator/separator';
 import { useToast } from '@/components/toast/use-toast';
 import type { BaseDialogProps } from '../common/base-dialog-props';
@@ -393,18 +394,18 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                             <p className="text-sm font-medium">
                                 {t('auth.settings.change_password_heading')}
                             </p>
-                            <label className="flex flex-col gap-1 text-sm">
-                                <span>
+                            <div className="flex flex-col gap-1 text-sm">
+                                <label htmlFor="settings-current-password">
                                     {t('auth.settings.current_password_label')}
-                                </span>
-                                <Input
+                                </label>
+                                <PasswordInput
+                                    id="settings-current-password"
                                     autoComplete="current-password"
                                     disabled={isSubmitting}
                                     name="current_password"
                                     onChange={(event) =>
                                         setCurrentPassword(event.target.value)
                                     }
-                                    type="password"
                                     value={currentPassword}
                                 />
                                 {fieldErrors.current_password ? (
@@ -415,19 +416,19 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                                         {fieldErrors.current_password}
                                     </span>
                                 ) : null}
-                            </label>
-                            <label className="flex flex-col gap-1 text-sm">
-                                <span>
+                            </div>
+                            <div className="flex flex-col gap-1 text-sm">
+                                <label htmlFor="settings-new-password">
                                     {t('auth.settings.new_password_label')}
-                                </span>
-                                <Input
+                                </label>
+                                <PasswordInput
+                                    id="settings-new-password"
                                     autoComplete="new-password"
                                     disabled={isSubmitting}
                                     name="password"
                                     onChange={(event) =>
                                         setNewPassword(event.target.value)
                                     }
-                                    type="password"
                                     value={newPassword}
                                 />
                                 {fieldErrors.password ? (
@@ -438,14 +439,15 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                                         {fieldErrors.password}
                                     </span>
                                 ) : null}
-                            </label>
-                            <label className="flex flex-col gap-1 text-sm">
-                                <span>
+                            </div>
+                            <div className="flex flex-col gap-1 text-sm">
+                                <label htmlFor="settings-password-confirmation">
                                     {t(
                                         'auth.settings.password_confirmation_label'
                                     )}
-                                </span>
-                                <Input
+                                </label>
+                                <PasswordInput
+                                    id="settings-password-confirmation"
                                     autoComplete="new-password"
                                     disabled={isSubmitting}
                                     name="password_confirmation"
@@ -454,7 +456,6 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                                             event.target.value
                                         )
                                     }
-                                    type="password"
                                     value={passwordConfirmation}
                                 />
                                 {fieldErrors.password_confirmation ? (
@@ -465,7 +466,7 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                                         {fieldErrors.password_confirmation}
                                     </span>
                                 ) : null}
-                            </label>
+                            </div>
                         </div>
 
                         {errorMessage !== null ? (

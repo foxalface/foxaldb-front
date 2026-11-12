@@ -1884,6 +1884,10 @@ export const ru: LanguageTranslation = {
                 forgot_password: 'Забыли пароль?',
                 no_account: 'Нет аккаунта?',
             },
+            password_visibility: {
+                show: 'Показать пароль',
+                hide: 'Скрыть пароль',
+            },
             register: {
                 title: 'Регистрация',
                 first_name_label: 'Имя',

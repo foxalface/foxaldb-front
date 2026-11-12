@@ -1875,6 +1875,10 @@ export const bn: LanguageTranslation = {
                 forgot_password: 'পাসওয়ার্ড ভুলে গেছেন?',
                 no_account: 'অ্যাকাউন্ট নেই?',
             },
+            password_visibility: {
+                show: 'পাসওয়ার্ড দেখান',
+                hide: 'পাসওয়ার্ড লুকান',
+            },
             register: {
                 title: 'নিবন্ধন',
                 first_name_label: 'নামের প্রথম অংশ',

@@ -1919,6 +1919,10 @@ export const ja: LanguageTranslation = {
                 forgot_password: 'パスワードをお忘れですか？',
                 no_account: 'アカウントをお持ちでないですか？',
             },
+            password_visibility: {
+                show: 'パスワードを表示',
+                hide: 'パスワードを非表示',
+            },
             register: {
                 title: '登録',
                 first_name_label: '名',

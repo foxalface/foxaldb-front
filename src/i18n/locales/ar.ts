@@ -1850,6 +1850,10 @@ export const ar: LanguageTranslation = {
                 forgot_password: 'هل نسيت كلمة المرور؟',
                 no_account: 'ليس لديك حساب؟',
             },
+            password_visibility: {
+                show: 'إظهار كلمة المرور',
+                hide: 'إخفاء كلمة المرور',
+            },
             register: {
                 title: 'إنشاء حساب',
                 first_name_label: 'الاسم الأول',

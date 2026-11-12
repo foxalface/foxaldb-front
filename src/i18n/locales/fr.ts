@@ -1918,6 +1918,10 @@ export const fr: LanguageTranslation = {
                 forgot_password: 'Mot de passe oublié ?',
                 no_account: 'Pas de compte ?',
             },
+            password_visibility: {
+                show: 'Afficher le mot de passe',
+                hide: 'Masquer le mot de passe',
+            },
             register: {
                 title: 'Inscription',
                 first_name_label: 'Prénom',

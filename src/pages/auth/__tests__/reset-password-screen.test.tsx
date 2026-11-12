@@ -74,4 +74,35 @@ describe('ResetPasswordScreen', () => {
             screen.getByText('auth.password_reset.reset.success_title')
         ).toBeTruthy();
     });
+
+    it('toggles the new password and confirmation independently', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <MemoryRouter>
+                <ResetPasswordScreen
+                    email="user@example.com"
+                    token="reset-token"
+                />
+            </MemoryRouter>
+        );
+
+        const password = screen.getByLabelText(
+            'auth.password_reset.reset.password_label'
+        );
+        const confirmation = screen.getByLabelText(
+            'auth.password_reset.reset.password_confirmation_label'
+        );
+        await user.type(password, 'new-password-9');
+        await user.type(confirmation, 'other-password');
+        const toggles = screen.getAllByRole('button', {
+            name: 'auth.password_visibility.show',
+        });
+        await user.click(toggles[1]);
+
+        expect(password).toHaveAttribute('type', 'password');
+        expect(password).toHaveValue('new-password-9');
+        expect(confirmation).toHaveAttribute('type', 'text');
+        expect(confirmation).toHaveValue('other-password');
+    });
 });

@@ -1877,6 +1877,10 @@ export const mr: LanguageTranslation = {
                 forgot_password: 'पासवर्ड विसरलात?',
                 no_account: 'खाते नाही?',
             },
+            password_visibility: {
+                show: 'पासवर्ड दाखवा',
+                hide: 'पासवर्ड लपवा',
+            },
             register: {
                 title: 'नोंदणी',
                 first_name_label: 'पहिले नाव',

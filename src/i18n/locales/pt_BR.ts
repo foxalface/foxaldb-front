@@ -1907,6 +1907,10 @@ export const pt_BR: LanguageTranslation = {
                 forgot_password: 'Esqueceu a senha?',
                 no_account: 'Não tem conta?',
             },
+            password_visibility: {
+                show: 'Mostrar senha',
+                hide: 'Ocultar senha',
+            },
             register: {
                 title: 'Cadastro',
                 first_name_label: 'Nome',

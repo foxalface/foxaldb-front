@@ -1884,6 +1884,10 @@ export const hr: LanguageTranslation = {
                 forgot_password: 'Zaboravili ste lozinku?',
                 no_account: 'Nemate račun?',
             },
+            password_visibility: {
+                show: 'Prikaži lozinku',
+                hide: 'Sakrij lozinku',
+            },
             register: {
                 title: 'Registracija',
                 first_name_label: 'Ime',

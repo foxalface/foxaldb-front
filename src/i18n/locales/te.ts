@@ -1897,6 +1897,10 @@ export const te: LanguageTranslation = {
                 forgot_password: 'పాస్‌వర్డ్ మర్చిపోయారా?',
                 no_account: 'ఖాతా లేదా?',
             },
+            password_visibility: {
+                show: 'పాస్‌వర్డ్ చూపించు',
+                hide: 'పాస్‌వర్డ్ దాచు',
+            },
             register: {
                 title: 'నమోదు',
                 first_name_label: 'మొదటి పేరు',

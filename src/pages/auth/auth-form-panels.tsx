@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
+import { PasswordInput } from '@/components/password-input/password-input';
 import { useAuth } from '@/hooks/use-auth';
 import {
     validateRegisterFields,
@@ -101,18 +102,20 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
                         value={email}
                     />
                 </label>
-                <label className="flex flex-col gap-1 text-sm">
-                    <span>{t('auth.login.password_label')}</span>
-                    <Input
+                <div className="flex flex-col gap-1 text-sm">
+                    <label htmlFor="login-password">
+                        {t('auth.login.password_label')}
+                    </label>
+                    <PasswordInput
+                        id="login-password"
                         autoComplete="current-password"
                         disabled={isSubmitting}
                         name="password"
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        type="password"
                         value={password}
                     />
-                </label>
+                </div>
                 {onForgotPassword ? (
                     <button
                         className="w-fit text-sm text-muted-foreground underline underline-offset-4"
@@ -533,7 +536,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                     <label htmlFor="register-password">
                         {t('auth.register.password_label')}
                     </label>
-                    <Input
+                    <PasswordInput
                         id="register-password"
                         autoComplete="new-password"
                         aria-invalid={fieldErrors.password ? true : undefined}
@@ -544,7 +547,6 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                         name="password"
                         onChange={handlePasswordChange}
                         required
-                        type="password"
                         value={password}
                     />
                     {fieldErrors.password ? (
@@ -553,11 +555,12 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                         </p>
                     ) : null}
                 </div>
-                <label className="flex flex-col gap-1 text-sm">
-                    <span>
+                <div className="flex flex-col gap-1 text-sm">
+                    <label htmlFor="register-password-confirmation">
                         {t('auth.register.password_confirmation_label')}
-                    </span>
-                    <Input
+                    </label>
+                    <PasswordInput
+                        id="register-password-confirmation"
                         autoComplete="new-password"
                         disabled={isSubmitting}
                         name="password_confirmation"
@@ -565,10 +568,9 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                             setPasswordConfirmation(e.target.value)
                         }
                         required
-                        type="password"
                         value={passwordConfirmation}
                     />
-                </label>
+                </div>
                 <RegisterAcceptTermsField
                     checked={acceptTerms}
                     disabled={isSubmitting}

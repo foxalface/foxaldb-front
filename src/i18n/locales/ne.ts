@@ -1883,6 +1883,10 @@ export const ne: LanguageTranslation = {
                 forgot_password: 'पासवर्ड बिर्सनुभयो?',
                 no_account: 'खाता छैन?',
             },
+            password_visibility: {
+                show: 'पासवर्ड देखाउनुहोस्',
+                hide: 'पासवर्ड लुकाउनुहोस्',
+            },
             register: {
                 title: 'दर्ता',
                 first_name_label: 'पहिलो नाम',

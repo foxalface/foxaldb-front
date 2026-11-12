@@ -1869,6 +1869,10 @@ export const vi: LanguageTranslation = {
                 forgot_password: 'Quên mật khẩu?',
                 no_account: 'Chưa có tài khoản?',
             },
+            password_visibility: {
+                show: 'Hiện mật khẩu',
+                hide: 'Ẩn mật khẩu',
+            },
             register: {
                 title: 'Đăng ký',
                 first_name_label: 'Tên',

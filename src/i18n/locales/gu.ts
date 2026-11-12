@@ -1860,6 +1860,10 @@ export const gu: LanguageTranslation = {
                 forgot_password: 'પાસવર્ડ ભૂલી ગયા?',
                 no_account: 'એકાઉન્ટ નથી?',
             },
+            password_visibility: {
+                show: 'પાસવર્ડ બતાવો',
+                hide: 'પાસવર્ડ છુપાવો',
+            },
             register: {
                 title: 'નોંધણી',
                 first_name_label: 'પ્રથમ નામ',

@@ -1883,6 +1883,10 @@ export const uk: LanguageTranslation = {
                 forgot_password: 'Забули пароль?',
                 no_account: 'Немає облікового запису?',
             },
+            password_visibility: {
+                show: 'Показати пароль',
+                hide: 'Сховати пароль',
+            },
             register: {
                 title: 'Реєстрація',
                 first_name_label: "Ім'я",

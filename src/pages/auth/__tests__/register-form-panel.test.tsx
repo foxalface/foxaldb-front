@@ -598,4 +598,30 @@ describe('RegisterFormPanel', () => {
         expect(localStorage.getItem('invite-secret')).toBeNull();
         expect(sessionStorage.getItem('invite-secret')).toBeNull();
     });
+
+    it('toggles password and confirmation independently', async () => {
+        const user = userEvent.setup();
+        render(
+            <RegisterFormPanel onSuccess={vi.fn()} onSwitchToLogin={vi.fn()} />
+        );
+
+        const password = screen.getByLabelText(
+            en.translation.auth.register.password_label
+        );
+        const confirmation = screen.getByLabelText(
+            en.translation.auth.register.password_confirmation_label
+        );
+        await user.type(password, 'secret-value');
+        await user.type(confirmation, 'other-value');
+
+        const toggles = screen.getAllByRole('button', {
+            name: en.translation.auth.password_visibility.show,
+        });
+        await user.click(toggles[0]);
+
+        expect(password).toHaveAttribute('type', 'text');
+        expect(password).toHaveValue('secret-value');
+        expect(confirmation).toHaveAttribute('type', 'password');
+        expect(confirmation).toHaveValue('other-value');
+    });
 });

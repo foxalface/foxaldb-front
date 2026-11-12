@@ -1877,6 +1877,10 @@ export const en = {
                 no_account: 'No account?',
                 forgot_password: 'Forgot password?',
             },
+            password_visibility: {
+                show: 'Show password',
+                hide: 'Hide password',
+            },
             register: {
                 title: 'Register',
                 first_name_label: 'First name',
