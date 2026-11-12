@@ -141,18 +141,32 @@ describe('public legal pages', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('links Legal, Privacy, and Terms together', async () => {
+    it('links Legal, Privacy, and Terms together in the document shell', async () => {
         renderLegalPage('notice');
 
         expect(
-            await screen.findByRole('link', { name: 'legal.nav.privacy' })
-        ).toHaveAttribute('href', '/privacy');
+            screen.queryByRole('link', { name: 'legal.nav.home' })
+        ).not.toBeInTheDocument();
+        await screen.findByRole('heading', { level: 1, name: 'Legal notice' });
+
+        const hrefs = screen
+            .getAllByRole('link')
+            .map((link) => link.getAttribute('href'));
+        expect(hrefs).toContain('/privacy');
+        expect(hrefs).toContain('/terms');
+        expect(hrefs).toContain('/legal');
+        expect(screen.getByRole('main')).toBeInTheDocument();
+    });
+
+    it('does not expose a Home action on legal pages', async () => {
+        renderLegalPage('terms');
+
         expect(
-            screen.getByRole('link', { name: 'legal.nav.terms' })
-        ).toHaveAttribute('href', '/terms');
+            await screen.findByRole('heading', { level: 1 })
+        ).toBeInTheDocument();
         expect(
-            screen.getByRole('link', { name: 'legal.nav.legal' })
-        ).toHaveAttribute('href', '/legal');
+            screen.queryByRole('link', { name: 'legal.nav.home' })
+        ).not.toBeInTheDocument();
     });
 
     it('loads /legal, /privacy, and /terms from the public router', async () => {

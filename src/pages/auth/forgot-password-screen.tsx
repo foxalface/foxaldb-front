@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
+import { AuthStepFooter } from '@/dialogs/auth-dialog/auth-step-footer';
 import { ApiError } from '@/lib/api/client';
 import { requestPasswordReset } from '@/lib/api/auth';
 import { formatApiErrorMessage } from './format-api-error-message';
 import { useTranslation } from 'react-i18next';
+
+const FORGOT_PASSWORD_FORM_ID = 'auth-forgot-password-form';
 
 export interface ForgotPasswordScreenProps {
     onBackToLogin: () => void;
@@ -51,7 +54,11 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({
                     {t('auth.password_reset.forgot.sent')}
                 </p>
             ) : (
-                <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+                <form
+                    className="flex flex-col gap-3"
+                    id={FORGOT_PASSWORD_FORM_ID}
+                    onSubmit={handleSubmit}
+                >
                     <label className="flex flex-col gap-1 text-sm">
                         <span>
                             {t('auth.password_reset.forgot.email_label')}
@@ -72,21 +79,30 @@ export const ForgotPasswordScreen: React.FC<ForgotPasswordScreenProps> = ({
                             {errorMessage}
                         </p>
                     ) : null}
-                    <Button disabled={isSubmitting} type="submit">
+                </form>
+            )}
+
+            <AuthStepFooter layout={submitted ? 'start' : 'between'}>
+                <Button
+                    disabled={isSubmitting}
+                    onClick={onBackToLogin}
+                    type="button"
+                    variant="secondary"
+                >
+                    {t('auth.dialog.back')}
+                </Button>
+                {submitted ? null : (
+                    <Button
+                        disabled={isSubmitting}
+                        form={FORGOT_PASSWORD_FORM_ID}
+                        type="submit"
+                    >
                         {isSubmitting
                             ? t('auth.password_reset.forgot.sending')
                             : t('auth.password_reset.forgot.send')}
                     </Button>
-                </form>
-            )}
-
-            <button
-                className="w-fit text-sm text-muted-foreground underline underline-offset-4"
-                onClick={onBackToLogin}
-                type="button"
-            >
-                {t('auth.password_reset.forgot.back_to_sign_in')}
-            </button>
+                )}
+            </AuthStepFooter>
         </div>
     );
 };

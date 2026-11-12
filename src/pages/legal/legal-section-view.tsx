@@ -50,7 +50,7 @@ const Block: React.FC<{ block: LegalBlock }> = ({ block }) => {
     }
 
     return (
-        <p>
+        <p className="text-foreground/95">
             {block.parts.map((part, index) => (
                 <Inline key={index} part={part} />
             ))}

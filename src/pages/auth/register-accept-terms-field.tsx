@@ -1,6 +1,7 @@
 import React from 'react';
 import { Checkbox } from '@/components/checkbox/checkbox';
 import { useTranslation } from 'react-i18next';
+import { LEGAL_APP_LINK_REL } from '@/lib/legal/legal-routes';
 import { parseAcceptTermsTemplate } from './parse-accept-terms-template';
 
 const linkClass =
@@ -46,6 +47,8 @@ export const RegisterAcceptTermsField: React.FC<
                                     key={index}
                                     className={linkClass}
                                     href="/terms"
+                                    rel={LEGAL_APP_LINK_REL}
+                                    target="_blank"
                                 >
                                     {segment.text}
                                 </a>
@@ -58,6 +61,8 @@ export const RegisterAcceptTermsField: React.FC<
                                     key={index}
                                     className={linkClass}
                                     href="/privacy"
+                                    rel={LEGAL_APP_LINK_REL}
+                                    target="_blank"
                                 >
                                     {segment.text}
                                 </a>

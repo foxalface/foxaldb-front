@@ -132,7 +132,7 @@ describe('forgot password auth flow', () => {
 
         await user.click(
             screen.getByRole('button', {
-                name: 'auth.password_reset.forgot.back_to_sign_in',
+                name: 'auth.dialog.back',
             })
         );
 

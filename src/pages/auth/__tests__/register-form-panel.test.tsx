@@ -90,12 +90,16 @@ describe('RegisterFormPanel', () => {
         expect(
             screen.getByRole('checkbox', { name: /Terms of Use/i })
         ).not.toBeChecked();
-        expect(
-            screen.getByRole('link', { name: 'Terms of Use' })
-        ).toHaveAttribute('href', '/terms');
-        expect(
-            screen.getByRole('link', { name: 'Privacy Policy' })
-        ).toHaveAttribute('href', '/privacy');
+        const termsLink = screen.getByRole('link', { name: 'Terms of Use' });
+        const privacyLink = screen.getByRole('link', {
+            name: 'Privacy Policy',
+        });
+        expect(termsLink).toHaveAttribute('href', '/terms');
+        expect(privacyLink).toHaveAttribute('href', '/privacy');
+        expect(termsLink).toHaveAttribute('target', '_blank');
+        expect(privacyLink).toHaveAttribute('target', '_blank');
+        expect(termsLink.getAttribute('rel')).toContain('noopener');
+        expect(termsLink.getAttribute('rel')).toContain('noreferrer');
     });
 
     it('does not check the box when the Terms link is used', async () => {

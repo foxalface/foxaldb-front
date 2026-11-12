@@ -26,7 +26,6 @@ import {
 } from '@/pages/editor-page/side-panel/side-panel-action-menu';
 import { cn } from '@/lib/utils';
 import { LogOut, Settings, User } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { legalConfig } from '@/lib/legal/legal-config';
 
@@ -233,13 +232,31 @@ export const UserNavMenu: React.FC<UserNavMenuProps> = ({ className }) => {
 
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                        <Link to="/legal">{t('legal.nav.legal')}</Link>
+                        <a
+                            href="/legal"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            {t('legal.nav.legal')}
+                        </a>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link to="/privacy">{t('legal.nav.privacy')}</Link>
+                        <a
+                            href="/privacy"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            {t('legal.nav.privacy')}
+                        </a>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link to="/terms">{t('legal.nav.terms')}</Link>
+                        <a
+                            href="/terms"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            {t('legal.nav.terms')}
+                        </a>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <a

@@ -152,7 +152,7 @@ describe('AuthDialog forgot password step', () => {
 
         await user.click(
             screen.getByRole('button', {
-                name: 'auth.password_reset.forgot.back_to_sign_in',
+                name: 'auth.dialog.back',
             })
         );
 
@@ -182,9 +182,20 @@ describe('AuthDialog forgot password step', () => {
             screen.getByRole('button', { name: 'auth.login.submit' })
         );
         await openForgotPasswordFromLogin(user);
-        await user.click(
-            screen.getByRole('button', { name: 'auth.dialog.back' })
-        );
+
+        const backToLogin = screen.getByRole('button', {
+            name: 'auth.dialog.back',
+        });
+        const sendReset = screen.getByRole('button', {
+            name: 'auth.password_reset.forgot.send',
+        });
+        expect(backToLogin.parentElement).toBe(sendReset.parentElement);
+        expect(backToLogin.parentElement).toHaveClass('!justify-between');
+        expect(
+            screen.getAllByRole('button', { name: 'auth.dialog.back' })
+        ).toHaveLength(1);
+
+        await user.click(backToLogin);
 
         expect(
             screen.getByRole('heading', { name: 'auth.dialog.login_title' })
@@ -249,7 +260,7 @@ describe('AuthDialog forgot password step', () => {
 
             await user.click(
                 screen.getByRole('button', {
-                    name: 'auth.password_reset.forgot.back_to_sign_in',
+                    name: 'auth.dialog.back',
                 })
             );
 

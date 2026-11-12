@@ -70,9 +70,13 @@ vi.mock('@/pages/auth/auth-form-panels', () => ({
     LoginFormPanel: ({
         onSuccess,
         onSwitchToRegister,
+        onBack,
+        backLabel,
     }: {
         onSuccess: () => void;
         onSwitchToRegister: () => void;
+        onBack?: () => void;
+        backLabel?: string;
     }) => (
         <div>
             <button type="button" onClick={onSuccess}>
@@ -81,14 +85,23 @@ vi.mock('@/pages/auth/auth-form-panels', () => ({
             <button type="button" onClick={onSwitchToRegister}>
                 switch-register
             </button>
+            {onBack ? (
+                <button type="button" onClick={onBack}>
+                    {backLabel}
+                </button>
+            ) : null}
         </div>
     ),
     RegisterFormPanel: ({
         onSuccess,
         onSwitchToLogin,
+        onBack,
+        backLabel,
     }: {
         onSuccess: () => void;
         onSwitchToLogin: () => void;
+        onBack?: () => void;
+        backLabel?: string;
     }) => (
         <div>
             <button type="button" onClick={onSuccess}>
@@ -97,6 +110,11 @@ vi.mock('@/pages/auth/auth-form-panels', () => ({
             <button type="button" onClick={onSwitchToLogin}>
                 switch-login
             </button>
+            {onBack ? (
+                <button type="button" onClick={onBack}>
+                    {backLabel}
+                </button>
+            ) : null}
         </div>
     ),
     AuthenticatedAccountPanel: ({ onBack }: { onBack: () => void }) => (

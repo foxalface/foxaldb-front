@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { formatApiErrorMessage } from './format-api-error-message';
 import { RegisterAcceptTermsField } from './register-accept-terms-field';
+import { AuthStepFooter } from '@/dialogs/auth-dialog/auth-step-footer';
 
 const REGISTER_FIELDS: RegisterField[] = [
     'first_name',
@@ -26,10 +27,16 @@ const REGISTER_FIELDS: RegisterField[] = [
     'password',
 ];
 
+const LOGIN_FORM_ID = 'auth-login-form';
+const REGISTER_FORM_ID = 'auth-register-form';
+
 export interface LoginFormPanelProps {
     onSuccess: () => void;
     onSwitchToRegister: () => void;
     onForgotPassword?: () => void;
+    /** Wizard Back. Rendered in the step footer with the submit action. */
+    onBack?: () => void;
+    backLabel?: string;
     /** False when AuthCard already renders the surface title. */
     showHeading?: boolean;
     initialEmail?: string;
@@ -39,6 +46,8 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
     onSuccess,
     onSwitchToRegister,
     onForgotPassword,
+    onBack,
+    backLabel,
     showHeading = true,
     initialEmail = '',
 }) => {
@@ -74,7 +83,11 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
                     {t('auth.login.title')}
                 </h1>
             ) : null}
-            <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+            <form
+                className="flex flex-col gap-3"
+                id={LOGIN_FORM_ID}
+                onSubmit={handleSubmit}
+            >
                 <label className="flex flex-col gap-1 text-sm">
                     <span>{t('auth.login.email_label')}</span>
                     <Input
@@ -115,11 +128,13 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
                         {errorMessage}
                     </p>
                 ) : null}
-                <Button disabled={isSubmitting} type="submit">
-                    {isSubmitting
-                        ? t('auth.login.submitting')
-                        : t('auth.login.submit')}
-                </Button>
+                {onBack ? null : (
+                    <Button disabled={isSubmitting} type="submit">
+                        {isSubmitting
+                            ? t('auth.login.submitting')
+                            : t('auth.login.submit')}
+                    </Button>
+                )}
             </form>
             <p className="text-sm text-muted-foreground">
                 {t('auth.login.no_account')}{' '}
@@ -132,6 +147,27 @@ export const LoginFormPanel: React.FC<LoginFormPanelProps> = ({
                     {t('auth.login.switch_to_register')}
                 </button>
             </p>
+            {onBack ? (
+                <AuthStepFooter layout="between">
+                    <Button
+                        disabled={isSubmitting}
+                        onClick={onBack}
+                        type="button"
+                        variant="secondary"
+                    >
+                        {backLabel}
+                    </Button>
+                    <Button
+                        disabled={isSubmitting}
+                        form={LOGIN_FORM_ID}
+                        type="submit"
+                    >
+                        {isSubmitting
+                            ? t('auth.login.submitting')
+                            : t('auth.login.submit')}
+                    </Button>
+                </AuthStepFooter>
+            ) : null}
         </div>
     );
 };
@@ -141,6 +177,9 @@ export interface RegisterFormPanelProps {
     onSwitchToLogin: () => void;
     lockedEmail?: string;
     invitationToken?: string;
+    /** Wizard Back. Rendered in the step footer with the submit action. */
+    onBack?: () => void;
+    backLabel?: string;
     /** False when AuthCard already renders the surface title. */
     showHeading?: boolean;
 }
@@ -150,6 +189,8 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
     onSwitchToLogin,
     lockedEmail,
     invitationToken,
+    onBack,
+    backLabel,
     showHeading = true,
 }) => {
     const { t, i18n } = useTranslation();
@@ -412,6 +453,7 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
             ) : null}
             <form
                 className="flex flex-col gap-3"
+                id={REGISTER_FORM_ID}
                 noValidate
                 onSubmit={handleSubmit}
             >
@@ -543,11 +585,13 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                         {formError}
                     </p>
                 ) : null}
-                <Button disabled={isSubmitting} type="submit">
-                    {isSubmitting
-                        ? t('auth.register.submitting')
-                        : t('auth.register.submit')}
-                </Button>
+                {onBack ? null : (
+                    <Button disabled={isSubmitting} type="submit">
+                        {isSubmitting
+                            ? t('auth.register.submitting')
+                            : t('auth.register.submit')}
+                    </Button>
+                )}
             </form>
             <p className="text-sm text-muted-foreground">
                 {t('auth.register.already_have_account')}{' '}
@@ -560,6 +604,27 @@ export const RegisterFormPanel: React.FC<RegisterFormPanelProps> = ({
                     {t('auth.register.switch_to_login')}
                 </button>
             </p>
+            {onBack ? (
+                <AuthStepFooter layout="between">
+                    <Button
+                        disabled={isSubmitting}
+                        onClick={onBack}
+                        type="button"
+                        variant="secondary"
+                    >
+                        {backLabel}
+                    </Button>
+                    <Button
+                        disabled={isSubmitting}
+                        form={REGISTER_FORM_ID}
+                        type="submit"
+                    >
+                        {isSubmitting
+                            ? t('auth.register.submitting')
+                            : t('auth.register.submit')}
+                    </Button>
+                </AuthStepFooter>
+            ) : null}
         </div>
     );
 };

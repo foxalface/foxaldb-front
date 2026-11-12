@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@/lib/api/client';
 import { ForgotPasswordScreen } from '../forgot-password-screen';
-import { LoginFormPanel } from '../auth-form-panels';
+import { LoginFormPanel, RegisterFormPanel } from '../auth-form-panels';
 
 const requestPasswordReset = vi.fn();
 
@@ -47,13 +47,32 @@ describe('ForgotPasswordScreen', () => {
 
             await user.click(
                 screen.getByRole('button', {
-                    name: 'auth.password_reset.forgot.back_to_sign_in',
+                    name: 'auth.dialog.back',
                 })
             );
 
             expect(onBackToLogin).toHaveBeenCalledTimes(1);
         }
     );
+
+    it('places Back and the send action in one footer', () => {
+        render(<ForgotPasswordScreen onBackToLogin={vi.fn()} />);
+
+        const back = screen.getByRole('button', {
+            name: 'auth.dialog.back',
+        });
+        const send = screen.getByRole('button', {
+            name: 'auth.password_reset.forgot.send',
+        });
+
+        expect(back.parentElement).toBe(send.parentElement);
+        expect(back.parentElement).toHaveClass('!justify-between');
+        expect(back).toHaveClass('bg-secondary');
+        expect(
+            back.compareDocumentPosition(send) &
+                Node.DOCUMENT_POSITION_FOLLOWING
+        ).toBeTruthy();
+    });
 
     it('shows a rate-limit error on 429', async () => {
         requestPasswordReset.mockRejectedValue(
@@ -94,5 +113,47 @@ describe('LoginFormPanel forgot password link', () => {
         );
 
         expect(screen.getByText('auth.login.forgot_password')).toBeTruthy();
+    });
+
+    it('places wizard Back and submit in one footer', () => {
+        render(
+            <LoginFormPanel
+                backLabel="auth.dialog.back"
+                onBack={vi.fn()}
+                onSuccess={vi.fn()}
+                onSwitchToRegister={vi.fn()}
+            />
+        );
+
+        const back = screen.getByRole('button', { name: 'auth.dialog.back' });
+        const submit = screen.getByRole('button', {
+            name: 'auth.login.submit',
+        });
+
+        expect(back.parentElement).toBe(submit.parentElement);
+        expect(back.parentElement).toHaveClass('!justify-between');
+        expect(back).toHaveClass('bg-secondary');
+    });
+});
+
+describe('RegisterFormPanel wizard footer', () => {
+    it('places wizard Back and submit in one footer', () => {
+        render(
+            <RegisterFormPanel
+                backLabel="auth.dialog.back"
+                onBack={vi.fn()}
+                onSuccess={vi.fn()}
+                onSwitchToLogin={vi.fn()}
+            />
+        );
+
+        const back = screen.getByRole('button', { name: 'auth.dialog.back' });
+        const submit = screen.getByRole('button', {
+            name: 'auth.register.submit',
+        });
+
+        expect(back.parentElement).toBe(submit.parentElement);
+        expect(back.parentElement).toHaveClass('!justify-between');
+        expect(back).toHaveClass('bg-secondary');
     });
 });

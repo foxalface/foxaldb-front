@@ -12,8 +12,6 @@ export interface AuthCardProps {
     descriptionClassName?: string;
     /** Dialog surfaces use DialogTitle. Public pages use a heading. */
     titleAs?: 'dialog' | 'heading';
-    onBack?: () => void;
-    backLabel?: string;
     /** Reserved for LEGAL1. Rendered only when provided. */
     footer?: React.ReactNode;
     children?: React.ReactNode;
@@ -25,22 +23,11 @@ export const AuthCard: React.FC<AuthCardProps> = ({
     description,
     descriptionClassName,
     titleAs = 'heading',
-    onBack,
-    backLabel,
     footer,
     children,
     className,
 }) => (
     <div className={cn('flex w-full max-w-md flex-col gap-4', className)}>
-        {onBack ? (
-            <button
-                className="w-fit text-sm text-muted-foreground underline underline-offset-4"
-                onClick={onBack}
-                type="button"
-            >
-                {backLabel}
-            </button>
-        ) : null}
         {titleAs === 'dialog' ? (
             <DialogHeader>
                 <DialogTitle>{title}</DialogTitle>

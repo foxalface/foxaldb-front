@@ -225,10 +225,8 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                 onEscapeKeyDown={handleEscape}
             >
                 <AuthCard
-                    backLabel={backLabel}
                     description={description}
                     descriptionClassName={descriptionClassName}
-                    onBack={onBack}
                     title={title}
                     titleAs="dialog"
                 >
@@ -245,6 +243,8 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                         />
                     ) : showRegister ? (
                         <RegisterFormPanel
+                            backLabel={backLabel}
+                            onBack={onBack}
                             onSuccess={handleRegisterSuccess}
                             onSwitchToLogin={openLogin}
                             showHeading={false}
@@ -253,6 +253,8 @@ export const AuthDialog: React.FC<AuthDialogProps> = ({
                         <ForgotPasswordScreen onBackToLogin={openLogin} />
                     ) : (
                         <LoginFormPanel
+                            backLabel={onBack ? backLabel : undefined}
+                            onBack={onBack}
                             onForgotPassword={openForgotPassword}
                             onSuccess={handleLoginSuccess}
                             onSwitchToRegister={openRegisterFromLogin}
