@@ -10,6 +10,12 @@
   Schema import is fully deterministic and runs in the browser — no AI and no direct database connection required.
 </p>
 
+<p align="center">
+  <b>Current product:</b> FoxalDB, ungated beta, not deployed.<br />
+  FoxalDB has no production AI feature. The OpenAI instructions further down belong to the upstream ChartDB README.<br />
+  Framework export requires a signed-in user. It is not a paid feature, because billing does not exist yet.
+</p>
+
 ---
 
 ## FoxalDB schema workflow (v1)
@@ -71,7 +77,7 @@ Developer documentation: [`docs/architecture/import.md`](docs/architecture/impor
 </p>
 
 <p align="center">
-  <i>Upstream ChartDB README content below. FoxalDB extends this fork with SaaS features and a redesigned import workflow (see above).</i>
+  <i>Status: upstream ChartDB README, kept for AGPL attribution. It is not FoxalDB’s current product, pricing, AI behavior, or deployment. FoxalDB’s own workflow is the section above.</i>
 </p>
 
 <h3 align="center">

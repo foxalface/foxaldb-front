@@ -61,7 +61,7 @@ Transforms the canonical `Diagram` into framework-native schema/code artifacts:
 
 Framework import parsers are **not** inverted into exporters. Each framework export receives its own implementation milestone with independent tests and QA.
 
-**Framework export authentication:** framework-native exports require an authenticated user (Sanctum). This applies to Laravel, Prisma, EF Core, Rails, Django, and Drizzle. Authentication is **not** paid-plan gating — registered free users may use framework exports unless another product rule applies. Portable/local exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) may remain guest-accessible.
+**Framework export authentication:** framework-native exports require an authenticated user (Sanctum). This applies to Laravel, Prisma, EF Core, Rails, Django, and Drizzle. There is no plan or entitlement gate. Portable/local exports (SQL, DBML, Diagram JSON, PNG/JPG/SVG) stay available to guests.
 
 ### C. Portable / Schema
 

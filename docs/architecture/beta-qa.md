@@ -1,6 +1,8 @@
 # Beta QA — executable checklist
 
-Operator-facing Beta validation for FoxalDB. This document is the **executable checklist** for Beta sign-off.
+**Status: historical.** B1–B5 below are a completed manual pass. They are not the next work queue. The next active activity is a new manual product QA pass. This file is not a browser E2E suite, a visual suite, an accessibility suite, or a mobile suite.
+
+Operator-facing record of that Beta validation. The tables below keep their original results.
 
 **Not duplicated here:** import/export/merge implementation architecture — see [import.md](import.md), [export.md](export.md), [schema-merge.md](schema-merge.md).
 
@@ -89,6 +91,8 @@ From repository root with Docker Compose (`DEV_HOST=localhost` in `.env`):
 | Redis | `redis:7` | internal |
 
 **Frontend env (browser):** `VITE_API_BASE_URL`, `VITE_BACKEND_URL`, `VITE_REVERB_*` — see [frontend/.env.example](../../.env.example).
+
+**Sanctum host:** open the SPA on the same host that the API and `XSRF-TOKEN` cookie use (`DEV_HOST` in the workspace env). A page on `127.0.0.1` cannot read a cookie set for another host, and state-changing auth then returns 419. That mismatch is not a Forgot Password defect. Do not record a specific LAN address in this checklist.
 
 **Backend env:** `APP_URL`, `FRONTEND_URL`, `SANCTUM_STATEFUL_DOMAINS`, `CORS_ALLOWED_ORIGINS`, `BROADCAST_CONNECTION=reverb`, DB vars — see [backend/.env.example](../../../backend/.env.example).
 
