@@ -3,8 +3,12 @@ import React from 'react';
 
 import type { ToastActionElement, ToastProps } from '@/components/toast/toast';
 
-const ERROR_TOAST_DURATION = 6000;
-const STATUS_TOAST_DURATION = 5000;
+const SEMANTIC_TOAST_DURATION_MS = {
+    success: 3_000,
+    info: 3_000,
+    warning: 4_000,
+    danger: 4_000,
+} as const;
 
 export type ToastLane = 'error' | 'status';
 
@@ -58,8 +62,21 @@ const emptyLane = (): LaneState => ({ visible: null, queue: [] });
 const laneFor = (variant: ToastProps['variant']): ToastLane =>
     variant === 'danger' || variant === 'destructive' ? 'error' : 'status';
 
-const defaultDuration = (lane: ToastLane): number =>
-    lane === 'error' ? ERROR_TOAST_DURATION : STATUS_TOAST_DURATION;
+const defaultDuration = (variant: ToastProps['variant']): number => {
+    switch (variant) {
+        case 'success':
+            return SEMANTIC_TOAST_DURATION_MS.success;
+        case 'warning':
+            return SEMANTIC_TOAST_DURATION_MS.warning;
+        case 'danger':
+        case 'destructive':
+            return SEMANTIC_TOAST_DURATION_MS.danger;
+        case 'info':
+        case 'default':
+        default:
+            return SEMANTIC_TOAST_DURATION_MS.info;
+    }
+};
 
 let count = 0;
 
@@ -276,7 +293,7 @@ function createHandle(id: string): ToastHandle {
 function toast(props: ToastOptions): ToastHandle {
     const variant = props.variant ?? 'default';
     const lane = laneFor(variant);
-    const duration = props.duration ?? defaultDuration(lane);
+    const duration = props.duration ?? defaultDuration(variant);
     const dedupeKey = props.dedupeKey;
 
     if (dedupeKey !== undefined && dedupeKey !== '') {

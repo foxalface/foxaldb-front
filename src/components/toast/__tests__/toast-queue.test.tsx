@@ -320,6 +320,61 @@ describe('toast dismissal timer', () => {
         return toastRegion;
     };
 
+    it.each([
+        ['success', 3_000],
+        ['info', 3_000],
+        ['warning', 4_000],
+        ['danger', 4_000],
+    ] as const)(
+        'dismisses a %s toast after its semantic default',
+        (variant, duration) => {
+            vi.useFakeTimers();
+            render(<Toaster />);
+
+            show({ title: variant, variant });
+
+            act(() => {
+                vi.advanceTimersByTime(duration - 1);
+            });
+            expect(openToasts()).toHaveLength(1);
+
+            act(() => {
+                vi.advanceTimersByTime(1);
+            });
+            expect(openToasts()).toHaveLength(0);
+        }
+    );
+
+    it('lets an explicit duration override the semantic default', () => {
+        vi.useFakeTimers();
+        render(<Toaster />);
+
+        show({ title: 'Custom', variant: 'success', duration: 8_000 });
+
+        act(() => {
+            vi.advanceTimersByTime(3_000);
+        });
+        expect(openToasts()).toHaveLength(1);
+
+        act(() => {
+            vi.advanceTimersByTime(5_000);
+        });
+        expect(openToasts()).toHaveLength(0);
+    });
+
+    it('keeps a toast open when duration is Infinity', () => {
+        vi.useFakeTimers();
+        render(<Toaster />);
+
+        show({ title: 'Hold', variant: 'danger', duration: Infinity });
+
+        act(() => {
+            vi.advanceTimersByTime(60_000);
+        });
+        expect(openToasts()).toHaveLength(1);
+        expect(openToasts()[0]).toHaveTextContent('Hold');
+    });
+
     it('auto-dismisses, pauses while hovered, and resumes the remaining time', () => {
         vi.useFakeTimers();
         render(<Toaster />);

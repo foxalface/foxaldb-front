@@ -14,27 +14,18 @@ import {
     ToastTitle,
     ToastViewport,
 } from '@/components/toast/toast';
+import { cn } from '@/lib/utils';
 import { useToast, type ToasterToast } from '@/components/toast/use-toast';
 
 const ToastGlyph: React.FC<{ variant: ToasterToast['variant'] }> = ({
     variant,
 }) => {
     if (variant === 'success') {
-        return (
-            <FiCheckCircle
-                aria-hidden
-                className="size-4 shrink-0 text-primary"
-            />
-        );
+        return <FiCheckCircle aria-hidden className="size-4 shrink-0" />;
     }
 
     if (variant === 'warning') {
-        return (
-            <FiAlertTriangle
-                aria-hidden
-                className="size-4 shrink-0 text-destructive"
-            />
-        );
+        return <FiAlertTriangle aria-hidden className="size-4 shrink-0" />;
     }
 
     if (variant === 'danger' || variant === 'destructive') {
@@ -68,9 +59,17 @@ export function Toaster() {
                         key={`${item.id}:${item.revision}`}
                         {...toastProps(item)}
                     >
-                        <ToastGlyph variant={item.variant} />
+                        <span
+                            data-slot="toast-icon"
+                            className="flex h-5 shrink-0 items-center self-start"
+                        >
+                            <ToastGlyph variant={item.variant} />
+                        </span>
                         <div
-                            className={`grid gap-1${layout === 'column' ? ' w-full' : ''}`}
+                            className={cn(
+                                'grid min-w-0 flex-1 gap-1 text-start',
+                                layout === 'column' && 'w-full'
+                            )}
                         >
                             {item.title ? (
                                 <ToastTitle>{item.title}</ToastTitle>
