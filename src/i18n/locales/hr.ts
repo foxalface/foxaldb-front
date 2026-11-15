@@ -5,6 +5,43 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/hr';
 
 export const hr: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'Obavezno',
+            required_fields: 'Ispunite obavezna polja.',
+            invalid_fields: 'Neka polja zahtijevaju vašu pažnju.',
+            invalid_email: 'Unesite valjanu adresu e-pošte.',
+            password_confirmation: 'Lozinke se ne podudaraju.',
+            invalid: 'Provjerite ovo polje.',
+            too_short: 'Ovo je prekratko.',
+            too_long: 'Ovo je predugo.',
+            already_used: 'Ovo se već koristi.',
+        },
+        errors: {
+            network: 'Problem s mrežom. Provjerite vezu i pokušajte ponovno.',
+            forbidden: 'Nemate dopuštenje za to.',
+            not_found: 'To nismo mogli pronaći.',
+            server: 'Nešto je pošlo po krivu na našoj strani. Pokušajte ponovno.',
+            too_many_requests:
+                'Previše zahtjeva. Pričekajte i pokušajte ponovno.',
+            unauthenticated: 'Prijavite se za nastavak.',
+            session_expired: 'Vaša je sesija istekla. Prijavite se ponovno.',
+            invalid_credentials: 'E-pošta ili lozinka nisu točni.',
+            generic: 'Nešto je pošlo po krivu. Pokušajte ponovno.',
+        },
+        toast: {
+            close: 'Zatvori',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'Vrste polja nisu kompatibilne',
+            incompatible_fields_description:
+                'Veze se mogu stvoriti samo između kompatibilnih vrsta polja',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'Izvoz DBML-a nije uspio',
+            generate_failed_description: 'DBML nije bilo moguće generirati.',
+            empty_field_names:
+                'Polja bez naziva u {{tables}} izostavljena su iz izvoza DBML-a.',
+        },
         editor_sidebar: {
             tables: 'Tablice',
             refs: 'Refs',
@@ -1076,6 +1113,8 @@ export const hr: LanguageTranslation = {
             errors: {
                 load_failed: 'Suradnici se nisu mogli učitati.',
                 add_failed: 'Suradnik nije mogao biti dodan.',
+                role_failed: 'Uloga suradnika nije mogla biti promijenjena.',
+                remove_failed: 'Suradnik nije mogao biti uklonjen.',
             },
         },
 
@@ -1444,6 +1483,10 @@ export const hr: LanguageTranslation = {
                     error_semantic: 'EF Core projekt nije moguće generirati.',
                     error_unauthenticated:
                         'Morate biti prijavljeni da biste izvezli EF Core projekte.',
+
+                    errors: {
+                        empty_diagram: 'Dijagram nema tablice za izvoz.',
+                    },
                 },
                 result_step: {
                     description: 'Pregledajte generirani EF Core projekt.',
@@ -1491,6 +1534,10 @@ export const hr: LanguageTranslation = {
                     error_empty_files: 'Izvoz nije sadržavao nijednu datoteku.',
                     error_invalid_package:
                         'Generirani paket nije važeći i nije preuzet.',
+
+                    errors: {
+                        empty_diagram: 'Dijagram nema tablice za izvoz.',
+                    },
                 },
             },
             django: {

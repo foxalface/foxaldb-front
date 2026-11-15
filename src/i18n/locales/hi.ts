@@ -5,6 +5,43 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/hi';
 
 export const hi: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'आवश्यक',
+            required_fields: 'कृपया आवश्यक फ़ील्ड पूरे करें।',
+            invalid_fields: 'कुछ फ़ील्ड पर आपका ध्यान चाहिए।',
+            invalid_email: 'एक मान्य ईमेल पता दर्ज करें।',
+            password_confirmation: 'पासवर्ड मेल नहीं खाते।',
+            invalid: 'इस फ़ील्ड की जाँच करें।',
+            too_short: 'यह बहुत छोटा है।',
+            too_long: 'यह बहुत लंबा है।',
+            already_used: 'यह पहले से उपयोग में है।',
+        },
+        errors: {
+            network: 'नेटवर्क समस्या। अपना कनेक्शन जाँचकर फिर कोशिश करें।',
+            forbidden: 'आपको ऐसा करने की अनुमति नहीं है।',
+            not_found: 'हम इसे नहीं ढूँढ सके।',
+            server: 'हमारी ओर कुछ गलत हुआ। फिर कोशिश करें।',
+            too_many_requests:
+                'बहुत अधिक अनुरोध। कृपया प्रतीक्षा करके फिर कोशिश करें।',
+            unauthenticated: 'जारी रखने के लिए साइन इन करें।',
+            session_expired: 'आपका सत्र समाप्त हो गया है। फिर साइन इन करें।',
+            invalid_credentials: 'ईमेल या पासवर्ड गलत है।',
+            generic: 'कुछ गलत हो गया। फिर कोशिश करें।',
+        },
+        toast: {
+            close: 'बंद करें',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'फ़ील्ड प्रकार संगत नहीं हैं',
+            incompatible_fields_description:
+                'संबंध केवल संगत फ़ील्ड प्रकारों के बीच बनाए जा सकते हैं',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML निर्यात विफल रहा',
+            generate_failed_description: 'DBML बनाया नहीं जा सका।',
+            empty_field_names:
+                '{{tables}} में बिना नाम वाले कुछ फ़ील्ड DBML निर्यात से बाहर रह गए।',
+        },
         editor_sidebar: {
             tables: 'टेबल',
             refs: 'रेफ्स',
@@ -1068,6 +1105,8 @@ export const hi: LanguageTranslation = {
             errors: {
                 load_failed: 'सहयोगियों को लोड नहीं किया जा सका।',
                 add_failed: 'सहयोगी जोड़ा नहीं जा सका।',
+                role_failed: 'सहयोगी की भूमिका बदली नहीं जा सकी।',
+                remove_failed: 'सहयोगी को हटाया नहीं जा सका।',
             },
         },
 
@@ -1437,6 +1476,11 @@ export const hi: LanguageTranslation = {
                     error_semantic: 'EF Core प्रोजेक्ट जनरेट नहीं हो सका।',
                     error_unauthenticated:
                         'EF Core प्रोजेक्ट निर्यात करने के लिए आपको साइन इन होना होगा।',
+
+                    errors: {
+                        empty_diagram:
+                            'आरेख में निर्यात करने योग्य तालिकाएँ नहीं हैं।',
+                    },
                 },
                 result_step: {
                     description:
@@ -1485,6 +1529,11 @@ export const hi: LanguageTranslation = {
                     error_empty_files: 'निर्यात में कोई फ़ाइल शामिल नहीं थी।',
                     error_invalid_package:
                         'जनरेट किया गया पैकेज अमान्य है, इसलिए उसे डाउनलोड नहीं किया गया।',
+
+                    errors: {
+                        empty_diagram:
+                            'आरेख में निर्यात करने योग्य तालिकाएँ नहीं हैं।',
+                    },
                 },
             },
             django: {

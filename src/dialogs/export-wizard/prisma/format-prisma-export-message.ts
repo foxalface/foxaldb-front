@@ -17,9 +17,7 @@ export const formatPrismaExportError = (
         return translated;
     }
 
-    return (
-        error.message || t('export_wizard.prisma.preview_step.generation_error')
-    );
+    return t('export_wizard.prisma.preview_step.generation_error');
 };
 
 export const formatPrismaExportNote = (
@@ -33,7 +31,7 @@ export const formatPrismaExportNote = (
         return translated;
     }
 
-    return note.message;
+    return t('export_wizard.prisma.preview_step.generation_error');
 };
 
 export const formatGroupedPrismaExportNote = (

@@ -5,6 +5,44 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/ru';
 
 export const ru: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'Обязательно',
+            required_fields: 'Заполните обязательные поля.',
+            invalid_fields: 'Некоторые поля требуют внимания.',
+            invalid_email: 'Введите действительный адрес электронной почты.',
+            password_confirmation: 'Пароли не совпадают.',
+            invalid: 'Проверьте это поле.',
+            too_short: 'Слишком коротко.',
+            too_long: 'Слишком длинно.',
+            already_used: 'Это значение уже используется.',
+        },
+        errors: {
+            network:
+                'Проблема с сетью. Проверьте подключение и попробуйте снова.',
+            forbidden: 'У вас нет разрешения на это действие.',
+            not_found: 'Не удалось это найти.',
+            server: 'На нашей стороне произошла ошибка. Попробуйте снова.',
+            too_many_requests:
+                'Слишком много запросов. Подождите и попробуйте снова.',
+            unauthenticated: 'Войдите, чтобы продолжить.',
+            session_expired: 'Сеанс истёк. Войдите снова.',
+            invalid_credentials: 'Электронная почта или пароль неверны.',
+            generic: 'Что-то пошло не так. Попробуйте снова.',
+        },
+        toast: {
+            close: 'Закрыть',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'Типы полей несовместимы',
+            incompatible_fields_description:
+                'Связи можно создавать только между совместимыми типами полей',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'Не удалось экспортировать DBML',
+            generate_failed_description: 'Не удалось сформировать DBML.',
+            empty_field_names:
+                'Поля без имени в {{tables}} исключены из экспорта DBML.',
+        },
         editor_sidebar: {
             tables: 'Таблицы',
             refs: 'Ссылки',
@@ -1072,6 +1110,8 @@ export const ru: LanguageTranslation = {
             errors: {
                 load_failed: 'Не удалось загрузить участников.',
                 add_failed: 'Не удалось добавить участника.',
+                role_failed: 'Не удалось изменить роль участника.',
+                remove_failed: 'Не удалось удалить участника.',
             },
         },
 
@@ -1442,6 +1482,10 @@ export const ru: LanguageTranslation = {
                     error_semantic: 'Не удалось создать проект EF Core.',
                     error_unauthenticated:
                         'Чтобы экспортировать проекты EF Core, необходимо войти в систему.',
+
+                    errors: {
+                        empty_diagram: 'В диаграмме нет экспортируемых таблиц.',
+                    },
                 },
                 result_step: {
                     description: 'Просмотрите сгенерированный проект EF Core.',
@@ -1489,6 +1533,10 @@ export const ru: LanguageTranslation = {
                     error_empty_files: 'Экспорт не содержал файлов.',
                     error_invalid_package:
                         'Созданный пакет недействителен и не был скачан.',
+
+                    errors: {
+                        empty_diagram: 'В диаграмме нет экспортируемых таблиц.',
+                    },
                 },
             },
             django: {

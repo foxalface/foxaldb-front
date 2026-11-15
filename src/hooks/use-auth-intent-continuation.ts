@@ -68,7 +68,8 @@ export const useAuthIntentContinuation = ({
     const showPutOnlineFailed = () => {
         toast({
             title: t('open_diagram_dialog.errors.put_online_failed'),
-            variant: 'destructive',
+            variant: 'danger',
+            dedupeKey: 'diagram:put-online-failed',
         });
     };
 
@@ -128,7 +129,8 @@ export const useAuthIntentContinuation = ({
             } catch {
                 toast({
                     title: t('auth.errors.generic'),
-                    variant: 'destructive',
+                    variant: 'danger',
+                    dedupeKey: 'auth:intent-failed',
                 });
             }
 
@@ -142,7 +144,8 @@ export const useAuthIntentContinuation = ({
         } catch {
             toast({
                 title: t('auth.errors.generic'),
-                variant: 'destructive',
+                variant: 'danger',
+                dedupeKey: 'auth:intent-failed',
             });
         }
 

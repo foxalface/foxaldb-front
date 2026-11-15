@@ -5,6 +5,44 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/uk';
 
 export const uk: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'Обов’язково',
+            required_fields: 'Заповніть обов’язкові поля.',
+            invalid_fields: 'Деякі поля потребують вашої уваги.',
+            invalid_email: 'Введіть дійсну адресу електронної пошти.',
+            password_confirmation: 'Паролі не збігаються.',
+            invalid: 'Перевірте це поле.',
+            too_short: 'Це закоротке.',
+            too_long: 'Це задовге.',
+            already_used: 'Це значення вже використовується.',
+        },
+        errors: {
+            network:
+                'Проблема з мережею. Перевірте з’єднання і спробуйте ще раз.',
+            forbidden: 'У вас немає дозволу це зробити.',
+            not_found: 'Не вдалося це знайти.',
+            server: 'Сталася помилка з нашого боку. Спробуйте ще раз.',
+            too_many_requests:
+                'Забагато запитів. Зачекайте і спробуйте ще раз.',
+            unauthenticated: 'Увійдіть, щоб продовжити.',
+            session_expired: 'Сеанс завершився. Увійдіть знову.',
+            invalid_credentials: 'Електронна пошта або пароль неправильні.',
+            generic: 'Щось пішло не так. Спробуйте ще раз.',
+        },
+        toast: {
+            close: 'Закрити',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'Типи полів несумісні',
+            incompatible_fields_description:
+                'Зв’язки можна створювати лише між сумісними типами полів',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'Не вдалося експортувати DBML',
+            generate_failed_description: 'Не вдалося створити DBML.',
+            empty_field_names:
+                'Поля без назви в {{tables}} виключено з експорту DBML.',
+        },
         editor_sidebar: {
             tables: 'Таблиці',
             refs: 'Зв’язки',
@@ -1076,6 +1114,8 @@ export const uk: LanguageTranslation = {
             errors: {
                 load_failed: 'Не вдалося завантажити учасників.',
                 add_failed: 'Не вдалося додати учасника.',
+                role_failed: 'Не вдалося змінити роль учасника.',
+                remove_failed: 'Не вдалося вилучити учасника.',
             },
         },
 
@@ -1446,6 +1486,11 @@ export const uk: LanguageTranslation = {
                     error_semantic: 'Не вдалося згенерувати проєкт EF Core.',
                     error_unauthenticated:
                         'Щоб експортувати проєкти EF Core, потрібно увійти в обліковий запис.',
+
+                    errors: {
+                        empty_diagram:
+                            'Діаграма не містить таблиць для експорту.',
+                    },
                 },
                 result_step: {
                     description: 'Перегляньте згенерований проєкт EF Core.',
@@ -1493,6 +1538,11 @@ export const uk: LanguageTranslation = {
                     error_empty_files: 'Експорт не містив жодного файлу.',
                     error_invalid_package:
                         'Згенерований пакет недійсний, тому його не завантажено.',
+
+                    errors: {
+                        empty_diagram:
+                            'Діаграма не містить таблиць для експорту.',
+                    },
                 },
             },
             django: {

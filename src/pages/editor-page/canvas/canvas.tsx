@@ -714,10 +714,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 )
             ) {
                 toast({
-                    title: 'Field types are not compatible',
-                    variant: 'destructive',
-                    description:
-                        'Relationships can only be created between compatible field types',
+                    title: t('canvas_toasts.incompatible_fields_title'),
+                    variant: 'danger',
+                    description: t(
+                        'canvas_toasts.incompatible_fields_description'
+                    ),
+                    dedupeKey: 'canvas:incompatible-fields',
                 });
                 return;
             }
@@ -734,6 +736,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             createDependency,
             getField,
             toast,
+            t,
             databaseType,
             readonly,
         ]

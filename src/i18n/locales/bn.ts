@@ -5,6 +5,43 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/bn';
 
 export const bn: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'আবশ্যক',
+            required_fields: 'অনুগ্রহ করে আবশ্যক ঘরগুলো পূরণ করুন।',
+            invalid_fields: 'কিছু ঘরে আপনার মনোযোগ দরকার।',
+            invalid_email: 'একটি বৈধ ইমেল ঠিকানা লিখুন।',
+            password_confirmation: 'পাসওয়ার্ড দুটি মিলছে না।',
+            invalid: 'এই ঘরটি পরীক্ষা করুন।',
+            too_short: 'এটি খুব ছোট।',
+            too_long: 'এটি খুব লম্বা।',
+            already_used: 'এটি ইতিমধ্যে ব্যবহৃত।',
+        },
+        errors: {
+            network: 'নেটওয়ার্ক সমস্যা। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।',
+            forbidden: 'এটি করার অনুমতি আপনার নেই।',
+            not_found: 'আমরা এটি খুঁজে পাইনি।',
+            server: 'আমাদের দিকে একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।',
+            too_many_requests:
+                'অনেক বেশি অনুরোধ। একটু অপেক্ষা করে আবার চেষ্টা করুন।',
+            unauthenticated: 'চালিয়ে যেতে সাইন ইন করুন।',
+            session_expired: 'আপনার সেশনের মেয়াদ শেষ। আবার সাইন ইন করুন।',
+            invalid_credentials: 'ইমেল বা পাসওয়ার্ডটি ভুল।',
+            generic: 'কিছু ভুল হয়েছে। আবার চেষ্টা করুন।',
+        },
+        toast: {
+            close: 'বন্ধ',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'ফিল্ডের ধরনগুলো সামঞ্জস্যপূর্ণ নয়',
+            incompatible_fields_description:
+                'সম্পর্ক শুধু সামঞ্জস্যপূর্ণ ফিল্ডের ধরনের মধ্যে তৈরি করা যায়',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML রপ্তানি ব্যর্থ হয়েছে',
+            generate_failed_description: 'DBML তৈরি করা যায়নি।',
+            empty_field_names:
+                '{{tables}}-এ নামহীন কিছু ফিল্ড DBML রপ্তানি থেকে বাদ পড়েছে।',
+        },
         editor_sidebar: {
             tables: 'টেবিল',
             refs: 'রেফস',
@@ -1067,6 +1104,8 @@ export const bn: LanguageTranslation = {
             errors: {
                 load_failed: 'সহযোগীদের লোড করা যায়নি।',
                 add_failed: 'সহযোগী যোগ করা যায়নি।',
+                role_failed: 'সহযোগীর ভূমিকা বদলানো যায়নি।',
+                remove_failed: 'সহযোগীকে সরানো যায়নি।',
             },
         },
 
@@ -1439,6 +1478,11 @@ export const bn: LanguageTranslation = {
                     error_semantic: 'EF Core প্রকল্প তৈরি করা যায়নি।',
                     error_unauthenticated:
                         'EF Core প্রকল্প রপ্তানি করতে আপনাকে সাইন ইন থাকতে হবে।',
+
+                    errors: {
+                        empty_diagram:
+                            'ডায়াগ্রামে এক্সপোর্টযোগ্য কোনো টেবিল নেই।',
+                    },
                 },
                 result_step: {
                     description: 'তৈরি EF Core প্রকল্প পর্যালোচনা করুন।',
@@ -1486,6 +1530,11 @@ export const bn: LanguageTranslation = {
                     error_empty_files: 'রপ্তানিতে কোনো ফাইল ছিল না।',
                     error_invalid_package:
                         'জেনারেট করা প্যাকেজ অবৈধ বলে ডাউনলোড করা হয়নি।',
+
+                    errors: {
+                        empty_diagram:
+                            'ডায়াগ্রামে এক্সপোর্টযোগ্য কোনো টেবিল নেই।',
+                    },
                 },
             },
             django: {

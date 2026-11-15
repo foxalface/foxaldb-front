@@ -18,6 +18,8 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useDialog } from '@/hooks/use-dialog';
+import { useToast } from '@/components/toast/use-toast';
+import { invalidControlClassName } from '@/components/form-field/form-field-ids';
 
 const MIN_TITLE_WIDTH_PX = 32;
 
@@ -27,8 +29,10 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
     const { diagramName, updateDiagramName, currentDiagram } = useChartDB();
 
     const { t } = useTranslation();
+    const { toast } = useToast();
     const [editMode, setEditMode] = useState(false);
     const [editedDiagramName, setEditedDiagramName] = useState(diagramName);
+    const [nameInvalid, setNameInvalid] = useState(false);
     const [fieldWidth, setFieldWidth] = useState(MIN_TITLE_WIDTH_PX);
     const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -53,15 +57,25 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
             return;
         }
 
-        if (editedDiagramName.trim()) {
-            updateDiagramName(editedDiagramName.trim());
+        if (!editedDiagramName.trim()) {
+            setNameInvalid(true);
+            inputRef.current?.focus();
+            toast({
+                title: t('validation.required_fields'),
+                variant: 'danger',
+                dedupeKey: 'diagram:rename-required',
+            });
+            return;
         }
 
+        updateDiagramName(editedDiagramName.trim());
+        setNameInvalid(false);
         setEditMode(false);
-    }, [editMode, editedDiagramName, updateDiagramName]);
+    }, [editMode, editedDiagramName, t, toast, updateDiagramName]);
 
     const abortEdit = useCallback(() => {
         setEditedDiagramName(diagramName);
+        setNameInvalid(false);
         setEditMode(false);
     }, [diagramName]);
 
@@ -169,13 +183,19 @@ export const DiagramName: React.FC<DiagramNameProps> = () => {
                             placeholder={diagramName}
                             value={editedDiagramName}
                             onClick={(e) => e.stopPropagation()}
-                            onChange={(e) =>
-                                setEditedDiagramName(e.target.value)
-                            }
+                            onChange={(e) => {
+                                setEditedDiagramName(e.target.value);
+                                setNameInvalid(false);
+                            }}
+                            aria-invalid={nameInvalid ? true : undefined}
+                            required
                             onBlur={() => {
                                 saveDiagramName();
                             }}
-                            className="h-6 w-full rounded-full border-border bg-secondary px-2.5 text-sm focus-visible:ring-0"
+                            className={cn(
+                                'h-6 w-full rounded-full border-border bg-secondary px-2.5 text-sm focus-visible:ring-0',
+                                invalidControlClassName(nameInvalid)
+                            )}
                         />
                     </div>
                 ) : (

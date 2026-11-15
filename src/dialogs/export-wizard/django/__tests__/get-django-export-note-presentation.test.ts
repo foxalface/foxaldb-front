@@ -610,7 +610,7 @@ describe('getDjangoExportErrorPresentation', () => {
         ).toBe('Localized collision users');
     });
 
-    it('falls back to backend message for unknown error codes', () => {
+    it('uses a localized generic message for unknown error codes', () => {
         expect(
             getDjangoExportErrorPresentation(
                 {
@@ -619,10 +619,19 @@ describe('getDjangoExportErrorPresentation', () => {
                 },
                 errorT
             )
-        ).toBe('Backend future error');
+        ).toBe('export_wizard.django.result_step.error_semantic');
+        expect(
+            getDjangoExportErrorPresentation(
+                {
+                    code: 'future_error',
+                    message: 'Backend future error',
+                },
+                errorT
+            )
+        ).not.toContain('Backend future error');
     });
 
-    it('falls back when a collision error is missing path', () => {
+    it('uses a localized generic message when a collision error is missing path', () => {
         expect(
             getDjangoExportErrorPresentation(
                 {
@@ -631,6 +640,6 @@ describe('getDjangoExportErrorPresentation', () => {
                 },
                 errorT
             )
-        ).toBe('Backend collision without path');
+        ).toBe('export_wizard.django.result_step.error_semantic');
     });
 });

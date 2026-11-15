@@ -5,6 +5,42 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/vi';
 
 export const vi: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'Bắt buộc',
+            required_fields: 'Vui lòng điền các trường bắt buộc.',
+            invalid_fields: 'Một số trường cần bạn chú ý.',
+            invalid_email: 'Nhập địa chỉ email hợp lệ.',
+            password_confirmation: 'Mật khẩu không khớp.',
+            invalid: 'Hãy kiểm tra trường này.',
+            too_short: 'Nội dung này quá ngắn.',
+            too_long: 'Nội dung này quá dài.',
+            already_used: 'Giá trị này đã được dùng.',
+        },
+        errors: {
+            network: 'Lỗi mạng. Kiểm tra kết nối và thử lại.',
+            forbidden: 'Bạn không có quyền thực hiện việc này.',
+            not_found: 'Chúng tôi không tìm thấy mục đó.',
+            server: 'Đã xảy ra lỗi từ phía chúng tôi. Hãy thử lại.',
+            too_many_requests: 'Quá nhiều yêu cầu. Vui lòng đợi và thử lại.',
+            unauthenticated: 'Đăng nhập để tiếp tục.',
+            session_expired: 'Phiên của bạn đã hết hạn. Hãy đăng nhập lại.',
+            invalid_credentials: 'Email hoặc mật khẩu không đúng.',
+            generic: 'Đã xảy ra lỗi. Hãy thử lại.',
+        },
+        toast: {
+            close: 'Đóng',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'Các kiểu trường không tương thích',
+            incompatible_fields_description:
+                'Quan hệ chỉ có thể tạo giữa các kiểu trường tương thích',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'Xuất DBML không thành công',
+            generate_failed_description: 'Không thể tạo DBML.',
+            empty_field_names:
+                'Các trường không có tên trong {{tables}} đã được loại khỏi bản xuất DBML.',
+        },
         editor_sidebar: {
             tables: 'Bảng',
             refs: 'Refs',
@@ -1072,6 +1108,8 @@ export const vi: LanguageTranslation = {
             errors: {
                 load_failed: 'Không thể tải cộng tác viên.',
                 add_failed: 'Không thể thêm cộng tác viên.',
+                role_failed: 'Không thể đổi vai trò của cộng tác viên.',
+                remove_failed: 'Không thể xóa cộng tác viên.',
             },
         },
 
@@ -1432,6 +1470,10 @@ export const vi: LanguageTranslation = {
                     error_semantic: 'Không thể tạo dự án EF Core.',
                     error_unauthenticated:
                         'Bạn cần đăng nhập để xuất dự án EF Core.',
+
+                    errors: {
+                        empty_diagram: 'Sơ đồ không có bảng có thể xuất.',
+                    },
                 },
                 result_step: {
                     description: 'Xem lại dự án EF Core đã tạo.',
@@ -1479,6 +1521,10 @@ export const vi: LanguageTranslation = {
                     error_empty_files: 'Bản xuất không chứa tệp nào.',
                     error_invalid_package:
                         'Gói đã tạo không hợp lệ nên không được tải xuống.',
+
+                    errors: {
+                        empty_diagram: 'Sơ đồ không có bảng có thể xuất.',
+                    },
                 },
             },
             django: {

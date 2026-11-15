@@ -541,8 +541,11 @@ describe('ExportWizardDialog Rails branch', () => {
 
         await waitFor(() => {
             expect(screen.getByTestId('export-rails-error')).toHaveTextContent(
-                'The diagram has no exportable tables.'
+                'export_wizard.rails.result_step.error_semantic'
             );
+            expect(
+                screen.getByTestId('export-rails-error')
+            ).not.toHaveTextContent('The diagram has no exportable tables.');
         });
 
         expect(screen.getByTestId('export-rails-error')).toHaveAttribute(

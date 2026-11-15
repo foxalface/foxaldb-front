@@ -162,8 +162,9 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = React.memo(
             setIsCopied(false);
             toast({
                 title: t('copy_to_clipboard_toast.failed.title'),
-                variant: 'destructive',
+                variant: 'danger',
                 description: t('copy_to_clipboard_toast.failed.description'),
+                dedupeKey: 'clipboard:copy-failed',
             });
         }, [textToCopy, t, toast]);
 

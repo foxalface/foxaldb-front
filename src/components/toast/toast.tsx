@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cross2Icon } from '@radix-ui/react-icons';
+import { FiX } from 'react-icons/fi';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -27,9 +27,15 @@ const toastVariants = cva(
     {
         variants: {
             variant: {
-                default: 'border bg-background text-foreground',
+                default: 'info border bg-background text-foreground',
+                info: 'info border bg-background text-foreground',
+                success:
+                    'success border border-primary bg-background text-foreground',
+                warning:
+                    'warning border border-destructive bg-background text-foreground',
+                danger: 'danger destructive group border-destructive bg-destructive text-destructive-foreground',
                 destructive:
-                    'destructive group border-destructive bg-destructive text-destructive-foreground',
+                    'danger destructive group border-destructive bg-destructive text-destructive-foreground',
             },
         },
         defaultVariants: {
@@ -75,13 +81,14 @@ const ToastClose = React.forwardRef<
     <ToastPrimitives.Close
         ref={ref}
         className={cn(
-            'absolute right-1 top-1 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-1 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600',
+            'absolute right-1 top-1 rounded-md p-1 text-foreground/60 hover:text-foreground focus:outline-none focus:ring-1 focus:ring-ring group-[.danger]:text-destructive-foreground/80 group-[.danger]:hover:text-destructive-foreground group-[.danger]:focus:ring-destructive-foreground',
             className
         )}
         toast-close=""
+        type="button"
         {...props}
     >
-        <Cross2Icon className="size-4" />
+        <FiX aria-hidden className="size-4" />
     </ToastPrimitives.Close>
 ));
 ToastClose.displayName = ToastPrimitives.Close.displayName;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Checkbox } from '@/components/checkbox/checkbox';
+import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { LEGAL_APP_LINK_REL } from '@/lib/legal/legal-routes';
 import { parseAcceptTermsTemplate } from './parse-accept-terms-template';
@@ -32,6 +33,7 @@ export const RegisterAcceptTermsField: React.FC<
                     aria-invalid={error !== null ? true : undefined}
                     aria-labelledby="register-accept-terms-copy"
                     checked={checked}
+                    className={cn(error !== null && 'border-destructive')}
                     disabled={disabled}
                     id="register-accept-terms"
                     onCheckedChange={(value) => onCheckedChange(value === true)}
@@ -82,11 +84,7 @@ export const RegisterAcceptTermsField: React.FC<
                 </p>
             </div>
             {error !== null ? (
-                <p
-                    className="text-xs text-destructive"
-                    id="register-accept-terms-error"
-                    role="alert"
-                >
+                <p className="sr-only" id="register-accept-terms-error">
                     {error}
                 </p>
             ) : null}

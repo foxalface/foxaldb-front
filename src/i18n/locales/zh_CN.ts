@@ -5,6 +5,41 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/zh_CN';
 
 export const zh_CN: LanguageTranslation = {
     translation: {
+        validation: {
+            required: '必填',
+            required_fields: '请填写必填项。',
+            invalid_fields: '有些字段需要您的注意。',
+            invalid_email: '请输入有效的电子邮箱地址。',
+            password_confirmation: '两次输入的密码不一致。',
+            invalid: '请检查此字段。',
+            too_short: '内容太短。',
+            too_long: '内容太长。',
+            already_used: '该内容已被使用。',
+        },
+        errors: {
+            network: '网络出现问题。请检查连接后重试。',
+            forbidden: '你没有权限执行此操作。',
+            not_found: '找不到该内容。',
+            server: '我们这边出了问题。请重试。',
+            too_many_requests: '请求过多。请稍候再试。',
+            unauthenticated: '请登录后继续。',
+            session_expired: '会话已过期。请重新登录。',
+            invalid_credentials: '电子邮箱或密码不正确。',
+            generic: '出了点问题。请重试。',
+        },
+        toast: {
+            close: '关闭',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: '字段类型不兼容',
+            incompatible_fields_description: '只能在兼容的字段类型之间创建关系',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML 导出失败',
+            generate_failed_description: '无法生成 DBML。',
+            empty_field_names:
+                '{{tables}} 中没有名称的字段已从 DBML 导出中排除。',
+        },
         editor_sidebar: {
             tables: '表',
             refs: '引用',
@@ -998,6 +1033,8 @@ export const zh_CN: LanguageTranslation = {
             errors: {
                 load_failed: '无法加载协作者。',
                 add_failed: '无法添加协作者。',
+                role_failed: '无法更改协作者的角色。',
+                remove_failed: '无法移除协作者。',
             },
         },
 
@@ -1340,6 +1377,9 @@ export const zh_CN: LanguageTranslation = {
                     error_unexpected: '无法导出 EF Core 项目。请重试。',
                     error_semantic: '无法生成 EF Core 项目。',
                     error_unauthenticated: '需要登录才能导出 EF Core 项目。',
+                    errors: {
+                        empty_diagram: '图表没有可导出的表。',
+                    },
                 },
                 result_step: {
                     description: '查看生成的 EF Core 项目。',
@@ -1380,6 +1420,9 @@ export const zh_CN: LanguageTranslation = {
                     error_unsafe_path: '导出包含不安全的文件路径，因此未下载。',
                     error_empty_files: '导出未包含任何文件。',
                     error_invalid_package: '生成的包无效，因此未下载。',
+                    errors: {
+                        empty_diagram: '图表没有可导出的表。',
+                    },
                 },
             },
             django: {

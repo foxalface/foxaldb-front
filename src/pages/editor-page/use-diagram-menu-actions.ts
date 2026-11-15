@@ -56,7 +56,8 @@ export const useDiagramMenuActions = (
     const showDeleteFailedToast = useCallback(() => {
         toast({
             title: t('delete_diagram_alert.delete_failed'),
-            variant: 'destructive',
+            variant: 'danger',
+            dedupeKey: 'diagram:delete-failed',
         });
     }, [toast, t]);
 

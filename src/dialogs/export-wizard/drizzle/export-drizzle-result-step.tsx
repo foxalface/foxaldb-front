@@ -75,12 +75,9 @@ export const ExportDrizzleResultStep: React.FC<
                 return getDrizzleExportErrorPresentation(
                     {
                         code: error.code ?? '',
-                        message:
-                            error.message && error.message.trim().length > 0
-                                ? error.message
-                                : t(
-                                      'export_wizard.drizzle.result_step.error_semantic'
-                                  ),
+                        message: t(
+                            'export_wizard.drizzle.result_step.error_semantic'
+                        ),
                         path: error.path,
                     },
                     t

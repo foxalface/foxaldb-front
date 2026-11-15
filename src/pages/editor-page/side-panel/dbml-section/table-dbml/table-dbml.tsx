@@ -182,7 +182,9 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
         if (foundInvalidFields) {
             const tableNamesString = Array.from(invalidTableNames).join(', ');
             setWarningMessage(
-                `Some fields had empty names in tables: [${tableNamesString}] and were excluded from the DBML export.`
+                t('dbml_toasts.empty_field_names', {
+                    tables: tableNamesString,
+                })
             );
         }
     }, [currentDiagram.tables, t, isEditMode]);
@@ -211,13 +213,15 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
                 return;
             }
 
-            // Handle errors
             if (result.error) {
                 toast({
-                    title: 'DBML Export Error',
-                    description: `Could not generate DBML: ${result.error.substring(0, 100)}${result.error.length > 100 ? '...' : ''}`,
-                    variant: 'destructive',
+                    title: t('dbml_toasts.generate_failed_title'),
+                    description: t('dbml_toasts.generate_failed_description'),
+                    variant: 'danger',
+                    dedupeKey: 'dbml:generate-failed',
                 });
+                setIsLoading(false);
+                return;
             }
 
             setStandardDbml(result.standardDbml);
@@ -232,7 +236,7 @@ export const TableDBML: React.FC<TableDBMLProps> = () => {
         return () => {
             clearTimeout(timeoutId);
         };
-    }, [currentDiagram, toast, isEditMode]);
+    }, [currentDiagram, isEditMode, t, toast]);
 
     // Update editedDbml when dbmlToDisplay changes
     useEffect(() => {

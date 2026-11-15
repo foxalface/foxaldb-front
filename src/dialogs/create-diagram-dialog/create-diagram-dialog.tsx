@@ -232,13 +232,14 @@ export const CreateDiagramDialog: React.FC<CreateDiagramDialogProps> = ({
                         });
                     } catch {
                         toast({
-                            variant: 'destructive',
+                            variant: 'danger',
                             title: t(
                                 'new_diagram_dialog.choose_creation_destination.save_preference_error_title'
                             ),
                             description: t(
                                 'new_diagram_dialog.choose_creation_destination.save_preference_error_description'
                             ),
+                            dedupeKey: 'diagram:creation-preference',
                         });
                     }
                 }

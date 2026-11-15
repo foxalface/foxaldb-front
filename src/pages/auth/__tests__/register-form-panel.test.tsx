@@ -1,10 +1,12 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { en } from '@/i18n/locales/en';
 import { formatRecoveryDeadline } from '@/lib/account/format-recovery-deadline';
 import { ApiError } from '@/lib/api/client';
+import { Toaster } from '@/components/toast/toaster';
+import { dismiss, toast } from '@/components/toast/use-toast';
 
 const { registerMock, requestAccountRecoveryMock } = vi.hoisted(() => ({
     registerMock: vi.fn(),
@@ -70,6 +72,7 @@ describe('RegisterFormPanel', () => {
         requestAccountRecoveryMock.mockResolvedValue(undefined);
         localStorage.clear();
         sessionStorage.clear();
+        dismiss();
     });
 
     afterEach(() => {
@@ -152,7 +155,7 @@ describe('RegisterFormPanel', () => {
         );
 
         expect(
-            screen.getByText(en.translation.auth.register.accept_terms_required)
+            screen.getByText(en.translation.validation.required)
         ).toBeInTheDocument();
         expect(registerMock).not.toHaveBeenCalled();
     });
@@ -180,12 +183,15 @@ describe('RegisterFormPanel', () => {
             })
         );
 
-        expect(
-            screen.getByText(en.translation.auth.errors.first_name_required)
-        ).toBeInTheDocument();
-        expect(
-            screen.queryByText(en.translation.auth.errors.last_name_required)
-        ).not.toBeInTheDocument();
+        const firstName = screen.getByLabelText(
+            en.translation.auth.register.first_name_label
+        );
+        const lastName = screen.getByLabelText(
+            en.translation.auth.register.last_name_label
+        );
+
+        expect(firstName).toHaveAttribute('aria-invalid', 'true');
+        expect(lastName).not.toHaveAttribute('aria-invalid');
         expect(registerMock).not.toHaveBeenCalled();
     });
 
@@ -212,12 +218,15 @@ describe('RegisterFormPanel', () => {
             })
         );
 
-        expect(
-            screen.getByText(en.translation.auth.errors.last_name_required)
-        ).toBeInTheDocument();
-        expect(
-            screen.queryByText(en.translation.auth.errors.first_name_required)
-        ).not.toBeInTheDocument();
+        const firstName = screen.getByLabelText(
+            en.translation.auth.register.first_name_label
+        );
+        const lastName = screen.getByLabelText(
+            en.translation.auth.register.last_name_label
+        );
+
+        expect(lastName).toHaveAttribute('aria-invalid', 'true');
+        expect(firstName).not.toHaveAttribute('aria-invalid');
         expect(registerMock).not.toHaveBeenCalled();
     });
 
@@ -323,8 +332,11 @@ describe('RegisterFormPanel', () => {
         );
 
         expect(
-            await screen.findByText('The email has already been taken.')
+            await screen.findByText(en.translation.validation.invalid)
         ).toBeInTheDocument();
+        expect(
+            screen.queryByText('The email has already been taken.')
+        ).not.toBeInTheDocument();
         expect(
             screen.queryByText(en.translation.auth.errors.first_name_required)
         ).not.toBeInTheDocument();
@@ -343,20 +355,16 @@ describe('RegisterFormPanel', () => {
             })
         );
 
-        expect(
-            screen.getByText(en.translation.auth.errors.first_name_required)
-        ).toBeInTheDocument();
-
-        await user.type(
-            screen.getByLabelText(
-                en.translation.auth.register.first_name_label
-            ),
-            'Alexis'
+        const firstName = screen.getByLabelText(
+            en.translation.auth.register.first_name_label
         );
 
-        expect(
-            screen.queryByText(en.translation.auth.errors.first_name_required)
-        ).not.toBeInTheDocument();
+        expect(firstName).toHaveAttribute('aria-invalid', 'true');
+
+        await user.type(firstName, 'Alexis');
+
+        expect(firstName).not.toHaveAttribute('aria-invalid');
+        expect(document.getElementById('register-first-name-error')).toBeNull();
     });
 
     it('accepts international names', async () => {
@@ -623,5 +631,286 @@ describe('RegisterFormPanel', () => {
         expect(password).toHaveValue('secret-value');
         expect(confirmation).toHaveAttribute('type', 'password');
         expect(confirmation).toHaveValue('other-value');
+    });
+
+    const openToasts = () => document.querySelectorAll('li[data-state="open"]');
+
+    const renderRegister = () =>
+        render(
+            <>
+                <Toaster />
+                <RegisterFormPanel
+                    onSuccess={vi.fn()}
+                    onSwitchToLogin={vi.fn()}
+                />
+            </>
+        );
+
+    it('marks every missing required control and shows one toast', async () => {
+        const user = userEvent.setup();
+        const reportValidity = vi.spyOn(
+            HTMLFormElement.prototype,
+            'reportValidity'
+        );
+        renderRegister();
+
+        const form = document.getElementById('auth-register-form');
+        expect(form).toHaveAttribute('novalidate');
+        expect(form).toHaveProperty('noValidate', true);
+
+        for (const id of [
+            'register-first-name',
+            'register-last-name',
+            'register-email',
+            'register-password',
+            'register-password-confirmation',
+        ]) {
+            expect(document.getElementById(id)).toBeRequired();
+        }
+
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+
+        const firstName = screen.getByLabelText(
+            en.translation.auth.register.first_name_label
+        );
+        const lastName = screen.getByLabelText(
+            en.translation.auth.register.last_name_label
+        );
+        const email = screen.getByLabelText(
+            en.translation.auth.register.email_label
+        );
+        const password = screen.getByLabelText(
+            en.translation.auth.register.password_label
+        );
+        const confirmation = screen.getByLabelText(
+            en.translation.auth.register.password_confirmation_label
+        );
+        const terms = screen.getByRole('checkbox', { name: /Terms of Use/i });
+
+        for (const control of [
+            firstName,
+            lastName,
+            email,
+            password,
+            confirmation,
+            terms,
+        ]) {
+            expect(control).toHaveAttribute('aria-invalid', 'true');
+            expect(control).toHaveClass('border-destructive');
+        }
+
+        expect(firstName).toHaveAttribute(
+            'aria-describedby',
+            'register-first-name-error'
+        );
+        expect(password).toHaveAttribute(
+            'aria-describedby',
+            'register-password-error'
+        );
+        expect(confirmation).toHaveAttribute(
+            'aria-describedby',
+            'register-password-confirmation-error'
+        );
+        expect(terms).toHaveAttribute(
+            'aria-describedby',
+            'register-accept-terms-error'
+        );
+        expect(
+            document.getElementById('register-first-name-error')
+        ).toHaveTextContent(en.translation.validation.required);
+        expect(
+            document.getElementById('register-first-name-error')
+        ).toHaveClass('sr-only');
+        expect(
+            document.getElementById('register-first-name-error')
+        ).not.toHaveAttribute('role', 'alert');
+        expect(firstName).toHaveFocus();
+        expect(registerMock).not.toHaveBeenCalled();
+        expect(reportValidity).not.toHaveBeenCalled();
+
+        const visible = openToasts();
+        expect(visible).toHaveLength(1);
+        expect(visible[0]).toHaveClass('destructive');
+        expect(visible[0]).toHaveTextContent(
+            en.translation.validation.required_fields
+        );
+
+        const showPassword = screen.getAllByRole('button', {
+            name: en.translation.auth.password_visibility.show,
+        })[0];
+        await user.click(showPassword);
+        expect(password).toHaveAttribute('type', 'text');
+        expect(password).toHaveAttribute('aria-invalid', 'true');
+        expect(password).toHaveAttribute('autocomplete', 'new-password');
+
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+        expect(openToasts()).toHaveLength(1);
+
+        reportValidity.mockRestore();
+    });
+
+    it('focuses the first invalid control after a partial submit', async () => {
+        const user = userEvent.setup();
+        renderRegister();
+
+        await user.type(
+            screen.getByLabelText(
+                en.translation.auth.register.first_name_label
+            ),
+            'Alexis'
+        );
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+
+        expect(
+            screen.getByLabelText(en.translation.auth.register.last_name_label)
+        ).toHaveFocus();
+        expect(
+            screen.getByLabelText(en.translation.auth.register.first_name_label)
+        ).not.toHaveAttribute('aria-invalid');
+    });
+
+    it('uses the email message and one attention toast for a malformed email', async () => {
+        const user = userEvent.setup();
+        renderRegister();
+
+        await user.type(
+            screen.getByLabelText(
+                en.translation.auth.register.first_name_label
+            ),
+            'Alexis'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.last_name_label),
+            'Renart'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.email_label),
+            'not-an-email'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.password_label),
+            'password'
+        );
+        await user.type(
+            screen.getByLabelText(
+                en.translation.auth.register.password_confirmation_label
+            ),
+            'password'
+        );
+        await checkAcceptTerms(user);
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+
+        const email = screen.getByLabelText(
+            en.translation.auth.register.email_label
+        );
+        expect(email).toHaveAttribute('aria-invalid', 'true');
+        expect(email).toHaveAttribute(
+            'aria-describedby',
+            'register-email-error'
+        );
+        expect(
+            document.getElementById('register-email-error')
+        ).toHaveTextContent(en.translation.validation.invalid_email);
+        expect(
+            screen.getByLabelText(en.translation.auth.register.password_label)
+        ).not.toHaveAttribute('aria-invalid');
+        expect(registerMock).not.toHaveBeenCalled();
+
+        const visible = openToasts();
+        expect(visible).toHaveLength(1);
+        expect(visible[0]).toHaveTextContent(
+            en.translation.validation.invalid_email
+        );
+    });
+
+    it('marks a password confirmation mismatch without a second toast', async () => {
+        const user = userEvent.setup();
+        renderRegister();
+
+        await user.type(
+            screen.getByLabelText(
+                en.translation.auth.register.first_name_label
+            ),
+            'Alexis'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.last_name_label),
+            'Renart'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.email_label),
+            'alexis@example.com'
+        );
+        await user.type(
+            screen.getByLabelText(en.translation.auth.register.password_label),
+            'password'
+        );
+        await user.type(
+            screen.getByLabelText(
+                en.translation.auth.register.password_confirmation_label
+            ),
+            'different'
+        );
+        await checkAcceptTerms(user);
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+
+        const confirmation = screen.getByLabelText(
+            en.translation.auth.register.password_confirmation_label
+        );
+        expect(confirmation).toHaveAttribute('aria-invalid', 'true');
+        expect(
+            document.getElementById('register-password-confirmation-error')
+        ).toHaveTextContent(en.translation.validation.password_confirmation);
+        expect(
+            screen.getByLabelText(en.translation.auth.register.password_label)
+        ).not.toHaveAttribute('aria-invalid');
+        expect(openToasts()).toHaveLength(1);
+        expect(openToasts()[0]).toHaveTextContent(
+            en.translation.validation.password_confirmation
+        );
+        expect(registerMock).not.toHaveBeenCalled();
+    });
+
+    it('keeps a status toast visible beside the register error toast', async () => {
+        const user = userEvent.setup();
+        renderRegister();
+
+        act(() => {
+            toast({ title: 'Diagram ready', duration: 60_000 });
+        });
+
+        await user.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.register.submit,
+            })
+        );
+
+        const visible = openToasts();
+        expect(visible).toHaveLength(2);
+        expect(visible[0]).toHaveTextContent('Diagram ready');
+        expect(visible[1]).toHaveTextContent(
+            en.translation.validation.required_fields
+        );
+        expect(visible[1]).toHaveClass('destructive');
     });
 });

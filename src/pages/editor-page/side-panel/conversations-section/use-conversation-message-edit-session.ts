@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '@/components/toast/use-toast';
 import { useConversationMutations } from '@/hooks/use-conversation-mutations';
 import {
     CONVERSATION_MESSAGE_MAX_LENGTH,
@@ -53,6 +54,7 @@ export const useConversationMessageEditSession = ({
     onRequestFocus,
 }: UseConversationMessageEditSessionArgs): UseConversationMessageEditSessionResult => {
     const { t } = useTranslation();
+    const { toast } = useToast();
     const { updateMessage } = useConversationMutations();
 
     const [body, setBody] = useState(() => message.body);
@@ -122,12 +124,7 @@ export const useConversationMessageEditSession = ({
             const resolved = resolveConversationMessageMutationError(error);
 
             if (resolved.key === 'validation') {
-                return (
-                    resolved.fieldError ??
-                    t(
-                        'side_panel.conversations_section.detail.edit.errors.empty'
-                    )
-                );
+                return t('validation.invalid');
             }
 
             if (resolved.key === 'forbidden') {
@@ -186,21 +183,31 @@ export const useConversationMessageEditSession = ({
         const nextCount = countUnicodeCharacters(nextTrimmedBody);
 
         if (nextCount > CONVERSATION_MESSAGE_MAX_LENGTH) {
-            setValidationError(
-                t(
-                    'side_panel.conversations_section.detail.edit.errors.too_long'
-                )
+            const message = t(
+                'side_panel.conversations_section.detail.edit.errors.too_long'
             );
+            setValidationError(message);
             setSubmitError(null);
+            toast({
+                title: message,
+                variant: 'danger',
+                dedupeKey: 'conversation:edit-validation',
+            });
             onRequestFocusRef.current();
             return;
         }
 
         if (nextCount === 0) {
-            setValidationError(
-                t('side_panel.conversations_section.detail.edit.errors.empty')
+            const message = t(
+                'side_panel.conversations_section.detail.edit.errors.empty'
             );
+            setValidationError(message);
             setSubmitError(null);
+            toast({
+                title: message,
+                variant: 'danger',
+                dedupeKey: 'conversation:edit-validation',
+            });
             onRequestFocusRef.current();
             return;
         }
@@ -235,7 +242,13 @@ export const useConversationMessageEditSession = ({
                 return;
             }
 
-            setSubmitError(resolveSubmitErrorMessage(error));
+            const message = resolveSubmitErrorMessage(error);
+            setSubmitError(message);
+            toast({
+                title: message,
+                variant: 'danger',
+                dedupeKey: 'conversation:edit-submit',
+            });
             onRequestFocusRef.current();
         } finally {
             if (sessionsEqual(sessionRef.current, submissionSession)) {
@@ -245,7 +258,13 @@ export const useConversationMessageEditSession = ({
                 }
             }
         }
-    }, [conversationStatus, resolveSubmitErrorMessage, t, updateMessage]);
+    }, [
+        conversationStatus,
+        resolveSubmitErrorMessage,
+        t,
+        toast,
+        updateMessage,
+    ]);
 
     const cancel = useCallback(() => {
         if (updateInFlightRef.current || isSubmitting) {

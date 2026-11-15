@@ -1,5 +1,4 @@
-import { ApiError } from '@/lib/api/client';
-import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
+import { normalizeApiError } from '@/lib/api/normalize-api-error';
 
 export type ConversationReactionMutationErrorKey =
     | 'invalid_emoji'
@@ -10,37 +9,26 @@ export type ConversationReactionMutationErrorKey =
 
 export interface ConversationReactionMutationError {
     key: ConversationReactionMutationErrorKey;
-    fieldError?: string;
 }
 
 export const resolveConversationReactionMutationError = (
     error: unknown
 ): ConversationReactionMutationError => {
-    if (!(error instanceof ApiError)) {
-        return { key: 'generic' };
+    const apiError = normalizeApiError(error);
+
+    if (apiError.code === 'validation_failed') {
+        return { key: 'invalid_emoji' };
     }
 
-    if (error.status === 422) {
-        const validationErrors = parseLaravelValidationErrors(error);
-        const emojiError = validationErrors.emoji;
-        return {
-            key: 'invalid_emoji',
-            fieldError:
-                typeof emojiError === 'string' && emojiError.length > 0
-                    ? emojiError
-                    : undefined,
-        };
-    }
-
-    if (error.status === 403) {
+    if (apiError.code === 'forbidden') {
         return { key: 'forbidden' };
     }
 
-    if (error.status === 409) {
+    if (apiError.code === 'conflict') {
         return { key: 'archived' };
     }
 
-    if (error.status === 404) {
+    if (apiError.code === 'not_found') {
         return { key: 'not_found' };
     }
 

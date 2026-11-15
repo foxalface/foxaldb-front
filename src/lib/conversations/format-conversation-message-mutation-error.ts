@@ -1,5 +1,4 @@
-import { ApiError } from '@/lib/api/client';
-import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
+import { normalizeApiError } from '@/lib/api/normalize-api-error';
 
 export type ConversationMessageMutationErrorKey =
     | 'validation'
@@ -10,37 +9,26 @@ export type ConversationMessageMutationErrorKey =
 
 export interface ConversationMessageMutationError {
     key: ConversationMessageMutationErrorKey;
-    fieldError?: string;
 }
 
 export const resolveConversationMessageMutationError = (
     error: unknown
 ): ConversationMessageMutationError => {
-    if (!(error instanceof ApiError)) {
-        return { key: 'generic' };
+    const apiError = normalizeApiError(error);
+
+    if (apiError.code === 'validation_failed') {
+        return { key: 'validation' };
     }
 
-    if (error.status === 422) {
-        const validationErrors = parseLaravelValidationErrors(error);
-        const bodyError = validationErrors.body;
-        return {
-            key: 'validation',
-            fieldError:
-                typeof bodyError === 'string' && bodyError.length > 0
-                    ? bodyError
-                    : undefined,
-        };
-    }
-
-    if (error.status === 403) {
+    if (apiError.code === 'forbidden') {
         return { key: 'forbidden' };
     }
 
-    if (error.status === 409) {
+    if (apiError.code === 'conflict') {
         return { key: 'archived' };
     }
 
-    if (error.status === 404) {
+    if (apiError.code === 'not_found') {
         return { key: 'not_found' };
     }
 

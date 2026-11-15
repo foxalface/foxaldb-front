@@ -79,7 +79,8 @@ export const ShareInvitationList: React.FC<ShareInvitationListProps> = ({
             } catch {
                 toast({
                     title: t('share_diagram_dialog.invitations.role_failed'),
-                    variant: 'destructive',
+                    variant: 'danger',
+                    dedupeKey: 'share:invitation-role',
                 });
             } finally {
                 setBusyId(null);
@@ -103,6 +104,7 @@ export const ShareInvitationList: React.FC<ShareInvitationListProps> = ({
                 );
                 toast({
                     title: t('share_diagram_dialog.invitations.renewed'),
+                    variant: 'success',
                 });
             } catch (error: unknown) {
                 toast({
@@ -114,7 +116,8 @@ export const ShareInvitationList: React.FC<ShareInvitationListProps> = ({
                             : t(
                                   'share_diagram_dialog.invitations.resend_failed'
                               ),
-                    variant: 'destructive',
+                    variant: 'danger',
+                    dedupeKey: 'share:invitation-resend',
                 });
             } finally {
                 setBusyId(null);
@@ -134,7 +137,8 @@ export const ShareInvitationList: React.FC<ShareInvitationListProps> = ({
             } catch {
                 toast({
                     title: t('share_diagram_dialog.invitations.revoke_failed'),
-                    variant: 'destructive',
+                    variant: 'danger',
+                    dedupeKey: 'share:invitation-revoke',
                 });
             } finally {
                 setBusyId(null);

@@ -5,6 +5,41 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/zh_TW';
 
 export const zh_TW: LanguageTranslation = {
     translation: {
+        validation: {
+            required: '必填',
+            required_fields: '請填寫必填欄位。',
+            invalid_fields: '有些欄位需要您的注意。',
+            invalid_email: '請輸入有效的電子郵件地址。',
+            password_confirmation: '密碼不相符。',
+            invalid: '請檢查此欄位。',
+            too_short: '內容太短。',
+            too_long: '內容太長。',
+            already_used: '此內容已被使用。',
+        },
+        errors: {
+            network: '網路發生問題。請檢查連線後再試一次。',
+            forbidden: '你沒有權限執行此操作。',
+            not_found: '找不到該內容。',
+            server: '我們這邊發生問題。請再試一次。',
+            too_many_requests: '要求過多。請稍後再試。',
+            unauthenticated: '請登入後繼續。',
+            session_expired: '工作階段已過期。請重新登入。',
+            invalid_credentials: '電子郵件或密碼不正確。',
+            generic: '發生問題。請再試一次。',
+        },
+        toast: {
+            close: '關閉',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: '欄位類型不相容',
+            incompatible_fields_description: '只能在相容的欄位類型之間建立關聯',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML 匯出失敗',
+            generate_failed_description: '無法產生 DBML。',
+            empty_field_names:
+                '{{tables}} 中沒有名稱的欄位已從 DBML 匯出中排除。',
+        },
         editor_sidebar: {
             tables: '表格',
             refs: 'Refs',
@@ -997,6 +1032,8 @@ export const zh_TW: LanguageTranslation = {
             errors: {
                 load_failed: '無法載入協作者。',
                 add_failed: '無法新增協作者。',
+                role_failed: '無法變更協作者的角色。',
+                remove_failed: '無法移除協作者。',
             },
         },
 
@@ -1339,6 +1376,9 @@ export const zh_TW: LanguageTranslation = {
                     error_unexpected: '無法匯出 EF Core 專案。請再試一次。',
                     error_semantic: '無法產生 EF Core 專案。',
                     error_unauthenticated: '必須登入才能匯出 EF Core 專案。',
+                    errors: {
+                        empty_diagram: '圖表沒有可匯出的資料表。',
+                    },
                 },
                 result_step: {
                     description: '檢視產生的 EF Core 專案。',
@@ -1378,6 +1418,9 @@ export const zh_TW: LanguageTranslation = {
                     error_unsafe_path: '匯出包含不安全的檔案路徑，因此未下載。',
                     error_empty_files: '匯出未包含任何檔案。',
                     error_invalid_package: '產生的套件無效，因此未下載。',
+                    errors: {
+                        empty_diagram: '圖表沒有可匯出的資料表。',
+                    },
                 },
             },
             django: {

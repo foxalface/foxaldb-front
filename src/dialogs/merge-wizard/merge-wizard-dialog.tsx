@@ -540,6 +540,7 @@ export const MergeWizardDialog: React.FC<MergeWizardDialogProps> = ({
                     );
                     toast({
                         title: t('merge_wizard.applied'),
+                        variant: 'success',
                     });
                     closeMergeWizardDialog();
                 })

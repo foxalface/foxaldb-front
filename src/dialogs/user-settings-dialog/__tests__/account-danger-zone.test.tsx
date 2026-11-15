@@ -7,10 +7,13 @@ import { ApiError } from '@/lib/api/client';
 import type { AuthUser } from '@/lib/api/auth';
 import { UserSettingsDialog } from '../user-settings-dialog';
 
-const { closeAccountMock, closeSettingsMock } = vi.hoisted(() => ({
-    closeAccountMock: vi.fn(),
-    closeSettingsMock: vi.fn(),
-}));
+const { closeAccountMock, closeSettingsMock, toastMock, updateProfileMock } =
+    vi.hoisted(() => ({
+        closeAccountMock: vi.fn(),
+        closeSettingsMock: vi.fn(),
+        toastMock: vi.fn(),
+        updateProfileMock: vi.fn(),
+    }));
 
 const user: AuthUser = {
     id: 7,
@@ -26,7 +29,7 @@ vi.mock('@/hooks/use-auth', () => ({
     useAuth: () => ({
         user,
         closeAccount: closeAccountMock,
-        updateProfile: vi.fn(),
+        updateProfile: updateProfileMock,
         updateDiagramCreationPreference: vi.fn(),
     }),
 }));
@@ -38,7 +41,7 @@ vi.mock('@/hooks/use-dialog', () => ({
 }));
 
 vi.mock('@/components/toast/use-toast', () => ({
-    useToast: () => ({ toast: vi.fn() }),
+    useToast: () => ({ toast: toastMock }),
 }));
 
 vi.mock('react-i18next', () => ({
@@ -97,6 +100,8 @@ describe('account danger zone', () => {
     beforeEach(() => {
         closeAccountMock.mockReset();
         closeSettingsMock.mockReset();
+        toastMock.mockReset();
+        updateProfileMock.mockReset();
     });
 
     it('uses a viewport-constrained scrollable settings body', () => {
@@ -154,8 +159,13 @@ describe('account danger zone', () => {
         const submit = confirm.getByRole('button', {
             name: en.translation.auth.settings.danger_zone.submit,
         });
-        expect(submit).toBeDisabled();
+        expect(submit).toBeEnabled();
+        await actor.click(submit);
         expect(closeAccountMock).not.toHaveBeenCalled();
+        expect(
+            await confirm.findByText(en.translation.validation.required)
+        ).toBeInTheDocument();
+        expect(toastMock).toHaveBeenCalledTimes(1);
 
         const password = confirm.getByLabelText(
             en.translation.auth.settings.danger_zone.current_password_label
@@ -186,5 +196,192 @@ describe('account danger zone', () => {
 
         expect(closeAccountMock).toHaveBeenLastCalledWith('correct-password');
         expect(closeSettingsMock).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('settings profile and password validation', () => {
+    beforeEach(() => {
+        toastMock.mockReset();
+        updateProfileMock.mockReset();
+        updateProfileMock.mockResolvedValue(undefined);
+    });
+
+    it('highlights a missing profile field and shows one toast', async () => {
+        const actor = userEvent.setup();
+        render(<UserSettingsDialog dialog={{ open: true }} />);
+
+        const form = screen
+            .getByRole('button', {
+                name: en.translation.auth.settings.submit,
+            })
+            .closest('form');
+        expect(form).toHaveProperty('noValidate', true);
+
+        await actor.clear(
+            screen.getByLabelText(en.translation.auth.settings.first_name_label)
+        );
+        await actor.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.settings.submit,
+            })
+        );
+
+        expect(
+            screen.getByLabelText(en.translation.auth.settings.first_name_label)
+        ).toHaveAttribute('aria-invalid', 'true');
+        expect(
+            screen.getByText(en.translation.validation.required)
+        ).toBeInTheDocument();
+        expect(updateProfileMock).not.toHaveBeenCalled();
+        expect(toastMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('maps a unique email rule without showing Laravel prose', async () => {
+        const actor = userEvent.setup();
+        updateProfileMock.mockRejectedValueOnce(
+            new ApiError('The email has already been taken.', 422, {
+                code: 'validation_failed',
+                message: 'The email has already been taken.',
+                errors: {
+                    email: ['The email has already been taken.'],
+                },
+                fields: {
+                    email: [
+                        {
+                            code: 'unique',
+                            message: 'The email has already been taken.',
+                        },
+                    ],
+                },
+            })
+        );
+        render(<UserSettingsDialog dialog={{ open: true }} />);
+
+        await actor.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.settings.submit,
+            })
+        );
+
+        expect(
+            await screen.findByText(en.translation.validation.already_used)
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText('The email has already been taken.')
+        ).not.toBeInTheDocument();
+        expect(toastMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                title: en.translation.validation.already_used,
+                variant: 'danger',
+            })
+        );
+    });
+
+    it('checks password confirmation and localizes a wrong current password', async () => {
+        const actor = userEvent.setup();
+        render(<UserSettingsDialog dialog={{ open: true }} />);
+
+        await actor.type(
+            screen.getByLabelText(
+                en.translation.auth.settings.current_password_label
+            ),
+            'current-secret'
+        );
+        await actor.type(
+            screen.getByLabelText(
+                en.translation.auth.settings.new_password_label
+            ),
+            'next-secret'
+        );
+        await actor.type(
+            screen.getByLabelText(
+                en.translation.auth.settings.password_confirmation_label
+            ),
+            'other-secret'
+        );
+        await actor.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.settings.submit,
+            })
+        );
+
+        expect(
+            document.getElementById('settings-password-confirmation-error')
+        ).toHaveClass('sr-only');
+        expect(updateProfileMock).not.toHaveBeenCalled();
+        expect(toastMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                title: en.translation.validation.password_confirmation,
+                variant: 'danger',
+            })
+        );
+
+        await actor.clear(
+            screen.getByLabelText(
+                en.translation.auth.settings.password_confirmation_label
+            )
+        );
+        await actor.type(
+            screen.getByLabelText(
+                en.translation.auth.settings.password_confirmation_label
+            ),
+            'next-secret'
+        );
+        updateProfileMock.mockRejectedValueOnce(
+            new ApiError('The password is incorrect.', 422, {
+                code: 'current_password_invalid',
+                message: 'The password is incorrect.',
+                errors: {
+                    current_password: ['The password is incorrect.'],
+                },
+            })
+        );
+        await actor.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.settings.submit,
+            })
+        );
+
+        expect(
+            await screen.findByText(
+                en.translation.auth.settings.danger_zone
+                    .current_password_invalid
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByText('The password is incorrect.')
+        ).not.toBeInTheDocument();
+        expect(toastMock).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                title: en.translation.auth.settings.danger_zone
+                    .current_password_invalid,
+                variant: 'danger',
+            })
+        );
+    });
+
+    it('shows a localized session-expired error', async () => {
+        const actor = userEvent.setup();
+        updateProfileMock.mockRejectedValueOnce(
+            new ApiError('CSRF token mismatch.', 419, null)
+        );
+        render(<UserSettingsDialog dialog={{ open: true }} />);
+
+        await actor.click(
+            screen.getByRole('button', {
+                name: en.translation.auth.settings.submit,
+            })
+        );
+
+        expect(toastMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                title: en.translation.errors.session_expired,
+                variant: 'danger',
+            })
+        );
+        expect(
+            screen.queryByText('CSRF token mismatch.')
+        ).not.toBeInTheDocument();
+        expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     });
 });

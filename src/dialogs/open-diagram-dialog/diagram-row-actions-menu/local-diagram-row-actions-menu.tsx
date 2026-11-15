@@ -70,7 +70,8 @@ export const LocalDiagramRowActionsMenu: React.FC<
     const showPutOnlineFailed = useCallback(() => {
         toast({
             title: t('open_diagram_dialog.errors.put_online_failed'),
-            variant: 'destructive',
+            variant: 'danger',
+            dedupeKey: 'diagram:put-online-failed',
         });
     }, [toast, t]);
 
@@ -130,7 +131,8 @@ export const LocalDiagramRowActionsMenu: React.FC<
         } catch {
             toast({
                 title: t('open_diagram_dialog.errors.duplicate_failed'),
-                variant: 'destructive',
+                variant: 'danger',
+                dedupeKey: 'diagram:duplicate-failed',
             });
         }
     }, [

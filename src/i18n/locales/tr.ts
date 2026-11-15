@@ -5,6 +5,43 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/tr';
 
 export const tr: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'Zorunlu',
+            required_fields: 'Lütfen zorunlu alanları doldurun.',
+            invalid_fields: 'Bazı alanlar dikkatinizi gerektiriyor.',
+            invalid_email: 'Geçerli bir e-posta adresi girin.',
+            password_confirmation: 'Parolalar eşleşmiyor.',
+            invalid: 'Bu alanı kontrol edin.',
+            too_short: 'Bu çok kısa.',
+            too_long: 'Bu çok uzun.',
+            already_used: 'Bu zaten kullanılıyor.',
+        },
+        errors: {
+            network: 'Ağ sorunu. Bağlantınızı kontrol edip yeniden deneyin.',
+            forbidden: 'Bunu yapmak için izniniz yok.',
+            not_found: 'Bunu bulamadık.',
+            server: 'Bizim tarafımızda bir sorun oluştu. Yeniden deneyin.',
+            too_many_requests:
+                'Çok fazla istek. Lütfen bekleyip yeniden deneyin.',
+            unauthenticated: 'Devam etmek için oturum açın.',
+            session_expired: 'Oturumunuz sona erdi. Yeniden oturum açın.',
+            invalid_credentials: 'E-posta veya parola yanlış.',
+            generic: 'Bir şeyler ters gitti. Yeniden deneyin.',
+        },
+        toast: {
+            close: 'Kapat',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'Alan türleri uyumlu değil',
+            incompatible_fields_description:
+                'İlişkiler yalnızca uyumlu alan türleri arasında oluşturulabilir',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML dışa aktarma başarısız oldu',
+            generate_failed_description: 'DBML oluşturulamadı.',
+            empty_field_names:
+                '{{tables}} içindeki adsız alanlar DBML dışa aktarmasına dahil edilmedi.',
+        },
         editor_sidebar: {
             tables: 'Tablolar',
             refs: 'Refs',
@@ -1056,6 +1093,8 @@ export const tr: LanguageTranslation = {
             errors: {
                 load_failed: 'İşbirlikçiler yüklenemedi.',
                 add_failed: 'İşbirlikçi eklenemedi.',
+                role_failed: 'İşbirlikçinin rolü değiştirilemedi.',
+                remove_failed: 'İşbirlikçi kaldırılamadı.',
             },
         },
 
@@ -1426,6 +1465,11 @@ export const tr: LanguageTranslation = {
                     error_semantic: 'EF Core projesi oluşturulamadı.',
                     error_unauthenticated:
                         'EF Core projelerini dışa aktarmak için oturum açmanız gerekir.',
+
+                    errors: {
+                        empty_diagram:
+                            'Diyagramda dışa aktarılabilir tablo yok.',
+                    },
                 },
                 result_step: {
                     description: 'Oluşturulan EF Core projesini inceleyin.',
@@ -1473,6 +1517,11 @@ export const tr: LanguageTranslation = {
                     error_empty_files: 'Dışa aktarma hiçbir dosya içermiyordu.',
                     error_invalid_package:
                         'Oluşturulan paket geçersiz ve indirilmedi.',
+
+                    errors: {
+                        empty_diagram:
+                            'Diyagramda dışa aktarılabilir tablo yok.',
+                    },
                 },
             },
             django: {

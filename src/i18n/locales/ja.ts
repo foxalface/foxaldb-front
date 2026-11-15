@@ -5,6 +5,46 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/ja';
 
 export const ja: LanguageTranslation = {
     translation: {
+        validation: {
+            required: '必須',
+            required_fields: '必須項目を入力してください。',
+            invalid_fields: '確認が必要な項目があります。',
+            invalid_email: '有効なメールアドレスを入力してください。',
+            password_confirmation: 'パスワードが一致しません。',
+            invalid: 'この項目を確認してください。',
+            too_short: '短すぎます。',
+            too_long: '長すぎます。',
+            already_used: 'これはすでに使われています。',
+        },
+        errors: {
+            network:
+                'ネットワークの問題です。接続を確認して、もう一度お試しください。',
+            forbidden: 'これを行う権限がありません。',
+            not_found: '見つかりませんでした。',
+            server: 'こちら側で問題が発生しました。もう一度お試しください。',
+            too_many_requests:
+                'リクエストが多すぎます。しばらく待ってからもう一度お試しください。',
+            unauthenticated: '続けるにはサインインしてください。',
+            session_expired:
+                'セッションの有効期限が切れました。もう一度サインインしてください。',
+            invalid_credentials:
+                'メールアドレスまたはパスワードが正しくありません。',
+            generic: '問題が発生しました。もう一度お試しください。',
+        },
+        toast: {
+            close: '閉じる',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'フィールドの型に互換性がありません',
+            incompatible_fields_description:
+                'リレーションは互換性のあるフィールド型の間でのみ作成できます',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBMLのエクスポートに失敗しました',
+            generate_failed_description: 'DBMLを生成できませんでした。',
+            empty_field_names:
+                '{{tables}} の名前のないフィールドは DBML エクスポートから除外されました。',
+        },
         editor_sidebar: {
             tables: 'テーブル',
             refs: '参照',
@@ -1090,6 +1130,8 @@ export const ja: LanguageTranslation = {
             errors: {
                 load_failed: '共同編集者を読み込めませんでした。',
                 add_failed: '共同編集者を追加できませんでした。',
+                role_failed: '共同編集者の役割を変更できませんでした。',
+                remove_failed: '共同編集者を削除できませんでした。',
             },
         },
 
@@ -1469,6 +1511,11 @@ export const ja: LanguageTranslation = {
                         'EF Core プロジェクトを生成できませんでした。',
                     error_unauthenticated:
                         'EF Core プロジェクトをエクスポートするにはサインインが必要です。',
+
+                    errors: {
+                        empty_diagram:
+                            'ダイアグラムに書き出し可能なテーブルがありません。',
+                    },
                 },
                 result_step: {
                     description:
@@ -1519,6 +1566,11 @@ export const ja: LanguageTranslation = {
                         'エクスポートにファイルが含まれていませんでした。',
                     error_invalid_package:
                         '生成されたパッケージは無効なため、ダウンロードしませんでした。',
+
+                    errors: {
+                        empty_diagram:
+                            'ダイアグラムに書き出し可能なテーブルがありません。',
+                    },
                 },
             },
             django: {

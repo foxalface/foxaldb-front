@@ -1,5 +1,4 @@
-import { ApiError } from '@/lib/api/client';
-import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
+import { normalizeApiError } from '@/lib/api/normalize-api-error';
 
 export type ConversationTargetMutationErrorKey =
     | 'validation'
@@ -10,43 +9,26 @@ export type ConversationTargetMutationErrorKey =
 
 export interface ConversationTargetMutationError {
     key: ConversationTargetMutationErrorKey;
-    fieldError?: string;
 }
 
 export const resolveConversationTargetMutationError = (
     error: unknown
 ): ConversationTargetMutationError => {
-    if (!(error instanceof ApiError)) {
-        return { key: 'generic' };
+    const apiError = normalizeApiError(error);
+
+    if (apiError.code === 'validation_failed') {
+        return { key: 'validation' };
     }
 
-    if (error.status === 422) {
-        const validationErrors = parseLaravelValidationErrors(error);
-        const targetTypeError = validationErrors.target_type;
-        const targetIdError = validationErrors.target_id;
-        const fieldError =
-            (typeof targetTypeError === 'string' && targetTypeError.length > 0
-                ? targetTypeError
-                : undefined) ??
-            (typeof targetIdError === 'string' && targetIdError.length > 0
-                ? targetIdError
-                : undefined);
-
-        return {
-            key: 'validation',
-            fieldError,
-        };
-    }
-
-    if (error.status === 403) {
+    if (apiError.code === 'forbidden') {
         return { key: 'forbidden' };
     }
 
-    if (error.status === 404) {
+    if (apiError.code === 'not_found') {
         return { key: 'not_found' };
     }
 
-    if (error.status === 409) {
+    if (apiError.code === 'conflict') {
         return { key: 'conflict' };
     }
 

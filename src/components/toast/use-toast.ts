@@ -3,11 +3,16 @@ import React from 'react';
 
 import type { ToastActionElement, ToastProps } from '@/components/toast/toast';
 
-const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1000000;
+const ERROR_TOAST_DURATION = 6000;
+const STATUS_TOAST_DURATION = 5000;
+
+export type ToastLane = 'error' | 'status';
 
 type ToasterToast = ToastProps & {
     id: string;
+    lane: ToastLane;
+    revision: number;
+    dedupeKey?: string;
     title?: React.ReactNode;
     description?: React.ReactNode;
     action?: ToastActionElement;
@@ -15,13 +20,46 @@ type ToasterToast = ToastProps & {
     hideCloseButton?: boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const actionTypes = {
-    ADD_TOAST: 'ADD_TOAST',
-    UPDATE_TOAST: 'UPDATE_TOAST',
-    DISMISS_TOAST: 'DISMISS_TOAST',
-    REMOVE_TOAST: 'REMOVE_TOAST',
-} as const;
+type ToastOptions = Omit<
+    ToasterToast,
+    'id' | 'lane' | 'revision' | 'open' | 'onOpenChange'
+>;
+
+export type ToastUpdate = Partial<
+    Omit<ToasterToast, 'id' | 'lane' | 'revision' | 'open' | 'onOpenChange'>
+>;
+
+interface LaneState {
+    visible: ToasterToast | null;
+    queue: ToasterToast[];
+}
+
+interface State {
+    error: LaneState;
+    status: LaneState;
+}
+
+type Action =
+    | {
+          type: 'ADD_TOAST';
+          toast: ToasterToast;
+      }
+    | {
+          type: 'UPDATE_TOAST';
+          toast: { id: string } & ToastUpdate;
+      }
+    | {
+          type: 'DISMISS_TOAST';
+          toastId?: string;
+      };
+
+const emptyLane = (): LaneState => ({ visible: null, queue: [] });
+
+const laneFor = (variant: ToastProps['variant']): ToastLane =>
+    variant === 'danger' || variant === 'destructive' ? 'error' : 'status';
+
+const defaultDuration = (lane: ToastLane): number =>
+    lane === 'error' ? ERROR_TOAST_DURATION : STATUS_TOAST_DURATION;
 
 let count = 0;
 
@@ -30,106 +68,181 @@ function genId() {
     return count.toString();
 }
 
-type ActionType = typeof actionTypes;
-
-type Action =
-    | {
-          type: ActionType['ADD_TOAST'];
-          toast: ToasterToast;
-      }
-    | {
-          type: ActionType['UPDATE_TOAST'];
-          toast: Partial<ToasterToast>;
-      }
-    | {
-          type: ActionType['DISMISS_TOAST'];
-          toastId?: ToasterToast['id'];
-      }
-    | {
-          type: ActionType['REMOVE_TOAST'];
-          toastId?: ToasterToast['id'];
-      };
-
-interface State {
-    toasts: ToasterToast[];
-}
-
-const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
-
-const addToRemoveQueue = (toastId: string) => {
-    if (toastTimeouts.has(toastId)) {
-        return;
+const findDedupe = (
+    lane: LaneState,
+    dedupeKey: string
+): {
+    place: 'visible' | 'queue';
+    index: number;
+    toast: ToasterToast;
+} | null => {
+    if (lane.visible?.dedupeKey === dedupeKey) {
+        return { place: 'visible', index: -1, toast: lane.visible };
     }
 
-    const timeout = setTimeout(() => {
-        toastTimeouts.delete(toastId);
-        dispatch({
-            type: 'REMOVE_TOAST',
-            toastId: toastId,
-        });
-    }, TOAST_REMOVE_DELAY);
+    const index = lane.queue.findIndex((item) => item.dedupeKey === dedupeKey);
+    if (index === -1) {
+        return null;
+    }
 
-    toastTimeouts.set(toastId, timeout);
+    return { place: 'queue', index, toast: lane.queue[index] };
+};
+
+const locate = (
+    state: State,
+    toastId: string
+): {
+    lane: ToastLane;
+    place: 'visible' | 'queue';
+    index: number;
+    toast: ToasterToast;
+} | null => {
+    for (const lane of ['error', 'status'] as const) {
+        if (state[lane].visible?.id === toastId) {
+            return {
+                lane,
+                place: 'visible',
+                index: -1,
+                toast: state[lane].visible,
+            };
+        }
+
+        const index = state[lane].queue.findIndex(
+            (item) => item.id === toastId
+        );
+        if (index !== -1) {
+            return {
+                lane,
+                place: 'queue',
+                index,
+                toast: state[lane].queue[index],
+            };
+        }
+    }
+
+    return null;
+};
+
+const writeInPlace = (
+    state: State,
+    lane: ToastLane,
+    place: 'visible' | 'queue',
+    index: number,
+    toast: ToasterToast
+): State => {
+    const current = state[lane];
+    if (place === 'visible') {
+        return {
+            ...state,
+            [lane]: { ...current, visible: toast },
+        };
+    }
+
+    const queue = current.queue.slice();
+    queue[index] = toast;
+    return {
+        ...state,
+        [lane]: { ...current, queue },
+    };
+};
+
+const removeFromLane = (lane: LaneState, toastId: string): LaneState => {
+    if (lane.visible?.id === toastId) {
+        const [next, ...queue] = lane.queue;
+        return { visible: next ?? null, queue };
+    }
+
+    return {
+        visible: lane.visible,
+        queue: lane.queue.filter((item) => item.id !== toastId),
+    };
+};
+
+const addToLane = (lane: LaneState, toast: ToasterToast): LaneState => {
+    if (lane.visible === null) {
+        return { visible: toast, queue: lane.queue };
+    }
+
+    return { visible: lane.visible, queue: [...lane.queue, toast] };
+};
+
+const mergeToast = (
+    current: ToasterToast,
+    patch: { id: string } & ToastUpdate
+): ToasterToast => {
+    const next: ToasterToast = { ...current, id: current.id };
+
+    for (const key of Object.keys(patch) as Array<keyof typeof patch>) {
+        if (key === 'id') {
+            continue;
+        }
+        const value = patch[key];
+        if (value !== undefined) {
+            Object.assign(next, { [key]: value });
+        }
+    }
+
+    next.onOpenChange = current.onOpenChange;
+    next.revision = current.revision + 1;
+    next.open = true;
+    next.lane = laneFor(next.variant);
+    return next;
 };
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
-        case 'ADD_TOAST':
+        case 'ADD_TOAST': {
+            const lane = action.toast.lane;
             return {
                 ...state,
-                toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
-            };
-
-        case 'UPDATE_TOAST':
-            return {
-                ...state,
-                toasts: state.toasts.map((t) =>
-                    t.id === action.toast.id ? { ...t, ...action.toast } : t
-                ),
-            };
-
-        case 'DISMISS_TOAST': {
-            const { toastId } = action;
-
-            // ! Side effects ! - This could be extracted into a dismissToast() action,
-            // but I'll keep it here for simplicity
-            if (toastId) {
-                addToRemoveQueue(toastId);
-            } else {
-                state.toasts.forEach((toast) => {
-                    addToRemoveQueue(toast.id);
-                });
-            }
-
-            return {
-                ...state,
-                toasts: state.toasts.map((t) =>
-                    t.id === toastId || toastId === undefined
-                        ? {
-                              ...t,
-                              open: false,
-                          }
-                        : t
-                ),
+                [lane]: addToLane(state[lane], action.toast),
             };
         }
-        case 'REMOVE_TOAST':
-            if (action.toastId === undefined) {
-                return {
-                    ...state,
-                    toasts: [],
-                };
+
+        case 'UPDATE_TOAST': {
+            const located = locate(state, action.toast.id);
+            if (located === null) {
+                return state;
             }
+
+            const merged = mergeToast(located.toast, action.toast);
+            if (merged.lane === located.lane) {
+                return writeInPlace(
+                    state,
+                    located.lane,
+                    located.place,
+                    located.index,
+                    merged
+                );
+            }
+
+            const without = removeFromLane(
+                state[located.lane],
+                located.toast.id
+            );
             return {
                 ...state,
-                toasts: state.toasts.filter((t) => t.id !== action.toastId),
+                [located.lane]: without,
+                [merged.lane]: addToLane(state[merged.lane], merged),
             };
+        }
+
+        case 'DISMISS_TOAST': {
+            if (action.toastId === undefined) {
+                return { error: emptyLane(), status: emptyLane() };
+            }
+
+            return {
+                error: removeFromLane(state.error, action.toastId),
+                status: removeFromLane(state.status, action.toastId),
+            };
+        }
     }
 };
 
 const listeners: Array<(state: State) => void> = [];
 
-let memoryState: State = { toasts: [] };
+let memoryState: State = { error: emptyLane(), status: emptyLane() };
 
 function dispatch(action: Action) {
     memoryState = reducer(memoryState, action);
@@ -138,35 +251,86 @@ function dispatch(action: Action) {
     });
 }
 
-type Toast = Omit<ToasterToast, 'id'>;
+export function dismiss(toastId?: string) {
+    dispatch({ type: 'DISMISS_TOAST', toastId });
+}
 
-function toast({ ...props }: Toast) {
+export interface ToastHandle {
+    id: string;
+    dismiss: () => void;
+    update: (props: ToastUpdate) => void;
+}
+
+function createHandle(id: string): ToastHandle {
+    return {
+        id,
+        dismiss: () => dismiss(id),
+        update: (props) =>
+            dispatch({
+                type: 'UPDATE_TOAST',
+                toast: { ...props, id },
+            }),
+    };
+}
+
+function toast(props: ToastOptions): ToastHandle {
+    const variant = props.variant ?? 'default';
+    const lane = laneFor(variant);
+    const duration = props.duration ?? defaultDuration(lane);
+    const dedupeKey = props.dedupeKey;
+
+    if (dedupeKey !== undefined && dedupeKey !== '') {
+        const existing = findDedupe(memoryState[lane], dedupeKey);
+        if (existing) {
+            const handle = createHandle(existing.toast.id);
+            dispatch({
+                type: 'UPDATE_TOAST',
+                toast: {
+                    ...props,
+                    id: existing.toast.id,
+                    variant,
+                    duration,
+                    dedupeKey,
+                },
+            });
+            return handle;
+        }
+    }
+
     const id = genId();
-
-    const update = (props: ToasterToast) =>
-        dispatch({
-            type: 'UPDATE_TOAST',
-            toast: { ...props, id },
-        });
-    const dismiss = () => dispatch({ type: 'DISMISS_TOAST', toastId: id });
+    const handle = createHandle(id);
 
     dispatch({
         type: 'ADD_TOAST',
         toast: {
             ...props,
             id,
+            lane,
+            variant,
+            duration,
+            dedupeKey,
+            revision: 0,
             open: true,
             onOpenChange: (open) => {
-                if (!open) dismiss();
+                if (!open) {
+                    dismiss(id);
+                }
             },
         },
     });
 
-    return {
-        id: id,
-        dismiss,
-        update,
-    };
+    return handle;
+}
+
+export function visibleToasts(state: State): ToasterToast[] {
+    const toasts: ToasterToast[] = [];
+    if (state.status.visible) {
+        toasts.push(state.status.visible);
+    }
+    if (state.error.visible) {
+        toasts.push(state.error.visible);
+    }
+    return toasts;
 }
 
 function useToast() {
@@ -180,14 +344,14 @@ function useToast() {
                 listeners.splice(index, 1);
             }
         };
-    }, [state]);
+    }, []);
 
     return {
-        ...state,
+        toasts: visibleToasts(state),
         toast,
-        dismiss: (toastId?: string) =>
-            dispatch({ type: 'DISMISS_TOAST', toastId }),
+        dismiss,
     };
 }
 
 export { useToast, toast };
+export type { ToasterToast };

@@ -5,6 +5,43 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/ar';
 
 export const ar: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'مطلوب',
+            required_fields: 'يُرجى إكمال الحقول المطلوبة.',
+            invalid_fields: 'بعض الحقول تحتاج إلى انتباهك.',
+            invalid_email: 'أدخل عنوان بريد إلكتروني صالحًا.',
+            password_confirmation: 'كلمتا المرور غير متطابقتين.',
+            invalid: 'تحقق من هذا الحقل.',
+            too_short: 'هذا قصير جدًا.',
+            too_long: 'هذا طويل جدًا.',
+            already_used: 'هذه القيمة مستخدمة بالفعل.',
+        },
+        errors: {
+            network: 'مشكلة في الشبكة. تحقق من اتصالك وحاول مرة أخرى.',
+            forbidden: 'ليست لديك صلاحية للقيام بذلك.',
+            not_found: 'تعذر العثور على ذلك.',
+            server: 'حدث خطأ من جانبنا. حاول مرة أخرى.',
+            too_many_requests:
+                'طلبات كثيرة جدًا. يرجى الانتظار ثم المحاولة مرة أخرى.',
+            unauthenticated: 'سجّل الدخول للمتابعة.',
+            session_expired: 'انتهت جلستك. سجّل الدخول مرة أخرى.',
+            invalid_credentials: 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+            generic: 'حدث خطأ. حاول مرة أخرى.',
+        },
+        toast: {
+            close: 'إغلاق',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'أنواع الحقول غير متوافقة',
+            incompatible_fields_description:
+                'يمكن إنشاء العلاقات فقط بين أنواع حقول متوافقة',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'فشل تصدير DBML',
+            generate_failed_description: 'تعذر إنشاء DBML.',
+            empty_field_names:
+                'استُبعدت حقول بلا اسم في {{tables}} من تصدير DBML.',
+        },
         editor_sidebar: {
             tables: 'الجداول',
             refs: 'المراجع',
@@ -1060,6 +1097,8 @@ export const ar: LanguageTranslation = {
             errors: {
                 load_failed: 'تعذر تحميل المتعاونين.',
                 add_failed: 'تعذر إضافة المتعاون.',
+                role_failed: 'تعذر تغيير دور المتعاون.',
+                remove_failed: 'تعذر إزالة المتعاون.',
             },
         },
 
@@ -1417,6 +1456,11 @@ export const ar: LanguageTranslation = {
                     error_semantic: 'تعذّر إنشاء مشروع EF Core.',
                     error_unauthenticated:
                         'يجب تسجيل الدخول لتصدير مشاريع EF Core.',
+
+                    errors: {
+                        empty_diagram:
+                            'لا يحتوي المخطط على جداول قابلة للتصدير.',
+                    },
                 },
                 result_step: {
                     description: 'راجع مشروع EF Core المُنشأ.',
@@ -1463,6 +1507,11 @@ export const ar: LanguageTranslation = {
                     error_empty_files: 'لم يتضمن التصدير أي ملفات.',
                     error_invalid_package:
                         'الحزمة المُنشأة غير صالحة ولم تُنزَّل.',
+
+                    errors: {
+                        empty_diagram:
+                            'لا يحتوي المخطط على جداول قابلة للتصدير.',
+                    },
                 },
             },
             django: {

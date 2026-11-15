@@ -5,6 +5,43 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/gu';
 
 export const gu: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'જરૂરી',
+            required_fields: 'કૃપા કરીને જરૂરી ક્ષેત્રો પૂર્ણ કરો.',
+            invalid_fields: 'કેટલાક ક્ષેત્રો પર તમારું ધ્યાન જરૂરી છે.',
+            invalid_email: 'માન્ય ઇમેઇલ સરનામું દાખલ કરો.',
+            password_confirmation: 'પાસવર્ડ મેળ ખાતા નથી.',
+            invalid: 'આ ક્ષેત્ર તપાસો.',
+            too_short: 'આ ખૂબ ટૂંકું છે.',
+            too_long: 'આ ખૂબ લાંબું છે.',
+            already_used: 'આ પહેલેથી ઉપયોગમાં છે.',
+        },
+        errors: {
+            network: 'નેટવર્ક સમસ્યા. તમારું કનેક્શન તપાસીને ફરી પ્રયાસ કરો.',
+            forbidden: 'તમને આ કરવાની પરવાનગી નથી.',
+            not_found: 'અમે તે શોધી શક્યા નહીં.',
+            server: 'અમારી બાજુએ કંઈક ખોટું થયું. ફરી પ્રયાસ કરો.',
+            too_many_requests:
+                'ઘણી વધુ વિનંતીઓ. કૃપા કરીને રાહ જુઓ અને ફરી પ્રયાસ કરો.',
+            unauthenticated: 'આગળ વધવા સાઇન ઇન કરો.',
+            session_expired: 'તમારું સત્ર સમાપ્ત થયું છે. ફરી સાઇન ઇન કરો.',
+            invalid_credentials: 'ઈમેલ અથવા પાસવર્ડ ખોટો છે.',
+            generic: 'કંઈક ખોટું થયું. ફરી પ્રયાસ કરો.',
+        },
+        toast: {
+            close: 'બંધ કરો',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'ફીલ્ડ પ્રકારો સુસંગત નથી',
+            incompatible_fields_description:
+                'સંબંધ ફક્ત સુસંગત ફીલ્ડ પ્રકારો વચ્ચે જ બનાવી શકાય',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML નિકાસ નિષ્ફળ રહી',
+            generate_failed_description: 'DBML બનાવી શકાયું નહીં.',
+            empty_field_names:
+                '{{tables}}માં નામ વગરના ફીલ્ડ DBML નિકાસમાંથી બાકાત રહ્યા.',
+        },
         editor_sidebar: {
             tables: 'ટેબલો',
             refs: 'રેફ્સ',
@@ -1055,6 +1092,8 @@ export const gu: LanguageTranslation = {
             errors: {
                 load_failed: 'સહયોગીઓ લોડ કરી શકાયા નહીં.',
                 add_failed: 'સહયોગી ઉમેરી શકાયો નહીં.',
+                role_failed: 'સહયોગીની ભૂમિકા બદલી શકાઈ નહીં.',
+                remove_failed: 'સહયોગીને દૂર કરી શકાયો નહીં.',
             },
         },
 
@@ -1422,6 +1461,11 @@ export const gu: LanguageTranslation = {
                     error_semantic: 'EF Core પ્રોજેક્ટ બની શક્યો નહીં.',
                     error_unauthenticated:
                         'EF Core પ્રોજેક્ટ નિકાસ કરવા માટે તમારે સાઇન ઇન હોવું જરૂરી છે.',
+
+                    errors: {
+                        empty_diagram:
+                            'ડાયાગ્રામમાં નિકાસ કરવા યોગ્ય કોઈ ટેબલ નથી.',
+                    },
                 },
                 result_step: {
                     description: 'જનરેટ થયેલ EF Core પ્રોજેક્ટની સમીક્ષા કરો.',
@@ -1469,6 +1513,11 @@ export const gu: LanguageTranslation = {
                     error_empty_files: 'નિકાસમાં કોઈ ફાઇલ નહોતી.',
                     error_invalid_package:
                         'જનરેટ થયેલ પેકેજ અમાન્ય છે તેથી તે ડાઉનલોડ થયું નહીં.',
+
+                    errors: {
+                        empty_diagram:
+                            'ડાયાગ્રામમાં નિકાસ કરવા યોગ્ય કોઈ ટેબલ નથી.',
+                    },
                 },
             },
             django: {

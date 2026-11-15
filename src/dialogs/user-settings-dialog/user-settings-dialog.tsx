@@ -7,6 +7,11 @@ import {
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { Button } from '@/components/button/button';
+import { FormField } from '@/components/form-field/form-field';
+import {
+    formFieldDescribedBy,
+    invalidControlClassName,
+} from '@/components/form-field/form-field-ids';
 import { Input } from '@/components/input/input';
 import { PasswordInput } from '@/components/password-input/password-input';
 import { Separator } from '@/components/separator/separator';
@@ -18,19 +23,33 @@ import type {
     DiagramCreationDestinationPreference,
     UpdateProfilePayload,
 } from '@/lib/api/auth';
-import { parseLaravelValidationErrors } from '@/lib/api/parse-validation-errors';
+import { normalizeApiError } from '@/lib/api/normalize-api-error';
+import {
+    collectFormValidity,
+    type FormFieldIssue,
+} from '@/lib/forms/collect-form-validity';
+import {
+    currentPasswordInvalidMessageKey,
+    mapServerFieldMessages,
+    messagesForIssues,
+    nonFieldErrorMessageKey,
+    submissionToastMessageKey,
+    toastMessageForMappedFields,
+} from '@/lib/forms/form-error-messages';
+import { namedControl, usePendingFocus } from '@/lib/forms/use-pending-focus';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
-import { formatApiErrorMessage } from '@/pages/auth/format-api-error-message';
 import { AccountDangerZone } from './account-danger-zone';
 
-type ProfileFieldName =
-    | 'first_name'
-    | 'last_name'
-    | 'email'
-    | 'current_password'
-    | 'password'
-    | 'password_confirmation';
+const PROFILE_FIELDS = ['first_name', 'last_name', 'email'] as const;
+const PASSWORD_FIELDS = [
+    'current_password',
+    'password',
+    'password_confirmation',
+] as const;
+const SETTINGS_FIELDS = [...PROFILE_FIELDS, ...PASSWORD_FIELDS] as const;
+
+type ProfileFieldName = (typeof SETTINGS_FIELDS)[number];
 
 export interface UserSettingsDialogProps extends BaseDialogProps {}
 
@@ -41,6 +60,7 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
     const { user, updateProfile, updateDiagramCreationPreference } = useAuth();
     const { closeUserSettingsDialog } = useDialog();
     const { toast } = useToast();
+    const focusInvalid = usePendingFocus();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -50,7 +70,6 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
     const [fieldErrors, setFieldErrors] = useState<
         Partial<Record<ProfileFieldName, string>>
     >({});
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [
         diagramCreationPreferenceSaving,
@@ -69,7 +88,6 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
         setNewPassword('');
         setPasswordConfirmation('');
         setFieldErrors({});
-        setErrorMessage(null);
         setDiagramCreationPreferenceSaving(false);
     }, [dialog.open, user]);
 
@@ -95,6 +113,7 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                 });
                 if (next === null) {
                     toast({
+                        variant: 'success',
                         title: t(
                             'auth.settings.diagram_creation.reset_success_title'
                         ),
@@ -105,7 +124,7 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                 }
             } catch {
                 toast({
-                    variant: 'destructive',
+                    variant: 'danger',
                     title: t('auth.settings.diagram_creation.save_error_title'),
                     description: t(
                         'auth.settings.diagram_creation.save_error_description'
@@ -118,17 +137,76 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
         [t, toast, updateDiagramCreationPreference, user]
     );
 
+    const clearField = useCallback((field: ProfileFieldName) => {
+        setFieldErrors((current) => {
+            if (current[field] === undefined) {
+                return current;
+            }
+
+            const next = { ...current };
+            delete next[field];
+            return next;
+        });
+    }, []);
+
     const handleSubmit = useCallback(
         async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
-            setFieldErrors({});
-            setErrorMessage(null);
-            setIsSubmitting(true);
 
+            const form = event.currentTarget;
             const isChangingPassword =
                 currentPassword.length > 0 ||
                 newPassword.length > 0 ||
                 passwordConfirmation.length > 0;
+            const additionalIssues: FormFieldIssue[] = [];
+
+            for (const name of ['first_name', 'last_name'] as const) {
+                const value = name === 'first_name' ? firstName : lastName;
+                if (value.trim() !== '') {
+                    continue;
+                }
+
+                const element = form.elements.namedItem(name);
+                if (
+                    element instanceof HTMLInputElement &&
+                    !element.validity.valueMissing
+                ) {
+                    additionalIssues.push({
+                        name,
+                        element,
+                        code: 'required',
+                    });
+                }
+            }
+
+            const validity = collectFormValidity(form, {
+                confirmation: isChangingPassword
+                    ? {
+                          field: 'password_confirmation',
+                          matches: 'password',
+                      }
+                    : undefined,
+                additionalIssues,
+            });
+
+            if (validity.issues.length > 0) {
+                setFieldErrors(messagesForIssues(validity.issues, t));
+                focusInvalid(validity.firstInvalid);
+                const includesProfile = validity.issues.some((issue) =>
+                    PROFILE_FIELDS.some((field) => field === issue.name)
+                );
+                toast({
+                    title: t(submissionToastMessageKey(validity.issues)),
+                    variant: 'danger',
+                    dedupeKey: includesProfile
+                        ? 'validation:settings-profile'
+                        : 'validation:settings-password',
+                });
+                return;
+            }
+
+            setFieldErrors({});
+            setIsSubmitting(true);
 
             const payload: UpdateProfilePayload = {
                 first_name: firstName.trim(),
@@ -145,25 +223,64 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
             try {
                 await updateProfile(payload);
                 toast({
+                    variant: 'success',
                     title: t('auth.settings.success_title'),
                     description: t('auth.settings.success_description'),
                 });
                 closeDialog();
             } catch (error: unknown) {
-                const validationErrors = parseLaravelValidationErrors(error);
-                if (Object.keys(validationErrors).length > 0) {
+                const apiError = normalizeApiError(error);
+
+                if (apiError.code === 'current_password_invalid') {
+                    const message = t(currentPasswordInvalidMessageKey);
                     setFieldErrors({
-                        first_name: validationErrors.first_name,
-                        last_name: validationErrors.last_name,
-                        email: validationErrors.email,
-                        current_password: validationErrors.current_password,
-                        password: validationErrors.password,
-                        password_confirmation:
-                            validationErrors.password_confirmation,
+                        current_password: message,
                     });
-                } else {
-                    setErrorMessage(formatApiErrorMessage(error));
+                    focusInvalid(namedControl(form, 'current_password'));
+                    toast({
+                        title: message,
+                        variant: 'danger',
+                        dedupeKey: 'auth:current-password',
+                    });
+                    return;
                 }
+
+                const mapped = mapServerFieldMessages(
+                    apiError,
+                    SETTINGS_FIELDS,
+                    t
+                );
+                if (
+                    apiError.code === 'validation_failed' &&
+                    Object.keys(mapped).length > 0
+                ) {
+                    setFieldErrors(mapped);
+                    const firstField = SETTINGS_FIELDS.find(
+                        (field) => mapped[field] !== undefined
+                    );
+                    focusInvalid(
+                        firstField === undefined
+                            ? null
+                            : namedControl(form, firstField)
+                    );
+                    const includesProfile = PROFILE_FIELDS.some(
+                        (field) => mapped[field] !== undefined
+                    );
+                    toast({
+                        title: toastMessageForMappedFields(mapped, t),
+                        variant: 'danger',
+                        dedupeKey: includesProfile
+                            ? 'validation:settings-profile'
+                            : 'validation:settings-password',
+                    });
+                    return;
+                }
+
+                toast({
+                    title: t(nonFieldErrorMessageKey(apiError.code)),
+                    variant: 'danger',
+                    dedupeKey: `auth:${apiError.code}`,
+                });
             } finally {
                 setIsSubmitting(false);
             }
@@ -173,6 +290,7 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
             currentPassword,
             email,
             firstName,
+            focusInvalid,
             lastName,
             newPassword,
             passwordConfirmation,
@@ -185,6 +303,11 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
     if (!user) {
         return null;
     }
+
+    const changingPassword =
+        currentPassword.length > 0 ||
+        newPassword.length > 0 ||
+        passwordConfirmation.length > 0;
 
     return (
         <Dialog
@@ -212,73 +335,95 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                 >
                     <form
                         className="flex flex-col gap-3"
+                        noValidate
                         onSubmit={handleSubmit}
                     >
-                        <label className="flex flex-col gap-1 text-sm">
-                            <span>{t('auth.settings.first_name_label')}</span>
+                        <FormField
+                            error={fieldErrors.first_name ?? null}
+                            id="settings-first-name"
+                            label={t('auth.settings.first_name_label')}
+                        >
                             <Input
+                                id="settings-first-name"
+                                aria-describedby={formFieldDescribedBy(
+                                    'settings-first-name',
+                                    { error: Boolean(fieldErrors.first_name) }
+                                )}
+                                aria-invalid={
+                                    fieldErrors.first_name ? true : undefined
+                                }
                                 autoComplete="given-name"
                                 autoFocus
+                                className={invalidControlClassName(
+                                    Boolean(fieldErrors.first_name)
+                                )}
                                 disabled={isSubmitting}
                                 name="first_name"
-                                onChange={(event) =>
-                                    setFirstName(event.target.value)
-                                }
+                                onChange={(event) => {
+                                    setFirstName(event.target.value);
+                                    clearField('first_name');
+                                }}
                                 required
                                 value={firstName}
                             />
-                            {fieldErrors.first_name ? (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {fieldErrors.first_name}
-                                </span>
-                            ) : null}
-                        </label>
-                        <label className="flex flex-col gap-1 text-sm">
-                            <span>{t('auth.settings.last_name_label')}</span>
+                        </FormField>
+                        <FormField
+                            error={fieldErrors.last_name ?? null}
+                            id="settings-last-name"
+                            label={t('auth.settings.last_name_label')}
+                        >
                             <Input
+                                id="settings-last-name"
+                                aria-describedby={formFieldDescribedBy(
+                                    'settings-last-name',
+                                    { error: Boolean(fieldErrors.last_name) }
+                                )}
+                                aria-invalid={
+                                    fieldErrors.last_name ? true : undefined
+                                }
                                 autoComplete="family-name"
+                                className={invalidControlClassName(
+                                    Boolean(fieldErrors.last_name)
+                                )}
                                 disabled={isSubmitting}
                                 name="last_name"
-                                onChange={(event) =>
-                                    setLastName(event.target.value)
-                                }
+                                onChange={(event) => {
+                                    setLastName(event.target.value);
+                                    clearField('last_name');
+                                }}
                                 required
                                 value={lastName}
                             />
-                            {fieldErrors.last_name ? (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {fieldErrors.last_name}
-                                </span>
-                            ) : null}
-                        </label>
-                        <label className="flex flex-col gap-1 text-sm">
-                            <span>{t('auth.settings.email_label')}</span>
+                        </FormField>
+                        <FormField
+                            error={fieldErrors.email ?? null}
+                            id="settings-email"
+                            label={t('auth.settings.email_label')}
+                        >
                             <Input
+                                id="settings-email"
+                                aria-describedby={formFieldDescribedBy(
+                                    'settings-email',
+                                    { error: Boolean(fieldErrors.email) }
+                                )}
+                                aria-invalid={
+                                    fieldErrors.email ? true : undefined
+                                }
                                 autoComplete="email"
+                                className={invalidControlClassName(
+                                    Boolean(fieldErrors.email)
+                                )}
                                 disabled={isSubmitting}
                                 name="email"
-                                onChange={(event) =>
-                                    setEmail(event.target.value)
-                                }
+                                onChange={(event) => {
+                                    setEmail(event.target.value);
+                                    clearField('email');
+                                }}
                                 required
                                 type="email"
                                 value={email}
                             />
-                            {fieldErrors.email ? (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {fieldErrors.email}
-                                </span>
-                            ) : null}
-                        </label>
+                        </FormField>
 
                         <Separator className="my-1" />
 
@@ -394,89 +539,114 @@ export const UserSettingsDialog: React.FC<UserSettingsDialogProps> = ({
                             <p className="text-sm font-medium">
                                 {t('auth.settings.change_password_heading')}
                             </p>
-                            <div className="flex flex-col gap-1 text-sm">
-                                <label htmlFor="settings-current-password">
-                                    {t('auth.settings.current_password_label')}
-                                </label>
+                            <FormField
+                                error={fieldErrors.current_password ?? null}
+                                id="settings-current-password"
+                                label={t(
+                                    'auth.settings.current_password_label'
+                                )}
+                            >
                                 <PasswordInput
                                     id="settings-current-password"
+                                    aria-describedby={formFieldDescribedBy(
+                                        'settings-current-password',
+                                        {
+                                            error: Boolean(
+                                                fieldErrors.current_password
+                                            ),
+                                        }
+                                    )}
+                                    aria-invalid={
+                                        fieldErrors.current_password
+                                            ? true
+                                            : undefined
+                                    }
                                     autoComplete="current-password"
+                                    className={invalidControlClassName(
+                                        Boolean(fieldErrors.current_password)
+                                    )}
                                     disabled={isSubmitting}
                                     name="current_password"
-                                    onChange={(event) =>
-                                        setCurrentPassword(event.target.value)
-                                    }
+                                    onChange={(event) => {
+                                        setCurrentPassword(event.target.value);
+                                        clearField('current_password');
+                                    }}
+                                    required={changingPassword}
                                     value={currentPassword}
                                 />
-                                {fieldErrors.current_password ? (
-                                    <span
-                                        className="text-xs text-destructive"
-                                        role="alert"
-                                    >
-                                        {fieldErrors.current_password}
-                                    </span>
-                                ) : null}
-                            </div>
-                            <div className="flex flex-col gap-1 text-sm">
-                                <label htmlFor="settings-new-password">
-                                    {t('auth.settings.new_password_label')}
-                                </label>
+                            </FormField>
+                            <FormField
+                                error={fieldErrors.password ?? null}
+                                id="settings-new-password"
+                                label={t('auth.settings.new_password_label')}
+                            >
                                 <PasswordInput
                                     id="settings-new-password"
+                                    aria-describedby={formFieldDescribedBy(
+                                        'settings-new-password',
+                                        { error: Boolean(fieldErrors.password) }
+                                    )}
+                                    aria-invalid={
+                                        fieldErrors.password ? true : undefined
+                                    }
                                     autoComplete="new-password"
+                                    className={invalidControlClassName(
+                                        Boolean(fieldErrors.password)
+                                    )}
                                     disabled={isSubmitting}
                                     name="password"
-                                    onChange={(event) =>
-                                        setNewPassword(event.target.value)
-                                    }
+                                    onChange={(event) => {
+                                        setNewPassword(event.target.value);
+                                        clearField('password');
+                                    }}
+                                    required={changingPassword}
                                     value={newPassword}
                                 />
-                                {fieldErrors.password ? (
-                                    <span
-                                        className="text-xs text-destructive"
-                                        role="alert"
-                                    >
-                                        {fieldErrors.password}
-                                    </span>
-                                ) : null}
-                            </div>
-                            <div className="flex flex-col gap-1 text-sm">
-                                <label htmlFor="settings-password-confirmation">
-                                    {t(
-                                        'auth.settings.password_confirmation_label'
-                                    )}
-                                </label>
+                            </FormField>
+                            <FormField
+                                error={
+                                    fieldErrors.password_confirmation ?? null
+                                }
+                                id="settings-password-confirmation"
+                                label={t(
+                                    'auth.settings.password_confirmation_label'
+                                )}
+                            >
                                 <PasswordInput
                                     id="settings-password-confirmation"
+                                    aria-describedby={formFieldDescribedBy(
+                                        'settings-password-confirmation',
+                                        {
+                                            error: Boolean(
+                                                fieldErrors.password_confirmation
+                                            ),
+                                        }
+                                    )}
+                                    aria-invalid={
+                                        fieldErrors.password_confirmation
+                                            ? true
+                                            : undefined
+                                    }
                                     autoComplete="new-password"
+                                    className={invalidControlClassName(
+                                        Boolean(
+                                            fieldErrors.password_confirmation
+                                        )
+                                    )}
                                     disabled={isSubmitting}
                                     name="password_confirmation"
-                                    onChange={(event) =>
+                                    onChange={(event) => {
                                         setPasswordConfirmation(
                                             event.target.value
-                                        )
-                                    }
+                                        );
+                                        clearField('password_confirmation');
+                                    }}
+                                    required={changingPassword}
                                     value={passwordConfirmation}
                                 />
-                                {fieldErrors.password_confirmation ? (
-                                    <span
-                                        className="text-xs text-destructive"
-                                        role="alert"
-                                    >
-                                        {fieldErrors.password_confirmation}
-                                    </span>
-                                ) : null}
-                            </div>
+                            </FormField>
                         </div>
 
-                        {errorMessage !== null ? (
-                            <p
-                                className="text-sm text-destructive"
-                                role="alert"
-                            >
-                                {errorMessage}
-                            </p>
-                        ) : null}
                         <Button
                             className={cn('mt-1')}
                             disabled={isSubmitting}

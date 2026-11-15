@@ -110,14 +110,12 @@ const ConversationMessageComposerCreate: React.FC<
                     aria-invalid={session.errorMessage !== null}
                     aria-describedby={describedBy}
                     rows={3}
-                    className="min-h-[72px] resize-none text-sm"
+                    className={`min-h-[72px] resize-none text-sm${
+                        session.errorMessage ? ' border-destructive' : ''
+                    }`}
                 />
                 {session.errorMessage ? (
-                    <p
-                        id={errorId}
-                        role="alert"
-                        className="text-xs text-destructive"
-                    >
+                    <p id={errorId} className="sr-only">
                         {session.errorMessage}
                     </p>
                 ) : null}
@@ -261,14 +259,12 @@ const ConversationMessageComposerEdit: React.FC<
                     aria-invalid={session.errorMessage !== null}
                     aria-describedby={describedBy}
                     rows={3}
-                    className="min-h-[72px] resize-none text-sm"
+                    className={`min-h-[72px] resize-none text-sm${
+                        session.errorMessage ? ' border-destructive' : ''
+                    }`}
                 />
                 {session.errorMessage ? (
-                    <p
-                        id={errorId}
-                        role="alert"
-                        className="text-xs text-destructive"
-                    >
+                    <p id={errorId} className="sr-only">
                         {session.errorMessage}
                     </p>
                 ) : null}

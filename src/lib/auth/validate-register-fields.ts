@@ -1,4 +1,9 @@
-export type RegisterField = 'first_name' | 'last_name' | 'email' | 'password';
+export type RegisterField =
+    | 'first_name'
+    | 'last_name'
+    | 'email'
+    | 'password'
+    | 'password_confirmation';
 
 export type RegisterFieldErrors = Partial<Record<RegisterField, string>>;
 

@@ -5,6 +5,42 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/ko_KR';
 
 export const ko_KR: LanguageTranslation = {
     translation: {
+        validation: {
+            required: '필수',
+            required_fields: '필수 항목을 입력해 주세요.',
+            invalid_fields: '확인이 필요한 항목이 있습니다.',
+            invalid_email: '유효한 이메일 주소를 입력하세요.',
+            password_confirmation: '비밀번호가 일치하지 않습니다.',
+            invalid: '이 항목을 확인해 주세요.',
+            too_short: '너무 짧습니다.',
+            too_long: '너무 깁니다.',
+            already_used: '이미 사용 중입니다.',
+        },
+        errors: {
+            network: '네트워크 문제입니다. 연결을 확인한 뒤 다시 시도하세요.',
+            forbidden: '이 작업을 할 권한이 없습니다.',
+            not_found: '찾을 수 없습니다.',
+            server: '서버에서 문제가 발생했습니다. 다시 시도하세요.',
+            too_many_requests: '요청이 너무 많습니다. 잠시 후 다시 시도하세요.',
+            unauthenticated: '계속하려면 로그인하세요.',
+            session_expired: '세션이 만료되었습니다. 다시 로그인하세요.',
+            invalid_credentials: '이메일 또는 비밀번호가 올바르지 않습니다.',
+            generic: '문제가 발생했습니다. 다시 시도하세요.',
+        },
+        toast: {
+            close: '닫기',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: '필드 형식이 호환되지 않습니다',
+            incompatible_fields_description:
+                '관계는 호환되는 필드 형식 사이에만 만들 수 있습니다',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML 내보내기에 실패했습니다',
+            generate_failed_description: 'DBML을 생성할 수 없습니다.',
+            empty_field_names:
+                '{{tables}}의 이름 없는 필드는 DBML 내보내기에서 제외되었습니다.',
+        },
         editor_sidebar: {
             tables: '테이블',
             refs: 'Refs',
@@ -1077,6 +1113,8 @@ export const ko_KR: LanguageTranslation = {
             errors: {
                 load_failed: '협업자를 불러올 수 없습니다.',
                 add_failed: '협업자를 추가할 수 없습니다.',
+                role_failed: '협업자의 역할을 변경할 수 없습니다.',
+                remove_failed: '협업자를 제거할 수 없습니다.',
             },
         },
 
@@ -1441,6 +1479,11 @@ export const ko_KR: LanguageTranslation = {
                     error_semantic: 'EF Core 프로젝트를 생성할 수 없습니다.',
                     error_unauthenticated:
                         'EF Core 프로젝트를 내보내려면 로그인해야 합니다.',
+
+                    errors: {
+                        empty_diagram:
+                            '다이어그램에보낼 수 있는 테이블이 없습니다.',
+                    },
                 },
                 result_step: {
                     description: '생성된 EF Core 프로젝트를 검토하세요.',
@@ -1488,6 +1531,11 @@ export const ko_KR: LanguageTranslation = {
                     error_empty_files: '보내기에 파일이 포함되지 않았습니다.',
                     error_invalid_package:
                         '생성된 패키지가 잘못되어 다운로드하지 않았습니다.',
+
+                    errors: {
+                        empty_diagram:
+                            '다이어그램에보낼 수 있는 테이블이 없습니다.',
+                    },
                 },
             },
             django: {

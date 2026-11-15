@@ -5,6 +5,43 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/id_ID';
 
 export const id_ID: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'Wajib',
+            required_fields: 'Lengkapi bidang yang wajib diisi.',
+            invalid_fields: 'Beberapa bidang perlu perhatian Anda.',
+            invalid_email: 'Masukkan alamat email yang valid.',
+            password_confirmation: 'Kata sandi tidak cocok.',
+            invalid: 'Periksa bidang ini.',
+            too_short: 'Ini terlalu pendek.',
+            too_long: 'Ini terlalu panjang.',
+            already_used: 'Ini sudah digunakan.',
+        },
+        errors: {
+            network: 'Masalah jaringan. Periksa koneksi Anda dan coba lagi.',
+            forbidden: 'Anda tidak memiliki izin untuk melakukan itu.',
+            not_found: 'Kami tidak dapat menemukannya.',
+            server: 'Terjadi masalah di pihak kami. Coba lagi.',
+            too_many_requests:
+                'Terlalu banyak permintaan. Tunggu dan coba lagi.',
+            unauthenticated: 'Masuk untuk melanjutkan.',
+            session_expired: 'Sesi Anda telah berakhir. Masuk lagi.',
+            invalid_credentials: 'Email atau kata sandi salah.',
+            generic: 'Terjadi kesalahan. Coba lagi.',
+        },
+        toast: {
+            close: 'Tutup',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'Jenis kolom tidak kompatibel',
+            incompatible_fields_description:
+                'Relasi hanya dapat dibuat antara jenis kolom yang kompatibel',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'Ekspor DBML gagal',
+            generate_failed_description: 'DBML tidak dapat dibuat.',
+            empty_field_names:
+                'Kolom tanpa nama di {{tables}} tidak disertakan dalam ekspor DBML.',
+        },
         editor_sidebar: {
             tables: 'Tabel',
             refs: 'Refs',
@@ -1077,6 +1114,8 @@ export const id_ID: LanguageTranslation = {
             errors: {
                 load_failed: 'Tidak dapat memuat kolaborator.',
                 add_failed: 'Tidak dapat menambahkan kolaborator.',
+                role_failed: 'Peran kolaborator tidak dapat diubah.',
+                remove_failed: 'Kolaborator tidak dapat dihapus.',
             },
         },
 
@@ -1443,6 +1482,11 @@ export const id_ID: LanguageTranslation = {
                     error_semantic: 'Proyek EF Core tidak dapat dihasilkan.',
                     error_unauthenticated:
                         'Anda harus masuk untuk mengekspor proyek EF Core.',
+
+                    errors: {
+                        empty_diagram:
+                            'Diagram tidak memiliki tabel yang dapat diekspor.',
+                    },
                 },
                 result_step: {
                     description: 'Tinjau proyek EF Core yang dihasilkan.',
@@ -1492,6 +1536,11 @@ export const id_ID: LanguageTranslation = {
                         'Ekspor tidak menyertakan berkas apa pun.',
                     error_invalid_package:
                         'Paket yang dihasilkan tidak valid dan tidak diunduh.',
+
+                    errors: {
+                        empty_diagram:
+                            'Diagram tidak memiliki tabel yang dapat diekspor.',
+                    },
                 },
             },
             django: {

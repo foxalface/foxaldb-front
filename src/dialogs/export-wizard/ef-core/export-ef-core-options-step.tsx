@@ -16,6 +16,7 @@ import { ExportFileListSkeleton } from '../export-file-list-skeleton';
 import { ExportGeneratedFilesTree } from '../export-generated-files-tree';
 import { ExportWizardFieldLabel } from '../export-wizard-field-label';
 import { ExportWizardNotesPanel } from '../export-wizard-notes-panel';
+import { translateExportCode } from '../translate-export-code';
 
 export type EfCoreWizardRequestErrorKind =
     | 'semantic'
@@ -70,9 +71,12 @@ export const ExportEfCoreOptionsStep: React.FC<
 
         switch (error.kind) {
             case 'semantic':
-                return error.message && error.message.trim().length > 0
-                    ? error.message
-                    : t('export_wizard.ef_core.options_step.error_semantic');
+                return translateExportCode(
+                    t,
+                    'export_wizard.ef_core.options_step.errors',
+                    'export_wizard.ef_core.options_step.error_semantic',
+                    error
+                );
             case 'rate_limited':
                 return t(
                     'export_wizard.ef_core.options_step.error_rate_limited'

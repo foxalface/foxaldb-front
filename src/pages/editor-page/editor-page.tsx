@@ -1,7 +1,6 @@
 import React, { Suspense, useCallback, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { Toaster } from '@/components/toast/toaster';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { FullScreenLoaderProvider } from '@/context/full-screen-spinner-context/full-screen-spinner-provider';
 import { LayoutProvider } from '@/context/layout-context/layout-provider';
@@ -131,7 +130,6 @@ const EditorPageContent: React.FC<
                     </Suspense>
                 </section>
             )}
-            <Toaster />
         </>
     );
 };

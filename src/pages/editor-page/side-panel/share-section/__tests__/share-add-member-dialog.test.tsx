@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { en } from '@/i18n/locales/en';
+import { ApiError } from '@/lib/api/client';
 import type * as DiagramMembersApi from '@/lib/api/diagram-members';
 
 const { shareDiagramMock, toastMock } = vi.hoisted(() => ({
@@ -82,6 +83,7 @@ describe('ShareAddMemberDialog', () => {
         expect(onShared).toHaveBeenCalled();
         expect(toastMock).toHaveBeenCalledWith({
             title: en.translation.share_diagram_dialog.add_member.success,
+            variant: 'success',
         });
         expect(en.translation.share_diagram_dialog.add_member.success).toBe(
             'Sharing updated.'
@@ -111,11 +113,97 @@ describe('ShareAddMemberDialog', () => {
         await waitFor(() => {
             expect(shareDiagramMock).toHaveBeenCalled();
         });
-        expect(toastMock).not.toHaveBeenCalled();
+        expect(toastMock).toHaveBeenCalledTimes(1);
+        expect(toastMock).toHaveBeenCalledWith({
+            title: en.translation.share_diagram_dialog.errors.add_failed,
+            variant: 'danger',
+            dedupeKey: 'share:add-member',
+        });
         expect(
-            screen.getByText(
+            screen.queryByText(
                 en.translation.share_diagram_dialog.errors.add_failed
             )
-        ).toBeInTheDocument();
+        ).not.toBeInTheDocument();
+    });
+
+    it('highlights an empty email and shows one danger toast', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <ShareAddMemberDialog
+                diagramId="42"
+                open
+                onOpenChange={vi.fn()}
+                onShared={vi.fn()}
+            />
+        );
+
+        await user.click(screen.getByRole('button', { name: 'Add' }));
+
+        expect(shareDiagramMock).not.toHaveBeenCalled();
+        expect(screen.getByLabelText('Email')).toHaveAttribute(
+            'aria-invalid',
+            'true'
+        );
+        expect(toastMock).toHaveBeenCalledTimes(1);
+        expect(toastMock).toHaveBeenCalledWith({
+            title: en.translation.validation.required_fields,
+            variant: 'danger',
+            dedupeKey: 'share:add-member',
+        });
+        expect(
+            screen.queryByText(en.translation.validation.required, {
+                selector: ':not(.sr-only)',
+            })
+        ).not.toBeInTheDocument();
+    });
+
+    it('localizes a server email validation code without Laravel prose', async () => {
+        const user = userEvent.setup();
+        shareDiagramMock.mockRejectedValueOnce(
+            new ApiError(
+                'The email field must be a valid email address.',
+                422,
+                {
+                    code: 'validation_failed',
+                    message: 'The email field must be a valid email address.',
+                    errors: {
+                        email: [
+                            'The email field must be a valid email address.',
+                        ],
+                    },
+                    fields: {
+                        email: [{ code: 'email', message: 'ignored' }],
+                    },
+                }
+            )
+        );
+
+        render(
+            <ShareAddMemberDialog
+                diagramId="42"
+                open
+                onOpenChange={vi.fn()}
+                onShared={vi.fn()}
+            />
+        );
+
+        await user.type(screen.getByLabelText('Email'), 'alexis@example.com');
+        await user.click(screen.getByRole('button', { name: 'Add' }));
+
+        await waitFor(() => {
+            expect(toastMock).toHaveBeenCalledWith({
+                title: en.translation.validation.invalid_email,
+                variant: 'danger',
+                dedupeKey: 'share:add-member',
+            });
+        });
+        expect(screen.getByLabelText('Email')).toHaveAttribute(
+            'aria-invalid',
+            'true'
+        );
+        expect(
+            screen.queryByText('The email field must be a valid email address.')
+        ).not.toBeInTheDocument();
     });
 });

@@ -97,7 +97,8 @@ export const OnlineDiagramRowActionsMenu: React.FC<
         } catch {
             toast({
                 title: t('open_diagram_dialog.errors.duplicate_failed'),
-                variant: 'destructive',
+                variant: 'danger',
+                dedupeKey: 'diagram:duplicate-failed',
             });
         }
     }, [diagramId, onListChanged, navigate, toast, t]);
@@ -114,7 +115,8 @@ export const OnlineDiagramRowActionsMenu: React.FC<
         } catch {
             toast({
                 title: t('open_diagram_dialog.errors.copy_to_device_failed'),
-                variant: 'destructive',
+                variant: 'danger',
+                dedupeKey: 'diagram:copy-to-device-failed',
             });
         }
     }, [

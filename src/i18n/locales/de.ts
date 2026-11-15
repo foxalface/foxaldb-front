@@ -5,6 +5,47 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/de';
 
 export const de: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'Erforderlich',
+            required_fields: 'Bitte füllen Sie die Pflichtfelder aus.',
+            invalid_fields: 'Einige Felder benötigen Ihre Aufmerksamkeit.',
+            invalid_email: 'Geben Sie eine gültige E-Mail-Adresse ein.',
+            password_confirmation: 'Die Passwörter stimmen nicht überein.',
+            invalid: 'Prüfen Sie dieses Feld.',
+            too_short: 'Das ist zu kurz.',
+            too_long: 'Das ist zu lang.',
+            already_used: 'Das wird bereits verwendet.',
+        },
+        errors: {
+            network:
+                'Netzwerkproblem. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
+            forbidden: 'Sie haben keine Berechtigung dafür.',
+            not_found: 'Das wurde nicht gefunden.',
+            server: 'Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es erneut.',
+            too_many_requests:
+                'Zu viele Anfragen. Bitte warten Sie und versuchen Sie es erneut.',
+            unauthenticated: 'Melden Sie sich an, um fortzufahren.',
+            session_expired:
+                'Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an.',
+            invalid_credentials:
+                'Die E-Mail-Adresse oder das Passwort ist falsch.',
+            generic: 'Etwas ist schiefgelaufen. Versuchen Sie es erneut.',
+        },
+        toast: {
+            close: 'Schließen',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'Die Feldtypen sind nicht kompatibel',
+            incompatible_fields_description:
+                'Beziehungen sind nur zwischen kompatiblen Feldtypen möglich',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML-Export fehlgeschlagen',
+            generate_failed_description:
+                'Das DBML konnte nicht erzeugt werden.',
+            empty_field_names:
+                'Felder ohne Namen in {{tables}} wurden aus dem DBML-Export ausgeschlossen.',
+        },
         editor_sidebar: {
             tables: 'Tabellen',
             refs: 'Refs',
@@ -1103,6 +1144,9 @@ export const de: LanguageTranslation = {
             errors: {
                 load_failed: 'Mitarbeitende konnten nicht geladen werden.',
                 add_failed: 'Mitarbeitende konnte nicht hinzugefügt werden.',
+                role_failed:
+                    'Die Rolle der Person konnte nicht geändert werden.',
+                remove_failed: 'Die Person konnte nicht entfernt werden.',
             },
         },
 
@@ -1484,6 +1528,11 @@ export const de: LanguageTranslation = {
                         'Das EF-Core-Projekt konnte nicht erzeugt werden.',
                     error_unauthenticated:
                         'Sie müssen angemeldet sein, um EF-Core-Projekte zu exportieren.',
+
+                    errors: {
+                        empty_diagram:
+                            'Das Diagramm enthält keine exportierbaren Tabellen.',
+                    },
                 },
                 result_step: {
                     description:
@@ -1533,6 +1582,11 @@ export const de: LanguageTranslation = {
                     error_empty_files: 'Der Export enthielt keine Dateien.',
                     error_invalid_package:
                         'Das erzeugte Paket ist ungültig und wurde nicht heruntergeladen.',
+
+                    errors: {
+                        empty_diagram:
+                            'Das Diagramm enthält keine exportierbaren Tabellen.',
+                    },
                 },
             },
             django: {

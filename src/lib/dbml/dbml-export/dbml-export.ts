@@ -1582,19 +1582,9 @@ export async function generateDBMLFromDiagram(
             baseScript // Log the SQL that caused the error
         );
 
-        errorMsg = error instanceof Error ? error.message : 'Unknown error';
-        const errorMessage = `// Error generating DBML: ${errorMsg}`;
-        standard = errorMessage;
-        inline = errorMessage;
-
-        // If an error occurred, still prepend enums if they exist, or they'll be lost.
-        // The error message will then follow.
-        if (standard.startsWith('// Error generating DBML:') && enumsDBML) {
-            standard = enumsDBML + '\n\n' + standard;
-        }
-        if (inline.startsWith('// Error generating DBML:') && enumsDBML) {
-            inline = enumsDBML + '\n\n' + inline;
-        }
+        errorMsg = 'generate_failed';
+        standard = '';
+        inline = '';
     }
 
     // Extract relationships DBML from standard output

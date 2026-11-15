@@ -6,6 +6,7 @@ import {
     type DiagramMemberRole,
 } from '@/lib/api/diagram-members';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '@/components/toast/use-toast';
 import { Input } from '@/components/input/input';
 import { DiagramRoleIcon } from '@/components/diagram-role-icon/diagram-role-icon';
 import { SidePanelAddButton } from '@/components/side-panel/side-panel-add-button';
@@ -41,6 +42,7 @@ export const ShareMemberList: React.FC<ShareMemberListProps> = ({
     onShared,
 }) => {
     const { t } = useTranslation();
+    const { toast } = useToast();
     const [busyMemberId, setBusyMemberId] = useState<number | null>(null);
     const [filterText, setFilterText] = useState('');
     const [selectedRoles, setSelectedRoles] = useState<DiagramMemberRole[]>(
@@ -87,12 +89,16 @@ export const ShareMemberList: React.FC<ShareMemberListProps> = ({
                     )
                 );
             } catch {
-                // Keep previous role on failure
+                toast({
+                    title: t('share_diagram_dialog.errors.role_failed'),
+                    variant: 'danger',
+                    dedupeKey: 'share:member-role',
+                });
             } finally {
                 setBusyMemberId(null);
             }
         },
-        [diagramId, members, onMembersChange]
+        [diagramId, members, onMembersChange, t, toast]
     );
 
     const handleRemove = useCallback(
@@ -102,12 +108,16 @@ export const ShareMemberList: React.FC<ShareMemberListProps> = ({
                 await removeDiagramMember(diagramId, memberId);
                 onMembersChange(members.filter((item) => item.id !== memberId));
             } catch {
-                // Keep list unchanged on failure
+                toast({
+                    title: t('share_diagram_dialog.errors.remove_failed'),
+                    variant: 'danger',
+                    dedupeKey: 'share:member-remove',
+                });
             } finally {
                 setBusyMemberId(null);
             }
         },
-        [diagramId, members, onMembersChange]
+        [diagramId, members, onMembersChange, t, toast]
     );
 
     return (

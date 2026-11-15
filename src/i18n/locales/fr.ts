@@ -5,6 +5,47 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/fr';
 
 export const fr: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'Obligatoire',
+            required_fields: 'Veuillez remplir les champs obligatoires.',
+            invalid_fields: 'Certains champs nécessitent votre attention.',
+            invalid_email: 'Saisissez une adresse e-mail valide.',
+            password_confirmation: 'Les mots de passe ne correspondent pas.',
+            invalid: 'Vérifiez ce champ.',
+            too_short: 'C’est trop court.',
+            too_long: 'C’est trop long.',
+            already_used: 'Cette valeur est déjà utilisée.',
+        },
+        errors: {
+            network:
+                'Problème de réseau. Vérifiez votre connexion et réessayez.',
+            forbidden: 'Vous n’avez pas l’autorisation de faire cela.',
+            not_found: 'Nous n’avons pas trouvé cet élément.',
+            server: 'Un problème est survenu de notre côté. Réessayez.',
+            too_many_requests:
+                'Trop de demandes. Veuillez patienter et réessayer.',
+            unauthenticated: 'Connectez-vous pour continuer.',
+            session_expired:
+                'Votre session a expiré. Connectez-vous à nouveau.',
+            invalid_credentials:
+                'L’adresse e-mail ou le mot de passe est incorrect.',
+            generic: 'Une erreur s’est produite. Réessayez.',
+        },
+        toast: {
+            close: 'Fermer',
+        },
+        canvas_toasts: {
+            incompatible_fields_title:
+                'Les types de champs ne sont pas compatibles',
+            incompatible_fields_description:
+                'Une relation ne peut relier que des types de champs compatibles',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'L’export DBML a échoué',
+            generate_failed_description: 'Le DBML n’a pas pu être généré.',
+            empty_field_names:
+                'Des champs sans nom dans {{tables}} ont été exclus de l’export DBML.',
+        },
         editor_sidebar: {
             tables: 'Tables',
             refs: 'Refs',
@@ -1098,6 +1139,9 @@ export const fr: LanguageTranslation = {
             errors: {
                 load_failed: 'Impossible de charger les collaborateurs.',
                 add_failed: 'Impossible d’ajouter le collaborateur.',
+                role_failed:
+                    'Le rôle du collaborateur n’a pas pu être modifié.',
+                remove_failed: 'Le collaborateur n’a pas pu être retiré.',
             },
         },
 
@@ -1473,6 +1517,11 @@ export const fr: LanguageTranslation = {
                     error_semantic: 'Le projet EF Core n’a pas pu être généré.',
                     error_unauthenticated:
                         'Vous devez être connecté pour exporter des projets EF Core.',
+
+                    errors: {
+                        empty_diagram:
+                            'Le diagramme n’a aucune table exportable.',
+                    },
                 },
                 result_step: {
                     description: 'Vérifiez le projet EF Core généré.',
@@ -1520,6 +1569,11 @@ export const fr: LanguageTranslation = {
                     error_empty_files: 'L’export n’incluait aucun fichier.',
                     error_invalid_package:
                         'Le paquet généré est invalide et n’a pas été téléchargé.',
+
+                    errors: {
+                        empty_diagram:
+                            'Le diagramme n’a aucune table exportable.',
+                    },
                 },
             },
             django: {

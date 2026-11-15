@@ -442,7 +442,12 @@ describe('ExportWizardDialog EF Core branch', () => {
         await waitFor(() => {
             expect(
                 screen.getByTestId('export-ef-core-error')
-            ).toHaveTextContent('The diagram has no exportable tables.');
+            ).toHaveTextContent(
+                'export_wizard.ef_core.options_step.error_semantic'
+            );
+            expect(
+                screen.getByTestId('export-ef-core-error')
+            ).not.toHaveTextContent('The diagram has no exportable tables.');
         });
 
         expect(screen.getByTestId('export-ef-core-error')).toHaveAttribute(

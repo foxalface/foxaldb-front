@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { Toaster } from '@/components/toast/toaster';
+import { dismiss } from '@/components/toast/use-toast';
 import { ApiError } from '@/lib/api/client';
 import { ForgotPasswordScreen } from '../forgot-password-screen';
 import { LoginFormPanel, RegisterFormPanel } from '../auth-form-panels';
@@ -18,9 +20,13 @@ vi.mock('@/lib/api/auth', () => ({
     requestPasswordReset: (...args: unknown[]) => requestPasswordReset(...args),
 }));
 
+const openToasts = (): HTMLElement[] =>
+    Array.from(document.querySelectorAll('li[data-state="open"]'));
+
 describe('ForgotPasswordScreen', () => {
     beforeEach(() => {
         requestPasswordReset.mockReset();
+        dismiss();
     });
 
     it.each(['missing@example.com', 'known@example.com'])(
@@ -80,7 +86,12 @@ describe('ForgotPasswordScreen', () => {
         );
         const user = userEvent.setup();
 
-        render(<ForgotPasswordScreen onBackToLogin={vi.fn()} />);
+        render(
+            <>
+                <ForgotPasswordScreen onBackToLogin={vi.fn()} />
+                <Toaster />
+            </>
+        );
 
         await user.type(
             screen.getByRole('textbox', {
@@ -97,6 +108,48 @@ describe('ForgotPasswordScreen', () => {
         expect(
             screen.getByText('auth.password_reset.errors.rate_limit')
         ).toBeTruthy();
+        expect(screen.queryByText('Too Many Attempts.')).toBeNull();
+    });
+
+    it('highlights an empty or malformed email with one toast', async () => {
+        const user = userEvent.setup();
+        const { container } = render(
+            <>
+                <ForgotPasswordScreen onBackToLogin={vi.fn()} />
+                <Toaster />
+            </>
+        );
+
+        expect(container.querySelector('form')).toHaveProperty(
+            'noValidate',
+            true
+        );
+        expect(screen.getByRole('textbox')).toBeRequired();
+
+        await user.click(
+            screen.getByRole('button', {
+                name: 'auth.password_reset.forgot.send',
+            })
+        );
+
+        const email = screen.getByRole('textbox');
+        expect(email).toHaveAttribute('aria-invalid', 'true');
+        expect(email).toHaveFocus();
+        expect(screen.getByText('validation.required')).toBeTruthy();
+        expect(openToasts()).toHaveLength(1);
+        expect(requestPasswordReset).not.toHaveBeenCalled();
+
+        await user.type(email, 'not-an-email');
+        await user.click(
+            screen.getByRole('button', {
+                name: 'auth.password_reset.forgot.send',
+            })
+        );
+
+        expect(screen.getAllByText('validation.invalid_email').length).toBe(2);
+        expect(openToasts()[0]).toHaveTextContent('validation.invalid_email');
+        expect(openToasts()).toHaveLength(1);
+        expect(requestPasswordReset).not.toHaveBeenCalled();
     });
 });
 

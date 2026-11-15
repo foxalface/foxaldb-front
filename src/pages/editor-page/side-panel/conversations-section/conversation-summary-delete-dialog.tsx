@@ -70,11 +70,7 @@ export const ConversationSummaryDeleteDialog: React.FC<
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 {session.errorMessage ? (
-                    <p
-                        id={errorId}
-                        role="alert"
-                        className="text-sm text-destructive"
-                    >
+                    <p id={errorId} className="sr-only">
                         {session.errorMessage}
                     </p>
                 ) : null}

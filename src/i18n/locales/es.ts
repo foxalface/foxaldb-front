@@ -5,6 +5,44 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/es';
 
 export const es: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'Obligatorio',
+            required_fields: 'Completa los campos obligatorios.',
+            invalid_fields: 'Algunos campos requieren tu atención.',
+            invalid_email: 'Introduce un correo electrónico válido.',
+            password_confirmation: 'Las contraseñas no coinciden.',
+            invalid: 'Revisa este campo.',
+            too_short: 'Esto es demasiado corto.',
+            too_long: 'Esto es demasiado largo.',
+            already_used: 'Esto ya está en uso.',
+        },
+        errors: {
+            network:
+                'Problema de red. Comprueba tu conexión e inténtalo de nuevo.',
+            forbidden: 'No tienes permiso para hacer eso.',
+            not_found: 'No pudimos encontrar eso.',
+            server: 'Algo salió mal de nuestro lado. Inténtalo de nuevo.',
+            too_many_requests:
+                'Demasiadas solicitudes. Espera e inténtalo de nuevo.',
+            unauthenticated: 'Inicia sesión para continuar.',
+            session_expired: 'Tu sesión ha caducado. Vuelve a iniciar sesión.',
+            invalid_credentials: 'El correo o la contraseña no son correctos.',
+            generic: 'Algo salió mal. Inténtalo de nuevo.',
+        },
+        toast: {
+            close: 'Cerrar',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'Los tipos de campo no son compatibles',
+            incompatible_fields_description:
+                'Las relaciones solo pueden crearse entre tipos de campo compatibles',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'La exportación DBML falló',
+            generate_failed_description: 'No se pudo generar el DBML.',
+            empty_field_names:
+                'Algunos campos sin nombre en {{tables}} quedaron fuera de la exportación DBML.',
+        },
         editor_sidebar: {
             tables: 'Tablas',
             refs: 'Refs',
@@ -1090,6 +1128,8 @@ export const es: LanguageTranslation = {
             errors: {
                 load_failed: 'No se pudieron cargar los colaboradores.',
                 add_failed: 'No se pudo añadir el colaborador.',
+                role_failed: 'No se pudo cambiar el rol del colaborador.',
+                remove_failed: 'No se pudo quitar al colaborador.',
             },
         },
 
@@ -1464,6 +1504,11 @@ export const es: LanguageTranslation = {
                     error_semantic: 'No se pudo generar el proyecto EF Core.',
                     error_unauthenticated:
                         'Debe iniciar sesión para exportar proyectos EF Core.',
+
+                    errors: {
+                        empty_diagram:
+                            'El diagrama no tiene tablas exportables.',
+                    },
                 },
                 result_step: {
                     description: 'Revise el proyecto EF Core generado.',
@@ -1513,6 +1558,11 @@ export const es: LanguageTranslation = {
                         'La exportación no incluyó ningún archivo.',
                     error_invalid_package:
                         'El paquete generado no es válido y no se descargó.',
+
+                    errors: {
+                        empty_diagram:
+                            'El diagrama no tiene tablas exportables.',
+                    },
                 },
             },
             django: {

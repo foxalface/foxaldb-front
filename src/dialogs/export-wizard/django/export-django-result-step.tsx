@@ -79,12 +79,9 @@ export const ExportDjangoResultStep: React.FC<ExportDjangoResultStepProps> = ({
                 return getDjangoExportErrorPresentation(
                     {
                         code: error.code ?? '',
-                        message:
-                            error.message && error.message.trim().length > 0
-                                ? error.message
-                                : t(
-                                      'export_wizard.django.result_step.error_semantic'
-                                  ),
+                        message: t(
+                            'export_wizard.django.result_step.error_semantic'
+                        ),
                         path: error.path,
                     },
                     t

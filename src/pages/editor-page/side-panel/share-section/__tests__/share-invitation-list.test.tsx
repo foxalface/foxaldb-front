@@ -110,7 +110,8 @@ describe('ShareInvitationList', () => {
 
         expect(toastMock).toHaveBeenCalledWith({
             title: 'Please wait before resending this invitation.',
-            variant: 'destructive',
+            variant: 'danger',
+            dedupeKey: 'share:invitation-resend',
         });
     });
 

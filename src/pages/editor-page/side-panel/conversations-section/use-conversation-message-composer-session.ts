@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '@/components/toast/use-toast';
 import { useConversationMutations } from '@/hooks/use-conversation-mutations';
 import {
     CONVERSATION_MESSAGE_MAX_LENGTH,
@@ -41,6 +42,7 @@ export const useConversationMessageComposerSession = ({
     canCreate,
 }: UseConversationMessageComposerSessionArgs): UseConversationMessageComposerSessionResult => {
     const { t } = useTranslation();
+    const { toast } = useToast();
     const { createMessage } = useConversationMutations();
 
     const [body, setBody] = useState('');
@@ -117,12 +119,7 @@ export const useConversationMessageComposerSession = ({
             const resolved = resolveConversationMessageMutationError(error);
 
             if (resolved.key === 'validation') {
-                return (
-                    resolved.fieldError ??
-                    t(
-                        'side_panel.conversations_section.detail.composer.errors.empty'
-                    )
-                );
+                return t('validation.invalid');
             }
 
             if (resolved.key === 'forbidden') {
@@ -163,22 +160,30 @@ export const useConversationMessageComposerSession = ({
         const nextCount = countUnicodeCharacters(nextTrimmedBody);
 
         if (nextCount > CONVERSATION_MESSAGE_MAX_LENGTH) {
-            setValidationError(
-                t(
-                    'side_panel.conversations_section.detail.composer.errors.too_long'
-                )
+            const message = t(
+                'side_panel.conversations_section.detail.composer.errors.too_long'
             );
+            setValidationError(message);
             setSubmitError(null);
+            toast({
+                title: message,
+                variant: 'danger',
+                dedupeKey: 'conversation:composer-validation',
+            });
             return;
         }
 
         if (nextCount === 0) {
-            setValidationError(
-                t(
-                    'side_panel.conversations_section.detail.composer.errors.empty'
-                )
+            const message = t(
+                'side_panel.conversations_section.detail.composer.errors.empty'
             );
+            setValidationError(message);
             setSubmitError(null);
+            toast({
+                title: message,
+                variant: 'danger',
+                dedupeKey: 'conversation:composer-validation',
+            });
             return;
         }
 
@@ -210,7 +215,13 @@ export const useConversationMessageComposerSession = ({
                 return;
             }
 
-            setSubmitError(resolveSubmitErrorMessage(error));
+            const message = resolveSubmitErrorMessage(error);
+            setSubmitError(message);
+            toast({
+                title: message,
+                variant: 'danger',
+                dedupeKey: 'conversation:composer-submit',
+            });
         } finally {
             if (sessionsEqual(sessionRef.current, submissionSession)) {
                 submissionInFlightRef.current = false;
@@ -226,6 +237,7 @@ export const useConversationMessageComposerSession = ({
         createMessage,
         resolveSubmitErrorMessage,
         t,
+        toast,
     ]);
 
     return {

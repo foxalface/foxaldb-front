@@ -18,11 +18,16 @@ import { useNavigate } from 'react-router-dom';
 const getRoleChangeToast = (
     access: DiagramAccess,
     t: (key: string) => string
-): { title: string; description: string } | null => {
+): {
+    title: string;
+    description: string;
+    variant: 'warning' | 'info';
+} | null => {
     if (access.role === 'viewer') {
         return {
             title: t('diagram_access.role_changed_viewer.title'),
             description: t('diagram_access.role_changed_viewer.description'),
+            variant: 'warning',
         };
     }
 
@@ -30,6 +35,7 @@ const getRoleChangeToast = (
         return {
             title: t('diagram_access.role_changed_editor.title'),
             description: t('diagram_access.role_changed_editor.description'),
+            variant: 'info',
         };
     }
 

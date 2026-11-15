@@ -9,6 +9,7 @@ import { downloadBlob } from '@/lib/download-blob';
 import { ExportFileListSkeleton } from '../export-file-list-skeleton';
 import { ExportGeneratedFilesTree } from '../export-generated-files-tree';
 import { ExportWizardNotesPanel } from '../export-wizard-notes-panel';
+import { translateExportCode } from '../translate-export-code';
 import type { RailsExportSuccess } from '@/lib/api/rails-export-types';
 import { getRailsExportNotePresentation } from './get-rails-export-note-presentation';
 import { RAILS_ZIP_MIME_TYPE } from '@/lib/export/rails-export-constants';
@@ -64,9 +65,12 @@ export const ExportRailsResultStep: React.FC<ExportRailsResultStepProps> = ({
 
         switch (error.kind) {
             case 'semantic':
-                return error.message && error.message.trim().length > 0
-                    ? error.message
-                    : t('export_wizard.rails.result_step.error_semantic');
+                return translateExportCode(
+                    t,
+                    'export_wizard.rails.result_step.errors',
+                    'export_wizard.rails.result_step.error_semantic',
+                    error
+                );
             case 'unauthenticated':
                 return t(
                     'export_wizard.rails.result_step.error_unauthenticated'

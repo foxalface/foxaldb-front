@@ -7,33 +7,62 @@ import {
     DialogTitle,
 } from '@/components/dialog/dialog';
 import { Button } from '@/components/button/button';
-import { PasswordInput } from '@/components/password-input/password-input';
-import { useAuth } from '@/hooks/use-auth';
+import { FormField } from '@/components/form-field/form-field';
 import {
-    parseLaravelValidationErrors,
-    readApiErrorCode,
-} from '@/lib/api/parse-validation-errors';
+    formFieldDescribedBy,
+    invalidControlClassName,
+} from '@/components/form-field/form-field-ids';
+import { PasswordInput } from '@/components/password-input/password-input';
+import { useToast } from '@/components/toast/use-toast';
+import { useAuth } from '@/hooks/use-auth';
+import { normalizeApiError } from '@/lib/api/normalize-api-error';
+import { collectFormValidity } from '@/lib/forms/collect-form-validity';
+import {
+    currentPasswordInvalidMessageKey,
+    mapServerFieldMessages,
+    messagesForIssues,
+    nonFieldErrorMessageKey,
+    submissionToastMessageKey,
+    toastMessageForMappedFields,
+} from '@/lib/forms/form-error-messages';
+import { usePendingFocus } from '@/lib/forms/use-pending-focus';
 import { useTranslation } from 'react-i18next';
-import { formatApiErrorMessage } from '@/pages/auth/format-api-error-message';
 
 export const AccountDangerZone: React.FC<{
     onClosed: () => void;
 }> = ({ onClosed }) => {
     const { t } = useTranslation();
     const { closeAccount } = useAuth();
+    const { toast } = useToast();
+    const focusInvalid = usePendingFocus();
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState<string | null>(null);
-    const [formError, setFormError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const submit = async (
         event: React.FormEvent<HTMLFormElement>
     ): Promise<void> => {
         event.preventDefault();
-        setPasswordError(null);
-        setFormError(null);
 
+        const form = event.currentTarget;
+        const validity = collectFormValidity(form);
+
+        if (validity.issues.length > 0) {
+            setPasswordError(
+                messagesForIssues(validity.issues, t).current_password ??
+                    t('validation.required')
+            );
+            focusInvalid(validity.firstInvalid);
+            toast({
+                title: t(submissionToastMessageKey(validity.issues)),
+                variant: 'danger',
+                dedupeKey: 'validation:account-close',
+            });
+            return;
+        }
+
+        setPasswordError(null);
         setIsSubmitting(true);
 
         try {
@@ -41,22 +70,48 @@ export const AccountDangerZone: React.FC<{
             setConfirmOpen(false);
             onClosed();
         } catch (error: unknown) {
-            const code = readApiErrorCode(error);
-            const validationErrors = parseLaravelValidationErrors(error);
+            const apiError = normalizeApiError(error);
+            const mapped = mapServerFieldMessages(
+                apiError,
+                ['current_password'],
+                t
+            );
+            const passwordMessage = mapped.current_password;
+
             if (
-                code === 'current_password_invalid' ||
-                validationErrors.current_password !== undefined
+                passwordMessage !== undefined &&
+                (apiError.code === 'current_password_invalid' ||
+                    apiError.code === 'validation_failed')
             ) {
-                setPasswordError(
-                    t('auth.settings.danger_zone.current_password_invalid')
-                );
+                const message =
+                    apiError.code === 'current_password_invalid'
+                        ? t(currentPasswordInvalidMessageKey)
+                        : passwordMessage;
+                setPasswordError(message);
+                const target = form.querySelector('#danger-current-password');
+                focusInvalid(target instanceof HTMLElement ? target : null);
+                toast({
+                    title:
+                        apiError.code === 'current_password_invalid'
+                            ? message
+                            : toastMessageForMappedFields(
+                                  { current_password: message },
+                                  t
+                              ),
+                    variant: 'danger',
+                    dedupeKey:
+                        apiError.code === 'current_password_invalid'
+                            ? 'auth:current-password'
+                            : 'validation:account-close',
+                });
                 return;
             }
 
-            setFormError(
-                formatApiErrorMessage(error) ||
-                    t('auth.settings.danger_zone.failure')
-            );
+            toast({
+                title: t(nonFieldErrorMessageKey(apiError.code)),
+                variant: 'danger',
+                dedupeKey: `auth:${apiError.code}`,
+            });
         } finally {
             setIsSubmitting(false);
         }
@@ -95,6 +150,7 @@ export const AccountDangerZone: React.FC<{
                     </DialogHeader>
                     <form
                         className="flex flex-col gap-3"
+                        noValidate
                         onSubmit={(event) => {
                             void submit(event);
                         }}
@@ -102,41 +158,38 @@ export const AccountDangerZone: React.FC<{
                         <p className="text-sm text-muted-foreground">
                             {t('auth.settings.danger_zone.device_warning')}
                         </p>
-                        <div className="flex flex-col gap-1 text-sm">
-                            <label htmlFor="danger-current-password">
-                                {t(
-                                    'auth.settings.danger_zone.current_password_label'
-                                )}
-                            </label>
+                        <FormField
+                            error={passwordError}
+                            id="danger-current-password"
+                            label={t(
+                                'auth.settings.danger_zone.current_password_label'
+                            )}
+                        >
                             <PasswordInput
                                 id="danger-current-password"
+                                aria-describedby={formFieldDescribedBy(
+                                    'danger-current-password',
+                                    { error: passwordError !== null }
+                                )}
+                                aria-invalid={
+                                    passwordError !== null ? true : undefined
+                                }
                                 autoComplete="current-password"
+                                className={invalidControlClassName(
+                                    passwordError !== null
+                                )}
                                 disabled={isSubmitting}
                                 name="current_password"
-                                onChange={(event) =>
-                                    setPassword(event.target.value)
-                                }
+                                onChange={(event) => {
+                                    setPassword(event.target.value);
+                                    setPasswordError(null);
+                                }}
+                                required
                                 value={password}
                             />
-                            {passwordError !== null ? (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {passwordError}
-                                </span>
-                            ) : null}
-                        </div>
-                        {formError !== null ? (
-                            <p
-                                className="text-sm text-destructive"
-                                role="alert"
-                            >
-                                {formError}
-                            </p>
-                        ) : null}
+                        </FormField>
                         <Button
-                            disabled={isSubmitting || password.length === 0}
+                            disabled={isSubmitting}
                             type="submit"
                             variant="destructive"
                         >

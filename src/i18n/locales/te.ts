@@ -5,6 +5,44 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/te';
 
 export const te: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'తప్పనిసరి',
+            required_fields: 'దయచేసి తప్పనిసరి ఫీల్డ్‌లను పూరించండి.',
+            invalid_fields: 'కొన్ని ఫీల్డ్‌లపై మీ దృష్టి అవసరం.',
+            invalid_email: 'చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామాను నమోదు చేయండి.',
+            password_confirmation: 'పాస్‌వర్డ్‌లు సరిపోలడం లేదు.',
+            invalid: 'ఈ ఫీల్డ్‌ను తనిఖీ చేయండి.',
+            too_short: 'ఇది చాలా చిన్నది.',
+            too_long: 'ఇది చాలా పొడవు.',
+            already_used: 'ఇది ఇప్పటికే ఉపయోగంలో ఉంది.',
+        },
+        errors: {
+            network:
+                'నెట్‌వర్క్ సమస్య. కనెక్షన్‌ను తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.',
+            forbidden: 'దీన్ని చేయడానికి మీకు అనుమతి లేదు.',
+            not_found: 'మేము దాన్ని కనుగొనలేకపోయాం.',
+            server: 'మా వైపు సమస్య వచ్చింది. మళ్లీ ప్రయత్నించండి.',
+            too_many_requests:
+                'చాలా ఎక్కువ అభ్యర్థనలు. దయచేసి వేచి మళ్లీ ప్రయత్నించండి.',
+            unauthenticated: 'కొనసాగించడానికి సైన్ ఇన్ చేయండి.',
+            session_expired: 'మీ సెషన్ ముగిసింది. మళ్లీ సైన్ ఇన్ చేయండి.',
+            invalid_credentials: 'ఈమెయిల్ లేదా పాస్‌వర్డ్ తప్పు.',
+            generic: 'ఏదో తప్పు జరిగింది. మళ్లీ ప్రయత్నించండి.',
+        },
+        toast: {
+            close: 'మూసివేయి',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'ఫీల్డ్ రకాలు అనుకూలంగా లేవు',
+            incompatible_fields_description:
+                'సంబంధాలు అనుకూలమైన ఫీల్డ్ రకాల మధ్య మాత్రమే సృష్టించవచ్చు',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML ఎగుమతి విఫలమైంది',
+            generate_failed_description: 'DBMLను రూపొందించలేకపోయాం.',
+            empty_field_names:
+                '{{tables}}లో పేరు లేని ఫీల్డ్‌లు DBML ఎగుమతి నుండి మినహాయించబడ్డాయి.',
+        },
         editor_sidebar: {
             tables: 'టేబల్లు',
             refs: 'సంబంధాలు',
@@ -1075,6 +1113,8 @@ export const te: LanguageTranslation = {
             errors: {
                 load_failed: 'సహకారులను లోడ్ చేయలేకపోయాం.',
                 add_failed: 'సహకారిని జోడించలేకపోయాం.',
+                role_failed: 'సహకారి పాత్రను మార్చలేకపోయాం.',
+                remove_failed: 'సహకారిని తొలగించలేకపోయాం.',
             },
         },
 
@@ -1449,6 +1489,11 @@ export const te: LanguageTranslation = {
                     error_semantic: 'EF Core ప్రాజెక్ట్‌ను రూపొందించలేకపోయాం.',
                     error_unauthenticated:
                         'EF Core ప్రాజెక్ట్‌లను ఎగుమతి చేయడానికి మీరు సైన్ ఇన్ అయి ఉండాలి.',
+
+                    errors: {
+                        empty_diagram:
+                            'డయాగ్రామ్‌లో ఎగుమతి చేయదగిన పట్టికలు లేవు.',
+                    },
                 },
                 result_step: {
                     description:
@@ -1497,6 +1542,11 @@ export const te: LanguageTranslation = {
                     error_empty_files: 'ఎగుమతిలో ఫైళ్లు లేవు.',
                     error_invalid_package:
                         'జనరేట్ చేసిన ప్యాకేజీ చెల్లదు కాబట్టి డౌన్‌లోడ్ కాలేదు.',
+
+                    errors: {
+                        empty_diagram:
+                            'డయాగ్రామ్‌లో ఎగుమతి చేయదగిన పట్టికలు లేవు.',
+                    },
                 },
             },
             django: {

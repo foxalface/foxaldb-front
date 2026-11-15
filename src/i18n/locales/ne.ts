@@ -5,6 +5,43 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/ne';
 
 export const ne: LanguageTranslation = {
     translation: {
+        validation: {
+            required: 'आवश्यक',
+            required_fields: 'कृपया आवश्यक फिल्डहरू पूरा गर्नुहोस्।',
+            invalid_fields: 'केही फिल्डमा तपाईंको ध्यान चाहिन्छ।',
+            invalid_email: 'मान्य इमेल ठेगाना लेख्नुहोस्।',
+            password_confirmation: 'पासवर्ड मिलेन।',
+            invalid: 'यो फिल्ड जाँच गर्नुहोस्।',
+            too_short: 'यो निकै छोटो छ।',
+            too_long: 'यो निकै लामो छ।',
+            already_used: 'यो पहिले नै प्रयोगमा छ।',
+        },
+        errors: {
+            network: 'नेटवर्क समस्या। जडान जाँचेर फेरि प्रयास गर्नुहोस्।',
+            forbidden: 'यो गर्न तपाईंलाई अनुमति छैन।',
+            not_found: 'हामीले त्यो फेला पार्न सकेनौं।',
+            server: 'हाम्रो तर्फ समस्या भयो। फेरि प्रयास गर्नुहोस्।',
+            too_many_requests:
+                'अत्यधिक अनुरोध। कृपया पर्खेर फेरि प्रयास गर्नुहोस्।',
+            unauthenticated: 'जारी राख्न साइन इन गर्नुहोस्।',
+            session_expired: 'तपाईंको सत्र समाप्त भयो। फेरि साइन इन गर्नुहोस्।',
+            invalid_credentials: 'इमेल वा पासवर्ड गलत छ।',
+            generic: 'केही गडबड भयो। फेरि प्रयास गर्नुहोस्।',
+        },
+        toast: {
+            close: 'बन्द गर्नुहोस्',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'फिल्डका प्रकारहरू मिल्दैनन्',
+            incompatible_fields_description:
+                'सम्बन्ध मिल्ने फिल्ड प्रकारहरू बीच मात्र बनाउन सकिन्छ',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML निर्यात असफल भयो',
+            generate_failed_description: 'DBML बनाउन सकिएन।',
+            empty_field_names:
+                '{{tables}} मा नाम नभएका फिल्ड DBML निर्यातबाट हटाइए।',
+        },
         editor_sidebar: {
             tables: 'टेबलहरू',
             refs: 'Refs',
@@ -1067,6 +1104,8 @@ export const ne: LanguageTranslation = {
             errors: {
                 load_failed: 'सहकारीहरू लोड गर्न सकिएन।',
                 add_failed: 'सहकारी थप्न सकिएन।',
+                role_failed: 'सहकर्मीको भूमिका परिवर्तन गर्न सकिएन।',
+                remove_failed: 'सहकर्मी हटाउन सकिएन।',
             },
         },
 
@@ -1438,6 +1477,11 @@ export const ne: LanguageTranslation = {
                     error_semantic: 'EF Core परियोजना उत्पन्न गर्न सकिएन।',
                     error_unauthenticated:
                         'EF Core परियोजना निर्यात गर्न तपाईं साइन इन हुनुपर्छ।',
+
+                    errors: {
+                        empty_diagram:
+                            'डायाग्राममा निर्यात गर्न मिल्ने तालिकाहरू छैनन्।',
+                    },
                 },
                 result_step: {
                     description:
@@ -1486,6 +1530,11 @@ export const ne: LanguageTranslation = {
                     error_empty_files: 'निर्यातमा कुनै फाइल समावेश थिएन।',
                     error_invalid_package:
                         'जनरेट गरिएको प्याकेज अमान्य छ र डाउनलोड गरिएन।',
+
+                    errors: {
+                        empty_diagram:
+                            'डायाग्राममा निर्यात गर्न मिल्ने तालिकाहरू छैनन्।',
+                    },
                 },
             },
             django: {

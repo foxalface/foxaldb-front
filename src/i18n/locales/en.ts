@@ -5,6 +5,42 @@ import { drizzleExportNoteMessages } from '../drizzle-export-notes/en';
 
 export const en = {
     translation: {
+        validation: {
+            required: 'Required',
+            required_fields: 'Please complete the required fields.',
+            invalid_fields: 'Some fields need your attention.',
+            invalid_email: 'Enter a valid email address.',
+            password_confirmation: 'Passwords do not match.',
+            invalid: 'Check this field.',
+            too_short: 'This is too short.',
+            too_long: 'This is too long.',
+            already_used: 'This is already in use.',
+        },
+        errors: {
+            network: 'Network problem. Check your connection and try again.',
+            forbidden: 'You do not have permission to do that.',
+            not_found: 'We could not find that.',
+            server: 'Something went wrong on our side. Try again.',
+            too_many_requests: 'Too many requests. Please wait and try again.',
+            unauthenticated: 'Sign in to continue.',
+            session_expired: 'Your session has expired. Sign in again.',
+            invalid_credentials: 'The email or password is incorrect.',
+            generic: 'Something went wrong. Try again.',
+        },
+        toast: {
+            close: 'Close',
+        },
+        canvas_toasts: {
+            incompatible_fields_title: 'Field types are not compatible',
+            incompatible_fields_description:
+                'Relationships can only be created between compatible field types',
+        },
+        dbml_toasts: {
+            generate_failed_title: 'DBML export failed',
+            generate_failed_description: 'The DBML could not be generated.',
+            empty_field_names:
+                'Some fields had empty names in {{tables}} and were left out of the DBML export.',
+        },
         editor_sidebar: {
             tables: 'Tables',
             refs: 'Refs',
@@ -1072,6 +1108,8 @@ export const en = {
             errors: {
                 load_failed: 'Could not load collaborators.',
                 add_failed: 'Could not add collaborator.',
+                role_failed: 'Could not update the collaborator role.',
+                remove_failed: 'Could not remove the collaborator.',
             },
         },
 
@@ -1437,6 +1475,10 @@ export const en = {
                         'The EF Core project could not be generated.',
                     error_unauthenticated:
                         'You need to be signed in to export EF Core projects.',
+
+                    errors: {
+                        empty_diagram: 'The diagram has no exportable tables.',
+                    },
                 },
                 result_step: {
                     description: 'Review the generated EF Core project.',
@@ -1484,6 +1526,10 @@ export const en = {
                     error_empty_files: 'The export did not include any files.',
                     error_invalid_package:
                         'The generated package is invalid and was not downloaded.',
+
+                    errors: {
+                        empty_diagram: 'The diagram has no exportable tables.',
+                    },
                 },
             },
             django: {

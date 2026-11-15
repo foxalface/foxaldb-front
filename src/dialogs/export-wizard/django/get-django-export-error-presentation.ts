@@ -6,6 +6,7 @@ import {
 } from './django-export-note-codes';
 
 const I18N_PREFIX = 'export_wizard.django.result_step.errors';
+const GENERIC_ERROR_KEY = 'export_wizard.django.result_step.error_semantic';
 
 const ERRORS_REQUIRING_PATH: ReadonlySet<KnownDjangoExportErrorCode> = new Set([
     'unsupported_structural_field',
@@ -22,7 +23,7 @@ export const getDjangoExportErrorPresentation = (
             error.code as KnownDjangoExportErrorCode
         )
     ) {
-        return error.message;
+        return t(GENERIC_ERROR_KEY);
     }
 
     const code = error.code as KnownDjangoExportErrorCode;
@@ -32,7 +33,7 @@ export const getDjangoExportErrorPresentation = (
             : null;
 
     if (ERRORS_REQUIRING_PATH.has(code) && interpolations === null) {
-        return error.message;
+        return t(GENERIC_ERROR_KEY);
     }
 
     const translated = t(`${I18N_PREFIX}.${code}`, interpolations ?? {});
@@ -41,7 +42,7 @@ export const getDjangoExportErrorPresentation = (
         translated === `${I18N_PREFIX}.${code}` ||
         translated.trim().length === 0
     ) {
-        return error.message;
+        return t(GENERIC_ERROR_KEY);
     }
 
     return translated;

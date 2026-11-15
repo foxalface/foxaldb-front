@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '@/components/toast/use-toast';
 import { useConversationMutations } from '@/hooks/use-conversation-mutations';
 import type { ConversationStatus } from '@/lib/conversations/conversation-types';
 import { resolveConversationMessageMutationError } from '@/lib/conversations/format-conversation-message-mutation-error';
@@ -40,6 +41,7 @@ export const useConversationMessageDeleteSession = ({
     onOpenChange,
 }: UseConversationMessageDeleteSessionArgs): UseConversationMessageDeleteSessionResult => {
     const { t } = useTranslation();
+    const { toast } = useToast();
     const { deleteMessage } = useConversationMutations();
 
     const [isPending, setIsPending] = useState(false);
@@ -163,7 +165,13 @@ export const useConversationMessageDeleteSession = ({
                 return;
             }
 
-            setErrorMessage(resolveDeleteErrorMessage(error));
+            const message = resolveDeleteErrorMessage(error);
+            setErrorMessage(message);
+            toast({
+                title: message,
+                variant: 'danger',
+                dedupeKey: 'conversation:message-delete',
+            });
         } finally {
             if (sessionsEqual(sessionRef.current, submissionSession)) {
                 deleteInFlightRef.current = false;
@@ -172,7 +180,7 @@ export const useConversationMessageDeleteSession = ({
                 }
             }
         }
-    }, [conversationStatus, deleteMessage, resolveDeleteErrorMessage]);
+    }, [conversationStatus, deleteMessage, resolveDeleteErrorMessage, toast]);
 
     return {
         isPending,

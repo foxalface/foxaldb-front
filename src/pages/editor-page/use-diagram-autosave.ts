@@ -35,17 +35,22 @@ export const useDiagramAutosave = (): void => {
         !(diagramAccess !== null && diagramAccess.can_edit === false);
 
     useEffect(() => {
+        const diagramId = onlineDiagramId;
         configureDiagramAutosaveFailureNotifier(() => {
             toast({
                 title: t('diagram_save.failed'),
-                variant: 'destructive',
+                variant: 'danger',
+                dedupeKey:
+                    diagramId === null
+                        ? 'diagram:save-failed'
+                        : `diagram:save-failed:${diagramId}`,
             });
         });
 
         return () => {
             configureDiagramAutosaveFailureNotifier(null);
         };
-    }, [toast, t]);
+    }, [toast, t, onlineDiagramId]);
 
     useEffect(() => {
         configureDiagramAutosaveStaleHandlers({
