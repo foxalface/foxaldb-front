@@ -1430,9 +1430,9 @@ export const zh_TW: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: '關於此 Django 匯出',
                     export_info:
-                        '此匯出為可直接整合的 Django 應用程式（`foxaldb_models`）。0001_initial.py 是目前結構描述的初始移轉，而非重建的 Django 移轉歷史。尚未針對 Django 6.1 進行執階段驗證。',
+                        '此匯出為可直接整合的 Django 應用程式（`foxaldb_models`）。0001_initial.py 是目前結構描述的初始移轉，而非重建的 Django 移轉歷史。針對 Django 6.1.3 的執行階段驗證涵蓋 SQLite、PostgreSQL、MySQL 與 MariaDB。',
                     explanation:
-                        '此匯出為可直接整合的 Django 應用程式（`foxaldb_models`）。0001_initial.py 是目前結構描述的初始移轉，而非重建的 Django 移轉歷史。尚未針對 Django 6.1 進行執階段驗證。',
+                        '此匯出為可直接整合的 Django 應用程式（`foxaldb_models`）。0001_initial.py 是目前結構描述的初始移轉，而非重建的 Django 移轉歷史。針對 Django 6.1.3 的執行階段驗證涵蓋 SQLite、PostgreSQL、MySQL 與 MariaDB。',
                     django_version: 'Django {{version}}',
                     provider_label: '提供者：{{provider}}',
                     package_type:
@@ -1478,9 +1478,9 @@ export const zh_TW: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: '關於此 Drizzle 匯出',
                     export_info:
-                        '此匯出是 Drizzle 架構套件。schema.ts 是真實來源。drizzle.config.ts 不含憑證（僅有 dialect、架構路徑與輸出目錄）。不會重建 SQL 遷移歷史。尚未對 drizzle-kit 進行執行階段驗證。',
+                        '此匯出是 Drizzle 架構套件。schema.ts 是真實來源。drizzle.config.ts 不含憑證（僅有 dialect、架構路徑與輸出目錄）。不會重建 SQL 遷移歷史。drizzle-kit 執行階段驗證涵蓋 SQLite、PostgreSQL、MySQL 與 MariaDB。',
                     explanation:
-                        '此匯出是 Drizzle 架構套件。schema.ts 是真實來源。drizzle.config.ts 不含憑證（僅有 dialect、架構路徑與輸出目錄）。不會重建 SQL 遷移歷史。尚未對 drizzle-kit 進行執行階段驗證。',
+                        '此匯出是 Drizzle 架構套件。schema.ts 是真實來源。drizzle.config.ts 不含憑證（僅有 dialect、架構路徑與輸出目錄）。不會重建 SQL 遷移歷史。drizzle-kit 執行階段驗證涵蓋 SQLite、PostgreSQL、MySQL 與 MariaDB。',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: '提供者：{{provider}}',

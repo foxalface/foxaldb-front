@@ -1596,9 +1596,9 @@ export const de: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'Über diesen Django-Export',
                     export_info:
-                        'Dieser Export ist eine Django-App zum direkten Einbinden (`foxaldb_models`). 0001_initial.py ist eine Ausgangsmigration des aktuellen Schemas, keine rekonstruierte Django-Migrationshistorie. Eine Laufzeitvalidierung gegen Django 6.1 wurde nicht durchgeführt.',
+                        'Dieser Export ist eine Django-App zum direkten Einbinden (`foxaldb_models`). 0001_initial.py ist eine Ausgangsmigration des aktuellen Schemas, keine rekonstruierte Django-Migrationshistorie. Die Laufzeitvalidierung gegen Django 6.1.3 deckt SQLite, PostgreSQL, MySQL und MariaDB ab.',
                     explanation:
-                        'Dieser Export ist eine Django-App zum direkten Einbinden (`foxaldb_models`). 0001_initial.py ist eine Ausgangsmigration des aktuellen Schemas, keine rekonstruierte Django-Migrationshistorie. Eine Laufzeitvalidierung gegen Django 6.1 wurde nicht durchgeführt.',
+                        'Dieser Export ist eine Django-App zum direkten Einbinden (`foxaldb_models`). 0001_initial.py ist eine Ausgangsmigration des aktuellen Schemas, keine rekonstruierte Django-Migrationshistorie. Die Laufzeitvalidierung gegen Django 6.1.3 deckt SQLite, PostgreSQL, MySQL und MariaDB ab.',
                     django_version: 'Django {{version}}',
                     provider_label: 'Anbieter: {{provider}}',
                     package_type:
@@ -1654,9 +1654,9 @@ export const de: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'Über diesen Drizzle-Export',
                     export_info:
-                        'Dieser Export ist ein Drizzle-Schema-Paket. schema.ts ist die Quelle der Wahrheit. drizzle.config.ts ist ohne Zugangsdaten (nur Dialekt, Schema-Pfad und Ausgabeverzeichnis). Die SQL-Migrationshistorie wird nicht rekonstruiert. Eine Laufzeitprüfung mit drizzle-kit wurde nicht durchgeführt.',
+                        'Dieser Export ist ein Drizzle-Schema-Paket. schema.ts ist die Quelle der Wahrheit. drizzle.config.ts ist ohne Zugangsdaten (nur Dialekt, Schema-Pfad und Ausgabeverzeichnis). Die SQL-Migrationshistorie wird nicht rekonstruiert. Die Laufzeitprüfung mit drizzle-kit deckt SQLite, PostgreSQL, MySQL und MariaDB ab.',
                     explanation:
-                        'Dieser Export ist ein Drizzle-Schema-Paket. schema.ts ist die Quelle der Wahrheit. drizzle.config.ts ist ohne Zugangsdaten (nur Dialekt, Schema-Pfad und Ausgabeverzeichnis). Die SQL-Migrationshistorie wird nicht rekonstruiert. Eine Laufzeitprüfung mit drizzle-kit wurde nicht durchgeführt.',
+                        'Dieser Export ist ein Drizzle-Schema-Paket. schema.ts ist die Quelle der Wahrheit. drizzle.config.ts ist ohne Zugangsdaten (nur Dialekt, Schema-Pfad und Ausgabeverzeichnis). Die SQL-Migrationshistorie wird nicht rekonstruiert. Die Laufzeitprüfung mit drizzle-kit deckt SQLite, PostgreSQL, MySQL und MariaDB ab.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'Anbieter: {{provider}}',

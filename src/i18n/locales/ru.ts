@@ -1546,9 +1546,9 @@ export const ru: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'Об этом экспорте Django',
                     export_info:
-                        'Этот экспорт — приложение Django для прямой интеграции (`foxaldb_models`). 0001_initial.py — начальная миграция текущей схемы, а не восстановленная история миграций Django. Проверка во время выполнения против Django 6.1 не проводилась.',
+                        'Этот экспорт — приложение Django для прямой интеграции (`foxaldb_models`). 0001_initial.py — начальная миграция текущей схемы, а не восстановленная история миграций Django. Проверка во время выполнения против Django 6.1.3 охватывает SQLite, PostgreSQL, MySQL и MariaDB.',
                     explanation:
-                        'Этот экспорт — приложение Django для прямой интеграции (`foxaldb_models`). 0001_initial.py — начальная миграция текущей схемы, а не восстановленная история миграций Django. Проверка во время выполнения против Django 6.1 не проводилась.',
+                        'Этот экспорт — приложение Django для прямой интеграции (`foxaldb_models`). 0001_initial.py — начальная миграция текущей схемы, а не восстановленная история миграций Django. Проверка во время выполнения против Django 6.1.3 охватывает SQLite, PostgreSQL, MySQL и MariaDB.',
                     django_version: 'Django {{version}}',
                     provider_label: 'Провайдер: {{provider}}',
                     package_type:
@@ -1603,9 +1603,9 @@ export const ru: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'Об этом экспорте Drizzle',
                     export_info:
-                        'Этот экспорт — пакет схемы Drizzle. schema.ts является источником истины. drizzle.config.ts не содержит учётных данных (только диалект, путь к схеме и каталог вывода). История SQL-миграций не восстанавливается. Проверка drizzle-kit во время выполнения не проводилась.',
+                        'Этот экспорт — пакет схемы Drizzle. schema.ts является источником истины. drizzle.config.ts не содержит учётных данных (только диалект, путь к схеме и каталог вывода). История SQL-миграций не восстанавливается. Проверка drizzle-kit во время выполнения охватывает SQLite, PostgreSQL, MySQL и MariaDB.',
                     explanation:
-                        'Этот экспорт — пакет схемы Drizzle. schema.ts является источником истины. drizzle.config.ts не содержит учётных данных (только диалект, путь к схеме и каталог вывода). История SQL-миграций не восстанавливается. Проверка drizzle-kit во время выполнения не проводилась.',
+                        'Этот экспорт — пакет схемы Drizzle. schema.ts является источником истины. drizzle.config.ts не содержит учётных данных (только диалект, путь к схеме и каталог вывода). История SQL-миграций не восстанавливается. Проверка drizzle-kit во время выполнения охватывает SQLite, PostgreSQL, MySQL и MariaDB.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'Провайдер: {{provider}}',

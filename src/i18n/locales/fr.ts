@@ -1583,9 +1583,9 @@ export const fr: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'À propos de cet export Django',
                     export_info:
-                        'Cet export produit une application Django prête à intégrer à un projet existant (`foxaldb_models`). Le fichier 0001_initial.py est une migration initiale représentant l’état actuel du schéma ; il ne reconstitue pas l’historique des migrations Django. Cet export n’a pas été validé à l’exécution contre Django 6.1.',
+                        'Cet export produit une application Django prête à intégrer à un projet existant (`foxaldb_models`). Le fichier 0001_initial.py est une migration initiale représentant l’état actuel du schéma ; il ne reconstitue pas l’historique des migrations Django. La validation à l’exécution contre Django 6.1.3 couvre SQLite, PostgreSQL, MySQL et MariaDB.',
                     explanation:
-                        'Cet export produit une application Django prête à intégrer à un projet existant (`foxaldb_models`). Le fichier 0001_initial.py est une migration initiale représentant l’état actuel du schéma ; il ne reconstitue pas l’historique des migrations Django. Cet export n’a pas été validé à l’exécution contre Django 6.1.',
+                        'Cet export produit une application Django prête à intégrer à un projet existant (`foxaldb_models`). Le fichier 0001_initial.py est une migration initiale représentant l’état actuel du schéma ; il ne reconstitue pas l’historique des migrations Django. La validation à l’exécution contre Django 6.1.3 couvre SQLite, PostgreSQL, MySQL et MariaDB.',
                     django_version: 'Django {{version}}',
                     provider_label: 'Fournisseur : {{provider}}',
                     package_type:
@@ -1640,9 +1640,9 @@ export const fr: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'À propos de cet export Drizzle',
                     export_info:
-                        'Cet export est un paquet de schéma Drizzle. schema.ts est la source de vérité. drizzle.config.ts est sans identifiants (dialecte, chemin du schéma et répertoire de sortie uniquement). L’historique des migrations SQL n’est pas reconstitué. La validation drizzle-kit à l’exécution n’a pas été effectuée.',
+                        'Cet export est un paquet de schéma Drizzle. schema.ts est la source de vérité. drizzle.config.ts est sans identifiants (dialecte, chemin du schéma et répertoire de sortie uniquement). L’historique des migrations SQL n’est pas reconstitué. La validation drizzle-kit à l’exécution couvre SQLite, PostgreSQL, MySQL et MariaDB.',
                     explanation:
-                        'Cet export est un paquet de schéma Drizzle. schema.ts est la source de vérité. drizzle.config.ts est sans identifiants (dialecte, chemin du schéma et répertoire de sortie uniquement). L’historique des migrations SQL n’est pas reconstitué. La validation drizzle-kit à l’exécution n’a pas été effectuée.',
+                        'Cet export est un paquet de schéma Drizzle. schema.ts est la source de vérité. drizzle.config.ts est sans identifiants (dialecte, chemin du schéma et répertoire de sortie uniquement). L’historique des migrations SQL n’est pas reconstitué. La validation drizzle-kit à l’exécution couvre SQLite, PostgreSQL, MySQL et MariaDB.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'Fournisseur : {{provider}}',

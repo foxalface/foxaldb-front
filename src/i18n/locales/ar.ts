@@ -1521,9 +1521,9 @@ export const ar: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'حول تصدير Django هذا',
                     export_info:
-                        'هذا التصدير تطبيق Django جاهز للدمج (`foxaldb_models`). 0001_initial.py هو ترحيل أولي للمخطط الحالي، وليس تاريخ ترحيل Django مُعاد بناؤه. لم تُجرَ عملية التحقق أثناء التشغيل مقابل Django 6.1.',
+                        'هذا التصدير تطبيق Django جاهز للدمج (`foxaldb_models`). 0001_initial.py هو ترحيل أولي للمخطط الحالي، وليس تاريخ ترحيل Django مُعاد بناؤه. يغطي التحقق أثناء التشغيل مقابل Django 6.1.3 كلاً من SQLite وPostgreSQL وMySQL وMariaDB.',
                     explanation:
-                        'هذا التصدير تطبيق Django جاهز للدمج (`foxaldb_models`). 0001_initial.py هو ترحيل أولي للمخطط الحالي، وليس تاريخ ترحيل Django مُعاد بناؤه. لم تُجرَ عملية التحقق أثناء التشغيل مقابل Django 6.1.',
+                        'هذا التصدير تطبيق Django جاهز للدمج (`foxaldb_models`). 0001_initial.py هو ترحيل أولي للمخطط الحالي، وليس تاريخ ترحيل Django مُعاد بناؤه. يغطي التحقق أثناء التشغيل مقابل Django 6.1.3 كلاً من SQLite وPostgreSQL وMySQL وMariaDB.',
                     django_version: 'Django {{version}}',
                     provider_label: 'المزوّد: {{provider}}',
                     package_type:
@@ -1577,9 +1577,9 @@ export const ar: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'حول تصدير Drizzle هذا',
                     export_info:
-                        'هذا التصدير حزمة مخطط Drizzle. schema.ts هو مصدر الحقيقة. drizzle.config.ts خالٍ من بيانات الاعتماد (اللهجة ومسار المخطط ودليل الإخراج فقط). لا يُعاد بناء تاريخ ترحيل SQL. لم تُجرَ عملية التحقق أثناء التشغيل بواسطة drizzle-kit.',
+                        'هذا التصدير حزمة مخطط Drizzle. schema.ts هو مصدر الحقيقة. drizzle.config.ts خالٍ من بيانات الاعتماد (اللهجة ومسار المخطط ودليل الإخراج فقط). لا يُعاد بناء تاريخ ترحيل SQL. يغطي التحقق أثناء التشغيل بواسطة drizzle-kit كلاً من SQLite وPostgreSQL وMySQL وMariaDB.',
                     explanation:
-                        'هذا التصدير حزمة مخطط Drizzle. schema.ts هو مصدر الحقيقة. drizzle.config.ts خالٍ من بيانات الاعتماد (اللهجة ومسار المخطط ودليل الإخراج فقط). لا يُعاد بناء تاريخ ترحيل SQL. لم تُجرَ عملية التحقق أثناء التشغيل بواسطة drizzle-kit.',
+                        'هذا التصدير حزمة مخطط Drizzle. schema.ts هو مصدر الحقيقة. drizzle.config.ts خالٍ من بيانات الاعتماد (اللهجة ومسار المخطط ودليل الإخراج فقط). لا يُعاد بناء تاريخ ترحيل SQL. يغطي التحقق أثناء التشغيل بواسطة drizzle-kit كلاً من SQLite وPostgreSQL وMySQL وMariaDB.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'المزوّد: {{provider}}',

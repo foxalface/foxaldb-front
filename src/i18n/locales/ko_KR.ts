@@ -1545,9 +1545,9 @@ export const ko_KR: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: '이 Django보내기 정보',
                     export_info:
-                        '이 내보내기는 즉시 통합 가능한 Django 앱(`foxaldb_models`)입니다. 0001_initial.py는 현재 스키마의 초기 마이그레이션이며, 재구성된 Django 마이그레이션 기록이 아닙니다. Django 6.1에 대한 런타임 검증은 수행되지 않았습니다.',
+                        '이 내보내기는 즉시 통합 가능한 Django 앱(`foxaldb_models`)입니다. 0001_initial.py는 현재 스키마의 초기 마이그레이션이며, 재구성된 Django 마이그레이션 기록이 아닙니다. Django 6.1.3에 대한 런타임 검증은 SQLite, PostgreSQL, MySQL, MariaDB를 대상으로 수행되었습니다.',
                     explanation:
-                        '이 내보내기는 즉시 통합 가능한 Django 앱(`foxaldb_models`)입니다. 0001_initial.py는 현재 스키마의 초기 마이그레이션이며, 재구성된 Django 마이그레이션 기록이 아닙니다. Django 6.1에 대한 런타임 검증은 수행되지 않았습니다.',
+                        '이 내보내기는 즉시 통합 가능한 Django 앱(`foxaldb_models`)입니다. 0001_initial.py는 현재 스키마의 초기 마이그레이션이며, 재구성된 Django 마이그레이션 기록이 아닙니다. Django 6.1.3에 대한 런타임 검증은 SQLite, PostgreSQL, MySQL, MariaDB를 대상으로 수행되었습니다.',
                     django_version: 'Django {{version}}',
                     provider_label: '제공자: {{provider}}',
                     package_type:
@@ -1601,9 +1601,9 @@ export const ko_KR: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: '이 Drizzle보내기 정보',
                     export_info:
-                        '이 보내기는 Drizzle 스키마 패키지입니다. schema.ts가 신뢰 원본입니다. drizzle.config.ts는 자격 증명이 없습니다(dialect, 스키마 경로, 출력 디렉터리만). SQL 마이그레이션 기록은 재구성되지 않습니다. drizzle-kit 런타임 검증은 수행되지 않았습니다.',
+                        '이 보내기는 Drizzle 스키마 패키지입니다. schema.ts가 신뢰 원본입니다. drizzle.config.ts는 자격 증명이 없습니다(dialect, 스키마 경로, 출력 디렉터리만). SQL 마이그레이션 기록은 재구성되지 않습니다. drizzle-kit 런타임 검증은 SQLite, PostgreSQL, MySQL, MariaDB를 대상으로 수행되었습니다.',
                     explanation:
-                        '이 보내기는 Drizzle 스키마 패키지입니다. schema.ts가 신뢰 원본입니다. drizzle.config.ts는 자격 증명이 없습니다(dialect, 스키마 경로, 출력 디렉터리만). SQL 마이그레이션 기록은 재구성되지 않습니다. drizzle-kit 런타임 검증은 수행되지 않았습니다.',
+                        '이 보내기는 Drizzle 스키마 패키지입니다. schema.ts가 신뢰 원본입니다. drizzle.config.ts는 자격 증명이 없습니다(dialect, 스키마 경로, 출력 디렉터리만). SQL 마이그레이션 기록은 재구성되지 않습니다. drizzle-kit 런타임 검증은 SQLite, PostgreSQL, MySQL, MariaDB를 대상으로 수행되었습니다.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: '제공자: {{provider}}',

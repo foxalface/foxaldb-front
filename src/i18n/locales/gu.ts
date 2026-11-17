@@ -1527,9 +1527,9 @@ export const gu: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'આ Django એક્સપોર્ટ વિશે',
                     export_info:
-                        'આ નિકાસ તરત એકીકૃત થઈ શકે તેવી Django એપ (`foxaldb_models`) છે. 0001_initial.py વર્તમાન schemaની પ્રારંભિક migration છે, પુનર્નિર્મિત Django migration history નથી. Django 6.1 સામે runtime validation કરવામાં આવી નથી.',
+                        'આ નિકાસ તરત એકીકૃત થઈ શકે તેવી Django એપ (`foxaldb_models`) છે. 0001_initial.py વર્તમાન schemaની પ્રારંભિક migration છે, પુનર્નિર્મિત Django migration history નથી. Django 6.1.3 સામે runtime validation SQLite, PostgreSQL, MySQL અને MariaDB આવરી લે છે.',
                     explanation:
-                        'આ નિકાસ તરત એકીકૃત થઈ શકે તેવી Django એપ (`foxaldb_models`) છે. 0001_initial.py વર્તમાન schemaની પ્રારંભિક migration છે, પુનર્નિર્મિત Django migration history નથી. Django 6.1 સામે runtime validation કરવામાં આવી નથી.',
+                        'આ નિકાસ તરત એકીકૃત થઈ શકે તેવી Django એપ (`foxaldb_models`) છે. 0001_initial.py વર્તમાન schemaની પ્રારંભિક migration છે, પુનર્નિર્મિત Django migration history નથી. Django 6.1.3 સામે runtime validation SQLite, PostgreSQL, MySQL અને MariaDB આવરી લે છે.',
                     django_version: 'Django {{version}}',
                     provider_label: 'પ્રદાતા: {{provider}}',
                     package_type:
@@ -1582,9 +1582,9 @@ export const gu: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'આ Drizzle એક્સપોર્ટ વિશે',
                     export_info:
-                        'આ નિકાસ Drizzle સ્કીમા પેકેજ છે. schema.ts સત્યનો સ્ત્રોત છે. drizzle.config.ts ક્રેડેન્શિયલ-મુક્ત છે (માત્ર dialect, સ્કીમા પથ અને આઉટપુટ ડિરેક્ટરી). SQL માઇગ્રેશન ઇતિહાસ પુનઃનિર્મિત થતો નથી. drizzle-kit રનટાઇમ ચકાસણી કરવામાં આવી નથી.',
+                        'આ નિકાસ Drizzle સ્કીમા પેકેજ છે. schema.ts સત્યનો સ્ત્રોત છે. drizzle.config.ts ક્રેડેન્શિયલ-મુક્ત છે (માત્ર dialect, સ્કીમા પથ અને આઉટપુટ ડિરેક્ટરી). SQL માઇગ્રેશન ઇતિહાસ પુનઃનિર્મિત થતો નથી. drizzle-kit રનટાઇમ ચકાસણી SQLite, PostgreSQL, MySQL અને MariaDB આવરી લે છે.',
                     explanation:
-                        'આ નિકાસ Drizzle સ્કીમા પેકેજ છે. schema.ts સત્યનો સ્ત્રોત છે. drizzle.config.ts ક્રેડેન્શિયલ-મુક્ત છે (માત્ર dialect, સ્કીમા પથ અને આઉટપુટ ડિરેક્ટરી). SQL માઇગ્રેશન ઇતિહાસ પુનઃનિર્મિત થતો નથી. drizzle-kit રનટાઇમ ચકાસણી કરવામાં આવી નથી.',
+                        'આ નિકાસ Drizzle સ્કીમા પેકેજ છે. schema.ts સત્યનો સ્ત્રોત છે. drizzle.config.ts ક્રેડેન્શિયલ-મુક્ત છે (માત્ર dialect, સ્કીમા પથ અને આઉટપુટ ડિરેક્ટરી). SQL માઇગ્રેશન ઇતિહાસ પુનઃનિર્મિત થતો નથી. drizzle-kit રનટાઇમ ચકાસણી SQLite, PostgreSQL, MySQL અને MariaDB આવરી લે છે.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'પ્રદાતા: {{provider}}',

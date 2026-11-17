@@ -1531,9 +1531,9 @@ export const tr: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'Bu Django dışa aktarımı hakkında',
                     export_info:
-                        'Bu dışa aktarım doğrudan entegre edilebilir bir Django uygulamasıdır (`foxaldb_models`). 0001_initial.py, mevcut şemanın başlangıç migrasyonudur; yeniden oluşturulmuş Django migrasyon geçmişi değildir. Django 6.1 karşısında çalışma zamanı doğrulaması yapılmamıştır.',
+                        'Bu dışa aktarım doğrudan entegre edilebilir bir Django uygulamasıdır (`foxaldb_models`). 0001_initial.py, mevcut şemanın başlangıç migrasyonudur; yeniden oluşturulmuş Django migrasyon geçmişi değildir. Django 6.1.3 karşısında çalışma zamanı doğrulaması SQLite, PostgreSQL, MySQL ve MariaDB için yapılmıştır.',
                     explanation:
-                        'Bu dışa aktarım doğrudan entegre edilebilir bir Django uygulamasıdır (`foxaldb_models`). 0001_initial.py, mevcut şemanın başlangıç migrasyonudur; yeniden oluşturulmuş Django migrasyon geçmişi değildir. Django 6.1 karşısında çalışma zamanı doğrulaması yapılmamıştır.',
+                        'Bu dışa aktarım doğrudan entegre edilebilir bir Django uygulamasıdır (`foxaldb_models`). 0001_initial.py, mevcut şemanın başlangıç migrasyonudur; yeniden oluşturulmuş Django migrasyon geçmişi değildir. Django 6.1.3 karşısında çalışma zamanı doğrulaması SQLite, PostgreSQL, MySQL ve MariaDB için yapılmıştır.',
                     django_version: 'Django {{version}}',
                     provider_label: 'Sağlayıcı: {{provider}}',
                     package_type:
@@ -1588,9 +1588,9 @@ export const tr: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'Bu Drizzle dışa aktarımı hakkında',
                     export_info:
-                        'Bu dışa aktarma bir Drizzle şema paketidir. schema.ts doğruluk kaynağıdır. drizzle.config.ts kimlik bilgisi içermez (yalnızca diyalekt, şema yolu ve çıktı dizini). SQL geçiş geçmişi yeniden oluşturulmaz. drizzle-kit çalışma zamanı doğrulaması yapılmamıştır.',
+                        'Bu dışa aktarma bir Drizzle şema paketidir. schema.ts doğruluk kaynağıdır. drizzle.config.ts kimlik bilgisi içermez (yalnızca diyalekt, şema yolu ve çıktı dizini). SQL geçiş geçmişi yeniden oluşturulmaz. drizzle-kit çalışma zamanı doğrulaması SQLite, PostgreSQL, MySQL ve MariaDB için yapılmıştır.',
                     explanation:
-                        'Bu dışa aktarma bir Drizzle şema paketidir. schema.ts doğruluk kaynağıdır. drizzle.config.ts kimlik bilgisi içermez (yalnızca diyalekt, şema yolu ve çıktı dizini). SQL geçiş geçmişi yeniden oluşturulmaz. drizzle-kit çalışma zamanı doğrulaması yapılmamıştır.',
+                        'Bu dışa aktarma bir Drizzle şema paketidir. schema.ts doğruluk kaynağıdır. drizzle.config.ts kimlik bilgisi içermez (yalnızca diyalekt, şema yolu ve çıktı dizini). SQL geçiş geçmişi yeniden oluşturulmaz. drizzle-kit çalışma zamanı doğrulaması SQLite, PostgreSQL, MySQL ve MariaDB için yapılmıştır.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'Sağlayıcı: {{provider}}',

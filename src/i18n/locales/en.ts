@@ -1539,9 +1539,9 @@ export const en = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'About this Django export',
                     export_info:
-                        'This export is a drop-in Django app (`foxaldb_models`). 0001_initial.py is a current-schema baseline, not reconstructed Django migration history. Runtime validation against Django 6.1 has not been performed.',
+                        'This export is a drop-in Django app (`foxaldb_models`). 0001_initial.py is a current-schema baseline, not reconstructed Django migration history. Runtime validation against Django 6.1.3 covers SQLite, PostgreSQL, MySQL, and MariaDB.',
                     explanation:
-                        'This export is a drop-in Django app (`foxaldb_models`). 0001_initial.py is a current-schema baseline, not reconstructed Django migration history. Runtime validation against Django 6.1 has not been performed.',
+                        'This export is a drop-in Django app (`foxaldb_models`). 0001_initial.py is a current-schema baseline, not reconstructed Django migration history. Runtime validation against Django 6.1.3 covers SQLite, PostgreSQL, MySQL, and MariaDB.',
                     django_version: 'Django {{version}}',
                     provider_label: 'Provider: {{provider}}',
                     package_type:
@@ -1596,9 +1596,9 @@ export const en = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'About this Drizzle export',
                     export_info:
-                        'This export is a Drizzle schema package. schema.ts is the source of truth. drizzle.config.ts is credential-free (dialect, schema path, and output directory only). SQL migration history is not reconstructed. Runtime drizzle-kit validation has not been performed.',
+                        'This export is a Drizzle schema package. schema.ts is the source of truth. drizzle.config.ts is credential-free (dialect, schema path, and output directory only). SQL migration history is not reconstructed. Runtime drizzle-kit validation covers SQLite, PostgreSQL, MySQL, and MariaDB.',
                     explanation:
-                        'This export is a Drizzle schema package. schema.ts is the source of truth. drizzle.config.ts is credential-free (dialect, schema path, and output directory only). SQL migration history is not reconstructed. Runtime drizzle-kit validation has not been performed.',
+                        'This export is a Drizzle schema package. schema.ts is the source of truth. drizzle.config.ts is credential-free (dialect, schema path, and output directory only). SQL migration history is not reconstructed. Runtime drizzle-kit validation covers SQLite, PostgreSQL, MySQL, and MariaDB.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'Provider: {{provider}}',

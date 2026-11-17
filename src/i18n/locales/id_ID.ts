@@ -1550,9 +1550,9 @@ export const id_ID: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'Tentang ekspor Django ini',
                     export_info:
-                        'Ekspor ini adalah aplikasi Django siap integrasi (`foxaldb_models`). 0001_initial.py adalah migrasi awal skema saat ini, bukan riwayat migrasi Django yang direkonstruksi. Validasi runtime terhadap Django 6.1 belum dilakukan.',
+                        'Ekspor ini adalah aplikasi Django siap integrasi (`foxaldb_models`). 0001_initial.py adalah migrasi awal skema saat ini, bukan riwayat migrasi Django yang direkonstruksi. Validasi runtime terhadap Django 6.1.3 mencakup SQLite, PostgreSQL, MySQL, dan MariaDB.',
                     explanation:
-                        'Ekspor ini adalah aplikasi Django siap integrasi (`foxaldb_models`). 0001_initial.py adalah migrasi awal skema saat ini, bukan riwayat migrasi Django yang direkonstruksi. Validasi runtime terhadap Django 6.1 belum dilakukan.',
+                        'Ekspor ini adalah aplikasi Django siap integrasi (`foxaldb_models`). 0001_initial.py adalah migrasi awal skema saat ini, bukan riwayat migrasi Django yang direkonstruksi. Validasi runtime terhadap Django 6.1.3 mencakup SQLite, PostgreSQL, MySQL, dan MariaDB.',
                     django_version: 'Django {{version}}',
                     provider_label: 'Penyedia: {{provider}}',
                     package_type:
@@ -1606,9 +1606,9 @@ export const id_ID: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'Tentang ekspor Drizzle ini',
                     export_info:
-                        'Ekspor ini adalah paket skema Drizzle. schema.ts adalah sumber kebenaran. drizzle.config.ts bebas kredensial (hanya dialek, jalur skema, dan direktori keluaran). Riwayat migrasi SQL tidak direkonstruksi. Validasi runtime drizzle-kit belum dilakukan.',
+                        'Ekspor ini adalah paket skema Drizzle. schema.ts adalah sumber kebenaran. drizzle.config.ts bebas kredensial (hanya dialek, jalur skema, dan direktori keluaran). Riwayat migrasi SQL tidak direkonstruksi. Validasi runtime drizzle-kit mencakup SQLite, PostgreSQL, MySQL, dan MariaDB.',
                     explanation:
-                        'Ekspor ini adalah paket skema Drizzle. schema.ts adalah sumber kebenaran. drizzle.config.ts bebas kredensial (hanya dialek, jalur skema, dan direktori keluaran). Riwayat migrasi SQL tidak direkonstruksi. Validasi runtime drizzle-kit belum dilakukan.',
+                        'Ekspor ini adalah paket skema Drizzle. schema.ts adalah sumber kebenaran. drizzle.config.ts bebas kredensial (hanya dialek, jalur skema, dan direktori keluaran). Riwayat migrasi SQL tidak direkonstruksi. Validasi runtime drizzle-kit mencakup SQLite, PostgreSQL, MySQL, dan MariaDB.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'Penyedia: {{provider}}',

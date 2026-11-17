@@ -55,9 +55,9 @@ Transforms the canonical `Diagram` into framework-native schema/code artifacts:
 - Laravel migrations (ZIP) — **implemented**
 - Prisma (`schema.prisma`) — **implemented**
 - EF Core (model project ZIP) — **implemented**
-- Rails (Rails 8.1 package ZIP) — **implemented** (wizard + browser ZIP; Ruby runtime QA green — U3.4 / Full Regression #9)
-- Django (Django 6.1 drop-in app ZIP) — **implemented** (wizard + browser ZIP; Django runtime QA green — U3.5 / Full Regression #9)
-- Drizzle (drizzle-orm ^0.45 schema package ZIP) — **implemented** (wizard + browser ZIP; drizzle-kit runtime QA green — U3.6 / Full Regression #9)
+- Rails (Rails 8.1 package ZIP) — **implemented** (wizard + browser ZIP; Ruby runtime QA green — U3.4; current proof Full Regression #15)
+- Django (Django 6.1 drop-in app ZIP) — **implemented** (wizard + browser ZIP; Django runtime QA green — U3.5; current proof Full Regression #15)
+- Drizzle (drizzle-orm ^0.45 schema package ZIP) — **implemented** (wizard + browser ZIP; drizzle-kit runtime QA green — U3.6; current proof Full Regression #15)
 
 Framework import parsers are **not** inverted into exporters. Each framework export receives its own implementation milestone with independent tests and QA.
 
@@ -291,7 +291,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | **Entry points**        | Export wizard → Rails (`RAILS_RESULT`; no version or options step)                                                                                                                                                                                                                                                                         |
 | **Tests**               | `frontend/src/lib/api/__tests__/rails-export.test.ts`; `frontend/src/lib/export/__tests__/rails-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-rails.test.tsx`; backend PHPUnit under `backend/tests/Feature/RailsExportTest.php` and `backend/tests/Unit/Services/RailsExport/`                           |
 
-**Rails 8.1 only.** There is no version selector and no version request field. Wizard flow is `TARGET_PICKER` → `RAILS_RESULT`. Selecting Rails starts generation immediately. Ruby/`rails` runtime QA is green (U3.4; included in Full Regression #9 on `ubuntu-26.04`, 54/54).
+**Rails 8.1 only.** There is no version selector and no version request field. Wizard flow is `TARGET_PICKER` → `RAILS_RESULT`. Selecting Rails starts generation immediately. Ruby/`rails` runtime QA is green (U3.4; current proof Full Regression #15 on `ubuntu-26.04`, 54/54). Full Regression #9 remains historical.
 
 **Provider inference:** `diagram.databaseType` only. No provider override and no connection string.
 
@@ -323,7 +323,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | **Entry points**        | Export wizard → Django (`DJANGO_RESULT`; no version, provider, or options step)                                                                                                                                                                                                                                                                                                               |
 | **Tests**               | `frontend/src/lib/api/__tests__/django-export.test.ts`; `frontend/src/lib/export/__tests__/django-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-django.test.tsx`; `frontend/src/i18n/__tests__/django-export-locale-consistency.test.ts`; backend PHPUnit under `backend/tests/Feature/DjangoExportTest.php` and `backend/tests/Unit/Services/DjangoExport/` |
 
-**Django 6.1 only.** There is no version selector, no Python version selector, and no provider selector. Wizard flow is `TARGET_PICKER` → `DJANGO_RESULT`. Selecting Django starts generation immediately. Runtime Django QA is green (U3.5; Full Regression #9 on `ubuntu-26.04`, 54/54).
+**Django 6.1 only.** There is no version selector, no Python version selector, and no provider selector. Wizard flow is `TARGET_PICKER` → `DJANGO_RESULT`. Selecting Django starts generation immediately. Runtime Django QA is green (U3.5; current proof Full Regression #15 on `ubuntu-26.04`, 54/54). Full Regression #9 remains historical.
 
 **Provider inference:** `diagram.databaseType` only. No provider override and no connection string. Unsupported types are **not** aliased to SQLite.
 
@@ -355,7 +355,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | **Entry points**        | Export wizard → Drizzle (`DRIZZLE_RESULT`; no version, provider, or options step)                                                                                                                                                                                                                                                                                                                   |
 | **Tests**               | `frontend/src/lib/api/__tests__/drizzle-export.test.ts`; `frontend/src/lib/export/__tests__/drizzle-export-*.test.ts`; `frontend/src/dialogs/export-wizard/__tests__/export-wizard-drizzle.test.tsx`; `frontend/src/i18n/__tests__/drizzle-export-locale-consistency.test.ts`; backend PHPUnit under `backend/tests/Feature/DrizzleExportTest.php` and `backend/tests/Unit/Services/DrizzleExport/` |
 
-**drizzle-orm ^0.45 / drizzle-kit ^0.31 only.** There is no version selector, no provider selector, and no options step. Wizard flow is `TARGET_PICKER` → `DRIZZLE_RESULT`. Selecting Drizzle starts generation immediately. D5 automated frontend QA passed. Runtime `drizzle-kit` QA is green (U3.6; drizzle-kit `0.31.11`; Full Regression #9 on `ubuntu-26.04`, 54/54).
+**drizzle-orm ^0.45 / drizzle-kit ^0.31 only.** There is no version selector, no provider selector, and no options step. Wizard flow is `TARGET_PICKER` → `DRIZZLE_RESULT`. Selecting Drizzle starts generation immediately. D5 automated frontend QA passed. Runtime `drizzle-kit` QA is green (U3.6; drizzle-kit `0.31.11`; current proof Full Regression #15 on `ubuntu-26.04`, 54/54). Full Regression #9 remains historical.
 
 **Provider inference:** `diagram.databaseType` only. No provider override and no connection string. Unsupported types are **not** aliased to PostgreSQL or SQLite.
 
@@ -649,7 +649,7 @@ Verified in current code:
 - **EF Core export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; MariaDB is deferred; real `dotnet` restore/build/model QA passed (EF6); `dotnet ef` needs a startup project or design-time factory
 - **Rails export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; Ruby/`rails` runtime QA is green (U3.4)
 - **Django export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; `0001_initial.py` is a current-schema baseline, not history; runtime Django QA is green (U3.5)
-- **Drizzle export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; frontend does not generate `schema.ts`; runtime drizzle-kit QA is green (U3.6; kit pin `0.31.11`)
+- **Drizzle export** — requires authentication; generation remains backend-owned and stateless (no backend diagram ID required); ZIP is built in the browser; SQL Server / Oracle / CockroachDB / ClickHouse / GENERIC are disabled; frontend does not generate `schema.ts`; runtime drizzle-kit QA is green (U3.6; kit pin `0.31.11`; current proof Full Regression #15)
 - **Schema filter asymmetry** — SQL export filtered; JSON/DBML full diagram; images follow rendered canvas (filters/hidden nodes respected)
 - **SVG portability** — visual SVG remains html-to-image `foreignObject` HTML, not a native vector engine
 
@@ -706,8 +706,9 @@ Provider inference is always `diagram.databaseType` (no provider override in V1)
 
 - **U4** — version completeness: complete
 - **U4.1** — provider completeness: complete (no `validate_only` / deferred provider rows)
-- **U4.3** — pin refresh on main: complete
-- **Full Regression #9** — green, **54/54** runtime cells, explicit **`ubuntu-26.04`**, commit **`93c9cf5`**, GitHub run **`39315880211`**, branch **`main`** (7m 16s)
+- **U4.6** — current official baseline: **Full Regression #15**, green, **54/54** runtime cells (Laravel 20, Prisma 14, EF Core 5, Rails 5, Django 5, Drizzle 5), explicit **`ubuntu-26.04`**, 7m 03s, branch **`main`**, displayed commit **`4fb2b26`**, full SHA **`4fb2b267d70b09185603e89288555bcda167bc55`** from local git, GitHub run **`44085661057`**, run number 15
+- **Full Regression #11** — previous global baseline, green, **54/54**, commit **`3ba9411`**, GitHub run **`41527967533`** (6m 47s)
+- **Full Regression #9** — historical, green, **54/54** runtime cells, explicit **`ubuntu-26.04`**, commit **`93c9cf5`**, GitHub run **`39315880211`**, branch **`main`** (7m 16s)
 
 Authoritative reference: [`backend/docs/export-runtime-qa.md`](../../../backend/docs/export-runtime-qa.md).
 

@@ -1556,9 +1556,9 @@ export const te: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'ఈ Django ఎగుమతి గురించి',
                     export_info:
-                        'ఈ ఎగుమతి నేరుగా ఇంటిగ్రేట్ అయ్యే Django యాప్ (`foxaldb_models`). 0001_initial.py ప్రస్తుత schema యొక్క ప్రారంభ migration, పునర్నిర్మించిన Django migration history కాదు. Django 6.1 వ్యతిరేకంగా runtime validation చేయలేదు.',
+                        'ఈ ఎగుమతి నేరుగా ఇంటిగ్రేట్ అయ్యే Django యాప్ (`foxaldb_models`). 0001_initial.py ప్రస్తుత schema యొక్క ప్రారంభ migration, పునర్నిర్మించిన Django migration history కాదు. Django 6.1.3 వ్యతిరేకంగా runtime validation SQLite, PostgreSQL, MySQL మరియు MariaDB లను కవర్ చేస్తుంది.',
                     explanation:
-                        'ఈ ఎగుమతి నేరుగా ఇంటిగ్రేట్ అయ్యే Django యాప్ (`foxaldb_models`). 0001_initial.py ప్రస్తుత schema యొక్క ప్రారంభ migration, పునర్నిర్మించిన Django migration history కాదు. Django 6.1 వ్యతిరేకంగా runtime validation చేయలేదు.',
+                        'ఈ ఎగుమతి నేరుగా ఇంటిగ్రేట్ అయ్యే Django యాప్ (`foxaldb_models`). 0001_initial.py ప్రస్తుత schema యొక్క ప్రారంభ migration, పునర్నిర్మించిన Django migration history కాదు. Django 6.1.3 వ్యతిరేకంగా runtime validation SQLite, PostgreSQL, MySQL మరియు MariaDB లను కవర్ చేస్తుంది.',
                     django_version: 'Django {{version}}',
                     provider_label: 'ప్రొవైడర్: {{provider}}',
                     package_type:
@@ -1612,9 +1612,9 @@ export const te: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'ఈ Drizzle ఎగుమతి గురించి',
                     export_info:
-                        'ఈ ఎగుమతి Drizzle స్కీమా ప్యాకేజీ. schema.ts సత్య మూలం. drizzle.config.ts క్రెడెన్షియల్-రహితం (dialect, స్కీమా మార్గం మరియు అవుట్‌పుట్ డైరెక్టరీ మాత్రమే). SQL మైగ్రేషన్ చరిత్ర పునర్నిర్మించబడదు. drizzle-kit రన్‌టైమ్ ధృవీకరణ జరగలేదు.',
+                        'ఈ ఎగుమతి Drizzle స్కీమా ప్యాకేజీ. schema.ts సత్య మూలం. drizzle.config.ts క్రెడెన్షియల్-రహితం (dialect, స్కీమా మార్గం మరియు అవుట్‌పుట్ డైరెక్టరీ మాత్రమే). SQL మైగ్రేషన్ చరిత్ర పునర్నిర్మించబడదు. drizzle-kit రన్‌టైమ్ ధృవీకరణ SQLite, PostgreSQL, MySQL మరియు MariaDB లను కవర్ చేస్తుంది.',
                     explanation:
-                        'ఈ ఎగుమతి Drizzle స్కీమా ప్యాకేజీ. schema.ts సత్య మూలం. drizzle.config.ts క్రెడెన్షియల్-రహితం (dialect, స్కీమా మార్గం మరియు అవుట్‌పుట్ డైరెక్టరీ మాత్రమే). SQL మైగ్రేషన్ చరిత్ర పునర్నిర్మించబడదు. drizzle-kit రన్‌టైమ్ ధృవీకరణ జరగలేదు.',
+                        'ఈ ఎగుమతి Drizzle స్కీమా ప్యాకేజీ. schema.ts సత్య మూలం. drizzle.config.ts క్రెడెన్షియల్-రహితం (dialect, స్కీమా మార్గం మరియు అవుట్‌పుట్ డైరెక్టరీ మాత్రమే). SQL మైగ్రేషన్ చరిత్ర పునర్నిర్మించబడదు. drizzle-kit రన్‌టైమ్ ధృవీకరణ SQLite, PostgreSQL, MySQL మరియు MariaDB లను కవర్ చేస్తుంది.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'ప్రొవైడర్: {{provider}}',

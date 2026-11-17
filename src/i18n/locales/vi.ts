@@ -1534,9 +1534,9 @@ export const vi: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'Giới thiệu xuất Django này',
                     export_info:
-                        'Bản xuất này là ứng dụng Django tích hợp trực tiếp (`foxaldb_models`). 0001_initial.py là migration ban đầu của schema hiện tại, không phải lịch sử migration Django được tái tạo. Chưa xác thực runtime với Django 6.1.',
+                        'Bản xuất này là ứng dụng Django tích hợp trực tiếp (`foxaldb_models`). 0001_initial.py là migration ban đầu của schema hiện tại, không phải lịch sử migration Django được tái tạo. Xác thực runtime với Django 6.1.3 bao gồm SQLite, PostgreSQL, MySQL và MariaDB.',
                     explanation:
-                        'Bản xuất này là ứng dụng Django tích hợp trực tiếp (`foxaldb_models`). 0001_initial.py là migration ban đầu của schema hiện tại, không phải lịch sử migration Django được tái tạo. Chưa xác thực runtime với Django 6.1.',
+                        'Bản xuất này là ứng dụng Django tích hợp trực tiếp (`foxaldb_models`). 0001_initial.py là migration ban đầu của schema hiện tại, không phải lịch sử migration Django được tái tạo. Xác thực runtime với Django 6.1.3 bao gồm SQLite, PostgreSQL, MySQL và MariaDB.',
                     django_version: 'Django {{version}}',
                     provider_label: 'Nhà cung cấp: {{provider}}',
                     package_type:
@@ -1590,9 +1590,9 @@ export const vi: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'Giới thiệu xuất Drizzle này',
                     export_info:
-                        'Bản xuất này là gói lược đồ Drizzle. schema.ts là nguồn sự thật. drizzle.config.ts không chứa thông tin đăng nhập (chỉ dialect, đường dẫn lược đồ và thư mục đầu ra). Lịch sử migration SQL không được tái tạo. Chưa thực hiện kiểm tra drizzle-kit lúc chạy.',
+                        'Bản xuất này là gói lược đồ Drizzle. schema.ts là nguồn sự thật. drizzle.config.ts không chứa thông tin đăng nhập (chỉ dialect, đường dẫn lược đồ và thư mục đầu ra). Lịch sử migration SQL không được tái tạo. Kiểm tra drizzle-kit lúc chạy bao gồm SQLite, PostgreSQL, MySQL và MariaDB.',
                     explanation:
-                        'Bản xuất này là gói lược đồ Drizzle. schema.ts là nguồn sự thật. drizzle.config.ts không chứa thông tin đăng nhập (chỉ dialect, đường dẫn lược đồ và thư mục đầu ra). Lịch sử migration SQL không được tái tạo. Chưa thực hiện kiểm tra drizzle-kit lúc chạy.',
+                        'Bản xuất này là gói lược đồ Drizzle. schema.ts là nguồn sự thật. drizzle.config.ts không chứa thông tin đăng nhập (chỉ dialect, đường dẫn lược đồ và thư mục đầu ra). Lịch sử migration SQL không được tái tạo. Kiểm tra drizzle-kit lúc chạy bao gồm SQLite, PostgreSQL, MySQL và MariaDB.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'Nhà cung cấp: {{provider}}',

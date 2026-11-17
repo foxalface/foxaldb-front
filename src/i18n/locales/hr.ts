@@ -1547,9 +1547,9 @@ export const hr: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'O ovom Django izvozu',
                     export_info:
-                        'Ovaj izvoz je Django aplikacija spremna za ugradnju (`foxaldb_models`). 0001_initial.py je početna migracija trenutačne sheme, a ne rekonstruirana Django povijest migracija. Provjera u izvođenju protiv Django 6.1 nije provedena.',
+                        'Ovaj izvoz je Django aplikacija spremna za ugradnju (`foxaldb_models`). 0001_initial.py je početna migracija trenutačne sheme, a ne rekonstruirana Django povijest migracija. Provjera u izvođenju protiv Django 6.1.3 pokriva SQLite, PostgreSQL, MySQL i MariaDB.',
                     explanation:
-                        'Ovaj izvoz je Django aplikacija spremna za ugradnju (`foxaldb_models`). 0001_initial.py je početna migracija trenutačne sheme, a ne rekonstruirana Django povijest migracija. Provjera u izvođenju protiv Django 6.1 nije provedena.',
+                        'Ovaj izvoz je Django aplikacija spremna za ugradnju (`foxaldb_models`). 0001_initial.py je početna migracija trenutačne sheme, a ne rekonstruirana Django povijest migracija. Provjera u izvođenju protiv Django 6.1.3 pokriva SQLite, PostgreSQL, MySQL i MariaDB.',
                     django_version: 'Django {{version}}',
                     provider_label: 'Pružatelj: {{provider}}',
                     package_type:
@@ -1603,9 +1603,9 @@ export const hr: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'O ovom Drizzle izvozu',
                     export_info:
-                        'Ovaj izvoz je Drizzle paket sheme. schema.ts je izvor istine. drizzle.config.ts je bez vjerodajnica (samo dijalekt, put sheme i izlazni direktorij). Povijest SQL migracija se ne rekonstruira. Runtime provjera drizzle-kit nije izvršena.',
+                        'Ovaj izvoz je Drizzle paket sheme. schema.ts je izvor istine. drizzle.config.ts je bez vjerodajnica (samo dijalekt, put sheme i izlazni direktorij). Povijest SQL migracija se ne rekonstruira. Runtime provjera drizzle-kit pokriva SQLite, PostgreSQL, MySQL i MariaDB.',
                     explanation:
-                        'Ovaj izvoz je Drizzle paket sheme. schema.ts je izvor istine. drizzle.config.ts je bez vjerodajnica (samo dijalekt, put sheme i izlazni direktorij). Povijest SQL migracija se ne rekonstruira. Runtime provjera drizzle-kit nije izvršena.',
+                        'Ovaj izvoz je Drizzle paket sheme. schema.ts je izvor istine. drizzle.config.ts je bez vjerodajnica (samo dijalekt, put sheme i izlazni direktorij). Povijest SQL migracija se ne rekonstruira. Runtime provjera drizzle-kit pokriva SQLite, PostgreSQL, MySQL i MariaDB.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'Pružatelj: {{provider}}',

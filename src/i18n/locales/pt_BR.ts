@@ -1568,9 +1568,9 @@ export const pt_BR: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'Sobre esta exportação Django',
                     export_info:
-                        'Esta exportação é um app Django pronto para integrar (`foxaldb_models`). 0001_initial.py é uma migração inicial do esquema atual, não um histórico de migrações Django reconstruído. A validação em tempo de execução contra Django 6.1 não foi realizada.',
+                        'Esta exportação é um app Django pronto para integrar (`foxaldb_models`). 0001_initial.py é uma migração inicial do esquema atual, não um histórico de migrações Django reconstruído. A validação em tempo de execução contra Django 6.1.3 cobre SQLite, PostgreSQL, MySQL e MariaDB.',
                     explanation:
-                        'Esta exportação é um app Django pronto para integrar (`foxaldb_models`). 0001_initial.py é uma migração inicial do esquema atual, não um histórico de migrações Django reconstruído. A validação em tempo de execução contra Django 6.1 não foi realizada.',
+                        'Esta exportação é um app Django pronto para integrar (`foxaldb_models`). 0001_initial.py é uma migração inicial do esquema atual, não um histórico de migrações Django reconstruído. A validação em tempo de execução contra Django 6.1.3 cobre SQLite, PostgreSQL, MySQL e MariaDB.',
                     django_version: 'Django {{version}}',
                     provider_label: 'Provedor: {{provider}}',
                     package_type:
@@ -1626,9 +1626,9 @@ export const pt_BR: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'Sobre esta exportação Drizzle',
                     export_info:
-                        'Esta exportação é um pacote de esquema Drizzle. schema.ts é a fonte da verdade. drizzle.config.ts não contém credenciais (apenas dialeto, caminho do esquema e diretório de saída). O histórico de migrações SQL não é reconstruído. A validação em tempo de execução com drizzle-kit não foi realizada.',
+                        'Esta exportação é um pacote de esquema Drizzle. schema.ts é a fonte da verdade. drizzle.config.ts não contém credenciais (apenas dialeto, caminho do esquema e diretório de saída). O histórico de migrações SQL não é reconstruído. A validação em tempo de execução com drizzle-kit cobre SQLite, PostgreSQL, MySQL e MariaDB.',
                     explanation:
-                        'Esta exportação é um pacote de esquema Drizzle. schema.ts é a fonte da verdade. drizzle.config.ts não contém credenciais (apenas dialeto, caminho do esquema e diretório de saída). O histórico de migrações SQL não é reconstruído. A validação em tempo de execução com drizzle-kit não foi realizada.',
+                        'Esta exportação é um pacote de esquema Drizzle. schema.ts é a fonte da verdade. drizzle.config.ts não contém credenciais (apenas dialeto, caminho do esquema e diretório de saída). O histórico de migrações SQL não é reconstruído. A validação em tempo de execução com drizzle-kit cobre SQLite, PostgreSQL, MySQL e MariaDB.',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'Provedor: {{provider}}',

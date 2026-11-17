@@ -1580,9 +1580,9 @@ export const ja: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: 'この Django エクスポートについて',
                     export_info:
-                        'このエクスポートはそのまま組み込める Django アプリ（`foxaldb_models`）です。0001_initial.py は現在のスキーマの初期マイグレーションであり、Django マイグレーション履歴の再構築ではありません。Django 6.1 に対する実行時検証は行われていません。',
+                        'このエクスポートはそのまま組み込める Django アプリ（`foxaldb_models`）です。0001_initial.py は現在のスキーマの初期マイグレーションであり、Django マイグレーション履歴の再構築ではありません。Django 6.1.3 に対する実行時検証は SQLite、PostgreSQL、MySQL、MariaDB を対象に実施済みです。',
                     explanation:
-                        'このエクスポートはそのまま組み込める Django アプリ（`foxaldb_models`）です。0001_initial.py は現在のスキーマの初期マイグレーションであり、Django マイグレーション履歴の再構築ではありません。Django 6.1 に対する実行時検証は行われていません。',
+                        'このエクスポートはそのまま組み込める Django アプリ（`foxaldb_models`）です。0001_initial.py は現在のスキーマの初期マイグレーションであり、Django マイグレーション履歴の再構築ではありません。Django 6.1.3 に対する実行時検証は SQLite、PostgreSQL、MySQL、MariaDB を対象に実施済みです。',
                     django_version: 'Django {{version}}',
                     provider_label: 'プロバイダー: {{provider}}',
                     package_type:
@@ -1637,9 +1637,9 @@ export const ja: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: 'この Drizzle エクスポートについて',
                     export_info:
-                        'このエクスポートは Drizzle スキーマパッケージです。schema.ts が信頼できる情報源です。drizzle.config.ts は認証情報なしです（dialect、スキーマパス、出力ディレクトリのみ）。SQL マイグレーション履歴は再構築されません。drizzle-kit の実行時検証は行われていません。',
+                        'このエクスポートは Drizzle スキーマパッケージです。schema.ts が信頼できる情報源です。drizzle.config.ts は認証情報なしです（dialect、スキーマパス、出力ディレクトリのみ）。SQL マイグレーション履歴は再構築されません。drizzle-kit の実行時検証は SQLite、PostgreSQL、MySQL、MariaDB を対象に実施済みです。',
                     explanation:
-                        'このエクスポートは Drizzle スキーマパッケージです。schema.ts が信頼できる情報源です。drizzle.config.ts は認証情報なしです（dialect、スキーマパス、出力ディレクトリのみ）。SQL マイグレーション履歴は再構築されません。drizzle-kit の実行時検証は行われていません。',
+                        'このエクスポートは Drizzle スキーマパッケージです。schema.ts が信頼できる情報源です。drizzle.config.ts は認証情報なしです（dialect、スキーマパス、出力ディレクトリのみ）。SQL マイグレーション履歴は再構築されません。drizzle-kit の実行時検証は SQLite、PostgreSQL、MySQL、MariaDB を対象に実施済みです。',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: 'プロバイダー: {{provider}}',

@@ -1432,9 +1432,9 @@ export const zh_CN: LanguageTranslation = {
                     description: '{{provider}} · Django {{version}}',
                     export_info_aria: '关于此 Django 导出',
                     export_info:
-                        '此导出为可直接集成的 Django 应用（`foxaldb_models`）。0001_initial.py 是当前模式的初始迁移，而非重建的 Django 迁移历史。尚未针对 Django 6.1 进行运行时验证。',
+                        '此导出为可直接集成的 Django 应用（`foxaldb_models`）。0001_initial.py 是当前模式的初始迁移，而非重建的 Django 迁移历史。针对 Django 6.1.3 的运行时验证覆盖 SQLite、PostgreSQL、MySQL 和 MariaDB。',
                     explanation:
-                        '此导出为可直接集成的 Django 应用（`foxaldb_models`）。0001_initial.py 是当前模式的初始迁移，而非重建的 Django 迁移历史。尚未针对 Django 6.1 进行运行时验证。',
+                        '此导出为可直接集成的 Django 应用（`foxaldb_models`）。0001_initial.py 是当前模式的初始迁移，而非重建的 Django 迁移历史。针对 Django 6.1.3 的运行时验证覆盖 SQLite、PostgreSQL、MySQL 和 MariaDB。',
                     django_version: 'Django {{version}}',
                     provider_label: '提供程序：{{provider}}',
                     package_type:
@@ -1480,9 +1480,9 @@ export const zh_CN: LanguageTranslation = {
                         '{{provider}} · drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     export_info_aria: '关于此 Drizzle 导出',
                     export_info:
-                        '此导出是 Drizzle 架构包。schema.ts 是事实来源。drizzle.config.ts 不含凭据（仅有 dialect、架构路径和输出目录）。不会重建 SQL 迁移历史。尚未对 drizzle-kit 进行运行时校验。',
+                        '此导出是 Drizzle 架构包。schema.ts 是事实来源。drizzle.config.ts 不含凭据（仅有 dialect、架构路径和输出目录）。不会重建 SQL 迁移历史。drizzle-kit 运行时校验覆盖 SQLite、PostgreSQL、MySQL 和 MariaDB。',
                     explanation:
-                        '此导出是 Drizzle 架构包。schema.ts 是事实来源。drizzle.config.ts 不含凭据（仅有 dialect、架构路径和输出目录）。不会重建 SQL 迁移历史。尚未对 drizzle-kit 进行运行时校验。',
+                        '此导出是 Drizzle 架构包。schema.ts 是事实来源。drizzle.config.ts 不含凭据（仅有 dialect、架构路径和输出目录）。不会重建 SQL 迁移历史。drizzle-kit 运行时校验覆盖 SQLite、PostgreSQL、MySQL 和 MariaDB。',
                     drizzle_version:
                         'drizzle-orm {{orm}} / drizzle-kit {{kit}}',
                     provider_label: '提供程序：{{provider}}',
