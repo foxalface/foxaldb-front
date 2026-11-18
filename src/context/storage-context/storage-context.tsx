@@ -9,6 +9,10 @@ import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import type { Note } from '@/lib/domain/note';
+import type {
+    DiagramTag,
+    DiagramTagAssignment,
+} from '@/lib/domain/diagram-tag';
 
 export interface StorageContext {
     // Config operations
@@ -152,6 +156,34 @@ export interface StorageContext {
     deleteNote: (params: { diagramId: string; id: string }) => Promise<void>;
     listNotes: (diagramId: string) => Promise<Note[]>;
     deleteDiagramNotes: (diagramId: string) => Promise<void>;
+
+    // Tag operations. Persistent diagram metadata, not personal filters.
+    addTag: (params: { diagramId: string; tag: DiagramTag }) => Promise<void>;
+    getTag: (params: {
+        diagramId: string;
+        id: string;
+    }) => Promise<DiagramTag | undefined>;
+    updateTag: (params: {
+        id: string;
+        attributes: Partial<DiagramTag>;
+    }) => Promise<void>;
+    deleteTag: (params: { diagramId: string; id: string }) => Promise<void>;
+    listTags: (diagramId: string) => Promise<DiagramTag[]>;
+    deleteDiagramTags: (diagramId: string) => Promise<void>;
+    addTagAssignment: (params: {
+        diagramId: string;
+        assignment: DiagramTagAssignment;
+    }) => Promise<void>;
+    getTagAssignment: (params: {
+        diagramId: string;
+        id: string;
+    }) => Promise<DiagramTagAssignment | undefined>;
+    deleteTagAssignment: (params: {
+        diagramId: string;
+        id: string;
+    }) => Promise<void>;
+    listTagAssignments: (diagramId: string) => Promise<DiagramTagAssignment[]>;
+    deleteDiagramTagAssignments: (diagramId: string) => Promise<void>;
 }
 
 export const storageInitialValue: StorageContext = {
@@ -212,6 +244,18 @@ export const storageInitialValue: StorageContext = {
     deleteNote: emptyFn,
     listNotes: emptyFn,
     deleteDiagramNotes: emptyFn,
+
+    addTag: emptyFn,
+    getTag: emptyFn,
+    updateTag: emptyFn,
+    deleteTag: emptyFn,
+    listTags: emptyFn,
+    deleteDiagramTags: emptyFn,
+    addTagAssignment: emptyFn,
+    getTagAssignment: emptyFn,
+    deleteTagAssignment: emptyFn,
+    listTagAssignments: emptyFn,
+    deleteDiagramTagAssignments: emptyFn,
 };
 
 export const storageContext =

@@ -12,12 +12,29 @@ import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import type { Note } from '@/lib/domain/note';
+import type {
+    DiagramTag,
+    DiagramTagAssignment,
+} from '@/lib/domain/diagram-tag';
+import { canonicalizeTagAssignments } from '@/lib/domain/diagram-tag';
+import {
+    attachStoredTags,
+    tagAssignmentFromRow,
+    tagFromRow,
+    toStoredTag,
+    toStoredTagAssignment,
+} from './diagram-tag-rows';
+import {
+    CHART_DB_SCHEMA_VERSION,
+    chartDbV13Stores,
+    chartDbV14Stores,
+} from './chart-db-schema';
 
-export const StorageProvider: React.FC<React.PropsWithChildren> = ({
-    children,
-}) => {
+export const StorageProvider: React.FC<
+    React.PropsWithChildren<{ databaseName?: string }>
+> = ({ children, databaseName = 'ChartDB' }) => {
     const db = useMemo(() => {
-        const dexieDB = new Dexie('ChartDB') as Dexie & {
+        const dexieDB = new Dexie(databaseName) as Dexie & {
             diagrams: EntityTable<
                 Diagram,
                 'id' // primary key "id" (for the typings only)
@@ -53,6 +70,11 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             diagram_filters: EntityTable<
                 DiagramFilter & { diagramId: string },
                 'diagramId' // primary key "id" (for the typings only)
+            >;
+            tags: EntityTable<DiagramTag & { diagramId: string }, 'id'>;
+            tag_assignments: EntityTable<
+                DiagramTagAssignment & { diagramId: string },
+                'id'
             >;
         };
 
@@ -221,22 +243,9 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 tx.table('config').clear();
             });
 
-        dexieDB.version(13).stores({
-            diagrams:
-                '++id, name, databaseType, databaseEdition, createdAt, updatedAt',
-            db_tables:
-                '++id, diagramId, name, schema, x, y, fields, indexes, color, createdAt, width, comment, isView, isMaterializedView, order',
-            db_relationships:
-                '++id, diagramId, name, sourceSchema, sourceTableId, targetSchema, targetTableId, sourceFieldId, targetFieldId, type, createdAt',
-            db_dependencies:
-                '++id, diagramId, schema, tableId, dependentSchema, dependentTableId, createdAt',
-            areas: '++id, diagramId, name, x, y, width, height, color',
-            db_custom_types:
-                '++id, diagramId, schema, type, kind, values, fields',
-            config: '++id, defaultDiagramId',
-            diagram_filters: 'diagramId, tableIds, schemasIds',
-            notes: '++id, diagramId, content, x, y, width, height, color',
-        });
+        dexieDB.version(13).stores(chartDbV13Stores);
+
+        dexieDB.version(CHART_DB_SCHEMA_VERSION).stores(chartDbV14Stores);
 
         dexieDB.on('ready', async () => {
             const config = await dexieDB.config.get(1);
@@ -251,7 +260,7 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             }
         });
         return dexieDB;
-    }, []);
+    }, [databaseName]);
 
     const getConfig: StorageContext['getConfig'] =
         useCallback(async (): Promise<ChartDBConfig | undefined> => {
@@ -622,8 +631,106 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             [db]
         );
 
+    const addTag: StorageContext['addTag'] = useCallback(
+        async ({ tag, diagramId }) => {
+            await db.tags.add(toStoredTag(diagramId, tag));
+        },
+        [db]
+    );
+
+    const getTag: StorageContext['getTag'] = useCallback(
+        async ({ diagramId, id }) => {
+            const row = await db.tags.get({ id, diagramId });
+            return row ? tagFromRow(row) : undefined;
+        },
+        [db]
+    );
+
+    const updateTag: StorageContext['updateTag'] = useCallback(
+        async ({ id, attributes }) => {
+            await db.tags.update(id, attributes);
+        },
+        [db]
+    );
+
+    const deleteTag: StorageContext['deleteTag'] = useCallback(
+        async ({ diagramId, id }) => {
+            await db.tags.where({ id, diagramId }).delete();
+        },
+        [db]
+    );
+
+    const listTags: StorageContext['listTags'] = useCallback(
+        async (diagramId) => {
+            const rows = await db.tags
+                .where('diagramId')
+                .equals(diagramId)
+                .toArray();
+
+            return rows.map((row) => tagFromRow(row));
+        },
+        [db]
+    );
+
+    const deleteDiagramTags: StorageContext['deleteDiagramTags'] = useCallback(
+        async (diagramId) => {
+            await db.tags.where('diagramId').equals(diagramId).delete();
+        },
+        [db]
+    );
+
+    const addTagAssignment: StorageContext['addTagAssignment'] = useCallback(
+        async ({ assignment, diagramId }) => {
+            await db.tag_assignments.add(
+                toStoredTagAssignment(diagramId, assignment)
+            );
+        },
+        [db]
+    );
+
+    const getTagAssignment: StorageContext['getTagAssignment'] = useCallback(
+        async ({ diagramId, id }) => {
+            const row = await db.tag_assignments.get({ id, diagramId });
+            return row ? tagAssignmentFromRow(row) : undefined;
+        },
+        [db]
+    );
+
+    const deleteTagAssignment: StorageContext['deleteTagAssignment'] =
+        useCallback(
+            async ({ diagramId, id }) => {
+                await db.tag_assignments.where({ id, diagramId }).delete();
+            },
+            [db]
+        );
+
+    const listTagAssignments: StorageContext['listTagAssignments'] =
+        useCallback(
+            async (diagramId) => {
+                const rows = await db.tag_assignments
+                    .where('diagramId')
+                    .equals(diagramId)
+                    .toArray();
+
+                return rows.map((row) => tagAssignmentFromRow(row));
+            },
+            [db]
+        );
+
+    const deleteDiagramTagAssignments: StorageContext['deleteDiagramTagAssignments'] =
+        useCallback(
+            async (diagramId) => {
+                await db.tag_assignments
+                    .where('diagramId')
+                    .equals(diagramId)
+                    .delete();
+            },
+            [db]
+        );
+
     const addDiagram: StorageContext['addDiagram'] = useCallback(
         async ({ diagram }) => {
+            const canonical = canonicalizeTagAssignments(diagram);
             const promises = [];
             promises.push(
                 db.diagrams.add({
@@ -674,6 +781,18 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 ...notes.map((note) => addNote({ diagramId: diagram.id, note }))
             );
 
+            const tags = canonical.tags ?? [];
+            promises.push(
+                ...tags.map((tag) => addTag({ diagramId: diagram.id, tag }))
+            );
+
+            const tagAssignments = canonical.tagAssignments ?? [];
+            promises.push(
+                ...tagAssignments.map((assignment) =>
+                    addTagAssignment({ diagramId: diagram.id, assignment })
+                )
+            );
+
             await Promise.all(promises);
         },
         [
@@ -684,6 +803,8 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             addRelationship,
             addTable,
             addNote,
+            addTag,
+            addTagAssignment,
         ]
     );
 
@@ -813,6 +934,15 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 diagram.notes = await listNotes(id);
             }
 
+            const tags = await listTags(id);
+            const tagAssignments = await listTagAssignments(id);
+            const attached = attachStoredTags(diagram, tags, tagAssignments, {
+                includeTables: options.includeTables,
+                includeRelationships: options.includeRelationships,
+            });
+            diagram.tags = attached.tags;
+            diagram.tagAssignments = attached.tagAssignments;
+
             return diagram;
         },
         [
@@ -823,6 +953,8 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
             listRelationships,
             listTables,
             listNotes,
+            listTags,
+            listTagAssignments,
         ]
     );
 
@@ -854,6 +986,12 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                     db.notes.where('diagramId').equals(id).modify({
                         diagramId: attributes.id,
                     }),
+                    db.tags.where('diagramId').equals(id).modify({
+                        diagramId: attributes.id,
+                    }),
+                    db.tag_assignments.where('diagramId').equals(id).modify({
+                        diagramId: attributes.id,
+                    }),
                 ]);
             }
         },
@@ -870,6 +1008,8 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 db.areas.where('diagramId').equals(id).delete(),
                 db.db_custom_types.where('diagramId').equals(id).delete(),
                 db.notes.where('diagramId').equals(id).delete(),
+                db.tags.where('diagramId').equals(id).delete(),
+                db.tag_assignments.where('diagramId').equals(id).delete(),
             ]);
         },
         [db]
@@ -922,6 +1062,17 @@ export const StorageProvider: React.FC<React.PropsWithChildren> = ({
                 deleteNote,
                 listNotes,
                 deleteDiagramNotes,
+                addTag,
+                getTag,
+                updateTag,
+                deleteTag,
+                listTags,
+                deleteDiagramTags,
+                addTagAssignment,
+                getTagAssignment,
+                deleteTagAssignment,
+                listTagAssignments,
+                deleteDiagramTagAssignments,
                 getDiagramFilter,
                 updateDiagramFilter,
                 deleteDiagramFilter,

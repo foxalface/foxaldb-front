@@ -43,6 +43,7 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { cloneTable } from '@/lib/clone';
+import { cloneTableTagAssignments } from '@/lib/domain/diagram-tag';
 import type { DBSchema } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
@@ -66,6 +67,8 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         schemas,
         databaseType,
         readonly,
+        tagAssignments,
+        addTagAssignments,
     } = useChartDB();
     const { schemasDisplayed } = useDiagramFilter();
     const { openTableSchemaDialog } = useDialog();
@@ -146,14 +149,25 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             e.stopPropagation();
             const clonedTable = cloneTable(table);
+            const inheritedAssignments = cloneTableTagAssignments({
+                sourceTable: table,
+                clonedTable,
+                tagAssignments,
+            });
 
             clonedTable.name = `${clonedTable.name}_copy`;
             clonedTable.x += 30;
             clonedTable.y += 50;
 
-            createTable(clonedTable);
+            void Promise.resolve(createTable(clonedTable)).then(() => {
+                if (inheritedAssignments.length === 0) {
+                    return;
+                }
+
+                return addTagAssignments(inheritedAssignments);
+            });
         },
-        [createTable, table]
+        [addTagAssignments, createTable, table, tagAssignments]
     );
 
     const openTableDiscussion = useCallback(

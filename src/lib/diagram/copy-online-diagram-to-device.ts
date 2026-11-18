@@ -33,6 +33,8 @@ export const copyOnlineDiagramToDevice = async (
         areas: cloned.areas,
         customTypes: cloned.customTypes,
         notes: cloned.notes,
+        tags: cloned.tags ?? [],
+        tagAssignments: cloned.tagAssignments ?? [],
         createdAt: now,
         updatedAt: now,
     };

@@ -56,6 +56,8 @@ vi.mock('@/hooks/use-chartdb', () => ({
         createIndex,
         createField,
         createTable,
+        tagAssignments: [],
+        addTagAssignments: vi.fn(),
         schemas: chartDBState.schemas,
         databaseType: chartDBState.databaseType as DatabaseType,
         readonly: chartDBState.readonly,

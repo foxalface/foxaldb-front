@@ -12,6 +12,8 @@ import type { DBCustomType } from './db-custom-type';
 import { dbCustomTypeSchema } from './db-custom-type';
 import type { Note } from './note';
 import { noteSchema } from './note';
+import type { DiagramTag, DiagramTagAssignment } from './diagram-tag';
+import { diagramTagAssignmentSchema, diagramTagSchema } from './diagram-tag';
 
 export interface Diagram {
     id: string;
@@ -24,6 +26,8 @@ export interface Diagram {
     areas?: Area[];
     customTypes?: DBCustomType[];
     notes?: Note[];
+    tags?: DiagramTag[];
+    tagAssignments?: DiagramTagAssignment[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -39,6 +43,8 @@ export const diagramSchema: z.ZodType<Diagram> = z.object({
     areas: z.array(areaSchema).optional(),
     customTypes: z.array(dbCustomTypeSchema).optional(),
     notes: z.array(noteSchema).optional(),
+    tags: z.array(diagramTagSchema).optional().default([]),
+    tagAssignments: z.array(diagramTagAssignmentSchema).optional().default([]),
     createdAt: z.date(),
     updatedAt: z.date(),
 });

@@ -12,6 +12,7 @@ import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useLayout } from '@/hooks/use-layout';
 import { cloneTable } from '@/lib/clone';
+import { cloneTableTagAssignments } from '@/lib/domain/diagram-tag';
 import type { DBTable } from '@/lib/domain/db-table';
 import { arrangeTablesForArea } from '@/lib/utils/area-utils';
 import {
@@ -50,6 +51,8 @@ export const TableNodeContextMenu: React.FC<
         relationships,
         updateArea,
         updateTablesState,
+        tagAssignments,
+        addTagAssignments,
     } = useChartDB();
     const { closeAllTablesInSidebar } = useLayout();
     const { t } = useTranslation();
@@ -71,12 +74,23 @@ export const TableNodeContextMenu: React.FC<
             (e) => {
                 e.stopPropagation();
                 const clonedTable = cloneTable(table);
+                const inheritedAssignments = cloneTableTagAssignments({
+                    sourceTable: table,
+                    clonedTable,
+                    tagAssignments,
+                });
                 clonedTable.name = `${clonedTable.name}_copy`;
                 clonedTable.x += 30;
                 clonedTable.y += 50;
-                createTable(clonedTable);
+                void Promise.resolve(createTable(clonedTable)).then(() => {
+                    if (inheritedAssignments.length === 0) {
+                        return;
+                    }
+
+                    return addTagAssignments(inheritedAssignments);
+                });
             },
-            [createTable, table]
+            [addTagAssignments, createTable, table, tagAssignments]
         );
 
     const editTableHandler: React.MouseEventHandler<HTMLDivElement> =

@@ -84,8 +84,15 @@ describe('B4 restore catalog', () => {
             })
         );
 
-        expect(JSON.parse(json).schemaVersion).toBe(1);
+        expect(JSON.parse(json).schemaVersion).toBe(2);
+        const versionOne = parseDiagramJsonContent(
+            JSON.stringify({
+                ...JSON.parse(json),
+                schemaVersion: 1,
+            })
+        );
         expect(versioned.ok).toBe(true);
+        expect(versionOne.ok).toBe(true);
         expect(unversioned.ok).toBe(true);
     });
 

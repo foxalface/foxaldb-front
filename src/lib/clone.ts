@@ -5,6 +5,8 @@ import type { DBField } from './domain/db-field';
 import type { DBIndex } from './domain/db-index';
 import type { DBRelationship } from './domain/db-relationship';
 import type { DBTable } from './domain/db-table';
+import { canonicalizeTagAssignments } from './domain/diagram-tag';
+import type { DiagramTag, DiagramTagAssignment } from './domain/diagram-tag';
 import type { Diagram } from './domain/diagram';
 import type { Note } from './domain/note';
 import { generateId as defaultGenerateId } from './utils';
@@ -56,6 +58,14 @@ const generateIdsMapFromDiagram = (
 
     diagram.customTypes?.forEach((customType) => {
         idsMap.set(customType.id, generateId());
+    });
+
+    diagram.tags?.forEach((tag) => {
+        idsMap.set(tag.id, generateId());
+    });
+
+    diagram.tagAssignments?.forEach((assignment) => {
+        idsMap.set(assignment.id, generateId());
     });
 
     return idsMap;
@@ -267,23 +277,62 @@ export const cloneDiagram = (
                 (customType): customType is DBCustomType => customType !== null
             ) ?? [];
 
+    const tags: DiagramTag[] =
+        diagram.tags
+            ?.map((tag) => {
+                const id = getNewId(tag.id);
+                if (!id) {
+                    return null;
+                }
+
+                return {
+                    id,
+                    name: tag.name,
+                    color: tag.color,
+                } satisfies DiagramTag;
+            })
+            .filter((tag): tag is DiagramTag => tag !== null) ?? [];
+
+    const tagAssignments: DiagramTagAssignment[] =
+        diagram.tagAssignments
+            ?.map((assignment) => {
+                const id = getNewId(assignment.id);
+                const tagId = getNewId(assignment.tagId);
+                const targetId = getNewId(assignment.targetId);
+
+                if (!id || !tagId || !targetId) {
+                    return null;
+                }
+
+                return {
+                    id,
+                    tagId,
+                    targetType: assignment.targetType,
+                    targetId,
+                } satisfies DiagramTagAssignment;
+            })
+            .filter(
+                (assignment): assignment is DiagramTagAssignment =>
+                    assignment !== null
+            ) ?? [];
+
+    const clonedDiagram = canonicalizeTagAssignments({
+        ...diagram,
+        id: diagramId,
+        dependencies,
+        relationships,
+        tables,
+        areas,
+        notes,
+        customTypes,
+        tags,
+        tagAssignments,
+        createdAt: diagram.createdAt ? new Date(diagram.createdAt) : new Date(),
+        updatedAt: diagram.updatedAt ? new Date(diagram.updatedAt) : new Date(),
+    });
+
     return {
-        diagram: {
-            ...diagram,
-            id: diagramId,
-            dependencies,
-            relationships,
-            tables,
-            areas,
-            notes,
-            customTypes,
-            createdAt: diagram.createdAt
-                ? new Date(diagram.createdAt)
-                : new Date(),
-            updatedAt: diagram.updatedAt
-                ? new Date(diagram.updatedAt)
-                : new Date(),
-        },
+        diagram: clonedDiagram,
         idsMap,
     };
 };

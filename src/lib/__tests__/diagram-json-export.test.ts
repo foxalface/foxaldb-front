@@ -175,7 +175,7 @@ const createSampleDiagram = (): Diagram => {
 };
 
 describe('diagramToJSONOutput', () => {
-    it('emits pretty-printed Diagram-shaped JSON with schemaVersion 1 and placeholder root id', () => {
+    it('emits pretty-printed Diagram-shaped JSON with schemaVersion 2 and placeholder root id', () => {
         const json = diagramToJSONOutput(createSampleDiagram());
         const parsed = JSON.parse(json) as Record<string, unknown>;
 
@@ -186,7 +186,7 @@ describe('diagramToJSONOutput', () => {
         expect(parsed.name).toBe('My Diagram');
         expect(parsed.databaseType).toBe(DatabaseType.POSTGRESQL);
         expect(parsed.schemaVersion).toBe(DIAGRAM_JSON_SCHEMA_VERSION);
-        expect(parsed.schemaVersion).toBe(1);
+        expect(parsed.schemaVersion).toBe(2);
         expect(Array.isArray(parsed.tables)).toBe(true);
         expect(Array.isArray(parsed.relationships)).toBe(true);
         expect((parsed.tables as unknown[]).length).toBe(3);

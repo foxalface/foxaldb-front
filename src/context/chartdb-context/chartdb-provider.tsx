@@ -29,6 +29,11 @@ import { useEventEmitter } from 'ahooks';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { Note } from '@/lib/domain/note';
+import {
+    canonicalizeTagAssignments,
+    type DiagramTag,
+    type DiagramTagAssignment,
+} from '@/lib/domain/diagram-tag';
 import { storageInitialValue } from '../storage-context/storage-context';
 import { useDiff } from '../diff-context/use-diff';
 import { buildRemoveTablesOperationData } from '@/lib/realtime/remove-tables-operation';
@@ -83,6 +88,10 @@ export const ChartDBProvider: React.FC<
         diagram?.customTypes ?? []
     );
     const [notes, setNotes] = useState<Note[]>(diagram?.notes ?? []);
+    const [tags, setTags] = useState<DiagramTag[]>(diagram?.tags ?? []);
+    const [tagAssignments, setTagAssignments] = useState<
+        DiagramTagAssignment[]
+    >(diagram?.tagAssignments ?? []);
     const tablesRef = useRef(tables);
     tablesRef.current = tables;
     const diagramIdRef = useRef(diagramId);
@@ -178,6 +187,8 @@ export const ChartDBProvider: React.FC<
             areas,
             customTypes,
             notes,
+            tags,
+            tagAssignments,
         }),
         [
             diagramId,
@@ -190,6 +201,8 @@ export const ChartDBProvider: React.FC<
             areas,
             customTypes,
             notes,
+            tags,
+            tagAssignments,
             diagramCreatedAt,
             diagramUpdatedAt,
         ]
@@ -204,6 +217,8 @@ export const ChartDBProvider: React.FC<
             setAreas([]);
             setCustomTypes([]);
             setNotes([]);
+            setTags([]);
+            setTagAssignments([]);
             setDiagramUpdatedAt(updatedAt);
 
             resetRedoStack();
@@ -217,6 +232,8 @@ export const ChartDBProvider: React.FC<
                 db.deleteDiagramAreas(diagramId),
                 db.deleteDiagramCustomTypes(diagramId),
                 db.deleteDiagramNotes(diagramId),
+                db.deleteDiagramTags(diagramId),
+                db.deleteDiagramTagAssignments(diagramId),
             ]);
         }, [db, diagramId, resetRedoStack, resetUndoStack]);
 
@@ -232,6 +249,8 @@ export const ChartDBProvider: React.FC<
             setAreas([]);
             setCustomTypes([]);
             setNotes([]);
+            setTags([]);
+            setTagAssignments([]);
             resetRedoStack();
             resetUndoStack();
 
@@ -243,6 +262,8 @@ export const ChartDBProvider: React.FC<
                 db.deleteDiagramAreas(diagramId),
                 db.deleteDiagramCustomTypes(diagramId),
                 db.deleteDiagramNotes(diagramId),
+                db.deleteDiagramTags(diagramId),
+                db.deleteDiagramTagAssignments(diagramId),
             ]);
         }, [db, diagramId, resetRedoStack, resetUndoStack]);
 
@@ -2051,6 +2072,9 @@ export const ChartDBProvider: React.FC<
             setDiagramUpdatedAt(diagram.updatedAt);
             setHighlightedCustomTypeId(undefined);
             setNotes(diagram.notes ?? []);
+            const canonicalTags = canonicalizeTagAssignments(diagram);
+            setTags(canonicalTags.tags ?? []);
+            setTagAssignments(canonicalTags.tagAssignments ?? []);
 
             events.emit({ action: 'load_diagram', data: { diagram } });
 
@@ -2074,6 +2098,8 @@ export const ChartDBProvider: React.FC<
             setHighlightedCustomTypeId,
             events,
             setNotes,
+            setTags,
+            setTagAssignments,
             resetRedoStack,
             resetUndoStack,
         ]
@@ -2323,6 +2349,23 @@ export const ChartDBProvider: React.FC<
         ]
     );
 
+    const addTagAssignments: ChartDBContext['addTagAssignments'] = useCallback(
+        async (assignments) => {
+            if (assignments.length === 0) {
+                return;
+            }
+
+            setTagAssignments((current) => [...current, ...assignments]);
+
+            await Promise.all(
+                assignments.map((assignment) =>
+                    db.addTagAssignment({ diagramId, assignment })
+                )
+            );
+        },
+        [db, diagramId]
+    );
+
     return (
         <chartDBContext.Provider
             value={{
@@ -2409,6 +2452,8 @@ export const ChartDBProvider: React.FC<
                 removeNote,
                 removeNotes,
                 updateNote,
+                tagAssignments,
+                addTagAssignments,
             }}
         >
             {children}

@@ -1,4 +1,5 @@
 import type { Diagram } from '@/lib/domain/diagram';
+import { canonicalizeTagAssignments } from '@/lib/domain/diagram-tag';
 import type { DatabaseEdition } from '@/lib/domain/database-edition';
 import type { DatabaseType } from '@/lib/domain/database-type';
 import { readDiagramContentHashFromApi } from '@/lib/api/diagram-content-hash';
@@ -19,6 +20,8 @@ type AutosaveSnapshotContent = Pick<
     | 'areas'
     | 'customTypes'
     | 'notes'
+    | 'tags'
+    | 'tagAssignments'
 >;
 
 interface ObservedDiagram {
@@ -42,20 +45,27 @@ const toAutosaveSnapshot = (diagram: {
     areas: NonNullable<Diagram['areas']>;
     customTypes: NonNullable<Diagram['customTypes']>;
     notes: NonNullable<Diagram['notes']>;
+    tags: NonNullable<Diagram['tags']>;
+    tagAssignments: NonNullable<Diagram['tagAssignments']>;
 }): string => JSON.stringify(diagram satisfies AutosaveSnapshotContent);
 
-export const diagramAutosavePayload = (diagram: Diagram): string =>
-    toAutosaveSnapshot({
-        name: diagram.name ?? 'Untitled diagram',
-        databaseType: diagram.databaseType,
-        databaseEdition: diagram.databaseEdition,
-        tables: diagram.tables ?? [],
-        relationships: diagram.relationships ?? [],
-        dependencies: diagram.dependencies ?? [],
-        areas: diagram.areas ?? [],
-        customTypes: diagram.customTypes ?? [],
-        notes: diagram.notes ?? [],
+export const diagramAutosavePayload = (diagram: Diagram): string => {
+    const canonical = canonicalizeTagAssignments(diagram);
+
+    return toAutosaveSnapshot({
+        name: canonical.name ?? 'Untitled diagram',
+        databaseType: canonical.databaseType,
+        databaseEdition: canonical.databaseEdition,
+        tables: canonical.tables ?? [],
+        relationships: canonical.relationships ?? [],
+        dependencies: canonical.dependencies ?? [],
+        areas: canonical.areas ?? [],
+        customTypes: canonical.customTypes ?? [],
+        notes: canonical.notes ?? [],
+        tags: canonical.tags ?? [],
+        tagAssignments: canonical.tagAssignments ?? [],
     });
+};
 
 /**
  * Generic autosave control. Callers can persist the current editor snapshot

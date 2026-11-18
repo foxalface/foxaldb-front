@@ -242,5 +242,54 @@ export const withDiagramLocationPersistence = (
 
             await storage.deleteDiagramNotes(diagramId);
         },
+        addTag: async (params) => {
+            if (shouldSkip(params.diagramId)) {
+                return;
+            }
+
+            await storage.addTag(params);
+        },
+        updateTag: async (params) => {
+            if (shouldSkip(readCurrentDiagramId())) {
+                return;
+            }
+
+            await storage.updateTag(params);
+        },
+        deleteTag: async (params) => {
+            if (shouldSkip(params.diagramId)) {
+                return;
+            }
+
+            await storage.deleteTag(params);
+        },
+        deleteDiagramTags: async (diagramId) => {
+            if (shouldSkip(diagramId)) {
+                return;
+            }
+
+            await storage.deleteDiagramTags(diagramId);
+        },
+        addTagAssignment: async (params) => {
+            if (shouldSkip(params.diagramId)) {
+                return;
+            }
+
+            await storage.addTagAssignment(params);
+        },
+        deleteTagAssignment: async (params) => {
+            if (shouldSkip(params.diagramId)) {
+                return;
+            }
+
+            await storage.deleteTagAssignment(params);
+        },
+        deleteDiagramTagAssignments: async (diagramId) => {
+            if (shouldSkip(diagramId)) {
+                return;
+            }
+
+            await storage.deleteDiagramTagAssignments(diagramId);
+        },
     };
 };

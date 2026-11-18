@@ -2,7 +2,7 @@ import { cloneDiagram } from './clone';
 import type { Diagram } from './domain/diagram';
 import { parseDiagramJsonContent } from './import/parse-diagram-json-content';
 
-export const DIAGRAM_JSON_SCHEMA_VERSION = 1 as const;
+export const DIAGRAM_JSON_SCHEMA_VERSION = 2 as const;
 
 export type DiagramJsonSchemaVersion = typeof DIAGRAM_JSON_SCHEMA_VERSION;
 

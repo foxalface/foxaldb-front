@@ -14,6 +14,7 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { Note } from '@/lib/domain/note';
+import type { DiagramTagAssignment } from '@/lib/domain/diagram-tag';
 
 export type ChartDBEventType =
     | 'update_diagram_name'
@@ -173,6 +174,7 @@ export interface ChartDBContext {
     areas: Area[];
     customTypes: DBCustomType[];
     notes: Note[];
+    tagAssignments: DiagramTagAssignment[];
     currentDiagram: Diagram;
     events: EventEmitter<ChartDBEvent>;
     readonly?: boolean;
@@ -411,6 +413,7 @@ export interface ChartDBContext {
         note: Partial<Note>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
+    addTagAssignments: (assignments: DiagramTagAssignment[]) => Promise<void>;
 
     // Custom type operations
     createCustomType: (
@@ -450,6 +453,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     areas: [],
     customTypes: [],
     notes: [],
+    tagAssignments: [],
     schemas: [],
     highlightCustomTypeId: emptyFn,
     currentDiagram: {
@@ -541,6 +545,7 @@ export const chartDBContext = createContext<ChartDBContext>({
     removeNote: emptyFn,
     removeNotes: emptyFn,
     updateNote: emptyFn,
+    addTagAssignments: emptyFn,
 
     // Custom type operations
     createCustomType: emptyFn,

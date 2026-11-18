@@ -263,7 +263,7 @@ describe('importDiagramFromJson', () => {
             areas: Array<{ id: string; name: string }>;
         };
 
-        expect(parsedExport.schemaVersion).toBe(1);
+        expect(parsedExport.schemaVersion).toBe(2);
         expect(parsedExport.id).toBe('diagram');
         expect(parsedExport.tables[0]?.id).toBe('table-users');
 

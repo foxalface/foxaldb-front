@@ -408,7 +408,7 @@ describe('B4 client export output', () => {
             notes: Array<{ content: string }>;
         };
 
-        expect(parsed.schemaVersion).toBe(1);
+        expect(parsed.schemaVersion).toBe(2);
         expect(parsed.relationships.map((item) => item.name)).toEqual([
             'users_posts_fk',
             'posts_comments_fk',
