@@ -211,6 +211,18 @@ export const hr: LanguageTranslation = {
                 clear: 'Očisti',
                 empty: 'Na ovom dijagramu nema oznaka',
                 tag_color: 'Boja oznake',
+                tabs: {
+                    schemas: 'Sheme',
+                },
+                areas: {
+                    no_constraint: 'Nema ograničenja područja',
+                    empty: 'Na ovom dijagramu nema područja',
+                    color: 'Boja područja',
+                },
+                schemas: {
+                    no_constraint: 'Nema ograničenja sheme',
+                    empty: 'Na ovom dijagramu nema shema',
+                },
             },
             tables_section: {
                 tables: 'Tablice',

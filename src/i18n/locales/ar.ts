@@ -212,6 +212,18 @@ export const ar: LanguageTranslation = {
                 clear: 'مسح',
                 empty: 'لا توجد وسوم في هذا المخطط',
                 tag_color: 'لون الوسم',
+                tabs: {
+                    schemas: 'المخططات',
+                },
+                areas: {
+                    no_constraint: 'لا قيد على المناطق',
+                    empty: 'لا توجد مناطق في هذا المخطط',
+                    color: 'لون المنطقة',
+                },
+                schemas: {
+                    no_constraint: 'لا قيد على المخططات',
+                    empty: 'لا توجد مخططات في هذا الرسم',
+                },
             },
             tables_section: {
                 tables: 'الجداول',

@@ -212,6 +212,18 @@ export const te: LanguageTranslation = {
                 clear: 'తీసివేయండి',
                 empty: 'ఈ రేఖాచిత్రంలో ట్యాగ్‌లు లేవు',
                 tag_color: 'ట్యాగ్ రంగు',
+                tabs: {
+                    schemas: 'స్కీమాలు',
+                },
+                areas: {
+                    no_constraint: 'ప్రాంత పరిమితి లేదు',
+                    empty: 'ఈ రేఖాచిత్రంలో ప్రాంతాలు లేవు',
+                    color: 'ప్రాంతపు రంగు',
+                },
+                schemas: {
+                    no_constraint: 'స్కీమా పరిమితి లేదు',
+                    empty: 'ఈ రేఖాచిత్రంలో స్కీమాలు లేవు',
+                },
             },
             tables_section: {
                 tables: 'పట్టికలు',

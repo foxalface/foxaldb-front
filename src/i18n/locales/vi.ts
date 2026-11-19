@@ -211,6 +211,18 @@ export const vi: LanguageTranslation = {
                 clear: 'Xóa',
                 empty: 'Sơ đồ này chưa có thẻ',
                 tag_color: 'Màu thẻ',
+                tabs: {
+                    schemas: 'Lược đồ',
+                },
+                areas: {
+                    no_constraint: 'Không ràng buộc khu vực',
+                    empty: 'Sơ đồ này không có khu vực',
+                    color: 'Màu khu vực',
+                },
+                schemas: {
+                    no_constraint: 'Không ràng buộc lược đồ',
+                    empty: 'Sơ đồ này không có lược đồ',
+                },
             },
             tables_section: {
                 tables: 'Bảng',

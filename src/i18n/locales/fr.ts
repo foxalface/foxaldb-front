@@ -215,6 +215,18 @@ export const fr: LanguageTranslation = {
                 clear: 'Effacer',
                 empty: 'Aucun tag sur ce diagramme',
                 tag_color: 'Couleur du tag',
+                tabs: {
+                    schemas: 'Schémas',
+                },
+                areas: {
+                    no_constraint: 'Aucune contrainte de zone',
+                    empty: 'Aucune zone sur ce diagramme',
+                    color: 'Couleur de la zone',
+                },
+                schemas: {
+                    no_constraint: 'Aucune contrainte de schéma',
+                    empty: 'Aucun schéma sur ce diagramme',
+                },
             },
             tables_section: {
                 tables: 'Tables',

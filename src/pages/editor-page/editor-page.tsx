@@ -39,7 +39,7 @@ import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { VerifyEmailScreen } from '@/pages/auth/verify-email-screen';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
-import { TagFilterProvider } from '@/context/tag-filter-context/tag-filter-provider';
+import { EditorFiltersProvider } from '@/context/editor-filters-context/editor-filters-provider';
 import { DiagramAccessProvider } from '@/context/diagram-access-context/diagram-access-provider';
 import { EditingBroadcastProvider } from '@/context/editing-broadcast-context/editing-broadcast-provider';
 import { RemoteEditingProvider } from '@/context/remote-editing-context/remote-editing-provider';
@@ -254,7 +254,7 @@ export const EditorPage: React.FC = () => (
                                           provider cycle.
                                         */}
                                             <LayoutProvider>
-                                                <TagFilterProvider>
+                                                <EditorFiltersProvider>
                                                     <DiagramFilterProvider>
                                                         <HistoryProvider>
                                                             <ReactFlowProvider>
@@ -268,7 +268,7 @@ export const EditorPage: React.FC = () => (
                                                             </ReactFlowProvider>
                                                         </HistoryProvider>
                                                     </DiagramFilterProvider>
-                                                </TagFilterProvider>
+                                                </EditorFiltersProvider>
                                             </LayoutProvider>
                                         </ChartDBEditorProvider>
                                     </DiagramAccessProvider>

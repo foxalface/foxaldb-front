@@ -214,6 +214,18 @@ export const mr: LanguageTranslation = {
                 clear: 'साफ करा',
                 empty: 'या आकृतीवर टॅग नाहीत',
                 tag_color: 'टॅगचा रंग',
+                tabs: {
+                    schemas: 'स्किमा',
+                },
+                areas: {
+                    no_constraint: 'क्षेत्र मर्यादा नाही',
+                    empty: 'या आकृतीत क्षेत्रे नाहीत',
+                    color: 'क्षेत्राचा रंग',
+                },
+                schemas: {
+                    no_constraint: 'स्किमा मर्यादा नाही',
+                    empty: 'या आकृतीत स्किमा नाहीत',
+                },
             },
             tables_section: {
                 tables: 'टेबल्स',

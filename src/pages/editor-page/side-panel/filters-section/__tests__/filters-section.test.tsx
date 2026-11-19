@@ -2,27 +2,41 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Area } from '@/lib/domain/area';
+import { DatabaseType } from '@/lib/domain/database-type';
+import type { DBTable } from '@/lib/domain/db-table';
 import type { DiagramTag } from '@/lib/domain/diagram-tag';
 import { en } from '@/i18n/locales/en';
-import { TagFilterProvider } from '@/context/tag-filter-context/tag-filter-provider';
+import { EditorFiltersProvider } from '@/context/editor-filters-context/editor-filters-provider';
 import { FiltersSection } from '../filters-section';
 
-const { chartDBState, addTags } = vi.hoisted(() => ({
-    chartDBState: {
-        diagramId: 'diagram-1',
-        tags: [] as DiagramTag[],
-    },
-    addTags: vi.fn(),
-}));
+const { chartDBState, addTags, updateArea, updateTablesState } = vi.hoisted(
+    () => ({
+        chartDBState: {
+            diagramId: 'diagram-1',
+            tags: [] as DiagramTag[],
+            areas: [] as Area[],
+            tables: [] as DBTable[],
+        },
+        addTags: vi.fn(),
+        updateArea: vi.fn(),
+        updateTablesState: vi.fn(),
+    })
+);
 
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => ({
         diagramId: chartDBState.diagramId,
         currentDiagram: {
             id: chartDBState.diagramId,
+            databaseType: DatabaseType.POSTGRESQL,
             tags: chartDBState.tags,
+            areas: chartDBState.areas,
+            tables: chartDBState.tables,
         },
         addTags,
+        updateArea,
+        updateTablesState,
         updateTag: vi.fn(),
         removeTags: vi.fn(),
     }),
@@ -60,9 +74,9 @@ vi.mock('react-i18next', () => ({
 
 const renderSection = () =>
     render(
-        <TagFilterProvider>
+        <EditorFiltersProvider>
             <FiltersSection />
-        </TagFilterProvider>
+        </EditorFiltersProvider>
     );
 
 describe('FiltersSection', () => {
@@ -72,7 +86,55 @@ describe('FiltersSection', () => {
             { id: 'tag-z', name: 'Zulu', color: '#ff6363' },
             { id: 'tag-a', name: 'Alpha', color: '#8eb7ff' },
         ];
+        chartDBState.areas = [
+            {
+                id: 'area-z',
+                name: 'Warehouse',
+                x: 0,
+                y: 0,
+                width: 10,
+                height: 10,
+                color: '#111111',
+            },
+            {
+                id: 'area-a',
+                name: 'Core',
+                x: 0,
+                y: 0,
+                width: 10,
+                height: 10,
+                color: '#222222',
+            },
+        ];
+        chartDBState.tables = [
+            {
+                id: 'users',
+                name: 'users',
+                schema: 'public',
+                x: 0,
+                y: 0,
+                fields: [],
+                indexes: [],
+                color: '#fff',
+                isView: false,
+                createdAt: 0,
+            },
+            {
+                id: 'invoices',
+                name: 'invoices',
+                schema: 'billing',
+                x: 0,
+                y: 0,
+                fields: [],
+                indexes: [],
+                color: '#fff',
+                isView: false,
+                createdAt: 0,
+            },
+        ];
         addTags.mockClear();
+        updateArea.mockClear();
+        updateTablesState.mockClear();
     });
 
     it('sorts tags and starts with no constraint', () => {
@@ -150,14 +212,95 @@ describe('FiltersSection', () => {
             { id: 'tag-new', name: 'Finance', color: '#ffe374' },
         ];
         rerender(
-            <TagFilterProvider>
+            <EditorFiltersProvider>
                 <FiltersSection />
-            </TagFilterProvider>
+            </EditorFiltersProvider>
         );
 
         expect(screen.getByText('Finance')).toBeInTheDocument();
         expect(
             screen.queryByText('No tags on this diagram')
         ).not.toBeInTheDocument();
+    });
+
+    it('shows Tags, Areas, and Schemas tabs', () => {
+        renderSection();
+
+        expect(screen.getByRole('tab', { name: 'Tags' })).toBeInTheDocument();
+        expect(screen.getByRole('tab', { name: 'Areas' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('tab', { name: 'Schemas' })
+        ).toBeInTheDocument();
+    });
+
+    it('selects areas from the diagram and clears only that constraint', async () => {
+        const user = userEvent.setup();
+        renderSection();
+
+        await user.click(screen.getByRole('tab', { name: 'Areas' }));
+        const names = screen
+            .getAllByTitle(/Core|Warehouse/)
+            .map((node) => node.textContent);
+        expect(names).toEqual(['Core', 'Warehouse']);
+        expect(screen.getByText('No area constraint')).toBeInTheDocument();
+
+        await user.click(screen.getByRole('checkbox', { name: 'Warehouse' }));
+        await user.click(screen.getByRole('checkbox', { name: 'Core' }));
+        expect(screen.getByText('2 selected')).toBeInTheDocument();
+
+        await user.click(screen.getByRole('button', { name: 'Clear' }));
+        expect(
+            screen.getByRole('checkbox', { name: 'Core' })
+        ).not.toBeChecked();
+        expect(updateArea).not.toHaveBeenCalled();
+        expect(addTags).not.toHaveBeenCalled();
+    });
+
+    it('selects schemas from table schemas and does not call the legacy filter', async () => {
+        const user = userEvent.setup();
+        renderSection();
+
+        await user.click(screen.getByRole('tab', { name: 'Schemas' }));
+        expect(screen.getByText('No schema constraint')).toBeInTheDocument();
+        await user.click(screen.getByRole('checkbox', { name: 'billing' }));
+        await user.click(screen.getByRole('checkbox', { name: 'public' }));
+        expect(screen.getByText('2 selected')).toBeInTheDocument();
+
+        await user.click(screen.getByRole('button', { name: 'Clear' }));
+        expect(
+            screen.getByRole('checkbox', { name: 'public' })
+        ).not.toBeChecked();
+        expect(updateTablesState).not.toHaveBeenCalled();
+    });
+
+    it('rerenders area options when the diagram gains an area', async () => {
+        const user = userEvent.setup();
+        chartDBState.areas = [];
+        const { rerender } = renderSection();
+
+        await user.click(screen.getByRole('tab', { name: 'Areas' }));
+        expect(
+            screen.getByText('No areas on this diagram')
+        ).toBeInTheDocument();
+
+        chartDBState.areas = [
+            {
+                id: 'area-new',
+                name: 'Archive',
+                x: 0,
+                y: 0,
+                width: 10,
+                height: 10,
+                color: '#abc',
+            },
+        ];
+        rerender(
+            <EditorFiltersProvider>
+                <FiltersSection />
+            </EditorFiltersProvider>
+        );
+
+        expect(screen.getByText('Archive')).toBeInTheDocument();
+        expect(updateArea).not.toHaveBeenCalled();
     });
 });

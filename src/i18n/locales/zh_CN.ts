@@ -205,6 +205,18 @@ export const zh_CN: LanguageTranslation = {
                 clear: '清除',
                 empty: '此图中没有标签',
                 tag_color: '标签颜色',
+                tabs: {
+                    schemas: '模式',
+                },
+                areas: {
+                    no_constraint: '没有区域约束',
+                    empty: '此图表中没有区域',
+                    color: '区域颜色',
+                },
+                schemas: {
+                    no_constraint: '没有模式约束',
+                    empty: '此图表中没有模式',
+                },
             },
             tables_section: {
                 tables: '表',

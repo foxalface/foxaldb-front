@@ -213,6 +213,18 @@ export const gu: LanguageTranslation = {
                 clear: 'સાફ કરો',
                 empty: 'આ આકૃતિમાં કોઈ ટૅગ નથી',
                 tag_color: 'ટૅગનો રંગ',
+                tabs: {
+                    schemas: 'સ્કીમા',
+                },
+                areas: {
+                    no_constraint: 'કોઈ વિસ્તાર મર્યાદા નથી',
+                    empty: 'આ આકૃતિમાં કોઈ વિસ્તાર નથી',
+                    color: 'વિસ્તારનો રંગ',
+                },
+                schemas: {
+                    no_constraint: 'કોઈ સ્કીમા મર્યાદા નથી',
+                    empty: 'આ આકૃતિમાં કોઈ સ્કીમા નથી',
+                },
             },
             tables_section: {
                 tables: 'ટેબલ્સ',

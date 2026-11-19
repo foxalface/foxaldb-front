@@ -211,6 +211,18 @@ export const ne: LanguageTranslation = {
                 clear: 'खाली गर्नुहोस्',
                 empty: 'यो रेखाचित्रमा ट्याग छैन',
                 tag_color: 'ट्यागको रङ',
+                tabs: {
+                    schemas: 'स्किमाहरू',
+                },
+                areas: {
+                    no_constraint: 'क्षेत्र बाधा छैन',
+                    empty: 'यो रेखाचित्रमा क्षेत्रहरू छैनन्',
+                    color: 'क्षेत्रको रङ',
+                },
+                schemas: {
+                    no_constraint: 'स्किमा बाधा छैन',
+                    empty: 'यो रेखाचित्रमा स्किमाहरू छैनन्',
+                },
             },
             tables_section: {
                 tables: 'तालिकाहरू',

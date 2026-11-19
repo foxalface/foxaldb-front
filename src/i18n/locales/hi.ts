@@ -212,6 +212,18 @@ export const hi: LanguageTranslation = {
                 clear: 'साफ़ करें',
                 empty: 'इस आरेख पर कोई टैग नहीं',
                 tag_color: 'टैग का रंग',
+                tabs: {
+                    schemas: 'स्कीमा',
+                },
+                areas: {
+                    no_constraint: 'कोई क्षेत्र बाधा नहीं',
+                    empty: 'इस आरेख में कोई क्षेत्र नहीं है',
+                    color: 'क्षेत्र का रंग',
+                },
+                schemas: {
+                    no_constraint: 'कोई स्कीमा बाधा नहीं',
+                    empty: 'इस आरेख में कोई स्कीमा नहीं है',
+                },
             },
             tables_section: {
                 tables: 'तालिकाएँ',

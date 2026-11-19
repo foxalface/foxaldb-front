@@ -123,7 +123,7 @@ import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
-import { useTagCanvasVisibility } from './use-tag-canvas-visibility';
+import { useCanvasFilterVisibility } from './use-canvas-filter-visibility';
 import {
     areaHiddenByTagVisibility,
     relationshipHiddenByTagVisibility,
@@ -241,7 +241,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         resetFilter,
     } = useDiagramFilter();
     const { checkIfNewTable } = useDiff();
-    const tagCanvasVisibility = useTagCanvasVisibility();
+    const canvasFilterVisibility = useCanvasFilterVisibility();
 
     const shouldForceShowTable = useCallback(
         (tableId: string) => {
@@ -268,7 +268,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 hidden: tableHiddenByTagVisibility(
                     Boolean(node.hidden),
                     table.id,
-                    tagCanvasVisibility
+                    canvasFilterVisibility
                 ),
             };
         })
@@ -303,7 +303,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                 hidden: tableHiddenByTagVisibility(
                     Boolean(node.hidden),
                     table.id,
-                    tagCanvasVisibility
+                    canvasFilterVisibility
                 ),
             };
         });
@@ -318,7 +318,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filterLoading,
         showDBViews,
         shouldForceShowTable,
-        tagCanvasVisibility,
+        canvasFilterVisibility,
     ]);
 
     useEffect(() => {
@@ -358,7 +358,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             const prevState = prevEdgeStates.get(edge.id);
                             const hidden = relationshipHiddenByTagVisibility(
                                 edge.id,
-                                tagCanvasVisibility
+                                canvasFilterVisibility
                             );
 
                             return {
@@ -392,7 +392,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         showDBViews,
         tables,
         updateNodeInternals,
-        tagCanvasVisibility,
+        canvasFilterVisibility,
     ]);
 
     useEffect(() => {
@@ -535,7 +535,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     const hidden = tableHiddenByTagVisibility(
                         Boolean(node.hidden),
                         table.id,
-                        tagCanvasVisibility
+                        canvasFilterVisibility
                     );
 
                     return {
@@ -562,7 +562,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     const hidden = areaHiddenByTagVisibility({
                         areaAlreadyHidden: Boolean(areaNode.hidden),
                         tableIdsInArea,
-                        visibility: tagCanvasVisibility,
+                        visibility: canvasFilterVisibility,
                     });
 
                     if (hidden === Boolean(areaNode.hidden)) {
@@ -601,7 +601,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         showDBViews,
         shouldForceShowTable,
         relationships,
-        tagCanvasVisibility,
+        canvasFilterVisibility,
     ]);
 
     // Surgical update for relationship creation target highlighting

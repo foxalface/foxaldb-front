@@ -218,6 +218,18 @@ export const de: LanguageTranslation = {
                 clear: 'Zurücksetzen',
                 empty: 'Keine Tags in diesem Diagramm',
                 tag_color: 'Tagfarbe',
+                tabs: {
+                    schemas: 'Schemata',
+                },
+                areas: {
+                    no_constraint: 'Keine Bereichseinschränkung',
+                    empty: 'Keine Bereiche in diesem Diagramm',
+                    color: 'Bereichsfarbe',
+                },
+                schemas: {
+                    no_constraint: 'Keine Schemaeinschränkung',
+                    empty: 'Keine Schemata in diesem Diagramm',
+                },
             },
             tables_section: {
                 tables: 'Tabellen',

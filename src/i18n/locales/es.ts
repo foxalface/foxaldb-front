@@ -213,6 +213,18 @@ export const es: LanguageTranslation = {
                 clear: 'Borrar',
                 empty: 'No hay etiquetas en este diagrama',
                 tag_color: 'Color de la etiqueta',
+                tabs: {
+                    schemas: 'Esquemas',
+                },
+                areas: {
+                    no_constraint: 'Sin restricción de área',
+                    empty: 'No hay áreas en este diagrama',
+                    color: 'Color del área',
+                },
+                schemas: {
+                    no_constraint: 'Sin restricción de esquema',
+                    empty: 'No hay esquemas en este diagrama',
+                },
             },
             tables_section: {
                 tables: 'Tablas',

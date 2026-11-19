@@ -212,6 +212,18 @@ export const uk: LanguageTranslation = {
                 clear: 'Очистити',
                 empty: 'У цій діаграмі немає тегів',
                 tag_color: 'Колір тегу',
+                tabs: {
+                    schemas: 'Схеми',
+                },
+                areas: {
+                    no_constraint: 'Немає обмеження за областями',
+                    empty: 'На цій діаграмі немає областей',
+                    color: 'Колір області',
+                },
+                schemas: {
+                    no_constraint: 'Немає обмеження за схемами',
+                    empty: 'На цій діаграмі немає схем',
+                },
             },
             tables_section: {
                 tables: 'Таблиці',

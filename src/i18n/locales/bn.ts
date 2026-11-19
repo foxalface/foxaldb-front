@@ -212,6 +212,18 @@ export const bn: LanguageTranslation = {
                 clear: 'মুছুন',
                 empty: 'এই ডায়াগ্রামে কোনো ট্যাগ নেই',
                 tag_color: 'ট্যাগের রঙ',
+                tabs: {
+                    schemas: 'স্কিমা',
+                },
+                areas: {
+                    no_constraint: 'কোনো এলাকার সীমাবদ্ধতা নেই',
+                    empty: 'এই ডায়াগ্রামে কোনো এলাকা নেই',
+                    color: 'এলাকার রং',
+                },
+                schemas: {
+                    no_constraint: 'কোনো স্কিমার সীমাবদ্ধতা নেই',
+                    empty: 'এই ডায়াগ্রামে কোনো স্কিমা নেই',
+                },
             },
             tables_section: {
                 tables: 'টেবিল',

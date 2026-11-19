@@ -210,6 +210,18 @@ export const en = {
                 clear: 'Clear',
                 empty: 'No tags on this diagram',
                 tag_color: 'Tag color',
+                tabs: {
+                    schemas: 'Schemas',
+                },
+                areas: {
+                    no_constraint: 'No area constraint',
+                    empty: 'No areas on this diagram',
+                    color: 'Area color',
+                },
+                schemas: {
+                    no_constraint: 'No schema constraint',
+                    empty: 'No schemas on this diagram',
+                },
             },
             tables_section: {
                 tables: 'Tables',

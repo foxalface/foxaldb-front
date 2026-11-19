@@ -210,6 +210,18 @@ export const ko_KR: LanguageTranslation = {
                 clear: '지우기',
                 empty: '이 다이어그램에 태그가 없습니다',
                 tag_color: '태그 색',
+                tabs: {
+                    schemas: '스키마',
+                },
+                areas: {
+                    no_constraint: '영역 제약 없음',
+                    empty: '이 다이어그램에 영역이 없습니다',
+                    color: '영역 색',
+                },
+                schemas: {
+                    no_constraint: '스키마 제약 없음',
+                    empty: '이 다이어그램에 스키마가 없습니다',
+                },
             },
             tables_section: {
                 tables: '테이블',

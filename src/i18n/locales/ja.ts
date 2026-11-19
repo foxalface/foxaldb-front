@@ -217,6 +217,18 @@ export const ja: LanguageTranslation = {
                 clear: 'クリア',
                 empty: 'この図にタグはありません',
                 tag_color: 'タグの色',
+                tabs: {
+                    schemas: 'スキーマ',
+                },
+                areas: {
+                    no_constraint: 'エリアの制約なし',
+                    empty: 'この図にエリアはありません',
+                    color: 'エリアの色',
+                },
+                schemas: {
+                    no_constraint: 'スキーマの制約なし',
+                    empty: 'この図にスキーマはありません',
+                },
             },
             tables_section: {
                 tables: 'テーブル',

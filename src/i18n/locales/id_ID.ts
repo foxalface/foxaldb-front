@@ -212,6 +212,18 @@ export const id_ID: LanguageTranslation = {
                 clear: 'Hapus',
                 empty: 'Tidak ada tag pada diagram ini',
                 tag_color: 'Warna tag',
+                tabs: {
+                    schemas: 'Skema',
+                },
+                areas: {
+                    no_constraint: 'Tidak ada batasan area',
+                    empty: 'Tidak ada area pada diagram ini',
+                    color: 'Warna area',
+                },
+                schemas: {
+                    no_constraint: 'Tidak ada batasan skema',
+                    empty: 'Tidak ada skema pada diagram ini',
+                },
             },
             tables_section: {
                 tables: 'Tabel',

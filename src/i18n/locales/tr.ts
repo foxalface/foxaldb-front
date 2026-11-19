@@ -210,6 +210,18 @@ export const tr: LanguageTranslation = {
                 clear: 'Temizle',
                 empty: 'Bu diyagramda etiket yok',
                 tag_color: 'Etiket rengi',
+                tabs: {
+                    schemas: 'Şemalar',
+                },
+                areas: {
+                    no_constraint: 'Alan kısıtı yok',
+                    empty: 'Bu diyagramda alan yok',
+                    color: 'Alan rengi',
+                },
+                schemas: {
+                    no_constraint: 'Şema kısıtı yok',
+                    empty: 'Bu diyagramda şema yok',
+                },
             },
             tables_section: {
                 tables: 'Tablolar',

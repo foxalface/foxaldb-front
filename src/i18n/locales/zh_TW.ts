@@ -205,6 +205,18 @@ export const zh_TW: LanguageTranslation = {
                 clear: '清除',
                 empty: '此圖中沒有標籤',
                 tag_color: '標籤顏色',
+                tabs: {
+                    schemas: '綱要',
+                },
+                areas: {
+                    no_constraint: '沒有區域約束',
+                    empty: '此圖表中沒有區域',
+                    color: '區域顏色',
+                },
+                schemas: {
+                    no_constraint: '沒有綱要約束',
+                    empty: '此圖表中沒有綱要',
+                },
             },
             tables_section: {
                 tables: '表格',

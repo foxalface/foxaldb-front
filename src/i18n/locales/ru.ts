@@ -211,6 +211,18 @@ export const ru: LanguageTranslation = {
                 clear: 'Очистить',
                 empty: 'В этой диаграмме нет тегов',
                 tag_color: 'Цвет тега',
+                tabs: {
+                    schemas: 'Схемы',
+                },
+                areas: {
+                    no_constraint: 'Нет ограничения по областям',
+                    empty: 'На этой диаграмме нет областей',
+                    color: 'Цвет области',
+                },
+                schemas: {
+                    no_constraint: 'Нет ограничения по схемам',
+                    empty: 'На этой диаграмме нет схем',
+                },
             },
             tables_section: {
                 tables: 'Таблицы',
