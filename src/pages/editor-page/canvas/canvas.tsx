@@ -123,6 +123,12 @@ import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
+import { useTagCanvasVisibility } from './use-tag-canvas-visibility';
+import {
+    areaHiddenByTagVisibility,
+    relationshipHiddenByTagVisibility,
+    tableHiddenByTagVisibility,
+} from './tag-canvas-visibility';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useClickAway } from 'react-use';
 import { useDiagramCursors } from '../use-diagram-cursors';
@@ -235,6 +241,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         resetFilter,
     } = useDiagramFilter();
     const { checkIfNewTable } = useDiff();
+    const tagCanvasVisibility = useTagCanvasVisibility();
 
     const shouldForceShowTable = useCallback(
         (tableId: string) => {
@@ -246,16 +253,25 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const [isInitialLoadingNodes, setIsInitialLoadingNodes] = useState(true);
 
     const [nodes, setNodes, onNodesChange] = useNodesState<NodeType>(
-        initialTables.map((table) =>
-            tableToTableNode(table, {
+        initialTables.map((table) => {
+            const node = tableToTableNode(table, {
                 filter,
                 databaseType,
                 filterLoading,
                 showDBViews,
                 forceShow: shouldForceShowTable(table.id),
                 isRelationshipCreatingTarget: false,
-            })
-        )
+            });
+
+            return {
+                ...node,
+                hidden: tableHiddenByTagVisibility(
+                    Boolean(node.hidden),
+                    table.id,
+                    tagCanvasVisibility
+                ),
+            };
+        })
     );
     const [edges, setEdges, onEdgesChange] =
         useEdgesState<EdgeType>(initialEdges);
@@ -272,16 +288,25 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [initialTables]);
 
     useEffect(() => {
-        const initialNodes = initialTables.map((table) =>
-            tableToTableNode(table, {
+        const initialNodes = initialTables.map((table) => {
+            const node = tableToTableNode(table, {
                 filter,
                 databaseType,
                 filterLoading,
                 showDBViews,
                 forceShow: shouldForceShowTable(table.id),
                 isRelationshipCreatingTarget: false,
-            })
-        );
+            });
+
+            return {
+                ...node,
+                hidden: tableHiddenByTagVisibility(
+                    Boolean(node.hidden),
+                    table.id,
+                    tagCanvasVisibility
+                ),
+            };
+        });
         if (equal(initialNodes, nodes)) {
             setIsInitialLoadingNodes(false);
         }
@@ -293,6 +318,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         filterLoading,
         showDBViews,
         shouldForceShowTable,
+        tagCanvasVisibility,
     ]);
 
     useEffect(() => {
@@ -330,8 +356,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     ...relationshipEdgesFromDiagram(relationships).map(
                         (edge): RelationshipEdgeType => {
                             const prevState = prevEdgeStates.get(edge.id);
+                            const hidden = relationshipHiddenByTagVisibility(
+                                edge.id,
+                                tagCanvasVisibility
+                            );
+
                             return {
                                 ...edge,
+                                ...(hidden ? { hidden: true } : {}),
                                 selected: prevState?.selected ?? false,
                                 animated: prevState?.animated ?? false,
                             };
@@ -360,6 +392,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         showDBViews,
         tables,
         updateNodeInternals,
+        tagCanvasVisibility,
     ]);
 
     useEffect(() => {
@@ -499,8 +532,15 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         );
                     }
 
+                    const hidden = tableHiddenByTagVisibility(
+                        Boolean(node.hidden),
+                        table.id,
+                        tagCanvasVisibility
+                    );
+
                     return {
                         ...node,
+                        hidden,
                         data: {
                             ...node.data,
                             isOverlapping,
@@ -509,14 +549,28 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         },
                     };
                 }),
-                ...areas.map((area) =>
-                    areaToAreaNode(area, {
+                ...areas.map((area) => {
+                    const areaNode = areaToAreaNode(area, {
                         tables,
                         filter,
                         databaseType,
                         filterLoading,
-                    })
-                ),
+                    });
+                    const tableIdsInArea = tables
+                        .filter((table) => table.parentAreaId === area.id)
+                        .map((table) => table.id);
+                    const hidden = areaHiddenByTagVisibility({
+                        areaAlreadyHidden: Boolean(areaNode.hidden),
+                        tableIdsInArea,
+                        visibility: tagCanvasVisibility,
+                    });
+
+                    if (hidden === Boolean(areaNode.hidden)) {
+                        return areaNode;
+                    }
+
+                    return { ...areaNode, hidden };
+                }),
                 ...notes.map((note) => noteToNoteNode(note)),
                 ...prevNodes.filter(
                     (n) =>
@@ -547,6 +601,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         showDBViews,
         shouldForceShowTable,
         relationships,
+        tagCanvasVisibility,
     ]);
 
     // Surgical update for relationship creation target highlighting
