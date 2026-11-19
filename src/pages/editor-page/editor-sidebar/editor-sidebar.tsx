@@ -11,7 +11,7 @@ import {
 } from '@/components/sidebar/sidebar';
 import { Group, FileType, History, Share2 } from 'lucide-react';
 import { SlBubbles } from 'react-icons/sl';
-import { Table, Workflow } from 'lucide-react';
+import { Filter, Table, Workflow } from 'lucide-react';
 import { useLayout } from '@/hooks/use-layout';
 import { useTranslation } from 'react-i18next';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -62,6 +62,15 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = () => {
                 },
                 active:
                     selectedSidebarSection === 'tables' && isSidePanelShowed,
+            },
+            {
+                title: t('editor_sidebar.filters'),
+                icon: Filter,
+                onClick: () => {
+                    toggleSidebarSection('filters');
+                },
+                active:
+                    selectedSidebarSection === 'filters' && isSidePanelShowed,
             },
             {
                 title: t('editor_sidebar.refs'),

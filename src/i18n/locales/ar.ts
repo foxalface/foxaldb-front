@@ -53,6 +53,7 @@ export const ar: LanguageTranslation = {
             visuals: 'مرئيات',
             activities: 'النشاط',
             share: 'مشاركة',
+            filters: 'عوامل التصفية',
         },
         menu: {
             actions: {
@@ -180,8 +181,38 @@ export const ar: LanguageTranslation = {
         copy_to_clipboard: 'نسخ إلى الحافظة',
         copied: '!تم النسخ',
 
+        tags: {
+            title: 'الوسوم',
+            assign: 'تعيين الوسوم',
+            create: 'إنشاء وسم',
+            name_placeholder: 'اسم الوسم',
+            color: 'اللون',
+            empty: 'لا توجد وسوم بعد',
+            search: 'البحث في الوسوم',
+            no_results: 'لا توجد وسوم مطابقة',
+            rename: 'إعادة تسمية الوسم',
+        },
         side_panel: {
             view_all_options: '...عرض جميع الخيارات',
+            filters_section: {
+                title: 'عوامل التصفية',
+                match_label: 'المطابقة',
+                match: {
+                    any: 'أي',
+                    all: 'الكل',
+                    none: 'لا شيء',
+                    any_hint: 'وسم واحد محدد على الأقل',
+                    all_hint: 'كل الوسوم المحددة',
+                    none_hint: 'لا شيء من الوسوم المحددة',
+                },
+                summary: {
+                    no_constraint: 'لا قيد على الوسوم',
+                    selected: 'تم تحديد {{count}}',
+                },
+                clear: 'مسح',
+                empty: 'لا توجد وسوم في هذا المخطط',
+                tag_color: 'لون الوسم',
+            },
             tables_section: {
                 tables: 'الجداول',
                 add_table: 'إضافة جدول',

@@ -54,6 +54,7 @@ export const uk: LanguageTranslation = {
             visuals: 'Візуальні елементи',
             activities: 'Активність',
             share: 'Поділитися',
+            filters: 'Фільтри',
         },
         menu: {
             actions: {
@@ -180,8 +181,38 @@ export const uk: LanguageTranslation = {
         copy_to_clipboard: 'Копіювати в буфер обміну',
         copied: 'Скопійовано!',
 
+        tags: {
+            title: 'Теги',
+            assign: 'Призначити теги',
+            create: 'Створити тег',
+            name_placeholder: 'Назва тегу',
+            color: 'Колір',
+            empty: 'Тегів ще немає',
+            search: 'Шукати теги',
+            no_results: 'Немає відповідних тегів',
+            rename: 'Перейменувати тег',
+        },
         side_panel: {
             view_all_options: 'Переглянути всі параметри…',
+            filters_section: {
+                title: 'Фільтри',
+                match_label: 'Збіг',
+                match: {
+                    any: 'Будь-який',
+                    all: 'Усі',
+                    none: 'Жоден',
+                    any_hint: 'Принаймні один вибраний тег',
+                    all_hint: 'Кожен вибраний тег',
+                    none_hint: 'Жоден із вибраних тегів',
+                },
+                summary: {
+                    no_constraint: 'Немає обмеження за тегами',
+                    selected: 'Вибрано: {{count}}',
+                },
+                clear: 'Очистити',
+                empty: 'У цій діаграмі немає тегів',
+                tag_color: 'Колір тегу',
+            },
             tables_section: {
                 tables: 'Таблиці',
                 add_table: 'Додати таблицю',

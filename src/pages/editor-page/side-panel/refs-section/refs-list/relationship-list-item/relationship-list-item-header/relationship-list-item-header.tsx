@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
-import { CircleDotDashed, Trash2, Check } from 'lucide-react';
+import { CircleDotDashed, Tags, Trash2, Check } from 'lucide-react';
+import { TagSelector } from '@/components/tag-selector/tag-selector';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/popover/popover';
 import { ListItemHeaderButton } from '../../../../list-item-header-button/list-item-header-button';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import { useReactFlow } from '@xyflow/react';
@@ -213,6 +219,27 @@ export const RelationshipListItemHeader: React.FC<
                                 <Trash2 />
                             </ListItemHeaderButton>
                         ) : null}
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <ListItemHeaderButton
+                                    asChild={false}
+                                    aria-label={t('tags.assign')}
+                                    onClick={(event) => event.stopPropagation()}
+                                >
+                                    <Tags />
+                                </ListItemHeaderButton>
+                            </PopoverTrigger>
+                            <PopoverContent
+                                className="w-auto p-2"
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                <TagSelector
+                                    targetType="relationship"
+                                    targetId={relationship.id}
+                                    disabled={readonly}
+                                />
+                            </PopoverContent>
+                        </Popover>
                         <div className="flex items-center md:hidden md:group-focus-within:flex md:group-hover:flex">
                             <ListItemHeaderButton
                                 onClick={handleFocusOnRelationship}

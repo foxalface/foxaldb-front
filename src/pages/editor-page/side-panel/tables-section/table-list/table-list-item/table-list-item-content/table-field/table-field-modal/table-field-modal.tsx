@@ -19,6 +19,7 @@ import {
 } from '@/components/popover/popover';
 import { Label } from '@/components/label/label';
 import { Checkbox } from '@/components/checkbox/checkbox';
+import { TagSelector } from '@/components/tag-selector/tag-selector';
 import { useTranslation } from 'react-i18next';
 import { Textarea } from '@/components/textarea/textarea';
 import { useDebounce } from '@/hooks/use-debounce';
@@ -176,7 +177,7 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                     <Ellipsis className="size-3.5" aria-hidden="true" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-52">
+            <PopoverContent className="w-72">
                 <div className="flex flex-col gap-2">
                     <div className="text-sm font-semibold">
                         {t(
@@ -511,6 +512,11 @@ export const TableFieldPopover: React.FC<TableFieldPopoverProps> = ({
                             />
                         </div>
                     </div>
+                    <TagSelector
+                        targetType="field"
+                        targetId={field.id}
+                        disabled={readonly}
+                    />
                     {conversationMenu.showConversationAction ? (
                         <Button
                             type="button"

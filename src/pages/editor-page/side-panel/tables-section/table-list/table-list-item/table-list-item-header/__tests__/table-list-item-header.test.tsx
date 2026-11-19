@@ -117,6 +117,22 @@ vi.mock('@/context/diagram-filter-context/use-diagram-filter', () => ({
     }),
 }));
 
+vi.mock('@/components/tag-selector/tag-selector', () => ({
+    TagSelector: ({
+        targetType,
+        targetId,
+    }: {
+        targetType: string;
+        targetId: string;
+    }) => (
+        <div
+            data-testid="tag-selector"
+            data-target-type={targetType}
+            data-target-id={targetId}
+        />
+    ),
+}));
+
 vi.mock('@dnd-kit/sortable', () => ({
     useSortable: () => ({
         listeners: {},
@@ -535,5 +551,48 @@ describe('TableListItemHeader legacy actions', () => {
         expect(
             screen.queryByRole('menuitem', { name: /Delete/i })
         ).not.toBeInTheDocument();
+    });
+});
+
+describe('TableListItemHeader tags', () => {
+    beforeEach(() => {
+        chartDBState.readonly = false;
+        conversationsState.isAvailable = false;
+        conversationMenuState.showConversationAction = false;
+    });
+
+    it('opens tag assignment for the table', async () => {
+        const user = await openMenu();
+
+        await user.click(screen.getByRole('menuitem', { name: 'Tags' }));
+
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-type',
+            'table'
+        );
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-id',
+            'table-1'
+        );
+    });
+
+    it('opens tag assignment for a view as a table target', async () => {
+        const user = await openMenu({
+            ...baseTable,
+            id: 'view-1',
+            name: 'Active clients',
+            isView: true,
+        });
+
+        await user.click(screen.getByRole('menuitem', { name: 'Tags' }));
+
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-type',
+            'table'
+        );
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-id',
+            'view-1'
+        );
     });
 });

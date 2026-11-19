@@ -53,6 +53,7 @@ export const gu: LanguageTranslation = {
             visuals: 'Visuals',
             activities: 'પ્રવૃત્તિ',
             share: 'શેર કરો',
+            filters: 'ફિલ્ટર',
         },
         menu: {
             actions: {
@@ -181,8 +182,38 @@ export const gu: LanguageTranslation = {
         copy_to_clipboard: 'ક્લિપબોર્ડમાં નકલ કરો',
         copied: 'નકલ થયું!',
 
+        tags: {
+            title: 'ટૅગ',
+            assign: 'ટૅગ સોંપો',
+            create: 'ટૅગ બનાવો',
+            name_placeholder: 'ટૅગનું નામ',
+            color: 'રંગ',
+            empty: 'હજી કોઈ ટૅગ નથી',
+            search: 'ટૅગ શોધો',
+            no_results: 'મેળ ખાતા ટૅગ નથી',
+            rename: 'ટૅગનું નામ બદલો',
+        },
         side_panel: {
             view_all_options: 'બધા વિકલ્પો જુઓ...',
+            filters_section: {
+                title: 'ફિલ્ટર',
+                match_label: 'મેળ',
+                match: {
+                    any: 'કોઈપણ',
+                    all: 'બધા',
+                    none: 'એકપણ નહીં',
+                    any_hint: 'પસંદ કરેલા ટૅગમાંથી ઓછામાં ઓછો એક',
+                    all_hint: 'પસંદ કરેલો દરેક ટૅગ',
+                    none_hint: 'પસંદ કરેલા ટૅગમાંથી એકપણ નહીં',
+                },
+                summary: {
+                    no_constraint: 'ટૅગની કોઈ મર્યાદા નથી',
+                    selected: '{{count}} પસંદ',
+                },
+                clear: 'સાફ કરો',
+                empty: 'આ આકૃતિમાં કોઈ ટૅગ નથી',
+                tag_color: 'ટૅગનો રંગ',
+            },
             tables_section: {
                 tables: 'ટેબલ્સ',
                 add_table: 'ટેબલ ઉમેરો',

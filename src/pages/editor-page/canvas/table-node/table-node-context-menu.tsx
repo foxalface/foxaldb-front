@@ -21,9 +21,11 @@ import {
     Pencil,
     Plus,
     SquareArrowOutUpRight,
+    Tags,
     Trash2,
     Workflow,
 } from 'lucide-react';
+import { TagSelector } from '@/components/tag-selector/tag-selector';
 import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCanvas } from '@/hooks/use-canvas';
@@ -267,6 +269,17 @@ export const TableNodeContextMenu: React.FC<
                     <Workflow className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     {t('table_node_context_menu.add_relationship')}
                 </ContextMenuItem>
+                <ContextMenuSub>
+                    <ContextMenuSubTrigger
+                        className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
+                    >
+                        <Tags className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
+                        {t('tags.title')}
+                    </ContextMenuSubTrigger>
+                    <ContextMenuSubContent className="w-auto p-2">
+                        <TagSelector targetType="table" targetId={table.id} />
+                    </ContextMenuSubContent>
+                </ContextMenuSub>
                 <ContextMenuSeparator />
                 <ContextMenuSub>
                     <ContextMenuSubTrigger

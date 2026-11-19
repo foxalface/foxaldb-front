@@ -318,4 +318,15 @@ describe('EditorSidebar share entry', () => {
 
         expect(layoutState.toggleSidebarSection).toHaveBeenCalledWith('share');
     });
+
+    it('toggles the filters panel on click', async () => {
+        const user = userEvent.setup();
+        renderSidebar();
+
+        await user.click(screen.getByRole('button', { name: 'Filters' }));
+
+        expect(layoutState.toggleSidebarSection).toHaveBeenCalledWith(
+            'filters'
+        );
+    });
 });

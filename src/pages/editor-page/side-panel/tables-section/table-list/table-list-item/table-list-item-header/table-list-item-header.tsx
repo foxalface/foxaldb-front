@@ -9,6 +9,7 @@ import {
     Check,
     Group,
     Copy,
+    Tags,
 } from 'lucide-react';
 import { SlBubbles } from 'react-icons/sl';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
@@ -27,8 +28,12 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from '@/components/dropdown-menu/dropdown-menu';
+import { TagSelector } from '@/components/tag-selector/tag-selector';
 import {
     SIDE_PANEL_ACTION_MENU_DESTRUCTIVE_ICON_CLASS,
     SIDE_PANEL_ACTION_MENU_ICON_CLASS,
@@ -282,6 +287,29 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                         )}
                                     </DropdownMenuItem>
                                 ) : null}
+                            </DropdownMenuGroup>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuGroup>
+                                <DropdownMenuSub>
+                                    <DropdownMenuSubTrigger
+                                        className={
+                                            SIDE_PANEL_ACTION_MENU_ITEM_CLASS
+                                        }
+                                    >
+                                        <Tags
+                                            className={
+                                                SIDE_PANEL_ACTION_MENU_ICON_CLASS
+                                            }
+                                        />
+                                        {t('tags.title')}
+                                    </DropdownMenuSubTrigger>
+                                    <DropdownMenuSubContent className="w-auto p-2">
+                                        <TagSelector
+                                            targetType="table"
+                                            targetId={table.id}
+                                        />
+                                    </DropdownMenuSubContent>
+                                </DropdownMenuSub>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>

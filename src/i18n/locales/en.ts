@@ -52,6 +52,7 @@ export const en = {
             visuals: 'Visuals',
             activities: 'Activity',
             share: 'Share',
+            filters: 'Filters',
         },
         menu: {
             actions: {
@@ -178,8 +179,38 @@ export const en = {
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
 
+        tags: {
+            title: 'Tags',
+            assign: 'Assign tags',
+            create: 'Create tag',
+            name_placeholder: 'Tag name',
+            color: 'Color',
+            empty: 'No tags yet',
+            search: 'Search tags',
+            no_results: 'No matching tags',
+            rename: 'Rename tag',
+        },
         side_panel: {
             view_all_options: 'View all Options...',
+            filters_section: {
+                title: 'Filters',
+                match_label: 'Match',
+                match: {
+                    any: 'Any',
+                    all: 'All',
+                    none: 'None',
+                    any_hint: 'At least one selected tag',
+                    all_hint: 'Every selected tag',
+                    none_hint: 'None of the selected tags',
+                },
+                summary: {
+                    no_constraint: 'No tag constraint',
+                    selected: '{{count}} selected',
+                },
+                clear: 'Clear',
+                empty: 'No tags on this diagram',
+                tag_color: 'Tag color',
+            },
             tables_section: {
                 tables: 'Tables',
                 add_table: 'Add Table',

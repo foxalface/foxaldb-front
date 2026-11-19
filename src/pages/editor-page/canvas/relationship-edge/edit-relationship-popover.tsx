@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { Trash2, ArrowLeftRight, CircleDotDashed } from 'lucide-react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { Trash2, ArrowLeftRight, CircleDotDashed, Tags } from 'lucide-react';
+import { TagSelector } from '@/components/tag-selector/tag-selector';
 import { SlBubbles } from 'react-icons/sl';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/button/button';
@@ -51,7 +52,8 @@ export const EditRelationshipPopover: React.FC<
     const popoverRef = useRef<HTMLDivElement>(null);
     const { closeRelationshipPopover } = useCanvas();
     const { selectSidebarSection, openRelationshipFromSidebar } = useLayout();
-    const { relationships } = useChartDB();
+    const { relationships, readonly } = useChartDB();
+    const [tagsOpen, setTagsOpen] = useState(false);
     const { t } = useTranslation();
     const conversationsAvailable = useConversationsAvailability();
     const relationshipName = useMemo(
@@ -189,6 +191,20 @@ export const EditRelationshipPopover: React.FC<
                 <Button
                     variant="ghost"
                     size="sm"
+                    className="size-7 p-0 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                    aria-pressed={tagsOpen}
+                    aria-label={t('tags.title')}
+                    onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setTagsOpen((open) => !open);
+                    }}
+                >
+                    <Tags className="!size-3.5" />
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="sm"
                     className="size-7 p-0 text-red-600 hover:bg-red-50 hover:text-red-700"
                     onClick={onDelete}
                     title="Delete relationship"
@@ -196,6 +212,15 @@ export const EditRelationshipPopover: React.FC<
                     <Trash2 className="!size-3.5" />
                 </Button>
             </div>
+            {tagsOpen ? (
+                <div className="mt-2 border-t pt-2">
+                    <TagSelector
+                        targetType="relationship"
+                        targetId={relationshipId}
+                        disabled={readonly}
+                    />
+                </div>
+            ) : null}
         </div>
     );
 };

@@ -8,6 +8,7 @@ import {
     SelectValue,
 } from '@/components/select/select';
 import { TablesSection } from './tables-section/tables-section';
+import { FiltersSection } from './filters-section/filters-section';
 import { useLayout } from '@/hooks/use-layout';
 import type { SidebarSection } from '@/context/layout-context/layout-context';
 import { useTranslation } from 'react-i18next';
@@ -75,6 +76,9 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
                                 <SelectItem value="tables">
                                     {t('side_panel.tables_section.tables')}
                                 </SelectItem>
+                                <SelectItem value="filters">
+                                    {t('side_panel.filters_section.title')}
+                                </SelectItem>
                                 <SelectItem value="refs">
                                     {t('side_panel.refs_section.refs')}
                                 </SelectItem>
@@ -117,6 +121,8 @@ export const SidePanel: React.FC<SidePanelProps> = () => {
             ) : null}
             {selectedSidebarSection === 'tables' ? (
                 <TablesSection />
+            ) : selectedSidebarSection === 'filters' ? (
+                <FiltersSection />
             ) : selectedSidebarSection === 'dbml' ? (
                 <Suspense
                     fallback={

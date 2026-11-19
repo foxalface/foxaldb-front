@@ -52,6 +52,7 @@ export const ne: LanguageTranslation = {
             visuals: 'Visuals',
             activities: 'गतिविधि',
             share: 'साझा गर्नुहोस्',
+            filters: 'फिल्टरहरू',
         },
         menu: {
             actions: {
@@ -179,8 +180,38 @@ export const ne: LanguageTranslation = {
         copy_to_clipboard: 'क्लिपबोर्डमा प्रतिलिपि गर्नुहोस्',
         copied: 'प्रतिलिपि गरियो!',
 
+        tags: {
+            title: 'ट्यागहरू',
+            assign: 'ट्याग तोक्नुहोस्',
+            create: 'ट्याग बनाउनुहोस्',
+            name_placeholder: 'ट्यागको नाम',
+            color: 'रङ',
+            empty: 'अहिलेसम्म ट्याग छैन',
+            search: 'ट्याग खोज्नुहोस्',
+            no_results: 'मिल्ने ट्याग छैन',
+            rename: 'ट्यागको नाम बदल्नुहोस्',
+        },
         side_panel: {
             view_all_options: 'सबै विकल्पहरू हेर्नुहोस्',
+            filters_section: {
+                title: 'फिल्टरहरू',
+                match_label: 'मिल्दो',
+                match: {
+                    any: 'कुनै एक',
+                    all: 'सबै',
+                    none: 'कुनै होइन',
+                    any_hint: 'छानिएका ट्यागमध्ये कम्तीमा एउटा',
+                    all_hint: 'छानिएको हरेक ट्याग',
+                    none_hint: 'छानिएका ट्यागमध्ये कुनै होइन',
+                },
+                summary: {
+                    no_constraint: 'ट्यागको कुनै सीमा छैन',
+                    selected: '{{count}} छानियो',
+                },
+                clear: 'खाली गर्नुहोस्',
+                empty: 'यो रेखाचित्रमा ट्याग छैन',
+                tag_color: 'ट्यागको रङ',
+            },
             tables_section: {
                 tables: 'तालिकाहरू',
                 add_table: 'तालिका थप्नुहोस्',

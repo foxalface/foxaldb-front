@@ -191,6 +191,12 @@ vi.mock('../tables-section/tables-section', () => ({
     TablesSection: () => <div data-testid="tables-section">TablesSection</div>,
 }));
 
+vi.mock('../filters-section/filters-section', () => ({
+    FiltersSection: () => (
+        <div data-testid="filters-section">FiltersSection</div>
+    ),
+}));
+
 vi.mock('../refs-section/refs-section', () => ({
     RefsSection: () => <div data-testid="refs-section">RefsSection</div>,
 }));
@@ -365,5 +371,22 @@ describe('SidePanel conversations routing', () => {
         render(<SidePanel />);
 
         expect(screen.getByTestId('share-section')).toBeInTheDocument();
+    });
+
+    it('includes Filters in the mobile selector', () => {
+        render(<SidePanel />);
+
+        expect(screen.getByRole('option', { name: 'Filters' })).toHaveAttribute(
+            'data-value',
+            'filters'
+        );
+    });
+
+    it('renders FiltersSection when selectedSidebarSection is filters', () => {
+        layoutState.selectedSidebarSection = 'filters';
+        render(<SidePanel />);
+
+        expect(screen.getByTestId('filters-section')).toBeInTheDocument();
+        expect(screen.queryByTestId('tables-section')).not.toBeInTheDocument();
     });
 });

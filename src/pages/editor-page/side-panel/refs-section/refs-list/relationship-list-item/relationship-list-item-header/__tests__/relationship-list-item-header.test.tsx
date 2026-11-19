@@ -28,6 +28,22 @@ const {
     deleteElements: vi.fn(),
 }));
 
+vi.mock('@/components/tag-selector/tag-selector', () => ({
+    TagSelector: ({
+        targetType,
+        targetId,
+    }: {
+        targetType: string;
+        targetId: string;
+    }) => (
+        <div
+            data-testid="tag-selector"
+            data-target-type={targetType}
+            data-target-id={targetId}
+        />
+    ),
+}));
+
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => ({
         updateRelationship: vi.fn(),
@@ -371,5 +387,21 @@ describe('RelationshipListItemHeader legacy actions', () => {
             '.md\\:hidden.md\\:group-focus-within\\:flex.md\\:group-hover\\:flex'
         );
         expect(hoverActions).not.toBeNull();
+    });
+
+    it('opens tag assignment for the relationship', async () => {
+        const user = userEvent.setup();
+        renderHeader();
+
+        await user.click(screen.getByRole('button', { name: 'Assign tags' }));
+
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-type',
+            'relationship'
+        );
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-id',
+            'rel-1'
+        );
     });
 });

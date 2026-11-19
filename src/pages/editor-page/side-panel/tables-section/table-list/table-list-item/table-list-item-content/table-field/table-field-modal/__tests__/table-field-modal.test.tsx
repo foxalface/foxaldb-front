@@ -29,6 +29,25 @@ const {
     removeField: vi.fn(),
 }));
 
+vi.mock('@/components/tag-selector/tag-selector', () => ({
+    TagSelector: ({
+        targetType,
+        targetId,
+        disabled,
+    }: {
+        targetType: string;
+        targetId: string;
+        disabled?: boolean;
+    }) => (
+        <div
+            data-testid="tag-selector"
+            data-target-type={targetType}
+            data-target-id={targetId}
+            data-disabled={disabled ? 'true' : 'false'}
+        />
+    ),
+}));
+
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => ({
         readonly: chartDBState.readonly,
@@ -349,6 +368,33 @@ describe('TableFieldPopover conversation entry', () => {
             conversationMenuState.openConversationAction
         ).toHaveBeenCalledTimes(1);
         expect(onOpenChange).toHaveBeenCalledWith(false);
+    });
+
+    it('exposes the field tag selector', async () => {
+        await openPopover();
+
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-type',
+            'field'
+        );
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-id',
+            'field-1'
+        );
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-disabled',
+            'false'
+        );
+    });
+
+    it('shows field tags as disabled for a readonly viewer', async () => {
+        chartDBState.readonly = true;
+        await openPopover();
+
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-disabled',
+            'true'
+        );
     });
 
     it('reflects the pending conversation label from the menu action hook', async () => {

@@ -54,6 +54,7 @@ export const es: LanguageTranslation = {
             visuals: 'Visuales',
             activities: 'Actividad',
             share: 'Compartir',
+            filters: 'Filtros',
         },
         menu: {
             actions: {
@@ -181,8 +182,38 @@ export const es: LanguageTranslation = {
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
 
+        tags: {
+            title: 'Etiquetas',
+            assign: 'Asignar etiquetas',
+            create: 'Crear etiqueta',
+            name_placeholder: 'Nombre de la etiqueta',
+            color: 'Color',
+            empty: 'Aún no hay etiquetas',
+            search: 'Buscar etiquetas',
+            no_results: 'Ninguna etiqueta coincide',
+            rename: 'Renombrar etiqueta',
+        },
         side_panel: {
             view_all_options: 'Ver todas las opciones...',
+            filters_section: {
+                title: 'Filtros',
+                match_label: 'Coincidencia',
+                match: {
+                    any: 'Alguna',
+                    all: 'Todas',
+                    none: 'Ninguna',
+                    any_hint: 'Al menos una etiqueta seleccionada',
+                    all_hint: 'Todas las etiquetas seleccionadas',
+                    none_hint: 'Ninguna de las etiquetas seleccionadas',
+                },
+                summary: {
+                    no_constraint: 'Sin restricción de etiquetas',
+                    selected: '{{count}} seleccionadas',
+                },
+                clear: 'Borrar',
+                empty: 'No hay etiquetas en este diagrama',
+                tag_color: 'Color de la etiqueta',
+            },
             tables_section: {
                 tables: 'Tablas',
                 add_table: 'Agregar Tabla',

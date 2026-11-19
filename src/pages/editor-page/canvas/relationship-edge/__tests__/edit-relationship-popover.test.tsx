@@ -31,6 +31,7 @@ const {
                     name: 'Users → Orders',
                 },
             ] as Pick<DBRelationship, 'id' | 'name'>[],
+            readonly: false,
         },
         conversationsState: {
             isAvailable: true,
@@ -67,9 +68,29 @@ vi.mock('react-i18next', () => ({
     }),
 }));
 
+vi.mock('@/components/tag-selector/tag-selector', () => ({
+    TagSelector: ({
+        targetType,
+        targetId,
+        disabled,
+    }: {
+        targetType: string;
+        targetId: string;
+        disabled?: boolean;
+    }) => (
+        <div
+            data-testid="tag-selector"
+            data-target-type={targetType}
+            data-target-id={targetId}
+            data-disabled={disabled ? 'true' : 'false'}
+        />
+    ),
+}));
+
 vi.mock('@/hooks/use-chartdb', () => ({
     useChartDB: () => ({
         relationships: chartDBState.relationships,
+        readonly: chartDBState.readonly,
     }),
 }));
 
@@ -258,5 +279,23 @@ describe('EditRelationshipPopover conversation action', () => {
 
         expect(onDelete).toHaveBeenCalledTimes(1);
         expect(openConversation).not.toHaveBeenCalled();
+    });
+
+    it('expands tag assignment for the relationship inside the popover', async () => {
+        const user = userEvent.setup();
+        renderPopover();
+
+        expect(screen.queryByTestId('tag-selector')).not.toBeInTheDocument();
+
+        await user.click(screen.getByRole('button', { name: 'tags.title' }));
+
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-type',
+            'relationship'
+        );
+        expect(screen.getByTestId('tag-selector')).toHaveAttribute(
+            'data-target-id',
+            'rel-1'
+        );
     });
 });

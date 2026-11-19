@@ -50,6 +50,7 @@ export const zh_CN: LanguageTranslation = {
             visuals: '视觉效果',
             activities: '活动',
             share: '分享',
+            filters: '筛选',
         },
         menu: {
             actions: {
@@ -173,8 +174,38 @@ export const zh_CN: LanguageTranslation = {
         copy_to_clipboard: '复制到剪切板',
         copied: '复制了！',
 
+        tags: {
+            title: '标签',
+            assign: '分配标签',
+            create: '创建标签',
+            name_placeholder: '标签名称',
+            color: '颜色',
+            empty: '还没有标签',
+            search: '搜索标签',
+            no_results: '没有匹配的标签',
+            rename: '重命名标签',
+        },
         side_panel: {
             view_all_options: '查看所有选项...',
+            filters_section: {
+                title: '筛选',
+                match_label: '匹配',
+                match: {
+                    any: '任一',
+                    all: '全部',
+                    none: '无',
+                    any_hint: '至少一个所选标签',
+                    all_hint: '每个所选标签',
+                    none_hint: '不含所选标签',
+                },
+                summary: {
+                    no_constraint: '没有标签约束',
+                    selected: '已选择 {{count}} 个',
+                },
+                clear: '清除',
+                empty: '此图中没有标签',
+                tag_color: '标签颜色',
+            },
             tables_section: {
                 tables: '表',
                 add_table: '添加表',

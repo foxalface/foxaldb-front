@@ -53,6 +53,7 @@ export const hr: LanguageTranslation = {
             visuals: 'Vizuali',
             activities: 'Aktivnost',
             share: 'Dijeli',
+            filters: 'Filtri',
         },
         menu: {
             actions: {
@@ -179,8 +180,38 @@ export const hr: LanguageTranslation = {
         copy_to_clipboard: 'Kopiraj u međuspremnik',
         copied: 'Kopirano!',
 
+        tags: {
+            title: 'Oznake',
+            assign: 'Dodijeli oznake',
+            create: 'Stvori oznaku',
+            name_placeholder: 'Naziv oznake',
+            color: 'Boja',
+            empty: 'Još nema oznaka',
+            search: 'Traži oznake',
+            no_results: 'Nema odgovarajućih oznaka',
+            rename: 'Preimenuj oznaku',
+        },
         side_panel: {
             view_all_options: 'Prikaži sve opcije...',
+            filters_section: {
+                title: 'Filtri',
+                match_label: 'Podudaranje',
+                match: {
+                    any: 'Bilo koja',
+                    all: 'Sve',
+                    none: 'Nijedna',
+                    any_hint: 'Barem jedna odabrana oznaka',
+                    all_hint: 'Svaka odabrana oznaka',
+                    none_hint: 'Nijedna od odabranih oznaka',
+                },
+                summary: {
+                    no_constraint: 'Nema ograničenja oznaka',
+                    selected: 'Odabrano: {{count}}',
+                },
+                clear: 'Očisti',
+                empty: 'Na ovom dijagramu nema oznaka',
+                tag_color: 'Boja oznake',
+            },
             tables_section: {
                 tables: 'Tablice',
                 add_table: 'Dodaj tablicu',

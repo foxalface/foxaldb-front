@@ -52,6 +52,7 @@ export const vi: LanguageTranslation = {
             visuals: 'Hình ảnh',
             activities: 'Hoạt động',
             share: 'Chia sẻ',
+            filters: 'Bộ lọc',
         },
         menu: {
             actions: {
@@ -179,8 +180,38 @@ export const vi: LanguageTranslation = {
         copy_to_clipboard: 'Sao chép vào bảng tạm',
         copied: 'Đã sao chép!',
 
+        tags: {
+            title: 'Thẻ',
+            assign: 'Gán thẻ',
+            create: 'Tạo thẻ',
+            name_placeholder: 'Tên thẻ',
+            color: 'Màu',
+            empty: 'Chưa có thẻ',
+            search: 'Tìm thẻ',
+            no_results: 'Không có thẻ phù hợp',
+            rename: 'Đổi tên thẻ',
+        },
         side_panel: {
             view_all_options: 'Xem tất cả tùy chọn...',
+            filters_section: {
+                title: 'Bộ lọc',
+                match_label: 'Khớp',
+                match: {
+                    any: 'Bất kỳ',
+                    all: 'Tất cả',
+                    none: 'Không',
+                    any_hint: 'Ít nhất một thẻ đã chọn',
+                    all_hint: 'Mọi thẻ đã chọn',
+                    none_hint: 'Không có thẻ đã chọn',
+                },
+                summary: {
+                    no_constraint: 'Không có ràng buộc thẻ',
+                    selected: 'Đã chọn {{count}}',
+                },
+                clear: 'Xóa',
+                empty: 'Sơ đồ này chưa có thẻ',
+                tag_color: 'Màu thẻ',
+            },
             tables_section: {
                 tables: 'Bảng',
                 add_table: 'Thêm bảng',

@@ -55,6 +55,7 @@ export const ja: LanguageTranslation = {
             visuals: 'ビジュアル',
             activities: 'アクティビティ',
             share: '共有',
+            filters: 'フィルター',
         },
         menu: {
             actions: {
@@ -185,8 +186,38 @@ export const ja: LanguageTranslation = {
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
 
+        tags: {
+            title: 'タグ',
+            assign: 'タグを割り当て',
+            create: 'タグを作成',
+            name_placeholder: 'タグ名',
+            color: '色',
+            empty: 'タグはまだありません',
+            search: 'タグを検索',
+            no_results: '一致するタグがありません',
+            rename: 'タグ名を変更',
+        },
         side_panel: {
             view_all_options: 'すべてのオプションを表示...',
+            filters_section: {
+                title: 'フィルター',
+                match_label: '一致',
+                match: {
+                    any: 'いずれか',
+                    all: 'すべて',
+                    none: 'なし',
+                    any_hint: '選択したタグの少なくとも1つ',
+                    all_hint: '選択したすべてのタグ',
+                    none_hint: '選択したタグを含まない',
+                },
+                summary: {
+                    no_constraint: 'タグの条件はありません',
+                    selected: '{{count}} 件選択',
+                },
+                clear: 'クリア',
+                empty: 'この図にタグはありません',
+                tag_color: 'タグの色',
+            },
             tables_section: {
                 tables: 'テーブル',
                 add_table: 'テーブルを追加',

@@ -51,6 +51,7 @@ export const ko_KR: LanguageTranslation = {
             visuals: '시각화',
             activities: '활동',
             share: '공유',
+            filters: '필터',
         },
         menu: {
             actions: {
@@ -178,8 +179,38 @@ export const ko_KR: LanguageTranslation = {
         copy_to_clipboard: '클립보드에 복사',
         copied: '복사됨!',
 
+        tags: {
+            title: '태그',
+            assign: '태그 지정',
+            create: '태그 만들기',
+            name_placeholder: '태그 이름',
+            color: '색',
+            empty: '아직 태그가 없습니다',
+            search: '태그 검색',
+            no_results: '일치하는 태그 없음',
+            rename: '태그 이름 변경',
+        },
         side_panel: {
             view_all_options: '전체 옵션 보기...',
+            filters_section: {
+                title: '필터',
+                match_label: '일치',
+                match: {
+                    any: '하나 이상',
+                    all: '모두',
+                    none: '없음',
+                    any_hint: '선택한 태그 중 하나 이상',
+                    all_hint: '선택한 모든 태그',
+                    none_hint: '선택한 태그가 없음',
+                },
+                summary: {
+                    no_constraint: '태그 조건 없음',
+                    selected: '{{count}}개 선택',
+                },
+                clear: '지우기',
+                empty: '이 다이어그램에 태그가 없습니다',
+                tag_color: '태그 색',
+            },
             tables_section: {
                 tables: '테이블',
                 add_table: '테이블 추가',

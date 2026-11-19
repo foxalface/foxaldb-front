@@ -39,6 +39,7 @@ import { DiffProvider } from '@/context/diff-context/diff-provider';
 import { TopNavbarMock } from './top-navbar/top-navbar-mock';
 import { VerifyEmailScreen } from '@/pages/auth/verify-email-screen';
 import { DiagramFilterProvider } from '@/context/diagram-filter-context/diagram-filter-provider';
+import { TagFilterProvider } from '@/context/tag-filter-context/tag-filter-provider';
 import { DiagramAccessProvider } from '@/context/diagram-access-context/diagram-access-provider';
 import { EditingBroadcastProvider } from '@/context/editing-broadcast-context/editing-broadcast-provider';
 import { RemoteEditingProvider } from '@/context/remote-editing-context/remote-editing-provider';
@@ -253,19 +254,21 @@ export const EditorPage: React.FC = () => (
                                           provider cycle.
                                         */}
                                             <LayoutProvider>
-                                                <DiagramFilterProvider>
-                                                    <HistoryProvider>
-                                                        <ReactFlowProvider>
-                                                            <CanvasProvider>
-                                                                <ExportImageProvider>
-                                                                    <AlertProvider>
-                                                                        <EditorPageComponent />
-                                                                    </AlertProvider>
-                                                                </ExportImageProvider>
-                                                            </CanvasProvider>
-                                                        </ReactFlowProvider>
-                                                    </HistoryProvider>
-                                                </DiagramFilterProvider>
+                                                <TagFilterProvider>
+                                                    <DiagramFilterProvider>
+                                                        <HistoryProvider>
+                                                            <ReactFlowProvider>
+                                                                <CanvasProvider>
+                                                                    <ExportImageProvider>
+                                                                        <AlertProvider>
+                                                                            <EditorPageComponent />
+                                                                        </AlertProvider>
+                                                                    </ExportImageProvider>
+                                                                </CanvasProvider>
+                                                            </ReactFlowProvider>
+                                                        </HistoryProvider>
+                                                    </DiagramFilterProvider>
+                                                </TagFilterProvider>
                                             </LayoutProvider>
                                         </ChartDBEditorProvider>
                                     </DiagramAccessProvider>

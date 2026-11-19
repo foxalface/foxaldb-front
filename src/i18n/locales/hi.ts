@@ -52,6 +52,7 @@ export const hi: LanguageTranslation = {
             visuals: 'Visuals',
             activities: 'गतिविधि',
             share: 'साझा करें',
+            filters: 'फ़िल्टर',
         },
         menu: {
             actions: {
@@ -180,8 +181,38 @@ export const hi: LanguageTranslation = {
         copy_to_clipboard: 'Copy to Clipboard',
         copied: 'Copied!',
 
+        tags: {
+            title: 'टैग',
+            assign: 'टैग असाइन करें',
+            create: 'टैग बनाएँ',
+            name_placeholder: 'टैग का नाम',
+            color: 'रंग',
+            empty: 'अभी कोई टैग नहीं',
+            search: 'टैग खोजें',
+            no_results: 'कोई मेल खाता टैग नहीं',
+            rename: 'टैग का नाम बदलें',
+        },
         side_panel: {
             view_all_options: 'सभी विकल्प देखें...',
+            filters_section: {
+                title: 'फ़िल्टर',
+                match_label: 'मिलान',
+                match: {
+                    any: 'कोई भी',
+                    all: 'सभी',
+                    none: 'कोई नहीं',
+                    any_hint: 'कम से कम एक चुना हुआ टैग',
+                    all_hint: 'हर चुना हुआ टैग',
+                    none_hint: 'चुने हुए टैग में से कोई नहीं',
+                },
+                summary: {
+                    no_constraint: 'कोई टैग प्रतिबंध नहीं',
+                    selected: '{{count}} चुने गए',
+                },
+                clear: 'साफ़ करें',
+                empty: 'इस आरेख पर कोई टैग नहीं',
+                tag_color: 'टैग का रंग',
+            },
             tables_section: {
                 tables: 'तालिकाएँ',
                 add_table: 'तालिका जोड़ें',

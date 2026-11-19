@@ -52,6 +52,7 @@ export const tr: LanguageTranslation = {
             visuals: 'Görseller',
             activities: 'Etkinlik',
             share: 'Paylaş',
+            filters: 'Filtreler',
         },
         menu: {
             actions: {
@@ -178,8 +179,38 @@ export const tr: LanguageTranslation = {
         show_less: 'Daha Az Göster',
         copy_to_clipboard: 'Panoya Kopyala',
         copied: 'Kopyalandı!',
+        tags: {
+            title: 'Etiketler',
+            assign: 'Etiket ata',
+            create: 'Etiket oluştur',
+            name_placeholder: 'Etiket adı',
+            color: 'Renk',
+            empty: 'Henüz etiket yok',
+            search: 'Etiket ara',
+            no_results: 'Eşleşen etiket yok',
+            rename: 'Etiketi yeniden adlandır',
+        },
         side_panel: {
             view_all_options: 'Tüm Seçenekleri Gör...',
+            filters_section: {
+                title: 'Filtreler',
+                match_label: 'Eşleşme',
+                match: {
+                    any: 'Herhangi',
+                    all: 'Tümü',
+                    none: 'Hiçbiri',
+                    any_hint: 'Seçili etiketlerden en az biri',
+                    all_hint: 'Seçili etiketlerin tümü',
+                    none_hint: 'Seçili etiketlerden hiçbiri',
+                },
+                summary: {
+                    no_constraint: 'Etiket kısıtı yok',
+                    selected: '{{count}} seçili',
+                },
+                clear: 'Temizle',
+                empty: 'Bu diyagramda etiket yok',
+                tag_color: 'Etiket rengi',
+            },
             tables_section: {
                 tables: 'Tablolar',
                 add_table: 'Tablo Ekle',

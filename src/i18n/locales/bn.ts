@@ -52,6 +52,7 @@ export const bn: LanguageTranslation = {
             visuals: 'ভিজ্যুয়াল',
             activities: 'কার্যকলাপ',
             share: 'শেয়ার',
+            filters: 'ফিল্টার',
         },
         menu: {
             actions: {
@@ -180,8 +181,38 @@ export const bn: LanguageTranslation = {
         copy_to_clipboard: 'ক্লিপবোর্ডে অনুলিপি করুন',
         copied: 'অনুলিপি সম্পন্ন!',
 
+        tags: {
+            title: 'ট্যাগ',
+            assign: 'ট্যাগ বরাদ্দ করুন',
+            create: 'ট্যাগ তৈরি করুন',
+            name_placeholder: 'ট্যাগের নাম',
+            color: 'রঙ',
+            empty: 'এখনও কোনো ট্যাগ নেই',
+            search: 'ট্যাগ খুঁজুন',
+            no_results: 'মিল থাকা কোনো ট্যাগ নেই',
+            rename: 'ট্যাগের নাম বদলান',
+        },
         side_panel: {
             view_all_options: 'সমস্ত বিকল্প দেখুন...',
+            filters_section: {
+                title: 'ফিল্টার',
+                match_label: 'মিল',
+                match: {
+                    any: 'যেকোনো',
+                    all: 'সব',
+                    none: 'কোনোটিই নয়',
+                    any_hint: 'নির্বাচিত ট্যাগের অন্তত একটি',
+                    all_hint: 'নির্বাচিত প্রতিটি ট্যাগ',
+                    none_hint: 'নির্বাচিত ট্যাগের কোনোটিই নয়',
+                },
+                summary: {
+                    no_constraint: 'কোনো ট্যাগ সীমাবদ্ধতা নেই',
+                    selected: '{{count}}টি নির্বাচিত',
+                },
+                clear: 'মুছুন',
+                empty: 'এই ডায়াগ্রামে কোনো ট্যাগ নেই',
+                tag_color: 'ট্যাগের রঙ',
+            },
             tables_section: {
                 tables: 'টেবিল',
                 add_table: 'টেবিল যোগ করুন',

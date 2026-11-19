@@ -54,6 +54,7 @@ export const ru: LanguageTranslation = {
             visuals: 'Визуальные элементы',
             activities: 'Активность',
             share: 'Поделиться',
+            filters: 'Фильтры',
         },
         menu: {
             actions: {
@@ -179,8 +180,38 @@ export const ru: LanguageTranslation = {
         show_more: 'Показать больше',
         show_less: 'Показать меньше',
 
+        tags: {
+            title: 'Теги',
+            assign: 'Назначить теги',
+            create: 'Создать тег',
+            name_placeholder: 'Название тега',
+            color: 'Цвет',
+            empty: 'Тегов пока нет',
+            search: 'Искать теги',
+            no_results: 'Нет подходящих тегов',
+            rename: 'Переименовать тег',
+        },
         side_panel: {
             view_all_options: 'Просмотреть все варианты...',
+            filters_section: {
+                title: 'Фильтры',
+                match_label: 'Совпадение',
+                match: {
+                    any: 'Любой',
+                    all: 'Все',
+                    none: 'Ни один',
+                    any_hint: 'Хотя бы один выбранный тег',
+                    all_hint: 'Каждый выбранный тег',
+                    none_hint: 'Ни один из выбранных тегов',
+                },
+                summary: {
+                    no_constraint: 'Нет ограничения по тегам',
+                    selected: 'Выбрано: {{count}}',
+                },
+                clear: 'Очистить',
+                empty: 'В этой диаграмме нет тегов',
+                tag_color: 'Цвет тега',
+            },
             tables_section: {
                 tables: 'Таблицы',
                 add_table: 'Добавить таблицу',

@@ -53,6 +53,7 @@ export const te: LanguageTranslation = {
             visuals: 'Visuals',
             activities: 'కార్యకలాపం',
             share: 'షేర్ చేయండి',
+            filters: 'ఫిల్టర్లు',
         },
         menu: {
             actions: {
@@ -180,8 +181,38 @@ export const te: LanguageTranslation = {
         copy_to_clipboard: 'క్లిప్బోర్డుకు కాపీ చేయండి',
         copied: 'కాపీ చేయబడింది!',
 
+        tags: {
+            title: 'ట్యాగ్‌లు',
+            assign: 'ట్యాగ్‌లను కేటాయించండి',
+            create: 'ట్యాగ్ సృష్టించండి',
+            name_placeholder: 'ట్యాగ్ పేరు',
+            color: 'రంగు',
+            empty: 'ఇంకా ట్యాగ్‌లు లేవు',
+            search: 'ట్యాగ్‌లను వెతకండి',
+            no_results: 'సరిపోలే ట్యాగ్‌లు లేవు',
+            rename: 'ట్యాగ్ పేరు మార్చండి',
+        },
         side_panel: {
             view_all_options: 'అన్ని ఎంపికలను చూడండి...',
+            filters_section: {
+                title: 'ఫిల్టర్లు',
+                match_label: 'సరిపోలిక',
+                match: {
+                    any: 'ఏదైనా',
+                    all: 'అన్నీ',
+                    none: 'ఏవీ కావు',
+                    any_hint: 'ఎంచుకున్న ట్యాగ్‌లలో కనీసం ఒకటి',
+                    all_hint: 'ఎంచుకున్న ప్రతి ట్యాగ్',
+                    none_hint: 'ఎంచుకున్న ట్యాగ్‌లు ఏవీ కావు',
+                },
+                summary: {
+                    no_constraint: 'ట్యాగ్ పరిమితి లేదు',
+                    selected: '{{count}} ఎంచుకున్నారు',
+                },
+                clear: 'తీసివేయండి',
+                empty: 'ఈ రేఖాచిత్రంలో ట్యాగ్‌లు లేవు',
+                tag_color: 'ట్యాగ్ రంగు',
+            },
             tables_section: {
                 tables: 'పట్టికలు',
                 add_table: 'పట్టికను జోడించు',

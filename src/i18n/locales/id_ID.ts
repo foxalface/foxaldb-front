@@ -53,6 +53,7 @@ export const id_ID: LanguageTranslation = {
             visuals: 'Visual',
             activities: 'Aktivitas',
             share: 'Bagikan',
+            filters: 'Filter',
         },
         menu: {
             actions: {
@@ -180,8 +181,38 @@ export const id_ID: LanguageTranslation = {
         copy_to_clipboard: 'Salin ke Clipboard',
         copied: 'Tersalin!',
 
+        tags: {
+            title: 'Tag',
+            assign: 'Tetapkan tag',
+            create: 'Buat tag',
+            name_placeholder: 'Nama tag',
+            color: 'Warna',
+            empty: 'Belum ada tag',
+            search: 'Cari tag',
+            no_results: 'Tidak ada tag yang cocok',
+            rename: 'Ubah nama tag',
+        },
         side_panel: {
             view_all_options: 'Tampilkan Semua Pilihan...',
+            filters_section: {
+                title: 'Filter',
+                match_label: 'Kecocokan',
+                match: {
+                    any: 'Salah satu',
+                    all: 'Semua',
+                    none: 'Tidak ada',
+                    any_hint: 'Setidaknya satu tag yang dipilih',
+                    all_hint: 'Setiap tag yang dipilih',
+                    none_hint: 'Tidak satu pun tag yang dipilih',
+                },
+                summary: {
+                    no_constraint: 'Tidak ada batasan tag',
+                    selected: '{{count}} dipilih',
+                },
+                clear: 'Hapus',
+                empty: 'Tidak ada tag pada diagram ini',
+                tag_color: 'Warna tag',
+            },
             tables_section: {
                 tables: 'Tabel',
                 add_table: 'Tambah Tabel',

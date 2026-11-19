@@ -54,6 +54,7 @@ export const pt_BR: LanguageTranslation = {
             visuals: 'Visuais',
             activities: 'Atividade',
             share: 'Compartilhar',
+            filters: 'Filtros',
         },
         menu: {
             actions: {
@@ -181,8 +182,38 @@ export const pt_BR: LanguageTranslation = {
         copy_to_clipboard: 'Copiar para a Área de Transferência',
         copied: 'Copiado!',
 
+        tags: {
+            title: 'Tags',
+            assign: 'Atribuir tags',
+            create: 'Criar tag',
+            name_placeholder: 'Nome da tag',
+            color: 'Cor',
+            empty: 'Nenhuma tag ainda',
+            search: 'Buscar tags',
+            no_results: 'Nenhuma tag correspondente',
+            rename: 'Renomear tag',
+        },
         side_panel: {
             view_all_options: 'Ver todas as Opções...',
+            filters_section: {
+                title: 'Filtros',
+                match_label: 'Correspondência',
+                match: {
+                    any: 'Qualquer',
+                    all: 'Todas',
+                    none: 'Nenhuma',
+                    any_hint: 'Pelo menos uma tag selecionada',
+                    all_hint: 'Todas as tags selecionadas',
+                    none_hint: 'Nenhuma das tags selecionadas',
+                },
+                summary: {
+                    no_constraint: 'Nenhuma restrição de tag',
+                    selected: '{{count}} selecionadas',
+                },
+                clear: 'Limpar',
+                empty: 'Nenhuma tag neste diagrama',
+                tag_color: 'Cor da tag',
+            },
             tables_section: {
                 tables: 'Tabelas',
                 add_table: 'Adicionar Tabela',

@@ -50,6 +50,7 @@ export const zh_TW: LanguageTranslation = {
             visuals: '視覺效果',
             activities: '活動',
             share: '分享',
+            filters: '篩選',
         },
         menu: {
             actions: {
@@ -173,8 +174,38 @@ export const zh_TW: LanguageTranslation = {
         copy_to_clipboard: '複製到剪貼簿',
         copied: '已複製！',
 
+        tags: {
+            title: '標籤',
+            assign: '指派標籤',
+            create: '建立標籤',
+            name_placeholder: '標籤名稱',
+            color: '顏色',
+            empty: '還沒有標籤',
+            search: '搜尋標籤',
+            no_results: '沒有相符的標籤',
+            rename: '重新命名標籤',
+        },
         side_panel: {
             view_all_options: '顯示所有選項...',
+            filters_section: {
+                title: '篩選',
+                match_label: '比對',
+                match: {
+                    any: '任一',
+                    all: '全部',
+                    none: '無',
+                    any_hint: '至少一個所選標籤',
+                    all_hint: '每一個所選標籤',
+                    none_hint: '不含所選標籤',
+                },
+                summary: {
+                    no_constraint: '沒有標籤條件',
+                    selected: '已選取 {{count}} 個',
+                },
+                clear: '清除',
+                empty: '此圖中沒有標籤',
+                tag_color: '標籤顏色',
+            },
             tables_section: {
                 tables: '表格',
                 add_table: '新增表格',

@@ -53,6 +53,7 @@ export const mr: LanguageTranslation = {
             visuals: 'Visuals',
             activities: 'क्रियाकलाप',
             share: 'शेअर करा',
+            filters: 'फिल्टर',
         },
         menu: {
             actions: {
@@ -182,8 +183,38 @@ export const mr: LanguageTranslation = {
         // TODO: Add translations
         copied: 'Copied!',
 
+        tags: {
+            title: 'टॅग',
+            assign: 'टॅग नियुक्त करा',
+            create: 'टॅग तयार करा',
+            name_placeholder: 'टॅगचे नाव',
+            color: 'रंग',
+            empty: 'अजून टॅग नाहीत',
+            search: 'टॅग शोधा',
+            no_results: 'जुळणारे टॅग नाहीत',
+            rename: 'टॅगचे नाव बदला',
+        },
         side_panel: {
             view_all_options: 'सर्व पर्याय पहा...',
+            filters_section: {
+                title: 'फिल्टर',
+                match_label: 'जुळणी',
+                match: {
+                    any: 'कोणतेही',
+                    all: 'सर्व',
+                    none: 'एकही नाही',
+                    any_hint: 'निवडलेल्या टॅगपैकी किमान एक',
+                    all_hint: 'निवडलेला प्रत्येक टॅग',
+                    none_hint: 'निवडलेल्या टॅगपैकी एकही नाही',
+                },
+                summary: {
+                    no_constraint: 'टॅग मर्यादा नाही',
+                    selected: '{{count}} निवडले',
+                },
+                clear: 'साफ करा',
+                empty: 'या आकृतीवर टॅग नाहीत',
+                tag_color: 'टॅगचा रंग',
+            },
             tables_section: {
                 tables: 'टेबल्स',
                 add_table: 'टेबल जोडा',
