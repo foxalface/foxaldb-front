@@ -13,8 +13,7 @@ const resolvedSchemaName = (
 ): string | undefined => schema ?? defaultSchema ?? undefined;
 
 /**
- * Schema options use the same identity as the legacy schema filter:
- * `schemaNameToSchemaId(table.schema ?? default schema)`.
+ * Schema options use `schemaNameToSchemaId(table.schema ?? default schema)`.
  * A missing schema with no default is not an option.
  */
 export const listDiagramSchemaOptions = (

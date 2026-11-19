@@ -221,6 +221,48 @@ describe('ExportImageProvider visual capture', () => {
         ]);
     });
 
+    it.each(['png', 'jpg', 'svg'] as const)(
+        'frames complete-diagram %s bounds on visible nodes only',
+        async (format) => {
+            getNodes.mockReturnValue([
+                { id: 'users', type: 'table', hidden: false },
+                { id: 'orders', type: 'table', hidden: true },
+                { id: 'area-1', type: 'area', hidden: true },
+                { id: 'temp', type: 'temp-cursor', hidden: false },
+            ]);
+
+            await mountExport(format, {
+                ...defaultOptions,
+                extent: 'diagram',
+            });
+
+            expect(getNodesBounds).toHaveBeenCalledWith([
+                { id: 'users', type: 'table', hidden: false },
+            ]);
+        }
+    );
+
+    it.each(['png', 'jpg', 'svg'] as const)(
+        'rejects a complete-diagram %s export when every node is hidden',
+        async (format) => {
+            getNodes.mockReturnValue([
+                { id: 'orders', type: 'table', hidden: true },
+                { id: 'area-1', type: 'area', hidden: true },
+            ]);
+
+            const error = await mountExport(format, {
+                ...defaultOptions,
+                extent: 'diagram',
+            });
+
+            expect(error).toBeInstanceOf(VisualExportError);
+            expect((error as VisualExportError).code).toBe('empty_diagram');
+            expect(toPng).not.toHaveBeenCalled();
+            expect(toJpeg).not.toHaveBeenCalled();
+            expect(toSvg).not.toHaveBeenCalled();
+        }
+    );
+
     it('toggles capture state and restores it in finally', async () => {
         await mountExport('png');
 

@@ -187,7 +187,7 @@ export const TagSelector: React.FC<TagSelectorProps> = ({
                                         type="button"
                                         className="size-3.5 shrink-0 rounded-sm border border-muted"
                                         style={{ backgroundColor: tag.color }}
-                                        aria-label={t('tags.color')}
+                                        aria-label={`${tag.name} ${t('tags.color')}`}
                                         disabled={disabled}
                                         onClick={() =>
                                             setOpenColorId((current) =>
@@ -348,6 +348,7 @@ const ColorSwatches: React.FC<{
                 )}
                 style={{ backgroundColor: color }}
                 aria-label={color}
+                aria-pressed={selected === color}
                 onClick={() => onSelect(color)}
             >
                 {selected === color ? (

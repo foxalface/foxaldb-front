@@ -286,7 +286,7 @@ describe('TagSelector', () => {
         const user = userEvent.setup();
         renderSelector();
 
-        await user.click(screen.getAllByRole('button', { name: 'Color' })[0]);
+        await user.click(screen.getByRole('button', { name: 'Backend Color' }));
         await user.click(screen.getByRole('button', { name: '#42e0c0' }));
 
         expect(updateTag).toHaveBeenCalledWith('tag-backend', {
