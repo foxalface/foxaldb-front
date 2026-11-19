@@ -1253,6 +1253,12 @@ export const ko_KR: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: '내보내기 범위',
+                all: '전체 다이어그램',
+                tags: '태그별',
+                hint: '태그로 테이블을 포함합니다. 선택하지 않으면 다이어그램 전체를 내보냅니다.',
+            },
             title: '보내기',
             description: '다이어그램을보낼 형식을 선택하세요.',
             back: '뒤로',

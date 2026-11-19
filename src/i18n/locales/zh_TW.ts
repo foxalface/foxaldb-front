@@ -1169,6 +1169,12 @@ export const zh_TW: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: '匯出範圍',
+                all: '整個圖表',
+                tags: '依標籤',
+                hint: '依標籤包含資料表。未選取標籤時匯出整個圖表。',
+            },
             title: '匯出',
             description: '選擇要匯出圖表的格式。',
             back: '返回',

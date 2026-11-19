@@ -1254,6 +1254,12 @@ export const id_ID: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'Cakupan ekspor',
+                all: 'Seluruh diagram',
+                tags: 'Menurut tag',
+                hint: 'Sertakan tabel berdasarkan tag-nya. Pilihan kosong mengekspor seluruh diagram.',
+            },
             title: 'Ekspor',
             description: 'Pilih format untuk mengekspor diagram Anda.',
             back: 'Kembali',

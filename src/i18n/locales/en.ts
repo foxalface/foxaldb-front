@@ -1246,6 +1246,12 @@ export const en = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'Export scope',
+                all: 'Whole diagram',
+                tags: 'By tags',
+                hint: 'Include tables by their tags. An empty selection exports the whole diagram.',
+            },
             title: 'Export',
             description: 'Choose a format to export your diagram.',
             back: 'Back',

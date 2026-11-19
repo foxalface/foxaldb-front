@@ -6,6 +6,11 @@ import { ExportWizardDialog } from '../export-wizard-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { exportBaseSQL } from '@/lib/data/sql-export/export-sql-script';
 import { downloadBlob } from '@/lib/download-blob';
+import {
+    chooseByTags,
+    exportedTableNames,
+    structuralExportFixture,
+} from './structural-export-wizard-fixture';
 
 const dialogMocks = {
     closeExportWizardDialog: vi.fn(),
@@ -28,7 +33,12 @@ const chartDbState = {
     },
 };
 
-const filterState = {
+const filterState: {
+    filter: {
+        tableIds: string[];
+        schemas: string[];
+    };
+} = {
     filter: {
         tableIds: [],
         schemas: [],
@@ -129,6 +139,10 @@ describe('ExportWizardDialog SQL branch', () => {
             relationships: [],
         };
         mockedExportBaseSQL.mockResolvedValue('CREATE TABLE users ();');
+        filterState.filter = {
+            tableIds: [],
+            schemas: [],
+        };
     });
 
     it('opens the SQL target step from the target picker without the legacy dialog', async () => {
@@ -241,11 +255,72 @@ describe('ExportWizardDialog SQL branch', () => {
         ).toBeInTheDocument();
         expect(mockedExportBaseSQL).toHaveBeenCalledTimes(1);
     });
+
+    it('exports the whole diagram for By tags with an empty selection', async () => {
+        const fixture = structuralExportFixture();
+        chartDbState.currentDiagram =
+            fixture as unknown as typeof chartDbState.currentDiagram;
+        filterState.filter = {
+            tableIds: ['orders'],
+            schemas: [],
+        };
+
+        await openSqlBranch();
+        await userEvent.click(screen.getByText('PostgreSQL'));
+        await userEvent.click(
+            screen.getByTestId('export-structural-scope-tags')
+        );
+
+        await waitFor(() => {
+            expect(mockedExportBaseSQL.mock.calls.at(-1)?.[0].diagram).toBe(
+                fixture
+            );
+        });
+    });
+
+    it('projects By tags before SQL generation and ignores the legacy table filter', async () => {
+        const fixture = structuralExportFixture();
+        chartDbState.currentDiagram =
+            fixture as unknown as typeof chartDbState.currentDiagram;
+        filterState.filter = {
+            tableIds: ['orders'],
+            schemas: [],
+        };
+
+        await openSqlBranch();
+        await userEvent.click(screen.getByText('PostgreSQL'));
+        await chooseByTags(['Red']);
+
+        await waitFor(() => {
+            const diagram = mockedExportBaseSQL.mock.calls.at(-1)?.[0].diagram;
+            expect(diagram).toBeDefined();
+            if (!diagram) {
+                return;
+            }
+            expect(exportedTableNames(diagram)).toEqual(['users']);
+            expect(diagram.relationships).toEqual([]);
+            expect(
+                diagram.tables?.[0]?.fields.map((field) => field.name)
+            ).toEqual(['id', 'email']);
+        });
+    });
 });
 
 describe('ExportWizardDialog SQL branch by source database', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        chartDbState.databaseType = DatabaseType.POSTGRESQL;
+        chartDbState.currentDiagram = {
+            id: 'guest-diagram-1',
+            name: 'My Diagram',
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [],
+            relationships: [],
+        };
+        filterState.filter = {
+            tableIds: [],
+            schemas: [],
+        };
         mockedExportBaseSQL.mockResolvedValue('SELECT 1;');
     });
 

@@ -17,6 +17,11 @@ import {
     typeRef,
 } from './prisma-test-helpers';
 import type { Diagram } from '@/lib/domain/diagram';
+import {
+    chooseByTags,
+    exportedTableNames,
+    structuralExportFixture,
+} from './structural-export-wizard-fixture';
 import { DEFAULT_EF_CORE_DB_CONTEXT_NAME } from '@/lib/export/ef-core-export-constants';
 
 const { exportEfCoreProjectMock } = vi.hoisted(() => ({
@@ -647,6 +652,23 @@ describe('ExportWizardDialog EF Core branch', () => {
         ).toHaveTextContent(
             'export_wizard.ef_core.result_step.error_unsafe_path'
         );
+    });
+
+    it('sends the By tags projection to the EF Core exporter', async () => {
+        chartDbState.currentDiagram = structuralExportFixture();
+
+        await openEfCoreBranch();
+        await chooseByTags(['Red']);
+
+        await waitFor(() => {
+            const diagram = exportEfCoreProjectMock.mock.calls.at(-1)?.[0]
+                .diagram as Diagram;
+            expect(exportedTableNames(diagram)).toEqual(['users']);
+            expect(diagram.relationships).toEqual([]);
+            expect(
+                diagram.tables?.[0]?.fields.map((field) => field.name)
+            ).toEqual(['id', 'email']);
+        });
     });
 });
 

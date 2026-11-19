@@ -1265,6 +1265,12 @@ export const pt_BR: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'Escopo da exportação',
+                all: 'Diagrama inteiro',
+                tags: 'Por tags',
+                hint: 'Inclua tabelas pelas suas tags. Uma seleção vazia exporta o diagrama inteiro.',
+            },
             title: 'Exportar',
             description: 'Escolha um formato para exportar seu diagrama.',
             back: 'Voltar',

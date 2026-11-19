@@ -1288,6 +1288,12 @@ export const de: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'Exportumfang',
+                all: 'Gesamtes Diagramm',
+                tags: 'Nach Tags',
+                hint: 'Tabellen anhand ihrer Tags einschließen. Eine leere Auswahl exportiert das gesamte Diagramm.',
+            },
             title: 'Exportieren',
             description:
                 'Wählen Sie ein Format zum Exportieren Ihres Diagramms.',

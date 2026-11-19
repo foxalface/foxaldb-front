@@ -1,0 +1,193 @@
+import { describe, expect, it } from 'vitest';
+import { DatabaseType } from '@/lib/domain/database-type';
+import type { DBRelationship } from '@/lib/domain/db-relationship';
+import type { DBTable } from '@/lib/domain/db-table';
+import type { Diagram } from '@/lib/domain/diagram';
+import type { DiagramTagAssignment } from '@/lib/domain/diagram-tag';
+import { projectDiagramForStructuralExport } from '@/lib/domain/structural-export-scope';
+import { exportBaseSQL } from '../export-sql-script';
+
+const createdAt = new Date('2024-01-01T00:00:00.000Z');
+
+const field = (
+    id: string,
+    name: string,
+    primaryKey = false
+): DBTable['fields'][number] => ({
+    id,
+    name,
+    type: { id: 'bigint', name: 'bigint' },
+    primaryKey,
+    unique: primaryKey,
+    nullable: !primaryKey,
+    createdAt: 1,
+});
+
+const table = (overrides: Partial<DBTable>): DBTable => ({
+    id: overrides.id ?? 'table',
+    name: overrides.name ?? 'table',
+    schema: 'public',
+    x: 0,
+    y: 0,
+    fields: [],
+    indexes: [],
+    color: '#8eb7ff',
+    isView: false,
+    createdAt: 1,
+    ...overrides,
+});
+
+const assignment = (
+    tagId: string,
+    targetType: DiagramTagAssignment['targetType'],
+    targetId: string
+): DiagramTagAssignment => ({
+    id: `${targetType}-${targetId}-${tagId}`,
+    tagId,
+    targetType,
+    targetId,
+});
+
+const buildDiagram = (databaseType: DatabaseType): Diagram => {
+    const users = table({
+        id: 'users',
+        name: 'users',
+        fields: [field('users-id', 'id', true), field('users-email', 'email')],
+        indexes: [
+            {
+                id: 'users-pk',
+                name: '',
+                fieldIds: ['users-id'],
+                unique: true,
+                isPrimaryKey: true,
+                createdAt: 1,
+            },
+        ],
+    });
+    const orders = table({
+        id: 'orders',
+        name: 'orders',
+        fields: [
+            field('orders-id', 'id', true),
+            field('orders-user', 'user_id'),
+            field('orders-note', 'note'),
+        ],
+        indexes: [
+            {
+                id: 'orders-pk',
+                name: '',
+                fieldIds: ['orders-id'],
+                unique: true,
+                isPrimaryKey: true,
+                createdAt: 1,
+            },
+        ],
+    });
+    const relationship: DBRelationship = {
+        id: 'rel-users-orders',
+        name: 'users_orders_fk',
+        sourceSchema: 'public',
+        sourceTableId: 'users',
+        targetSchema: 'public',
+        targetTableId: 'orders',
+        sourceFieldId: 'users-id',
+        targetFieldId: 'orders-user',
+        sourceCardinality: 'one',
+        targetCardinality: 'many',
+        createdAt: 1,
+    };
+
+    return {
+        id: 'diagram-1',
+        name: 'Catalog',
+        databaseType,
+        tables: [users, orders],
+        relationships: [relationship],
+        tags: [
+            { id: 'red', name: 'Red', color: '#ff0000' },
+            { id: 'blue', name: 'Blue', color: '#0000ff' },
+        ],
+        tagAssignments: [
+            assignment('red', 'table', 'users'),
+            assignment('red', 'field', 'orders-note'),
+            assignment('red', 'relationship', 'rel-users-orders'),
+        ],
+        createdAt,
+        updatedAt: createdAt,
+    };
+};
+
+const sameDialectTargets = [
+    DatabaseType.POSTGRESQL,
+    DatabaseType.MYSQL,
+    DatabaseType.MARIADB,
+    DatabaseType.SQLITE,
+    DatabaseType.SQL_SERVER,
+] as const;
+
+describe('SQL export consumes the structural projection', () => {
+    it.each(sameDialectTargets)(
+        'exports the projected tables for %s',
+        async (databaseType) => {
+            const diagram = buildDiagram(databaseType);
+            const projected = projectDiagramForStructuralExport(diagram, {
+                kind: 'tags',
+                selectedTagIds: ['red'],
+                matchMode: 'any',
+            });
+            const sql = await exportBaseSQL({
+                diagram: projected,
+                targetDatabaseType: databaseType,
+            });
+
+            expect(projected.tables?.map((item) => item.name)).toEqual([
+                'users',
+            ]);
+            expect(sql).toContain('users');
+            expect(sql).toContain('email');
+            expect(sql).not.toContain('orders');
+            expect(sql).not.toContain('user_id');
+            expect(sql.toLowerCase()).not.toContain('foreign key');
+        }
+    );
+
+    it('feeds the same projected diagram to a PostgreSQL to MySQL cross-dialect export', async () => {
+        const diagram = buildDiagram(DatabaseType.POSTGRESQL);
+        const projected = projectDiagramForStructuralExport(diagram, {
+            kind: 'tags',
+            selectedTagIds: ['red'],
+            matchMode: 'any',
+        });
+        const sql = await exportBaseSQL({
+            diagram: projected,
+            targetDatabaseType: DatabaseType.MYSQL,
+        });
+
+        expect(sql).toContain('users');
+        expect(sql).toContain('email');
+        expect(sql).not.toContain('orders');
+        expect(sql.toLowerCase()).not.toContain('foreign key');
+    });
+
+    it('keeps the full script when By tags has an empty selection', async () => {
+        const diagram = buildDiagram(DatabaseType.POSTGRESQL);
+        const projected = projectDiagramForStructuralExport(diagram, {
+            kind: 'tags',
+            selectedTagIds: [],
+            matchMode: 'all',
+        });
+        const fullSql = await exportBaseSQL({
+            diagram,
+            targetDatabaseType: DatabaseType.POSTGRESQL,
+        });
+        const projectedSql = await exportBaseSQL({
+            diagram: projected,
+            targetDatabaseType: DatabaseType.POSTGRESQL,
+        });
+
+        expect(projected).toBe(diagram);
+        expect(projectedSql).toBe(fullSql);
+        expect(projectedSql).toContain('orders');
+        expect(projectedSql.toLowerCase()).toContain('foreign key');
+    });
+});

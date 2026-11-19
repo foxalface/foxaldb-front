@@ -1283,6 +1283,12 @@ export const fr: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: "Périmètre d'export",
+                all: 'Diagramme entier',
+                tags: 'Par tags',
+                hint: 'Inclure les tables selon leurs tags. Une sélection vide exporte tout le diagramme.',
+            },
             title: 'Exporter',
             description: 'Choisissez un format pour exporter votre diagramme.',
             back: 'Retour',

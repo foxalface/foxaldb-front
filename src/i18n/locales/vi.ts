@@ -1248,6 +1248,12 @@ export const vi: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'Phạm vi xuất',
+                all: 'Toàn bộ sơ đồ',
+                tags: 'Theo thẻ',
+                hint: 'Bao gồm bảng theo thẻ của chúng. Không chọn thẻ nào sẽ xuất toàn bộ sơ đồ.',
+            },
             title: 'Xuất',
             description: 'Chọn định dạng để xuất sơ đồ của bạn.',
             back: 'Quay lại',

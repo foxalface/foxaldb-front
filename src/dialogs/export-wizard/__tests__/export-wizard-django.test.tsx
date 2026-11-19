@@ -18,6 +18,11 @@ import {
     typeRef,
 } from './prisma-test-helpers';
 import type { Diagram } from '@/lib/domain/diagram';
+import {
+    chooseByTags,
+    exportedTableNames,
+    structuralExportFixture,
+} from './structural-export-wizard-fixture';
 
 const { exportDjangoProjectMock } = vi.hoisted(() => ({
     exportDjangoProjectMock: vi.fn(),
@@ -1051,6 +1056,24 @@ describe('ExportWizardDialog Django branch', () => {
         ).toHaveTextContent(
             'export_wizard.django.result_step.error_unsafe_path'
         );
+    });
+
+    it('sends the By tags projection to the Django exporter', async () => {
+        chartDbState.databaseType = DatabaseType.POSTGRESQL;
+        chartDbState.currentDiagram = structuralExportFixture();
+
+        await openDjangoBranch();
+        await chooseByTags(['Red']);
+
+        await waitFor(() => {
+            const diagram = exportDjangoProjectMock.mock.calls.at(-1)?.[0]
+                .diagram as Diagram;
+            expect(exportedTableNames(diagram)).toEqual(['users']);
+            expect(diagram.relationships).toEqual([]);
+            expect(
+                diagram.tables?.[0]?.fields.map((field) => field.name)
+            ).toEqual(['id', 'email']);
+        });
     });
 });
 

@@ -15,6 +15,11 @@ import { downloadBlob } from '@/lib/download-blob';
 import { exportLaravelMigrations } from '@/lib/api/diagram-laravel-export';
 import { flushDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import type { Diagram } from '@/lib/domain/diagram';
+import {
+    chooseByTags,
+    exportedTableNames,
+    structuralExportFixture,
+} from './structural-export-wizard-fixture';
 
 const dialogMocks = {
     closeExportWizardDialog: vi.fn(),
@@ -435,5 +440,22 @@ describe('ExportWizardDialog Laravel branch', () => {
         expect(
             screen.queryByTestId('export-laravel-error')
         ).not.toBeInTheDocument();
+    });
+
+    it('sends the By tags projection and ignores the legacy schema filter', async () => {
+        chartDbState.currentDiagram = structuralExportFixture();
+
+        await openLaravelBranch();
+        await chooseByTags(['Red']);
+        await userEvent.click(screen.getByTestId('export-laravel-submit'));
+
+        const content = mockedExportLaravelMigrations.mock.calls[0]?.[1]
+            .content as Diagram;
+        expect(exportedTableNames(content)).toEqual(['users']);
+        expect(content.relationships).toEqual([]);
+        expect(content.tables?.[0]?.fields.map((field) => field.name)).toEqual([
+            'id',
+            'email',
+        ]);
     });
 });

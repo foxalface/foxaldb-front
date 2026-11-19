@@ -1235,6 +1235,12 @@ export const ar: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'نطاق التصدير',
+                all: 'المخطط بالكامل',
+                tags: 'حسب الوسوم',
+                hint: 'تضمين الجداول حسب وسومها. التحديد الفارغ يصدّر المخطط بالكامل.',
+            },
             title: 'تصدير',
             description: 'اختر تنسيقًا لتصدير مخططك.',
             back: 'رجوع',

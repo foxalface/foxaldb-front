@@ -1232,6 +1232,12 @@ export const tr: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'Dışa aktarma kapsamı',
+                all: 'Tüm diyagram',
+                tags: 'Etiketlere göre',
+                hint: 'Tabloları etiketlerine göre dahil edin. Boş seçim tüm diyagramı dışa aktarır.',
+            },
             title: 'Dışa aktar',
             description: 'Diyagramınızı dışa aktarmak için bir format seçin.',
             back: 'Geri',

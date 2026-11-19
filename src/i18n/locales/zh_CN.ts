@@ -1170,6 +1170,12 @@ export const zh_CN: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: '导出范围',
+                all: '整个图表',
+                tags: '按标签',
+                hint: '按标签包含表。未选择标签时导出整个图表。',
+            },
             title: '导出',
             description: '选择要导出图表的格式。',
             back: '返回',

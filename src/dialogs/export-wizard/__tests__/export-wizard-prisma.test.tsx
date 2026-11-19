@@ -16,6 +16,11 @@ import {
     typeRef,
 } from './prisma-test-helpers';
 import type { Diagram } from '@/lib/domain/diagram';
+import {
+    chooseByTags,
+    exportedTableNames,
+    structuralExportFixture,
+} from './structural-export-wizard-fixture';
 
 const { exportPrismaSchemaMock } = vi.hoisted(() => ({
     exportPrismaSchemaMock: vi.fn(),
@@ -789,6 +794,23 @@ describe('ExportWizardDialog Prisma branch', () => {
         expect(
             screen.queryByTestId('export-prisma-preview-container')
         ).not.toBeInTheDocument();
+    });
+
+    it('sends the By tags projection to the Prisma exporter', async () => {
+        chartDbState.currentDiagram = structuralExportFixture();
+
+        await openPrismaBranch();
+        await chooseByTags(['Red']);
+
+        await waitFor(() => {
+            const diagram = exportPrismaSchemaMock.mock.calls.at(-1)?.[0]
+                .diagram as Diagram;
+            expect(exportedTableNames(diagram)).toEqual(['users']);
+            expect(diagram.relationships).toEqual([]);
+            expect(
+                diagram.tables?.[0]?.fields.map((field) => field.name)
+            ).toEqual(['id', 'email']);
+        });
     });
 });
 

@@ -199,7 +199,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 
 **Generator hardening:** backend output is intended to be executable (`migrate` / `migrate:rollback`) for supported schema semantics. Integer PK/FK signedness is matched from relationship-referenced columns (not from `_id` names). Schema Builder calls preserve canonical table/column names; ZIP filenames are sanitized separately. Laravel’s own `migrations` table is not exported. See [`backend/docs/laravel-migration-export.md`](../../../backend/docs/laravel-migration-export.md).
 
-**Current-state override:** the wizard always sends `content: currentDiagram`. That payload is ephemeral generation input. It must not update `diagrams.content`, Dexie, operations, or realtime.
+**Current-state override:** the wizard sends `content: structuralExportDiagram`, the diagram projected by the wizard's structural export scope. Whole diagram, and By tags with an empty selection, send the current diagram unchanged. That payload is ephemeral generation input. It must not update `diagrams.content`, Dexie, operations, or realtime.
 
 **Boundary:** Laravel export is a **specialized Export V1 target**. Its controller/service/DTOs must **not** define generic Export architecture. See [`backend/docs/laravel-migration-export.md`](../../../backend/docs/laravel-migration-export.md).
 
@@ -678,7 +678,7 @@ Entry: Diagram menu → **Export** (`openExportWizard`). Backup → Export diagr
 | Laravel | Hidden | Available when diagram has numeric backend ID (`isValidBackendDiagramId`) |
 | Prisma, EF Core, Rails, Django, Drizzle | Hidden | Available when `databaseType` is supported; otherwise disabled with localized reason |
 
-Framework exports use Sanctum. They are **not** paid-plan gated. Laravel sends ephemeral `content: currentDiagram` to `POST /api/diagrams/{diagram}/export/laravel-migrations`. Other frameworks POST stateless `{ diagram }` to `/api/exports/*` (no backend diagram ID required).
+Framework exports use Sanctum. They are **not** paid-plan gated. Laravel sends ephemeral projected diagram content to `POST /api/diagrams/{diagram}/export/laravel-migrations`. Other frameworks POST stateless `{ diagram }` to `/api/exports/*` (no backend diagram ID required). The diagram in those requests is the wizard's structural projection. The backend does not receive tag filters or canvas filters.
 
 ### Execution split
 

@@ -18,6 +18,11 @@ import {
     typeRef,
 } from './prisma-test-helpers';
 import type { Diagram } from '@/lib/domain/diagram';
+import {
+    chooseByTags,
+    exportedTableNames,
+    structuralExportFixture,
+} from './structural-export-wizard-fixture';
 
 const { exportDrizzleProjectMock } = vi.hoisted(() => ({
     exportDrizzleProjectMock: vi.fn(),
@@ -932,6 +937,24 @@ describe('ExportWizardDialog Drizzle branch', () => {
         ).toHaveTextContent(
             'export_wizard.drizzle.result_step.error_unsafe_path'
         );
+    });
+
+    it('sends the By tags projection to the Drizzle exporter', async () => {
+        chartDbState.databaseType = DatabaseType.POSTGRESQL;
+        chartDbState.currentDiagram = structuralExportFixture();
+
+        await openDrizzleBranch();
+        await chooseByTags(['Red']);
+
+        await waitFor(() => {
+            const diagram = exportDrizzleProjectMock.mock.calls.at(-1)?.[0]
+                .diagram as Diagram;
+            expect(exportedTableNames(diagram)).toEqual(['users']);
+            expect(diagram.relationships).toEqual([]);
+            expect(
+                diagram.tables?.[0]?.fields.map((field) => field.name)
+            ).toEqual(['id', 'email']);
+        });
     });
 });
 

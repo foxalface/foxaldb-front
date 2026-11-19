@@ -1254,6 +1254,12 @@ export const hr: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'Opseg izvoza',
+                all: 'Cijeli dijagram',
+                tags: 'Po oznakama',
+                hint: 'Uključi tablice prema njihovim oznakama. Prazan odabir izvozi cijeli dijagram.',
+            },
             title: 'Izvoz',
             description: 'Odaberite format za izvoz dijagrama.',
             back: 'Natrag',

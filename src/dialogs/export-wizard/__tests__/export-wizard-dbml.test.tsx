@@ -6,6 +6,11 @@ import { ExportWizardDialog } from '../export-wizard-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
 import { downloadBlob } from '@/lib/download-blob';
+import {
+    chooseByTags,
+    exportedTableNames,
+    structuralExportFixture,
+} from './structural-export-wizard-fixture';
 
 const dialogMocks = {
     closeExportWizardDialog: vi.fn(),
@@ -136,6 +141,13 @@ describe('ExportWizardDialog DBML branch', () => {
             inlineDbml: sampleInlineDbml,
             relationshipsDbml: '',
         });
+        chartDbState.currentDiagram = {
+            id: 'guest-diagram-1',
+            name: 'My Diagram',
+            databaseType: DatabaseType.POSTGRESQL,
+            tables: [],
+            relationships: [],
+        };
     });
 
     it('enters DBML preview when DBML target is selected', async () => {
@@ -316,5 +328,35 @@ describe('ExportWizardDialog DBML availability', () => {
         expect(
             screen.queryByText('export_wizard.targets.dbml.coming_soon')
         ).not.toBeInTheDocument();
+    });
+
+    it('previews and downloads the DBML generated from the By tags projection', async () => {
+        const fixture = structuralExportFixture();
+        chartDbState.currentDiagram =
+            fixture as unknown as typeof chartDbState.currentDiagram;
+
+        await openDbmlBranch();
+        await chooseByTags(['Red']);
+
+        await waitFor(() => {
+            const diagram = mockedGenerateDBML.mock.calls.at(-1)?.[0];
+            expect(diagram).toBeDefined();
+            if (!diagram) {
+                return;
+            }
+            expect(exportedTableNames(diagram)).toEqual(['users']);
+            expect(diagram.relationships).toEqual([]);
+            expect(
+                diagram.tables?.[0]?.fields.map((field) => field.name)
+            ).toEqual(['id', 'email']);
+        });
+
+        expect(screen.getByTestId('code-snippet')).toHaveTextContent(
+            sampleStandardDbml
+        );
+        await userEvent.click(screen.getByTestId('export-dbml-download'));
+
+        const blob = mockedDownloadBlob.mock.calls.at(-1)?.[0] as Blob;
+        expect(await blob.text()).toBe(sampleStandardDbml);
     });
 });

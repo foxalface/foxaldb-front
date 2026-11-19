@@ -18,6 +18,11 @@ import {
     typeRef,
 } from './prisma-test-helpers';
 import type { Diagram } from '@/lib/domain/diagram';
+import {
+    chooseByTags,
+    exportedTableNames,
+    structuralExportFixture,
+} from './structural-export-wizard-fixture';
 
 const { exportRailsProjectMock } = vi.hoisted(() => ({
     exportRailsProjectMock: vi.fn(),
@@ -873,6 +878,23 @@ describe('ExportWizardDialog Rails branch', () => {
         ).toHaveTextContent(
             'export_wizard.rails.result_step.error_unsafe_path'
         );
+    });
+
+    it('sends the By tags projection to the Rails exporter', async () => {
+        chartDbState.currentDiagram = structuralExportFixture();
+
+        await openRailsBranch();
+        await chooseByTags(['Red']);
+
+        await waitFor(() => {
+            const diagram = exportRailsProjectMock.mock.calls.at(-1)?.[0]
+                .diagram as Diagram;
+            expect(exportedTableNames(diagram)).toEqual(['users']);
+            expect(diagram.relationships).toEqual([]);
+            expect(
+                diagram.tables?.[0]?.fields.map((field) => field.name)
+            ).toEqual(['id', 'email']);
+        });
     });
 });
 

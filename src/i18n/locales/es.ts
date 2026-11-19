@@ -1269,6 +1269,12 @@ export const es: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'Alcance de la exportación',
+                all: 'Diagrama completo',
+                tags: 'Por etiquetas',
+                hint: 'Incluye las tablas según sus etiquetas. Una selección vacía exporta todo el diagrama.',
+            },
             title: 'Exportar',
             description: 'Elija un formato para exportar su diagrama.',
             back: 'Atrás',

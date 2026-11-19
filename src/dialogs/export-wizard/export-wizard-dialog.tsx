@@ -35,6 +35,7 @@ import {
     type LaravelExportErrorCode,
 } from '@/lib/laravel-export/resolve-laravel-export-error-code';
 import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import { ExportStructuralScopeControl } from './export-structural-scope-control';
 import { ExportWizardStep } from './export-wizard-step';
 import type { ExportTargetId } from './export-target-id';
 import { ExportTargetPickerStep } from './export-target-picker-step';
@@ -73,6 +74,11 @@ import {
 } from '@/lib/data/sql-export/deterministic-sql-export-capability';
 import { exportBaseSQL } from '@/lib/data/sql-export/export-sql-script';
 import { getFilteredDiagramForSqlExport } from '@/lib/data/sql-export/get-filtered-diagram-for-sql-export';
+import {
+    fullStructuralExportScope,
+    projectDiagramForStructuralExport,
+    type StructuralExportScope,
+} from '@/lib/domain/structural-export-scope';
 import { generateDBMLFromDiagram } from '@/lib/dbml/dbml-export/dbml-export';
 import {
     DEFAULT_DBML_REF_FORMAT,
@@ -118,6 +124,17 @@ import type {
 } from '@/lib/api/prisma-export-types';
 
 export interface ExportWizardDialogProps extends BaseDialogProps {}
+
+const STRUCTURAL_EXPORT_SCOPE_STEPS = new Set<ExportWizardStep>([
+    ExportWizardStep.SQL_PREVIEW,
+    ExportWizardStep.DBML_PREVIEW,
+    ExportWizardStep.LARAVEL_OPTIONS,
+    ExportWizardStep.PRISMA_PREVIEW,
+    ExportWizardStep.EF_CORE_OPTIONS,
+    ExportWizardStep.RAILS_RESULT,
+    ExportWizardStep.DJANGO_RESULT,
+    ExportWizardStep.DRIZZLE_RESULT,
+]);
 
 export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     dialog,
@@ -209,6 +226,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         useState<DrizzleWizardRequestError | null>(null);
     const [isDrizzleExporting, setIsDrizzleExporting] = useState(false);
     const drizzleExportRequestIdRef = useRef(0);
+    const [structuralExportScope, setStructuralExportScope] =
+        useState<StructuralExportScope>(fullStructuralExportScope);
     const wasDialogOpenRef = useRef(false);
     const [registeredFooterAction, setRegisteredFooterAction] =
         useState<ExportWizardFooterAction | null>(null);
@@ -319,6 +338,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         resetRailsBranchState();
         resetDjangoBranchState();
         resetDrizzleBranchState();
+        setStructuralExportScope(fullStructuralExportScope);
     }, [
         resetDbmlBranchState,
         resetDjangoBranchState,
@@ -340,6 +360,78 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
         wasDialogOpenRef.current = isOpen;
     }, [dialog.open, resetWizardState]);
+
+    const structuralExportDiagram = useMemo(
+        () =>
+            projectDiagramForStructuralExport(
+                currentDiagram,
+                structuralExportScope
+            ),
+        [currentDiagram, structuralExportScope]
+    );
+
+    const handleStructuralExportScopeChange = useCallback(
+        (scope: StructuralExportScope) => {
+            setStructuralExportScope(scope);
+            setSqlScript(undefined);
+            setSqlHasError(false);
+            setDbmlStandard(undefined);
+            setDbmlInline(undefined);
+            setDbmlHasError(false);
+            prismaExportRequestIdRef.current += 1;
+            setPrismaSchema(undefined);
+            setPrismaGenerationError(null);
+            setPrismaHasUnexpectedError(false);
+            efCoreExportRequestIdRef.current += 1;
+            efCoreInitialExportDoneRef.current = false;
+            setEfCoreSuccess(null);
+            setEfCoreError(null);
+            setIsEfCoreExporting(false);
+            railsExportRequestIdRef.current += 1;
+            setRailsSuccess(null);
+            setRailsError(null);
+            setIsRailsExporting(false);
+            djangoExportRequestIdRef.current += 1;
+            setDjangoSuccess(null);
+            setDjangoError(null);
+            setIsDjangoExporting(false);
+            drizzleExportRequestIdRef.current += 1;
+            setDrizzleSuccess(null);
+            setDrizzleError(null);
+            setIsDrizzleExporting(false);
+        },
+        []
+    );
+
+    useEffect(() => {
+        if (structuralExportScope.kind !== 'tags') {
+            return;
+        }
+
+        const liveTagIds = new Set(
+            (currentDiagram.tags ?? []).map((tag) => tag.id)
+        );
+        const selectedTagIds = structuralExportScope.selectedTagIds.filter(
+            (tagId) => liveTagIds.has(tagId)
+        );
+
+        if (
+            selectedTagIds.length ===
+            structuralExportScope.selectedTagIds.length
+        ) {
+            return;
+        }
+
+        handleStructuralExportScopeChange({
+            kind: 'tags',
+            matchMode: structuralExportScope.matchMode,
+            selectedTagIds,
+        });
+    }, [
+        currentDiagram.tags,
+        handleStructuralExportScopeChange,
+        structuralExportScope,
+    ]);
 
     const availabilityContext = useMemo<ExportAvailabilityContext>(
         () => ({
@@ -768,7 +860,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         void (async () => {
             try {
                 const result = await exportPrismaSchema({
-                    diagram: currentDiagram,
+                    diagram: projectDiagramForStructuralExport(
+                        currentDiagram,
+                        structuralExportScope
+                    ),
                     version: prismaVersion,
                 });
 
@@ -819,6 +914,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         prismaHasUnexpectedError,
         prismaVersion,
         step,
+        structuralExportScope,
     ]);
 
     useEffect(() => {
@@ -837,7 +933,12 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             setDbmlHasError(false);
 
             try {
-                const result = await generateDBMLFromDiagram(currentDiagram);
+                const result = await generateDBMLFromDiagram(
+                    projectDiagramForStructuralExport(
+                        currentDiagram,
+                        structuralExportScope
+                    )
+                );
 
                 if (cancelled) {
                     return;
@@ -866,7 +967,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         return () => {
             cancelled = true;
         };
-    }, [currentDiagram, dbmlHasError, dbmlStandard, step]);
+    }, [
+        currentDiagram,
+        dbmlHasError,
+        dbmlStandard,
+        step,
+        structuralExportScope,
+    ]);
 
     useEffect(() => {
         if (
@@ -885,11 +992,14 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             setSqlHasError(false);
 
             try {
-                const filteredDiagram = getFilteredDiagramForSqlExport(
-                    currentDiagram,
-                    filter ?? {},
-                    sqlTargetDatabaseType
-                );
+                const filteredDiagram =
+                    structuralExportScope.kind === 'tags'
+                        ? structuralExportDiagram
+                        : getFilteredDiagramForSqlExport(
+                              structuralExportDiagram,
+                              filter ?? {},
+                              sqlTargetDatabaseType
+                          );
                 const script = await exportBaseSQL({
                     diagram: filteredDiagram,
                     targetDatabaseType: sqlTargetDatabaseType,
@@ -915,12 +1025,13 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             cancelled = true;
         };
     }, [
-        currentDiagram,
         filter,
         sqlHasError,
         sqlScript,
         sqlTargetDatabaseType,
         step,
+        structuralExportDiagram,
+        structuralExportScope,
     ]);
 
     const handleVisualExport = useCallback(async () => {
@@ -970,7 +1081,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                 laravelVersion,
                 includeIndexes: laravelIncludeIndexes,
                 includeForeignKeys: laravelIncludeForeignKeys,
-                content: currentDiagram,
+                content: structuralExportDiagram,
             });
 
             downloadBlob(
@@ -988,6 +1099,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         laravelIncludeForeignKeys,
         laravelIncludeIndexes,
         laravelVersion,
+        structuralExportDiagram,
     ]);
 
     const handleEfCoreNamespaceChange = useCallback(
@@ -1031,7 +1143,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 
         try {
             const result = await exportEfCoreProject({
-                diagram: currentDiagram,
+                diagram: structuralExportDiagram,
                 namespace: efCoreNamespace,
                 dbContextName: efCoreDbContextName,
             });
@@ -1078,11 +1190,11 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             }
         }
     }, [
-        currentDiagram,
         databaseType,
         efCoreDbContextName,
         efCoreNamespace,
         isEfCoreExporting,
+        structuralExportDiagram,
     ]);
 
     useEffect(() => {
@@ -1109,7 +1221,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         void (async () => {
             try {
                 const result = await exportEfCoreProject({
-                    diagram: currentDiagram,
+                    diagram: projectDiagramForStructuralExport(
+                        currentDiagram,
+                        structuralExportScope
+                    ),
                     namespace: efCoreNamespace,
                     dbContextName: efCoreDbContextName,
                 });
@@ -1176,6 +1291,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         efCoreNamespace,
         isAuthenticated,
         step,
+        structuralExportScope,
     ]);
 
     const handleRailsRetry = useCallback(() => {
@@ -1209,7 +1325,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         void (async () => {
             try {
                 const result = await exportRailsProject({
-                    diagram: currentDiagram,
+                    diagram: projectDiagramForStructuralExport(
+                        currentDiagram,
+                        structuralExportScope
+                    ),
                 });
 
                 if (
@@ -1279,6 +1398,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         railsError,
         railsSuccess,
         step,
+        structuralExportScope,
     ]);
 
     const handleDjangoRetry = useCallback(() => {
@@ -1312,7 +1432,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         void (async () => {
             try {
                 const result = await exportDjangoProject({
-                    diagram: currentDiagram,
+                    diagram: projectDiagramForStructuralExport(
+                        currentDiagram,
+                        structuralExportScope
+                    ),
                 });
 
                 if (
@@ -1382,6 +1505,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         djangoError,
         djangoSuccess,
         step,
+        structuralExportScope,
     ]);
 
     const handleDrizzleRetry = useCallback(() => {
@@ -1415,7 +1539,10 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         void (async () => {
             try {
                 const result = await exportDrizzleProject({
-                    diagram: currentDiagram,
+                    diagram: projectDiagramForStructuralExport(
+                        currentDiagram,
+                        structuralExportScope
+                    ),
                 });
 
                 if (
@@ -1485,6 +1612,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
         drizzleError,
         drizzleSuccess,
         step,
+        structuralExportScope,
     ]);
 
     const handleOpenChange = useCallback(
@@ -1717,6 +1845,7 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
     const isPrismaPreview = step === ExportWizardStep.PRISMA_PREVIEW;
     const isPreviewStep =
         isSqlPreview || isDbmlPreview || isJsonDownload || isPrismaPreview;
+    const showStructuralScope = STRUCTURAL_EXPORT_SCOPE_STEPS.has(step);
 
     return (
         <Dialog {...dialog} onOpenChange={handleOpenChange}>
@@ -1787,11 +1916,21 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
                     className={cn(
                         'min-h-0 min-w-0 flex-1',
                         isPreviewStep
-                            ? 'flex flex-col overflow-hidden'
+                            ? showStructuralScope
+                                ? 'flex flex-col gap-3 overflow-y-auto p-1'
+                                : 'flex flex-col overflow-hidden'
                             : 'overflow-y-auto p-1'
                     )}
                     data-testid="export-wizard-scroll-body"
                 >
+                    {showStructuralScope ? (
+                        <ExportStructuralScopeControl
+                            tags={currentDiagram.tags ?? []}
+                            scope={structuralExportScope}
+                            onChange={handleStructuralExportScopeChange}
+                        />
+                    ) : null}
+
                     {step === ExportWizardStep.TARGET_PICKER ? (
                         <ExportTargetPickerStep
                             availabilityContext={availabilityContext}

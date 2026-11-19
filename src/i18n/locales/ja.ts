@@ -1273,6 +1273,12 @@ export const ja: LanguageTranslation = {
         },
 
         export_wizard: {
+            scope: {
+                label: 'エクスポート範囲',
+                all: '図全体',
+                tags: 'タグで',
+                hint: 'タグに一致するテーブルを含めます。未選択の場合は図全体をエクスポートします。',
+            },
             title: 'エクスポート',
             description: 'ダイアグラムのエクスポート形式を選択してください。',
             back: '戻る',
