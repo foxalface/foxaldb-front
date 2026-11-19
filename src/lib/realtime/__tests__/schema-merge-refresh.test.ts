@@ -193,6 +193,9 @@ describe('apply_schema_merge refresh', () => {
                 getAreaFromStorage: async () => undefined,
                 existingDependencyIds: new Set(),
                 getDependencyFromStorage: async () => undefined,
+                existingTagIds: new Set(),
+                existingAssignmentIds: new Set(),
+                existingAssignmentKeys: new Set(),
             }
         );
 

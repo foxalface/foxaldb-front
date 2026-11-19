@@ -8,6 +8,7 @@ import {
     onlineDiagramLocation,
     type DiagramLocation,
 } from '@/lib/diagram/diagram-location';
+import { getClientId } from '@/lib/realtime/client-id';
 import { clearEchoInstance } from '@/lib/realtime/echo';
 import { DIAGRAM_CONVERSATION_READ_UPDATED_EVENT } from '@/lib/realtime/conversation-events';
 import { useDiagramAccessListener } from '@/pages/editor-page/use-diagram-access-listener';
@@ -199,6 +200,13 @@ vi.mock('@/hooks/use-chartdb', () => ({
         addDependencies: resolvedMutator,
         removeDependencies: resolvedMutator,
         updateDependency: resolvedMutator,
+        tags: [],
+        tagAssignments: [],
+        addTags: resolvedMutator,
+        updateTag: resolvedMutator,
+        removeTags: resolvedMutator,
+        addTagAssignments: resolvedMutator,
+        removeTagAssignments: resolvedMutator,
         addNotes: resolvedMutator,
         removeNotes: resolvedMutator,
         updateNote: resolvedMutator,
@@ -435,6 +443,28 @@ describe('diagram channel ownership', () => {
 
     afterEach(() => {
         vi.restoreAllMocks();
+    });
+
+    it('ignores an operation echoed from the local client', async () => {
+        renderSession(onlineDiagramLocation('77'));
+        establish();
+
+        await waitFor(() => {
+            expect(operationListeners('77')).toBe(1);
+        });
+
+        updateDiagramName.mockClear();
+
+        act(() => {
+            emitOn(channels.get('private-diagram.77'), '.DiagramOperation', {
+                ...peerOperation('echo'),
+                clientId: getClientId(),
+            });
+        });
+
+        await Promise.resolve();
+
+        expect(updateDiagramName).not.toHaveBeenCalled();
     });
 
     it('applies a live operation, reconciles once, then applies the next live operation', async () => {

@@ -46,6 +46,11 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
         addNotes,
         removeNotes,
         updateNote,
+        addTags,
+        removeTags,
+        updateTag,
+        addTagAssignments,
+        removeTagAssignments,
         replaceDiagram,
     } = useChartDB();
 
@@ -176,6 +181,23 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             updateNote: ({ redoData: { noteId, note } }) => {
                 return updateNote(noteId, note, { updateHistory: false });
             },
+            addTags: ({ redoData: { tags } }) => {
+                return addTags(tags, { updateHistory: false });
+            },
+            updateTag: ({ redoData: { tagId, attributes } }) => {
+                return updateTag(tagId, attributes, { updateHistory: false });
+            },
+            removeTags: ({ redoData: { tagIds } }) => {
+                return removeTags(tagIds, { updateHistory: false });
+            },
+            addTagAssignments: ({ redoData: { assignments } }) => {
+                return addTagAssignments(assignments, { updateHistory: false });
+            },
+            removeTagAssignments: ({ redoData: { assignmentIds } }) => {
+                return removeTagAssignments(assignmentIds, {
+                    updateHistory: false,
+                });
+            },
             replaceDiagram: ({ redoData: { diagram } }) => {
                 return replaceDiagram(diagram, {
                     updateHistory: false,
@@ -213,6 +235,11 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addNotes,
             removeNotes,
             updateNote,
+            addTags,
+            removeTags,
+            updateTag,
+            addTagAssignments,
+            removeTagAssignments,
             replaceDiagram,
         ]
     );
@@ -226,13 +253,24 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
                 return removeTables(tableIds, { updateHistory: false });
             },
             removeTables: async ({
-                undoData: { tables, relationships, dependencies },
+                undoData: {
+                    tables,
+                    relationships,
+                    dependencies,
+                    tagAssignments,
+                },
             }) => {
                 await Promise.all([
                     addTables(tables, { updateHistory: false }),
                     addRelationships(relationships, { updateHistory: false }),
                     addDependencies(dependencies, { updateHistory: false }),
                 ]);
+
+                if (tagAssignments.length > 0) {
+                    await addTagAssignments(tagAssignments, {
+                        updateHistory: false,
+                    });
+                }
             },
             updateTable: ({ undoData: { tableId, table } }) => {
                 return updateTable(tableId, table, { updateHistory: false });
@@ -240,8 +278,16 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addField: ({ undoData: { fieldId, tableId } }) => {
                 return removeField(tableId, fieldId, { updateHistory: false });
             },
-            removeField: ({ undoData: { tableId, field } }) => {
-                return addField(tableId, field, { updateHistory: false });
+            removeField: async ({
+                undoData: { tableId, field, tagAssignments },
+            }) => {
+                await addField(tableId, field, { updateHistory: false });
+
+                if (tagAssignments.length > 0) {
+                    await addTagAssignments(tagAssignments, {
+                        updateHistory: false,
+                    });
+                }
             },
             updateField: ({ undoData: { tableId, fieldId, field } }) => {
                 return updateField(tableId, fieldId, field, {
@@ -253,10 +299,18 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
                     updateHistory: false,
                 });
             },
-            removeRelationships: ({ undoData: { relationships } }) => {
-                return addRelationships(relationships, {
+            removeRelationships: async ({
+                undoData: { relationships, tagAssignments },
+            }) => {
+                await addRelationships(relationships, {
                     updateHistory: false,
                 });
+
+                if (tagAssignments.length > 0) {
+                    await addTagAssignments(tagAssignments, {
+                        updateHistory: false,
+                    });
+                }
             },
             updateRelationship: ({
                 undoData: { relationshipId, relationship },
@@ -356,6 +410,29 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             updateNote: ({ undoData: { noteId, note } }) => {
                 return updateNote(noteId, note, { updateHistory: false });
             },
+            addTags: ({ undoData: { tagIds } }) => {
+                return removeTags(tagIds, { updateHistory: false });
+            },
+            updateTag: ({ undoData: { tagId, attributes } }) => {
+                return updateTag(tagId, attributes, { updateHistory: false });
+            },
+            removeTags: async ({ undoData: { tags, assignments } }) => {
+                await addTags(tags, { updateHistory: false });
+
+                if (assignments.length > 0) {
+                    await addTagAssignments(assignments, {
+                        updateHistory: false,
+                    });
+                }
+            },
+            addTagAssignments: ({ undoData: { assignmentIds } }) => {
+                return removeTagAssignments(assignmentIds, {
+                    updateHistory: false,
+                });
+            },
+            removeTagAssignments: ({ undoData: { assignments } }) => {
+                return addTagAssignments(assignments, { updateHistory: false });
+            },
             replaceDiagram: ({ undoData: { diagram } }) => {
                 return replaceDiagram(diagram, {
                     updateHistory: false,
@@ -393,6 +470,11 @@ export const HistoryProvider: React.FC<React.PropsWithChildren> = ({
             addNotes,
             removeNotes,
             updateNote,
+            addTags,
+            removeTags,
+            updateTag,
+            addTagAssignments,
+            removeTagAssignments,
             replaceDiagram,
         ]
     );

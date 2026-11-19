@@ -7,6 +7,7 @@ import { normalizeDiagramFromApi } from '@/lib/api/normalize-diagram-from-api';
 import { setDiagramAutosaveContentHash } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { cancelPendingDiagramAutosave } from '@/lib/diagram-autosave/diagram-autosave-controller';
 import { useRealtime } from '@/hooks/use-realtime';
+import { tagAssignmentKey } from '@/lib/domain/diagram-tag';
 import { getClientId } from '@/lib/realtime/client-id';
 import type { DiagramPrivateEventChannel } from '@/lib/realtime/diagram-private-channel';
 import {
@@ -88,6 +89,8 @@ export const useDiagramRealtime = (): void => {
         dependencies,
         notes,
         areas,
+        currentDiagram,
+        tagAssignments,
         updateDiagramName,
         addTables,
         updateTable,
@@ -107,6 +110,11 @@ export const useDiagramRealtime = (): void => {
         addAreas,
         removeAreas,
         updateArea,
+        addTags,
+        updateTag,
+        removeTags,
+        addTagAssignments,
+        removeTagAssignments,
         replaceDiagram,
     } = useChartDB();
 
@@ -139,6 +147,21 @@ export const useDiagramRealtime = (): void => {
         dependencies.map((dependency) => dependency.id)
     );
 
+    const existingTagIdsRef = useRef<ReadonlySet<string>>(new Set());
+    existingTagIdsRef.current = new Set(
+        (currentDiagram.tags ?? []).map((tag) => tag.id)
+    );
+
+    const existingAssignmentIdsRef = useRef<ReadonlySet<string>>(new Set());
+    existingAssignmentIdsRef.current = new Set(
+        tagAssignments.map((assignment) => assignment.id)
+    );
+
+    const existingAssignmentKeysRef = useRef<ReadonlySet<string>>(new Set());
+    existingAssignmentKeysRef.current = new Set(
+        tagAssignments.map((assignment) => tagAssignmentKey(assignment))
+    );
+
     const diagramIdRef = useRef<string | null>(diagramId);
     diagramIdRef.current = diagramId;
 
@@ -162,6 +185,11 @@ export const useDiagramRealtime = (): void => {
         addDependencies,
         removeDependencies,
         updateDependency,
+        addTags,
+        updateTag,
+        removeTags,
+        addTagAssignments,
+        removeTagAssignments,
     });
     mutatorsRef.current = {
         updateDiagramName,
@@ -183,6 +211,11 @@ export const useDiagramRealtime = (): void => {
         addDependencies,
         removeDependencies,
         updateDependency,
+        addTags,
+        updateTag,
+        removeTags,
+        addTagAssignments,
+        removeTagAssignments,
     };
 
     const replaceDiagramRef = useRef(replaceDiagram);
@@ -311,6 +344,9 @@ export const useDiagramRealtime = (): void => {
                 getAreaFromStorage: readNothing,
                 existingDependencyIds: existingDependencyIdsRef.current,
                 getDependencyFromStorage: readNothing,
+                existingTagIds: existingTagIdsRef.current,
+                existingAssignmentIds: existingAssignmentIdsRef.current,
+                existingAssignmentKeys: existingAssignmentKeysRef.current,
             })
                 .catch((error: unknown) => {
                     console.warn(

@@ -22,6 +22,35 @@ export interface DiagramTagAssignment {
     targetId: string;
 }
 
+export const tagAssignmentKey = (
+    assignment: Pick<DiagramTagAssignment, 'tagId' | 'targetType' | 'targetId'>
+): string =>
+    `${assignment.tagId}\0${assignment.targetType}\0${assignment.targetId}`;
+
+export const assignmentTargetsRemovedEntity = (
+    assignment: DiagramTagAssignment,
+    removed: {
+        tableIds?: ReadonlySet<string>;
+        fieldIds?: ReadonlySet<string>;
+        relationshipIds?: ReadonlySet<string>;
+        tagIds?: ReadonlySet<string>;
+    }
+): boolean => {
+    if (removed.tagIds?.has(assignment.tagId)) {
+        return true;
+    }
+
+    if (assignment.targetType === 'table') {
+        return removed.tableIds?.has(assignment.targetId) ?? false;
+    }
+
+    if (assignment.targetType === 'field') {
+        return removed.fieldIds?.has(assignment.targetId) ?? false;
+    }
+
+    return removed.relationshipIds?.has(assignment.targetId) ?? false;
+};
+
 const nonEmptyString = z.string().min(1);
 
 export const diagramTagSchema: z.ZodType<DiagramTag> = z.object({

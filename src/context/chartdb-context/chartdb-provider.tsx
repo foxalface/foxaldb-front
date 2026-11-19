@@ -30,6 +30,7 @@ import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { Note } from '@/lib/domain/note';
 import {
+    assignmentTargetsRemovedEntity,
     canonicalizeTagAssignments,
     type DiagramTag,
     type DiagramTagAssignment,
@@ -92,6 +93,10 @@ export const ChartDBProvider: React.FC<
     const [tagAssignments, setTagAssignments] = useState<
         DiagramTagAssignment[]
     >(diagram?.tagAssignments ?? []);
+    const tagsRef = useRef(tags);
+    tagsRef.current = tags;
+    const tagAssignmentsRef = useRef(tagAssignments);
+    tagAssignmentsRef.current = tagAssignments;
     const tablesRef = useRef(tables);
     tablesRef.current = tables;
     const diagramIdRef = useRef(diagramId);
@@ -436,7 +441,7 @@ export const ChartDBProvider: React.FC<
     );
 
     const removeTables: ChartDBContext['removeTables'] = useCallback(
-        async (ids, options) => {
+        async (ids, options = { updateHistory: true }) => {
             const tables = ids.map((id) => getTable(id)).filter((t) => !!t);
             const relationshipsToRemove = relationships.filter(
                 (relationship) =>
@@ -472,6 +477,34 @@ export const ChartDBProvider: React.FC<
                 tables.filter((table) => !ids.includes(table.id))
             );
 
+            const removedTagAssignments = tagAssignmentsRef.current.filter(
+                (assignment) =>
+                    assignmentTargetsRemovedEntity(assignment, {
+                        tableIds: new Set(ids),
+                        fieldIds: new Set(
+                            tables.flatMap((table) =>
+                                table.fields.map((field) => field.id)
+                            )
+                        ),
+                        relationshipIds: new Set(
+                            relationshipsToRemove.map(
+                                (relationship) => relationship.id
+                            )
+                        ),
+                    })
+            );
+            const removedAssignmentIds = new Set(
+                removedTagAssignments.map((assignment) => assignment.id)
+            );
+
+            if (removedAssignmentIds.size > 0) {
+                setTagAssignments((current) =>
+                    current.filter(
+                        (assignment) => !removedAssignmentIds.has(assignment.id)
+                    )
+                );
+            }
+
             events.emit({
                 action: 'remove_tables',
                 data: buildRemoveTablesOperationData(
@@ -492,9 +525,15 @@ export const ChartDBProvider: React.FC<
                     db.deleteDependency({ diagramId, id: dependency.id })
                 ),
                 ...ids.map((id) => db.deleteTable({ diagramId, id })),
+                ...removedTagAssignments.map((assignment) =>
+                    db.deleteTagAssignment({
+                        diagramId,
+                        id: assignment.id,
+                    })
+                ),
             ]);
 
-            if (tables.length > 0 && options?.updateHistory) {
+            if (tables.length > 0 && options.updateHistory) {
                 addUndoAction({
                     action: 'removeTables',
                     redoData: {
@@ -504,6 +543,7 @@ export const ChartDBProvider: React.FC<
                         tables,
                         relationships: relationshipsToRemove,
                         dependencies: dependenciesToRemove,
+                        tagAssignments: removedTagAssignments,
                     },
                 });
                 resetRedoStack();
@@ -519,6 +559,7 @@ export const ChartDBProvider: React.FC<
             relationships,
             events,
             dependencies,
+            setTagAssignments,
         ]
     );
 
@@ -840,28 +881,57 @@ export const ChartDBProvider: React.FC<
                 },
             });
 
-            const table = await db.getTable({ diagramId, id: tableId });
-            if (!table) {
-                return;
+            const removedTagAssignments = tagAssignmentsRef.current.filter(
+                (assignment) =>
+                    assignmentTargetsRemovedEntity(assignment, {
+                        fieldIds: new Set([fieldId]),
+                    })
+            );
+
+            if (removedTagAssignments.length > 0) {
+                const removedAssignmentIds = new Set(
+                    removedTagAssignments.map((assignment) => assignment.id)
+                );
+                setTagAssignments((current) =>
+                    current.filter(
+                        (assignment) => !removedAssignmentIds.has(assignment.id)
+                    )
+                );
             }
 
             const updatedAt = new Date();
             setDiagramUpdatedAt(updatedAt);
+            const table = await db.getTable({ diagramId, id: tableId });
+
             await Promise.all([
                 db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
-                db.updateTable({
-                    id: tableId,
-                    attributes: {
-                        ...updateTableFn(table),
-                    },
-                }),
+                ...removedTagAssignments.map((assignment) =>
+                    db.deleteTagAssignment({
+                        diagramId,
+                        id: assignment.id,
+                    })
+                ),
+                ...(table
+                    ? [
+                          db.updateTable({
+                              id: tableId,
+                              attributes: {
+                                  ...updateTableFn(table),
+                              },
+                          }),
+                      ]
+                    : []),
             ]);
 
             if (!!prevField && options.updateHistory) {
                 addUndoAction({
                     action: 'removeField',
                     redoData: { tableId, fieldId },
-                    undoData: { tableId, field: prevField },
+                    undoData: {
+                        tableId,
+                        field: prevField,
+                        tagAssignments: removedTagAssignments,
+                    },
                 });
                 resetRedoStack();
             }
@@ -875,6 +945,7 @@ export const ChartDBProvider: React.FC<
             getField,
             getTable,
             events,
+            setTagAssignments,
         ]
     );
 
@@ -1462,6 +1533,25 @@ export const ChartDBProvider: React.FC<
                     )
                 );
 
+                const removedTagAssignments = tagAssignmentsRef.current.filter(
+                    (assignment) =>
+                        assignmentTargetsRemovedEntity(assignment, {
+                            relationshipIds: new Set(ids),
+                        })
+                );
+
+                if (removedTagAssignments.length > 0) {
+                    const removedAssignmentIds = new Set(
+                        removedTagAssignments.map((assignment) => assignment.id)
+                    );
+                    setTagAssignments((current) =>
+                        current.filter(
+                            (assignment) =>
+                                !removedAssignmentIds.has(assignment.id)
+                        )
+                    );
+                }
+
                 events.emit({
                     action: 'remove_relationships',
                     data: { relationshipIds: ids },
@@ -1473,6 +1563,12 @@ export const ChartDBProvider: React.FC<
                     ...ids.map((id) =>
                         db.deleteRelationship({ diagramId, id })
                     ),
+                    ...removedTagAssignments.map((assignment) =>
+                        db.deleteTagAssignment({
+                            diagramId,
+                            id: assignment.id,
+                        })
+                    ),
                     db.updateDiagram({
                         id: diagramId,
                         attributes: { updatedAt },
@@ -1483,7 +1579,10 @@ export const ChartDBProvider: React.FC<
                     addUndoAction({
                         action: 'removeRelationships',
                         redoData: { relationshipsIds: ids },
-                        undoData: { relationships: prevRelationships },
+                        undoData: {
+                            relationships: prevRelationships,
+                            tagAssignments: removedTagAssignments,
+                        },
                     });
                     resetRedoStack();
                 }
@@ -1496,6 +1595,7 @@ export const ChartDBProvider: React.FC<
                 addUndoAction,
                 resetRedoStack,
                 events,
+                setTagAssignments,
             ]
         );
 
@@ -2349,22 +2449,265 @@ export const ChartDBProvider: React.FC<
         ]
     );
 
+    const addTags: ChartDBContext['addTags'] = useCallback(
+        async (tagsToAdd, options = { updateHistory: true }) => {
+            if (tagsToAdd.length === 0) {
+                return;
+            }
+
+            setTags((current) => [...current, ...tagsToAdd]);
+            events.emit({
+                action: 'add_tags',
+                data: { tags: tagsToAdd },
+            });
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...tagsToAdd.map((tag) => db.addTag({ diagramId, tag })),
+            ]);
+
+            if (options.updateHistory) {
+                addUndoAction({
+                    action: 'addTags',
+                    redoData: { tags: tagsToAdd },
+                    undoData: { tagIds: tagsToAdd.map((tag) => tag.id) },
+                });
+                resetRedoStack();
+            }
+        },
+        [db, diagramId, setTags, events, addUndoAction, resetRedoStack]
+    );
+
+    const updateTag: ChartDBContext['updateTag'] = useCallback(
+        async (id, attributes, options = { updateHistory: true }) => {
+            const supported: Partial<Pick<DiagramTag, 'name' | 'color'>> = {};
+
+            if (
+                typeof attributes.name === 'string' &&
+                attributes.name.trim().length > 0
+            ) {
+                supported.name = attributes.name;
+            }
+
+            if (
+                typeof attributes.color === 'string' &&
+                attributes.color.trim().length > 0
+            ) {
+                supported.color = attributes.color;
+            }
+
+            if (Object.keys(supported).length === 0) {
+                return;
+            }
+
+            const previous = tagsRef.current.find((tag) => tag.id === id);
+
+            if (!previous) {
+                return;
+            }
+
+            setTags((current) =>
+                current.map((tag) =>
+                    tag.id === id ? { ...tag, ...supported } : tag
+                )
+            );
+            events.emit({
+                action: 'update_tag',
+                data: { id, tag: supported },
+            });
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                db.updateTag({ id, attributes: supported }),
+            ]);
+
+            if (options.updateHistory) {
+                addUndoAction({
+                    action: 'updateTag',
+                    redoData: { tagId: id, attributes: supported },
+                    undoData: {
+                        tagId: id,
+                        attributes: {
+                            name: previous.name,
+                            color: previous.color,
+                        },
+                    },
+                });
+                resetRedoStack();
+            }
+        },
+        [db, diagramId, setTags, events, addUndoAction, resetRedoStack]
+    );
+
+    const removeTags: ChartDBContext['removeTags'] = useCallback(
+        async (tagIds, options = { updateHistory: true }) => {
+            const idSet = new Set(tagIds);
+            const removedTags = tagsRef.current.filter((tag) =>
+                idSet.has(tag.id)
+            );
+
+            if (removedTags.length === 0) {
+                return;
+            }
+
+            const removedIds = new Set(removedTags.map((tag) => tag.id));
+            const removedAssignments = tagAssignmentsRef.current.filter(
+                (assignment) =>
+                    assignmentTargetsRemovedEntity(assignment, {
+                        tagIds: removedIds,
+                    })
+            );
+
+            setTags((current) =>
+                current.filter((tag) => !removedIds.has(tag.id))
+            );
+            setTagAssignments((current) =>
+                current.filter(
+                    (assignment) => !removedIds.has(assignment.tagId)
+                )
+            );
+            events.emit({
+                action: 'remove_tags',
+                data: { tagIds: removedTags.map((tag) => tag.id) },
+            });
+
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...removedTags.map((tag) =>
+                    db.deleteTag({ diagramId, id: tag.id })
+                ),
+                ...removedAssignments.map((assignment) =>
+                    db.deleteTagAssignment({
+                        diagramId,
+                        id: assignment.id,
+                    })
+                ),
+            ]);
+
+            if (options.updateHistory) {
+                addUndoAction({
+                    action: 'removeTags',
+                    redoData: { tagIds: removedTags.map((tag) => tag.id) },
+                    undoData: {
+                        tags: removedTags,
+                        assignments: removedAssignments,
+                    },
+                });
+                resetRedoStack();
+            }
+        },
+        [
+            db,
+            diagramId,
+            setTags,
+            setTagAssignments,
+            events,
+            addUndoAction,
+            resetRedoStack,
+        ]
+    );
+
     const addTagAssignments: ChartDBContext['addTagAssignments'] = useCallback(
-        async (assignments) => {
+        async (assignments, options = { updateHistory: true }) => {
             if (assignments.length === 0) {
                 return;
             }
 
             setTagAssignments((current) => [...current, ...assignments]);
+            events.emit({
+                action: 'add_tag_assignments',
+                data: { assignments },
+            });
 
-            await Promise.all(
-                assignments.map((assignment) =>
+            const updatedAt = new Date();
+            setDiagramUpdatedAt(updatedAt);
+            await Promise.all([
+                db.updateDiagram({ id: diagramId, attributes: { updatedAt } }),
+                ...assignments.map((assignment) =>
                     db.addTagAssignment({ diagramId, assignment })
-                )
-            );
+                ),
+            ]);
+
+            if (options.updateHistory) {
+                addUndoAction({
+                    action: 'addTagAssignments',
+                    redoData: { assignments },
+                    undoData: {
+                        assignmentIds: assignments.map(
+                            (assignment) => assignment.id
+                        ),
+                    },
+                });
+                resetRedoStack();
+            }
         },
-        [db, diagramId]
+        [db, diagramId, events, addUndoAction, resetRedoStack]
     );
+
+    const removeTagAssignments: ChartDBContext['removeTagAssignments'] =
+        useCallback(
+            async (assignmentIds, options = { updateHistory: true }) => {
+                const idSet = new Set(assignmentIds);
+                const removed = tagAssignmentsRef.current.filter((assignment) =>
+                    idSet.has(assignment.id)
+                );
+
+                if (removed.length === 0) {
+                    return;
+                }
+
+                const removedIds = new Set(
+                    removed.map((assignment) => assignment.id)
+                );
+                setTagAssignments((current) =>
+                    current.filter(
+                        (assignment) => !removedIds.has(assignment.id)
+                    )
+                );
+                events.emit({
+                    action: 'remove_tag_assignments',
+                    data: { assignmentIds: [...removedIds] },
+                });
+
+                const updatedAt = new Date();
+                setDiagramUpdatedAt(updatedAt);
+                await Promise.all([
+                    db.updateDiagram({
+                        id: diagramId,
+                        attributes: { updatedAt },
+                    }),
+                    ...removed.map((assignment) =>
+                        db.deleteTagAssignment({
+                            diagramId,
+                            id: assignment.id,
+                        })
+                    ),
+                ]);
+
+                if (options.updateHistory) {
+                    addUndoAction({
+                        action: 'removeTagAssignments',
+                        redoData: { assignmentIds: [...removedIds] },
+                        undoData: { assignments: removed },
+                    });
+                    resetRedoStack();
+                }
+            },
+            [
+                db,
+                diagramId,
+                setTagAssignments,
+                events,
+                addUndoAction,
+                resetRedoStack,
+            ]
+        );
 
     return (
         <chartDBContext.Provider
@@ -2453,7 +2796,11 @@ export const ChartDBProvider: React.FC<
                 removeNotes,
                 updateNote,
                 tagAssignments,
+                addTags,
+                updateTag,
+                removeTags,
                 addTagAssignments,
+                removeTagAssignments,
             }}
         >
             {children}

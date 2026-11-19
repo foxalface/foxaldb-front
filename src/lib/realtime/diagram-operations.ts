@@ -19,6 +19,13 @@ import type { DBField } from '@/lib/domain/db-field';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { Note } from '@/lib/domain/note';
+import {
+    tagAssignmentKey,
+    tagTargetTypes,
+    type DiagramTag,
+    type DiagramTagAssignment,
+    type TagTargetType,
+} from '@/lib/domain/diagram-tag';
 
 export type DiagramOperationAction =
     | 'update_diagram_name'
@@ -39,7 +46,12 @@ export type DiagramOperationAction =
     | 'update_area'
     | 'add_dependencies'
     | 'remove_dependencies'
-    | 'update_dependency';
+    | 'update_dependency'
+    | 'add_tags'
+    | 'update_tag'
+    | 'remove_tags'
+    | 'add_tag_assignments'
+    | 'remove_tag_assignments';
 
 export type UpdateFieldOperationData = {
     tableId: string;
@@ -71,6 +83,27 @@ export type UpdateDiagramNameOperationData = {
     name: string;
 };
 
+export type AddTagsOperationData = {
+    tags: DiagramTag[];
+};
+
+export type UpdateTagOperationData = {
+    id: string;
+    attributes: Partial<Pick<DiagramTag, 'name' | 'color'>>;
+};
+
+export type RemoveTagsOperationData = {
+    tagIds: string[];
+};
+
+export type AddTagAssignmentsOperationData = {
+    assignments: DiagramTagAssignment[];
+};
+
+export type RemoveTagAssignmentsOperationData = {
+    assignmentIds: string[];
+};
+
 export type DiagramOperationData =
     | UpdateDiagramNameOperationData
     | CreateTableEvent['data']
@@ -90,7 +123,12 @@ export type DiagramOperationData =
     | UpdateAreaOperationData
     | AddDependenciesEvent['data']
     | RemoveDependenciesEvent['data']
-    | UpdateDependencyOperationData;
+    | UpdateDependencyOperationData
+    | AddTagsOperationData
+    | UpdateTagOperationData
+    | RemoveTagsOperationData
+    | AddTagAssignmentsOperationData
+    | RemoveTagAssignmentsOperationData;
 
 export interface DiagramOperationRequest {
     action: DiagramOperationAction;
@@ -192,6 +230,27 @@ export interface DiagramOperationMutators {
         dependency: Partial<DBDependency>,
         options: { updateHistory: false }
     ) => Promise<void>;
+    addTags: (
+        tags: DiagramTag[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    updateTag: (
+        id: string,
+        attributes: Partial<Pick<DiagramTag, 'name' | 'color'>>,
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    removeTags: (
+        tagIds: string[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    addTagAssignments: (
+        assignments: DiagramTagAssignment[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
+    removeTagAssignments: (
+        assignmentIds: string[],
+        options: { updateHistory: false }
+    ) => Promise<void>;
 }
 
 export interface ApplyRemoteDiagramOperationContext {
@@ -210,6 +269,9 @@ export interface ApplyRemoteDiagramOperationContext {
     getDependencyFromStorage: (
         dependencyId: string
     ) => Promise<DBDependency | undefined>;
+    existingTagIds: ReadonlySet<string>;
+    existingAssignmentIds: ReadonlySet<string>;
+    existingAssignmentKeys: ReadonlySet<string>;
 }
 
 const isDexieConstraintError = (error: unknown): boolean =>
@@ -235,6 +297,11 @@ const DIAGRAM_OPERATION_ACTIONS: readonly DiagramOperationAction[] = [
     'add_dependencies',
     'remove_dependencies',
     'update_dependency',
+    'add_tags',
+    'update_tag',
+    'remove_tags',
+    'add_tag_assignments',
+    'remove_tag_assignments',
 ];
 
 export const isDiagramOperationAction = (
@@ -432,6 +499,130 @@ const validateUpdateDependencyData = (
 
 const tableHasField = (table: DBTable | undefined, fieldId: string): boolean =>
     table?.fields.some((field) => field.id === fieldId) ?? false;
+
+const isNonEmptyString = (value: unknown): value is string =>
+    typeof value === 'string' && value.trim().length > 0;
+
+const isTagTargetType = (value: unknown): value is TagTargetType =>
+    typeof value === 'string' &&
+    (tagTargetTypes as readonly string[]).includes(value);
+
+const isDiagramTag = (value: unknown): value is DiagramTag =>
+    isRecord(value) &&
+    isNonEmptyString(value.id) &&
+    isNonEmptyString(value.name) &&
+    isNonEmptyString(value.color);
+
+const isDiagramTagAssignment = (
+    value: unknown
+): value is DiagramTagAssignment =>
+    isRecord(value) &&
+    isNonEmptyString(value.id) &&
+    isNonEmptyString(value.tagId) &&
+    isTagTargetType(value.targetType) &&
+    isNonEmptyString(value.targetId);
+
+const tagAttributes = (
+    value: unknown
+): Partial<Pick<DiagramTag, 'name' | 'color'>> | null => {
+    if (!isRecord(value)) {
+        return null;
+    }
+
+    const attributes: Partial<Pick<DiagramTag, 'name' | 'color'>> = {};
+
+    if (value.name !== undefined) {
+        if (!isNonEmptyString(value.name)) {
+            return null;
+        }
+
+        attributes.name = value.name;
+    }
+
+    if (value.color !== undefined) {
+        if (!isNonEmptyString(value.color)) {
+            return null;
+        }
+
+        attributes.color = value.color;
+    }
+
+    const unsupported = Object.keys(value).filter(
+        (key) => key !== 'name' && key !== 'color'
+    );
+
+    if (unsupported.length > 0 || Object.keys(attributes).length === 0) {
+        return null;
+    }
+
+    return attributes;
+};
+
+const validateAddTagsData = (data: unknown): data is AddTagsOperationData =>
+    isRecord(data) &&
+    Array.isArray(data.tags) &&
+    data.tags.length > 0 &&
+    data.tags.every(isDiagramTag);
+
+const validateUpdateTagData = (data: unknown): data is UpdateTagOperationData =>
+    isRecord(data) &&
+    isNonEmptyString(data.id) &&
+    tagAttributes(data.attributes) !== null;
+
+const validateRemoveTagsData = (
+    data: unknown
+): data is RemoveTagsOperationData =>
+    isRecord(data) &&
+    Array.isArray(data.tagIds) &&
+    data.tagIds.length > 0 &&
+    data.tagIds.every(isNonEmptyString);
+
+const validateAddTagAssignmentsData = (
+    data: unknown
+): data is AddTagAssignmentsOperationData =>
+    isRecord(data) &&
+    Array.isArray(data.assignments) &&
+    data.assignments.length > 0 &&
+    data.assignments.every(isDiagramTagAssignment);
+
+const validateRemoveTagAssignmentsData = (
+    data: unknown
+): data is RemoveTagAssignmentsOperationData =>
+    isRecord(data) &&
+    Array.isArray(data.assignmentIds) &&
+    data.assignmentIds.length > 0 &&
+    data.assignmentIds.every(isNonEmptyString);
+
+const fieldIdExists = (
+    fieldId: string,
+    fieldsByTable: ReadonlyMap<string, ReadonlySet<string>>
+): boolean => {
+    for (const fieldIds of fieldsByTable.values()) {
+        if (fieldIds.has(fieldId)) {
+            return true;
+        }
+    }
+
+    return false;
+};
+
+const assignmentTargetExists = (
+    assignment: DiagramTagAssignment,
+    context: ApplyRemoteDiagramOperationContext
+): boolean => {
+    if (assignment.targetType === 'table') {
+        return context.existingTableIds.has(assignment.targetId);
+    }
+
+    if (assignment.targetType === 'field') {
+        return fieldIdExists(
+            assignment.targetId,
+            context.existingFieldIdsByTable
+        );
+    }
+
+    return context.existingRelationshipIds.has(assignment.targetId);
+};
 
 export const applyRemoteDiagramOperation = async (
     payload: DiagramOperationPayload,
@@ -924,6 +1115,121 @@ export const applyRemoteDiagramOperation = async (
             await mutators.updateDependency(
                 dependencyId,
                 payload.data.attributes,
+                historyOptions
+            );
+            return;
+        }
+
+        case 'add_tags': {
+            if (!validateAddTagsData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid add_tags payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const tags = payload.data.tags.filter(
+                (tag) => !context.existingTagIds.has(tag.id)
+            );
+
+            if (tags.length === 0) {
+                return;
+            }
+
+            await mutators.addTags(tags, historyOptions);
+            return;
+        }
+
+        case 'update_tag': {
+            if (!validateUpdateTagData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid update_tag payload',
+                    payload.data
+                );
+                return;
+            }
+
+            if (!context.existingTagIds.has(payload.data.id)) {
+                return;
+            }
+
+            const attributes = tagAttributes(payload.data.attributes);
+
+            if (attributes === null) {
+                return;
+            }
+
+            await mutators.updateTag(
+                payload.data.id,
+                attributes,
+                historyOptions
+            );
+            return;
+        }
+
+        case 'remove_tags': {
+            if (!validateRemoveTagsData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid remove_tags payload',
+                    payload.data
+                );
+                return;
+            }
+
+            await mutators.removeTags(payload.data.tagIds, historyOptions);
+            return;
+        }
+
+        case 'add_tag_assignments': {
+            if (!validateAddTagAssignmentsData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid add_tag_assignments payload',
+                    payload.data
+                );
+                return;
+            }
+
+            const seenIds = new Set(context.existingAssignmentIds);
+            const seenKeys = new Set(context.existingAssignmentKeys);
+            const assignments = payload.data.assignments.filter(
+                (assignment) => {
+                    const key = tagAssignmentKey(assignment);
+
+                    if (
+                        seenIds.has(assignment.id) ||
+                        seenKeys.has(key) ||
+                        !context.existingTagIds.has(assignment.tagId) ||
+                        !assignmentTargetExists(assignment, context)
+                    ) {
+                        return false;
+                    }
+
+                    seenIds.add(assignment.id);
+                    seenKeys.add(key);
+                    return true;
+                }
+            );
+
+            if (assignments.length === 0) {
+                return;
+            }
+
+            await mutators.addTagAssignments(assignments, historyOptions);
+            return;
+        }
+
+        case 'remove_tag_assignments': {
+            if (!validateRemoveTagAssignmentsData(payload.data)) {
+                console.warn(
+                    '[DiagramOperation] Invalid remove_tag_assignments payload',
+                    payload.data
+                );
+                return;
+            }
+
+            await mutators.removeTagAssignments(
+                payload.data.assignmentIds,
                 historyOptions
             );
             return;

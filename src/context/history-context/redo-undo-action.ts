@@ -8,6 +8,10 @@ import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { Note } from '@/lib/domain/note';
+import type {
+    DiagramTag,
+    DiagramTagAssignment,
+} from '@/lib/domain/diagram-tag';
 import type { Diagram } from '@/lib/domain/diagram';
 
 type Action = keyof ChartDBContext;
@@ -43,6 +47,7 @@ type RedoUndoActionRemoveTables = RedoUndoActionBase<
         tables: DBTable[];
         relationships: DBRelationship[];
         dependencies: DBDependency[];
+        tagAssignments: DiagramTagAssignment[];
     }
 >;
 
@@ -65,7 +70,11 @@ type RedoUndoActionAddField = RedoUndoActionBase<
 type RedoUndoActionRemoveField = RedoUndoActionBase<
     'removeField',
     { tableId: string; fieldId: string },
-    { tableId: string; field: DBField }
+    {
+        tableId: string;
+        field: DBField;
+        tagAssignments: DiagramTagAssignment[];
+    }
 >;
 
 type RedoUndoActionUpdateField = RedoUndoActionBase<
@@ -133,7 +142,10 @@ type RedoUndoActionUpdateRelationship = RedoUndoActionBase<
 type RedoUndoActionRemoveRelationships = RedoUndoActionBase<
     'removeRelationships',
     { relationshipsIds: string[] },
-    { relationships: DBRelationship[] }
+    {
+        relationships: DBRelationship[];
+        tagAssignments: DiagramTagAssignment[];
+    }
 >;
 
 type RedoUndoActionAddDependencies = RedoUndoActionBase<
@@ -208,6 +220,36 @@ type RedoUndoActionRemoveNotes = RedoUndoActionBase<
     { notes: Note[] }
 >;
 
+type RedoUndoActionAddTags = RedoUndoActionBase<
+    'addTags',
+    { tags: DiagramTag[] },
+    { tagIds: string[] }
+>;
+
+type RedoUndoActionUpdateTag = RedoUndoActionBase<
+    'updateTag',
+    { tagId: string; attributes: Partial<Pick<DiagramTag, 'name' | 'color'>> },
+    { tagId: string; attributes: Partial<Pick<DiagramTag, 'name' | 'color'>> }
+>;
+
+type RedoUndoActionRemoveTags = RedoUndoActionBase<
+    'removeTags',
+    { tagIds: string[] },
+    { tags: DiagramTag[]; assignments: DiagramTagAssignment[] }
+>;
+
+type RedoUndoActionAddTagAssignments = RedoUndoActionBase<
+    'addTagAssignments',
+    { assignments: DiagramTagAssignment[] },
+    { assignmentIds: string[] }
+>;
+
+type RedoUndoActionRemoveTagAssignments = RedoUndoActionBase<
+    'removeTagAssignments',
+    { assignmentIds: string[] },
+    { assignments: DiagramTagAssignment[] }
+>;
+
 type RedoUndoActionReplaceDiagram = RedoUndoActionBase<
     'replaceDiagram',
     { diagram: Diagram },
@@ -244,6 +286,11 @@ export type RedoUndoAction =
     | RedoUndoActionAddNotes
     | RedoUndoActionUpdateNote
     | RedoUndoActionRemoveNotes
+    | RedoUndoActionAddTags
+    | RedoUndoActionUpdateTag
+    | RedoUndoActionRemoveTags
+    | RedoUndoActionAddTagAssignments
+    | RedoUndoActionRemoveTagAssignments
     | RedoUndoActionReplaceDiagram;
 
 export type RedoActionData<T extends Action> = Extract<

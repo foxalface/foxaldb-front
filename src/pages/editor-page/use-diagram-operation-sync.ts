@@ -23,6 +23,7 @@ const UPDATE_RELATIONSHIP_DEBOUNCE_MS = 150;
 const UPDATE_NOTE_DEBOUNCE_MS = 150;
 const UPDATE_AREA_DEBOUNCE_MS = 150;
 const UPDATE_DEPENDENCY_DEBOUNCE_MS = 150;
+const UPDATE_TAG_DEBOUNCE_MS = 150;
 
 const updateDiagramNameTimeouts = new Map<
     string,
@@ -40,6 +41,12 @@ const updateDependencyTimeouts = new Map<
     string,
     ReturnType<typeof setTimeout>
 >();
+const updateTagTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+
+// One client's HTTP posts are not ordered by the transport. Assignment posts
+// wait until earlier posts from the same diagram have settled so a tag or
+// table exists before its assignment is broadcast.
+const diagramOperationTails = new Map<string, Promise<void>>();
 
 const clearTimeoutMap = (
     timeouts: Map<string, ReturnType<typeof setTimeout>>
@@ -56,6 +63,27 @@ export const clearPendingDiagramOperationSyncTimers = (): void => {
     clearTimeoutMap(updateNoteTimeouts);
     clearTimeoutMap(updateAreaTimeouts);
     clearTimeoutMap(updateDependencyTimeouts);
+    clearTimeoutMap(updateTagTimeouts);
+    diagramOperationTails.clear();
+};
+
+const tagAttributePresent = (value: string | undefined): boolean =>
+    typeof value === 'string' && value.trim().length > 0;
+
+const supportedTagAttributes = (
+    tag: Partial<{ name: string; color: string }>
+): { name?: string; color?: string } => {
+    const attributes: { name?: string; color?: string } = {};
+
+    if (tagAttributePresent(tag.name)) {
+        attributes.name = tag.name;
+    }
+
+    if (tagAttributePresent(tag.color)) {
+        attributes.color = tag.color;
+    }
+
+    return attributes;
 };
 
 const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
@@ -121,6 +149,20 @@ const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
                 event.data.id.length > 0 &&
                 Object.keys(event.data.dependency).length > 0
             );
+        case 'add_tags':
+            return event.data.tags.length > 0;
+        case 'remove_tags':
+            return event.data.tagIds.length > 0;
+        case 'update_tag':
+            return (
+                event.data.id.length > 0 &&
+                (tagAttributePresent(event.data.tag.name) ||
+                    tagAttributePresent(event.data.tag.color))
+            );
+        case 'add_tag_assignments':
+            return event.data.assignments.length > 0;
+        case 'remove_tag_assignments':
+            return event.data.assignmentIds.length > 0;
         case 'load_diagram':
             return false;
     }
@@ -146,14 +188,41 @@ export const useDiagramOperationSync = (): void => {
 
             const diagramId = onlineDiagramId;
 
-            const postOperation = (body: DiagramOperationRequest): void => {
-                void postDiagramOperation(diagramId, body).catch(
+            const sendOperation = (
+                body: DiagramOperationRequest
+            ): Promise<void> =>
+                postDiagramOperation(diagramId, body).then(
+                    () => undefined,
                     (error: unknown) => {
                         console.warn(
                             '[DiagramOperation] Failed to post operation',
                             error
                         );
                     }
+                );
+
+            const postOperation = (body: DiagramOperationRequest): void => {
+                if (body.action === 'add_tag_assignments') {
+                    const waitFor =
+                        diagramOperationTails.get(diagramId) ??
+                        Promise.resolve();
+                    const pending = waitFor.then(
+                        () => sendOperation(body),
+                        () => sendOperation(body)
+                    );
+                    diagramOperationTails.set(diagramId, pending);
+                    return;
+                }
+
+                const pending = sendOperation(body);
+                const previous =
+                    diagramOperationTails.get(diagramId) ?? Promise.resolve();
+                diagramOperationTails.set(
+                    diagramId,
+                    previous.then(
+                        () => pending,
+                        () => pending
+                    )
                 );
             };
 
@@ -407,6 +476,43 @@ export const useDiagramOperationSync = (): void => {
 
                 updateDependencyTimeouts.set(dependencyId, timeout);
                 return;
+            }
+
+            if (
+                event.action === 'add_tags' ||
+                event.action === 'remove_tags' ||
+                event.action === 'add_tag_assignments' ||
+                event.action === 'remove_tag_assignments'
+            ) {
+                postOperation({
+                    action: event.action,
+                    data: event.data,
+                    clientId: getClientId(),
+                });
+                return;
+            }
+
+            if (event.action === 'update_tag') {
+                const tagId = event.data.id;
+                const existing = updateTagTimeouts.get(tagId);
+                if (existing) clearTimeout(existing);
+
+                const timeout = setTimeout(() => {
+                    updateTagTimeouts.delete(tagId);
+
+                    if (shouldSkipOutboundSync()) return;
+
+                    postOperation({
+                        action: 'update_tag',
+                        data: {
+                            id: event.data.id,
+                            attributes: supportedTagAttributes(event.data.tag),
+                        },
+                        clientId: getClientId(),
+                    });
+                }, UPDATE_TAG_DEBOUNCE_MS);
+
+                updateTagTimeouts.set(tagId, timeout);
             }
         },
         [onlineDiagramId, diagramAccess, isAuthenticated, isLoading]

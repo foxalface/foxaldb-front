@@ -14,7 +14,10 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
 import type { Note } from '@/lib/domain/note';
-import type { DiagramTagAssignment } from '@/lib/domain/diagram-tag';
+import type {
+    DiagramTag,
+    DiagramTagAssignment,
+} from '@/lib/domain/diagram-tag';
 
 export type ChartDBEventType =
     | 'update_diagram_name'
@@ -36,6 +39,11 @@ export type ChartDBEventType =
     | 'add_dependencies'
     | 'remove_dependencies'
     | 'update_dependency'
+    | 'add_tags'
+    | 'update_tag'
+    | 'remove_tags'
+    | 'add_tag_assignments'
+    | 'remove_tag_assignments'
     | 'load_diagram';
 
 export type ChartDBEventBase<T extends ChartDBEventType, D> = {
@@ -131,6 +139,28 @@ export type UpdateDependencyEvent = ChartDBEventBase<
     { id: string; dependency: Partial<DBDependency> }
 >;
 
+export type AddTagsEvent = ChartDBEventBase<'add_tags', { tags: DiagramTag[] }>;
+
+export type UpdateTagEvent = ChartDBEventBase<
+    'update_tag',
+    { id: string; tag: Partial<Pick<DiagramTag, 'name' | 'color'>> }
+>;
+
+export type RemoveTagsEvent = ChartDBEventBase<
+    'remove_tags',
+    { tagIds: string[] }
+>;
+
+export type AddTagAssignmentsEvent = ChartDBEventBase<
+    'add_tag_assignments',
+    { assignments: DiagramTagAssignment[] }
+>;
+
+export type RemoveTagAssignmentsEvent = ChartDBEventBase<
+    'remove_tag_assignments',
+    { assignmentIds: string[] }
+>;
+
 export type LoadDiagramEvent = ChartDBEventBase<
     'load_diagram',
     { diagram: Diagram }
@@ -161,6 +191,11 @@ export type ChartDBEvent =
     | AddDependenciesEvent
     | RemoveDependenciesEvent
     | UpdateDependencyEvent
+    | AddTagsEvent
+    | UpdateTagEvent
+    | RemoveTagsEvent
+    | AddTagAssignmentsEvent
+    | RemoveTagAssignmentsEvent
     | LoadDiagramEvent;
 
 export interface ChartDBContext {
@@ -413,7 +448,27 @@ export interface ChartDBContext {
         note: Partial<Note>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
-    addTagAssignments: (assignments: DiagramTagAssignment[]) => Promise<void>;
+    addTags: (
+        tags: DiagramTag[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    updateTag: (
+        id: string,
+        attributes: Partial<Pick<DiagramTag, 'name' | 'color'>>,
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    removeTags: (
+        tagIds: string[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    addTagAssignments: (
+        assignments: DiagramTagAssignment[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
+    removeTagAssignments: (
+        assignmentIds: string[],
+        options?: { updateHistory: boolean }
+    ) => Promise<void>;
 
     // Custom type operations
     createCustomType: (
@@ -545,7 +600,11 @@ export const chartDBContext = createContext<ChartDBContext>({
     removeNote: emptyFn,
     removeNotes: emptyFn,
     updateNote: emptyFn,
+    addTags: emptyFn,
+    updateTag: emptyFn,
+    removeTags: emptyFn,
     addTagAssignments: emptyFn,
+    removeTagAssignments: emptyFn,
 
     // Custom type operations
     createCustomType: emptyFn,
