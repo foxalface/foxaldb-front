@@ -34,7 +34,6 @@ import {
     resolveLaravelExportErrorCode,
     type LaravelExportErrorCode,
 } from '@/lib/laravel-export/resolve-laravel-export-error-code';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { ExportStructuralScopeControl } from './export-structural-scope-control';
 import { ExportWizardStep } from './export-wizard-step';
 import type { ExportTargetId } from './export-target-id';
@@ -73,7 +72,6 @@ import {
     isDeterministicSqlExportSourceSupported,
 } from '@/lib/data/sql-export/deterministic-sql-export-capability';
 import { exportBaseSQL } from '@/lib/data/sql-export/export-sql-script';
-import { getFilteredDiagramForSqlExport } from '@/lib/data/sql-export/get-filtered-diagram-for-sql-export';
 import {
     fullStructuralExportScope,
     projectDiagramForStructuralExport,
@@ -141,7 +139,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
 }) => {
     const { t } = useTranslation();
     const { databaseType, currentDiagram } = useChartDB();
-    const { filter } = useDiagramFilter();
     const { isAuthenticated } = useAuth();
     const onlineDiagramId = useOnlineDiagramId();
     const { exportImage } = useExportImage();
@@ -992,16 +989,8 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             setSqlHasError(false);
 
             try {
-                const filteredDiagram =
-                    structuralExportScope.kind === 'tags'
-                        ? structuralExportDiagram
-                        : getFilteredDiagramForSqlExport(
-                              structuralExportDiagram,
-                              filter ?? {},
-                              sqlTargetDatabaseType
-                          );
                 const script = await exportBaseSQL({
-                    diagram: filteredDiagram,
+                    diagram: structuralExportDiagram,
                     targetDatabaseType: sqlTargetDatabaseType,
                 });
 
@@ -1025,7 +1014,6 @@ export const ExportWizardDialog: React.FC<ExportWizardDialogProps> = ({
             cancelled = true;
         };
     }, [
-        filter,
         sqlHasError,
         sqlScript,
         sqlTargetDatabaseType,

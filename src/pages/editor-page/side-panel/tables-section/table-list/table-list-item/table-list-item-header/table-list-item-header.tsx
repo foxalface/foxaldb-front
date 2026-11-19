@@ -51,7 +51,6 @@ import { cloneTable } from '@/lib/clone';
 import { cloneTableTagAssignments } from '@/lib/domain/diagram-tag';
 import type { DBSchema } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
 import { ColorPicker } from '@/components/color-picker/color-picker';
 
@@ -75,7 +74,6 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         tagAssignments,
         addTagAssignments,
     } = useChartDB();
-    const { schemasDisplayed } = useDiagramFilter();
     const { openTableSchemaDialog } = useDialog();
     const { startEditing, stopEditing } = useEditingBroadcast();
     const { t } = useTranslation();
@@ -365,10 +363,10 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
     ]);
 
     const schemaToDisplay = useMemo(() => {
-        if (schemasDisplayed.length > 1) {
+        if (schemas.length > 1) {
             return table.schema ?? defaultSchemas[databaseType];
         }
-    }, [table.schema, schemasDisplayed.length, databaseType]);
+    }, [table.schema, schemas.length, databaseType]);
 
     useEffect(() => {
         if (table.name.trim()) {

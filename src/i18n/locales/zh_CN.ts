@@ -230,8 +230,6 @@ export const zh_CN: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                all_hidden: '所有表格已隐藏',
-                show_all: '显示全部',
 
                 table: {
                     fields: '字段',
@@ -739,7 +737,6 @@ export const zh_CN: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: '突出显示重叠的表',
-            filter: '筛选表',
         },
 
         new_diagram_dialog: {
@@ -1768,22 +1765,6 @@ export const zh_CN: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: '移动到区域',
             no_area: '无区域',
-        },
-
-        canvas: {
-            all_tables_hidden: '所有表格已隐藏',
-            show_all_tables: '显示全部',
-        },
-
-        canvas_filter: {
-            title: '筛选表格',
-            search_placeholder: '搜索表格...',
-            group_by_schema: '按模式分组',
-            group_by_area: '按区域分组',
-            no_tables_found: '未找到表格',
-            empty_diagram_description: '创建表格以开始',
-            no_tables_description: '尝试调整您的搜索或筛选',
-            clear_filter: '清除筛选',
         },
 
         snap_to_grid_tooltip: '对齐到网格（按住 {{key}}）',

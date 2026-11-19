@@ -21,4 +21,15 @@ export const chartDbV14Stores = {
     tag_assignments: '++id, diagramId, tagId, targetType, targetId',
 } as const;
 
-export const CHART_DB_SCHEMA_VERSION = 14;
+const {
+    diagram_filters: _legacyDiagramFilters,
+    ...chartDbStoresWithoutDiagramFilters
+} = chartDbV14Stores;
+
+export const chartDbV15Stores = {
+    ...chartDbStoresWithoutDiagramFilters,
+} as const;
+
+void _legacyDiagramFilters;
+
+export const CHART_DB_SCHEMA_VERSION = 15;

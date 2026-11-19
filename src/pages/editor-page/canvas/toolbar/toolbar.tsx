@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/card/card';
 import {
     ZoomIn,
     ZoomOut,
-    Search,
+    Filter,
     Redo,
     Undo,
     Scan,
@@ -23,8 +23,10 @@ import { Button } from '@/components/button/button';
 import { keyboardShortcutsForOS } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { useCanvas } from '@/hooks/use-canvas';
+import { useLayout } from '@/hooks/use-layout';
 import { cn } from '@/lib/utils';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
+import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
+import { toggleFiltersSidebar } from '../toggle-filters-sidebar';
 import { useAlert } from '@/context/alert-context/alert-context';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
@@ -38,13 +40,14 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
     const { redo, undo, hasRedo, hasUndo } = useHistory();
     const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
-    const { setShowFilter, reorderTables } = useCanvas();
-    const { hasActiveFilter } = useDiagramFilter();
+    const { reorderTables } = useCanvas();
+    const { toggleSidebarSection } = useLayout();
+    const { hasAnyConstraint } = useEditorFilters();
     const { showAlert } = useAlert();
 
     const toggleFilter = useCallback(() => {
-        setShowFilter((prev) => !prev);
-    }, [setShowFilter]);
+        toggleFiltersSidebar(toggleSidebarSection);
+    }, [toggleSidebarSection]);
 
     useOnViewportChange({
         onChange: ({ zoom }) => {
@@ -100,16 +103,16 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
                                         'transition-all duration-200',
                                         {
                                             'bg-pink-500 text-white hover:bg-pink-600 hover:text-white':
-                                                hasActiveFilter,
+                                                hasAnyConstraint,
                                         }
                                     )}
                                 >
-                                    <Search />
+                                    <Filter />
                                 </ToolbarButton>
                             </span>
                         </TooltipTrigger>
                         <TooltipContent>
-                            {t('toolbar.filter')}
+                            {t('editor_sidebar.filters')}
                             <span className="ml-2 text-muted-foreground">
                                 {
                                     keyboardShortcutsForOS[

@@ -72,6 +72,7 @@ const Probe: React.FC = () => {
             <span data-testid="schemas">
                 {filter.selectedSchemaIds.join(',')}
             </span>
+            <span data-testid="views">{filter.showViews ? 'yes' : 'no'}</span>
             <span data-testid="any">
                 {filter.hasAnyConstraint ? 'yes' : 'no'}
             </span>
@@ -120,6 +121,12 @@ const Probe: React.FC = () => {
             <button type="button" onClick={() => filter.clearSchemaFilter()}>
                 clear-schemas
             </button>
+            <button type="button" onClick={() => filter.setShowViews(true)}>
+                views-on
+            </button>
+            <button type="button" onClick={() => filter.setShowViews(false)}>
+                views-off
+            </button>
             <button type="button" onClick={() => filter.clearAllFilters()}>
                 clear-all
             </button>
@@ -161,6 +168,7 @@ describe('EditorFiltersProvider', () => {
         expect(screen.getByTestId('mode')).toHaveTextContent('any');
         expect(screen.getByTestId('areas')).toHaveTextContent('');
         expect(screen.getByTestId('schemas')).toHaveTextContent('');
+        expect(screen.getByTestId('views')).toHaveTextContent('no');
         expect(screen.getByTestId('any')).toHaveTextContent('no');
     });
 
@@ -272,6 +280,7 @@ describe('EditorFiltersProvider', () => {
         await user.click(screen.getByRole('button', { name: 'mode-all' }));
         await user.click(screen.getByRole('button', { name: 'toggle-area-a' }));
         await user.click(screen.getByRole('button', { name: 'toggle-public' }));
+        await user.click(screen.getByRole('button', { name: 'views-on' }));
 
         chartDBState.diagramId = 'diagram-2';
         rerender(
@@ -284,6 +293,24 @@ describe('EditorFiltersProvider', () => {
         expect(screen.getByTestId('mode')).toHaveTextContent('any');
         expect(screen.getByTestId('areas')).toHaveTextContent('');
         expect(screen.getByTestId('schemas')).toHaveTextContent('');
+        expect(screen.getByTestId('views')).toHaveTextContent('no');
+    });
+
+    it('toggles Show views without counting it as a filter or persisting it', async () => {
+        const user = userEvent.setup();
+        const setItem = vi.spyOn(Storage.prototype, 'setItem');
+        renderFilter();
+
+        await user.click(screen.getByRole('button', { name: 'views-on' }));
+        expect(screen.getByTestId('views')).toHaveTextContent('yes');
+        expect(screen.getByTestId('any')).toHaveTextContent('no');
+
+        await user.click(screen.getByRole('button', { name: 'views-off' }));
+        expect(screen.getByTestId('views')).toHaveTextContent('no');
+        expect(setItem).not.toHaveBeenCalled();
+        expect(chartDBState.addTags).not.toHaveBeenCalled();
+        expect(chartDBState.updateTablesState).not.toHaveBeenCalled();
+        setItem.mockRestore();
     });
 
     it('clears every personal filter without touching the diagram', async () => {
@@ -295,10 +322,12 @@ describe('EditorFiltersProvider', () => {
         await user.click(
             screen.getByRole('button', { name: 'toggle-billing' })
         );
+        await user.click(screen.getByRole('button', { name: 'views-on' }));
         await user.click(screen.getByRole('button', { name: 'clear-all' }));
 
         expect(screen.getByTestId('any')).toHaveTextContent('no');
         expect(screen.getByTestId('mode')).toHaveTextContent('any');
+        expect(screen.getByTestId('views')).toHaveTextContent('no');
         expect(chartDBState.tags).toHaveLength(2);
         expect(chartDBState.areas).toHaveLength(2);
         expect(chartDBState.addTags).not.toHaveBeenCalled();

@@ -57,6 +57,7 @@ export const EditorFiltersProvider: React.FC<React.PropsWithChildren> = ({
     const [selectedSchemaIds, setSelectedSchemaIds] = useState<
         readonly string[]
     >([]);
+    const [showViews, setShowViewsState] = useState(false);
     const previousDiagramIdRef = useRef(diagramId);
 
     useEffect(() => {
@@ -69,6 +70,7 @@ export const EditorFiltersProvider: React.FC<React.PropsWithChildren> = ({
         setTagMatchModeState('any');
         setSelectedAreaIds([]);
         setSelectedSchemaIds([]);
+        setShowViewsState(false);
     }, [diagramId]);
 
     useEffect(() => {
@@ -119,11 +121,16 @@ export const EditorFiltersProvider: React.FC<React.PropsWithChildren> = ({
         setSelectedSchemaIds([]);
     }, []);
 
+    const setShowViews = useCallback((next: boolean) => {
+        setShowViewsState(next);
+    }, []);
+
     const clearAllFilters = useCallback(() => {
         setSelectedTagIds([]);
         setTagMatchModeState('any');
         setSelectedAreaIds([]);
         setSelectedSchemaIds([]);
+        setShowViewsState(false);
     }, []);
 
     const hasTagConstraint = selectedTagIds.length > 0;
@@ -138,6 +145,7 @@ export const EditorFiltersProvider: React.FC<React.PropsWithChildren> = ({
             tagMatchMode,
             selectedAreaIds,
             selectedSchemaIds,
+            showViews,
             hasTagConstraint,
             hasAreaConstraint,
             hasSchemaConstraint,
@@ -149,6 +157,7 @@ export const EditorFiltersProvider: React.FC<React.PropsWithChildren> = ({
             clearAreaFilter,
             toggleSchema,
             clearSchemaFilter,
+            setShowViews,
             clearAllFilters,
         }),
         [
@@ -156,6 +165,7 @@ export const EditorFiltersProvider: React.FC<React.PropsWithChildren> = ({
             tagMatchMode,
             selectedAreaIds,
             selectedSchemaIds,
+            showViews,
             hasTagConstraint,
             hasAreaConstraint,
             hasSchemaConstraint,
@@ -167,6 +177,7 @@ export const EditorFiltersProvider: React.FC<React.PropsWithChildren> = ({
             clearAreaFilter,
             toggleSchema,
             clearSchemaFilter,
+            setShowViews,
             clearAllFilters,
         ]
     );

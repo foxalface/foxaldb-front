@@ -235,8 +235,6 @@ export const tr: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                all_hidden: 'Tüm tablolar gizli',
-                show_all: 'Tümünü göster',
 
                 table: {
                     fields: 'Alanlar',
@@ -765,8 +763,8 @@ export const tr: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Çakışan Tabloları Vurgula',
-            filter: 'Tabloları Filtrele',
         },
+
         new_diagram_dialog: {
             database_selection: {
                 title: "DBMS'nizi seçin",
@@ -1895,23 +1893,6 @@ export const tr: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'Alana Taşı',
             no_area: 'Alan Yok',
-        },
-
-        canvas: {
-            all_tables_hidden: 'Tüm tablolar gizli',
-            show_all_tables: 'Tümünü göster',
-        },
-
-        canvas_filter: {
-            title: 'Tabloları Filtrele',
-            search_placeholder: 'Tablo ara...',
-            group_by_schema: 'Şemaya Göre Grupla',
-            group_by_area: 'Alana Göre Grupla',
-            no_tables_found: 'Tablo bulunamadı',
-            empty_diagram_description: 'Başlamak için bir tablo oluşturun',
-            no_tables_description:
-                'Aramanızı veya filtrenizi ayarlamayı deneyin',
-            clear_filter: 'Filtreyi temizle',
         },
 
         // TODO: Translate

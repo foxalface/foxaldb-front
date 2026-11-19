@@ -1,13 +1,10 @@
 import type { EdgeTypes, NodeTypes } from '@xyflow/react';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DatabaseType } from '@/lib/domain/database-type';
-import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
-import { filterTable } from '@/lib/domain/diagram-filter/filter';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { DBTable } from '@/lib/domain/db-table';
 import { MIN_TABLE_SIZE } from '@/lib/domain/db-table';
-import { defaultSchemas } from '@/lib/data/default-schemas';
 import type { Area } from '@/lib/domain/area';
 import type { Note } from '@/lib/domain/note';
 import type { MergeChangeVisual } from '@/lib/schema-merge/preview/preview-types';
@@ -60,9 +57,7 @@ export interface MergePreviewEdgeHoverFlags {
 }
 
 export interface TableToTableNodeOptions {
-    filter?: DiagramFilter;
     databaseType: DatabaseType;
-    filterLoading: boolean;
     showDBViews?: boolean;
     forceShow?: boolean;
     isRelationshipCreatingTarget?: boolean;
@@ -76,9 +71,6 @@ export const tableToTableNode = (
     options: TableToTableNodeOptions
 ): TableNodeType => {
     const {
-        filter,
-        databaseType,
-        filterLoading,
         showDBViews,
         forceShow,
         isRelationshipCreatingTarget = false,
@@ -94,14 +86,7 @@ export const tableToTableNode = (
     if (forceShow) {
         hidden = false;
     } else {
-        hidden =
-            !filterTable({
-                table: { id: table.id, schema: table.schema },
-                filter,
-                options: { defaultSchema: defaultSchemas[databaseType] },
-            }) ||
-            filterLoading ||
-            (!showDBViews && table.isView);
+        hidden = !showDBViews && Boolean(table.isView);
     }
 
     return {
@@ -124,34 +109,7 @@ export const tableToTableNode = (
     };
 };
 
-export const areaToAreaNode = (
-    area: Area,
-    {
-        tables,
-        filter,
-        databaseType,
-        filterLoading,
-    }: {
-        tables: DBTable[];
-        filter?: DiagramFilter;
-        databaseType: DatabaseType;
-        filterLoading: boolean;
-    }
-): AreaNodeType => {
-    const tablesInArea = tables.filter((t) => t.parentAreaId === area.id);
-
-    const hasVisibleTable =
-        tablesInArea.length === 0 ||
-        tablesInArea.some((table) =>
-            filterTable({
-                table: { id: table.id, schema: table.schema },
-                filter,
-                options: {
-                    defaultSchema: defaultSchemas[databaseType],
-                },
-            })
-        );
-
+export const areaToAreaNode = (area: Area): AreaNodeType => {
     return {
         id: area.id,
         type: 'area',
@@ -163,7 +121,7 @@ export const areaToAreaNode = (
         style: {
             zIndex: -10,
         },
-        hidden: !hasVisibleTable || filterLoading,
+        hidden: false,
     };
 };
 
@@ -274,8 +232,6 @@ export const dependencyEdgesFromDiagram = (
 
 export interface DiagramToFlowElementsOptions {
     databaseType: DatabaseType;
-    filter?: DiagramFilter;
-    filterLoading?: boolean;
     showDBViews?: boolean;
     forceShowTables?: boolean;
     includeAreas?: boolean;
@@ -302,15 +258,12 @@ export const diagramToFlowElements = (
     const dependencies = diagram.dependencies ?? [];
     const areas = diagram.areas ?? [];
     const notes = diagram.notes ?? [];
-    const filterLoading = options.filterLoading ?? false;
     const showDBViews = options.showDBViews ?? true;
     const targetEdgeCounts = targetEdgeCountsByFieldId(relationships);
 
     const tableNodes = tables.map((table) =>
         tableToTableNode(table, {
-            filter: options.filter,
             databaseType: options.databaseType,
-            filterLoading,
             showDBViews,
             forceShow: options.forceShowTables,
             targetEdgeCounts: targetEdgeCounts,
@@ -324,14 +277,7 @@ export const diagramToFlowElements = (
     const areaNodes =
         options.includeAreas === false
             ? []
-            : areas.map((area) =>
-                  areaToAreaNode(area, {
-                      tables,
-                      filter: options.filter,
-                      databaseType: options.databaseType,
-                      filterLoading,
-                  })
-              );
+            : areas.map((area) => areaToAreaNode(area));
 
     const noteNodes =
         options.includeNotes === false

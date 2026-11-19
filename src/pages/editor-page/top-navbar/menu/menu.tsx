@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useLayout } from '@/hooks/use-layout';
 import { useTheme } from '@/hooks/use-theme';
 import { useLocalConfig } from '@/hooks/use-local-config';
+import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
 import { useAlert } from '@/context/alert-context/alert-context';
 import { useDiagramMenuActions } from '@/pages/editor-page/use-diagram-menu-actions';
 
@@ -53,9 +54,8 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
         showFieldAttributes,
         setShowMiniMapOnCanvas,
         showMiniMapOnCanvas,
-        showDBViews,
-        setShowDBViews,
     } = useLocalConfig();
+    const { showViews, setShowViews } = useEditorFilters();
     const { t } = useTranslation();
     const { redo, undo, hasRedo, hasUndo } = useHistory();
 
@@ -258,14 +258,14 @@ export const Menu: React.FC<MenuProps> = ({ onActiveDiagramDeleted }) => {
                         </MenubarSubTrigger>
                         <MenubarSubContent>
                             <MenubarCheckboxItem
-                                checked={showDBViews}
-                                onClick={() => setShowDBViews(true)}
+                                checked={showViews}
+                                onClick={() => setShowViews(true)}
                             >
                                 {t('on')}
                             </MenubarCheckboxItem>
                             <MenubarCheckboxItem
-                                checked={!showDBViews}
-                                onClick={() => setShowDBViews(false)}
+                                checked={!showViews}
+                                onClick={() => setShowViews(false)}
                             >
                                 {t('off')}
                             </MenubarCheckboxItem>

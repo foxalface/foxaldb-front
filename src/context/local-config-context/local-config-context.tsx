@@ -11,9 +11,6 @@ export interface LocalConfigContext {
     scrollAction: ScrollAction;
     setScrollAction: (action: ScrollAction) => void;
 
-    showDBViews: boolean;
-    setShowDBViews: (showViews: boolean) => void;
-
     showCardinality: boolean;
     setShowCardinality: (showCardinality: boolean) => void;
 
@@ -30,9 +27,6 @@ export const LocalConfigContext = createContext<LocalConfigContext>({
 
     scrollAction: 'pan',
     setScrollAction: emptyFn,
-
-    showDBViews: false,
-    setShowDBViews: emptyFn,
 
     showCardinality: true,
     setShowCardinality: emptyFn,

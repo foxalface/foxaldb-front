@@ -37,7 +37,6 @@ import {
 } from '@/lib/domain/db-custom-type';
 import { Badge } from '@/components/badge/badge';
 import { checkIfCustomTypeUsed } from '../utils';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 
 export interface CustomTypeListItemHeaderProps {
@@ -53,10 +52,10 @@ export const CustomTypeListItemHeader: React.FC<
         highlightedCustomType,
         highlightCustomTypeId,
         tables,
+        schemas,
         databaseType,
         readonly,
     } = useChartDB();
-    const { schemasDisplayed } = useDiagramFilter();
     const { t } = useTranslation();
     const [editMode, setEditMode] = React.useState(false);
     const [customTypeName, setCustomTypeName] = React.useState(customType.name);
@@ -169,10 +168,10 @@ export const CustomTypeListItemHeader: React.FC<
     ]);
 
     const schemaToDisplay = useMemo(() => {
-        if (schemasDisplayed.length > 1) {
+        if (schemas.length > 1) {
             return customType.schema ?? defaultSchemas[databaseType];
         }
-    }, [customType.schema, schemasDisplayed.length, databaseType]);
+    }, [customType.schema, schemas.length, databaseType]);
 
     return (
         <div className="group flex h-11 flex-1 items-center justify-between gap-1 overflow-hidden">

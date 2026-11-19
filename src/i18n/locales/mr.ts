@@ -239,8 +239,6 @@ export const mr: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                all_hidden: 'सर्व टेबल्स लपवलेले आहेत',
-                show_all: 'सर्व दाखवा',
 
                 table: {
                     fields: 'फील्ड्स',
@@ -777,7 +775,6 @@ export const mr: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'ओव्हरलॅपिंग टेबल्स हायलाइट करा',
-            filter: 'टेबल्स फिल्टर करा',
         },
 
         new_diagram_dialog: {
@@ -1906,23 +1903,6 @@ export const mr: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'क्षेत्रात हलवा',
             no_area: 'क्षेत्र नाही',
-        },
-
-        canvas: {
-            all_tables_hidden: 'सर्व टेबल्स लपवलेले आहेत',
-            show_all_tables: 'सर्व दाखवा',
-        },
-
-        canvas_filter: {
-            title: 'टेबल्स फिल्टर करा',
-            search_placeholder: 'टेबल्स शोधा...',
-            group_by_schema: 'स्कीमानुसार गट करा',
-            group_by_area: 'क्षेत्रानुसार गट करा',
-            no_tables_found: 'कोणतेही टेबल सापडले नाही',
-            empty_diagram_description: 'सुरू करण्यासाठी टेबल तयार करा',
-            no_tables_description:
-                'तुमची शोध किंवा फिल्टर समायोजित करण्याचा प्रयत्न करा',
-            clear_filter: 'फिल्टर साफ करा',
         },
 
         // TODO: Add translations

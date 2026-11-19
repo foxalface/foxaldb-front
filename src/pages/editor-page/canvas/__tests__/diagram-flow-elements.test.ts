@@ -35,7 +35,6 @@ describe('diagram-flow-elements', () => {
     it('maps a table to a node at its diagram position', () => {
         const node = tableToTableNode(table('t1', 'users', { x: 42, y: 99 }), {
             databaseType: DatabaseType.POSTGRESQL,
-            filterLoading: false,
             forceShow: true,
         });
 
@@ -48,7 +47,6 @@ describe('diagram-flow-elements', () => {
     it('keeps pointer events on a merge preview table so hover can reach it', () => {
         const node = tableToTableNode(table('t1', 'users'), {
             databaseType: DatabaseType.POSTGRESQL,
-            filterLoading: false,
             forceShow: true,
             mergePreview: [
                 {

@@ -93,12 +93,6 @@ vi.mock('@/hooks/use-export-image', () => ({
     }),
 }));
 
-vi.mock('@/context/diagram-filter-context/use-diagram-filter', () => ({
-    useDiagramFilter: () => ({
-        filter: { tableIds: ['hidden-table'], schemas: ['hidden'] },
-    }),
-}));
-
 vi.mock('@/hooks/use-theme', () => ({
     useTheme: () => ({
         effectiveTheme: 'light',

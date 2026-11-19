@@ -27,8 +27,7 @@ import {
     SquareArrowOutUpRight,
 } from 'lucide-react';
 import { SlBubbles } from 'react-icons/sl';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
-import { useLocalConfig } from '@/hooks/use-local-config';
+import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
 import { useCanvas } from '@/hooks/use-canvas';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import { useAlert } from '@/context/alert-context/alert-context';
@@ -52,12 +51,12 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         relationships,
         updateArea,
         updateTablesState,
+        schemas,
     } = useChartDB();
-    const { schemasDisplayed } = useDiagramFilter();
     const { openCreateRelationshipDialog } = useDialog();
     const { screenToFlowPosition, getNodes } = useReactFlow();
     const { t } = useTranslation();
-    const { showDBViews } = useLocalConfig();
+    const { showViews } = useEditorFilters();
     const { setEditTableModeTable, reorderTables } = useCanvas();
     const { showAlert } = useAlert();
 
@@ -92,14 +91,14 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             });
 
             let schema: string | undefined = undefined;
-            if (schemasDisplayed.length > 0) {
+            if (schemas.length > 0) {
                 const defaultSchemaName = defaultSchemas[databaseType];
-                const defaultSchemaInList = schemasDisplayed.find(
+                const defaultSchemaInList = schemas.find(
                     (s) => s.name === defaultSchemaName
                 );
                 schema = defaultSchemaInList
                     ? defaultSchemaInList.name
-                    : schemasDisplayed[0]?.name;
+                    : schemas[0]?.name;
             }
 
             const newTable = await createTable({
@@ -115,7 +114,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         [
             createTable,
             screenToFlowPosition,
-            schemasDisplayed,
+            schemas,
             setEditTableModeTable,
             databaseType,
         ]
@@ -129,14 +128,14 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
             });
 
             let schema: string | undefined = undefined;
-            if (schemasDisplayed.length > 0) {
+            if (schemas.length > 0) {
                 const defaultSchemaName = defaultSchemas[databaseType];
-                const defaultSchemaInList = schemasDisplayed.find(
+                const defaultSchemaInList = schemas.find(
                     (s) => s.name === defaultSchemaName
                 );
                 schema = defaultSchemaInList
                     ? defaultSchemaInList.name
-                    : schemasDisplayed[0]?.name;
+                    : schemas[0]?.name;
             }
 
             const newView = await createTable({
@@ -153,7 +152,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
         [
             createTable,
             screenToFlowPosition,
-            schemasDisplayed,
+            schemas,
             setEditTableModeTable,
             databaseType,
         ]
@@ -311,7 +310,7 @@ export const CanvasContextMenu: React.FC<React.PropsWithChildren> = ({
                     <Table className={SIDE_PANEL_ACTION_MENU_ICON_CLASS} />
                     {t('canvas_context_menu.new_table')}
                 </ContextMenuItem>
-                {showDBViews ? (
+                {showViews ? (
                     <ContextMenuItem
                         onClick={createViewHandler}
                         className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}

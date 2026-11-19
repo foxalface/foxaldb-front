@@ -195,7 +195,6 @@ describe('relationship preview decoration pipeline', () => {
             databaseType: preview.diagram.databaseType,
             forceShowTables: true,
             showDBViews: true,
-            filterLoading: false,
             includeAreas: false,
             includeNotes: false,
             includeDependencies: false,

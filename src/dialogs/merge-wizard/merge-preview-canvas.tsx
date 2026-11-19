@@ -113,7 +113,6 @@ const MergePreviewCanvasFlow: React.FC<{
                 databaseType: diagram.databaseType,
                 forceShowTables: true,
                 showDBViews: true,
-                filterLoading: false,
                 includeAreas: true,
                 includeNotes: true,
                 includeDependencies: true,

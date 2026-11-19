@@ -40,12 +40,6 @@ vi.mock('@/hooks/use-export-image', () => ({
     }),
 }));
 
-vi.mock('@/context/diagram-filter-context/use-diagram-filter', () => ({
-    useDiagramFilter: () => ({
-        filter: {},
-    }),
-}));
-
 vi.mock('@/lib/dbml/dbml-export/dbml-export', () => ({
     generateDBMLFromDiagram: vi.fn().mockResolvedValue({
         standardDbml: 'Table users {}',

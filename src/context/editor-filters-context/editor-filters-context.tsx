@@ -7,6 +7,7 @@ export interface EditorFiltersContextValue {
     tagMatchMode: TagMatchMode;
     selectedAreaIds: readonly string[];
     selectedSchemaIds: readonly string[];
+    showViews: boolean;
     hasTagConstraint: boolean;
     hasAreaConstraint: boolean;
     hasSchemaConstraint: boolean;
@@ -18,6 +19,7 @@ export interface EditorFiltersContextValue {
     clearAreaFilter: () => void;
     toggleSchema: (schemaId: string) => void;
     clearSchemaFilter: () => void;
+    setShowViews: (showViews: boolean) => void;
     clearAllFilters: () => void;
 }
 
@@ -26,6 +28,7 @@ export const editorFiltersContext = createContext<EditorFiltersContextValue>({
     tagMatchMode: 'any',
     selectedAreaIds: [],
     selectedSchemaIds: [],
+    showViews: false,
     hasTagConstraint: false,
     hasAreaConstraint: false,
     hasSchemaConstraint: false,
@@ -37,5 +40,6 @@ export const editorFiltersContext = createContext<EditorFiltersContextValue>({
     clearAreaFilter: emptyFn,
     toggleSchema: emptyFn,
     clearSchemaFilter: emptyFn,
+    setShowViews: emptyFn,
     clearAllFilters: emptyFn,
 });

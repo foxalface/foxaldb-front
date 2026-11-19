@@ -238,8 +238,6 @@ export const es: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                all_hidden: 'Todas las tablas están ocultas',
-                show_all: 'Mostrar todo',
 
                 table: {
                     fields: 'Campos',
@@ -786,7 +784,6 @@ export const es: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Resaltar tablas superpuestas',
-            filter: 'Filtrar Tablas',
         },
 
         new_diagram_dialog: {
@@ -1945,22 +1942,6 @@ export const es: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'Mover a Área',
             no_area: 'Sin Área',
-        },
-
-        canvas: {
-            all_tables_hidden: 'Todas las tablas están ocultas',
-            show_all_tables: 'Mostrar todo',
-        },
-
-        canvas_filter: {
-            title: 'Filtrar Tablas',
-            search_placeholder: 'Buscar tablas...',
-            group_by_schema: 'Agrupar por Esquema',
-            group_by_area: 'Agrupar por Área',
-            no_tables_found: 'No se encontraron tablas',
-            empty_diagram_description: 'Crea una tabla para comenzar',
-            no_tables_description: 'Intenta ajustar tu búsqueda o filtro',
-            clear_filter: 'Limpiar filtro',
         },
 
         // TODO: Add translations

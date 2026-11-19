@@ -111,12 +111,6 @@ vi.mock('@/hooks/use-dialog', () => ({
     }),
 }));
 
-vi.mock('@/context/diagram-filter-context/use-diagram-filter', () => ({
-    useDiagramFilter: () => ({
-        schemasDisplayed: [],
-    }),
-}));
-
 vi.mock('@/components/tag-selector/tag-selector', () => ({
     TagSelector: ({
         targetType,

@@ -8,7 +8,6 @@ import type { DBField } from '@/lib/domain/db-field';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DiagramTagAssignment } from '@/lib/domain/diagram-tag';
-import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import { tableToTableNode } from '../diagram-flow-elements';
 import { tableHiddenByTagVisibility } from '../tag-canvas-visibility';
 import { useCanvasFilterVisibility } from '../use-canvas-filter-visibility';
@@ -28,9 +27,6 @@ const harness = vi.hoisted(() => ({
     tables: [] as DBTable[],
     relationships: [] as DBRelationship[],
     tagAssignments: [] as DiagramTagAssignment[],
-    filter: undefined as DiagramFilter | undefined,
-    filterLoading: false,
-    showDBViews: true,
     forceShowIds: new Set<string>(),
     areas: [] as {
         id: string;
@@ -66,19 +62,6 @@ vi.mock('@/hooks/use-chartdb', () => ({
             updatedAt: new Date(0),
         },
         ...mutations,
-    }),
-}));
-
-vi.mock('@/context/diagram-filter-context/use-diagram-filter', () => ({
-    useDiagramFilter: () => ({
-        filter: harness.filter,
-        loading: harness.filterLoading,
-    }),
-}));
-
-vi.mock('@/hooks/use-local-config', () => ({
-    useLocalConfig: () => ({
-        showDBViews: harness.showDBViews,
     }),
 }));
 
@@ -164,13 +147,12 @@ const useProbe = () => {
 
 const renderedHidden = (
     table: DBTable,
-    visibility: ReturnType<typeof useCanvasFilterVisibility>
+    visibility: ReturnType<typeof useCanvasFilterVisibility>,
+    showViews = false
 ) => {
     const node = tableToTableNode(table, {
-        filter: harness.filter,
         databaseType: DatabaseType.POSTGRESQL,
-        filterLoading: harness.filterLoading,
-        showDBViews: harness.showDBViews,
+        showDBViews: showViews,
         forceShow: harness.forceShowIds.has(table.id),
     });
 
@@ -186,9 +168,6 @@ describe('useCanvasFilterVisibility', () => {
         harness.tables = [];
         harness.relationships = [];
         harness.tagAssignments = [];
-        harness.filter = undefined;
-        harness.filterLoading = false;
-        harness.showDBViews = true;
         harness.forceShowIds = new Set();
         harness.areas = [];
         vi.clearAllMocks();
@@ -312,9 +291,8 @@ describe('useCanvasFilterVisibility', () => {
         );
     });
 
-    it('keeps a legacy table filter authoritative over a matching tag', () => {
+    it('shows both tagged tables when only a tag constraint is active', () => {
         harness.tables = [dbTable('users'), dbTable('orders')];
-        harness.filter = { tableIds: ['users'] };
         harness.tagAssignments = [
             assign('red', 'table', 'users'),
             assign('red', 'table', 'orders'),
@@ -327,15 +305,15 @@ describe('useCanvasFilterVisibility', () => {
             result.current.filter.toggleTag('red');
         });
 
+        expect(result.current.visibility?.visibleTableIds).toEqual(
+            new Set(['users', 'orders'])
+        );
         expect(
             renderedHidden(harness.tables[0]!, result.current.visibility)
         ).toBe(false);
         expect(
             renderedHidden(harness.tables[1]!, result.current.visibility)
-        ).toBe(true);
-        expect(result.current.visibility?.visibleTableIds).toEqual(
-            new Set(['users'])
-        );
+        ).toBe(false);
     });
 
     it('keeps schema and show-views gates authoritative over tag promotion', () => {
@@ -345,8 +323,6 @@ describe('useCanvasFilterVisibility', () => {
         });
         const otherSchema = dbTable('billing', { schema: 'billing' });
         harness.tables = [view, otherSchema, dbTable('users')];
-        harness.showDBViews = false;
-        harness.filter = { schemaIds: ['public'] };
         harness.relationships = [
             dbRelationship('rel', 'users', 'active_users'),
         ];
@@ -359,6 +335,7 @@ describe('useCanvasFilterVisibility', () => {
         const { result } = renderHook(() => useProbe(), { wrapper });
 
         act(() => {
+            result.current.filter.toggleSchema('public');
             result.current.filter.toggleTag('red');
         });
 
@@ -442,7 +419,7 @@ describe('useCanvasFilterVisibility', () => {
 
         expect(result.current.visibility).toBeNull();
         expect(renderedHidden(invoices, null)).toBe(false);
-        expect(harness.filter).toBeUndefined();
+        expect(result.current.filter.showViews).toBe(false);
     });
 
     it('does not let a new schema filter resurrect a view hidden by Show views', () => {
@@ -451,7 +428,6 @@ describe('useCanvasFilterVisibility', () => {
             schema: 'public',
         });
         harness.tables = [view, dbTable('users')];
-        harness.showDBViews = false;
         harness.tagAssignments = [
             assign('red', 'table', 'active_users'),
             assign('red', 'table', 'users'),
@@ -467,5 +443,54 @@ describe('useCanvasFilterVisibility', () => {
         expect(result.current.visibility?.visibleTableIds).toEqual(
             new Set(['users'])
         );
+    });
+
+    it('hides views by default and lets Show views reveal them', () => {
+        const view = dbTable('active_users', { isView: true });
+        const users = dbTable('users');
+        harness.tables = [view, users];
+        const { result } = renderHook(() => useProbe(), { wrapper });
+
+        expect(result.current.filter.showViews).toBe(false);
+        expect(result.current.visibility?.visibleTableIds).toEqual(
+            new Set(['users'])
+        );
+        expect(renderedHidden(view, result.current.visibility)).toBe(true);
+        expect(renderedHidden(users, result.current.visibility)).toBe(false);
+
+        act(() => {
+            result.current.filter.setShowViews(true);
+        });
+
+        expect(result.current.visibility).toBeNull();
+        expect(renderedHidden(view, null, true)).toBe(false);
+    });
+
+    it('does not let a table, field, or relationship tag resurrect a hidden view', () => {
+        const view = dbTable('active_users', {
+            isView: true,
+            fields: [field('active_users.id')],
+        });
+        const users = dbTable('users');
+        harness.tables = [view, users];
+        harness.relationships = [
+            dbRelationship('rel', 'users', 'active_users'),
+        ];
+        harness.tagAssignments = [
+            assign('red', 'table', 'active_users'),
+            assign('red', 'field', 'active_users.id'),
+            assign('red', 'relationship', 'rel'),
+        ];
+        const { result } = renderHook(() => useProbe(), { wrapper });
+
+        act(() => {
+            result.current.filter.toggleTag('red');
+        });
+
+        expect(result.current.visibility?.visibleTableIds).toEqual(
+            new Set(['users'])
+        );
+        expect(result.current.visibility?.visibleRelationshipIds.size).toBe(0);
+        expect(renderedHidden(view, result.current.visibility)).toBe(true);
     });
 });

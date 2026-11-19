@@ -236,8 +236,6 @@ export const vi: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                all_hidden: 'Tất cả bảng đã bị ẩn',
-                show_all: 'Hiển thị tất cả',
 
                 table: {
                     fields: 'Trường',
@@ -778,7 +776,6 @@ export const vi: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Làm nổi bật các bảng chồng chéo',
-            filter: 'Lọc Bảng',
         },
 
         new_diagram_dialog: {
@@ -1898,23 +1895,6 @@ export const vi: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'Di chuyển đến Khu vực',
             no_area: 'Không có Khu vực',
-        },
-
-        canvas: {
-            all_tables_hidden: 'Tất cả bảng đã bị ẩn',
-            show_all_tables: 'Hiển thị tất cả',
-        },
-
-        canvas_filter: {
-            title: 'Lọc bảng',
-            search_placeholder: 'Tìm kiếm bảng...',
-            group_by_schema: 'Nhóm theo Schema',
-            group_by_area: 'Nhóm theo Khu vực',
-            no_tables_found: 'Không tìm thấy bảng',
-            empty_diagram_description: 'Tạo bảng để bắt đầu',
-            no_tables_description:
-                'Thử điều chỉnh tìm kiếm hoặc bộ lọc của bạn',
-            clear_filter: 'Xóa bộ lọc',
         },
 
         snap_to_grid_tooltip: 'Căn lưới (Giữ phím {{key}})',

@@ -55,13 +55,7 @@ import {
 } from './diagram-flow-elements';
 import { Toolbar } from './toolbar/toolbar';
 import { useToast } from '@/components/toast/use-toast';
-import {
-    Pencil,
-    Magnet,
-    AlertTriangle,
-    Highlighter,
-    EyeOff,
-} from 'lucide-react';
+import { Pencil, Magnet, AlertTriangle, Highlighter } from 'lucide-react';
 import { Button } from '@/components/button/button';
 import { useLayout } from '@/hooks/use-layout';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
@@ -114,16 +108,13 @@ import {
     updateTablesParentAreas,
     getTablesInArea,
 } from '@/lib/utils/area-utils';
-import { CanvasFilter } from './canvas-filter/canvas-filter';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { ShowAllButton } from './show-all-button';
 import { DiagramNamePanel } from '@/pages/editor-page/top-navbar/diagram-name-panel';
 import { useIsLostInCanvas } from './hooks/use-is-lost-in-canvas';
-import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
-import { filterTable } from '@/lib/domain/diagram-filter/filter';
-import { defaultSchemas } from '@/lib/data/default-schemas';
+import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
 import { useCanvasFilterVisibility } from './use-canvas-filter-visibility';
+import { toggleFiltersSidebar } from './toggle-filters-sidebar';
 import {
     areaHiddenByTagVisibility,
     relationshipHiddenByTagVisibility,
@@ -213,9 +204,9 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         highlightedCustomType,
         highlightCustomTypeId,
     } = useChartDB();
-    const { showSidePanel } = useLayout();
+    const { showSidePanel, toggleSidebarSection } = useLayout();
     const { effectiveTheme } = useTheme();
-    const { scrollAction, showDBViews, showMiniMapOnCanvas } = useLocalConfig();
+    const { scrollAction, showMiniMapOnCanvas } = useLocalConfig();
     const { isMd: isDesktop } = useBreakpoint('md');
     const [highlightOverlappingTables, setHighlightOverlappingTables] =
         useState(false);
@@ -223,8 +214,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         fitView,
         setOverlapGraph,
         overlapGraph,
-        showFilter,
-        setShowFilter,
         setEditTableModeTable,
         tempFloatingEdge,
         endFloatingEdgeCreation,
@@ -234,12 +223,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         events: canvasEvents,
         visualExportCaptureActive,
     } = useCanvas();
-    const {
-        filter,
-        loading: filterLoading,
-        hasActiveFilter,
-        resetFilter,
-    } = useDiagramFilter();
+    const { showViews } = useEditorFilters();
     const { checkIfNewTable } = useDiff();
     const canvasFilterVisibility = useCanvasFilterVisibility();
 
@@ -255,10 +239,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     const [nodes, setNodes, onNodesChange] = useNodesState<NodeType>(
         initialTables.map((table) => {
             const node = tableToTableNode(table, {
-                filter,
                 databaseType,
-                filterLoading,
-                showDBViews,
+                showDBViews: showViews,
                 forceShow: shouldForceShowTable(table.id),
                 isRelationshipCreatingTarget: false,
             });
@@ -290,10 +272,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     useEffect(() => {
         const initialNodes = initialTables.map((table) => {
             const node = tableToTableNode(table, {
-                filter,
                 databaseType,
-                filterLoading,
-                showDBViews,
+                showDBViews: showViews,
                 forceShow: shouldForceShowTable(table.id),
                 isRelationshipCreatingTarget: false,
             });
@@ -313,10 +293,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     }, [
         initialTables,
         nodes,
-        filter,
         databaseType,
-        filterLoading,
-        showDBViews,
+        showViews,
         shouldForceShowTable,
         canvasFilterVisibility,
     ]);
@@ -369,17 +347,16 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             };
                         }
                     ),
-                    ...dependencyEdgesFromDiagram(
-                        dependencies,
-                        showDBViews
-                    ).map((edge): DependencyEdgeType => {
-                        const prevState = prevEdgeStates.get(edge.id);
-                        return {
-                            ...edge,
-                            selected: prevState?.selected ?? false,
-                            animated: prevState?.animated ?? false,
-                        };
-                    }),
+                    ...dependencyEdgesFromDiagram(dependencies, showViews).map(
+                        (edge): DependencyEdgeType => {
+                            const prevState = prevEdgeStates.get(edge.id);
+                            return {
+                                ...edge,
+                                selected: prevState?.selected ?? false,
+                                animated: prevState?.animated ?? false,
+                            };
+                        }
+                    ),
                 ];
             });
         }, 100); // Delay to let handles register after updateNodeInternals
@@ -389,7 +366,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         relationships,
         dependencies,
         setEdges,
-        showDBViews,
+        showViews,
         tables,
         updateNodeInternals,
         canvasFilterVisibility,
@@ -514,10 +491,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     });
 
                     const node = tableToTableNode(table, {
-                        filter,
                         databaseType,
-                        filterLoading,
-                        showDBViews,
+                        showDBViews: showViews,
                         forceShow: shouldForceShowTable(table.id),
                         isRelationshipCreatingTarget: false,
                         targetEdgeCounts: tableTargetEdgeCounts,
@@ -550,12 +525,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     };
                 }),
                 ...areas.map((area) => {
-                    const areaNode = areaToAreaNode(area, {
-                        tables,
-                        filter,
-                        databaseType,
-                        filterLoading,
-                    });
+                    const areaNode = areaToAreaNode(area);
                     const tableIdsInArea = tables
                         .filter((table) => table.parentAreaId === area.id)
                         .map((table) => table.id);
@@ -591,14 +561,12 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         areas,
         notes,
         setNodes,
-        filter,
         databaseType,
         overlapGraph.lastUpdated,
         overlapGraph.graph,
         highlightOverlappingTables,
         highlightedCustomType,
-        filterLoading,
-        showDBViews,
+        showViews,
         shouldForceShowTable,
         relationships,
         canvasFilterVisibility,
@@ -635,40 +603,27 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
         });
     }, [tempFloatingEdge?.sourceNodeId, setNodes]);
 
-    const prevFilter = useRef<DiagramFilter | undefined>(undefined);
-    const prevShowDBViews = useRef<boolean>(showDBViews);
+    const prevShowViews = useRef<boolean>(showViews);
     useEffect(() => {
-        if (
-            !equal(filter, prevFilter.current) ||
-            showDBViews !== prevShowDBViews.current
-        ) {
-            debounce(() => {
-                const overlappingTablesInDiagram = findOverlappingTables({
-                    tables: tables.filter(
-                        (table) =>
-                            filterTable({
-                                table: {
-                                    id: table.id,
-                                    schema: table.schema,
-                                },
-                                filter,
-                                options: {
-                                    defaultSchema: defaultSchemas[databaseType],
-                                },
-                            }) && (showDBViews ? true : !table.isView)
-                    ),
-                });
-                setOverlapGraph(overlappingTablesInDiagram);
-                fitView({
-                    duration: 500,
-                    padding: 0.1,
-                    maxZoom: 0.8,
-                });
-            }, 500)();
-            prevFilter.current = filter;
-            prevShowDBViews.current = showDBViews;
+        if (showViews === prevShowViews.current) {
+            return;
         }
-    }, [filter, fitView, tables, setOverlapGraph, databaseType, showDBViews]);
+
+        debounce(() => {
+            const overlappingTablesInDiagram = findOverlappingTables({
+                tables: tables.filter((table) =>
+                    showViews ? true : !table.isView
+                ),
+            });
+            setOverlapGraph(overlappingTablesInDiagram);
+            fitView({
+                duration: 500,
+                padding: 0.1,
+                maxZoom: 0.8,
+            });
+        }, 500)();
+        prevShowViews.current = showViews;
+    }, [fitView, tables, setOverlapGraph, showViews]);
 
     useEffect(() => {
         const checkParentAreas = debounce(() => {
@@ -1446,33 +1401,14 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             } else if (event.action === 'load_diagram') {
                 const diagramTables = event.data.diagram.tables ?? [];
                 const overlappingTablesInDiagram = findOverlappingTables({
-                    tables: diagramTables.filter(
-                        (table) =>
-                            filterTable({
-                                table: {
-                                    id: table.id,
-                                    schema: table.schema,
-                                },
-                                filter,
-                                options: {
-                                    defaultSchema: defaultSchemas[databaseType],
-                                },
-                            }) && (showDBViews ? true : !table.isView)
+                    tables: diagramTables.filter((table) =>
+                        showViews ? true : !table.isView
                     ),
                 });
                 setOverlapGraph(overlappingTablesInDiagram);
             }
         },
-        [
-            overlapGraph,
-            setOverlapGraph,
-            getNode,
-            nodes,
-            filter,
-            setNodes,
-            databaseType,
-            showDBViews,
-        ]
+        [overlapGraph, setOverlapGraph, getNode, nodes, setNodes, showViews]
     );
 
     events.useSubscription(eventConsumer);
@@ -1487,23 +1423,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
             ),
         [overlapGraph]
     );
-
-    // Check if all tables are hidden due to filtering
-    // Derived from filter state directly (not nodes) for better performance
-    const allTablesHiddenByFilter = useMemo(() => {
-        if (!hasActiveFilter || tables.length === 0 || filterLoading) {
-            return false;
-        }
-        // Check if any table passes the filter
-        const visibleTableCount = tables.filter((table) =>
-            filterTable({
-                table: { id: table.id, schema: table.schema },
-                filter,
-                options: { defaultSchema: defaultSchemas[databaseType] },
-            })
-        ).length;
-        return visibleTableCount === 0;
-    }, [hasActiveFilter, tables, filter, databaseType, filterLoading]);
 
     const pulseOverlappingTables = useCallback(() => {
         setHighlightOverlappingTables(true);
@@ -1531,13 +1450,13 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
     useHotkeys(
         operatingSystem === 'mac' ? 'meta+f' : 'ctrl+f',
         () => {
-            setShowFilter((prev) => !prev);
+            toggleFiltersSidebar(toggleSidebarSection);
         },
         {
             preventDefault: true,
             enableOnFormTags: true,
         },
-        []
+        [toggleSidebarSection]
     );
 
     // Handle mouse move to update cursor position for floating edge
@@ -1958,29 +1877,6 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         >
                             <DiagramNamePanel />
                         </Panel>
-                        {/* Empty state when all tables are hidden by filter */}
-                        {allTablesHiddenByFilter && (
-                            <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
-                                <div className="pointer-events-auto flex items-center gap-3 rounded-lg border bg-background/90 px-4 py-3 shadow-sm backdrop-blur-sm">
-                                    <EyeOff className="size-5 text-muted-foreground" />
-                                    <span className="text-sm text-muted-foreground">
-                                        {t('canvas.all_tables_hidden')}
-                                    </span>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => resetFilter()}
-                                    >
-                                        {t('canvas.show_all_tables')}
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
-                        {showFilter ? (
-                            <CanvasFilter
-                                onClose={() => setShowFilter(false)}
-                            />
-                        ) : null}
                         <CursorOverlay />
                         <SelectionBroadcastListener />
                         <TableMovementBroadcastListener />

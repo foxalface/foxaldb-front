@@ -237,8 +237,6 @@ export const id_ID: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                all_hidden: 'Semua tabel tersembunyi',
-                show_all: 'Tampilkan semua',
 
                 table: {
                     fields: 'Kolom',
@@ -780,7 +778,6 @@ export const id_ID: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Sorot Tabel yang Tumpang Tindih',
-            filter: 'Filter Tabel',
         },
 
         new_diagram_dialog: {
@@ -1917,22 +1914,6 @@ export const id_ID: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'Pindahkan ke Area',
             no_area: 'Tanpa Area',
-        },
-
-        canvas: {
-            all_tables_hidden: 'Semua tabel tersembunyi',
-            show_all_tables: 'Tampilkan semua',
-        },
-
-        canvas_filter: {
-            title: 'Filter Tabel',
-            search_placeholder: 'Cari tabel...',
-            group_by_schema: 'Kelompokkan berdasarkan Skema',
-            group_by_area: 'Kelompokkan berdasarkan Area',
-            no_tables_found: 'Tidak ada tabel ditemukan',
-            empty_diagram_description: 'Buat tabel untuk memulai',
-            no_tables_description: 'Coba sesuaikan pencarian atau filter Anda',
-            clear_filter: 'Hapus filter',
         },
 
         snap_to_grid_tooltip: 'Snap ke Kisi (Tahan {{key}})',

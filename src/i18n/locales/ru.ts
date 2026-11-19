@@ -236,8 +236,6 @@ export const ru: LanguageTranslation = {
                     'Таблицы не найдены, соответствующие вашему фильтру.',
                 show_list: 'Переключиться на список таблиц',
                 show_dbml: 'Переключиться на редактор DBML',
-                all_hidden: 'Все таблицы скрыты',
-                show_all: 'Показать все',
 
                 table: {
                     fields: 'Поля',
@@ -778,7 +776,6 @@ export const ru: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Выделение перекрывающихся таблиц',
-            filter: 'Фильтровать таблицы',
         },
 
         new_diagram_dialog: {
@@ -1915,22 +1912,6 @@ export const ru: LanguageTranslation = {
             add_relationship: 'Добавить связь',
             move_to_area: 'Переместить в область',
             no_area: 'Без области',
-        },
-
-        canvas: {
-            all_tables_hidden: 'Все таблицы скрыты',
-            show_all_tables: 'Показать все',
-        },
-
-        canvas_filter: {
-            title: 'Фильтр таблиц',
-            search_placeholder: 'Поиск таблиц...',
-            group_by_schema: 'Группировать по схеме',
-            group_by_area: 'Группировать по области',
-            no_tables_found: 'Таблицы не найдены',
-            empty_diagram_description: 'Создайте таблицу, чтобы начать',
-            no_tables_description: 'Попробуйте изменить поиск или фильтр',
-            clear_filter: 'Очистить фильтр',
         },
 
         copy_to_clipboard: 'Скопировать в буфер обмена',

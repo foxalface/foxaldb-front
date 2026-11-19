@@ -10,7 +10,6 @@ import type { ChartDBConfig } from '@/lib/domain/config';
 import type { DBDependency } from '@/lib/domain/db-dependency';
 import type { Area } from '@/lib/domain/area';
 import type { DBCustomType } from '@/lib/domain/db-custom-type';
-import type { DiagramFilter } from '@/lib/domain/diagram-filter/diagram-filter';
 import type { Note } from '@/lib/domain/note';
 import type {
     DiagramTag,
@@ -28,6 +27,7 @@ import {
     CHART_DB_SCHEMA_VERSION,
     chartDbV13Stores,
     chartDbV14Stores,
+    chartDbV15Stores,
 } from './chart-db-schema';
 
 export const StorageProvider: React.FC<
@@ -66,10 +66,6 @@ export const StorageProvider: React.FC<
             config: EntityTable<
                 ChartDBConfig & { id: number },
                 'id' // primary key "id" (for the typings only)
-            >;
-            diagram_filters: EntityTable<
-                DiagramFilter & { diagramId: string },
-                'diagramId' // primary key "id" (for the typings only)
             >;
             tags: EntityTable<DiagramTag & { diagramId: string }, 'id'>;
             tag_assignments: EntityTable<
@@ -245,7 +241,12 @@ export const StorageProvider: React.FC<
 
         dexieDB.version(13).stores(chartDbV13Stores);
 
-        dexieDB.version(CHART_DB_SCHEMA_VERSION).stores(chartDbV14Stores);
+        dexieDB.version(14).stores(chartDbV14Stores);
+
+        dexieDB.version(CHART_DB_SCHEMA_VERSION).stores({
+            ...chartDbV15Stores,
+            diagram_filters: null,
+        });
 
         dexieDB.on('ready', async () => {
             const config = await dexieDB.config.get(1);
@@ -273,34 +274,6 @@ export const StorageProvider: React.FC<
         },
         [db]
     );
-
-    const getDiagramFilter: StorageContext['getDiagramFilter'] = useCallback(
-        async (diagramId: string): Promise<DiagramFilter | undefined> => {
-            const filter = await db.diagram_filters.get({ diagramId });
-
-            return filter;
-        },
-        [db]
-    );
-
-    const updateDiagramFilter: StorageContext['updateDiagramFilter'] =
-        useCallback(
-            async (diagramId, filter): Promise<void> => {
-                await db.diagram_filters.put({
-                    diagramId,
-                    ...filter,
-                });
-            },
-            [db]
-        );
-
-    const deleteDiagramFilter: StorageContext['deleteDiagramFilter'] =
-        useCallback(
-            async (diagramId: string): Promise<void> => {
-                await db.diagram_filters.where({ diagramId }).delete();
-            },
-            [db]
-        );
 
     const addTable: StorageContext['addTable'] = useCallback(
         async ({ diagramId, table }) => {
@@ -1073,9 +1046,6 @@ export const StorageProvider: React.FC<
                 deleteTagAssignment,
                 listTagAssignments,
                 deleteDiagramTagAssignments,
-                getDiagramFilter,
-                updateDiagramFilter,
-                deleteDiagramFilter,
             }}
         >
             {children}

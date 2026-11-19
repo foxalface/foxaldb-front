@@ -25,15 +25,6 @@ import { Annoyed, Sparkles, Blocks, Wand2 } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import type { BaseDialogProps } from '../common/base-dialog-props';
-import type { Diagram } from '@/lib/domain/diagram';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
-import {
-    filterDependency,
-    filterRelationship,
-    filterTable,
-} from '@/lib/domain/diagram-filter/filter';
-import { defaultSchemas } from '@/lib/data/default-schemas';
-
 export interface ExportSQLDialogProps extends BaseDialogProps {
     targetDatabaseType: DatabaseType;
 }
@@ -44,7 +35,6 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
 }) => {
     const { closeExportSQLDialog } = useDialog();
     const { currentDiagram } = useChartDB();
-    const { filter } = useDiagramFilter();
     const { t } = useTranslation();
     const [script, setScript] = React.useState<string>();
     const [error, setError] = React.useState<boolean>(false);
@@ -75,95 +65,20 @@ export const ExportSQLDialog: React.FC<ExportSQLDialogProps> = ({
     }, [hasDeterministicPath, currentDiagram.databaseType, targetDatabaseType]);
 
     const exportSQLScript = useCallback(async () => {
-        const filteredDiagram: Diagram = {
-            ...currentDiagram,
-            tables: currentDiagram.tables?.filter((table) =>
-                filterTable({
-                    table: {
-                        id: table.id,
-                        schema: table.schema,
-                    },
-                    filter,
-                    options: {
-                        defaultSchema: defaultSchemas[targetDatabaseType],
-                    },
-                })
-            ),
-            relationships: currentDiagram.relationships?.filter((rel) => {
-                const sourceTable = currentDiagram.tables?.find(
-                    (t) => t.id === rel.sourceTableId
-                );
-                const targetTable = currentDiagram.tables?.find(
-                    (t) => t.id === rel.targetTableId
-                );
-                return (
-                    sourceTable &&
-                    targetTable &&
-                    filterRelationship({
-                        tableA: {
-                            id: sourceTable.id,
-                            schema: sourceTable.schema,
-                        },
-                        tableB: {
-                            id: targetTable.id,
-                            schema: targetTable.schema,
-                        },
-                        filter,
-                        options: {
-                            defaultSchema: defaultSchemas[targetDatabaseType],
-                        },
-                    })
-                );
-            }),
-            dependencies: currentDiagram.dependencies?.filter((dep) => {
-                const table = currentDiagram.tables?.find(
-                    (t) => t.id === dep.tableId
-                );
-                const dependentTable = currentDiagram.tables?.find(
-                    (t) => t.id === dep.dependentTableId
-                );
-                return (
-                    table &&
-                    dependentTable &&
-                    filterDependency({
-                        tableA: {
-                            id: table.id,
-                            schema: table.schema,
-                        },
-                        tableB: {
-                            id: dependentTable.id,
-                            schema: dependentTable.schema,
-                        },
-                        filter,
-                        options: {
-                            defaultSchema: defaultSchemas[targetDatabaseType],
-                        },
-                    })
-                );
-            }),
-        };
-
-        // Use deterministic export if available and AI export is not selected
         if (hasDeterministicPath && !useAIExport) {
             return exportBaseSQL({
-                diagram: filteredDiagram,
+                diagram: currentDiagram,
                 targetDatabaseType,
             });
         } else {
-            return exportSQL(filteredDiagram, targetDatabaseType, {
+            return exportSQL(currentDiagram, targetDatabaseType, {
                 stream: true,
                 onResultStream: (text) =>
                     setScript((prev) => (prev ? prev + text : text)),
                 signal: abortControllerRef.current?.signal,
             });
         }
-    }, [
-        targetDatabaseType,
-        currentDiagram,
-        filter,
-        hasDeterministicPath,
-        useAIExport,
-    ]);
+    }, [targetDatabaseType, currentDiagram, hasDeterministicPath, useAIExport]);
 
     useEffect(() => {
         if (!dialog.open) {

@@ -20,13 +20,7 @@ import {
     TooltipTrigger,
 } from '@/components/tooltip/tooltip';
 import { useDialog } from '@/hooks/use-dialog';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
-import {
-    filterRelationship,
-    filterDependency,
-} from '@/lib/domain/diagram-filter/filter';
-import { defaultSchemas } from '@/lib/data/default-schemas';
-import { useLocalConfig } from '@/hooks/use-local-config';
+import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
 import { SidePanelAddButton } from '@/components/side-panel/side-panel-add-button';
 
 export type RefType = 'relationship' | 'dependency';
@@ -41,14 +35,12 @@ export interface Ref {
 export interface RefsSectionProps {}
 
 export const RefsSection: React.FC<RefsSectionProps> = () => {
-    const { relationships, dependencies, databaseType, getTable, readonly } =
-        useChartDB();
-    const { filter } = useDiagramFilter();
+    const { relationships, dependencies, getTable, readonly } = useChartDB();
     const [filterText, setFilterText] = React.useState('');
     const { closeAllRefsInSidebar } = useLayout();
     const { t } = useTranslation();
     const { openCreateRelationshipDialog } = useDialog();
-    const { showDBViews } = useLocalConfig();
+    const { showViews } = useEditorFilters();
     const filterInputRef = React.useRef<HTMLInputElement>(null);
 
     const allRefs = useMemo((): Ref[] => {
@@ -61,7 +53,7 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
                 }) satisfies Ref
         );
 
-        const dependencyRefs: Ref[] = showDBViews
+        const dependencyRefs: Ref[] = showViews
             ? dependencies.map(
                   (dep) =>
                       ({
@@ -73,7 +65,7 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
             : [];
 
         return [...relationshipRefs, ...dependencyRefs];
-    }, [relationships, dependencies, showDBViews]);
+    }, [relationships, dependencies, showViews]);
 
     const filteredRefs = useMemo(() => {
         const filterName = (ref: Ref): boolean => {
@@ -99,69 +91,30 @@ export const RefsSection: React.FC<RefsSectionProps> = () => {
             }
         };
 
-        const filterByDiagram = (ref: Ref): boolean => {
-            if (ref.type === 'relationship') {
-                const relationship = ref.relationship!;
-                return filterRelationship({
-                    tableA: {
-                        id: relationship.sourceTableId,
-                        schema: relationship.sourceSchema,
-                    },
-                    tableB: {
-                        id: relationship.targetTableId,
-                        schema: relationship.targetSchema,
-                    },
-                    filter,
-                    options: {
-                        defaultSchema: defaultSchemas[databaseType],
-                    },
-                });
-            } else {
-                const dependency = ref.dependency!;
-                return filterDependency({
-                    tableA: {
-                        id: dependency.tableId,
-                        schema: dependency.schema,
-                    },
-                    tableB: {
-                        id: dependency.dependentTableId,
-                        schema: dependency.dependentSchema,
-                    },
-                    filter,
-                    options: {
-                        defaultSchema: defaultSchemas[databaseType],
-                    },
-                });
+        return allRefs.filter(filterName).sort((a, b) => {
+            // Sort relationships before dependencies
+            if (a.type !== b.type) {
+                return a.type === 'relationship' ? -1 : 1;
             }
-        };
 
-        return allRefs
-            .filter(filterByDiagram)
-            .filter(filterName)
-            .sort((a, b) => {
-                // Sort relationships before dependencies
-                if (a.type !== b.type) {
-                    return a.type === 'relationship' ? -1 : 1;
-                }
-
-                // Within same type, sort by name
-                if (a.type === 'relationship') {
-                    const relA = a.relationship!;
-                    const relB = b.relationship!;
-                    return relA.name.localeCompare(relB.name);
-                } else {
-                    const depA = a.dependency!;
-                    const depB = b.dependency!;
-                    const tableA = getTable(depA.dependentTableId);
-                    const tableAName = getTable(depA.tableId);
-                    const tableB = getTable(depB.dependentTableId);
-                    const tableBName = getTable(depB.tableId);
-                    return `${tableA?.name}${tableAName?.name}`.localeCompare(
-                        `${tableB?.name}${tableBName?.name}`
-                    );
-                }
-            });
-    }, [allRefs, filterText, filter, databaseType, getTable]);
+            // Within same type, sort by name
+            if (a.type === 'relationship') {
+                const relA = a.relationship!;
+                const relB = b.relationship!;
+                return relA.name.localeCompare(relB.name);
+            } else {
+                const depA = a.dependency!;
+                const depB = b.dependency!;
+                const tableA = getTable(depA.dependentTableId);
+                const tableAName = getTable(depA.tableId);
+                const tableB = getTable(depB.dependentTableId);
+                const tableBName = getTable(depB.tableId);
+                return `${tableA?.name}${tableAName?.name}`.localeCompare(
+                    `${tableB?.name}${tableBName?.name}`
+                );
+            }
+        });
+    }, [allRefs, filterText, getTable]);
 
     const handleCreateRelationship = useCallback(async () => {
         setFilterText('');

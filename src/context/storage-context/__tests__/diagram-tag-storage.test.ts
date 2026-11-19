@@ -8,7 +8,9 @@ import {
     CHART_DB_SCHEMA_VERSION,
     chartDbV13Stores,
     chartDbV14Stores,
+    chartDbV15Stores,
 } from '../chart-db-schema';
+import { storageInitialValue } from '../storage-context';
 import {
     attachStoredTags,
     tagAssignmentFromRow,
@@ -93,7 +95,6 @@ class MemoryTagDb {
 
 describe('Dexie tag schema', () => {
     it('keeps version 13 stores and adds tag stores at version 14', () => {
-        expect(CHART_DB_SCHEMA_VERSION).toBe(14);
         expect(chartDbV13Stores.diagram_filters).toBe(
             'diagramId, tableIds, schemasIds'
         );
@@ -109,6 +110,32 @@ describe('Dexie tag schema', () => {
         expect(Object.keys(chartDbV14Stores).sort()).toEqual(
             [...Object.keys(chartDbV13Stores), 'tag_assignments', 'tags'].sort()
         );
+    });
+
+    it('drops diagram_filters at version 15 and keeps the other stores', () => {
+        expect(CHART_DB_SCHEMA_VERSION).toBe(15);
+        expect(chartDbV15Stores).not.toHaveProperty('diagram_filters');
+        expect(chartDbV15Stores.tags).toBe(chartDbV14Stores.tags);
+        expect(chartDbV15Stores.tag_assignments).toBe(
+            chartDbV14Stores.tag_assignments
+        );
+        expect(chartDbV15Stores.diagrams).toBe(chartDbV14Stores.diagrams);
+        expect(chartDbV15Stores.db_tables).toBe(chartDbV14Stores.db_tables);
+        expect(chartDbV15Stores.db_relationships).toBe(
+            chartDbV14Stores.db_relationships
+        );
+        expect(chartDbV15Stores.db_dependencies).toBe(
+            chartDbV14Stores.db_dependencies
+        );
+        expect(chartDbV15Stores.areas).toBe(chartDbV14Stores.areas);
+        expect(chartDbV15Stores.db_custom_types).toBe(
+            chartDbV14Stores.db_custom_types
+        );
+        expect(chartDbV15Stores.notes).toBe(chartDbV14Stores.notes);
+        expect(chartDbV15Stores.config).toBe(chartDbV14Stores.config);
+        expect(storageInitialValue).not.toHaveProperty('getDiagramFilter');
+        expect(storageInitialValue).not.toHaveProperty('updateDiagramFilter');
+        expect(storageInitialValue).not.toHaveProperty('deleteDiagramFilter');
     });
 });
 

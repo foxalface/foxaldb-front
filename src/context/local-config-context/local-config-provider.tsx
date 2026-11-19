@@ -8,7 +8,6 @@ const scrollActionKey = 'scroll_action';
 const showCardinalityKey = 'show_cardinality';
 const showFieldAttributesKey = 'show_field_attributes';
 const showMiniMapOnCanvasKey = 'show_minimap_on_canvas';
-const showDBViewsKey = 'show_db_views';
 
 export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -19,10 +18,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
 
     const [scrollAction, setScrollAction] = React.useState<ScrollAction>(
         (localStorage.getItem(scrollActionKey) as ScrollAction) || 'pan'
-    );
-
-    const [showDBViews, setShowDBViews] = React.useState<boolean>(
-        (localStorage.getItem(showDBViewsKey) || 'false') === 'true'
     );
 
     const [showCardinality, setShowCardinality] = React.useState<boolean>(
@@ -48,10 +43,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
     }, [scrollAction]);
 
     useEffect(() => {
-        localStorage.setItem(showDBViewsKey, showDBViews.toString());
-    }, [showDBViews]);
-
-    useEffect(() => {
         localStorage.setItem(showCardinalityKey, showCardinality.toString());
     }, [showCardinality]);
 
@@ -69,8 +60,6 @@ export const LocalConfigProvider: React.FC<React.PropsWithChildren> = ({
                 setTheme,
                 scrollAction,
                 setScrollAction,
-                showDBViews,
-                setShowDBViews,
                 showCardinality,
                 setShowCardinality,
                 showFieldAttributes,

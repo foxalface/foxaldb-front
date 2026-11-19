@@ -235,8 +235,6 @@ export const ko_KR: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                all_hidden: '모든 테이블이 숨겨져 있습니다',
-                show_all: '모두 표시',
 
                 table: {
                     fields: '필드',
@@ -770,7 +768,6 @@ export const ko_KR: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: '겹치는 테이블 강조 표시',
-            filter: '테이블 필터',
         },
 
         new_diagram_dialog: {
@@ -1908,22 +1905,6 @@ export const ko_KR: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: '영역으로 이동',
             no_area: '영역 없음',
-        },
-
-        canvas: {
-            all_tables_hidden: '모든 테이블이 숨겨져 있습니다',
-            show_all_tables: '모두 표시',
-        },
-
-        canvas_filter: {
-            title: '테이블 필터',
-            search_placeholder: '테이블 검색...',
-            group_by_schema: '스키마별 그룹화',
-            group_by_area: '영역별 그룹화',
-            no_tables_found: '테이블을 찾을 수 없습니다',
-            empty_diagram_description: '시작하려면 테이블을 만드세요',
-            no_tables_description: '검색 또는 필터를 조정해 보세요',
-            clear_filter: '필터 지우기',
         },
 
         snap_to_grid_tooltip: '그리드에 맞추기 ({{key}}를 누른채 유지)',

@@ -233,6 +233,29 @@ describe('FiltersSection', () => {
         ).toBeInTheDocument();
     });
 
+    it('toggles Show views without clearing the tag selection', async () => {
+        const user = userEvent.setup();
+        renderSection();
+
+        const showViews = screen.getByRole('checkbox', {
+            name: 'Database Views',
+        });
+        expect(showViews).not.toBeChecked();
+
+        await user.click(screen.getByRole('checkbox', { name: 'Alpha' }));
+        await user.click(showViews);
+        expect(showViews).toBeChecked();
+        expect(screen.getByRole('checkbox', { name: 'Alpha' })).toBeChecked();
+
+        await user.click(screen.getByRole('button', { name: 'Clear' }));
+        expect(showViews).toBeChecked();
+        expect(
+            screen.getByRole('checkbox', { name: 'Alpha' })
+        ).not.toBeChecked();
+        expect(addTags).not.toHaveBeenCalled();
+        expect(updateTablesState).not.toHaveBeenCalled();
+    });
+
     it('selects areas from the diagram and clears only that constraint', async () => {
         const user = userEvent.setup();
         renderSection();

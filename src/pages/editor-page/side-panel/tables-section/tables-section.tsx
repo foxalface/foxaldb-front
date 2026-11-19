@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { TableList } from './table-list/table-list';
 import { Button } from '@/components/button/button';
-import { View, EyeOff, ListCollapse } from 'lucide-react';
+import { View, ListCollapse } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import type { DBTable } from '@/lib/domain/db-table';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -21,61 +21,31 @@ import {
 import { useViewport } from '@xyflow/react';
 import { useDialog } from '@/hooks/use-dialog';
 import type { DBSchema } from '@/lib/domain';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
-import { filterTable } from '@/lib/domain/diagram-filter/filter';
-import { defaultSchemas } from '@/lib/data/default-schemas';
+import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
 import { SidePanelAddButtonWithAlternatives } from '@/components/side-panel/side-panel-add-button';
-import { useLocalConfig } from '@/hooks/use-local-config';
 
 export interface TablesSectionProps {}
 
 export const TablesSection: React.FC<TablesSectionProps> = () => {
-    const { createTable, tables, databaseType, readonly } = useChartDB();
-    const { filter, schemasDisplayed, hasActiveFilter, resetFilter } =
-        useDiagramFilter();
+    const { createTable, tables, schemas, readonly } = useChartDB();
+    const { showViews } = useEditorFilters();
     const { openTableSchemaDialog } = useDialog();
     const viewport = useViewport();
     const { t } = useTranslation();
     const { openTableFromSidebar, closeAllTablesInSidebar } = useLayout();
     const [filterText, setFilterText] = React.useState('');
-    const { showDBViews } = useLocalConfig();
     const filterInputRef = React.useRef<HTMLInputElement>(null);
 
-    // First, filter tables by the diagram filter (schemas/tables visibility)
-    // This is computed once and reused for both filteredTables and allTablesHiddenByDiagramFilter
-    const tablesFilteredByDiagram = useMemo(
-        () =>
-            tables.filter((table) =>
-                filterTable({
-                    table: { id: table.id, schema: table.schema },
-                    filter,
-                    options: { defaultSchema: defaultSchemas[databaseType] },
-                })
-            ),
-        [tables, filter, databaseType]
-    );
-
-    // Check if all tables are hidden by the diagram filter (not the text search)
-    const allTablesHiddenByDiagramFilter = useMemo(() => {
-        if (!hasActiveFilter || tables.length === 0) {
-            return false;
-        }
-        return tablesFilteredByDiagram.length === 0;
-    }, [hasActiveFilter, tables.length, tablesFilteredByDiagram.length]);
-
-    // Apply additional filters (text search and views) on top of diagram-filtered tables
     const filteredTables = useMemo(() => {
-        const filterTableName: (table: DBTable) => boolean = (table) =>
+        const matchesSearch: (table: DBTable) => boolean = (table) =>
             !filterText?.trim?.() ||
             table.name.toLowerCase().includes(filterText.toLowerCase());
 
         const filterViews: (table: DBTable) => boolean = (table) =>
-            showDBViews ? true : !table.isView;
+            showViews ? true : !table.isView;
 
-        return tablesFilteredByDiagram
-            .filter(filterTableName)
-            .filter(filterViews);
-    }, [tablesFilteredByDiagram, filterText, showDBViews]);
+        return tables.filter(matchesSearch).filter(filterViews);
+    }, [tables, filterText, showViews]);
 
     const getCenterLocation = useCallback(() => {
         const padding = 80;
@@ -116,18 +86,15 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         async ({ view }: { view?: boolean }) => {
             setFilterText('');
 
-            if (schemasDisplayed.length > 1) {
+            if (schemas.length > 1) {
                 openTableSchemaDialog({
                     onConfirm: view
                         ? createViewWithLocation
                         : createTableWithLocation,
-                    schemas: schemasDisplayed,
+                    schemas,
                 });
             } else {
-                const schema =
-                    schemasDisplayed.length === 1
-                        ? schemasDisplayed[0]
-                        : undefined;
+                const schema = schemas.length === 1 ? schemas[0] : undefined;
 
                 if (view) {
                     createViewWithLocation({ schema });
@@ -139,7 +106,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
         [
             createViewWithLocation,
             createTableWithLocation,
-            schemasDisplayed,
+            schemas,
             openTableSchemaDialog,
             setFilterText,
         ]
@@ -188,7 +155,7 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                         label={t('side_panel.tables_section.add_table')}
                         onClick={() => handleCreateTable({ view: false })}
                         alternatives={
-                            showDBViews
+                            showViews
                                 ? [
                                       {
                                           label: t(
@@ -205,23 +172,6 @@ export const TablesSection: React.FC<TablesSectionProps> = () => {
                     />
                 ) : null}
             </div>
-            {/* Indicator when all tables are hidden by diagram filter */}
-            {allTablesHiddenByDiagramFilter && (
-                <div className="mb-2 flex items-center gap-2 rounded-md border bg-muted/50 px-3 py-2">
-                    <EyeOff className="size-4 text-muted-foreground" />
-                    <span className="flex-1 text-xs text-muted-foreground">
-                        {t('side_panel.tables_section.all_hidden')}
-                    </span>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-6 px-2 text-xs"
-                        onClick={() => resetFilter()}
-                    >
-                        {t('side_panel.tables_section.show_all')}
-                    </Button>
-                </div>
-            )}
             <div className="flex flex-1 flex-col overflow-hidden">
                 <ScrollArea className="h-full">
                     {tables.length === 0 ? (

@@ -169,7 +169,7 @@ Backup and the Export Wizard share `diagramToJSONOutput`. Do not duplicate strin
 | **Entry points** | Export wizard → PNG / JPG / SVG (`VISUAL_OPTIONS`)                                                             |
 | **Tests**        | `frontend/src/lib/visual-export/__tests__/`; `export-wizard-visual.test.tsx`; `export-image-provider.test.tsx` |
 
-**Rendered-state semantics:** visual export follows the live canvas, not the full unfiltered canonical `Diagram`. Schema-filter-hidden tables, `node.hidden`, and `showDBViews` remain respected. Areas follow current canvas visibility. Notes follow current canvas behavior. This intentionally differs from DBML/JSON.
+**Rendered-state semantics:** visual export follows the live canvas, not the full canonical `Diagram`. Nodes hidden by editor filters or Show views stay out of the capture because they are hidden on the canvas. Areas follow current canvas visibility. Notes follow current canvas behavior. Final visual-export semantics stay with FILTERS1J. This intentionally differs from DBML/JSON.
 
 **Extent:** Complete diagram (default) or current viewport. Complete export temporarily disables `onlyRenderVisibleElements` via ephemeral `visualExportCaptureActive`, waits for render, then captures with `getNodesBounds` + padded 1:1 transform on the html-to-image clone. It does not mutate Diagram positions, persisted viewport, or call `fitView`.
 
@@ -425,7 +425,7 @@ FoxalDB Export Wizard calls **`exportBaseSQL` only** (never `exportSQL`). Target
 - Cross-dialect for PostgreSQL → MySQL, MariaDB, SQL Server only
 - Unsupported sources (Oracle, CockroachDB, ClickHouse, GENERIC) → empty target list + unsupported step
 
-Preview: filtered diagram via `getFilteredDiagramForSqlExport()` (same filter semantics as legacy `ExportSQLDialog`). Download: `buildSqlExportFilename()` + `downloadBlob` (`application/sql`).
+Preview: the structural export diagram. Whole diagram is the current diagram. By tags uses `projectDiagramForStructuralExport()`. Download: `buildSqlExportFilename()` + `downloadBlob` (`application/sql`).
 
 ### Legacy dialog routing (`ExportSQLDialog`)
 
@@ -597,7 +597,7 @@ Sync/Diff/Merge is **after Export**. No `ChangeSet` abstraction is implemented o
 2. Exporters must **not mutate** `Diagram`.
 3. Dialect conversion during export must **not mutate** canonical diagram state.
 4. Laravel-specific DTOs and assumptions stay in `backend/app/Services/LaravelMigrationExport/`.
-5. **Schema-filtered** SQL export (via `useDiagramFilter`) is not equivalent to the full canonical diagram.
+5. SQL **Whole diagram** exports the full structural diagram. SQL **By tags** exports the structural projection. Neither reads editor visibility.
 6. **JSON files preserve internal entity IDs** of the source Diagram, but import remaps them. Sync/Diff/Merge must not treat Diagram JSON as a restore-in-place or identity-preserving import protocol. Matching successive **files** from the same live diagram can use those file IDs; matching an imported clone requires structural comparison.
 7. Realtime editing conflict handling (LWW, editing awareness) is **completely separate** from schema Sync/Diff/Merge.
 

@@ -243,8 +243,6 @@ export const de: LanguageTranslation = {
                 // TODO: Translate
                 show_list: 'Show Table List',
                 show_dbml: 'Show DBML Editor',
-                all_hidden: 'Alle Tabellen sind ausgeblendet',
-                show_all: 'Alle anzeigen',
 
                 table: {
                     fields: 'Felder',
@@ -801,7 +799,6 @@ export const de: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Überlappende Tabellen hervorheben',
-            filter: 'Tabellen filtern',
         },
 
         new_diagram_dialog: {
@@ -1970,24 +1967,6 @@ export const de: LanguageTranslation = {
             add_relationship: 'Add Relationship', // TODO: Translate
             move_to_area: 'In Bereich verschieben',
             no_area: 'Kein Bereich',
-        },
-
-        canvas: {
-            all_tables_hidden: 'Alle Tabellen sind ausgeblendet',
-            show_all_tables: 'Alle anzeigen',
-        },
-
-        canvas_filter: {
-            title: 'Tabellen filtern',
-            search_placeholder: 'Tabellen suchen...',
-            group_by_schema: 'Nach Schema gruppieren',
-            group_by_area: 'Nach Bereich gruppieren',
-            no_tables_found: 'Keine Tabellen gefunden',
-            empty_diagram_description:
-                'Erstellen Sie eine Tabelle, um zu beginnen',
-            no_tables_description:
-                'Versuchen Sie, Ihre Suche oder Filter anzupassen',
-            clear_filter: 'Filter löschen',
         },
 
         // TODO: Add translations

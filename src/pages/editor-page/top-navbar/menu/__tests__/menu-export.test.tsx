@@ -123,8 +123,13 @@ vi.mock('@/hooks/use-local-config', () => ({
         showFieldAttributes: false,
         setShowMiniMapOnCanvas: vi.fn(),
         showMiniMapOnCanvas: false,
-        showDBViews: false,
-        setShowDBViews: vi.fn(),
+    }),
+}));
+
+vi.mock('@/context/editor-filters-context/use-editor-filters', () => ({
+    useEditorFilters: () => ({
+        showViews: false,
+        setShowViews: vi.fn(),
     }),
 }));
 

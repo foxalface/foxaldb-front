@@ -239,8 +239,6 @@ export const fr: LanguageTranslation = {
                     'Aucune table trouvée correspondant à votre filtre.',
                 show_list: 'Afficher la Liste des Tableaux',
                 show_dbml: "Afficher l'éditeur DBML",
-                all_hidden: 'Toutes les tables sont masquées',
-                show_all: 'Tout afficher',
 
                 table: {
                     fields: 'Champs',
@@ -786,7 +784,6 @@ export const fr: LanguageTranslation = {
             custom_type_highlight_tooltip:
                 'Highlighting "{{typeName}}" - Click to clear',
             highlight_overlapping_tables: 'Surligner les tables chevauchées',
-            filter: 'Filtrer les Tables',
         },
 
         new_diagram_dialog: {
@@ -1952,23 +1949,6 @@ export const fr: LanguageTranslation = {
             add_relationship: 'Ajouter une Relation',
             move_to_area: 'Déplacer vers une Zone',
             no_area: 'Aucune Zone',
-        },
-
-        canvas: {
-            all_tables_hidden: 'Toutes les tables sont masquées',
-            show_all_tables: 'Tout afficher',
-        },
-
-        canvas_filter: {
-            title: 'Filtrer les Tables',
-            search_placeholder: 'Rechercher des tables...',
-            group_by_schema: 'Grouper par Schéma',
-            group_by_area: 'Grouper par Zone',
-            no_tables_found: 'Aucune table trouvée',
-            empty_diagram_description: 'Créez une table pour commencer',
-            no_tables_description:
-                'Essayez de modifier votre recherche ou filtre',
-            clear_filter: 'Effacer le filtre',
         },
 
         snap_to_grid_tooltip:

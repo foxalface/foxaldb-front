@@ -33,13 +33,6 @@ const chartDbState = {
     },
 };
 
-const filterState = {
-    filter: {
-        tableIds: [],
-        schemas: [],
-    },
-};
-
 vi.mock('@/hooks/use-dialog', () => ({
     useDialog: () => dialogMocks,
 }));
@@ -56,10 +49,6 @@ vi.mock('@/hooks/use-export-image', () => ({
     useExportImage: () => ({
         exportImage: vi.fn(),
     }),
-}));
-
-vi.mock('@/context/diagram-filter-context/use-diagram-filter', () => ({
-    useDiagramFilter: () => filterState,
 }));
 
 vi.mock('@/hooks/use-theme', () => ({

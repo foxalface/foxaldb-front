@@ -33,18 +33,6 @@ const chartDbState = {
     },
 };
 
-const filterState: {
-    filter: {
-        tableIds: string[];
-        schemas: string[];
-    };
-} = {
-    filter: {
-        tableIds: [],
-        schemas: [],
-    },
-};
-
 const exportImageMock = vi.fn();
 
 vi.mock('@/hooks/use-dialog', () => ({
@@ -63,10 +51,6 @@ vi.mock('@/hooks/use-export-image', () => ({
     useExportImage: () => ({
         exportImage: exportImageMock,
     }),
-}));
-
-vi.mock('@/context/diagram-filter-context/use-diagram-filter', () => ({
-    useDiagramFilter: () => filterState,
 }));
 
 vi.mock('@/hooks/use-theme', () => ({
@@ -139,10 +123,6 @@ describe('ExportWizardDialog SQL branch', () => {
             relationships: [],
         };
         mockedExportBaseSQL.mockResolvedValue('CREATE TABLE users ();');
-        filterState.filter = {
-            tableIds: [],
-            schemas: [],
-        };
     });
 
     it('opens the SQL target step from the target picker without the legacy dialog', async () => {
@@ -256,14 +236,25 @@ describe('ExportWizardDialog SQL branch', () => {
         expect(mockedExportBaseSQL).toHaveBeenCalledTimes(1);
     });
 
+    it('exports the actual whole diagram for SQL scope all', async () => {
+        const fixture = structuralExportFixture();
+        chartDbState.currentDiagram =
+            fixture as unknown as typeof chartDbState.currentDiagram;
+
+        await openSqlBranch();
+        await userEvent.click(screen.getByText('PostgreSQL'));
+
+        await waitFor(() => {
+            expect(mockedExportBaseSQL.mock.calls.at(-1)?.[0].diagram).toBe(
+                fixture
+            );
+        });
+    });
+
     it('exports the whole diagram for By tags with an empty selection', async () => {
         const fixture = structuralExportFixture();
         chartDbState.currentDiagram =
             fixture as unknown as typeof chartDbState.currentDiagram;
-        filterState.filter = {
-            tableIds: ['orders'],
-            schemas: [],
-        };
 
         await openSqlBranch();
         await userEvent.click(screen.getByText('PostgreSQL'));
@@ -278,14 +269,10 @@ describe('ExportWizardDialog SQL branch', () => {
         });
     });
 
-    it('projects By tags before SQL generation and ignores the legacy table filter', async () => {
+    it('projects By tags before SQL generation', async () => {
         const fixture = structuralExportFixture();
         chartDbState.currentDiagram =
             fixture as unknown as typeof chartDbState.currentDiagram;
-        filterState.filter = {
-            tableIds: ['orders'],
-            schemas: [],
-        };
 
         await openSqlBranch();
         await userEvent.click(screen.getByText('PostgreSQL'));
@@ -316,10 +303,6 @@ describe('ExportWizardDialog SQL branch by source database', () => {
             databaseType: DatabaseType.POSTGRESQL,
             tables: [],
             relationships: [],
-        };
-        filterState.filter = {
-            tableIds: [],
-            schemas: [],
         };
         mockedExportBaseSQL.mockResolvedValue('SELECT 1;');
     });

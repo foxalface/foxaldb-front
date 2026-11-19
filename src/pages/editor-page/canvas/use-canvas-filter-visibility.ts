@@ -1,28 +1,24 @@
 import { useMemo } from 'react';
-import { useDiagramFilter } from '@/context/diagram-filter-context/use-diagram-filter';
 import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
 import { useChartDB } from '@/hooks/use-chartdb';
-import { useLocalConfig } from '@/hooks/use-local-config';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { defaultSchemas } from '@/lib/data/default-schemas';
 import {
     tablePassesAreaConstraint,
     tablePassesSchemaConstraint,
 } from '@/lib/domain/editor-filter-eligibility';
-import { tableToTableNode } from './diagram-flow-elements';
 import type { TagCanvasVisibility } from './tag-canvas-visibility';
 import { deriveTagCanvasVisibility } from './tag-canvas-visibility';
 
 /**
- * One canvas-scoped derivation.
- * Null means the personal editor filters add no extra hiding.
- * Legacy gates run first, then area and schema constraints, then tag closure.
+ * Canvas visibility for the final editor filters.
+ * Null means every table is eligible and no tag, area, or schema constraint is active.
+ * Order: diff force-show, Show views, areas, schemas, then tag closure.
+ * A table excluded before tag closure cannot be added back.
  */
 export const useCanvasFilterVisibility = (): TagCanvasVisibility | null => {
     const { tables, relationships, tagAssignments, databaseType } =
         useChartDB();
-    const { filter, loading: filterLoading } = useDiagramFilter();
-    const { showDBViews } = useLocalConfig();
     const { checkIfNewTable } = useDiff();
     const {
         selectedTagIds,
@@ -32,26 +28,20 @@ export const useCanvasFilterVisibility = (): TagCanvasVisibility | null => {
         hasTagConstraint,
         hasAreaConstraint,
         hasSchemaConstraint,
+        showViews,
     } = useEditorFilters();
 
     return useMemo(() => {
-        if (!hasTagConstraint && !hasAreaConstraint && !hasSchemaConstraint) {
-            return null;
-        }
-
         const defaultSchema = defaultSchemas[databaseType];
         const eligibleTableIds = new Set<string>();
 
         for (const table of tables) {
-            const node = tableToTableNode(table, {
-                filter,
-                databaseType,
-                filterLoading,
-                showDBViews,
-                forceShow: checkIfNewTable({ tableId: table.id }),
-            });
+            if (checkIfNewTable({ tableId: table.id })) {
+                eligibleTableIds.add(table.id);
+                continue;
+            }
 
-            if (node.hidden) {
+            if (!showViews && table.isView) {
                 continue;
             }
 
@@ -74,6 +64,19 @@ export const useCanvasFilterVisibility = (): TagCanvasVisibility | null => {
             eligibleTableIds.add(table.id);
         }
 
+        const everyTableEligible = tables.every((table) =>
+            eligibleTableIds.has(table.id)
+        );
+
+        if (
+            everyTableEligible &&
+            !hasTagConstraint &&
+            !hasAreaConstraint &&
+            !hasSchemaConstraint
+        ) {
+            return null;
+        }
+
         return deriveTagCanvasVisibility({
             tables,
             relationships,
@@ -93,10 +96,8 @@ export const useCanvasFilterVisibility = (): TagCanvasVisibility | null => {
         tagMatchMode,
         selectedAreaIds,
         selectedSchemaIds,
-        filter,
         databaseType,
-        filterLoading,
-        showDBViews,
+        showViews,
         checkIfNewTable,
     ]);
 };
