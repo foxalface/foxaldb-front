@@ -1,14 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Card, CardContent } from '@/components/card/card';
-import {
-    ZoomIn,
-    ZoomOut,
-    Filter,
-    Redo,
-    Undo,
-    Scan,
-    LayoutGrid,
-} from 'lucide-react';
+import { ZoomIn, ZoomOut, Redo, Undo, Scan, LayoutGrid } from 'lucide-react';
 import { Separator } from '@/components/separator/separator';
 import { ToolbarButton } from './toolbar-button';
 import { useHistory } from '@/hooks/use-history';
@@ -23,10 +15,6 @@ import { Button } from '@/components/button/button';
 import { keyboardShortcutsForOS } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { KeyboardShortcutAction } from '@/context/keyboard-shortcuts-context/keyboard-shortcuts';
 import { useCanvas } from '@/hooks/use-canvas';
-import { useLayout } from '@/hooks/use-layout';
-import { cn } from '@/lib/utils';
-import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
-import { toggleFiltersSidebar } from '../toggle-filters-sidebar';
 import { useAlert } from '@/context/alert-context/alert-context';
 
 const convertToPercentage = (value: number) => `${Math.round(value * 100)}%`;
@@ -41,13 +29,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
     const { getZoom, zoomIn, zoomOut, fitView } = useReactFlow();
     const [zoom, setZoom] = useState<string>(convertToPercentage(getZoom()));
     const { reorderTables } = useCanvas();
-    const { toggleSidebarSection } = useLayout();
-    const { hasAnyConstraint } = useEditorFilters();
     const { showAlert } = useAlert();
-
-    const toggleFilter = useCallback(() => {
-        toggleFiltersSidebar(toggleSidebarSection);
-    }, [toggleSidebarSection]);
 
     useOnViewportChange({
         onChange: ({ zoom }) => {
@@ -94,35 +76,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({ readonly }) => {
         <div className="px-1">
             <Card className="h-[44px] bg-secondary p-0 shadow-none">
                 <CardContent className="flex h-full flex-row items-center p-1">
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <span>
-                                <ToolbarButton
-                                    onClick={toggleFilter}
-                                    className={cn(
-                                        'transition-all duration-200',
-                                        {
-                                            'bg-pink-500 text-white hover:bg-pink-600 hover:text-white':
-                                                hasAnyConstraint,
-                                        }
-                                    )}
-                                >
-                                    <Filter />
-                                </ToolbarButton>
-                            </span>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            {t('editor_sidebar.filters')}
-                            <span className="ml-2 text-muted-foreground">
-                                {
-                                    keyboardShortcutsForOS[
-                                        KeyboardShortcutAction.TOGGLE_FILTER
-                                    ].keyCombinationLabel
-                                }
-                            </span>
-                        </TooltipContent>
-                    </Tooltip>
-                    <Separator orientation="vertical" />
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <span>

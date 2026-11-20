@@ -189,12 +189,20 @@
     }
 
     .side-panel-group-hover-surface {
-        @apply rounded-md group-hover:bg-slate-100 group-hover:ring-[0.5px] dark:group-hover:bg-slate-900;
+        @apply rounded-md group-hover:bg-slate-100 dark:group-hover:bg-slate-900;
     }
 
     .text-editable {
         @apply side-panel-group-hover-surface cursor-pointer;
     }
+}
+
+/* Inset so overflow:hidden on field rows cannot clip the top and bottom.
+   !important beats the input's focus-visible:outline-none shorthand. */
+.side-panel-group-hover-surface:hover,
+.side-panel-group-hover-surface:focus-visible {
+    outline: 1px solid hsl(var(--ring)) !important;
+    outline-offset: -1px !important;
 }
 
 .gradient-background {
