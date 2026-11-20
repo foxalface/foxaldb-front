@@ -3,6 +3,7 @@ import type { DiagramTagAssignment } from '@/lib/domain/diagram-tag';
 import {
     areaHiddenByTagVisibility,
     deriveTagCanvasVisibility,
+    fieldHiddenByTagVisibility,
     relationshipHiddenByTagVisibility,
     tableHiddenByTagVisibility,
 } from '../tag-canvas-visibility';
@@ -77,6 +78,7 @@ describe('deriveTagCanvasVisibility', () => {
 
         expect([...result.visibleTableIds]).toEqual(['users', 'orders']);
         expect([...result.visibleRelationshipIds]).toEqual(['rel']);
+        expect(result.visibleFieldIds).toBeNull();
     });
 
     it('matches a table that carries one selected tag in ANY mode', () => {
@@ -116,6 +118,7 @@ describe('deriveTagCanvasVisibility', () => {
         });
 
         expect(result.visibleTableIds).toEqual(new Set(['users']));
+        expect(result.visibleFieldIds).toEqual(new Set(['email']));
     });
 
     it('promotes both relationship endpoints that match ANY', () => {
@@ -259,10 +262,9 @@ describe('deriveTagCanvasVisibility', () => {
         expect(result.visibleRelationshipIds).toEqual(new Set(['rel']));
     });
 
-    it('keeps every field of a promoted parent and does not expose field hiding', () => {
-        const users = table('users', ['email', 'name']);
+    it('shows only tag-matching fields when a parent is promoted', () => {
         const result = visible({
-            tables: [users],
+            tables: [table('users', ['email', 'name'])],
             tagAssignments: [
                 assignment('red', 'field', 'email'),
                 assignment('blue', 'field', 'name'),
@@ -273,19 +275,15 @@ describe('deriveTagCanvasVisibility', () => {
         });
 
         expect(result.visibleTableIds).toEqual(new Set(['users']));
-        expect(users.fields.map((field) => field.id)).toEqual([
-            'email',
-            'name',
-        ]);
-        expect(result).not.toHaveProperty('visibleFieldIds');
+        expect(result.visibleFieldIds).toEqual(new Set(['email']));
     });
 
-    it('keeps a non-matching field parent visible when the table itself matches', () => {
+    it('does not show non-matching fields on a directly matching table', () => {
         const result = visible({
-            tables: [table('users', ['email'])],
+            tables: [table('users', ['email', 'name'])],
             tagAssignments: [
                 assignment('red', 'table', 'users'),
-                assignment('blue', 'field', 'email'),
+                assignment('blue', 'field', 'name'),
             ],
             selectedTagIds: ['red'],
             matchMode: 'any',
@@ -293,6 +291,48 @@ describe('deriveTagCanvasVisibility', () => {
         });
 
         expect(result.visibleTableIds).toEqual(new Set(['users']));
+        expect(result.visibleFieldIds).toEqual(new Set());
+    });
+
+    it('hides a field carrying the selected tag in NONE mode while siblings stay visible', () => {
+        const result = visible({
+            tables: [table('users', ['id', 'name', 'email'])],
+            tagAssignments: [assignment('test', 'field', 'name')],
+            selectedTagIds: ['test'],
+            matchMode: 'none',
+            eligibleTableIds: ['users'],
+        });
+
+        expect(result.visibleTableIds).toEqual(new Set(['users']));
+        expect(result.visibleFieldIds).toEqual(new Set(['id', 'email']));
+    });
+
+    it('requires every selected tag on a field in ALL mode', () => {
+        const result = visible({
+            tables: [table('users', ['full', 'partial'])],
+            tagAssignments: [
+                assignment('red', 'field', 'full'),
+                assignment('blue', 'field', 'full'),
+                assignment('red', 'field', 'partial'),
+            ],
+            selectedTagIds: ['red', 'blue'],
+            matchMode: 'all',
+            eligibleTableIds: ['users'],
+        });
+
+        expect(result.visibleFieldIds).toEqual(new Set(['full']));
+    });
+
+    it('shows a field tagged only with an unrelated tag under NONE', () => {
+        const result = visible({
+            tables: [table('users', ['other'])],
+            tagAssignments: [assignment('blue', 'field', 'other')],
+            selectedTagIds: ['red'],
+            matchMode: 'none',
+            eligibleTableIds: ['users'],
+        });
+
+        expect(result.visibleFieldIds).toEqual(new Set(['other']));
     });
 
     it('keeps an untagged relationship between visible tables', () => {
@@ -360,6 +400,31 @@ describe('deriveTagCanvasVisibility', () => {
         expect(result.visibleRelationshipIds.size).toBe(0);
     });
 
+    it('hides a view tagged with the selected tag in NONE mode', () => {
+        const result = visible({
+            tables: [table('active_users'), table('users')],
+            tagAssignments: [assignment('test', 'table', 'active_users')],
+            selectedTagIds: ['test'],
+            matchMode: 'none',
+            eligibleTableIds: ['users', 'active_users'],
+        });
+
+        expect(result.visibleTableIds).toEqual(new Set(['users']));
+    });
+
+    it('hides a tagged relationship in NONE mode', () => {
+        const result = visible({
+            tables: [table('users'), table('orders')],
+            relationships: [relationship('rel', 'users', 'orders')],
+            tagAssignments: [assignment('test', 'relationship', 'rel')],
+            selectedTagIds: ['test'],
+            matchMode: 'none',
+            eligibleTableIds: ['users', 'orders'],
+        });
+
+        expect(result.visibleRelationshipIds.size).toBe(0);
+    });
+
     it('treats a view through table assignments and refuses to resurrect an ineligible view', () => {
         const result = visible({
             tables: [
@@ -422,6 +487,7 @@ describe('tag visibility application', () => {
     it('leaves pre-tag hiding unchanged when there is no tag constraint', () => {
         expect(tableHiddenByTagVisibility(true, 'users', null)).toBe(true);
         expect(tableHiddenByTagVisibility(false, 'users', null)).toBe(false);
+        expect(fieldHiddenByTagVisibility('email', null)).toBe(false);
         expect(relationshipHiddenByTagVisibility('rel', null)).toBe(false);
         expect(
             areaHiddenByTagVisibility({

@@ -95,6 +95,8 @@ export type TableNodeType = Node<
         /** Non-persisted merge preview metadata (M10.3 styling). */
         mergePreview?: MergePreviewNodeDecoration[];
         mergePreviewHover?: MergePreviewHoverFlags;
+        /** When set, only these field ids render on the canvas (tag filter). */
+        tagVisibleFieldIds?: ReadonlySet<string> | null;
     },
     'table'
 >;
@@ -114,6 +116,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             targetEdgeCounts,
             mergePreview,
             mergePreviewHover: mergePreviewHoverFromNode,
+            tagVisibleFieldIds,
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
@@ -363,10 +366,16 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
 
         const visibleFields = useMemo(() => {
             // If in edit mode, use the initial field count to keep consistent height
-            const fieldsToConsider =
+            let fieldsToConsider =
                 editTableMode && editModeInitialFieldCount !== null
                     ? fields.slice(0, editModeInitialFieldCount)
                     : fields;
+
+            if (tagVisibleFieldIds) {
+                fieldsToConsider = fieldsToConsider.filter((field) =>
+                    tagVisibleFieldIds.has(field.id)
+                );
+            }
 
             if (expanded || fieldsToConsider.length <= TABLE_MINIMIZED_FIELDS) {
                 return fieldsToConsider;
@@ -413,6 +422,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             relatedFieldIds,
             editTableMode,
             editModeInitialFieldCount,
+            tagVisibleFieldIds,
         ]);
 
         const isPartOfCreatingRelationship = useMemo(
@@ -536,6 +546,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         table={table}
                         color={tableColor}
                         focusFieldId={editTableModeFieldId ?? undefined}
+                        tagVisibleFieldIds={tagVisibleFieldIds}
                         onClose={() => {
                             exitEditTableMode();
                         }}

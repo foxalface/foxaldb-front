@@ -20,6 +20,11 @@ export interface TagCanvasVisibilityRelationship {
 export interface TagCanvasVisibility {
     readonly visibleTableIds: ReadonlySet<string>;
     readonly visibleRelationshipIds: ReadonlySet<string>;
+    /**
+     * null when no tag ids are selected: every field on a visible table is shown.
+     * Otherwise only listed field ids are shown on visible tables.
+     */
+    readonly visibleFieldIds: ReadonlySet<string> | null;
 }
 
 const tagsByTarget = (
@@ -54,9 +59,9 @@ const tagsByTarget = (
 
 /**
  * Derives canvas visibility inside an already-eligible table universe.
- * Empty selected tags keep every eligible table and every relationship
- * whose endpoints are both eligible. Field and relationship anchors require
- * at least one assignment, so NONE does not promote untagged entities.
+ * Empty selected tags keep every eligible table, relationship, and field visible.
+ * Field and relationship anchors require at least one assignment to promote
+ * endpoints; untagged entities do not promote structurally.
  */
 export const deriveTagCanvasVisibility = ({
     tables,
@@ -74,15 +79,6 @@ export const deriveTagCanvasVisibility = ({
     eligibleTableIds: ReadonlySet<string>;
 }): TagCanvasVisibility => {
     const tags = tagsByTarget(tagAssignments);
-    const fieldParentTableId = new Map<string, string>();
-
-    for (const table of tables) {
-        for (const field of table.fields) {
-            fieldParentTableId.set(field.id, table.id);
-        }
-    }
-
-    const visibleTableIds = new Set<string>();
     const matches = (entityTagIds: readonly string[]): boolean =>
         matchesTags({
             entityTagIds,
@@ -90,25 +86,29 @@ export const deriveTagCanvasVisibility = ({
             mode: matchMode,
         });
 
-    for (const tableId of eligibleTableIds) {
-        if (matches(tags.table.get(tableId) ?? noTags)) {
-            visibleTableIds.add(tableId);
+    const visibleTableIds = new Set<string>();
+
+    for (const table of tables) {
+        if (!eligibleTableIds.has(table.id)) {
+            continue;
+        }
+
+        if (matches(tags.table.get(table.id) ?? noTags)) {
+            visibleTableIds.add(table.id);
         }
     }
 
-    for (const [fieldId, entityTagIds] of tags.field) {
-        if (entityTagIds.length === 0) {
+    for (const table of tables) {
+        if (!eligibleTableIds.has(table.id)) {
             continue;
         }
 
-        const parentTableId = fieldParentTableId.get(fieldId);
+        for (const field of table.fields) {
+            const entityTagIds = tags.field.get(field.id) ?? noTags;
 
-        if (!parentTableId || !eligibleTableIds.has(parentTableId)) {
-            continue;
-        }
-
-        if (matches(entityTagIds)) {
-            visibleTableIds.add(parentTableId);
+            if (entityTagIds.length > 0 && matches(entityTagIds)) {
+                visibleTableIds.add(table.id);
+            }
         }
     }
 
@@ -145,7 +145,29 @@ export const deriveTagCanvasVisibility = ({
         }
     }
 
-    return { visibleTableIds, visibleRelationshipIds };
+    let visibleFieldIds: ReadonlySet<string> | null = null;
+
+    if (selectedTagIds.length > 0) {
+        const fieldIds = new Set<string>();
+
+        for (const table of tables) {
+            if (!visibleTableIds.has(table.id)) {
+                continue;
+            }
+
+            for (const field of table.fields) {
+                const entityTagIds = tags.field.get(field.id) ?? noTags;
+
+                if (matches(entityTagIds)) {
+                    fieldIds.add(field.id);
+                }
+            }
+        }
+
+        visibleFieldIds = fieldIds;
+    }
+
+    return { visibleTableIds, visibleRelationshipIds, visibleFieldIds };
 };
 
 export const tableHiddenByTagVisibility = (
@@ -158,6 +180,17 @@ export const tableHiddenByTagVisibility = (
     }
 
     return !visibility.visibleTableIds.has(tableId);
+};
+
+export const fieldHiddenByTagVisibility = (
+    fieldId: string,
+    visibility: TagCanvasVisibility | null
+): boolean => {
+    if (!visibility?.visibleFieldIds) {
+        return false;
+    }
+
+    return !visibility.visibleFieldIds.has(fieldId);
 };
 
 export const relationshipHiddenByTagVisibility = (

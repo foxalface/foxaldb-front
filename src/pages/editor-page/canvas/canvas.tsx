@@ -521,6 +521,8 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             isOverlapping,
                             highlightOverlappingTables,
                             hasHighlightedCustomType,
+                            tagVisibleFieldIds:
+                                canvasFilterVisibility?.visibleFieldIds ?? null,
                         },
                     };
                 }),

@@ -12,6 +12,7 @@ import type {
 import {
     areaHiddenByTagVisibility,
     deriveTagCanvasVisibility,
+    fieldHiddenByTagVisibility,
     relationshipHiddenByTagVisibility,
     tableHiddenByTagVisibility,
 } from '@/pages/editor-page/canvas/tag-canvas-visibility';
@@ -45,7 +46,12 @@ const exportedNodeIds = (
     relationships: RelationshipFixture[],
     assignments: DiagramTagAssignment[],
     filter: FilterFixture = {}
-): { tables: string[]; relationships: string[]; areas: string[] } => {
+): {
+    tables: string[];
+    relationships: string[];
+    areas: string[];
+    fields: string[];
+} => {
     const selectedTagIds = filter.selectedTagIds ?? [];
     const selectedAreaIds = filter.selectedAreaIds ?? [];
     const selectedSchemaIds = filter.selectedSchemaIds ?? [];
@@ -106,6 +112,13 @@ const exportedNodeIds = (
         tables: nodes
             .filter((node) => isVisualExportDiagramNode(node))
             .map((node) => node.id),
+        fields: tables.flatMap((table) =>
+            table.fields
+                .filter(
+                    (field) => !fieldHiddenByTagVisibility(field.id, visibility)
+                )
+                .map((field) => field.id)
+        ),
         relationships: relationships
             .filter(
                 (relationship) =>
@@ -132,7 +145,7 @@ const users: TableFixture = {
     id: 'users',
     parentAreaId: 'area-core',
     schema: 'public',
-    fields: [{ id: 'users-id' }],
+    fields: [{ id: 'id' }, { id: 'name' }, { id: 'email' }],
 };
 const orders: TableFixture = {
     id: 'orders',
@@ -307,5 +320,31 @@ describe('visual export follows canvas visibility', () => {
         expect(exported.tables).toEqual(['users', 'orders']);
         expect(exported.relationships).toEqual(['user-orders']);
         expect(exported.areas).toEqual(['area-core']);
+        expect(exported.fields).toEqual([
+            'id',
+            'name',
+            'email',
+            'orders-id',
+            'orders-email',
+        ]);
+    });
+
+    it('omits fields hidden by NONE on a visible table from the live canvas', () => {
+        const exported = exportedNodeIds(
+            [users],
+            [],
+            [
+                {
+                    id: 'a1',
+                    tagId: 'test',
+                    targetType: 'field',
+                    targetId: 'name',
+                },
+            ],
+            { selectedTagIds: ['test'], tagMatchMode: 'none', showViews: true }
+        );
+
+        expect(exported.tables).toEqual(['users']);
+        expect(exported.fields).toEqual(['id', 'email']);
     });
 });

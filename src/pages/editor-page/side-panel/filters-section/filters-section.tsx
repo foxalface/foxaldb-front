@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Database, Group, Tags } from 'lucide-react';
-import { Checkbox } from '@/components/checkbox/checkbox';
 import { Tabs, TabsContent } from '@/components/tabs/tabs';
-import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
 import {
     SidePanelSectionTabsList,
     SidePanelSectionTabsToolbar,
@@ -17,24 +15,13 @@ type FiltersTab = 'tags' | 'areas' | 'schemas';
 
 export const FiltersSection: React.FC = () => {
     const { t } = useTranslation();
-    const { showViews, setShowViews } = useEditorFilters();
     const [tab, setTab] = useState<FiltersTab>('tags');
-    const showViewsLabel = t('menu.view.show_views');
 
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden"
             data-vaul-no-drag
         >
-            <label className="flex items-center gap-2 border-b px-3 py-2 text-sm">
-                <Checkbox
-                    checked={showViews}
-                    onCheckedChange={(value) => setShowViews(value === true)}
-                    aria-label={showViewsLabel}
-                    data-testid="filters-show-views"
-                />
-                <span>{showViewsLabel}</span>
-            </label>
             <Tabs
                 value={tab}
                 onValueChange={(value) => setTab(value as FiltersTab)}

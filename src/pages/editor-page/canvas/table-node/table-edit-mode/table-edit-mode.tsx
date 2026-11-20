@@ -36,17 +36,34 @@ export interface TableEditModeProps {
     table: DBTable;
     color: string;
     focusFieldId?: string;
+    tagVisibleFieldIds?: ReadonlySet<string> | null;
     onClose: () => void;
 }
 
 export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
-    ({ table, color, focusFieldId: focusFieldIdProp, onClose }) => {
+    ({
+        table,
+        color,
+        focusFieldId: focusFieldIdProp,
+        tagVisibleFieldIds,
+        onClose,
+    }) => {
         const containerRef = useRef<HTMLDivElement>(null);
         const scrollAreaRef = useRef<HTMLDivElement>(null);
         const fieldRefs = useRef<Map<string, HTMLDivElement>>(new Map());
         const [isVisible, setIsVisible] = useState(false);
         const { createField, updateTable, schemas, databaseType } =
             useChartDB();
+
+        const visibleFields = useMemo(() => {
+            if (!tagVisibleFieldIds) {
+                return table.fields;
+            }
+
+            return table.fields.filter((field) =>
+                tagVisibleFieldIds.has(field.id)
+            );
+        }, [table.fields, tagVisibleFieldIds]);
         const { startEditing, stopEditing } = useEditingBroadcast();
         const [isLocallyEditing, setIsLocallyEditing] = useState(false);
         const { message, editors, hasConflict } = useEditingConflictWarning(
@@ -339,7 +356,7 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
                 />
 
                 <ScrollArea ref={scrollAreaRef} className="nodrag flex-1 p-2">
-                    {table.fields.map((field) => (
+                    {visibleFields.map((field) => (
                         <div key={field.id} ref={setFieldRef(field.id)}>
                             <TableEditModeField
                                 table={table}
