@@ -2,101 +2,59 @@ import { useMemo } from 'react';
 import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
 import { useChartDB } from '@/hooks/use-chartdb';
 import { useDiff } from '@/context/diff-context/use-diff';
-import { defaultSchemas } from '@/lib/data/default-schemas';
-import {
-    tablePassesAreaConstraint,
-    tablePassesSchemaConstraint,
-} from '@/lib/domain/editor-filter-eligibility';
-import type { TagCanvasVisibility } from './tag-canvas-visibility';
-import { deriveTagCanvasVisibility } from './tag-canvas-visibility';
+import type { Diagram } from '@/lib/domain/diagram';
+import { projectCanvasVisibility } from './canvas-filter-visibility';
+import type { CanvasFilterVisibility } from './canvas-filter-visibility';
 
 /**
- * Canvas visibility for the final editor filters.
- * Null means every table is eligible and no tag, area, or schema constraint is active.
- * Order: diff force-show, Show views, areas, schemas, then tag closure.
- * A table excluded before tag closure cannot be added back.
+ * One canvas-level visibility memo.
+ * Null means every table is eligible and the filter expression is inactive.
  */
-export const useCanvasFilterVisibility = (): TagCanvasVisibility | null => {
-    const { tables, relationships, tagAssignments, databaseType } =
-        useChartDB();
-    const { checkIfNewTable } = useDiff();
+export const useCanvasFilterVisibility = (): CanvasFilterVisibility | null => {
     const {
-        selectedTagIds,
-        tagMatchMode,
-        selectedAreaIds,
-        selectedSchemaIds,
-        hasTagConstraint,
-        hasAreaConstraint,
-        hasSchemaConstraint,
-        showViews,
-    } = useEditorFilters();
+        tables,
+        relationships,
+        dependencies,
+        tagAssignments,
+        databaseType,
+    } = useChartDB();
+    const { checkIfNewTable } = useDiff();
+    const { expression, showViews } = useEditorFilters();
 
     return useMemo(() => {
-        const defaultSchema = defaultSchemas[databaseType];
-        const eligibleTableIds = new Set<string>();
+        const forceShownTableIds = new Set<string>();
 
         for (const table of tables) {
             if (checkIfNewTable({ tableId: table.id })) {
-                eligibleTableIds.add(table.id);
-                continue;
+                forceShownTableIds.add(table.id);
             }
-
-            if (!showViews && table.isView) {
-                continue;
-            }
-
-            if (
-                !tablePassesAreaConstraint(table.parentAreaId, selectedAreaIds)
-            ) {
-                continue;
-            }
-
-            if (
-                !tablePassesSchemaConstraint(
-                    table,
-                    selectedSchemaIds,
-                    defaultSchema
-                )
-            ) {
-                continue;
-            }
-
-            eligibleTableIds.add(table.id);
         }
 
-        const everyTableEligible = tables.every((table) =>
-            eligibleTableIds.has(table.id)
-        );
-
-        if (
-            everyTableEligible &&
-            !hasTagConstraint &&
-            !hasAreaConstraint &&
-            !hasSchemaConstraint
-        ) {
-            return null;
-        }
-
-        return deriveTagCanvasVisibility({
+        const diagram: Diagram = {
+            id: 'canvas-filter',
+            name: '',
+            databaseType,
             tables,
             relationships,
+            dependencies,
             tagAssignments,
-            selectedTagIds,
-            matchMode: tagMatchMode,
-            eligibleTableIds,
+            createdAt: new Date(0),
+            updatedAt: new Date(0),
+        };
+
+        return projectCanvasVisibility({
+            diagram,
+            expression,
+            showViews,
+            forceShownTableIds,
         });
     }, [
-        hasTagConstraint,
-        hasAreaConstraint,
-        hasSchemaConstraint,
         tables,
         relationships,
+        dependencies,
         tagAssignments,
-        selectedTagIds,
-        tagMatchMode,
-        selectedAreaIds,
-        selectedSchemaIds,
         databaseType,
+        expression,
         showViews,
         checkIfNewTable,
     ]);

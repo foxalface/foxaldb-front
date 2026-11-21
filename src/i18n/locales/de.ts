@@ -230,6 +230,57 @@ export const de: LanguageTranslation = {
                     no_constraint: 'Keine Schemaeinschränkung',
                     empty: 'Keine Schemata in diesem Diagramm',
                 },
+                query: {
+                    empty: 'Fügen Sie eine Bedingung hinzu, um das Diagramm zu filtern.',
+                    add_condition: 'Bedingung hinzufügen',
+                    add_group: 'Gruppe hinzufügen',
+                    remove: 'Entfernen',
+                    group_operator: 'Gruppenoperator',
+                    views_hidden:
+                        'Ansichten sind über das Menü Ansicht ausgeblendet. Dieser Filter kann Ansichten weiterhin auswählen, aber sie bleiben von der Zeichenfläche fern, bis Datenbankansichten aktiviert ist.',
+                    too_complex:
+                        'Dieser Filter ist zu komplex. Vereinfachen Sie ihn, bevor er angewendet wird.',
+                    target: {
+                        label: 'Ziel',
+                        table: 'Tabelle',
+                        field: 'Feld',
+                        relationship: 'Beziehung',
+                        view: 'Ansicht',
+                    },
+                    property: {
+                        label: 'Eigenschaft',
+                        tag: 'Tag',
+                        area: 'Bereich',
+                        schema: 'Schema',
+                        name: 'Name',
+                    },
+                    operator: {
+                        label: 'Operator',
+                        is_any_of: 'ist eines von',
+                        is_all_of: 'ist alle von',
+                        is_none_of: 'ist keines von',
+                        contains: 'enthält',
+                        does_not_contain: 'enthält nicht',
+                        starts_with: 'beginnt mit',
+                        ends_with: 'endet mit',
+                        is: 'ist',
+                        is_not: 'ist nicht',
+                    },
+                    operator_group: {
+                        and: 'UND',
+                        or: 'ODER',
+                    },
+                    value: {
+                        label: 'Wert',
+                        tags: 'Tags',
+                        areas: 'Bereiche',
+                        schemas: 'Schemata',
+                        name_placeholder: 'Name',
+                        none: 'Werte wählen',
+                        selected: '{{count}} ausgewählt',
+                        empty_options: 'Nichts auswählbar',
+                    },
+                },
             },
             tables_section: {
                 tables: 'Tabellen',
@@ -1288,8 +1339,12 @@ export const de: LanguageTranslation = {
             scope: {
                 label: 'Exportumfang',
                 all: 'Gesamtes Diagramm',
-                tags: 'Nach Tags',
-                hint: 'Tabellen anhand ihrer Tags einschließen. Eine leere Auswahl exportiert das gesamte Diagramm.',
+                current: 'Aktueller Filter',
+                custom: 'Eigener Filter',
+                all_hint: 'Exportiert das gesamte Diagramm.',
+                current_hint:
+                    'Verwendet den Editorfilter. Der Export ändert ihn nicht.',
+                custom_hint: 'Gilt nur für diesen Export.',
             },
             title: 'Exportieren',
             description:

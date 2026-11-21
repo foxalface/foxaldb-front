@@ -218,14 +218,17 @@ describe('B4 export inventory', () => {
         expect(wizard).not.toContain('createDiagram');
         expect(wizard).not.toContain('deleteDiagram');
         expect(wizard).not.toContain('useStorage');
-        expect(wizard).not.toContain('useEditorFilters');
+        expect(wizard).toContain('useEditorFilters');
         expect(wizard).not.toContain('useDiagramFilter');
         expect(wizard).not.toContain('getFilteredDiagramForSqlExport');
         expect(wizard).not.toContain('useCanvasFilterVisibility');
         expect(wizard).not.toContain('visibleTableIds');
         expect(wizard).not.toContain('selectedAreaIds');
         expect(wizard).not.toContain('selectedSchemaIds');
-        expect(wizard).toContain('projectDiagramForStructuralExport');
+        expect(wizard).toContain('projectStructuralExport');
+        expect(wizard).not.toContain(
+            'diagramToJSONOutput(structuralExportDiagram'
+        );
         expect(wizard).toContain('content: structuralExportDiagram');
         expect(wizard).toContain('exportLaravelMigrations(currentDiagram.id');
     });

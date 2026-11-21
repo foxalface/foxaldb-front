@@ -1,11 +1,18 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { useState } from 'react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ExportWizardDialog } from '../export-wizard-dialog';
 import { DatabaseType } from '@/lib/domain/database-type';
 import { exportBaseSQL } from '@/lib/data/sql-export/export-sql-script';
 import { downloadBlob } from '@/lib/download-blob';
+import { EditorFiltersProvider } from '@/context/editor-filters-context/editor-filters-provider';
+import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
+import {
+    createFilterGroup,
+    type FilterCondition,
+} from '@/lib/domain/filter-expression';
 import {
     chooseByTags,
     exportedTableNames,
@@ -23,6 +30,7 @@ const authState = {
 };
 
 const chartDbState = {
+    diagramId: 'guest-diagram-1',
     databaseType: DatabaseType.POSTGRESQL,
     currentDiagram: {
         id: 'guest-diagram-1',
@@ -251,7 +259,7 @@ describe('ExportWizardDialog SQL branch', () => {
         });
     });
 
-    it('exports the whole diagram for By tags with an empty selection', async () => {
+    it('exports the whole diagram for an empty custom filter', async () => {
         const fixture = structuralExportFixture();
         chartDbState.currentDiagram =
             fixture as unknown as typeof chartDbState.currentDiagram;
@@ -259,7 +267,7 @@ describe('ExportWizardDialog SQL branch', () => {
         await openSqlBranch();
         await userEvent.click(screen.getByText('PostgreSQL'));
         await userEvent.click(
-            screen.getByTestId('export-structural-scope-tags')
+            screen.getByTestId('export-structural-scope-custom')
         );
 
         await waitFor(() => {
@@ -456,4 +464,94 @@ describe('ExportWizardDialog SQL branch by source database', () => {
             expect(dialogMocks.openExportSQLDialog).not.toHaveBeenCalled();
         }
     );
+});
+
+const editorTableTag = (): FilterCondition => ({
+    kind: 'condition',
+    id: 'editor-tag',
+    target: 'table',
+    property: 'tag',
+    operator: 'is_any_of',
+    value: ['red'],
+});
+
+describe('ExportWizardDialog filter scope', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        chartDbState.databaseType = DatabaseType.POSTGRESQL;
+        chartDbState.diagramId = '42';
+        chartDbState.currentDiagram =
+            structuralExportFixture() as unknown as typeof chartDbState.currentDiagram;
+        mockedExportBaseSQL.mockResolvedValue('CREATE TABLE users ();');
+    });
+
+    it('reads the current editor filter and keeps a custom filter local', async () => {
+        const Probe = () => {
+            const filters = useEditorFilters();
+            const [open, setOpen] = useState(false);
+
+            return (
+                <>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            filters.setExpression(
+                                createFilterGroup(
+                                    'and',
+                                    [editorTableTag()],
+                                    'root'
+                                )
+                            );
+                            setOpen(true);
+                        }}
+                    >
+                        apply-editor-filter
+                    </button>
+                    <span data-testid="editor-children">
+                        {filters.expression.children.length}
+                    </span>
+                    <ExportWizardDialog dialog={{ open }} />
+                </>
+            );
+        };
+
+        render(
+            <EditorFiltersProvider>
+                <Probe />
+            </EditorFiltersProvider>
+        );
+
+        await userEvent.click(
+            screen.getByRole('button', { name: 'apply-editor-filter' })
+        );
+        await userEvent.click(
+            screen.getByRole('button', {
+                name: 'export_wizard.targets.sql.title',
+            })
+        );
+        await userEvent.click(screen.getByText('PostgreSQL'));
+        await userEvent.click(
+            screen.getByTestId('export-structural-scope-current')
+        );
+
+        await waitFor(() => {
+            const diagram = mockedExportBaseSQL.mock.calls.at(-1)?.[0].diagram;
+            expect(exportedTableNames(diagram ?? { tables: [] })).toEqual([
+                'users',
+            ]);
+        });
+
+        expect(screen.getByTestId('editor-children')).toHaveTextContent('1');
+
+        await userEvent.click(
+            screen.getByTestId('export-structural-scope-custom')
+        );
+        await userEvent.click(
+            screen.getByRole('button', {
+                name: 'side_panel.filters_section.query.add_condition',
+            })
+        );
+
+        expect(screen.getByTestId('editor-children')).toHaveTextContent('1');
+    });
 });

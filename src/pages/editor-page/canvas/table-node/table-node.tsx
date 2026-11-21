@@ -96,7 +96,7 @@ export type TableNodeType = Node<
         mergePreview?: MergePreviewNodeDecoration[];
         mergePreviewHover?: MergePreviewHoverFlags;
         /** When set, only these field ids render on the canvas (tag filter). */
-        tagVisibleFieldIds?: ReadonlySet<string> | null;
+        visibleFieldIds?: ReadonlySet<string> | null;
     },
     'table'
 >;
@@ -116,7 +116,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             targetEdgeCounts,
             mergePreview,
             mergePreviewHover: mergePreviewHoverFromNode,
-            tagVisibleFieldIds,
+            visibleFieldIds,
         },
     }) => {
         const { updateTable, relationships, readonly } = useChartDB();
@@ -371,9 +371,9 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                     ? fields.slice(0, editModeInitialFieldCount)
                     : fields;
 
-            if (tagVisibleFieldIds) {
+            if (visibleFieldIds) {
                 fieldsToConsider = fieldsToConsider.filter((field) =>
-                    tagVisibleFieldIds.has(field.id)
+                    visibleFieldIds.has(field.id)
                 );
             }
 
@@ -422,7 +422,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
             relatedFieldIds,
             editTableMode,
             editModeInitialFieldCount,
-            tagVisibleFieldIds,
+            visibleFieldIds,
         ]);
 
         const isPartOfCreatingRelationship = useMemo(
@@ -546,7 +546,7 @@ export const TableNode: React.FC<NodeProps<TableNodeType>> = React.memo(
                         table={table}
                         color={tableColor}
                         focusFieldId={editTableModeFieldId ?? undefined}
-                        tagVisibleFieldIds={tagVisibleFieldIds}
+                        visibleFieldIds={visibleFieldIds}
                         onClose={() => {
                             exitEditTableMode();
                         }}

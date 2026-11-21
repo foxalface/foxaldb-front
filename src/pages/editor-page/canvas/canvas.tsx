@@ -116,10 +116,11 @@ import { useEditorFilters } from '@/context/editor-filters-context/use-editor-fi
 import { useCanvasFilterVisibility } from './use-canvas-filter-visibility';
 import { toggleFiltersSidebar } from './toggle-filters-sidebar';
 import {
-    areaHiddenByTagVisibility,
-    relationshipHiddenByTagVisibility,
-    tableHiddenByTagVisibility,
-} from './tag-canvas-visibility';
+    areaHiddenByFilterVisibility,
+    dependencyHiddenByFilterVisibility,
+    relationshipHiddenByFilterVisibility,
+    tableHiddenByFilterVisibility,
+} from './canvas-filter-visibility';
 import { useDiff } from '@/context/diff-context/use-diff';
 import { useClickAway } from 'react-use';
 import { useDiagramCursors } from '../use-diagram-cursors';
@@ -247,7 +248,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
             return {
                 ...node,
-                hidden: tableHiddenByTagVisibility(
+                hidden: tableHiddenByFilterVisibility(
                     Boolean(node.hidden),
                     table.id,
                     canvasFilterVisibility
@@ -280,7 +281,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
 
             return {
                 ...node,
-                hidden: tableHiddenByTagVisibility(
+                hidden: tableHiddenByFilterVisibility(
                     Boolean(node.hidden),
                     table.id,
                     canvasFilterVisibility
@@ -334,7 +335,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     ...relationshipEdgesFromDiagram(relationships).map(
                         (edge): RelationshipEdgeType => {
                             const prevState = prevEdgeStates.get(edge.id);
-                            const hidden = relationshipHiddenByTagVisibility(
+                            const hidden = relationshipHiddenByFilterVisibility(
                                 edge.id,
                                 canvasFilterVisibility
                             );
@@ -350,8 +351,16 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     ...dependencyEdgesFromDiagram(dependencies, showViews).map(
                         (edge): DependencyEdgeType => {
                             const prevState = prevEdgeStates.get(edge.id);
+                            const hidden =
+                                edge.hidden ||
+                                dependencyHiddenByFilterVisibility(
+                                    edge.id,
+                                    canvasFilterVisibility
+                                );
+
                             return {
                                 ...edge,
+                                ...(hidden ? { hidden: true } : {}),
                                 selected: prevState?.selected ?? false,
                                 animated: prevState?.animated ?? false,
                             };
@@ -507,7 +516,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                         );
                     }
 
-                    const hidden = tableHiddenByTagVisibility(
+                    const hidden = tableHiddenByFilterVisibility(
                         Boolean(node.hidden),
                         table.id,
                         canvasFilterVisibility
@@ -521,7 +530,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                             isOverlapping,
                             highlightOverlappingTables,
                             hasHighlightedCustomType,
-                            tagVisibleFieldIds:
+                            visibleFieldIds:
                                 canvasFilterVisibility?.visibleFieldIds ?? null,
                         },
                     };
@@ -531,7 +540,7 @@ export const Canvas: React.FC<CanvasProps> = ({ initialTables }) => {
                     const tableIdsInArea = tables
                         .filter((table) => table.parentAreaId === area.id)
                         .map((table) => table.id);
-                    const hidden = areaHiddenByTagVisibility({
+                    const hidden = areaHiddenByFilterVisibility({
                         areaAlreadyHidden: Boolean(areaNode.hidden),
                         tableIdsInArea,
                         visibility: canvasFilterVisibility,

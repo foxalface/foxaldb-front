@@ -6,7 +6,11 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { Area } from '@/lib/domain/area';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { DiagramTag } from '@/lib/domain/diagram-tag';
-import type { TagMatchMode } from '@/lib/domain/diagram-tag';
+import {
+    createFilterCondition,
+    createFilterGroup,
+    type FilterCondition,
+} from '@/lib/domain/filter-expression';
 import { EditorFiltersProvider } from '../editor-filters-provider';
 import { useEditorFilters } from '../use-editor-filters';
 
@@ -61,74 +65,46 @@ const table = (id: string, schema?: string): DBTable => ({
     createdAt: 0,
 });
 
+const tagCondition = (tagId: string): FilterCondition => {
+    const condition = createFilterCondition('table', 'tag', 'condition-tag');
+
+    return condition.property === 'tag'
+        ? { ...condition, value: [tagId] }
+        : condition;
+};
+
 const Probe: React.FC = () => {
     const filter = useEditorFilters();
+    const tagValue =
+        filter.expression.children[0]?.kind === 'condition' &&
+        filter.expression.children[0].property === 'tag'
+            ? filter.expression.children[0].value.join(',')
+            : '';
 
     return (
         <div>
-            <span data-testid="tags">{filter.selectedTagIds.join(',')}</span>
-            <span data-testid="mode">{filter.tagMatchMode}</span>
-            <span data-testid="areas">{filter.selectedAreaIds.join(',')}</span>
-            <span data-testid="schemas">
-                {filter.selectedSchemaIds.join(',')}
-            </span>
+            <span data-testid="tags">{tagValue}</span>
+            <span data-testid="query">{filter.hasQuery ? 'yes' : 'no'}</span>
             <span data-testid="views">{filter.showViews ? 'yes' : 'no'}</span>
-            <span data-testid="any">
-                {filter.hasAnyConstraint ? 'yes' : 'no'}
-            </span>
-            <button type="button" onClick={() => filter.toggleTag('tag-a')}>
-                toggle-tag-a
-            </button>
-            <button type="button" onClick={() => filter.toggleTag('tag-b')}>
-                toggle-tag-b
-            </button>
-            <button type="button" onClick={() => filter.setTagMatchMode('all')}>
-                mode-all
-            </button>
             <button
                 type="button"
-                onClick={() => filter.setTagMatchMode('none')}
+                onClick={() =>
+                    filter.setExpression(
+                        createFilterGroup(
+                            'and',
+                            [tagCondition('tag-a')],
+                            'root'
+                        )
+                    )
+                }
             >
-                mode-none
-            </button>
-            <button
-                type="button"
-                onClick={() => filter.setTagMatchMode('' as TagMatchMode)}
-            >
-                mode-empty
-            </button>
-            <button type="button" onClick={() => filter.clearTagFilter()}>
-                clear-tags
-            </button>
-            <button type="button" onClick={() => filter.toggleArea('area-a')}>
-                toggle-area-a
-            </button>
-            <button type="button" onClick={() => filter.toggleArea('area-b')}>
-                toggle-area-b
-            </button>
-            <button type="button" onClick={() => filter.clearAreaFilter()}>
-                clear-areas
-            </button>
-            <button type="button" onClick={() => filter.toggleSchema('public')}>
-                toggle-public
-            </button>
-            <button
-                type="button"
-                onClick={() => filter.toggleSchema('billing')}
-            >
-                toggle-billing
-            </button>
-            <button type="button" onClick={() => filter.clearSchemaFilter()}>
-                clear-schemas
+                set-tag
             </button>
             <button type="button" onClick={() => filter.setShowViews(true)}>
                 views-on
             </button>
-            <button type="button" onClick={() => filter.setShowViews(false)}>
-                views-off
-            </button>
-            <button type="button" onClick={() => filter.clearAllFilters()}>
-                clear-all
+            <button type="button" onClick={() => filter.clearFilters()}>
+                clear-filters
             </button>
         </div>
     );
@@ -148,189 +124,66 @@ describe('EditorFiltersProvider', () => {
             { id: 'tag-a', name: 'Alpha', color: '#fff' },
             { id: 'tag-b', name: 'Beta', color: '#000' },
         ];
-        chartDBState.areas = [
-            area('area-a', 'Core'),
-            area('area-b', 'Billing'),
-        ];
-        chartDBState.tables = [
-            table('users', 'public'),
-            table('invoices', 'billing'),
-        ];
+        chartDBState.areas = [area('area-a', 'Core')];
+        chartDBState.tables = [table('users', 'public')];
         chartDBState.updatedAt = new Date('2026-01-01T00:00:00.000Z');
         chartDBState.addTags.mockClear();
         chartDBState.updateTablesState.mockClear();
     });
 
-    it('starts with no personal constraints', () => {
+    it('starts with an empty query and hidden views', () => {
         renderFilter();
 
         expect(screen.getByTestId('tags')).toHaveTextContent('');
-        expect(screen.getByTestId('mode')).toHaveTextContent('any');
-        expect(screen.getByTestId('areas')).toHaveTextContent('');
-        expect(screen.getByTestId('schemas')).toHaveTextContent('');
-        expect(screen.getByTestId('views')).toHaveTextContent('no');
-        expect(screen.getByTestId('any')).toHaveTextContent('no');
-    });
-
-    it('toggles tags in click order, ignores an empty mode, and clears tags only', async () => {
-        const user = userEvent.setup();
-        renderFilter();
-
-        await user.click(screen.getByRole('button', { name: 'toggle-tag-a' }));
-        await user.click(screen.getByRole('button', { name: 'toggle-tag-b' }));
-        await user.click(screen.getByRole('button', { name: 'toggle-area-a' }));
-        expect(screen.getByTestId('tags')).toHaveTextContent('tag-a,tag-b');
-
-        await user.click(screen.getByRole('button', { name: 'toggle-tag-a' }));
-        expect(screen.getByTestId('tags')).toHaveTextContent('tag-b');
-
-        await user.click(screen.getByRole('button', { name: 'mode-all' }));
-        await user.click(screen.getByRole('button', { name: 'mode-none' }));
-        await user.click(screen.getByRole('button', { name: 'mode-empty' }));
-        expect(screen.getByTestId('mode')).toHaveTextContent('none');
-
-        await user.click(screen.getByRole('button', { name: 'clear-tags' }));
-        expect(screen.getByTestId('tags')).toHaveTextContent('');
-        expect(screen.getByTestId('mode')).toHaveTextContent('any');
-        expect(screen.getByTestId('areas')).toHaveTextContent('area-a');
-        expect(chartDBState.addTags).not.toHaveBeenCalled();
-        expect(chartDBState.updateTablesState).not.toHaveBeenCalled();
-        expect(chartDBState.updatedAt.toISOString()).toBe(
-            '2026-01-01T00:00:00.000Z'
-        );
-    });
-
-    it('prunes a deleted tag and keeps a renamed tag selected', async () => {
-        const user = userEvent.setup();
-        const { rerender } = renderFilter();
-        await user.click(screen.getByRole('button', { name: 'toggle-tag-a' }));
-        await user.click(screen.getByRole('button', { name: 'toggle-tag-b' }));
-
-        chartDBState.tags = [
-            { id: 'tag-a', name: 'Alpha renamed', color: '#123456' },
-        ];
-        rerender(
-            <EditorFiltersProvider>
-                <Probe />
-            </EditorFiltersProvider>
-        );
-
-        expect(screen.getByTestId('tags')).toHaveTextContent('tag-a');
-        expect(screen.getByTestId('mode')).toHaveTextContent('any');
-    });
-
-    it('toggles areas, clears them, and prunes a deleted area', async () => {
-        const user = userEvent.setup();
-        const { rerender } = renderFilter();
-
-        await user.click(screen.getByRole('button', { name: 'toggle-area-a' }));
-        await user.click(screen.getByRole('button', { name: 'toggle-area-b' }));
-        expect(screen.getByTestId('areas')).toHaveTextContent('area-a,area-b');
-        expect(screen.getByTestId('any')).toHaveTextContent('yes');
-
-        await user.click(screen.getByRole('button', { name: 'toggle-area-a' }));
-        expect(screen.getByTestId('areas')).toHaveTextContent('area-b');
-
-        chartDBState.areas = [area('area-a', 'Core renamed')];
-        rerender(
-            <EditorFiltersProvider>
-                <Probe />
-            </EditorFiltersProvider>
-        );
-        expect(screen.getByTestId('areas')).toHaveTextContent('');
-
-        await user.click(screen.getByRole('button', { name: 'toggle-area-a' }));
-        await user.click(screen.getByRole('button', { name: 'clear-areas' }));
-        expect(screen.getByTestId('areas')).toHaveTextContent('');
-        expect(chartDBState.updateTablesState).not.toHaveBeenCalled();
-    });
-
-    it('toggles schemas, clears them, and prunes an unavailable schema', async () => {
-        const user = userEvent.setup();
-        const { rerender } = renderFilter();
-
-        await user.click(screen.getByRole('button', { name: 'toggle-public' }));
-        await user.click(
-            screen.getByRole('button', { name: 'toggle-billing' })
-        );
-        expect(screen.getByTestId('schemas')).toHaveTextContent(
-            'public,billing'
-        );
-
-        await user.click(screen.getByRole('button', { name: 'toggle-public' }));
-        expect(screen.getByTestId('schemas')).toHaveTextContent('billing');
-
-        chartDBState.tables = [table('users')];
-        rerender(
-            <EditorFiltersProvider>
-                <Probe />
-            </EditorFiltersProvider>
-        );
-        expect(screen.getByTestId('schemas')).toHaveTextContent('');
-
-        await user.click(screen.getByRole('button', { name: 'toggle-public' }));
-        await user.click(screen.getByRole('button', { name: 'clear-schemas' }));
-        expect(screen.getByTestId('schemas')).toHaveTextContent('');
-    });
-
-    it('resets every personal filter when the diagram changes', async () => {
-        const user = userEvent.setup();
-        const { rerender } = renderFilter();
-        await user.click(screen.getByRole('button', { name: 'toggle-tag-a' }));
-        await user.click(screen.getByRole('button', { name: 'mode-all' }));
-        await user.click(screen.getByRole('button', { name: 'toggle-area-a' }));
-        await user.click(screen.getByRole('button', { name: 'toggle-public' }));
-        await user.click(screen.getByRole('button', { name: 'views-on' }));
-
-        chartDBState.diagramId = 'diagram-2';
-        rerender(
-            <EditorFiltersProvider>
-                <Probe />
-            </EditorFiltersProvider>
-        );
-
-        expect(screen.getByTestId('tags')).toHaveTextContent('');
-        expect(screen.getByTestId('mode')).toHaveTextContent('any');
-        expect(screen.getByTestId('areas')).toHaveTextContent('');
-        expect(screen.getByTestId('schemas')).toHaveTextContent('');
+        expect(screen.getByTestId('query')).toHaveTextContent('no');
         expect(screen.getByTestId('views')).toHaveTextContent('no');
     });
 
-    it('toggles Show views without counting it as a filter or persisting it', async () => {
+    it('clears the query without resetting show views or the diagram', async () => {
         const user = userEvent.setup();
         const setItem = vi.spyOn(Storage.prototype, 'setItem');
         renderFilter();
 
         await user.click(screen.getByRole('button', { name: 'views-on' }));
+        await user.click(screen.getByRole('button', { name: 'set-tag' }));
+        expect(screen.getByTestId('query')).toHaveTextContent('yes');
         expect(screen.getByTestId('views')).toHaveTextContent('yes');
-        expect(screen.getByTestId('any')).toHaveTextContent('no');
 
-        await user.click(screen.getByRole('button', { name: 'views-off' }));
-        expect(screen.getByTestId('views')).toHaveTextContent('no');
+        await user.click(screen.getByRole('button', { name: 'clear-filters' }));
+
+        expect(screen.getByTestId('query')).toHaveTextContent('no');
+        expect(screen.getByTestId('views')).toHaveTextContent('yes');
         expect(setItem).not.toHaveBeenCalled();
         expect(chartDBState.addTags).not.toHaveBeenCalled();
         expect(chartDBState.updateTablesState).not.toHaveBeenCalled();
         setItem.mockRestore();
     });
 
-    it('clears every personal filter without touching the diagram', async () => {
+    it('drops a stale tag id and resets the session when the diagram changes', async () => {
         const user = userEvent.setup();
-        renderFilter();
-        await user.click(screen.getByRole('button', { name: 'toggle-tag-a' }));
-        await user.click(screen.getByRole('button', { name: 'mode-none' }));
-        await user.click(screen.getByRole('button', { name: 'toggle-area-b' }));
-        await user.click(
-            screen.getByRole('button', { name: 'toggle-billing' })
-        );
+        const { rerender } = renderFilter();
+        await user.click(screen.getByRole('button', { name: 'set-tag' }));
         await user.click(screen.getByRole('button', { name: 'views-on' }));
-        await user.click(screen.getByRole('button', { name: 'clear-all' }));
 
-        expect(screen.getByTestId('any')).toHaveTextContent('no');
-        expect(screen.getByTestId('mode')).toHaveTextContent('any');
+        chartDBState.tags = [{ id: 'tag-b', name: 'Beta', color: '#000' }];
+        rerender(
+            <EditorFiltersProvider>
+                <Probe />
+            </EditorFiltersProvider>
+        );
+        expect(screen.getByTestId('tags')).toHaveTextContent('');
+        expect(screen.getByTestId('query')).toHaveTextContent('no');
+
+        chartDBState.diagramId = 'diagram-2';
+        chartDBState.tags = [{ id: 'tag-a', name: 'Alpha', color: '#fff' }];
+        rerender(
+            <EditorFiltersProvider>
+                <Probe />
+            </EditorFiltersProvider>
+        );
+
+        expect(screen.getByTestId('query')).toHaveTextContent('no');
         expect(screen.getByTestId('views')).toHaveTextContent('no');
-        expect(chartDBState.tags).toHaveLength(2);
-        expect(chartDBState.areas).toHaveLength(2);
-        expect(chartDBState.addTags).not.toHaveBeenCalled();
     });
 
     it('keeps the context value stable when state does not change', () => {

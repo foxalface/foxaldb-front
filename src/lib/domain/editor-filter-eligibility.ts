@@ -43,34 +43,3 @@ export const listDiagramSchemaOptions = (
         .map(([id, name]) => ({ id, name }))
         .sort((left, right) => left.name.localeCompare(right.name));
 };
-
-/** Empty selection is no constraint. Several areas match with OR. */
-export const tablePassesAreaConstraint = (
-    parentAreaId: string | null | undefined,
-    selectedAreaIds: readonly string[]
-): boolean => {
-    if (selectedAreaIds.length === 0) {
-        return true;
-    }
-
-    return !!parentAreaId && selectedAreaIds.includes(parentAreaId);
-};
-
-/** Empty selection is no constraint. Several schemas match with OR. */
-export const tablePassesSchemaConstraint = (
-    table: { schema?: string | null },
-    selectedSchemaIds: readonly string[],
-    defaultSchema: string | undefined
-): boolean => {
-    if (selectedSchemaIds.length === 0) {
-        return true;
-    }
-
-    const name = resolvedSchemaName(table.schema, defaultSchema);
-
-    if (!name) {
-        return false;
-    }
-
-    return selectedSchemaIds.includes(schemaNameToSchemaId(name));
-};

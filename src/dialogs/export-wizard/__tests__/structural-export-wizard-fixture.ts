@@ -97,7 +97,17 @@ export const structuralExportFixture = (): Diagram => ({
 export const chooseByTags = async (
     tagNames: readonly string[]
 ): Promise<void> => {
-    await userEvent.click(screen.getByTestId('export-structural-scope-tags'));
+    await userEvent.click(screen.getByTestId('export-structural-scope-custom'));
+    await userEvent.click(
+        screen.getByRole('button', {
+            name: 'side_panel.filters_section.query.add_condition',
+        })
+    );
+    await userEvent.click(
+        screen.getByRole('button', {
+            name: 'side_panel.filters_section.query.value.tags',
+        })
+    );
 
     for (const tagName of tagNames) {
         await userEvent.click(screen.getByRole('checkbox', { name: tagName }));

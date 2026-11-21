@@ -4,7 +4,13 @@ import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { Diagram } from '@/lib/domain/diagram';
 import type { DiagramTagAssignment } from '@/lib/domain/diagram-tag';
-import { projectDiagramForStructuralExport } from '@/lib/domain/structural-export-scope';
+import {
+    createFilterGroup,
+    emptyFilterGroup,
+    type FilterCondition,
+    type FilterGroup,
+} from '@/lib/domain/filter-expression';
+import { projectStructuralExport as projectStructuralExportResult } from '@/lib/domain/structural-export-projection';
 import { exportBaseSQL } from '../export-sql-script';
 
 const createdAt = new Date('2024-01-01T00:00:00.000Z');
@@ -117,6 +123,28 @@ const buildDiagram = (databaseType: DatabaseType): Diagram => {
     };
 };
 
+const projectStructuralExport = (
+    diagram: Diagram,
+    expression: FilterGroup | null
+): Diagram => {
+    const result = projectStructuralExportResult(diagram, expression);
+
+    if (result.status !== 'ready') {
+        throw new Error(result.status);
+    }
+
+    return result.diagram;
+};
+
+const tableTag = (tagIds: readonly string[]): FilterCondition => ({
+    kind: 'condition',
+    id: 'table-tag',
+    target: 'table',
+    property: 'tag',
+    operator: 'is_any_of',
+    value: tagIds,
+});
+
 const sameDialectTargets = [
     DatabaseType.POSTGRESQL,
     DatabaseType.MYSQL,
@@ -130,11 +158,10 @@ describe('SQL export consumes the structural projection', () => {
         'exports the projected tables for %s',
         async (databaseType) => {
             const diagram = buildDiagram(databaseType);
-            const projected = projectDiagramForStructuralExport(diagram, {
-                kind: 'tags',
-                selectedTagIds: ['red'],
-                matchMode: 'any',
-            });
+            const projected = projectStructuralExport(
+                diagram,
+                createFilterGroup('and', [tableTag(['red'])], 'root')
+            );
             const sql = await exportBaseSQL({
                 diagram: projected,
                 targetDatabaseType: databaseType,
@@ -153,11 +180,10 @@ describe('SQL export consumes the structural projection', () => {
 
     it('feeds the same projected diagram to a PostgreSQL to MySQL cross-dialect export', async () => {
         const diagram = buildDiagram(DatabaseType.POSTGRESQL);
-        const projected = projectDiagramForStructuralExport(diagram, {
-            kind: 'tags',
-            selectedTagIds: ['red'],
-            matchMode: 'any',
-        });
+        const projected = projectStructuralExport(
+            diagram,
+            createFilterGroup('and', [tableTag(['red'])], 'root')
+        );
         const sql = await exportBaseSQL({
             diagram: projected,
             targetDatabaseType: DatabaseType.MYSQL,
@@ -169,13 +195,9 @@ describe('SQL export consumes the structural projection', () => {
         expect(sql.toLowerCase()).not.toContain('foreign key');
     });
 
-    it('keeps the full script when By tags has an empty selection', async () => {
+    it('keeps the full script when the filter is unconstrained', async () => {
         const diagram = buildDiagram(DatabaseType.POSTGRESQL);
-        const projected = projectDiagramForStructuralExport(diagram, {
-            kind: 'tags',
-            selectedTagIds: [],
-            matchMode: 'all',
-        });
+        const projected = projectStructuralExport(diagram, emptyFilterGroup());
         const fullSql = await exportBaseSQL({
             diagram,
             targetDatabaseType: DatabaseType.POSTGRESQL,

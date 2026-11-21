@@ -1,67 +1,68 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Database, Group, Tags } from 'lucide-react';
-import { Tabs, TabsContent } from '@/components/tabs/tabs';
+import { Button } from '@/components/button/button';
+import { FilterQueryBuilder } from '@/components/filter-query-builder/filter-query-builder';
 import {
-    SidePanelSectionTabsList,
-    SidePanelSectionTabsToolbar,
-    SidePanelSectionTabsTrigger,
-} from '@/components/side-panel-section-tabs/side-panel-section-tabs';
-import { AreasFilterTab } from './areas-filter-tab';
-import { SchemasFilterTab } from './schemas-filter-tab';
-import { TagsFilterTab } from './tags-filter-tab';
-
-type FiltersTab = 'tags' | 'areas' | 'schemas';
+    sidePanelFilterClearButtonClassName,
+    sidePanelFilterClearButtonIcon,
+} from '@/components/side-panel-empty-state/side-panel-filter-clear-action';
+import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
+import { useChartDB } from '@/hooks/use-chartdb';
+import { listDiagramSchemaOptions } from '@/lib/domain/editor-filter-eligibility';
+import { expressionHasViewCondition } from '@/lib/domain/filter-expression';
 
 export const FiltersSection: React.FC = () => {
     const { t } = useTranslation();
-    const [tab, setTab] = useState<FiltersTab>('tags');
+    const { currentDiagram } = useChartDB();
+    const { expression, showViews, hasQuery, setExpression, clearFilters } =
+        useEditorFilters();
+    const tags = currentDiagram.tags ?? [];
+    const areas = currentDiagram.areas ?? [];
+    const schemas = useMemo(
+        () =>
+            listDiagramSchemaOptions(
+                currentDiagram.tables,
+                currentDiagram.databaseType
+            ),
+        [currentDiagram.tables, currentDiagram.databaseType]
+    );
+    const viewsHidden = !showViews && expressionHasViewCondition(expression);
 
     return (
         <section
             className="flex flex-1 flex-col overflow-hidden"
             data-vaul-no-drag
         >
-            <Tabs
-                value={tab}
-                onValueChange={(value) => setTab(value as FiltersTab)}
-                className="flex flex-1 flex-col overflow-hidden"
-            >
-                <SidePanelSectionTabsToolbar>
-                    <SidePanelSectionTabsList className="grid-cols-3">
-                        <SidePanelSectionTabsTrigger value="tags">
-                            <Tags className="size-3.5" aria-hidden="true" />
-                            {t('tags.title')}
-                        </SidePanelSectionTabsTrigger>
-                        <SidePanelSectionTabsTrigger value="areas">
-                            <Group className="size-3.5" aria-hidden="true" />
-                            {t('side_panel.visuals_section.tabs.areas')}
-                        </SidePanelSectionTabsTrigger>
-                        <SidePanelSectionTabsTrigger value="schemas">
-                            <Database className="size-3.5" aria-hidden="true" />
-                            {t('side_panel.filters_section.tabs.schemas')}
-                        </SidePanelSectionTabsTrigger>
-                    </SidePanelSectionTabsList>
-                </SidePanelSectionTabsToolbar>
-                <TabsContent
-                    value="tags"
-                    className="mt-0 flex flex-1 flex-col overflow-hidden px-2 data-[state=inactive]:hidden"
+            <div className="flex items-center justify-end px-2 py-1">
+                {hasQuery ? (
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className={sidePanelFilterClearButtonClassName}
+                        onClick={clearFilters}
+                    >
+                        {sidePanelFilterClearButtonIcon}
+                        {t('side_panel.filters_section.clear')}
+                    </Button>
+                ) : null}
+            </div>
+            {viewsHidden ? (
+                <p
+                    className="px-2 pb-2 text-xs text-muted-foreground"
+                    data-testid="filter-views-hidden-hint"
                 >
-                    <TagsFilterTab />
-                </TabsContent>
-                <TabsContent
-                    value="areas"
-                    className="mt-0 flex flex-1 flex-col overflow-hidden px-2 data-[state=inactive]:hidden"
-                >
-                    <AreasFilterTab />
-                </TabsContent>
-                <TabsContent
-                    value="schemas"
-                    className="mt-0 flex flex-1 flex-col overflow-hidden px-2 data-[state=inactive]:hidden"
-                >
-                    <SchemasFilterTab />
-                </TabsContent>
-            </Tabs>
+                    {t('side_panel.filters_section.query.views_hidden')}
+                </p>
+            ) : null}
+            <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
+                <FilterQueryBuilder
+                    expression={expression}
+                    tags={tags}
+                    areas={areas}
+                    schemas={schemas}
+                    onChange={setExpression}
+                />
+            </div>
         </section>
     );
 };

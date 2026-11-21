@@ -3,7 +3,14 @@ import { DatabaseType } from '@/lib/domain/database-type';
 import type { DBRelationship } from '@/lib/domain/db-relationship';
 import type { DBTable } from '@/lib/domain/db-table';
 import type { Diagram } from '@/lib/domain/diagram';
-import { projectDiagramForStructuralExport } from '@/lib/domain/structural-export-scope';
+import {
+    createFilterGroup,
+    emptyFilterGroup,
+    type FilterCondition,
+    type FilterGroup,
+    type TagFilterOperator,
+} from '@/lib/domain/filter-expression';
+import { projectStructuralExport as projectStructuralExportResult } from '@/lib/domain/structural-export-projection';
 import { generateDBMLFromDiagram } from '../dbml-export';
 
 const createdAt = new Date('2024-01-01T00:00:00.000Z');
@@ -124,11 +131,37 @@ const diagram: Diagram = {
     updatedAt: createdAt,
 };
 
-const dbmlFor = async (
-    scope: Parameters<typeof projectDiagramForStructuralExport>[1]
-): Promise<string> => {
+const projectStructuralExport = (
+    diagram: Diagram,
+    expression: FilterGroup
+): Diagram => {
+    const result = projectStructuralExportResult(diagram, expression);
+
+    if (result.status !== 'ready') {
+        throw new Error(result.status);
+    }
+
+    return result.diagram;
+};
+
+const tableTag = (
+    tagIds: readonly string[],
+    operator: TagFilterOperator
+): FilterCondition => ({
+    kind: 'condition',
+    id: `table-${operator}`,
+    target: 'table',
+    property: 'tag',
+    operator,
+    value: tagIds,
+});
+
+const dbmlFor = async (expression: FilterCondition): Promise<string> => {
     const result = await generateDBMLFromDiagram(
-        projectDiagramForStructuralExport(diagram, scope)
+        projectStructuralExport(
+            diagram,
+            createFilterGroup('and', [expression], 'root')
+        )
     );
 
     expect(result.error).toBeUndefined();
@@ -137,36 +170,22 @@ const dbmlFor = async (
 };
 
 describe('DBML export consumes the structural projection', () => {
-    it('keeps the full DBML for the full scope and an empty tag selection', async () => {
+    it('keeps the full DBML for an unconstrained expression', async () => {
         const full = await generateDBMLFromDiagram(diagram);
-        const emptySelection = await dbmlFor({
-            kind: 'tags',
-            selectedTagIds: [],
-            matchMode: 'none',
-        });
+        const emptySelection = await generateDBMLFromDiagram(
+            projectStructuralExport(diagram, emptyFilterGroup())
+        );
 
-        expect(emptySelection).toBe(full.standardDbml);
-        expect(emptySelection).toContain('users');
-        expect(emptySelection).toContain('orders');
-        expect(emptySelection).toContain('invoices');
+        expect(emptySelection.standardDbml).toBe(full.standardDbml);
+        expect(emptySelection.standardDbml).toContain('users');
+        expect(emptySelection.standardDbml).toContain('orders');
+        expect(emptySelection.standardDbml).toContain('invoices');
     });
 
-    it('exports ANY, ALL, and NONE with the same table and relationship rules as SQL', async () => {
-        const anyRed = await dbmlFor({
-            kind: 'tags',
-            selectedTagIds: ['red'],
-            matchMode: 'any',
-        });
-        const allTags = await dbmlFor({
-            kind: 'tags',
-            selectedTagIds: ['red', 'blue'],
-            matchMode: 'all',
-        });
-        const noneRed = await dbmlFor({
-            kind: 'tags',
-            selectedTagIds: ['red'],
-            matchMode: 'none',
-        });
+    it('exports table tag any, all, and none with table-level structural rules', async () => {
+        const anyRed = await dbmlFor(tableTag(['red'], 'is_any_of'));
+        const allTags = await dbmlFor(tableTag(['red', 'blue'], 'is_all_of'));
+        const noneRed = await dbmlFor(tableTag(['red'], 'is_none_of'));
 
         expect(anyRed).toContain('Table "users"');
         expect(anyRed).toContain('email');

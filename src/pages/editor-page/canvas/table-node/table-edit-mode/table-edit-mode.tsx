@@ -36,7 +36,7 @@ export interface TableEditModeProps {
     table: DBTable;
     color: string;
     focusFieldId?: string;
-    tagVisibleFieldIds?: ReadonlySet<string> | null;
+    visibleFieldIds?: ReadonlySet<string> | null;
     onClose: () => void;
 }
 
@@ -45,7 +45,7 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
         table,
         color,
         focusFieldId: focusFieldIdProp,
-        tagVisibleFieldIds,
+        visibleFieldIds,
         onClose,
     }) => {
         const containerRef = useRef<HTMLDivElement>(null);
@@ -56,14 +56,14 @@ export const TableEditMode: React.FC<TableEditModeProps> = React.memo(
             useChartDB();
 
         const visibleFields = useMemo(() => {
-            if (!tagVisibleFieldIds) {
+            if (!visibleFieldIds) {
                 return table.fields;
             }
 
             return table.fields.filter((field) =>
-                tagVisibleFieldIds.has(field.id)
+                visibleFieldIds.has(field.id)
             );
-        }, [table.fields, tagVisibleFieldIds]);
+        }, [table.fields, visibleFieldIds]);
         const { startEditing, stopEditing } = useEditingBroadcast();
         const [isLocallyEditing, setIsLocallyEditing] = useState(false);
         const { message, editors, hasConflict } = useEditingConflictWarning(
