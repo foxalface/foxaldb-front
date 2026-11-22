@@ -4,15 +4,19 @@ import type { Diagram } from '../diagram';
 import {
     FILTER_MAX_GROUP_DEPTH,
     addGroupToGroup,
+    clearFilterGroupChildren,
+    groupHasIncompleteDescendantConditions,
     createFilterCondition,
     createFilterGroup,
     emptyFilterGroup,
+    isFilterConditionComplete,
     filterNormalizationScopeFromDiagram,
     hasActiveFilter,
     normalizeFilterExpression,
     withConditionOperator,
     withConditionProperty,
     withConditionTarget,
+    withConditionValue,
     type FilterCondition,
     type FilterGroup,
 } from '../filter-expression';
@@ -167,6 +171,68 @@ describe('filter expression', () => {
             true
         );
         expect(JSON.stringify(normalized).includes('deep-field')).toBe(false);
+    });
+
+    it('marks incomplete tag conditions without values', () => {
+        const condition = createFilterCondition('table', 'tag');
+        expect(isFilterConditionComplete(condition)).toBe(false);
+        expect(
+            isFilterConditionComplete(withConditionValue(condition, ['tag-a']))
+        ).toBe(true);
+    });
+
+    it('detects incomplete descendant conditions in a group', () => {
+        const complete = withConditionValue(
+            createFilterCondition('table', 'tag', 'c1'),
+            ['tag-a']
+        );
+        const incomplete = createFilterCondition('table', 'tag', 'c2');
+        const nested = createFilterGroup(
+            'and',
+            [
+                withConditionValue(
+                    createFilterCondition('field', 'name', 'c3'),
+                    'users'
+                ),
+            ],
+            'nested'
+        );
+        const onlyComplete = createFilterGroup('and', [complete, nested]);
+        const withIncomplete = createFilterGroup('and', [
+            complete,
+            incomplete,
+            nested,
+        ]);
+
+        expect(groupHasIncompleteDescendantConditions(onlyComplete)).toBe(
+            false
+        );
+        expect(groupHasIncompleteDescendantConditions(withIncomplete)).toBe(
+            true
+        );
+    });
+
+    it('creates a nested group with one initial condition', () => {
+        const root = emptyFilterGroup();
+        const next = addGroupToGroup(root, root.id);
+        const created = next.children[0];
+        expect(created?.kind).toBe('group');
+        if (created?.kind === 'group') {
+            expect(created.children).toHaveLength(1);
+            expect(created.children[0]?.kind).toBe('condition');
+        }
+    });
+
+    it('clears group children while preserving the group shell', () => {
+        const root = emptyFilterGroup();
+        const withChild = {
+            ...root,
+            children: [createFilterCondition('table', 'tag', 'condition-1')],
+        };
+        const cleared = clearFilterGroupChildren(withChild, root.id);
+        expect(cleared.children).toEqual([]);
+        expect(cleared.id).toBe(root.id);
+        expect(cleared.operator).toBe('and');
     });
 
     it('refuses to add a group past the domain depth cap', () => {

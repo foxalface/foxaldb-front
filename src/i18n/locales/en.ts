@@ -223,10 +223,28 @@ export const en = {
                     empty: 'No schemas on this diagram',
                 },
                 query: {
-                    empty: 'Add a condition to filter the diagram.',
-                    add_condition: 'Add condition',
-                    add_group: 'Add group',
+                    empty: 'No conditions',
+                    empty_state: {
+                        title: 'No filters',
+                        description:
+                            'Add a condition or a group to get started',
+                        add_condition: 'Add condition',
+                        add_group: 'Add group',
+                    },
+                    add: 'Add',
+                    add_condition: 'Condition',
+                    add_group: 'Group',
+                    delete_all: 'Delete all',
+                    delete_condition: 'Delete condition',
+                    delete_group: 'Delete group',
                     remove: 'Remove',
+                    status_active: 'Active condition',
+                    status_incomplete:
+                        'Incomplete condition — it is not applied',
+                    collapse_group: 'Collapse group',
+                    expand_group: 'Expand group',
+                    group_incomplete_warning:
+                        'This group contains incomplete conditions',
                     group_operator: 'Group operator',
                     views_hidden:
                         'Views are hidden by the View menu. This filter can still target views, but they stay off the canvas until Database Views is turned on.',
@@ -268,6 +286,8 @@ export const en = {
                         areas: 'Areas',
                         schemas: 'Schemas',
                         name_placeholder: 'Name',
+                        select: 'Select',
+                        summary_more: '{{name}} +{{count}}',
                         none: 'Choose values',
                         selected: '{{count}} selected',
                         empty_options: 'Nothing to choose',

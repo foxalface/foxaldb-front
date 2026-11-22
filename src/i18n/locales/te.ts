@@ -225,10 +225,28 @@ export const te: LanguageTranslation = {
                     empty: 'ఈ రేఖాచిత్రంలో స్కీమాలు లేవు',
                 },
                 query: {
-                    empty: 'రేఖాచిత్రాన్ని ఫిల్టర్ చేయడానికి ఒక షరతు జోడించండి.',
-                    add_condition: 'షరతు జోడించండి',
-                    add_group: 'సమూహం జోడించండి',
+                    empty: 'షరతులు లేవు',
+                    empty_state: {
+                        title: 'ఫిల్టర్లు లేవు',
+                        description:
+                            'ప్రారంభించడానికి షరతు లేదా సమూహాన్ని జోడించండి',
+                        add_condition: 'షరతు జోడించండి',
+                        add_group: 'సమూహం జోడించండి',
+                    },
+                    add: 'జోడించండి',
+                    add_condition: 'షరతు',
+                    add_group: 'సమూహం',
+                    delete_all: 'అన్నీ తొలగించండి',
+                    delete_condition: 'షరతును తొలగించండి',
+                    delete_group: 'సమూహాన్ని తొలగించండి',
                     remove: 'తొలగించండి',
+                    status_active: 'సక్రియ షరతు',
+                    status_incomplete: 'అసంపూర్ణ షరతు — వర్తించదు',
+                    collapse_group: 'సమూహాన్ని ముడుచు',
+                    expand_group: 'సమూహాన్ని విస్తరించు',
+                    group_incomplete_warning:
+                        'ఈ సమూహంలో అసంపూర్ణ షరతులు ఉన్నాయి',
+
                     group_operator: 'సమూహ ఆపరేటర్',
                     views_hidden:
                         'వ్యూలు వ్యూ మెనూలో దాచబడ్డాయి. ఈ ఫిల్టర్ వ్యూలను లక్ష్యంగా పెట్టగలదు, కానీ డేటాబేస్ వ్యూలు ఆన్ అయ్యే వరకు అవి కాన్వాస్‌పై కనిపించవు.',
@@ -270,6 +288,8 @@ export const te: LanguageTranslation = {
                         areas: 'ప్రాంతాలు',
                         schemas: 'స్కీమాలు',
                         name_placeholder: 'పేరు',
+                        select: 'ఎంచుకోండి',
+                        summary_more: '{{name}} +{{count}}',
                         none: 'విలువలు ఎంచుకోండి',
                         selected: '{{count}} ఎంచుకున్నారు',
                         empty_options: 'ఎంచుకోవడానికి ఏమీ లేదు',

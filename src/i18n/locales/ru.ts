@@ -224,10 +224,28 @@ export const ru: LanguageTranslation = {
                     empty: 'На этой диаграмме нет схем',
                 },
                 query: {
-                    empty: 'Добавьте условие, чтобы отфильтровать диаграмму.',
-                    add_condition: 'Добавить условие',
-                    add_group: 'Добавить группу',
+                    empty: 'Нет условий',
+                    empty_state: {
+                        title: 'Нет фильтров',
+                        description:
+                            'Добавьте условие или группу, чтобы начать',
+                        add_condition: 'Добавить условие',
+                        add_group: 'Добавить группу',
+                    },
+                    add: 'Добавить',
+                    add_condition: 'Условие',
+                    add_group: 'Группа',
+                    delete_all: 'Удалить всё',
+                    delete_condition: 'Удалить условие',
+                    delete_group: 'Удалить группу',
                     remove: 'Удалить',
+                    status_active: 'Активное условие',
+                    status_incomplete: 'Неполное условие — не применяется',
+                    collapse_group: 'Свернуть группу',
+                    expand_group: 'Развернуть группу',
+                    group_incomplete_warning:
+                        'В этой группе есть неполные условия',
+
                     group_operator: 'Оператор группы',
                     views_hidden:
                         'Представления скрыты меню Вид. Этот фильтр по-прежнему может выбирать представления, но они остаются вне холста, пока не включены Представления базы данных.',
@@ -269,6 +287,8 @@ export const ru: LanguageTranslation = {
                         areas: 'Области',
                         schemas: 'Схемы',
                         name_placeholder: 'Имя',
+                        select: 'Выбрать',
+                        summary_more: '{{name}} +{{count}}',
                         none: 'Выберите значения',
                         selected: 'Выбрано: {{count}}',
                         empty_options: 'Нечего выбирать',

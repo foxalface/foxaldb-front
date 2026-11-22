@@ -230,10 +230,28 @@ export const ja: LanguageTranslation = {
                     empty: 'この図にスキーマはありません',
                 },
                 query: {
-                    empty: '条件を追加して図を絞り込みます。',
-                    add_condition: '条件を追加',
-                    add_group: 'グループを追加',
+                    empty: '条件なし',
+                    empty_state: {
+                        title: 'フィルターなし',
+                        description:
+                            '開始するには条件またはグループを追加してください',
+                        add_condition: '条件を追加',
+                        add_group: 'グループを追加',
+                    },
+                    add: '追加',
+                    add_condition: '条件',
+                    add_group: 'グループ',
+                    delete_all: 'すべて削除',
+                    delete_condition: '条件を削除',
+                    delete_group: 'グループを削除',
                     remove: '削除',
+                    status_active: '有効な条件',
+                    status_incomplete: '不完全な条件 — 適用されません',
+                    collapse_group: 'グループを折りたたむ',
+                    expand_group: 'グループを展開',
+                    group_incomplete_warning:
+                        'このグループには不完全な条件が含まれています',
+
                     group_operator: 'グループの演算子',
                     views_hidden:
                         'ビューは表示メニューで非表示です。このフィルタはビューを条件にできますが、データベースビューをオンにするまでキャンバスには出ません。',
@@ -275,6 +293,8 @@ export const ja: LanguageTranslation = {
                         areas: 'エリア',
                         schemas: 'スキーマ',
                         name_placeholder: '名前',
+                        select: '選択',
+                        summary_more: '{{name}} +{{count}}',
                         none: '値を選択',
                         selected: '{{count}} 件選択',
                         empty_options: '選択肢がありません',

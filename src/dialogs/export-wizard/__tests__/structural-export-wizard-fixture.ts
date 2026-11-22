@@ -100,6 +100,11 @@ export const chooseByTags = async (
     await userEvent.click(screen.getByTestId('export-structural-scope-custom'));
     await userEvent.click(
         screen.getByRole('button', {
+            name: 'side_panel.filters_section.query.add',
+        })
+    );
+    await userEvent.click(
+        screen.getByRole('menuitem', {
             name: 'side_panel.filters_section.query.add_condition',
         })
     );

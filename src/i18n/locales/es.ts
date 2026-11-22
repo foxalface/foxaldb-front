@@ -226,10 +226,28 @@ export const es: LanguageTranslation = {
                     empty: 'No hay esquemas en este diagrama',
                 },
                 query: {
-                    empty: 'Añada una condición para filtrar el diagrama.',
-                    add_condition: 'Añadir condición',
-                    add_group: 'Añadir grupo',
-                    remove: 'Quitar',
+                    empty: 'Sin condiciones',
+                    empty_state: {
+                        title: 'Sin filtros',
+                        description:
+                            'Añada una condición o un grupo para empezar',
+                        add_condition: 'Añadir condición',
+                        add_group: 'Añadir grupo',
+                    },
+                    add: 'Añadir',
+                    add_condition: 'Condición',
+                    add_group: 'Grupo',
+                    delete_all: 'Eliminar todo',
+                    delete_condition: 'Eliminar condición',
+                    delete_group: 'Eliminar grupo',
+                    remove: 'Eliminar',
+                    status_active: 'Condición activa',
+                    status_incomplete: 'Condición incompleta — no se aplica',
+                    collapse_group: 'Contraer grupo',
+                    expand_group: 'Expandir grupo',
+                    group_incomplete_warning:
+                        'Este grupo contiene condiciones incompletas',
+
                     group_operator: 'Operador del grupo',
                     views_hidden:
                         'Las vistas están ocultas por el menú Ver. Este filtro puede seguir apuntando a vistas, pero permanecen fuera del lienzo hasta que se active Vistas de Base de Datos.',
@@ -271,6 +289,8 @@ export const es: LanguageTranslation = {
                         areas: 'Áreas',
                         schemas: 'Esquemas',
                         name_placeholder: 'Nombre',
+                        select: 'Seleccionar',
+                        summary_more: '{{name}} +{{count}}',
                         none: 'Elegir valores',
                         selected: '{{count}} seleccionados',
                         empty_options: 'Nada que elegir',

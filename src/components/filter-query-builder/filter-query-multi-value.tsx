@@ -17,8 +17,7 @@ export interface FilterQueryValueOption {
 export const FilterQueryMultiValue: React.FC<{
     conditionId: string;
     label: string;
-    emptyLabel: string;
-    selectedLabel: (count: number) => string;
+    selectLabel: string;
     options: readonly FilterQueryValueOption[];
     selectedIds: readonly string[];
     readOnly?: boolean;
@@ -26,8 +25,7 @@ export const FilterQueryMultiValue: React.FC<{
 }> = ({
     conditionId,
     label,
-    emptyLabel,
-    selectedLabel,
+    selectLabel,
     options,
     selectedIds,
     readOnly = false,
@@ -35,10 +33,30 @@ export const FilterQueryMultiValue: React.FC<{
 }) => {
     const { t } = useTranslation();
     const selected = useMemo(() => new Set(selectedIds), [selectedIds]);
-    const summary =
-        selectedIds.length === 0
-            ? emptyLabel
-            : selectedLabel(selectedIds.length);
+    const summary = useMemo(() => {
+        if (selectedIds.length === 0) {
+            return selectLabel;
+        }
+
+        const names = selectedIds
+            .map(
+                (id) => options.find((option) => option.id === id)?.name ?? null
+            )
+            .filter((name): name is string => name !== null);
+
+        if (names.length === 0) {
+            return selectLabel;
+        }
+
+        if (names.length === 1) {
+            return names[0];
+        }
+
+        return t('side_panel.filters_section.query.value.summary_more', {
+            name: names[0],
+            count: names.length - 1,
+        });
+    }, [options, selectLabel, selectedIds, t]);
 
     const toggle = (id: string, checked: boolean) => {
         onChange(

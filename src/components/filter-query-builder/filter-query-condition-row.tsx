@@ -1,7 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { X } from 'lucide-react';
-import { Button } from '@/components/button/button';
 import { Input } from '@/components/input/input';
 import {
     Select,
@@ -26,6 +24,8 @@ import {
     withConditionTarget,
     withConditionValue,
 } from '@/lib/domain/filter-expression';
+import { FilterQueryConditionStatus } from './filter-query-condition-status';
+import { FilterQueryDestructiveButton } from './filter-query-destructive-button';
 import { FilterQueryMultiValue } from './filter-query-multi-value';
 
 const selectTriggerClassName = 'h-8 text-xs';
@@ -52,8 +52,11 @@ export const FilterQueryConditionRow: React.FC<{
     const operators = operatorsForProperty(condition.property);
 
     return (
-        <div className="flex flex-col gap-1 rounded-md border bg-background p-2">
-            <div className="grid grid-cols-2 gap-1">
+        <div
+            className="rounded-md border bg-background p-2"
+            data-testid={`filter-query-condition-${condition.id}`}
+        >
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] gap-1">
                 <Select
                     value={condition.target}
                     disabled={readOnly}
@@ -118,6 +121,26 @@ export const FilterQueryConditionRow: React.FC<{
                         ))}
                     </SelectContent>
                 </Select>
+                <div className="flex items-center justify-end gap-0.5">
+                    <FilterQueryConditionStatus
+                        condition={condition}
+                        activeLabel={t(
+                            'side_panel.filters_section.query.status_active'
+                        )}
+                        incompleteLabel={t(
+                            'side_panel.filters_section.query.status_incomplete'
+                        )}
+                    />
+                    {readOnly ? null : (
+                        <FilterQueryDestructiveButton
+                            label={t(
+                                'side_panel.filters_section.query.delete_condition'
+                            )}
+                            testId={`filter-query-remove-${condition.id}`}
+                            onClick={onRemove}
+                        />
+                    )}
+                </div>
                 <Select
                     value={condition.operator}
                     disabled={readOnly}
@@ -171,15 +194,9 @@ export const FilterQueryConditionRow: React.FC<{
                         label={t(
                             `side_panel.filters_section.query.value.${condition.property === 'tag' ? 'tags' : condition.property === 'area' ? 'areas' : 'schemas'}`
                         )}
-                        emptyLabel={t(
-                            'side_panel.filters_section.query.value.none'
+                        selectLabel={t(
+                            'side_panel.filters_section.query.value.select'
                         )}
-                        selectedLabel={(count) =>
-                            t(
-                                'side_panel.filters_section.query.value.selected',
-                                { count }
-                            )
-                        }
                         options={
                             condition.property === 'tag'
                                 ? tags.map((tag) => ({
@@ -206,24 +223,6 @@ export const FilterQueryConditionRow: React.FC<{
                     />
                 )}
             </div>
-            {readOnly ? null : (
-                <div className="flex justify-end">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="h-7 px-2 text-xs"
-                        aria-label={t(
-                            'side_panel.filters_section.query.remove'
-                        )}
-                        data-testid={`filter-query-remove-${condition.id}`}
-                        onClick={onRemove}
-                    >
-                        <X className="size-3.5" aria-hidden="true" />
-                        {t('side_panel.filters_section.query.remove')}
-                    </Button>
-                </div>
-            )}
         </div>
     );
 };

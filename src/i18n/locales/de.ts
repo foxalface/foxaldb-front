@@ -231,10 +231,29 @@ export const de: LanguageTranslation = {
                     empty: 'Keine Schemata in diesem Diagramm',
                 },
                 query: {
-                    empty: 'Fügen Sie eine Bedingung hinzu, um das Diagramm zu filtern.',
-                    add_condition: 'Bedingung hinzufügen',
-                    add_group: 'Gruppe hinzufügen',
-                    remove: 'Entfernen',
+                    empty: 'Keine Bedingungen',
+                    empty_state: {
+                        title: 'Keine Filter',
+                        description:
+                            'Fügen Sie eine Bedingung oder Gruppe hinzu, um zu beginnen',
+                        add_condition: 'Bedingung hinzufügen',
+                        add_group: 'Gruppe hinzufügen',
+                    },
+                    add: 'Hinzufügen',
+                    add_condition: 'Bedingung',
+                    add_group: 'Gruppe',
+                    delete_all: 'Alle löschen',
+                    delete_condition: 'Bedingung löschen',
+                    delete_group: 'Gruppe löschen',
+                    remove: 'Löschen',
+                    status_active: 'Aktive Bedingung',
+                    status_incomplete:
+                        'Unvollständige Bedingung — wird nicht angewendet',
+                    collapse_group: 'Gruppe einklappen',
+                    expand_group: 'Gruppe ausklappen',
+                    group_incomplete_warning:
+                        'Diese Gruppe enthält unvollständige Bedingungen',
+
                     group_operator: 'Gruppenoperator',
                     views_hidden:
                         'Ansichten sind über das Menü Ansicht ausgeblendet. Dieser Filter kann Ansichten weiterhin auswählen, aber sie bleiben von der Zeichenfläche fern, bis Datenbankansichten aktiviert ist.',
@@ -276,6 +295,8 @@ export const de: LanguageTranslation = {
                         areas: 'Bereiche',
                         schemas: 'Schemata',
                         name_placeholder: 'Name',
+                        select: 'Auswählen',
+                        summary_more: '{{name}} +{{count}}',
                         none: 'Werte wählen',
                         selected: '{{count}} ausgewählt',
                         empty_options: 'Nichts auswählbar',

@@ -204,7 +204,10 @@ export const createFilterCondition = (
     }
 };
 
-export const isConditionComplete = (condition: FilterCondition): boolean => {
+/** Canonical completeness for FilterCondition; shared by evaluation and UI. */
+export const isFilterConditionComplete = (
+    condition: FilterCondition
+): boolean => {
     switch (condition.property) {
         case 'tag':
         case 'area':
@@ -217,6 +220,23 @@ export const isConditionComplete = (condition: FilterCondition): boolean => {
             return exhaustive;
         }
     }
+};
+
+export const isConditionComplete = (condition: FilterCondition): boolean =>
+    isFilterConditionComplete(condition);
+
+export const groupHasIncompleteDescendantConditions = (
+    group: FilterGroup
+): boolean => {
+    const walk = (expression: FilterExpression): boolean => {
+        if (expression.kind === 'condition') {
+            return !isFilterConditionComplete(expression);
+        }
+
+        return expression.children.some((child) => walk(child));
+    };
+
+    return group.children.some((child) => walk(child));
 };
 
 export const hasActiveFilter = (expression: FilterExpression): boolean => {
@@ -318,9 +338,20 @@ export const addGroupToGroup = (
 
     return mapGroup(root, groupId, (group) => ({
         ...group,
-        children: [...group.children, createFilterGroup()],
+        children: [
+            ...group.children,
+            createFilterGroup('and', [createFilterCondition('table')]),
+        ],
     }));
 };
+
+export const clearFilterGroupChildren = (
+    root: FilterGroup,
+    groupId: string
+): FilterGroup =>
+    mapGroup(root, groupId, (group) =>
+        group.children.length === 0 ? group : { ...group, children: [] }
+    );
 
 export const setGroupOperator = (
     root: FilterGroup,

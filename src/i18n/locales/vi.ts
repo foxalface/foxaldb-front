@@ -224,10 +224,28 @@ export const vi: LanguageTranslation = {
                     empty: 'Sơ đồ này không có lược đồ',
                 },
                 query: {
-                    empty: 'Thêm một điều kiện để lọc sơ đồ.',
-                    add_condition: 'Thêm điều kiện',
-                    add_group: 'Thêm nhóm',
+                    empty: 'Không có điều kiện',
+                    empty_state: {
+                        title: 'Không có bộ lọc',
+                        description: 'Thêm điều kiện hoặc nhóm để bắt đầu',
+                        add_condition: 'Thêm điều kiện',
+                        add_group: 'Thêm nhóm',
+                    },
+                    add: 'Thêm',
+                    add_condition: 'Điều kiện',
+                    add_group: 'Nhóm',
+                    delete_all: 'Xóa tất cả',
+                    delete_condition: 'Xóa điều kiện',
+                    delete_group: 'Xóa nhóm',
                     remove: 'Xóa',
+                    status_active: 'Điều kiện hoạt động',
+                    status_incomplete:
+                        'Điều kiện chưa đầy đủ — không được áp dụng',
+                    collapse_group: 'Thu gọn nhóm',
+                    expand_group: 'Mở rộng nhóm',
+                    group_incomplete_warning:
+                        'Nhóm này chứa các điều kiện chưa đầy đủ',
+
                     group_operator: 'Toán tử nhóm',
                     views_hidden:
                         'Chế độ xem đang bị ẩn bởi menu Xem. Bộ lọc này vẫn có thể nhắm tới chế độ xem, nhưng chúng nằm ngoài khung vẽ cho đến khi bật Chế độ xem Cơ sở dữ liệu.',
@@ -269,6 +287,8 @@ export const vi: LanguageTranslation = {
                         areas: 'Vùng',
                         schemas: 'Lược đồ',
                         name_placeholder: 'Tên',
+                        select: 'Chọn',
+                        summary_more: '{{name}} +{{count}}',
                         none: 'Chọn giá trị',
                         selected: 'Đã chọn {{count}}',
                         empty_options: 'Không có gì để chọn',

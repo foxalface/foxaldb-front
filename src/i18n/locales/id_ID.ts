@@ -225,10 +225,29 @@ export const id_ID: LanguageTranslation = {
                     empty: 'Tidak ada skema pada diagram ini',
                 },
                 query: {
-                    empty: 'Tambahkan kondisi untuk memfilter diagram.',
-                    add_condition: 'Tambah kondisi',
-                    add_group: 'Tambah grup',
+                    empty: 'Tidak ada kondisi',
+                    empty_state: {
+                        title: 'Tidak ada filter',
+                        description:
+                            'Tambahkan kondisi atau grup untuk memulai',
+                        add_condition: 'Tambah kondisi',
+                        add_group: 'Tambah grup',
+                    },
+                    add: 'Tambah',
+                    add_condition: 'Kondisi',
+                    add_group: 'Grup',
+                    delete_all: 'Hapus semua',
+                    delete_condition: 'Hapus kondisi',
+                    delete_group: 'Hapus grup',
                     remove: 'Hapus',
+                    status_active: 'Kondisi aktif',
+                    status_incomplete:
+                        'Kondisi tidak lengkap — tidak diterapkan',
+                    collapse_group: 'Ciutkan grup',
+                    expand_group: 'Bentangkan grup',
+                    group_incomplete_warning:
+                        'Grup ini berisi kondisi yang tidak lengkap',
+
                     group_operator: 'Operator grup',
                     views_hidden:
                         'Tampilan disembunyikan oleh menu Tampilan. Filter ini tetap dapat menargetkan tampilan, tetapi tampilan tetap di luar kanvas sampai Tampilan Database diaktifkan.',
@@ -270,6 +289,8 @@ export const id_ID: LanguageTranslation = {
                         areas: 'Area',
                         schemas: 'Skema',
                         name_placeholder: 'Nama',
+                        select: 'Pilih',
+                        summary_more: '{{name}} +{{count}}',
                         none: 'Pilih nilai',
                         selected: '{{count}} dipilih',
                         empty_options: 'Tidak ada pilihan',

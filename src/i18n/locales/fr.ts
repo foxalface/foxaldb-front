@@ -228,10 +228,28 @@ export const fr: LanguageTranslation = {
                     empty: 'Aucun schéma sur ce diagramme',
                 },
                 query: {
-                    empty: 'Ajoutez une condition pour filtrer le diagramme.',
-                    add_condition: 'Ajouter une condition',
-                    add_group: 'Ajouter un groupe',
-                    remove: 'Retirer',
+                    empty: 'Aucune condition',
+                    empty_state: {
+                        title: 'Aucun filtre',
+                        description:
+                            'Ajouter une condition ou un groupe pour commencer',
+                        add_condition: 'Ajouter une condition',
+                        add_group: 'Ajouter un groupe',
+                    },
+                    add: 'Ajouter',
+                    add_condition: 'Condition',
+                    add_group: 'Groupe',
+                    delete_all: 'Tout supprimer',
+                    delete_condition: 'Supprimer la condition',
+                    delete_group: 'Supprimer le groupe',
+                    remove: 'Supprimer',
+                    status_active: 'Condition active',
+                    status_incomplete:
+                        "Condition incomplète — elle n'est pas appliquée",
+                    collapse_group: 'Replier le groupe',
+                    expand_group: 'Déplier le groupe',
+                    group_incomplete_warning:
+                        'Ce groupe contient des conditions incomplètes',
                     group_operator: 'Opérateur du groupe',
                     views_hidden:
                         'Les vues sont masquées par le menu Affichage. Ce filtre peut toujours cibler des vues, mais elles restent hors du canevas tant que Vues de Base de Données est désactivé.',
@@ -273,6 +291,8 @@ export const fr: LanguageTranslation = {
                         areas: 'Zones',
                         schemas: 'Schémas',
                         name_placeholder: 'Nom',
+                        select: 'Sélectionner',
+                        summary_more: '{{name}} +{{count}}',
                         none: 'Choisir des valeurs',
                         selected: '{{count}} sélectionné(s)',
                         empty_options: 'Aucun choix',

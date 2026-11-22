@@ -12,6 +12,7 @@ import {
 } from '@/lib/domain/filter-expression';
 import { EditorFiltersProvider } from '@/context/editor-filters-context/editor-filters-provider';
 import { useEditorFilters } from '@/context/editor-filters-context/use-editor-filters';
+import { TooltipProvider } from '@/components/tooltip/tooltip';
 import { FiltersSection } from '../filters-section';
 
 const { chartDBState } = vi.hoisted(() => ({
@@ -86,16 +87,44 @@ describe('FiltersSection', () => {
         chartDBState.tables = [];
     });
 
-    it('builds a query without a Show views control', () => {
+    const renderFiltersSection = (ui: React.ReactElement) =>
         render(
-            <EditorFiltersProvider>
-                <FiltersSection />
-            </EditorFiltersProvider>
+            <TooltipProvider>
+                <EditorFiltersProvider>{ui}</EditorFiltersProvider>
+            </TooltipProvider>
         );
 
+    it('builds a query without a Show views control or outer clear action', () => {
+        renderFiltersSection(<FiltersSection />);
+
         expect(
-            screen.getByText('side_panel.filters_section.query.empty')
+            screen.getByTestId('filter-query-empty-root')
         ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'side_panel.filters_section.query.empty_state.title'
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'side_panel.filters_section.query.empty_state.description'
+            )
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'side_panel.filters_section.query.empty_state.add_condition',
+            })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', {
+                name: 'side_panel.filters_section.query.empty_state.add_group',
+            })
+        ).toBeInTheDocument();
+        expect(
+            screen.queryByRole('button', {
+                name: 'side_panel.filters_section.clear',
+            })
+        ).not.toBeInTheDocument();
         expect(screen.queryByText(/show views/i)).not.toBeInTheDocument();
         expect(
             screen.queryByRole('tab', { name: 'tags.title' })
@@ -104,11 +133,7 @@ describe('FiltersSection', () => {
 
     it('explains that a view condition stays hidden while Show views is off', async () => {
         const user = userEvent.setup();
-        render(
-            <EditorFiltersProvider>
-                <Probe />
-            </EditorFiltersProvider>
-        );
+        renderFiltersSection(<Probe />);
 
         await user.click(screen.getByRole('button', { name: 'view-filter' }));
 
