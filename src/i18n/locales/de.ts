@@ -330,6 +330,8 @@ export const de: LanguageTranslation = {
                     field_name: 'Name',
                     field_type: 'Datentyp',
                     field_actions: {
+                        menu_title: 'Feldoptionen',
+                        attributes: 'Attribute',
                         title: 'Feldattribute',
                         open_discussion: 'Unterhaltung öffnen',
                         unique: 'Eindeutig',

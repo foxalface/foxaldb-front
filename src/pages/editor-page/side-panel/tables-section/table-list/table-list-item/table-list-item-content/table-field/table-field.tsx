@@ -3,7 +3,6 @@ import { GripVertical, KeyRound } from 'lucide-react';
 import { Input } from '@/components/input/input';
 import { generateDBFieldSuffix, type DBField } from '@/lib/domain/db-field';
 import { useUpdateTableField } from '@/hooks/use-update-table-field';
-import { useConversationsAvailability } from '@/hooks/use-conversations-availability';
 import { useEditingBroadcast } from '@/hooks/use-editing-broadcast';
 import { createFieldEditingItem } from '@/lib/realtime/editing-utils';
 import {
@@ -17,7 +16,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { SelectBox } from '@/components/select-box/select-box';
 import { TableFieldPopover } from './table-field-modal/table-field-modal';
-import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
 import type { DatabaseType, DBTable } from '@/lib/domain';
 import { requiresNotNull } from '@/lib/data/data-types/data-types';
 import { cn } from '@/lib/utils';
@@ -41,8 +39,6 @@ export const TableField: React.FC<TableFieldProps> = ({
 }) => {
     const { t } = useTranslation();
     const { startEditing, stopEditing } = useEditingBroadcast();
-    const conversationsAvailable = useConversationsAvailability();
-
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id: field.id });
 
@@ -171,16 +167,6 @@ export const TableField: React.FC<TableFieldProps> = ({
                 </Tooltip>
             </div>
             <div className="flex shrink-0 items-center justify-end gap-1">
-                {conversationsAvailable ? (
-                    <ConversationIndicator
-                        className="shrink-0"
-                        target={{
-                            targetType: 'field',
-                            targetId: field.id,
-                        }}
-                        targetName={field.name}
-                    />
-                ) : null}
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <span>

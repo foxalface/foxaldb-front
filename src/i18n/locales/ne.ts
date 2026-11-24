@@ -320,6 +320,8 @@ export const ne: LanguageTranslation = {
                     field_name: 'नाम',
                     field_type: 'प्रकार',
                     field_actions: {
+                        menu_title: 'क्षेत्र विकल्पहरू',
+                        attributes: 'विशेषताहरू',
                         title: 'क्षेत्र विशेषताहरू',
                         open_discussion: 'कुराकानी खोल्नुहोस्',
                         unique: 'अनन्य',

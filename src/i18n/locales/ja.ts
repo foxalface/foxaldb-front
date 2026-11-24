@@ -328,6 +328,8 @@ export const ja: LanguageTranslation = {
                     field_name: '名前',
                     field_type: 'タイプ',
                     field_actions: {
+                        menu_title: 'フィールドのオプション',
+                        attributes: '属性',
                         title: 'フィールド属性',
                         open_discussion: '会話を開く',
                         unique: 'ユニーク',

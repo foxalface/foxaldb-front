@@ -321,6 +321,8 @@ export const bn: LanguageTranslation = {
                     field_name: 'নাম',
                     field_type: 'ধরন',
                     field_actions: {
+                        menu_title: 'ফিল্ড বিকল্প',
+                        attributes: 'বৈশিষ্ট্য',
                         title: 'ফিল্ড কর্ম',
                         open_discussion: 'কথোপকথন খুলুন',
                         unique: 'অদ্বিতীয়',

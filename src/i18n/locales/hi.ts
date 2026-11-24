@@ -321,6 +321,8 @@ export const hi: LanguageTranslation = {
                     field_name: 'नाम',
                     field_type: 'प्रकार',
                     field_actions: {
+                        menu_title: 'फ़ील्ड विकल्प',
+                        attributes: 'विशेषताएँ',
                         title: 'फ़ील्ड विशेषताएँ',
                         open_discussion: 'वार्तालाप खोलें',
                         unique: 'अद्वितीय',

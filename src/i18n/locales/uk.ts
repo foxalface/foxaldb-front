@@ -321,6 +321,8 @@ export const uk: LanguageTranslation = {
                     field_name: 'Назва поля',
                     field_type: 'Тип',
                     field_actions: {
+                        menu_title: 'Параметри поля',
+                        attributes: 'Атрибути',
                         title: 'Атрибути полів',
                         open_discussion: 'Відкрити розмову',
                         unique: 'Унікальне',

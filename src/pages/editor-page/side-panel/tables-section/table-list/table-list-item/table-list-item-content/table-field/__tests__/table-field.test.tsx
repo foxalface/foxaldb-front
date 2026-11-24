@@ -31,23 +31,6 @@ vi.mock('@/hooks/use-conversations-availability', () => ({
     useConversationsAvailability: () => conversationsState.isAvailable,
 }));
 
-vi.mock('@/components/conversation-indicator/conversation-indicator', () => ({
-    ConversationIndicator: ({
-        target,
-        targetName,
-    }: {
-        target: { targetType: string; targetId: string };
-        targetName: string;
-    }) => (
-        <span
-            data-testid="conversation-indicator"
-            data-target-type={target.targetType}
-            data-target-id={target.targetId}
-            data-target-name={targetName}
-        />
-    ),
-}));
-
 vi.mock('@/hooks/use-editing-broadcast', () => ({
     useEditingBroadcast: () => ({
         startEditing: vi.fn(),
@@ -161,8 +144,8 @@ const renderField = ({
         </TooltipProvider>
     );
 
-const fieldAttributesTrigger = () =>
-    screen.getByRole('button', { name: 'Field Attributes' });
+const fieldOptionsTrigger = () =>
+    screen.getByRole('button', { name: 'Field options' });
 
 const schemaCommentMarker = (container: HTMLElement) =>
     container.querySelector('.border-t-pink-500');
@@ -177,57 +160,13 @@ describe('TableField conversations', () => {
         handleNameChange.mockClear();
     });
 
-    it('renders ConversationIndicator when conversations are available', () => {
-        renderField();
-
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
-    });
-
-    it('hides ConversationIndicator when conversations are unavailable', () => {
-        conversationsState.isAvailable = false;
+    it('does not render an inline conversation indicator', () => {
         renderField();
 
         expect(
             screen.queryByTestId('conversation-indicator')
         ).not.toBeInTheDocument();
-    });
-
-    it('passes the field target and name to ConversationIndicator', () => {
-        renderField({
-            field: { ...baseField, id: 'field-42', name: 'username' },
-        });
-
-        const indicator = screen.getByTestId('conversation-indicator');
-        expect(indicator).toHaveAttribute('data-target-type', 'field');
-        expect(indicator).toHaveAttribute('data-target-id', 'field-42');
-        expect(indicator).toHaveAttribute('data-target-name', 'username');
-    });
-
-    it('keeps ConversationIndicator visible in readonly mode when conversations are available', () => {
-        renderField({ readonly: true });
-
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
-        expect(fieldAttributesTrigger()).toBeInTheDocument();
-    });
-
-    it('places ConversationIndicator in the controls column', () => {
-        const { container } = renderField();
-
-        const controlsColumn = container.querySelector(
-            '.flex.shrink-0.items-center.justify-end.gap-1'
-        );
-
-        expect(controlsColumn).not.toBeNull();
-        expect(controlsColumn).toContainElement(
-            screen.getByTestId('conversation-indicator')
-        );
-        expect(
-            screen.getByTestId('conversation-indicator').parentElement
-        ).not.toHaveClass('hidden');
+        expect(fieldOptionsTrigger()).toBeInTheDocument();
     });
 });
 
@@ -259,24 +198,19 @@ describe('TableField field rendering', () => {
         expect(schemaCommentMarker(container)).toBeNull();
     });
 
-    it('coexists with the schema comment affordance and conversation indicator', () => {
+    it('coexists with the schema comment affordance and options trigger', () => {
         const { container } = renderField({
             field: { ...baseField, comments: 'schema note' },
         });
 
         expect(schemaCommentMarker(container)).not.toBeNull();
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
+        expect(fieldOptionsTrigger()).toBeInTheDocument();
     });
 
-    it('keeps the Field Attributes trigger present and accessible', () => {
+    it('keeps the field options trigger present and accessible', () => {
         renderField();
 
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
-        expect(fieldAttributesTrigger()).toBeInTheDocument();
+        expect(fieldOptionsTrigger()).toBeInTheDocument();
     });
 });
 
@@ -287,7 +221,7 @@ describe('TableField controls', () => {
         handlePrimaryKeyToggle.mockClear();
     });
 
-    it('keeps nullable and primary-key controls functional with the indicator visible', async () => {
+    it('keeps nullable and primary-key controls functional with the options menu available', async () => {
         const user = userEvent.setup();
         renderField();
 
@@ -302,12 +236,10 @@ describe('TableField controls', () => {
         expect(handlePrimaryKeyToggle).toHaveBeenCalled();
     });
 
-    it('hides the drag handle and disables toggles in readonly mode while keeping the indicator', () => {
+    it('hides the drag handle and disables toggles in readonly mode while keeping the options menu', () => {
         const { container } = renderField({ readonly: true });
 
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
+        expect(fieldOptionsTrigger()).toBeInTheDocument();
         expect(container.querySelector('.cursor-move')).not.toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'N' })).toBeDisabled();
         expect(screen.getByDisplayValue('email')).toHaveAttribute('readonly');
@@ -325,17 +257,13 @@ describe('TableField controls', () => {
 
         expect(identityColumn).not.toBeNull();
         expect(controlsColumn).not.toBeNull();
-        expect(controlsColumn).toContainElement(
-            screen.getByTestId('conversation-indicator')
-        );
+        expect(controlsColumn).toContainElement(fieldOptionsTrigger());
     });
 
     it('does not render EntityEditingBadge on the side-panel field row', () => {
         renderField();
 
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
+        expect(fieldOptionsTrigger()).toBeInTheDocument();
         expect(
             screen.queryByTestId('entity-editing-badge')
         ).not.toBeInTheDocument();

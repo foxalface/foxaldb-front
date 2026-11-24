@@ -319,6 +319,8 @@ export const en = {
                     field_name: 'Name',
                     field_type: 'Type',
                     field_actions: {
+                        menu_title: 'Field options',
+                        attributes: 'Attributes',
                         title: 'Field Attributes',
                         open_discussion: 'Open conversation',
                         unique: 'Unique',

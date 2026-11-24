@@ -313,6 +313,8 @@ export const zh_CN: LanguageTranslation = {
                     field_name: '名称',
                     field_type: '类型',
                     field_actions: {
+                        menu_title: '字段选项',
+                        attributes: '属性',
                         title: '字段属性',
                         open_discussion: '打开对话',
                         unique: '唯一',

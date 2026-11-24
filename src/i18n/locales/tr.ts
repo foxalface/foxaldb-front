@@ -320,6 +320,8 @@ export const tr: LanguageTranslation = {
                     field_name: 'Ad',
                     field_type: 'Tür',
                     field_actions: {
+                        menu_title: 'Alan seçenekleri',
+                        attributes: 'Özellikler',
                         title: 'Alan Özellikleri',
                         open_discussion: 'Konuşmayı aç',
                         unique: 'Tekil',

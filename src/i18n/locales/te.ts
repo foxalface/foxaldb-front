@@ -323,6 +323,8 @@ export const te: LanguageTranslation = {
                     field_name: 'పేరు',
                     field_type: 'ప్రకృతి',
                     field_actions: {
+                        menu_title: 'ఫీల్డ్ ఎంపికలు',
+                        attributes: 'గుణాలు',
                         title: 'ఫీల్డ్ గుణాలు',
                         open_discussion: 'సంభాషణ తెరవండి',
                         unique: 'అద్వితీయ',

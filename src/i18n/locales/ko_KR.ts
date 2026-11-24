@@ -320,6 +320,8 @@ export const ko_KR: LanguageTranslation = {
                     field_name: '이름',
                     field_type: '타입',
                     field_actions: {
+                        menu_title: '필드 옵션',
+                        attributes: '속성',
                         title: '필드 속성',
                         open_discussion: '대화 열기',
                         unique: '유니크 여부',

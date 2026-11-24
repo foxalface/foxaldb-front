@@ -320,6 +320,8 @@ export const hr: LanguageTranslation = {
                     field_name: 'Naziv',
                     field_type: 'Tip',
                     field_actions: {
+                        menu_title: 'Opcije polja',
+                        attributes: 'Atributi',
                         title: 'Atributi polja',
                         open_discussion: 'Otvori razgovor',
                         unique: 'Jedinstven',

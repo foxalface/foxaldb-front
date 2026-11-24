@@ -313,6 +313,8 @@ export const zh_TW: LanguageTranslation = {
                     field_name: '名稱',
                     field_type: '類型',
                     field_actions: {
+                        menu_title: '欄位選項',
+                        attributes: '屬性',
                         title: '欄位屬性',
                         open_discussion: '開啟對話',
                         unique: '唯一',

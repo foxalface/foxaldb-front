@@ -357,7 +357,7 @@ describe('TableListItemHeader conversation entry', () => {
     });
 });
 
-describe('TableListItemHeader conversation indicator', () => {
+describe('TableListItemHeader conversation menu', () => {
     beforeEach(() => {
         chartDBState.readonly = false;
         conversationsState.isAvailable = true;
@@ -365,60 +365,18 @@ describe('TableListItemHeader conversation indicator', () => {
         useTargetConversationMenuAction.mockClear();
     });
 
-    it('renders ConversationIndicator when conversations are available', () => {
-        renderHeader();
-
-        const indicator = screen.getByTestId('conversation-indicator');
-        expect(indicator).toHaveAttribute('data-target-type', 'table');
-        expect(indicator).toHaveAttribute('data-target-id', 'table-1');
-        expect(indicator).toHaveAttribute('data-target-name', 'Clients');
-        const actions = indicator.closest('.md\\:group-hover\\:flex');
-        expect(actions).not.toBeNull();
-        expect(actions).toHaveClass('flex', 'items-center');
-    });
-
-    it('hides ConversationIndicator when conversations are unavailable', () => {
-        conversationsState.isAvailable = false;
+    it('does not render an inline conversation indicator', () => {
         renderHeader();
 
         expect(
             screen.queryByTestId('conversation-indicator')
         ).not.toBeInTheDocument();
-    });
-
-    it('passes the table target to ConversationIndicator for another table id', () => {
-        renderHeader({ ...baseTable, id: 'table-99', name: 'Orders' });
-
-        const indicator = screen.getByTestId('conversation-indicator');
-        expect(indicator).toHaveAttribute('data-target-id', 'table-99');
-        expect(indicator).toHaveAttribute('data-target-name', 'Orders');
-    });
-
-    it('shows the indicator for readonly viewers when conversations are available', () => {
-        chartDBState.readonly = true;
-        renderHeader();
-
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
         expect(menuTrigger()).toBeInTheDocument();
     });
 
-    it('coexists with the table actions trigger', () => {
-        renderHeader();
-
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
-        expect(menuTrigger()).toBeInTheDocument();
-    });
-
-    it('keeps Open conversation functional while the indicator is visible', async () => {
+    it('keeps Open conversation in the table actions menu', async () => {
         const user = await openMenu();
 
-        expect(
-            screen.getByTestId('conversation-indicator')
-        ).toBeInTheDocument();
         await user.click(
             screen.getByRole('menuitem', { name: /Open conversation/i })
         );

@@ -323,6 +323,8 @@ export const mr: LanguageTranslation = {
                     field_name: 'नाव',
                     field_type: 'प्रकार',
                     field_actions: {
+                        menu_title: 'फील्ड पर्याय',
+                        attributes: 'गुणधर्म',
                         title: 'फील्ड गुणधर्म',
                         open_discussion: 'संवाद उघडा',
                         unique: 'युनिक',

@@ -324,6 +324,8 @@ export const es: LanguageTranslation = {
                     field_type: 'Tipo',
                     no_types_found: 'No se encontraron tipos',
                     field_actions: {
+                        menu_title: 'Opciones del campo',
+                        attributes: 'Atributos',
                         title: 'Atributos del Campo',
                         open_discussion: 'Abrir conversación',
                         unique: 'Único',

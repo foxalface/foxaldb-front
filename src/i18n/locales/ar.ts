@@ -321,6 +321,8 @@ export const ar: LanguageTranslation = {
                     field_name: 'الإسم',
                     field_type: 'النوع',
                     field_actions: {
+                        menu_title: 'خيارات الحقل',
+                        attributes: 'الخصائص',
                         title: 'خصائص الحقل',
                         open_discussion: 'فتح المحادثة',
                         unique: 'فريد',

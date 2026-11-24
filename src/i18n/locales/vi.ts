@@ -322,6 +322,8 @@ export const vi: LanguageTranslation = {
                     field_name: 'Tên trường',
                     field_type: 'Loại trường',
                     field_actions: {
+                        menu_title: 'Tùy chọn trường',
+                        attributes: 'Thuộc tính',
                         title: 'Thuộc tính trường',
                         open_discussion: 'Mở cuộc trò chuyện',
                         unique: 'Giá trị duy nhất',

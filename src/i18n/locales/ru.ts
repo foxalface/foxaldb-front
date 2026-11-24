@@ -322,6 +322,8 @@ export const ru: LanguageTranslation = {
                     field_name: 'Имя',
                     field_type: 'Тип',
                     field_actions: {
+                        menu_title: 'Параметры поля',
+                        attributes: 'Атрибуты',
                         title: 'Атрибуты поля',
                         open_discussion: 'Открыть беседу',
                         unique: 'Уникальный',

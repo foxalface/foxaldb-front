@@ -324,6 +324,8 @@ export const id_ID: LanguageTranslation = {
                     field_name: 'Nama',
                     field_type: 'Tipe',
                     field_actions: {
+                        menu_title: 'Opsi kolom',
+                        attributes: 'Atribut',
                         title: 'Atribut Kolom',
                         open_discussion: 'Buka percakapan',
                         unique: 'Unik',

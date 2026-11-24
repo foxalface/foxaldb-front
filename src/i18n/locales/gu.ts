@@ -323,6 +323,8 @@ export const gu: LanguageTranslation = {
                     field_name: 'નામ',
                     field_type: 'પ્રકાર',
                     field_actions: {
+                        menu_title: 'ફીલ્ડ વિકલ્પો',
+                        attributes: 'લક્ષણો',
                         title: 'ફીલ્ડ લક્ષણો',
                         open_discussion: 'વાતચીત ખોલો',
                         unique: 'અદ્વિતીય',

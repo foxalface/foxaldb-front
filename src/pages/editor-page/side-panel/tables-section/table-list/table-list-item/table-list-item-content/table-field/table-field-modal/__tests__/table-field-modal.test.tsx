@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DatabaseType } from '@/lib/domain/database-type';
@@ -127,17 +127,50 @@ const PopoverHarness: React.FC<PopoverHarnessProps> = ({
     );
 };
 
-const popoverTrigger = () =>
-    screen.getByRole('button', { name: 'Field Attributes' });
+const menuTrigger = () => screen.getByRole('button', { name: 'Field options' });
 
 const renderPopover = (props: PopoverHarnessProps = {}) =>
     render(<PopoverHarness {...props} />);
 
+const openAttributesPanel = async (
+    user: ReturnType<typeof userEvent.setup>,
+    options: { menuAlreadyOpen?: boolean } = {}
+) => {
+    if (!options.menuAlreadyOpen) {
+        await user.click(menuTrigger());
+    }
+    const attributesItem = screen.getByRole('menuitem', {
+        name: 'Attributes',
+    });
+    await user.hover(attributesItem);
+    await user.keyboard('{ArrowRight}');
+};
+
+const openTagsPanel = async (
+    user: ReturnType<typeof userEvent.setup>,
+    options: { menuAlreadyOpen?: boolean } = {}
+) => {
+    if (!options.menuAlreadyOpen) {
+        await user.click(menuTrigger());
+    }
+    const tagsItem = screen.getByRole('menuitem', { name: 'Tags' });
+    await user.hover(tagsItem);
+    await user.keyboard('{ArrowRight}');
+};
+
 const openPopover = async (props: PopoverHarnessProps = {}) => {
     const user = userEvent.setup();
     renderPopover(props);
-    await user.click(popoverTrigger());
+    await openAttributesPanel(user);
     return user;
+};
+
+const openOptionsMenu = async (
+    user: ReturnType<typeof userEvent.setup>,
+    props: PopoverHarnessProps = {}
+) => {
+    renderPopover(props);
+    await user.click(menuTrigger());
 };
 
 describe('TableFieldPopover conversation entry', () => {
@@ -161,46 +194,56 @@ describe('TableFieldPopover conversation entry', () => {
         });
     });
 
-    it('exposes a translated accessible name on the popover trigger', async () => {
+    it('exposes a translated accessible name on the field options trigger', async () => {
         const user = userEvent.setup();
         renderPopover();
-        const trigger = popoverTrigger();
-        await user.click(trigger);
-        expect(trigger).toHaveAttribute('aria-expanded', 'true');
+        await openAttributesPanel(user);
         expect(
-            screen.getByRole('button', { name: 'Open conversation' })
+            screen.getByText('Field Attributes', {
+                selector: '.text-sm.font-semibold',
+            })
         ).toBeInTheDocument();
     });
 
     it('shows Open conversation when the menu action is available and the field is editable', async () => {
-        await openPopover();
+        const user = userEvent.setup();
+        renderPopover();
+        await user.click(menuTrigger());
 
         expect(
-            screen.getByRole('button', { name: 'Open conversation' })
+            screen.getByRole('menuitem', { name: 'Open conversation' })
         ).toBeInTheDocument();
         expect(
-            screen.getByRole('button', { name: 'Delete' })
+            screen.getByRole('menuitem', { name: 'Delete' })
         ).toBeInTheDocument();
+
+        await openAttributesPanel(user, { menuAlreadyOpen: true });
+        expect(
+            screen.queryByRole('button', { name: 'Delete' })
+        ).not.toBeInTheDocument();
         expect(screen.getByText('Unique')).toBeInTheDocument();
         expect(screen.getByText('Default Value')).toBeInTheDocument();
     });
 
     it('shows Open conversation for readonly viewers when the menu action is available', async () => {
         chartDBState.readonly = true;
-        await openPopover();
+        const user = userEvent.setup();
+        await openOptionsMenu(user);
 
         expect(
-            screen.getByRole('button', { name: 'Open conversation' })
+            screen.getByRole('menuitem', { name: 'Open conversation' })
         ).toBeInTheDocument();
     });
 
     it('hides Delete and keeps editing controls readonly for viewers', async () => {
         chartDBState.readonly = true;
-        await openPopover();
-
+        const user = userEvent.setup();
+        await openOptionsMenu(user);
         expect(
-            screen.queryByRole('button', { name: 'Delete' })
+            screen.queryByRole('menuitem', { name: 'Delete' })
         ).not.toBeInTheDocument();
+
+        await openAttributesPanel(user, { menuAlreadyOpen: true });
 
         const uniqueCheckbox = screen.getByRole('checkbox');
         expect(uniqueCheckbox).toBeDisabled();
@@ -211,14 +254,18 @@ describe('TableFieldPopover conversation entry', () => {
 
     it('hides Open conversation when the menu action is unavailable', async () => {
         conversationMenuState.showConversationAction = false;
-        await openPopover();
+        const user = userEvent.setup();
+        await openOptionsMenu(user);
 
         expect(
-            screen.queryByRole('button', { name: 'Open conversation' })
+            screen.queryByRole('menuitem', { name: 'Open conversation' })
         ).not.toBeInTheDocument();
+
         expect(
-            screen.getByRole('button', { name: 'Delete' })
+            screen.getByRole('menuitem', { name: 'Delete' })
         ).toBeInTheDocument();
+
+        await openAttributesPanel(user, { menuAlreadyOpen: true });
         expect(screen.getByText('Unique')).toBeInTheDocument();
     });
 
@@ -228,10 +275,10 @@ describe('TableFieldPopover conversation entry', () => {
         await openPopover();
 
         expect(
-            screen.queryByRole('button', { name: 'Open conversation' })
+            screen.queryByRole('menuitem', { name: 'Open conversation' })
         ).not.toBeInTheDocument();
         expect(
-            screen.queryByRole('button', { name: 'Delete' })
+            screen.queryByRole('menuitem', { name: 'Delete' })
         ).not.toBeInTheDocument();
 
         const content = screen.getByText('Field Attributes', {
@@ -243,19 +290,18 @@ describe('TableFieldPopover conversation entry', () => {
             '[data-orientation="horizontal"]'
         );
         expect(separators).toHaveLength(1);
-        const children = Array.from(contentRoot!.children);
         expect(
-            children[children.length - 1].getAttribute('data-orientation')
-        ).not.toBe('horizontal');
+            contentRoot!.querySelector('[data-testid="tag-selector"]')
+        ).toBeNull();
     });
 
-    it('calls openConversationAction and closes the popover', async () => {
+    it('calls openConversationAction and closes the menu', async () => {
         const onOpenChange = vi.fn();
         const user = userEvent.setup();
-        renderPopover({ defaultOpen: true, onOpenChange });
+        await openOptionsMenu(user, { onOpenChange });
 
         await user.click(
-            screen.getByRole('button', { name: 'Open conversation' })
+            screen.getByRole('menuitem', { name: 'Open conversation' })
         );
 
         expect(
@@ -263,14 +309,39 @@ describe('TableFieldPopover conversation entry', () => {
         ).toHaveBeenCalledTimes(1);
         expect(updateField).not.toHaveBeenCalled();
         expect(removeField).not.toHaveBeenCalled();
-        expect(onOpenChange).toHaveBeenCalledWith(false);
-        expect(popoverTrigger()).toHaveAttribute('aria-expanded', 'false');
+        expect(menuTrigger()).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('closes the attributes panel when the pointer leaves it', async () => {
+        await openPopover();
+
+        expect(screen.getByText('Field Attributes')).toBeInTheDocument();
+
+        const outside = document.createElement('div');
+        document.body.appendChild(outside);
+        outside.dispatchEvent(
+            new PointerEvent('pointermove', {
+                bubbles: true,
+                pointerType: 'mouse',
+            })
+        );
+
+        await waitFor(() => {
+            expect(
+                screen.queryByText('Field Attributes')
+            ).not.toBeInTheDocument();
+        });
+        expect(
+            screen.getByRole('menuitem', { name: 'Attributes' })
+        ).toBeInTheDocument();
+        outside.remove();
     });
 
     it('keeps Delete behavior unchanged', async () => {
-        const user = await openPopover();
+        const user = userEvent.setup();
+        await openOptionsMenu(user);
 
-        await user.click(screen.getByRole('button', { name: 'Delete' }));
+        await user.click(screen.getByRole('menuitem', { name: 'Delete' }));
 
         expect(removeField).toHaveBeenCalledTimes(1);
         expect(
@@ -287,77 +358,28 @@ describe('TableFieldPopover conversation entry', () => {
         ).not.toBeInTheDocument();
     });
 
-    it('viewer footer contains only Open conversation without orphan separators', async () => {
+    it('opens tags from the root menu for a readonly viewer', async () => {
         chartDBState.readonly = true;
-        await openPopover();
-
-        const discussion = screen.getByRole('button', {
-            name: 'Open conversation',
-        });
-        expect(
-            screen.queryByRole('button', { name: 'Delete' })
-        ).not.toBeInTheDocument();
-
-        const contentRoot = discussion.closest('.flex.flex-col.gap-2');
-        expect(contentRoot).not.toBeNull();
-        const separators = contentRoot!.querySelectorAll(
-            '[data-orientation="horizontal"]'
-        );
-        expect(separators).toHaveLength(1);
-
-        const children = Array.from(contentRoot!.children);
-        expect(children[0].getAttribute('data-orientation')).not.toBe(
-            'horizontal'
-        );
-        expect(
-            children[children.length - 1].getAttribute('data-orientation')
-        ).not.toBe('horizontal');
-        expect(children[children.length - 1]).toContainElement(discussion);
-    });
-
-    it('editable footer separates discussion from Delete without adjacent separators', async () => {
-        await openPopover();
-
-        const discussion = screen.getByRole('button', {
-            name: 'Open conversation',
-        });
-        const deleteButton = screen.getByRole('button', {
-            name: 'Delete',
-        });
-        const contentRoot = discussion.closest('.flex.flex-col.gap-2');
-        expect(contentRoot).not.toBeNull();
-
-        const children = Array.from(contentRoot!.children);
-        const orientations = children.map((child) =>
-            child.getAttribute('data-orientation')
-        );
-        expect(orientations[0]).not.toBe('horizontal');
-        expect(orientations[orientations.length - 1]).not.toBe('horizontal');
-
-        for (let i = 0; i < orientations.length - 1; i += 1) {
-            if (orientations[i] === 'horizontal') {
-                expect(orientations[i + 1]).not.toBe('horizontal');
-            }
-        }
-
-        const discussionIndex = children.findIndex((child) =>
-            child.contains(discussion)
-        );
-        const deleteIndex = children.findIndex((child) =>
-            child.contains(deleteButton)
-        );
-        expect(discussionIndex).toBeGreaterThanOrEqual(0);
-        expect(deleteIndex).toBeGreaterThan(discussionIndex);
-        expect(orientations[discussionIndex + 1]).toBe('horizontal');
-    });
-
-    it('Open conversation remains keyboard accessible for viewers', async () => {
-        chartDBState.readonly = true;
-        const onOpenChange = vi.fn();
         const user = userEvent.setup();
-        renderPopover({ defaultOpen: true, onOpenChange });
+        await openOptionsMenu(user);
 
-        const discussion = screen.getByRole('button', {
+        expect(
+            screen.queryByRole('menuitem', { name: 'Delete' })
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByRole('menuitem', { name: 'Tags' })
+        ).toBeInTheDocument();
+
+        await openTagsPanel(user, { menuAlreadyOpen: true });
+        expect(screen.getByTestId('tag-selector')).toBeInTheDocument();
+    });
+
+    it('Open conversation remains keyboard accessible from the options menu', async () => {
+        chartDBState.readonly = true;
+        const user = userEvent.setup();
+        await openOptionsMenu(user);
+
+        const discussion = screen.getByRole('menuitem', {
             name: 'Open conversation',
         });
         discussion.focus();
@@ -367,11 +389,12 @@ describe('TableFieldPopover conversation entry', () => {
         expect(
             conversationMenuState.openConversationAction
         ).toHaveBeenCalledTimes(1);
-        expect(onOpenChange).toHaveBeenCalledWith(false);
     });
 
     it('exposes the field tag selector', async () => {
-        await openPopover();
+        const user = userEvent.setup();
+        await openOptionsMenu(user);
+        await openTagsPanel(user, { menuAlreadyOpen: true });
 
         expect(screen.getByTestId('tag-selector')).toHaveAttribute(
             'data-target-type',
@@ -389,7 +412,9 @@ describe('TableFieldPopover conversation entry', () => {
 
     it('shows field tags as disabled for a readonly viewer', async () => {
         chartDBState.readonly = true;
-        await openPopover();
+        const user = userEvent.setup();
+        await openOptionsMenu(user);
+        await openTagsPanel(user, { menuAlreadyOpen: true });
 
         expect(screen.getByTestId('tag-selector')).toHaveAttribute(
             'data-disabled',
@@ -400,12 +425,13 @@ describe('TableFieldPopover conversation entry', () => {
     it('reflects the pending conversation label from the menu action hook', async () => {
         conversationMenuState.conversationLabel = 'Starting conversation…';
         conversationMenuState.isConversationPending = true;
-        await openPopover();
+        const user = userEvent.setup();
+        await openOptionsMenu(user);
 
-        const discussion = screen.getByRole('button', {
+        const discussion = screen.getByRole('menuitem', {
             name: 'Starting conversation…',
         });
         expect(discussion).toHaveAttribute('aria-busy', 'true');
-        expect(discussion).toBeDisabled();
+        expect(discussion).toHaveAttribute('aria-disabled', 'true');
     });
 });

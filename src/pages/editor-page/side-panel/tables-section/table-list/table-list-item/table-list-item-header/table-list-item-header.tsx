@@ -11,7 +11,6 @@ import {
     Copy,
     Tags,
 } from 'lucide-react';
-import { SlBubbles } from 'react-icons/sl';
 import { ListItemHeaderButton } from '@/pages/editor-page/side-panel/list-item-header-button/list-item-header-button';
 import type { DBTable } from '@/lib/domain/db-table';
 import { Input } from '@/components/input/input';
@@ -51,7 +50,7 @@ import { cloneTable } from '@/lib/clone';
 import { cloneTableTagAssignments } from '@/lib/domain/diagram-tag';
 import type { DBSchema } from '@/lib/domain';
 import { defaultSchemas } from '@/lib/data/default-schemas';
-import { ConversationIndicator } from '@/components/conversation-indicator/conversation-indicator';
+import { SidePanelConversationMenuItem } from '@/pages/editor-page/side-panel/side-panel-conversation-menu-item';
 import { ColorPicker } from '@/components/color-picker/color-picker';
 
 export interface TableListItemHeaderProps {
@@ -173,13 +172,9 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
         [addTagAssignments, createTable, table, tagAssignments]
     );
 
-    const openTableDiscussion = useCallback(
-        (e: React.MouseEvent) => {
-            e.stopPropagation();
-            conversationMenu.openConversationAction();
-        },
-        [conversationMenu]
-    );
+    const openTableDiscussion = useCallback(() => {
+        conversationMenu.openConversationAction();
+    }, [conversationMenu]);
 
     const renderDropDownMenu = useCallback(() => {
         const showSchemaAction =
@@ -197,23 +192,21 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                         <EllipsisVertical aria-hidden="true" />
                     </ListItemHeaderButton>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-fit min-w-40">
+                <DropdownMenuContent
+                    className="w-fit min-w-40"
+                    onCloseAutoFocus={(event) => {
+                        event.preventDefault();
+                    }}
+                >
                     {conversationMenu.showConversationAction ? (
                         <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                className={SIDE_PANEL_ACTION_MENU_ITEM_CLASS}
-                                onClick={openTableDiscussion}
-                                disabled={
+                            <SidePanelConversationMenuItem
+                                label={conversationMenu.conversationLabel}
+                                isPending={
                                     conversationMenu.isConversationPending
                                 }
-                            >
-                                <SlBubbles
-                                    className={
-                                        SIDE_PANEL_ACTION_MENU_ICON_CLASS
-                                    }
-                                />
-                                {conversationMenu.conversationLabel}
-                            </DropdownMenuItem>
+                                onSelect={openTableDiscussion}
+                            />
                         </DropdownMenuGroup>
                     ) : null}
                     {conversationMenu.showConversationAction && !readonly ? (
@@ -450,22 +443,10 @@ export const TableListItemHeader: React.FC<TableListItemHeaderProps> = ({
                                 }
                             />
                         ) : null}
-                        <div className="flex items-center md:hidden md:group-focus-within:flex md:group-hover:flex">
+                        <div className="group/actions flex items-center md:hidden md:group-focus-within/actions:flex md:group-hover:flex">
                             <ListItemHeaderButton onClick={handleFocusOnTable}>
                                 <CircleDotDashed />
                             </ListItemHeaderButton>
-                            {conversationsAvailable ? (
-                                <ConversationIndicator
-                                    appearance="list-item-header"
-                                    highlightWhenActive={false}
-                                    showTooltip={false}
-                                    target={{
-                                        targetType: 'table',
-                                        targetId: table.id,
-                                    }}
-                                    targetName={table.name}
-                                />
-                            ) : null}
                         </div>
                     </>
                 ) : (

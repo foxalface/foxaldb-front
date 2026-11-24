@@ -324,6 +324,8 @@ export const pt_BR: LanguageTranslation = {
                     field_name: 'Nome',
                     field_type: 'Tipo',
                     field_actions: {
+                        menu_title: 'Opções do campo',
+                        attributes: 'Atributos',
                         title: 'Atributos do Campo',
                         open_discussion: 'Abrir conversa',
                         unique: 'Único',
