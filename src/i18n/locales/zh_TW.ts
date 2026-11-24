@@ -179,7 +179,6 @@ export const zh_TW: LanguageTranslation = {
             assign: '指派標籤',
             create: '建立標籤',
             name_placeholder: '標籤名稱',
-            color: '顏色',
             empty: '還沒有標籤',
             search: '搜尋標籤',
             no_results: '沒有相符的標籤',
@@ -204,7 +203,6 @@ export const zh_TW: LanguageTranslation = {
                 },
                 clear: '清除',
                 empty: '此圖中沒有標籤',
-                tag_color: '標籤顏色',
                 tabs: {
                     schemas: '綱要',
                 },

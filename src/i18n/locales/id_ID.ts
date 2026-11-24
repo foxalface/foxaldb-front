@@ -186,7 +186,6 @@ export const id_ID: LanguageTranslation = {
             assign: 'Tetapkan tag',
             create: 'Buat tag',
             name_placeholder: 'Nama tag',
-            color: 'Warna',
             empty: 'Belum ada tag',
             search: 'Cari tag',
             no_results: 'Tidak ada tag yang cocok',
@@ -211,7 +210,6 @@ export const id_ID: LanguageTranslation = {
                 },
                 clear: 'Hapus',
                 empty: 'Tidak ada tag pada diagram ini',
-                tag_color: 'Warna tag',
                 tabs: {
                     schemas: 'Skema',
                 },

@@ -184,7 +184,6 @@ export const en = {
             assign: 'Assign tags',
             create: 'Create tag',
             name_placeholder: 'Tag name',
-            color: 'Color',
             empty: 'No tags yet',
             search: 'Search tags',
             no_results: 'No matching tags',
@@ -209,7 +208,6 @@ export const en = {
                 },
                 clear: 'Clear',
                 empty: 'No tags on this diagram',
-                tag_color: 'Tag color',
                 tabs: {
                     schemas: 'Schemas',
                 },

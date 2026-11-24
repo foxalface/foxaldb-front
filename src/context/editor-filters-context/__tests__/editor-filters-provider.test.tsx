@@ -121,8 +121,8 @@ describe('EditorFiltersProvider', () => {
     beforeEach(() => {
         chartDBState.diagramId = 'diagram-1';
         chartDBState.tags = [
-            { id: 'tag-a', name: 'Alpha', color: '#fff' },
-            { id: 'tag-b', name: 'Beta', color: '#000' },
+            { id: 'tag-a', name: 'Alpha' },
+            { id: 'tag-b', name: 'Beta' },
         ];
         chartDBState.areas = [area('area-a', 'Core')];
         chartDBState.tables = [table('users', 'public')];
@@ -165,7 +165,7 @@ describe('EditorFiltersProvider', () => {
         await user.click(screen.getByRole('button', { name: 'set-tag' }));
         await user.click(screen.getByRole('button', { name: 'views-on' }));
 
-        chartDBState.tags = [{ id: 'tag-b', name: 'Beta', color: '#000' }];
+        chartDBState.tags = [{ id: 'tag-b', name: 'Beta' }];
         rerender(
             <EditorFiltersProvider>
                 <Probe />
@@ -175,7 +175,7 @@ describe('EditorFiltersProvider', () => {
         expect(screen.getByTestId('query')).toHaveTextContent('no');
 
         chartDBState.diagramId = 'diagram-2';
-        chartDBState.tags = [{ id: 'tag-a', name: 'Alpha', color: '#fff' }];
+        chartDBState.tags = [{ id: 'tag-a', name: 'Alpha' }];
         rerender(
             <EditorFiltersProvider>
                 <Probe />

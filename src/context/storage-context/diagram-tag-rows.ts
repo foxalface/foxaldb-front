@@ -14,7 +14,8 @@ export const toStoredTag = (
     diagramId: string,
     tag: DiagramTag
 ): StoredDiagramTag => ({
-    ...tag,
+    id: tag.id,
+    name: tag.name,
     diagramId,
 });
 
@@ -29,7 +30,6 @@ export const toStoredTagAssignment = (
 export const tagFromRow = (row: StoredDiagramTag): DiagramTag => ({
     id: row.id,
     name: row.name,
-    color: row.color,
 });
 
 export const tagAssignmentFromRow = (

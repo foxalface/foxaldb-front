@@ -186,7 +186,6 @@ export const te: LanguageTranslation = {
             assign: 'ట్యాగ్‌లను కేటాయించండి',
             create: 'ట్యాగ్ సృష్టించండి',
             name_placeholder: 'ట్యాగ్ పేరు',
-            color: 'రంగు',
             empty: 'ఇంకా ట్యాగ్‌లు లేవు',
             search: 'ట్యాగ్‌లను వెతకండి',
             no_results: 'సరిపోలే ట్యాగ్‌లు లేవు',
@@ -211,7 +210,6 @@ export const te: LanguageTranslation = {
                 },
                 clear: 'తీసివేయండి',
                 empty: 'ఈ రేఖాచిత్రంలో ట్యాగ్‌లు లేవు',
-                tag_color: 'ట్యాగ్ రంగు',
                 tabs: {
                     schemas: 'స్కీమాలు',
                 },

@@ -142,10 +142,9 @@ const payload = (
     sentAt: '2026-01-01T00:00:00Z',
 });
 
-const tag = (id: string, name = id, color = '#8eb7ff'): DiagramTag => ({
+const tag = (id: string, name = id): DiagramTag => ({
     id,
     name,
-    color,
 });
 
 const assignment = (
@@ -170,7 +169,7 @@ describe('tag diagram operations', () => {
         expect(isDiagramOperationAction('selected_tags')).toBe(false);
     });
 
-    it('applies a remote tag create, rename, recolor, and delete without history', async () => {
+    it('applies a remote tag create, rename, and delete without history', async () => {
         const mutators = createMutators();
         const context = emptyContext();
         context.existingTagIds = new Set(['tag-backend']);
@@ -191,14 +190,6 @@ describe('tag diagram operations', () => {
             context
         );
         await applyRemoteDiagramOperation(
-            payload('update_tag', {
-                id: 'tag-backend',
-                attributes: { color: '#111111' },
-            }),
-            mutators,
-            context
-        );
-        await applyRemoteDiagramOperation(
             payload('remove_tags', { tagIds: ['tag-backend'] }),
             mutators,
             context
@@ -208,16 +199,9 @@ describe('tag diagram operations', () => {
             [tag('tag-mvp', 'MVP')],
             historyOptions
         );
-        expect(mutators.updateTag).toHaveBeenNthCalledWith(
-            1,
+        expect(mutators.updateTag).toHaveBeenCalledWith(
             'tag-backend',
             { name: 'API' },
-            historyOptions
-        );
-        expect(mutators.updateTag).toHaveBeenNthCalledWith(
-            2,
-            'tag-backend',
-            { color: '#111111' },
             historyOptions
         );
         expect(mutators.removeTags).toHaveBeenCalledWith(
@@ -255,7 +239,23 @@ describe('tag diagram operations', () => {
             mutators,
             context
         );
+        await applyRemoteDiagramOperation(
+            payload('update_tag', {
+                id: 'tag-backend',
+                attributes: { color: '#111111' },
+            } as never),
+            mutators,
+            context
+        );
+        await applyRemoteDiagramOperation(
+            payload('add_tags', {
+                tags: [{ id: 'tag-colored', name: 'Colored', color: '#fff' }],
+            } as never),
+            mutators,
+            context
+        );
 
+        expect(mutators.addTags).toHaveBeenCalledTimes(1);
         expect(mutators.addTags).toHaveBeenCalledWith(
             [tag('tag-mvp', 'MVP')],
             historyOptions

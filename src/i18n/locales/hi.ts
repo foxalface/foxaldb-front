@@ -186,7 +186,6 @@ export const hi: LanguageTranslation = {
             assign: 'टैग असाइन करें',
             create: 'टैग बनाएँ',
             name_placeholder: 'टैग का नाम',
-            color: 'रंग',
             empty: 'अभी कोई टैग नहीं',
             search: 'टैग खोजें',
             no_results: 'कोई मेल खाता टैग नहीं',
@@ -211,7 +210,6 @@ export const hi: LanguageTranslation = {
                 },
                 clear: 'साफ़ करें',
                 empty: 'इस आरेख पर कोई टैग नहीं',
-                tag_color: 'टैग का रंग',
                 tabs: {
                     schemas: 'स्कीमा',
                 },

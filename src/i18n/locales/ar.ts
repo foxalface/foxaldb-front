@@ -186,7 +186,6 @@ export const ar: LanguageTranslation = {
             assign: 'تعيين الوسوم',
             create: 'إنشاء وسم',
             name_placeholder: 'اسم الوسم',
-            color: 'اللون',
             empty: 'لا توجد وسوم بعد',
             search: 'البحث في الوسوم',
             no_results: 'لا توجد وسوم مطابقة',
@@ -211,7 +210,6 @@ export const ar: LanguageTranslation = {
                 },
                 clear: 'مسح',
                 empty: 'لا توجد وسوم في هذا المخطط',
-                tag_color: 'لون الوسم',
                 tabs: {
                     schemas: 'المخططات',
                 },

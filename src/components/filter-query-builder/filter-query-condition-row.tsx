@@ -202,7 +202,6 @@ export const FilterQueryConditionRow: React.FC<{
                                 ? tags.map((tag) => ({
                                       id: tag.id,
                                       name: tag.name,
-                                      color: tag.color,
                                   }))
                                 : condition.property === 'area'
                                   ? areas.map((area) => ({

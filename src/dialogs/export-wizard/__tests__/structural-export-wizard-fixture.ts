@@ -69,7 +69,7 @@ export const structuralExportFixture = (): Diagram => ({
             createdAt: 1,
         },
     ],
-    tags: [{ id: 'red', name: 'Red', color: '#ff0000' }],
+    tags: [{ id: 'red', name: 'Red' }],
     tagAssignments: [
         {
             id: 'assign-users',

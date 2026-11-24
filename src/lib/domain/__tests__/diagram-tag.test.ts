@@ -66,7 +66,6 @@ const relationship = (
 const tag = (id: string, name: string): DiagramTag => ({
     id,
     name,
-    color: '#8eb7ff',
 });
 
 const assignment = (
@@ -111,9 +110,10 @@ describe('diagram tag schema', () => {
     });
 
     it('accepts table, field, and relationship assignments', () => {
-        expect(diagramTagSchema.parse(tag('tag-backend', 'Backend')).name).toBe(
-            'Backend'
-        );
+        expect(diagramTagSchema.parse(tag('tag-backend', 'Backend'))).toEqual({
+            id: 'tag-backend',
+            name: 'Backend',
+        });
 
         for (const targetType of ['table', 'field', 'relationship'] as const) {
             expect(
@@ -136,6 +136,12 @@ describe('diagram tag schema', () => {
         expect(
             diagramTagSchema.safeParse({
                 id: '',
+                name: 'Backend',
+            }).success
+        ).toBe(false);
+        expect(
+            diagramTagSchema.safeParse({
+                id: 'tag-backend',
                 name: 'Backend',
                 color: '#fff',
             }).success
@@ -318,8 +324,11 @@ describe('cloneDiagram tags', () => {
 
         expect(cloned.tags).toHaveLength(1);
         expect(cloned.tags?.[0]?.id).not.toBe('tag-backend');
-        expect(cloned.tags?.[0]?.name).toBe('Backend');
-        expect(cloned.tags?.[0]?.color).toBe('#8eb7ff');
+        expect(cloned.tags?.[0]).toEqual({
+            id: cloned.tags?.[0]?.id,
+            name: 'Backend',
+        });
+        expect(cloned.tags?.[0]).not.toHaveProperty('color');
         expect(cloned.tagAssignments).toHaveLength(3);
         expect(
             cloned.tagAssignments?.every(
@@ -505,6 +514,7 @@ describe('online tag normalization', () => {
         });
 
         expect(normalized.tags).toEqual([tag('tag-backend', 'Backend')]);
+        expect(normalized.tags?.[0]).not.toHaveProperty('color');
         expect(normalized.tagAssignments).toEqual([
             assignment('as-ok', 'tag-backend', 'table', 'table-users'),
         ]);

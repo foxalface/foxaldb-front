@@ -110,8 +110,8 @@ const buildDiagram = (databaseType: DatabaseType): Diagram => {
         tables: [users, orders],
         relationships: [relationship],
         tags: [
-            { id: 'red', name: 'Red', color: '#ff0000' },
-            { id: 'blue', name: 'Blue', color: '#0000ff' },
+            { id: 'red', name: 'Red' },
+            { id: 'blue', name: 'Blue' },
         ],
         tagAssignments: [
             assignment('red', 'table', 'users'),

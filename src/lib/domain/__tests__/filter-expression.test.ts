@@ -55,7 +55,7 @@ const diagram = (): Diagram => ({
             color: '#fff',
         },
     ],
-    tags: [{ id: 'tag-backend', name: 'Backend', color: '#f00' }],
+    tags: [{ id: 'tag-backend', name: 'Backend' }],
     createdAt: new Date(0),
     updatedAt: new Date(0),
 });

@@ -184,7 +184,6 @@ export const ko_KR: LanguageTranslation = {
             assign: '태그 지정',
             create: '태그 만들기',
             name_placeholder: '태그 이름',
-            color: '색',
             empty: '아직 태그가 없습니다',
             search: '태그 검색',
             no_results: '일치하는 태그 없음',
@@ -209,7 +208,6 @@ export const ko_KR: LanguageTranslation = {
                 },
                 clear: '지우기',
                 empty: '이 다이어그램에 태그가 없습니다',
-                tag_color: '태그 색',
                 tabs: {
                     schemas: '스키마',
                 },

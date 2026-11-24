@@ -288,7 +288,6 @@ export const cloneDiagram = (
                 return {
                     id,
                     name: tag.name,
-                    color: tag.color,
                 } satisfies DiagramTag;
             })
             .filter((tag): tag is DiagramTag => tag !== null) ?? [];

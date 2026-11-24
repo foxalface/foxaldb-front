@@ -191,7 +191,6 @@ export const ja: LanguageTranslation = {
             assign: 'タグを割り当て',
             create: 'タグを作成',
             name_placeholder: 'タグ名',
-            color: '色',
             empty: 'タグはまだありません',
             search: 'タグを検索',
             no_results: '一致するタグがありません',
@@ -216,7 +215,6 @@ export const ja: LanguageTranslation = {
                 },
                 clear: 'クリア',
                 empty: 'この図にタグはありません',
-                tag_color: 'タグの色',
                 tabs: {
                     schemas: 'スキーマ',
                 },

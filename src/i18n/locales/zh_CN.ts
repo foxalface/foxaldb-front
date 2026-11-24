@@ -179,7 +179,6 @@ export const zh_CN: LanguageTranslation = {
             assign: '分配标签',
             create: '创建标签',
             name_placeholder: '标签名称',
-            color: '颜色',
             empty: '还没有标签',
             search: '搜索标签',
             no_results: '没有匹配的标签',
@@ -204,7 +203,6 @@ export const zh_CN: LanguageTranslation = {
                 },
                 clear: '清除',
                 empty: '此图中没有标签',
-                tag_color: '标签颜色',
                 tabs: {
                     schemas: '模式',
                 },

@@ -187,7 +187,6 @@ export const es: LanguageTranslation = {
             assign: 'Asignar etiquetas',
             create: 'Crear etiqueta',
             name_placeholder: 'Nombre de la etiqueta',
-            color: 'Color',
             empty: 'Aún no hay etiquetas',
             search: 'Buscar etiquetas',
             no_results: 'Ninguna etiqueta coincide',
@@ -212,7 +211,6 @@ export const es: LanguageTranslation = {
                 },
                 clear: 'Borrar',
                 empty: 'No hay etiquetas en este diagrama',
-                tag_color: 'Color de la etiqueta',
                 tabs: {
                     schemas: 'Esquemas',
                 },

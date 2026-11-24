@@ -185,7 +185,6 @@ export const ne: LanguageTranslation = {
             assign: 'ट्याग तोक्नुहोस्',
             create: 'ट्याग बनाउनुहोस्',
             name_placeholder: 'ट्यागको नाम',
-            color: 'रङ',
             empty: 'अहिलेसम्म ट्याग छैन',
             search: 'ट्याग खोज्नुहोस्',
             no_results: 'मिल्ने ट्याग छैन',
@@ -210,7 +209,6 @@ export const ne: LanguageTranslation = {
                 },
                 clear: 'खाली गर्नुहोस्',
                 empty: 'यो रेखाचित्रमा ट्याग छैन',
-                tag_color: 'ट्यागको रङ',
                 tabs: {
                     schemas: 'स्किमाहरू',
                 },

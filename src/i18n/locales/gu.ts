@@ -187,7 +187,6 @@ export const gu: LanguageTranslation = {
             assign: 'ટૅગ સોંપો',
             create: 'ટૅગ બનાવો',
             name_placeholder: 'ટૅગનું નામ',
-            color: 'રંગ',
             empty: 'હજી કોઈ ટૅગ નથી',
             search: 'ટૅગ શોધો',
             no_results: 'મેળ ખાતા ટૅગ નથી',
@@ -212,7 +211,6 @@ export const gu: LanguageTranslation = {
                 },
                 clear: 'સાફ કરો',
                 empty: 'આ આકૃતિમાં કોઈ ટૅગ નથી',
-                tag_color: 'ટૅગનો રંગ',
                 tabs: {
                     schemas: 'સ્કીમા',
                 },

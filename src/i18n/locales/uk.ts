@@ -186,7 +186,6 @@ export const uk: LanguageTranslation = {
             assign: 'Призначити теги',
             create: 'Створити тег',
             name_placeholder: 'Назва тегу',
-            color: 'Колір',
             empty: 'Тегів ще немає',
             search: 'Шукати теги',
             no_results: 'Немає відповідних тегів',
@@ -211,7 +210,6 @@ export const uk: LanguageTranslation = {
                 },
                 clear: 'Очистити',
                 empty: 'У цій діаграмі немає тегів',
-                tag_color: 'Колір тегу',
                 tabs: {
                     schemas: 'Схеми',
                 },

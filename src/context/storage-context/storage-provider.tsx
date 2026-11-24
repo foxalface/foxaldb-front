@@ -28,6 +28,7 @@ import {
     chartDbV13Stores,
     chartDbV14Stores,
     chartDbV15Stores,
+    chartDbV16Stores,
 } from './chart-db-schema';
 
 export const StorageProvider: React.FC<
@@ -243,10 +244,12 @@ export const StorageProvider: React.FC<
 
         dexieDB.version(14).stores(chartDbV14Stores);
 
-        dexieDB.version(CHART_DB_SCHEMA_VERSION).stores({
+        dexieDB.version(15).stores({
             ...chartDbV15Stores,
             diagram_filters: null,
         });
+
+        dexieDB.version(CHART_DB_SCHEMA_VERSION).stores(chartDbV16Stores);
 
         dexieDB.on('ready', async () => {
             const config = await dexieDB.config.get(1);

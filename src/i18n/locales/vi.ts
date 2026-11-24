@@ -185,7 +185,6 @@ export const vi: LanguageTranslation = {
             assign: 'Gán thẻ',
             create: 'Tạo thẻ',
             name_placeholder: 'Tên thẻ',
-            color: 'Màu',
             empty: 'Chưa có thẻ',
             search: 'Tìm thẻ',
             no_results: 'Không có thẻ phù hợp',
@@ -210,7 +209,6 @@ export const vi: LanguageTranslation = {
                 },
                 clear: 'Xóa',
                 empty: 'Sơ đồ này chưa có thẻ',
-                tag_color: 'Màu thẻ',
                 tabs: {
                     schemas: 'Lược đồ',
                 },

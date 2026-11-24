@@ -266,9 +266,9 @@ const buildDiagram = (): Diagram => ({
         billingStatus,
     ],
     tags: [
-        { id: 'backend', name: 'Backend', color: '#f00' },
-        { id: 'pii', name: 'PII', color: '#0f0' },
-        { id: 'critical', name: 'Critical', color: '#00f' },
+        { id: 'backend', name: 'Backend' },
+        { id: 'pii', name: 'PII' },
+        { id: 'critical', name: 'Critical' },
     ],
     tagAssignments: [
         assign('backend', 'table', 'users'),

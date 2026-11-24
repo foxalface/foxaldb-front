@@ -1,4 +1,5 @@
 import type { ChartDBEvent } from '@/context/chartdb-context/chartdb-context';
+import type { DiagramTag } from '@/lib/domain/diagram-tag';
 import { useAuth } from '@/hooks/use-auth';
 import { useDiagramAccess } from '@/hooks/use-diagram-access';
 import { useChartDB } from '@/hooks/use-chartdb';
@@ -71,16 +72,12 @@ const tagAttributePresent = (value: string | undefined): boolean =>
     typeof value === 'string' && value.trim().length > 0;
 
 const supportedTagAttributes = (
-    tag: Partial<{ name: string; color: string }>
-): { name?: string; color?: string } => {
-    const attributes: { name?: string; color?: string } = {};
+    tag: Partial<Pick<DiagramTag, 'name'>>
+): { name?: string } => {
+    const attributes: { name?: string } = {};
 
     if (tagAttributePresent(tag.name)) {
         attributes.name = tag.name;
-    }
-
-    if (tagAttributePresent(tag.color)) {
-        attributes.color = tag.color;
     }
 
     return attributes;
@@ -156,8 +153,7 @@ const shouldPostDiagramSyncEvent = (event: ChartDBEvent): boolean => {
         case 'update_tag':
             return (
                 event.data.id.length > 0 &&
-                (tagAttributePresent(event.data.tag.name) ||
-                    tagAttributePresent(event.data.tag.color))
+                tagAttributePresent(event.data.tag.name)
             );
         case 'add_tag_assignments':
             return event.data.assignments.length > 0;

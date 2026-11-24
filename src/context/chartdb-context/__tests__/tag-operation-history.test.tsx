@@ -87,8 +87,8 @@ const diagram = (): Diagram => ({
     tables: [table],
     relationships: [relationship],
     tags: [
-        { id: 'tag-backend', name: 'Backend', color: '#8eb7ff' },
-        { id: 'tag-pii', name: 'PII', color: '#ff8e8e' },
+        { id: 'tag-backend', name: 'Backend' },
+        { id: 'tag-pii', name: 'PII' },
     ],
     tagAssignments: [
         {

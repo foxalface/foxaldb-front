@@ -187,7 +187,6 @@ export const pt_BR: LanguageTranslation = {
             assign: 'Atribuir tags',
             create: 'Criar tag',
             name_placeholder: 'Nome da tag',
-            color: 'Cor',
             empty: 'Nenhuma tag ainda',
             search: 'Buscar tags',
             no_results: 'Nenhuma tag correspondente',
@@ -212,7 +211,6 @@ export const pt_BR: LanguageTranslation = {
                 },
                 clear: 'Limpar',
                 empty: 'Nenhuma tag neste diagrama',
-                tag_color: 'Cor da tag',
                 tabs: {
                     schemas: 'Esquemas',
                 },

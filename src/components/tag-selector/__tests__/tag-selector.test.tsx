@@ -8,7 +8,6 @@ import type {
     DiagramTag,
     DiagramTagAssignment,
 } from '@/lib/domain/diagram-tag';
-import { colorOptions } from '@/lib/colors';
 import { en } from '@/i18n/locales/en';
 import { TagSelector } from '../tag-selector';
 
@@ -83,13 +82,11 @@ vi.mock('react-i18next', () => ({
 const backend: DiagramTag = {
     id: 'tag-backend',
     name: 'Backend',
-    color: '#8eb7ff',
 };
 
 const pii: DiagramTag = {
     id: 'tag-pii',
     name: 'PII',
-    color: '#ff6363',
 };
 
 const renderSelector = (
@@ -124,8 +121,14 @@ describe('TagSelector', () => {
     it('shows diagram tags without copying them into selector state', () => {
         renderSelector();
 
-        expect(screen.getByText('Backend')).toBeInTheDocument();
-        expect(screen.getByText('PII')).toBeInTheDocument();
+        const backendBadge = screen.getByText('Backend');
+        expect(backendBadge).toHaveClass('bg-secondary');
+        expect(backendBadge).toHaveClass('text-secondary-foreground');
+        expect(backendBadge).not.toHaveAttribute('style');
+        expect(screen.getByText('PII')).toHaveClass('bg-secondary');
+        expect(
+            screen.queryByRole('button', { name: /#[0-9a-f]{3,8}/i })
+        ).not.toBeInTheDocument();
         expect(screen.queryByText('Any')).not.toBeInTheDocument();
     });
 
@@ -236,11 +239,9 @@ describe('TagSelector', () => {
             {
                 id: 'generated-1',
                 name: 'Finance',
-                color: expect.any(String),
             },
         ]);
-        const created = addTags.mock.calls[0][0][0] as DiagramTag;
-        expect(colorOptions).toContain(created.color);
+        expect(addTags.mock.calls[0][0][0]).not.toHaveProperty('color');
         expect(addTagAssignments).toHaveBeenCalledWith([
             {
                 id: 'generated-2',
@@ -280,18 +281,6 @@ describe('TagSelector', () => {
 
         expect(updateTag).not.toHaveBeenCalled();
         expect(screen.getByText('Backend')).toBeInTheDocument();
-    });
-
-    it('recolors a tag with an existing palette color', async () => {
-        const user = userEvent.setup();
-        renderSelector();
-
-        await user.click(screen.getByRole('button', { name: 'Backend Color' }));
-        await user.click(screen.getByRole('button', { name: '#42e0c0' }));
-
-        expect(updateTag).toHaveBeenCalledWith('tag-backend', {
-            color: '#42e0c0',
-        });
     });
 
     it('deletes through removeTags only', async () => {

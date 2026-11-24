@@ -24,10 +24,12 @@ const readTags = (value: unknown): DiagramTag[] => {
             return [];
         }
 
+        const keys = Object.keys(item);
+
         if (
             !nonEmptyString(item.id) ||
             !nonEmptyString(item.name) ||
-            !nonEmptyString(item.color)
+            keys.some((key) => key !== 'id' && key !== 'name')
         ) {
             return [];
         }
@@ -36,7 +38,6 @@ const readTags = (value: unknown): DiagramTag[] => {
             {
                 id: item.id,
                 name: item.name,
-                color: item.color,
             },
         ];
     });

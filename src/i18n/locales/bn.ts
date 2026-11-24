@@ -186,7 +186,6 @@ export const bn: LanguageTranslation = {
             assign: 'ট্যাগ বরাদ্দ করুন',
             create: 'ট্যাগ তৈরি করুন',
             name_placeholder: 'ট্যাগের নাম',
-            color: 'রঙ',
             empty: 'এখনও কোনো ট্যাগ নেই',
             search: 'ট্যাগ খুঁজুন',
             no_results: 'মিল থাকা কোনো ট্যাগ নেই',
@@ -211,7 +210,6 @@ export const bn: LanguageTranslation = {
                 },
                 clear: 'মুছুন',
                 empty: 'এই ডায়াগ্রামে কোনো ট্যাগ নেই',
-                tag_color: 'ট্যাগের রঙ',
                 tabs: {
                     schemas: 'স্কিমা',
                 },

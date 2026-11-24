@@ -89,7 +89,7 @@ export type AddTagsOperationData = {
 
 export type UpdateTagOperationData = {
     id: string;
-    attributes: Partial<Pick<DiagramTag, 'name' | 'color'>>;
+    attributes: Partial<Pick<DiagramTag, 'name'>>;
 };
 
 export type RemoveTagsOperationData = {
@@ -236,7 +236,7 @@ export interface DiagramOperationMutators {
     ) => Promise<void>;
     updateTag: (
         id: string,
-        attributes: Partial<Pick<DiagramTag, 'name' | 'color'>>,
+        attributes: Partial<Pick<DiagramTag, 'name'>>,
         options: { updateHistory: false }
     ) => Promise<void>;
     removeTags: (
@@ -511,7 +511,7 @@ const isDiagramTag = (value: unknown): value is DiagramTag =>
     isRecord(value) &&
     isNonEmptyString(value.id) &&
     isNonEmptyString(value.name) &&
-    isNonEmptyString(value.color);
+    Object.keys(value).every((key) => key === 'id' || key === 'name');
 
 const isDiagramTagAssignment = (
     value: unknown
@@ -524,12 +524,12 @@ const isDiagramTagAssignment = (
 
 const tagAttributes = (
     value: unknown
-): Partial<Pick<DiagramTag, 'name' | 'color'>> | null => {
+): Partial<Pick<DiagramTag, 'name'>> | null => {
     if (!isRecord(value)) {
         return null;
     }
 
-    const attributes: Partial<Pick<DiagramTag, 'name' | 'color'>> = {};
+    const attributes: Partial<Pick<DiagramTag, 'name'>> = {};
 
     if (value.name !== undefined) {
         if (!isNonEmptyString(value.name)) {
@@ -539,17 +539,7 @@ const tagAttributes = (
         attributes.name = value.name;
     }
 
-    if (value.color !== undefined) {
-        if (!isNonEmptyString(value.color)) {
-            return null;
-        }
-
-        attributes.color = value.color;
-    }
-
-    const unsupported = Object.keys(value).filter(
-        (key) => key !== 'name' && key !== 'color'
-    );
+    const unsupported = Object.keys(value).filter((key) => key !== 'name');
 
     if (unsupported.length > 0 || Object.keys(attributes).length === 0) {
         return null;

@@ -228,8 +228,8 @@ type RedoUndoActionAddTags = RedoUndoActionBase<
 
 type RedoUndoActionUpdateTag = RedoUndoActionBase<
     'updateTag',
-    { tagId: string; attributes: Partial<Pick<DiagramTag, 'name' | 'color'>> },
-    { tagId: string; attributes: Partial<Pick<DiagramTag, 'name' | 'color'>> }
+    { tagId: string; attributes: Partial<Pick<DiagramTag, 'name'>> },
+    { tagId: string; attributes: Partial<Pick<DiagramTag, 'name'>> }
 >;
 
 type RedoUndoActionRemoveTags = RedoUndoActionBase<

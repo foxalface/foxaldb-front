@@ -49,9 +49,9 @@ const renderWithUi = (
 
 const builderProps = {
     tags: [
-        { id: 'backend', name: 'Backend', color: '#f00' },
-        { id: 'frontend', name: 'Frontend', color: '#0f0' },
-        { id: 'api', name: 'API', color: '#00f' },
+        { id: 'backend', name: 'Backend' },
+        { id: 'frontend', name: 'Frontend' },
+        { id: 'api', name: 'API' },
     ],
     areas: [
         {
@@ -447,7 +447,16 @@ describe('FilterQueryBuilder', () => {
                 name: 'side_panel.filters_section.query.value.tags',
             })
         );
+        const backendOption = screen
+            .getByRole('checkbox', { name: 'Backend' })
+            .closest('label');
+        expect(backendOption?.querySelector('.rounded-full')).toBeNull();
         await user.click(screen.getByRole('checkbox', { name: 'Backend' }));
+        expect(
+            screen.getByRole('button', {
+                name: 'side_panel.filters_section.query.value.tags',
+            })
+        ).toHaveTextContent('Backend');
 
         expect(status).toHaveAttribute('data-complete', 'true');
         expect(conditionId).toBeDefined();

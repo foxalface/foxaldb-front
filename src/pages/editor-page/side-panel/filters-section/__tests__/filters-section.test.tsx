@@ -82,7 +82,7 @@ const Probe: React.FC = () => {
 
 describe('FiltersSection', () => {
     beforeEach(() => {
-        chartDBState.tags = [{ id: 'backend', name: 'Backend', color: '#f00' }];
+        chartDBState.tags = [{ id: 'backend', name: 'Backend' }];
         chartDBState.areas = [];
         chartDBState.tables = [];
     });

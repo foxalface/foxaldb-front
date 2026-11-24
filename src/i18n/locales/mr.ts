@@ -188,7 +188,6 @@ export const mr: LanguageTranslation = {
             assign: 'टॅग नियुक्त करा',
             create: 'टॅग तयार करा',
             name_placeholder: 'टॅगचे नाव',
-            color: 'रंग',
             empty: 'अजून टॅग नाहीत',
             search: 'टॅग शोधा',
             no_results: 'जुळणारे टॅग नाहीत',
@@ -213,7 +212,6 @@ export const mr: LanguageTranslation = {
                 },
                 clear: 'साफ करा',
                 empty: 'या आकृतीवर टॅग नाहीत',
-                tag_color: 'टॅगचा रंग',
                 tabs: {
                     schemas: 'स्किमा',
                 },

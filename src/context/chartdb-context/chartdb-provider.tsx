@@ -2482,20 +2482,13 @@ export const ChartDBProvider: React.FC<
 
     const updateTag: ChartDBContext['updateTag'] = useCallback(
         async (id, attributes, options = { updateHistory: true }) => {
-            const supported: Partial<Pick<DiagramTag, 'name' | 'color'>> = {};
+            const supported: Partial<Pick<DiagramTag, 'name'>> = {};
 
             if (
                 typeof attributes.name === 'string' &&
                 attributes.name.trim().length > 0
             ) {
                 supported.name = attributes.name;
-            }
-
-            if (
-                typeof attributes.color === 'string' &&
-                attributes.color.trim().length > 0
-            ) {
-                supported.color = attributes.color;
             }
 
             if (Object.keys(supported).length === 0) {
@@ -2533,7 +2526,6 @@ export const ChartDBProvider: React.FC<
                         tagId: id,
                         attributes: {
                             name: previous.name,
-                            color: previous.color,
                         },
                     },
                 });

@@ -9,6 +9,7 @@ import {
     chartDbV13Stores,
     chartDbV14Stores,
     chartDbV15Stores,
+    chartDbV16Stores,
 } from '../chart-db-schema';
 import { storageInitialValue } from '../storage-context';
 import {
@@ -113,7 +114,6 @@ describe('Dexie tag schema', () => {
     });
 
     it('drops diagram_filters at version 15 and keeps the other stores', () => {
-        expect(CHART_DB_SCHEMA_VERSION).toBe(15);
         expect(chartDbV15Stores).not.toHaveProperty('diagram_filters');
         expect(chartDbV15Stores.tags).toBe(chartDbV14Stores.tags);
         expect(chartDbV15Stores.tag_assignments).toBe(
@@ -133,6 +133,14 @@ describe('Dexie tag schema', () => {
         );
         expect(chartDbV15Stores.notes).toBe(chartDbV14Stores.notes);
         expect(chartDbV15Stores.config).toBe(chartDbV14Stores.config);
+        expect(CHART_DB_SCHEMA_VERSION).toBe(16);
+        expect(chartDbV16Stores.tags).toBe('++id, diagramId, name');
+        expect(chartDbV16Stores.tags).not.toContain('color');
+        expect(chartDbV16Stores.tag_assignments).toBe(
+            chartDbV15Stores.tag_assignments
+        );
+        expect(chartDbV16Stores.diagrams).toBe(chartDbV15Stores.diagrams);
+        expect(chartDbV16Stores.db_tables).toBe(chartDbV15Stores.db_tables);
         expect(storageInitialValue).not.toHaveProperty('getDiagramFilter');
         expect(storageInitialValue).not.toHaveProperty('updateDiagramFilter');
         expect(storageInitialValue).not.toHaveProperty('deleteDiagramFilter');
@@ -146,7 +154,7 @@ describe('device tag persistence mapping', () => {
         databaseType: DatabaseType.POSTGRESQL,
         tables: [usersTable(`${id}-table`)],
         relationships: [],
-        tags: [{ id: tagId, name: 'Backend', color: '#8eb7ff' }],
+        tags: [{ id: tagId, name: 'Backend' }],
         tagAssignments: [
             {
                 id: `${id}-assignment`,
@@ -173,9 +181,11 @@ describe('device tag persistence mapping', () => {
             true
         );
 
-        expect(loaded.tags).toEqual([
-            { id: 'tag-a', name: 'Backend', color: '#8eb7ff' },
-        ]);
+        expect(loaded.tags).toEqual([{ id: 'tag-a', name: 'Backend' }]);
+        expect(loaded.tags?.[0]).not.toHaveProperty('color');
+        expect(db.tags.find((row) => row.id === 'tag-a')).not.toHaveProperty(
+            'color'
+        );
         expect(loaded.tagAssignments?.[0]?.targetId).toBe('diagram-a-table');
         expect(loaded.tags?.[0]).not.toHaveProperty('diagramId');
 

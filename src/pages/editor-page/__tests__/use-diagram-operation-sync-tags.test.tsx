@@ -48,7 +48,6 @@ import { useDiagramOperationSync } from '@/pages/editor-page/use-diagram-operati
 const tag = (id: string): DiagramTag => ({
     id,
     name: 'Backend',
-    color: '#8eb7ff',
 });
 
 describe('useDiagramOperationSync tags', () => {
@@ -88,7 +87,7 @@ describe('useDiagramOperationSync tags', () => {
         expect(harness.postDiagramOperation).not.toHaveBeenCalled();
     });
 
-    it('posts update_tag with name and color attributes only', async () => {
+    it('posts update_tag with the name only', async () => {
         vi.useFakeTimers();
         renderHook(() => useDiagramOperationSync());
 
@@ -97,7 +96,7 @@ describe('useDiagramOperationSync tags', () => {
                 action: 'update_tag',
                 data: {
                     id: 'tag-backend',
-                    tag: { name: 'API', color: '#111111' },
+                    tag: { name: 'API' },
                 },
             });
         });
@@ -112,7 +111,7 @@ describe('useDiagramOperationSync tags', () => {
             action: 'update_tag',
             data: {
                 id: 'tag-backend',
-                attributes: { name: 'API', color: '#111111' },
+                attributes: { name: 'API' },
             },
             clientId: expect.any(String),
         });
@@ -121,6 +120,7 @@ describe('useDiagramOperationSync tags', () => {
         };
         expect(body.data).not.toHaveProperty('selectedTagIds');
         expect(body.data).not.toHaveProperty('matchMode');
+        expect(body.data.attributes).not.toHaveProperty('color');
         vi.useRealTimers();
     });
 

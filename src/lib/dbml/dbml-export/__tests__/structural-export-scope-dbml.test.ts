@@ -92,8 +92,8 @@ const diagram: Diagram = {
     tables: [users, orders, invoices],
     relationships: [usersOrders, usersInvoices],
     tags: [
-        { id: 'red', name: 'Red', color: '#ff0000' },
-        { id: 'blue', name: 'Blue', color: '#0000ff' },
+        { id: 'red', name: 'Red' },
+        { id: 'blue', name: 'Blue' },
     ],
     tagAssignments: [
         {

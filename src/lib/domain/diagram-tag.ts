@@ -12,7 +12,6 @@ export type TagMatchMode = 'any' | 'all' | 'none';
 export interface DiagramTag {
     id: string;
     name: string;
-    color: string;
 }
 
 export interface DiagramTagAssignment {
@@ -53,11 +52,12 @@ export const assignmentTargetsRemovedEntity = (
 
 const nonEmptyString = z.string().min(1);
 
-export const diagramTagSchema: z.ZodType<DiagramTag> = z.object({
-    id: nonEmptyString,
-    name: nonEmptyString,
-    color: nonEmptyString,
-});
+export const diagramTagSchema: z.ZodType<DiagramTag> = z
+    .object({
+        id: nonEmptyString,
+        name: nonEmptyString,
+    })
+    .strict();
 
 export const diagramTagAssignmentSchema: z.ZodType<DiagramTagAssignment> =
     z.object({

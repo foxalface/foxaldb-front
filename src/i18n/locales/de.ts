@@ -192,7 +192,6 @@ export const de: LanguageTranslation = {
             assign: 'Tags zuweisen',
             create: 'Tag erstellen',
             name_placeholder: 'Tagname',
-            color: 'Farbe',
             empty: 'Noch keine Tags',
             search: 'Tags suchen',
             no_results: 'Keine passenden Tags',
@@ -217,7 +216,6 @@ export const de: LanguageTranslation = {
                 },
                 clear: 'Zurücksetzen',
                 empty: 'Keine Tags in diesem Diagramm',
-                tag_color: 'Tagfarbe',
                 tabs: {
                     schemas: 'Schemata',
                 },

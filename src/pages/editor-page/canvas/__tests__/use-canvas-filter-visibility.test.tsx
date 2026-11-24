@@ -34,7 +34,7 @@ vi.mock('@/hooks/use-chartdb', () => ({
             tables: harness.tables,
             relationships: [],
             tagAssignments: harness.tagAssignments,
-            tags: [{ id: 'backend', name: 'Backend', color: '#f00' }],
+            tags: [{ id: 'backend', name: 'Backend' }],
             areas: [],
             createdAt: new Date(0),
             updatedAt: new Date(0),

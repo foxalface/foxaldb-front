@@ -185,7 +185,6 @@ export const hr: LanguageTranslation = {
             assign: 'Dodijeli oznake',
             create: 'Stvori oznaku',
             name_placeholder: 'Naziv oznake',
-            color: 'Boja',
             empty: 'Još nema oznaka',
             search: 'Traži oznake',
             no_results: 'Nema odgovarajućih oznaka',
@@ -210,7 +209,6 @@ export const hr: LanguageTranslation = {
                 },
                 clear: 'Očisti',
                 empty: 'Na ovom dijagramu nema oznaka',
-                tag_color: 'Boja oznake',
                 tabs: {
                     schemas: 'Sheme',
                 },

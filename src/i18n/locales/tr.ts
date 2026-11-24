@@ -184,7 +184,6 @@ export const tr: LanguageTranslation = {
             assign: 'Etiket ata',
             create: 'Etiket oluştur',
             name_placeholder: 'Etiket adı',
-            color: 'Renk',
             empty: 'Henüz etiket yok',
             search: 'Etiket ara',
             no_results: 'Eşleşen etiket yok',
@@ -209,7 +208,6 @@ export const tr: LanguageTranslation = {
                 },
                 clear: 'Temizle',
                 empty: 'Bu diyagramda etiket yok',
-                tag_color: 'Etiket rengi',
                 tabs: {
                     schemas: 'Şemalar',
                 },

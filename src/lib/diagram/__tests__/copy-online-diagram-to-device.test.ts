@@ -76,9 +76,7 @@ describe('copyOnlineDiagramToDevice', () => {
                     },
                 ],
                 relationships: [],
-                tags: [
-                    { id: 'tag-backend', name: 'Backend', color: '#8eb7ff' },
-                ],
+                tags: [{ id: 'tag-backend', name: 'Backend' }],
                 tagAssignments: [
                     {
                         id: 'as-table',

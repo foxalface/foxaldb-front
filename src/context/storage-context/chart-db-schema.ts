@@ -32,4 +32,9 @@ export const chartDbV15Stores = {
 
 void _legacyDiagramFilters;
 
-export const CHART_DB_SCHEMA_VERSION = 15;
+export const chartDbV16Stores = {
+    ...chartDbV15Stores,
+    tags: '++id, diagramId, name',
+} as const;
+
+export const CHART_DB_SCHEMA_VERSION = 16;

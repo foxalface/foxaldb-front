@@ -143,7 +143,7 @@ export type AddTagsEvent = ChartDBEventBase<'add_tags', { tags: DiagramTag[] }>;
 
 export type UpdateTagEvent = ChartDBEventBase<
     'update_tag',
-    { id: string; tag: Partial<Pick<DiagramTag, 'name' | 'color'>> }
+    { id: string; tag: Partial<Pick<DiagramTag, 'name'>> }
 >;
 
 export type RemoveTagsEvent = ChartDBEventBase<
@@ -454,7 +454,7 @@ export interface ChartDBContext {
     ) => Promise<void>;
     updateTag: (
         id: string,
-        attributes: Partial<Pick<DiagramTag, 'name' | 'color'>>,
+        attributes: Partial<Pick<DiagramTag, 'name'>>,
         options?: { updateHistory: boolean }
     ) => Promise<void>;
     removeTags: (
